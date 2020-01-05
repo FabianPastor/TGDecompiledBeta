@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -73,6 +74,11 @@ public class RadialProgress2 {
         this.circlePaint.setStrokeWidth((float) i);
         this.circlePaint.setStyle(Style.STROKE);
         invalidateParent();
+    }
+
+    public void setBackgroundDrawable(Drawable drawable) {
+        this.mediaActionDrawable.setBackgroundDrawable(drawable);
+        this.miniMediaActionDrawable.setBackgroundDrawable(drawable);
     }
 
     public void setImageOverlay(PhotoSize photoSize, Document document, Object obj) {
@@ -225,59 +231,59 @@ public class RadialProgress2 {
 
     /* JADX WARNING: Removed duplicated region for block: B:35:0x0093  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0068  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ff  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017e  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0230  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0283  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0293  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0240  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x022e  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x02a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c2  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:35:0x0093  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0150  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017e  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0230  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0283  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0293  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0174  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x022e  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0240  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x02a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c2  */
     /* JADX WARNING: Removed duplicated region for block: B:35:0x0093  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0068  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ff  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0150  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017e  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0230  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0283  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0293  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0174  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0240  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x022e  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x02a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c2  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:35:0x0093  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x00c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0150  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x017e  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x01e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0230  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0273  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0283  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0293  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0174  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x022e  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0240  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:107:0x02a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c2  */
     public void draw(android.graphics.Canvas r19) {
         /*
         r18 = this;
@@ -401,69 +407,83 @@ public class RadialProgress2 {
         r6.setColor(r7);
     L_0x00bd:
         r6 = r0.isPressed;
-        if (r6 == 0) goto L_0x00ed;
+        if (r6 == 0) goto L_0x00ff;
     L_0x00c1:
         r6 = r0.iconPressedColorKey;
-        if (r6 == 0) goto L_0x00cf;
+        if (r6 == 0) goto L_0x00da;
     L_0x00c5:
         r7 = r0.mediaActionDrawable;
         r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
         r7.setColor(r6);
-        goto L_0x00d7;
-    L_0x00cf:
+        r7 = r0.mediaActionDrawable;
+        r8 = r0.circlePressedColorKey;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r7.setBackColor(r8);
+        goto L_0x00e9;
+    L_0x00da:
         r6 = r0.mediaActionDrawable;
         r7 = r0.iconPressedColor;
         r6.setColor(r7);
+        r6 = r0.mediaActionDrawable;
+        r8 = r0.circlePressedColor;
+        r6.setBackColor(r8);
         r6 = r7;
-    L_0x00d7:
+    L_0x00e9:
         r7 = r0.circlePressedColorKey;
-        if (r7 == 0) goto L_0x00e5;
-    L_0x00db:
+        if (r7 == 0) goto L_0x00f7;
+    L_0x00ed:
         r8 = r0.circlePaint;
         r7 = org.telegram.ui.ActionBar.Theme.getColor(r7);
         r8.setColor(r7);
-        goto L_0x0118;
-    L_0x00e5:
+        goto L_0x013c;
+    L_0x00f7:
         r7 = r0.circlePaint;
         r8 = r0.circlePressedColor;
         r7.setColor(r8);
-        goto L_0x0118;
-    L_0x00ed:
+        goto L_0x013c;
+    L_0x00ff:
         r6 = r0.iconColorKey;
-        if (r6 == 0) goto L_0x00fb;
-    L_0x00f1:
+        if (r6 == 0) goto L_0x0118;
+    L_0x0103:
         r7 = r0.mediaActionDrawable;
         r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
         r7.setColor(r6);
-        goto L_0x0103;
-    L_0x00fb:
+        r7 = r0.mediaActionDrawable;
+        r8 = r0.circleColorKey;
+        r8 = org.telegram.ui.ActionBar.Theme.getColor(r8);
+        r7.setBackColor(r8);
+        goto L_0x0127;
+    L_0x0118:
         r6 = r0.mediaActionDrawable;
         r7 = r0.iconColor;
         r6.setColor(r7);
+        r6 = r0.mediaActionDrawable;
+        r8 = r0.circleColor;
+        r6.setBackColor(r8);
         r6 = r7;
-    L_0x0103:
+    L_0x0127:
         r7 = r0.circleColorKey;
-        if (r7 == 0) goto L_0x0111;
-    L_0x0107:
+        if (r7 == 0) goto L_0x0135;
+    L_0x012b:
         r8 = r0.circlePaint;
         r7 = org.telegram.ui.ActionBar.Theme.getColor(r7);
         r8.setColor(r7);
-        goto L_0x0118;
-    L_0x0111:
+        goto L_0x013c;
+    L_0x0135:
         r7 = r0.circlePaint;
         r8 = r0.circleColor;
         r7.setColor(r8);
-    L_0x0118:
+    L_0x013c:
         r7 = r0.drawMiniIcon;
         r8 = 0;
-        if (r7 == 0) goto L_0x0126;
-    L_0x011d:
+        if (r7 == 0) goto L_0x014a;
+    L_0x0141:
         r7 = r0.miniDrawCanvas;
-        if (r7 == 0) goto L_0x0126;
-    L_0x0121:
+        if (r7 == 0) goto L_0x014a;
+    L_0x0145:
         r7 = r0.miniDrawBitmap;
         r7.eraseColor(r8);
-    L_0x0126:
+    L_0x014a:
         r7 = r0.circlePaint;
         r7 = r7.getAlpha();
         r9 = r0.circlePaint;
@@ -483,11 +503,11 @@ public class RadialProgress2 {
         r7 = (int) r7;
         r9.setAlpha(r7);
         r7 = r0.drawMiniIcon;
-        if (r7 == 0) goto L_0x0167;
-    L_0x0150:
+        if (r7 == 0) goto L_0x018b;
+    L_0x0174:
         r7 = r0.miniDrawCanvas;
-        if (r7 == 0) goto L_0x0167;
-    L_0x0154:
+        if (r7 == 0) goto L_0x018b;
+    L_0x0178:
         r7 = r0.progressRect;
         r7 = r7.width();
         r9 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
@@ -497,20 +517,20 @@ public class RadialProgress2 {
         r10 = r10.height();
         r10 = r10 / r9;
         r9 = (int) r10;
-        goto L_0x0175;
-    L_0x0167:
+        goto L_0x0199;
+    L_0x018b:
         r7 = r0.progressRect;
         r7 = r7.centerX();
         r7 = (int) r7;
         r9 = r0.progressRect;
         r9 = r9.centerY();
         r9 = (int) r9;
-    L_0x0175:
+    L_0x0199:
         r10 = r0.overlayImageView;
         r10 = r10.hasBitmapImage();
         r12 = 2;
-        if (r10 == 0) goto L_0x01e3;
-    L_0x017e:
+        if (r10 == 0) goto L_0x0207;
+    L_0x01a2:
         r10 = r0.overlayImageView;
         r10 = r10.getCurrentAlpha();
         r13 = r0.overlayPaint;
@@ -522,12 +542,12 @@ public class RadialProgress2 {
         r14 = (int) r14;
         r13.setAlpha(r14);
         r13 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1));
-        if (r13 < 0) goto L_0x019b;
-    L_0x0198:
+        if (r13 < 0) goto L_0x01bf;
+    L_0x01bc:
         r6 = -1;
         r11 = 0;
-        goto L_0x01cc;
-    L_0x019b:
+        goto L_0x01f0;
+    L_0x01bf:
         r13 = android.graphics.Color.red(r6);
         r14 = android.graphics.Color.green(r6);
         r15 = android.graphics.Color.blue(r6);
@@ -554,7 +574,7 @@ public class RadialProgress2 {
         r15 = r15 + r4;
         r6 = android.graphics.Color.argb(r6, r13, r14, r15);
         r11 = 1;
-    L_0x01cc:
+    L_0x01f0:
         r3 = r0.mediaActionDrawable;
         r3.setColor(r6);
         r3 = r0.overlayImageView;
@@ -565,39 +585,39 @@ public class RadialProgress2 {
         r4 = r4 * 2;
         r3.setImageCoords(r6, r8, r10, r4);
         r16 = r11;
-        goto L_0x01e5;
-    L_0x01e3:
+        goto L_0x0209;
+    L_0x0207:
         r16 = 1;
-    L_0x01e5:
+    L_0x0209:
         r3 = 0;
-        if (r16 == 0) goto L_0x0228;
-    L_0x01e8:
+        if (r16 == 0) goto L_0x024c;
+    L_0x020c:
         r4 = r0.drawBackground;
-        if (r4 == 0) goto L_0x0228;
-    L_0x01ec:
+        if (r4 == 0) goto L_0x024c;
+    L_0x0210:
         r4 = r0.drawMiniIcon;
-        if (r4 == 0) goto L_0x01ff;
-    L_0x01f0:
+        if (r4 == 0) goto L_0x0223;
+    L_0x0214:
         r4 = r0.miniDrawCanvas;
-        if (r4 == 0) goto L_0x01ff;
-    L_0x01f4:
+        if (r4 == 0) goto L_0x0223;
+    L_0x0218:
         r2 = (float) r7;
         r6 = (float) r9;
         r8 = r0.circleRadius;
         r8 = (float) r8;
         r10 = r0.circlePaint;
         r4.drawCircle(r2, r6, r8, r10);
-        goto L_0x0228;
-    L_0x01ff:
+        goto L_0x024c;
+    L_0x0223:
         r4 = 4;
-        if (r2 != r4) goto L_0x0206;
-    L_0x0202:
+        if (r2 != r4) goto L_0x022a;
+    L_0x0226:
         r2 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1));
-        if (r2 == 0) goto L_0x0228;
-    L_0x0206:
+        if (r2 == 0) goto L_0x024c;
+    L_0x022a:
         r2 = r0.backgroundStroke;
-        if (r2 == 0) goto L_0x021c;
-    L_0x020a:
+        if (r2 == 0) goto L_0x0240;
+    L_0x022e:
         r2 = (float) r7;
         r4 = (float) r9;
         r6 = r0.circleRadius;
@@ -607,8 +627,8 @@ public class RadialProgress2 {
         r6 = (float) r6;
         r8 = r0.circlePaint;
         r1.drawCircle(r2, r4, r6, r8);
-        goto L_0x0228;
-    L_0x021c:
+        goto L_0x024c;
+    L_0x0240:
         r2 = (float) r7;
         r4 = (float) r9;
         r6 = r0.circleRadius;
@@ -616,21 +636,21 @@ public class RadialProgress2 {
         r6 = r6 * r5;
         r8 = r0.circlePaint;
         r1.drawCircle(r2, r4, r6, r8);
-    L_0x0228:
+    L_0x024c:
         r2 = r0.overlayImageView;
         r2 = r2.hasBitmapImage();
-        if (r2 == 0) goto L_0x0262;
-    L_0x0230:
+        if (r2 == 0) goto L_0x0286;
+    L_0x0254:
         r2 = r0.overlayImageView;
         r4 = r0.overrideAlpha;
         r5 = r5 * r4;
         r2.setAlpha(r5);
         r2 = r0.drawMiniIcon;
-        if (r2 == 0) goto L_0x0253;
-    L_0x023d:
+        if (r2 == 0) goto L_0x0277;
+    L_0x0261:
         r2 = r0.miniDrawCanvas;
-        if (r2 == 0) goto L_0x0253;
-    L_0x0241:
+        if (r2 == 0) goto L_0x0277;
+    L_0x0265:
         r4 = r0.overlayImageView;
         r4.draw(r2);
         r2 = r0.miniDrawCanvas;
@@ -640,8 +660,8 @@ public class RadialProgress2 {
         r6 = (float) r6;
         r8 = r0.overlayPaint;
         r2.drawCircle(r4, r5, r6, r8);
-        goto L_0x0262;
-    L_0x0253:
+        goto L_0x0286;
+    L_0x0277:
         r2 = r0.overlayImageView;
         r2.draw(r1);
         r2 = (float) r7;
@@ -650,7 +670,7 @@ public class RadialProgress2 {
         r5 = (float) r5;
         r6 = r0.overlayPaint;
         r1.drawCircle(r2, r4, r5, r6);
-    L_0x0262:
+    L_0x0286:
         r2 = r0.mediaActionDrawable;
         r4 = r0.circleRadius;
         r5 = r7 - r4;
@@ -658,29 +678,33 @@ public class RadialProgress2 {
         r7 = r7 + r4;
         r9 = r9 + r4;
         r2.setBounds(r5, r6, r7, r9);
+        r2 = r0.mediaActionDrawable;
+        r4 = r0.overlayImageView;
+        r4 = r4.hasBitmapImage();
+        r2.setHasOverlayImage(r4);
         r2 = r0.drawMiniIcon;
-        if (r2 == 0) goto L_0x0283;
-    L_0x0273:
+        if (r2 == 0) goto L_0x02b2;
+    L_0x02a2:
         r2 = r0.miniDrawCanvas;
-        if (r2 == 0) goto L_0x027d;
-    L_0x0277:
+        if (r2 == 0) goto L_0x02ac;
+    L_0x02a6:
         r4 = r0.mediaActionDrawable;
         r4.draw(r2);
-        goto L_0x028f;
-    L_0x027d:
+        goto L_0x02be;
+    L_0x02ac:
         r2 = r0.mediaActionDrawable;
         r2.draw(r1);
-        goto L_0x028f;
-    L_0x0283:
+        goto L_0x02be;
+    L_0x02b2:
         r2 = r0.mediaActionDrawable;
         r4 = r0.overrideAlpha;
         r2.setOverrideAlpha(r4);
         r2 = r0.mediaActionDrawable;
         r2.draw(r1);
-    L_0x028f:
+    L_0x02be:
         r2 = r0.drawMiniIcon;
-        if (r2 == 0) goto L_0x038d;
-    L_0x0293:
+        if (r2 == 0) goto L_0x03bc;
+    L_0x02c2:
         r2 = r0.progressRect;
         r2 = r2.width();
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
@@ -690,8 +714,8 @@ public class RadialProgress2 {
         r2 = java.lang.Math.abs(r2);
         r4 = org.telegram.messenger.AndroidUtilities.density;
         r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r2 >= 0) goto L_0x02ca;
-    L_0x02ab:
+        if (r2 >= 0) goto L_0x02f9;
+    L_0x02da:
         r2 = 20;
         r4 = r0.progressRect;
         r4 = r4.centerX();
@@ -706,8 +730,8 @@ public class RadialProgress2 {
         r5 = (float) r5;
         r6 = r6 + r5;
         r12 = 0;
-        goto L_0x02e6;
-    L_0x02ca:
+        goto L_0x0315;
+    L_0x02f9:
         r2 = 22;
         r4 = r0.progressRect;
         r4 = r4.centerX();
@@ -720,31 +744,31 @@ public class RadialProgress2 {
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r5 = (float) r5;
         r6 = r6 + r5;
-    L_0x02e6:
+    L_0x0315:
         r5 = r2 / 2;
         r7 = r0.miniMediaActionDrawable;
         r7 = r7.getCurrentIcon();
         r8 = 4;
-        if (r7 == r8) goto L_0x02f4;
-    L_0x02f1:
+        if (r7 == r8) goto L_0x0323;
+    L_0x0320:
         r17 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0300;
-    L_0x02f4:
+        goto L_0x032f;
+    L_0x0323:
         r7 = r0.miniMediaActionDrawable;
         r7 = r7.getTransitionProgress();
         r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r7 = r8 - r7;
         r17 = r7;
-    L_0x0300:
+    L_0x032f:
         r3 = (r17 > r3 ? 1 : (r17 == r3 ? 0 : -1));
-        if (r3 != 0) goto L_0x0307;
-    L_0x0304:
+        if (r3 != 0) goto L_0x0336;
+    L_0x0333:
         r3 = 0;
         r0.drawMiniIcon = r3;
-    L_0x0307:
+    L_0x0336:
         r3 = r0.miniDrawCanvas;
-        if (r3 == 0) goto L_0x0329;
-    L_0x030b:
+        if (r3 == 0) goto L_0x0358;
+    L_0x033a:
         r2 = r2 + 18;
         r2 = r2 + r12;
         r2 = (float) r2;
@@ -759,8 +783,8 @@ public class RadialProgress2 {
         r8 = r8 * r17;
         r9 = org.telegram.ui.ActionBar.Theme.checkboxSquare_eraserPaint;
         r3.drawCircle(r7, r2, r8, r9);
-        goto L_0x033c;
-    L_0x0329:
+        goto L_0x036b;
+    L_0x0358:
         r2 = r0.miniProgressBackgroundPaint;
         r3 = r0.progressColor;
         r2.setColor(r3);
@@ -769,10 +793,10 @@ public class RadialProgress2 {
         r2 = (float) r2;
         r3 = r0.miniProgressBackgroundPaint;
         r1.drawCircle(r4, r6, r2, r3);
-    L_0x033c:
+    L_0x036b:
         r2 = r0.miniDrawCanvas;
-        if (r2 == 0) goto L_0x0350;
-    L_0x0340:
+        if (r2 == 0) goto L_0x037f;
+    L_0x036f:
         r2 = r0.miniDrawBitmap;
         r3 = r0.progressRect;
         r7 = r3.left;
@@ -783,7 +807,7 @@ public class RadialProgress2 {
         r3 = (float) r3;
         r8 = 0;
         r1.drawBitmap(r2, r7, r3, r8);
-    L_0x0350:
+    L_0x037f:
         r2 = (float) r5;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r3 = (float) r3;
@@ -814,7 +838,7 @@ public class RadialProgress2 {
         r3.setBounds(r5, r7, r4, r2);
         r2 = r0.miniMediaActionDrawable;
         r2.draw(r1);
-    L_0x038d:
+    L_0x03bc:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RadialProgress2.draw(android.graphics.Canvas):void");

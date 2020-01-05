@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -16,17 +17,19 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class GroupCreateUserCell extends FrameLayout {
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
     private CheckBox2 checkBox;
     private int currentAccount = UserConfig.selectedAccount;
     private CharSequence currentName;
     private TLObject currentObject;
     private CharSequence currentStatus;
+    private boolean drawDivider = false;
     private FileLocation lastAvatar;
     private String lastName;
     private int lastStatus;
     private SimpleTextView nameTextView;
+    private int padding;
     private SimpleTextView statusTextView;
 
     public boolean hasOverlappingRendering() {
@@ -35,28 +38,31 @@ public class GroupCreateUserCell extends FrameLayout {
 
     public GroupCreateUserCell(Context context, boolean z, int i) {
         Context context2 = context;
+        int i2 = i;
         super(context);
+        this.padding = i2;
+        this.avatarDrawable = new AvatarDrawable();
         this.avatarImageView = new BackupImageView(context2);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        int i2 = 5;
-        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (i + 13), 6.0f, LocaleController.isRTL ? (float) (i + 13) : 0.0f, 0.0f));
+        int i3 = 5;
+        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (i2 + 13), 6.0f, LocaleController.isRTL ? (float) (i2 + 13) : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context2);
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(16);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        int i3 = 28;
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) ((LocaleController.isRTL ? 28 : 72) + i), 10.0f, (float) ((LocaleController.isRTL ? 72 : 28) + i), 0.0f));
+        int i4 = 28;
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) ((LocaleController.isRTL ? 28 : 72) + i2), 10.0f, (float) ((LocaleController.isRTL ? 72 : 28) + i2), 0.0f));
         this.statusTextView = new SimpleTextView(context2);
-        this.statusTextView.setTextSize(15);
+        this.statusTextView.setTextSize(14);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView = this.statusTextView;
-        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f = (float) ((LocaleController.isRTL ? 28 : 72) + i);
+        int i5 = (LocaleController.isRTL ? 5 : 3) | 48;
+        float f = (float) ((LocaleController.isRTL ? 28 : 72) + i2);
         if (LocaleController.isRTL) {
-            i3 = 72;
+            i4 = 72;
         }
-        addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i4, f, 32.0f, (float) (i3 + i), 0.0f));
+        addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i5, f, 32.0f, (float) (i4 + i2), 0.0f));
         if (z) {
             this.checkBox = new CheckBox2(context2, 21);
             this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
@@ -64,16 +70,23 @@ public class GroupCreateUserCell extends FrameLayout {
             this.checkBox.setDrawBackgroundAsArc(3);
             CheckBox2 checkBox2 = this.checkBox;
             if (!LocaleController.isRTL) {
-                i2 = 3;
+                i3 = 3;
             }
-            addView(checkBox2, LayoutHelper.createFrame(24, 24.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 40.0f, 33.0f, LocaleController.isRTL ? 39.0f : 0.0f, 0.0f));
+            addView(checkBox2, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 40.0f, 33.0f, LocaleController.isRTL ? 39.0f : 0.0f, 0.0f));
         }
+        setWillNotDraw(false);
+    }
+
+    public void setObject(TLObject tLObject, CharSequence charSequence, CharSequence charSequence2, boolean z) {
+        setObject(tLObject, charSequence, charSequence2);
+        this.drawDivider = z;
     }
 
     public void setObject(TLObject tLObject, CharSequence charSequence, CharSequence charSequence2) {
         this.currentObject = tLObject;
         this.currentStatus = charSequence2;
         this.currentName = charSequence;
+        this.drawDivider = false;
         update(0);
     }
 
@@ -260,7 +273,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e01e5 float:1.8876021E38 double:1.0531623963E-314;
+        r1 = NUM; // 0x7f0e01e8 float:1.8876027E38 double:1.0531623977E-314;
         r3 = "Bot";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -309,7 +322,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0760 float:1.8878867E38 double:1.0531630894E-314;
+        r1 = NUM; // 0x7f0e0770 float:1.88789E38 double:1.0531630973E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -429,7 +442,7 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x01e9;
     L_0x01da:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0623 float:1.8878224E38 double:1.053162933E-314;
+        r1 = NUM; // 0x7f0e0631 float:1.8878252E38 double:1.0531629397E-314;
         r3 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -440,14 +453,14 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x0200;
     L_0x01f1:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0624 float:1.8878226E38 double:1.0531629333E-314;
+        r1 = NUM; // 0x7f0e0632 float:1.8878254E38 double:1.05316294E-314;
         r3 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
         goto L_0x020e;
     L_0x0200:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0627 float:1.8878232E38 double:1.053162935E-314;
+        r1 = NUM; // 0x7f0e0635 float:1.887826E38 double:1.0531629417E-314;
         r3 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -471,5 +484,19 @@ public class GroupCreateUserCell extends FrameLayout {
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCreateUserCell.update(int):void");
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (this.drawDivider) {
+            float f = 0.0f;
+            int dp = AndroidUtilities.dp(LocaleController.isRTL ? 0.0f : (float) (this.padding + 72));
+            int measuredWidth = getMeasuredWidth();
+            if (LocaleController.isRTL) {
+                f = (float) (this.padding + 72);
+            }
+            canvas.drawRect((float) dp, (float) (getMeasuredHeight() - 1), (float) (measuredWidth - AndroidUtilities.dp(f)), (float) getMeasuredHeight(), Theme.dividerPaint);
+        }
     }
 }

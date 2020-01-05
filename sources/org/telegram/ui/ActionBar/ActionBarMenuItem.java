@@ -42,6 +42,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean animateClear;
     private boolean animationEnabled;
     private ImageView clearButton;
+    private boolean clearsTextOnSearchCollapse;
     private ActionBarMenuItemDelegate delegate;
     protected ImageView iconView;
     private boolean ignoreOnTextChange;
@@ -118,6 +119,7 @@ public class ActionBarMenuItem extends FrameLayout {
         this.animationEnabled = true;
         this.longClickEnabled = true;
         this.animateClear = true;
+        this.clearsTextOnSearchCollapse = true;
         if (i != 0) {
             setBackgroundDrawable(Theme.createSelectorDrawable(i, z ? 5 : 1));
         }
@@ -383,6 +385,9 @@ public class ActionBarMenuItem extends FrameLayout {
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             if (!this.processedPopupClick) {
                 this.processedPopupClick = true;
+                if (!this.allowCloseAnimation) {
+                    this.popupWindow.setAnimationStyle(NUM);
+                }
                 this.popupWindow.dismiss(this.allowCloseAnimation);
             } else {
                 return;
@@ -663,7 +668,9 @@ public class ActionBarMenuItem extends FrameLayout {
             if (z) {
                 AndroidUtilities.hideKeyboard(this.searchField);
             }
-            this.searchField.setText(str);
+            if (this.clearsTextOnSearchCollapse) {
+                this.searchField.setText(str);
+            }
             this.searchContainer.setVisibility(8);
             this.searchField.clearFocus();
             setVisibility(0);
@@ -685,6 +692,10 @@ public class ActionBarMenuItem extends FrameLayout {
             actionBarMenuItemSearchListener2.onSearchExpand();
         }
         return true;
+    }
+
+    public void setClearsTextOnSearchCollapse(boolean z) {
+        this.clearsTextOnSearchCollapse = z;
     }
 
     public void closeSubMenu() {

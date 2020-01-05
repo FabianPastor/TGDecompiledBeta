@@ -1,6 +1,7 @@
 package org.telegram.ui.Adapters;
 
 import android.location.Location;
+import android.os.Build.VERSION;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -117,10 +118,14 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     public void searchPlacesWithQuery(String str, Location location, boolean z) {
+        searchPlacesWithQuery(str, location, z, false);
+    }
+
+    public void searchPlacesWithQuery(String str, Location location, boolean z, boolean z2) {
         if (location != null) {
             Location location2 = this.lastSearchLocation;
             if (location2 == null || location.distanceTo(location2) >= 200.0f) {
-                this.lastSearchLocation = location;
+                this.lastSearchLocation = new Location(location);
                 this.lastSearchQuery = str;
                 if (this.searching) {
                     this.searching = false;
@@ -129,6 +134,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         this.currentRequestNum = 0;
                     }
                 }
+                int itemCount = getItemCount();
+                boolean z3 = this.searching;
                 this.searching = true;
                 TLObject userOrChat = MessagesController.getInstance(this.currentAccount).getUserOrChat(MessagesController.getInstance(this.currentAccount).venueSearchBot);
                 if (userOrChat instanceof User) {
@@ -149,7 +156,16 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         tL_messages_getInlineBotResults.peer = new TL_inputPeerEmpty();
                     }
                     this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getInlineBotResults, new -$$Lambda$BaseLocationAdapter$Q_AKnGvZK4rCf-iCn8zQfX2dHBA(this, str));
-                    notifyDataSetChanged();
+                    if (!z2 || VERSION.SDK_INT < 19) {
+                        notifyDataSetChanged();
+                    } else if (!this.places.isEmpty() && !z3) {
+                        int size = this.places.size() + 1;
+                        itemCount -= size;
+                        notifyItemInserted(itemCount);
+                        notifyItemRangeRemoved(itemCount, size);
+                    } else if (!z3) {
+                        notifyItemChanged(getItemCount() - 1);
+                    }
                 } else {
                     if (z) {
                         searchBotUser();

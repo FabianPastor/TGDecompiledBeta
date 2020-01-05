@@ -35,12 +35,13 @@ public class URLSpanNoUnderline extends URLSpan {
     }
 
     public void updateDrawState(TextPaint textPaint) {
+        int i = textPaint.linkColor;
+        int color = textPaint.getColor();
         super.updateDrawState(textPaint);
         TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
-        } else {
-            textPaint.setUnderlineText(false);
         }
+        textPaint.setUnderlineText(i == color);
     }
 }

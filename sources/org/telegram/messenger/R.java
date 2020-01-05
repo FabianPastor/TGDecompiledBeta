@@ -304,6 +304,7 @@ public final class R {
         public static final int devices = NUM;
         public static final int doc_big = NUM;
         public static final int edit_cancel = NUM;
+        public static final int editor_rotate = NUM;
         public static final int fab_highlight_dark = NUM;
         public static final int fast_reply = NUM;
         public static final int field_carret_empty = NUM;
@@ -353,6 +354,7 @@ public final class R {
         public static final int group_edit_profile = NUM;
         public static final int group_log = NUM;
         public static final int groups_create = NUM;
+        public static final int groups_limit1 = NUM;
         public static final int groups_overview_check = NUM;
         public static final int groupsintro = NUM;
         public static final int groupsintro2 = NUM;
@@ -479,7 +481,6 @@ public final class R {
         public static final int list_selector_ex = NUM;
         public static final int list_warning_sign = NUM;
         public static final int live_loc = NUM;
-        public static final int livelocationpin = NUM;
         public static final int livepin = NUM;
         public static final int load_big = NUM;
         public static final int loading_animation = NUM;
@@ -619,6 +620,7 @@ public final class R {
         public static final int msg_pollstop = NUM;
         public static final int msg_reply = NUM;
         public static final int msg_report = NUM;
+        public static final int msg_reset = NUM;
         public static final int msg_retry = NUM;
         public static final int msg_round_cancel_m = NUM;
         public static final int msg_round_file_s = NUM;
@@ -728,6 +730,7 @@ public final class R {
         public static final int pl_repeat1 = NUM;
         public static final int pl_shuffle = NUM;
         public static final int place_x = NUM;
+        public static final int places_btn = NUM;
         public static final int play_big = NUM;
         public static final int play_mini_video = NUM;
         public static final int player = NUM;
@@ -840,6 +843,7 @@ public final class R {
         public static final int tip5 = NUM;
         public static final int tip6 = NUM;
         public static final int tip6_dark = NUM;
+        public static final int toast_pallete = NUM;
         public static final int tool_blur = NUM;
         public static final int tool_cropfix = NUM;
         public static final int tool_curve = NUM;
@@ -1519,6 +1523,7 @@ public final class R {
         public static final int AndOther_other = NUM;
         public static final int AndOther_two = NUM;
         public static final int AndOther_zero = NUM;
+        public static final int AnimatedStickers = NUM;
         public static final int AnonymousPoll = NUM;
         public static final int ApkRestricted = NUM;
         public static final int AppFolderInfo = NUM;
@@ -1642,6 +1647,7 @@ public final class R {
         public static final int AuthAnotherClientOk = NUM;
         public static final int AuthAnotherClientScan = NUM;
         public static final int AuthAnotherClientTokenError = NUM;
+        public static final int AuthAnotherClientUrl = NUM;
         public static final int AutoDownloadAudioInfo = NUM;
         public static final int AutoDownloadChannels = NUM;
         public static final int AutoDownloadContacts = NUM;
@@ -1717,6 +1723,7 @@ public final class R {
         public static final int Back = NUM;
         public static final int BackgroundBlurred = NUM;
         public static final int BackgroundBrightness = NUM;
+        public static final int BackgroundChoosePattern = NUM;
         public static final int BackgroundColor = NUM;
         public static final int BackgroundColorPreviewLine1 = NUM;
         public static final int BackgroundColorPreviewLine2 = NUM;
@@ -2059,6 +2066,8 @@ public final class R {
         public static final int ColorRed = NUM;
         public static final int ColorSepia = NUM;
         public static final int ColorTheme = NUM;
+        public static final int ColorThemeChanged = NUM;
+        public static final int ColorThemeChangedInfo = NUM;
         public static final int ColorThemes = NUM;
         public static final int ColorViolet = NUM;
         public static final int ColorWhite = NUM;
@@ -2206,6 +2215,7 @@ public final class R {
         public static final int DeleteProxy = NUM;
         public static final int DeleteReportSpam = NUM;
         public static final int DeleteSingleMessagesTitle = NUM;
+        public static final int DeleteTheme = NUM;
         public static final int DeleteThemeAlert = NUM;
         public static final int DeleteThemeTitle = NUM;
         public static final int DeleteThisChat = NUM;
@@ -2304,6 +2314,7 @@ public final class R {
         public static final int EditMessageError = NUM;
         public static final int EditMessageMedia = NUM;
         public static final int EditName = NUM;
+        public static final int EditThemeColors = NUM;
         public static final int EditThemeTitle = NUM;
         public static final int EditedMessage = NUM;
         public static final int EmailCopied = NUM;
@@ -2351,6 +2362,7 @@ public final class R {
         public static final int EnterNewFirstPasscode = NUM;
         public static final int EnterNewPasscode = NUM;
         public static final int EnterThemeName = NUM;
+        public static final int EnterThemeNameEdit = NUM;
         public static final int EnterYourPasscode = NUM;
         public static final int ErrorOccurred = NUM;
         public static final int ErrorSendRestrictedMedia = NUM;
@@ -2659,6 +2671,9 @@ public final class R {
         public static final int InAppSounds = NUM;
         public static final int InAppVibrate = NUM;
         public static final int InChatSound = NUM;
+        public static final int InactiveChannelSignature = NUM;
+        public static final int InactiveChatSignature = NUM;
+        public static final int InactiveChats = NUM;
         public static final int IncomingCalls = NUM;
         public static final int IncorrectLocalization = NUM;
         public static final int IncorrectTheme = NUM;
@@ -2745,9 +2760,11 @@ public final class R {
         public static final int Later = NUM;
         public static final int LeaveChannel = NUM;
         public static final int LeaveChannelMenu = NUM;
+        public static final int LeaveChats = NUM;
         public static final int LeaveMegaMenu = NUM;
         public static final int LedColor = NUM;
         public static final int LedDisabled = NUM;
+        public static final int LimitReached = NUM;
         public static final int LinkAvailable = NUM;
         public static final int LinkChecking = NUM;
         public static final int LinkCopied = NUM;
@@ -2766,6 +2783,7 @@ public final class R {
         public static final int LinksTitle = NUM;
         public static final int LiveLocationAlertGroup = NUM;
         public static final int LiveLocationAlertPrivate = NUM;
+        public static final int LiveLocationContext = NUM;
         public static final int LiveLocations = NUM;
         public static final int Loading = NUM;
         public static final int LoadingFullImage = NUM;
@@ -2942,9 +2960,10 @@ public final class R {
         public static final int NewSecretChat = NUM;
         public static final int NewTheme = NUM;
         public static final int NewThemePreviewLine1 = NUM;
-        public static final int NewThemePreviewLine2 = NUM;
+        public static final int NewThemePreviewLine3 = NUM;
         public static final int NewThemePreviewName = NUM;
         public static final int NewThemePreviewReply = NUM;
+        public static final int NewThemePreviewReply2 = NUM;
         public static final int NewThemeTitle = NUM;
         public static final int Next = NUM;
         public static final int NoAudioFiles = NUM;
@@ -3171,6 +3190,7 @@ public final class R {
         public static final int OpenFile = NUM;
         public static final int OpenGroup = NUM;
         public static final int OpenInBrowser = NUM;
+        public static final int OpenInEditor = NUM;
         public static final int OpenInExternalApp = NUM;
         public static final int OpenMessage = NUM;
         public static final int OpenTheme = NUM;
@@ -3528,6 +3548,7 @@ public final class R {
         public static final int PinnedMessage = NUM;
         public static final int PinnedMessages = NUM;
         public static final int PinnedPoll = NUM;
+        public static final int PlacesInThisArea = NUM;
         public static final int PleaseDownload = NUM;
         public static final int PleaseEnterCurrentPassword = NUM;
         public static final int PleaseEnterCurrentPasswordTransfer = NUM;
@@ -3720,6 +3741,8 @@ public final class R {
         public static final int Satellite = NUM;
         public static final int Saturation = NUM;
         public static final int Save = NUM;
+        public static final int SaveChangesAlertText = NUM;
+        public static final int SaveChangesAlertTitle = NUM;
         public static final int SaveTheme = NUM;
         public static final int SaveToDownloads = NUM;
         public static final int SaveToGIFs = NUM;
@@ -3872,6 +3895,7 @@ public final class R {
         public static final int SharePhoneNumberWith = NUM;
         public static final int ShareSendTo = NUM;
         public static final int ShareTelegram = NUM;
+        public static final int ShareTheme = NUM;
         public static final int ShareYouLocationInfo = NUM;
         public static final int ShareYouLocationInline = NUM;
         public static final int ShareYouLocationTitle = NUM;
@@ -4030,15 +4054,16 @@ public final class R {
         public static final int TermsOfService = NUM;
         public static final int TermsOfServiceLogin = NUM;
         public static final int TextCopied = NUM;
+        public static final int TextSelectionHit = NUM;
         public static final int TextSizeHeader = NUM;
         public static final int Theme = NUM;
         public static final int ThemeArcticBlue = NUM;
-        public static final int ThemeBlue = NUM;
+        public static final int ThemeClassic = NUM;
         public static final int ThemeCreateHelp = NUM;
         public static final int ThemeCreateHelp2 = NUM;
         public static final int ThemeDark = NUM;
         public static final int ThemeDarkBlue = NUM;
-        public static final int ThemeGraphite = NUM;
+        public static final int ThemeDay = NUM;
         public static final int ThemeHelpLink = NUM;
         public static final int ThemeInfo = NUM;
         public static final int ThemeInstallCount_few = NUM;
@@ -4049,6 +4074,7 @@ public final class R {
         public static final int ThemeInstallCount_zero = NUM;
         public static final int ThemeNameInvalid = NUM;
         public static final int ThemeNamePlaceholder = NUM;
+        public static final int ThemeNight = NUM;
         public static final int ThemeNotFound = NUM;
         public static final int ThemeNotSupported = NUM;
         public static final int ThemePreview = NUM;
@@ -4076,6 +4102,9 @@ public final class R {
         public static final int ThemePreviewSongPerformer = NUM;
         public static final int ThemePreviewSongTitle = NUM;
         public static final int ThemePreviewTitle = NUM;
+        public static final int ThemeResetToDefaults = NUM;
+        public static final int ThemeResetToDefaultsText = NUM;
+        public static final int ThemeResetToDefaultsTitle = NUM;
         public static final int ThemeSetUrl = NUM;
         public static final int ThemeSetUrlHelp = NUM;
         public static final int ThemeUrl = NUM;
@@ -4091,6 +4120,10 @@ public final class R {
         public static final int TintShadows = NUM;
         public static final int TodayAt = NUM;
         public static final int TodayAtFormatted = NUM;
+        public static final int TooManyCommunities = NUM;
+        public static final int TooManyCommunitiesHintCreate = NUM;
+        public static final int TooManyCommunitiesHintEdit = NUM;
+        public static final int TooManyCommunitiesHintJoin = NUM;
         public static final int TooManyTries = NUM;
         public static final int TosAgeText = NUM;
         public static final int TosAgeTitle = NUM;
@@ -4181,6 +4214,7 @@ public final class R {
         public static final int UserBioEmpty = NUM;
         public static final int UserBioInfo = NUM;
         public static final int UserBlocked = NUM;
+        public static final int UserChannelTooMuchJoin = NUM;
         public static final int UserRemovedBy = NUM;
         public static final int UserRestricted = NUM;
         public static final int UserRestrictions = NUM;

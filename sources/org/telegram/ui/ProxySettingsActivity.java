@@ -597,7 +597,7 @@ public class ProxySettingsActivity extends BaseFragment {
         r4 = new java.lang.String[r4];
         r11.pasteFields = r4;
         r4 = 2;
-        if (r0 == 0) goto L_0x012a;
+        if (r0 == 0) goto L_0x012b;
     L_0x003c:
         r5 = new java.lang.String[r4];
         r6 = "t.me/socks?";
@@ -653,12 +653,12 @@ public class ProxySettingsActivity extends BaseFragment {
         r7 = r7 + 1;
         goto L_0x0077;
     L_0x0097:
-        if (r1 == 0) goto L_0x012a;
+        if (r1 == 0) goto L_0x012b;
     L_0x0099:
         r0 = 0;
     L_0x009a:
         r5 = r1.length;
-        if (r0 >= r5) goto L_0x012a;
+        if (r0 >= r5) goto L_0x012b;
     L_0x009d:
         r5 = r1[r0];
         r7 = "=";
@@ -666,7 +666,7 @@ public class ProxySettingsActivity extends BaseFragment {
         r7 = r5.length;
         if (r7 == r4) goto L_0x00aa;
     L_0x00a8:
-        goto L_0x0126;
+        goto L_0x0127;
     L_0x00aa:
         r7 = r5[r2];
         r7 = r7.toLowerCase();
@@ -674,126 +674,126 @@ public class ProxySettingsActivity extends BaseFragment {
         r9 = 4;
         r10 = 3;
         switch(r8) {
-            case -906277200: goto L_0x00e2;
-            case -905826493: goto L_0x00d8;
-            case 3433489: goto L_0x00ce;
-            case 3446913: goto L_0x00c4;
+            case -906277200: goto L_0x00e3;
+            case -905826493: goto L_0x00d9;
+            case 3433489: goto L_0x00cf;
+            case 3446913: goto L_0x00c5;
             case 3599307: goto L_0x00ba;
             default: goto L_0x00b9;
         };
     L_0x00b9:
-        goto L_0x00ec;
+        goto L_0x00ed;
     L_0x00ba:
         r8 = "user";
         r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ec;
-    L_0x00c2:
+        if (r7 == 0) goto L_0x00ed;
+    L_0x00c3:
         r7 = 2;
-        goto L_0x00ed;
-    L_0x00c4:
+        goto L_0x00ee;
+    L_0x00c5:
         r8 = "port";
         r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ec;
-    L_0x00cc:
+        if (r7 == 0) goto L_0x00ed;
+    L_0x00cd:
         r7 = 1;
-        goto L_0x00ed;
-    L_0x00ce:
+        goto L_0x00ee;
+    L_0x00cf:
         r8 = "pass";
         r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ec;
-    L_0x00d6:
+        if (r7 == 0) goto L_0x00ed;
+    L_0x00d7:
         r7 = 3;
-        goto L_0x00ed;
-    L_0x00d8:
+        goto L_0x00ee;
+    L_0x00d9:
         r8 = "server";
         r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ec;
-    L_0x00e0:
+        if (r7 == 0) goto L_0x00ed;
+    L_0x00e1:
         r7 = 0;
-        goto L_0x00ed;
-    L_0x00e2:
+        goto L_0x00ee;
+    L_0x00e3:
         r8 = "secret";
         r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ec;
-    L_0x00ea:
+        if (r7 == 0) goto L_0x00ed;
+    L_0x00eb:
         r7 = 4;
-        goto L_0x00ed;
-    L_0x00ec:
-        r7 = -1;
+        goto L_0x00ee;
     L_0x00ed:
-        if (r7 == 0) goto L_0x0120;
-    L_0x00ef:
-        if (r7 == r6) goto L_0x0119;
-    L_0x00f1:
-        if (r7 == r4) goto L_0x010e;
-    L_0x00f3:
-        if (r7 == r10) goto L_0x0103;
-    L_0x00f5:
-        if (r7 == r9) goto L_0x00f8;
-    L_0x00f7:
-        goto L_0x0126;
+        r7 = -1;
+    L_0x00ee:
+        if (r7 == 0) goto L_0x0121;
+    L_0x00f0:
+        if (r7 == r6) goto L_0x011a;
+    L_0x00f2:
+        if (r7 == r4) goto L_0x010f;
+    L_0x00f4:
+        if (r7 == r10) goto L_0x0104;
+    L_0x00f6:
+        if (r7 == r9) goto L_0x00f9;
     L_0x00f8:
+        goto L_0x0127;
+    L_0x00f9:
         r7 = r11.pasteType;
-        if (r7 != r6) goto L_0x0126;
-    L_0x00fc:
+        if (r7 != r6) goto L_0x0127;
+    L_0x00fd:
         r7 = r11.pasteFields;
         r5 = r5[r6];
         r7[r9] = r5;
-        goto L_0x0126;
-    L_0x0103:
+        goto L_0x0127;
+    L_0x0104:
         r7 = r11.pasteType;
-        if (r7 != 0) goto L_0x0126;
-    L_0x0107:
+        if (r7 != 0) goto L_0x0127;
+    L_0x0108:
         r7 = r11.pasteFields;
         r5 = r5[r6];
         r7[r10] = r5;
-        goto L_0x0126;
-    L_0x010e:
+        goto L_0x0127;
+    L_0x010f:
         r7 = r11.pasteType;
-        if (r7 != 0) goto L_0x0126;
-    L_0x0112:
+        if (r7 != 0) goto L_0x0127;
+    L_0x0113:
         r7 = r11.pasteFields;
         r5 = r5[r6];
         r7[r4] = r5;
-        goto L_0x0126;
-    L_0x0119:
+        goto L_0x0127;
+    L_0x011a:
         r7 = r11.pasteFields;
         r5 = r5[r6];
         r7[r6] = r5;
-        goto L_0x0126;
-    L_0x0120:
+        goto L_0x0127;
+    L_0x0121:
         r7 = r11.pasteFields;
         r5 = r5[r6];
         r7[r2] = r5;
-    L_0x0126:
+    L_0x0127:
         r0 = r0 + 1;
         goto L_0x009a;
-    L_0x012a:
+    L_0x012b:
         r0 = r11.pasteType;
-        if (r0 == r3) goto L_0x0143;
-    L_0x012e:
+        if (r0 == r3) goto L_0x0144;
+    L_0x012f:
         r0 = r11.pasteCell;
         r0 = r0.getVisibility();
-        if (r0 == 0) goto L_0x0159;
-    L_0x0136:
+        if (r0 == 0) goto L_0x015a;
+    L_0x0137:
         r0 = r11.pasteCell;
         r0.setVisibility(r2);
         r0 = r11.sectionCell;
         r0 = r0[r4];
         r0.setVisibility(r2);
-        goto L_0x0159;
-    L_0x0143:
+        goto L_0x015a;
+    L_0x0144:
         r0 = r11.pasteCell;
         r0 = r0.getVisibility();
         r1 = 8;
-        if (r0 == r1) goto L_0x0159;
-    L_0x014d:
+        if (r0 == r1) goto L_0x015a;
+    L_0x014e:
         r0 = r11.pasteCell;
         r0.setVisibility(r1);
         r0 = r11.sectionCell;
         r0 = r0[r4];
         r0.setVisibility(r1);
-    L_0x0159:
+    L_0x015a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProxySettingsActivity.updatePasteCell():void");

@@ -2510,7 +2510,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getContext(), chatActivity.getDialogId(), new -$$Lambda$ChatAttachAlert$nkoGoAQLTQRSH5XzK0gXDuHdNw0(this));
         } else if (i == 1) {
-            sendPressed(true, 0);
+            sendPressed(false, 0);
         }
     }
 
@@ -3327,7 +3327,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_c5 float:1.7944978E38 double:1.0529356004E-314;
+        r6 = NUM; // 0x7var_c6 float:1.794498E38 double:1.052935601E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
         r0 = "AccDescrCameraFlashAuto";
@@ -3335,7 +3335,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_c7 float:1.7944982E38 double:1.0529356013E-314;
+        r6 = NUM; // 0x7var_c8 float:1.7944984E38 double:1.052935602E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0014 float:1.8875078E38 double:1.0531621665E-314;
         r0 = "AccDescrCameraFlashOn";
@@ -3343,7 +3343,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_c6 float:1.794498E38 double:1.052935601E-314;
+        r6 = NUM; // 0x7var_c7 float:1.7944982E38 double:1.0529356013E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
         r0 = "AccDescrCameraFlashOff";
@@ -4477,13 +4477,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         if (top < AndroidUtilities.dp(7.0f) || holder == null || holder.getAdapterPosition() != 0) {
             top = dp;
         }
-        Object obj = top <= AndroidUtilities.dp(12.0f) ? 1 : null;
-        if ((obj != null && this.actionBar.getTag() == null) || (obj == null && this.actionBar.getTag() != null)) {
-            this.actionBar.setTag(obj != null ? Integer.valueOf(1) : null);
+        final boolean z2 = top <= AndroidUtilities.dp(12.0f);
+        if ((z2 && this.actionBar.getTag() == null) || !(z2 || this.actionBar.getTag() == null)) {
+            this.actionBar.setTag(z2 ? Integer.valueOf(1) : null);
             AnimatorSet animatorSet = this.actionBarAnimation;
             if (animatorSet != null) {
                 animatorSet.cancel();
                 this.actionBarAnimation = null;
+            }
+            if (!z2) {
+                this.buttonsRecyclerView.setVisibility(0);
             }
             this.actionBarAnimation = new AnimatorSet();
             this.actionBarAnimation.setDuration(180);
@@ -4493,12 +4496,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             float f = 1.0f;
-            fArr[0] = obj != null ? 1.0f : 0.0f;
+            fArr[0] = z2 ? 1.0f : 0.0f;
             animatorArr[0] = ObjectAnimator.ofFloat(actionBar, property, fArr);
             View view = this.actionBarShadow;
             property = View.ALPHA;
             fArr = new float[1];
-            if (obj == null) {
+            if (!z2) {
                 f = 0.0f;
             }
             fArr[0] = f;
@@ -4506,6 +4509,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             animatorSet.playTogether(animatorArr);
             this.actionBarAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
+                    if (ChatAttachAlert.this.actionBarAnimation != null && z2) {
+                        ChatAttachAlert.this.buttonsRecyclerView.setVisibility(4);
+                    }
+                }
+
+                public void onAnimationCancel(Animator animator) {
                     ChatAttachAlert.this.actionBarAnimation = null;
                 }
             });

@@ -670,12 +670,12 @@ public class RecyclerListView extends RecyclerView {
 
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
                     if (!(RecyclerListView.this.currentChildView == null || (RecyclerListView.this.onItemClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null))) {
-                        RecyclerListView recyclerListView = RecyclerListView.this;
-                        recyclerListView.onChildPressed(recyclerListView.currentChildView, true);
-                        final View access$300 = RecyclerListView.this.currentChildView;
-                        final int access$600 = RecyclerListView.this.currentChildPosition;
                         final float x = motionEvent.getX();
                         final float y = motionEvent.getY();
+                        RecyclerListView recyclerListView = RecyclerListView.this;
+                        recyclerListView.onChildPressed(recyclerListView.currentChildView, x, y, true);
+                        final View access$300 = RecyclerListView.this.currentChildView;
+                        final int access$600 = RecyclerListView.this.currentChildPosition;
                         if (RecyclerListView.this.instantClick && access$600 != -1) {
                             access$300.playSoundEffect(0);
                             access$300.sendAccessibilityEvent(1);
@@ -692,7 +692,7 @@ public class RecyclerListView extends RecyclerView {
                                 }
                                 View view = access$300;
                                 if (view != null) {
-                                    RecyclerListView.this.onChildPressed(view, false);
+                                    RecyclerListView.this.onChildPressed(view, 0.0f, 0.0f, false);
                                     if (!RecyclerListView.this.instantClick) {
                                         access$300.playSoundEffect(0);
                                         access$300.sendAccessibilityEvent(1);
@@ -791,7 +791,7 @@ public class RecyclerListView extends RecyclerView {
                 if (RecyclerListView.this.interceptedByChild || RecyclerListView.this.currentChildView == null) {
                     RecyclerListView.this.selectorRect.setEmpty();
                 } else {
-                    RecyclerListView.this.selectChildRunnable = new -$$Lambda$RecyclerListView$RecyclerListViewItemClickListener$XWyZ4ltKefT0aojGOGmh-BAE5L4(this);
+                    RecyclerListView.this.selectChildRunnable = new -$$Lambda$RecyclerListView$RecyclerListViewItemClickListener$SK_thRYGfpljnQ09MrG-_RQm5SU(this, motionEvent.getX(), motionEvent.getY());
                     AndroidUtilities.runOnUIThread(RecyclerListView.this.selectChildRunnable, (long) ViewConfiguration.getTapTimeout());
                     if (RecyclerListView.this.currentChildView.isEnabled()) {
                         recyclerListView = RecyclerListView.this;
@@ -822,7 +822,7 @@ public class RecyclerListView extends RecyclerView {
                 }
                 View access$300 = RecyclerListView.this.currentChildView;
                 RecyclerListView recyclerListView3 = RecyclerListView.this;
-                recyclerListView3.onChildPressed(recyclerListView3.currentChildView, false);
+                recyclerListView3.onChildPressed(recyclerListView3.currentChildView, 0.0f, 0.0f, false);
                 RecyclerListView.this.currentChildView = null;
                 RecyclerListView.this.interceptedByChild = false;
                 RecyclerListView.this.removeSelection(access$300, motionEvent2);
@@ -834,10 +834,10 @@ public class RecyclerListView extends RecyclerView {
             return false;
         }
 
-        public /* synthetic */ void lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener() {
+        public /* synthetic */ void lambda$onInterceptTouchEvent$0$RecyclerListView$RecyclerListViewItemClickListener(float f, float f2) {
             if (RecyclerListView.this.selectChildRunnable != null && RecyclerListView.this.currentChildView != null) {
                 RecyclerListView recyclerListView = RecyclerListView.this;
-                recyclerListView.onChildPressed(recyclerListView.currentChildView, true);
+                recyclerListView.onChildPressed(recyclerListView.currentChildView, f, f2, true);
                 RecyclerListView.this.selectChildRunnable = null;
             }
         }
@@ -1044,7 +1044,7 @@ public class RecyclerListView extends RecyclerView {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onChildPressed(View view, boolean z) {
+    public void onChildPressed(View view, float f, float f2, boolean z) {
         if (!this.disableHighlightState) {
             view.setPressed(z);
         }
@@ -1080,7 +1080,7 @@ public class RecyclerListView extends RecyclerView {
         View view = this.currentChildView;
         if (view != null) {
             if (z) {
-                onChildPressed(view, false);
+                onChildPressed(view, 0.0f, 0.0f, false);
             }
             this.currentChildView = null;
             removeSelection(view, null);
@@ -1142,7 +1142,7 @@ public class RecyclerListView extends RecyclerView {
                     obtain.recycle();
                     View access$300 = RecyclerListView.this.currentChildView;
                     RecyclerListView recyclerListView = RecyclerListView.this;
-                    recyclerListView.onChildPressed(recyclerListView.currentChildView, false);
+                    recyclerListView.onChildPressed(recyclerListView.currentChildView, 0.0f, 0.0f, false);
                     RecyclerListView.this.currentChildView = null;
                     RecyclerListView.this.removeSelection(access$300, null);
                     RecyclerListView.this.interceptedByChild = false;
@@ -1715,12 +1715,13 @@ public class RecyclerListView extends RecyclerView {
     public void hideSelector(boolean z) {
         View view = this.currentChildView;
         if (view != null) {
-            onChildPressed(view, false);
+            onChildPressed(view, 0.0f, 0.0f, false);
             this.currentChildView = null;
             if (z) {
                 removeSelection(view, null);
-                return;
             }
+        }
+        if (!z) {
             this.selectorDrawable.setState(StateSet.NOTHING);
             this.selectorRect.setEmpty();
         }

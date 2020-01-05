@@ -1098,9 +1098,11 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$initTransfer$7$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, int i) {
-        this.chatId = i;
-        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
-        initTransfer(inputCheckPasswordSRP, twoStepVerificationActivity);
+        if (i != 0) {
+            this.chatId = i;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+            initTransfer(inputCheckPasswordSRP, twoStepVerificationActivity);
+        }
     }
 
     public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TL_channels_editCreator tL_channels_editCreator, TLObject tLObject, TL_error tL_error) {
@@ -1196,6 +1198,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                     } else {
                         if ("SRP_ID_INVALID".equals(tL_error2.text)) {
                             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getPassword(), new -$$Lambda$ChatRightsEditActivity$EmEFuBPyDzxsPVJjrp4s9BS_M7o(this, twoStepVerificationActivity2), 8);
+                        } else if (tL_error2.text.equals("CHANNELS_TOO_MUCH")) {
+                            presentFragment(new TooManyCommunitiesActivity(1));
                         } else {
                             if (twoStepVerificationActivity2 != null) {
                                 twoStepVerificationActivity.needHideProgress();
@@ -1620,9 +1624,11 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$onDonePressed$15$ChatRightsEditActivity(int i) {
-        this.chatId = i;
-        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
-        onDonePressed();
+        if (i != 0) {
+            this.chatId = i;
+            this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+            onDonePressed();
+        }
     }
 
     public void setDelegate(ChatRightsEditActivityDelegate chatRightsEditActivityDelegate) {

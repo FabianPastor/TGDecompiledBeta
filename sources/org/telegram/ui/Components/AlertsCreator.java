@@ -11,6 +11,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -43,6 +44,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.MessagesStorage.BooleanCallback;
 import org.telegram.messenger.MessagesStorage.IntCallback;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SharedConfig;
@@ -79,6 +81,8 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeAccent;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Cells.AccountSelectCell;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.RadioColorCell;
@@ -89,6 +93,7 @@ import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity.NotificationException;
 import org.telegram.ui.ProfileNotificationsActivity;
 import org.telegram.ui.ReportOtherActivity;
+import org.telegram.ui.ThemePreviewActivity;
 
 public class AlertsCreator {
 
@@ -108,403 +113,446 @@ public class AlertsCreator {
         void didSelectDate(boolean z, int i);
     }
 
+    static /* synthetic */ void lambda$createThemeCreateDialog$61(DialogInterface dialogInterface, int i) {
+    }
+
     static /* synthetic */ void lambda$null$31(TLObject tLObject, TL_error tL_error) {
     }
 
     static /* synthetic */ void lambda$null$59(TLObject tLObject, TL_error tL_error) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x031b  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x031b  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x03c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:200:0x03c8  */
-    public static android.app.Dialog processError(int r17, org.telegram.tgnet.TLRPC.TL_error r18, org.telegram.ui.ActionBar.BaseFragment r19, org.telegram.tgnet.TLObject r20, java.lang.Object... r21) {
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x054a  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0387  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x036a  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x036a  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0387  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x041a  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x041a  */
+    public static android.app.Dialog processError(int r18, org.telegram.tgnet.TLRPC.TL_error r19, org.telegram.ui.ActionBar.BaseFragment r20, org.telegram.tgnet.TLObject r21, java.lang.Object... r22) {
         /*
-        r0 = r18;
-        r1 = r19;
-        r2 = r20;
-        r3 = r21;
+        r0 = r19;
+        r1 = r20;
+        r2 = r21;
+        r3 = r22;
         r4 = r0.code;
-        r5 = 406; // 0x196 float:5.69E-43 double:2.006E-321;
-        if (r4 == r5) goto L_0x059a;
-    L_0x000e:
-        r5 = r0.text;
-        if (r5 != 0) goto L_0x0014;
-    L_0x0012:
-        goto L_0x059a;
-    L_0x0014:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_saveSecureValue;
-        r7 = "\n";
-        r9 = "InvalidPhoneNumber";
-        r10 = "PHONE_NUMBER_INVALID";
-        r11 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r12 = "ErrorOccurred";
-        r13 = NUM; // 0x7f0e04b9 float:1.887749E38 double:1.053162754E-314;
-        r14 = "FloodWait";
-        r15 = "FLOOD_WAIT";
-        if (r6 != 0) goto L_0x053b;
-    L_0x002a:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getAuthorizationForm;
-        if (r6 == 0) goto L_0x0030;
-    L_0x002e:
-        goto L_0x053b;
-    L_0x0030:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
-        r8 = 0;
-        if (r6 != 0) goto L_0x0504;
+        r5 = 0;
+        r6 = 406; // 0x196 float:5.69E-43 double:2.006E-321;
+        if (r4 == r6) goto L_0x061b;
+    L_0x000f:
+        r6 = r0.text;
+        if (r6 != 0) goto L_0x0015;
+    L_0x0013:
+        goto L_0x061b;
+    L_0x0015:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_saveSecureValue;
+        r8 = "\n";
+        r10 = "InvalidPhoneNumber";
+        r11 = "PHONE_NUMBER_INVALID";
+        r13 = "ErrorOccurred";
+        r15 = "FloodWait";
+        r9 = "FLOOD_WAIT";
+        if (r7 != 0) goto L_0x05bb;
+    L_0x0025:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getAuthorizationForm;
+        if (r7 == 0) goto L_0x002b;
+    L_0x0029:
+        goto L_0x05bb;
+    L_0x002b:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
+        r12 = "CHANNELS_TOO_MUCH";
+        if (r7 != 0) goto L_0x055f;
+    L_0x0031:
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
+        if (r14 != 0) goto L_0x055f;
     L_0x0035:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
+        if (r14 != 0) goto L_0x055f;
     L_0x0039:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
+        if (r14 != 0) goto L_0x055f;
     L_0x003d:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_startBot;
+        if (r14 != 0) goto L_0x055f;
     L_0x0041:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_startBot;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editBanned;
+        if (r14 != 0) goto L_0x055f;
     L_0x0045:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_editBanned;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatDefaultBannedRights;
+        if (r14 != 0) goto L_0x055f;
     L_0x0049:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatDefaultBannedRights;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatAdmin;
+        if (r14 != 0) goto L_0x055f;
     L_0x004d:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editChatAdmin;
-        if (r6 != 0) goto L_0x0504;
+        r14 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_migrateChat;
+        if (r14 == 0) goto L_0x0053;
     L_0x0051:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_migrateChat;
-        if (r6 == 0) goto L_0x0057;
-    L_0x0055:
-        goto L_0x0504;
-    L_0x0057:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_createChat;
-        if (r6 == 0) goto L_0x006f;
-    L_0x005b:
-        r3 = r5.startsWith(r15);
-        if (r3 == 0) goto L_0x0068;
-    L_0x0061:
-        r0 = r0.text;
-        showFloodWaitAlert(r0, r1);
-        goto L_0x0598;
-    L_0x0068:
-        r0 = r0.text;
-        showAddUserAlert(r0, r1, r8, r2);
-        goto L_0x0598;
+        goto L_0x055f;
+    L_0x0053:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_createChat;
+        r14 = 2;
+        if (r7 == 0) goto L_0x007e;
+    L_0x0058:
+        r3 = r6.equals(r12);
+        if (r3 == 0) goto L_0x0067;
+    L_0x005e:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r0.<init>(r14);
+        r1.presentFragment(r0);
+        return r5;
+    L_0x0067:
+        r3 = r0.text;
+        r3 = r3.startsWith(r9);
+        if (r3 == 0) goto L_0x0076;
     L_0x006f:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_createChannel;
-        if (r6 == 0) goto L_0x0087;
-    L_0x0073:
-        r3 = r5.startsWith(r15);
-        if (r3 == 0) goto L_0x0080;
-    L_0x0079:
         r0 = r0.text;
         showFloodWaitAlert(r0, r1);
-        goto L_0x0598;
-    L_0x0080:
+        goto L_0x061b;
+    L_0x0076:
         r0 = r0.text;
-        showAddUserAlert(r0, r1, r8, r2);
-        goto L_0x0598;
-    L_0x0087:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editMessage;
-        if (r6 == 0) goto L_0x00b1;
-    L_0x008b:
+        r3 = 0;
+        showAddUserAlert(r0, r1, r3, r2);
+        goto L_0x061b;
+    L_0x007e:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_createChannel;
+        if (r7 == 0) goto L_0x00a8;
+    L_0x0082:
+        r3 = r6.equals(r12);
+        if (r3 == 0) goto L_0x0091;
+    L_0x0088:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r0.<init>(r14);
+        r1.presentFragment(r0);
+        return r5;
+    L_0x0091:
+        r3 = r0.text;
+        r3 = r3.startsWith(r9);
+        if (r3 == 0) goto L_0x00a0;
+    L_0x0099:
+        r0 = r0.text;
+        showFloodWaitAlert(r0, r1);
+        goto L_0x061b;
+    L_0x00a0:
+        r0 = r0.text;
+        r3 = 0;
+        showAddUserAlert(r0, r1, r3, r2);
+        goto L_0x061b;
+    L_0x00a8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_editMessage;
+        if (r7 == 0) goto L_0x00d2;
+    L_0x00ac:
         r0 = "MESSAGE_NOT_MODIFIED";
-        r0 = r5.equals(r0);
-        if (r0 != 0) goto L_0x0598;
-    L_0x0093:
-        if (r1 == 0) goto L_0x00a3;
-    L_0x0095:
-        r0 = NUM; // 0x7f0e0405 float:1.8877125E38 double:1.053162665E-314;
+        r0 = r6.equals(r0);
+        if (r0 != 0) goto L_0x061b;
+    L_0x00b4:
+        if (r1 == 0) goto L_0x00c4;
+    L_0x00b6:
+        r0 = NUM; // 0x7f0e040b float:1.8877137E38 double:1.053162668E-314;
         r2 = "EditMessageError";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x00a3:
-        r0 = NUM; // 0x7f0e0405 float:1.8877125E38 double:1.053162665E-314;
+        goto L_0x061b;
+    L_0x00c4:
+        r0 = NUM; // 0x7f0e040b float:1.8877137E38 double:1.053162668E-314;
         r2 = "EditMessageError";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x00b1:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMessage;
-        r16 = -1;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00b7:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00bb:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00bf:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00c3:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
-        if (r6 != 0) goto L_0x048d;
-    L_0x00c7:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendScheduledMessages;
-        if (r6 == 0) goto L_0x00cd;
-    L_0x00cb:
-        goto L_0x048d;
-    L_0x00cd:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
-        if (r6 == 0) goto L_0x0106;
-    L_0x00d1:
-        r2 = r5.startsWith(r15);
-        if (r2 == 0) goto L_0x00e0;
-    L_0x00d7:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
-        showSimpleAlert(r1, r0);
-        goto L_0x0598;
+        goto L_0x061b;
+    L_0x00d2:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMessage;
+        r17 = -1;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00d8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00dc:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
+        if (r7 != 0) goto L_0x04e9;
     L_0x00e0:
-        r0 = r0.text;
-        r2 = "USERS_TOO_MUCH";
-        r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x00f8;
-    L_0x00ea:
-        r0 = NUM; // 0x7f0e0597 float:1.887794E38 double:1.0531628636E-314;
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00e4:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
+        if (r7 != 0) goto L_0x04e9;
+    L_0x00e8:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_sendScheduledMessages;
+        if (r7 == 0) goto L_0x00ee;
+    L_0x00ec:
+        goto L_0x04e9;
+    L_0x00ee:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
+        if (r7 == 0) goto L_0x013d;
+    L_0x00f2:
+        r2 = r6.startsWith(r9);
+        if (r2 == 0) goto L_0x0104;
+    L_0x00f8:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
+        showSimpleAlert(r1, r0);
+        goto L_0x061b;
+    L_0x0104:
+        r2 = r0.text;
+        r3 = "USERS_TOO_MUCH";
+        r2 = r2.equals(r3);
+        if (r2 == 0) goto L_0x011c;
+    L_0x010e:
+        r0 = NUM; // 0x7f0e05a2 float:1.8877962E38 double:1.053162869E-314;
         r2 = "JoinToGroupErrorFull";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x00f8:
-        r0 = NUM; // 0x7f0e0598 float:1.8877942E38 double:1.053162864E-314;
+        goto L_0x061b;
+    L_0x011c:
+        r0 = r0.text;
+        r0 = r0.equals(r12);
+        if (r0 == 0) goto L_0x012f;
+    L_0x0124:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r2 = 0;
+        r0.<init>(r2);
+        r1.presentFragment(r0);
+        goto L_0x061b;
+    L_0x012f:
+        r0 = NUM; // 0x7f0e05a3 float:1.8877964E38 double:1.0531628696E-314;
         r2 = "JoinToGroupErrorNotExist";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0106:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
-        if (r6 == 0) goto L_0x0137;
-    L_0x010a:
-        if (r1 == 0) goto L_0x0598;
-    L_0x010c:
-        r2 = r19.getParentActivity();
-        if (r2 == 0) goto L_0x0598;
-    L_0x0112:
-        r1 = r19.getParentActivity();
+        goto L_0x061b;
+    L_0x013d:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
+        if (r7 == 0) goto L_0x0172;
+    L_0x0141:
+        if (r1 == 0) goto L_0x061b;
+    L_0x0143:
+        r2 = r20.getParentActivity();
+        if (r2 == 0) goto L_0x061b;
+    L_0x0149:
+        r1 = r20.getParentActivity();
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r11);
+        r3 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
-        r0 = android.widget.Toast.makeText(r1, r0, r8);
+        r2 = 0;
+        r0 = android.widget.Toast.makeText(r1, r0, r2);
         r0.show();
-        goto L_0x0598;
-    L_0x0137:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
-        r8 = "InvalidCode";
-        r11 = "PHONE_CODE_EMPTY";
-        if (r6 != 0) goto L_0x041f;
-    L_0x013f:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyPhone;
-        if (r6 != 0) goto L_0x041f;
-    L_0x0143:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyEmail;
-        if (r6 == 0) goto L_0x0149;
-    L_0x0147:
-        goto L_0x041f;
-    L_0x0149:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_auth_resendCode;
-        if (r6 == 0) goto L_0x01cd;
-    L_0x014d:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x015f;
-    L_0x0153:
-        r2 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        goto L_0x061b;
+    L_0x0172:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
+        if (r7 != 0) goto L_0x0474;
+    L_0x0176:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyPhone;
+        if (r7 != 0) goto L_0x0474;
+    L_0x017a:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_verifyEmail;
+        if (r7 == 0) goto L_0x0180;
+    L_0x017e:
+        goto L_0x0474;
+    L_0x0180:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_auth_resendCode;
+        if (r7 == 0) goto L_0x020b;
+    L_0x0184:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x0196;
+    L_0x018a:
+        r2 = NUM; // 0x7f0e0584 float:1.8877901E38 double:1.0531628543E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x015f:
+    L_0x0196:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x01c1;
-    L_0x0167:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x01fd;
+    L_0x01a0:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0172;
-    L_0x0171:
-        goto L_0x01c1;
-    L_0x0172:
+        if (r2 == 0) goto L_0x01ab;
+    L_0x01aa:
+        goto L_0x01fd;
+    L_0x01ab:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x018a;
-    L_0x017c:
-        r0 = NUM; // 0x7f0e0303 float:1.8876601E38 double:1.0531625376E-314;
+        if (r2 == 0) goto L_0x01c3;
+    L_0x01b5:
+        r0 = NUM; // 0x7f0e0306 float:1.8876607E38 double:1.053162539E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x018a:
+    L_0x01c3:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x019b;
-    L_0x0192:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x01d7;
+    L_0x01cb:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x019b:
+    L_0x01d7:
         r2 = r0.code;
         r3 = -1000; // 0xfffffffffffffCLASSNAME float:NaN double:NaN;
-        if (r2 == r3) goto L_0x0598;
-    L_0x01a1:
+        if (r2 == r3) goto L_0x061b;
+    L_0x01dd:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01c1:
-        r0 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+    L_0x01fd:
+        r0 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01cd:
-        r6 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
-        if (r6 == 0) goto L_0x0200;
-    L_0x01d1:
+    L_0x020b:
+        r7 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
+        if (r7 == 0) goto L_0x0241;
+    L_0x020f:
         r0 = 400; // 0x190 float:5.6E-43 double:1.976E-321;
-        if (r4 != r0) goto L_0x01e3;
-    L_0x01d5:
-        r0 = NUM; // 0x7f0e0216 float:1.887612E38 double:1.0531624205E-314;
+        if (r4 != r0) goto L_0x0221;
+    L_0x0213:
+        r0 = NUM; // 0x7f0e0219 float:1.8876127E38 double:1.053162422E-314;
         r2 = "CancelLinkExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01e3:
-        if (r5 == 0) goto L_0x0598;
-    L_0x01e5:
-        r0 = r5.startsWith(r15);
-        if (r0 == 0) goto L_0x01f4;
-    L_0x01eb:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+    L_0x0221:
+        if (r6 == 0) goto L_0x061b;
+    L_0x0223:
+        r0 = r6.startsWith(r9);
+        if (r0 == 0) goto L_0x0235;
+    L_0x0229:
+        r0 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x01f4:
-        r0 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+    L_0x0235:
+        r0 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0200:
+    L_0x0241:
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_changePhone;
-        if (r4 == 0) goto L_0x0265;
-    L_0x0204:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x0216;
-    L_0x020a:
-        r2 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        if (r4 == 0) goto L_0x02ad;
+    L_0x0245:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x0257;
+    L_0x024b:
+        r2 = NUM; // 0x7f0e0584 float:1.8877901E38 double:1.0531628543E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0216:
+        goto L_0x061b;
+    L_0x0257:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x0259;
-    L_0x021e:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x029f;
+    L_0x0261:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0229;
-    L_0x0228:
-        goto L_0x0259;
-    L_0x0229:
+        if (r2 == 0) goto L_0x026c;
+    L_0x026b:
+        goto L_0x029f;
+    L_0x026c:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0241;
-    L_0x0233:
-        r0 = NUM; // 0x7f0e0303 float:1.8876601E38 double:1.0531625376E-314;
+        if (r2 == 0) goto L_0x0284;
+    L_0x0276:
+        r0 = NUM; // 0x7f0e0306 float:1.8876607E38 double:1.053162539E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0241:
+        goto L_0x061b;
+    L_0x0284:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x0252;
-    L_0x0249:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x0298;
+    L_0x028c:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0252:
+        goto L_0x061b;
+    L_0x0298:
         r0 = r0.text;
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0259:
-        r0 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+        goto L_0x061b;
+    L_0x029f:
+        r0 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0265:
+        goto L_0x061b;
+    L_0x02ad:
         r4 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_sendChangePhoneCode;
-        if (r4 == 0) goto L_0x02f1;
-    L_0x0269:
-        r2 = r5.contains(r10);
-        if (r2 == 0) goto L_0x027b;
-    L_0x026f:
-        r2 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        if (r4 == 0) goto L_0x0340;
+    L_0x02b1:
+        r2 = r6.contains(r11);
+        if (r2 == 0) goto L_0x02c3;
+    L_0x02b7:
+        r2 = NUM; // 0x7f0e0584 float:1.8877901E38 double:1.0531628543E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x027b:
+        goto L_0x061b;
+    L_0x02c3:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x02e5;
-    L_0x0283:
+        r4 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r4);
+        if (r2 != 0) goto L_0x0332;
+    L_0x02cd:
         r2 = r0.text;
         r4 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r4);
-        if (r2 == 0) goto L_0x028e;
-    L_0x028d:
-        goto L_0x02e5;
-    L_0x028e:
+        if (r2 == 0) goto L_0x02d8;
+    L_0x02d7:
+        goto L_0x0332;
+    L_0x02d8:
         r2 = r0.text;
         r4 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r4);
-        if (r2 == 0) goto L_0x02a6;
-    L_0x0298:
-        r0 = NUM; // 0x7f0e0303 float:1.8876601E38 double:1.0531625376E-314;
+        if (r2 == 0) goto L_0x02f0;
+    L_0x02e2:
+        r0 = NUM; // 0x7f0e0306 float:1.8876607E38 double:1.053162539E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02a6:
+        goto L_0x061b;
+    L_0x02f0:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x02b7;
-    L_0x02ae:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x0304;
+    L_0x02f8:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02b7:
+        goto L_0x061b;
+    L_0x0304:
         r0 = r0.text;
         r2 = "PHONE_NUMBER_OCCUPIED";
         r0 = r0.startsWith(r2);
-        if (r0 == 0) goto L_0x02d9;
-    L_0x02c1:
-        r0 = NUM; // 0x7f0e022b float:1.8876163E38 double:1.053162431E-314;
+        if (r0 == 0) goto L_0x0326;
+    L_0x030e:
+        r0 = NUM; // 0x7f0e022e float:1.887617E38 double:1.0531624323E-314;
         r2 = 1;
         r2 = new java.lang.Object[r2];
         r4 = 0;
@@ -514,344 +562,377 @@ public class AlertsCreator {
         r3 = "ChangePhoneNumberOccupied";
         r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02d9:
-        r0 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+        goto L_0x061b;
+    L_0x0326:
+        r0 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02e5:
-        r0 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+        goto L_0x061b;
+    L_0x0332:
+        r0 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x02f1:
+        goto L_0x061b;
+    L_0x0340:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_updateUserName;
-        if (r3 == 0) goto L_0x0346;
-    L_0x02f5:
-        r0 = r5.hashCode();
+        if (r3 == 0) goto L_0x0395;
+    L_0x0344:
+        r0 = r6.hashCode();
         r2 = NUM; // 0x1137676e float:1.4468026E-28 double:1.427077146E-315;
-        if (r0 == r2) goto L_0x030e;
-    L_0x02fe:
+        if (r0 == r2) goto L_0x035d;
+    L_0x034d:
         r2 = NUM; // 0x1fCLASSNAMEbe7 float:8.45377E-20 double:2.634235846E-315;
-        if (r0 == r2) goto L_0x0304;
-    L_0x0303:
-        goto L_0x0318;
-    L_0x0304:
+        if (r0 == r2) goto L_0x0353;
+    L_0x0352:
+        goto L_0x0367;
+    L_0x0353:
         r0 = "USERNAME_OCCUPIED";
-        r0 = r5.equals(r0);
-        if (r0 == 0) goto L_0x0318;
-    L_0x030c:
+        r0 = r6.equals(r0);
+        if (r0 == 0) goto L_0x0367;
+    L_0x035b:
         r0 = 1;
-        goto L_0x0319;
-    L_0x030e:
+        goto L_0x0368;
+    L_0x035d:
         r0 = "USERNAME_INVALID";
-        r0 = r5.equals(r0);
-        if (r0 == 0) goto L_0x0318;
-    L_0x0316:
+        r0 = r6.equals(r0);
+        if (r0 == 0) goto L_0x0367;
+    L_0x0365:
         r0 = 0;
-        goto L_0x0319;
-    L_0x0318:
+        goto L_0x0368;
+    L_0x0367:
         r0 = -1;
-    L_0x0319:
-        if (r0 == 0) goto L_0x0338;
-    L_0x031b:
+    L_0x0368:
+        if (r0 == 0) goto L_0x0387;
+    L_0x036a:
         r2 = 1;
-        if (r0 == r2) goto L_0x032a;
-    L_0x031e:
-        r0 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
+        if (r0 == r2) goto L_0x0379;
+    L_0x036d:
+        r0 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r13, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x032a:
-        r0 = NUM; // 0x7f0e0b92 float:1.8881045E38 double:1.05316362E-314;
+        goto L_0x061b;
+    L_0x0379:
+        r0 = NUM; // 0x7f0e0bb3 float:1.8881112E38 double:1.0531636364E-314;
         r2 = "UsernameInUse";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0338:
-        r0 = NUM; // 0x7f0e0b93 float:1.8881047E38 double:1.0531636205E-314;
+        goto L_0x061b;
+    L_0x0387:
+        r0 = NUM; // 0x7f0e0bb4 float:1.8881114E38 double:1.053163637E-314;
         r2 = "UsernameInvalid";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0346:
+        goto L_0x061b;
+    L_0x0395:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
-        if (r3 == 0) goto L_0x037c;
-    L_0x034a:
-        if (r0 == 0) goto L_0x0373;
-    L_0x034c:
-        r2 = r5.startsWith(r15);
-        if (r2 == 0) goto L_0x0353;
-    L_0x0352:
-        goto L_0x0373;
-    L_0x0353:
+        if (r3 == 0) goto L_0x03ce;
+    L_0x0399:
+        if (r0 == 0) goto L_0x03c2;
+    L_0x039b:
+        r2 = r6.startsWith(r9);
+        if (r2 == 0) goto L_0x03a2;
+    L_0x03a1:
+        goto L_0x03c2;
+    L_0x03a2:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x0373:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        goto L_0x061b;
+    L_0x03c2:
+        r0 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r0);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x037c:
+        goto L_0x061b;
+    L_0x03ce:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getPassword;
-        if (r3 != 0) goto L_0x0405;
-    L_0x0380:
+        if (r3 != 0) goto L_0x045a;
+    L_0x03d2:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_account_getTmpPassword;
-        if (r3 == 0) goto L_0x0386;
-    L_0x0384:
-        goto L_0x0405;
-    L_0x0386:
+        if (r3 == 0) goto L_0x03d8;
+    L_0x03d6:
+        goto L_0x045a;
+    L_0x03d8:
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_sendPaymentForm;
-        if (r3 == 0) goto L_0x03d6;
-    L_0x038a:
-        r2 = r5.hashCode();
+        if (r3 == 0) goto L_0x0428;
+    L_0x03dc:
+        r2 = r6.hashCode();
         r3 = -NUM; // 0xffffffffbbcefe0b float:-0.NUM double:NaN;
-        if (r2 == r3) goto L_0x03a3;
-    L_0x0393:
+        if (r2 == r3) goto L_0x03f5;
+    L_0x03e5:
         r3 = -NUM; // 0xffffffffd14178b6 float:-5.1934618E10 double:NaN;
-        if (r2 == r3) goto L_0x0399;
-    L_0x0398:
-        goto L_0x03ad;
-    L_0x0399:
+        if (r2 == r3) goto L_0x03eb;
+    L_0x03ea:
+        goto L_0x03ff;
+    L_0x03eb:
         r2 = "PAYMENT_FAILED";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ad;
-    L_0x03a1:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x03ff;
+    L_0x03f3:
         r2 = 1;
-        goto L_0x03ae;
-    L_0x03a3:
+        goto L_0x0400;
+    L_0x03f5:
         r2 = "BOT_PRECHECKOUT_FAILED";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ad;
-    L_0x03ab:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x03ff;
+    L_0x03fd:
         r2 = 0;
-        goto L_0x03ae;
-    L_0x03ad:
+        goto L_0x0400;
+    L_0x03ff:
         r2 = -1;
-    L_0x03ae:
-        if (r2 == 0) goto L_0x03c8;
-    L_0x03b0:
+    L_0x0400:
+        if (r2 == 0) goto L_0x041a;
+    L_0x0402:
         r3 = 1;
-        if (r2 == r3) goto L_0x03ba;
-    L_0x03b3:
+        if (r2 == r3) goto L_0x040c;
+    L_0x0405:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03ba:
-        r0 = NUM; // 0x7f0e0874 float:1.8879427E38 double:1.053163226E-314;
+        goto L_0x061b;
+    L_0x040c:
+        r0 = NUM; // 0x7f0e0885 float:1.8879461E38 double:1.053163234E-314;
         r2 = "PaymentFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03c8:
-        r0 = NUM; // 0x7f0e0881 float:1.8879453E38 double:1.053163232E-314;
+        goto L_0x061b;
+    L_0x041a:
+        r0 = NUM; // 0x7f0e0892 float:1.8879488E38 double:1.0531632406E-314;
         r2 = "PaymentPrecheckoutFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03d6:
+        goto L_0x061b;
+    L_0x0428:
         r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_validateRequestedInfo;
-        if (r2 == 0) goto L_0x0598;
-    L_0x03da:
-        r2 = r5.hashCode();
+        if (r2 == 0) goto L_0x061b;
+    L_0x042c:
+        r2 = r6.hashCode();
         r3 = NUM; // 0x68CLASSNAMEc float:7.606448E24 double:8.68580028E-315;
-        if (r2 == r3) goto L_0x03e4;
-    L_0x03e3:
-        goto L_0x03ee;
-    L_0x03e4:
+        if (r2 == r3) goto L_0x0436;
+    L_0x0435:
+        goto L_0x0441;
+    L_0x0436:
         r2 = "SHIPPING_NOT_AVAILABLE";
-        r2 = r5.equals(r2);
-        if (r2 == 0) goto L_0x03ee;
-    L_0x03ec:
+        r2 = r6.equals(r2);
+        if (r2 == 0) goto L_0x0441;
+    L_0x043e:
         r16 = 0;
-    L_0x03ee:
-        if (r16 == 0) goto L_0x03f7;
-    L_0x03f0:
+        goto L_0x0443;
+    L_0x0441:
+        r16 = -1;
+    L_0x0443:
+        if (r16 == 0) goto L_0x044c;
+    L_0x0445:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x03f7:
-        r0 = NUM; // 0x7f0e0876 float:1.887943E38 double:1.053163227E-314;
+        goto L_0x061b;
+    L_0x044c:
+        r0 = NUM; // 0x7f0e0887 float:1.8879465E38 double:1.053163235E-314;
         r2 = "PaymentNoShippingMethod";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x0405:
+        goto L_0x061b;
+    L_0x045a:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x0418;
-    L_0x040d:
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x046d;
+    L_0x0462:
         r0 = r0.text;
         r0 = getFloodWaitString(r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x0418:
+        goto L_0x061b;
+    L_0x046d:
         r0 = r0.text;
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x041f:
+        goto L_0x061b;
+    L_0x0474:
         r2 = r0.text;
-        r2 = r2.contains(r11);
-        if (r2 != 0) goto L_0x0481;
-    L_0x0427:
+        r3 = "PHONE_CODE_EMPTY";
+        r2 = r2.contains(r3);
+        if (r2 != 0) goto L_0x04db;
+    L_0x047e:
         r2 = r0.text;
         r3 = "PHONE_CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0481;
-    L_0x0431:
+        if (r2 != 0) goto L_0x04db;
+    L_0x0488:
         r2 = r0.text;
         r3 = "CODE_INVALID";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0481;
-    L_0x043b:
+        if (r2 != 0) goto L_0x04db;
+    L_0x0492:
         r2 = r0.text;
         r3 = "CODE_EMPTY";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x0446;
-    L_0x0445:
-        goto L_0x0481;
-    L_0x0446:
+        if (r2 == 0) goto L_0x049d;
+    L_0x049c:
+        goto L_0x04db;
+    L_0x049d:
         r2 = r0.text;
         r3 = "PHONE_CODE_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 != 0) goto L_0x0473;
-    L_0x0450:
+        if (r2 != 0) goto L_0x04cd;
+    L_0x04a7:
         r2 = r0.text;
         r3 = "EMAIL_VERIFY_EXPIRED";
         r2 = r2.contains(r3);
-        if (r2 == 0) goto L_0x045b;
-    L_0x045a:
-        goto L_0x0473;
-    L_0x045b:
+        if (r2 == 0) goto L_0x04b2;
+    L_0x04b1:
+        goto L_0x04cd;
+    L_0x04b2:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x046c;
-    L_0x0463:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x04c6;
+    L_0x04ba:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x046c:
+    L_0x04c6:
         r0 = r0.text;
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0473:
-        r0 = NUM; // 0x7f0e0303 float:1.8876601E38 double:1.0531625376E-314;
+    L_0x04cd:
+        r0 = NUM; // 0x7f0e0306 float:1.8876607E38 double:1.053162539E-314;
         r2 = "CodeExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x0481:
-        r0 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
+    L_0x04db:
+        r0 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
+        r2 = "InvalidCode";
+        r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = showSimpleAlert(r1, r0);
         return r0;
-    L_0x048d:
+    L_0x04e9:
         r0 = r0.text;
         r2 = r0.hashCode();
         r3 = -NUM; // 0xfffffffvar_b816 float:-8.417163E-27 double:NaN;
-        if (r2 == r3) goto L_0x04b7;
-    L_0x0498:
+        if (r2 == r3) goto L_0x0513;
+    L_0x04f4:
         r3 = -NUM; // 0xffffffffe4efe6c1 float:-3.5403195E22 double:NaN;
-        if (r2 == r3) goto L_0x04ad;
-    L_0x049d:
+        if (r2 == r3) goto L_0x0509;
+    L_0x04f9:
         r3 = NUM; // 0x45b984e0 float:5936.6094 double:5.77951115E-315;
-        if (r2 == r3) goto L_0x04a3;
-    L_0x04a2:
-        goto L_0x04c1;
-    L_0x04a3:
+        if (r2 == r3) goto L_0x04ff;
+    L_0x04fe:
+        goto L_0x051d;
+    L_0x04ff:
         r2 = "SCHEDULE_TOO_MUCH";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04ab:
-        r8 = 2;
-        goto L_0x04c2;
-    L_0x04ad:
+        if (r0 == 0) goto L_0x051d;
+    L_0x0507:
+        r0 = 2;
+        goto L_0x051e;
+    L_0x0509:
         r2 = "PEER_FLOOD";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04b5:
-        r8 = 0;
-        goto L_0x04c2;
-    L_0x04b7:
+        if (r0 == 0) goto L_0x051d;
+    L_0x0511:
+        r0 = 0;
+        goto L_0x051e;
+    L_0x0513:
         r2 = "USER_BANNED_IN_CHANNEL";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x04c1;
-    L_0x04bf:
-        r8 = 1;
-        goto L_0x04c2;
-    L_0x04c1:
-        r8 = -1;
-    L_0x04c2:
-        if (r8 == 0) goto L_0x04ef;
-    L_0x04c4:
+        if (r0 == 0) goto L_0x051d;
+    L_0x051b:
         r0 = 1;
-        if (r8 == r0) goto L_0x04da;
-    L_0x04c7:
-        r0 = 2;
-        if (r8 == r0) goto L_0x04cc;
-    L_0x04ca:
-        goto L_0x0598;
-    L_0x04cc:
-        r0 = NUM; // 0x7f0e0641 float:1.8878285E38 double:1.0531629476E-314;
+        goto L_0x051e;
+    L_0x051d:
+        r0 = -1;
+    L_0x051e:
+        if (r0 == 0) goto L_0x054a;
+    L_0x0520:
+        r2 = 1;
+        if (r0 == r2) goto L_0x0535;
+    L_0x0523:
+        if (r0 == r14) goto L_0x0527;
+    L_0x0525:
+        goto L_0x061b;
+    L_0x0527:
+        r0 = NUM; // 0x7f0e064f float:1.8878313E38 double:1.0531629545E-314;
         r2 = "MessageScheduledLimitReached";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
-        goto L_0x0598;
-    L_0x04da:
-        r1 = org.telegram.messenger.NotificationCenter.getInstance(r17);
-        r2 = org.telegram.messenger.NotificationCenter.needShowAlert;
-        r0 = new java.lang.Object[r0];
+        goto L_0x061b;
+    L_0x0535:
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
+        r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
+        r2 = new java.lang.Object[r2];
         r3 = 5;
         r3 = java.lang.Integer.valueOf(r3);
         r4 = 0;
-        r0[r4] = r3;
-        r1.postNotificationName(r2, r0);
-        goto L_0x0598;
-    L_0x04ef:
-        r0 = 1;
+        r2[r4] = r3;
+        r0.postNotificationName(r1, r2);
+        goto L_0x061b;
+    L_0x054a:
+        r2 = 1;
         r4 = 0;
-        r1 = org.telegram.messenger.NotificationCenter.getInstance(r17);
-        r2 = org.telegram.messenger.NotificationCenter.needShowAlert;
-        r0 = new java.lang.Object[r0];
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
+        r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
+        r2 = new java.lang.Object[r2];
         r3 = java.lang.Integer.valueOf(r4);
-        r0[r4] = r3;
-        r1.postNotificationName(r2, r0);
-        goto L_0x0598;
-    L_0x0504:
-        if (r1 == 0) goto L_0x051d;
-    L_0x0506:
-        r0 = r0.text;
-        if (r3 == 0) goto L_0x0517;
-    L_0x050a:
-        r4 = r3.length;
-        if (r4 <= 0) goto L_0x0517;
-    L_0x050d:
+        r2[r4] = r3;
+        r0.postNotificationName(r1, r2);
+        goto L_0x061b;
+    L_0x055f:
+        if (r1 == 0) goto L_0x0584;
+    L_0x0561:
+        r4 = r0.text;
+        r4 = r4.equals(r12);
+        if (r4 == 0) goto L_0x0584;
+    L_0x0569:
+        if (r7 != 0) goto L_0x057a;
+    L_0x056b:
+        r0 = r2 instanceof org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
+        if (r0 == 0) goto L_0x0570;
+    L_0x056f:
+        goto L_0x057a;
+    L_0x0570:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
+        r2 = 1;
+        r0.<init>(r2);
+        r1.presentFragment(r0);
+        goto L_0x0583;
+    L_0x057a:
+        r0 = new org.telegram.ui.TooManyCommunitiesActivity;
         r4 = 0;
+        r0.<init>(r4);
+        r1.presentFragment(r0);
+    L_0x0583:
+        return r5;
+    L_0x0584:
+        r4 = 0;
+        if (r1 == 0) goto L_0x059d;
+    L_0x0587:
+        r0 = r0.text;
+        if (r3 == 0) goto L_0x0597;
+    L_0x058b:
+        r6 = r3.length;
+        if (r6 <= 0) goto L_0x0597;
+    L_0x058e:
         r3 = r3[r4];
         r3 = (java.lang.Boolean) r3;
-        r8 = r3.booleanValue();
-        goto L_0x0518;
-    L_0x0517:
-        r8 = 0;
-    L_0x0518:
-        showAddUserAlert(r0, r1, r8, r2);
+        r14 = r3.booleanValue();
         goto L_0x0598;
-    L_0x051d:
+    L_0x0597:
+        r14 = 0;
+    L_0x0598:
+        showAddUserAlert(r0, r1, r14, r2);
+        goto L_0x061b;
+    L_0x059d:
         r0 = r0.text;
         r1 = "PEER_FLOOD";
         r0 = r0.equals(r1);
-        if (r0 == 0) goto L_0x0598;
-    L_0x0527:
-        r0 = org.telegram.messenger.NotificationCenter.getInstance(r17);
+        if (r0 == 0) goto L_0x061b;
+    L_0x05a7:
+        r0 = org.telegram.messenger.NotificationCenter.getInstance(r18);
         r1 = org.telegram.messenger.NotificationCenter.needShowAlert;
         r2 = 1;
         r3 = new java.lang.Object[r2];
@@ -859,54 +940,51 @@ public class AlertsCreator {
         r4 = 0;
         r3[r4] = r2;
         r0.postNotificationName(r1, r3);
-        goto L_0x0598;
-    L_0x053b:
+        goto L_0x061b;
+    L_0x05bb:
         r2 = r0.text;
-        r2 = r2.contains(r10);
-        if (r2 == 0) goto L_0x054e;
-    L_0x0543:
-        r2 = NUM; // 0x7f0e0579 float:1.887788E38 double:1.053162849E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r9, r2);
+        r2 = r2.contains(r11);
+        if (r2 == 0) goto L_0x05ce;
+    L_0x05c3:
+        r2 = NUM; // 0x7f0e0584 float:1.8877901E38 double:1.0531628543E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r10, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x054e:
+        goto L_0x061b;
+    L_0x05ce:
         r2 = r0.text;
-        r2 = r2.startsWith(r15);
-        if (r2 == 0) goto L_0x055e;
-    L_0x0556:
-        r0 = org.telegram.messenger.LocaleController.getString(r14, r13);
+        r2 = r2.startsWith(r9);
+        if (r2 == 0) goto L_0x05e1;
+    L_0x05d6:
+        r2 = NUM; // 0x7f0e04c1 float:1.8877506E38 double:1.053162758E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r15, r2);
         showSimpleAlert(r1, r0);
-        goto L_0x0598;
-    L_0x055e:
+        goto L_0x061b;
+    L_0x05e1:
         r2 = r0.text;
         r3 = "APP_VERSION_OUTDATED";
         r2 = r3.equals(r2);
-        if (r2 == 0) goto L_0x057a;
-    L_0x0568:
-        r0 = r19.getParentActivity();
-        r1 = NUM; // 0x7f0e0b43 float:1.8880885E38 double:1.053163581E-314;
+        if (r2 == 0) goto L_0x05fd;
+    L_0x05eb:
+        r0 = r20.getParentActivity();
+        r1 = NUM; // 0x7f0e0b63 float:1.888095E38 double:1.053163597E-314;
         r2 = "UpdateAppAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 1;
         showUpdateAppAlert(r0, r1, r2);
-        goto L_0x0598;
-    L_0x057a:
+        goto L_0x061b;
+    L_0x05fd:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
-        r3 = NUM; // 0x7f0e0438 float:1.8877228E38 double:1.05316269E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r12, r3);
+        r3 = NUM; // 0x7f0e0440 float:1.8877244E38 double:1.053162694E-314;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r3);
         r2.append(r3);
-        r2.append(r7);
+        r2.append(r8);
         r0 = r0.text;
         r2.append(r0);
         r0 = r2.toString();
         showSimpleAlert(r1, r0);
-    L_0x0598:
-        r0 = 0;
-        return r0;
-    L_0x059a:
-        r0 = 0;
-        return r0;
+    L_0x061b:
+        return r5;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.processError(int, org.telegram.tgnet.TLRPC$TL_error, org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLObject, java.lang.Object[]):android.app.Dialog");
     }
@@ -1144,14 +1222,14 @@ public class AlertsCreator {
     L_0x0048:
         if (r21 == 0) goto L_0x0136;
     L_0x004a:
-        r1 = NUM; // 0x7f0e01d6 float:1.887599E38 double:1.053162389E-314;
+        r1 = NUM; // 0x7f0e01d9 float:1.8875997E38 double:1.0531623903E-314;
         r6 = new java.lang.Object[r4];
         r10 = org.telegram.messenger.UserObject.getFirstName(r21);
         r6[r5] = r10;
         r10 = "BlockUserTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6);
         r11.setTitle(r1);
-        r1 = NUM; // 0x7f0e01d2 float:1.8875983E38 double:1.053162387E-314;
+        r1 = NUM; // 0x7f0e01d5 float:1.8875989E38 double:1.0531623883E-314;
         r6 = new java.lang.Object[r4];
         r10 = org.telegram.messenger.UserObject.getFirstName(r21);
         r6[r5] = r10;
@@ -1159,7 +1237,7 @@ public class AlertsCreator {
         r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r11.setMessage(r1);
-        r1 = NUM; // 0x7f0e01d0 float:1.8875979E38 double:1.053162386E-314;
+        r1 = NUM; // 0x7f0e01d3 float:1.8875985E38 double:1.0531623874E-314;
         r6 = "BlockContact";
         r1 = org.telegram.messenger.LocaleController.getString(r6, r1);
         r6 = 2;
@@ -1194,7 +1272,7 @@ public class AlertsCreator {
         if (r15 != 0) goto L_0x00cd;
     L_0x00bc:
         r13 = r10[r15];
-        r12 = NUM; // 0x7f0e03a4 float:1.8876928E38 double:1.053162617E-314;
+        r12 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
         r16 = r1;
         r1 = "DeleteReportSpam";
         r1 = org.telegram.messenger.LocaleController.getString(r1, r12);
@@ -1205,7 +1283,7 @@ public class AlertsCreator {
         if (r15 != r4) goto L_0x00e4;
     L_0x00d1:
         r1 = r10[r15];
-        r12 = NUM; // 0x7f0e03a8 float:1.8876936E38 double:1.053162619E-314;
+        r12 = NUM; // 0x7f0e03ae float:1.8876948E38 double:1.053162622E-314;
         r13 = new java.lang.Object[r5];
         r17 = r2;
         r2 = "DeleteThisChat";
@@ -1263,7 +1341,7 @@ public class AlertsCreator {
     L_0x0138:
         if (r24 == 0) goto L_0x0174;
     L_0x013a:
-        r2 = NUM; // 0x7f0e0962 float:1.887991E38 double:1.0531633434E-314;
+        r2 = NUM; // 0x7f0e0974 float:1.8879946E38 double:1.0531633523E-314;
         r6 = "ReportUnrelatedGroup";
         r2 = org.telegram.messenger.LocaleController.getString(r6, r2);
         r11.setTitle(r2);
@@ -1274,7 +1352,7 @@ public class AlertsCreator {
         if (r2 == 0) goto L_0x0167;
     L_0x014e:
         r1 = (org.telegram.tgnet.TLRPC.TL_channelLocation) r1;
-        r2 = NUM; // 0x7f0e0963 float:1.8879911E38 double:1.053163344E-314;
+        r2 = NUM; // 0x7f0e0975 float:1.8879948E38 double:1.053163353E-314;
         r4 = new java.lang.Object[r4];
         r1 = r1.address;
         r4[r5] = r1;
@@ -1284,13 +1362,13 @@ public class AlertsCreator {
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0167:
-        r1 = NUM; // 0x7f0e0964 float:1.8879913E38 double:1.0531633444E-314;
+        r1 = NUM; // 0x7f0e0976 float:1.887995E38 double:1.0531633533E-314;
         r2 = "ReportUnrelatedGroupTextNoAddress";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0174:
-        r1 = NUM; // 0x7f0e0960 float:1.8879905E38 double:1.0531633424E-314;
+        r1 = NUM; // 0x7f0e0972 float:1.8879942E38 double:1.0531633513E-314;
         r2 = "ReportSpamTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setTitle(r1);
@@ -1300,18 +1378,18 @@ public class AlertsCreator {
         r1 = r7.megagroup;
         if (r1 != 0) goto L_0x0197;
     L_0x018a:
-        r1 = NUM; // 0x7f0e095c float:1.8879897E38 double:1.0531633404E-314;
+        r1 = NUM; // 0x7f0e096e float:1.8879934E38 double:1.0531633493E-314;
         r2 = "ReportSpamAlertChannel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0197:
-        r1 = NUM; // 0x7f0e095d float:1.88799E38 double:1.053163341E-314;
+        r1 = NUM; // 0x7f0e096f float:1.8879936E38 double:1.05316335E-314;
         r2 = "ReportSpamAlertGroup";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
     L_0x01a3:
-        r1 = NUM; // 0x7f0e0952 float:1.8879877E38 double:1.0531633355E-314;
+        r1 = NUM; // 0x7f0e0964 float:1.8879913E38 double:1.0531633444E-314;
         r2 = "ReportChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r12 = r1;
@@ -1327,7 +1405,7 @@ public class AlertsCreator {
         r10 = r26;
         r1.<init>(r2, r3, r4, r5, r7, r8, r9, r10);
         r11.setPositiveButton(r12, r13);
-        r1 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r1 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 0;
@@ -2221,13 +2299,13 @@ public class AlertsCreator {
         r17 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
         if (r17 != 0) goto L_0x0089;
     L_0x007c:
-        r1 = NUM; // 0x7f0e0a16 float:1.8880274E38 double:1.0531634323E-314;
+        r1 = NUM; // 0x7f0e0a2a float:1.8880315E38 double:1.053163442E-314;
         r12 = "SetReminder";
         r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
         r3.setText(r1);
         goto L_0x0095;
     L_0x0089:
-        r1 = NUM; // 0x7f0e099f float:1.8880033E38 double:1.0531633735E-314;
+        r1 = NUM; // 0x7f0e09b3 float:1.8880074E38 double:1.0531633834E-314;
         r12 = "ScheduleMessage";
         r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
         r3.setText(r1);
@@ -2299,7 +2377,7 @@ public class AlertsCreator {
         r3.setLongClickEnabled(r4);
         r4 = 2;
         r3.setSubMenuOpenSide(r4);
-        r4 = NUM; // 0x7var_f7 float:1.7945079E38 double:1.052935625E-314;
+        r4 = NUM; // 0x7var_f9 float:1.7945083E38 double:1.052935626E-314;
         r3.setIcon(r4);
         r4 = "player_actionBarSelector";
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
@@ -2315,7 +2393,7 @@ public class AlertsCreator {
         r28 = 0;
         r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28);
         r2.addView(r3, r4);
-        r2 = NUM; // 0x7f0e09a0 float:1.8880035E38 double:1.053163374E-314;
+        r2 = NUM; // 0x7f0e09b4 float:1.8880076E38 double:1.053163384E-314;
         r4 = 1;
         r5 = new java.lang.Object[r4];
         r6 = 0;
@@ -2786,6 +2864,12 @@ public class AlertsCreator {
                         break;
                     }
                     break;
+                case 1377621075:
+                    if (str.equals("USER_CHANNELS_TOO_MUCH")) {
+                        obj = 19;
+                        break;
+                    }
+                    break;
                 case 1623167701:
                     if (str.equals("USER_NOT_MUTUAL_CONTACT")) {
                         obj = 5;
@@ -2805,6 +2889,7 @@ public class AlertsCreator {
                     }
                     break;
             }
+            String str2 = "ChannelTooMuchTitle";
             switch (obj) {
                 case null:
                     builder.setMessage(LocaleController.getString("NobodyLikesSpam2", NUM));
@@ -2886,7 +2971,7 @@ public class AlertsCreator {
                     builder.setMessage(LocaleController.getString("LocatedChannelsTooMuch", NUM));
                     break;
                 case 18:
-                    builder.setTitle(LocaleController.getString("ChannelTooMuchTitle", NUM));
+                    builder.setTitle(LocaleController.getString(str2, NUM));
                     if (!(tLObject instanceof TL_channels_createChannel)) {
                         builder.setMessage(LocaleController.getString("ChannelTooMuchJoin", NUM));
                         break;
@@ -2894,6 +2979,10 @@ public class AlertsCreator {
                         builder.setMessage(LocaleController.getString("ChannelTooMuch", NUM));
                         break;
                     }
+                case 19:
+                    builder.setTitle(LocaleController.getString(str2, NUM));
+                    builder.setMessage(LocaleController.getString("UserChannelTooMuchJoin", NUM));
+                    break;
                 default:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(LocaleController.getString("ErrorOccurred", NUM));
@@ -3999,7 +4088,7 @@ public class AlertsCreator {
         r14.setTag(r13);
         if (r9 != 0) goto L_0x024a;
     L_0x023a:
-        r13 = NUM; // 0x7f0e038d float:1.8876881E38 double:1.0531626057E-314;
+        r13 = NUM; // 0x7f0e0392 float:1.8876891E38 double:1.053162608E-314;
         r15 = "DeleteBanUser";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r15 = 0;
@@ -4012,7 +4101,7 @@ public class AlertsCreator {
         r15 = 0;
         if (r9 != r13) goto L_0x025b;
     L_0x024e:
-        r13 = NUM; // 0x7f0e03a4 float:1.8876928E38 double:1.053162617E-314;
+        r13 = NUM; // 0x7f0e03a9 float:1.8876938E38 double:1.0531626196E-314;
         r0 = "DeleteReportSpam";
         r0 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r14.setText(r0, r11, r15, r15);
@@ -4029,7 +4118,7 @@ public class AlertsCreator {
         r7 = org.telegram.messenger.ContactsController.formatName(r13, r7);
         r0[r15] = r7;
         r7 = "DeleteAllFrom";
-        r13 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
+        r13 = NUM; // 0x7f0e0387 float:1.887687E38 double:1.053162603E-314;
         r0 = org.telegram.messenger.LocaleController.formatString(r7, r13, r0);
         r14.setText(r0, r11, r15, r15);
     L_0x0279:
@@ -4091,7 +4180,7 @@ public class AlertsCreator {
         r1 = 0;
         r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1);
         r8.setBackgroundDrawable(r9);
-        r9 = NUM; // 0x7f0e039c float:1.8876912E38 double:1.053162613E-314;
+        r9 = NUM; // 0x7f0e03a1 float:1.8876922E38 double:1.0531626156E-314;
         r10 = "DeleteMessagesOption";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.setText(r9, r11, r1, r1);
@@ -4305,7 +4394,7 @@ public class AlertsCreator {
         r6.setBackgroundDrawable(r10);
         if (r31 == 0) goto L_0x044a;
     L_0x0433:
-        r10 = NUM; // 0x7f0e039d float:1.8876914E38 double:1.0531626136E-314;
+        r10 = NUM; // 0x7f0e03a2 float:1.8876924E38 double:1.053162616E-314;
         r13 = new java.lang.Object[r8];
         r8 = org.telegram.messenger.UserObject.getFirstName(r35);
         r13[r1] = r8;
@@ -4322,13 +4411,13 @@ public class AlertsCreator {
     L_0x0450:
         if (r7 != r8) goto L_0x045f;
     L_0x0452:
-        r10 = NUM; // 0x7f0e0393 float:1.8876893E38 double:1.0531626087E-314;
+        r10 = NUM; // 0x7f0e0398 float:1.8876904E38 double:1.053162611E-314;
         r13 = "DeleteForAll";
         r10 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r6.setText(r10, r11, r1, r1);
         goto L_0x046b;
     L_0x045f:
-        r10 = NUM; // 0x7f0e039c float:1.8876912E38 double:1.053162613E-314;
+        r10 = NUM; // 0x7f0e03a1 float:1.8876922E38 double:1.0531626156E-314;
         r13 = "DeleteMessagesOption";
         r10 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r6.setText(r10, r11, r1, r1);
@@ -4381,7 +4470,7 @@ public class AlertsCreator {
     L_0x04bb:
         r25 = 0;
     L_0x04bd:
-        r5 = NUM; // 0x7f0e037d float:1.8876849E38 double:1.053162598E-314;
+        r5 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
         r6 = "Delete";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r6 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$broXPqwNv8W5CV_H317xOPkk6GM;
@@ -4403,13 +4492,13 @@ public class AlertsCreator {
         r6 = 1;
         if (r8 != r6) goto L_0x04f7;
     L_0x04ea:
-        r9 = NUM; // 0x7f0e03a5 float:1.887693E38 double:1.0531626176E-314;
+        r9 = NUM; // 0x7f0e03aa float:1.887694E38 double:1.05316262E-314;
         r10 = "DeleteSingleMessagesTitle";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r9);
         goto L_0x050c;
     L_0x04f7:
-        r9 = NUM; // 0x7f0e03a1 float:1.8876922E38 double:1.0531626156E-314;
+        r9 = NUM; // 0x7f0e03a6 float:1.8876932E38 double:1.053162618E-314;
         r10 = new java.lang.Object[r6];
         r6 = org.telegram.messenger.LocaleController.formatPluralString(r5, r8);
         r11 = 0;
@@ -4418,9 +4507,9 @@ public class AlertsCreator {
         r6 = org.telegram.messenger.LocaleController.formatString(r6, r9, r10);
         r0.setTitle(r6);
     L_0x050c:
-        r6 = NUM; // 0x7f0e012e float:1.887565E38 double:1.053162306E-314;
+        r6 = NUM; // 0x7f0e012f float:1.8875652E38 double:1.0531623063E-314;
         r9 = "AreYouSureDeleteSingleMessage";
-        r10 = NUM; // 0x7f0e0128 float:1.8875638E38 double:1.053162303E-314;
+        r10 = NUM; // 0x7f0e0129 float:1.887564E38 double:1.0531623034E-314;
         r11 = "AreYouSureDeleteFewMessages";
         if (r4 == 0) goto L_0x054b;
     L_0x0518:
@@ -4430,7 +4519,7 @@ public class AlertsCreator {
     L_0x051c:
         if (r7 == r8) goto L_0x0536;
     L_0x051e:
-        r1 = NUM; // 0x7f0e03a0 float:1.887692E38 double:1.053162615E-314;
+        r1 = NUM; // 0x7f0e03a5 float:1.887693E38 double:1.0531626176E-314;
         r3 = 1;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4460,7 +4549,7 @@ public class AlertsCreator {
     L_0x0551:
         if (r4 == 0) goto L_0x056a;
     L_0x0553:
-        r1 = NUM; // 0x7f0e039f float:1.8876918E38 double:1.0531626146E-314;
+        r1 = NUM; // 0x7f0e03a4 float:1.8876928E38 double:1.053162617E-314;
         r3 = 1;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4472,7 +4561,7 @@ public class AlertsCreator {
         goto L_0x05c3;
     L_0x056a:
         r6 = 0;
-        r1 = NUM; // 0x7f0e039e float:1.8876916E38 double:1.053162614E-314;
+        r1 = NUM; // 0x7f0e03a3 float:1.8876926E38 double:1.0531626166E-314;
         r3 = 2;
         r3 = new java.lang.Object[r3];
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r7);
@@ -4496,13 +4585,13 @@ public class AlertsCreator {
         r1 = 1;
         if (r8 != r1) goto L_0x05a4;
     L_0x0597:
-        r1 = NUM; // 0x7f0e012f float:1.8875652E38 double:1.0531623063E-314;
+        r1 = NUM; // 0x7f0e0130 float:1.8875654E38 double:1.053162307E-314;
         r3 = "AreYouSureDeleteSingleMessageMega";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
         goto L_0x05c3;
     L_0x05a4:
-        r1 = NUM; // 0x7f0e0129 float:1.887564E38 double:1.0531623034E-314;
+        r1 = NUM; // 0x7f0e012a float:1.8875642E38 double:1.053162304E-314;
         r3 = "AreYouSureDeleteFewMessagesMega";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -4518,7 +4607,7 @@ public class AlertsCreator {
         r1 = org.telegram.messenger.LocaleController.getString(r11, r10);
         r0.setMessage(r1);
     L_0x05c3:
-        r1 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r1 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
         r3 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = 0;
@@ -4810,5 +4899,1159 @@ public class AlertsCreator {
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createDeleteMessagesAlert$60(org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessages, org.telegram.tgnet.TLRPC$EncryptedChat, int, long, boolean[], boolean, android.util.SparseArray[], org.telegram.tgnet.TLRPC$User, boolean[], org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, java.lang.Runnable, android.content.DialogInterface, int):void");
+    }
+
+    public static void createThemeCreateDialog(BaseFragment baseFragment, int i, ThemeInfo themeInfo, ThemeAccent themeAccent) {
+        BaseFragment baseFragment2 = baseFragment;
+        if (baseFragment2 != null && baseFragment.getParentActivity() != null) {
+            Context parentActivity = baseFragment.getParentActivity();
+            EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(parentActivity);
+            editTextBoldCursor.setBackgroundDrawable(Theme.createEditTextDrawable(parentActivity, true));
+            Builder builder = new Builder(parentActivity);
+            builder.setTitle(LocaleController.getString("NewTheme", NUM));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+            builder.setPositiveButton(LocaleController.getString("Create", NUM), -$$Lambda$AlertsCreator$0QtuIWIKEN8KFAWtr5Uy2CbfW1o.INSTANCE);
+            LinearLayout linearLayout = new LinearLayout(parentActivity);
+            linearLayout.setOrientation(1);
+            builder.setView(linearLayout);
+            TextView textView = new TextView(parentActivity);
+            if (i != 0) {
+                textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EnterThemeNameEdit", NUM)));
+            } else {
+                textView.setText(LocaleController.getString("EnterThemeName", NUM));
+            }
+            textView.setTextSize(16.0f);
+            textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
+            String str = "dialogTextBlack";
+            textView.setTextColor(Theme.getColor(str));
+            linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2));
+            editTextBoldCursor.setTextSize(1, 16.0f);
+            editTextBoldCursor.setTextColor(Theme.getColor(str));
+            editTextBoldCursor.setMaxLines(1);
+            editTextBoldCursor.setLines(1);
+            editTextBoldCursor.setInputType(16385);
+            editTextBoldCursor.setGravity(51);
+            editTextBoldCursor.setSingleLine(true);
+            editTextBoldCursor.setImeOptions(6);
+            editTextBoldCursor.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            editTextBoldCursor.setCursorSize(AndroidUtilities.dp(20.0f));
+            editTextBoldCursor.setCursorWidth(1.5f);
+            editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
+            linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
+            editTextBoldCursor.setOnEditorActionListener(-$$Lambda$AlertsCreator$DJqb4RTx9GX9dj02-QDzvL2X5Jo.INSTANCE);
+            editTextBoldCursor.setText(generateThemeName(themeAccent));
+            editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            AlertDialog create = builder.create();
+            create.setOnShowListener(new -$$Lambda$AlertsCreator$dywCIYGCwAk2dvnBomvTJlKTZmI(editTextBoldCursor));
+            baseFragment2.showDialog(create);
+            editTextBoldCursor.requestFocus();
+            create.getButton(-1).setOnClickListener(new -$$Lambda$AlertsCreator$kY_IuBuIRtt9K0_qm7YfE68TTG8(baseFragment, editTextBoldCursor, themeAccent, themeInfo, create));
+        }
+    }
+
+    static /* synthetic */ void lambda$null$63(EditTextBoldCursor editTextBoldCursor) {
+        editTextBoldCursor.requestFocus();
+        AndroidUtilities.showKeyboard(editTextBoldCursor);
+    }
+
+    static /* synthetic */ void lambda$createThemeCreateDialog$67(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, ThemeAccent themeAccent, ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
+        if (baseFragment.getParentActivity() != null) {
+            if (editTextBoldCursor.length() == 0) {
+                Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
+                if (vibrator != null) {
+                    vibrator.vibrate(200);
+                }
+                AndroidUtilities.shakeView(editTextBoldCursor, 2.0f, 0);
+                return;
+            }
+            if (baseFragment instanceof ThemePreviewActivity) {
+                Theme.applyPreviousTheme();
+                baseFragment.finishFragment();
+            }
+            if (themeAccent != null) {
+                themeInfo.setCurrentAccentId(themeAccent.id);
+                Theme.refreshThemeColors();
+                Utilities.searchQueue.postRunnable(new -$$Lambda$AlertsCreator$1jvar_OO0E8-EZLKIOCErJX2WIT8(editTextBoldCursor, alertDialog, baseFragment));
+                return;
+            }
+            processCreate(editTextBoldCursor, alertDialog, baseFragment);
+        }
+    }
+
+    private static void processCreate(EditTextBoldCursor editTextBoldCursor, AlertDialog alertDialog, BaseFragment baseFragment) {
+        AndroidUtilities.hideKeyboard(editTextBoldCursor);
+        ThemeInfo createNewTheme = Theme.createNewTheme(editTextBoldCursor.getText().toString());
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
+        new ThemeEditorView().show(baseFragment.getParentActivity(), createNewTheme);
+        alertDialog.dismiss();
+        SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+        String str = "themehint";
+        if (!globalMainSettings.getBoolean(str, false)) {
+            globalMainSettings.edit().putBoolean(str, true).commit();
+            try {
+                Toast.makeText(baseFragment.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", NUM), 1).show();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    /* JADX WARNING: Missing block: B:6:0x0906, code skipped:
+            if (r5 != 0) goto L_0x0913;
+     */
+    private static java.lang.String generateThemeName(org.telegram.ui.ActionBar.Theme.ThemeAccent r18) {
+        /*
+        r0 = 107; // 0x6b float:1.5E-43 double:5.3E-322;
+        r0 = new java.lang.String[r0];
+        r1 = 0;
+        r2 = "Ancient";
+        r0[r1] = r2;
+        r2 = 1;
+        r3 = "Antique";
+        r0[r2] = r3;
+        r3 = 2;
+        r4 = "Autumn";
+        r0[r3] = r4;
+        r4 = 3;
+        r5 = "Baby";
+        r0[r4] = r5;
+        r5 = 4;
+        r6 = "Barely";
+        r0[r5] = r6;
+        r6 = 5;
+        r7 = "Baroque";
+        r0[r6] = r7;
+        r7 = 6;
+        r8 = "Blazing";
+        r0[r7] = r8;
+        r8 = 7;
+        r9 = "Blushing";
+        r0[r8] = r9;
+        r9 = 8;
+        r10 = "Bohemian";
+        r0[r9] = r10;
+        r10 = 9;
+        r11 = "Bubbly";
+        r0[r10] = r11;
+        r11 = 10;
+        r12 = "Burning";
+        r0[r11] = r12;
+        r12 = 11;
+        r13 = "Buttered";
+        r0[r12] = r13;
+        r13 = 12;
+        r14 = "Classic";
+        r0[r13] = r14;
+        r14 = 13;
+        r15 = "Clear";
+        r0[r14] = r15;
+        r15 = 14;
+        r16 = "Cool";
+        r0[r15] = r16;
+        r16 = 15;
+        r17 = "Cosmic";
+        r0[r16] = r17;
+        r16 = 16;
+        r17 = "Cotton";
+        r0[r16] = r17;
+        r16 = 17;
+        r17 = "Cozy";
+        r0[r16] = r17;
+        r16 = 18;
+        r17 = "Crystal";
+        r0[r16] = r17;
+        r16 = 19;
+        r17 = "Dark";
+        r0[r16] = r17;
+        r16 = 20;
+        r17 = "Daring";
+        r0[r16] = r17;
+        r16 = 21;
+        r17 = "Darling";
+        r0[r16] = r17;
+        r16 = 22;
+        r17 = "Dawn";
+        r0[r16] = r17;
+        r16 = 23;
+        r17 = "Dazzling";
+        r0[r16] = r17;
+        r16 = 24;
+        r17 = "Deep";
+        r0[r16] = r17;
+        r16 = 25;
+        r17 = "Deepest";
+        r0[r16] = r17;
+        r16 = 26;
+        r17 = "Delicate";
+        r0[r16] = r17;
+        r16 = 27;
+        r17 = "Delightful";
+        r0[r16] = r17;
+        r16 = 28;
+        r17 = "Divine";
+        r0[r16] = r17;
+        r16 = 29;
+        r17 = "Double";
+        r0[r16] = r17;
+        r16 = 30;
+        r17 = "Downtown";
+        r0[r16] = r17;
+        r16 = 31;
+        r17 = "Dreamy";
+        r0[r16] = r17;
+        r16 = 32;
+        r17 = "Dusky";
+        r0[r16] = r17;
+        r16 = 33;
+        r17 = "Dusty";
+        r0[r16] = r17;
+        r16 = 34;
+        r17 = "Electric";
+        r0[r16] = r17;
+        r16 = 35;
+        r17 = "Enchanted";
+        r0[r16] = r17;
+        r16 = 36;
+        r17 = "Endless";
+        r0[r16] = r17;
+        r16 = 37;
+        r17 = "Evening";
+        r0[r16] = r17;
+        r16 = 38;
+        r17 = "Fantastic";
+        r0[r16] = r17;
+        r16 = 39;
+        r17 = "Flirty";
+        r0[r16] = r17;
+        r16 = 40;
+        r17 = "Forever";
+        r0[r16] = r17;
+        r16 = 41;
+        r17 = "Frigid";
+        r0[r16] = r17;
+        r16 = 42;
+        r17 = "Frosty";
+        r0[r16] = r17;
+        r16 = 43;
+        r17 = "Frozen";
+        r0[r16] = r17;
+        r16 = 44;
+        r17 = "Gentle";
+        r0[r16] = r17;
+        r16 = 45;
+        r17 = "Heavenly";
+        r0[r16] = r17;
+        r16 = 46;
+        r17 = "Hyper";
+        r0[r16] = r17;
+        r16 = 47;
+        r17 = "Icy";
+        r0[r16] = r17;
+        r16 = 48;
+        r17 = "Infinite";
+        r0[r16] = r17;
+        r16 = 49;
+        r17 = "Innocent";
+        r0[r16] = r17;
+        r16 = 50;
+        r17 = "Instant";
+        r0[r16] = r17;
+        r16 = 51;
+        r17 = "Luscious";
+        r0[r16] = r17;
+        r16 = 52;
+        r17 = "Lunar";
+        r0[r16] = r17;
+        r16 = 53;
+        r17 = "Lustrous";
+        r0[r16] = r17;
+        r16 = 54;
+        r17 = "Magic";
+        r0[r16] = r17;
+        r16 = 55;
+        r17 = "Majestic";
+        r0[r16] = r17;
+        r16 = 56;
+        r17 = "Mambo";
+        r0[r16] = r17;
+        r16 = 57;
+        r17 = "Midnight";
+        r0[r16] = r17;
+        r16 = 58;
+        r17 = "Millenium";
+        r0[r16] = r17;
+        r16 = 59;
+        r17 = "Morning";
+        r0[r16] = r17;
+        r16 = 60;
+        r17 = "Mystic";
+        r0[r16] = r17;
+        r16 = 61;
+        r17 = "Natural";
+        r0[r16] = r17;
+        r16 = 62;
+        r17 = "Neon";
+        r0[r16] = r17;
+        r16 = 63;
+        r17 = "Night";
+        r0[r16] = r17;
+        r16 = 64;
+        r17 = "Opaque";
+        r0[r16] = r17;
+        r16 = 65;
+        r17 = "Paradise";
+        r0[r16] = r17;
+        r16 = 66;
+        r17 = "Perfect";
+        r0[r16] = r17;
+        r16 = 67;
+        r17 = "Perky";
+        r0[r16] = r17;
+        r16 = 68;
+        r17 = "Polished";
+        r0[r16] = r17;
+        r16 = 69;
+        r17 = "Powerful";
+        r0[r16] = r17;
+        r16 = 70;
+        r17 = "Rich";
+        r0[r16] = r17;
+        r16 = 71;
+        r17 = "Royal";
+        r0[r16] = r17;
+        r16 = 72;
+        r17 = "Sheer";
+        r0[r16] = r17;
+        r16 = 73;
+        r17 = "Simply";
+        r0[r16] = r17;
+        r16 = 74;
+        r17 = "Sizzling";
+        r0[r16] = r17;
+        r16 = 75;
+        r17 = "Solar";
+        r0[r16] = r17;
+        r16 = 76;
+        r17 = "Sparkling";
+        r0[r16] = r17;
+        r16 = 77;
+        r17 = "Splendid";
+        r0[r16] = r17;
+        r16 = 78;
+        r17 = "Spicy";
+        r0[r16] = r17;
+        r16 = 79;
+        r17 = "Spring";
+        r0[r16] = r17;
+        r16 = 80;
+        r17 = "Stellar";
+        r0[r16] = r17;
+        r16 = 81;
+        r17 = "Sugared";
+        r0[r16] = r17;
+        r16 = 82;
+        r17 = "Summer";
+        r0[r16] = r17;
+        r16 = 83;
+        r17 = "Sunny";
+        r0[r16] = r17;
+        r16 = 84;
+        r17 = "Super";
+        r0[r16] = r17;
+        r16 = 85;
+        r17 = "Sweet";
+        r0[r16] = r17;
+        r16 = 86;
+        r17 = "Tender";
+        r0[r16] = r17;
+        r16 = 87;
+        r17 = "Tenacious";
+        r0[r16] = r17;
+        r16 = 88;
+        r17 = "Tidal";
+        r0[r16] = r17;
+        r16 = 89;
+        r17 = "Toasted";
+        r0[r16] = r17;
+        r16 = 90;
+        r17 = "Totally";
+        r0[r16] = r17;
+        r16 = 91;
+        r17 = "Tranquil";
+        r0[r16] = r17;
+        r16 = 92;
+        r17 = "Tropical";
+        r0[r16] = r17;
+        r16 = 93;
+        r17 = "True";
+        r0[r16] = r17;
+        r16 = 94;
+        r17 = "Twilight";
+        r0[r16] = r17;
+        r16 = 95;
+        r17 = "Twinkling";
+        r0[r16] = r17;
+        r16 = 96;
+        r17 = "Ultimate";
+        r0[r16] = r17;
+        r16 = 97;
+        r17 = "Ultra";
+        r0[r16] = r17;
+        r16 = 98;
+        r17 = "Velvety";
+        r0[r16] = r17;
+        r16 = 99;
+        r17 = "Vibrant";
+        r0[r16] = r17;
+        r16 = 100;
+        r17 = "Vintage";
+        r0[r16] = r17;
+        r16 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r17 = "Virtual";
+        r0[r16] = r17;
+        r16 = 102; // 0x66 float:1.43E-43 double:5.04E-322;
+        r17 = "Warm";
+        r0[r16] = r17;
+        r16 = 103; // 0x67 float:1.44E-43 double:5.1E-322;
+        r17 = "Warmest";
+        r0[r16] = r17;
+        r16 = 104; // 0x68 float:1.46E-43 double:5.14E-322;
+        r17 = "Whipped";
+        r0[r16] = r17;
+        r16 = 105; // 0x69 float:1.47E-43 double:5.2E-322;
+        r17 = "Wild";
+        r0[r16] = r17;
+        r16 = 106; // 0x6a float:1.49E-43 double:5.24E-322;
+        r17 = "Winsome";
+        r0[r16] = r17;
+        r0 = java.util.Arrays.asList(r0);
+        r15 = 81;
+        r15 = new java.lang.String[r15];
+        r17 = "Ambrosia";
+        r15[r1] = r17;
+        r17 = "Attack";
+        r15[r2] = r17;
+        r2 = "Avalanche";
+        r15[r3] = r2;
+        r2 = "Blast";
+        r15[r4] = r2;
+        r2 = "Bliss";
+        r15[r5] = r2;
+        r2 = "Blossom";
+        r15[r6] = r2;
+        r2 = "Blush";
+        r15[r7] = r2;
+        r2 = "Burst";
+        r15[r8] = r2;
+        r2 = "Butter";
+        r15[r9] = r2;
+        r2 = "Candy";
+        r15[r10] = r2;
+        r2 = "Carnival";
+        r15[r11] = r2;
+        r2 = "Charm";
+        r15[r12] = r2;
+        r2 = "Chiffon";
+        r15[r13] = r2;
+        r2 = "Cloud";
+        r15[r14] = r2;
+        r2 = "Comet";
+        r4 = 14;
+        r15[r4] = r2;
+        r2 = 15;
+        r4 = "Delight";
+        r15[r2] = r4;
+        r2 = 16;
+        r4 = "Dream";
+        r15[r2] = r4;
+        r2 = 17;
+        r4 = "Dust";
+        r15[r2] = r4;
+        r2 = 18;
+        r4 = "Fantasy";
+        r15[r2] = r4;
+        r2 = 19;
+        r4 = "Flame";
+        r15[r2] = r4;
+        r2 = 20;
+        r4 = "Flash";
+        r15[r2] = r4;
+        r2 = 21;
+        r4 = "Fire";
+        r15[r2] = r4;
+        r2 = 22;
+        r4 = "Freeze";
+        r15[r2] = r4;
+        r2 = 23;
+        r4 = "Frost";
+        r15[r2] = r4;
+        r2 = 24;
+        r4 = "Glade";
+        r15[r2] = r4;
+        r2 = 25;
+        r4 = "Glaze";
+        r15[r2] = r4;
+        r2 = 26;
+        r4 = "Gleam";
+        r15[r2] = r4;
+        r2 = 27;
+        r4 = "Glimmer";
+        r15[r2] = r4;
+        r2 = 28;
+        r4 = "Glitter";
+        r15[r2] = r4;
+        r2 = 29;
+        r4 = "Glow";
+        r15[r2] = r4;
+        r2 = 30;
+        r4 = "Grande";
+        r15[r2] = r4;
+        r2 = 31;
+        r4 = "Haze";
+        r15[r2] = r4;
+        r2 = 32;
+        r4 = "Highlight";
+        r15[r2] = r4;
+        r2 = 33;
+        r4 = "Ice";
+        r15[r2] = r4;
+        r2 = 34;
+        r4 = "Illusion";
+        r15[r2] = r4;
+        r2 = 35;
+        r4 = "Intrigue";
+        r15[r2] = r4;
+        r2 = 36;
+        r4 = "Jewel";
+        r15[r2] = r4;
+        r2 = 37;
+        r4 = "Jubilee";
+        r15[r2] = r4;
+        r2 = 38;
+        r4 = "Kiss";
+        r15[r2] = r4;
+        r2 = 39;
+        r4 = "Lights";
+        r15[r2] = r4;
+        r2 = 40;
+        r4 = "Lollypop";
+        r15[r2] = r4;
+        r2 = 41;
+        r4 = "Love";
+        r15[r2] = r4;
+        r2 = 42;
+        r4 = "Luster";
+        r15[r2] = r4;
+        r2 = 43;
+        r4 = "Madness";
+        r15[r2] = r4;
+        r2 = 44;
+        r4 = "Matte";
+        r15[r2] = r4;
+        r2 = 45;
+        r4 = "Mirage";
+        r15[r2] = r4;
+        r2 = 46;
+        r4 = "Mist";
+        r15[r2] = r4;
+        r2 = 47;
+        r4 = "Moon";
+        r15[r2] = r4;
+        r2 = 48;
+        r4 = "Muse";
+        r15[r2] = r4;
+        r2 = 49;
+        r4 = "Myth";
+        r15[r2] = r4;
+        r2 = 50;
+        r4 = "Nectar";
+        r15[r2] = r4;
+        r2 = 51;
+        r4 = "Nova";
+        r15[r2] = r4;
+        r2 = 52;
+        r4 = "Parfait";
+        r15[r2] = r4;
+        r2 = 53;
+        r4 = "Passion";
+        r15[r2] = r4;
+        r2 = 54;
+        r4 = "Pop";
+        r15[r2] = r4;
+        r2 = 55;
+        r4 = "Rain";
+        r15[r2] = r4;
+        r2 = 56;
+        r4 = "Reflection";
+        r15[r2] = r4;
+        r2 = 57;
+        r4 = "Rhapsody";
+        r15[r2] = r4;
+        r2 = 58;
+        r4 = "Romance";
+        r15[r2] = r4;
+        r2 = 59;
+        r4 = "Satin";
+        r15[r2] = r4;
+        r2 = 60;
+        r4 = "Sensation";
+        r15[r2] = r4;
+        r2 = 61;
+        r4 = "Silk";
+        r15[r2] = r4;
+        r2 = 62;
+        r4 = "Shine";
+        r15[r2] = r4;
+        r2 = 63;
+        r4 = "Shadow";
+        r15[r2] = r4;
+        r2 = 64;
+        r4 = "Shimmer";
+        r15[r2] = r4;
+        r2 = 65;
+        r4 = "Sky";
+        r15[r2] = r4;
+        r2 = 66;
+        r4 = "Spice";
+        r15[r2] = r4;
+        r2 = 67;
+        r4 = "Star";
+        r15[r2] = r4;
+        r2 = 68;
+        r4 = "Sugar";
+        r15[r2] = r4;
+        r2 = 69;
+        r4 = "Sunrise";
+        r15[r2] = r4;
+        r2 = 70;
+        r4 = "Sunset";
+        r15[r2] = r4;
+        r2 = 71;
+        r4 = "Sun";
+        r15[r2] = r4;
+        r2 = 72;
+        r4 = "Twist";
+        r15[r2] = r4;
+        r2 = 73;
+        r4 = "Unbound";
+        r15[r2] = r4;
+        r2 = 74;
+        r4 = "Velvet";
+        r15[r2] = r4;
+        r2 = 75;
+        r4 = "Vibrant";
+        r15[r2] = r4;
+        r2 = 76;
+        r4 = "Waters";
+        r15[r2] = r4;
+        r2 = 77;
+        r4 = "Wine";
+        r15[r2] = r4;
+        r2 = 78;
+        r4 = "Wink";
+        r15[r2] = r4;
+        r2 = 79;
+        r4 = "Wonder";
+        r15[r2] = r4;
+        r2 = 80;
+        r4 = "Zone";
+        r15[r2] = r4;
+        r2 = java.util.Arrays.asList(r15);
+        r4 = new java.util.HashMap;
+        r4.<init>();
+        r5 = 9306112; // 0x8e0000 float:1.304064E-38 double:4.59783E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Berry";
+        r4.put(r5, r6);
+        r5 = 14598550; // 0xdeCLASSNAME float:2.0456926E-38 double:7.212642E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Brandy";
+        r4.put(r5, r6);
+        r5 = 8391495; // 0x800b47 float:1.1758989E-38 double:4.1459494E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cherry";
+        r4.put(r5, r6);
+        r5 = 16744272; // 0xff7var_ float:2.3463723E-38 double:8.2727696E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Coral";
+        r4.put(r5, r6);
+        r5 = 14372985; // 0xdb5079 float:2.0140842E-38 double:7.101198E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cranberry";
+        r4.put(r5, r6);
+        r5 = 14423100; // 0xdCLASSNAMEc float:2.0211068E-38 double:7.125958E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Crimson";
+        r4.put(r5, r6);
+        r5 = 14725375; // 0xe0b0ff float:2.0634645E-38 double:7.275302E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mauve";
+        r4.put(r5, r6);
+        r5 = 16761035; // 0xffc0cb float:2.3487213E-38 double:8.2810516E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Pink";
+        r4.put(r5, r6);
+        r5 = 16711680; // 0xfvar_ float:2.3418052E-38 double:8.256667E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Red";
+        r4.put(r5, r6);
+        r5 = 16711807; // 0xfvar_f float:2.341823E-38 double:8.2567297E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Rose";
+        r4.put(r5, r6);
+        r5 = 8406555; // 0x80461b float:1.1780093E-38 double:4.15339E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Russet";
+        r4.put(r5, r6);
+        r5 = 16720896; // 0xfvar_ float:2.3430966E-38 double:8.2612203E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Scarlet";
+        r4.put(r5, r6);
+        r5 = 15856113; // 0xf1f1f1 float:2.2219147E-38 double:7.8339607E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Seashell";
+        r4.put(r5, r6);
+        r5 = 16724889; // 0xfvar_ float:2.3436561E-38 double:8.263193E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Strawberry";
+        r4.put(r5, r6);
+        r5 = 16760576; // 0xffbvar_ float:2.348657E-38 double:8.280825E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Amber";
+        r4.put(r5, r6);
+        r5 = 15438707; // 0xeb9373 float:2.1634236E-38 double:7.6277347E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Apricot";
+        r4.put(r5, r6);
+        r5 = 16508850; // 0xfbe7b2 float:2.3133826E-38 double:8.1564556E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Banana";
+        r4.put(r5, r6);
+        r5 = 10601738; // 0xa1CLASSNAMEa float:1.4856199E-38 double:5.2379545E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Citrus";
+        r4.put(r5, r6);
+        r5 = 11560192; // 0xb06500 float:1.6199279E-38 double:5.7114937E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ginger";
+        r4.put(r5, r6);
+        r5 = 16766720; // 0xffd700 float:2.3495179E-38 double:8.2838603E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Gold";
+        r4.put(r5, r6);
+        r5 = 16640272; // 0xfde910 float:2.3317988E-38 double:8.2213867E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lemon";
+        r4.put(r5, r6);
+        r5 = 16753920; // 0xffa500 float:2.3477242E-38 double:8.2775363E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Orange";
+        r4.put(r5, r6);
+        r5 = 16770484; // 0xffe5b4 float:2.3500453E-38 double:8.28572E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Peach";
+        r4.put(r5, r6);
+        r5 = 16739155; // 0xff6b53 float:2.3456552E-38 double:8.2702414E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Persimmon";
+        r4.put(r5, r6);
+        r5 = 14996514; // 0xe4d422 float:2.1014592E-38 double:7.4092624E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sunflower";
+        r4.put(r5, r6);
+        r5 = 15893760; // 0xvar_ float:2.2271901E-38 double:7.852561E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Tangerine";
+        r4.put(r5, r6);
+        r5 = 16763004; // 0xffCLASSNAMEc float:2.3489972E-38 double:8.2820244E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Topaz";
+        r4.put(r5, r6);
+        r5 = 16776960; // 0xfffvar_ float:2.3509528E-38 double:8.2889196E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Yellow";
+        r4.put(r5, r6);
+        r5 = 3688720; // 0x384910 float:5.168998E-39 double:1.82247E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Clover";
+        r4.put(r5, r6);
+        r5 = 8628829; // 0x83aa5d float:1.2091565E-38 double:4.263208E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cucumber";
+        r4.put(r5, r6);
+        r5 = 5294200; // 0x50CLASSNAME float:7.418754E-39 double:2.6156823E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Emerald";
+        r4.put(r5, r6);
+        r5 = 11907932; // 0xb5b35c float:1.6686567E-38 double:5.8833E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Olive";
+        r4.put(r5, r6);
+        r5 = 65280; // 0xfvar_ float:9.1477E-41 double:3.22526E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Green";
+        r4.put(r5, r6);
+        r5 = 43115; // 0xa86b float:6.0417E-41 double:2.13016E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Jade";
+        r4.put(r5, r6);
+        r5 = 2730887; // 0x29ab87 float:3.826788E-39 double:1.3492374E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Jungle";
+        r4.put(r5, r6);
+        r5 = 12582656; // 0xbffvar_ float:1.7632057E-38 double:6.216658E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lime";
+        r4.put(r5, r6);
+        r5 = 776785; // 0xbda51 float:1.088508E-39 double:3.83783E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Malachite";
+        r4.put(r5, r6);
+        r5 = 10026904; // 0x98fvar_ float:1.4050685E-38 double:4.953949E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mint";
+        r4.put(r5, r6);
+        r5 = 11394989; // 0xaddfad float:1.596778E-38 double:5.6298726E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Moss";
+        r4.put(r5, r6);
+        r5 = 3234721; // 0x315ba1 float:4.53281E-39 double:1.5981645E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Azure";
+        r4.put(r5, r6);
+        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blue";
+        r4.put(r5, r6);
+        r5 = 18347; // 0x47ab float:2.571E-41 double:9.0646E-320;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cobalt";
+        r4.put(r5, r6);
+        r5 = 5204422; // 0x4var_c6 float:7.292949E-39 double:2.571326E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Indigo";
+        r4.put(r5, r6);
+        r5 = 96647; // 0x17987 float:1.35431E-40 double:4.775E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lagoon";
+        r4.put(r5, r6);
+        r5 = 7461346; // 0x71d9e2 float:1.0455573E-38 double:3.6863947E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Aquamarine";
+        r4.put(r5, r6);
+        r5 = 1182351; // 0x120a8f float:1.656827E-39 double:5.84159E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ultramarine";
+        r4.put(r5, r6);
+        r5 = 128; // 0x80 float:1.794E-43 double:6.32E-322;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Navy";
+        r4.put(r5, r6);
+        r5 = 3101086; // 0x2var_e float:4.345547E-39 double:1.53214E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sapphire";
+        r4.put(r5, r6);
+        r5 = 7788522; // 0x76d7ea float:1.0914044E-38 double:3.848041E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sky";
+        r4.put(r5, r6);
+        r5 = 32896; // 0x8080 float:4.6097E-41 double:1.6253E-319;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Teal";
+        r4.put(r5, r6);
+        r5 = 4251856; // 0x40e0d0 float:5.958119E-39 double:2.100696E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Turquoise";
+        r4.put(r5, r6);
+        r5 = 10053324; // 0x9966cc float:1.4087707E-38 double:4.967002E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Amethyst";
+        r4.put(r5, r6);
+        r5 = 5046581; // 0x4d0135 float:7.071766E-39 double:2.4933423E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blackberry";
+        r4.put(r5, r6);
+        r5 = 6373457; // 0x614051 float:8.931116E-39 double:3.148906E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Eggplant";
+        r4.put(r5, r6);
+        r5 = 13148872; // 0xc8a2c8 float:1.8425494E-38 double:6.496406E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lilac";
+        r4.put(r5, r6);
+        r5 = 11894492; // 0xb57edc float:1.6667733E-38 double:5.87666E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Lavender";
+        r4.put(r5, r6);
+        r5 = 13421823; // 0xccccff float:1.880798E-38 double:6.6312616E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Periwinkle";
+        r4.put(r5, r6);
+        r5 = 8663417; // 0x843179 float:1.2140033E-38 double:4.2802967E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Plum";
+        r4.put(r5, r6);
+        r5 = 6684825; // 0x660099 float:9.367435E-39 double:3.3027424E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Purple";
+        r4.put(r5, r6);
+        r5 = 14204888; // 0xd8bfd8 float:1.9905288E-38 double:7.018147E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Thistle";
+        r4.put(r5, r6);
+        r5 = 14315734; // 0xda70d6 float:2.0060616E-38 double:7.0729124E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Orchid";
+        r4.put(r5, r6);
+        r5 = 2361920; // 0x240a40 float:3.309755E-39 double:1.1669435E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Violet";
+        r4.put(r5, r6);
+        r5 = 4137225; // 0x3var_ float:5.797487E-39 double:2.0440607E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Bronze";
+        r4.put(r5, r6);
+        r5 = 3604994; // 0x370202 float:5.051673E-39 double:1.7811037E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chocolate";
+        r4.put(r5, r6);
+        r5 = 8077056; // 0x7b3var_ float:1.1318366E-38 double:3.990596E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cinnamon";
+        r4.put(r5, r6);
+        r5 = 3153694; // 0x301f1e float:4.419267E-39 double:1.558132E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cocoa";
+        r4.put(r5, r6);
+        r5 = 7365973; // 0x706555 float:1.0321927E-38 double:3.639274E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Coffee";
+        r4.put(r5, r6);
+        r5 = 7956873; // 0x796989 float:1.1149954E-38 double:3.9312176E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Rum";
+        r4.put(r5, r6);
+        r5 = 5113350; // 0x4e0606 float:7.16533E-39 double:2.5263306E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mahogany";
+        r4.put(r5, r6);
+        r5 = 7875865; // 0x782d19 float:1.1036438E-38 double:3.8911943E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mocha";
+        r4.put(r5, r6);
+        r5 = 12759680; // 0xc2b280 float:1.788012E-38 double:6.3041195E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sand";
+        r4.put(r5, r6);
+        r5 = 8924439; // 0x882d17 float:1.2505803E-38 double:4.4092587E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Sienna";
+        r4.put(r5, r6);
+        r5 = 7864585; // 0x780109 float:1.1020631E-38 double:3.8856213E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Maple";
+        r4.put(r5, r6);
+        r5 = 15787660; // 0xf0e68c float:2.2123224E-38 double:7.8001404E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Khaki";
+        r4.put(r5, r6);
+        r5 = 12088115; // 0xb87333 float:1.6939057E-38 double:5.9723223E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Copper";
+        r4.put(r5, r6);
+        r5 = 12144200; // 0xb94e48 float:1.7017649E-38 double:6.000032E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chestnut";
+        r4.put(r5, r6);
+        r5 = 15653316; // 0xeed9c4 float:2.1934968E-38 double:7.7337657E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Almond";
+        r4.put(r5, r6);
+        r5 = 16776656; // 0xfffdd0 float:2.3509102E-38 double:8.2887694E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Cream";
+        r4.put(r5, r6);
+        r5 = 12186367; // 0xb9f2ff float:1.7076737E-38 double:6.0208653E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Diamond";
+        r4.put(r5, r6);
+        r5 = 11109127; // 0xa98307 float:1.5567203E-38 double:5.488638E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Honey";
+        r4.put(r5, r6);
+        r5 = 16777200; // 0xfffff0 float:2.3509865E-38 double:8.289038E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ivory";
+        r4.put(r5, r6);
+        r5 = 15392968; // 0xeae0c8 float:2.1570142E-38 double:7.6051367E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Pearl";
+        r4.put(r5, r6);
+        r5 = 15725299; // 0xeff2f3 float:2.2035837E-38 double:7.76933E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Porcelain";
+        r4.put(r5, r6);
+        r5 = 13745832; // 0xd1bea8 float:1.9262013E-38 double:6.7913434E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Vanilla";
+        r4.put(r5, r6);
+        r5 = 16777215; // 0xffffff float:2.3509886E-38 double:8.2890456E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "White";
+        r4.put(r5, r6);
+        r5 = 8421504; // 0x808080 float:1.180104E-38 double:4.160776E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Gray";
+        r4.put(r5, r6);
+        r5 = java.lang.Integer.valueOf(r1);
+        r6 = "Black";
+        r4.put(r5, r6);
+        r5 = 15266260; // 0xe8f1d4 float:2.1392587E-38 double:7.5425346E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Chrome";
+        r4.put(r5, r6);
+        r5 = 3556687; // 0x36454f float:4.98398E-39 double:1.757237E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Charcoal";
+        r4.put(r5, r6);
+        r5 = 789277; // 0xc0b1d float:1.106013E-39 double:3.899547E-318;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Ebony";
+        r4.put(r5, r6);
+        r5 = 12632256; // 0xc0c0c0 float:1.7701561E-38 double:6.2411637E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Silver";
+        r4.put(r5, r6);
+        r5 = 16119285; // 0xf5f5f5 float:2.258793E-38 double:7.963985E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Smoke";
+        r4.put(r5, r6);
+        r5 = 2499381; // 0x262335 float:3.502379E-39 double:1.2348583E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Steel";
+        r4.put(r5, r6);
+        r5 = 5220413; // 0x4fa83d float:7.315357E-39 double:2.5792267E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Apple";
+        r4.put(r5, r6);
+        r5 = 8434628; // 0x80b3c4 float:1.1819431E-38 double:4.16726E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Glacier";
+        r4.put(r5, r6);
+        r5 = 16693933; // 0xfebaad float:2.3393183E-38 double:8.247899E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Melon";
+        r4.put(r5, r6);
+        r5 = 12929932; // 0xCLASSNAMEb8c float:1.8118694E-38 double:6.388235E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Mulberry";
+        r4.put(r5, r6);
+        r5 = 11126466; // 0xa9c6c2 float:1.55915E-38 double:5.4972046E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Opal";
+        r4.put(r5, r6);
+        r5 = 5547512; // 0x54a5f8 float:7.77372E-39 double:2.740835E-317;
+        r5 = java.lang.Integer.valueOf(r5);
+        r6 = "Blue";
+        r4.put(r5, r6);
+        if (r18 != 0) goto L_0x0900;
+    L_0x08f7:
+        r5 = org.telegram.ui.ActionBar.Theme.getCurrentTheme();
+        r5 = r5.getAccent(r1);
+        goto L_0x0902;
+    L_0x0900:
+        r5 = r18;
+    L_0x0902:
+        if (r5 == 0) goto L_0x0909;
+    L_0x0904:
+        r5 = r5.accentColor;
+        if (r5 == 0) goto L_0x0909;
+    L_0x0908:
+        goto L_0x0913;
+    L_0x0909:
+        r5 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper();
+        r5 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r5);
+        r5 = r5[r1];
+    L_0x0913:
+        r1 = 0;
+        r6 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        r7 = android.graphics.Color.red(r5);
+        r8 = android.graphics.Color.green(r5);
+        r5 = android.graphics.Color.blue(r5);
+        r4 = r4.entrySet();
+        r4 = r4.iterator();
+    L_0x092b:
+        r10 = r4.hasNext();
+        if (r10 == 0) goto L_0x097e;
+    L_0x0931:
+        r10 = r4.next();
+        r10 = (java.util.Map.Entry) r10;
+        r11 = r10.getKey();
+        r11 = (java.lang.Integer) r11;
+        r12 = r11.intValue();
+        r12 = android.graphics.Color.red(r12);
+        r13 = r11.intValue();
+        r13 = android.graphics.Color.green(r13);
+        r11 = r11.intValue();
+        r11 = android.graphics.Color.blue(r11);
+        r14 = r7 + r12;
+        r14 = r14 / r3;
+        r12 = r7 - r12;
+        r13 = r8 - r13;
+        r11 = r5 - r11;
+        r15 = r14 + 512;
+        r15 = r15 * r12;
+        r15 = r15 * r12;
+        r12 = r15 >> 8;
+        r15 = r13 * 4;
+        r15 = r15 * r13;
+        r12 = r12 + r15;
+        r13 = 767 - r14;
+        r13 = r13 * r11;
+        r13 = r13 * r11;
+        r11 = r13 >> 8;
+        r12 = r12 + r11;
+        if (r12 >= r6) goto L_0x092b;
+    L_0x0976:
+        r1 = r10.getValue();
+        r1 = (java.lang.String) r1;
+        r6 = r12;
+        goto L_0x092b;
+    L_0x097e:
+        r4 = org.telegram.messenger.Utilities.random;
+        r4 = r4.nextInt();
+        r4 = r4 % r3;
+        if (r4 != 0) goto L_0x09ac;
+    L_0x0987:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r3 = org.telegram.messenger.Utilities.random;
+        r4 = r0.size();
+        r3 = r3.nextInt(r4);
+        r0 = r0.get(r3);
+        r0 = (java.lang.String) r0;
+        r2.append(r0);
+        r0 = " ";
+        r2.append(r0);
+        r2.append(r1);
+        r0 = r2.toString();
+        goto L_0x09d0;
+    L_0x09ac:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r0.append(r1);
+        r1 = " ";
+        r0.append(r1);
+        r1 = org.telegram.messenger.Utilities.random;
+        r3 = r2.size();
+        r1 = r1.nextInt(r3);
+        r1 = r2.get(r1);
+        r1 = (java.lang.String) r1;
+        r0.append(r1);
+        r0 = r0.toString();
+    L_0x09d0:
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.generateThemeName(org.telegram.ui.ActionBar.Theme$ThemeAccent):java.lang.String");
     }
 }

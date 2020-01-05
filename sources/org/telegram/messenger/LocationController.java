@@ -123,6 +123,7 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     public static class SharingLocationInfo {
+        public int account;
         public long did;
         public MessageObject messageObject;
         public int mid;
@@ -554,7 +555,9 @@ public class LocationController extends BaseController implements NotificationCe
         sharingLocationInfo.did = j;
         sharingLocationInfo.mid = i;
         sharingLocationInfo.period = i2;
-        sharingLocationInfo.messageObject = new MessageObject(this.currentAccount, message, false);
+        i = this.currentAccount;
+        sharingLocationInfo.account = i;
+        sharingLocationInfo.messageObject = new MessageObject(i, message, false);
         sharingLocationInfo.stopTime = getConnectionsManager().getCurrentTime() + i2;
         SharingLocationInfo sharingLocationInfo2 = (SharingLocationInfo) this.sharingLocationsMap.get(j);
         this.sharingLocationsMap.put(j, sharingLocationInfo);
@@ -603,6 +606,7 @@ public class LocationController extends BaseController implements NotificationCe
                 sharingLocationInfo.mid = queryFinalized.intValue(1);
                 sharingLocationInfo.stopTime = queryFinalized.intValue(2);
                 sharingLocationInfo.period = queryFinalized.intValue(3);
+                sharingLocationInfo.account = this.currentAccount;
                 NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(4);
                 if (byteBufferValue != null) {
                     sharingLocationInfo.messageObject = new MessageObject(this.currentAccount, Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), false);

@@ -1589,7 +1589,6 @@
     <string name="NewSecretChat">Nieuwe geheime chat</string>
     <string name="NewTheme">Nieuw kleurenthema</string>
     <string name="NewThemePreviewLine1">Do you know what time it is?</string>
-    <string name="NewThemePreviewLine2">It\'s morning in Tokyo ��</string>
     <string name="NewThemePreviewName">Bob Harris</string>
     <string name="NewThemePreviewReply">Good morning! ��</string>
     <string name="NewThemeTitle">New Theme</string>
@@ -2630,12 +2629,10 @@
     <string name="TextSizeHeader">Tekstgrootte berichten</string>
     <string name="Theme">Thema</string>
     <string name="ThemeArcticBlue">Arctisch</string>
-    <string name="ThemeBlue">Mono</string>
     <string name="ThemeCreateHelp">Anyone can install your theme using this link. When you change the theme, it will be updated for all users who installed it.\10\10The theme will be based on your currently selected theme and wallpaper.</string>
     <string name="ThemeCreateHelp2">You can change the link of your theme.\10\10Theme links must be longer than 5 characters and can use a-z, 0-9 and underscores.</string>
     <string name="ThemeDark">Donker</string>
     <string name="ThemeDarkBlue">Donkerblauw</string>
-    <string name="ThemeGraphite">Grafiet</string>
     <string name="ThemeHelpLink">Je thema zal worden bijgewerkt voor alle gebruikers iedere keer als je deze wijzigt. Iedereen kan het installeren via deze link.\10\10%1$s</string>
     <string name="ThemeInfo">Kies aangepast kleurenthema</string>
     <string name="ThemeInstallCount_few">%1$d people are using this theme</string>

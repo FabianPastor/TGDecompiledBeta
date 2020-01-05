@@ -67,6 +67,7 @@ import org.telegram.tgnet.TLRPC.TL_photos_getUserPhotos;
 import org.telegram.tgnet.TLRPC.TL_theme;
 import org.telegram.tgnet.TLRPC.TL_users_getUsers;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
+import org.telegram.tgnet.TLRPC.TL_webPageAttributeTheme;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.tgnet.TLRPC.WebPage;
@@ -1682,22 +1683,35 @@ public class FileRefController extends BaseController {
         if (fileReference != null) {
             return fileReference;
         }
-        if (fileReference == null) {
-            Page page = webPage.cached_page;
-            if (page != null) {
-                int size = page.documents.size();
-                for (int i = 0; i < size; i++) {
-                    byte[] fileReference2 = getFileReference((Document) webPage.cached_page.documents.get(i), inputFileLocation, zArr, inputFileLocationArr);
+        int size;
+        int i;
+        if (!webPage.attributes.isEmpty()) {
+            size = webPage.attributes.size();
+            for (i = 0; i < size; i++) {
+                TL_webPageAttributeTheme tL_webPageAttributeTheme = (TL_webPageAttributeTheme) webPage.attributes.get(i);
+                int size2 = tL_webPageAttributeTheme.documents.size();
+                for (int i2 = 0; i2 < size2; i2++) {
+                    byte[] fileReference2 = getFileReference((Document) tL_webPageAttributeTheme.documents.get(i2), inputFileLocation, zArr, inputFileLocationArr);
                     if (fileReference2 != null) {
                         return fileReference2;
                     }
                 }
-                size = webPage.cached_page.photos.size();
-                for (int i2 = 0; i2 < size; i2++) {
-                    byte[] fileReference3 = getFileReference((Photo) webPage.cached_page.photos.get(i2), inputFileLocation, zArr, inputFileLocationArr);
-                    if (fileReference3 != null) {
-                        return fileReference3;
-                    }
+            }
+        }
+        Page page = webPage.cached_page;
+        if (page != null) {
+            size = page.documents.size();
+            for (i = 0; i < size; i++) {
+                byte[] fileReference3 = getFileReference((Document) webPage.cached_page.documents.get(i), inputFileLocation, zArr, inputFileLocationArr);
+                if (fileReference3 != null) {
+                    return fileReference3;
+                }
+            }
+            size = webPage.cached_page.photos.size();
+            for (int i3 = 0; i3 < size; i3++) {
+                byte[] fileReference4 = getFileReference((Photo) webPage.cached_page.photos.get(i3), inputFileLocation, zArr, inputFileLocationArr);
+                if (fileReference4 != null) {
+                    return fileReference4;
                 }
             }
         }

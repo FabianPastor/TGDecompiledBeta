@@ -357,7 +357,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
                 if (z && MessageObject.isAnimatedStickerDocument(document, true)) {
                     backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
-                } else if (forDocument.lottieAnimation) {
+                } else if (forDocument.imageType == 1) {
                     backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
                 } else {
                     backupImageView.setImage(forDocument, null, "webp", null, tag2);
@@ -395,7 +395,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                         backupImageView.setImageDrawable(null);
                     } else if (z && MessageObject.isAnimatedStickerDocument(document, true)) {
                         backupImageView.setImage(ImageLocation.getForDocument(document), "30_30", forDocument, null, 0, tag2);
-                    } else if (forDocument.lottieAnimation) {
+                    } else if (forDocument.imageType == 1) {
                         backupImageView.setImage(forDocument, "30_30", "tgs", null, tag2);
                     } else {
                         backupImageView.setImage(forDocument, null, "webp", null, tag2);

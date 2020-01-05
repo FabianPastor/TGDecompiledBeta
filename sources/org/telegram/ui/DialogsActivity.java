@@ -90,6 +90,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 import org.telegram.ui.Adapters.DialogsSearchAdapter.DialogsSearchAdapterDelegate;
@@ -192,6 +193,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private int folderId;
     private ItemTouchHelper itemTouchhelper;
     private int lastItemsCount;
+    private boolean lastSearchScrolledToTop;
     private LinearLayoutManager layoutManager;
     private DialogsRecyclerView listView;
     private MenuDrawable menuDrawable;
@@ -950,6 +952,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             getMessagesController().loadGlobalNotificationsSettings();
             getMessagesController().loadDialogs(this.folderId, 0, 100, true);
             getMessagesController().loadHintDialogs();
+            getMessagesController().loadUserInfo(UserConfig.getInstance(this.currentAccount).getCurrentUser(), false, this.classGuid);
             getContactsController().checkInviteText();
             getMediaDataController().loadRecents(2, false, true, false);
             getMediaDataController().checkFeaturedStickers();
@@ -1065,9 +1068,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     DialogsActivity.this.showSearch(false, true);
                 }
-                if (DialogsActivity.this.dialogsSearchAdapter != null) {
-                    DialogsActivity.this.dialogsSearchAdapter.searchDialogs(null);
-                }
                 DialogsActivity.this.updatePasscodeButton();
                 if (DialogsActivity.this.menuDrawable != null) {
                     DialogsActivity.this.actionBar.setBackButtonContentDescription(LocaleController.getString("AccDescrOpenMenu", NUM));
@@ -1083,10 +1083,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
                 if (DialogsActivity.this.dialogsSearchAdapter != null) {
+                    DialogsActivity.this.lastSearchScrolledToTop = false;
                     DialogsActivity.this.dialogsSearchAdapter.searchDialogs(obj);
                 }
             }
         });
+        actionBarMenuItemSearchListener.setClearsTextOnSearchCollapse(false);
         actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         actionBarMenuItemSearchListener.setContentDescription(LocaleController.getString("Search", NUM));
         if (this.onlySelect) {
@@ -1161,11 +1163,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$7700 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$7800 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$7700);
+                    dialogsActivity.setDelegate(access$7800);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -1624,7 +1626,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.itemTouchhelper = new ItemTouchHelper(this.swipeController);
         this.itemTouchhelper.attachToRecyclerView(this.listView);
         i = this.searchString != null ? 2 : !this.onlySelect ? 1 : 0;
-        this.dialogsSearchAdapter = new DialogsSearchAdapter(context2, i, this.dialogsType);
+        this.dialogsSearchAdapter = new DialogsSearchAdapter(context2, i, this.dialogsType) {
+            public void notifyDataSetChanged() {
+                super.notifyDataSetChanged();
+                if (!DialogsActivity.this.lastSearchScrolledToTop && DialogsActivity.this.searchListView != null) {
+                    DialogsActivity.this.searchListView.scrollToPosition(0);
+                    DialogsActivity.this.lastSearchScrolledToTop = true;
+                }
+            }
+        };
         this.dialogsSearchAdapter.setDelegate(new DialogsSearchAdapterDelegate() {
             public void searchStateChanged(boolean z) {
                 if (!DialogsActivity.this.searching || !DialogsActivity.this.searchWas || DialogsActivity.this.searchEmptyView == null) {
@@ -1676,7 +1686,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     Builder builder = new Builder(DialogsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("ChatHintsDeleteAlertTitle", NUM));
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ChatHintsDeleteAlert", NUM, ContactsController.formatName(r0.first_name, r0.last_name))));
-                    builder.setPositiveButton(LocaleController.getString("StickersRemove", NUM), new -$$Lambda$DialogsActivity$6$D1hA8YjwyqjZdku77GjoErkXcyQ(this, i));
+                    builder.setPositiveButton(LocaleController.getString("StickersRemove", NUM), new -$$Lambda$DialogsActivity$7$pFWWoadhQcRHWr_Y7cZ0Jjitf-M(this, i));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                     AlertDialog create = builder.create();
                     DialogsActivity.this.showDialog(create);
@@ -1687,7 +1697,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            public /* synthetic */ void lambda$needRemoveHint$0$DialogsActivity$6(int i, DialogInterface dialogInterface, int i2) {
+            public /* synthetic */ void lambda$needRemoveHint$0$DialogsActivity$7(int i, DialogInterface dialogInterface, int i2) {
                 DialogsActivity.this.getMediaDataController().removePeer(i);
             }
 
@@ -1695,7 +1705,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 Builder builder = new Builder(DialogsActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("ClearSearchAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ClearSearchAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new -$$Lambda$DialogsActivity$6$hjWTeuHftV9_-3tWJ5IJj75xOJE(this));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new -$$Lambda$DialogsActivity$7$rQFFK6jysxOQNgCBtMiX0lcWOuM(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                 AlertDialog create = builder.create();
                 DialogsActivity.this.showDialog(create);
@@ -1705,7 +1715,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            public /* synthetic */ void lambda$needClearList$1$DialogsActivity$6(DialogInterface dialogInterface, int i) {
+            public /* synthetic */ void lambda$needClearList$1$DialogsActivity$7(DialogInterface dialogInterface, int i) {
                 if (DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) {
                     DialogsActivity.this.dialogsSearchAdapter.clearRecentSearch();
                 } else {
@@ -1854,7 +1864,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 r0 = r0.isServerDialogsEndReached(r2);
                 if (r0 != 0) goto L_0x0082;
             L_0x007a:
-                r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$9$t1yK0eXAt0F_hrTRPt-tptU1rD4;
+                r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$10$ZmbzK1COxw_WcLYjhVXaatEQtBQ;
                 r0.<init>(r5, r8);
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
             L_0x0082:
@@ -1947,10 +1957,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             L_0x0112:
                 return;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass9.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass10.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
             }
 
-            public /* synthetic */ void lambda$onScrolled$0$DialogsActivity$9(boolean z) {
+            public /* synthetic */ void lambda$onScrolled$0$DialogsActivity$10(boolean z) {
                 DialogsActivity.this.getMessagesController().loadDialogs(DialogsActivity.this.folderId, -1, 100, z);
             }
         });
@@ -2429,6 +2439,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             DialogsActivity.this.searchEmptyView.setScaleY(1.1f);
                             DialogsActivity.this.searchListView.hide();
                             DialogsActivity.this.listView.show();
+                            DialogsActivity.this.dialogsSearchAdapter.searchDialogs(null);
                         }
                         DialogsActivity.this.listView.setVerticalScrollBarEnabled(true);
                         DialogsActivity.this.searchListView.setVerticalScrollBarEnabled(true);
@@ -2747,98 +2758,98 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r10.dialogsAdapter;
         r12.addOrRemoveSelectedDialog(r6, r11);
         r10.updateSelectedCount();
-        goto L_0x0243;
+        goto L_0x0244;
     L_0x018f:
         r10.didSelectResult(r6, r1, r5);
-        goto L_0x0243;
+        goto L_0x0244;
     L_0x0194:
         r11 = new android.os.Bundle;
         r11.<init>();
         r1 = (int) r6;
         r2 = r6 >> r2;
         r3 = (int) r2;
-        if (r1 == 0) goto L_0x01cf;
+        if (r1 == 0) goto L_0x01d0;
     L_0x019f:
-        if (r1 <= 0) goto L_0x01a7;
+        if (r1 <= 0) goto L_0x01a8;
     L_0x01a1:
         r2 = "user_id";
         r11.putInt(r2, r1);
-        goto L_0x01d4;
-    L_0x01a7:
-        if (r1 >= 0) goto L_0x01d4;
-    L_0x01a9:
-        if (r0 == 0) goto L_0x01c8;
-    L_0x01ab:
+        goto L_0x01d5;
+    L_0x01a8:
+        if (r1 >= 0) goto L_0x01d5;
+    L_0x01aa:
+        if (r0 == 0) goto L_0x01c9;
+    L_0x01ac:
         r2 = r10.getMessagesController();
         r3 = -r1;
         r3 = java.lang.Integer.valueOf(r3);
         r2 = r2.getChat(r3);
-        if (r2 == 0) goto L_0x01c8;
-    L_0x01ba:
+        if (r2 == 0) goto L_0x01c9;
+    L_0x01bb:
         r3 = r2.migrated_to;
-        if (r3 == 0) goto L_0x01c8;
-    L_0x01be:
+        if (r3 == 0) goto L_0x01c9;
+    L_0x01bf:
         r3 = "migrated_to";
         r11.putInt(r3, r1);
         r1 = r2.migrated_to;
         r1 = r1.channel_id;
         r1 = -r1;
-    L_0x01c8:
+    L_0x01c9:
         r1 = -r1;
         r2 = "chat_id";
         r11.putInt(r2, r1);
-        goto L_0x01d4;
-    L_0x01cf:
+        goto L_0x01d5;
+    L_0x01d0:
         r1 = "enc_id";
         r11.putInt(r1, r3);
-    L_0x01d4:
-        if (r0 == 0) goto L_0x01dc;
-    L_0x01d6:
+    L_0x01d5:
+        if (r0 == 0) goto L_0x01dd;
+    L_0x01d7:
         r12 = "message_id";
         r11.putInt(r12, r0);
-        goto L_0x01f0;
-    L_0x01dc:
-        if (r12 != 0) goto L_0x01e2;
-    L_0x01de:
+        goto L_0x01f1;
+    L_0x01dd:
+        if (r12 != 0) goto L_0x01e3;
+    L_0x01df:
         r10.closeSearch();
-        goto L_0x01f0;
-    L_0x01e2:
+        goto L_0x01f1;
+    L_0x01e3:
         r12 = r10.searchObject;
-        if (r12 == 0) goto L_0x01f0;
-    L_0x01e6:
+        if (r12 == 0) goto L_0x01f1;
+    L_0x01e7:
         r0 = r10.dialogsSearchAdapter;
         r1 = r10.searchDialogId;
         r0.putRecentSearch(r1, r12);
         r12 = 0;
         r10.searchObject = r12;
-    L_0x01f0:
+    L_0x01f1:
         r12 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r12 == 0) goto L_0x020f;
-    L_0x01f6:
+        if (r12 == 0) goto L_0x0210;
+    L_0x01f7:
         r0 = r10.openedDialogId;
         r12 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
-        if (r12 != 0) goto L_0x0201;
-    L_0x01fc:
+        if (r12 != 0) goto L_0x0202;
+    L_0x01fd:
         r12 = r10.dialogsSearchAdapter;
-        if (r13 == r12) goto L_0x0201;
-    L_0x0200:
-        return;
+        if (r13 == r12) goto L_0x0202;
     L_0x0201:
+        return;
+    L_0x0202:
         r12 = r10.dialogsAdapter;
-        if (r12 == 0) goto L_0x020f;
-    L_0x0205:
+        if (r12 == 0) goto L_0x0210;
+    L_0x0206:
         r10.openedDialogId = r6;
         r12.setOpenedDialogId(r6);
         r12 = 512; // 0x200 float:7.175E-43 double:2.53E-321;
         r10.updateVisibleRows(r12);
-    L_0x020f:
+    L_0x0210:
         r12 = r10.searchString;
-        if (r12 == 0) goto L_0x0231;
-    L_0x0213:
+        if (r12 == 0) goto L_0x0232;
+    L_0x0214:
         r12 = r10.getMessagesController();
         r12 = r12.checkCanOpenChat(r11, r10);
-        if (r12 == 0) goto L_0x0243;
-    L_0x021d:
+        if (r12 == 0) goto L_0x0244;
+    L_0x021e:
         r12 = r10.getNotificationCenter();
         r13 = org.telegram.messenger.NotificationCenter.closeChats;
         r0 = new java.lang.Object[r5];
@@ -2846,16 +2857,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = new org.telegram.ui.ChatActivity;
         r12.<init>(r11);
         r10.presentFragment(r12);
-        goto L_0x0243;
-    L_0x0231:
+        goto L_0x0244;
+    L_0x0232:
         r12 = r10.getMessagesController();
         r12 = r12.checkCanOpenChat(r11, r10);
-        if (r12 == 0) goto L_0x0243;
-    L_0x023b:
+        if (r12 == 0) goto L_0x0244;
+    L_0x023c:
         r12 = new org.telegram.ui.ChatActivity;
         r12.<init>(r11);
         r10.presentFragment(r12);
-    L_0x0243:
+    L_0x0244:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");
@@ -3248,7 +3259,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0232;
     L_0x0124:
-        r0 = NUM; // 0x7f0e08cf float:1.8879611E38 double:1.0531632707E-314;
+        r0 = NUM; // 0x7f0e08e0 float:1.8879646E38 double:1.053163279E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3286,7 +3297,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01a1;
     L_0x016d:
-        r3 = NUM; // 0x7f0e0392 float:1.8876891E38 double:1.053162608E-314;
+        r3 = NUM; // 0x7f0e0397 float:1.8876901E38 double:1.0531626107E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3294,11 +3305,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "DeleteFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0127 float:1.8875636E38 double:1.0531623024E-314;
+        r1 = NUM; // 0x7f0e0128 float:1.8875638E38 double:1.053162303E-314;
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e037d float:1.8876849E38 double:1.053162598E-314;
+        r1 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
@@ -3309,7 +3320,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01d9;
     L_0x01a5:
-        r3 = NUM; // 0x7f0e02f3 float:1.8876569E38 double:1.0531625297E-314;
+        r3 = NUM; // 0x7f0e02f6 float:1.8876575E38 double:1.053162531E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3317,11 +3328,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearCacheFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e011c float:1.8875614E38 double:1.053162297E-314;
+        r1 = NUM; // 0x7f0e011d float:1.8875616E38 double:1.0531622974E-314;
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f7 float:1.8876577E38 double:1.0531625316E-314;
+        r1 = NUM; // 0x7f0e02fa float:1.8876583E38 double:1.053162533E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$alhJl2oxrWyqDQR9VMC4_CoynGI;
@@ -3329,7 +3340,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x020c;
     L_0x01d9:
-        r3 = NUM; // 0x7f0e02f5 float:1.8876573E38 double:1.0531625306E-314;
+        r3 = NUM; // 0x7f0e02f8 float:1.887658E38 double:1.053162532E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3337,18 +3348,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e011e float:1.8875618E38 double:1.053162298E-314;
+        r1 = NUM; // 0x7f0e011f float:1.887562E38 double:1.0531622984E-314;
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f6 float:1.8876575E38 double:1.053162531E-314;
+        r1 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$1j3JEkAThEHgG6O1BGBF0RX0na8;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x020c:
-        r1 = NUM; // 0x7f0e0211 float:1.887611E38 double:1.053162418E-314;
+        r1 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);
@@ -3950,7 +3961,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 arrayList.add(ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.1f, 1.0f}));
             }
             animatorSet.playTogether(arrayList);
-            animatorSet.setDuration(250);
+            animatorSet.setDuration(200);
             animatorSet.start();
             MenuDrawable menuDrawable = this.menuDrawable;
             if (menuDrawable != null) {
@@ -4773,10 +4784,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{DrawerUserCell.class}, new String[]{str}, null, null, null, "chats_menuBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerAddCell.class}, new String[]{str2}, null, null, null, "chats_menuItemIcon"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerAddCell.class}, new String[]{str2}, null, null, null, "chats_menuItemText"));
+        View view3 = this.listView;
+        Class[] clsArr3 = new Class[]{UserCell.class};
+        String[] strArr2 = new String[1];
+        strArr2[0] = "nameTextView";
+        arrayList.add(new ThemeDescription(view3, 0, clsArr3, strArr2, null, null, null, "windowBackgroundWhiteBlackText"));
+        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_dialogsactivity_iy3fofqmgrbrmjxefbyhefg9ov0;
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DividerCell.class}, Theme.dividerPaint, null, null, "divider"));
         arrayList.add(new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle"));
         DialogsAdapter dialogsAdapter = this.dialogsAdapter;
-        View view3 = null;
+        View view4 = null;
         arrayList.add(new ThemeDescription(dialogsAdapter != null ? dialogsAdapter.getArchiveHintCellPager() : null, 0, new Class[]{ArchiveHintInnerCell.class}, new String[]{"imageView"}, null, null, null, "chats_nameMessage_threeLines"));
         dialogsAdapter = this.dialogsAdapter;
         arrayList.add(new ThemeDescription(dialogsAdapter != null ? dialogsAdapter.getArchiveHintCellPager() : null, 0, new Class[]{ArchiveHintInnerCell.class}, new String[]{"imageView2"}, null, null, null, "chats_unreadCounter"));
@@ -4795,12 +4814,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         dialogsSearchAdapter = this.dialogsSearchAdapter;
         arrayList.add(new ThemeDescription(dialogsSearchAdapter != null ? dialogsSearchAdapter.getInnerListView() : null, 0, new Class[]{HintDialogCell.class}, Theme.dialogs_archiveTextPaint, null, null, "chats_archiveText"));
         dialogsSearchAdapter = this.dialogsSearchAdapter;
-        arrayList.add(new ThemeDescription(dialogsSearchAdapter != null ? dialogsSearchAdapter.getInnerListView() : null, 0, new Class[]{HintDialogCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription(dialogsSearchAdapter != null ? dialogsSearchAdapter.getInnerListView() : null, 0, new Class[]{HintDialogCell.class}, new String[]{r23}, null, null, null, "windowBackgroundWhiteBlackText"));
         dialogsSearchAdapter = this.dialogsSearchAdapter;
         if (dialogsSearchAdapter != null) {
-            view3 = dialogsSearchAdapter.getInnerListView();
+            view4 = dialogsSearchAdapter.getInnerListView();
         }
-        arrayList.add(new ThemeDescription(view3, 0, new Class[]{HintDialogCell.class}, null, null, null, "chats_onlineCircle"));
+        arrayList.add(new ThemeDescription(view4, 0, new Class[]{HintDialogCell.class}, null, null, null, "chats_onlineCircle"));
         view2 = this.fragmentView;
         int i3 = ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG;
         clsArr2 = new Class[]{FragmentContextView.class};
@@ -4822,18 +4841,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         while (true) {
             UndoView[] undoViewArr = this.undoView;
             if (i < undoViewArr.length) {
-                arrayList.add(new ThemeDescription(undoViewArr[i], ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "undo_background"));
+                arrayList.add(new ThemeDescription(undoViewArr[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "undo_background"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, null, null, null, "undo_cancelColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, null, null, null, "undo_cancelColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, null, null, null, "undo_infoColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"subinfoTextView"}, null, null, null, "undo_infoColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, null, null, null, "undo_infoColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, null, null, null, "undo_infoColor"));
-                View view4 = this.undoView[i];
+                View view5 = this.undoView[i];
                 clsArr2 = new Class[]{UndoView.class};
                 strArr = new String[1];
                 strArr[0] = "leftImageView";
-                arrayList.add(new ThemeDescription(view4, 0, clsArr2, strArr, "info1", "undo_background"));
+                arrayList.add(new ThemeDescription(view5, 0, clsArr2, strArr, "info1", "undo_background"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "info2", "undo_background"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "luCLASSNAME", "undo_infoColor"));
                 arrayList.add(new ThemeDescription(this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "luCLASSNAME", "undo_infoColor"));
@@ -4931,6 +4950,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         ((ProfileSearchCell) childAt).update(0);
                     } else if (childAt instanceof DialogCell) {
                         ((DialogCell) childAt).update(0);
+                    } else if (childAt instanceof UserCell) {
+                        ((UserCell) childAt).update(0);
                     }
                 }
             }
@@ -4953,7 +4974,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (recyclerView != null) {
             View childAt3 = recyclerView.getChildAt(0);
             if (childAt3 instanceof DrawerProfileCell) {
-                ((DrawerProfileCell) childAt3).applyBackground(true);
+                DrawerProfileCell drawerProfileCell = (DrawerProfileCell) childAt3;
+                drawerProfileCell.applyBackground(true);
+                drawerProfileCell.updateColors();
             }
         }
         PullForegroundDrawable pullForegroundDrawable = this.pullForegroundDrawable;

@@ -134,6 +134,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     public void setDrawerLayout(ViewGroup viewGroup) {
         this.drawerLayout = viewGroup;
         addView(this.drawerLayout);
+        this.drawerLayout.setVisibility(4);
         if (VERSION.SDK_INT >= 21) {
             this.drawerLayout.setFitsSystemWindows(true);
         }
@@ -152,7 +153,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             this.drawerPosition = 0.0f;
         }
         this.drawerLayout.setTranslationX(this.drawerPosition);
-        int i = this.drawerPosition > 0.0f ? 0 : 8;
+        int i = this.drawerPosition > 0.0f ? 0 : 4;
         if (this.drawerLayout.getVisibility() != i) {
             this.drawerLayout.setVisibility(i);
         }
@@ -191,7 +192,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (z) {
                 animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.drawerLayout.getMeasuredWidth())) * (((float) this.drawerLayout.getMeasuredWidth()) - this.drawerPosition)), 50));
             } else {
-                animatorSet.setDuration(300);
+                animatorSet.setDuration(250);
             }
             animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -213,7 +214,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (z) {
             animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.drawerLayout.getMeasuredWidth())) * this.drawerPosition), 50));
         } else {
-            animatorSet.setDuration(300);
+            animatorSet.setDuration(250);
         }
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {

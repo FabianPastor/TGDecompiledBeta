@@ -73,7 +73,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private HashMap<Integer, Integer> vibrationPattern;
     private int width;
 
-    private static native long create(String str, int[] iArr, boolean z, int[] iArr2);
+    private static native long create(String str, int[] iArr, boolean z, int[] iArr2, boolean z2);
 
     private static native void createCache(long j, Bitmap bitmap, int i, int i2, int i3);
 
@@ -221,6 +221,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             RLottieDrawable.this.pendingReplaceColors = null;
                         }
                         try {
+                            SystemClock.uptimeMillis();
                             RLottieDrawable.getFrame(RLottieDrawable.this.nativePtr, RLottieDrawable.this.currentFrame, RLottieDrawable.this.backgroundBitmap, RLottieDrawable.this.width, RLottieDrawable.this.height, RLottieDrawable.this.backgroundBitmap.getRowBytes());
                             if (RLottieDrawable.this.metaData[2] != 0) {
                                 RLottieDrawable.this.needGenerateCache = true;
@@ -258,7 +259,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.height = i2;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z, iArr);
+        this.nativePtr = create(file.getAbsolutePath(), this.metaData, z, iArr, this.shouldLimitFps);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }

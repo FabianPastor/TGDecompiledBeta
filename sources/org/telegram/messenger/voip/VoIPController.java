@@ -273,8 +273,8 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x005e  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0047  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0060  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0049  */
     public void setConfig(double r17, double r19, int r21, long r22) {
         /*
         r16 = this;
@@ -299,36 +299,36 @@ public class VoIPController {
         r5 = r5.getBoolean(r6, r3);
         r6 = r14.nativeInst;
         r8 = 1;
-        if (r2 == 0) goto L_0x0033;
+        if (r2 == 0) goto L_0x0034;
     L_0x0028:
         r2 = "use_system_aec";
         r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8);
-        if (r2 != 0) goto L_0x0031;
-    L_0x0030:
-        goto L_0x0033;
+        if (r2 != 0) goto L_0x0032;
     L_0x0031:
-        r9 = 0;
         goto L_0x0034;
-    L_0x0033:
-        r9 = 1;
+    L_0x0032:
+        r9 = 0;
+        goto L_0x0035;
     L_0x0034:
-        if (r4 == 0) goto L_0x0041;
-    L_0x0036:
+        r9 = 1;
+    L_0x0035:
+        if (r4 == 0) goto L_0x0043;
+    L_0x0037:
         r2 = "use_system_ns";
         r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8);
-        if (r2 != 0) goto L_0x003f;
-    L_0x003e:
-        goto L_0x0041;
-    L_0x003f:
-        r10 = 0;
-        goto L_0x0042;
+        if (r2 != 0) goto L_0x0041;
+    L_0x0040:
+        goto L_0x0043;
     L_0x0041:
+        r10 = 0;
+        goto L_0x0044;
+    L_0x0043:
         r10 = 1;
-    L_0x0042:
+    L_0x0044:
         r11 = 1;
         r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r2 == 0) goto L_0x005e;
-    L_0x0047:
+        if (r2 == 0) goto L_0x0060;
+    L_0x0049:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r3 = "voip";
@@ -336,22 +336,22 @@ public class VoIPController {
         r2.append(r0);
         r0 = r2.toString();
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0062;
-    L_0x005e:
+        goto L_0x0064;
+    L_0x0060:
         r0 = r14.getLogFilePath(r0);
-    L_0x0062:
+    L_0x0064:
         r12 = r0;
         r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r0 == 0) goto L_0x0071;
-    L_0x0067:
-        if (r5 == 0) goto L_0x0071;
+        if (r0 == 0) goto L_0x0073;
     L_0x0069:
+        if (r5 == 0) goto L_0x0073;
+    L_0x006b:
         r0 = "voipStats";
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0072;
-    L_0x0071:
+        goto L_0x0074;
+    L_0x0073:
         r0 = 0;
-    L_0x0072:
+    L_0x0074:
         r13 = r0;
         r15 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
         r0 = r16;

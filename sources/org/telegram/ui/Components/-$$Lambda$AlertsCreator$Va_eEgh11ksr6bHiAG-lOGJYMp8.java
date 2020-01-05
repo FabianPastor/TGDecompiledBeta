@@ -14,6 +14,6 @@ public final /* synthetic */ class -$$Lambda$AlertsCreator$Va_eEgh11ksr6bHiAG-lO
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$31$LaunchActivity(new CacheControlActivity());
+        this.f$0.lambda$runLinkRequest$32$LaunchActivity(new CacheControlActivity());
     }
 }

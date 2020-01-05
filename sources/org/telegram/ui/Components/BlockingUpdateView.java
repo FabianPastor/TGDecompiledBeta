@@ -238,45 +238,43 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         return z;
     }
 
-    private void showProgress(boolean z) {
-        final boolean z2 = z;
+    private void showProgress(final boolean z) {
         AnimatorSet animatorSet = this.progressAnimation;
         if (animatorSet != null) {
             animatorSet.cancel();
         }
         this.progressAnimation = new AnimatorSet();
-        String str = "alpha";
-        String str2 = "scaleY";
-        String str3 = "scaleX";
-        if (z2) {
+        AnimatorSet animatorSet2;
+        Animator[] animatorArr;
+        if (z) {
             this.radialProgressView.setVisibility(0);
             this.acceptButton.setEnabled(false);
-            AnimatorSet animatorSet2 = this.progressAnimation;
-            Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, str, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{1.0f});
+            animatorSet2 = this.progressAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_X, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_Y, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, View.ALPHA, new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.radialProgressView, View.SCALE_X, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.radialProgressView, View.SCALE_Y, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.radialProgressView, View.ALPHA, new float[]{1.0f});
             animatorSet2.playTogether(animatorArr);
         } else {
             this.acceptTextView.setVisibility(0);
             this.acceptButton.setEnabled(true);
-            animatorSet = this.progressAnimation;
-            Animator[] animatorArr2 = new Animator[6];
-            animatorArr2[0] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{0.1f});
-            animatorArr2[1] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{0.1f});
-            animatorArr2[2] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{0.0f});
-            animatorArr2[3] = ObjectAnimator.ofFloat(this.acceptTextView, str3, new float[]{1.0f});
-            animatorArr2[4] = ObjectAnimator.ofFloat(this.acceptTextView, str2, new float[]{1.0f});
-            animatorArr2[5] = ObjectAnimator.ofFloat(this.acceptTextView, str, new float[]{1.0f});
-            animatorSet.playTogether(animatorArr2);
+            animatorSet2 = this.progressAnimation;
+            animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.radialProgressView, View.SCALE_X, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.radialProgressView, View.SCALE_Y, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.radialProgressView, View.ALPHA, new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_X, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.acceptTextView, View.SCALE_Y, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.acceptTextView, View.ALPHA, new float[]{1.0f});
+            animatorSet2.playTogether(animatorArr);
         }
         this.progressAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (BlockingUpdateView.this.progressAnimation != null && BlockingUpdateView.this.progressAnimation.equals(animator)) {
-                    if (z2) {
+                    if (z) {
                         BlockingUpdateView.this.acceptTextView.setVisibility(4);
                     } else {
                         BlockingUpdateView.this.radialProgressView.setVisibility(4);

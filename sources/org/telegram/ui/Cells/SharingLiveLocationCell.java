@@ -230,6 +230,8 @@ public class SharingLiveLocationCell extends FrameLayout {
 
     public void setDialog(SharingLocationInfo sharingLocationInfo) {
         this.currentInfo = sharingLocationInfo;
+        this.currentAccount = sharingLocationInfo.account;
+        this.avatarImageView.getImageReceiver().setCurrentAccount(this.currentAccount);
         int i = (int) sharingLocationInfo.did;
         String str = "50_50";
         Object user;
