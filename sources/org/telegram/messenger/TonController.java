@@ -1311,7 +1311,7 @@ public class TonController extends BaseController {
         r5.putExtra(r2, r6);	 Catch:{ Exception -> 0x007c }
     L_0x0069:
         r6 = "WalletShareQr";
-        r0 = NUM; // 0x7f0e0CLASSNAME float:1.8881467E38 double:1.053163723E-314;
+        r0 = NUM; // 0x7f0e0CLASSNAME float:1.888147E38 double:1.0531637233E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x007c }
         r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x007c }
         r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;

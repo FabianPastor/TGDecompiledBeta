@@ -286,7 +286,10 @@ public class AlertDialog extends Dialog implements Callback {
 
     public /* synthetic */ void lambda$new$0$AlertDialog() {
         if (!isShowing()) {
-            show();
+            try {
+                show();
+            } catch (Exception unused) {
+            }
         }
     }
 

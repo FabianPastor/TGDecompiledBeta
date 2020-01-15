@@ -465,7 +465,7 @@ public class UserCell2 extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r1.setTextColor(r2);
         r1 = r12.statusTextView;
-        r2 = NUM; // 0x7f0e0768 float:1.8878883E38 double:1.0531630934E-314;
+        r2 = NUM; // 0x7f0e0769 float:1.8878885E38 double:1.053163094E-314;
         r3 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -501,14 +501,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x01d1;
     L_0x01c2:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e0278 float:1.887632E38 double:1.053162469E-314;
+        r1 = NUM; // 0x7f0e0279 float:1.8876321E38 double:1.0531624694E-314;
         r2 = "ChannelPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x01d1:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e027b float:1.8876325E38 double:1.0531624704E-314;
+        r1 = NUM; // 0x7f0e027c float:1.8876328E38 double:1.053162471E-314;
         r2 = "ChannelPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -527,7 +527,7 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x0203;
     L_0x01f4:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e062d float:1.8878244E38 double:1.0531629377E-314;
+        r1 = NUM; // 0x7f0e062e float:1.8878246E38 double:1.053162938E-314;
         r2 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
@@ -538,14 +538,14 @@ public class UserCell2 extends FrameLayout {
         if (r0 == 0) goto L_0x021a;
     L_0x020b:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e062e float:1.8878246E38 double:1.053162938E-314;
+        r1 = NUM; // 0x7f0e062f float:1.8878248E38 double:1.0531629387E-314;
         r2 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);
         goto L_0x0228;
     L_0x021a:
         r0 = r12.statusTextView;
-        r1 = NUM; // 0x7f0e0631 float:1.8878252E38 double:1.0531629397E-314;
+        r1 = NUM; // 0x7f0e0632 float:1.8878254E38 double:1.05316294E-314;
         r2 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);

@@ -502,6 +502,7 @@
     <string name="BotStop">Stop bot</string>
     <string name="BotUnblock">RESTART</string>
     <string name="Brown">Brown</string>
+    <string name="BubbleRadius">Message bubble radius</string>
     <string name="BuiltInThemes">Built-in themes</string>
     <string name="BytesReceived">Bytes received</string>
     <string name="BytesSent">Bytes sent</string>

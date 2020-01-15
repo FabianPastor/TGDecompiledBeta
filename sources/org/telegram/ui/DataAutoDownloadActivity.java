@@ -1514,7 +1514,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r3 = "fonts/rmedium.ttf";
         r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
         r1.setTypeface(r3);
-        r3 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
+        r3 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
         r4 = "Cancel";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = r3.toUpperCase();
@@ -1546,7 +1546,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
         r1 = "fonts/rmedium.ttf";
         r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1);
         r14.setTypeface(r1);
-        r1 = NUM; // 0x7f0e099e float:1.8880031E38 double:1.053163373E-314;
+        r1 = NUM; // 0x7f0e099f float:1.8880033E38 double:1.0531633735E-314;
         r2 = "Save";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r1 = r1.toUpperCase();

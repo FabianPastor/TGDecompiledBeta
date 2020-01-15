@@ -1597,10 +1597,10 @@ public class DocumentSelectActivity extends BaseFragment {
         r4 = android.os.Environment.getExternalStorageState();
         r5 = "mounted";
         r5 = r4.equals(r5);
-        r6 = NUM; // 0x7f0e04ab float:1.8877461E38 double:1.053162747E-314;
+        r6 = NUM; // 0x7f0e04ac float:1.8877463E38 double:1.0531627475E-314;
         r7 = "ExternalFolderInfo";
         r8 = NUM; // 0x7var_c0 float:1.7944967E38 double:1.052935598E-314;
-        r9 = NUM; // 0x7f0e09b1 float:1.888007E38 double:1.0531633824E-314;
+        r9 = NUM; // 0x7f0e09b2 float:1.8880072E38 double:1.053163383E-314;
         r10 = "SdCard";
         if (r5 != 0) goto L_0x003e;
     L_0x0036:
@@ -1620,13 +1620,13 @@ public class DocumentSelectActivity extends BaseFragment {
         r4.subtitle = r5;
         goto L_0x0073;
     L_0x0058:
-        r5 = NUM; // 0x7f0e057d float:1.8877887E38 double:1.053162851E-314;
+        r5 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
         r11 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.title = r5;
         r5 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
         r4.icon = r5;
-        r5 = NUM; // 0x7f0e057c float:1.8877885E38 double:1.0531628503E-314;
+        r5 = NUM; // 0x7f0e057d float:1.8877887E38 double:1.053162851E-314;
         r11 = "InternalFolderInfo";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.subtitle = r5;
@@ -1733,7 +1733,7 @@ public class DocumentSelectActivity extends BaseFragment {
         goto L_0x014f;
     L_0x0144:
         r11 = "ExternalStorage";
-        r12 = NUM; // 0x7f0e04ac float:1.8877463E38 double:1.0531627475E-314;
+        r12 = NUM; // 0x7f0e04ad float:1.8877465E38 double:1.053162748E-314;
         r11 = org.telegram.messenger.LocaleController.getString(r11, r12);	 Catch:{ Exception -> 0x0165 }
         r5.title = r11;	 Catch:{ Exception -> 0x0165 }
     L_0x014f:
@@ -1777,7 +1777,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r2.<init>(r13, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0e0ab1 float:1.8880589E38 double:1.053163509E-314;
+        r4 = NUM; // 0x7f0e0ab2 float:1.888059E38 double:1.0531635094E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
@@ -1812,11 +1812,11 @@ public class DocumentSelectActivity extends BaseFragment {
     L_0x01d8:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r13, r1);
-        r2 = NUM; // 0x7f0e051b float:1.8877688E38 double:1.0531628024E-314;
+        r2 = NUM; // 0x7f0e051c float:1.887769E38 double:1.053162803E-314;
         r3 = "Gallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e051c float:1.887769E38 double:1.053162803E-314;
+        r2 = NUM; // 0x7f0e051d float:1.8877693E38 double:1.0531628034E-314;
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
@@ -1834,7 +1834,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r3 = "AttachMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e0671 float:1.8878382E38 double:1.0531629713E-314;
+        r2 = NUM; // 0x7f0e0672 float:1.8878384E38 double:1.053162972E-314;
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;

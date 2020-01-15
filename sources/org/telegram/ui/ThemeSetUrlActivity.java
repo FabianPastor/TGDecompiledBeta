@@ -463,14 +463,14 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x001c:
         r0 = 0;
         r11.lastNameAvailable = r0;
-        r2 = NUM; // 0x7f0e0ada float:1.8880672E38 double:1.053163529E-314;
+        r2 = NUM; // 0x7f0e0adb float:1.8880674E38 double:1.0531635296E-314;
         r3 = "Theme";
         r4 = "windowBackgroundWhiteRedText4";
         if (r12 == 0) goto L_0x00ab;
     L_0x0029:
         r5 = "_";
         r6 = r12.startsWith(r5);
-        r7 = NUM; // 0x7f0e0a21 float:1.8880297E38 double:1.0531634377E-314;
+        r7 = NUM; // 0x7f0e0a22 float:1.8880299E38 double:1.053163438E-314;
         r8 = "SetUrlInvalid";
         if (r6 != 0) goto L_0x00a3;
     L_0x0036:
@@ -496,13 +496,13 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (r13 == 0) goto L_0x0065;
     L_0x0054:
         r12 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r13 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
+        r13 = NUM; // 0x7f0e0a25 float:1.8880305E38 double:1.0531634397E-314;
         r1 = "SetUrlInvalidStartNumber";
         r13 = org.telegram.messenger.LocaleController.getString(r1, r13);
         org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r11, r12, r13);
         goto L_0x0071;
     L_0x0065:
-        r12 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
+        r12 = NUM; // 0x7f0e0a25 float:1.8880305E38 double:1.0531634397E-314;
         r13 = "SetUrlInvalidStartNumber";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r11.setCheckText(r12, r4);
@@ -559,7 +559,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r6 = 64;
         if (r5 <= r6) goto L_0x00d8;
     L_0x00bd:
-        r12 = NUM; // 0x7f0e0a22 float:1.8880299E38 double:1.053163438E-314;
+        r12 = NUM; // 0x7f0e0a23 float:1.88803E38 double:1.0531634387E-314;
         r1 = "SetUrlInvalidLong";
         if (r13 == 0) goto L_0x00d0;
     L_0x00c4:
@@ -588,7 +588,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r13 = r12.equals(r13);
         if (r13 == 0) goto L_0x00ff;
     L_0x00eb:
-        r13 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
+        r13 = NUM; // 0x7f0e0a1f float:1.8880293E38 double:1.053163437E-314;
         r2 = new java.lang.Object[r1];
         r2[r0] = r12;
         r12 = "SetUrlAvailable";
@@ -597,7 +597,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r11.setCheckText(r12, r13);
         return r1;
     L_0x00ff:
-        r13 = NUM; // 0x7f0e0a1f float:1.8880293E38 double:1.053163437E-314;
+        r13 = NUM; // 0x7f0e0a20 float:1.8880295E38 double:1.0531634372E-314;
         r0 = "SetUrlChecking";
         r13 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r0 = "windowBackgroundWhiteGrayText8";
@@ -612,7 +612,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x011e:
         return r1;
     L_0x011f:
-        r12 = NUM; // 0x7f0e0a23 float:1.88803E38 double:1.0531634387E-314;
+        r12 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
         r1 = "SetUrlInvalidShort";
         if (r13 == 0) goto L_0x0132;
     L_0x0126:
@@ -669,7 +669,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     L_0x0023:
         goto L_0x0036;
     L_0x0024:
-        r4 = NUM; // 0x7f0e0a20 float:1.8880295E38 double:1.0531634372E-314;
+        r4 = NUM; // 0x7f0e0a21 float:1.8880297E38 double:1.0531634377E-314;
         r5 = "SetUrlInUse";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "windowBackgroundWhiteRedText4";
@@ -677,7 +677,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r3.lastNameAvailable = r0;
         goto L_0x004c;
     L_0x0036:
-        r5 = NUM; // 0x7f0e0a1e float:1.888029E38 double:1.0531634363E-314;
+        r5 = NUM; // 0x7f0e0a1f float:1.8880293E38 double:1.053163437E-314;
         r1 = 1;
         r2 = new java.lang.Object[r1];
         r2[r0] = r4;
@@ -846,11 +846,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         r1[31] = new ThemeDescription(this.divider, ThemeDescription.FLAG_BACKGROUND, null, Theme.dividerPaint, null, null, "divider");
         r1[32] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
         r1[33] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
-        r1[34] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
+        r1[34] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable.getShadowDrawable(), Theme.chat_msgInMediaDrawable.getShadowDrawable()}, null, "chat_inBubbleShadow");
         r1[35] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
         r1[36] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubbleGradient");
         r1[37] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
-        r1[38] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow");
+        r1[38] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable.getShadowDrawable(), Theme.chat_msgOutMediaDrawable.getShadowDrawable()}, null, "chat_outBubbleShadow");
         r1[39] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextIn");
         r1[40] = new ThemeDescription(this.messagesCell, 0, null, null, null, null, "chat_messageTextOut");
         r1[41] = new ThemeDescription(this.messagesCell, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck");

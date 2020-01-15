@@ -55,6 +55,8 @@ import java.io.FileOutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -75,6 +77,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.SunDate;
@@ -249,16 +252,14 @@ public class Theme {
     public static Drawable chat_msgInCallDrawable = null;
     public static Drawable chat_msgInCallSelectedDrawable = null;
     public static Drawable chat_msgInClockDrawable = null;
-    public static Drawable chat_msgInDrawable = null;
+    public static MessageDrawable chat_msgInDrawable = null;
     public static Drawable chat_msgInInstantDrawable = null;
-    public static Drawable chat_msgInMediaDrawable = null;
-    public static Drawable chat_msgInMediaSelectedDrawable = null;
-    public static Drawable chat_msgInMediaShadowDrawable = null;
+    public static MessageDrawable chat_msgInMediaDrawable = null;
+    public static MessageDrawable chat_msgInMediaSelectedDrawable = null;
     public static Drawable chat_msgInMenuDrawable = null;
     public static Drawable chat_msgInMenuSelectedDrawable = null;
     public static Drawable chat_msgInSelectedClockDrawable = null;
-    public static Drawable chat_msgInSelectedDrawable = null;
-    public static Drawable chat_msgInShadowDrawable = null;
+    public static MessageDrawable chat_msgInSelectedDrawable = null;
     public static Drawable chat_msgInViewsDrawable = null;
     public static Drawable chat_msgInViewsSelectedDrawable = null;
     public static Drawable chat_msgMediaBroadcastDrawable = null;
@@ -283,12 +284,10 @@ public class Theme {
     public static Drawable chat_msgOutLocationDrawable = null;
     public static MessageDrawable chat_msgOutMediaDrawable = null;
     public static MessageDrawable chat_msgOutMediaSelectedDrawable = null;
-    public static Drawable chat_msgOutMediaShadowDrawable = null;
     public static Drawable chat_msgOutMenuDrawable = null;
     public static Drawable chat_msgOutMenuSelectedDrawable = null;
     public static Drawable chat_msgOutSelectedClockDrawable = null;
     public static MessageDrawable chat_msgOutSelectedDrawable = null;
-    public static Drawable chat_msgOutShadowDrawable = null;
     public static Drawable chat_msgOutViewsDrawable = null;
     public static Drawable chat_msgOutViewsSelectedDrawable = null;
     public static Drawable chat_msgStickerCheckDrawable = null;
@@ -1100,14 +1099,17 @@ public class Theme {
         private int currentBackgroundHeight;
         private int currentColor;
         private int currentGradientColor;
+        private int currentShadowDrawableRadius;
         private int currentType;
         private LinearGradient gradientShader;
+        private boolean isOut;
         private boolean isSelected;
         private Matrix matrix = new Matrix();
         private Paint paint = new Paint(1);
         private Path path;
         private RectF rect = new RectF();
         private Paint selectedPaint;
+        private Drawable shadowDrawable;
         private int topY;
 
         public int getOpacity() {
@@ -1120,9 +1122,10 @@ public class Theme {
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
-        public MessageDrawable(int i, boolean z) {
+        public MessageDrawable(int i, boolean z, boolean z2) {
+            this.isOut = z;
             this.currentType = i;
-            this.isSelected = z;
+            this.isSelected = z2;
             if (this.currentType != 1) {
                 this.path = new Path();
             }
@@ -1152,17 +1155,25 @@ public class Theme {
         }
 
         public void setTop(int i, int i2) {
+            int color;
+            Integer currentColor;
+            int i3 = i2;
             String str = "chat_outBubble";
-            int color = getColor(this.isSelected ? "chat_outBubbleSelected" : str);
-            Integer currentColor = getCurrentColor("chat_outBubbleGradient");
+            if (this.isOut) {
+                color = getColor(this.isSelected ? "chat_outBubbleSelected" : str);
+                currentColor = getCurrentColor("chat_outBubbleGradient");
+            } else {
+                color = getColor(this.isSelected ? "chat_inBubbleSelected" : "chat_inBubble");
+                currentColor = null;
+            }
             if (currentColor != null) {
                 color = getColor(str);
             }
             if (currentColor == null) {
                 currentColor = Integer.valueOf(0);
             }
-            if (currentColor.intValue() != 0 && (this.gradientShader == null || i2 != this.currentBackgroundHeight || this.currentColor != color || this.currentGradientColor != currentColor.intValue())) {
-                this.gradientShader = new LinearGradient(0.0f, 0.0f, 0.0f, (float) i2, new int[]{currentColor.intValue(), color}, null, TileMode.CLAMP);
+            if (currentColor.intValue() != 0 && (this.gradientShader == null || i3 != this.currentBackgroundHeight || this.currentColor != color || this.currentGradientColor != currentColor.intValue())) {
+                this.gradientShader = new LinearGradient(0.0f, 0.0f, 0.0f, (float) i3, new int[]{currentColor.intValue(), color}, null, TileMode.CLAMP);
                 this.paint.setShader(this.gradientShader);
                 this.currentColor = color;
                 this.currentGradientColor = currentColor.intValue();
@@ -1174,7 +1185,7 @@ public class Theme {
                 }
                 this.paint.setColor(color);
             }
-            this.currentBackgroundHeight = i2;
+            this.currentBackgroundHeight = i3;
             this.topY = i;
         }
 
@@ -1185,80 +1196,211 @@ public class Theme {
             return AndroidUtilities.dp(f);
         }
 
+        public Drawable getShadowDrawable() {
+            int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
+            if (this.shadowDrawable == null || this.currentShadowDrawableRadius != dp) {
+                this.currentShadowDrawableRadius = dp;
+                try {
+                    Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Config.ARGB_8888);
+                    Canvas canvas = new Canvas(createBitmap);
+                    Paint paint = new Paint(1);
+                    paint.setStyle(Style.STROKE);
+                    paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+                    paint.setColor(NUM);
+                    if (AndroidUtilities.density > 1.0f) {
+                        setBounds(-1, -1, createBitmap.getWidth() + 1, createBitmap.getHeight() + 1);
+                    } else {
+                        setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                    }
+                    draw(canvas, paint);
+                    this.shadowDrawable = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
+                    this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow"), Mode.MULTIPLY));
+                } catch (Throwable unused) {
+                }
+            }
+            return this.shadowDrawable;
+        }
+
+        private static ByteBuffer getByteBuffer(int i, int i2, int i3, int i4) {
+            ByteBuffer order = ByteBuffer.allocate(84).order(ByteOrder.nativeOrder());
+            order.put((byte) 1);
+            order.put((byte) 2);
+            order.put((byte) 2);
+            order.put((byte) 9);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(0);
+            order.putInt(i);
+            order.putInt(i2);
+            order.putInt(i3);
+            order.putInt(i4);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            order.putInt(1);
+            return order;
+        }
+
         public void draw(Canvas canvas) {
+            draw(canvas, null);
+        }
+
+        public void draw(Canvas canvas, Paint paint) {
+            int dp;
+            Canvas canvas2 = canvas;
             Rect bounds = getBounds();
-            int dp = dp(2.0f);
-            int dp2 = dp(6.0f);
-            if (this.gradientShader != null) {
+            int dp2 = dp(2.0f);
+            if (this.currentType == 2) {
+                dp = dp(6.0f);
+            } else {
+                dp = dp((float) SharedConfig.bubbleRadius);
+            }
+            int dp3 = dp(6.0f);
+            Paint paint2 = paint == null ? this.paint : paint;
+            if (paint == null && this.gradientShader != null) {
                 this.matrix.reset();
                 this.matrix.postTranslate(0.0f, (float) (-this.topY));
                 this.gradientShader.setLocalMatrix(this.matrix);
             }
             String str = "chat_outBubbleGradientSelectedOverlay";
             if (this.currentType == 1) {
-                this.rect.set((float) (bounds.left + dp), (float) (bounds.top + dp), (float) (bounds.right - dp), (float) (bounds.bottom - dp));
-                float f = (float) dp2;
-                canvas.drawRoundRect(this.rect, f, f, this.paint);
+                this.rect.set((float) (bounds.left + dp2), (float) (bounds.top + dp2), (float) (bounds.right - dp2), (float) (bounds.bottom - dp2));
+                float f = (float) dp;
+                canvas2.drawRoundRect(this.rect, f, f, paint2);
                 if (this.gradientShader != null && this.isSelected) {
                     this.selectedPaint.setColor(getColor(str));
-                    canvas.drawRoundRect(this.rect, f, f, this.selectedPaint);
+                    canvas2.drawRoundRect(this.rect, f, f, this.selectedPaint);
                     return;
                 }
                 return;
             }
+            this.path.reset();
             RectF rectF;
             int i;
+            float f2;
             int i2;
-            this.path.reset();
-            if ((this.topY + bounds.bottom) - dp2 < this.currentBackgroundHeight) {
-                this.path.moveTo((float) (bounds.right - dp(2.6f)), (float) (bounds.bottom - dp));
-                this.path.lineTo((float) ((bounds.left + dp) + dp2), (float) (bounds.bottom - dp));
-                rectF = this.rect;
-                i = bounds.left;
-                float f2 = (float) (i + dp);
-                int i3 = bounds.bottom;
-                i2 = dp2 * 2;
-                rectF.set(f2, (float) ((i3 - dp) - i2), (float) ((i + dp) + i2), (float) (i3 - dp));
-                this.path.arcTo(this.rect, 90.0f, 90.0f, false);
-            } else {
-                this.path.moveTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                this.path.lineTo((float) (bounds.left + dp), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-            }
-            int i4 = this.topY;
-            i = dp2 * 2;
-            if (i4 + i >= 0) {
-                this.path.lineTo((float) (bounds.left + dp), (float) ((bounds.top + dp) + dp2));
-                rectF = this.rect;
-                int i5 = bounds.left;
-                float f3 = (float) (i5 + dp);
-                i2 = bounds.top;
-                rectF.set(f3, (float) (i2 + dp), (float) ((i5 + dp) + i), (float) ((i2 + dp) + i));
+            int i3;
+            RectF rectF2;
+            float f3;
+            int i4;
+            if (this.isOut) {
+                if (paint != null || (this.topY + bounds.bottom) - dp < this.currentBackgroundHeight) {
+                    this.path.moveTo((float) (bounds.right - dp(2.6f)), (float) (bounds.bottom - dp2));
+                    this.path.lineTo((float) ((bounds.left + dp2) + dp), (float) (bounds.bottom - dp2));
+                    rectF = this.rect;
+                    i = bounds.left;
+                    f2 = (float) (i + dp2);
+                    i2 = bounds.bottom;
+                    int i5 = dp * 2;
+                    rectF.set(f2, (float) ((i2 - dp2) - i5), (float) ((i + dp2) + i5), (float) (i2 - dp2));
+                    this.path.arcTo(this.rect, 90.0f, 90.0f, false);
+                } else {
+                    this.path.moveTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                    this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                }
+                if (paint == null) {
+                    i3 = this.topY;
+                    if ((dp * 2) + i3 < 0) {
+                        this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top - i3) - dp(2.0f)));
+                        this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) - dp(2.0f)));
+                        if (paint == null || (this.topY + bounds.bottom) - (dp3 * 2) < this.currentBackgroundHeight) {
+                            this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
+                            dp3 *= 2;
+                            this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + dp3), (float) ((bounds.bottom - dp2) - dp(1.0f)));
+                            this.path.arcTo(this.rect, 180.0f, -83.0f, false);
+                        } else {
+                            this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                        }
+                    }
+                }
+                this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top + dp2) + dp));
+                rectF2 = this.rect;
+                i3 = bounds.left;
+                f3 = (float) (i3 + dp2);
+                i4 = bounds.top;
+                int i6 = dp * 2;
+                rectF2.set(f3, (float) (i4 + dp2), (float) ((i3 + dp2) + i6), (float) ((i4 + dp2) + i6));
                 this.path.arcTo(this.rect, 180.0f, 90.0f, false);
-                this.path.lineTo((float) ((bounds.right - dp(8.0f)) - dp2), (float) (bounds.top + dp));
-                this.rect.set((float) ((bounds.right - dp(8.0f)) - i), (float) (bounds.top + dp), (float) (bounds.right - dp(8.0f)), (float) ((bounds.top + dp) + i));
+                this.path.lineTo((float) ((bounds.right - dp(8.0f)) - dp), (float) (bounds.top + dp2));
+                this.rect.set((float) ((bounds.right - dp(8.0f)) - i6), (float) (bounds.top + dp2), (float) (bounds.right - dp(8.0f)), (float) ((bounds.top + dp2) + i6));
                 this.path.arcTo(this.rect, 270.0f, 90.0f, false);
-            } else {
-                this.path.lineTo((float) (bounds.left + dp), (float) (bounds.top - i4));
-                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (bounds.top - this.topY));
-            }
-            if ((this.topY + bounds.bottom) - i < this.currentBackgroundHeight) {
-                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - dp2) - dp(1.0f)));
-                this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp) - i) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + i), (float) ((bounds.bottom - dp) - dp(1.0f)));
+                if (paint == null) {
+                }
+                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
+                dp3 *= 2;
+                this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + dp3), (float) ((bounds.bottom - dp2) - dp(1.0f)));
                 this.path.arcTo(this.rect, 180.0f, -83.0f, false);
             } else {
-                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                int i7;
+                if (paint != null || (this.topY + bounds.bottom) - dp < this.currentBackgroundHeight) {
+                    this.path.moveTo((float) (bounds.left + dp(2.6f)), (float) (bounds.bottom - dp2));
+                    this.path.lineTo((float) ((bounds.right - dp2) - dp), (float) (bounds.bottom - dp2));
+                    rectF = this.rect;
+                    i = bounds.right;
+                    i2 = dp * 2;
+                    f2 = (float) ((i - dp2) - i2);
+                    i7 = bounds.bottom;
+                    rectF.set(f2, (float) ((i7 - dp2) - i2), (float) (i - dp2), (float) (i7 - dp2));
+                    this.path.arcTo(this.rect, 90.0f, -90.0f, false);
+                } else {
+                    this.path.moveTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                    this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                }
+                if (paint == null) {
+                    i7 = this.topY;
+                    if ((dp * 2) + i7 < 0) {
+                        this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top - i7) - dp(2.0f)));
+                        this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) - dp(2.0f)));
+                        if (paint == null || (this.topY + bounds.bottom) - (dp3 * 2) < this.currentBackgroundHeight) {
+                            this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
+                            dp3 *= 2;
+                            this.rect.set((float) ((bounds.left + dp(7.0f)) - dp3), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) (bounds.left + dp(8.0f)), (float) ((bounds.bottom - dp2) - dp(1.0f)));
+                            this.path.arcTo(this.rect, 0.0f, 83.0f, false);
+                        } else {
+                            this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
+                        }
+                    }
+                }
+                this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top + dp2) + dp));
+                rectF2 = this.rect;
+                i3 = bounds.right;
+                int i8 = dp * 2;
+                f3 = (float) ((i3 - dp2) - i8);
+                i4 = bounds.top;
+                rectF2.set(f3, (float) (i4 + dp2), (float) (i3 - dp2), (float) ((i4 + dp2) + i8));
+                this.path.arcTo(this.rect, 0.0f, -90.0f, false);
+                this.path.lineTo((float) ((bounds.left + dp(8.0f)) + dp), (float) (bounds.top + dp2));
+                this.rect.set((float) (bounds.left + dp(8.0f)), (float) (bounds.top + dp2), (float) ((bounds.left + dp(8.0f)) + i8), (float) ((bounds.top + dp2) + i8));
+                this.path.arcTo(this.rect, 270.0f, -90.0f, false);
+                if (paint == null) {
+                }
+                this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
+                dp3 *= 2;
+                this.rect.set((float) ((bounds.left + dp(7.0f)) - dp3), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) (bounds.left + dp(8.0f)), (float) ((bounds.bottom - dp2) - dp(1.0f)));
+                this.path.arcTo(this.rect, 0.0f, 83.0f, false);
             }
             this.path.close();
-            canvas.drawPath(this.path, this.paint);
+            canvas2.drawPath(this.path, paint2);
             if (this.gradientShader != null && this.isSelected) {
                 this.selectedPaint.setColor(getColor(str));
-                canvas.drawPath(this.path, this.selectedPaint);
+                canvas2.drawPath(this.path, this.selectedPaint);
             }
         }
 
         public void setAlpha(int i) {
             this.paint.setAlpha(i);
-            this.selectedPaint.setAlpha((int) (((float) Color.alpha(getColor("chat_outBubbleGradientSelectedOverlay"))) * (((float) i) / 255.0f)));
+            if (this.isOut) {
+                this.selectedPaint.setAlpha((int) (((float) Color.alpha(getColor("chat_outBubbleGradientSelectedOverlay"))) * (((float) i) / 255.0f)));
+            }
         }
     }
 
@@ -8274,7 +8416,7 @@ public class Theme {
     L_0x005f:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getResources();
-        r1 = NUM; // 0x7var_ float:1.7945657E38 double:1.052935766E-314;
+        r1 = NUM; // 0x7var_ float:1.7945649E38 double:1.052935764E-314;
         r0 = r0.getDrawable(r1);
         dialogs_holidayDrawable = r0;
         r0 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -10822,697 +10964,790 @@ public class Theme {
         return num.intValue();
     }
 
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:89:0x0343=Splitter:B:89:0x0343, B:27:0x01a8=Splitter:B:27:0x01a8} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x032c A:{SYNTHETIC, Splitter:B:74:0x032c} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x033d A:{SYNTHETIC, Splitter:B:85:0x033d} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x033d A:{SYNTHETIC, Splitter:B:85:0x033d} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0396 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x035e A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x03c1 A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x03df A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x042f A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x043d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x047a A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x049d A:{Catch:{ all -> 0x034a, all -> 0x0508 }} */
-    public static java.lang.String createThemePreviewImage(java.lang.String r29, java.lang.String r30) {
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:117:0x0367=Splitter:B:117:0x0367, B:39:0x01bd=Splitter:B:39:0x01bd} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x034d A:{SYNTHETIC, Splitter:B:101:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    public static java.lang.String createThemePreviewImage(java.lang.String r26, java.lang.String r27) {
         /*
-        r0 = r29;
-        r1 = r30;
+        r0 = r26;
+        r1 = r27;
         r2 = 0;
         r3 = 1;
-        r4 = new java.lang.String[r3];	 Catch:{ all -> 0x0508 }
-        r5 = new java.io.File;	 Catch:{ all -> 0x0508 }
-        r5.<init>(r0);	 Catch:{ all -> 0x0508 }
-        r5 = getThemeFileValues(r5, r2, r4);	 Catch:{ all -> 0x0508 }
+        r4 = new java.lang.String[r3];	 Catch:{ all -> 0x0539 }
+        r5 = new java.io.File;	 Catch:{ all -> 0x0539 }
+        r5.<init>(r0);	 Catch:{ all -> 0x0539 }
+        r5 = getThemeFileValues(r5, r2, r4);	 Catch:{ all -> 0x0539 }
         r6 = "wallpaperFileOffset";
-        r6 = r5.get(r6);	 Catch:{ all -> 0x0508 }
-        r6 = (java.lang.Integer) r6;	 Catch:{ all -> 0x0508 }
+        r6 = r5.get(r6);	 Catch:{ all -> 0x0539 }
+        r6 = (java.lang.Integer) r6;	 Catch:{ all -> 0x0539 }
         r7 = 560; // 0x230 float:7.85E-43 double:2.767E-321;
         r8 = 678; // 0x2a6 float:9.5E-43 double:3.35E-321;
-        r9 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0508 }
-        r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9);	 Catch:{ all -> 0x0508 }
-        r14 = new android.graphics.Canvas;	 Catch:{ all -> 0x0508 }
-        r14.<init>(r7);	 Catch:{ all -> 0x0508 }
-        r15 = new android.graphics.Paint;	 Catch:{ all -> 0x0508 }
-        r15.<init>();	 Catch:{ all -> 0x0508 }
+        r9 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0539 }
+        r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9);	 Catch:{ all -> 0x0539 }
+        r14 = new android.graphics.Canvas;	 Catch:{ all -> 0x0539 }
+        r14.<init>(r7);	 Catch:{ all -> 0x0539 }
+        r15 = new android.graphics.Paint;	 Catch:{ all -> 0x0539 }
+        r15.<init>();	 Catch:{ all -> 0x0539 }
         r8 = "actionBarDefault";
-        r8 = getPreviewColor(r5, r8);	 Catch:{ all -> 0x0508 }
+        r8 = getPreviewColor(r5, r8);	 Catch:{ all -> 0x0539 }
         r9 = "actionBarDefaultIcon";
-        r9 = getPreviewColor(r5, r9);	 Catch:{ all -> 0x0508 }
+        r9 = getPreviewColor(r5, r9);	 Catch:{ all -> 0x0539 }
         r10 = "chat_messagePanelBackground";
-        r13 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0508 }
+        r13 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0539 }
         r10 = "chat_messagePanelIcons";
-        r10 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0508 }
+        r10 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0539 }
         r11 = "chat_inBubble";
-        r11 = getPreviewColor(r5, r11);	 Catch:{ all -> 0x0508 }
+        r11 = getPreviewColor(r5, r11);	 Catch:{ all -> 0x0539 }
         r12 = "chat_outBubble";
-        r12 = getPreviewColor(r5, r12);	 Catch:{ all -> 0x0508 }
+        r12 = getPreviewColor(r5, r12);	 Catch:{ all -> 0x0539 }
         r2 = "chat_outBubbleGradient";
-        r2 = r5.get(r2);	 Catch:{ all -> 0x0508 }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0508 }
+        r2 = r5.get(r2);	 Catch:{ all -> 0x0539 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0539 }
         r2 = "chat_wallpaper";
-        r2 = r5.get(r2);	 Catch:{ all -> 0x0508 }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0508 }
+        r2 = r5.get(r2);	 Catch:{ all -> 0x0539 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0539 }
         r3 = "chat_serviceBackground";
-        r3 = r5.get(r3);	 Catch:{ all -> 0x0508 }
-        r3 = (java.lang.Integer) r3;	 Catch:{ all -> 0x0508 }
+        r3 = r5.get(r3);	 Catch:{ all -> 0x0539 }
+        r3 = (java.lang.Integer) r3;	 Catch:{ all -> 0x0539 }
+        r16 = r11;
+        r11 = "chat_wallpaper_gradient_to";
+        r11 = r5.get(r11);	 Catch:{ all -> 0x0539 }
+        r11 = (java.lang.Integer) r11;	 Catch:{ all -> 0x0539 }
+        r17 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r18 = r12;
+        r12 = r17.getResources();	 Catch:{ all -> 0x0539 }
         r17 = r13;
-        r13 = "chat_wallpaper_gradient_to";
-        r13 = r5.get(r13);	 Catch:{ all -> 0x0508 }
-        r13 = (java.lang.Integer) r13;	 Catch:{ all -> 0x0508 }
-        r18 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r19 = r8;
-        r8 = r18.getResources();	 Catch:{ all -> 0x0508 }
-        r18 = r15;
-        r15 = NUM; // 0x7var_d float:1.7945837E38 double:1.05293581E-314;
-        r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0508 }
-        r15 = r8.mutate();	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r15, r9);	 Catch:{ all -> 0x0508 }
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r8 = r8.getResources();	 Catch:{ all -> 0x0508 }
-        r20 = r15;
-        r15 = NUM; // 0x7var_f float:1.7945842E38 double:1.052935811E-314;
-        r8 = r8.getDrawable(r15);	 Catch:{ all -> 0x0508 }
-        r15 = r8.mutate();	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r15, r9);	 Catch:{ all -> 0x0508 }
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r8 = r8.getResources();	 Catch:{ all -> 0x0508 }
-        r9 = NUM; // 0x7var_ float:1.794585E38 double:1.052935813E-314;
-        r8 = r8.getDrawable(r9);	 Catch:{ all -> 0x0508 }
-        r9 = r8.mutate();	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r9, r10);	 Catch:{ all -> 0x0508 }
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r8 = r8.getResources();	 Catch:{ all -> 0x0508 }
-        r21 = r9;
-        r9 = NUM; // 0x7var_ float:1.7945844E38 double:1.0529358113E-314;
-        r8 = r8.getDrawable(r9);	 Catch:{ all -> 0x0508 }
-        r9 = r8.mutate();	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r9, r10);	 Catch:{ all -> 0x0508 }
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r8 = r8.getResources();	 Catch:{ all -> 0x0508 }
-        r10 = NUM; // 0x7var_ float:1.7945846E38 double:1.052935812E-314;
-        r8 = r8.getDrawable(r10);	 Catch:{ all -> 0x0508 }
-        r10 = r8.mutate();	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r10, r11);	 Catch:{ all -> 0x0508 }
-        r11 = new org.telegram.ui.ActionBar.Theme$8;	 Catch:{ all -> 0x0508 }
+        r13 = NUM; // 0x7var_ float:1.794583E38 double:1.052935808E-314;
+        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
+        r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
+        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
+        r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r12 = r12.getResources();	 Catch:{ all -> 0x0539 }
+        r19 = r13;
+        r13 = NUM; // 0x7var_b float:1.7945833E38 double:1.052935809E-314;
+        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
+        r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
+        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
+        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
+        r12 = NUM; // 0x7var_e float:1.794584E38 double:1.0529358103E-314;
+        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
+        r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
+        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
+        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
+        r20 = r12;
+        r12 = NUM; // 0x7var_c float:1.7945835E38 double:1.0529358093E-314;
+        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
+        r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
+        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
+        r10 = 2;
+        r9 = new org.telegram.ui.ActionBar.Theme.MessageDrawable[r10];	 Catch:{ all -> 0x0539 }
+        r21 = r12;
+        r12 = 0;
+    L_0x00d2:
+        if (r12 >= r10) goto L_0x00ff;
+    L_0x00d4:
+        r10 = new org.telegram.ui.ActionBar.Theme$8;	 Catch:{ all -> 0x0539 }
+        r22 = r13;
+        r13 = 1;
+        r23 = r8;
+        r24 = r15;
         r8 = 2;
-        r22 = r10;
-        r10 = 0;
-        r11.<init>(r8, r10, r5);	 Catch:{ all -> 0x0508 }
-        setDrawableColor(r11, r12);	 Catch:{ all -> 0x0508 }
-        r12 = new android.graphics.RectF;	 Catch:{ all -> 0x0508 }
-        r12.<init>();	 Catch:{ all -> 0x0508 }
-        r23 = 80;
-        r24 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r25 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r10 = 0;
-        r26 = NUM; // 0x440CLASSNAME float:560.0 double:5.64043681E-315;
-        r27 = r9;
+        if (r12 != r13) goto L_0x00e2;
+    L_0x00e0:
+        r13 = 1;
+        goto L_0x00e3;
+    L_0x00e2:
+        r13 = 0;
+    L_0x00e3:
+        r15 = 0;
+        r10.<init>(r8, r13, r15, r5);	 Catch:{ all -> 0x0539 }
+        r9[r12] = r10;	 Catch:{ all -> 0x0539 }
+        r8 = r9[r12];	 Catch:{ all -> 0x0539 }
+        if (r12 != 0) goto L_0x00f0;
+    L_0x00ed:
+        r10 = r16;
+        goto L_0x00f2;
+    L_0x00f0:
+        r10 = r18;
+    L_0x00f2:
+        setDrawableColor(r8, r10);	 Catch:{ all -> 0x0539 }
+        r12 = r12 + 1;
+        r13 = r22;
+        r8 = r23;
+        r15 = r24;
+        r10 = 2;
+        goto L_0x00d2;
+    L_0x00ff:
+        r23 = r8;
+        r22 = r13;
+        r24 = r15;
+        r15 = new android.graphics.RectF;	 Catch:{ all -> 0x0539 }
+        r15.<init>();	 Catch:{ all -> 0x0539 }
+        r8 = 80;
+        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r13 = 0;
+        r16 = NUM; // 0x440CLASSNAME float:560.0 double:5.64043681E-315;
+        r18 = r9;
         r9 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
-        if (r1 == 0) goto L_0x01af;
-    L_0x0100:
-        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x01a5 }
-        r0.<init>();	 Catch:{ all -> 0x01a5 }
+        if (r1 == 0) goto L_0x01c5;
+    L_0x0119:
+        r0 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x01bb }
+        r0.<init>();	 Catch:{ all -> 0x01bb }
         r2 = 1;
-        r0.inJustDecodeBounds = r2;	 Catch:{ all -> 0x01a5 }
-        android.graphics.BitmapFactory.decodeFile(r1, r0);	 Catch:{ all -> 0x01a5 }
-        r2 = r0.outWidth;	 Catch:{ all -> 0x01a5 }
-        if (r2 <= 0) goto L_0x01a2;
-    L_0x010f:
-        r2 = r0.outHeight;	 Catch:{ all -> 0x01a5 }
-        if (r2 <= 0) goto L_0x01a2;
-    L_0x0113:
-        r2 = r0.outWidth;	 Catch:{ all -> 0x01a5 }
-        r2 = (float) r2;	 Catch:{ all -> 0x01a5 }
-        r2 = r2 / r26;
-        r4 = r0.outHeight;	 Catch:{ all -> 0x01a5 }
-        r4 = (float) r4;	 Catch:{ all -> 0x01a5 }
-        r4 = r4 / r26;
-        r2 = java.lang.Math.min(r2, r4);	 Catch:{ all -> 0x01a5 }
-        r4 = 1;
-        r0.inSampleSize = r4;	 Catch:{ all -> 0x01a5 }
-        r4 = (r2 > r24 ? 1 : (r2 == r24 ? 0 : -1));
-        if (r4 <= 0) goto L_0x0135;
+        r0.inJustDecodeBounds = r2;	 Catch:{ all -> 0x01bb }
+        android.graphics.BitmapFactory.decodeFile(r1, r0);	 Catch:{ all -> 0x01bb }
+        r2 = r0.outWidth;	 Catch:{ all -> 0x01bb }
+        if (r2 <= 0) goto L_0x01b8;
     L_0x0128:
-        r4 = r0.inSampleSize;	 Catch:{ all -> 0x01a5 }
+        r2 = r0.outHeight;	 Catch:{ all -> 0x01bb }
+        if (r2 <= 0) goto L_0x01b8;
+    L_0x012c:
+        r2 = r0.outWidth;	 Catch:{ all -> 0x01bb }
+        r2 = (float) r2;	 Catch:{ all -> 0x01bb }
+        r2 = r2 / r16;
+        r4 = r0.outHeight;	 Catch:{ all -> 0x01bb }
+        r4 = (float) r4;	 Catch:{ all -> 0x01bb }
+        r4 = r4 / r16;
+        r2 = java.lang.Math.min(r2, r4);	 Catch:{ all -> 0x01bb }
+        r4 = 1;
+        r0.inSampleSize = r4;	 Catch:{ all -> 0x01bb }
+        r4 = (r2 > r10 ? 1 : (r2 == r10 ? 0 : -1));
+        if (r4 <= 0) goto L_0x014f;
+    L_0x0141:
+        r4 = r0.inSampleSize;	 Catch:{ all -> 0x01bb }
+        r5 = 2;
         r4 = r4 * 2;
-        r0.inSampleSize = r4;	 Catch:{ all -> 0x01a5 }
-        r4 = r0.inSampleSize;	 Catch:{ all -> 0x01a5 }
-        r4 = (float) r4;	 Catch:{ all -> 0x01a5 }
+        r0.inSampleSize = r4;	 Catch:{ all -> 0x01bb }
+        r4 = r0.inSampleSize;	 Catch:{ all -> 0x01bb }
+        r4 = (float) r4;	 Catch:{ all -> 0x01bb }
         r4 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1));
-        if (r4 < 0) goto L_0x0128;
-    L_0x0135:
+        if (r4 < 0) goto L_0x0141;
+    L_0x014f:
         r2 = 0;
-        r0.inJustDecodeBounds = r2;	 Catch:{ all -> 0x01a5 }
-        r0 = android.graphics.BitmapFactory.decodeFile(r1, r0);	 Catch:{ all -> 0x01a5 }
-        if (r0 == 0) goto L_0x01a2;
-    L_0x013e:
-        r1 = new android.graphics.Paint;	 Catch:{ all -> 0x01a5 }
-        r1.<init>();	 Catch:{ all -> 0x01a5 }
+        r0.inJustDecodeBounds = r2;	 Catch:{ all -> 0x01bb }
+        r0 = android.graphics.BitmapFactory.decodeFile(r1, r0);	 Catch:{ all -> 0x01bb }
+        if (r0 == 0) goto L_0x01b8;
+    L_0x0158:
+        r1 = new android.graphics.Paint;	 Catch:{ all -> 0x01bb }
+        r1.<init>();	 Catch:{ all -> 0x01bb }
         r2 = 1;
-        r1.setFilterBitmap(r2);	 Catch:{ all -> 0x01a5 }
-        r2 = r0.getWidth();	 Catch:{ all -> 0x01a5 }
-        r2 = (float) r2;	 Catch:{ all -> 0x01a5 }
-        r2 = r2 / r26;
-        r4 = r0.getHeight();	 Catch:{ all -> 0x01a5 }
-        r4 = (float) r4;	 Catch:{ all -> 0x01a5 }
-        r4 = r4 / r26;
-        r2 = java.lang.Math.min(r2, r4);	 Catch:{ all -> 0x01a5 }
-        r4 = r0.getWidth();	 Catch:{ all -> 0x01a5 }
-        r4 = (float) r4;	 Catch:{ all -> 0x01a5 }
+        r1.setFilterBitmap(r2);	 Catch:{ all -> 0x01bb }
+        r2 = r0.getWidth();	 Catch:{ all -> 0x01bb }
+        r2 = (float) r2;	 Catch:{ all -> 0x01bb }
+        r2 = r2 / r16;
+        r4 = r0.getHeight();	 Catch:{ all -> 0x01bb }
+        r4 = (float) r4;	 Catch:{ all -> 0x01bb }
+        r4 = r4 / r16;
+        r2 = java.lang.Math.min(r2, r4);	 Catch:{ all -> 0x01bb }
+        r4 = r0.getWidth();	 Catch:{ all -> 0x01bb }
+        r4 = (float) r4;	 Catch:{ all -> 0x01bb }
         r4 = r4 / r2;
-        r5 = r0.getHeight();	 Catch:{ all -> 0x01a5 }
-        r5 = (float) r5;	 Catch:{ all -> 0x01a5 }
+        r5 = r0.getHeight();	 Catch:{ all -> 0x01bb }
+        r5 = (float) r5;	 Catch:{ all -> 0x01bb }
         r5 = r5 / r2;
-        r12.set(r10, r10, r4, r5);	 Catch:{ all -> 0x01a5 }
-        r2 = r7.getWidth();	 Catch:{ all -> 0x01a5 }
-        r2 = (float) r2;	 Catch:{ all -> 0x01a5 }
-        r4 = r12.width();	 Catch:{ all -> 0x01a5 }
+        r15.set(r13, r13, r4, r5);	 Catch:{ all -> 0x01bb }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x01bb }
+        r2 = (float) r2;	 Catch:{ all -> 0x01bb }
+        r4 = r15.width();	 Catch:{ all -> 0x01bb }
         r2 = r2 - r4;
-        r2 = r2 / r25;
-        r4 = r7.getHeight();	 Catch:{ all -> 0x01a5 }
-        r4 = (float) r4;	 Catch:{ all -> 0x01a5 }
-        r5 = r12.height();	 Catch:{ all -> 0x01a5 }
+        r2 = r2 / r12;
+        r4 = r7.getHeight();	 Catch:{ all -> 0x01bb }
+        r4 = (float) r4;	 Catch:{ all -> 0x01bb }
+        r5 = r15.height();	 Catch:{ all -> 0x01bb }
         r4 = r4 - r5;
-        r4 = r4 / r25;
-        r12.offset(r2, r4);	 Catch:{ all -> 0x01a5 }
+        r4 = r4 / r12;
+        r15.offset(r2, r4);	 Catch:{ all -> 0x01bb }
         r2 = 0;
-        r14.drawBitmap(r0, r2, r12, r1);	 Catch:{ all -> 0x01a5 }
-        if (r3 != 0) goto L_0x019f;
-    L_0x0189:
-        r1 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x019b }
-        r1.<init>(r0);	 Catch:{ all -> 0x019b }
-        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x019b }
+        r14.drawBitmap(r0, r2, r15, r1);	 Catch:{ all -> 0x01bb }
+        if (r3 != 0) goto L_0x01b6;
+    L_0x01a1:
+        r1 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x01b3 }
+        r1.<init>(r0);	 Catch:{ all -> 0x01b3 }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x01b3 }
         r1 = 0;
-        r0 = r0[r1];	 Catch:{ all -> 0x019b }
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x019b }
+        r0 = r0[r1];	 Catch:{ all -> 0x01b3 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x01b3 }
         r3 = r0;
-        goto L_0x019f;
-    L_0x019b:
-        r0 = move-exception;
-        r16 = 1;
-        goto L_0x01a8;
-    L_0x019f:
-        r16 = 1;
-        goto L_0x01ab;
-    L_0x01a2:
-        r16 = 0;
-        goto L_0x01ab;
-    L_0x01a5:
-        r0 = move-exception;
-        r16 = 0;
-    L_0x01a8:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0508 }
-    L_0x01ab:
-        r0 = 80;
-        goto L_0x035c;
-    L_0x01af:
-        if (r2 == 0) goto L_0x021c;
-    L_0x01b1:
-        if (r13 != 0) goto L_0x01bd;
+        goto L_0x01b6;
     L_0x01b3:
-        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0508 }
-        r1 = r2.intValue();	 Catch:{ all -> 0x0508 }
-        r0.<init>(r1);	 Catch:{ all -> 0x0508 }
-        goto L_0x01f0;
+        r0 = move-exception;
+        r1 = 1;
+        goto L_0x01bd;
+    L_0x01b6:
+        r0 = 1;
+        goto L_0x01b9;
+    L_0x01b8:
+        r0 = 0;
+    L_0x01b9:
+        r1 = r0;
+        goto L_0x01c0;
+    L_0x01bb:
+        r0 = move-exception;
+        r1 = 0;
     L_0x01bd:
-        r0 = "chat_wallpaper_gradient_rotation";
-        r0 = r5.get(r0);	 Catch:{ all -> 0x0508 }
-        r0 = (java.lang.Integer) r0;	 Catch:{ all -> 0x0508 }
-        if (r0 != 0) goto L_0x01cd;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0539 }
+    L_0x01c0:
+        r0 = 80;
+    L_0x01c2:
+        r10 = 2;
+        goto L_0x037f;
+    L_0x01c5:
+        if (r2 == 0) goto L_0x0230;
     L_0x01c7:
+        if (r11 != 0) goto L_0x01d3;
+    L_0x01c9:
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0539 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0539 }
+        goto L_0x0207;
+    L_0x01d3:
+        r0 = "chat_wallpaper_gradient_rotation";
+        r0 = r5.get(r0);	 Catch:{ all -> 0x0539 }
+        r0 = (java.lang.Integer) r0;	 Catch:{ all -> 0x0539 }
+        if (r0 != 0) goto L_0x01e3;
+    L_0x01dd:
         r0 = 45;
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0508 }
-    L_0x01cd:
-        r1 = new int[r8];	 Catch:{ all -> 0x0508 }
-        r4 = r2.intValue();	 Catch:{ all -> 0x0508 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0539 }
+    L_0x01e3:
+        r1 = 2;
+        r4 = new int[r1];	 Catch:{ all -> 0x0539 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
         r5 = 0;
-        r1[r5] = r4;	 Catch:{ all -> 0x0508 }
-        r4 = r13.intValue();	 Catch:{ all -> 0x0508 }
+        r4[r5] = r1;	 Catch:{ all -> 0x0539 }
+        r1 = r11.intValue();	 Catch:{ all -> 0x0539 }
         r5 = 1;
-        r1[r5] = r4;	 Catch:{ all -> 0x0508 }
-        r0 = r0.intValue();	 Catch:{ all -> 0x0508 }
-        r4 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r5 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r4[r5] = r1;	 Catch:{ all -> 0x0539 }
+        r0 = r0.intValue();	 Catch:{ all -> 0x0539 }
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r5 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r5 = r5 - r9;
-        r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(r0, r1, r4, r5);	 Catch:{ all -> 0x0508 }
-        r23 = 90;
-    L_0x01f0:
-        r1 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r4 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(r0, r4, r1, r5);	 Catch:{ all -> 0x0539 }
+        r8 = 90;
+    L_0x0207:
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r4 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r4 = r4 - r9;
         r5 = 0;
-        r0.setBounds(r5, r9, r1, r4);	 Catch:{ all -> 0x0508 }
-        r0.draw(r14);	 Catch:{ all -> 0x0508 }
-        if (r3 != 0) goto L_0x0216;
-    L_0x0202:
-        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0508 }
-        r1 = r2.intValue();	 Catch:{ all -> 0x0508 }
-        r0.<init>(r1);	 Catch:{ all -> 0x0508 }
-        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0508 }
+        r0.setBounds(r5, r9, r1, r4);	 Catch:{ all -> 0x0539 }
+        r0.draw(r14);	 Catch:{ all -> 0x0539 }
+        if (r3 != 0) goto L_0x022d;
+    L_0x0219:
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0539 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0539 }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0539 }
         r1 = 0;
-        r0 = r0[r1];	 Catch:{ all -> 0x0508 }
-        r3 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0508 }
-    L_0x0216:
-        r0 = r23;
-        r16 = 1;
-        goto L_0x035c;
-    L_0x021c:
-        if (r6 == 0) goto L_0x0224;
-    L_0x021e:
-        r1 = r6.intValue();	 Catch:{ all -> 0x0508 }
-        if (r1 >= 0) goto L_0x022d;
-    L_0x0224:
-        r1 = 0;
-        r2 = r4[r1];	 Catch:{ all -> 0x0508 }
-        r1 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x0508 }
-        if (r1 != 0) goto L_0x0358;
+        r0 = r0[r1];	 Catch:{ all -> 0x0539 }
+        r3 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0539 }
     L_0x022d:
-        r1 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x0335 }
-        r1.<init>();	 Catch:{ all -> 0x0335 }
+        r0 = r8;
+        r1 = 1;
+        goto L_0x01c2;
+    L_0x0230:
+        if (r6 == 0) goto L_0x0238;
+    L_0x0232:
+        r1 = r6.intValue();	 Catch:{ all -> 0x0539 }
+        if (r1 >= 0) goto L_0x0241;
+    L_0x0238:
+        r1 = 0;
+        r2 = r4[r1];	 Catch:{ all -> 0x0539 }
+        r1 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x0539 }
+        if (r1 != 0) goto L_0x037b;
+    L_0x0241:
+        r1 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x0358 }
+        r1.<init>();	 Catch:{ all -> 0x0358 }
         r2 = 1;
-        r1.inJustDecodeBounds = r2;	 Catch:{ all -> 0x0335 }
+        r1.inJustDecodeBounds = r2;	 Catch:{ all -> 0x0358 }
         r2 = 0;
-        r5 = r4[r2];	 Catch:{ all -> 0x0335 }
-        r2 = android.text.TextUtils.isEmpty(r5);	 Catch:{ all -> 0x0335 }
-        if (r2 != 0) goto L_0x0269;
-    L_0x023e:
-        r2 = new java.io.File;	 Catch:{ all -> 0x0335 }
-        r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x0335 }
-        r5 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0335 }
-        r5.<init>();	 Catch:{ all -> 0x0335 }
-        r13 = 0;
-        r4 = r4[r13];	 Catch:{ all -> 0x0335 }
-        r4 = org.telegram.messenger.Utilities.MD5(r4);	 Catch:{ all -> 0x0335 }
-        r5.append(r4);	 Catch:{ all -> 0x0335 }
+        r5 = r4[r2];	 Catch:{ all -> 0x0358 }
+        r2 = android.text.TextUtils.isEmpty(r5);	 Catch:{ all -> 0x0358 }
+        if (r2 != 0) goto L_0x0283;
+    L_0x0252:
+        r2 = new java.io.File;	 Catch:{ all -> 0x027d }
+        r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ all -> 0x027d }
+        r5 = new java.lang.StringBuilder;	 Catch:{ all -> 0x027d }
+        r5.<init>();	 Catch:{ all -> 0x027d }
+        r11 = 0;
+        r4 = r4[r11];	 Catch:{ all -> 0x027d }
+        r4 = org.telegram.messenger.Utilities.MD5(r4);	 Catch:{ all -> 0x027d }
+        r5.append(r4);	 Catch:{ all -> 0x027d }
         r4 = ".wp";
-        r5.append(r4);	 Catch:{ all -> 0x0335 }
-        r4 = r5.toString();	 Catch:{ all -> 0x0335 }
-        r2.<init>(r0, r4);	 Catch:{ all -> 0x0335 }
-        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x0335 }
-        android.graphics.BitmapFactory.decodeFile(r0, r1);	 Catch:{ all -> 0x0335 }
+        r5.append(r4);	 Catch:{ all -> 0x027d }
+        r4 = r5.toString();	 Catch:{ all -> 0x027d }
+        r2.<init>(r0, r4);	 Catch:{ all -> 0x027d }
+        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x027d }
+        android.graphics.BitmapFactory.decodeFile(r0, r1);	 Catch:{ all -> 0x027d }
         r0 = r2;
         r2 = 0;
-        goto L_0x027f;
-    L_0x0269:
-        r2 = new java.io.FileInputStream;	 Catch:{ all -> 0x0335 }
-        r2.<init>(r0);	 Catch:{ all -> 0x0335 }
-        r0 = r2.getChannel();	 Catch:{ all -> 0x0333 }
-        r4 = r6.intValue();	 Catch:{ all -> 0x0333 }
-        r4 = (long) r4;	 Catch:{ all -> 0x0333 }
-        r0.position(r4);	 Catch:{ all -> 0x0333 }
-        r4 = 0;
-        android.graphics.BitmapFactory.decodeStream(r2, r4, r1);	 Catch:{ all -> 0x0333 }
-        r0 = 0;
-    L_0x027f:
-        r4 = r1.outWidth;	 Catch:{ all -> 0x0333 }
-        if (r4 <= 0) goto L_0x0329;
-    L_0x0283:
-        r4 = r1.outHeight;	 Catch:{ all -> 0x0333 }
-        if (r4 <= 0) goto L_0x0329;
-    L_0x0287:
-        r4 = r1.outWidth;	 Catch:{ all -> 0x0333 }
-        r4 = (float) r4;	 Catch:{ all -> 0x0333 }
-        r4 = r4 / r26;
-        r5 = r1.outHeight;	 Catch:{ all -> 0x0333 }
-        r5 = (float) r5;	 Catch:{ all -> 0x0333 }
-        r5 = r5 / r26;
-        r4 = java.lang.Math.min(r4, r5);	 Catch:{ all -> 0x0333 }
-        r5 = 1;
-        r1.inSampleSize = r5;	 Catch:{ all -> 0x0333 }
-        r5 = (r4 > r24 ? 1 : (r4 == r24 ? 0 : -1));
-        if (r5 <= 0) goto L_0x02a9;
-    L_0x029c:
-        r5 = r1.inSampleSize;	 Catch:{ all -> 0x0333 }
-        r5 = r5 * 2;
-        r1.inSampleSize = r5;	 Catch:{ all -> 0x0333 }
-        r5 = r1.inSampleSize;	 Catch:{ all -> 0x0333 }
-        r5 = (float) r5;	 Catch:{ all -> 0x0333 }
-        r5 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1));
-        if (r5 < 0) goto L_0x029c;
-    L_0x02a9:
-        r4 = 0;
-        r1.inJustDecodeBounds = r4;	 Catch:{ all -> 0x0333 }
-        if (r0 == 0) goto L_0x02b7;
-    L_0x02ae:
-        r0 = r0.getAbsolutePath();	 Catch:{ all -> 0x0333 }
-        r0 = android.graphics.BitmapFactory.decodeFile(r0, r1);	 Catch:{ all -> 0x0333 }
-        goto L_0x02c8;
-    L_0x02b7:
-        r0 = r2.getChannel();	 Catch:{ all -> 0x0333 }
-        r4 = r6.intValue();	 Catch:{ all -> 0x0333 }
-        r4 = (long) r4;	 Catch:{ all -> 0x0333 }
-        r0.position(r4);	 Catch:{ all -> 0x0333 }
-        r4 = 0;
-        r0 = android.graphics.BitmapFactory.decodeStream(r2, r4, r1);	 Catch:{ all -> 0x0333 }
-    L_0x02c8:
-        if (r0 == 0) goto L_0x0329;
-    L_0x02ca:
-        r1 = new android.graphics.Paint;	 Catch:{ all -> 0x0333 }
-        r1.<init>();	 Catch:{ all -> 0x0333 }
-        r4 = 1;
-        r1.setFilterBitmap(r4);	 Catch:{ all -> 0x0333 }
-        r5 = r0.getWidth();	 Catch:{ all -> 0x0333 }
-        r5 = (float) r5;	 Catch:{ all -> 0x0333 }
-        r5 = r5 / r26;
-        r6 = r0.getHeight();	 Catch:{ all -> 0x0333 }
-        r6 = (float) r6;	 Catch:{ all -> 0x0333 }
-        r6 = r6 / r26;
-        r5 = java.lang.Math.min(r5, r6);	 Catch:{ all -> 0x0333 }
-        r6 = r0.getWidth();	 Catch:{ all -> 0x0333 }
-        r6 = (float) r6;	 Catch:{ all -> 0x0333 }
-        r6 = r6 / r5;
-        r13 = r0.getHeight();	 Catch:{ all -> 0x0333 }
-        r13 = (float) r13;	 Catch:{ all -> 0x0333 }
-        r13 = r13 / r5;
-        r12.set(r10, r10, r6, r13);	 Catch:{ all -> 0x0333 }
-        r5 = r7.getWidth();	 Catch:{ all -> 0x0333 }
-        r5 = (float) r5;	 Catch:{ all -> 0x0333 }
-        r6 = r12.width();	 Catch:{ all -> 0x0333 }
-        r5 = r5 - r6;
-        r5 = r5 / r25;
-        r6 = r7.getHeight();	 Catch:{ all -> 0x0333 }
-        r6 = (float) r6;	 Catch:{ all -> 0x0333 }
-        r10 = r12.height();	 Catch:{ all -> 0x0333 }
-        r6 = r6 - r10;
-        r6 = r6 / r25;
-        r12.offset(r5, r6);	 Catch:{ all -> 0x0333 }
-        r5 = 0;
-        r14.drawBitmap(r0, r5, r12, r1);	 Catch:{ all -> 0x0333 }
-        if (r3 != 0) goto L_0x032a;
-    L_0x0315:
-        r1 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0327 }
-        r1.<init>(r0);	 Catch:{ all -> 0x0327 }
-        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0327 }
+        goto L_0x0299;
+    L_0x027d:
+        r0 = move-exception;
         r1 = 0;
-        r0 = r0[r1];	 Catch:{ all -> 0x0327 }
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0327 }
-        r3 = r0;
-        goto L_0x032a;
-    L_0x0327:
-        r0 = move-exception;
-        goto L_0x0338;
-    L_0x0329:
-        r4 = 0;
-    L_0x032a:
-        if (r2 == 0) goto L_0x0346;
-    L_0x032c:
-        r2.close();	 Catch:{ Exception -> 0x0330 }
-        goto L_0x0346;
-    L_0x0330:
-        r0 = move-exception;
-        r1 = r0;
-        goto L_0x0343;
-    L_0x0333:
-        r0 = move-exception;
-        goto L_0x0337;
-    L_0x0335:
-        r0 = move-exception;
         r2 = 0;
-    L_0x0337:
+        r10 = 2;
+        goto L_0x035c;
+    L_0x0283:
+        r2 = new java.io.FileInputStream;	 Catch:{ all -> 0x0358 }
+        r2.<init>(r0);	 Catch:{ all -> 0x0358 }
+        r0 = r2.getChannel();	 Catch:{ all -> 0x0354 }
+        r4 = r6.intValue();	 Catch:{ all -> 0x0354 }
+        r4 = (long) r4;	 Catch:{ all -> 0x0354 }
+        r0.position(r4);	 Catch:{ all -> 0x0354 }
         r4 = 0;
-    L_0x0338:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x034a }
-        if (r2 == 0) goto L_0x0346;
-    L_0x033d:
-        r2.close();	 Catch:{ Exception -> 0x0341 }
-        goto L_0x0346;
-    L_0x0341:
+        android.graphics.BitmapFactory.decodeStream(r2, r4, r1);	 Catch:{ all -> 0x0354 }
+        r0 = 0;
+    L_0x0299:
+        r4 = r1.outWidth;	 Catch:{ all -> 0x0354 }
+        if (r4 <= 0) goto L_0x0349;
+    L_0x029d:
+        r4 = r1.outHeight;	 Catch:{ all -> 0x0354 }
+        if (r4 <= 0) goto L_0x0349;
+    L_0x02a1:
+        r4 = r1.outWidth;	 Catch:{ all -> 0x0354 }
+        r4 = (float) r4;	 Catch:{ all -> 0x0354 }
+        r4 = r4 / r16;
+        r5 = r1.outHeight;	 Catch:{ all -> 0x0354 }
+        r5 = (float) r5;	 Catch:{ all -> 0x0354 }
+        r5 = r5 / r16;
+        r4 = java.lang.Math.min(r4, r5);	 Catch:{ all -> 0x0354 }
+        r5 = 1;
+        r1.inSampleSize = r5;	 Catch:{ all -> 0x0354 }
+        r5 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
+        if (r5 <= 0) goto L_0x02c5;
+    L_0x02b6:
+        r5 = r1.inSampleSize;	 Catch:{ all -> 0x0354 }
+        r10 = 2;
+        r5 = r5 * 2;
+        r1.inSampleSize = r5;	 Catch:{ all -> 0x0347 }
+        r5 = r1.inSampleSize;	 Catch:{ all -> 0x0347 }
+        r5 = (float) r5;	 Catch:{ all -> 0x0347 }
+        r5 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1));
+        if (r5 < 0) goto L_0x02b6;
+    L_0x02c4:
+        goto L_0x02c6;
+    L_0x02c5:
+        r10 = 2;
+    L_0x02c6:
+        r4 = 0;
+        r1.inJustDecodeBounds = r4;	 Catch:{ all -> 0x0347 }
+        if (r0 == 0) goto L_0x02d4;
+    L_0x02cb:
+        r0 = r0.getAbsolutePath();	 Catch:{ all -> 0x0347 }
+        r0 = android.graphics.BitmapFactory.decodeFile(r0, r1);	 Catch:{ all -> 0x0347 }
+        goto L_0x02e5;
+    L_0x02d4:
+        r0 = r2.getChannel();	 Catch:{ all -> 0x0347 }
+        r4 = r6.intValue();	 Catch:{ all -> 0x0347 }
+        r4 = (long) r4;	 Catch:{ all -> 0x0347 }
+        r0.position(r4);	 Catch:{ all -> 0x0347 }
+        r4 = 0;
+        r0 = android.graphics.BitmapFactory.decodeStream(r2, r4, r1);	 Catch:{ all -> 0x0347 }
+    L_0x02e5:
+        if (r0 == 0) goto L_0x034a;
+    L_0x02e7:
+        r1 = new android.graphics.Paint;	 Catch:{ all -> 0x0347 }
+        r1.<init>();	 Catch:{ all -> 0x0347 }
+        r4 = 1;
+        r1.setFilterBitmap(r4);	 Catch:{ all -> 0x0347 }
+        r4 = r0.getWidth();	 Catch:{ all -> 0x0347 }
+        r4 = (float) r4;	 Catch:{ all -> 0x0347 }
+        r4 = r4 / r16;
+        r5 = r0.getHeight();	 Catch:{ all -> 0x0347 }
+        r5 = (float) r5;	 Catch:{ all -> 0x0347 }
+        r5 = r5 / r16;
+        r4 = java.lang.Math.min(r4, r5);	 Catch:{ all -> 0x0347 }
+        r5 = r0.getWidth();	 Catch:{ all -> 0x0347 }
+        r5 = (float) r5;	 Catch:{ all -> 0x0347 }
+        r5 = r5 / r4;
+        r6 = r0.getHeight();	 Catch:{ all -> 0x0347 }
+        r6 = (float) r6;	 Catch:{ all -> 0x0347 }
+        r6 = r6 / r4;
+        r15.set(r13, r13, r5, r6);	 Catch:{ all -> 0x0347 }
+        r4 = r7.getWidth();	 Catch:{ all -> 0x0347 }
+        r4 = (float) r4;	 Catch:{ all -> 0x0347 }
+        r5 = r15.width();	 Catch:{ all -> 0x0347 }
+        r4 = r4 - r5;
+        r4 = r4 / r12;
+        r5 = r7.getHeight();	 Catch:{ all -> 0x0347 }
+        r5 = (float) r5;	 Catch:{ all -> 0x0347 }
+        r6 = r15.height();	 Catch:{ all -> 0x0347 }
+        r5 = r5 - r6;
+        r5 = r5 / r12;
+        r15.offset(r4, r5);	 Catch:{ all -> 0x0347 }
+        r4 = 0;
+        r14.drawBitmap(r0, r4, r15, r1);	 Catch:{ all -> 0x0347 }
+        if (r3 != 0) goto L_0x0345;
+    L_0x0330:
+        r1 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0342 }
+        r1.<init>(r0);	 Catch:{ all -> 0x0342 }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0342 }
+        r1 = 0;
+        r0 = r0[r1];	 Catch:{ all -> 0x0342 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0342 }
+        r3 = r0;
+        goto L_0x0345;
+    L_0x0342:
         r0 = move-exception;
-        r1 = r0;
-    L_0x0343:
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x0508 }
-    L_0x0346:
-        r16 = r4;
-        goto L_0x01ab;
+        r1 = 1;
+        goto L_0x035c;
+    L_0x0345:
+        r1 = 1;
+        goto L_0x034b;
+    L_0x0347:
+        r0 = move-exception;
+        goto L_0x0356;
+    L_0x0349:
+        r10 = 2;
     L_0x034a:
-        r0 = move-exception;
-        r1 = r0;
-        if (r2 == 0) goto L_0x0357;
-    L_0x034e:
-        r2.close();	 Catch:{ Exception -> 0x0352 }
-        goto L_0x0357;
-    L_0x0352:
+        r1 = 0;
+    L_0x034b:
+        if (r2 == 0) goto L_0x036a;
+    L_0x034d:
+        r2.close();	 Catch:{ Exception -> 0x0351 }
+        goto L_0x036a;
+    L_0x0351:
         r0 = move-exception;
         r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0508 }
-    L_0x0357:
-        throw r1;	 Catch:{ all -> 0x0508 }
+        goto L_0x0367;
+    L_0x0354:
+        r0 = move-exception;
+        r10 = 2;
+    L_0x0356:
+        r1 = 0;
+        goto L_0x035c;
     L_0x0358:
-        r0 = 80;
-        r16 = 0;
+        r0 = move-exception;
+        r10 = 2;
+        r1 = 0;
+        r2 = 0;
     L_0x035c:
-        if (r16 != 0) goto L_0x0396;
-    L_0x035e:
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0508 }
-        r1 = r1.getResources();	 Catch:{ all -> 0x0508 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x036d }
+        if (r2 == 0) goto L_0x036a;
+    L_0x0361:
+        r2.close();	 Catch:{ Exception -> 0x0365 }
+        goto L_0x036a;
+    L_0x0365:
+        r0 = move-exception;
+        r2 = r0;
+    L_0x0367:
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0539 }
+    L_0x036a:
+        r0 = 80;
+        goto L_0x037f;
+    L_0x036d:
+        r0 = move-exception;
+        r1 = r0;
+        if (r2 == 0) goto L_0x037a;
+    L_0x0371:
+        r2.close();	 Catch:{ Exception -> 0x0375 }
+        goto L_0x037a;
+    L_0x0375:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0539 }
+    L_0x037a:
+        throw r1;	 Catch:{ all -> 0x0539 }
+    L_0x037b:
+        r10 = 2;
+        r0 = 80;
+        r1 = 0;
+    L_0x037f:
+        if (r1 != 0) goto L_0x03b9;
+    L_0x0381:
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r1 = r1.getResources();	 Catch:{ all -> 0x0539 }
         r2 = NUM; // 0x7var_ float:1.794484E38 double:1.052935567E-314;
-        r1 = r1.getDrawable(r2);	 Catch:{ all -> 0x0508 }
-        r1 = r1.mutate();	 Catch:{ all -> 0x0508 }
-        r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0508 }
-        if (r3 != 0) goto L_0x037e;
-    L_0x0373:
-        r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0508 }
+        r1 = r1.getDrawable(r2);	 Catch:{ all -> 0x0539 }
+        r1 = r1.mutate();	 Catch:{ all -> 0x0539 }
+        r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0539 }
+        if (r3 != 0) goto L_0x03a1;
+    L_0x0396:
+        r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0539 }
         r3 = 0;
-        r2 = r2[r3];	 Catch:{ all -> 0x0508 }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ all -> 0x0508 }
-    L_0x037e:
-        r2 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0508 }
-        r4 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0508 }
-        r1.setTileModeXY(r2, r4);	 Catch:{ all -> 0x0508 }
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r4 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r2 = r2[r3];	 Catch:{ all -> 0x0539 }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ all -> 0x0539 }
+    L_0x03a1:
+        r2 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0539 }
+        r4 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0539 }
+        r1.setTileModeXY(r2, r4);	 Catch:{ all -> 0x0539 }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r4 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r4 = r4 - r9;
         r5 = 0;
-        r1.setBounds(r5, r9, r2, r4);	 Catch:{ all -> 0x0508 }
-        r1.draw(r14);	 Catch:{ all -> 0x0508 }
-        goto L_0x0397;
-    L_0x0396:
+        r1.setBounds(r5, r9, r2, r4);	 Catch:{ all -> 0x0539 }
+        r1.draw(r14);	 Catch:{ all -> 0x0539 }
+        goto L_0x03ba;
+    L_0x03b9:
         r5 = 0;
-    L_0x0397:
-        r1 = r18;
-        r2 = r19;
-        r1.setColor(r2);	 Catch:{ all -> 0x0508 }
+    L_0x03ba:
+        r2 = r23;
+        r1 = r24;
+        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
         r2 = 0;
-        r10 = 0;
-        r4 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r4 = (float) r4;	 Catch:{ all -> 0x0508 }
-        r6 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r16 = 2;
+        r4 = 0;
+        r6 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r11 = (float) r6;	 Catch:{ all -> 0x0539 }
+        r12 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r8 = r14;
-        r13 = r21;
-        r5 = r27;
-        r18 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
+        r6 = r18;
+        r16 = 120; // 0x78 float:1.68E-43 double:5.93E-322;
         r9 = r2;
-        r2 = r22;
-        r28 = r11;
-        r11 = r4;
-        r4 = r12;
-        r12 = r6;
-        r5 = r13;
-        r6 = r17;
+        r2 = 2;
+        r10 = r4;
+        r4 = r20;
+        r5 = r21;
+        r13 = 0;
+        r25 = r17;
+        r2 = r19;
+        r5 = r22;
+        r4 = 0;
         r13 = r1;
-        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0508 }
-        if (r20 == 0) goto L_0x03dd;
-    L_0x03c1:
+        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0539 }
+        if (r2 == 0) goto L_0x03fe;
+    L_0x03e4:
         r8 = 13;
-        r9 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r9 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r9 = 120 - r9;
-        r9 = r9 / 2;
-        r10 = r20.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
+        r10 = 2;
+        r9 = r9 / r10;
+        r10 = r2.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
         r10 = r10 + r8;
-        r11 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r11 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r11 = r11 + r9;
-        r12 = r20;
-        r12.setBounds(r8, r9, r10, r11);	 Catch:{ all -> 0x0508 }
-        r12.draw(r14);	 Catch:{ all -> 0x0508 }
-    L_0x03dd:
-        if (r15 == 0) goto L_0x0402;
-    L_0x03df:
-        r8 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r9 = r15.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
-        r8 = r8 - r9;
-        r8 = r8 + -10;
-        r9 = r15.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
-        r9 = 120 - r9;
-        r9 = r9 / 2;
-        r10 = r15.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
-        r10 = r10 + r8;
-        r11 = r15.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
-        r11 = r11 + r9;
-        r15.setBounds(r8, r9, r10, r11);	 Catch:{ all -> 0x0508 }
-        r15.draw(r14);	 Catch:{ all -> 0x0508 }
-    L_0x0402:
+        r2.setBounds(r8, r9, r10, r11);	 Catch:{ all -> 0x0539 }
+        r2.draw(r14);	 Catch:{ all -> 0x0539 }
+    L_0x03fe:
+        if (r5 == 0) goto L_0x0423;
+    L_0x0400:
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r2 = r2 - r8;
+        r2 = r2 + -10;
+        r8 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r9 = 120 - r8;
+        r8 = 2;
+        r9 = r9 / r8;
+        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r8 = r8 + r2;
+        r10 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r10 = r10 + r9;
+        r5.setBounds(r2, r9, r8, r10);	 Catch:{ all -> 0x0539 }
+        r5.draw(r14);	 Catch:{ all -> 0x0539 }
+    L_0x0423:
+        r2 = 1;
+        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
         r8 = 216; // 0xd8 float:3.03E-43 double:1.067E-321;
-        r9 = r7.getWidth();	 Catch:{ all -> 0x0508 }
+        r9 = r7.getWidth();	 Catch:{ all -> 0x0539 }
         r10 = 20;
         r9 = r9 - r10;
         r11 = 308; // 0x134 float:4.32E-43 double:1.52E-321;
         r12 = 161; // 0xa1 float:2.26E-43 double:7.95E-322;
-        r13 = r28;
-        r13.setBounds(r12, r8, r9, r11);	 Catch:{ all -> 0x0508 }
+        r5.setBounds(r12, r8, r9, r11);	 Catch:{ all -> 0x0539 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
         r8 = 522; // 0x20a float:7.31E-43 double:2.58E-321;
-        r9 = 0;
-        r13.setTop(r9, r8);	 Catch:{ all -> 0x0508 }
-        r13.draw(r14);	 Catch:{ all -> 0x0508 }
-        r9 = r7.getWidth();	 Catch:{ all -> 0x0508 }
+        r5.setTop(r4, r8);	 Catch:{ all -> 0x0539 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r5.draw(r14);	 Catch:{ all -> 0x0539 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r9 = r7.getWidth();	 Catch:{ all -> 0x0539 }
         r9 = r9 - r10;
         r11 = 430; // 0x1ae float:6.03E-43 double:2.124E-321;
-        r13.setBounds(r12, r11, r9, r8);	 Catch:{ all -> 0x0508 }
-        r13.setTop(r11, r8);	 Catch:{ all -> 0x0508 }
-        r13.draw(r14);	 Catch:{ all -> 0x0508 }
-        if (r2 == 0) goto L_0x043b;
-    L_0x042f:
-        r8 = 323; // 0x143 float:4.53E-43 double:1.596E-321;
-        r9 = 399; // 0x18f float:5.59E-43 double:1.97E-321;
-        r11 = 415; // 0x19f float:5.82E-43 double:2.05E-321;
-        r2.setBounds(r10, r8, r9, r11);	 Catch:{ all -> 0x0508 }
-        r2.draw(r14);	 Catch:{ all -> 0x0508 }
-    L_0x043b:
-        if (r3 == 0) goto L_0x045e;
-    L_0x043d:
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0508 }
+        r5.setBounds(r12, r11, r9, r8);	 Catch:{ all -> 0x0539 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r5.setTop(r11, r8);	 Catch:{ all -> 0x0539 }
+        r2 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r2.draw(r14);	 Catch:{ all -> 0x0539 }
+        r2 = r6[r4];	 Catch:{ all -> 0x0539 }
+        r5 = 323; // 0x143 float:4.53E-43 double:1.596E-321;
+        r8 = 399; // 0x18f float:5.59E-43 double:1.97E-321;
+        r9 = 415; // 0x19f float:5.82E-43 double:2.05E-321;
+        r2.setBounds(r10, r5, r8, r9);	 Catch:{ all -> 0x0539 }
+        r2 = r6[r4];	 Catch:{ all -> 0x0539 }
+        r2.draw(r14);	 Catch:{ all -> 0x0539 }
+        if (r3 == 0) goto L_0x048b;
+    L_0x046a:
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
         r2 = r2 + -126;
-        r2 = r2 / 2;
-        r8 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
-        r9 = (float) r2;	 Catch:{ all -> 0x0508 }
-        r8 = (float) r8;	 Catch:{ all -> 0x0508 }
+        r4 = 2;
+        r2 = r2 / r4;
+        r4 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
+        r5 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r4 = (float) r4;	 Catch:{ all -> 0x0539 }
         r2 = r2 + 126;
-        r2 = (float) r2;	 Catch:{ all -> 0x0508 }
-        r10 = 192; // 0xc0 float:2.69E-43 double:9.5E-322;
-        r10 = (float) r10;	 Catch:{ all -> 0x0508 }
-        r4.set(r9, r8, r2, r10);	 Catch:{ all -> 0x0508 }
-        r2 = r3.intValue();	 Catch:{ all -> 0x0508 }
-        r1.setColor(r2);	 Catch:{ all -> 0x0508 }
+        r2 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r6 = 192; // 0xc0 float:2.69E-43 double:9.5E-322;
+        r6 = (float) r6;	 Catch:{ all -> 0x0539 }
+        r15.set(r5, r4, r2, r6);	 Catch:{ all -> 0x0539 }
+        r2 = r3.intValue();	 Catch:{ all -> 0x0539 }
+        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
         r2 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
-        r14.drawRoundRect(r4, r2, r2, r1);	 Catch:{ all -> 0x0508 }
-    L_0x045e:
-        r1.setColor(r6);	 Catch:{ all -> 0x0508 }
+        r14.drawRoundRect(r15, r2, r2, r1);	 Catch:{ all -> 0x0539 }
+    L_0x048b:
+        r2 = r25;
+        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
         r9 = 0;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r2 = r2 + -120;
-        r10 = (float) r2;	 Catch:{ all -> 0x0508 }
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r11 = (float) r2;	 Catch:{ all -> 0x0508 }
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0508 }
-        r12 = (float) r2;	 Catch:{ all -> 0x0508 }
+        r10 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r11 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r12 = (float) r2;	 Catch:{ all -> 0x0539 }
         r8 = r14;
         r13 = r1;
-        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0508 }
-        if (r5 == 0) goto L_0x049b;
-    L_0x047a:
+        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0539 }
+        if (r20 == 0) goto L_0x04cc;
+    L_0x04a9:
         r1 = 22;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r2 = r2 + -120;
-        r3 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r3 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r9 = 120 - r3;
-        r9 = r9 / 2;
+        r3 = 2;
+        r9 = r9 / r3;
         r2 = r2 + r9;
-        r3 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
+        r3 = r20.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
         r3 = r3 + r1;
-        r4 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r4 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r4 = r4 + r2;
-        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0508 }
-        r5.draw(r14);	 Catch:{ all -> 0x0508 }
-    L_0x049b:
-        if (r27 == 0) goto L_0x04c9;
-    L_0x049d:
-        r1 = r7.getWidth();	 Catch:{ all -> 0x0508 }
-        r2 = r27.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
+        r5 = r20;
+        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0539 }
+        r5.draw(r14);	 Catch:{ all -> 0x0539 }
+    L_0x04cc:
+        if (r21 == 0) goto L_0x04fa;
+    L_0x04ce:
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r2 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
         r1 = r1 - r2;
         r1 = r1 + -22;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0508 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
         r2 = r2 + -120;
-        r3 = r27.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r3 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r9 = 120 - r3;
-        r9 = r9 / 2;
+        r3 = 2;
+        r9 = r9 / r3;
         r2 = r2 + r9;
-        r3 = r27.getIntrinsicWidth();	 Catch:{ all -> 0x0508 }
+        r3 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
         r3 = r3 + r1;
-        r4 = r27.getIntrinsicHeight();	 Catch:{ all -> 0x0508 }
+        r4 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
         r4 = r4 + r2;
-        r5 = r27;
-        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0508 }
-        r5.draw(r14);	 Catch:{ all -> 0x0508 }
-    L_0x04c9:
+        r5 = r21;
+        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0539 }
+        r5.draw(r14);	 Catch:{ all -> 0x0539 }
+    L_0x04fa:
         r1 = 0;
-        r14.setBitmap(r1);	 Catch:{ all -> 0x0508 }
-        r1 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0508 }
-        r1.<init>();	 Catch:{ all -> 0x0508 }
+        r14.setBitmap(r1);	 Catch:{ all -> 0x0539 }
+        r1 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0539 }
+        r1.<init>();	 Catch:{ all -> 0x0539 }
         r2 = "-2147483648_";
-        r1.append(r2);	 Catch:{ all -> 0x0508 }
-        r2 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ all -> 0x0508 }
-        r1.append(r2);	 Catch:{ all -> 0x0508 }
+        r1.append(r2);	 Catch:{ all -> 0x0539 }
+        r2 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ all -> 0x0539 }
+        r1.append(r2);	 Catch:{ all -> 0x0539 }
         r2 = ".jpg";
-        r1.append(r2);	 Catch:{ all -> 0x0508 }
-        r1 = r1.toString();	 Catch:{ all -> 0x0508 }
-        r2 = new java.io.File;	 Catch:{ all -> 0x0508 }
+        r1.append(r2);	 Catch:{ all -> 0x0539 }
+        r1 = r1.toString();	 Catch:{ all -> 0x0539 }
+        r2 = new java.io.File;	 Catch:{ all -> 0x0539 }
         r3 = 4;
-        r3 = org.telegram.messenger.FileLoader.getDirectory(r3);	 Catch:{ all -> 0x0508 }
-        r2.<init>(r3, r1);	 Catch:{ all -> 0x0508 }
-        r1 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0503 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0503 }
-        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0503 }
-        r7.compress(r3, r0, r1);	 Catch:{ all -> 0x0503 }
-        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ all -> 0x0503 }
-        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x0503 }
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r3);	 Catch:{ all -> 0x0539 }
+        r2.<init>(r3, r1);	 Catch:{ all -> 0x0539 }
+        r1 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0534 }
+        r1.<init>(r2);	 Catch:{ all -> 0x0534 }
+        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0534 }
+        r7.compress(r3, r0, r1);	 Catch:{ all -> 0x0534 }
+        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ all -> 0x0534 }
+        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x0534 }
         return r0;
-    L_0x0503:
+    L_0x0534:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0508 }
-        goto L_0x050c;
-    L_0x0508:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0539 }
+        goto L_0x053d;
+    L_0x0539:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x050c:
+    L_0x053d:
         r1 = 0;
         return r1;
         */
@@ -11946,46 +12181,46 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0bc2 */
-    /* JADX WARNING: Can't wrap try/catch for region: R(11:11|12|13|(4:15|(1:17)(1:18)|19|20)|37|21|22|23|24|25|26) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0b85 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(9:12|13|(4:15|(1:17)(1:18)|19|20)|37|21|22|23|24|25) */
     public static void createChatResources(android.content.Context r15, boolean r16) {
         /*
         r1 = sync;
         monitor-enter(r1);
-        r0 = chat_msgTextPaint;	 Catch:{ all -> 0x0d5c }
+        r0 = chat_msgTextPaint;	 Catch:{ all -> 0x0d1f }
         r2 = 1;
         if (r0 != 0) goto L_0x003d;
     L_0x0008:
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgTextPaint = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgGameTextPaint = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgTextPaintOneEmoji = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgTextPaintTwoEmoji = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgTextPaintThreeEmoji = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d5c }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d5c }
-        chat_msgBotButtonPaint = r0;	 Catch:{ all -> 0x0d5c }
-        r0 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0d5c }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgTextPaint = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgGameTextPaint = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgTextPaintOneEmoji = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgTextPaintTwoEmoji = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgTextPaintThreeEmoji = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
+        chat_msgBotButtonPaint = r0;	 Catch:{ all -> 0x0d1f }
+        r0 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0d1f }
         r3 = "fonts/rmedium.ttf";
-        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0d5c }
-        r0.setTypeface(r3);	 Catch:{ all -> 0x0d5c }
+        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0d1f }
+        r0.setTypeface(r3);	 Catch:{ all -> 0x0d1f }
     L_0x003d:
-        monitor-exit(r1);	 Catch:{ all -> 0x0d5c }
+        monitor-exit(r1);	 Catch:{ all -> 0x0d1f }
         r0 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r1 = 2;
-        if (r16 != 0) goto L_0x0bcc;
+        if (r16 != 0) goto L_0x0b8f;
     L_0x0043:
         r3 = chat_msgInDrawable;
-        if (r3 != 0) goto L_0x0bcc;
+        if (r3 != 0) goto L_0x0b8f;
     L_0x0047:
         r3 = new android.text.TextPaint;
         r3.<init>(r2);
@@ -12183,37 +12418,33 @@ public class Theme {
         r3.<init>();
         chat_composeBackgroundPaint = r3;
         r3 = r15.getResources();
-        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgInDrawable = r4;
-        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgInSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_e9 float:1.7946089E38 double:1.052935871E-314;
+        r4 = NUM; // 0x7var_e4 float:1.7946079E38 double:1.0529358686E-314;
         r4 = r3.getDrawable(r4);
         chat_msgNoSoundDrawable = r4;
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
         r5 = 0;
-        r4.<init>(r5, r5);
+        r4.<init>(r5, r5, r5);
+        chat_msgInDrawable = r4;
+        r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
+        r4.<init>(r5, r5, r2);
+        chat_msgInSelectedDrawable = r4;
+        r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
+        r4.<init>(r5, r2, r5);
         chat_msgOutDrawable = r4;
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
-        r4.<init>(r5, r2);
+        r4.<init>(r5, r2, r2);
         chat_msgOutSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_ef float:1.7945582E38 double:1.0529357476E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
+        r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
+        r4.<init>(r2, r5, r5);
         chat_msgInMediaDrawable = r4;
-        r4 = NUM; // 0x7var_ef float:1.7945582E38 double:1.0529357476E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
+        r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
+        r4.<init>(r2, r5, r2);
         chat_msgInMediaSelectedDrawable = r4;
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
-        r4.<init>(r2, r5);
+        r4.<init>(r2, r2, r5);
         chat_msgOutMediaDrawable = r4;
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
-        r4.<init>(r2, r2);
+        r4.<init>(r2, r2, r2);
         chat_msgOutMediaSelectedDrawable = r4;
         r4 = NUM; // 0x7var_c9 float:1.7945505E38 double:1.052935729E-314;
         r6 = r3.getDrawable(r4);
@@ -12274,27 +12505,27 @@ public class Theme {
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerClockDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInViewsDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInViewsSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutViewsDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutViewsSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgMediaViewsDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
+        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerViewsDrawable = r4;
@@ -12314,18 +12545,18 @@ public class Theme {
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutMenuSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_e2 float:1.7946075E38 double:1.0529358676E-314;
+        r4 = NUM; // 0x7var_dd float:1.7946065E38 double:1.052935865E-314;
         r4 = r3.getDrawable(r4);
         chat_msgMediaMenuDrawable = r4;
-        r4 = NUM; // 0x7var_dc float:1.7945543E38 double:1.052935738E-314;
+        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInInstantDrawable = r4;
-        r4 = NUM; // 0x7var_dc float:1.7945543E38 double:1.052935738E-314;
+        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutInstantDrawable = r4;
-        r4 = NUM; // 0x7var_d float:1.7945643E38 double:1.0529357624E-314;
+        r4 = NUM; // 0x7var_ float:1.7945635E38 double:1.0529357604E-314;
         r4 = r3.getDrawable(r4);
         chat_msgErrorDrawable = r4;
         r4 = NUM; // 0x7var_ float:1.7945298E38 double:1.0529356784E-314;
@@ -12404,25 +12635,13 @@ public class Theme {
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_redLocationIcon = r4;
-        r4 = NUM; // 0x7var_db float:1.7945541E38 double:1.0529357377E-314;
-        r4 = r3.getDrawable(r4);
-        chat_msgInShadowDrawable = r4;
-        r4 = NUM; // 0x7var_eb float:1.7945574E38 double:1.0529357456E-314;
-        r4 = r3.getDrawable(r4);
-        chat_msgOutShadowDrawable = r4;
-        r4 = NUM; // 0x7var_f0 float:1.7945584E38 double:1.052935748E-314;
-        r4 = r3.getDrawable(r4);
-        chat_msgInMediaShadowDrawable = r4;
-        r4 = NUM; // 0x7var_f0 float:1.7945584E38 double:1.052935748E-314;
-        r4 = r3.getDrawable(r4);
-        chat_msgOutMediaShadowDrawable = r4;
         r4 = NUM; // 0x7var_e float:1.7944801E38 double:1.0529355574E-314;
         r4 = r3.getDrawable(r4);
         chat_botLinkDrawalbe = r4;
         r4 = NUM; // 0x7var_d float:1.79448E38 double:1.052935557E-314;
         r4 = r3.getDrawable(r4);
         chat_botInlineDrawable = r4;
-        r4 = NUM; // 0x7var_c9 float:1.7946024E38 double:1.0529358553E-314;
+        r4 = NUM; // 0x7var_c4 float:1.7946014E38 double:1.052935853E-314;
         r4 = r3.getDrawable(r4);
         chat_systemDrawable = r4;
         r4 = NUM; // 0x7var_ef float:1.7945063E38 double:1.052935621E-314;
@@ -12468,7 +12687,7 @@ public class Theme {
         r6 = createCircleDrawableWithIcon(r6, r9);
         r9 = 5;
         r4[r9] = r6;
-        r4 = NUM; // 0x7var_c float:1.7945673E38 double:1.05293577E-314;
+        r4 = NUM; // 0x7var_ float:1.7945665E38 double:1.052935768E-314;
         r4 = r3.getDrawable(r4);
         chat_attachEmptyDrawable = r4;
         r4 = chat_cornerOuter;
@@ -12503,10 +12722,10 @@ public class Theme {
         r6 = NUM; // 0x7var_ad float:1.7944929E38 double:1.0529355885E-314;
         r6 = r3.getDrawable(r6);
         r4[r7] = r6;
-        r4 = NUM; // 0x7var_ float:1.7945923E38 double:1.0529358306E-314;
+        r4 = NUM; // 0x7var_ float:1.7945913E38 double:1.052935828E-314;
         r4 = r3.getDrawable(r4);
         chat_shareDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794592E38 double:1.05293583E-314;
+        r4 = NUM; // 0x7var_ float:1.794591E38 double:1.0529358276E-314;
         r4 = r3.getDrawable(r4);
         chat_shareIconDrawable = r4;
         r4 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
@@ -12563,7 +12782,7 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r8];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_e6 float:1.7946083E38 double:1.0529358696E-314;
+        r11 = NUM; // 0x7var_e1 float:1.7946073E38 double:1.052935867E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12574,13 +12793,13 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r9];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_e7 float:1.7946085E38 double:1.05293587E-314;
+        r11 = NUM; // 0x7var_e2 float:1.7946075E38 double:1.0529358676E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r9];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r10 = NUM; // 0x7var_e7 float:1.7946085E38 double:1.05293587E-314;
+        r10 = NUM; // 0x7var_e2 float:1.7946075E38 double:1.0529358676E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r4[r2] = r6;
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
@@ -12746,7 +12965,7 @@ public class Theme {
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_flameIcon = r4;
-        r4 = NUM; // 0x7var_f9 float:1.7945602E38 double:1.0529357525E-314;
+        r4 = NUM; // 0x7var_f5 float:1.7945594E38 double:1.0529357506E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_gifIcon = r4;
@@ -12754,7 +12973,7 @@ public class Theme {
         r4 = r4[r5];
         r6 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
+        r11 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12765,7 +12984,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r2];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
+        r11 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12776,7 +12995,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r1];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_fa float:1.7945604E38 double:1.052935753E-314;
+        r11 = NUM; // 0x7var_f6 float:1.7945596E38 double:1.052935751E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12787,7 +13006,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r7];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r12 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r10 = createCircleDrawableWithIcon(r10, r12);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12798,7 +13017,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r8];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
+        r12 = NUM; // 0x7var_f3 float:1.794559E38 double:1.0529357496E-314;
         r10 = createCircleDrawableWithIcon(r10, r12);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12809,7 +13028,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r9];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
+        r13 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12821,7 +13040,7 @@ public class Theme {
         r10 = 6;
         r4 = r4[r10];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
+        r13 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12846,7 +13065,7 @@ public class Theme {
         r10 = 8;
         r4 = r4[r10];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r13 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12891,7 +13110,7 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r4 = r4[r1];
         r13 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r14 = NUM; // 0x7var_f9 float:1.7945602E38 double:1.0529357525E-314;
+        r14 = NUM; // 0x7var_f5 float:1.7945594E38 double:1.0529357506E-314;
         r13 = createCircleDrawableWithIcon(r13, r14);
         r4[r5] = r13;
         r4 = chat_photoStatesDrawables;
@@ -12902,13 +13121,13 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r4 = r4[r7];
         r13 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r14 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
+        r14 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r13 = createCircleDrawableWithIcon(r13, r14);
         r4[r5] = r13;
         r4 = chat_photoStatesDrawables;
         r4 = r4[r7];
         r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r13 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
+        r13 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r7 = createCircleDrawableWithIcon(r7, r13);
         r4[r2] = r7;
         r4 = chat_photoStatesDrawables;
@@ -12930,7 +13149,7 @@ public class Theme {
         r7 = r4[r7];
         r8 = 6;
         r4 = r4[r8];
-        r8 = NUM; // 0x7var_ float:1.7945787E38 double:1.0529357975E-314;
+        r8 = NUM; // 0x7var_ float:1.7945779E38 double:1.0529357955E-314;
         r8 = r3.getDrawable(r8);
         r4[r2] = r8;
         r7[r5] = r8;
@@ -13007,93 +13226,92 @@ public class Theme {
         r7 = 12;
         r4 = r4[r7];
         r7 = NUM; // 0x7var_b7 float:1.794495E38 double:1.0529355934E-314;
-        r3 = r3.getDrawable(r7);
+        r7 = r3.getDrawable(r7);
+        r7 = r7.mutate();
+        r4[r2] = r7;
+        r4 = chat_contactDrawable;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r8 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
+        r7 = createCircleDrawableWithIcon(r7, r8);
+        r4[r5] = r7;
+        r4 = chat_contactDrawable;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r7 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
+        r6 = createCircleDrawableWithIcon(r6, r7);
+        r4[r2] = r6;
+        r4 = chat_locationDrawable;
+        r6 = NUM; // 0x7var_df float:1.794555E38 double:1.0529357397E-314;
+        r6 = r3.getDrawable(r6);
+        r6 = r6.mutate();
+        r4[r5] = r6;
+        r4 = chat_locationDrawable;
+        r6 = NUM; // 0x7var_df float:1.794555E38 double:1.0529357397E-314;
+        r3 = r3.getDrawable(r6);
         r3 = r3.mutate();
         r4[r2] = r3;
-        r3 = chat_contactDrawable;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
-        r4 = createCircleDrawableWithIcon(r4, r7);
-        r3[r5] = r4;
-        r3 = chat_contactDrawable;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
-        r4 = createCircleDrawableWithIcon(r4, r6);
-        r3[r2] = r4;
-        r3 = chat_locationDrawable;
-        r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_e1 float:1.7945554E38 double:1.0529357407E-314;
-        r4 = createRoundRectDrawableWithIcon(r4, r6);
-        r3[r5] = r4;
-        r3 = chat_locationDrawable;
-        r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = createRoundRectDrawableWithIcon(r4, r6);
-        r3[r2] = r4;
         r3 = r15.getResources();
         r4 = NUM; // 0x7var_aa float:1.7944923E38 double:1.052935587E-314;
         r3 = r3.getDrawable(r4);
         chat_composeShadowDrawable = r3;
-        r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0bc9 }
+        r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0b8c }
         r4 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ all -> 0x0bc9 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ all -> 0x0b8c }
         r3 = r3 + r4;
-        r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0bc9 }
-        r4 = android.graphics.Bitmap.createBitmap(r3, r3, r4);	 Catch:{ all -> 0x0bc9 }
-        r6 = new android.graphics.Canvas;	 Catch:{ all -> 0x0bc9 }
-        r6.<init>(r4);	 Catch:{ all -> 0x0bc9 }
-        r7 = new android.graphics.Paint;	 Catch:{ all -> 0x0bc9 }
-        r7.<init>(r2);	 Catch:{ all -> 0x0bc9 }
-        r7.setColor(r5);	 Catch:{ all -> 0x0bc9 }
-        r8 = android.graphics.Paint.Style.FILL;	 Catch:{ all -> 0x0bc9 }
-        r7.setStyle(r8);	 Catch:{ all -> 0x0bc9 }
-        r8 = new android.graphics.PorterDuffXfermode;	 Catch:{ all -> 0x0bc9 }
-        r9 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ all -> 0x0bc9 }
-        r8.<init>(r9);	 Catch:{ all -> 0x0bc9 }
-        r7.setXfermode(r8);	 Catch:{ all -> 0x0bc9 }
-        r8 = new android.graphics.Paint;	 Catch:{ all -> 0x0bc9 }
-        r8.<init>(r2);	 Catch:{ all -> 0x0bc9 }
+        r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0b8c }
+        r4 = android.graphics.Bitmap.createBitmap(r3, r3, r4);	 Catch:{ all -> 0x0b8c }
+        r6 = new android.graphics.Canvas;	 Catch:{ all -> 0x0b8c }
+        r6.<init>(r4);	 Catch:{ all -> 0x0b8c }
+        r7 = new android.graphics.Paint;	 Catch:{ all -> 0x0b8c }
+        r7.<init>(r2);	 Catch:{ all -> 0x0b8c }
+        r7.setColor(r5);	 Catch:{ all -> 0x0b8c }
+        r8 = android.graphics.Paint.Style.FILL;	 Catch:{ all -> 0x0b8c }
+        r7.setStyle(r8);	 Catch:{ all -> 0x0b8c }
+        r8 = new android.graphics.PorterDuffXfermode;	 Catch:{ all -> 0x0b8c }
+        r9 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ all -> 0x0b8c }
+        r8.<init>(r9);	 Catch:{ all -> 0x0b8c }
+        r7.setXfermode(r8);	 Catch:{ all -> 0x0b8c }
+        r8 = new android.graphics.Paint;	 Catch:{ all -> 0x0b8c }
+        r8.<init>(r2);	 Catch:{ all -> 0x0b8c }
         r2 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ all -> 0x0bc9 }
-        r2 = (float) r2;	 Catch:{ all -> 0x0bc9 }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ all -> 0x0b8c }
+        r2 = (float) r2;	 Catch:{ all -> 0x0b8c }
         r9 = 0;
         r10 = 0;
         r11 = NUM; // 0x5var_ float:9.223372E18 double:7.874593756E-315;
-        r8.setShadowLayer(r2, r9, r10, r11);	 Catch:{ all -> 0x0bc9 }
-    L_0x0ba0:
-        if (r5 >= r1) goto L_0x0bbe;
-    L_0x0ba2:
+        r8.setShadowLayer(r2, r9, r10, r11);	 Catch:{ all -> 0x0b8c }
+    L_0x0b63:
+        if (r5 >= r1) goto L_0x0b81;
+    L_0x0b65:
         r2 = r3 / 2;
-        r2 = (float) r2;	 Catch:{ all -> 0x0bc9 }
+        r2 = (float) r2;	 Catch:{ all -> 0x0b8c }
         r9 = r3 / 2;
-        r9 = (float) r9;	 Catch:{ all -> 0x0bc9 }
-        r10 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0bc9 }
+        r9 = (float) r9;	 Catch:{ all -> 0x0b8c }
+        r10 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0b8c }
         r10 = r10 / r1;
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);	 Catch:{ all -> 0x0bc9 }
+        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);	 Catch:{ all -> 0x0b8c }
         r10 = r10 - r11;
-        r10 = (float) r10;	 Catch:{ all -> 0x0bc9 }
-        if (r5 != 0) goto L_0x0bb7;
-    L_0x0bb5:
+        r10 = (float) r10;	 Catch:{ all -> 0x0b8c }
+        if (r5 != 0) goto L_0x0b7a;
+    L_0x0b78:
         r11 = r8;
-        goto L_0x0bb8;
-    L_0x0bb7:
+        goto L_0x0b7b;
+    L_0x0b7a:
         r11 = r7;
-    L_0x0bb8:
-        r6.drawCircle(r2, r9, r10, r11);	 Catch:{ all -> 0x0bc9 }
+    L_0x0b7b:
+        r6.drawCircle(r2, r9, r10, r11);	 Catch:{ all -> 0x0b8c }
         r5 = r5 + 1;
-        goto L_0x0ba0;
-    L_0x0bbe:
+        goto L_0x0b63;
+    L_0x0b81:
         r2 = 0;
-        r6.setBitmap(r2);	 Catch:{ Exception -> 0x0bc2 }
-    L_0x0bc2:
-        r2 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0bc9 }
-        r2.<init>(r4);	 Catch:{ all -> 0x0bc9 }
-        chat_roundVideoShadow = r2;	 Catch:{ all -> 0x0bc9 }
-    L_0x0bc9:
+        r6.setBitmap(r2);	 Catch:{ Exception -> 0x0b85 }
+    L_0x0b85:
+        r2 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0b8c }
+        r2.<init>(r4);	 Catch:{ all -> 0x0b8c }
+        chat_roundVideoShadow = r2;	 Catch:{ all -> 0x0b8c }
+    L_0x0b8c:
         applyChatTheme(r16);
-    L_0x0bcc:
+    L_0x0b8f:
         r2 = chat_msgTextPaintOneEmoji;
         r3 = NUM; // 0x41e00000 float:28.0 double:5.46040909E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -13124,11 +13342,11 @@ public class Theme {
         r4 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r4 = (float) r4;
         r2.setTextSize(r4);
-        if (r16 != 0) goto L_0x0d5b;
-    L_0x0CLASSNAME:
+        if (r16 != 0) goto L_0x0d1e;
+    L_0x0bd8:
         r2 = chat_botProgressPaint;
-        if (r2 == 0) goto L_0x0d5b;
-    L_0x0CLASSNAME:
+        if (r2 == 0) goto L_0x0d1e;
+    L_0x0bdc:
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = (float) r4;
@@ -13261,16 +13479,16 @@ public class Theme {
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = (float) r1;
         r0.setStrokeWidth(r1);
-    L_0x0d5b:
+    L_0x0d1e:
         return;
-    L_0x0d5c:
+    L_0x0d1f:
         r0 = move-exception;
-        monitor-exit(r1);	 Catch:{ all -> 0x0d5c }
-        goto L_0x0d60;
-    L_0x0d5f:
+        monitor-exit(r1);	 Catch:{ all -> 0x0d1f }
+        goto L_0x0d23;
+    L_0x0d22:
         throw r0;
-    L_0x0d60:
-        goto L_0x0d5f;
+    L_0x0d23:
+        goto L_0x0d22;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
     }
@@ -13300,14 +13518,8 @@ public class Theme {
             setDrawableColorByKey(chat_msgInDrawable, str2);
             String str3 = "chat_inBubbleSelected";
             setDrawableColorByKey(chat_msgInSelectedDrawable, str3);
-            String str4 = "chat_inBubbleShadow";
-            setDrawableColorByKey(chat_msgInShadowDrawable, str4);
-            String str5 = "chat_outBubbleShadow";
-            setDrawableColorByKey(chat_msgOutShadowDrawable, str5);
             setDrawableColorByKey(chat_msgInMediaDrawable, str2);
             setDrawableColorByKey(chat_msgInMediaSelectedDrawable, str3);
-            setDrawableColorByKey(chat_msgInMediaShadowDrawable, str4);
-            setDrawableColorByKey(chat_msgOutMediaShadowDrawable, str5);
             setDrawableColorByKey(chat_msgOutCheckDrawable, "chat_outSentCheck");
             setDrawableColorByKey(chat_msgOutCheckSelectedDrawable, "chat_outSentCheckSelected");
             str2 = "chat_outSentCheckRead";
@@ -13320,8 +13532,9 @@ public class Theme {
             setDrawableColorByKey(chat_msgOutSelectedClockDrawable, "chat_outSentClockSelected");
             setDrawableColorByKey(chat_msgInClockDrawable, "chat_inSentClock");
             setDrawableColorByKey(chat_msgInSelectedClockDrawable, "chat_inSentClockSelected");
-            setDrawableColorByKey(chat_msgMediaCheckDrawable, "chat_mediaSentCheck");
-            setDrawableColorByKey(chat_msgMediaHalfCheckDrawable, "chat_mediaSentCheck");
+            str2 = "chat_mediaSentCheck";
+            setDrawableColorByKey(chat_msgMediaCheckDrawable, str2);
+            setDrawableColorByKey(chat_msgMediaHalfCheckDrawable, str2);
             setDrawableColorByKey(chat_msgMediaClockDrawable, "chat_mediaSentClock");
             setDrawableColorByKey(chat_msgStickerCheckDrawable, str);
             setDrawableColorByKey(chat_msgStickerHalfCheckDrawable, str);
@@ -13343,20 +13556,21 @@ public class Theme {
             setDrawableColorByKey(chat_msgOutMenuDrawable, "chat_outMenu");
             setDrawableColorByKey(chat_msgOutMenuSelectedDrawable, "chat_outMenuSelected");
             setDrawableColorByKey(chat_msgMediaMenuDrawable, "chat_mediaMenu");
-            setDrawableColorByKey(chat_msgOutInstantDrawable, "chat_outInstant");
+            str = "chat_outInstant";
+            setDrawableColorByKey(chat_msgOutInstantDrawable, str);
             setDrawableColorByKey(chat_msgInInstantDrawable, "chat_inInstant");
             setDrawableColorByKey(chat_msgErrorDrawable, "chat_sentErrorIcon");
             setDrawableColorByKey(chat_muteIconDrawable, "chat_muteIcon");
             setDrawableColorByKey(chat_lockIconDrawable, "chat_lockIcon");
             setDrawableColorByKey(chat_msgBroadcastDrawable, "chat_outBroadcast");
             setDrawableColorByKey(chat_msgBroadcastMediaDrawable, "chat_mediaBroadcast");
-            str = "chat_inlineResultIcon";
-            setDrawableColorByKey(chat_inlineResultFile, str);
-            setDrawableColorByKey(chat_inlineResultAudio, str);
-            setDrawableColorByKey(chat_inlineResultLocation, str);
+            str2 = "chat_inlineResultIcon";
+            setDrawableColorByKey(chat_inlineResultFile, str2);
+            setDrawableColorByKey(chat_inlineResultAudio, str2);
+            setDrawableColorByKey(chat_inlineResultLocation, str2);
             setDrawableColorByKey(chat_msgInCallDrawable, "chat_inInstant");
             setDrawableColorByKey(chat_msgInCallSelectedDrawable, "chat_inInstantSelected");
-            setDrawableColorByKey(chat_msgOutCallDrawable, "chat_outInstant");
+            setDrawableColorByKey(chat_msgOutCallDrawable, str);
             setDrawableColorByKey(chat_msgOutCallSelectedDrawable, "chat_outInstantSelected");
             setDrawableColorByKey(chat_msgCallUpGreenDrawable, "chat_outUpCall");
             setDrawableColorByKey(chat_msgCallDownRedDrawable, "chat_inUpCall");
@@ -13418,10 +13632,8 @@ public class Theme {
             setCombinedDrawableColor(chat_contactDrawable[0], getColor("chat_inContactIcon"), true);
             setCombinedDrawableColor(chat_contactDrawable[1], getColor("chat_outContactBackground"), false);
             setCombinedDrawableColor(chat_contactDrawable[1], getColor("chat_outContactIcon"), true);
-            setCombinedDrawableColor(chat_locationDrawable[0], getColor("chat_inLocationBackground"), false);
-            setCombinedDrawableColor(chat_locationDrawable[0], getColor("chat_inLocationIcon"), true);
-            setCombinedDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationBackground"), false);
-            setCombinedDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationIcon"), true);
+            setDrawableColor(chat_locationDrawable[0], getColor("chat_inLocationIcon"));
+            setDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationIcon"));
             setDrawableColorByKey(chat_composeShadowDrawable, "chat_messagePanelShadow");
             setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryBackground"), false);
             setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryIcon"), true);

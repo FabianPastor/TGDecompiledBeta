@@ -3299,7 +3299,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r6 = r6 + r16;
         if (r6 <= r4) goto L_0x0241;
     L_0x0133:
-        r0 = NUM; // 0x7f0e08d8 float:1.887963E38 double:1.053163275E-314;
+        r0 = NUM; // 0x7f0e08d9 float:1.8879632E38 double:1.0531632757E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3337,7 +3337,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01b0;
     L_0x017c:
-        r3 = NUM; // 0x7f0e0396 float:1.88769E38 double:1.05316261E-314;
+        r3 = NUM; // 0x7f0e0397 float:1.8876901E38 double:1.0531626107E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3349,7 +3349,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0381 float:1.8876857E38 double:1.0531626E-314;
+        r1 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
@@ -3360,7 +3360,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01e8;
     L_0x01b4:
-        r3 = NUM; // 0x7f0e02f4 float:1.887657E38 double:1.05316253E-314;
+        r3 = NUM; // 0x7f0e02f5 float:1.8876573E38 double:1.0531625306E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3372,7 +3372,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f8 float:1.887658E38 double:1.053162532E-314;
+        r1 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$alhJl2oxrWyqDQR9VMC4_CoynGI;
@@ -3380,7 +3380,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x021b;
     L_0x01e8:
-        r3 = NUM; // 0x7f0e02f6 float:1.8876575E38 double:1.053162531E-314;
+        r3 = NUM; // 0x7f0e02f7 float:1.8876577E38 double:1.0531625316E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3392,14 +3392,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f7 float:1.8876577E38 double:1.0531625316E-314;
+        r1 = NUM; // 0x7f0e02f8 float:1.887658E38 double:1.053162532E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$1j3JEkAThEHgG6O1BGBF0RX0na8;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x021b:
-        r1 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
+        r1 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);

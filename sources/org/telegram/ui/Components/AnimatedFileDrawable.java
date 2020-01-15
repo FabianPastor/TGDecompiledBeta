@@ -6,6 +6,8 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Path.Direction;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
@@ -40,6 +42,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public static final int PARAM_NUM_VIDEO_FRAME_SIZE = 6;
     public static final int PARAM_NUM_WIDTH = 1;
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new DiscardPolicy());
+    private static float[] radii = new float[8];
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
     private RectF actualDrawRect = new RectF();
     private boolean applyTransformation;
@@ -77,7 +80,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     }
                     if (AnimatedFileDrawable.this.backgroundBitmap == null && AnimatedFileDrawable.this.metaData[0] > 0 && AnimatedFileDrawable.this.metaData[1] > 0) {
                         AnimatedFileDrawable.this.backgroundBitmap = Bitmap.createBitmap(AnimatedFileDrawable.this.metaData[0], AnimatedFileDrawable.this.metaData[1], Config.ARGB_8888);
-                        if (!(AnimatedFileDrawable.this.backgroundShader != null || AnimatedFileDrawable.this.backgroundBitmap == null || AnimatedFileDrawable.this.roundRadius == 0)) {
+                        if (AnimatedFileDrawable.this.backgroundShader == null && AnimatedFileDrawable.this.backgroundBitmap != null && AnimatedFileDrawable.this.hasRoundRadius()) {
                             AnimatedFileDrawable.this.backgroundShader = new BitmapShader(AnimatedFileDrawable.this.backgroundBitmap, TileMode.CLAMP, TileMode.CLAMP);
                         }
                     }
@@ -129,7 +132,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private Bitmap renderingBitmap;
     private int renderingBitmapTime;
     private BitmapShader renderingShader;
-    private int roundRadius;
+    private Path roundPath = new Path();
+    private int[] roundRadius = new int[4];
     private float scaleX = 1.0f;
     private float scaleY = 1.0f;
     private View secondParentView;
@@ -547,10 +551,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             }
             bitmap = this.renderingBitmap;
             if (bitmap != null) {
-                int height;
                 if (this.applyTransformation) {
                     int width = bitmap.getWidth();
-                    height = this.renderingBitmap.getHeight();
+                    int height = this.renderingBitmap.getHeight();
                     int[] iArr = this.metaData;
                     if (iArr[2] == 90 || iArr[2] == 270) {
                         int i = height;
@@ -562,7 +565,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     this.scaleY = ((float) this.dstRect.height()) / ((float) height);
                     this.applyTransformation = false;
                 }
-                if (this.roundRadius != 0) {
+                if (hasRoundRadius()) {
                     Math.max(this.scaleX, this.scaleY);
                     if (this.renderingShader == null) {
                         Bitmap bitmap2 = this.backgroundBitmap;
@@ -588,20 +591,33 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     }
                     this.shaderMatrix.preScale(this.scaleX, this.scaleY);
                     this.renderingShader.setLocalMatrix(this.shaderMatrix);
-                    RectF rectF = this.actualDrawRect;
-                    height = this.roundRadius;
-                    canvas2.drawRoundRect(rectF, (float) height, (float) height, paint);
+                    int i2 = 0;
+                    while (true) {
+                        int[] iArr3 = this.roundRadius;
+                        if (i2 >= iArr3.length) {
+                            break;
+                        }
+                        float[] fArr = radii;
+                        int i3 = i2 * 2;
+                        fArr[i3] = (float) iArr3[i2];
+                        fArr[i3 + 1] = (float) iArr3[i2];
+                        i2++;
+                    }
+                    this.roundPath.reset();
+                    this.roundPath.addRoundRect(this.actualDrawRect, radii, Direction.CW);
+                    this.roundPath.close();
+                    canvas2.drawPath(this.roundPath, paint);
                 } else {
                     Rect rect2 = this.dstRect;
                     canvas2.translate((float) rect2.left, (float) rect2.top);
-                    int[] iArr3 = this.metaData;
-                    if (iArr3[2] == 90) {
+                    int[] iArr4 = this.metaData;
+                    if (iArr4[2] == 90) {
                         canvas2.rotate(90.0f);
                         canvas2.translate(0.0f, (float) (-this.dstRect.width()));
-                    } else if (iArr3[2] == 180) {
+                    } else if (iArr4[2] == 180) {
                         canvas2.rotate(180.0f);
                         canvas2.translate((float) (-this.dstRect.width()), (float) (-this.dstRect.height()));
-                    } else if (iArr3[2] == 270) {
+                    } else if (iArr4[2] == 270) {
                         canvas2.rotate(270.0f);
                         canvas2.translate((float) (-this.dstRect.height()), 0.0f);
                     }
@@ -660,9 +676,38 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.actualDrawRect.set(f, f2, f3 + f, f4 + f2);
     }
 
-    public void setRoundRadius(int i) {
-        this.roundRadius = i;
+    public void setRoundRadius(int[] iArr) {
+        int[] iArr2 = this.roundRadius;
+        System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
         getPaint().setFlags(3);
+    }
+
+    public void setRoundRadius(int i) {
+        int i2 = 0;
+        while (true) {
+            int[] iArr = this.roundRadius;
+            if (i2 < iArr.length) {
+                iArr[i2] = i;
+                i2++;
+            } else {
+                getPaint().setFlags(3);
+                return;
+            }
+        }
+    }
+
+    private boolean hasRoundRadius() {
+        int i = 0;
+        while (true) {
+            int[] iArr = this.roundRadius;
+            if (i >= iArr.length) {
+                return false;
+            }
+            if (iArr[i] != 0) {
+                return true;
+            }
+            i++;
+        }
     }
 
     public boolean hasBitmap() {

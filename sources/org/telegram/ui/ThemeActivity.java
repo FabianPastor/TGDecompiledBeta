@@ -93,6 +93,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private int automaticBrightnessRow;
     private int automaticHeaderRow;
     private int backgroundRow;
+    private int bubbleRadiusHeaderRow;
+    private int bubbleRadiusInfoRow;
+    private int bubbleRadiusRow;
     private int chatListHeaderRow;
     private int chatListInfoRow;
     private int chatListRow;
@@ -149,6 +152,55 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private int themeListRow;
     private ThemesHorizontalListCell themesHorizontalListCell;
     private boolean updatingLocation;
+
+    private class BubbleRadiusCell extends FrameLayout {
+        private int endRadius = 17;
+        private SeekBarView sizeBar;
+        private int startRadius = 0;
+        private TextPaint textPaint;
+
+        public BubbleRadiusCell(Context context) {
+            super(context);
+            setWillNotDraw(false);
+            this.textPaint = new TextPaint(1);
+            this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+            this.sizeBar = new SeekBarView(context);
+            this.sizeBar.setReportChanges(true);
+            this.sizeBar.setDelegate(new SeekBarViewDelegate(ThemeActivity.this) {
+                public void onSeekBarPressed(boolean z) {
+                }
+
+                public void onSeekBarDrag(boolean z, float f) {
+                    BubbleRadiusCell bubbleRadiusCell = BubbleRadiusCell.this;
+                    ThemeActivity.this.setBubbleRadius(Math.round(((float) bubbleRadiusCell.startRadius) + (((float) (BubbleRadiusCell.this.endRadius - BubbleRadiusCell.this.startRadius)) * f)), false);
+                }
+            });
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteValueText"));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append(SharedConfig.bubbleRadius);
+            canvas.drawText(stringBuilder.toString(), (float) (getMeasuredWidth() - AndroidUtilities.dp(39.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), i2);
+            SeekBarView seekBarView = this.sizeBar;
+            i2 = SharedConfig.bubbleRadius;
+            int i3 = this.startRadius;
+            seekBarView.setProgress(((float) (i2 - i3)) / ((float) (this.endRadius - i3)));
+        }
+
+        public void invalidate() {
+            super.invalidate();
+            this.sizeBar.invalidate();
+        }
+    }
 
     private class GpsLocationListener implements LocationListener {
         public void onProviderDisabled(String str) {
@@ -317,7 +369,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
     private class TextSizeCell extends FrameLayout {
         private int endFontSize = 30;
-        private int lastWidth;
         private ThemePreviewMessagesCell messagesCell;
         private SeekBarView sizeBar;
         private int startFontSize = 12;
@@ -356,7 +407,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         /* Access modifiers changed, original: protected */
         public void onMeasure(int i, int i2) {
             super.onMeasure(i, i2);
-            MeasureSpec.getSize(i);
             SeekBarView seekBarView = this.sizeBar;
             i2 = SharedConfig.fontSize;
             int i3 = this.startFontSize;
@@ -634,7 +684,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x0162:
             r9 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x0178 }
             r10 = "ShareFile";
-            r0 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
+            r0 = NUM; // 0x7f0e0a32 float:1.8880331E38 double:1.053163446E-314;
             r10 = org.telegram.messenger.LocaleController.getString(r10, r0);	 Catch:{ Exception -> 0x0178 }
             r8 = android.content.Intent.createChooser(r8, r10);	 Catch:{ Exception -> 0x0178 }
             r10 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -681,21 +731,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r10 = org.telegram.ui.ThemeActivity.this;
             r10 = r10.getParentActivity();
             r9.<init>(r10);
-            r10 = NUM; // 0x7f0e03ab float:1.8876942E38 double:1.0531626206E-314;
+            r10 = NUM; // 0x7f0e03ac float:1.8876944E38 double:1.053162621E-314;
             r0 = "DeleteThemeTitle";
             r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
             r9.setTitle(r10);
-            r10 = NUM; // 0x7f0e03aa float:1.887694E38 double:1.05316262E-314;
+            r10 = NUM; // 0x7f0e03ab float:1.8876942E38 double:1.0531626206E-314;
             r0 = "DeleteThemeAlert";
             r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
             r9.setMessage(r10);
-            r10 = NUM; // 0x7f0e0381 float:1.8876857E38 double:1.0531626E-314;
+            r10 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
             r0 = "Delete";
             r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
             r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;
             r0.<init>(r7, r8);
             r9.setPositiveButton(r10, r0);
-            r8 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
+            r8 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
             r10 = "Cancel";
             r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
             r9.setNegativeButton(r8, r1);
@@ -722,120 +772,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
             }
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View textSettingsCell;
-            String str = "windowBackgroundWhite";
-            switch (i) {
-                case 1:
-                    textSettingsCell = new TextSettingsCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 2:
-                    textSettingsCell = new TextInfoPrivacyCell(this.mContext);
-                    textSettingsCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                    break;
-                case 3:
-                    textSettingsCell = new ShadowSectionCell(this.mContext);
-                    break;
-                case 4:
-                    textSettingsCell = new ThemeTypeCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 5:
-                    textSettingsCell = new HeaderCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 6:
-                    textSettingsCell = new BrightnessControlCell(this.mContext) {
-                        /* Access modifiers changed, original: protected */
-                        public void didChangedValue(float f) {
-                            int i = (int) (Theme.autoNightBrighnessThreshold * 100.0f);
-                            int i2 = (int) (f * 100.0f);
-                            Theme.autoNightBrighnessThreshold = f;
-                            if (i != i2) {
-                                Holder holder = (Holder) ThemeActivity.this.listView.findViewHolderForAdapterPosition(ThemeActivity.this.automaticBrightnessInfoRow);
-                                if (holder != null) {
-                                    ((TextInfoPrivacyCell) holder.itemView).setText(LocaleController.formatString("AutoNightBrightnessInfo", NUM, Integer.valueOf((int) (Theme.autoNightBrighnessThreshold * 100.0f))));
-                                }
-                                Theme.checkAutoNightThemeConditions(true);
-                            }
-                        }
-                    };
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 7:
-                    textSettingsCell = new TextCheckCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 8:
-                    textSettingsCell = new TextSizeCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 9:
-                    textSettingsCell = new ChatListCell(this.mContext) {
-                        /* Access modifiers changed, original: protected */
-                        public void didSelectChatType(boolean z) {
-                            SharedConfig.setUseThreeLinesLayout(z);
-                        }
-                    };
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 10:
-                    textSettingsCell = new NotificationsCheckCell(this.mContext, 21, 64);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    break;
-                case 11:
-                    this.first = true;
-                    ThemeActivity themeActivity = ThemeActivity.this;
-                    themeActivity.themesHorizontalListCell = new ThemesHorizontalListCell(this.mContext, themeActivity.currentType, ThemeActivity.this.defaultThemes, ThemeActivity.this.darkThemes) {
-                        /* Access modifiers changed, original: protected */
-                        public void showOptionsForTheme(ThemeInfo themeInfo) {
-                            ThemeActivity.this.listAdapter.showOptionsForTheme(themeInfo);
-                        }
-
-                        /* Access modifiers changed, original: protected */
-                        public void presentFragment(BaseFragment baseFragment) {
-                            ThemeActivity.this.presentFragment(baseFragment);
-                        }
-
-                        /* Access modifiers changed, original: protected */
-                        public void updateRows() {
-                            ThemeActivity.this.updateRows(false);
-                        }
-                    };
-                    ThemeActivity.this.themesHorizontalListCell.setDrawDivider(ThemeActivity.this.hasThemeAccents);
-                    ThemeActivity.this.themesHorizontalListCell.setFocusable(false);
-                    textSettingsCell = ThemeActivity.this.themesHorizontalListCell;
-                    textSettingsCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(148.0f)));
-                    break;
-                default:
-                    textSettingsCell = new TintRecyclerListView(this.mContext) {
-                        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                            if (!(getParent() == null || getParent().getParent() == null)) {
-                                getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
-                            }
-                            return super.onInterceptTouchEvent(motionEvent);
-                        }
-                    };
-                    textSettingsCell.setFocusable(false);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                    textSettingsCell.setItemAnimator(null);
-                    textSettingsCell.setLayoutAnimation(null);
-                    textSettingsCell.setPadding(AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f), 0);
-                    textSettingsCell.setClipToPadding(false);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.mContext);
-                    linearLayoutManager.setOrientation(0);
-                    textSettingsCell.setLayoutManager(linearLayoutManager);
-                    ThemeAccentsListAdapter themeAccentsListAdapter = new ThemeAccentsListAdapter(this.mContext);
-                    textSettingsCell.setAdapter(themeAccentsListAdapter);
-                    textSettingsCell.setOnItemClickListener(new -$$Lambda$ThemeActivity$ListAdapter$37GYc2ZgypZubBbNYS34Yq2aS8g(this, themeAccentsListAdapter, textSettingsCell));
-                    textSettingsCell.setOnItemLongClickListener(new -$$Lambda$ThemeActivity$ListAdapter$cfae1HOWszm_UVN2RQ8ct-ooT1E(this, themeAccentsListAdapter));
-                    textSettingsCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(62.0f)));
-                    break;
-            }
-            return new Holder(textSettingsCell);
         }
 
         public /* synthetic */ void lambda$onCreateViewHolder$2$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, RecyclerListView recyclerListView, View view, int i) {
@@ -965,6 +901,124 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 objArr[3] = Integer.valueOf(-1);
                 globalInstance.postNotificationName(i2, objArr);
             }
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View textSettingsCell;
+            String str = "windowBackgroundWhite";
+            switch (i) {
+                case 1:
+                    textSettingsCell = new TextSettingsCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 2:
+                    textSettingsCell = new TextInfoPrivacyCell(this.mContext);
+                    textSettingsCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    break;
+                case 3:
+                    textSettingsCell = new ShadowSectionCell(this.mContext);
+                    break;
+                case 4:
+                    textSettingsCell = new ThemeTypeCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 5:
+                    textSettingsCell = new HeaderCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 6:
+                    textSettingsCell = new BrightnessControlCell(this.mContext) {
+                        /* Access modifiers changed, original: protected */
+                        public void didChangedValue(float f) {
+                            int i = (int) (Theme.autoNightBrighnessThreshold * 100.0f);
+                            int i2 = (int) (f * 100.0f);
+                            Theme.autoNightBrighnessThreshold = f;
+                            if (i != i2) {
+                                Holder holder = (Holder) ThemeActivity.this.listView.findViewHolderForAdapterPosition(ThemeActivity.this.automaticBrightnessInfoRow);
+                                if (holder != null) {
+                                    ((TextInfoPrivacyCell) holder.itemView).setText(LocaleController.formatString("AutoNightBrightnessInfo", NUM, Integer.valueOf((int) (Theme.autoNightBrighnessThreshold * 100.0f))));
+                                }
+                                Theme.checkAutoNightThemeConditions(true);
+                            }
+                        }
+                    };
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 7:
+                    textSettingsCell = new TextCheckCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 8:
+                    textSettingsCell = new TextSizeCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 9:
+                    textSettingsCell = new ChatListCell(this.mContext) {
+                        /* Access modifiers changed, original: protected */
+                        public void didSelectChatType(boolean z) {
+                            SharedConfig.setUseThreeLinesLayout(z);
+                        }
+                    };
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 10:
+                    textSettingsCell = new NotificationsCheckCell(this.mContext, 21, 64);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+                case 11:
+                    this.first = true;
+                    ThemeActivity themeActivity = ThemeActivity.this;
+                    themeActivity.themesHorizontalListCell = new ThemesHorizontalListCell(this.mContext, themeActivity.currentType, ThemeActivity.this.defaultThemes, ThemeActivity.this.darkThemes) {
+                        /* Access modifiers changed, original: protected */
+                        public void showOptionsForTheme(ThemeInfo themeInfo) {
+                            ThemeActivity.this.listAdapter.showOptionsForTheme(themeInfo);
+                        }
+
+                        /* Access modifiers changed, original: protected */
+                        public void presentFragment(BaseFragment baseFragment) {
+                            ThemeActivity.this.presentFragment(baseFragment);
+                        }
+
+                        /* Access modifiers changed, original: protected */
+                        public void updateRows() {
+                            ThemeActivity.this.updateRows(false);
+                        }
+                    };
+                    ThemeActivity.this.themesHorizontalListCell.setDrawDivider(ThemeActivity.this.hasThemeAccents);
+                    ThemeActivity.this.themesHorizontalListCell.setFocusable(false);
+                    textSettingsCell = ThemeActivity.this.themesHorizontalListCell;
+                    textSettingsCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(148.0f)));
+                    break;
+                case 12:
+                    textSettingsCell = new TintRecyclerListView(this.mContext) {
+                        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                            if (!(getParent() == null || getParent().getParent() == null)) {
+                                getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
+                            }
+                            return super.onInterceptTouchEvent(motionEvent);
+                        }
+                    };
+                    textSettingsCell.setFocusable(false);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    textSettingsCell.setItemAnimator(null);
+                    textSettingsCell.setLayoutAnimation(null);
+                    textSettingsCell.setPadding(AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f), 0);
+                    textSettingsCell.setClipToPadding(false);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.mContext);
+                    linearLayoutManager.setOrientation(0);
+                    textSettingsCell.setLayoutManager(linearLayoutManager);
+                    ThemeAccentsListAdapter themeAccentsListAdapter = new ThemeAccentsListAdapter(this.mContext);
+                    textSettingsCell.setAdapter(themeAccentsListAdapter);
+                    textSettingsCell.setOnItemClickListener(new -$$Lambda$ThemeActivity$ListAdapter$37GYc2ZgypZubBbNYS34Yq2aS8g(this, themeAccentsListAdapter, textSettingsCell));
+                    textSettingsCell.setOnItemLongClickListener(new -$$Lambda$ThemeActivity$ListAdapter$cfae1HOWszm_UVN2RQ8ct-ooT1E(this, themeAccentsListAdapter));
+                    textSettingsCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(62.0f)));
+                    break;
+                default:
+                    textSettingsCell = new BubbleRadiusCell(this.mContext);
+                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
+                    break;
+            }
+            return new Holder(textSettingsCell);
         }
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -1113,6 +1167,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     } else if (i == ThemeActivity.this.chatListHeaderRow) {
                         headerCell.setText(LocaleController.getString("ChatList", NUM));
                         return;
+                    } else if (i == ThemeActivity.this.bubbleRadiusHeaderRow) {
+                        headerCell.setText(LocaleController.getString("BubbleRadius", NUM));
+                        return;
                     } else {
                         return;
                     }
@@ -1217,13 +1274,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             if (i == ThemeActivity.this.automaticBrightnessInfoRow || i == ThemeActivity.this.scheduleLocationInfoRow) {
                 return 2;
             }
-            if (i == ThemeActivity.this.themeInfoRow || i == ThemeActivity.this.nightTypeInfoRow || i == ThemeActivity.this.scheduleFromToInfoRow || i == ThemeActivity.this.stickersSection2Row || i == ThemeActivity.this.settings2Row || i == ThemeActivity.this.newThemeInfoRow || i == ThemeActivity.this.chatListInfoRow) {
+            if (i == ThemeActivity.this.themeInfoRow || i == ThemeActivity.this.nightTypeInfoRow || i == ThemeActivity.this.scheduleFromToInfoRow || i == ThemeActivity.this.stickersSection2Row || i == ThemeActivity.this.settings2Row || i == ThemeActivity.this.newThemeInfoRow || i == ThemeActivity.this.chatListInfoRow || i == ThemeActivity.this.bubbleRadiusInfoRow) {
                 return 3;
             }
             if (i == ThemeActivity.this.nightDisabledRow || i == ThemeActivity.this.nightScheduledRow || i == ThemeActivity.this.nightAutomaticRow || i == ThemeActivity.this.nightSystemDefaultRow) {
                 return 4;
             }
-            if (i == ThemeActivity.this.scheduleHeaderRow || i == ThemeActivity.this.automaticHeaderRow || i == ThemeActivity.this.preferedHeaderRow || i == ThemeActivity.this.settingsRow || i == ThemeActivity.this.themeHeaderRow || i == ThemeActivity.this.textSizeHeaderRow || i == ThemeActivity.this.chatListHeaderRow) {
+            if (i == ThemeActivity.this.scheduleHeaderRow || i == ThemeActivity.this.automaticHeaderRow || i == ThemeActivity.this.preferedHeaderRow || i == ThemeActivity.this.settingsRow || i == ThemeActivity.this.themeHeaderRow || i == ThemeActivity.this.textSizeHeaderRow || i == ThemeActivity.this.chatListHeaderRow || i == ThemeActivity.this.bubbleRadiusHeaderRow) {
                 return 5;
             }
             if (i == ThemeActivity.this.automaticBrightnessRow) {
@@ -1246,6 +1303,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
             if (i == ThemeActivity.this.themeAccentListRow) {
                 return 12;
+            }
+            if (i == ThemeActivity.this.bubbleRadiusRow) {
+                return 13;
             }
             return 1;
         }
@@ -1311,6 +1371,46 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         updateRows(true);
     }
 
+    private boolean setBubbleRadius(int i, boolean z) {
+        int i2 = 0;
+        if (i == SharedConfig.bubbleRadius) {
+            return false;
+        }
+        View view;
+        SharedConfig.bubbleRadius = i;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("bubbleRadius", SharedConfig.bubbleRadius);
+        edit.commit();
+        ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.textSizeRow);
+        if (findViewHolderForAdapterPosition != null) {
+            view = findViewHolderForAdapterPosition.itemView;
+            if (view instanceof TextSizeCell) {
+                TextSizeCell textSizeCell = (TextSizeCell) view;
+                ChatMessageCell[] cells = textSizeCell.messagesCell.getCells();
+                while (i2 < cells.length) {
+                    cells[i2].getMessageObject().resetLayout();
+                    cells[i2].requestLayout();
+                    i2++;
+                }
+                textSizeCell.invalidate();
+            }
+        }
+        findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.bubbleRadiusRow);
+        if (findViewHolderForAdapterPosition != null) {
+            view = findViewHolderForAdapterPosition.itemView;
+            if (view instanceof BubbleRadiusCell) {
+                BubbleRadiusCell bubbleRadiusCell = (BubbleRadiusCell) view;
+                if (z) {
+                    bubbleRadiusCell.requestLayout();
+                } else {
+                    bubbleRadiusCell.invalidate();
+                }
+            }
+        }
+        updateMenuItem();
+        return true;
+    }
+
     private boolean setFontSize(int i) {
         int i2 = 0;
         if (i == SharedConfig.fontSize) {
@@ -1367,6 +1467,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         this.automaticBrightnessInfoRow = -1;
         this.textSizeHeaderRow = -1;
         this.themeHeaderRow = -1;
+        this.bubbleRadiusHeaderRow = -1;
+        this.bubbleRadiusRow = -1;
+        this.bubbleRadiusInfoRow = -1;
         this.chatListHeaderRow = -1;
         this.chatListRow = -1;
         this.chatListInfoRow = -1;
@@ -1435,6 +1538,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             size = this.rowCount;
             this.rowCount = size + 1;
             this.themeInfoRow = size;
+            size = this.rowCount;
+            this.rowCount = size + 1;
+            this.bubbleRadiusHeaderRow = size;
+            size = this.rowCount;
+            this.rowCount = size + 1;
+            this.bubbleRadiusRow = size;
+            size = this.rowCount;
+            this.rowCount = size + 1;
+            this.bubbleRadiusInfoRow = size;
             size = this.rowCount;
             this.rowCount = size + 1;
             this.chatListHeaderRow = size;
@@ -1846,8 +1958,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
 
             public /* synthetic */ void lambda$onItemClick$1$ThemeActivity$1(DialogInterface dialogInterface, int i) {
-                if (ThemeActivity.this.setFontSize(AndroidUtilities.isTablet() ? 18 : 16)) {
+                boolean access$500 = ThemeActivity.this.setFontSize(AndroidUtilities.isTablet() ? 18 : 16);
+                if (ThemeActivity.this.setBubbleRadius(6, true)) {
+                    access$500 = true;
+                }
+                if (access$500) {
                     ThemeActivity.this.listAdapter.notifyItemChanged(ThemeActivity.this.textSizeRow, new Object());
+                    ThemeActivity.this.listAdapter.notifyItemChanged(ThemeActivity.this.bubbleRadiusRow, new Object());
                 }
                 if (ThemeActivity.this.themesHorizontalListCell != null) {
                     ThemeInfo theme = Theme.getTheme("Blue");
@@ -2118,7 +2235,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
             int i = AndroidUtilities.isTablet() ? 18 : 16;
             ThemeInfo currentTheme2 = Theme.getCurrentTheme();
-            if (SharedConfig.fontSize == i && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+            if (SharedConfig.fontSize == i && SharedConfig.bubbleRadius == 6 && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
                 this.menuItem.hideSubItem(4);
             } else {
                 this.menuItem.showSubItem(4);
@@ -2302,92 +2419,93 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[61];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, BrightnessControlCell.class, ThemeTypeCell.class, TextSizeCell.class, ChatListCell.class, NotificationsCheckCell.class, ThemesHorizontalListCell.class, TintRecyclerListView.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
-        themeDescriptionArr[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
-        themeDescriptionArr[9] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1 = new ThemeDescription[63];
+        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, BrightnessControlCell.class, ThemeTypeCell.class, TextSizeCell.class, BubbleRadiusCell.class, ChatListCell.class, NotificationsCheckCell.class, ThemesHorizontalListCell.class, TintRecyclerListView.class}, null, null, null, "windowBackgroundWhite");
+        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r1[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
+        r1[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
+        r1[9] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
+        r1[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
         View view = this.listView;
+        View view2 = view;
+        r1[12] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        view = this.listView;
         Class[] clsArr = new Class[]{TextInfoPrivacyCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[14] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.listView;
-        clsArr = new Class[]{TextSettingsCell.class};
-        strArr = new String[1];
-        strArr[0] = "valueTextView";
-        themeDescriptionArr[16] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteValueText");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[14] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText4");
+        r1[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[16] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteValueText");
+        r1[17] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
+        r1[18] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
         view = this.listView;
         clsArr = new Class[]{TextCheckCell.class};
         strArr = new String[1];
         strArr[0] = "checkBox";
-        themeDescriptionArr[19] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
-        themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        view = this.listView;
-        View view2 = view;
-        themeDescriptionArr[21] = new ThemeDescription(view2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{BrightnessControlCell.class}, new String[]{"leftImageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
+        r1[19] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
+        r1[20] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
         view = this.listView;
         view2 = view;
-        themeDescriptionArr[22] = new ThemeDescription(view2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{BrightnessControlCell.class}, new String[]{"rightImageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
+        r1[21] = new ThemeDescription(view2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{BrightnessControlCell.class}, new String[]{"leftImageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
         view = this.listView;
-        clsArr = new Class[]{BrightnessControlCell.class};
+        view2 = view;
+        r1[22] = new ThemeDescription(view2, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{BrightnessControlCell.class}, new String[]{"rightImageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
+        r1[23] = new ThemeDescription(this.listView, 0, new Class[]{BrightnessControlCell.class}, new String[]{"seekBarView"}, null, null, null, "player_progressBackground");
+        view = this.listView;
+        view2 = view;
+        r1[24] = new ThemeDescription(view2, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{BrightnessControlCell.class}, new String[]{"seekBarView"}, null, null, null, "player_progress");
+        r1[25] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[26] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"checkImage"}, null, null, null, "featuredStickers_addedIcon");
+        view = this.listView;
+        int i = ThemeDescription.FLAG_PROGRESSBAR;
+        clsArr = new Class[]{TextSizeCell.class};
         strArr = new String[1];
-        strArr[0] = "seekBarView";
-        themeDescriptionArr[23] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "player_progressBackground");
+        strArr[0] = "sizeBar";
+        r1[27] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "player_progress");
+        r1[28] = new ThemeDescription(this.listView, 0, new Class[]{TextSizeCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progressBackground");
         view = this.listView;
         view2 = view;
-        themeDescriptionArr[24] = new ThemeDescription(view2, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{BrightnessControlCell.class}, new String[]{"seekBarView"}, null, null, null, "player_progress");
-        themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"checkImage"}, null, null, null, "featuredStickers_addedIcon");
-        view = this.listView;
-        view2 = view;
-        themeDescriptionArr[27] = new ThemeDescription(view2, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{TextSizeCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progress");
-        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{TextSizeCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progressBackground");
-        themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, null, null, null, "radioBackground");
-        themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, null, null, null, "radioBackgroundChecked");
-        themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[32] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[33] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
-        themeDescriptionArr[34] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        themeDescriptionArr[35] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
-        themeDescriptionArr[36] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
-        themeDescriptionArr[37] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
-        themeDescriptionArr[38] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
-        themeDescriptionArr[39] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubbleGradient");
-        themeDescriptionArr[40] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
-        themeDescriptionArr[41] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow");
-        themeDescriptionArr[42] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_messageTextIn");
-        themeDescriptionArr[43] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_messageTextOut");
-        themeDescriptionArr[44] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck");
-        themeDescriptionArr[45] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable}, null, "chat_outSentCheckSelected");
-        themeDescriptionArr[46] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheckRead");
-        themeDescriptionArr[47] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckReadSelected");
-        themeDescriptionArr[48] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgMediaCheckDrawable, Theme.chat_msgMediaHalfCheckDrawable}, null, "chat_mediaSentCheck");
-        themeDescriptionArr[49] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyLine");
-        themeDescriptionArr[50] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyLine");
-        themeDescriptionArr[51] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyNameText");
-        themeDescriptionArr[52] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyNameText");
-        themeDescriptionArr[53] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyMessageText");
-        themeDescriptionArr[54] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyMessageText");
-        themeDescriptionArr[55] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyMediaMessageSelectedText");
-        themeDescriptionArr[56] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyMediaMessageSelectedText");
-        themeDescriptionArr[57] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inTimeText");
-        themeDescriptionArr[58] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outTimeText");
-        themeDescriptionArr[59] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inTimeSelectedText");
-        themeDescriptionArr[60] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outTimeSelectedText");
-        return themeDescriptionArr;
+        r1[29] = new ThemeDescription(view2, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{BubbleRadiusCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progress");
+        r1[30] = new ThemeDescription(this.listView, 0, new Class[]{BubbleRadiusCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progressBackground");
+        r1[31] = new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, null, null, null, "radioBackground");
+        r1[32] = new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, null, null, null, "radioBackgroundChecked");
+        r1[33] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[34] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        r1[35] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
+        r1[36] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
+        r1[37] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
+        r1[38] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
+        r1[39] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable.getShadowDrawable(), Theme.chat_msgInMediaDrawable.getShadowDrawable()}, null, "chat_inBubbleShadow");
+        r1[40] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
+        r1[41] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubbleGradient");
+        r1[42] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
+        r1[43] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutDrawable.getShadowDrawable(), Theme.chat_msgOutMediaDrawable.getShadowDrawable()}, null, "chat_outBubbleShadow");
+        r1[44] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_messageTextIn");
+        r1[45] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_messageTextOut");
+        r1[46] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckDrawable}, null, "chat_outSentCheck");
+        r1[47] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckSelectedDrawable}, null, "chat_outSentCheckSelected");
+        r1[48] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadDrawable, Theme.chat_msgOutHalfCheckDrawable}, null, "chat_outSentCheckRead");
+        r1[49] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgOutCheckReadSelectedDrawable, Theme.chat_msgOutHalfCheckSelectedDrawable}, null, "chat_outSentCheckReadSelected");
+        r1[50] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgMediaCheckDrawable, Theme.chat_msgMediaHalfCheckDrawable}, null, "chat_mediaSentCheck");
+        r1[51] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyLine");
+        r1[52] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyLine");
+        r1[53] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyNameText");
+        r1[54] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyNameText");
+        r1[55] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyMessageText");
+        r1[56] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyMessageText");
+        r1[57] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inReplyMediaMessageSelectedText");
+        r1[58] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outReplyMediaMessageSelectedText");
+        r1[59] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inTimeText");
+        r1[60] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outTimeText");
+        r1[61] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_inTimeSelectedText");
+        r1[62] = new ThemeDescription(this.listView, 0, null, null, null, null, "chat_outTimeSelectedText");
+        return r1;
     }
 }

@@ -448,7 +448,7 @@ public class MediaDataController extends BaseController {
         if (r1 == 0) goto L_0x006b;
     L_0x0058:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0e094f float:1.887987E38 double:1.053163334E-314;
+        r3 = NUM; // 0x7f0e0950 float:1.8879873E38 double:1.0531633345E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r9);
@@ -3628,13 +3628,13 @@ public class MediaDataController extends BaseController {
         r10 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ all -> 0x02b8 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b8 }
         r10.<init>(r11, r9);	 Catch:{ all -> 0x02b8 }
-        r11 = NUM; // 0x7f0e0685 float:1.8878423E38 double:1.053162981E-314;
+        r11 = NUM; // 0x7f0e0686 float:1.8878425E38 double:1.0531629817E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b8 }
         r10 = r10.setShortLabel(r12);	 Catch:{ all -> 0x02b8 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ all -> 0x02b8 }
         r0 = r10.setLongLabel(r0);	 Catch:{ all -> 0x02b8 }
         r10 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b8 }
-        r11 = NUM; // 0x7var_a float:1.7945929E38 double:1.052935832E-314;
+        r11 = NUM; // 0x7var_ float:1.7945919E38 double:1.0529358296E-314;
         r10 = android.graphics.drawable.Icon.createWithResource(r10, r11);	 Catch:{ all -> 0x02b8 }
         r0 = r0.setIcon(r10);	 Catch:{ all -> 0x02b8 }
         r0 = r0.setIntent(r3);	 Catch:{ all -> 0x02b8 }
@@ -3866,7 +3866,7 @@ public class MediaDataController extends BaseController {
         goto L_0x029b;
     L_0x028f:
         r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x02b8 }
-        r6 = NUM; // 0x7var_b float:1.794593E38 double:1.0529358326E-314;
+        r6 = NUM; // 0x7var_ float:1.794592E38 double:1.05293583E-314;
         r3 = android.graphics.drawable.Icon.createWithResource(r3, r6);	 Catch:{ all -> 0x02b8 }
         r1.setIcon(r3);	 Catch:{ all -> 0x02b8 }
     L_0x029b:
@@ -4375,7 +4375,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0e09a7 float:1.888005E38 double:1.0531633775E-314;
+        r9 = NUM; // 0x7f0e09a8 float:1.8880051E38 double:1.053163378E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;

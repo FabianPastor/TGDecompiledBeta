@@ -30,6 +30,7 @@ public class SharedConfig {
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
+    public static int bubbleRadius = 6;
     private static boolean configLoaded = false;
     public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
@@ -38,11 +39,11 @@ public class SharedConfig {
     public static long directShareHash = 0;
     public static int distanceSystemType = 0;
     public static boolean drawDialogIcons = false;
-    public static int fontSize = AndroidUtilities.dp(16.0f);
+    public static int fontSize = 16;
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
-    public static int ivFontSize = AndroidUtilities.dp(16.0f);
+    public static int ivFontSize = 16;
     public static int keepMedia = 2;
     public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
@@ -218,6 +219,7 @@ public class SharedConfig {
             roundCamera16to9 = true;
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            bubbleRadius = sharedPreferences.getInt("bubbleRadius", 6);
             ivFontSize = sharedPreferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
             useSystemEmoji = sharedPreferences.getBoolean("useSystemEmoji", false);

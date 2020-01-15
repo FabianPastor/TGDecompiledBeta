@@ -593,8 +593,6 @@ public final class R {
         public static final int msg_halfcheck = NUM;
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
-        public static final int msg_in = NUM;
-        public static final int msg_in_shadow = NUM;
         public static final int msg_instant = NUM;
         public static final int msg_language = NUM;
         public static final int msg_leave = NUM;
@@ -609,8 +607,6 @@ public final class R {
         public static final int msg_message = NUM;
         public static final int msg_mute = NUM;
         public static final int msg_openin = NUM;
-        public static final int msg_out = NUM;
-        public static final int msg_out_shadow = NUM;
         public static final int msg_panel_clear = NUM;
         public static final int msg_panel_forward = NUM;
         public static final int msg_panel_reply = NUM;
@@ -744,7 +740,6 @@ public final class R {
         public static final int preview_custom = NUM;
         public static final int preview_dots = NUM;
         public static final int preview_mic = NUM;
-        public static final int preview_msg_in = NUM;
         public static final int preview_open = NUM;
         public static final int preview_smile = NUM;
         public static final int profile_admin = NUM;
@@ -1781,6 +1776,7 @@ public final class R {
         public static final int BotStop = NUM;
         public static final int BotUnblock = NUM;
         public static final int Brown = NUM;
+        public static final int BubbleRadius = NUM;
         public static final int BuiltInThemes = NUM;
         public static final int BytesReceived = NUM;
         public static final int BytesSent = NUM;
