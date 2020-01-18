@@ -835,8 +835,8 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                         -CC.$default$didPressViaBot(this, chatMessageCell, str);
                     }
 
-                    public /* synthetic */ void didPressVoteButton(ChatMessageCell chatMessageCell, TL_pollAnswer tL_pollAnswer) {
-                        -CC.$default$didPressVoteButton(this, chatMessageCell, tL_pollAnswer);
+                    public /* synthetic */ void didPressVoteButtons(ChatMessageCell chatMessageCell, ArrayList<TL_pollAnswer> arrayList, int i, int i2, int i3) {
+                        -CC.$default$didPressVoteButtons(this, chatMessageCell, arrayList, i, i2, i3);
                     }
 
                     public /* synthetic */ void didStartVideoStream(MessageObject messageObject) {
@@ -1098,7 +1098,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         }
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public /* synthetic */ void lambda$new$0$ThemePreviewActivity() {
@@ -3092,21 +3092,21 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r7.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0e09a1 float:1.8880037E38 double:1.0531633745E-314;
+        r1 = NUM; // 0x7f0e09b6 float:1.888008E38 double:1.053163385E-314;
         r2 = "SaveChangesAlertTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e09a0 float:1.8880035E38 double:1.053163374E-314;
+        r1 = NUM; // 0x7f0e09b5 float:1.8880078E38 double:1.0531633844E-314;
         r2 = "SaveChangesAlertText";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e099f float:1.8880033E38 double:1.0531633735E-314;
+        r1 = NUM; // 0x7f0e09b4 float:1.8880076E38 double:1.053163384E-314;
         r2 = "Save";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo;
         r2.<init>(r7);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0e07db float:1.8879116E38 double:1.05316315E-314;
+        r1 = NUM; // 0x7f0e07de float:1.8879122E38 double:1.0531631517E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c;
@@ -3232,10 +3232,10 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         updateButtonState(false, true);
     }
 
-    public void onProgressDownload(String str, float f) {
+    public void onProgressDownload(String str, long j, long j2) {
         RadialProgress2 radialProgress2 = this.radialProgress;
         if (radialProgress2 != null) {
-            radialProgress2.setProgress(f, this.progressVisible);
+            radialProgress2.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), this.progressVisible);
             if (this.radialProgress.getIcon() != 10) {
                 updateButtonState(false, true);
             }

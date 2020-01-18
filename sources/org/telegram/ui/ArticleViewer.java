@@ -216,6 +216,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.BottomSheet.BottomSheetDelegate;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -347,6 +348,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private static Paint webpageMarkPaint;
     private static Paint webpageSearchPaint;
     private static Paint webpageUrlPaint;
+    private final String BOTTOM_SHEET_VIEW_TAG = "bottomSheet";
     private ActionBar actionBar;
     private WebpageAdapter[] adapter;
     private int anchorsOffsetMeasuredWidth;
@@ -500,6 +502,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private Paint statusBarPaint = new Paint();
     private int switchImageAfterAnimation;
     ArticleTextSelectionHelper textSelectionHelper;
+    ArticleTextSelectionHelper textSelectionHelperBottomSheet;
     private boolean textureUploaded;
     private SimpleTextView titleTextView;
     private long transitionAnimationStartTime;
@@ -616,6 +619,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     articleViewer = ArticleViewer.this;
                     if (articleViewer.textSelectionHelper.isSelectable(articleViewer.pressedLinkOwnerView)) {
                         ArticleViewer.this.windowView.performHapticFeedback(0);
+                        if (ArticleViewer.this.pressedLinkOwnerView.getTag() != null && ArticleViewer.this.pressedLinkOwnerView.getTag() == "bottomSheet") {
+                            articleViewer = ArticleViewer.this;
+                            ArticleTextSelectionHelper articleTextSelectionHelper = articleViewer.textSelectionHelperBottomSheet;
+                            if (articleTextSelectionHelper != null) {
+                                articleTextSelectionHelper.trySelect(articleViewer.pressedLinkOwnerView);
+                                return;
+                            }
+                        }
                         articleViewer = ArticleViewer.this;
                         articleViewer.textSelectionHelper.trySelect(articleViewer.pressedLinkOwnerView);
                         return;
@@ -898,14 +909,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public void onDraw(Canvas canvas) {
             Drawable drawable;
             int i = (int) (((float) this.size) * this.scale);
-            int access$23400 = (ArticleViewer.this.getContainerViewWidth() - i) / 2;
-            int access$23500 = (ArticleViewer.this.getContainerViewHeight() - i) / 2;
+            int access$23700 = (ArticleViewer.this.getContainerViewWidth() - i) / 2;
+            int access$23800 = (ArticleViewer.this.getContainerViewHeight() - i) / 2;
             int i2 = this.previousBackgroundState;
             if (i2 >= 0 && i2 < 4) {
                 drawable = ArticleViewer.progressDrawables[this.previousBackgroundState];
                 if (drawable != null) {
                     drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                    drawable.setBounds(access$23400, access$23500, access$23400 + i, access$23500 + i);
+                    drawable.setBounds(access$23700, access$23800, access$23700 + i, access$23800 + i);
                     drawable.draw(canvas);
                 }
             }
@@ -918,7 +929,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     } else {
                         drawable.setAlpha((int) (this.alpha * 255.0f));
                     }
-                    drawable.setBounds(access$23400, access$23500, access$23400 + i, access$23500 + i);
+                    drawable.setBounds(access$23700, access$23800, access$23700 + i, access$23800 + i);
                     drawable.draw(canvas);
                 }
             }
@@ -935,7 +946,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             } else {
                 ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
             }
-            this.progressRect.set((float) (access$23400 + dp), (float) (access$23500 + dp), (float) ((access$23400 + i) - dp), (float) ((access$23500 + i) - dp));
+            this.progressRect.set((float) (access$23700 + dp), (float) (access$23800 + dp), (float) ((access$23700 + i) - dp), (float) ((access$23800 + i) - dp));
             canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, this.animatedProgressValue * 360.0f), false, ArticleViewer.progressPaint);
             updateAnimation();
         }
@@ -1345,7 +1356,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                     ArticleViewer articleViewer = ArticleViewer.this;
                                     articleViewer.currentPage = (WebPage) articleViewer.pagesStack.get(ArticleViewer.this.pagesStack.size() - 1);
                                     articleViewer = ArticleViewer.this;
-                                    articleViewer.textSelectionHelper.parentView = articleViewer.listView[0];
+                                    articleViewer.textSelectionHelper.setParentView(articleViewer.listView[0]);
                                     articleViewer = ArticleViewer.this;
                                     articleViewer.textSelectionHelper.layoutManager = articleViewer.layoutManager[0];
                                     ArticleViewer.this.titleTextView.setText(ArticleViewer.this.currentPage.site_name == null ? "" : ArticleViewer.this.currentPage.site_name);
@@ -1585,7 +1596,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         private int textY = AndroidUtilities.dp(58.0f);
         private DrawingText titleLayout;
 
-        public void onProgressUpload(String str, float f, boolean z) {
+        public void onProgressUpload(String str, long j, long j2, boolean z) {
         }
 
         public BlockAudioCell(Context context, WebpageAdapter webpageAdapter) {
@@ -1848,7 +1859,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     this.titleLayout.y = this.seekBarY - AndroidUtilities.dp(16.0f);
                     DrawingText drawingText2 = this.titleLayout;
                     canvas.translate((float) drawingText2.x, (float) drawingText2.y);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.titleLayout.draw(canvas);
                     canvas.restore();
                     i = 1;
@@ -1864,7 +1875,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     drawingText.y = i3;
                     canvas.translate((float) i2, (float) i3);
                     i2 = i + 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                     i = i2;
@@ -1878,7 +1889,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     int i5 = this.creditOffset;
                     drawingText.y = i3 + i5;
                     canvas.translate((float) i2, (float) (i3 + i5));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -2019,8 +2030,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             updateButtonState(true);
         }
 
-        public void onProgressDownload(String str, float f) {
-            this.radialProgress.setProgress(f, true);
+        public void onProgressDownload(String str, long j, long j2) {
+            this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
             if (this.buttonState != 3) {
                 updateButtonState(true);
             }
@@ -2078,25 +2089,25 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int indexOf;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 RichText richText = tL_pageBlockAuthorDate.author;
-                CharSequence access$22200 = articleViewer.getText(this, richText, richText, tL_pageBlockAuthorDate, i);
+                CharSequence access$22500 = articleViewer.getText(this, richText, richText, tL_pageBlockAuthorDate, i);
                 Spannable spannable = null;
-                if (access$22200 instanceof Spannable) {
-                    spannable = (Spannable) access$22200;
-                    metricAffectingSpanArr = (MetricAffectingSpan[]) spannable.getSpans(0, access$22200.length(), MetricAffectingSpan.class);
+                if (access$22500 instanceof Spannable) {
+                    spannable = (Spannable) access$22500;
+                    metricAffectingSpanArr = (MetricAffectingSpan[]) spannable.getSpans(0, access$22500.length(), MetricAffectingSpan.class);
                 } else {
                     metricAffectingSpanArr = null;
                 }
-                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(access$22200)) {
-                    formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), access$22200);
-                } else if (TextUtils.isEmpty(access$22200)) {
+                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(access$22500)) {
+                    formatString = LocaleController.formatString("ArticleDateByAuthor", NUM, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), access$22500);
+                } else if (TextUtils.isEmpty(access$22500)) {
                     formatString = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                 } else {
-                    formatString = LocaleController.formatString("ArticleByAuthor", NUM, access$22200);
+                    formatString = LocaleController.formatString("ArticleByAuthor", NUM, access$22500);
                 }
                 if (metricAffectingSpanArr != null) {
                     try {
                         if (metricAffectingSpanArr.length > 0) {
-                            indexOf = TextUtils.indexOf(formatString, access$22200);
+                            indexOf = TextUtils.indexOf(formatString, access$22500);
                             if (indexOf != -1) {
                                 formatString = Factory.getInstance().newSpannable(formatString);
                                 for (int i3 = 0; i3 < metricAffectingSpanArr.length; i3++) {
@@ -2132,7 +2143,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -2244,7 +2255,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -2253,7 +2264,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (this.textLayout2 != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.textLayout2.draw(canvas);
                     canvas.restore();
                 }
@@ -2504,7 +2515,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         canvas.translate((float) this.textX, (float) this.textY);
                     }
                     if (this.currentType == 0) {
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                        ArticleViewer.this.drawTextSelection(canvas, this);
                     }
                     this.textLayout.draw(canvas);
                     canvas.restore();
@@ -2590,17 +2601,17 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         PhotoSize closestPhotoSizeWithSize;
                         TLObject tLObject = (TLObject) BlockCollageCell.this.currentBlock.items.get(i4);
                         if (tLObject instanceof TL_pageBlockPhoto) {
-                            Photo access$15200 = ArticleViewer.this.getPhotoWithId(((TL_pageBlockPhoto) tLObject).photo_id);
-                            if (access$15200 == null) {
+                            Photo access$15300 = ArticleViewer.this.getPhotoWithId(((TL_pageBlockPhoto) tLObject).photo_id);
+                            if (access$15300 == null) {
                                 i4++;
                             } else {
-                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, AndroidUtilities.getPhotoSize());
+                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, AndroidUtilities.getPhotoSize());
                             }
                         } else {
                             if (tLObject instanceof TL_pageBlockVideo) {
-                                Document access$13200 = ArticleViewer.this.getDocumentWithId(((TL_pageBlockVideo) tLObject).video_id);
-                                if (access$13200 != null) {
-                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$13200.thumbs, 90);
+                                Document access$13300 = ArticleViewer.this.getDocumentWithId(((TL_pageBlockVideo) tLObject).video_id);
+                                if (access$13300 != null) {
+                                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$13300.thumbs, 90);
                                 }
                             }
                             i4++;
@@ -3207,7 +3218,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -3216,7 +3227,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -3308,7 +3319,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                    ArticleViewer.this.drawTextSelection(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -3857,7 +3868,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -3866,7 +3877,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -3966,12 +3977,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     boolean z = tL_pageBlockEmbedPost.author_photo_id != 0;
                     this.avatarVisible = z;
                     if (z) {
-                        Photo access$15200 = ArticleViewer.this.getPhotoWithId(this.currentBlock.author_photo_id);
-                        boolean z2 = access$15200 instanceof TL_photo;
+                        Photo access$15300 = ArticleViewer.this.getPhotoWithId(this.currentBlock.author_photo_id);
+                        boolean z2 = access$15300 instanceof TL_photo;
                         this.avatarVisible = z2;
                         if (z2) {
                             this.avatarDrawable.setInfo(0, this.currentBlock.author, null);
-                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, AndroidUtilities.dp(40.0f), true), access$15200), "40_40", this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
+                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, AndroidUtilities.dp(40.0f), true), access$15300), "40_40", this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
                         }
                     }
                     this.nameLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
@@ -4052,7 +4063,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     if (this.nameLayout != null) {
                         canvas.save();
                         canvas.translate((float) AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32)), (float) AndroidUtilities.dp(this.dateLayout != null ? 10.0f : 19.0f));
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                        ArticleViewer.this.drawTextSelection(canvas, this, 0);
                         this.nameLayout.draw(canvas);
                         canvas.restore();
                         i = 1;
@@ -4066,7 +4077,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         }
                         canvas.translate((float) AndroidUtilities.dp((float) (i2 + 32)), (float) AndroidUtilities.dp(29.0f));
                         i4 = i + 1;
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                        ArticleViewer.this.drawTextSelection(canvas, this, i);
                         this.dateLayout.draw(canvas);
                         canvas.restore();
                         i = i4;
@@ -4084,7 +4095,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i2 = i + 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                     i = i2;
@@ -4092,7 +4103,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -4181,7 +4192,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                    ArticleViewer.this.drawTextSelection(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -4245,7 +4256,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -4324,7 +4335,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -4955,7 +4966,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                    ArticleViewer.this.drawTextSelection(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -5391,7 +5402,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     centerY = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -5400,7 +5411,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, centerY);
+                    ArticleViewer.this.drawTextSelection(canvas, this, centerY);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -6011,7 +6022,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                    ArticleViewer.this.drawTextSelection(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -6112,7 +6123,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                    ArticleViewer.this.drawTextSelection(canvas, this);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -6168,7 +6179,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private int textX;
         private int textY;
 
-        public void onProgressUpload(String str, float f, boolean z) {
+        public void onProgressUpload(String str, long j, long j2, boolean z) {
         }
 
         public BlockPhotoCell(Context context, WebpageAdapter webpageAdapter, int i) {
@@ -6194,9 +6205,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             tL_pageBlockPhoto = this.currentBlock;
             if (tL_pageBlockPhoto != null) {
-                Photo access$15200 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
-                if (access$15200 != null) {
-                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, AndroidUtilities.getPhotoSize());
+                Photo access$15300 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
+                if (access$15300 != null) {
+                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, AndroidUtilities.getPhotoSize());
                 } else {
                     this.currentPhotoObject = null;
                 }
@@ -6912,7 +6923,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -6921,7 +6932,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -7014,8 +7025,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             updateButtonState(true);
         }
 
-        public void onProgressDownload(String str, float f) {
-            this.radialProgress.setProgress(f, true);
+        public void onProgressDownload(String str, long j, long j2) {
+            this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
             if (this.buttonState != 1) {
                 updateButtonState(true);
             }
@@ -7113,7 +7124,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     if (BlockPreformattedCell.this.textLayout != null) {
                         canvas.save();
                         BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
-                        ArticleViewer.this.textSelectionHelper.draw(canvas, blockPreformattedCell);
+                        ArticleViewer.this.drawTextSelection(canvas, blockPreformattedCell);
                         BlockPreformattedCell.this.textLayout.draw(canvas);
                         canvas.restore();
                     }
@@ -7224,7 +7235,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.textLayout.draw(canvas);
                     canvas.restore();
                     i = 1;
@@ -7232,7 +7243,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.textLayout2 != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY2);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.textLayout2.draw(canvas);
                     canvas.restore();
                 }
@@ -7288,15 +7299,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             TL_pageRelatedArticle tL_pageRelatedArticle = (TL_pageRelatedArticle) this.currentBlock.parent.articles.get(this.currentBlock.num);
             int dp2 = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
             long j = tL_pageRelatedArticle.photo_id;
-            Photo access$15200 = j != 0 ? ArticleViewer.this.getPhotoWithId(j) : null;
-            if (access$15200 != null) {
+            Photo access$15300 = j != 0 ? ArticleViewer.this.getPhotoWithId(j) : null;
+            if (access$15300 != null) {
                 this.drawImage = true;
-                PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, AndroidUtilities.getPhotoSize());
-                PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, 80, true);
+                PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, AndroidUtilities.getPhotoSize());
+                PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, 80, true);
                 if (closestPhotoSizeWithSize == closestPhotoSizeWithSize2) {
                     closestPhotoSizeWithSize2 = null;
                 }
-                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$15200), "64_64", ImageLocation.getForPhoto(closestPhotoSizeWithSize2, access$15200), "64_64_b", closestPhotoSizeWithSize.size, null, ArticleViewer.this.currentPage, 1);
+                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$15300), "64_64", ImageLocation.getForPhoto(closestPhotoSizeWithSize2, access$15300), "64_64_b", closestPhotoSizeWithSize.size, null, ArticleViewer.this.currentPage, 1);
             } else {
                 this.drawImage = false;
             }
@@ -7379,7 +7390,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 canvas.translate((float) this.textX, (float) AndroidUtilities.dp(10.0f));
                 int i2 = 0;
                 if (this.textLayout != null) {
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.textLayout.draw(canvas);
                     i = 1;
                 } else {
@@ -7387,7 +7398,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
                 if (this.textLayout2 != null) {
                     canvas.translate(0.0f, (float) this.textOffset);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.textLayout2.draw(canvas);
                 }
                 canvas.restore();
@@ -7461,7 +7472,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -7615,9 +7626,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         dp = 0;
                         while (dp < BlockSlideshowCell.this.currentBlock.items.size()) {
                             measuredWidth = (AndroidUtilities.dp(4.0f) + count) + (AndroidUtilities.dp(13.0f) * dp);
-                            Drawable access$20400 = BlockSlideshowCell.this.currentPage == dp ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
-                            access$20400.setBounds(measuredWidth - AndroidUtilities.dp(5.0f), 0, measuredWidth + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
-                            access$20400.draw(canvas);
+                            Drawable access$20700 = BlockSlideshowCell.this.currentPage == dp ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
+                            access$20700.setBounds(measuredWidth - AndroidUtilities.dp(5.0f), 0, measuredWidth + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
+                            access$20700.draw(canvas);
                             dp++;
                         }
                     }
@@ -7698,7 +7709,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.captionLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                     i = 1;
@@ -7706,7 +7717,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -7771,7 +7782,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -7843,7 +7854,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -8142,7 +8153,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.titleLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.titleLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -8226,7 +8237,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(this.currentBlock == null || this.textLayout == null)) {
                 canvas.save();
                 canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.textSelectionHelper.draw(canvas, this);
+                ArticleViewer.this.drawTextSelection(canvas, this);
                 this.textLayout.draw(canvas);
                 canvas.restore();
             }
@@ -8278,7 +8289,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private int textX;
         private int textY;
 
-        public void onProgressUpload(String str, float f, boolean z) {
+        public void onProgressUpload(String str, long j, long j2, boolean z) {
         }
 
         public BlockVideoCell(Context context, WebpageAdapter webpageAdapter, int i) {
@@ -9004,7 +9015,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     canvas.save();
                     canvas.translate((float) this.textX, (float) this.textY);
                     i = 1;
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, 0);
+                    ArticleViewer.this.drawTextSelection(canvas, this, 0);
                     this.captionLayout.draw(canvas);
                     canvas.restore();
                 } else {
@@ -9013,7 +9024,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 if (this.creditLayout != null) {
                     canvas.save();
                     canvas.translate((float) this.textX, (float) (this.textY + this.creditOffset));
-                    ArticleViewer.this.textSelectionHelper.draw(canvas, this, i);
+                    ArticleViewer.this.drawTextSelection(canvas, this, i);
                     this.creditLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -9143,8 +9154,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             updateButtonState(true);
         }
 
-        public void onProgressDownload(String str, float f) {
-            this.radialProgress.setProgress(f, true);
+        public void onProgressDownload(String str, long j, long j2) {
+            this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
             if (this.buttonState != 1) {
                 updateButtonState(true);
             }
@@ -10242,18 +10253,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private void addAllMediaFromBlock(PageBlock pageBlock) {
             if (pageBlock instanceof TL_pageBlockPhoto) {
                 TL_pageBlockPhoto tL_pageBlockPhoto = (TL_pageBlockPhoto) pageBlock;
-                Photo access$15200 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
-                if (access$15200 != null) {
-                    tL_pageBlockPhoto.thumb = FileLoader.getClosestPhotoSizeWithSize(access$15200.sizes, 56, true);
-                    tL_pageBlockPhoto.thumbObject = access$15200;
+                Photo access$15300 = ArticleViewer.this.getPhotoWithId(tL_pageBlockPhoto.photo_id);
+                if (access$15300 != null) {
+                    tL_pageBlockPhoto.thumb = FileLoader.getClosestPhotoSizeWithSize(access$15300.sizes, 56, true);
+                    tL_pageBlockPhoto.thumbObject = access$15300;
                     this.photoBlocks.add(pageBlock);
                 }
             } else if ((pageBlock instanceof TL_pageBlockVideo) && ArticleViewer.this.isVideoBlock(pageBlock)) {
                 TL_pageBlockVideo tL_pageBlockVideo = (TL_pageBlockVideo) pageBlock;
-                Document access$13200 = ArticleViewer.this.getDocumentWithId(tL_pageBlockVideo.video_id);
-                if (access$13200 != null) {
-                    tL_pageBlockVideo.thumb = FileLoader.getClosestPhotoSizeWithSize(access$13200.thumbs, 56, true);
-                    tL_pageBlockVideo.thumbObject = access$13200;
+                Document access$13300 = ArticleViewer.this.getDocumentWithId(tL_pageBlockVideo.video_id);
+                if (access$13300 != null) {
+                    tL_pageBlockVideo.thumb = FileLoader.getClosestPhotoSizeWithSize(access$13300.thumbs, 56, true);
+                    tL_pageBlockVideo.thumbObject = access$13300;
                     this.photoBlocks.add(pageBlock);
                 }
             } else {
@@ -10668,16 +10679,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
 
         private boolean isBlockOpened(TL_pageBlockDetailsChild tL_pageBlockDetailsChild) {
-            PageBlock access$13100 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
-            if (access$13100 instanceof TL_pageBlockDetails) {
-                return ((TL_pageBlockDetails) access$13100).open;
+            PageBlock access$13200 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
+            if (access$13200 instanceof TL_pageBlockDetails) {
+                return ((TL_pageBlockDetails) access$13200).open;
             }
-            if (!(access$13100 instanceof TL_pageBlockDetailsChild)) {
+            if (!(access$13200 instanceof TL_pageBlockDetailsChild)) {
                 return false;
             }
-            tL_pageBlockDetailsChild = (TL_pageBlockDetailsChild) access$13100;
-            PageBlock access$131002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.block);
-            if (!(access$131002 instanceof TL_pageBlockDetails) || ((TL_pageBlockDetails) access$131002).open) {
+            tL_pageBlockDetailsChild = (TL_pageBlockDetailsChild) access$13200;
+            PageBlock access$132002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.block);
+            if (!(access$132002 instanceof TL_pageBlockDetails) || ((TL_pageBlockDetails) access$132002).open) {
                 return isBlockOpened(tL_pageBlockDetailsChild);
             }
             return false;
@@ -10688,8 +10699,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             int size = this.blocks.size();
             for (int i = 0; i < size; i++) {
                 PageBlock pageBlock = (PageBlock) this.blocks.get(i);
-                PageBlock access$13100 = ArticleViewer.this.getLastNonListPageBlock(pageBlock);
-                if (!(access$13100 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$13100)) {
+                PageBlock access$13200 = ArticleViewer.this.getLastNonListPageBlock(pageBlock);
+                if (!(access$13200 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$13200)) {
                     this.localBlocks.add(pageBlock);
                 }
             }
@@ -11271,7 +11282,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     public void onAnimationEnd(Animator animator) {
                         ArticleViewer.this.listView[1].setVisibility(8);
                         ArticleViewer articleViewer = ArticleViewer.this;
-                        articleViewer.textSelectionHelper.parentView = articleViewer.listView[0];
+                        articleViewer.textSelectionHelper.setParentView(articleViewer.listView[0]);
                         articleViewer = ArticleViewer.this;
                         articleViewer.textSelectionHelper.layoutManager = articleViewer.layoutManager[0];
                         ArticleViewer.this.listView[indexOfChild].setBackgroundDrawable(null);
@@ -11386,24 +11397,77 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 this.adapter[0].bindBlockToHolder(access$8100, onCreateViewHolder, tL_pageBlockParagraph, 0, 0);
                 Builder builder = new Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
-                LinearLayout linearLayout = new LinearLayout(this.parentActivity);
+                builder.setApplyBottomPadding(false);
+                final LinearLayout linearLayout = new LinearLayout(this.parentActivity);
                 linearLayout.setOrientation(1);
-                AnonymousClass3 anonymousClass3 = new TextView(this.parentActivity) {
+                this.textSelectionHelperBottomSheet = new ArticleTextSelectionHelper();
+                this.textSelectionHelperBottomSheet.setParentView(linearLayout);
+                this.textSelectionHelperBottomSheet.setCallback(new TextSelectionHelper.Callback() {
+                    public void onStateChanged(boolean z) {
+                        if (ArticleViewer.this.linkSheet != null) {
+                            ArticleViewer.this.linkSheet.setDisableScroll(z);
+                        }
+                    }
+                });
+                AnonymousClass4 anonymousClass4 = new TextView(this.parentActivity) {
                     /* Access modifiers changed, original: protected */
                     public void onDraw(Canvas canvas) {
                         canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
                         super.onDraw(canvas);
                     }
                 };
-                anonymousClass3.setTextSize(1, 16.0f);
-                anonymousClass3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                anonymousClass3.setText(LocaleController.getString("InstantViewReference", NUM));
-                anonymousClass3.setGravity((this.adapter[0].isRtl ? 5 : 3) | 16);
-                anonymousClass3.setTextColor(getTextColor());
-                anonymousClass3.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-                linearLayout.addView(anonymousClass3, new LinearLayout.LayoutParams(-1, AndroidUtilities.dp(48.0f) + 1));
+                anonymousClass4.setTextSize(1, 16.0f);
+                anonymousClass4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                anonymousClass4.setText(LocaleController.getString("InstantViewReference", NUM));
+                anonymousClass4.setGravity((this.adapter[0].isRtl ? 5 : 3) | 16);
+                anonymousClass4.setTextColor(getTextColor());
+                anonymousClass4.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
+                linearLayout.addView(anonymousClass4, new LinearLayout.LayoutParams(-1, AndroidUtilities.dp(48.0f) + 1));
+                onCreateViewHolder.itemView.setTag("bottomSheet");
                 linearLayout.addView(onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
-                builder.setCustomView(linearLayout);
+                TextSelectionOverlay overlayView = this.textSelectionHelperBottomSheet.getOverlayView(this.parentActivity);
+                AnonymousClass5 anonymousClass5 = new FrameLayout(this.parentActivity) {
+                    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                        TextSelectionOverlay overlayView = ArticleViewer.this.textSelectionHelperBottomSheet.getOverlayView(getContext());
+                        MotionEvent obtain = MotionEvent.obtain(motionEvent);
+                        obtain.offsetLocation(-linearLayout.getX(), -linearLayout.getY());
+                        if (ArticleViewer.this.textSelectionHelperBottomSheet.isSelectionMode() && ArticleViewer.this.textSelectionHelperBottomSheet.getOverlayView(getContext()).onTouchEvent(obtain)) {
+                            return true;
+                        }
+                        if (overlayView.checkOnTap(motionEvent)) {
+                            motionEvent.setAction(3);
+                        }
+                        if (motionEvent.getAction() != 0 || !ArticleViewer.this.textSelectionHelperBottomSheet.isSelectionMode() || (motionEvent.getY() >= ((float) linearLayout.getTop()) && motionEvent.getY() <= ((float) linearLayout.getBottom()))) {
+                            return super.dispatchTouchEvent(motionEvent);
+                        }
+                        if (ArticleViewer.this.textSelectionHelperBottomSheet.getOverlayView(getContext()).onTouchEvent(obtain)) {
+                            return super.dispatchTouchEvent(motionEvent);
+                        }
+                        return true;
+                    }
+
+                    /* Access modifiers changed, original: protected */
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(i, i2);
+                        super.onMeasure(i, MeasureSpec.makeMeasureSpec(linearLayout.getMeasuredHeight() + AndroidUtilities.dp(8.0f), NUM));
+                    }
+                };
+                builder.setDelegate(new BottomSheetDelegate() {
+                    public boolean canDismiss() {
+                        ArticleTextSelectionHelper articleTextSelectionHelper = ArticleViewer.this.textSelectionHelperBottomSheet;
+                        if (articleTextSelectionHelper == null || !articleTextSelectionHelper.isSelectionMode()) {
+                            return true;
+                        }
+                        ArticleViewer.this.textSelectionHelperBottomSheet.clear();
+                        return false;
+                    }
+                });
+                anonymousClass5.addView(linearLayout, -1, -2);
+                anonymousClass5.addView(overlayView, -1, -2);
+                builder.setCustomView(anonymousClass5);
+                if (this.textSelectionHelper.isSelectionMode()) {
+                    this.textSelectionHelper.clear();
+                }
                 BottomSheet create = builder.create();
                 this.linkSheet = create;
                 showDialog(create);
@@ -11459,6 +11523,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.checkingForLongPress = true;
             if (this.pendingCheckForTap == null) {
                 this.pendingCheckForTap = new CheckForTap(this, null);
+            }
+            if (view.getTag() != null && view.getTag() == "bottomSheet") {
+                ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelperBottomSheet;
+                if (articleTextSelectionHelper != null) {
+                    articleTextSelectionHelper.setMaybeView((int) f, (int) f2, view);
+                    this.windowView.postDelayed(this.pendingCheckForTap, (long) ViewConfiguration.getTapTimeout());
+                }
             }
             this.textSelectionHelper.setMaybeView((int) f, (int) f2, view);
             this.windowView.postDelayed(this.pendingCheckForTap, (long) ViewConfiguration.getTapTimeout());
@@ -13103,7 +13174,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             while (i3 < 3) {
                 strArr = this.currentFileNames;
                 if (strArr[i3] != null && strArr[i3].equals(str)) {
-                    this.radialProgressViews[i3].setProgress(((Float) objArr[1]).floatValue(), true);
+                    this.radialProgressViews[i3].setProgress(Math.min(1.0f, ((float) ((Long) objArr[1]).longValue()) / ((float) ((Long) objArr[2]).longValue())), true);
                 }
                 i3++;
             }
@@ -13504,7 +13575,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 r0 = super.drawChild(r11, r12, r13);
                 return r0;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$AnonymousClass4.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$AnonymousClass7.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
             }
         };
         this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
@@ -13762,7 +13833,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                             ArticleViewer.this.clearButton.setTag(null);
                             ArticleViewer.this.clearButton.clearAnimation();
                             if (ArticleViewer.this.animateClear) {
-                                ArticleViewer.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new -$$Lambda$ArticleViewer$11$TzCub7BJVCnExECp-nu2Bs8OnCU(this)).start();
+                                ArticleViewer.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new -$$Lambda$ArticleViewer$14$uv1bLccQQi3qagMhYNvvRqSCKEI(this)).start();
                             } else {
                                 ArticleViewer.this.clearButton.setAlpha(0.0f);
                                 ArticleViewer.this.clearButton.setRotation(45.0f);
@@ -13789,7 +13860,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 }
             }
 
-            public /* synthetic */ void lambda$onTextChanged$0$ArticleViewer$11() {
+            public /* synthetic */ void lambda$onTextChanged$0$ArticleViewer$14() {
                 ArticleViewer.this.clearButton.setVisibility(4);
             }
         });
@@ -13838,7 +13909,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.backButton.setOnClickListener(new -$$Lambda$ArticleViewer$H1Bc9M26tuZkWwbtuUTUyFFEPMA(this));
         this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
         ActionBarMenuItem actionBarMenuItem = r0;
-        ActionBarMenuItem anonymousClass13 = new ActionBarMenuItem(this.parentActivity, null, NUM, -5000269) {
+        ActionBarMenuItem anonymousClass16 = new ActionBarMenuItem(this.parentActivity, null, NUM, -5000269) {
             public void toggleSubMenu() {
                 super.toggleSubMenu();
                 ArticleViewer.this.listView[0].stopScroll();
@@ -13945,15 +14016,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         }
                     }
                     articleViewer = ArticleViewer.this;
-                    File access$10800 = articleViewer.getMediaFile(articleViewer.currentIndex);
-                    if (access$10800 == null || !access$10800.exists()) {
+                    File access$10900 = articleViewer.getMediaFile(articleViewer.currentIndex);
+                    if (access$10900 == null || !access$10900.exists()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
                         builder.setMessage(LocaleController.getString("PleaseDownload", NUM));
                         ArticleViewer.this.showDialog(builder.create());
                     } else {
-                        String file = access$10800.toString();
+                        String file = access$10900.toString();
                         Activity access$2200 = ArticleViewer.this.parentActivity;
                         ArticleViewer articleViewer2 = ArticleViewer.this;
                         MediaController.saveFile(file, access$2200, articleViewer2.isMediaVideo(articleViewer2.currentIndex), null, null);
@@ -13969,9 +14040,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     }
                 } else if (i == 4) {
                     articleViewer = ArticleViewer.this;
-                    TLObject access$11100 = articleViewer.getMedia(articleViewer.currentIndex);
-                    if (access$11100 instanceof Document) {
-                        Document document = (Document) access$11100;
+                    TLObject access$11200 = articleViewer.getMedia(articleViewer.currentIndex);
+                    if (access$11200 instanceof Document) {
+                        Document document = (Document) access$11200;
                         MediaDataController.getInstance(ArticleViewer.this.currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000));
                         MessagesController.getInstance(ArticleViewer.this.currentAccount).saveGif(ArticleViewer.this.currentPage, document);
                     }
@@ -13980,8 +14051,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
             public boolean canOpenMenu() {
                 ArticleViewer articleViewer = ArticleViewer.this;
-                File access$10800 = articleViewer.getMediaFile(articleViewer.currentIndex);
-                return access$10800 != null && access$10800.exists();
+                File access$10900 = articleViewer.getMediaFile(articleViewer.currentIndex);
+                return access$10900 != null && access$10900.exists();
             }
         });
         ActionBarMenu createMenu = this.actionBar.createMenu();
@@ -14135,8 +14206,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.rightImage.setCrossfadeAlpha((byte) 2);
         this.rightImage.setInvalidateAll(true);
         this.textSelectionHelper = new ArticleTextSelectionHelper();
+        this.textSelectionHelper.setParentView(this.listView[0]);
         ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelper;
-        articleTextSelectionHelper.parentView = this.listView[0];
         articleTextSelectionHelper.layoutManager = this.layoutManager[0];
         articleTextSelectionHelper.setCallback(new TextSelectionHelper.Callback() {
             public void onTextCopied() {
@@ -15234,7 +15305,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12.setDuration(r13);
         r13 = r11.interpolator;
         r12.setInterpolator(r13);
-        r13 = new org.telegram.ui.ArticleViewer$21;
+        r13 = new org.telegram.ui.ArticleViewer$24;
         r13.<init>();
         r12.addListener(r13);
         r13 = java.lang.System.currentTimeMillis();
@@ -15857,6 +15928,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.visibleDialog = null;
     }
 
+    private void drawTextSelection(Canvas canvas, ArticleSelectableView articleSelectableView) {
+        drawTextSelection(canvas, articleSelectableView, 0);
+    }
+
+    private void drawTextSelection(Canvas canvas, ArticleSelectableView articleSelectableView, int i) {
+        View view = (View) articleSelectableView;
+        if (view.getTag() != null && view.getTag() == "bottomSheet") {
+            ArticleTextSelectionHelper articleTextSelectionHelper = this.textSelectionHelperBottomSheet;
+            if (articleTextSelectionHelper != null) {
+                articleTextSelectionHelper.draw(canvas, articleSelectableView, i);
+                return;
+            }
+        }
+        this.textSelectionHelper.draw(canvas, articleSelectableView, i);
+    }
+
     /* JADX WARNING: Missing exception handler attribute for start block: B:14:0x0040 */
     /* JADX WARNING: Can't wrap try/catch for region: R(4:12|13|14|15) */
     private void onSharePressed() {
@@ -15905,7 +15992,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a32 float:1.8880331E38 double:1.053163446E-314;
+        r3 = NUM; // 0x7f0e0a48 float:1.8880376E38 double:1.053163457E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -15916,16 +16003,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "AppName";
-        r2 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
+        r2 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0e0765 float:1.8878877E38 double:1.053163092E-314;
+        r2 = NUM; // 0x7f0e0768 float:1.8878883E38 double:1.0531630934E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0e08e0 float:1.8879646E38 double:1.053163279E-314;
+        r2 = NUM; // 0x7f0e08e3 float:1.8879652E38 double:1.0531632806E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -16393,7 +16480,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x0080:
         r1 = new android.text.SpannableStringBuilder;
         r1.<init>(r0);
-        r2 = new org.telegram.ui.ArticleViewer$29;
+        r2 = new org.telegram.ui.ArticleViewer$32;
         r2.<init>(r0);
         r0 = r0.length();
         r3 = 34;
@@ -16434,7 +16521,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.showSubItem(r13);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
+        r1 = NUM; // 0x7f0e0150 float:1.887572E38 double:1.0531623226E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -16449,21 +16536,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r15 == 0) goto L_0x00fa;
     L_0x00eb:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r1 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x012e;
     L_0x00fa:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r1 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x012e;
     L_0x0109:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0767 float:1.8878881E38 double:1.053163093E-314;
+        r1 = NUM; // 0x7f0e076a float:1.8878887E38 double:1.0531630944E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;
@@ -16942,10 +17029,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         animatorSet.setDuration(200);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ArticleViewer$31$OxC9yTDmATIGGwh8Am5vKMtD61s(this));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$ArticleViewer$34$ZoCkrtmlqMoaOJjBk1AdF0rd5qk(this));
             }
 
-            public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$31() {
+            public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$34() {
                 NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
                 if (ArticleViewer.this.photoAnimationEndRunnable != null) {
                     ArticleViewer.this.photoAnimationEndRunnable.run();
@@ -17499,7 +17586,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.photoAnimationEndRunnable = r1;
         r1 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r6.setDuration(r1);
-        r1 = new org.telegram.ui.ArticleViewer$32;
+        r1 = new org.telegram.ui.ArticleViewer$35;
         r1.<init>();
         r6.addListener(r1);
         r1 = java.lang.System.currentTimeMillis();
@@ -19011,8 +19098,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         Object obj = (aspectRatioFrameLayout == null || aspectRatioFrameLayout.getVisibility() != 0) ? null : 1;
         RadialProgressView[] radialProgressViewArr = this.radialProgressViews;
         if (!(radialProgressViewArr[0] == null || this.photoContainerView == null || obj != null)) {
-            int access$24200 = radialProgressViewArr[0].backgroundState;
-            if (access$24200 > 0 && access$24200 <= 3) {
+            int access$24500 = radialProgressViewArr[0].backgroundState;
+            if (access$24500 > 0 && access$24500 <= 3) {
                 float x = motionEvent.getX();
                 float y = motionEvent.getY();
                 if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {

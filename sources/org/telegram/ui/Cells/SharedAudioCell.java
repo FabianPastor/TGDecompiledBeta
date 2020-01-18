@@ -55,7 +55,7 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         return false;
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public SharedAudioCell(Context context) {
@@ -477,8 +477,8 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         updateButtonState(false, true);
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.radialProgress.setProgress(f, true);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         if (this.hasMiniProgress != 0) {
             if (this.miniButtonState != 1) {
                 updateButtonState(false, true);

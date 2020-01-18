@@ -86,7 +86,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         void didPressedImage(ContextLinkCell contextLinkCell);
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public ContextLinkCell(Context context) {
@@ -1851,8 +1851,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         updateButtonState(false, true);
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.radialProgress.setProgress(f, true);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         int i = this.documentAttachType;
         if (i == 3 || i == 5) {
             if (this.buttonState != 4) {

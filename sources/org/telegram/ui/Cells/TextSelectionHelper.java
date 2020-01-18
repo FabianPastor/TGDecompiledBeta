@@ -87,7 +87,8 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     float movingOffsetY;
     protected boolean multiselect = true;
     private boolean parentIsScrolling;
-    public RecyclerListView parentView;
+    protected RecyclerListView parentRecyclerView;
+    protected ViewGroup parentView;
     protected PathWithSavedBottom path = new PathWithSavedBottom();
     private ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
@@ -97,7 +98,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         public void run() {
             if (TextSelectionHelper.this.scrolling) {
                 TextSelectionHelper textSelectionHelper = TextSelectionHelper.this;
-                if (textSelectionHelper.parentView != null) {
+                if (textSelectionHelper.parentRecyclerView != null) {
                     int dp;
                     if (textSelectionHelper.multiselect && textSelectionHelper.selectedView == null) {
                         dp = AndroidUtilities.dp(8.0f);
@@ -120,7 +121,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                         }
                     }
                     textSelectionHelper2 = TextSelectionHelper.this;
-                    RecyclerListView recyclerListView = textSelectionHelper2.parentView;
+                    RecyclerListView recyclerListView = textSelectionHelper2.parentRecyclerView;
                     if (!textSelectionHelper2.scrollDown) {
                         dp = -dp;
                     }
@@ -148,7 +149,10 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 TextSelectionHelper textSelectionHelper2;
                 SelectableView selectableView2 = textSelectionHelper.selectedView;
                 CharSequence text = textSelectionHelper.getText(selectableView, true);
-                TextSelectionHelper.this.parentView.cancelClickRunnables(false);
+                RecyclerListView recyclerListView = TextSelectionHelper.this.parentRecyclerView;
+                if (recyclerListView != null) {
+                    recyclerListView.cancelClickRunnables(false);
+                }
                 TextSelectionHelper textSelectionHelper3 = TextSelectionHelper.this;
                 int i2 = textSelectionHelper3.capturedX;
                 int i3 = textSelectionHelper3.capturedY;
@@ -268,10 +272,12 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     private int touchSlop = ViewConfiguration.get(ApplicationLoader.applicationContext).getScaledTouchSlop();
     private boolean tryCapture;
 
-    public interface Callback {
-        void onStateChanged(boolean z);
+    public static class Callback {
+        public void onStateChanged(boolean z) {
+        }
 
-        void onTextCopied();
+        public void onTextCopied() {
+        }
     }
 
     public static class IgnoreCopySpannable {
@@ -1506,10 +1512,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             this.arrayList.clear();
             articleSelectableView.fillTextLayoutBlocks(this.arrayList);
             int i = z ? this.maybeTextIndex : this.startPeek ? this.startViewChildPosition : this.endViewChildPosition;
-            if (this.arrayList.isEmpty()) {
-                return "";
-            }
-            return ((TextLayoutBlock) this.arrayList.get(i)).getLayout().getText();
+            return (this.arrayList.isEmpty() || i < 0) ? "" : ((TextLayoutBlock) this.arrayList.get(i)).getLayout().getText();
         }
 
         /* Access modifiers changed, original: protected */
@@ -1561,7 +1564,12 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             if (z) {
                 layoutBlock.layout = ((TextLayoutBlock) this.arrayList.get(this.maybeTextIndex)).getLayout();
             } else {
-                layoutBlock.layout = ((TextLayoutBlock) this.arrayList.get(this.startPeek ? this.startViewChildPosition : this.endViewChildPosition)).getLayout();
+                i = this.startPeek ? this.startViewChildPosition : this.endViewChildPosition;
+                if (i < 0 || i >= this.arrayList.size()) {
+                    layoutBlock.layout = null;
+                    return;
+                }
+                layoutBlock.layout = ((TextLayoutBlock) this.arrayList.get(i)).getLayout();
             }
             layoutBlock.yOffset = 0.0f;
             layoutBlock.xOffset = 0.0f;
@@ -1575,16 +1583,20 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
             this.arrayList.clear();
             ((ArticleSelectableView) this.selectedView).fillTextLayoutBlocks(this.arrayList);
-            StaticLayout layout = ((TextLayoutBlock) this.arrayList.get(this.startPeek ? this.startViewChildPosition : this.endViewChildPosition)).getLayout();
-            int i2 = Integer.MAX_VALUE;
+            int i2 = this.startPeek ? this.startViewChildPosition : this.endViewChildPosition;
+            if (i2 < 0 || i2 >= this.arrayList.size()) {
+                return 0;
+            }
+            StaticLayout layout = ((TextLayoutBlock) this.arrayList.get(i2)).getLayout();
+            int i3 = Integer.MAX_VALUE;
             while (i < layout.getLineCount()) {
                 int lineBottom = layout.getLineBottom(i) - layout.getLineTop(i);
-                if (lineBottom < i2) {
-                    i2 = lineBottom;
+                if (lineBottom < i3) {
+                    i3 = lineBottom;
                 }
                 i++;
             }
-            return i2;
+            return i3;
         }
 
         public void trySelect(View view) {
@@ -1673,45 +1685,43 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             return size;
         }
 
-        public void draw(Canvas canvas, ArticleSelectableView articleSelectableView) {
-            draw(canvas, articleSelectableView, 0);
-        }
-
         public void draw(Canvas canvas, ArticleSelectableView articleSelectableView, int i) {
             this.selectionPaint.setColor(Theme.getColor("chat_inTextSelectionHighlight"));
             int adapterPosition = getAdapterPosition(articleSelectableView);
-            this.arrayList.clear();
-            articleSelectableView.fillTextLayoutBlocks(this.arrayList);
-            if (!this.arrayList.isEmpty()) {
-                TextLayoutBlock textLayoutBlock = (TextLayoutBlock) this.arrayList.get(i);
-                int i2 = this.endViewOffset;
-                int length = textLayoutBlock.getLayout().getText().length();
-                if (i2 > length) {
-                    i2 = length;
-                }
-                if (adapterPosition == this.startViewPosition && adapterPosition == this.endViewPosition) {
-                    adapterPosition = this.startViewChildPosition;
-                    if (adapterPosition == this.endViewChildPosition && adapterPosition == i) {
-                        drawSelection(canvas, textLayoutBlock.getLayout(), this.startViewOffset, i2);
-                        return;
+            if (adapterPosition >= 0) {
+                this.arrayList.clear();
+                articleSelectableView.fillTextLayoutBlocks(this.arrayList);
+                if (!this.arrayList.isEmpty()) {
+                    TextLayoutBlock textLayoutBlock = (TextLayoutBlock) this.arrayList.get(i);
+                    int i2 = this.endViewOffset;
+                    int length = textLayoutBlock.getLayout().getText().length();
+                    if (i2 > length) {
+                        i2 = length;
                     }
-                    adapterPosition = this.startViewChildPosition;
-                    if (i == adapterPosition) {
+                    if (adapterPosition == this.startViewPosition && adapterPosition == this.endViewPosition) {
+                        adapterPosition = this.startViewChildPosition;
+                        if (adapterPosition == this.endViewChildPosition && adapterPosition == i) {
+                            drawSelection(canvas, textLayoutBlock.getLayout(), this.startViewOffset, i2);
+                        } else {
+                            adapterPosition = this.startViewChildPosition;
+                            if (i == adapterPosition) {
+                                drawSelection(canvas, textLayoutBlock.getLayout(), this.startViewOffset, length);
+                            } else {
+                                int i3 = this.endViewChildPosition;
+                                if (i == i3) {
+                                    drawSelection(canvas, textLayoutBlock.getLayout(), 0, i2);
+                                } else if (i > adapterPosition && i < i3) {
+                                    drawSelection(canvas, textLayoutBlock.getLayout(), 0, length);
+                                }
+                            }
+                        }
+                    } else if (adapterPosition == this.startViewPosition && this.startViewChildPosition == i) {
                         drawSelection(canvas, textLayoutBlock.getLayout(), this.startViewOffset, length);
-                        return;
-                    }
-                    int i3 = this.endViewChildPosition;
-                    if (i == i3) {
+                    } else if (adapterPosition == this.endViewPosition && this.endViewChildPosition == i) {
                         drawSelection(canvas, textLayoutBlock.getLayout(), 0, i2);
-                    } else if (i > adapterPosition && i < i3) {
+                    } else if ((adapterPosition > this.startViewPosition && adapterPosition < this.endViewPosition) || ((adapterPosition == this.startViewPosition && i > this.startViewChildPosition) || (adapterPosition == this.endViewPosition && i < this.endViewChildPosition))) {
                         drawSelection(canvas, textLayoutBlock.getLayout(), 0, length);
                     }
-                } else if (adapterPosition == this.startViewPosition && this.startViewChildPosition == i) {
-                    drawSelection(canvas, textLayoutBlock.getLayout(), this.startViewOffset, length);
-                } else if (adapterPosition == this.endViewPosition && this.endViewChildPosition == i) {
-                    drawSelection(canvas, textLayoutBlock.getLayout(), 0, i2);
-                } else if ((adapterPosition > this.startViewPosition && adapterPosition < this.endViewPosition) || ((adapterPosition == this.startViewPosition && i > this.startViewChildPosition) || (adapterPosition == this.endViewPosition && i < this.endViewChildPosition))) {
-                    drawSelection(canvas, textLayoutBlock.getLayout(), 0, length);
                 }
             }
         }
@@ -1719,13 +1729,22 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         private int getAdapterPosition(ArticleSelectableView articleSelectableView) {
             View view = (View) articleSelectableView;
             ViewParent parent = view.getParent();
-            if (!(parent instanceof ArticleSelectableView)) {
-                return this.parentView.getChildAdapterPosition(view);
+            while (parent != this.parentView && parent != null) {
+                if (!(parent instanceof View)) {
+                    parent = null;
+                    break;
+                }
+                view = (View) parent;
+                parent = view.getParent();
             }
-            if (parent.getParent() instanceof ArticleSelectableView) {
-                return getAdapterPosition((ArticleSelectableView) parent);
+            if (parent == null) {
+                return -1;
             }
-            return this.parentView.getChildAdapterPosition((View) parent);
+            RecyclerListView recyclerListView = this.parentRecyclerView;
+            if (recyclerListView != null) {
+                return recyclerListView.getChildAdapterPosition(view);
+            }
+            return this.parentView.indexOfChild(view);
         }
 
         public boolean isSelectable(View view) {
@@ -1743,19 +1762,21 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         /* Access modifiers changed, original: protected */
         public void onTextSelected(ArticleSelectableView articleSelectableView, ArticleSelectableView articleSelectableView2) {
             int adapterPosition = getAdapterPosition(articleSelectableView);
-            this.endViewPosition = adapterPosition;
-            this.startViewPosition = adapterPosition;
-            int i = this.maybeTextIndex;
-            this.endViewChildPosition = i;
-            this.startViewChildPosition = i;
-            this.arrayList.clear();
-            articleSelectableView.fillTextLayoutBlocks(this.arrayList);
-            int size = this.arrayList.size();
-            this.childCountByPosition.put(adapterPosition, size);
-            for (i = 0; i < size; i++) {
-                int i2 = (i << 16) + adapterPosition;
-                this.textByPosition.put(i2, ((TextLayoutBlock) this.arrayList.get(i)).getLayout().getText());
-                this.prefixTextByPosition.put(i2, ((TextLayoutBlock) this.arrayList.get(i)).getPrefix());
+            if (adapterPosition >= 0) {
+                this.endViewPosition = adapterPosition;
+                this.startViewPosition = adapterPosition;
+                int i = this.maybeTextIndex;
+                this.endViewChildPosition = i;
+                this.startViewChildPosition = i;
+                this.arrayList.clear();
+                articleSelectableView.fillTextLayoutBlocks(this.arrayList);
+                int size = this.arrayList.size();
+                this.childCountByPosition.put(adapterPosition, size);
+                for (i = 0; i < size; i++) {
+                    int i2 = (i << 16) + adapterPosition;
+                    this.textByPosition.put(i2, ((TextLayoutBlock) this.arrayList.get(i)).getLayout().getText());
+                    this.prefixTextByPosition.put(i2, ((TextLayoutBlock) this.arrayList.get(i)).getPrefix());
+                }
             }
         }
 
@@ -1959,12 +1980,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 this.startPeek = false;
                 int i = this.endViewPosition;
                 if (i >= 0) {
-                    ArticleSelectableView articleSelectableView = (ArticleSelectableView) this.layoutManager.findViewByPosition(i);
-                    if (articleSelectableView == null) {
+                    LinearLayoutManager linearLayoutManager = this.layoutManager;
+                    SelectableView selectableView = linearLayoutManager != null ? (ArticleSelectableView) linearLayoutManager.findViewByPosition(i) : i < this.parentView.getChildCount() ? (ArticleSelectableView) this.parentView.getChildAt(this.endViewPosition) : null;
+                    if (selectableView == null) {
                         this.selectedView = null;
                         return;
                     }
-                    this.selectedView = articleSelectableView;
+                    this.selectedView = selectableView;
                     if (this.startViewPosition != this.endViewPosition) {
                         this.selectionStart = 0;
                     } else if (this.startViewChildPosition != this.endViewChildPosition) {
@@ -1993,12 +2015,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 this.startPeek = true;
                 int i = this.startViewPosition;
                 if (i >= 0) {
-                    ArticleSelectableView articleSelectableView = (ArticleSelectableView) this.layoutManager.findViewByPosition(i);
-                    if (articleSelectableView == null) {
+                    LinearLayoutManager linearLayoutManager = this.layoutManager;
+                    SelectableView selectableView = linearLayoutManager != null ? (ArticleSelectableView) linearLayoutManager.findViewByPosition(i) : this.endViewPosition < this.parentView.getChildCount() ? (ArticleSelectableView) this.parentView.getChildAt(this.startViewPosition) : null;
+                    if (selectableView == null) {
                         this.selectedView = null;
                         return;
                     }
-                    this.selectedView = articleSelectableView;
+                    this.selectedView = selectableView;
                     if (this.startViewPosition != this.endViewPosition) {
                         this.selectionEnd = getText((ArticleSelectableView) this.selectedView, false).length();
                     } else if (this.startViewChildPosition != this.endViewChildPosition) {
@@ -2226,7 +2249,11 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
 
         /* Access modifiers changed, original: protected */
         public boolean canShowActions() {
-            int findFirstVisibleItemPosition = this.layoutManager.findFirstVisibleItemPosition();
+            LinearLayoutManager linearLayoutManager = this.layoutManager;
+            if (linearLayoutManager == null) {
+                return true;
+            }
+            int findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
             int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
             if ((findFirstVisibleItemPosition >= this.startViewPosition && findFirstVisibleItemPosition <= this.endViewPosition) || (findLastVisibleItemPosition >= this.startViewPosition && findLastVisibleItemPosition <= this.endViewPosition)) {
                 return true;
@@ -2661,6 +2688,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         return false;
     }
 
+    public void setParentView(ViewGroup viewGroup) {
+        if (viewGroup instanceof RecyclerListView) {
+            this.parentRecyclerView = (RecyclerListView) viewGroup;
+        }
+        this.parentView = viewGroup;
+    }
+
     public void setMaybeTextCord(int i, int i2) {
         this.maybeTextX = i;
         this.maybeTextY = i2;
@@ -3061,7 +3095,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         r5 = r9.textSelectionOverlay;
         r5 = r5.getContext();
         r5 = r5.getResources();
-        r6 = NUM; // 0x7var_ float:1.7945403E38 double:1.052935704E-314;
+        r6 = NUM; // 0x7var_ float:1.7945405E38 double:1.0529357046E-314;
         r5 = r5.getDrawable(r6);
         r0.setBackgroundDrawable(r5);
         r0 = r9.popupLayout;
@@ -3381,8 +3415,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 int itemId = menuItem.getItemId();
                 if (itemId == 16908319) {
                     TextSelectionHelper textSelectionHelper = TextSelectionHelper.this;
-                    textSelectionHelper.selectionStart = 0;
-                    textSelectionHelper.selectionEnd = textSelectionHelper.getText(textSelectionHelper.selectedView, false).length();
+                    CharSequence text = textSelectionHelper.getText(textSelectionHelper.selectedView, false);
+                    if (text == null) {
+                        return true;
+                    }
+                    TextSelectionHelper textSelectionHelper2 = TextSelectionHelper.this;
+                    textSelectionHelper2.selectionStart = 0;
+                    textSelectionHelper2.selectionEnd = text.length();
                     TextSelectionHelper.this.hideActions();
                     TextSelectionHelper.this.invalidate();
                     TextSelectionHelper.this.showActions();

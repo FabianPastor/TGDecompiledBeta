@@ -1503,7 +1503,6 @@ public class MessagesController extends BaseController implements NotificationCe
         getSecretChatHelper().cleanup();
         getLocationController().cleanup();
         getMediaDataController().cleanup();
-        getTonController().cleanup();
         DialogsActivity.dialogsLoaded[this.currentAccount] = false;
         this.notificationsPreferences.edit().clear().commit();
         this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
@@ -5759,7 +5758,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02c9  */
     /* JADX WARNING: Removed duplicated region for block: B:152:0x030b A:{SYNTHETIC} */
     /* JADX WARNING: Missing block: B:117:0x02b0, code skipped:
-            if (r3[0] < (byte) 108) goto L_0x02b7;
+            if (r3[0] < (byte) 109) goto L_0x02b7;
      */
     public /* synthetic */ void lambda$processLoadedMessages$124$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r26, long r27, boolean r29, boolean r30, int r31, int r32, boolean r33, int r34, int r35, int r36, int r37, int r38, boolean r39, int r40, int r41, int r42, int r43, boolean r44) {
         /*
@@ -6147,7 +6146,7 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x0286:
         r2 = r24;
         r3 = r2.legacy;
-        r4 = 108; // 0x6c float:1.51E-43 double:5.34E-322;
+        r4 = 109; // 0x6d float:1.53E-43 double:5.4E-322;
         if (r3 == 0) goto L_0x029c;
     L_0x028e:
         r3 = r2.layer;

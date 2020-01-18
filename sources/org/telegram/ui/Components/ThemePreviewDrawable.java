@@ -41,8 +41,6 @@ public class ThemePreviewDrawable extends BitmapDrawable {
         Object obj;
         int intrinsicHeight;
         Drawable drawable3;
-        int width;
-        int height;
         File file2 = file;
         ThemeDocument themeDocument2 = themeDocument;
         RectF rectF = new RectF();
@@ -184,6 +182,8 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             bitmapDrawable.setTileModeXY(tileMode, tileMode);
             bitmapDrawable.setBounds(previewColor3, 120, createBitmap.getWidth(), createBitmap.getHeight() - 120);
             bitmapDrawable.draw(canvas);
+        } else {
+            previewColor3 = 0;
         }
         Integer num5 = num2;
         paint.setColor(i);
@@ -203,33 +203,33 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             drawable3.draw(canvas);
         }
         drawableArr2[1].setBounds(161, 216, createBitmap.getWidth() - 20, 308);
-        drawableArr2[1].setTop(0, 522);
+        drawableArr2[1].setTop(previewColor3, 522, previewColor3, previewColor3);
         drawableArr2[1].draw(canvas);
         drawableArr2[1].setBounds(161, 430, createBitmap.getWidth() - 20, 522);
-        drawableArr2[1].setTop(430, 522);
+        drawableArr2[1].setTop(430, 522, previewColor3, previewColor3);
         drawableArr2[1].draw(canvas);
-        drawableArr2[0].setBounds(20, 323, 399, 415);
-        drawableArr2[0].draw(canvas);
+        drawableArr2[previewColor3].setBounds(20, 323, 399, 415);
+        drawableArr2[previewColor3].draw(canvas);
         if (num5 != null) {
-            width = (createBitmap.getWidth() - 126) / 2;
+            previewColor = (createBitmap.getWidth() - 126) / 2;
             RectF rectF3 = rectF2;
-            rectF3.set((float) width, (float) 150, (float) (width + 126), (float) 192);
+            rectF3.set((float) previewColor, (float) 150, (float) (previewColor + 126), (float) 192);
             paint.setColor(num5.intValue());
             canvas.drawRoundRect(rectF3, 21.0f, 21.0f, paint);
         }
         paint.setColor(i4);
         canvas.drawRect(0.0f, (float) (createBitmap.getHeight() - 120), (float) createBitmap.getWidth(), (float) createBitmap.getHeight(), paint);
         if (drawable4 != null) {
-            height = (createBitmap.getHeight() - 120) + ((120 - drawable4.getIntrinsicHeight()) / 2);
+            previewColor = (createBitmap.getHeight() - 120) + ((120 - drawable4.getIntrinsicHeight()) / 2);
             Drawable drawable6 = drawable4;
-            drawable6.setBounds(22, height, drawable4.getIntrinsicWidth() + 22, drawable4.getIntrinsicHeight() + height);
+            drawable6.setBounds(22, previewColor, drawable4.getIntrinsicWidth() + 22, drawable4.getIntrinsicHeight() + previewColor);
             drawable6.draw(canvas);
         }
         if (drawable5 != null) {
-            height = (createBitmap.getWidth() - drawable5.getIntrinsicWidth()) - 22;
-            width = (createBitmap.getHeight() - 120) + ((120 - drawable5.getIntrinsicHeight()) / 2);
+            previewColor = (createBitmap.getWidth() - drawable5.getIntrinsicWidth()) - 22;
+            int height = (createBitmap.getHeight() - 120) + ((120 - drawable5.getIntrinsicHeight()) / 2);
             Drawable drawable7 = drawable5;
-            drawable7.setBounds(height, width, drawable5.getIntrinsicWidth() + height, drawable5.getIntrinsicHeight() + width);
+            drawable7.setBounds(previewColor, height, drawable5.getIntrinsicWidth() + previewColor, drawable5.getIntrinsicHeight() + height);
             drawable7.draw(canvas);
         }
         return createBitmap;

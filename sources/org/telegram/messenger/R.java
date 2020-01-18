@@ -197,6 +197,7 @@ public final class R {
         public static final int animationpinleft = NUM;
         public static final int animationpinright = NUM;
         public static final int app_update = NUM;
+        public static final int arrow_more = NUM;
         public static final int attach_audio = NUM;
         public static final int attach_close = NUM;
         public static final int attach_contact = NUM;
@@ -577,6 +578,7 @@ public final class R {
         public static final int msg_callback = NUM;
         public static final int msg_cancel = NUM;
         public static final int msg_check = NUM;
+        public static final int msg_check_s = NUM;
         public static final int msg_clear = NUM;
         public static final int msg_clock = NUM;
         public static final int msg_contact = NUM;
@@ -591,6 +593,7 @@ public final class R {
         public static final int msg_go_down = NUM;
         public static final int msg_go_up = NUM;
         public static final int msg_halfcheck = NUM;
+        public static final int msg_halfcheck_s = NUM;
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
         public static final int msg_instant = NUM;
@@ -731,6 +734,12 @@ public final class R {
         public static final int play_mini_video = NUM;
         public static final int player = NUM;
         public static final int plus = NUM;
+        public static final int poll_add_circle = NUM;
+        public static final int poll_add_plus = NUM;
+        public static final int poll_remove = NUM;
+        public static final int poll_reorder = NUM;
+        public static final int poll_right = NUM;
+        public static final int poll_wrong = NUM;
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
         public static final int popup_fixed_alert2 = NUM;
@@ -1520,6 +1529,7 @@ public final class R {
         public static final int AndOther_zero = NUM;
         public static final int AnimatedStickers = NUM;
         public static final int AnonymousPoll = NUM;
+        public static final int AnonymousQuizPoll = NUM;
         public static final int ApkRestricted = NUM;
         public static final int AppFolderInfo = NUM;
         public static final int AppName = NUM;
@@ -2891,6 +2901,7 @@ public final class R {
         public static final int MessageScheduledReminderNotification = NUM;
         public static final int MessageScheduledUntilOnline = NUM;
         public static final int MessageScheduledVote = NUM;
+        public static final int MessageScheduledVoteResults = NUM;
         public static final int MessagesDataUsage = NUM;
         public static final int MessagesSettings = NUM;
         public static final int MetersAway2 = NUM;
@@ -3017,6 +3028,7 @@ public final class R {
         public static final int NoStickersFound = NUM;
         public static final int NoUsernameFound = NUM;
         public static final int NoVotes = NUM;
+        public static final int NoVotesQuiz = NUM;
         public static final int NobodyLikesSpam1 = NUM;
         public static final int NobodyLikesSpam2 = NUM;
         public static final int NobodyLikesSpam3 = NUM;
@@ -3561,7 +3573,17 @@ public final class R {
         public static final int Points_two = NUM;
         public static final int Points_zero = NUM;
         public static final int Poll = NUM;
+        public static final int PollAnonymous = NUM;
+        public static final int PollCantForwardSecretChat = NUM;
+        public static final int PollCollapse = NUM;
+        public static final int PollExpand = NUM;
+        public static final int PollMultiple = NUM;
         public static final int PollOptions = NUM;
+        public static final int PollQuiz = NUM;
+        public static final int PollResults = NUM;
+        public static final int PollSubmitVotes = NUM;
+        public static final int PollTapToSelect = NUM;
+        public static final int PollViewResults = NUM;
         public static final int PopupDisabled = NUM;
         public static final int PopupEnabled = NUM;
         public static final int PopupNotification = NUM;
@@ -3618,6 +3640,8 @@ public final class R {
         public static final int ProxyDetails = NUM;
         public static final int ProxySettings = NUM;
         public static final int PublicChannelsTooMuch = NUM;
+        public static final int PublicPoll = NUM;
+        public static final int PublicPollCantForward = NUM;
         public static final int Purple = NUM;
         public static final int Question = NUM;
         public static final int QuestionHint = NUM;
@@ -3626,6 +3650,12 @@ public final class R {
         public static final int QuickReplyDefault2 = NUM;
         public static final int QuickReplyDefault3 = NUM;
         public static final int QuickReplyDefault4 = NUM;
+        public static final int QuizInfo = NUM;
+        public static final int QuizPoll = NUM;
+        public static final int QuizWellDone = NUM;
+        public static final int QuizWellDoneInfo = NUM;
+        public static final int QuizWrongAnswer = NUM;
+        public static final int QuizWrongAnswerInfo = NUM;
         public static final int RaiseToSpeak = NUM;
         public static final int RateCallDistorted = NUM;
         public static final int RateCallDropped = NUM;
@@ -3753,6 +3783,7 @@ public final class R {
         public static final int ScheduleMessage = NUM;
         public static final int ScheduleWhenOnline = NUM;
         public static final int ScheduledMessages = NUM;
+        public static final int ScheduledOrNoSoundHint = NUM;
         public static final int ScreenCapture = NUM;
         public static final int ScreenCaptureAlert = NUM;
         public static final int ScreenCaptureInfo = NUM;
@@ -3924,6 +3955,12 @@ public final class R {
         public static final int ShowInChat = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
+        public static final int ShowVotes_few = NUM;
+        public static final int ShowVotes_many = NUM;
+        public static final int ShowVotes_one = NUM;
+        public static final int ShowVotes_other = NUM;
+        public static final int ShowVotes_two = NUM;
+        public static final int ShowVotes_zero = NUM;
         public static final int Shuffle = NUM;
         public static final int SignUp = NUM;
         public static final int SinglePhotosHelp = NUM;
@@ -3983,6 +4020,9 @@ public final class R {
         public static final int StopPoll = NUM;
         public static final int StopPollAlertText = NUM;
         public static final int StopPollAlertTitle = NUM;
+        public static final int StopQuiz = NUM;
+        public static final int StopQuizAlertText = NUM;
+        public static final int StopQuizAlertTitle = NUM;
         public static final int StopVerification = NUM;
         public static final int StorageUsage = NUM;
         public static final int Streaming = NUM;
@@ -4323,6 +4363,12 @@ public final class R {
         public static final int VoipSettingsRingtone = NUM;
         public static final int VoipUseLessData = NUM;
         public static final int VoipWaiting = NUM;
+        public static final int VoteQuiz_few = NUM;
+        public static final int VoteQuiz_many = NUM;
+        public static final int VoteQuiz_one = NUM;
+        public static final int VoteQuiz_other = NUM;
+        public static final int VoteQuiz_two = NUM;
+        public static final int VoteQuiz_zero = NUM;
         public static final int Vote_few = NUM;
         public static final int Vote_many = NUM;
         public static final int Vote_one = NUM;

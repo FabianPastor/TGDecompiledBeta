@@ -41,7 +41,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     private int timeX;
     private boolean wasLayout = false;
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public /* synthetic */ void onSeekBarContinuousDrag(float f) {
@@ -361,8 +361,8 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         updateButtonState();
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.progressView.setProgress(f);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)));
         if (this.buttonState != 3) {
             updateButtonState();
         }

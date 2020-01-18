@@ -133,7 +133,7 @@ public class FileLoadOperation {
     private InputWebFileLocation webLocation;
 
     public interface FileLoadOperationDelegate {
-        void didChangedLoadProgress(FileLoadOperation fileLoadOperation, float f);
+        void didChangedLoadProgress(FileLoadOperation fileLoadOperation, long j, long j2);
 
         void didFailedLoadingFile(FileLoadOperation fileLoadOperation, int i);
 
@@ -770,72 +770,52 @@ public class FileLoadOperation {
         return start(null, 0, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0588 A:{SYNTHETIC, Splitter:B:191:0x0588} */
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x060d  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x05a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x05a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x060d  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x05b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x066b  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0614  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x06be  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x0766 A:{Catch:{ Exception -> 0x076f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x077b  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x0777  */
     /* JADX WARNING: Removed duplicated region for block: B:132:0x047e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x060d  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x05a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0588 A:{SYNTHETIC, Splitter:B:191:0x0588} */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x05a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:218:0x060d  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0617  */
-    /* JADX WARNING: Removed duplicated region for block: B:234:0x066e  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0695  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x06c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x076e A:{Catch:{ Exception -> 0x0777 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0783  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x05b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0614  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x066b  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x06be  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x0766 A:{Catch:{ Exception -> 0x076f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x0777  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x077b  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x058e A:{SYNTHETIC, Splitter:B:191:0x058e} */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x05b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x066b  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0614  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x06be  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x0766 A:{Catch:{ Exception -> 0x076f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x077b  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x0777  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x058e A:{SYNTHETIC, Splitter:B:191:0x058e} */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x05b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0614  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x066b  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x06be  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x06fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x0766 A:{Catch:{ Exception -> 0x076f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x0777  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x077b  */
     /* JADX WARNING: Missing block: B:102:0x03c3, code skipped:
             if (((long) r5) != r7.cacheFileFinal.length()) goto L_0x03c5;
      */
-    public boolean start(org.telegram.messenger.FileLoadOperationStream r24, int r25, boolean r26) {
+    public boolean start(org.telegram.messenger.FileLoadOperationStream r23, int r24, boolean r25) {
         /*
-        r23 = this;
-        r7 = r23;
+        r22 = this;
+        r7 = r22;
         r0 = r7.currentDownloadChunkSize;
         if (r0 != 0) goto L_0x001b;
     L_0x0006:
@@ -866,15 +846,15 @@ public class FileLoadOperation {
     L_0x0024:
         r10 = r7.paused;
         r7.paused = r9;
-        if (r24 == 0) goto L_0x003f;
+        if (r23 == 0) goto L_0x003f;
     L_0x002a:
         r11 = org.telegram.messenger.Utilities.stageQueue;
         r12 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$ueOLhTDJvcCHBhZ6A3pTvCfLNBQ;
         r1 = r12;
-        r2 = r23;
-        r3 = r26;
-        r4 = r25;
-        r5 = r24;
+        r2 = r22;
+        r3 = r25;
+        r4 = r24;
+        r5 = r23;
         r6 = r0;
         r1.<init>(r2, r3, r4, r5, r6);
         r11.postRunnable(r12);
@@ -903,7 +883,7 @@ public class FileLoadOperation {
         return r9;
     L_0x005c:
         r0 = r7.currentDownloadChunkSize;
-        r1 = r25 / r0;
+        r1 = r24 / r0;
         r1 = r1 * r0;
         r7.streamStartOffset = r1;
         r1 = r7.allowDisordererFileSave;
@@ -990,9 +970,9 @@ public class FileLoadOperation {
     L_0x010f:
         r2 = 0;
         r12 = 0;
-        r22 = r1;
+        r21 = r1;
         r1 = r0;
-        r0 = r22;
+        r0 = r21;
         goto L_0x035e;
     L_0x0118:
         r0 = r7.location;
@@ -1139,14 +1119,14 @@ public class FileLoadOperation {
         return r9;
     L_0x024c:
         r0 = r7.datacenterId;
-        if (r0 == 0) goto L_0x079a;
+        if (r0 == 0) goto L_0x0792;
     L_0x0250:
         r0 = r7.location;
         r12 = r0.id;
         r0 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1));
         if (r0 != 0) goto L_0x025a;
     L_0x0258:
-        goto L_0x079a;
+        goto L_0x0792;
     L_0x025a:
         r0 = r7.encryptFile;
         if (r0 == 0) goto L_0x02bf;
@@ -1264,10 +1244,10 @@ public class FileLoadOperation {
         r2.append(r4);
         r2 = r2.toString();
     L_0x0358:
-        r22 = r12;
+        r21 = r12;
         r12 = r0;
         r0 = r1;
-        r1 = r22;
+        r1 = r21;
     L_0x035e:
         r4 = new java.util.ArrayList;
         r5 = r7.currentMaxDownloadRequests;
@@ -1325,7 +1305,7 @@ public class FileLoadOperation {
         r4.delete();
         r4 = 0;
     L_0x03cb:
-        if (r4 != 0) goto L_0x0790;
+        if (r4 != 0) goto L_0x0788;
     L_0x03cd:
         r4 = new java.io.File;
         r5 = r7.tempPath;
@@ -1347,53 +1327,53 @@ public class FileLoadOperation {
     L_0x03f4:
         r0 = r7.encryptFile;
         r4 = 32;
-        r5 = "rws";
+        r13 = "rws";
         if (r0 == 0) goto L_0x0473;
     L_0x03fc:
         r0 = new java.io.File;
-        r6 = org.telegram.messenger.FileLoader.getInternalCacheDir();
-        r13 = new java.lang.StringBuilder;
-        r13.<init>();
-        r13.append(r3);
+        r5 = org.telegram.messenger.FileLoader.getInternalCacheDir();
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r6.append(r3);
         r3 = ".key";
-        r13.append(r3);
-        r3 = r13.toString();
-        r0.<init>(r6, r3);
+        r6.append(r3);
+        r3 = r6.toString();
+        r0.<init>(r5, r3);
         r3 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x046d }
-        r3.<init>(r0, r5);	 Catch:{ Exception -> 0x046d }
-        r13 = r0.length();	 Catch:{ Exception -> 0x046d }
+        r3.<init>(r0, r13);	 Catch:{ Exception -> 0x046d }
+        r5 = r0.length();	 Catch:{ Exception -> 0x046d }
         r0 = new byte[r4];	 Catch:{ Exception -> 0x046d }
         r7.encryptKey = r0;	 Catch:{ Exception -> 0x046d }
         r0 = 16;
         r0 = new byte[r0];	 Catch:{ Exception -> 0x046d }
         r7.encryptIv = r0;	 Catch:{ Exception -> 0x046d }
-        r0 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1));
+        r0 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1));
         if (r0 <= 0) goto L_0x0442;
     L_0x042d:
-        r15 = 48;
-        r13 = r13 % r15;
-        r0 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1));
+        r14 = 48;
+        r5 = r5 % r14;
+        r0 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1));
         if (r0 != 0) goto L_0x0442;
     L_0x0434:
         r0 = r7.encryptKey;	 Catch:{ Exception -> 0x046d }
         r3.read(r0, r9, r4);	 Catch:{ Exception -> 0x046d }
         r0 = r7.encryptIv;	 Catch:{ Exception -> 0x046d }
-        r6 = 16;
-        r3.read(r0, r9, r6);	 Catch:{ Exception -> 0x046d }
-        r6 = 0;
+        r5 = 16;
+        r3.read(r0, r9, r5);	 Catch:{ Exception -> 0x046d }
+        r5 = 0;
         goto L_0x045b;
     L_0x0442:
         r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x046d }
-        r6 = r7.encryptKey;	 Catch:{ Exception -> 0x046d }
-        r0.nextBytes(r6);	 Catch:{ Exception -> 0x046d }
+        r5 = r7.encryptKey;	 Catch:{ Exception -> 0x046d }
+        r0.nextBytes(r5);	 Catch:{ Exception -> 0x046d }
         r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x046d }
-        r6 = r7.encryptIv;	 Catch:{ Exception -> 0x046d }
-        r0.nextBytes(r6);	 Catch:{ Exception -> 0x046d }
+        r5 = r7.encryptIv;	 Catch:{ Exception -> 0x046d }
+        r0.nextBytes(r5);	 Catch:{ Exception -> 0x046d }
         r0 = r7.encryptKey;	 Catch:{ Exception -> 0x046d }
         r3.write(r0);	 Catch:{ Exception -> 0x046d }
         r0 = r7.encryptIv;	 Catch:{ Exception -> 0x046d }
         r3.write(r0);	 Catch:{ Exception -> 0x046d }
-        r6 = 1;
+        r5 = 1;
     L_0x045b:
         r0 = r3.getChannel();	 Catch:{ Exception -> 0x0463 }
         r0.close();	 Catch:{ Exception -> 0x0463 }
@@ -1409,40 +1389,40 @@ public class FileLoadOperation {
         goto L_0x046f;
     L_0x046d:
         r0 = move-exception;
-        r6 = 0;
+        r5 = 0;
     L_0x046f:
         org.telegram.messenger.FileLog.e(r0);
         goto L_0x0474;
     L_0x0473:
-        r6 = 0;
+        r5 = 0;
     L_0x0474:
-        r3 = new boolean[r8];
-        r3[r9] = r9;
+        r14 = new boolean[r8];
+        r14[r9] = r9;
         r0 = r7.supportsPreloading;
-        r13 = 4;
-        if (r0 == 0) goto L_0x05a4;
+        r15 = 4;
+        if (r0 == 0) goto L_0x05aa;
     L_0x047e:
-        if (r2 == 0) goto L_0x05a4;
+        if (r2 == 0) goto L_0x05aa;
     L_0x0480:
         r0 = new java.io.File;
-        r15 = r7.tempPath;
-        r0.<init>(r15, r2);
+        r3 = r7.tempPath;
+        r0.<init>(r3, r2);
         r7.cacheFilePreload = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0573 }
-        r2 = r7.cacheFilePreload;	 Catch:{ Exception -> 0x0573 }
-        r0.<init>(r2, r5);	 Catch:{ Exception -> 0x0573 }
-        r7.preloadStream = r0;	 Catch:{ Exception -> 0x0573 }
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0573 }
-        r15 = r0.length();	 Catch:{ Exception -> 0x0573 }
-        r7.preloadStreamFileOffset = r8;	 Catch:{ Exception -> 0x0573 }
-        r10 = (long) r9;	 Catch:{ Exception -> 0x0573 }
-        r10 = r15 - r10;
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0577 }
+        r2 = r7.cacheFilePreload;	 Catch:{ Exception -> 0x0577 }
+        r0.<init>(r2, r13);	 Catch:{ Exception -> 0x0577 }
+        r7.preloadStream = r0;	 Catch:{ Exception -> 0x0577 }
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0577 }
+        r2 = r0.length();	 Catch:{ Exception -> 0x0577 }
+        r7.preloadStreamFileOffset = r8;	 Catch:{ Exception -> 0x0577 }
+        r10 = (long) r9;	 Catch:{ Exception -> 0x0577 }
+        r10 = r2 - r10;
         r17 = 1;
         r0 = (r10 > r17 ? 1 : (r10 == r17 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0566;
+        if (r0 <= 0) goto L_0x0568;
     L_0x04a3:
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0573 }
-        r0 = r0.readByte();	 Catch:{ Exception -> 0x0573 }
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0577 }
+        r0 = r0.readByte();	 Catch:{ Exception -> 0x0577 }
         if (r0 == 0) goto L_0x04ad;
     L_0x04ab:
         r0 = 1;
@@ -1450,330 +1430,325 @@ public class FileLoadOperation {
     L_0x04ad:
         r0 = 0;
     L_0x04ae:
-        r3[r9] = r0;	 Catch:{ Exception -> 0x0573 }
+        r14[r9] = r0;	 Catch:{ Exception -> 0x0577 }
         r0 = 1;
     L_0x04b1:
-        r10 = (long) r0;	 Catch:{ Exception -> 0x0573 }
-        r2 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0566;
+        r10 = (long) r0;	 Catch:{ Exception -> 0x0577 }
+        r6 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1));
+        if (r6 >= 0) goto L_0x0568;
     L_0x04b6:
-        r10 = r15 - r10;
-        r2 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
-        if (r2 >= 0) goto L_0x04be;
+        r10 = r2 - r10;
+        r6 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1));
+        if (r6 >= 0) goto L_0x04be;
     L_0x04bc:
-        goto L_0x0566;
+        goto L_0x0568;
     L_0x04be:
-        r2 = r7.preloadStream;	 Catch:{ Exception -> 0x0573 }
-        r2 = r2.readInt();	 Catch:{ Exception -> 0x0573 }
+        r6 = r7.preloadStream;	 Catch:{ Exception -> 0x0577 }
+        r6 = r6.readInt();	 Catch:{ Exception -> 0x0577 }
         r0 = r0 + 4;
-        r10 = (long) r0;	 Catch:{ Exception -> 0x0573 }
-        r10 = r15 - r10;
-        r17 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
-        if (r17 < 0) goto L_0x0566;
+        r10 = (long) r0;	 Catch:{ Exception -> 0x0577 }
+        r10 = r2 - r10;
+        r17 = (r10 > r15 ? 1 : (r10 == r15 ? 0 : -1));
+        if (r17 < 0) goto L_0x0568;
     L_0x04cd:
-        if (r2 < 0) goto L_0x0566;
+        if (r6 < 0) goto L_0x0568;
     L_0x04cf:
-        r10 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0573 }
-        if (r2 <= r10) goto L_0x04d5;
+        r10 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0577 }
+        if (r6 <= r10) goto L_0x04d5;
     L_0x04d3:
-        goto L_0x0566;
+        goto L_0x0568;
     L_0x04d5:
-        r10 = r7.preloadStream;	 Catch:{ Exception -> 0x0573 }
-        r10 = r10.readInt();	 Catch:{ Exception -> 0x0573 }
+        r10 = r7.preloadStream;	 Catch:{ Exception -> 0x0577 }
+        r10 = r10.readInt();	 Catch:{ Exception -> 0x0577 }
         r0 = r0 + 4;
-        r13 = (long) r0;
-        r13 = r15 - r13;
-        r19 = r5;
-        r4 = (long) r10;
-        r20 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1));
-        if (r20 < 0) goto L_0x0568;
-    L_0x04e7:
-        r4 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0571 }
-        if (r10 <= r4) goto L_0x04ed;
-    L_0x04eb:
-        goto L_0x0568;
+        r17 = r5;
+        r4 = (long) r0;
+        r4 = r2 - r4;
+        r18 = r12;
+        r11 = (long) r10;
+        r19 = (r4 > r11 ? 1 : (r4 == r11 ? 0 : -1));
+        if (r19 < 0) goto L_0x056c;
+    L_0x04e9:
+        r4 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0575 }
+        if (r10 <= r4) goto L_0x04ef;
     L_0x04ed:
-        r4 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x0571 }
+        goto L_0x056c;
+    L_0x04ef:
+        r4 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x0575 }
         r5 = 0;
-        r4.<init>(r0, r10);	 Catch:{ Exception -> 0x0571 }
+        r4.<init>(r0, r10);	 Catch:{ Exception -> 0x0575 }
         r0 = r0 + r10;
-        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0571 }
-        r13 = (long) r0;	 Catch:{ Exception -> 0x0571 }
-        r5.seek(r13);	 Catch:{ Exception -> 0x0571 }
-        r13 = r15 - r13;
-        r20 = 12;
-        r5 = (r13 > r20 ? 1 : (r13 == r20 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0503;
-    L_0x0502:
-        goto L_0x0568;
-    L_0x0503:
-        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0571 }
-        r5 = r5.readInt();	 Catch:{ Exception -> 0x0571 }
-        r7.foundMoovSize = r5;	 Catch:{ Exception -> 0x0571 }
-        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0571 }
-        if (r5 == 0) goto L_0x0520;
-    L_0x050f:
-        r5 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0571 }
-        r13 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0571 }
-        r13 = r13 / 2;
-        if (r5 <= r13) goto L_0x0519;
-    L_0x0517:
-        r5 = 2;
-        goto L_0x051a;
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0575 }
+        r11 = (long) r0;	 Catch:{ Exception -> 0x0575 }
+        r5.seek(r11);	 Catch:{ Exception -> 0x0575 }
+        r11 = r2 - r11;
+        r19 = 12;
+        r5 = (r11 > r19 ? 1 : (r11 == r19 ? 0 : -1));
+        if (r5 >= 0) goto L_0x0505;
+    L_0x0504:
+        goto L_0x056c;
+    L_0x0505:
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0575 }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x0575 }
+        r7.foundMoovSize = r5;	 Catch:{ Exception -> 0x0575 }
+        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0575 }
+        if (r5 == 0) goto L_0x0522;
+    L_0x0511:
+        r5 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0575 }
+        r11 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0575 }
+        r11 = r11 / 2;
+        if (r5 <= r11) goto L_0x051b;
     L_0x0519:
+        r5 = 2;
+        goto L_0x051c;
+    L_0x051b:
         r5 = 1;
-    L_0x051a:
-        r7.moovFound = r5;	 Catch:{ Exception -> 0x0571 }
-        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0571 }
-        r7.preloadNotRequestedBytesCount = r5;	 Catch:{ Exception -> 0x0571 }
-    L_0x0520:
-        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0571 }
-        r5 = r5.readInt();	 Catch:{ Exception -> 0x0571 }
-        r7.nextPreloadDownloadOffset = r5;	 Catch:{ Exception -> 0x0571 }
-        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0571 }
-        r5 = r5.readInt();	 Catch:{ Exception -> 0x0571 }
-        r7.nextAtomOffset = r5;	 Catch:{ Exception -> 0x0571 }
+    L_0x051c:
+        r7.moovFound = r5;	 Catch:{ Exception -> 0x0575 }
+        r5 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0575 }
+        r7.preloadNotRequestedBytesCount = r5;	 Catch:{ Exception -> 0x0575 }
+    L_0x0522:
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0575 }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x0575 }
+        r7.nextPreloadDownloadOffset = r5;	 Catch:{ Exception -> 0x0575 }
+        r5 = r7.preloadStream;	 Catch:{ Exception -> 0x0575 }
+        r5 = r5.readInt();	 Catch:{ Exception -> 0x0575 }
+        r7.nextAtomOffset = r5;	 Catch:{ Exception -> 0x0575 }
         r0 = r0 + 12;
-        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0571 }
-        if (r5 != 0) goto L_0x053d;
-    L_0x0536:
-        r5 = new android.util.SparseArray;	 Catch:{ Exception -> 0x0571 }
-        r5.<init>();	 Catch:{ Exception -> 0x0571 }
-        r7.preloadedBytesRanges = r5;	 Catch:{ Exception -> 0x0571 }
-    L_0x053d:
-        r5 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0571 }
-        if (r5 != 0) goto L_0x0548;
-    L_0x0541:
-        r5 = new android.util.SparseIntArray;	 Catch:{ Exception -> 0x0571 }
-        r5.<init>();	 Catch:{ Exception -> 0x0571 }
-        r7.requestedPreloadedBytesRanges = r5;	 Catch:{ Exception -> 0x0571 }
-    L_0x0548:
-        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0571 }
-        r5.put(r2, r4);	 Catch:{ Exception -> 0x0571 }
-        r4 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0571 }
-        r4.put(r2, r8);	 Catch:{ Exception -> 0x0571 }
-        r2 = r7.totalPreloadedBytes;	 Catch:{ Exception -> 0x0571 }
-        r2 = r2 + r10;
-        r7.totalPreloadedBytes = r2;	 Catch:{ Exception -> 0x0571 }
-        r2 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0571 }
+        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0575 }
+        if (r5 != 0) goto L_0x053f;
+    L_0x0538:
+        r5 = new android.util.SparseArray;	 Catch:{ Exception -> 0x0575 }
+        r5.<init>();	 Catch:{ Exception -> 0x0575 }
+        r7.preloadedBytesRanges = r5;	 Catch:{ Exception -> 0x0575 }
+    L_0x053f:
+        r5 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0575 }
+        if (r5 != 0) goto L_0x054a;
+    L_0x0543:
+        r5 = new android.util.SparseIntArray;	 Catch:{ Exception -> 0x0575 }
+        r5.<init>();	 Catch:{ Exception -> 0x0575 }
+        r7.requestedPreloadedBytesRanges = r5;	 Catch:{ Exception -> 0x0575 }
+    L_0x054a:
+        r5 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0575 }
+        r5.put(r6, r4);	 Catch:{ Exception -> 0x0575 }
+        r4 = r7.requestedPreloadedBytesRanges;	 Catch:{ Exception -> 0x0575 }
+        r4.put(r6, r8);	 Catch:{ Exception -> 0x0575 }
+        r4 = r7.totalPreloadedBytes;	 Catch:{ Exception -> 0x0575 }
+        r4 = r4 + r10;
+        r7.totalPreloadedBytes = r4;	 Catch:{ Exception -> 0x0575 }
+        r4 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0575 }
         r10 = r10 + 20;
-        r2 = r2 + r10;
-        r7.preloadStreamFileOffset = r2;	 Catch:{ Exception -> 0x0571 }
-        r5 = r19;
+        r4 = r4 + r10;
+        r7.preloadStreamFileOffset = r4;	 Catch:{ Exception -> 0x0575 }
+        r5 = r17;
+        r12 = r18;
         r4 = 32;
-        r13 = 4;
         goto L_0x04b1;
-    L_0x0566:
-        r19 = r5;
     L_0x0568:
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0571 }
-        r2 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0571 }
-        r4 = (long) r2;	 Catch:{ Exception -> 0x0571 }
-        r0.seek(r4);	 Catch:{ Exception -> 0x0571 }
-        goto L_0x0579;
-    L_0x0571:
+        r17 = r5;
+        r18 = r12;
+    L_0x056c:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0575 }
+        r2 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0575 }
+        r2 = (long) r2;	 Catch:{ Exception -> 0x0575 }
+        r0.seek(r2);	 Catch:{ Exception -> 0x0575 }
+        goto L_0x057f;
+    L_0x0575:
         r0 = move-exception;
-        goto L_0x0576;
-    L_0x0573:
+        goto L_0x057c;
+    L_0x0577:
         r0 = move-exception;
-        r19 = r5;
-    L_0x0576:
+        r17 = r5;
+        r18 = r12;
+    L_0x057c:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0579:
+    L_0x057f:
         r0 = r7.isPreloadVideoOperation;
-        if (r0 != 0) goto L_0x05a6;
-    L_0x057d:
+        if (r0 != 0) goto L_0x05ae;
+    L_0x0583:
         r0 = r7.preloadedBytesRanges;
-        if (r0 != 0) goto L_0x05a6;
-    L_0x0581:
+        if (r0 != 0) goto L_0x05ae;
+    L_0x0587:
         r2 = 0;
         r7.cacheFilePreload = r2;
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x059f }
-        if (r0 == 0) goto L_0x05a6;
-    L_0x0588:
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0592 }
-        r0 = r0.getChannel();	 Catch:{ Exception -> 0x0592 }
-        r0.close();	 Catch:{ Exception -> 0x0592 }
-        goto L_0x0596;
-    L_0x0592:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x05a5 }
+        if (r0 == 0) goto L_0x05ae;
+    L_0x058e:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0598 }
+        r0 = r0.getChannel();	 Catch:{ Exception -> 0x0598 }
+        r0.close();	 Catch:{ Exception -> 0x0598 }
+        goto L_0x059c;
+    L_0x0598:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x059f }
-    L_0x0596:
-        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x059f }
-        r0.close();	 Catch:{ Exception -> 0x059f }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x05a5 }
+    L_0x059c:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x05a5 }
+        r0.close();	 Catch:{ Exception -> 0x05a5 }
         r2 = 0;
-        r7.preloadStream = r2;	 Catch:{ Exception -> 0x059f }
-        goto L_0x05a6;
-    L_0x059f:
+        r7.preloadStream = r2;	 Catch:{ Exception -> 0x05a5 }
+        goto L_0x05ae;
+    L_0x05a5:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x05a6;
-    L_0x05a4:
-        r19 = r5;
-    L_0x05a6:
-        if (r12 == 0) goto L_0x060d;
-    L_0x05a8:
+        goto L_0x05ae;
+    L_0x05aa:
+        r17 = r5;
+        r18 = r12;
+    L_0x05ae:
+        if (r18 == 0) goto L_0x060c;
+    L_0x05b0:
         r0 = new java.io.File;
         r2 = r7.tempPath;
+        r12 = r18;
         r0.<init>(r2, r12);
         r7.cacheFileParts = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0606 }
-        r2 = r7.cacheFileParts;	 Catch:{ Exception -> 0x0606 }
-        r4 = r19;
-        r0.<init>(r2, r4);	 Catch:{ Exception -> 0x0604 }
-        r7.filePartsStream = r0;	 Catch:{ Exception -> 0x0604 }
-        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x0604 }
-        r12 = r0.length();	 Catch:{ Exception -> 0x0604 }
-        r14 = 8;
-        r14 = r12 % r14;
-        r16 = 4;
-        r0 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
-        if (r0 != 0) goto L_0x060f;
-    L_0x05cc:
-        r12 = r12 - r16;
-        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x0604 }
-        r0 = r0.readInt();	 Catch:{ Exception -> 0x0604 }
-        r14 = (long) r0;	 Catch:{ Exception -> 0x0604 }
-        r16 = 2;
-        r12 = r12 / r16;
-        r2 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1));
-        if (r2 > 0) goto L_0x060f;
-    L_0x05dd:
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0608 }
+        r2 = r7.cacheFileParts;	 Catch:{ Exception -> 0x0608 }
+        r0.<init>(r2, r13);	 Catch:{ Exception -> 0x0608 }
+        r7.filePartsStream = r0;	 Catch:{ Exception -> 0x0608 }
+        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x0608 }
+        r2 = r0.length();	 Catch:{ Exception -> 0x0608 }
+        r4 = 8;
+        r4 = r2 % r4;
+        r0 = (r4 > r15 ? 1 : (r4 == r15 ? 0 : -1));
+        if (r0 != 0) goto L_0x060c;
+    L_0x05d2:
+        r2 = r2 - r15;
+        r0 = r7.filePartsStream;	 Catch:{ Exception -> 0x0608 }
+        r0 = r0.readInt();	 Catch:{ Exception -> 0x0608 }
+        r4 = (long) r0;	 Catch:{ Exception -> 0x0608 }
+        r10 = 2;
+        r2 = r2 / r10;
+        r6 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1));
+        if (r6 > 0) goto L_0x060c;
+    L_0x05e1:
         r2 = 0;
-    L_0x05de:
-        if (r2 >= r0) goto L_0x060f;
-    L_0x05e0:
-        r5 = r7.filePartsStream;	 Catch:{ Exception -> 0x0604 }
-        r5 = r5.readInt();	 Catch:{ Exception -> 0x0604 }
-        r10 = r7.filePartsStream;	 Catch:{ Exception -> 0x0604 }
-        r10 = r10.readInt();	 Catch:{ Exception -> 0x0604 }
-        r12 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0604 }
-        r13 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x0604 }
-        r14 = 0;
-        r13.<init>(r5, r10);	 Catch:{ Exception -> 0x0604 }
-        r12.add(r13);	 Catch:{ Exception -> 0x0604 }
-        r12 = r7.notRequestedBytesRanges;	 Catch:{ Exception -> 0x0604 }
-        r13 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x0604 }
-        r13.<init>(r5, r10);	 Catch:{ Exception -> 0x0604 }
-        r12.add(r13);	 Catch:{ Exception -> 0x0604 }
+    L_0x05e2:
+        if (r2 >= r0) goto L_0x060c;
+    L_0x05e4:
+        r3 = r7.filePartsStream;	 Catch:{ Exception -> 0x0608 }
+        r3 = r3.readInt();	 Catch:{ Exception -> 0x0608 }
+        r4 = r7.filePartsStream;	 Catch:{ Exception -> 0x0608 }
+        r4 = r4.readInt();	 Catch:{ Exception -> 0x0608 }
+        r5 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0608 }
+        r6 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x0608 }
+        r10 = 0;
+        r6.<init>(r3, r4);	 Catch:{ Exception -> 0x0608 }
+        r5.add(r6);	 Catch:{ Exception -> 0x0608 }
+        r5 = r7.notRequestedBytesRanges;	 Catch:{ Exception -> 0x0608 }
+        r6 = new org.telegram.messenger.FileLoadOperation$Range;	 Catch:{ Exception -> 0x0608 }
+        r6.<init>(r3, r4);	 Catch:{ Exception -> 0x0608 }
+        r5.add(r6);	 Catch:{ Exception -> 0x0608 }
         r2 = r2 + 1;
-        goto L_0x05de;
-    L_0x0604:
+        goto L_0x05e2;
+    L_0x0608:
         r0 = move-exception;
-        goto L_0x0609;
-    L_0x0606:
-        r0 = move-exception;
-        r4 = r19;
-    L_0x0609:
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x060f;
-    L_0x060d:
-        r4 = r19;
-    L_0x060f:
+    L_0x060c:
         r0 = r7.cacheFileTemp;
         r0 = r0.exists();
-        if (r0 == 0) goto L_0x066e;
-    L_0x0617:
-        if (r6 == 0) goto L_0x061f;
-    L_0x0619:
+        if (r0 == 0) goto L_0x066b;
+    L_0x0614:
+        if (r17 == 0) goto L_0x061c;
+    L_0x0616:
         r0 = r7.cacheFileTemp;
         r0.delete();
-        goto L_0x0691;
-    L_0x061f:
+        goto L_0x068e;
+    L_0x061c:
         r0 = r7.cacheFileTemp;
-        r12 = r0.length();
-        if (r1 == 0) goto L_0x0636;
-    L_0x0627:
+        r2 = r0.length();
+        if (r1 == 0) goto L_0x0633;
+    L_0x0624:
         r0 = r7.currentDownloadChunkSize;
-        r14 = (long) r0;
-        r12 = r12 % r14;
-        r14 = 0;
-        r0 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1));
-        if (r0 == 0) goto L_0x0636;
-    L_0x0631:
+        r4 = (long) r0;
+        r2 = r2 % r4;
+        r4 = 0;
+        r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
+        if (r0 == 0) goto L_0x0633;
+    L_0x062e:
         r7.downloadedBytes = r9;
         r7.requestedBytesCount = r9;
-        goto L_0x0646;
-    L_0x0636:
+        goto L_0x0643;
+    L_0x0633:
         r0 = r7.cacheFileTemp;
-        r12 = r0.length();
-        r0 = (int) r12;
+        r2 = r0.length();
+        r0 = (int) r2;
         r2 = r7.currentDownloadChunkSize;
         r0 = r0 / r2;
         r0 = r0 * r2;
         r7.downloadedBytes = r0;
         r7.requestedBytesCount = r0;
-    L_0x0646:
+    L_0x0643:
         r0 = r7.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x0691;
-    L_0x064a:
+        if (r0 == 0) goto L_0x068e;
+    L_0x0647:
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x0691;
-    L_0x0650:
+        if (r0 == 0) goto L_0x068e;
+    L_0x064d:
         r0 = r7.notLoadedBytesRanges;
         r2 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r7.downloadedBytes;
-        r10 = r7.totalBytesCount;
-        r12 = 0;
-        r2.<init>(r5, r10);
+        r3 = r7.downloadedBytes;
+        r4 = r7.totalBytesCount;
+        r5 = 0;
+        r2.<init>(r3, r4);
         r0.add(r2);
         r0 = r7.notRequestedBytesRanges;
         r2 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r7.downloadedBytes;
-        r10 = r7.totalBytesCount;
-        r2.<init>(r5, r10);
+        r3 = r7.downloadedBytes;
+        r4 = r7.totalBytesCount;
+        r2.<init>(r3, r4);
         r0.add(r2);
-        goto L_0x0691;
-    L_0x066e:
+        goto L_0x068e;
+    L_0x066b:
         r0 = r7.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x0691;
-    L_0x0672:
+        if (r0 == 0) goto L_0x068e;
+    L_0x066f:
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x0691;
-    L_0x0678:
+        if (r0 == 0) goto L_0x068e;
+    L_0x0675:
         r0 = r7.notLoadedBytesRanges;
         r2 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r7.totalBytesCount;
-        r10 = 0;
-        r2.<init>(r9, r5);
+        r3 = r7.totalBytesCount;
+        r4 = 0;
+        r2.<init>(r9, r3);
         r0.add(r2);
         r0 = r7.notRequestedBytesRanges;
         r2 = new org.telegram.messenger.FileLoadOperation$Range;
-        r5 = r7.totalBytesCount;
-        r2.<init>(r9, r5);
+        r3 = r7.totalBytesCount;
+        r2.<init>(r9, r3);
         r0.add(r2);
-    L_0x0691:
+    L_0x068e:
         r0 = r7.notLoadedBytesRanges;
-        if (r0 == 0) goto L_0x06bd;
-    L_0x0695:
+        if (r0 == 0) goto L_0x06ba;
+    L_0x0692:
         r2 = r7.totalBytesCount;
         r7.downloadedBytes = r2;
         r0 = r0.size();
         r2 = 0;
-    L_0x069e:
-        if (r2 >= r0) goto L_0x06b9;
-    L_0x06a0:
-        r5 = r7.notLoadedBytesRanges;
-        r5 = r5.get(r2);
-        r5 = (org.telegram.messenger.FileLoadOperation.Range) r5;
-        r10 = r7.downloadedBytes;
-        r12 = r5.end;
-        r5 = r5.start;
-        r12 = r12 - r5;
-        r10 = r10 - r12;
-        r7.downloadedBytes = r10;
+    L_0x069b:
+        if (r2 >= r0) goto L_0x06b6;
+    L_0x069d:
+        r3 = r7.notLoadedBytesRanges;
+        r3 = r3.get(r2);
+        r3 = (org.telegram.messenger.FileLoadOperation.Range) r3;
+        r4 = r7.downloadedBytes;
+        r5 = r3.end;
+        r3 = r3.start;
+        r5 = r5 - r3;
+        r4 = r4 - r5;
+        r7.downloadedBytes = r4;
         r2 = r2 + 1;
-        goto L_0x069e;
-    L_0x06b9:
+        goto L_0x069b;
+    L_0x06b6:
         r0 = r7.downloadedBytes;
         r7.requestedBytesCount = r0;
-    L_0x06bd:
+    L_0x06ba:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x06fc;
-    L_0x06c1:
+        if (r0 == 0) goto L_0x06f9;
+    L_0x06be:
         r0 = r7.isPreloadVideoOperation;
-        if (r0 == 0) goto L_0x06dc;
-    L_0x06c5:
+        if (r0 == 0) goto L_0x06d9;
+    L_0x06c2:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
         r2 = "start preloading file to temp = ";
@@ -1782,8 +1757,8 @@ public class FileLoadOperation {
         r0.append(r2);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-        goto L_0x06fc;
-    L_0x06dc:
+        goto L_0x06f9;
+    L_0x06d9:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
         r2 = "start loading file to temp = ";
@@ -1796,105 +1771,103 @@ public class FileLoadOperation {
         r0.append(r2);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-    L_0x06fc:
-        if (r1 == 0) goto L_0x0740;
-    L_0x06fe:
+    L_0x06f9:
+        if (r1 == 0) goto L_0x073d;
+    L_0x06fb:
         r0 = new java.io.File;
         r2 = r7.tempPath;
         r0.<init>(r2, r1);
         r7.cacheIvTemp = r0;
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0738 }
-        r1 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0738 }
-        r0.<init>(r1, r4);	 Catch:{ Exception -> 0x0738 }
-        r7.fiv = r0;	 Catch:{ Exception -> 0x0738 }
-        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0738 }
-        if (r0 == 0) goto L_0x0740;
-    L_0x0714:
-        if (r6 != 0) goto L_0x0740;
-    L_0x0716:
-        r0 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0738 }
-        r0 = r0.length();	 Catch:{ Exception -> 0x0738 }
-        r5 = 0;
-        r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0733;
-    L_0x0722:
-        r12 = 32;
-        r0 = r0 % r12;
-        r2 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r2 != 0) goto L_0x0733;
-    L_0x0729:
-        r0 = r7.fiv;	 Catch:{ Exception -> 0x0738 }
-        r1 = r7.iv;	 Catch:{ Exception -> 0x0738 }
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0735 }
+        r1 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0735 }
+        r0.<init>(r1, r13);	 Catch:{ Exception -> 0x0735 }
+        r7.fiv = r0;	 Catch:{ Exception -> 0x0735 }
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0735 }
+        if (r0 == 0) goto L_0x073d;
+    L_0x0711:
+        if (r17 != 0) goto L_0x073d;
+    L_0x0713:
+        r0 = r7.cacheIvTemp;	 Catch:{ Exception -> 0x0735 }
+        r0 = r0.length();	 Catch:{ Exception -> 0x0735 }
+        r2 = 0;
+        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
+        if (r4 <= 0) goto L_0x0730;
+    L_0x071f:
+        r4 = 32;
+        r0 = r0 % r4;
+        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
+        if (r4 != 0) goto L_0x0730;
+    L_0x0726:
+        r0 = r7.fiv;	 Catch:{ Exception -> 0x0735 }
+        r1 = r7.iv;	 Catch:{ Exception -> 0x0735 }
         r2 = 32;
-        r0.read(r1, r9, r2);	 Catch:{ Exception -> 0x0738 }
-        goto L_0x0740;
-    L_0x0733:
-        r7.downloadedBytes = r9;	 Catch:{ Exception -> 0x0738 }
-        r7.requestedBytesCount = r9;	 Catch:{ Exception -> 0x0738 }
-        goto L_0x0740;
-    L_0x0738:
+        r0.read(r1, r9, r2);	 Catch:{ Exception -> 0x0735 }
+        goto L_0x073d;
+    L_0x0730:
+        r7.downloadedBytes = r9;	 Catch:{ Exception -> 0x0735 }
+        r7.requestedBytesCount = r9;	 Catch:{ Exception -> 0x0735 }
+        goto L_0x073d;
+    L_0x0735:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r7.downloadedBytes = r9;
         r7.requestedBytesCount = r9;
-    L_0x0740:
+    L_0x073d:
         r0 = r7.isPreloadVideoOperation;
-        if (r0 != 0) goto L_0x0761;
-    L_0x0744:
+        if (r0 != 0) goto L_0x0759;
+    L_0x0741:
         r0 = r7.downloadedBytes;
-        if (r0 == 0) goto L_0x0761;
-    L_0x0748:
+        if (r0 == 0) goto L_0x0759;
+    L_0x0745:
         r0 = r7.totalBytesCount;
-        if (r0 <= 0) goto L_0x0761;
-    L_0x074c:
-        r23.copyNotLoadedRanges();
-        r0 = r7.delegate;
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = r7.downloadedBytes;
-        r2 = (float) r2;
-        r5 = r7.totalBytesCount;
-        r5 = (float) r5;
-        r2 = r2 / r5;
-        r1 = java.lang.Math.min(r1, r2);
-        r0.didChangedLoadProgress(r7, r1);
-    L_0x0761:
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0777 }
-        r1 = r7.cacheFileTemp;	 Catch:{ Exception -> 0x0777 }
-        r0.<init>(r1, r4);	 Catch:{ Exception -> 0x0777 }
-        r7.fileOutputStream = r0;	 Catch:{ Exception -> 0x0777 }
-        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0777 }
-        if (r0 == 0) goto L_0x077b;
-    L_0x076e:
-        r0 = r7.fileOutputStream;	 Catch:{ Exception -> 0x0777 }
-        r1 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0777 }
-        r1 = (long) r1;	 Catch:{ Exception -> 0x0777 }
-        r0.seek(r1);	 Catch:{ Exception -> 0x0777 }
-        goto L_0x077b;
-    L_0x0777:
+        if (r0 <= 0) goto L_0x0759;
+    L_0x0749:
+        r22.copyNotLoadedRanges();
+        r1 = r7.delegate;
+        r0 = r7.downloadedBytes;
+        r3 = (long) r0;
+        r0 = r7.totalBytesCount;
+        r5 = (long) r0;
+        r2 = r22;
+        r1.didChangedLoadProgress(r2, r3, r5);
+    L_0x0759:
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x076f }
+        r1 = r7.cacheFileTemp;	 Catch:{ Exception -> 0x076f }
+        r0.<init>(r1, r13);	 Catch:{ Exception -> 0x076f }
+        r7.fileOutputStream = r0;	 Catch:{ Exception -> 0x076f }
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x076f }
+        if (r0 == 0) goto L_0x0773;
+    L_0x0766:
+        r0 = r7.fileOutputStream;	 Catch:{ Exception -> 0x076f }
+        r1 = r7.downloadedBytes;	 Catch:{ Exception -> 0x076f }
+        r1 = (long) r1;	 Catch:{ Exception -> 0x076f }
+        r0.seek(r1);	 Catch:{ Exception -> 0x076f }
+        goto L_0x0773;
+    L_0x076f:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x077b:
+    L_0x0773:
         r0 = r7.fileOutputStream;
-        if (r0 != 0) goto L_0x0783;
-    L_0x077f:
+        if (r0 != 0) goto L_0x077b;
+    L_0x0777:
         r7.onFail(r8, r9);
         return r9;
-    L_0x0783:
+    L_0x077b:
         r7.started = r8;
         r0 = org.telegram.messenger.Utilities.stageQueue;
         r1 = new org.telegram.messenger.-$$Lambda$FileLoadOperation$pnBGbN7TnymWdMGyH-sNRrKnKro;
-        r1.<init>(r7, r3);
+        r1.<init>(r7, r14);
         r0.postRunnable(r1);
-        goto L_0x0799;
-    L_0x0790:
+        goto L_0x0791;
+    L_0x0788:
         r7.started = r8;
-        r7.onFinishLoadingFile(r9);	 Catch:{ Exception -> 0x0796 }
-        goto L_0x0799;
-    L_0x0796:
+        r7.onFinishLoadingFile(r9);	 Catch:{ Exception -> 0x078e }
+        goto L_0x0791;
+    L_0x078e:
         r7.onFail(r8, r9);
-    L_0x0799:
+    L_0x0791:
         return r8;
-    L_0x079a:
+    L_0x0792:
         r7.onFail(r8, r9);
         return r9;
         */
@@ -2324,781 +2297,783 @@ public class FileLoadOperation {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01ea A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01dc A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x022a A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x0253 A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0292 A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x02dd A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x03f2 A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x048c A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0487 A:{Catch:{ Exception -> 0x0495 }} */
-    /* JADX WARNING: Missing block: B:81:0x0204, code skipped:
-            if (r1.downloadedBytes >= r1.totalBytesCount) goto L_0x0206;
-     */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01e9 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01db A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x022a A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0253 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0292 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x02dd A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x03f2 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x022a A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0253 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x0292 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x02dd A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x03f2 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0487 A:{Catch:{ Exception -> 0x0490 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:179:0x0482 A:{Catch:{ Exception -> 0x0490 }} */
     public boolean processRequestResult(org.telegram.messenger.FileLoadOperation.RequestInfo r22, org.telegram.tgnet.TLRPC.TL_error r23) {
         /*
         r21 = this;
-        r1 = r21;
+        r7 = r21;
         r0 = r23;
-        r2 = r1.state;
-        r3 = " offset ";
-        r4 = 1;
-        r5 = 0;
-        if (r2 == r4) goto L_0x0032;
+        r1 = r7.state;
+        r2 = " offset ";
+        r8 = 1;
+        r9 = 0;
+        if (r1 == r8) goto L_0x0031;
     L_0x000c:
         r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r0 == 0) goto L_0x0031;
+        if (r0 == 0) goto L_0x0030;
     L_0x0010:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r2 = "trying to write to finished file ";
+        r1 = "trying to write to finished file ";
+        r0.append(r1);
+        r1 = r7.cacheFileFinal;
+        r0.append(r1);
         r0.append(r2);
-        r2 = r1.cacheFileFinal;
-        r0.append(r2);
-        r0.append(r3);
-        r2 = r22.offset;
-        r0.append(r2);
+        r1 = r22.offset;
+        r0.append(r1);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
+    L_0x0030:
+        return r9;
     L_0x0031:
-        return r5;
-    L_0x0032:
-        r2 = r1.requestInfos;
-        r6 = r22;
-        r2.remove(r6);
-        r2 = " local_id = ";
-        r7 = 2;
-        r8 = " id = ";
-        r9 = 0;
-        if (r0 != 0) goto L_0x049e;
-    L_0x0041:
-        r0 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        if (r0 != 0) goto L_0x0051;
-    L_0x0045:
-        r0 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r10 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == r10) goto L_0x0051;
-    L_0x004d:
-        r21.delayRequestInfo(r22);	 Catch:{ Exception -> 0x0495 }
-        return r5;
-    L_0x0051:
-        r0 = r22.response;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == 0) goto L_0x005e;
-    L_0x0057:
-        r0 = r22.response;	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.bytes;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0079;
-    L_0x005e:
-        r0 = r22.responseWeb;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == 0) goto L_0x006b;
-    L_0x0064:
-        r0 = r22.responseWeb;	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.bytes;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0079;
-    L_0x006b:
-        r0 = r22.responseCdn;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == 0) goto L_0x0078;
-    L_0x0071:
-        r0 = r22.responseCdn;	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.bytes;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0079;
+        r1 = r7.requestInfos;
+        r3 = r22;
+        r1.remove(r3);
+        r1 = " local_id = ";
+        r4 = 2;
+        r5 = " id = ";
+        r10 = 0;
+        if (r0 != 0) goto L_0x0499;
+    L_0x0040:
+        r0 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        if (r0 != 0) goto L_0x0050;
+    L_0x0044:
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r6 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == r6) goto L_0x0050;
+    L_0x004c:
+        r21.delayRequestInfo(r22);	 Catch:{ Exception -> 0x0490 }
+        return r9;
+    L_0x0050:
+        r0 = r22.response;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == 0) goto L_0x005d;
+    L_0x0056:
+        r0 = r22.response;	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.bytes;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0078;
+    L_0x005d:
+        r0 = r22.responseWeb;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == 0) goto L_0x006a;
+    L_0x0063:
+        r0 = r22.responseWeb;	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.bytes;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0078;
+    L_0x006a:
+        r0 = r22.responseCdn;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == 0) goto L_0x0077;
+    L_0x0070:
+        r0 = r22.responseCdn;	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.bytes;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0078;
+    L_0x0077:
+        r0 = r10;
     L_0x0078:
-        r0 = r9;
-    L_0x0079:
-        if (r0 == 0) goto L_0x0491;
-    L_0x007b:
-        r10 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        if (r10 != 0) goto L_0x0083;
-    L_0x0081:
-        goto L_0x0491;
-    L_0x0083:
-        r10 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.isCdn;	 Catch:{ Exception -> 0x0495 }
+        if (r0 == 0) goto L_0x048c;
+    L_0x007a:
+        r6 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        if (r6 != 0) goto L_0x0082;
+    L_0x0080:
+        goto L_0x048c;
+    L_0x0082:
+        r6 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.isCdn;	 Catch:{ Exception -> 0x0490 }
         r12 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        if (r11 == 0) goto L_0x00ab;
-    L_0x008d:
-        r11 = r22.offset;	 Catch:{ Exception -> 0x0495 }
+        if (r11 == 0) goto L_0x00aa;
+    L_0x008c:
+        r11 = r22.offset;	 Catch:{ Exception -> 0x0490 }
         r11 = r11 / r12;
         r11 = r11 * r12;
-        r13 = r1.cdnHashes;	 Catch:{ Exception -> 0x0495 }
-        if (r13 == 0) goto L_0x00a1;
-    L_0x0098:
-        r13 = r1.cdnHashes;	 Catch:{ Exception -> 0x0495 }
-        r13 = r13.get(r11);	 Catch:{ Exception -> 0x0495 }
-        r13 = (org.telegram.tgnet.TLRPC.TL_fileHash) r13;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x00a2;
+        r13 = r7.cdnHashes;	 Catch:{ Exception -> 0x0490 }
+        if (r13 == 0) goto L_0x00a0;
+    L_0x0097:
+        r13 = r7.cdnHashes;	 Catch:{ Exception -> 0x0490 }
+        r13 = r13.get(r11);	 Catch:{ Exception -> 0x0490 }
+        r13 = (org.telegram.tgnet.TLRPC.TL_fileHash) r13;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x00a1;
+    L_0x00a0:
+        r13 = r10;
     L_0x00a1:
-        r13 = r9;
-    L_0x00a2:
-        if (r13 != 0) goto L_0x00ab;
-    L_0x00a4:
-        r21.delayRequestInfo(r22);	 Catch:{ Exception -> 0x0495 }
-        r1.requestFileOffsets(r11);	 Catch:{ Exception -> 0x0495 }
-        return r4;
-    L_0x00ab:
-        r11 = r22.responseCdn;	 Catch:{ Exception -> 0x0495 }
+        if (r13 != 0) goto L_0x00aa;
+    L_0x00a3:
+        r21.delayRequestInfo(r22);	 Catch:{ Exception -> 0x0490 }
+        r7.requestFileOffsets(r11);	 Catch:{ Exception -> 0x0490 }
+        return r8;
+    L_0x00aa:
+        r11 = r22.responseCdn;	 Catch:{ Exception -> 0x0490 }
         r13 = 12;
-        if (r11 == 0) goto L_0x00ee;
-    L_0x00b3:
-        r11 = r22.offset;	 Catch:{ Exception -> 0x0495 }
+        if (r11 == 0) goto L_0x00ed;
+    L_0x00b2:
+        r11 = r22.offset;	 Catch:{ Exception -> 0x0490 }
         r11 = r11 / 16;
-        r14 = r1.cdnIv;	 Catch:{ Exception -> 0x0495 }
+        r14 = r7.cdnIv;	 Catch:{ Exception -> 0x0490 }
         r15 = 15;
         r12 = r11 & 255;
-        r12 = (byte) r12;	 Catch:{ Exception -> 0x0495 }
-        r14[r15] = r12;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.cdnIv;	 Catch:{ Exception -> 0x0495 }
+        r12 = (byte) r12;	 Catch:{ Exception -> 0x0490 }
+        r14[r15] = r12;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.cdnIv;	 Catch:{ Exception -> 0x0490 }
         r14 = 14;
         r15 = r11 >> 8;
         r15 = r15 & 255;
-        r15 = (byte) r15;	 Catch:{ Exception -> 0x0495 }
-        r12[r14] = r15;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.cdnIv;	 Catch:{ Exception -> 0x0495 }
+        r15 = (byte) r15;	 Catch:{ Exception -> 0x0490 }
+        r12[r14] = r15;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.cdnIv;	 Catch:{ Exception -> 0x0490 }
         r14 = 13;
         r15 = r11 >> 16;
         r15 = r15 & 255;
-        r15 = (byte) r15;	 Catch:{ Exception -> 0x0495 }
-        r12[r14] = r15;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.cdnIv;	 Catch:{ Exception -> 0x0495 }
+        r15 = (byte) r15;	 Catch:{ Exception -> 0x0490 }
+        r12[r14] = r15;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.cdnIv;	 Catch:{ Exception -> 0x0490 }
         r11 = r11 >> 24;
         r11 = r11 & 255;
-        r11 = (byte) r11;	 Catch:{ Exception -> 0x0495 }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0495 }
-        r11 = r0.buffer;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.cdnKey;	 Catch:{ Exception -> 0x0495 }
-        r14 = r1.cdnIv;	 Catch:{ Exception -> 0x0495 }
-        r15 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.Utilities.aesCtrDecryption(r11, r12, r14, r5, r15);	 Catch:{ Exception -> 0x0495 }
-    L_0x00ee:
-        r11 = r1.isPreloadVideoOperation;	 Catch:{ Exception -> 0x0495 }
-        if (r11 == 0) goto L_0x01f7;
-    L_0x00f2:
-        r2 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r8 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r2.writeInt(r8);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2.writeInt(r10);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 + 8;
-        r1.preloadStreamFileOffset = r2;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.getChannel();	 Catch:{ Exception -> 0x0495 }
-        r8 = r0.buffer;	 Catch:{ Exception -> 0x0495 }
-        r2.write(r8);	 Catch:{ Exception -> 0x0495 }
-        r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION;	 Catch:{ Exception -> 0x0495 }
-        if (r2 == 0) goto L_0x013d;
-    L_0x0115:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0495 }
-        r2.<init>();	 Catch:{ Exception -> 0x0495 }
-        r8 = "save preload file part ";
-        r2.append(r8);	 Catch:{ Exception -> 0x0495 }
-        r8 = r1.cacheFilePreload;	 Catch:{ Exception -> 0x0495 }
-        r2.append(r8);	 Catch:{ Exception -> 0x0495 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r3 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r2.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r3 = " size ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r2.append(r10);	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0495 }
-    L_0x013d:
-        r2 = r1.preloadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        if (r2 != 0) goto L_0x0148;
-    L_0x0141:
-        r2 = new android.util.SparseArray;	 Catch:{ Exception -> 0x0495 }
-        r2.<init>();	 Catch:{ Exception -> 0x0495 }
-        r1.preloadedBytesRanges = r2;	 Catch:{ Exception -> 0x0495 }
-    L_0x0148:
-        r2 = r1.preloadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        r3 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r8 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0495 }
-        r8.<init>(r11, r10);	 Catch:{ Exception -> 0x0495 }
-        r2.put(r3, r8);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.totalPreloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 + r10;
-        r1.totalPreloadedBytes = r2;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 + r10;
-        r1.preloadStreamFileOffset = r2;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.moovFound;	 Catch:{ Exception -> 0x0495 }
-        if (r2 != 0) goto L_0x01a4;
-    L_0x0166:
-        r2 = r1.nextAtomOffset;	 Catch:{ Exception -> 0x0495 }
-        r3 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.findNextPreloadDownloadOffset(r2, r3, r0);	 Catch:{ Exception -> 0x0495 }
-        if (r0 >= 0) goto L_0x0198;
-    L_0x0172:
+        r11 = (byte) r11;	 Catch:{ Exception -> 0x0490 }
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0490 }
+        r11 = r0.buffer;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.cdnKey;	 Catch:{ Exception -> 0x0490 }
+        r14 = r7.cdnIv;	 Catch:{ Exception -> 0x0490 }
+        r15 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.Utilities.aesCtrDecryption(r11, r12, r14, r9, r15);	 Catch:{ Exception -> 0x0490 }
+    L_0x00ed:
+        r11 = r7.isPreloadVideoOperation;	 Catch:{ Exception -> 0x0490 }
+        if (r11 == 0) goto L_0x01f6;
+    L_0x00f1:
+        r1 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r5 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r1.writeInt(r5);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1.writeInt(r6);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 + 8;
+        r7.preloadStreamFileOffset = r1;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.getChannel();	 Catch:{ Exception -> 0x0490 }
+        r5 = r0.buffer;	 Catch:{ Exception -> 0x0490 }
+        r1.write(r5);	 Catch:{ Exception -> 0x0490 }
+        r1 = org.telegram.messenger.BuildVars.DEBUG_VERSION;	 Catch:{ Exception -> 0x0490 }
+        if (r1 == 0) goto L_0x013c;
+    L_0x0114:
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0490 }
+        r1.<init>();	 Catch:{ Exception -> 0x0490 }
+        r5 = "save preload file part ";
+        r1.append(r5);	 Catch:{ Exception -> 0x0490 }
+        r5 = r7.cacheFilePreload;	 Catch:{ Exception -> 0x0490 }
+        r1.append(r5);	 Catch:{ Exception -> 0x0490 }
+        r1.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r2 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r1.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r2 = " size ";
+        r1.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r1.append(r6);	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.toString();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0490 }
+    L_0x013c:
+        r1 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        if (r1 != 0) goto L_0x0147;
+    L_0x0140:
+        r1 = new android.util.SparseArray;	 Catch:{ Exception -> 0x0490 }
+        r1.<init>();	 Catch:{ Exception -> 0x0490 }
+        r7.preloadedBytesRanges = r1;	 Catch:{ Exception -> 0x0490 }
+    L_0x0147:
+        r1 = r7.preloadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        r2 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r5 = new org.telegram.messenger.FileLoadOperation$PreloadRange;	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0490 }
+        r5.<init>(r11, r6);	 Catch:{ Exception -> 0x0490 }
+        r1.put(r2, r5);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.totalPreloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 + r6;
+        r7.totalPreloadedBytes = r1;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 + r6;
+        r7.preloadStreamFileOffset = r1;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.moovFound;	 Catch:{ Exception -> 0x0490 }
+        if (r1 != 0) goto L_0x01a3;
+    L_0x0165:
+        r1 = r7.nextAtomOffset;	 Catch:{ Exception -> 0x0490 }
+        r2 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.findNextPreloadDownloadOffset(r1, r2, r0);	 Catch:{ Exception -> 0x0490 }
+        if (r0 >= 0) goto L_0x0197;
+    L_0x0171:
         r0 = r0 * -1;
-        r2 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0495 }
-        r3 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 + r3;
-        r1.nextPreloadDownloadOffset = r2;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0495 }
-        r3 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3 / r7;
-        if (r2 >= r3) goto L_0x018c;
-    L_0x0182:
-        r2 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
-        r2 = r2 + r0;
-        r1.foundMoovSize = r2;	 Catch:{ Exception -> 0x0495 }
-        r1.preloadNotRequestedBytesCount = r2;	 Catch:{ Exception -> 0x0495 }
-        r1.moovFound = r4;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0194;
-    L_0x018c:
-        r2 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
-        r1.foundMoovSize = r2;	 Catch:{ Exception -> 0x0495 }
-        r1.preloadNotRequestedBytesCount = r2;	 Catch:{ Exception -> 0x0495 }
-        r1.moovFound = r7;	 Catch:{ Exception -> 0x0495 }
-    L_0x0194:
-        r2 = -1;
-        r1.nextPreloadDownloadOffset = r2;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x01a2;
-    L_0x0198:
-        r2 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        r2 = r0 / r2;
-        r3 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 * r3;
-        r1.nextPreloadDownloadOffset = r2;	 Catch:{ Exception -> 0x0495 }
-    L_0x01a2:
-        r1.nextAtomOffset = r0;	 Catch:{ Exception -> 0x0495 }
-    L_0x01a4:
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.foundMoovSize;	 Catch:{ Exception -> 0x0495 }
-        r0.writeInt(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0495 }
-        r0.writeInt(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.nextAtomOffset;	 Catch:{ Exception -> 0x0495 }
-        r0.writeInt(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0495 }
+        r1 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0490 }
+        r2 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 + r2;
+        r7.nextPreloadDownloadOffset = r1;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0490 }
+        r2 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2 / r4;
+        if (r1 >= r2) goto L_0x018b;
+    L_0x0181:
+        r1 = 1048576; // 0x100000 float:1.469368E-39 double:5.180654E-318;
+        r1 = r1 + r0;
+        r7.foundMoovSize = r1;	 Catch:{ Exception -> 0x0490 }
+        r7.preloadNotRequestedBytesCount = r1;	 Catch:{ Exception -> 0x0490 }
+        r7.moovFound = r8;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0193;
+    L_0x018b:
+        r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
+        r7.foundMoovSize = r1;	 Catch:{ Exception -> 0x0490 }
+        r7.preloadNotRequestedBytesCount = r1;	 Catch:{ Exception -> 0x0490 }
+        r7.moovFound = r4;	 Catch:{ Exception -> 0x0490 }
+    L_0x0193:
+        r1 = -1;
+        r7.nextPreloadDownloadOffset = r1;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x01a1;
+    L_0x0197:
+        r1 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        r1 = r0 / r1;
+        r2 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 * r2;
+        r7.nextPreloadDownloadOffset = r1;	 Catch:{ Exception -> 0x0490 }
+    L_0x01a1:
+        r7.nextAtomOffset = r0;	 Catch:{ Exception -> 0x0490 }
+    L_0x01a3:
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0490 }
+        r0.writeInt(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0490 }
+        r0.writeInt(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.nextAtomOffset;	 Catch:{ Exception -> 0x0490 }
+        r0.writeInt(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.preloadStreamFileOffset;	 Catch:{ Exception -> 0x0490 }
         r0 = r0 + r13;
-        r1.preloadStreamFileOffset = r0;	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == 0) goto L_0x01d9;
-    L_0x01c2:
-        r0 = r1.moovFound;	 Catch:{ Exception -> 0x0495 }
-        if (r0 == 0) goto L_0x01ca;
-    L_0x01c6:
-        r0 = r1.foundMoovSize;	 Catch:{ Exception -> 0x0495 }
-        if (r0 < 0) goto L_0x01d9;
-    L_0x01ca:
-        r0 = r1.totalPreloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r2 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
-        if (r0 > r2) goto L_0x01d9;
-    L_0x01d0:
-        r0 = r1.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r0 < r2) goto L_0x01d7;
+        r7.preloadStreamFileOffset = r0;	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == 0) goto L_0x01d8;
+    L_0x01c1:
+        r0 = r7.moovFound;	 Catch:{ Exception -> 0x0490 }
+        if (r0 == 0) goto L_0x01c9;
+    L_0x01c5:
+        r0 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0490 }
+        if (r0 < 0) goto L_0x01d8;
+    L_0x01c9:
+        r0 = r7.totalPreloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
+        if (r0 > r1) goto L_0x01d8;
+    L_0x01cf:
+        r0 = r7.nextPreloadDownloadOffset;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r0 < r1) goto L_0x01d6;
+    L_0x01d5:
+        goto L_0x01d8;
     L_0x01d6:
-        goto L_0x01d9;
-    L_0x01d7:
         r0 = 0;
-        goto L_0x01da;
-    L_0x01d9:
+        goto L_0x01d9;
+    L_0x01d8:
         r0 = 1;
-    L_0x01da:
-        if (r0 == 0) goto L_0x01ea;
-    L_0x01dc:
-        r2 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r6 = 0;
-        r2.seek(r6);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.preloadStream;	 Catch:{ Exception -> 0x0495 }
-        r2.write(r4);	 Catch:{ Exception -> 0x0495 }
-        goto L_0x041e;
-    L_0x01ea:
-        r2 = r1.moovFound;	 Catch:{ Exception -> 0x0495 }
-        if (r2 == 0) goto L_0x041e;
-    L_0x01ee:
-        r2 = r1.foundMoovSize;	 Catch:{ Exception -> 0x0495 }
-        r3 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2 - r3;
-        r1.foundMoovSize = r2;	 Catch:{ Exception -> 0x0495 }
-        goto L_0x041e;
-    L_0x01f7:
-        r7 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r7 = r7 + r10;
-        r1.downloadedBytes = r7;	 Catch:{ Exception -> 0x0495 }
-        r7 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r7 <= 0) goto L_0x020a;
-    L_0x0200:
-        r7 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r7 < r11) goto L_0x0208;
+    L_0x01d9:
+        if (r0 == 0) goto L_0x01e9;
+    L_0x01db:
+        r1 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r2 = 0;
+        r1.seek(r2);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.preloadStream;	 Catch:{ Exception -> 0x0490 }
+        r1.write(r8);	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0419;
+    L_0x01e9:
+        r1 = r7.moovFound;	 Catch:{ Exception -> 0x0490 }
+        if (r1 == 0) goto L_0x0419;
+    L_0x01ed:
+        r1 = r7.foundMoovSize;	 Catch:{ Exception -> 0x0490 }
+        r2 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1 - r2;
+        r7.foundMoovSize = r1;	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0419;
+    L_0x01f6:
+        r4 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 + r6;
+        r7.downloadedBytes = r4;	 Catch:{ Exception -> 0x0490 }
+        r4 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r4 <= 0) goto L_0x0206;
+    L_0x01ff:
+        r4 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r4 < r11) goto L_0x0222;
+    L_0x0205:
+        goto L_0x0224;
     L_0x0206:
-        r7 = 1;
-        goto L_0x0226;
-    L_0x0208:
-        r7 = 0;
-        goto L_0x0226;
+        r4 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        if (r6 != r4) goto L_0x0224;
     L_0x020a:
-        r7 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        if (r10 != r7) goto L_0x0206;
-    L_0x020e:
-        r7 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        if (r7 == r11) goto L_0x021b;
-    L_0x0214:
-        r7 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0495 }
-        r7 = r7 % r11;
-        if (r7 == 0) goto L_0x0208;
+        r4 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == r11) goto L_0x0217;
+    L_0x0210:
+        r4 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.currentDownloadChunkSize;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 % r11;
+        if (r4 == 0) goto L_0x0222;
+    L_0x0217:
+        r4 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r4 <= 0) goto L_0x0224;
     L_0x021b:
-        r7 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r7 <= 0) goto L_0x0206;
-    L_0x021f:
-        r7 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        if (r7 > r11) goto L_0x0208;
+        r4 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        r11 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        if (r4 > r11) goto L_0x0222;
+    L_0x0221:
+        goto L_0x0224;
+    L_0x0222:
+        r4 = 0;
+        goto L_0x0225;
+    L_0x0224:
+        r4 = 1;
     L_0x0225:
-        goto L_0x0206;
-    L_0x0226:
-        r11 = r1.key;	 Catch:{ Exception -> 0x0495 }
-        if (r11 == 0) goto L_0x024f;
+        r11 = r4;
+        r4 = r7.key;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == 0) goto L_0x024f;
     L_0x022a:
-        r14 = r0.buffer;	 Catch:{ Exception -> 0x0495 }
-        r15 = r1.key;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.iv;	 Catch:{ Exception -> 0x0495 }
+        r14 = r0.buffer;	 Catch:{ Exception -> 0x0490 }
+        r15 = r7.key;	 Catch:{ Exception -> 0x0490 }
+        r4 = r7.iv;	 Catch:{ Exception -> 0x0490 }
         r17 = 0;
         r18 = 1;
         r19 = 0;
-        r20 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        r16 = r11;
-        org.telegram.messenger.Utilities.aesIgeEncryption(r14, r15, r16, r17, r18, r19, r20);	 Catch:{ Exception -> 0x0495 }
-        if (r7 == 0) goto L_0x024f;
-    L_0x0241:
-        r11 = r1.bytesCountPadding;	 Catch:{ Exception -> 0x0495 }
+        r20 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        r16 = r4;
+        org.telegram.messenger.Utilities.aesIgeEncryption(r14, r15, r16, r17, r18, r19, r20);	 Catch:{ Exception -> 0x0490 }
         if (r11 == 0) goto L_0x024f;
+    L_0x0241:
+        r4 = r7.bytesCountPadding;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == 0) goto L_0x024f;
     L_0x0245:
-        r11 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.bytesCountPadding;	 Catch:{ Exception -> 0x0495 }
-        r11 = r11 - r12;
-        r0.limit(r11);	 Catch:{ Exception -> 0x0495 }
+        r4 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.bytesCountPadding;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 - r12;
+        r0.limit(r4);	 Catch:{ Exception -> 0x0490 }
     L_0x024f:
-        r11 = r1.encryptFile;	 Catch:{ Exception -> 0x0495 }
-        if (r11 == 0) goto L_0x028e;
+        r4 = r7.encryptFile;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == 0) goto L_0x028e;
     L_0x0253:
-        r11 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r11 = r11 / 16;
-        r12 = r1.encryptIv;	 Catch:{ Exception -> 0x0495 }
+        r4 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 / 16;
+        r12 = r7.encryptIv;	 Catch:{ Exception -> 0x0490 }
         r14 = 15;
-        r15 = r11 & 255;
-        r15 = (byte) r15;	 Catch:{ Exception -> 0x0495 }
-        r12[r14] = r15;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.encryptIv;	 Catch:{ Exception -> 0x0495 }
+        r15 = r4 & 255;
+        r15 = (byte) r15;	 Catch:{ Exception -> 0x0490 }
+        r12[r14] = r15;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.encryptIv;	 Catch:{ Exception -> 0x0490 }
         r14 = 14;
-        r15 = r11 >> 8;
+        r15 = r4 >> 8;
         r15 = r15 & 255;
-        r15 = (byte) r15;	 Catch:{ Exception -> 0x0495 }
-        r12[r14] = r15;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.encryptIv;	 Catch:{ Exception -> 0x0495 }
+        r15 = (byte) r15;	 Catch:{ Exception -> 0x0490 }
+        r12[r14] = r15;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.encryptIv;	 Catch:{ Exception -> 0x0490 }
         r14 = 13;
-        r15 = r11 >> 16;
+        r15 = r4 >> 16;
         r15 = r15 & 255;
-        r15 = (byte) r15;	 Catch:{ Exception -> 0x0495 }
-        r12[r14] = r15;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.encryptIv;	 Catch:{ Exception -> 0x0495 }
-        r11 = r11 >> 24;
-        r11 = r11 & 255;
-        r11 = (byte) r11;	 Catch:{ Exception -> 0x0495 }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0495 }
-        r11 = r0.buffer;	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.encryptKey;	 Catch:{ Exception -> 0x0495 }
-        r13 = r1.encryptIv;	 Catch:{ Exception -> 0x0495 }
-        r14 = r0.limit();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.Utilities.aesCtrDecryption(r11, r12, r13, r5, r14);	 Catch:{ Exception -> 0x0495 }
+        r15 = (byte) r15;	 Catch:{ Exception -> 0x0490 }
+        r12[r14] = r15;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.encryptIv;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 >> 24;
+        r4 = r4 & 255;
+        r4 = (byte) r4;	 Catch:{ Exception -> 0x0490 }
+        r12[r13] = r4;	 Catch:{ Exception -> 0x0490 }
+        r4 = r0.buffer;	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.encryptKey;	 Catch:{ Exception -> 0x0490 }
+        r13 = r7.encryptIv;	 Catch:{ Exception -> 0x0490 }
+        r14 = r0.limit();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.Utilities.aesCtrDecryption(r4, r12, r13, r9, r14);	 Catch:{ Exception -> 0x0490 }
     L_0x028e:
-        r11 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        if (r11 == 0) goto L_0x02c0;
+        r4 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == 0) goto L_0x02c0;
     L_0x0292:
-        r11 = r1.fileOutputStream;	 Catch:{ Exception -> 0x0495 }
-        r12 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r12 = (long) r12;	 Catch:{ Exception -> 0x0495 }
-        r11.seek(r12);	 Catch:{ Exception -> 0x0495 }
-        r11 = org.telegram.messenger.BuildVars.DEBUG_VERSION;	 Catch:{ Exception -> 0x0495 }
-        if (r11 == 0) goto L_0x02c0;
+        r4 = r7.fileOutputStream;	 Catch:{ Exception -> 0x0490 }
+        r12 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r12 = (long) r12;	 Catch:{ Exception -> 0x0490 }
+        r4.seek(r12);	 Catch:{ Exception -> 0x0490 }
+        r4 = org.telegram.messenger.BuildVars.DEBUG_VERSION;	 Catch:{ Exception -> 0x0490 }
+        if (r4 == 0) goto L_0x02c0;
     L_0x02a0:
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0495 }
-        r11.<init>();	 Catch:{ Exception -> 0x0495 }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0490 }
+        r4.<init>();	 Catch:{ Exception -> 0x0490 }
         r12 = "save file part ";
-        r11.append(r12);	 Catch:{ Exception -> 0x0495 }
-        r12 = r1.cacheFileFinal;	 Catch:{ Exception -> 0x0495 }
-        r11.append(r12);	 Catch:{ Exception -> 0x0495 }
-        r11.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r3 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r11.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r3 = r11.toString();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.FileLog.d(r3);	 Catch:{ Exception -> 0x0495 }
+        r4.append(r12);	 Catch:{ Exception -> 0x0490 }
+        r12 = r7.cacheFileFinal;	 Catch:{ Exception -> 0x0490 }
+        r4.append(r12);	 Catch:{ Exception -> 0x0490 }
+        r4.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r2 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r4.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r2 = r4.toString();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0490 }
     L_0x02c0:
-        r3 = r1.fileOutputStream;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.getChannel();	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.buffer;	 Catch:{ Exception -> 0x0495 }
-        r3.write(r0);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        r3 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r11 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r11 = r11 + r10;
-        r1.addPart(r0, r3, r11, r4);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.isCdn;	 Catch:{ Exception -> 0x0495 }
+        r2 = r7.fileOutputStream;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.getChannel();	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.buffer;	 Catch:{ Exception -> 0x0490 }
+        r2.write(r0);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        r2 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r4 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4 + r6;
+        r7.addPart(r0, r2, r4, r8);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.isCdn;	 Catch:{ Exception -> 0x0490 }
         if (r0 == 0) goto L_0x03ee;
     L_0x02dd:
-        r0 = r22.offset;	 Catch:{ Exception -> 0x0495 }
-        r3 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        r0 = r0 / r3;
-        r3 = r1.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.size();	 Catch:{ Exception -> 0x0495 }
-        r6 = 0;
-    L_0x02eb:
-        if (r6 >= r3) goto L_0x0306;
-    L_0x02ed:
-        r10 = r1.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0495 }
-        r10 = r10.get(r6);	 Catch:{ Exception -> 0x0495 }
-        r10 = (org.telegram.messenger.FileLoadOperation.Range) r10;	 Catch:{ Exception -> 0x0495 }
-        r11 = r10.start;	 Catch:{ Exception -> 0x0495 }
-        if (r11 > r0) goto L_0x0303;
-    L_0x02fb:
-        r10 = r10.end;	 Catch:{ Exception -> 0x0495 }
-        if (r0 > r10) goto L_0x0303;
-    L_0x0301:
+        r0 = r22.offset;	 Catch:{ Exception -> 0x0490 }
+        r2 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        r0 = r0 / r2;
+        r2 = r7.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.size();	 Catch:{ Exception -> 0x0490 }
         r3 = 0;
+    L_0x02eb:
+        if (r3 >= r2) goto L_0x0306;
+    L_0x02ed:
+        r4 = r7.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0490 }
+        r4 = r4.get(r3);	 Catch:{ Exception -> 0x0490 }
+        r4 = (org.telegram.messenger.FileLoadOperation.Range) r4;	 Catch:{ Exception -> 0x0490 }
+        r6 = r4.start;	 Catch:{ Exception -> 0x0490 }
+        if (r6 > r0) goto L_0x0303;
+    L_0x02fb:
+        r4 = r4.end;	 Catch:{ Exception -> 0x0490 }
+        if (r0 > r4) goto L_0x0303;
+    L_0x0301:
+        r2 = 0;
         goto L_0x0307;
     L_0x0303:
-        r6 = r6 + 1;
+        r3 = r3 + 1;
         goto L_0x02eb;
     L_0x0306:
-        r3 = 1;
+        r2 = 1;
     L_0x0307:
-        if (r3 != 0) goto L_0x03ee;
+        if (r2 != 0) goto L_0x03ee;
     L_0x0309:
-        r3 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        r12 = r0 * r3;
-        r6 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        r6 = r1.getDownloadedLengthFromOffsetInternal(r6, r12, r3);	 Catch:{ Exception -> 0x0495 }
-        if (r6 == 0) goto L_0x03ee;
+        r2 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        r12 = r0 * r2;
+        r3 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        r3 = r7.getDownloadedLengthFromOffsetInternal(r3, r12, r2);	 Catch:{ Exception -> 0x0490 }
+        if (r3 == 0) goto L_0x03ee;
     L_0x0315:
-        if (r6 == r3) goto L_0x0326;
+        if (r3 == r2) goto L_0x0326;
     L_0x0317:
-        r3 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r3 <= 0) goto L_0x0320;
+        r2 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r2 <= 0) goto L_0x0320;
     L_0x031b:
-        r3 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3 - r12;
-        if (r6 == r3) goto L_0x0326;
+        r2 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2 - r12;
+        if (r3 == r2) goto L_0x0326;
     L_0x0320:
-        r3 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r3 > 0) goto L_0x03ee;
+        r2 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r2 > 0) goto L_0x03ee;
     L_0x0324:
-        if (r7 == 0) goto L_0x03ee;
+        if (r11 == 0) goto L_0x03ee;
     L_0x0326:
-        r3 = r1.cdnHashes;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.get(r12);	 Catch:{ Exception -> 0x0495 }
-        r3 = (org.telegram.tgnet.TLRPC.TL_fileHash) r3;	 Catch:{ Exception -> 0x0495 }
-        r10 = r1.fileReadStream;	 Catch:{ Exception -> 0x0495 }
-        if (r10 != 0) goto L_0x0343;
+        r2 = r7.cdnHashes;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.get(r12);	 Catch:{ Exception -> 0x0490 }
+        r2 = (org.telegram.tgnet.TLRPC.TL_fileHash) r2;	 Catch:{ Exception -> 0x0490 }
+        r4 = r7.fileReadStream;	 Catch:{ Exception -> 0x0490 }
+        if (r4 != 0) goto L_0x0343;
     L_0x0332:
-        r10 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        r10 = new byte[r10];	 Catch:{ Exception -> 0x0495 }
-        r1.cdnCheckBytes = r10;	 Catch:{ Exception -> 0x0495 }
-        r10 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.cacheFileTemp;	 Catch:{ Exception -> 0x0495 }
+        r4 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        r4 = new byte[r4];	 Catch:{ Exception -> 0x0490 }
+        r7.cdnCheckBytes = r4;	 Catch:{ Exception -> 0x0490 }
+        r4 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0490 }
+        r6 = r7.cacheFileTemp;	 Catch:{ Exception -> 0x0490 }
         r13 = "r";
-        r10.<init>(r11, r13);	 Catch:{ Exception -> 0x0495 }
-        r1.fileReadStream = r10;	 Catch:{ Exception -> 0x0495 }
+        r4.<init>(r6, r13);	 Catch:{ Exception -> 0x0490 }
+        r7.fileReadStream = r4;	 Catch:{ Exception -> 0x0490 }
     L_0x0343:
-        r10 = r1.fileReadStream;	 Catch:{ Exception -> 0x0495 }
-        r13 = (long) r12;	 Catch:{ Exception -> 0x0495 }
-        r10.seek(r13);	 Catch:{ Exception -> 0x0495 }
-        r10 = r1.fileReadStream;	 Catch:{ Exception -> 0x0495 }
-        r11 = r1.cdnCheckBytes;	 Catch:{ Exception -> 0x0495 }
-        r10.readFully(r11, r5, r6);	 Catch:{ Exception -> 0x0495 }
-        r10 = r1.cdnCheckBytes;	 Catch:{ Exception -> 0x0495 }
-        r6 = org.telegram.messenger.Utilities.computeSHA256(r10, r5, r6);	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.hash;	 Catch:{ Exception -> 0x0495 }
-        r3 = java.util.Arrays.equals(r6, r3);	 Catch:{ Exception -> 0x0495 }
-        if (r3 != 0) goto L_0x03e2;
+        r4 = r7.fileReadStream;	 Catch:{ Exception -> 0x0490 }
+        r13 = (long) r12;	 Catch:{ Exception -> 0x0490 }
+        r4.seek(r13);	 Catch:{ Exception -> 0x0490 }
+        r4 = r7.fileReadStream;	 Catch:{ Exception -> 0x0490 }
+        r6 = r7.cdnCheckBytes;	 Catch:{ Exception -> 0x0490 }
+        r4.readFully(r6, r9, r3);	 Catch:{ Exception -> 0x0490 }
+        r4 = r7.cdnCheckBytes;	 Catch:{ Exception -> 0x0490 }
+        r3 = org.telegram.messenger.Utilities.computeSHA256(r4, r9, r3);	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.hash;	 Catch:{ Exception -> 0x0490 }
+        r2 = java.util.Arrays.equals(r3, r2);	 Catch:{ Exception -> 0x0490 }
+        if (r2 != 0) goto L_0x03e2;
     L_0x035e:
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0495 }
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0490 }
         if (r0 == 0) goto L_0x03d9;
     L_0x0362:
-        r0 = r1.location;	 Catch:{ Exception -> 0x0495 }
+        r0 = r7.location;	 Catch:{ Exception -> 0x0490 }
         if (r0 == 0) goto L_0x03b5;
     L_0x0366:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0495 }
-        r0.<init>();	 Catch:{ Exception -> 0x0495 }
-        r3 = "invalid cdn hash ";
-        r0.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r3 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r0.append(r8);	 Catch:{ Exception -> 0x0495 }
-        r3 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.id;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r3);	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.local_id;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = " access_hash = ";
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.access_hash;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = " volume_id = ";
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.volume_id;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = " secret = ";
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.location;	 Catch:{ Exception -> 0x0495 }
-        r2 = r2.secret;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0495 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0490 }
+        r0.<init>();	 Catch:{ Exception -> 0x0490 }
+        r2 = "invalid cdn hash ";
+        r0.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r2 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r0.append(r5);	 Catch:{ Exception -> 0x0490 }
+        r2 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.id;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r2);	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.local_id;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = " access_hash = ";
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.access_hash;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = " volume_id = ";
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.volume_id;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = " secret = ";
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.location;	 Catch:{ Exception -> 0x0490 }
+        r1 = r1.secret;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0490 }
         goto L_0x03d9;
     L_0x03b5:
-        r0 = r1.webLocation;	 Catch:{ Exception -> 0x0495 }
+        r0 = r7.webLocation;	 Catch:{ Exception -> 0x0490 }
         if (r0 == 0) goto L_0x03d9;
     L_0x03b9:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0495 }
-        r0.<init>();	 Catch:{ Exception -> 0x0495 }
-        r2 = "invalid cdn hash  ";
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.webLocation;	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r0.append(r8);	 Catch:{ Exception -> 0x0495 }
-        r2 = r21.getFileName();	 Catch:{ Exception -> 0x0495 }
-        r0.append(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0495 }
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0495 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0490 }
+        r0.<init>();	 Catch:{ Exception -> 0x0490 }
+        r1 = "invalid cdn hash  ";
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.webLocation;	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r0.append(r5);	 Catch:{ Exception -> 0x0490 }
+        r1 = r21.getFileName();	 Catch:{ Exception -> 0x0490 }
+        r0.append(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0490 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0490 }
     L_0x03d9:
-        r1.onFail(r5, r5);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.cacheFileTemp;	 Catch:{ Exception -> 0x0495 }
-        r0.delete();	 Catch:{ Exception -> 0x0495 }
-        return r5;
+        r7.onFail(r9, r9);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.cacheFileTemp;	 Catch:{ Exception -> 0x0490 }
+        r0.delete();	 Catch:{ Exception -> 0x0490 }
+        return r9;
     L_0x03e2:
-        r2 = r1.cdnHashes;	 Catch:{ Exception -> 0x0495 }
-        r2.remove(r12);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0495 }
-        r3 = r0 + 1;
-        r1.addPart(r2, r0, r3, r5);	 Catch:{ Exception -> 0x0495 }
+        r1 = r7.cdnHashes;	 Catch:{ Exception -> 0x0490 }
+        r1.remove(r12);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.notCheckedCdnRanges;	 Catch:{ Exception -> 0x0490 }
+        r2 = r0 + 1;
+        r7.addPart(r1, r0, r2, r9);	 Catch:{ Exception -> 0x0490 }
     L_0x03ee:
-        r0 = r1.fiv;	 Catch:{ Exception -> 0x0495 }
+        r0 = r7.fiv;	 Catch:{ Exception -> 0x0490 }
         if (r0 == 0) goto L_0x0400;
     L_0x03f2:
-        r0 = r1.fiv;	 Catch:{ Exception -> 0x0495 }
-        r2 = 0;
-        r0.seek(r2);	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.fiv;	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.iv;	 Catch:{ Exception -> 0x0495 }
-        r0.write(r2);	 Catch:{ Exception -> 0x0495 }
+        r0 = r7.fiv;	 Catch:{ Exception -> 0x0490 }
+        r1 = 0;
+        r0.seek(r1);	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.fiv;	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.iv;	 Catch:{ Exception -> 0x0490 }
+        r0.write(r1);	 Catch:{ Exception -> 0x0490 }
     L_0x0400:
-        r0 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        if (r0 <= 0) goto L_0x041d;
+        r0 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        if (r0 <= 0) goto L_0x0418;
     L_0x0404:
-        r0 = r1.state;	 Catch:{ Exception -> 0x0495 }
-        if (r0 != r4) goto L_0x041d;
+        r0 = r7.state;	 Catch:{ Exception -> 0x0490 }
+        if (r0 != r8) goto L_0x0418;
     L_0x0408:
-        r21.copyNotLoadedRanges();	 Catch:{ Exception -> 0x0495 }
-        r0 = r1.delegate;	 Catch:{ Exception -> 0x0495 }
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r3 = (float) r3;	 Catch:{ Exception -> 0x0495 }
-        r6 = r1.totalBytesCount;	 Catch:{ Exception -> 0x0495 }
-        r6 = (float) r6;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3 / r6;
-        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0495 }
-        r0.didChangedLoadProgress(r1, r2);	 Catch:{ Exception -> 0x0495 }
-    L_0x041d:
-        r0 = r7;
-    L_0x041e:
-        r2 = 0;
-    L_0x041f:
-        r3 = r1.delayedRequestInfos;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.size();	 Catch:{ Exception -> 0x0495 }
-        if (r2 >= r3) goto L_0x0485;
-    L_0x0427:
-        r3 = r1.delayedRequestInfos;	 Catch:{ Exception -> 0x0495 }
-        r3 = r3.get(r2);	 Catch:{ Exception -> 0x0495 }
-        r3 = (org.telegram.messenger.FileLoadOperation.RequestInfo) r3;	 Catch:{ Exception -> 0x0495 }
-        r6 = r1.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0495 }
-        if (r6 != 0) goto L_0x043f;
-    L_0x0433:
-        r6 = r1.downloadedBytes;	 Catch:{ Exception -> 0x0495 }
-        r7 = r3.offset;	 Catch:{ Exception -> 0x0495 }
-        if (r6 != r7) goto L_0x043c;
-    L_0x043b:
-        goto L_0x043f;
-    L_0x043c:
-        r2 = r2 + 1;
-        goto L_0x041f;
-    L_0x043f:
-        r6 = r1.delayedRequestInfos;	 Catch:{ Exception -> 0x0495 }
-        r6.remove(r2);	 Catch:{ Exception -> 0x0495 }
-        r2 = r1.processRequestResult(r3, r9);	 Catch:{ Exception -> 0x0495 }
-        if (r2 != 0) goto L_0x0485;
-    L_0x044a:
-        r2 = r3.response;	 Catch:{ Exception -> 0x0495 }
-        if (r2 == 0) goto L_0x045e;
-    L_0x0450:
-        r2 = r3.response;	 Catch:{ Exception -> 0x0495 }
-        r2.disableFree = r5;	 Catch:{ Exception -> 0x0495 }
-        r2 = r3.response;	 Catch:{ Exception -> 0x0495 }
-        r2.freeResources();	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0485;
-    L_0x045e:
-        r2 = r3.responseWeb;	 Catch:{ Exception -> 0x0495 }
-        if (r2 == 0) goto L_0x0472;
-    L_0x0464:
-        r2 = r3.responseWeb;	 Catch:{ Exception -> 0x0495 }
-        r2.disableFree = r5;	 Catch:{ Exception -> 0x0495 }
-        r2 = r3.responseWeb;	 Catch:{ Exception -> 0x0495 }
-        r2.freeResources();	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0485;
-    L_0x0472:
-        r2 = r3.responseCdn;	 Catch:{ Exception -> 0x0495 }
-        if (r2 == 0) goto L_0x0485;
-    L_0x0478:
-        r2 = r3.responseCdn;	 Catch:{ Exception -> 0x0495 }
-        r2.disableFree = r5;	 Catch:{ Exception -> 0x0495 }
-        r2 = r3.responseCdn;	 Catch:{ Exception -> 0x0495 }
-        r2.freeResources();	 Catch:{ Exception -> 0x0495 }
-    L_0x0485:
-        if (r0 == 0) goto L_0x048c;
+        r21.copyNotLoadedRanges();	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.delegate;	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r3 = (long) r0;	 Catch:{ Exception -> 0x0490 }
+        r0 = r7.totalBytesCount;	 Catch:{ Exception -> 0x0490 }
+        r5 = (long) r0;	 Catch:{ Exception -> 0x0490 }
+        r2 = r21;
+        r1.didChangedLoadProgress(r2, r3, r5);	 Catch:{ Exception -> 0x0490 }
+    L_0x0418:
+        r0 = r11;
+    L_0x0419:
+        r1 = 0;
+    L_0x041a:
+        r2 = r7.delayedRequestInfos;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.size();	 Catch:{ Exception -> 0x0490 }
+        if (r1 >= r2) goto L_0x0480;
+    L_0x0422:
+        r2 = r7.delayedRequestInfos;	 Catch:{ Exception -> 0x0490 }
+        r2 = r2.get(r1);	 Catch:{ Exception -> 0x0490 }
+        r2 = (org.telegram.messenger.FileLoadOperation.RequestInfo) r2;	 Catch:{ Exception -> 0x0490 }
+        r3 = r7.notLoadedBytesRanges;	 Catch:{ Exception -> 0x0490 }
+        if (r3 != 0) goto L_0x043a;
+    L_0x042e:
+        r3 = r7.downloadedBytes;	 Catch:{ Exception -> 0x0490 }
+        r4 = r2.offset;	 Catch:{ Exception -> 0x0490 }
+        if (r3 != r4) goto L_0x0437;
+    L_0x0436:
+        goto L_0x043a;
+    L_0x0437:
+        r1 = r1 + 1;
+        goto L_0x041a;
+    L_0x043a:
+        r3 = r7.delayedRequestInfos;	 Catch:{ Exception -> 0x0490 }
+        r3.remove(r1);	 Catch:{ Exception -> 0x0490 }
+        r1 = r7.processRequestResult(r2, r10);	 Catch:{ Exception -> 0x0490 }
+        if (r1 != 0) goto L_0x0480;
+    L_0x0445:
+        r1 = r2.response;	 Catch:{ Exception -> 0x0490 }
+        if (r1 == 0) goto L_0x0459;
+    L_0x044b:
+        r1 = r2.response;	 Catch:{ Exception -> 0x0490 }
+        r1.disableFree = r9;	 Catch:{ Exception -> 0x0490 }
+        r1 = r2.response;	 Catch:{ Exception -> 0x0490 }
+        r1.freeResources();	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0480;
+    L_0x0459:
+        r1 = r2.responseWeb;	 Catch:{ Exception -> 0x0490 }
+        if (r1 == 0) goto L_0x046d;
+    L_0x045f:
+        r1 = r2.responseWeb;	 Catch:{ Exception -> 0x0490 }
+        r1.disableFree = r9;	 Catch:{ Exception -> 0x0490 }
+        r1 = r2.responseWeb;	 Catch:{ Exception -> 0x0490 }
+        r1.freeResources();	 Catch:{ Exception -> 0x0490 }
+        goto L_0x0480;
+    L_0x046d:
+        r1 = r2.responseCdn;	 Catch:{ Exception -> 0x0490 }
+        if (r1 == 0) goto L_0x0480;
+    L_0x0473:
+        r1 = r2.responseCdn;	 Catch:{ Exception -> 0x0490 }
+        r1.disableFree = r9;	 Catch:{ Exception -> 0x0490 }
+        r1 = r2.responseCdn;	 Catch:{ Exception -> 0x0490 }
+        r1.freeResources();	 Catch:{ Exception -> 0x0490 }
+    L_0x0480:
+        if (r0 == 0) goto L_0x0487;
+    L_0x0482:
+        r7.onFinishLoadingFile(r8);	 Catch:{ Exception -> 0x0490 }
+        goto L_0x058d;
     L_0x0487:
-        r1.onFinishLoadingFile(r4);	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0592;
+        r21.startDownloadRequest();	 Catch:{ Exception -> 0x0490 }
+        goto L_0x058d;
     L_0x048c:
-        r21.startDownloadRequest();	 Catch:{ Exception -> 0x0495 }
-        goto L_0x0592;
-    L_0x0491:
-        r1.onFinishLoadingFile(r4);	 Catch:{ Exception -> 0x0495 }
-        return r5;
-    L_0x0495:
+        r7.onFinishLoadingFile(r8);	 Catch:{ Exception -> 0x0490 }
+        return r9;
+    L_0x0490:
         r0 = move-exception;
-        r1.onFail(r5, r5);
+        r7.onFail(r9, r9);
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0592;
-    L_0x049e:
-        r3 = r0.text;
-        r6 = "FILE_MIGRATE_";
-        r3 = r3.contains(r6);
-        if (r3 == 0) goto L_0x04d8;
-    L_0x04a8:
+        goto L_0x058d;
+    L_0x0499:
+        r2 = r0.text;
+        r3 = "FILE_MIGRATE_";
+        r2 = r2.contains(r3);
+        if (r2 == 0) goto L_0x04d3;
+    L_0x04a3:
         r0 = r0.text;
-        r2 = "";
-        r0 = r0.replace(r6, r2);
-        r3 = new java.util.Scanner;
-        r3.<init>(r0);
-        r3.useDelimiter(r2);
-        r0 = r3.nextInt();	 Catch:{ Exception -> 0x04c1 }
-        r9 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x04c1 }
-        goto L_0x04c2;
-    L_0x04c2:
-        if (r9 != 0) goto L_0x04c9;
+        r1 = "";
+        r0 = r0.replace(r3, r1);
+        r2 = new java.util.Scanner;
+        r2.<init>(r0);
+        r2.useDelimiter(r1);
+        r0 = r2.nextInt();	 Catch:{ Exception -> 0x04bc }
+        r10 = java.lang.Integer.valueOf(r0);	 Catch:{ Exception -> 0x04bc }
+        goto L_0x04bd;
+    L_0x04bd:
+        if (r10 != 0) goto L_0x04c4;
+    L_0x04bf:
+        r7.onFail(r9, r9);
+        goto L_0x058d;
     L_0x04c4:
-        r1.onFail(r5, r5);
-        goto L_0x0592;
-    L_0x04c9:
-        r0 = r9.intValue();
-        r1.datacenterId = r0;
-        r1.downloadedBytes = r5;
-        r1.requestedBytesCount = r5;
+        r0 = r10.intValue();
+        r7.datacenterId = r0;
+        r7.downloadedBytes = r9;
+        r7.requestedBytesCount = r9;
         r21.startDownloadRequest();
-        goto L_0x0592;
-    L_0x04d8:
-        r3 = r0.text;
-        r6 = "OFFSET_INVALID";
-        r3 = r3.contains(r6);
-        if (r3 == 0) goto L_0x04fd;
-    L_0x04e2:
-        r0 = r1.downloadedBytes;
-        r2 = r1.currentDownloadChunkSize;
-        r0 = r0 % r2;
-        if (r0 != 0) goto L_0x04f8;
+        goto L_0x058d;
+    L_0x04d3:
+        r2 = r0.text;
+        r3 = "OFFSET_INVALID";
+        r2 = r2.contains(r3);
+        if (r2 == 0) goto L_0x04f8;
+    L_0x04dd:
+        r0 = r7.downloadedBytes;
+        r1 = r7.currentDownloadChunkSize;
+        r0 = r0 % r1;
+        if (r0 != 0) goto L_0x04f3;
+    L_0x04e4:
+        r7.onFinishLoadingFile(r8);	 Catch:{ Exception -> 0x04e9 }
+        goto L_0x058d;
     L_0x04e9:
-        r1.onFinishLoadingFile(r4);	 Catch:{ Exception -> 0x04ee }
-        goto L_0x0592;
-    L_0x04ee:
         r0 = move-exception;
-        r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);
-        r1.onFail(r5, r5);
-        goto L_0x0592;
+        r1 = r0;
+        org.telegram.messenger.FileLog.e(r1);
+        r7.onFail(r9, r9);
+        goto L_0x058d;
+    L_0x04f3:
+        r7.onFail(r9, r9);
+        goto L_0x058d;
     L_0x04f8:
-        r1.onFail(r5, r5);
-        goto L_0x0592;
-    L_0x04fd:
-        r3 = r0.text;
-        r4 = "RETRY_LIMIT";
-        r3 = r3.contains(r4);
-        if (r3 == 0) goto L_0x050c;
+        r2 = r0.text;
+        r3 = "RETRY_LIMIT";
+        r2 = r2.contains(r3);
+        if (r2 == 0) goto L_0x0507;
+    L_0x0502:
+        r7.onFail(r9, r4);
+        goto L_0x058d;
     L_0x0507:
-        r1.onFail(r5, r7);
-        goto L_0x0592;
-    L_0x050c:
-        r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r3 == 0) goto L_0x058f;
-    L_0x0510:
-        r3 = r1.location;
-        r4 = " ";
-        if (r3 == 0) goto L_0x0568;
-    L_0x0516:
-        r3 = new java.lang.StringBuilder;
-        r3.<init>();
-        r0 = r0.text;
-        r3.append(r0);
-        r3.append(r4);
-        r0 = r1.location;
-        r3.append(r0);
-        r3.append(r8);
-        r0 = r1.location;
-        r6 = r0.id;
-        r3.append(r6);
-        r3.append(r2);
-        r0 = r1.location;
-        r0 = r0.local_id;
-        r3.append(r0);
-        r0 = " access_hash = ";
-        r3.append(r0);
-        r0 = r1.location;
-        r6 = r0.access_hash;
-        r3.append(r6);
-        r0 = " volume_id = ";
-        r3.append(r0);
-        r0 = r1.location;
-        r6 = r0.volume_id;
-        r3.append(r6);
-        r0 = " secret = ";
-        r3.append(r0);
-        r0 = r1.location;
-        r6 = r0.secret;
-        r3.append(r6);
-        r0 = r3.toString();
-        org.telegram.messenger.FileLog.e(r0);
-        goto L_0x058f;
-    L_0x0568:
-        r2 = r1.webLocation;
-        if (r2 == 0) goto L_0x058f;
-    L_0x056c:
+        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r2 == 0) goto L_0x058a;
+    L_0x050b:
+        r2 = r7.location;
+        r3 = " ";
+        if (r2 == 0) goto L_0x0563;
+    L_0x0511:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r0 = r0.text;
         r2.append(r0);
-        r2.append(r4);
-        r0 = r1.webLocation;
+        r2.append(r3);
+        r0 = r7.location;
         r2.append(r0);
-        r2.append(r8);
-        r0 = r21.getFileName();
+        r2.append(r5);
+        r0 = r7.location;
+        r3 = r0.id;
+        r2.append(r3);
+        r2.append(r1);
+        r0 = r7.location;
+        r0 = r0.local_id;
+        r2.append(r0);
+        r0 = " access_hash = ";
+        r2.append(r0);
+        r0 = r7.location;
+        r0 = r0.access_hash;
+        r2.append(r0);
+        r0 = " volume_id = ";
+        r2.append(r0);
+        r0 = r7.location;
+        r0 = r0.volume_id;
+        r2.append(r0);
+        r0 = " secret = ";
+        r2.append(r0);
+        r0 = r7.location;
+        r0 = r0.secret;
         r2.append(r0);
         r0 = r2.toString();
         org.telegram.messenger.FileLog.e(r0);
-    L_0x058f:
-        r1.onFail(r5, r5);
-    L_0x0592:
-        return r5;
+        goto L_0x058a;
+    L_0x0563:
+        r1 = r7.webLocation;
+        if (r1 == 0) goto L_0x058a;
+    L_0x0567:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r0 = r0.text;
+        r1.append(r0);
+        r1.append(r3);
+        r0 = r7.webLocation;
+        r1.append(r0);
+        r1.append(r5);
+        r0 = r21.getFileName();
+        r1.append(r0);
+        r0 = r1.toString();
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x058a:
+        r7.onFail(r9, r9);
+    L_0x058d:
+        return r9;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.processRequestResult(org.telegram.messenger.FileLoadOperation$RequestInfo, org.telegram.tgnet.TLRPC$TL_error):boolean");
     }
@@ -3295,6 +3270,7 @@ public class FileLoadOperation {
                     tL_upload_getCdnFile.location = this.location;
                     tL_upload_getCdnFile.offset = i2;
                     tL_upload_getCdnFile.limit = this.currentDownloadChunkSize;
+                    tL_upload_getCdnFile.cdn_supported = true;
                 }
                 int i10 = i9;
                 TLObject tLObject = tL_upload_getCdnFile;

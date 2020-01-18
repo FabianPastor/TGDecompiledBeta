@@ -301,6 +301,8 @@ public class Theme {
     public static Drawable chat_muteIconDrawable = null;
     public static TextPaint chat_namePaint = null;
     public static Drawable[][] chat_photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
+    public static Drawable[] chat_pollCheckDrawable = new Drawable[2];
+    public static Drawable[] chat_pollCrossDrawable = new Drawable[2];
     public static Paint chat_radialProgress2Paint = null;
     public static Paint chat_radialProgressPaint = null;
     public static Drawable chat_redLocationIcon = null;
@@ -1099,17 +1101,19 @@ public class Theme {
         private int currentBackgroundHeight;
         private int currentColor;
         private int currentGradientColor;
-        private int currentShadowDrawableRadius;
+        private int[] currentShadowDrawableRadius = new int[4];
         private int currentType;
         private LinearGradient gradientShader;
+        private boolean isBottomNear;
         private boolean isOut;
         private boolean isSelected;
+        private boolean isTopNear;
         private Matrix matrix = new Matrix();
         private Paint paint = new Paint(1);
         private Path path;
         private RectF rect = new RectF();
         private Paint selectedPaint;
-        private Drawable shadowDrawable;
+        private Drawable[] shadowDrawable = new Drawable[4];
         private int topY;
 
         public int getOpacity() {
@@ -1126,9 +1130,7 @@ public class Theme {
             this.isOut = z;
             this.currentType = i;
             this.isSelected = z2;
-            if (this.currentType != 1) {
-                this.path = new Path();
-            }
+            this.path = new Path();
             this.selectedPaint = new Paint(1);
         }
 
@@ -1154,7 +1156,7 @@ public class Theme {
             return (Integer) Theme.currentColors.get(str);
         }
 
-        public void setTop(int i, int i2) {
+        public void setTop(int i, int i2, boolean z, boolean z2) {
             int color;
             Integer currentColor;
             int i3 = i2;
@@ -1187,6 +1189,8 @@ public class Theme {
             }
             this.currentBackgroundHeight = i3;
             this.topY = i;
+            this.isTopNear = z;
+            this.isBottomNear = z2;
         }
 
         private int dp(float f) {
@@ -1196,29 +1200,41 @@ public class Theme {
             return AndroidUtilities.dp(f);
         }
 
+        public Paint getPaint() {
+            return this.paint;
+        }
+
         public Drawable getShadowDrawable() {
             int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
-            if (this.shadowDrawable == null || this.currentShadowDrawableRadius != dp) {
-                this.currentShadowDrawableRadius = dp;
+            int i = (this.isTopNear && this.isBottomNear) ? 3 : this.isTopNear ? 2 : this.isBottomNear ? 1 : 0;
+            int[] iArr = this.currentShadowDrawableRadius;
+            if (iArr[i] != dp) {
+                iArr[i] = dp;
                 try {
                     Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Config.ARGB_8888);
                     Canvas canvas = new Canvas(createBitmap);
                     Paint paint = new Paint(1);
-                    paint.setStyle(Style.STROKE);
-                    paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
                     paint.setColor(NUM);
+                    paint.setShadowLayer(2.0f, 0.0f, 1.0f, -1);
                     if (AndroidUtilities.density > 1.0f) {
                         setBounds(-1, -1, createBitmap.getWidth() + 1, createBitmap.getHeight() + 1);
                     } else {
                         setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
                     }
                     draw(canvas, paint);
-                    this.shadowDrawable = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
-                    this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow"), Mode.MULTIPLY));
+                    if (AndroidUtilities.density > 1.0f) {
+                        paint.setColor(0);
+                        paint.setShadowLayer(0.0f, 0.0f, 0.0f, 0);
+                        paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                        setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
+                        draw(canvas, paint);
+                    }
+                    this.shadowDrawable[i] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
+                    this.shadowDrawable[i].setColorFilter(new PorterDuffColorFilter(getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow"), Mode.MULTIPLY));
                 } catch (Throwable unused) {
                 }
             }
-            return this.shadowDrawable;
+            return this.shadowDrawable[i];
         }
 
         private static ByteBuffer getByteBuffer(int i, int i2, int i3, int i4) {
@@ -1254,146 +1270,863 @@ public class Theme {
             draw(canvas, null);
         }
 
-        public void draw(Canvas canvas, Paint paint) {
-            int dp;
-            Canvas canvas2 = canvas;
-            Rect bounds = getBounds();
-            int dp2 = dp(2.0f);
-            if (this.currentType == 2) {
-                dp = dp(6.0f);
-            } else {
-                dp = dp((float) SharedConfig.bubbleRadius);
-            }
-            int dp3 = dp(6.0f);
-            Paint paint2 = paint == null ? this.paint : paint;
-            if (paint == null && this.gradientShader != null) {
-                this.matrix.reset();
-                this.matrix.postTranslate(0.0f, (float) (-this.topY));
-                this.gradientShader.setLocalMatrix(this.matrix);
-            }
-            String str = "chat_outBubbleGradientSelectedOverlay";
-            if (this.currentType == 1) {
-                this.rect.set((float) (bounds.left + dp2), (float) (bounds.top + dp2), (float) (bounds.right - dp2), (float) (bounds.bottom - dp2));
-                float f = (float) dp;
-                canvas2.drawRoundRect(this.rect, f, f, paint2);
-                if (this.gradientShader != null && this.isSelected) {
-                    this.selectedPaint.setColor(getColor(str));
-                    canvas2.drawRoundRect(this.rect, f, f, this.selectedPaint);
-                    return;
-                }
-                return;
-            }
-            this.path.reset();
-            RectF rectF;
-            int i;
-            float f2;
-            int i2;
-            int i3;
-            RectF rectF2;
-            float f3;
-            int i4;
-            if (this.isOut) {
-                if (paint != null || (this.topY + bounds.bottom) - dp < this.currentBackgroundHeight) {
-                    this.path.moveTo((float) (bounds.right - dp(2.6f)), (float) (bounds.bottom - dp2));
-                    this.path.lineTo((float) ((bounds.left + dp2) + dp), (float) (bounds.bottom - dp2));
-                    rectF = this.rect;
-                    i = bounds.left;
-                    f2 = (float) (i + dp2);
-                    i2 = bounds.bottom;
-                    int i5 = dp * 2;
-                    rectF.set(f2, (float) ((i2 - dp2) - i5), (float) ((i + dp2) + i5), (float) (i2 - dp2));
-                    this.path.arcTo(this.rect, 90.0f, 90.0f, false);
-                } else {
-                    this.path.moveTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                    this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                }
-                if (paint == null) {
-                    i3 = this.topY;
-                    if ((dp * 2) + i3 < 0) {
-                        this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top - i3) - dp(2.0f)));
-                        this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) - dp(2.0f)));
-                        if (paint == null || (this.topY + bounds.bottom) - (dp3 * 2) < this.currentBackgroundHeight) {
-                            this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
-                            dp3 *= 2;
-                            this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + dp3), (float) ((bounds.bottom - dp2) - dp(1.0f)));
-                            this.path.arcTo(this.rect, 180.0f, -83.0f, false);
-                        } else {
-                            this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                        }
-                    }
-                }
-                this.path.lineTo((float) (bounds.left + dp2), (float) ((bounds.top + dp2) + dp));
-                rectF2 = this.rect;
-                i3 = bounds.left;
-                f3 = (float) (i3 + dp2);
-                i4 = bounds.top;
-                int i6 = dp * 2;
-                rectF2.set(f3, (float) (i4 + dp2), (float) ((i3 + dp2) + i6), (float) ((i4 + dp2) + i6));
-                this.path.arcTo(this.rect, 180.0f, 90.0f, false);
-                this.path.lineTo((float) ((bounds.right - dp(8.0f)) - dp), (float) (bounds.top + dp2));
-                this.rect.set((float) ((bounds.right - dp(8.0f)) - i6), (float) (bounds.top + dp2), (float) (bounds.right - dp(8.0f)), (float) ((bounds.top + dp2) + i6));
-                this.path.arcTo(this.rect, 270.0f, 90.0f, false);
-                if (paint == null) {
-                }
-                this.path.lineTo((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
-                dp3 *= 2;
-                this.rect.set((float) (bounds.right - dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) ((bounds.right - dp(7.0f)) + dp3), (float) ((bounds.bottom - dp2) - dp(1.0f)));
-                this.path.arcTo(this.rect, 180.0f, -83.0f, false);
-            } else {
-                int i7;
-                if (paint != null || (this.topY + bounds.bottom) - dp < this.currentBackgroundHeight) {
-                    this.path.moveTo((float) (bounds.left + dp(2.6f)), (float) (bounds.bottom - dp2));
-                    this.path.lineTo((float) ((bounds.right - dp2) - dp), (float) (bounds.bottom - dp2));
-                    rectF = this.rect;
-                    i = bounds.right;
-                    i2 = dp * 2;
-                    f2 = (float) ((i - dp2) - i2);
-                    i7 = bounds.bottom;
-                    rectF.set(f2, (float) ((i7 - dp2) - i2), (float) (i - dp2), (float) (i7 - dp2));
-                    this.path.arcTo(this.rect, 90.0f, -90.0f, false);
-                } else {
-                    this.path.moveTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                    this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                }
-                if (paint == null) {
-                    i7 = this.topY;
-                    if ((dp * 2) + i7 < 0) {
-                        this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top - i7) - dp(2.0f)));
-                        this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) - dp(2.0f)));
-                        if (paint == null || (this.topY + bounds.bottom) - (dp3 * 2) < this.currentBackgroundHeight) {
-                            this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
-                            dp3 *= 2;
-                            this.rect.set((float) ((bounds.left + dp(7.0f)) - dp3), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) (bounds.left + dp(8.0f)), (float) ((bounds.bottom - dp2) - dp(1.0f)));
-                            this.path.arcTo(this.rect, 0.0f, 83.0f, false);
-                        } else {
-                            this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) ((bounds.top - this.topY) + this.currentBackgroundHeight));
-                        }
-                    }
-                }
-                this.path.lineTo((float) (bounds.right - dp2), (float) ((bounds.top + dp2) + dp));
-                rectF2 = this.rect;
-                i3 = bounds.right;
-                int i8 = dp * 2;
-                f3 = (float) ((i3 - dp2) - i8);
-                i4 = bounds.top;
-                rectF2.set(f3, (float) (i4 + dp2), (float) (i3 - dp2), (float) ((i4 + dp2) + i8));
-                this.path.arcTo(this.rect, 0.0f, -90.0f, false);
-                this.path.lineTo((float) ((bounds.left + dp(8.0f)) + dp), (float) (bounds.top + dp2));
-                this.rect.set((float) (bounds.left + dp(8.0f)), (float) (bounds.top + dp2), (float) ((bounds.left + dp(8.0f)) + i8), (float) ((bounds.top + dp2) + i8));
-                this.path.arcTo(this.rect, 270.0f, -90.0f, false);
-                if (paint == null) {
-                }
-                this.path.lineTo((float) (bounds.left + dp(8.0f)), (float) (((bounds.bottom - dp2) - dp3) - dp(3.0f)));
-                dp3 *= 2;
-                this.rect.set((float) ((bounds.left + dp(7.0f)) - dp3), (float) (((bounds.bottom - dp2) - dp3) - dp(9.0f)), (float) (bounds.left + dp(8.0f)), (float) ((bounds.bottom - dp2) - dp(1.0f)));
-                this.path.arcTo(this.rect, 0.0f, 83.0f, false);
-            }
-            this.path.close();
-            canvas2.drawPath(this.path, paint2);
-            if (this.gradientShader != null && this.isSelected) {
-                this.selectedPaint.setColor(getColor(str));
-                canvas2.drawPath(this.path, this.selectedPaint);
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x0247  */
+        /* JADX WARNING: Removed duplicated region for block: B:42:0x01f5  */
+        /* JADX WARNING: Removed duplicated region for block: B:91:0x04b0  */
+        /* JADX WARNING: Removed duplicated region for block: B:83:0x045d  */
+        public void draw(android.graphics.Canvas r21, android.graphics.Paint r22) {
+            /*
+            r20 = this;
+            r0 = r20;
+            r1 = r21;
+            r2 = r20.getBounds();
+            r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r4 = r0.dp(r3);
+            r5 = r0.currentType;
+            r6 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
+            r7 = 2;
+            if (r5 != r7) goto L_0x001e;
+        L_0x0015:
+            r5 = r0.dp(r6);
+            r8 = r0.dp(r6);
+            goto L_0x0031;
+        L_0x001e:
+            r5 = org.telegram.messenger.SharedConfig.bubbleRadius;
+            r5 = (float) r5;
+            r5 = r0.dp(r5);
+            r8 = 5;
+            r9 = org.telegram.messenger.SharedConfig.bubbleRadius;
+            r8 = java.lang.Math.min(r8, r9);
+            r8 = (float) r8;
+            r8 = r0.dp(r8);
+        L_0x0031:
+            r6 = r0.dp(r6);
+            if (r22 != 0) goto L_0x003a;
+        L_0x0037:
+            r9 = r0.paint;
+            goto L_0x003c;
+        L_0x003a:
+            r9 = r22;
+        L_0x003c:
+            r10 = 0;
+            if (r22 != 0) goto L_0x0058;
+        L_0x003f:
+            r11 = r0.gradientShader;
+            if (r11 == 0) goto L_0x0058;
+        L_0x0043:
+            r11 = r0.matrix;
+            r11.reset();
+            r11 = r0.matrix;
+            r12 = r0.topY;
+            r12 = -r12;
+            r12 = (float) r12;
+            r11.postTranslate(r10, r12);
+            r11 = r0.gradientShader;
+            r12 = r0.matrix;
+            r11.setLocalMatrix(r12);
+        L_0x0058:
+            r11 = r0.path;
+            r11.reset();
+            r11 = r0.isOut;
+            r13 = NUM; // 0x40266666 float:2.6 double:5.317423045E-315;
+            r14 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
+            r10 = 1;
+            r15 = 0;
+            r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            if (r11 == 0) goto L_0x02cc;
+        L_0x006a:
+            if (r22 != 0) goto L_0x00a0;
+        L_0x006c:
+            r11 = r0.topY;
+            r12 = r2.bottom;
+            r11 = r11 + r12;
+            r11 = r11 - r5;
+            r12 = r0.currentBackgroundHeight;
+            if (r11 >= r12) goto L_0x0077;
+        L_0x0076:
+            goto L_0x00a0;
+        L_0x0077:
+            r11 = r0.path;
+            r12 = r2.right;
+            r13 = r0.dp(r7);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r13 = r2.top;
+            r3 = r0.topY;
+            r13 = r13 - r3;
+            r3 = r0.currentBackgroundHeight;
+            r13 = r13 + r3;
+            r3 = (float) r13;
+            r11.moveTo(r12, r3);
+            r3 = r0.path;
+            r11 = r2.left;
+            r11 = r11 + r4;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r13 = r0.topY;
+            r12 = r12 - r13;
+            r13 = r0.currentBackgroundHeight;
+            r12 = r12 + r13;
+            r12 = (float) r12;
+            r3.lineTo(r11, r12);
+            goto L_0x00f6;
+        L_0x00a0:
+            r3 = r0.currentType;
+            if (r3 != r10) goto L_0x00b7;
+        L_0x00a4:
+            r3 = r0.path;
+            r11 = r2.right;
+            r12 = r0.dp(r7);
+            r11 = r11 - r12;
+            r11 = r11 - r5;
+            r11 = (float) r11;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3.moveTo(r11, r12);
+            goto L_0x00c8;
+        L_0x00b7:
+            r3 = r0.path;
+            r11 = r2.right;
+            r12 = r0.dp(r13);
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3.moveTo(r11, r12);
+        L_0x00c8:
+            r3 = r0.path;
+            r11 = r2.left;
+            r11 = r11 + r4;
+            r11 = r11 + r5;
+            r11 = (float) r11;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3.lineTo(r11, r12);
+            r3 = r0.rect;
+            r11 = r2.left;
+            r12 = r11 + r4;
+            r12 = (float) r12;
+            r13 = r2.bottom;
+            r18 = r13 - r4;
+            r19 = r5 * 2;
+            r7 = r18 - r19;
+            r7 = (float) r7;
+            r11 = r11 + r4;
+            r11 = r11 + r19;
+            r11 = (float) r11;
+            r13 = r13 - r4;
+            r13 = (float) r13;
+            r3.set(r12, r7, r11, r13);
+            r3 = r0.path;
+            r7 = r0.rect;
+            r3.arcTo(r7, r14, r14, r15);
+        L_0x00f6:
+            if (r22 != 0) goto L_0x014e;
+        L_0x00f8:
+            r3 = r0.topY;
+            r7 = r5 * 2;
+            r7 = r7 + r3;
+            if (r7 < 0) goto L_0x0100;
+        L_0x00ff:
+            goto L_0x014e;
+        L_0x0100:
+            r7 = r0.path;
+            r11 = r2.left;
+            r11 = r11 + r4;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r12 = r12 - r3;
+            r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r3);
+            r12 = r12 - r13;
+            r3 = (float) r12;
+            r7.lineTo(r11, r3);
+            r3 = r0.currentType;
+            if (r3 != r10) goto L_0x0130;
+        L_0x0118:
+            r3 = r0.path;
+            r7 = r2.right;
+            r7 = r7 - r4;
+            r7 = (float) r7;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r12 = r0.dp(r12);
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r3.lineTo(r7, r11);
+            goto L_0x01f0;
+        L_0x0130:
+            r3 = r0.path;
+            r7 = r2.right;
+            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r12 = r0.dp(r11);
+            r7 = r7 - r12;
+            r7 = (float) r7;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r12 = r0.dp(r12);
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r3.lineTo(r7, r11);
+            goto L_0x01f0;
+        L_0x014e:
+            r3 = r0.path;
+            r7 = r2.left;
+            r7 = r7 + r4;
+            r7 = (float) r7;
+            r11 = r2.top;
+            r11 = r11 + r4;
+            r11 = r11 + r5;
+            r11 = (float) r11;
+            r3.lineTo(r7, r11);
+            r3 = r0.rect;
+            r7 = r2.left;
+            r11 = r7 + r4;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r13 = r12 + r4;
+            r13 = (float) r13;
+            r7 = r7 + r4;
+            r17 = r5 * 2;
+            r7 = r7 + r17;
+            r7 = (float) r7;
+            r12 = r12 + r4;
+            r12 = r12 + r17;
+            r12 = (float) r12;
+            r3.set(r11, r13, r7, r12);
+            r3 = r0.path;
+            r7 = r0.rect;
+            r11 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
+            r3.arcTo(r7, r11, r14, r15);
+            r3 = r0.isTopNear;
+            if (r3 == 0) goto L_0x0184;
+        L_0x0182:
+            r3 = r8;
+            goto L_0x0185;
+        L_0x0184:
+            r3 = r5;
+        L_0x0185:
+            r7 = r0.currentType;
+            if (r7 != r10) goto L_0x01b0;
+        L_0x0189:
+            r7 = r0.path;
+            r11 = r2.right;
+            r11 = r11 - r4;
+            r11 = r11 - r3;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r7.lineTo(r11, r12);
+            r7 = r0.rect;
+            r11 = r2.right;
+            r12 = r11 - r4;
+            r13 = 2;
+            r3 = r3 * 2;
+            r12 = r12 - r3;
+            r12 = (float) r12;
+            r13 = r2.top;
+            r10 = r13 + r4;
+            r10 = (float) r10;
+            r11 = r11 - r4;
+            r11 = (float) r11;
+            r13 = r13 + r4;
+            r13 = r13 + r3;
+            r3 = (float) r13;
+            r7.set(r12, r10, r11, r3);
+            goto L_0x01e7;
+        L_0x01b0:
+            r7 = r0.path;
+            r10 = r2.right;
+            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r12 = r0.dp(r11);
+            r10 = r10 - r12;
+            r10 = r10 - r3;
+            r10 = (float) r10;
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r7.lineTo(r10, r12);
+            r7 = r0.rect;
+            r10 = r2.right;
+            r12 = r0.dp(r11);
+            r10 = r10 - r12;
+            r12 = 2;
+            r3 = r3 * 2;
+            r10 = r10 - r3;
+            r10 = (float) r10;
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r13 = r2.right;
+            r17 = r0.dp(r11);
+            r13 = r13 - r17;
+            r11 = (float) r13;
+            r13 = r2.top;
+            r13 = r13 + r4;
+            r13 = r13 + r3;
+            r3 = (float) r13;
+            r7.set(r10, r12, r11, r3);
+        L_0x01e7:
+            r3 = r0.path;
+            r7 = r0.rect;
+            r10 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
+            r3.arcTo(r7, r10, r14, r15);
+        L_0x01f0:
+            r3 = r0.currentType;
+            r7 = 1;
+            if (r3 != r7) goto L_0x0247;
+        L_0x01f5:
+            if (r22 != 0) goto L_0x0212;
+        L_0x01f7:
+            r3 = r0.topY;
+            r6 = r2.bottom;
+            r6 = r6 + r3;
+            r6 = r6 - r5;
+            r7 = r0.currentBackgroundHeight;
+            if (r6 >= r7) goto L_0x0202;
+        L_0x0201:
+            goto L_0x0212;
+        L_0x0202:
+            r5 = r0.path;
+            r6 = r2.right;
+            r6 = r6 - r4;
+            r4 = (float) r6;
+            r2 = r2.top;
+            r2 = r2 - r3;
+            r2 = r2 + r7;
+            r2 = (float) r2;
+            r5.lineTo(r4, r2);
+            goto L_0x0531;
+        L_0x0212:
+            r3 = r0.isBottomNear;
+            if (r3 == 0) goto L_0x0217;
+        L_0x0216:
+            r5 = r8;
+        L_0x0217:
+            r3 = r0.path;
+            r6 = r2.right;
+            r6 = r6 - r4;
+            r6 = (float) r6;
+            r7 = r2.bottom;
+            r7 = r7 - r4;
+            r7 = r7 - r5;
+            r7 = (float) r7;
+            r3.lineTo(r6, r7);
+            r3 = r0.rect;
+            r6 = r2.right;
+            r7 = r6 - r4;
+            r8 = 2;
+            r5 = r5 * 2;
+            r7 = r7 - r5;
+            r7 = (float) r7;
+            r2 = r2.bottom;
+            r8 = r2 - r4;
+            r8 = r8 - r5;
+            r5 = (float) r8;
+            r6 = r6 - r4;
+            r6 = (float) r6;
+            r2 = r2 - r4;
+            r2 = (float) r2;
+            r3.set(r7, r5, r6, r2);
+            r2 = r0.path;
+            r3 = r0.rect;
+            r4 = 0;
+            r2.arcTo(r3, r4, r14, r15);
+            goto L_0x0531;
+        L_0x0247:
+            if (r22 != 0) goto L_0x0270;
+        L_0x0249:
+            r3 = r0.topY;
+            r5 = r2.bottom;
+            r3 = r3 + r5;
+            r5 = r6 * 2;
+            r3 = r3 - r5;
+            r5 = r0.currentBackgroundHeight;
+            if (r3 >= r5) goto L_0x0256;
+        L_0x0255:
+            goto L_0x0270;
+        L_0x0256:
+            r3 = r0.path;
+            r4 = r2.right;
+            r5 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r5 = r0.dp(r5);
+            r4 = r4 - r5;
+            r4 = (float) r4;
+            r2 = r2.top;
+            r5 = r0.topY;
+            r2 = r2 - r5;
+            r5 = r0.currentBackgroundHeight;
+            r2 = r2 + r5;
+            r2 = (float) r2;
+            r3.lineTo(r4, r2);
+            goto L_0x0531;
+        L_0x0270:
+            r3 = r0.path;
+            r5 = r2.right;
+            r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r8 = r0.dp(r7);
+            r5 = r5 - r8;
+            r5 = (float) r5;
+            r7 = r2.bottom;
+            r7 = r7 - r4;
+            r7 = r7 - r6;
+            r8 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+            r8 = r0.dp(r8);
+            r7 = r7 - r8;
+            r7 = (float) r7;
+            r3.lineTo(r5, r7);
+            r3 = r0.rect;
+            r5 = r2.right;
+            r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r7 = r0.dp(r7);
+            r5 = r5 - r7;
+            r5 = (float) r5;
+            r7 = r2.bottom;
+            r7 = r7 - r4;
+            r8 = 2;
+            r6 = r6 * 2;
+            r7 = r7 - r6;
+            r8 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
+            r8 = r0.dp(r8);
+            r7 = r7 - r8;
+            r7 = (float) r7;
+            r8 = r2.right;
+            r10 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
+            r10 = r0.dp(r10);
+            r8 = r8 - r10;
+            r8 = r8 + r6;
+            r6 = (float) r8;
+            r2 = r2.bottom;
+            r2 = r2 - r4;
+            r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+            r4 = r0.dp(r4);
+            r2 = r2 - r4;
+            r2 = (float) r2;
+            r3.set(r5, r7, r6, r2);
+            r2 = r0.path;
+            r3 = r0.rect;
+            r4 = -NUM; // 0xffffffffc2a60000 float:-83.0 double:NaN;
+            r5 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
+            r2.arcTo(r3, r5, r4, r15);
+            goto L_0x0531;
+        L_0x02cc:
+            r3 = -NUM; // 0xffffffffc2b40000 float:-90.0 double:NaN;
+            if (r22 != 0) goto L_0x0306;
+        L_0x02d0:
+            r7 = r0.topY;
+            r10 = r2.bottom;
+            r7 = r7 + r10;
+            r7 = r7 - r5;
+            r10 = r0.currentBackgroundHeight;
+            if (r7 >= r10) goto L_0x02db;
+        L_0x02da:
+            goto L_0x0306;
+        L_0x02db:
+            r7 = r0.path;
+            r10 = r2.left;
+            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r12 = r0.dp(r11);
+            r10 = r10 + r12;
+            r10 = (float) r10;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = r0.currentBackgroundHeight;
+            r11 = r11 + r12;
+            r11 = (float) r11;
+            r7.moveTo(r10, r11);
+            r7 = r0.path;
+            r10 = r2.right;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = r0.currentBackgroundHeight;
+            r11 = r11 + r12;
+            r11 = (float) r11;
+            r7.lineTo(r10, r11);
+            goto L_0x035e;
+        L_0x0306:
+            r7 = r0.currentType;
+            r10 = 1;
+            if (r7 != r10) goto L_0x0320;
+        L_0x030b:
+            r7 = r0.path;
+            r10 = r2.left;
+            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r12 = r0.dp(r11);
+            r10 = r10 + r12;
+            r10 = r10 + r5;
+            r10 = (float) r10;
+            r11 = r2.bottom;
+            r11 = r11 - r4;
+            r11 = (float) r11;
+            r7.moveTo(r10, r11);
+            goto L_0x0331;
+        L_0x0320:
+            r7 = r0.path;
+            r10 = r2.left;
+            r11 = r0.dp(r13);
+            r10 = r10 + r11;
+            r10 = (float) r10;
+            r11 = r2.bottom;
+            r11 = r11 - r4;
+            r11 = (float) r11;
+            r7.moveTo(r10, r11);
+        L_0x0331:
+            r7 = r0.path;
+            r10 = r2.right;
+            r10 = r10 - r4;
+            r10 = r10 - r5;
+            r10 = (float) r10;
+            r11 = r2.bottom;
+            r11 = r11 - r4;
+            r11 = (float) r11;
+            r7.lineTo(r10, r11);
+            r7 = r0.rect;
+            r10 = r2.right;
+            r11 = r10 - r4;
+            r12 = r5 * 2;
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r13 = r2.bottom;
+            r19 = r13 - r4;
+            r12 = r19 - r12;
+            r12 = (float) r12;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r13 = r13 - r4;
+            r13 = (float) r13;
+            r7.set(r11, r12, r10, r13);
+            r7 = r0.path;
+            r10 = r0.rect;
+            r7.arcTo(r10, r14, r3, r15);
+        L_0x035e:
+            if (r22 != 0) goto L_0x03b7;
+        L_0x0360:
+            r7 = r0.topY;
+            r10 = r5 * 2;
+            r10 = r10 + r7;
+            if (r10 < 0) goto L_0x0368;
+        L_0x0367:
+            goto L_0x03b7;
+        L_0x0368:
+            r10 = r0.path;
+            r11 = r2.right;
+            r11 = r11 - r4;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r12 = r12 - r7;
+            r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r7);
+            r12 = r12 - r13;
+            r7 = (float) r12;
+            r10.lineTo(r11, r7);
+            r7 = r0.currentType;
+            r10 = 1;
+            if (r7 != r10) goto L_0x0399;
+        L_0x0381:
+            r7 = r0.path;
+            r10 = r2.left;
+            r10 = r10 + r4;
+            r10 = (float) r10;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r12 = r0.dp(r12);
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r7.lineTo(r10, r11);
+            goto L_0x0458;
+        L_0x0399:
+            r7 = r0.path;
+            r10 = r2.left;
+            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r12 = r0.dp(r11);
+            r10 = r10 + r12;
+            r10 = (float) r10;
+            r11 = r2.top;
+            r12 = r0.topY;
+            r11 = r11 - r12;
+            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r12 = r0.dp(r12);
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r7.lineTo(r10, r11);
+            goto L_0x0458;
+        L_0x03b7:
+            r7 = r0.path;
+            r10 = r2.right;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r11 = r2.top;
+            r11 = r11 + r4;
+            r11 = r11 + r5;
+            r11 = (float) r11;
+            r7.lineTo(r10, r11);
+            r7 = r0.rect;
+            r10 = r2.right;
+            r11 = r10 - r4;
+            r12 = r5 * 2;
+            r11 = r11 - r12;
+            r11 = (float) r11;
+            r13 = r2.top;
+            r14 = r13 + r4;
+            r14 = (float) r14;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r13 = r13 + r4;
+            r13 = r13 + r12;
+            r12 = (float) r13;
+            r7.set(r11, r14, r10, r12);
+            r7 = r0.path;
+            r10 = r0.rect;
+            r11 = 0;
+            r7.arcTo(r10, r11, r3, r15);
+            r7 = r0.isTopNear;
+            if (r7 == 0) goto L_0x03ea;
+        L_0x03e8:
+            r7 = r8;
+            goto L_0x03eb;
+        L_0x03ea:
+            r7 = r5;
+        L_0x03eb:
+            r10 = r0.currentType;
+            r11 = 1;
+            if (r10 != r11) goto L_0x0418;
+        L_0x03f0:
+            r10 = r0.path;
+            r11 = r2.left;
+            r11 = r11 + r4;
+            r11 = r11 + r7;
+            r11 = (float) r11;
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r10.lineTo(r11, r12);
+            r10 = r0.rect;
+            r11 = r2.left;
+            r12 = r11 + r4;
+            r12 = (float) r12;
+            r13 = r2.top;
+            r14 = r13 + r4;
+            r14 = (float) r14;
+            r11 = r11 + r4;
+            r16 = 2;
+            r7 = r7 * 2;
+            r11 = r11 + r7;
+            r11 = (float) r11;
+            r13 = r13 + r4;
+            r13 = r13 + r7;
+            r7 = (float) r13;
+            r10.set(r12, r14, r11, r7);
+            goto L_0x044f;
+        L_0x0418:
+            r10 = r0.path;
+            r11 = r2.left;
+            r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r13 = r0.dp(r12);
+            r11 = r11 + r13;
+            r11 = r11 + r7;
+            r11 = (float) r11;
+            r13 = r2.top;
+            r13 = r13 + r4;
+            r13 = (float) r13;
+            r10.lineTo(r11, r13);
+            r10 = r0.rect;
+            r11 = r2.left;
+            r13 = r0.dp(r12);
+            r11 = r11 + r13;
+            r11 = (float) r11;
+            r13 = r2.top;
+            r13 = r13 + r4;
+            r13 = (float) r13;
+            r14 = r2.left;
+            r17 = r0.dp(r12);
+            r14 = r14 + r17;
+            r12 = 2;
+            r7 = r7 * 2;
+            r14 = r14 + r7;
+            r12 = (float) r14;
+            r14 = r2.top;
+            r14 = r14 + r4;
+            r14 = r14 + r7;
+            r7 = (float) r14;
+            r10.set(r11, r13, r12, r7);
+        L_0x044f:
+            r7 = r0.path;
+            r10 = r0.rect;
+            r11 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
+            r7.arcTo(r10, r11, r3, r15);
+        L_0x0458:
+            r7 = r0.currentType;
+            r10 = 1;
+            if (r7 != r10) goto L_0x04b0;
+        L_0x045d:
+            if (r22 != 0) goto L_0x047a;
+        L_0x045f:
+            r6 = r0.topY;
+            r7 = r2.bottom;
+            r7 = r7 + r6;
+            r7 = r7 - r5;
+            r10 = r0.currentBackgroundHeight;
+            if (r7 >= r10) goto L_0x046a;
+        L_0x0469:
+            goto L_0x047a;
+        L_0x046a:
+            r3 = r0.path;
+            r5 = r2.left;
+            r5 = r5 + r4;
+            r4 = (float) r5;
+            r2 = r2.top;
+            r2 = r2 - r6;
+            r2 = r2 + r10;
+            r2 = (float) r2;
+            r3.lineTo(r4, r2);
+            goto L_0x0531;
+        L_0x047a:
+            r6 = r0.isBottomNear;
+            if (r6 == 0) goto L_0x047f;
+        L_0x047e:
+            r5 = r8;
+        L_0x047f:
+            r6 = r0.path;
+            r7 = r2.left;
+            r7 = r7 + r4;
+            r7 = (float) r7;
+            r8 = r2.bottom;
+            r8 = r8 - r4;
+            r8 = r8 - r5;
+            r8 = (float) r8;
+            r6.lineTo(r7, r8);
+            r6 = r0.rect;
+            r7 = r2.left;
+            r8 = r7 + r4;
+            r8 = (float) r8;
+            r2 = r2.bottom;
+            r10 = r2 - r4;
+            r11 = 2;
+            r5 = r5 * 2;
+            r10 = r10 - r5;
+            r10 = (float) r10;
+            r7 = r7 + r4;
+            r7 = r7 + r5;
+            r5 = (float) r7;
+            r2 = r2 - r4;
+            r2 = (float) r2;
+            r6.set(r8, r10, r5, r2);
+            r2 = r0.path;
+            r4 = r0.rect;
+            r5 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
+            r2.arcTo(r4, r5, r3, r15);
+            goto L_0x0531;
+        L_0x04b0:
+            if (r22 != 0) goto L_0x04d8;
+        L_0x04b2:
+            r3 = r0.topY;
+            r5 = r2.bottom;
+            r3 = r3 + r5;
+            r5 = r6 * 2;
+            r3 = r3 - r5;
+            r5 = r0.currentBackgroundHeight;
+            if (r3 >= r5) goto L_0x04bf;
+        L_0x04be:
+            goto L_0x04d8;
+        L_0x04bf:
+            r3 = r0.path;
+            r4 = r2.left;
+            r5 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r5 = r0.dp(r5);
+            r4 = r4 + r5;
+            r4 = (float) r4;
+            r2 = r2.top;
+            r5 = r0.topY;
+            r2 = r2 - r5;
+            r5 = r0.currentBackgroundHeight;
+            r2 = r2 + r5;
+            r2 = (float) r2;
+            r3.lineTo(r4, r2);
+            goto L_0x0531;
+        L_0x04d8:
+            r3 = r0.path;
+            r5 = r2.left;
+            r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r8 = r0.dp(r7);
+            r5 = r5 + r8;
+            r5 = (float) r5;
+            r7 = r2.bottom;
+            r7 = r7 - r4;
+            r7 = r7 - r6;
+            r8 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+            r8 = r0.dp(r8);
+            r7 = r7 - r8;
+            r7 = (float) r7;
+            r3.lineTo(r5, r7);
+            r3 = r0.rect;
+            r5 = r2.left;
+            r7 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
+            r7 = r0.dp(r7);
+            r5 = r5 + r7;
+            r7 = 2;
+            r6 = r6 * 2;
+            r5 = r5 - r6;
+            r5 = (float) r5;
+            r7 = r2.bottom;
+            r7 = r7 - r4;
+            r7 = r7 - r6;
+            r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
+            r6 = r0.dp(r6);
+            r7 = r7 - r6;
+            r6 = (float) r7;
+            r7 = r2.left;
+            r8 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r8 = r0.dp(r8);
+            r7 = r7 + r8;
+            r7 = (float) r7;
+            r2 = r2.bottom;
+            r2 = r2 - r4;
+            r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+            r4 = r0.dp(r4);
+            r2 = r2 - r4;
+            r2 = (float) r2;
+            r3.set(r5, r6, r7, r2);
+            r2 = r0.path;
+            r3 = r0.rect;
+            r4 = NUM; // 0x42a60000 float:83.0 double:5.52451968E-315;
+            r5 = 0;
+            r2.arcTo(r3, r5, r4, r15);
+        L_0x0531:
+            r2 = r0.path;
+            r2.close();
+            r2 = r0.path;
+            r1.drawPath(r2, r9);
+            r2 = r0.gradientShader;
+            if (r2 == 0) goto L_0x0555;
+        L_0x053f:
+            r2 = r0.isSelected;
+            if (r2 == 0) goto L_0x0555;
+        L_0x0543:
+            r2 = r0.selectedPaint;
+            r3 = "chat_outBubbleGradientSelectedOverlay";
+            r3 = r0.getColor(r3);
+            r2.setColor(r3);
+            r2 = r0.path;
+            r3 = r0.selectedPaint;
+            r1.drawPath(r2, r3);
+        L_0x0555:
+            return;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme$MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");
         }
 
         public void setAlpha(int i) {
@@ -3213,101 +3946,101 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x2c1d A:{Catch:{ all -> 0x2CLASSNAME }} */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x2CLASSNAME A:{Catch:{ all -> 0x2c3a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d78 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d9b A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d88 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x2aca A:{SYNTHETIC, Splitter:B:67:0x2aca} */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x2ab9 A:{Catch:{ Exception -> 0x2e4f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x2aeb A:{SYNTHETIC, Splitter:B:78:0x2aeb} */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x2b19 A:{Catch:{ Exception -> 0x2e4b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x2daa A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x2db9 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x2db8 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x2e18 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x2e11 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x2e34 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x2e2d A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x2c1a A:{Catch:{ all -> 0x2CLASSNAME }} */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x2c0e A:{Catch:{ all -> 0x2CLASSNAME }} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d58 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d78 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d75 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d98 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d85 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x2ac7 A:{SYNTHETIC, Splitter:B:67:0x2ac7} */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x2ab6 A:{Catch:{ Exception -> 0x2e4c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x2ae8 A:{SYNTHETIC, Splitter:B:78:0x2ae8} */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x2b16 A:{Catch:{ Exception -> 0x2e48 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x2da7 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x2db6 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x2db5 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x2e15 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x2e0e A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x2e31 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x2e2a A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d78 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d88 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d9b A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d58 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d75 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d78 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d85 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d98 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d58 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d78 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d75 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d98 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d85 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d78 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d9b A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d88 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d5b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d78 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d7b A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d88 A:{Catch:{ Exception -> 0x2e47 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d9b A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e57  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x2ead  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1f  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x2e57  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x2e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x2eaa  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x2efd  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x2f1c  */
     /* JADX WARNING: Removed duplicated region for block: B:257:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:256:0x2var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x2d58 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2d75 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x2d78 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x2d85 A:{Catch:{ Exception -> 0x2e44 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x2d98 A:{SYNTHETIC} */
     static {
         /*
         r0 = new java.lang.Object;
@@ -3355,13 +4088,17 @@ public class Theme {
         lastLoadingThemesTime = r6;
         r6 = new int[r4];
         remoteThemesHash = r6;
-        r6 = 6;
+        r6 = 2;
         r7 = new android.graphics.drawable.Drawable[r6];
-        chat_attachButtonDrawables = r7;
-        r7 = 2;
+        chat_pollCheckDrawable = r7;
+        r7 = new android.graphics.drawable.Drawable[r6];
+        chat_pollCrossDrawable = r7;
+        r7 = 6;
         r8 = new android.graphics.drawable.Drawable[r7];
+        chat_attachButtonDrawables = r8;
+        r8 = new android.graphics.drawable.Drawable[r6];
         chat_locationDrawable = r8;
-        r8 = new android.graphics.drawable.Drawable[r7];
+        r8 = new android.graphics.drawable.Drawable[r6];
         chat_contactDrawable = r8;
         r8 = 4;
         r9 = new android.graphics.drawable.Drawable[r8];
@@ -3369,23 +4106,23 @@ public class Theme {
         r9 = new android.graphics.drawable.Drawable[r8];
         chat_cornerInner = r9;
         r9 = 10;
-        r9 = new int[]{r9, r7};
+        r9 = new int[]{r9, r6};
         r10 = android.graphics.drawable.Drawable.class;
         r9 = java.lang.reflect.Array.newInstance(r10, r9);
         r9 = (android.graphics.drawable.Drawable[][]) r9;
         chat_fileStatesDrawable = r9;
-        r9 = new int[]{r6, r7};
+        r9 = new int[]{r7, r6};
         r10 = org.telegram.ui.Components.CombinedDrawable.class;
         r9 = java.lang.reflect.Array.newInstance(r10, r9);
         r9 = (org.telegram.ui.Components.CombinedDrawable[][]) r9;
         chat_fileMiniStatesDrawable = r9;
         r9 = 13;
-        r9 = new int[]{r9, r7};
+        r9 = new int[]{r9, r6};
         r10 = android.graphics.drawable.Drawable.class;
         r9 = java.lang.reflect.Array.newInstance(r10, r9);
         r9 = (android.graphics.drawable.Drawable[][]) r9;
         chat_photoStatesDrawables = r9;
-        r9 = new android.graphics.Path[r7];
+        r9 = new android.graphics.Path[r6];
         chat_filePath = r9;
         r9 = 7;
         r9 = new java.lang.String[r9];
@@ -3394,7 +4131,7 @@ public class Theme {
         r10 = "avatar_backgroundOrange";
         r9[r5] = r10;
         r10 = "avatar_backgroundViolet";
-        r9[r7] = r10;
+        r9[r6] = r10;
         r10 = "avatar_backgroundGreen";
         r9[r4] = r10;
         r10 = "avatar_backgroundCyan";
@@ -3403,7 +4140,7 @@ public class Theme {
         r11 = "avatar_backgroundBlue";
         r9[r10] = r11;
         r11 = "avatar_backgroundPink";
-        r9[r6] = r11;
+        r9[r7] = r11;
         keys_avatar_background = r9;
         r9 = 7;
         r9 = new java.lang.String[r9];
@@ -3412,7 +4149,7 @@ public class Theme {
         r11 = "avatar_nameInMessageOrange";
         r9[r5] = r11;
         r11 = "avatar_nameInMessageViolet";
-        r9[r7] = r11;
+        r9[r6] = r11;
         r11 = "avatar_nameInMessageGreen";
         r9[r4] = r11;
         r11 = "avatar_nameInMessageCyan";
@@ -3420,7 +4157,7 @@ public class Theme {
         r11 = "avatar_nameInMessageBlue";
         r9[r10] = r11;
         r11 = "avatar_nameInMessagePink";
-        r9[r6] = r11;
+        r9[r7] = r11;
         keys_avatar_nameInMessage = r9;
         r9 = new java.util.HashSet;
         r9.<init>();
@@ -3984,12 +4721,12 @@ public class Theme {
         r15 = "divider";
         r9.put(r15, r14);
         r9 = defaultColors;
-        r14 = -1117195; // 0xffffffffffeef3f5 float:NaN double:NaN;
+        r14 = -657931; // 0xfffffffffff5f5f5 float:NaN double:NaN;
         r14 = java.lang.Integer.valueOf(r14);
         r15 = "graySection";
         r9.put(r15, r14);
         r9 = defaultColors;
-        r14 = -8418927; // 0xffffffffff7var_ float:-3.3966742E38 double:NaN;
+        r14 = -8222838; // 0xfffffffffvar_a float:NaN double:NaN;
         r14 = java.lang.Integer.valueOf(r14);
         r15 = "key_graySectionText";
         r9.put(r15, r14);
@@ -4592,7 +5329,7 @@ public class Theme {
         r14 = "chat_attachContactIcon";
         r9.put(r14, r0);
         r9 = defaultColors;
-        r14 = -13187226; // 0xfffffffffvar_CLASSNAME float:-2.4295483E38 double:NaN;
+        r14 = -10436011; // 0xfffffffffvar_CLASSNAME float:-2.987561E38 double:NaN;
         r14 = java.lang.Integer.valueOf(r14);
         r15 = "chat_attachLocationBackground";
         r9.put(r15, r14);
@@ -7023,14 +7760,14 @@ public class Theme {
         r11 = {0, -2104672, -1918575, -2637335, -2305600, -1067658, -4152623, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r2 = new int[r15];
         r2 = {0, -4071005, -1318214, -1520170, -2039866, -1251471, -2175778, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r6 = new int[r15];
-        r6 = {99, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8};
+        r7 = new int[r15];
+        r7 = {99, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4, 5, 6, 7, 8};
         r10 = new java.lang.String[r15];
         r10[r1] = r3;
         r16 = "p-pXcflrmFIBAAAAvXYQk-mCwZU";
         r10[r5] = r16;
         r16 = "JqSUrO0-mFIBAAAAWwTvLzoWGQI";
-        r10[r7] = r16;
+        r10[r6] = r16;
         r16 = "O-wmAfBPSFADAAAA4zINVfD_bro";
         r10[r4] = r16;
         r16 = "RepJ5uE_SVABAAAAr4d0YhgB850";
@@ -7061,17 +7798,17 @@ public class Theme {
         r10[r8] = r3;
         r8 = new int[r15];
         r8 = {0, 180, 45, 0, 45, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        r7 = new int[r15];
-        r7 = {0, 52, 46, 57, 45, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        r6 = new int[r15];
+        r6 = {0, 52, 46, 57, 45, 64, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         r16 = r11;
         r11 = r0;
         r21 = 16;
         r15 = r16;
         r16 = r2;
-        r17 = r6;
+        r17 = r7;
         r18 = r10;
         r19 = r8;
-        r20 = r7;
+        r20 = r6;
         r11.setAccentColorOptions(r12, r13, r14, r15, r16, r17, r18, r19, r20);
         r2 = themes;
         defaultTheme = r0;
@@ -7438,7 +8175,7 @@ public class Theme {
         r0 = 0;
     L_0x29c1:
         r6 = r2.length();	 Catch:{ Exception -> 0x29ea }
-        if (r0 >= r6) goto L_0x2a36;
+        if (r0 >= r6) goto L_0x2a34;
     L_0x29c7:
         r6 = r2.getJSONObject(r0);	 Catch:{ Exception -> 0x29ea }
         r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r6);	 Catch:{ Exception -> 0x29ea }
@@ -7458,25 +8195,25 @@ public class Theme {
     L_0x29ea:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x2a36;
+        goto L_0x2a34;
     L_0x29ef:
         r0 = 0;
         r2 = "themes";
         r0 = r9.getString(r2, r0);
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x2a36;
-    L_0x29fd:
+        if (r2 != 0) goto L_0x2a34;
+    L_0x29fc:
         r2 = "&";
         r0 = r0.split(r2);
         r2 = 0;
-    L_0x2a04:
+    L_0x2a03:
         r6 = r0.length;
-        if (r2 >= r6) goto L_0x2a25;
-    L_0x2a07:
+        if (r2 >= r6) goto L_0x2a24;
+    L_0x2a06:
         r6 = r0[r2];
         r6 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r6);
-        if (r6 == 0) goto L_0x2a22;
-    L_0x2a0f:
+        if (r6 == 0) goto L_0x2a21;
+    L_0x2a0e:
         r7 = otherThemes;
         r7.add(r6);
         r7 = themes;
@@ -7484,277 +8221,277 @@ public class Theme {
         r7 = themesDict;
         r8 = r6.getKey();
         r7.put(r8, r6);
-    L_0x2a22:
+    L_0x2a21:
         r2 = r2 + 1;
-        goto L_0x2a04;
-    L_0x2a25:
+        goto L_0x2a03;
+    L_0x2a24:
         saveOtherThemes(r5, r5);
         r0 = r9.edit();
         r2 = "themes";
         r0 = r0.remove(r2);
         r0.commit();
-    L_0x2a36:
+    L_0x2a34:
         sortThemes();
         r2 = 0;
         r6 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e4f }
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e4c }
         r7 = "Dark Blue";
-        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e4f }
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e4c }
         r7 = r0;
-        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e4f }
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e4c }
         r0 = "theme";
         r8 = 0;
-        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e4f }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e4c }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4f }
-        if (r8 == 0) goto L_0x2a70;
-    L_0x2a59:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e4f }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4c }
+        if (r8 == 0) goto L_0x2a6d;
+    L_0x2a56:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e4c }
         r8 = "Blue";
-        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e4f }
+        r0 = r0.get(r8);	 Catch:{ Exception -> 0x2e4c }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e4f }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a6a }
-        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a6a }
-    L_0x2a68:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e4c }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a67 }
+        r8.currentAccentId = r0;	 Catch:{ Exception -> 0x2a67 }
+    L_0x2a65:
         r2 = r8;
-        goto L_0x2aaa;
-    L_0x2a6a:
+        goto L_0x2aa7;
+    L_0x2a67:
         r0 = move-exception;
         r4 = r3;
         r1 = r6;
         r2 = r8;
-        goto L_0x2e52;
-    L_0x2a70:
+        goto L_0x2e4f;
+    L_0x2a6d:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4f }
-        if (r8 == 0) goto L_0x2a84;
-    L_0x2a78:
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4c }
+        if (r8 == 0) goto L_0x2a81;
+    L_0x2a75:
         r0 = 9;
-        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a7e }
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a7b }
         r2 = r7;
-        goto L_0x2aaa;
-    L_0x2a7e:
+        goto L_0x2aa7;
+    L_0x2a7b:
         r0 = move-exception;
         r4 = r3;
         r1 = r6;
         r2 = r7;
-        goto L_0x2e52;
-    L_0x2a84:
-        if (r0 == 0) goto L_0x2aaa;
-    L_0x2a86:
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e4f }
-        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e4f }
+        goto L_0x2e4f;
+    L_0x2a81:
+        if (r0 == 0) goto L_0x2aa7;
+    L_0x2a83:
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e4c }
+        r0 = r8.get(r0);	 Catch:{ Exception -> 0x2e4c }
         r8 = r0;
-        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e4f }
-        if (r8 == 0) goto L_0x2a68;
-    L_0x2a91:
+        r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8;	 Catch:{ Exception -> 0x2e4c }
+        if (r8 == 0) goto L_0x2a65;
+    L_0x2a8e:
         r0 = "lastDayTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a6a }
-        if (r0 != 0) goto L_0x2a68;
-    L_0x2a99:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2a6a }
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2a67 }
+        if (r0 != 0) goto L_0x2a65;
+    L_0x2a96:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2a67 }
         r2 = "lastDayTheme";
-        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a6a }
-        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a6a }
-        r0.commit();	 Catch:{ Exception -> 0x2a6a }
-        goto L_0x2a68;
-    L_0x2aaa:
+        r10 = r8.getKey();	 Catch:{ Exception -> 0x2a67 }
+        r0.putString(r2, r10);	 Catch:{ Exception -> 0x2a67 }
+        r0.commit();	 Catch:{ Exception -> 0x2a67 }
+        goto L_0x2a65;
+    L_0x2aa7:
         r0 = "nighttheme";
         r8 = 0;
-        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e4f }
+        r0 = r6.getString(r0, r8);	 Catch:{ Exception -> 0x2e4c }
         r8 = "Default";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4f }
-        if (r8 == 0) goto L_0x2aca;
-    L_0x2ab9:
-        r0 = themesDict;	 Catch:{ Exception -> 0x2e4f }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4c }
+        if (r8 == 0) goto L_0x2ac7;
+    L_0x2ab6:
+        r0 = themesDict;	 Catch:{ Exception -> 0x2e4c }
         r7 = "Blue";
-        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e4f }
+        r0 = r0.get(r7);	 Catch:{ Exception -> 0x2e4c }
         r7 = r0;
-        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e4f }
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a7e }
-        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a7e }
+        r7 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r7;	 Catch:{ Exception -> 0x2e4c }
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2a7b }
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2a7b }
         r2 = r7;
-        goto L_0x2ae7;
-    L_0x2aca:
+        goto L_0x2ae4;
+    L_0x2ac7:
         r8 = "Dark";
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4f }
-        if (r8 == 0) goto L_0x2ad9;
-    L_0x2ad2:
-        currentNightTheme = r7;	 Catch:{ Exception -> 0x2e4f }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x2e4c }
+        if (r8 == 0) goto L_0x2ad6;
+    L_0x2acf:
+        currentNightTheme = r7;	 Catch:{ Exception -> 0x2e4c }
         r0 = 9;
-        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2e4f }
-        goto L_0x2ae7;
-    L_0x2ad9:
-        if (r0 == 0) goto L_0x2ae7;
-    L_0x2adb:
-        r7 = themesDict;	 Catch:{ Exception -> 0x2e4f }
-        r0 = r7.get(r0);	 Catch:{ Exception -> 0x2e4f }
-        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e4f }
-        if (r0 == 0) goto L_0x2ae7;
-    L_0x2ae5:
-        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e4f }
-    L_0x2ae7:
-        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e4b }
-        if (r0 == 0) goto L_0x2b05;
-    L_0x2aeb:
+        r7.currentAccentId = r0;	 Catch:{ Exception -> 0x2e4c }
+        goto L_0x2ae4;
+    L_0x2ad6:
+        if (r0 == 0) goto L_0x2ae4;
+    L_0x2ad8:
+        r7 = themesDict;	 Catch:{ Exception -> 0x2e4c }
+        r0 = r7.get(r0);	 Catch:{ Exception -> 0x2e4c }
+        r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0;	 Catch:{ Exception -> 0x2e4c }
+        if (r0 == 0) goto L_0x2ae4;
+    L_0x2ae2:
+        currentNightTheme = r0;	 Catch:{ Exception -> 0x2e4c }
+    L_0x2ae4:
+        r0 = currentNightTheme;	 Catch:{ Exception -> 0x2e48 }
+        if (r0 == 0) goto L_0x2b02;
+    L_0x2ae8:
         r0 = "lastDarkTheme";
-        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e4f }
-        if (r0 != 0) goto L_0x2b05;
-    L_0x2af3:
-        r0 = r9.edit();	 Catch:{ Exception -> 0x2e4f }
+        r0 = r9.contains(r0);	 Catch:{ Exception -> 0x2e4c }
+        if (r0 != 0) goto L_0x2b02;
+    L_0x2af0:
+        r0 = r9.edit();	 Catch:{ Exception -> 0x2e4c }
         r7 = "lastDarkTheme";
-        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e4f }
-        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e4f }
-        r0.putString(r7, r8);	 Catch:{ Exception -> 0x2e4f }
-        r0.commit();	 Catch:{ Exception -> 0x2e4f }
-    L_0x2b05:
+        r8 = currentNightTheme;	 Catch:{ Exception -> 0x2e4c }
+        r8 = r8.getKey();	 Catch:{ Exception -> 0x2e4c }
+        r0.putString(r7, r8);	 Catch:{ Exception -> 0x2e4c }
+        r0.commit();	 Catch:{ Exception -> 0x2e4c }
+    L_0x2b02:
         r0 = 0;
         r7 = 0;
-        r8 = themesDict;	 Catch:{ Exception -> 0x2e4b }
-        r8 = r8.values();	 Catch:{ Exception -> 0x2e4b }
-        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e4b }
+        r8 = themesDict;	 Catch:{ Exception -> 0x2e48 }
+        r8 = r8.values();	 Catch:{ Exception -> 0x2e48 }
+        r8 = r8.iterator();	 Catch:{ Exception -> 0x2e48 }
         r10 = r7;
         r7 = r0;
-    L_0x2b13:
-        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e4b }
-        if (r0 == 0) goto L_0x2da3;
-    L_0x2b19:
-        r0 = r8.next();	 Catch:{ Exception -> 0x2e4b }
+    L_0x2b10:
+        r0 = r8.hasNext();	 Catch:{ Exception -> 0x2e48 }
+        if (r0 == 0) goto L_0x2da0;
+    L_0x2b16:
+        r0 = r8.next();	 Catch:{ Exception -> 0x2e48 }
         r11 = r0;
-        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e4b }
-        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e4b }
-        if (r0 == 0) goto L_0x2d95;
-    L_0x2b24:
-        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e4b }
-        if (r0 == 0) goto L_0x2d95;
-    L_0x2b28:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4b }
-        r0.<init>();	 Catch:{ Exception -> 0x2e4b }
+        r11 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r11;	 Catch:{ Exception -> 0x2e48 }
+        r0 = r11.assetName;	 Catch:{ Exception -> 0x2e48 }
+        if (r0 == 0) goto L_0x2d92;
+    L_0x2b21:
+        r0 = r11.accentBaseColor;	 Catch:{ Exception -> 0x2e48 }
+        if (r0 == 0) goto L_0x2d92;
+    L_0x2b25:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e48 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e48 }
         r12 = "accents_";
-        r0.append(r12);	 Catch:{ Exception -> 0x2e4b }
-        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e4b }
-        r0.append(r12);	 Catch:{ Exception -> 0x2e4b }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e4b }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e48 }
+        r12 = r11.assetName;	 Catch:{ Exception -> 0x2e48 }
+        r0.append(r12);	 Catch:{ Exception -> 0x2e48 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e48 }
         r12 = 0;
-        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e4b }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e4b }
-        r12.<init>();	 Catch:{ Exception -> 0x2e4b }
+        r0 = r9.getString(r0, r12);	 Catch:{ Exception -> 0x2e48 }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e48 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e48 }
         r13 = "accent_current_";
-        r12.append(r13);	 Catch:{ Exception -> 0x2e4b }
-        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e4b }
-        r12.append(r13);	 Catch:{ Exception -> 0x2e4b }
-        r12 = r12.toString();	 Catch:{ Exception -> 0x2e4b }
-        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e4b }
-        if (r13 == 0) goto L_0x2b5a;
+        r12.append(r13);	 Catch:{ Exception -> 0x2e48 }
+        r13 = r11.assetName;	 Catch:{ Exception -> 0x2e48 }
+        r12.append(r13);	 Catch:{ Exception -> 0x2e48 }
+        r12 = r12.toString();	 Catch:{ Exception -> 0x2e48 }
+        r13 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e48 }
+        if (r13 == 0) goto L_0x2b57;
+    L_0x2b54:
+        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e4c }
+        goto L_0x2b58;
     L_0x2b57:
-        r13 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e4f }
-        goto L_0x2b5b;
-    L_0x2b5a:
         r13 = 0;
-    L_0x2b5b:
-        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e4b }
-        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e4b }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e4b }
-        r12.<init>();	 Catch:{ Exception -> 0x2e4b }
-        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e4b }
-        if (r13 != 0) goto L_0x2c5a;
-    L_0x2b6c:
-        r13 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x2CLASSNAME }
-        r0 = android.util.Base64.decode(r0, r4);	 Catch:{ all -> 0x2CLASSNAME }
-        r13.<init>(r0);	 Catch:{ all -> 0x2CLASSNAME }
-        r0 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r14 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2b58:
+        r12 = r9.getInt(r12, r13);	 Catch:{ Exception -> 0x2e48 }
+        r11.currentAccentId = r12;	 Catch:{ Exception -> 0x2e48 }
+        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x2e48 }
+        r12.<init>();	 Catch:{ Exception -> 0x2e48 }
+        r13 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x2e48 }
+        if (r13 != 0) goto L_0x2CLASSNAME;
+    L_0x2b69:
+        r13 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x2c3f }
+        r0 = android.util.Base64.decode(r0, r4);	 Catch:{ all -> 0x2c3f }
+        r13.<init>(r0);	 Catch:{ all -> 0x2c3f }
+        r0 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
+        r14 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
         r15 = 0;
-    L_0x2b7e:
-        if (r15 >= r14) goto L_0x2c3c;
-    L_0x2b80:
-        r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.<init>();	 Catch:{ all -> 0x2CLASSNAME }
-        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.id = r4;	 Catch:{ all -> 0x2CLASSNAME }
-        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.accentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
-        r1.parentTheme = r11;	 Catch:{ all -> 0x2CLASSNAME }
-        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.myMessagesAccentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
-        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
-        r1.myMessagesGradientAccentColor = r4;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2b7b:
+        if (r15 >= r14) goto L_0x2CLASSNAME;
+    L_0x2b7d:
+        r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ all -> 0x2c3f }
+        r1.<init>();	 Catch:{ all -> 0x2c3f }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
+        r1.id = r4;	 Catch:{ all -> 0x2c3f }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
+        r1.accentColor = r4;	 Catch:{ all -> 0x2c3f }
+        r1.parentTheme = r11;	 Catch:{ all -> 0x2c3f }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
+        r1.myMessagesAccentColor = r4;	 Catch:{ all -> 0x2c3f }
+        r4 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3f }
+        r1.myMessagesGradientAccentColor = r4;	 Catch:{ all -> 0x2c3f }
         r4 = 3;
-        if (r0 < r4) goto L_0x2bac;
-    L_0x2ba2:
+        if (r0 < r4) goto L_0x2ba9;
+    L_0x2b9f:
         r18 = r2;
         r4 = r3;
-        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2c3a }
-        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2c3a }
-        goto L_0x2bb6;
-    L_0x2bac:
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        goto L_0x2bb3;
+    L_0x2ba9:
         r18 = r2;
         r4 = r3;
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3a }
-        r2 = (long) r2;	 Catch:{ all -> 0x2c3a }
-        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2c3a }
-    L_0x2bb6:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bb3:
         r2 = 2;
-        if (r0 < r2) goto L_0x2bc0;
-    L_0x2bb9:
-        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2c3a }
-        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2c3a }
-        goto L_0x2bc7;
-    L_0x2bc0:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3a }
-        r2 = (long) r2;	 Catch:{ all -> 0x2c3a }
-        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2c3a }
-    L_0x2bc7:
-        if (r0 < r5) goto L_0x2bcf;
-    L_0x2bc9:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3a }
-        r1.backgroundRotation = r2;	 Catch:{ all -> 0x2c3a }
-    L_0x2bcf:
+        if (r0 < r2) goto L_0x2bbd;
+    L_0x2bb6:
+        r2 = r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        goto L_0x2bc4;
+    L_0x2bbd:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (long) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundGradientOverrideColor = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bc4:
+        if (r0 < r5) goto L_0x2bcc;
+    L_0x2bc6:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.backgroundRotation = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2bcc:
         r2 = 4;
-        if (r0 < r2) goto L_0x2beb;
-    L_0x2bd2:
-        r13.readInt64(r5);	 Catch:{ all -> 0x2c3a }
-        r2 = r13.readDouble(r5);	 Catch:{ all -> 0x2c3a }
-        r2 = (float) r2;	 Catch:{ all -> 0x2c3a }
-        r1.patternIntensity = r2;	 Catch:{ all -> 0x2c3a }
-        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2c3a }
-        r1.patternMotion = r2;	 Catch:{ all -> 0x2c3a }
+        if (r0 < r2) goto L_0x2be8;
+    L_0x2bcf:
+        r13.readInt64(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readDouble(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (float) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternIntensity = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternMotion = r2;	 Catch:{ all -> 0x2CLASSNAME }
         r2 = 5;
-        if (r0 < r2) goto L_0x2bec;
-    L_0x2be5:
-        r2 = r13.readString(r5);	 Catch:{ all -> 0x2c3a }
-        r1.patternSlug = r2;	 Catch:{ all -> 0x2c3a }
-    L_0x2beb:
+        if (r0 < r2) goto L_0x2be9;
+    L_0x2be2:
+        r2 = r13.readString(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.patternSlug = r2;	 Catch:{ all -> 0x2CLASSNAME }
+    L_0x2be8:
         r2 = 5;
-    L_0x2bec:
+    L_0x2be9:
         if (r0 < r2) goto L_0x2CLASSNAME;
-    L_0x2bee:
-        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2c3a }
+    L_0x2beb:
+        r2 = r13.readBool(r5);	 Catch:{ all -> 0x2CLASSNAME }
         if (r2 == 0) goto L_0x2CLASSNAME;
-    L_0x2bf4:
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3a }
-        r1.account = r2;	 Catch:{ all -> 0x2c3a }
-        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2c3a }
-        r2 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r2, r5);	 Catch:{ all -> 0x2c3a }
-        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;	 Catch:{ all -> 0x2c3a }
-        r1.info = r2;	 Catch:{ all -> 0x2c3a }
+    L_0x2bf1:
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r1.account = r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r13.readInt32(r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = org.telegram.tgnet.TLRPC.Theme.TLdeserialize(r13, r2, r5);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = (org.telegram.tgnet.TLRPC.TL_theme) r2;	 Catch:{ all -> 0x2CLASSNAME }
+        r1.info = r2;	 Catch:{ all -> 0x2CLASSNAME }
     L_0x2CLASSNAME:
-        r2 = r11.themeAccentsMap;	 Catch:{ all -> 0x2c3a }
-        r3 = r1.id;	 Catch:{ all -> 0x2c3a }
-        r2.put(r3, r1);	 Catch:{ all -> 0x2c3a }
-        r2 = r1.info;	 Catch:{ all -> 0x2c3a }
-        if (r2 == 0) goto L_0x2c1d;
-    L_0x2CLASSNAME:
-        r2 = r11.accentsByThemeId;	 Catch:{ all -> 0x2c3a }
-        r3 = r1.info;	 Catch:{ all -> 0x2c3a }
+        r2 = r11.themeAccentsMap;	 Catch:{ all -> 0x2CLASSNAME }
+        r3 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
+        r2.put(r3, r1);	 Catch:{ all -> 0x2CLASSNAME }
+        r2 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
+        if (r2 == 0) goto L_0x2c1a;
+    L_0x2c0e:
+        r2 = r11.accentsByThemeId;	 Catch:{ all -> 0x2CLASSNAME }
+        r3 = r1.info;	 Catch:{ all -> 0x2CLASSNAME }
         r20 = r6;
         r5 = r3.id;	 Catch:{ all -> 0x2CLASSNAME }
         r2.put(r5, r1);	 Catch:{ all -> 0x2CLASSNAME }
-        goto L_0x2c1f;
-    L_0x2c1d:
+        goto L_0x2c1c;
+    L_0x2c1a:
         r20 = r6;
-    L_0x2c1f:
+    L_0x2c1c:
         r12.add(r1);	 Catch:{ all -> 0x2CLASSNAME }
         r2 = r11.lastAccentId;	 Catch:{ all -> 0x2CLASSNAME }
         r1 = r1.id;	 Catch:{ all -> 0x2CLASSNAME }
@@ -7767,338 +8504,338 @@ public class Theme {
         r1 = 0;
         r4 = 3;
         r5 = 1;
-        goto L_0x2b7e;
+        goto L_0x2b7b;
     L_0x2CLASSNAME:
         r0 = move-exception;
         goto L_0x2CLASSNAME;
-    L_0x2c3a:
+    L_0x2CLASSNAME:
         r0 = move-exception;
         goto L_0x2CLASSNAME;
-    L_0x2c3c:
+    L_0x2CLASSNAME:
         r18 = r2;
         r4 = r3;
         r1 = r6;
         r3 = 5;
-        goto L_0x2c4f;
-    L_0x2CLASSNAME:
+        goto L_0x2c4c;
+    L_0x2c3f:
         r0 = move-exception;
         r18 = r2;
         r4 = r3;
     L_0x2CLASSNAME:
         r20 = r6;
     L_0x2CLASSNAME:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x2CLASSNAME }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x2c4f }
         r1 = r20;
-    L_0x2c4d:
+    L_0x2c4a:
         r3 = 5;
         r5 = 1;
-    L_0x2c4f:
+    L_0x2c4c:
         r6 = 3;
-        goto L_0x2d55;
-    L_0x2CLASSNAME:
+        goto L_0x2d52;
+    L_0x2c4f:
         r0 = move-exception;
         r2 = r18;
         r1 = r20;
     L_0x2CLASSNAME:
         r5 = 1;
-        goto L_0x2e52;
-    L_0x2c5a:
+        goto L_0x2e4f;
+    L_0x2CLASSNAME:
         r18 = r2;
         r4 = r3;
         r20 = r6;
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2d8f }
-        r0.<init>();	 Catch:{ Exception -> 0x2d8f }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2d8c }
+        r0.<init>();	 Catch:{ Exception -> 0x2d8c }
         r1 = "accent_for_";
-        r0.append(r1);	 Catch:{ Exception -> 0x2d8f }
-        r1 = r11.assetName;	 Catch:{ Exception -> 0x2d8f }
-        r0.append(r1);	 Catch:{ Exception -> 0x2d8f }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2d8f }
+        r0.append(r1);	 Catch:{ Exception -> 0x2d8c }
+        r1 = r11.assetName;	 Catch:{ Exception -> 0x2d8c }
+        r0.append(r1);	 Catch:{ Exception -> 0x2d8c }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2d8c }
         r1 = r20;
         r2 = 0;
-        r3 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2d8d }
-        if (r3 == 0) goto L_0x2c4d;
-    L_0x2c7b:
-        if (r7 != 0) goto L_0x2c8b;
-    L_0x2c7d:
+        r3 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2d8a }
+        if (r3 == 0) goto L_0x2c4a;
+    L_0x2CLASSNAME:
+        if (r7 != 0) goto L_0x2CLASSNAME;
+    L_0x2c7a:
         r7 = r1.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
         r2 = r9.edit();	 Catch:{ Exception -> 0x2CLASSNAME }
         r10 = r2;
-        goto L_0x2c8b;
+        goto L_0x2CLASSNAME;
     L_0x2CLASSNAME:
         r0 = move-exception;
         r2 = r18;
         goto L_0x2CLASSNAME;
-    L_0x2c8b:
-        r7.remove(r0);	 Catch:{ Exception -> 0x2d8d }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2d8d }
-        r0 = r0.size();	 Catch:{ Exception -> 0x2d8d }
+    L_0x2CLASSNAME:
+        r7.remove(r0);	 Catch:{ Exception -> 0x2d8a }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2d8a }
+        r0 = r0.size();	 Catch:{ Exception -> 0x2d8a }
         r2 = 0;
     L_0x2CLASSNAME:
-        if (r2 >= r0) goto L_0x2cac;
+        if (r2 >= r0) goto L_0x2ca9;
     L_0x2CLASSNAME:
         r5 = r11.themeAccents;	 Catch:{ Exception -> 0x2CLASSNAME }
         r5 = r5.get(r2);	 Catch:{ Exception -> 0x2CLASSNAME }
         r5 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r5;	 Catch:{ Exception -> 0x2CLASSNAME }
         r6 = r5.accentColor;	 Catch:{ Exception -> 0x2CLASSNAME }
-        if (r6 != r3) goto L_0x2ca9;
-    L_0x2ca3:
+        if (r6 != r3) goto L_0x2ca6;
+    L_0x2ca0:
         r0 = r5.id;	 Catch:{ Exception -> 0x2CLASSNAME }
         r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2CLASSNAME }
         r0 = 1;
-        goto L_0x2cad;
-    L_0x2ca9:
+        goto L_0x2caa;
+    L_0x2ca6:
         r2 = r2 + 1;
         goto L_0x2CLASSNAME;
+    L_0x2ca9:
+        r0 = 0;
+    L_0x2caa:
+        if (r0 != 0) goto L_0x2d37;
     L_0x2cac:
-        r0 = 0;
-    L_0x2cad:
-        if (r0 != 0) goto L_0x2d3a;
-    L_0x2caf:
-        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2d8d }
-        r0.<init>();	 Catch:{ Exception -> 0x2d8d }
+        r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent;	 Catch:{ Exception -> 0x2d8a }
+        r0.<init>();	 Catch:{ Exception -> 0x2d8a }
         r2 = 100;
-        r0.id = r2;	 Catch:{ Exception -> 0x2d8d }
-        r0.accentColor = r3;	 Catch:{ Exception -> 0x2d8d }
-        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2d8d }
-        r2 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2d8d }
-        r3 = r0.id;	 Catch:{ Exception -> 0x2d8d }
-        r2.put(r3, r0);	 Catch:{ Exception -> 0x2d8d }
+        r0.id = r2;	 Catch:{ Exception -> 0x2d8a }
+        r0.accentColor = r3;	 Catch:{ Exception -> 0x2d8a }
+        r0.parentTheme = r11;	 Catch:{ Exception -> 0x2d8a }
+        r2 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2d8a }
+        r3 = r0.id;	 Catch:{ Exception -> 0x2d8a }
+        r2.put(r3, r0);	 Catch:{ Exception -> 0x2d8a }
         r2 = 0;
-        r12.add(r2, r0);	 Catch:{ Exception -> 0x2d8d }
+        r12.add(r2, r0);	 Catch:{ Exception -> 0x2d8a }
         r2 = 100;
-        r11.currentAccentId = r2;	 Catch:{ Exception -> 0x2d8d }
+        r11.currentAccentId = r2;	 Catch:{ Exception -> 0x2d8a }
         r2 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        r11.lastAccentId = r2;	 Catch:{ Exception -> 0x2d8d }
-        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2d8d }
+        r11.lastAccentId = r2;	 Catch:{ Exception -> 0x2d8a }
+        r2 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x2d8a }
         r3 = 68;
-        r2.<init>(r3);	 Catch:{ Exception -> 0x2d8d }
+        r2.<init>(r3);	 Catch:{ Exception -> 0x2d8a }
         r3 = 5;
-        r2.writeInt32(r3);	 Catch:{ Exception -> 0x2d8d }
+        r2.writeInt32(r3);	 Catch:{ Exception -> 0x2d8a }
         r5 = 1;
-        r2.writeInt32(r5);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.id;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.accentColor;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e47 }
-        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e47 }
-        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e47 }
+        r2.writeInt32(r5);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.id;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.accentColor;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.myMessagesAccentColor;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.myMessagesGradientAccentColor;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e44 }
+        r13 = r0.backgroundOverrideColor;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e44 }
+        r13 = r0.backgroundGradientOverrideColor;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.backgroundRotation;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeInt32(r6);	 Catch:{ Exception -> 0x2e44 }
         r13 = 0;
-        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e47 }
-        r13 = (double) r6;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeDouble(r13);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r0.patternMotion;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e47 }
-        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e47 }
-        r2.writeString(r0);	 Catch:{ Exception -> 0x2e47 }
+        r2.writeInt64(r13);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.patternIntensity;	 Catch:{ Exception -> 0x2e44 }
+        r13 = (double) r6;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeDouble(r13);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r0.patternMotion;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e44 }
+        r0 = r0.patternSlug;	 Catch:{ Exception -> 0x2e44 }
+        r2.writeString(r0);	 Catch:{ Exception -> 0x2e44 }
         r6 = 0;
-        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e47 }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e47 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e47 }
+        r2.writeBool(r6);	 Catch:{ Exception -> 0x2e44 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e44 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e44 }
         r6 = "accents_";
-        r0.append(r6);	 Catch:{ Exception -> 0x2e47 }
-        r6 = r11.assetName;	 Catch:{ Exception -> 0x2e47 }
-        r0.append(r6);	 Catch:{ Exception -> 0x2e47 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e47 }
-        r2 = r2.toByteArray();	 Catch:{ Exception -> 0x2e47 }
+        r0.append(r6);	 Catch:{ Exception -> 0x2e44 }
+        r6 = r11.assetName;	 Catch:{ Exception -> 0x2e44 }
+        r0.append(r6);	 Catch:{ Exception -> 0x2e44 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e44 }
+        r2 = r2.toByteArray();	 Catch:{ Exception -> 0x2e44 }
         r6 = 3;
-        r2 = android.util.Base64.encodeToString(r2, r6);	 Catch:{ Exception -> 0x2e47 }
-        r10.putString(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        goto L_0x2d3d;
-    L_0x2d3a:
+        r2 = android.util.Base64.encodeToString(r2, r6);	 Catch:{ Exception -> 0x2e44 }
+        r10.putString(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        goto L_0x2d3a;
+    L_0x2d37:
         r3 = 5;
         r5 = 1;
         r6 = 3;
-    L_0x2d3d:
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e47 }
-        r0.<init>();	 Catch:{ Exception -> 0x2e47 }
+    L_0x2d3a:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x2e44 }
+        r0.<init>();	 Catch:{ Exception -> 0x2e44 }
         r2 = "accent_current_";
-        r0.append(r2);	 Catch:{ Exception -> 0x2e47 }
-        r2 = r11.assetName;	 Catch:{ Exception -> 0x2e47 }
-        r0.append(r2);	 Catch:{ Exception -> 0x2e47 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x2e47 }
-        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e47 }
-        r10.putInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-    L_0x2d55:
-        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e47 }
-        if (r0 != 0) goto L_0x2d66;
-    L_0x2d5b:
-        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e47 }
-        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e47 }
-        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e47 }
+        r0.append(r2);	 Catch:{ Exception -> 0x2e44 }
+        r2 = r11.assetName;	 Catch:{ Exception -> 0x2e44 }
+        r0.append(r2);	 Catch:{ Exception -> 0x2e44 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x2e44 }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e44 }
+        r10.putInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+    L_0x2d52:
+        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x2e44 }
+        if (r0 != 0) goto L_0x2d63;
+    L_0x2d58:
+        r0 = org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE;	 Catch:{ Exception -> 0x2e44 }
+        java.util.Collections.sort(r12, r0);	 Catch:{ Exception -> 0x2e44 }
+        r0 = r11.themeAccents;	 Catch:{ Exception -> 0x2e44 }
         r2 = 0;
-        r0.addAll(r2, r12);	 Catch:{ Exception -> 0x2e47 }
-    L_0x2d66:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e47 }
-        if (r0 == 0) goto L_0x2d7e;
-    L_0x2d6a:
-        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e47 }
-        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e47 }
-        r0 = r0.get(r2);	 Catch:{ Exception -> 0x2e47 }
-        if (r0 != 0) goto L_0x2d7e;
-    L_0x2d74:
-        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e47 }
+        r0.addAll(r2, r12);	 Catch:{ Exception -> 0x2e44 }
+    L_0x2d63:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e44 }
         if (r0 == 0) goto L_0x2d7b;
+    L_0x2d67:
+        r0 = r11.themeAccentsMap;	 Catch:{ Exception -> 0x2e44 }
+        r2 = r11.currentAccentId;	 Catch:{ Exception -> 0x2e44 }
+        r0 = r0.get(r2);	 Catch:{ Exception -> 0x2e44 }
+        if (r0 != 0) goto L_0x2d7b;
+    L_0x2d71:
+        r0 = r11.firstAccentIsDefault;	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2d78;
+    L_0x2d75:
+        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e44 }
+        goto L_0x2d79;
     L_0x2d78:
-        r0 = DEFALT_THEME_ACCENT_ID;	 Catch:{ Exception -> 0x2e47 }
-        goto L_0x2d7c;
-    L_0x2d7b:
         r0 = 0;
-    L_0x2d7c:
-        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e47 }
-    L_0x2d7e:
-        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e47 }
+    L_0x2d79:
+        r11.currentAccentId = r0;	 Catch:{ Exception -> 0x2e44 }
+    L_0x2d7b:
+        r11.loadWallpapers(r9);	 Catch:{ Exception -> 0x2e44 }
         r2 = 0;
-        r0 = r11.getAccent(r2);	 Catch:{ Exception -> 0x2e47 }
-        if (r0 == 0) goto L_0x2d9b;
-    L_0x2d88:
-        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e47 }
-        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e47 }
-        goto L_0x2d9b;
-    L_0x2d8d:
+        r0 = r11.getAccent(r2);	 Catch:{ Exception -> 0x2e44 }
+        if (r0 == 0) goto L_0x2d98;
+    L_0x2d85:
+        r0 = r0.overrideWallpaper;	 Catch:{ Exception -> 0x2e44 }
+        r11.overrideWallpaper = r0;	 Catch:{ Exception -> 0x2e44 }
+        goto L_0x2d98;
+    L_0x2d8a:
         r0 = move-exception;
-        goto L_0x2d92;
-    L_0x2d8f:
+        goto L_0x2d8f;
+    L_0x2d8c:
         r0 = move-exception;
         r1 = r20;
-    L_0x2d92:
+    L_0x2d8f:
         r5 = 1;
-        goto L_0x2e48;
-    L_0x2d95:
+        goto L_0x2e45;
+    L_0x2d92:
         r18 = r2;
         r4 = r3;
         r1 = r6;
         r3 = 5;
         r6 = 3;
-    L_0x2d9b:
+    L_0x2d98:
         r6 = r1;
         r3 = r4;
         r2 = r18;
         r1 = 0;
         r4 = 3;
-        goto L_0x2b13;
-    L_0x2da3:
+        goto L_0x2b10;
+    L_0x2da0:
         r18 = r2;
         r4 = r3;
         r1 = r6;
         r6 = 3;
-        if (r7 == 0) goto L_0x2db0;
-    L_0x2daa:
-        r7.commit();	 Catch:{ Exception -> 0x2e47 }
-        r10.commit();	 Catch:{ Exception -> 0x2e47 }
-    L_0x2db0:
+        if (r7 == 0) goto L_0x2dad;
+    L_0x2da7:
+        r7.commit();	 Catch:{ Exception -> 0x2e44 }
+        r10.commit();	 Catch:{ Exception -> 0x2e44 }
+    L_0x2dad:
         r0 = "selectedAutoNightType";
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x2e47 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x2e44 }
         r3 = 29;
-        if (r2 < r3) goto L_0x2db9;
-    L_0x2db8:
-        goto L_0x2dba;
-    L_0x2db9:
+        if (r2 < r3) goto L_0x2db6;
+    L_0x2db5:
+        goto L_0x2db7;
+    L_0x2db6:
         r6 = 0;
-    L_0x2dba:
-        r0 = r1.getInt(r0, r6);	 Catch:{ Exception -> 0x2e47 }
-        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e47 }
+    L_0x2db7:
+        r0 = r1.getInt(r0, r6);	 Catch:{ Exception -> 0x2e44 }
+        selectedAutoNightType = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightScheduleByLocation";
         r2 = 0;
-        r0 = r1.getBoolean(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getBoolean(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightScheduleByLocation = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightBrighnessThreshold";
         r2 = NUM; // 0x3e800000 float:0.25 double:5.180653787E-315;
-        r0 = r1.getFloat(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getFloat(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightBrighnessThreshold = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightDayStartTime";
         r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightDayStartTime = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightDayEndTime";
         r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightDayEndTime = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightSunsetTime";
         r2 = 1320; // 0x528 float:1.85E-42 double:6.52E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightSunsetTime = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightSunriseTime";
         r2 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightSunriseTime = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightCityName";
-        r0 = r1.getString(r0, r4);	 Catch:{ Exception -> 0x2e47 }
-        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e47 }
+        r0 = r1.getString(r0, r4);	 Catch:{ Exception -> 0x2e44 }
+        autoNightCityName = r0;	 Catch:{ Exception -> 0x2e44 }
         r0 = "autoNightLocationLatitude3";
         r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e47 }
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e44 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
-        if (r0 == 0) goto L_0x2e18;
-    L_0x2e11:
-        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e47 }
-        goto L_0x2e1f;
-    L_0x2e18:
+        if (r0 == 0) goto L_0x2e15;
+    L_0x2e0e:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e44 }
+        goto L_0x2e1c;
+    L_0x2e15:
         r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e47 }
-    L_0x2e1f:
+        autoNightLocationLatitude = r2;	 Catch:{ Exception -> 0x2e44 }
+    L_0x2e1c:
         r0 = "autoNightLocationLongitude3";
         r2 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e47 }
+        r2 = r1.getLong(r0, r2);	 Catch:{ Exception -> 0x2e44 }
         r6 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
         r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1));
-        if (r0 == 0) goto L_0x2e34;
-    L_0x2e2d:
-        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e47 }
-        goto L_0x2e3b;
-    L_0x2e34:
+        if (r0 == 0) goto L_0x2e31;
+    L_0x2e2a:
+        r2 = java.lang.Double.longBitsToDouble(r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e44 }
+        goto L_0x2e38;
+    L_0x2e31:
         r2 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e47 }
-    L_0x2e3b:
+        autoNightLocationLongitude = r2;	 Catch:{ Exception -> 0x2e44 }
+    L_0x2e38:
         r0 = "autoNightLastSunCheckDay";
         r2 = -1;
-        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e47 }
-        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e47 }
-        r2 = r18;
-        goto L_0x2e55;
-    L_0x2e47:
-        r0 = move-exception;
-    L_0x2e48:
+        r0 = r1.getInt(r0, r2);	 Catch:{ Exception -> 0x2e44 }
+        autoNightLastSunCheckDay = r0;	 Catch:{ Exception -> 0x2e44 }
         r2 = r18;
         goto L_0x2e52;
-    L_0x2e4b:
+    L_0x2e44:
+        r0 = move-exception;
+    L_0x2e45:
+        r2 = r18;
+        goto L_0x2e4f;
+    L_0x2e48:
         r0 = move-exception;
         r18 = r2;
-        goto L_0x2e50;
-    L_0x2e4f:
+        goto L_0x2e4d;
+    L_0x2e4c:
         r0 = move-exception;
-    L_0x2e50:
+    L_0x2e4d:
         r4 = r3;
         r1 = r6;
-    L_0x2e52:
+    L_0x2e4f:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x2e55:
-        if (r2 != 0) goto L_0x2e5a;
-    L_0x2e57:
+    L_0x2e52:
+        if (r2 != 0) goto L_0x2e57;
+    L_0x2e54:
         r2 = defaultTheme;
-        goto L_0x2e5c;
-    L_0x2e5a:
+        goto L_0x2e59;
+    L_0x2e57:
         currentDayTheme = r2;
-    L_0x2e5c:
+    L_0x2e59:
         r0 = "overrideThemeWallpaper";
         r0 = r1.contains(r0);
-        if (r0 != 0) goto L_0x2e6c;
-    L_0x2e64:
+        if (r0 != 0) goto L_0x2e69;
+    L_0x2e61:
         r0 = "selectedBackground2";
         r0 = r1.contains(r0);
         if (r0 == 0) goto L_0x2var_;
-    L_0x2e6c:
+    L_0x2e69:
         r0 = "overrideThemeWallpaper";
         r3 = 0;
         r0 = r1.getBoolean(r0, r3);
@@ -8107,18 +8844,18 @@ public class Theme {
         r6 = r1.getLong(r3, r6);
         r8 = -1;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 == 0) goto L_0x2e91;
-    L_0x2e82:
+        if (r3 == 0) goto L_0x2e8e;
+    L_0x2e7f:
         if (r0 == 0) goto L_0x2var_;
-    L_0x2e84:
+    L_0x2e81:
         r8 = -2;
         r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
         if (r0 == 0) goto L_0x2var_;
-    L_0x2e8a:
+    L_0x2e87:
         r8 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r0 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
         if (r0 == 0) goto L_0x2var_;
-    L_0x2e91:
+    L_0x2e8e:
         r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo;
         r0.<init>();
         r3 = "selectedColor";
@@ -8130,26 +8867,26 @@ public class Theme {
         r0.slug = r3;
         r8 = -100;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 < 0) goto L_0x2ec0;
-    L_0x2ead:
+        if (r3 < 0) goto L_0x2ebd;
+    L_0x2eaa:
         r8 = -1;
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 > 0) goto L_0x2ec0;
-    L_0x2eb3:
+        if (r3 > 0) goto L_0x2ebd;
+    L_0x2eb0:
         r3 = r0.color;
-        if (r3 == 0) goto L_0x2ec0;
-    L_0x2eb7:
+        if (r3 == 0) goto L_0x2ebd;
+    L_0x2eb4:
         r3 = "c";
         r0.slug = r3;
         r0.fileName = r4;
         r0.originalFileName = r4;
-        goto L_0x2eca;
-    L_0x2ec0:
+        goto L_0x2ec7;
+    L_0x2ebd:
         r3 = "wallpaper.jpg";
         r0.fileName = r3;
         r3 = "wallpaper_original.jpg";
         r0.originalFileName = r3;
-    L_0x2eca:
+    L_0x2ec7:
         r3 = "selectedGradientColor";
         r4 = 0;
         r3 = r1.getInt(r3, r4);
@@ -8172,7 +8909,7 @@ public class Theme {
         r3.setOverrideWallpaper(r0);
         r3 = selectedAutoNightType;
         if (r3 == 0) goto L_0x2var_;
-    L_0x2var_:
+    L_0x2efd:
         r3 = currentNightTheme;
         r3.setOverrideWallpaper(r0);
     L_0x2var_:
@@ -8185,10 +8922,10 @@ public class Theme {
     L_0x2var_:
         r0 = needSwitchToTheme();
         r1 = 2;
-        if (r0 != r1) goto L_0x2var_;
-    L_0x2f1f:
+        if (r0 != r1) goto L_0x2f1e;
+    L_0x2f1c:
         r2 = currentNightTheme;
-    L_0x2var_:
+    L_0x2f1e:
         if (r0 != r1) goto L_0x2var_;
     L_0x2var_:
         r1 = 0;
@@ -8416,7 +9153,7 @@ public class Theme {
     L_0x005f:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getResources();
-        r1 = NUM; // 0x7var_ float:1.7945649E38 double:1.052935764E-314;
+        r1 = NUM; // 0x7var_ float:1.7945655E38 double:1.0529357654E-314;
         r0 = r0.getDrawable(r1);
         dialogs_holidayDrawable = r0;
         r0 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -9050,16 +9787,16 @@ public class Theme {
         applyTheme(themeInfo, true, true, z);
     }
 
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:38:0x00c9=Splitter:B:38:0x00c9, B:76:0x017b=Splitter:B:76:0x017b} */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x018d A:{Catch:{ Exception -> 0x019d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x018d A:{Catch:{ Exception -> 0x019d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x015b A:{Catch:{ Exception -> 0x0166 }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:64:0x014f */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:76:0x017b */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00e1 A:{Catch:{ all -> 0x0168 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x012d A:{Catch:{ Exception -> 0x014f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x015b A:{Catch:{ Exception -> 0x0166 }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x00c9 */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:38:0x00c8=Splitter:B:38:0x00c8, B:76:0x017a=Splitter:B:76:0x017a} */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x018c A:{Catch:{ Exception -> 0x019c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x018c A:{Catch:{ Exception -> 0x019c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x015a A:{Catch:{ Exception -> 0x0165 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:64:0x014e */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:76:0x017a */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00e0 A:{Catch:{ all -> 0x0167 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x012c A:{Catch:{ Exception -> 0x014e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x015a A:{Catch:{ Exception -> 0x0165 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x00c8 */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Can't wrap try/catch for region: R(24:31|32|33|(1:37)|38|39|40|41|(2:43|(3:47|(4:50|(2:52|96)(2:53|(2:55|95)(1:97))|56|48)|94))|57|58|59|(2:61|(1:63))|64|65|(1:67)|79|81|(0)|84|87|90|92|93) */
     /* JADX WARNING: Can't wrap try/catch for region: R(13:72|73|(1:75)|76|77|79|81|(0)|84|87|90|92|93) */
@@ -9075,229 +9812,229 @@ public class Theme {
         r8.destroy();
     L_0x000c:
         r8 = 0;
-        r0 = r6.pathToFile;	 Catch:{ Exception -> 0x019d }
+        r0 = r6.pathToFile;	 Catch:{ Exception -> 0x019c }
         r1 = "theme";
         r2 = 0;
-        if (r0 != 0) goto L_0x003b;
-    L_0x0015:
-        r0 = r6.assetName;	 Catch:{ Exception -> 0x019d }
-        if (r0 == 0) goto L_0x001a;
+        if (r0 != 0) goto L_0x003a;
+    L_0x0014:
+        r0 = r6.assetName;	 Catch:{ Exception -> 0x019c }
+        if (r0 == 0) goto L_0x0019;
+    L_0x0018:
+        goto L_0x003a;
     L_0x0019:
-        goto L_0x003b;
-    L_0x001a:
-        if (r9 != 0) goto L_0x002c;
-    L_0x001c:
-        if (r7 == 0) goto L_0x002c;
-    L_0x001e:
-        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x019d }
-        r0 = r0.edit();	 Catch:{ Exception -> 0x019d }
-        r0.remove(r1);	 Catch:{ Exception -> 0x019d }
-        r0.commit();	 Catch:{ Exception -> 0x019d }
-    L_0x002c:
-        r0 = currentColorsNoAccent;	 Catch:{ Exception -> 0x019d }
-        r0.clear();	 Catch:{ Exception -> 0x019d }
-        themedWallpaperFileOffset = r8;	 Catch:{ Exception -> 0x019d }
-        themedWallpaperLink = r2;	 Catch:{ Exception -> 0x019d }
-        wallpaper = r2;	 Catch:{ Exception -> 0x019d }
-        themedWallpaper = r2;	 Catch:{ Exception -> 0x019d }
-        goto L_0x017f;
-    L_0x003b:
-        if (r9 != 0) goto L_0x0051;
-    L_0x003d:
-        if (r7 == 0) goto L_0x0051;
-    L_0x003f:
-        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x019d }
-        r0 = r0.edit();	 Catch:{ Exception -> 0x019d }
-        r3 = r6.getKey();	 Catch:{ Exception -> 0x019d }
-        r0.putString(r1, r3);	 Catch:{ Exception -> 0x019d }
-        r0.commit();	 Catch:{ Exception -> 0x019d }
-    L_0x0051:
+        if (r9 != 0) goto L_0x002b;
+    L_0x001b:
+        if (r7 == 0) goto L_0x002b;
+    L_0x001d:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x019c }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x019c }
+        r0.remove(r1);	 Catch:{ Exception -> 0x019c }
+        r0.commit();	 Catch:{ Exception -> 0x019c }
+    L_0x002b:
+        r0 = currentColorsNoAccent;	 Catch:{ Exception -> 0x019c }
+        r0.clear();	 Catch:{ Exception -> 0x019c }
+        themedWallpaperFileOffset = r8;	 Catch:{ Exception -> 0x019c }
+        themedWallpaperLink = r2;	 Catch:{ Exception -> 0x019c }
+        wallpaper = r2;	 Catch:{ Exception -> 0x019c }
+        themedWallpaper = r2;	 Catch:{ Exception -> 0x019c }
+        goto L_0x017e;
+    L_0x003a:
+        if (r9 != 0) goto L_0x0050;
+    L_0x003c:
+        if (r7 == 0) goto L_0x0050;
+    L_0x003e:
+        r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x019c }
+        r0 = r0.edit();	 Catch:{ Exception -> 0x019c }
+        r3 = r6.getKey();	 Catch:{ Exception -> 0x019c }
+        r0.putString(r1, r3);	 Catch:{ Exception -> 0x019c }
+        r0.commit();	 Catch:{ Exception -> 0x019c }
+    L_0x0050:
         r0 = 1;
-        r1 = new java.lang.String[r0];	 Catch:{ Exception -> 0x019d }
-        r3 = r6.assetName;	 Catch:{ Exception -> 0x019d }
-        if (r3 == 0) goto L_0x0061;
-    L_0x0058:
-        r3 = r6.assetName;	 Catch:{ Exception -> 0x019d }
-        r3 = getThemeFileValues(r2, r3, r2);	 Catch:{ Exception -> 0x019d }
-        currentColorsNoAccent = r3;	 Catch:{ Exception -> 0x019d }
-        goto L_0x006e;
-    L_0x0061:
-        r3 = new java.io.File;	 Catch:{ Exception -> 0x019d }
-        r4 = r6.pathToFile;	 Catch:{ Exception -> 0x019d }
-        r3.<init>(r4);	 Catch:{ Exception -> 0x019d }
-        r3 = getThemeFileValues(r3, r2, r1);	 Catch:{ Exception -> 0x019d }
-        currentColorsNoAccent = r3;	 Catch:{ Exception -> 0x019d }
-    L_0x006e:
-        r3 = currentColorsNoAccent;	 Catch:{ Exception -> 0x019d }
+        r1 = new java.lang.String[r0];	 Catch:{ Exception -> 0x019c }
+        r3 = r6.assetName;	 Catch:{ Exception -> 0x019c }
+        if (r3 == 0) goto L_0x0060;
+    L_0x0057:
+        r3 = r6.assetName;	 Catch:{ Exception -> 0x019c }
+        r3 = getThemeFileValues(r2, r3, r2);	 Catch:{ Exception -> 0x019c }
+        currentColorsNoAccent = r3;	 Catch:{ Exception -> 0x019c }
+        goto L_0x006d;
+    L_0x0060:
+        r3 = new java.io.File;	 Catch:{ Exception -> 0x019c }
+        r4 = r6.pathToFile;	 Catch:{ Exception -> 0x019c }
+        r3.<init>(r4);	 Catch:{ Exception -> 0x019c }
+        r3 = getThemeFileValues(r3, r2, r1);	 Catch:{ Exception -> 0x019c }
+        currentColorsNoAccent = r3;	 Catch:{ Exception -> 0x019c }
+    L_0x006d:
+        r3 = currentColorsNoAccent;	 Catch:{ Exception -> 0x019c }
         r4 = "wallpaperFileOffset";
-        r3 = r3.get(r4);	 Catch:{ Exception -> 0x019d }
-        r3 = (java.lang.Integer) r3;	 Catch:{ Exception -> 0x019d }
-        if (r3 == 0) goto L_0x0080;
-    L_0x007b:
-        r3 = r3.intValue();	 Catch:{ Exception -> 0x019d }
-        goto L_0x0081;
-    L_0x0080:
+        r3 = r3.get(r4);	 Catch:{ Exception -> 0x019c }
+        r3 = (java.lang.Integer) r3;	 Catch:{ Exception -> 0x019c }
+        if (r3 == 0) goto L_0x007f;
+    L_0x007a:
+        r3 = r3.intValue();	 Catch:{ Exception -> 0x019c }
+        goto L_0x0080;
+    L_0x007f:
         r3 = -1;
-    L_0x0081:
-        themedWallpaperFileOffset = r3;	 Catch:{ Exception -> 0x019d }
-        r3 = r1[r8];	 Catch:{ Exception -> 0x019d }
-        r3 = android.text.TextUtils.isEmpty(r3);	 Catch:{ Exception -> 0x019d }
-        if (r3 != 0) goto L_0x016d;
-    L_0x008b:
-        r1 = r1[r8];	 Catch:{ Exception -> 0x019d }
-        themedWallpaperLink = r1;	 Catch:{ Exception -> 0x019d }
-        r1 = new java.io.File;	 Catch:{ Exception -> 0x019d }
-        r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Exception -> 0x019d }
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x019d }
-        r3.<init>();	 Catch:{ Exception -> 0x019d }
-        r4 = themedWallpaperLink;	 Catch:{ Exception -> 0x019d }
-        r4 = org.telegram.messenger.Utilities.MD5(r4);	 Catch:{ Exception -> 0x019d }
-        r3.append(r4);	 Catch:{ Exception -> 0x019d }
+    L_0x0080:
+        themedWallpaperFileOffset = r3;	 Catch:{ Exception -> 0x019c }
+        r3 = r1[r8];	 Catch:{ Exception -> 0x019c }
+        r3 = android.text.TextUtils.isEmpty(r3);	 Catch:{ Exception -> 0x019c }
+        if (r3 != 0) goto L_0x016c;
+    L_0x008a:
+        r1 = r1[r8];	 Catch:{ Exception -> 0x019c }
+        themedWallpaperLink = r1;	 Catch:{ Exception -> 0x019c }
+        r1 = new java.io.File;	 Catch:{ Exception -> 0x019c }
+        r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Exception -> 0x019c }
+        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x019c }
+        r3.<init>();	 Catch:{ Exception -> 0x019c }
+        r4 = themedWallpaperLink;	 Catch:{ Exception -> 0x019c }
+        r4 = org.telegram.messenger.Utilities.MD5(r4);	 Catch:{ Exception -> 0x019c }
+        r3.append(r4);	 Catch:{ Exception -> 0x019c }
         r4 = ".wp";
-        r3.append(r4);	 Catch:{ Exception -> 0x019d }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x019d }
-        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x019d }
-        r1 = r1.getAbsolutePath();	 Catch:{ Exception -> 0x019d }
-        r2 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c9 }
-        if (r2 == 0) goto L_0x00c9;
-    L_0x00b7:
-        r2 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c9 }
-        r2 = r2.equals(r1);	 Catch:{ Exception -> 0x00c9 }
-        if (r2 != 0) goto L_0x00c9;
-    L_0x00bf:
-        r2 = new java.io.File;	 Catch:{ Exception -> 0x00c9 }
-        r3 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c9 }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x00c9 }
-        r2.delete();	 Catch:{ Exception -> 0x00c9 }
-    L_0x00c9:
-        r6.pathToWallpaper = r1;	 Catch:{ Exception -> 0x019d }
-        r1 = themedWallpaperLink;	 Catch:{ all -> 0x0168 }
-        r1 = android.net.Uri.parse(r1);	 Catch:{ all -> 0x0168 }
+        r3.append(r4);	 Catch:{ Exception -> 0x019c }
+        r3 = r3.toString();	 Catch:{ Exception -> 0x019c }
+        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x019c }
+        r1 = r1.getAbsolutePath();	 Catch:{ Exception -> 0x019c }
+        r2 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c8 }
+        if (r2 == 0) goto L_0x00c8;
+    L_0x00b6:
+        r2 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c8 }
+        r2 = r2.equals(r1);	 Catch:{ Exception -> 0x00c8 }
+        if (r2 != 0) goto L_0x00c8;
+    L_0x00be:
+        r2 = new java.io.File;	 Catch:{ Exception -> 0x00c8 }
+        r3 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x00c8 }
+        r2.<init>(r3);	 Catch:{ Exception -> 0x00c8 }
+        r2.delete();	 Catch:{ Exception -> 0x00c8 }
+    L_0x00c8:
+        r6.pathToWallpaper = r1;	 Catch:{ Exception -> 0x019c }
+        r1 = themedWallpaperLink;	 Catch:{ all -> 0x0167 }
+        r1 = android.net.Uri.parse(r1);	 Catch:{ all -> 0x0167 }
         r2 = "slug";
-        r2 = r1.getQueryParameter(r2);	 Catch:{ all -> 0x0168 }
-        r6.slug = r2;	 Catch:{ all -> 0x0168 }
+        r2 = r1.getQueryParameter(r2);	 Catch:{ all -> 0x0167 }
+        r6.slug = r2;	 Catch:{ all -> 0x0167 }
         r2 = "mode";
-        r2 = r1.getQueryParameter(r2);	 Catch:{ all -> 0x0168 }
-        if (r2 == 0) goto L_0x0110;
-    L_0x00e1:
-        r2 = r2.toLowerCase();	 Catch:{ all -> 0x0168 }
+        r2 = r1.getQueryParameter(r2);	 Catch:{ all -> 0x0167 }
+        if (r2 == 0) goto L_0x010f;
+    L_0x00e0:
+        r2 = r2.toLowerCase();	 Catch:{ all -> 0x0167 }
         r3 = " ";
-        r2 = r2.split(r3);	 Catch:{ all -> 0x0168 }
-        if (r2 == 0) goto L_0x0110;
-    L_0x00ed:
-        r3 = r2.length;	 Catch:{ all -> 0x0168 }
-        if (r3 <= 0) goto L_0x0110;
-    L_0x00f0:
+        r2 = r2.split(r3);	 Catch:{ all -> 0x0167 }
+        if (r2 == 0) goto L_0x010f;
+    L_0x00ec:
+        r3 = r2.length;	 Catch:{ all -> 0x0167 }
+        if (r3 <= 0) goto L_0x010f;
+    L_0x00ef:
         r3 = 0;
-    L_0x00f1:
-        r4 = r2.length;	 Catch:{ all -> 0x0168 }
-        if (r3 >= r4) goto L_0x0110;
-    L_0x00f4:
+    L_0x00f0:
+        r4 = r2.length;	 Catch:{ all -> 0x0167 }
+        if (r3 >= r4) goto L_0x010f;
+    L_0x00f3:
         r4 = "blur";
-        r5 = r2[r3];	 Catch:{ all -> 0x0168 }
-        r4 = r4.equals(r5);	 Catch:{ all -> 0x0168 }
-        if (r4 == 0) goto L_0x0101;
-    L_0x00fe:
-        r6.isBlured = r0;	 Catch:{ all -> 0x0168 }
-        goto L_0x010d;
-    L_0x0101:
+        r5 = r2[r3];	 Catch:{ all -> 0x0167 }
+        r4 = r4.equals(r5);	 Catch:{ all -> 0x0167 }
+        if (r4 == 0) goto L_0x0100;
+    L_0x00fd:
+        r6.isBlured = r0;	 Catch:{ all -> 0x0167 }
+        goto L_0x010c;
+    L_0x0100:
         r4 = "motion";
-        r5 = r2[r3];	 Catch:{ all -> 0x0168 }
-        r4 = r4.equals(r5);	 Catch:{ all -> 0x0168 }
-        if (r4 == 0) goto L_0x010d;
-    L_0x010b:
-        r6.isMotion = r0;	 Catch:{ all -> 0x0168 }
-    L_0x010d:
+        r5 = r2[r3];	 Catch:{ all -> 0x0167 }
+        r4 = r4.equals(r5);	 Catch:{ all -> 0x0167 }
+        if (r4 == 0) goto L_0x010c;
+    L_0x010a:
+        r6.isMotion = r0;	 Catch:{ all -> 0x0167 }
+    L_0x010c:
         r3 = r3 + 1;
-        goto L_0x00f1;
-    L_0x0110:
+        goto L_0x00f0;
+    L_0x010f:
         r0 = "intensity";
-        r0 = r1.getQueryParameter(r0);	 Catch:{ all -> 0x0168 }
-        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ all -> 0x0168 }
-        r0.intValue();	 Catch:{ all -> 0x0168 }
+        r0 = r1.getQueryParameter(r0);	 Catch:{ all -> 0x0167 }
+        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ all -> 0x0167 }
+        r0.intValue();	 Catch:{ all -> 0x0167 }
         r0 = 45;
-        r6.patternBgGradientRotation = r0;	 Catch:{ all -> 0x0168 }
+        r6.patternBgGradientRotation = r0;	 Catch:{ all -> 0x0167 }
         r0 = "bg_color";
-        r0 = r1.getQueryParameter(r0);	 Catch:{ Exception -> 0x014f }
-        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x014f }
-        if (r2 != 0) goto L_0x014f;
-    L_0x012d:
+        r0 = r1.getQueryParameter(r0);	 Catch:{ Exception -> 0x014e }
+        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x014e }
+        if (r2 != 0) goto L_0x014e;
+    L_0x012c:
         r2 = 6;
-        r3 = r0.substring(r8, r2);	 Catch:{ Exception -> 0x014f }
+        r3 = r0.substring(r8, r2);	 Catch:{ Exception -> 0x014e }
         r4 = 16;
-        r3 = java.lang.Integer.parseInt(r3, r4);	 Catch:{ Exception -> 0x014f }
+        r3 = java.lang.Integer.parseInt(r3, r4);	 Catch:{ Exception -> 0x014e }
         r5 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
         r3 = r3 | r5;
-        r6.patternBgColor = r3;	 Catch:{ Exception -> 0x014f }
-        r3 = r0.length();	 Catch:{ Exception -> 0x014f }
-        if (r3 <= r2) goto L_0x014f;
-    L_0x0143:
+        r6.patternBgColor = r3;	 Catch:{ Exception -> 0x014e }
+        r3 = r0.length();	 Catch:{ Exception -> 0x014e }
+        if (r3 <= r2) goto L_0x014e;
+    L_0x0142:
         r2 = 7;
-        r0 = r0.substring(r2);	 Catch:{ Exception -> 0x014f }
-        r0 = java.lang.Integer.parseInt(r0, r4);	 Catch:{ Exception -> 0x014f }
+        r0 = r0.substring(r2);	 Catch:{ Exception -> 0x014e }
+        r0 = java.lang.Integer.parseInt(r0, r4);	 Catch:{ Exception -> 0x014e }
         r0 = r0 | r5;
-        r6.patternBgGradientColor = r0;	 Catch:{ Exception -> 0x014f }
-    L_0x014f:
+        r6.patternBgGradientColor = r0;	 Catch:{ Exception -> 0x014e }
+    L_0x014e:
         r0 = "rotation";
-        r0 = r1.getQueryParameter(r0);	 Catch:{ Exception -> 0x0166 }
-        r1 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0166 }
-        if (r1 != 0) goto L_0x017f;
-    L_0x015b:
-        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ Exception -> 0x0166 }
-        r0 = r0.intValue();	 Catch:{ Exception -> 0x0166 }
-        r6.patternBgGradientRotation = r0;	 Catch:{ Exception -> 0x0166 }
-        goto L_0x017f;
-        goto L_0x017f;
-    L_0x0168:
+        r0 = r1.getQueryParameter(r0);	 Catch:{ Exception -> 0x0165 }
+        r1 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0165 }
+        if (r1 != 0) goto L_0x017e;
+    L_0x015a:
+        r0 = org.telegram.messenger.Utilities.parseInt(r0);	 Catch:{ Exception -> 0x0165 }
+        r0 = r0.intValue();	 Catch:{ Exception -> 0x0165 }
+        r6.patternBgGradientRotation = r0;	 Catch:{ Exception -> 0x0165 }
+        goto L_0x017e;
+        goto L_0x017e;
+    L_0x0167:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x019d }
-        goto L_0x017f;
-    L_0x016d:
-        r0 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x017b }
-        if (r0 == 0) goto L_0x017b;
-    L_0x0171:
-        r0 = new java.io.File;	 Catch:{ Exception -> 0x017b }
-        r1 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x017b }
-        r0.<init>(r1);	 Catch:{ Exception -> 0x017b }
-        r0.delete();	 Catch:{ Exception -> 0x017b }
-    L_0x017b:
-        r6.pathToWallpaper = r2;	 Catch:{ Exception -> 0x019d }
-        themedWallpaperLink = r2;	 Catch:{ Exception -> 0x019d }
-    L_0x017f:
-        if (r9 != 0) goto L_0x0197;
-    L_0x0181:
-        r0 = previousTheme;	 Catch:{ Exception -> 0x019d }
-        if (r0 != 0) goto L_0x0197;
-    L_0x0185:
-        currentDayTheme = r6;	 Catch:{ Exception -> 0x019d }
-        r0 = isCurrentThemeNight();	 Catch:{ Exception -> 0x019d }
-        if (r0 == 0) goto L_0x0197;
-    L_0x018d:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x019c }
+        goto L_0x017e;
+    L_0x016c:
+        r0 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x017a }
+        if (r0 == 0) goto L_0x017a;
+    L_0x0170:
+        r0 = new java.io.File;	 Catch:{ Exception -> 0x017a }
+        r1 = r6.pathToWallpaper;	 Catch:{ Exception -> 0x017a }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x017a }
+        r0.delete();	 Catch:{ Exception -> 0x017a }
+    L_0x017a:
+        r6.pathToWallpaper = r2;	 Catch:{ Exception -> 0x019c }
+        themedWallpaperLink = r2;	 Catch:{ Exception -> 0x019c }
+    L_0x017e:
+        if (r9 != 0) goto L_0x0196;
+    L_0x0180:
+        r0 = previousTheme;	 Catch:{ Exception -> 0x019c }
+        if (r0 != 0) goto L_0x0196;
+    L_0x0184:
+        currentDayTheme = r6;	 Catch:{ Exception -> 0x019c }
+        r0 = isCurrentThemeNight();	 Catch:{ Exception -> 0x019c }
+        if (r0 == 0) goto L_0x0196;
+    L_0x018c:
         r0 = 2000; // 0x7d0 float:2.803E-42 double:9.88E-321;
-        switchNightThemeDelay = r0;	 Catch:{ Exception -> 0x019d }
-        r0 = android.os.SystemClock.uptimeMillis();	 Catch:{ Exception -> 0x019d }
-        lastDelayUpdateTime = r0;	 Catch:{ Exception -> 0x019d }
-    L_0x0197:
-        currentTheme = r6;	 Catch:{ Exception -> 0x019d }
-        refreshThemeColors();	 Catch:{ Exception -> 0x019d }
-        goto L_0x01a1;
-    L_0x019d:
+        switchNightThemeDelay = r0;	 Catch:{ Exception -> 0x019c }
+        r0 = android.os.SystemClock.uptimeMillis();	 Catch:{ Exception -> 0x019c }
+        lastDelayUpdateTime = r0;	 Catch:{ Exception -> 0x019c }
+    L_0x0196:
+        currentTheme = r6;	 Catch:{ Exception -> 0x019c }
+        refreshThemeColors();	 Catch:{ Exception -> 0x019c }
+        goto L_0x01a0;
+    L_0x019c:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x01a1:
+    L_0x01a0:
         r0 = previousTheme;
-        if (r0 != 0) goto L_0x01b8;
-    L_0x01a5:
-        if (r7 == 0) goto L_0x01b8;
-    L_0x01a7:
+        if (r0 != 0) goto L_0x01b7;
+    L_0x01a4:
+        if (r7 == 0) goto L_0x01b7;
+    L_0x01a6:
         r7 = switchingNightTheme;
-        if (r7 != 0) goto L_0x01b8;
-    L_0x01ab:
+        if (r7 != 0) goto L_0x01b7;
+    L_0x01aa:
         r7 = r6.account;
         r7 = org.telegram.messenger.MessagesController.getInstance(r7);
         r0 = r6.getAccent(r8);
         r7.saveTheme(r6, r0, r9, r8);
-    L_0x01b8:
+    L_0x01b7:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.applyTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
@@ -9905,11 +10642,11 @@ public class Theme {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:107:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x01dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x01d3 A:{SYNTHETIC, Splitter:B:89:0x01d3} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x01dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x01dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x01d2 A:{SYNTHETIC, Splitter:B:89:0x01d2} */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x01dc  */
     /* JADX WARNING: Removed duplicated region for block: B:107:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01ed A:{SYNTHETIC, Splitter:B:96:0x01ed} */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x01ec A:{SYNTHETIC, Splitter:B:96:0x01ec} */
     public static void saveCurrentTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r12, boolean r13, boolean r14, boolean r15) {
         /*
         r0 = r12.overrideWallpaper;
@@ -10015,38 +10752,38 @@ public class Theme {
         goto L_0x0065;
     L_0x00a3:
         r2 = 0;
-        r6 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x01cd }
-        r8 = r12.pathToFile;	 Catch:{ Exception -> 0x01cd }
-        r6.<init>(r8);	 Catch:{ Exception -> 0x01cd }
-        r2 = r5.length();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r6 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x01cc }
+        r8 = r12.pathToFile;	 Catch:{ Exception -> 0x01cc }
+        r6.<init>(r8);	 Catch:{ Exception -> 0x01cc }
+        r2 = r5.length();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r2 != 0) goto L_0x00c0;
     L_0x00b1:
-        r2 = r1 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r2 = r1 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r2 != 0) goto L_0x00c0;
     L_0x00b5:
-        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r2 == 0) goto L_0x00c0;
     L_0x00bb:
         r2 = 32;
-        r5.append(r2);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r5.append(r2);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x00c0:
-        r2 = r5.toString();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r6.write(r2);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r2 = r5.toString();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r6.write(r2);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r5 = 1;
         r8 = 87;
         if (r2 != 0) goto L_0x0128;
     L_0x00d4:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2.<init>();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2.<init>();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r9 = "WLS=";
-        r2.append(r9);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2.append(r0);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2.append(r7);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r6.write(r2);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r2.append(r9);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2.append(r0);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2.append(r7);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r2 = org.telegram.messenger.AndroidUtilities.getStringBytes(r2);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r6.write(r2);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r14 == 0) goto L_0x016b;
     L_0x00f1:
         r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0123 }
@@ -10069,135 +10806,135 @@ public class Theme {
         goto L_0x016b;
     L_0x0123:
         r14 = move-exception;
-        org.telegram.messenger.FileLog.e(r14);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        org.telegram.messenger.FileLog.e(r14);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         goto L_0x016b;
     L_0x0128:
-        r14 = r1 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = r1 instanceof android.graphics.drawable.BitmapDrawable;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r14 == 0) goto L_0x016b;
     L_0x012c:
         r14 = r1;
-        r14 = (android.graphics.drawable.BitmapDrawable) r14;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = r14.getBitmap();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = (android.graphics.drawable.BitmapDrawable) r14;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = r14.getBitmap();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r0 = 2;
         if (r14 == 0) goto L_0x0162;
     L_0x0136:
         r2 = 4;
-        r7 = new byte[r2];	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r7[r3] = r8;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r7 = new byte[r2];	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r7[r3] = r8;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r9 = 80;
-        r7[r5] = r9;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r7[r5] = r9;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r10 = 83;
-        r7[r0] = r10;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r7[r0] = r10;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r10 = 3;
         r11 = 10;
-        r7[r10] = r11;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r6.write(r7);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r7 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.compress(r7, r8, r6);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r7[r10] = r11;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r6.write(r7);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r7 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.compress(r7, r8, r6);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r14 = 5;
-        r14 = new byte[r14];	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14[r3] = r11;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14[r5] = r8;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14[r0] = r9;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = new byte[r14];	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14[r3] = r11;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14[r5] = r8;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14[r0] = r9;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r7 = 69;
-        r14[r10] = r7;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14[r2] = r11;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r6.write(r14);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14[r10] = r7;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14[r2] = r11;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r6.write(r14);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x0162:
         if (r13 == 0) goto L_0x016b;
     L_0x0164:
         if (r15 != 0) goto L_0x016b;
     L_0x0166:
-        wallpaper = r1;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        calcBackgroundColor(r1, r0);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        wallpaper = r1;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        calcBackgroundColor(r1, r0);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x016b:
-        if (r15 != 0) goto L_0x01c1;
+        if (r15 != 0) goto L_0x01c0;
     L_0x016d:
-        r14 = themesDict;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r15 = r12.getKey();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = r14.get(r15);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = themesDict;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r15 = r12.getKey();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = r14.get(r15);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r14 != 0) goto L_0x0192;
     L_0x0179:
-        r14 = themes;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.add(r12);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = themesDict;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r15 = r12.getKey();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.put(r15, r12);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = otherThemes;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.add(r12);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        saveOtherThemes(r5);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        sortThemes();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = themes;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.add(r12);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = themesDict;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r15 = r12.getKey();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.put(r15, r12);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = otherThemes;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.add(r12);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        saveOtherThemes(r5);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        sortThemes();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x0192:
-        currentTheme = r12;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = currentTheme;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r15 = currentNightTheme;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        currentTheme = r12;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = currentTheme;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r15 = currentNightTheme;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r14 == r15) goto L_0x019e;
     L_0x019a:
-        r14 = currentTheme;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        currentDayTheme = r14;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = currentTheme;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        currentDayTheme = r14;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x019e:
-        r14 = defaultColors;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = defaultColors;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         if (r4 != r14) goto L_0x01aa;
     L_0x01a2:
-        r14 = currentColorsNoAccent;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.clear();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        refreshThemeColors();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = currentColorsNoAccent;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.clear();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        refreshThemeColors();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
     L_0x01aa:
-        r14 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14 = r14.edit();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
+        r14 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14 = r14.edit();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
         r15 = "theme";
-        r0 = currentDayTheme;	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r0 = r0.getKey();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.putString(r15, r0);	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-        r14.commit();	 Catch:{ Exception -> 0x01c7, all -> 0x01c5 }
-    L_0x01c1:
-        r6.close();	 Catch:{ Exception -> 0x01d7 }
-        goto L_0x01db;
-    L_0x01c5:
+        r0 = currentDayTheme;	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r0 = r0.getKey();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.putString(r15, r0);	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+        r14.commit();	 Catch:{ Exception -> 0x01c6, all -> 0x01c4 }
+    L_0x01c0:
+        r6.close();	 Catch:{ Exception -> 0x01d6 }
+        goto L_0x01da;
+    L_0x01c4:
         r12 = move-exception;
-        goto L_0x01eb;
-    L_0x01c7:
+        goto L_0x01ea;
+    L_0x01c6:
         r14 = move-exception;
         r2 = r6;
-        goto L_0x01ce;
-    L_0x01ca:
+        goto L_0x01cd;
+    L_0x01c9:
         r12 = move-exception;
         r6 = r2;
-        goto L_0x01eb;
-    L_0x01cd:
+        goto L_0x01ea;
+    L_0x01cc:
         r14 = move-exception;
-    L_0x01ce:
-        org.telegram.messenger.FileLog.e(r14);	 Catch:{ all -> 0x01ca }
-        if (r2 == 0) goto L_0x01db;
-    L_0x01d3:
-        r2.close();	 Catch:{ Exception -> 0x01d7 }
-        goto L_0x01db;
-    L_0x01d7:
+    L_0x01cd:
+        org.telegram.messenger.FileLog.e(r14);	 Catch:{ all -> 0x01c9 }
+        if (r2 == 0) goto L_0x01da;
+    L_0x01d2:
+        r2.close();	 Catch:{ Exception -> 0x01d6 }
+        goto L_0x01da;
+    L_0x01d6:
         r14 = move-exception;
         org.telegram.messenger.FileLog.e(r14);
-    L_0x01db:
-        if (r13 == 0) goto L_0x01ea;
-    L_0x01dd:
+    L_0x01da:
+        if (r13 == 0) goto L_0x01e9;
+    L_0x01dc:
         r13 = r12.account;
         r13 = org.telegram.messenger.MessagesController.getInstance(r13);
         r14 = r12.getAccent(r3);
         r13.saveThemeToServer(r12, r14);
-    L_0x01ea:
+    L_0x01e9:
         return;
-    L_0x01eb:
-        if (r6 == 0) goto L_0x01f5;
-    L_0x01ed:
-        r6.close();	 Catch:{ Exception -> 0x01f1 }
-        goto L_0x01f5;
-    L_0x01f1:
+    L_0x01ea:
+        if (r6 == 0) goto L_0x01f4;
+    L_0x01ec:
+        r6.close();	 Catch:{ Exception -> 0x01f0 }
+        goto L_0x01f4;
+    L_0x01f0:
         r13 = move-exception;
         org.telegram.messenger.FileLog.e(r13);
-    L_0x01f5:
-        goto L_0x01f7;
-    L_0x01f6:
-        throw r12;
-    L_0x01f7:
+    L_0x01f4:
         goto L_0x01f6;
+    L_0x01f5:
+        throw r12;
+    L_0x01f6:
+        goto L_0x01f5;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.saveCurrentTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
     }
@@ -11097,27 +11834,27 @@ public class Theme {
         r18 = r12;
         r12 = r17.getResources();	 Catch:{ all -> 0x0539 }
         r17 = r13;
-        r13 = NUM; // 0x7var_ float:1.794583E38 double:1.052935808E-314;
+        r13 = NUM; // 0x7var_ float:1.7945848E38 double:1.0529358123E-314;
         r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
         r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
         setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
         r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
         r12 = r12.getResources();	 Catch:{ all -> 0x0539 }
         r19 = r13;
-        r13 = NUM; // 0x7var_b float:1.7945833E38 double:1.052935809E-314;
+        r13 = NUM; // 0x7var_ float:1.7945852E38 double:1.0529358133E-314;
         r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
         r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
         setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
         r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
         r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
-        r12 = NUM; // 0x7var_e float:1.794584E38 double:1.0529358103E-314;
+        r12 = NUM; // 0x7var_ float:1.7945858E38 double:1.052935815E-314;
         r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
         r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
         setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
         r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
         r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
         r20 = r12;
-        r12 = NUM; // 0x7var_c float:1.7945835E38 double:1.0529358093E-314;
+        r12 = NUM; // 0x7var_ float:1.7945854E38 double:1.052935814E-314;
         r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
         r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
         setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
@@ -11539,7 +12276,7 @@ public class Theme {
     L_0x0381:
         r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
         r1 = r1.getResources();	 Catch:{ all -> 0x0539 }
-        r2 = NUM; // 0x7var_ float:1.794484E38 double:1.052935567E-314;
+        r2 = NUM; // 0x7var_ float:1.7944842E38 double:1.0529355673E-314;
         r1 = r1.getDrawable(r2);	 Catch:{ all -> 0x0539 }
         r1 = r1.mutate();	 Catch:{ all -> 0x0539 }
         r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0539 }
@@ -11628,7 +12365,7 @@ public class Theme {
         r5.setBounds(r12, r8, r9, r11);	 Catch:{ all -> 0x0539 }
         r5 = r6[r2];	 Catch:{ all -> 0x0539 }
         r8 = 522; // 0x20a float:7.31E-43 double:2.58E-321;
-        r5.setTop(r4, r8);	 Catch:{ all -> 0x0539 }
+        r5.setTop(r4, r8, r4, r4);	 Catch:{ all -> 0x0539 }
         r5 = r6[r2];	 Catch:{ all -> 0x0539 }
         r5.draw(r14);	 Catch:{ all -> 0x0539 }
         r5 = r6[r2];	 Catch:{ all -> 0x0539 }
@@ -11637,7 +12374,7 @@ public class Theme {
         r11 = 430; // 0x1ae float:6.03E-43 double:2.124E-321;
         r5.setBounds(r12, r11, r9, r8);	 Catch:{ all -> 0x0539 }
         r5 = r6[r2];	 Catch:{ all -> 0x0539 }
-        r5.setTop(r11, r8);	 Catch:{ all -> 0x0539 }
+        r5.setTop(r11, r8, r4, r4);	 Catch:{ all -> 0x0539 }
         r2 = r6[r2];	 Catch:{ all -> 0x0539 }
         r2.draw(r14);	 Catch:{ all -> 0x0539 }
         r2 = r6[r4];	 Catch:{ all -> 0x0539 }
@@ -12181,46 +12918,46 @@ public class Theme {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0b85 */
-    /* JADX WARNING: Can't wrap try/catch for region: R(9:12|13|(4:15|(1:17)(1:18)|19|20)|37|21|22|23|24|25) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x0ba9 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(9:15|16|(4:18|(1:20)(1:21)|22|23)|41|24|25|26|27|28) */
     public static void createChatResources(android.content.Context r15, boolean r16) {
         /*
         r1 = sync;
         monitor-enter(r1);
-        r0 = chat_msgTextPaint;	 Catch:{ all -> 0x0d1f }
+        r0 = chat_msgTextPaint;	 Catch:{ all -> 0x0d43 }
         r2 = 1;
         if (r0 != 0) goto L_0x003d;
     L_0x0008:
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgTextPaint = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgGameTextPaint = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgTextPaintOneEmoji = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgTextPaintTwoEmoji = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgTextPaintThreeEmoji = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d1f }
-        r0.<init>(r2);	 Catch:{ all -> 0x0d1f }
-        chat_msgBotButtonPaint = r0;	 Catch:{ all -> 0x0d1f }
-        r0 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0d1f }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgTextPaint = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgGameTextPaint = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgTextPaintOneEmoji = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgTextPaintTwoEmoji = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgTextPaintThreeEmoji = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = new android.text.TextPaint;	 Catch:{ all -> 0x0d43 }
+        r0.<init>(r2);	 Catch:{ all -> 0x0d43 }
+        chat_msgBotButtonPaint = r0;	 Catch:{ all -> 0x0d43 }
+        r0 = chat_msgBotButtonPaint;	 Catch:{ all -> 0x0d43 }
         r3 = "fonts/rmedium.ttf";
-        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0d1f }
-        r0.setTypeface(r3);	 Catch:{ all -> 0x0d1f }
+        r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);	 Catch:{ all -> 0x0d43 }
+        r0.setTypeface(r3);	 Catch:{ all -> 0x0d43 }
     L_0x003d:
-        monitor-exit(r1);	 Catch:{ all -> 0x0d1f }
+        monitor-exit(r1);	 Catch:{ all -> 0x0d43 }
         r0 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r1 = 2;
-        if (r16 != 0) goto L_0x0b8f;
+        if (r16 != 0) goto L_0x0bb3;
     L_0x0043:
         r3 = chat_msgInDrawable;
-        if (r3 != 0) goto L_0x0b8f;
+        if (r3 != 0) goto L_0x0bb3;
     L_0x0047:
         r3 = new android.text.TextPaint;
         r3.<init>(r2);
@@ -12418,7 +13155,7 @@ public class Theme {
         r3.<init>();
         chat_composeBackgroundPaint = r3;
         r3 = r15.getResources();
-        r4 = NUM; // 0x7var_e4 float:1.7946079E38 double:1.0529358686E-314;
+        r4 = NUM; // 0x7var_ed float:1.7946097E38 double:1.052935873E-314;
         r4 = r3.getDrawable(r4);
         chat_msgNoSoundDrawable = r4;
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
@@ -12446,299 +13183,316 @@ public class Theme {
         r4 = new org.telegram.ui.ActionBar.Theme$MessageDrawable;
         r4.<init>(r2, r2, r2);
         chat_msgOutMediaSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_c9 float:1.7945505E38 double:1.052935729E-314;
-        r6 = r3.getDrawable(r4);
-        r6 = r6.mutate();
-        chat_msgOutCheckDrawable = r6;
-        r6 = r3.getDrawable(r4);
-        r6 = r6.mutate();
-        chat_msgOutCheckSelectedDrawable = r6;
-        r6 = r3.getDrawable(r4);
-        r6 = r6.mutate();
-        chat_msgOutCheckReadDrawable = r6;
-        r6 = r3.getDrawable(r4);
-        r6 = r6.mutate();
-        chat_msgOutCheckReadSelectedDrawable = r6;
-        r6 = r3.getDrawable(r4);
-        r6 = r6.mutate();
-        chat_msgMediaCheckDrawable = r6;
+        r4 = NUM; // 0x7var_ca float:1.7945507E38 double:1.0529357293E-314;
+        r4 = r3.getDrawable(r4);
+        r4 = r4.mutate();
+        chat_msgOutCheckDrawable = r4;
+        r4 = NUM; // 0x7var_ca float:1.7945507E38 double:1.0529357293E-314;
+        r4 = r3.getDrawable(r4);
+        r4 = r4.mutate();
+        chat_msgOutCheckSelectedDrawable = r4;
+        r4 = NUM; // 0x7var_ca float:1.7945507E38 double:1.0529357293E-314;
+        r4 = r3.getDrawable(r4);
+        r4 = r4.mutate();
+        chat_msgOutCheckReadDrawable = r4;
+        r4 = NUM; // 0x7var_ca float:1.7945507E38 double:1.0529357293E-314;
+        r4 = r3.getDrawable(r4);
+        r4 = r4.mutate();
+        chat_msgOutCheckReadSelectedDrawable = r4;
+        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r4 = r3.getDrawable(r4);
+        r4 = r4.mutate();
+        chat_msgMediaCheckDrawable = r4;
+        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerCheckDrawable = r4;
-        r4 = NUM; // 0x7var_d7 float:1.7945533E38 double:1.0529357357E-314;
+        r4 = NUM; // 0x7var_d9 float:1.7945537E38 double:1.0529357367E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutHalfCheckDrawable = r4;
-        r4 = NUM; // 0x7var_d7 float:1.7945533E38 double:1.0529357357E-314;
+        r4 = NUM; // 0x7var_d9 float:1.7945537E38 double:1.0529357367E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutHalfCheckSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_d7 float:1.7945533E38 double:1.0529357357E-314;
+        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgMediaHalfCheckDrawable = r4;
-        r4 = NUM; // 0x7var_d7 float:1.7945533E38 double:1.0529357357E-314;
+        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerHalfCheckDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgOutClockDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgOutSelectedClockDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgInClockDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgInSelectedClockDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
-        r4 = r3.getDrawable(r4);
-        r4 = r4.mutate();
-        chat_msgMediaClockDrawable = r4;
-        r4 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r4 = NUM; // 0x7var_cd float:1.7945513E38 double:1.052935731E-314;
+        r6 = r3.getDrawable(r4);
+        r6 = r6.mutate();
+        chat_msgOutClockDrawable = r6;
+        r6 = r3.getDrawable(r4);
+        r6 = r6.mutate();
+        chat_msgOutSelectedClockDrawable = r6;
+        r6 = r3.getDrawable(r4);
+        r6 = r6.mutate();
+        chat_msgInClockDrawable = r6;
+        r6 = r3.getDrawable(r4);
+        r6 = r6.mutate();
+        chat_msgInSelectedClockDrawable = r6;
+        r6 = r3.getDrawable(r4);
+        r6 = r6.mutate();
+        chat_msgMediaClockDrawable = r6;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerClockDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInViewsDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInViewsSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutViewsDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutViewsSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgMediaViewsDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945633E38 double:1.05293576E-314;
+        r4 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgStickerViewsDrawable = r4;
-        r4 = NUM; // 0x7var_c1 float:1.7945489E38 double:1.052935725E-314;
+        r4 = NUM; // 0x7var_c2 float:1.794549E38 double:1.0529357254E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInMenuDrawable = r4;
-        r4 = NUM; // 0x7var_c1 float:1.7945489E38 double:1.052935725E-314;
+        r4 = NUM; // 0x7var_c2 float:1.794549E38 double:1.0529357254E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInMenuSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_c1 float:1.7945489E38 double:1.052935725E-314;
+        r4 = NUM; // 0x7var_c2 float:1.794549E38 double:1.0529357254E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutMenuDrawable = r4;
-        r4 = NUM; // 0x7var_c1 float:1.7945489E38 double:1.052935725E-314;
+        r4 = NUM; // 0x7var_c2 float:1.794549E38 double:1.0529357254E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutMenuSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_dd float:1.7946065E38 double:1.052935865E-314;
+        r4 = NUM; // 0x7var_e6 float:1.7946083E38 double:1.0529358696E-314;
         r4 = r3.getDrawable(r4);
         chat_msgMediaMenuDrawable = r4;
-        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
+        r4 = NUM; // 0x7var_dd float:1.7945545E38 double:1.0529357387E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInInstantDrawable = r4;
-        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
+        r4 = NUM; // 0x7var_dd float:1.7945545E38 double:1.0529357387E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutInstantDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945635E38 double:1.0529357604E-314;
+        r4 = NUM; // 0x7var_c float:1.794564E38 double:1.052935762E-314;
         r4 = r3.getDrawable(r4);
         chat_msgErrorDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945298E38 double:1.0529356784E-314;
+        r4 = NUM; // 0x7var_ float:1.79453E38 double:1.052935679E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_muteIconDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945142E38 double:1.0529356404E-314;
+        r4 = NUM; // 0x7var_ float:1.7945144E38 double:1.052935641E-314;
         r4 = r3.getDrawable(r4);
         chat_lockIconDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7944815E38 double:1.052935561E-314;
+        r4 = NUM; // 0x7var_ float:1.7944817E38 double:1.0529355613E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgBroadcastDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7944815E38 double:1.052935561E-314;
+        r4 = NUM; // 0x7var_ float:1.7944817E38 double:1.0529355613E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgBroadcastMediaDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r4 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInCallDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r4 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgInCallSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r4 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutCallDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794511E38 double:1.0529356325E-314;
+        r4 = NUM; // 0x7var_ float:1.7945111E38 double:1.052935633E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgOutCallSelectedDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945115E38 double:1.052935634E-314;
+        r4 = NUM; // 0x7var_a float:1.7945117E38 double:1.0529356344E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgCallUpGreenDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
+        r4 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgCallDownRedDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
+        r4 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgCallDownGreenDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945115E38 double:1.052935634E-314;
+        r4 = 0;
+    L_0x0464:
+        if (r4 >= r1) goto L_0x0487;
+    L_0x0466:
+        r6 = chat_pollCheckDrawable;
+        r7 = NUM; // 0x7var_b float:1.7945833E38 double:1.052935809E-314;
+        r7 = r3.getDrawable(r7);
+        r7 = r7.mutate();
+        r6[r4] = r7;
+        r6 = chat_pollCrossDrawable;
+        r7 = NUM; // 0x7var_c float:1.7945835E38 double:1.0529358093E-314;
+        r7 = r3.getDrawable(r7);
+        r7 = r7.mutate();
+        r6[r4] = r7;
+        r4 = r4 + 1;
+        goto L_0x0464;
+    L_0x0487:
+        r4 = NUM; // 0x7var_a float:1.7945117E38 double:1.0529356344E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         calllog_msgCallUpRedDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.7945115E38 double:1.052935634E-314;
+        r4 = NUM; // 0x7var_a float:1.7945117E38 double:1.0529356344E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         calllog_msgCallUpGreenDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
+        r4 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         calllog_msgCallDownRedDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
+        r4 = NUM; // 0x7var_d float:1.7945124E38 double:1.052935636E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         calllog_msgCallDownGreenDrawable = r4;
-        r4 = NUM; // 0x7var_a float:1.7945312E38 double:1.052935682E-314;
+        r4 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_msgAvatarLiveLocationDrawable = r4;
-        r4 = NUM; // 0x7var_c float:1.7944797E38 double:1.0529355564E-314;
+        r4 = NUM; // 0x7var_d float:1.79448E38 double:1.052935557E-314;
         r4 = r3.getDrawable(r4);
         chat_inlineResultFile = r4;
-        r4 = NUM; // 0x7var_ float:1.7944805E38 double:1.0529355584E-314;
+        r4 = NUM; // 0x7var_ float:1.7944807E38 double:1.052935559E-314;
         r4 = r3.getDrawable(r4);
         chat_inlineResultAudio = r4;
-        r4 = NUM; // 0x7var_f float:1.7944803E38 double:1.052935558E-314;
+        r4 = NUM; // 0x7var_ float:1.7944805E38 double:1.0529355584E-314;
         r4 = r3.getDrawable(r4);
         chat_inlineResultLocation = r4;
-        r4 = NUM; // 0x7var_c float:1.7945349E38 double:1.052935691E-314;
+        r4 = NUM; // 0x7var_d float:1.794535E38 double:1.0529356913E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_redLocationIcon = r4;
-        r4 = NUM; // 0x7var_e float:1.7944801E38 double:1.0529355574E-314;
+        r4 = NUM; // 0x7var_f float:1.7944803E38 double:1.052935558E-314;
         r4 = r3.getDrawable(r4);
         chat_botLinkDrawalbe = r4;
-        r4 = NUM; // 0x7var_d float:1.79448E38 double:1.052935557E-314;
+        r4 = NUM; // 0x7var_e float:1.7944801E38 double:1.0529355574E-314;
         r4 = r3.getDrawable(r4);
         chat_botInlineDrawable = r4;
-        r4 = NUM; // 0x7var_c4 float:1.7946014E38 double:1.052935853E-314;
+        r4 = NUM; // 0x7var_cd float:1.7946032E38 double:1.0529358573E-314;
         r4 = r3.getDrawable(r4);
         chat_systemDrawable = r4;
-        r4 = NUM; // 0x7var_ef float:1.7945063E38 double:1.052935621E-314;
+        r4 = NUM; // 0x7var_f0 float:1.7945065E38 double:1.0529356216E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_contextResult_shadowUnderSwitchDrawable = r4;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_ float:1.7944744E38 double:1.0529355435E-314;
+        r7 = NUM; // 0x7var_ float:1.7944746E38 double:1.052935544E-314;
         r6 = createCircleDrawableWithIcon(r6, r7);
         r4[r5] = r6;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_e float:1.7944736E38 double:1.0529355416E-314;
+        r7 = NUM; // 0x7var_f float:1.7944738E38 double:1.052935542E-314;
         r6 = createCircleDrawableWithIcon(r6, r7);
         r4[r2] = r6;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_ float:1.7944742E38 double:1.052935543E-314;
+        r7 = NUM; // 0x7var_ float:1.7944744E38 double:1.0529355435E-314;
         r6 = createCircleDrawableWithIcon(r6, r7);
         r4[r1] = r6;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_ float:1.794474E38 double:1.0529355426E-314;
+        r7 = NUM; // 0x7var_ float:1.7944742E38 double:1.052935543E-314;
         r6 = createCircleDrawableWithIcon(r6, r7);
         r7 = 3;
         r4[r7] = r6;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r8 = NUM; // 0x7var_ float:1.7944746E38 double:1.052935544E-314;
+        r8 = NUM; // 0x7var_ float:1.7944748E38 double:1.0529355445E-314;
         r6 = createCircleDrawableWithIcon(r6, r8);
         r8 = 4;
         r4[r8] = r6;
         r4 = chat_attachButtonDrawables;
         r6 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r9 = NUM; // 0x7var_ float:1.7944748E38 double:1.0529355445E-314;
+        r9 = NUM; // 0x7var_ float:1.794475E38 double:1.052935545E-314;
         r6 = createCircleDrawableWithIcon(r6, r9);
         r9 = 5;
         r4[r9] = r6;
-        r4 = NUM; // 0x7var_ float:1.7945665E38 double:1.052935768E-314;
+        r4 = NUM; // 0x7var_b float:1.7945671E38 double:1.0529357693E-314;
         r4 = r3.getDrawable(r4);
         chat_attachEmptyDrawable = r4;
         r4 = chat_cornerOuter;
-        r6 = NUM; // 0x7var_b3 float:1.794494E38 double:1.0529355915E-314;
+        r6 = NUM; // 0x7var_b4 float:1.7944943E38 double:1.052935592E-314;
         r6 = r3.getDrawable(r6);
         r4[r5] = r6;
         r4 = chat_cornerOuter;
-        r6 = NUM; // 0x7var_b4 float:1.7944943E38 double:1.052935592E-314;
+        r6 = NUM; // 0x7var_b5 float:1.7944945E38 double:1.0529355925E-314;
         r6 = r3.getDrawable(r6);
         r4[r2] = r6;
+        r4 = chat_cornerOuter;
+        r6 = NUM; // 0x7var_b3 float:1.794494E38 double:1.0529355915E-314;
+        r6 = r3.getDrawable(r6);
+        r4[r1] = r6;
         r4 = chat_cornerOuter;
         r6 = NUM; // 0x7var_b2 float:1.7944939E38 double:1.052935591E-314;
         r6 = r3.getDrawable(r6);
-        r4[r1] = r6;
-        r4 = chat_cornerOuter;
-        r6 = NUM; // 0x7var_b1 float:1.7944937E38 double:1.0529355905E-314;
-        r6 = r3.getDrawable(r6);
         r4[r7] = r6;
         r4 = chat_cornerInner;
-        r6 = NUM; // 0x7var_b0 float:1.7944935E38 double:1.05293559E-314;
+        r6 = NUM; // 0x7var_b1 float:1.7944937E38 double:1.0529355905E-314;
         r6 = r3.getDrawable(r6);
         r4[r5] = r6;
         r4 = chat_cornerInner;
-        r6 = NUM; // 0x7var_af float:1.7944933E38 double:1.0529355895E-314;
+        r6 = NUM; // 0x7var_b0 float:1.7944935E38 double:1.05293559E-314;
         r6 = r3.getDrawable(r6);
         r4[r2] = r6;
         r4 = chat_cornerInner;
-        r6 = NUM; // 0x7var_ae float:1.794493E38 double:1.052935589E-314;
+        r6 = NUM; // 0x7var_af float:1.7944933E38 double:1.0529355895E-314;
         r6 = r3.getDrawable(r6);
         r4[r1] = r6;
         r4 = chat_cornerInner;
-        r6 = NUM; // 0x7var_ad float:1.7944929E38 double:1.0529355885E-314;
+        r6 = NUM; // 0x7var_ae float:1.794493E38 double:1.052935589E-314;
         r6 = r3.getDrawable(r6);
         r4[r7] = r6;
-        r4 = NUM; // 0x7var_ float:1.7945913E38 double:1.052935828E-314;
+        r4 = NUM; // 0x7var_b float:1.794593E38 double:1.0529358326E-314;
         r4 = r3.getDrawable(r4);
         chat_shareDrawable = r4;
-        r4 = NUM; // 0x7var_ float:1.794591E38 double:1.0529358276E-314;
+        r4 = NUM; // 0x7var_a float:1.7945929E38 double:1.052935832E-314;
         r4 = r3.getDrawable(r4);
         chat_shareIconDrawable = r4;
-        r4 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
+        r4 = NUM; // 0x7var_bc float:1.794496E38 double:1.052935596E-314;
         r4 = r3.getDrawable(r4);
         chat_replyIconDrawable = r4;
-        r4 = NUM; // 0x7var_ba float:1.7945474E38 double:1.0529357214E-314;
+        r4 = NUM; // 0x7var_bb float:1.7945476E38 double:1.052935722E-314;
         r4 = r3.getDrawable(r4);
         chat_goIconDrawable = r4;
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r5];
         r6 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_ float:1.7944754E38 double:1.052935546E-314;
+        r11 = NUM; // 0x7var_ float:1.7944756E38 double:1.0529355465E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12749,7 +13503,7 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r2];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_ float:1.7944756E38 double:1.0529355465E-314;
+        r11 = NUM; // 0x7var_ float:1.7944758E38 double:1.052935547E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12760,7 +13514,7 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r1];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_ float:1.7944754E38 double:1.052935546E-314;
+        r11 = NUM; // 0x7var_ float:1.7944756E38 double:1.0529355465E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12771,7 +13525,7 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r7];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_ float:1.7944756E38 double:1.0529355465E-314;
+        r11 = NUM; // 0x7var_ float:1.7944758E38 double:1.052935547E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12782,7 +13536,7 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r8];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_e1 float:1.7946073E38 double:1.052935867E-314;
+        r11 = NUM; // 0x7var_ea float:1.794609E38 double:1.0529358716E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
@@ -12793,13 +13547,13 @@ public class Theme {
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r9];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_e2 float:1.7946075E38 double:1.0529358676E-314;
+        r11 = NUM; // 0x7var_eb float:1.7946093E38 double:1.052935872E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileMiniStatesDrawable;
         r4 = r4[r9];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r10 = NUM; // 0x7var_e2 float:1.7946075E38 double:1.0529358676E-314;
+        r10 = NUM; // 0x7var_eb float:1.7946093E38 double:1.052935872E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r4[r2] = r6;
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
@@ -12961,11 +13715,11 @@ public class Theme {
         r4 = chat_filePath;
         r4 = r4[r2];
         r4.close();
-        r4 = NUM; // 0x7var_ float:1.7944821E38 double:1.0529355623E-314;
+        r4 = NUM; // 0x7var_ float:1.7944823E38 double:1.052935563E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_flameIcon = r4;
-        r4 = NUM; // 0x7var_f5 float:1.7945594E38 double:1.0529357506E-314;
+        r4 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r4 = r3.getDrawable(r4);
         r4 = r4.mutate();
         chat_gifIcon = r4;
@@ -12973,7 +13727,7 @@ public class Theme {
         r4 = r4[r5];
         r6 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r11 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12984,7 +13738,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r2];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
+        r11 = NUM; // 0x7var_fa float:1.7945604E38 double:1.052935753E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -12995,7 +13749,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r1];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = NUM; // 0x7var_f6 float:1.7945596E38 double:1.052935751E-314;
+        r11 = NUM; // 0x7var_f9 float:1.7945602E38 double:1.0529357525E-314;
         r10 = createCircleDrawableWithIcon(r10, r11);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13006,7 +13760,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r7];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
+        r12 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
         r10 = createCircleDrawableWithIcon(r10, r12);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13017,7 +13771,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r8];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = NUM; // 0x7var_f3 float:1.794559E38 double:1.0529357496E-314;
+        r12 = NUM; // 0x7var_f6 float:1.7945596E38 double:1.052935751E-314;
         r10 = createCircleDrawableWithIcon(r10, r12);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13028,7 +13782,7 @@ public class Theme {
         r4 = chat_fileStatesDrawable;
         r4 = r4[r9];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r13 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13040,7 +13794,7 @@ public class Theme {
         r10 = 6;
         r4 = r4[r10];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
+        r13 = NUM; // 0x7var_fa float:1.7945604E38 double:1.052935753E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13065,7 +13819,7 @@ public class Theme {
         r10 = 8;
         r4 = r4[r10];
         r10 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
+        r13 = NUM; // 0x7var_f7 float:1.7945598E38 double:1.0529357515E-314;
         r10 = createCircleDrawableWithIcon(r10, r13);
         r4[r5] = r10;
         r4 = chat_fileStatesDrawable;
@@ -13110,7 +13864,7 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r4 = r4[r1];
         r13 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r14 = NUM; // 0x7var_f5 float:1.7945594E38 double:1.0529357506E-314;
+        r14 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
         r13 = createCircleDrawableWithIcon(r13, r14);
         r4[r5] = r13;
         r4 = chat_photoStatesDrawables;
@@ -13121,26 +13875,26 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r4 = r4[r7];
         r13 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r14 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r14 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
         r13 = createCircleDrawableWithIcon(r13, r14);
         r4[r5] = r13;
         r4 = chat_photoStatesDrawables;
         r4 = r4[r7];
         r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r13 = NUM; // 0x7var_f8 float:1.79456E38 double:1.052935752E-314;
+        r13 = NUM; // 0x7var_fb float:1.7945606E38 double:1.0529357535E-314;
         r7 = createCircleDrawableWithIcon(r7, r13);
         r4[r2] = r7;
         r4 = chat_photoStatesDrawables;
         r7 = r4[r8];
         r4 = r4[r8];
-        r8 = NUM; // 0x7var_ float:1.7944821E38 double:1.0529355623E-314;
+        r8 = NUM; // 0x7var_ float:1.7944823E38 double:1.052935563E-314;
         r8 = r3.getDrawable(r8);
         r4[r2] = r8;
         r7[r5] = r8;
         r4 = chat_photoStatesDrawables;
         r7 = r4[r9];
         r4 = r4[r9];
-        r8 = NUM; // 0x7var_ float:1.7944874E38 double:1.052935575E-314;
+        r8 = NUM; // 0x7var_ float:1.7944876E38 double:1.0529355757E-314;
         r8 = r3.getDrawable(r8);
         r4[r2] = r8;
         r7[r5] = r8;
@@ -13149,7 +13903,7 @@ public class Theme {
         r7 = r4[r7];
         r8 = 6;
         r4 = r4[r8];
-        r8 = NUM; // 0x7var_ float:1.7945779E38 double:1.0529357955E-314;
+        r8 = NUM; // 0x7var_ float:1.7945785E38 double:1.052935797E-314;
         r8 = r3.getDrawable(r8);
         r4[r2] = r8;
         r7[r5] = r8;
@@ -13180,14 +13934,14 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r7 = 9;
         r4 = r4[r7];
-        r7 = NUM; // 0x7var_b7 float:1.794495E38 double:1.0529355934E-314;
+        r7 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r7 = r3.getDrawable(r7);
         r7 = r7.mutate();
         r4[r5] = r7;
         r4 = chat_photoStatesDrawables;
         r7 = 9;
         r4 = r4[r7];
-        r7 = NUM; // 0x7var_b7 float:1.794495E38 double:1.0529355934E-314;
+        r7 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r7 = r3.getDrawable(r7);
         r7 = r7.mutate();
         r4[r2] = r7;
@@ -13218,100 +13972,100 @@ public class Theme {
         r4 = chat_photoStatesDrawables;
         r7 = 12;
         r4 = r4[r7];
-        r7 = NUM; // 0x7var_b7 float:1.794495E38 double:1.0529355934E-314;
+        r7 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r7 = r3.getDrawable(r7);
         r7 = r7.mutate();
         r4[r5] = r7;
         r4 = chat_photoStatesDrawables;
         r7 = 12;
         r4 = r4[r7];
-        r7 = NUM; // 0x7var_b7 float:1.794495E38 double:1.0529355934E-314;
+        r7 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r7 = r3.getDrawable(r7);
         r7 = r7.mutate();
         r4[r2] = r7;
         r4 = chat_contactDrawable;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r8 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
+        r8 = NUM; // 0x7var_ce float:1.7945515E38 double:1.0529357313E-314;
         r7 = createCircleDrawableWithIcon(r7, r8);
         r4[r5] = r7;
         r4 = chat_contactDrawable;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7var_cc float:1.794551E38 double:1.0529357303E-314;
+        r7 = NUM; // 0x7var_ce float:1.7945515E38 double:1.0529357313E-314;
         r6 = createCircleDrawableWithIcon(r6, r7);
         r4[r2] = r6;
         r4 = chat_locationDrawable;
-        r6 = NUM; // 0x7var_df float:1.794555E38 double:1.0529357397E-314;
+        r6 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
         r6 = r3.getDrawable(r6);
         r6 = r6.mutate();
         r4[r5] = r6;
         r4 = chat_locationDrawable;
-        r6 = NUM; // 0x7var_df float:1.794555E38 double:1.0529357397E-314;
+        r6 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
         r3 = r3.getDrawable(r6);
         r3 = r3.mutate();
         r4[r2] = r3;
         r3 = r15.getResources();
-        r4 = NUM; // 0x7var_aa float:1.7944923E38 double:1.052935587E-314;
+        r4 = NUM; // 0x7var_ab float:1.7944925E38 double:1.0529355875E-314;
         r3 = r3.getDrawable(r4);
         chat_composeShadowDrawable = r3;
-        r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0b8c }
+        r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0bb0 }
         r4 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ all -> 0x0b8c }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ all -> 0x0bb0 }
         r3 = r3 + r4;
-        r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0b8c }
-        r4 = android.graphics.Bitmap.createBitmap(r3, r3, r4);	 Catch:{ all -> 0x0b8c }
-        r6 = new android.graphics.Canvas;	 Catch:{ all -> 0x0b8c }
-        r6.<init>(r4);	 Catch:{ all -> 0x0b8c }
-        r7 = new android.graphics.Paint;	 Catch:{ all -> 0x0b8c }
-        r7.<init>(r2);	 Catch:{ all -> 0x0b8c }
-        r7.setColor(r5);	 Catch:{ all -> 0x0b8c }
-        r8 = android.graphics.Paint.Style.FILL;	 Catch:{ all -> 0x0b8c }
-        r7.setStyle(r8);	 Catch:{ all -> 0x0b8c }
-        r8 = new android.graphics.PorterDuffXfermode;	 Catch:{ all -> 0x0b8c }
-        r9 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ all -> 0x0b8c }
-        r8.<init>(r9);	 Catch:{ all -> 0x0b8c }
-        r7.setXfermode(r8);	 Catch:{ all -> 0x0b8c }
-        r8 = new android.graphics.Paint;	 Catch:{ all -> 0x0b8c }
-        r8.<init>(r2);	 Catch:{ all -> 0x0b8c }
+        r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0bb0 }
+        r4 = android.graphics.Bitmap.createBitmap(r3, r3, r4);	 Catch:{ all -> 0x0bb0 }
+        r6 = new android.graphics.Canvas;	 Catch:{ all -> 0x0bb0 }
+        r6.<init>(r4);	 Catch:{ all -> 0x0bb0 }
+        r7 = new android.graphics.Paint;	 Catch:{ all -> 0x0bb0 }
+        r7.<init>(r2);	 Catch:{ all -> 0x0bb0 }
+        r7.setColor(r5);	 Catch:{ all -> 0x0bb0 }
+        r8 = android.graphics.Paint.Style.FILL;	 Catch:{ all -> 0x0bb0 }
+        r7.setStyle(r8);	 Catch:{ all -> 0x0bb0 }
+        r8 = new android.graphics.PorterDuffXfermode;	 Catch:{ all -> 0x0bb0 }
+        r9 = android.graphics.PorterDuff.Mode.CLEAR;	 Catch:{ all -> 0x0bb0 }
+        r8.<init>(r9);	 Catch:{ all -> 0x0bb0 }
+        r7.setXfermode(r8);	 Catch:{ all -> 0x0bb0 }
+        r8 = new android.graphics.Paint;	 Catch:{ all -> 0x0bb0 }
+        r8.<init>(r2);	 Catch:{ all -> 0x0bb0 }
         r2 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ all -> 0x0b8c }
-        r2 = (float) r2;	 Catch:{ all -> 0x0b8c }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ all -> 0x0bb0 }
+        r2 = (float) r2;	 Catch:{ all -> 0x0bb0 }
         r9 = 0;
         r10 = 0;
         r11 = NUM; // 0x5var_ float:9.223372E18 double:7.874593756E-315;
-        r8.setShadowLayer(r2, r9, r10, r11);	 Catch:{ all -> 0x0b8c }
-    L_0x0b63:
-        if (r5 >= r1) goto L_0x0b81;
-    L_0x0b65:
+        r8.setShadowLayer(r2, r9, r10, r11);	 Catch:{ all -> 0x0bb0 }
+    L_0x0b87:
+        if (r5 >= r1) goto L_0x0ba5;
+    L_0x0b89:
         r2 = r3 / 2;
-        r2 = (float) r2;	 Catch:{ all -> 0x0b8c }
+        r2 = (float) r2;	 Catch:{ all -> 0x0bb0 }
         r9 = r3 / 2;
-        r9 = (float) r9;	 Catch:{ all -> 0x0b8c }
-        r10 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0b8c }
+        r9 = (float) r9;	 Catch:{ all -> 0x0bb0 }
+        r10 = org.telegram.messenger.AndroidUtilities.roundMessageSize;	 Catch:{ all -> 0x0bb0 }
         r10 = r10 / r1;
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);	 Catch:{ all -> 0x0b8c }
+        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);	 Catch:{ all -> 0x0bb0 }
         r10 = r10 - r11;
-        r10 = (float) r10;	 Catch:{ all -> 0x0b8c }
-        if (r5 != 0) goto L_0x0b7a;
-    L_0x0b78:
+        r10 = (float) r10;	 Catch:{ all -> 0x0bb0 }
+        if (r5 != 0) goto L_0x0b9e;
+    L_0x0b9c:
         r11 = r8;
-        goto L_0x0b7b;
-    L_0x0b7a:
+        goto L_0x0b9f;
+    L_0x0b9e:
         r11 = r7;
-    L_0x0b7b:
-        r6.drawCircle(r2, r9, r10, r11);	 Catch:{ all -> 0x0b8c }
+    L_0x0b9f:
+        r6.drawCircle(r2, r9, r10, r11);	 Catch:{ all -> 0x0bb0 }
         r5 = r5 + 1;
-        goto L_0x0b63;
-    L_0x0b81:
+        goto L_0x0b87;
+    L_0x0ba5:
         r2 = 0;
-        r6.setBitmap(r2);	 Catch:{ Exception -> 0x0b85 }
-    L_0x0b85:
-        r2 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0b8c }
-        r2.<init>(r4);	 Catch:{ all -> 0x0b8c }
-        chat_roundVideoShadow = r2;	 Catch:{ all -> 0x0b8c }
-    L_0x0b8c:
+        r6.setBitmap(r2);	 Catch:{ Exception -> 0x0ba9 }
+    L_0x0ba9:
+        r2 = new android.graphics.drawable.BitmapDrawable;	 Catch:{ all -> 0x0bb0 }
+        r2.<init>(r4);	 Catch:{ all -> 0x0bb0 }
+        chat_roundVideoShadow = r2;	 Catch:{ all -> 0x0bb0 }
+    L_0x0bb0:
         applyChatTheme(r16);
-    L_0x0b8f:
+    L_0x0bb3:
         r2 = chat_msgTextPaintOneEmoji;
         r3 = NUM; // 0x41e00000 float:28.0 double:5.46040909E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -13342,11 +14096,11 @@ public class Theme {
         r4 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r4 = (float) r4;
         r2.setTextSize(r4);
-        if (r16 != 0) goto L_0x0d1e;
-    L_0x0bd8:
+        if (r16 != 0) goto L_0x0d42;
+    L_0x0bfc:
         r2 = chat_botProgressPaint;
-        if (r2 == 0) goto L_0x0d1e;
-    L_0x0bdc:
+        if (r2 == 0) goto L_0x0d42;
+    L_0x0CLASSNAME:
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = (float) r4;
@@ -13479,16 +14233,16 @@ public class Theme {
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = (float) r1;
         r0.setStrokeWidth(r1);
-    L_0x0d1e:
+    L_0x0d42:
         return;
-    L_0x0d1f:
+    L_0x0d43:
         r0 = move-exception;
-        monitor-exit(r1);	 Catch:{ all -> 0x0d1f }
-        goto L_0x0d23;
-    L_0x0d22:
+        monitor-exit(r1);	 Catch:{ all -> 0x0d43 }
+        goto L_0x0d47;
+    L_0x0d46:
         throw r0;
-    L_0x0d23:
-        goto L_0x0d22;
+    L_0x0d47:
+        goto L_0x0d46;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
     }
@@ -13647,6 +14401,9 @@ public class Theme {
             setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachLocationIcon"), true);
             setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollBackground"), false);
             setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollIcon"), true);
+            int color = getColor("chat_outAudioSeekbarFill") == -1 ? getColor("chat_outBubble") : -1;
+            setDrawableColor(chat_pollCheckDrawable[1], color);
+            setDrawableColor(chat_pollCrossDrawable[1], color);
             setDrawableColor(chat_attachEmptyDrawable, getColor("chat_attachEmptyImage"));
             applyChatServiceMessageColor();
         }
@@ -14360,7 +15117,7 @@ public class Theme {
     L_0x0160:
         r8 = 0;
     L_0x0161:
-        r9 = NUM; // 0x7var_c float:1.7944765E38 double:1.0529355485E-314;
+        r9 = NUM; // 0x7var_d float:1.7944767E38 double:1.052935549E-314;
         if (r7 == 0) goto L_0x01e3;
     L_0x0166:
         r10 = r7.isDefault();	 Catch:{ all -> 0x01f1 }

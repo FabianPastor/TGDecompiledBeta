@@ -43,6 +43,7 @@ import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.PollResults;
 import org.telegram.tgnet.TLRPC.ReplyMarkup;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
 import org.telegram.tgnet.TLRPC.TL_channels_deleteMessages;
@@ -79,7 +80,6 @@ import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_photos;
 import org.telegram.tgnet.TLRPC.TL_poll;
-import org.telegram.tgnet.TLRPC.TL_pollResults;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
@@ -2871,11 +2871,11 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void updateMessagePollResults(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$uTTvp4JTkvUeceAdO2CWGXhwxi4(this, j, tL_poll, tL_pollResults));
+    public void updateMessagePollResults(long j, TL_poll tL_poll, PollResults pollResults) {
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$leglyP8xKeJ-Yq7SI6RTdzWLoSg(this, j, tL_poll, pollResults));
     }
 
-    public /* synthetic */ void lambda$updateMessagePollResults$50$MessagesStorage(long j, TL_poll tL_poll, TL_pollResults tL_pollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$50$MessagesStorage(long j, TL_poll tL_poll, PollResults pollResults) {
         ArrayList arrayList = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -2903,8 +2903,8 @@ public class MessagesStorage extends BaseController {
                                 if (tL_poll != null) {
                                     tL_messageMediaPoll.poll = tL_poll;
                                 }
-                                if (tL_pollResults != null) {
-                                    MessageObject.updatePollResults(tL_messageMediaPoll, tL_pollResults);
+                                if (pollResults != null) {
+                                    MessageObject.updatePollResults(tL_messageMediaPoll, pollResults);
                                 }
                                 SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
                                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(TLdeserialize.getObjectSize());
@@ -5223,6 +5223,43 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
+        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
+        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
+        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
+        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
+        	at java.lang.Iterable.forEach(Iterable.java:75)
+        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
     public /* synthetic */ void lambda$checkMessageByRandomId$88$MessagesStorage(long r7, boolean[] r9, java.util.concurrent.CountDownLatch r10) {
         /*
@@ -5283,6 +5320,43 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
+        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
+        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
+        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
+        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
+        	at java.lang.Iterable.forEach(Iterable.java:75)
+        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
     public /* synthetic */ void lambda$checkMessageId$89$MessagesStorage(int r6, boolean r7, long r8, boolean[] r10, java.util.concurrent.CountDownLatch r11) {
         /*
@@ -13400,13 +13474,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (messageMedia instanceof TL_messageMediaUnsupported_old) {
                 if (messageMedia.bytes.length == 0) {
                     messageMedia.bytes = new byte[1];
-                    messageMedia.bytes[0] = (byte) 108;
+                    messageMedia.bytes[0] = (byte) 109;
                 }
             } else if (messageMedia instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 messageMedia = message.media;
                 messageMedia.bytes = new byte[1];
-                messageMedia.bytes[0] = (byte) 108;
+                messageMedia.bytes[0] = (byte) 109;
                 message.flags |= 512;
             }
         }
@@ -14905,6 +14979,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (!(i3 == 0 || arrayList.contains(Integer.valueOf(i3)))) {
                 arrayList.add(Integer.valueOf(message.media.user_id));
             }
+            messageMedia = message.media;
+            if (messageMedia instanceof TL_messageMediaPoll) {
+                TL_messageMediaPoll tL_messageMediaPoll = (TL_messageMediaPoll) messageMedia;
+                if (!tL_messageMediaPoll.results.recent_voters.isEmpty()) {
+                    arrayList.addAll(tL_messageMediaPoll.results.recent_voters);
+                }
+            }
         }
         MessageFwdHeader messageFwdHeader = message.fwd_from;
         if (messageFwdHeader != null) {
@@ -16356,6 +16437,36 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
+        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
+        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
+        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
+        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
+        	at java.lang.Iterable.forEach(Iterable.java:75)
+        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
     public /* synthetic */ void lambda$getDialogReadMax$146$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
@@ -16432,6 +16543,43 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /*  JADX ERROR: NullPointerException in pass: ProcessVariables
         java.lang.NullPointerException
+        	at jadx.core.dex.visitors.regions.ProcessVariables.addToUsageMap(ProcessVariables.java:278)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.access$000(ProcessVariables.java:31)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processInsn(ProcessVariables.java:163)
+        	at jadx.core.dex.visitors.regions.ProcessVariables$CollectUsageRegionVisitor.processBlockTraced(ProcessVariables.java:129)
+        	at jadx.core.dex.visitors.regions.TracedRegionVisitor.processBlock(TracedRegionVisitor.java:23)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:53)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1082)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.lambda$traverseInternal$0(DepthRegionTraversal.java:57)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseInternal(DepthRegionTraversal.java:57)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverse(DepthRegionTraversal.java:18)
+        	at jadx.core.dex.visitors.regions.ProcessVariables.visit(ProcessVariables.java:183)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
+        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
+        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
+        	at java.lang.Iterable.forEach(Iterable.java:75)
+        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x003c A:{SYNTHETIC, Splitter:B:11:0x003c} */
     /* JADX WARNING: Removed duplicated region for block: B:18:? A:{SYNTHETIC, RETURN} */

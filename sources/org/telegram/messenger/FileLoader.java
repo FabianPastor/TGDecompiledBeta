@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -81,9 +82,9 @@ public class FileLoader extends BaseController {
 
         void fileDidUploaded(String str, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
 
-        void fileLoadProgressChanged(String str, float f);
+        void fileLoadProgressChanged(String str, long j, long j2);
 
-        void fileUploadProgressChanged(String str, float f, boolean z);
+        void fileUploadProgressChanged(String str, long j, long j2, boolean z);
     }
 
     public static FileLoader getInstance(int i) {
@@ -283,30 +284,38 @@ public class FileLoader extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, final boolean z2) {
+    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, boolean z2) {
         int i3;
-        if (z) {
+        boolean z3 = z;
+        String str2 = str;
+        int i4 = i;
+        final boolean z4 = z2;
+        if (z3) {
             if (this.uploadOperationPathsEnc.containsKey(str)) {
                 return;
             }
         } else if (this.uploadOperationPaths.containsKey(str)) {
             return;
         }
-        if (i == 0 || ((Long) this.uploadSizes.get(str)) == null) {
-            i3 = i;
+        if (i4 == 0 || ((Long) this.uploadSizes.get(str)) == null) {
+            i3 = i4;
         } else {
             this.uploadSizes.remove(str);
             i3 = 0;
         }
+        FileLoaderDelegate fileLoaderDelegate = this.delegate;
+        if (fileLoaderDelegate != null) {
+            fileLoaderDelegate.fileUploadProgressChanged(str, 0, (long) i4, z);
+        }
         FileUploadOperation fileUploadOperation = new FileUploadOperation(this.currentAccount, str, z, i3, i2);
-        if (z) {
+        if (z3) {
             this.uploadOperationPathsEnc.put(str, fileUploadOperation);
         } else {
             this.uploadOperationPaths.put(str, fileUploadOperation);
         }
         fileUploadOperation.setDelegate(new FileUploadOperationDelegate() {
             public void didFinishUploadingFile(FileUploadOperation fileUploadOperation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2) {
-                FileLoader.fileLoaderQueue.postRunnable(new -$$Lambda$FileLoader$1$8qI8Hd84Wsy2NQjG71Z0jivjIew(this, z, str, z2, inputFile, inputEncryptedFile, bArr, bArr2, fileUploadOperation));
+                FileLoader.fileLoaderQueue.postRunnable(new -$$Lambda$FileLoader$1$8qI8Hd84Wsy2NQjG71Z0jivjIew(this, z, str, z4, inputFile, inputEncryptedFile, bArr, bArr2, fileUploadOperation));
             }
 
             public /* synthetic */ void lambda$didFinishUploadingFile$0$FileLoader$1(boolean z, String str, boolean z2, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, FileUploadOperation fileUploadOperation) {
@@ -342,7 +351,7 @@ public class FileLoader extends BaseController {
             }
 
             public void didFailedUploadingFile(FileUploadOperation fileUploadOperation) {
-                FileLoader.fileLoaderQueue.postRunnable(new -$$Lambda$FileLoader$1$4L6YnCrX_lUiw2AHHpo_e3FY75I(this, z, str, z2));
+                FileLoader.fileLoaderQueue.postRunnable(new -$$Lambda$FileLoader$1$4L6YnCrX_lUiw2AHHpo_e3FY75I(this, z, str, z4));
             }
 
             public /* synthetic */ void lambda$didFailedUploadingFile$1$FileLoader$1(boolean z, String str, boolean z2) {
@@ -378,25 +387,25 @@ public class FileLoader extends BaseController {
                 }
             }
 
-            public void didChangedUploadProgress(FileUploadOperation fileUploadOperation, float f) {
+            public void didChangedUploadProgress(FileUploadOperation fileUploadOperation, long j, long j2) {
                 if (FileLoader.this.delegate != null) {
-                    FileLoader.this.delegate.fileUploadProgressChanged(str, f, z);
+                    FileLoader.this.delegate.fileUploadProgressChanged(str, j, j2, z);
                 }
             }
         });
-        int i4;
-        if (z2) {
-            i4 = this.currentUploadSmallOperationsCount;
-            if (i4 < 1) {
-                this.currentUploadSmallOperationsCount = i4 + 1;
+        int i5;
+        if (z4) {
+            i5 = this.currentUploadSmallOperationsCount;
+            if (i5 < 1) {
+                this.currentUploadSmallOperationsCount = i5 + 1;
                 fileUploadOperation.start();
             } else {
                 this.uploadSmallOperationQueue.add(fileUploadOperation);
             }
         } else {
-            i4 = this.currentUploadOperationsCount;
-            if (i4 < 1) {
-                this.currentUploadOperationsCount = i4 + 1;
+            i5 = this.currentUploadOperationsCount;
+            if (i5 < 1) {
+                this.currentUploadOperationsCount = i5 + 1;
                 fileUploadOperation.start();
             } else {
                 this.uploadOperationQueue.add(fileUploadOperation);
@@ -1665,5 +1674,60 @@ public class FileLoader extends BaseController {
         fileOutputStream.getFD().sync();
         fileOutputStream.close();
         return true;
+    }
+
+    public static long getTempFileSize(Document document, boolean z) {
+        Throwable e;
+        long j = document.id;
+        long j2 = (long) document.dc_id;
+        if (j2 == 0 || j == 0) {
+            return 0;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(j2);
+        String str = "_";
+        stringBuilder.append(str);
+        stringBuilder.append(j);
+        stringBuilder.append(z ? ".temp.enc" : ".temp");
+        String stringBuilder2 = stringBuilder.toString();
+        stringBuilder = new StringBuilder();
+        stringBuilder.append(j2);
+        stringBuilder.append(str);
+        stringBuilder.append(j);
+        stringBuilder.append(".pt");
+        String stringBuilder3 = stringBuilder.toString();
+        File file = new File(getDirectory(4), stringBuilder2);
+        long length = file.exists() ? file.length() : 0;
+        if (length != 0) {
+            try {
+                RandomAccessFile randomAccessFile = new RandomAccessFile(new File(getDirectory(4), stringBuilder3), "r");
+                long length2 = randomAccessFile.length();
+                if (length2 % 8 == 4) {
+                    length2 -= 4;
+                    int readInt = randomAccessFile.readInt();
+                    if (((long) readInt) <= length2 / 2) {
+                        length2 = (long) document.size;
+                        int i = 0;
+                        while (i < readInt) {
+                            try {
+                                length2 -= (long) (randomAccessFile.readInt() - randomAccessFile.readInt());
+                                i++;
+                            } catch (Exception e2) {
+                                e = e2;
+                                length = length2;
+                                FileLog.e(e);
+                                return length;
+                            }
+                        }
+                        length = length2;
+                    }
+                }
+            } catch (Exception e3) {
+                e = e3;
+                FileLog.e(e);
+                return length;
+            }
+        }
+        return length;
     }
 }

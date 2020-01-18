@@ -65,7 +65,7 @@ public class FileUploadOperation {
     private String uploadingFilePath;
 
     public interface FileUploadOperationDelegate {
-        void didChangedUploadProgress(FileUploadOperation fileUploadOperation, float f);
+        void didChangedUploadProgress(FileUploadOperation fileUploadOperation, long j, long j2);
 
         void didFailedUploadingFile(FileUploadOperation fileUploadOperation);
 
@@ -310,19 +310,19 @@ public class FileUploadOperation {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x029f A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e4 A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a9 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x029f A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e4 A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a8 }} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02e6 A:{SYNTHETIC, Splitter:B:127:0x02e6} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e4 A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x029f A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a9 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e4 A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x029f A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a8 }} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02e6 A:{SYNTHETIC, Splitter:B:127:0x02e6} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a9 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a9 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02a6 A:{Catch:{ Exception -> 0x04a8 }} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02e6 A:{SYNTHETIC, Splitter:B:127:0x02e6} */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a9 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0324 A:{Catch:{ Exception -> 0x04a8 }} */
     private void startUploadRequest() {
         /*
         r27 = this;
@@ -333,45 +333,45 @@ public class FileUploadOperation {
     L_0x0007:
         return;
     L_0x0008:
-        r12.started = r1;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
+        r12.started = r1;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
         r3 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
         r4 = 0;
         r5 = 0;
         r7 = 32;
         r8 = 0;
-        if (r0 != 0) goto L_0x034b;
+        if (r0 != 0) goto L_0x034a;
     L_0x0016:
-        r0 = new java.io.File;	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.uploadingFilePath;	 Catch:{ Exception -> 0x04a9 }
-        r0.<init>(r9);	 Catch:{ Exception -> 0x04a9 }
-        r9 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x04a9 }
-        r9 = org.telegram.messenger.AndroidUtilities.isInternalUri(r9);	 Catch:{ Exception -> 0x04a9 }
+        r0 = new java.io.File;	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.uploadingFilePath;	 Catch:{ Exception -> 0x04a8 }
+        r0.<init>(r9);	 Catch:{ Exception -> 0x04a8 }
+        r9 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x04a8 }
+        r9 = org.telegram.messenger.AndroidUtilities.isInternalUri(r9);	 Catch:{ Exception -> 0x04a8 }
         if (r9 != 0) goto L_0x0342;
     L_0x0027:
-        r9 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x04a9 }
+        r9 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x04a8 }
         r10 = "r";
-        r9.<init>(r0, r10);	 Catch:{ Exception -> 0x04a9 }
-        r12.stream = r9;	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
+        r9.<init>(r0, r10);	 Catch:{ Exception -> 0x04a8 }
+        r12.stream = r9;	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
         if (r9 == 0) goto L_0x003a;
     L_0x0034:
-        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
-        r9 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
-        r12.totalFileSize = r9;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
+        r9 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
+        r12.totalFileSize = r9;	 Catch:{ Exception -> 0x04a8 }
         goto L_0x0040;
     L_0x003a:
-        r9 = r0.length();	 Catch:{ Exception -> 0x04a9 }
-        r12.totalFileSize = r9;	 Catch:{ Exception -> 0x04a9 }
+        r9 = r0.length();	 Catch:{ Exception -> 0x04a8 }
+        r12.totalFileSize = r9;	 Catch:{ Exception -> 0x04a8 }
     L_0x0040:
-        r9 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a9 }
+        r9 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a8 }
         r13 = 10485760; // 0xa00000 float:1.469368E-38 double:5.180654E-317;
         r0 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1));
         if (r0 <= 0) goto L_0x004b;
     L_0x0049:
-        r12.isBigFile = r1;	 Catch:{ Exception -> 0x04a9 }
+        r12.isBigFile = r1;	 Catch:{ Exception -> 0x04a8 }
     L_0x004b:
-        r0 = r12.slowNetwork;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.slowNetwork;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x0052;
     L_0x004f:
         r9 = 32;
@@ -379,31 +379,31 @@ public class FileUploadOperation {
     L_0x0052:
         r9 = 128; // 0x80 float:1.794E-43 double:6.32E-322;
     L_0x0054:
-        r13 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a8 }
         r15 = 3072000; // 0x2ee000 float:4.304789E-39 double:1.5177697E-317;
         r13 = r13 + r15;
         r17 = 1;
         r13 = r13 - r17;
         r13 = r13 / r15;
-        r9 = java.lang.Math.max(r9, r13);	 Catch:{ Exception -> 0x04a9 }
-        r0 = (int) r9;	 Catch:{ Exception -> 0x04a9 }
-        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r9 = java.lang.Math.max(r9, r13);	 Catch:{ Exception -> 0x04a8 }
+        r0 = (int) r9;	 Catch:{ Exception -> 0x04a8 }
+        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         r0 = r3 % r0;
         r9 = 64;
         if (r0 == 0) goto L_0x0079;
     L_0x006e:
         r0 = 64;
     L_0x0070:
-        r10 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r10 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         if (r10 <= r0) goto L_0x0077;
     L_0x0074:
         r0 = r0 * 2;
         goto L_0x0070;
     L_0x0077:
-        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a9 }
+        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a8 }
     L_0x0079:
-        r0 = r12.slowNetwork;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.slowNetwork;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x0080;
     L_0x007d:
         r0 = 32;
@@ -411,40 +411,40 @@ public class FileUploadOperation {
     L_0x0080:
         r0 = 2048; // 0x800 float:2.87E-42 double:1.0118E-320;
     L_0x0082:
-        r10 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r10 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         r0 = r0 / r10;
-        r0 = java.lang.Math.max(r1, r0);	 Catch:{ Exception -> 0x04a9 }
-        r12.maxRequestsCount = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r0 = java.lang.Math.max(r1, r0);	 Catch:{ Exception -> 0x04a8 }
+        r12.maxRequestsCount = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x00a7;
     L_0x008f:
-        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x04a9 }
-        r10 = r12.maxRequestsCount;	 Catch:{ Exception -> 0x04a9 }
-        r0.<init>(r10);	 Catch:{ Exception -> 0x04a9 }
-        r12.freeRequestIvs = r0;	 Catch:{ Exception -> 0x04a9 }
+        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x04a8 }
+        r10 = r12.maxRequestsCount;	 Catch:{ Exception -> 0x04a8 }
+        r0.<init>(r10);	 Catch:{ Exception -> 0x04a8 }
+        r12.freeRequestIvs = r0;	 Catch:{ Exception -> 0x04a8 }
         r0 = 0;
     L_0x0099:
-        r10 = r12.maxRequestsCount;	 Catch:{ Exception -> 0x04a9 }
+        r10 = r12.maxRequestsCount;	 Catch:{ Exception -> 0x04a8 }
         if (r0 >= r10) goto L_0x00a7;
     L_0x009d:
-        r10 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a9 }
-        r11 = new byte[r7];	 Catch:{ Exception -> 0x04a9 }
-        r10.add(r11);	 Catch:{ Exception -> 0x04a9 }
+        r10 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a8 }
+        r11 = new byte[r7];	 Catch:{ Exception -> 0x04a8 }
+        r10.add(r11);	 Catch:{ Exception -> 0x04a8 }
         r0 = r0 + 1;
         goto L_0x0099;
     L_0x00a7:
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         r0 = r0 * 1024;
-        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a9 }
-        r27.calcTotalPartsCount();	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x04a9 }
-        r12.readBuffer = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r0.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r10 = r12.uploadingFilePath;	 Catch:{ Exception -> 0x04a9 }
-        r0.append(r10);	 Catch:{ Exception -> 0x04a9 }
-        r10 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r12.uploadChunkSize = r0;	 Catch:{ Exception -> 0x04a8 }
+        r27.calcTotalPartsCount();	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x04a8 }
+        r12.readBuffer = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r0.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r10 = r12.uploadingFilePath;	 Catch:{ Exception -> 0x04a8 }
+        r0.append(r10);	 Catch:{ Exception -> 0x04a8 }
+        r10 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r10 == 0) goto L_0x00c7;
     L_0x00c4:
         r10 = "enc";
@@ -452,113 +452,113 @@ public class FileUploadOperation {
     L_0x00c7:
         r10 = "";
     L_0x00c9:
-        r0.append(r10);	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x04a9 }
-        r0 = org.telegram.messenger.Utilities.MD5(r0);	 Catch:{ Exception -> 0x04a9 }
-        r12.fileKey = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r10.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
+        r0.append(r10);	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.toString();	 Catch:{ Exception -> 0x04a8 }
+        r0 = org.telegram.messenger.Utilities.MD5(r0);	 Catch:{ Exception -> 0x04a8 }
+        r12.fileKey = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r10.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
         r11 = "_size";
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
-        r10 = r10.toString();	 Catch:{ Exception -> 0x04a9 }
-        r10 = r0.getLong(r10, r5);	 Catch:{ Exception -> 0x04a9 }
-        r13 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x04a9 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
+        r10 = r10.toString();	 Catch:{ Exception -> 0x04a8 }
+        r10 = r0.getLong(r10, r5);	 Catch:{ Exception -> 0x04a8 }
+        r13 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x04a8 }
         r15 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r13 = r13 / r15;
-        r0 = (int) r13;	 Catch:{ Exception -> 0x04a9 }
-        r12.uploadStartTime = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a9 }
+        r0 = (int) r13;	 Catch:{ Exception -> 0x04a8 }
+        r12.uploadStartTime = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02a2;
     L_0x00fd:
-        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02a2;
     L_0x0101:
-        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02a2;
     L_0x0105:
-        r13 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a8 }
         r0 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
         if (r0 != 0) goto L_0x02a2;
     L_0x010b:
-        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r10.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r10.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
         r11 = "_id";
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
-        r10 = r10.toString();	 Catch:{ Exception -> 0x04a9 }
-        r10 = r0.getLong(r10, r5);	 Catch:{ Exception -> 0x04a9 }
-        r12.currentFileId = r10;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r10.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
+        r10 = r10.toString();	 Catch:{ Exception -> 0x04a8 }
+        r10 = r0.getLong(r10, r5);	 Catch:{ Exception -> 0x04a8 }
+        r12.currentFileId = r10;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r10.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r11 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
         r11 = "_time";
-        r10.append(r11);	 Catch:{ Exception -> 0x04a9 }
-        r10 = r10.toString();	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.getInt(r10, r8);	 Catch:{ Exception -> 0x04a9 }
-        r10 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r11.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r11.append(r13);	 Catch:{ Exception -> 0x04a9 }
+        r10.append(r11);	 Catch:{ Exception -> 0x04a8 }
+        r10 = r10.toString();	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.getInt(r10, r8);	 Catch:{ Exception -> 0x04a8 }
+        r10 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r11.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r11.append(r13);	 Catch:{ Exception -> 0x04a8 }
         r13 = "_uploaded";
-        r11.append(r13);	 Catch:{ Exception -> 0x04a9 }
-        r11 = r11.toString();	 Catch:{ Exception -> 0x04a9 }
-        r10 = r10.getLong(r11, r5);	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r11.append(r13);	 Catch:{ Exception -> 0x04a8 }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x04a8 }
+        r10 = r10.getLong(r11, r5);	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r13 == 0) goto L_0x01be;
     L_0x015c:
-        r13 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r14.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r15 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r14.append(r15);	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r14.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r15 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r14.append(r15);	 Catch:{ Exception -> 0x04a8 }
         r15 = "_iv";
-        r14.append(r15);	 Catch:{ Exception -> 0x04a9 }
-        r14 = r14.toString();	 Catch:{ Exception -> 0x04a9 }
-        r13 = r13.getString(r14, r4);	 Catch:{ Exception -> 0x04a9 }
-        r14 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r15.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r15.append(r3);	 Catch:{ Exception -> 0x04a9 }
+        r14.append(r15);	 Catch:{ Exception -> 0x04a8 }
+        r14 = r14.toString();	 Catch:{ Exception -> 0x04a8 }
+        r13 = r13.getString(r14, r4);	 Catch:{ Exception -> 0x04a8 }
+        r14 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r15.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r15.append(r3);	 Catch:{ Exception -> 0x04a8 }
         r3 = "_key";
-        r15.append(r3);	 Catch:{ Exception -> 0x04a9 }
-        r3 = r15.toString();	 Catch:{ Exception -> 0x04a9 }
-        r3 = r14.getString(r3, r4);	 Catch:{ Exception -> 0x04a9 }
+        r15.append(r3);	 Catch:{ Exception -> 0x04a8 }
+        r3 = r15.toString();	 Catch:{ Exception -> 0x04a8 }
+        r3 = r14.getString(r3, r4);	 Catch:{ Exception -> 0x04a8 }
         if (r13 == 0) goto L_0x01bc;
     L_0x0190:
         if (r3 == 0) goto L_0x01bc;
     L_0x0192:
-        r3 = org.telegram.messenger.Utilities.hexToBytes(r3);	 Catch:{ Exception -> 0x04a9 }
-        r12.key = r3;	 Catch:{ Exception -> 0x04a9 }
-        r3 = org.telegram.messenger.Utilities.hexToBytes(r13);	 Catch:{ Exception -> 0x04a9 }
-        r12.iv = r3;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.key;	 Catch:{ Exception -> 0x04a9 }
+        r3 = org.telegram.messenger.Utilities.hexToBytes(r3);	 Catch:{ Exception -> 0x04a8 }
+        r12.key = r3;	 Catch:{ Exception -> 0x04a8 }
+        r3 = org.telegram.messenger.Utilities.hexToBytes(r13);	 Catch:{ Exception -> 0x04a8 }
+        r12.iv = r3;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.key;	 Catch:{ Exception -> 0x04a8 }
         if (r3 == 0) goto L_0x01bc;
     L_0x01a2:
-        r3 = r12.iv;	 Catch:{ Exception -> 0x04a9 }
+        r3 = r12.iv;	 Catch:{ Exception -> 0x04a8 }
         if (r3 == 0) goto L_0x01bc;
     L_0x01a6:
-        r3 = r12.key;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r3.length;	 Catch:{ Exception -> 0x04a9 }
+        r3 = r12.key;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r3.length;	 Catch:{ Exception -> 0x04a8 }
         if (r3 != r7) goto L_0x01bc;
     L_0x01ab:
-        r3 = r12.iv;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r3.length;	 Catch:{ Exception -> 0x04a9 }
+        r3 = r12.iv;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r3.length;	 Catch:{ Exception -> 0x04a8 }
         if (r3 != r7) goto L_0x01bc;
     L_0x01b0:
-        r3 = new byte[r7];	 Catch:{ Exception -> 0x04a9 }
-        r12.ivChange = r3;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.iv;	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
-        java.lang.System.arraycopy(r3, r8, r13, r8, r7);	 Catch:{ Exception -> 0x04a9 }
+        r3 = new byte[r7];	 Catch:{ Exception -> 0x04a8 }
+        r12.ivChange = r3;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.iv;	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
+        java.lang.System.arraycopy(r3, r8, r13, r8, r7);	 Catch:{ Exception -> 0x04a8 }
         goto L_0x01be;
     L_0x01bc:
         r3 = 1;
@@ -570,10 +570,10 @@ public class FileUploadOperation {
     L_0x01c1:
         if (r0 == 0) goto L_0x02a2;
     L_0x01c3:
-        r13 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
         if (r13 == 0) goto L_0x01d1;
     L_0x01c7:
-        r13 = r12.uploadStartTime;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.uploadStartTime;	 Catch:{ Exception -> 0x04a8 }
         r14 = 86400; // 0x15180 float:1.21072E-40 double:4.26873E-319;
         r13 = r13 - r14;
         if (r0 >= r13) goto L_0x01d1;
@@ -581,12 +581,12 @@ public class FileUploadOperation {
         r0 = 0;
         goto L_0x01e2;
     L_0x01d1:
-        r13 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
         if (r13 != 0) goto L_0x01e2;
     L_0x01d5:
-        r13 = (float) r0;	 Catch:{ Exception -> 0x04a9 }
-        r14 = r12.uploadStartTime;	 Catch:{ Exception -> 0x04a9 }
-        r14 = (float) r14;	 Catch:{ Exception -> 0x04a9 }
+        r13 = (float) r0;	 Catch:{ Exception -> 0x04a8 }
+        r14 = r12.uploadStartTime;	 Catch:{ Exception -> 0x04a8 }
+        r14 = (float) r14;	 Catch:{ Exception -> 0x04a8 }
         r15 = NUM; // 0x45a8CLASSNAME float:5400.0 double:5.77408149E-315;
         r14 = r14 - r15;
         r13 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1));
@@ -599,30 +599,30 @@ public class FileUploadOperation {
         r0 = (r10 > r5 ? 1 : (r10 == r5 ? 0 : -1));
         if (r0 <= 0) goto L_0x02a2;
     L_0x01e8:
-        r12.readBytesCount = r10;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        r13 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
+        r12.readBytesCount = r10;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        r13 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
         r13 = r10 / r13;
-        r0 = (int) r13;	 Catch:{ Exception -> 0x04a9 }
-        r12.currentPartNum = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
+        r0 = (int) r13;	 Catch:{ Exception -> 0x04a8 }
+        r12.currentPartNum = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x0260;
     L_0x01f6:
         r0 = 0;
     L_0x01f7:
-        r10 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a9 }
-        r15 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r10 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a8 }
+        r15 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         r18 = r3;
-        r2 = (long) r15;	 Catch:{ Exception -> 0x04a9 }
+        r2 = (long) r15;	 Catch:{ Exception -> 0x04a8 }
         r13 = r13 / r2;
         r2 = (r10 > r13 ? 1 : (r10 == r13 ? 0 : -1));
         if (r2 >= 0) goto L_0x02a4;
     L_0x0204:
-        r2 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r2.read(r3);	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r2 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r2.read(r3);	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r3 == 0) goto L_0x021a;
     L_0x0210:
         r3 = r2 % 16;
@@ -635,35 +635,35 @@ public class FileUploadOperation {
     L_0x021a:
         r3 = 0;
     L_0x021b:
-        r10 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x04a9 }
+        r10 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x04a8 }
         r11 = r2 + r3;
-        r10.<init>(r11);	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
+        r10.<init>(r11);	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
         if (r2 != r13) goto L_0x022d;
     L_0x0226:
-        r13 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a9 }
-        r14 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a8 }
+        r14 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a8 }
         r14 = r14 + r1;
         if (r13 != r14) goto L_0x022f;
     L_0x022d:
-        r12.isLastPart = r1;	 Catch:{ Exception -> 0x04a9 }
+        r12.isLastPart = r1;	 Catch:{ Exception -> 0x04a8 }
     L_0x022f:
-        r13 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
-        r10.writeBytes(r13, r8, r2);	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r13 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
+        r10.writeBytes(r13, r8, r2);	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r2 == 0) goto L_0x0258;
     L_0x0238:
         r2 = 0;
     L_0x0239:
         if (r2 >= r3) goto L_0x0241;
     L_0x023b:
-        r10.writeByte(r8);	 Catch:{ Exception -> 0x04a9 }
+        r10.writeByte(r8);	 Catch:{ Exception -> 0x04a8 }
         r2 = r2 + 1;
         goto L_0x0239;
     L_0x0241:
-        r2 = r10.buffer;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.key;	 Catch:{ Exception -> 0x04a9 }
-        r13 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
+        r2 = r10.buffer;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.key;	 Catch:{ Exception -> 0x04a8 }
+        r13 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
         r22 = 1;
         r23 = 1;
         r24 = 0;
@@ -671,45 +671,45 @@ public class FileUploadOperation {
         r20 = r3;
         r21 = r13;
         r25 = r11;
-        org.telegram.messenger.Utilities.aesIgeEncryption(r19, r20, r21, r22, r23, r24, r25);	 Catch:{ Exception -> 0x04a9 }
+        org.telegram.messenger.Utilities.aesIgeEncryption(r19, r20, r21, r22, r23, r24, r25);	 Catch:{ Exception -> 0x04a8 }
     L_0x0258:
-        r10.reuse();	 Catch:{ Exception -> 0x04a9 }
+        r10.reuse();	 Catch:{ Exception -> 0x04a8 }
         r0 = r0 + 1;
         r3 = r18;
         goto L_0x01f7;
     L_0x0260:
         r18 = r3;
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r0.seek(r10);	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r0.seek(r10);	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x02a4;
     L_0x026b:
-        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a9 }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a9 }
-        r2.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.fileKey;	 Catch:{ Exception -> 0x04a9 }
-        r2.append(r3);	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.preferences;	 Catch:{ Exception -> 0x04a8 }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x04a8 }
+        r2.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.fileKey;	 Catch:{ Exception -> 0x04a8 }
+        r2.append(r3);	 Catch:{ Exception -> 0x04a8 }
         r3 = "_ivc";
-        r2.append(r3);	 Catch:{ Exception -> 0x04a9 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.getString(r2, r4);	 Catch:{ Exception -> 0x04a9 }
+        r2.append(r3);	 Catch:{ Exception -> 0x04a8 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.getString(r2, r4);	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x029a;
     L_0x0286:
-        r0 = org.telegram.messenger.Utilities.hexToBytes(r0);	 Catch:{ Exception -> 0x04a9 }
-        r12.ivChange = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
+        r0 = org.telegram.messenger.Utilities.hexToBytes(r0);	 Catch:{ Exception -> 0x04a8 }
+        r12.ivChange = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x0295;
     L_0x0290:
-        r0 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.length;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.length;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == r7) goto L_0x02a4;
     L_0x0295:
-        r12.readBytesCount = r5;	 Catch:{ Exception -> 0x04a9 }
-        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a9 }
+        r12.readBytesCount = r5;	 Catch:{ Exception -> 0x04a8 }
+        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a8 }
         goto L_0x02a2;
     L_0x029a:
-        r12.readBytesCount = r5;	 Catch:{ Exception -> 0x04a9 }
-        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a9 }
+        r12.readBytesCount = r5;	 Catch:{ Exception -> 0x04a8 }
+        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a8 }
         goto L_0x02a2;
     L_0x029f:
         r18 = r3;
@@ -719,40 +719,40 @@ public class FileUploadOperation {
     L_0x02a4:
         if (r18 == 0) goto L_0x02e2;
     L_0x02a6:
-        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x02cb;
     L_0x02aa:
-        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a9 }
-        r12.iv = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a9 }
-        r12.key = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a9 }
-        r12.ivChange = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.iv;	 Catch:{ Exception -> 0x04a9 }
-        r0.nextBytes(r2);	 Catch:{ Exception -> 0x04a9 }
-        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.key;	 Catch:{ Exception -> 0x04a9 }
-        r0.nextBytes(r2);	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.iv;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
-        java.lang.System.arraycopy(r0, r8, r2, r8, r7);	 Catch:{ Exception -> 0x04a9 }
+        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a8 }
+        r12.iv = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a8 }
+        r12.key = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = new byte[r7];	 Catch:{ Exception -> 0x04a8 }
+        r12.ivChange = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.iv;	 Catch:{ Exception -> 0x04a8 }
+        r0.nextBytes(r2);	 Catch:{ Exception -> 0x04a8 }
+        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.key;	 Catch:{ Exception -> 0x04a8 }
+        r0.nextBytes(r2);	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.iv;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
+        java.lang.System.arraycopy(r0, r8, r2, r8, r7);	 Catch:{ Exception -> 0x04a8 }
     L_0x02cb:
-        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r0.nextLong();	 Catch:{ Exception -> 0x04a9 }
-        r12.currentFileId = r2;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a9 }
+        r0 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r0.nextLong();	 Catch:{ Exception -> 0x04a8 }
+        r12.currentFileId = r2;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02e2;
     L_0x02d7:
-        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02e2;
     L_0x02db:
-        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
         if (r0 != 0) goto L_0x02e2;
     L_0x02df:
-        r27.storeFileUploadInfo();	 Catch:{ Exception -> 0x04a9 }
+        r27.storeFileUploadInfo();	 Catch:{ Exception -> 0x04a8 }
     L_0x02e2:
-        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x0318;
     L_0x02e6:
         r0 = "MD5";
@@ -782,138 +782,138 @@ public class FileUploadOperation {
         goto L_0x02fd;
     L_0x0314:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x04a9 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x04a8 }
     L_0x0318:
-        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a9 }
-        r12.uploadedBytesCount = r2;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a9 }
-        r12.lastSavedPartNum = r0;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a9 }
-        if (r0 == 0) goto L_0x034b;
+        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a8 }
+        r12.uploadedBytesCount = r2;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a8 }
+        r12.lastSavedPartNum = r0;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a8 }
+        if (r0 == 0) goto L_0x034a;
     L_0x0324:
-        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
         if (r0 == 0) goto L_0x0336;
     L_0x0328:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        r2 = (long) r2;	 Catch:{ Exception -> 0x04a9 }
-        r0.seek(r2);	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        r2 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
-        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        r2 = (long) r2;	 Catch:{ Exception -> 0x04a8 }
+        r0.seek(r2);	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        r2 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
+        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a8 }
         goto L_0x033f;
     L_0x0336:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
         r2 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
-        r0.seek(r2);	 Catch:{ Exception -> 0x04a9 }
-        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a9 }
+        r0.seek(r2);	 Catch:{ Exception -> 0x04a8 }
+        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a8 }
     L_0x033f:
-        r12.currentPartNum = r1;	 Catch:{ Exception -> 0x04a9 }
-        goto L_0x034b;
+        r12.currentPartNum = r1;	 Catch:{ Exception -> 0x04a8 }
+        goto L_0x034a;
     L_0x0342:
-        r0 = new java.lang.Exception;	 Catch:{ Exception -> 0x04a9 }
+        r0 = new java.lang.Exception;	 Catch:{ Exception -> 0x04a8 }
         r1 = "trying to upload internal file";
-        r0.<init>(r1);	 Catch:{ Exception -> 0x04a9 }
-        throw r0;	 Catch:{ Exception -> 0x04a9 }
-    L_0x034b:
-        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
-        if (r0 == 0) goto L_0x035c;
-    L_0x034f:
-        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        r9 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x04a8 }
+        throw r0;	 Catch:{ Exception -> 0x04a8 }
+    L_0x034a:
+        r0 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
+        if (r0 == 0) goto L_0x035b;
+    L_0x034e:
+        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        r9 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
         r2 = r2 + r9;
-        r9 = r12.availableSize;	 Catch:{ Exception -> 0x04a9 }
+        r9 = r12.availableSize;	 Catch:{ Exception -> 0x04a8 }
         r0 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1));
-        if (r0 <= 0) goto L_0x035c;
+        if (r0 <= 0) goto L_0x035b;
+    L_0x035a:
+        return;
     L_0x035b:
-        return;
-    L_0x035c:
-        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a9 }
-        if (r0 == 0) goto L_0x037f;
-    L_0x0360:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r0.seek(r5);	 Catch:{ Exception -> 0x04a9 }
-        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
-        if (r0 == 0) goto L_0x0372;
-    L_0x0369:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.read(r2);	 Catch:{ Exception -> 0x04a9 }
-        goto L_0x037c;
-    L_0x0372:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
+        r0 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a8 }
+        if (r0 == 0) goto L_0x037e;
+    L_0x035f:
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r0.seek(r5);	 Catch:{ Exception -> 0x04a8 }
+        r0 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
+        if (r0 == 0) goto L_0x0371;
+    L_0x0368:
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.read(r2);	 Catch:{ Exception -> 0x04a8 }
+        goto L_0x037b;
+    L_0x0371:
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
         r3 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
-        r0 = r0.read(r2, r8, r3);	 Catch:{ Exception -> 0x04a9 }
-    L_0x037c:
-        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a9 }
-        goto L_0x0387;
-    L_0x037f:
-        r0 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
-        r0 = r0.read(r2);	 Catch:{ Exception -> 0x04a9 }
-    L_0x0387:
+        r0 = r0.read(r2, r8, r3);	 Catch:{ Exception -> 0x04a8 }
+    L_0x037b:
+        r12.currentPartNum = r8;	 Catch:{ Exception -> 0x04a8 }
+        goto L_0x0386;
+    L_0x037e:
+        r0 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
+        r0 = r0.read(r2);	 Catch:{ Exception -> 0x04a8 }
+    L_0x0386:
         r2 = -1;
-        if (r0 != r2) goto L_0x038b;
-    L_0x038a:
+        if (r0 != r2) goto L_0x038a;
+    L_0x0389:
         return;
-    L_0x038b:
-        r3 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
-        if (r3 == 0) goto L_0x0399;
-    L_0x038f:
+    L_0x038a:
+        r3 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
+        if (r3 == 0) goto L_0x0398;
+    L_0x038e:
         r3 = r0 % 16;
-        if (r3 == 0) goto L_0x0399;
-    L_0x0393:
+        if (r3 == 0) goto L_0x0398;
+    L_0x0392:
         r3 = r0 % 16;
         r3 = 16 - r3;
         r3 = r3 + r8;
-        goto L_0x039a;
-    L_0x0399:
+        goto L_0x0399;
+    L_0x0398:
         r3 = 0;
-    L_0x039a:
-        r5 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x04a9 }
+    L_0x0399:
+        r5 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x04a8 }
         r6 = r0 + r3;
-        r5.<init>(r6);	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a9 }
-        if (r9 != 0) goto L_0x03b4;
-    L_0x03a5:
-        r9 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a9 }
-        if (r0 != r9) goto L_0x03b4;
-    L_0x03a9:
-        r9 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
-        if (r9 != 0) goto L_0x03bf;
-    L_0x03ad:
-        r9 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a9 }
-        r10 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a9 }
+        r5.<init>(r6);	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a8 }
+        if (r9 != 0) goto L_0x03b3;
+    L_0x03a4:
+        r9 = r12.uploadChunkSize;	 Catch:{ Exception -> 0x04a8 }
+        if (r0 != r9) goto L_0x03b3;
+    L_0x03a8:
+        r9 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
+        if (r9 != 0) goto L_0x03be;
+    L_0x03ac:
+        r9 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a8 }
+        r10 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a8 }
         r10 = r10 + r1;
-        if (r9 != r10) goto L_0x03bf;
-    L_0x03b4:
-        r9 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a9 }
-        if (r9 == 0) goto L_0x03bd;
-    L_0x03b8:
-        r12.nextPartFirst = r1;	 Catch:{ Exception -> 0x04a9 }
-        r12.uploadFirstPartLater = r8;	 Catch:{ Exception -> 0x04a9 }
-        goto L_0x03bf;
-    L_0x03bd:
-        r12.isLastPart = r1;	 Catch:{ Exception -> 0x04a9 }
-    L_0x03bf:
-        r9 = r12.readBuffer;	 Catch:{ Exception -> 0x04a9 }
-        r5.writeBytes(r9, r8, r0);	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a9 }
-        if (r9 == 0) goto L_0x03fc;
-    L_0x03c8:
+        if (r9 != r10) goto L_0x03be;
+    L_0x03b3:
+        r9 = r12.uploadFirstPartLater;	 Catch:{ Exception -> 0x04a8 }
+        if (r9 == 0) goto L_0x03bc;
+    L_0x03b7:
+        r12.nextPartFirst = r1;	 Catch:{ Exception -> 0x04a8 }
+        r12.uploadFirstPartLater = r8;	 Catch:{ Exception -> 0x04a8 }
+        goto L_0x03be;
+    L_0x03bc:
+        r12.isLastPart = r1;	 Catch:{ Exception -> 0x04a8 }
+    L_0x03be:
+        r9 = r12.readBuffer;	 Catch:{ Exception -> 0x04a8 }
+        r5.writeBytes(r9, r8, r0);	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.isEncrypted;	 Catch:{ Exception -> 0x04a8 }
+        if (r9 == 0) goto L_0x03fb;
+    L_0x03c7:
         r4 = 0;
-    L_0x03c9:
-        if (r4 >= r3) goto L_0x03d1;
-    L_0x03cb:
-        r5.writeByte(r8);	 Catch:{ Exception -> 0x04a9 }
+    L_0x03c8:
+        if (r4 >= r3) goto L_0x03d0;
+    L_0x03ca:
+        r5.writeByte(r8);	 Catch:{ Exception -> 0x04a8 }
         r4 = r4 + 1;
-        goto L_0x03c9;
-    L_0x03d1:
-        r3 = r5.buffer;	 Catch:{ Exception -> 0x04a9 }
-        r4 = r12.key;	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
+        goto L_0x03c8;
+    L_0x03d0:
+        r3 = r5.buffer;	 Catch:{ Exception -> 0x04a8 }
+        r4 = r12.key;	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
         r21 = 1;
         r22 = 1;
         r23 = 0;
@@ -921,70 +921,70 @@ public class FileUploadOperation {
         r19 = r4;
         r20 = r9;
         r24 = r6;
-        org.telegram.messenger.Utilities.aesIgeEncryption(r18, r19, r20, r21, r22, r23, r24);	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r3.get(r8);	 Catch:{ Exception -> 0x04a9 }
-        r3 = (byte[]) r3;	 Catch:{ Exception -> 0x04a9 }
-        r4 = r12.ivChange;	 Catch:{ Exception -> 0x04a9 }
-        java.lang.System.arraycopy(r4, r8, r3, r8, r7);	 Catch:{ Exception -> 0x04a9 }
-        r4 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a9 }
-        r4.remove(r8);	 Catch:{ Exception -> 0x04a9 }
+        org.telegram.messenger.Utilities.aesIgeEncryption(r18, r19, r20, r21, r22, r23, r24);	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r3.get(r8);	 Catch:{ Exception -> 0x04a8 }
+        r3 = (byte[]) r3;	 Catch:{ Exception -> 0x04a8 }
+        r4 = r12.ivChange;	 Catch:{ Exception -> 0x04a8 }
+        java.lang.System.arraycopy(r4, r8, r3, r8, r7);	 Catch:{ Exception -> 0x04a8 }
+        r4 = r12.freeRequestIvs;	 Catch:{ Exception -> 0x04a8 }
+        r4.remove(r8);	 Catch:{ Exception -> 0x04a8 }
         r6 = r3;
-        goto L_0x03fd;
-    L_0x03fc:
+        goto L_0x03fc;
+    L_0x03fb:
         r6 = r4;
-    L_0x03fd:
-        r3 = r12.isBigFile;	 Catch:{ Exception -> 0x04a9 }
-        if (r3 == 0) goto L_0x041f;
-    L_0x0401:
-        r3 = new org.telegram.tgnet.TLRPC$TL_upload_saveBigFilePart;	 Catch:{ Exception -> 0x04a9 }
-        r3.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r4 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a9 }
-        r3.file_part = r4;	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.currentFileId;	 Catch:{ Exception -> 0x04a9 }
-        r3.file_id = r9;	 Catch:{ Exception -> 0x04a9 }
-        r7 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a9 }
-        if (r7 == 0) goto L_0x0415;
-    L_0x0412:
-        r3.file_total_parts = r2;	 Catch:{ Exception -> 0x04a9 }
-        goto L_0x0419;
-    L_0x0415:
-        r2 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a9 }
-        r3.file_total_parts = r2;	 Catch:{ Exception -> 0x04a9 }
-    L_0x0419:
-        r3.bytes = r5;	 Catch:{ Exception -> 0x04a9 }
+    L_0x03fc:
+        r3 = r12.isBigFile;	 Catch:{ Exception -> 0x04a8 }
+        if (r3 == 0) goto L_0x041e;
+    L_0x0400:
+        r3 = new org.telegram.tgnet.TLRPC$TL_upload_saveBigFilePart;	 Catch:{ Exception -> 0x04a8 }
+        r3.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r4 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a8 }
+        r3.file_part = r4;	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.currentFileId;	 Catch:{ Exception -> 0x04a8 }
+        r3.file_id = r9;	 Catch:{ Exception -> 0x04a8 }
+        r7 = r12.estimatedSize;	 Catch:{ Exception -> 0x04a8 }
+        if (r7 == 0) goto L_0x0414;
+    L_0x0411:
+        r3.file_total_parts = r2;	 Catch:{ Exception -> 0x04a8 }
+        goto L_0x0418;
+    L_0x0414:
+        r2 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a8 }
+        r3.file_total_parts = r2;	 Catch:{ Exception -> 0x04a8 }
+    L_0x0418:
+        r3.bytes = r5;	 Catch:{ Exception -> 0x04a8 }
         r19 = r3;
         r9 = r4;
-        goto L_0x0431;
-    L_0x041f:
-        r2 = new org.telegram.tgnet.TLRPC$TL_upload_saveFilePart;	 Catch:{ Exception -> 0x04a9 }
-        r2.<init>();	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a9 }
-        r2.file_part = r3;	 Catch:{ Exception -> 0x04a9 }
-        r9 = r12.currentFileId;	 Catch:{ Exception -> 0x04a9 }
-        r2.file_id = r9;	 Catch:{ Exception -> 0x04a9 }
-        r2.bytes = r5;	 Catch:{ Exception -> 0x04a9 }
+        goto L_0x0430;
+    L_0x041e:
+        r2 = new org.telegram.tgnet.TLRPC$TL_upload_saveFilePart;	 Catch:{ Exception -> 0x04a8 }
+        r2.<init>();	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.currentPartNum;	 Catch:{ Exception -> 0x04a8 }
+        r2.file_part = r3;	 Catch:{ Exception -> 0x04a8 }
+        r9 = r12.currentFileId;	 Catch:{ Exception -> 0x04a8 }
+        r2.file_id = r9;	 Catch:{ Exception -> 0x04a8 }
+        r2.bytes = r5;	 Catch:{ Exception -> 0x04a8 }
         r19 = r2;
         r9 = r3;
-    L_0x0431:
-        r2 = r12.isLastPart;	 Catch:{ Exception -> 0x04a9 }
-        if (r2 == 0) goto L_0x0447;
-    L_0x0435:
-        r2 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a9 }
-        if (r2 == 0) goto L_0x0447;
-    L_0x0439:
-        r12.nextPartFirst = r8;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a9 }
+    L_0x0430:
+        r2 = r12.isLastPart;	 Catch:{ Exception -> 0x04a8 }
+        if (r2 == 0) goto L_0x0446;
+    L_0x0434:
+        r2 = r12.nextPartFirst;	 Catch:{ Exception -> 0x04a8 }
+        if (r2 == 0) goto L_0x0446;
+    L_0x0438:
+        r12.nextPartFirst = r8;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.totalPartsCount;	 Catch:{ Exception -> 0x04a8 }
         r2 = r2 - r1;
-        r12.currentPartNum = r2;	 Catch:{ Exception -> 0x04a9 }
-        r2 = r12.stream;	 Catch:{ Exception -> 0x04a9 }
-        r3 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a9 }
-        r2.seek(r3);	 Catch:{ Exception -> 0x04a9 }
-    L_0x0447:
-        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a9 }
-        r4 = (long) r0;	 Catch:{ Exception -> 0x04a9 }
+        r12.currentPartNum = r2;	 Catch:{ Exception -> 0x04a8 }
+        r2 = r12.stream;	 Catch:{ Exception -> 0x04a8 }
+        r3 = r12.totalFileSize;	 Catch:{ Exception -> 0x04a8 }
+        r2.seek(r3);	 Catch:{ Exception -> 0x04a8 }
+    L_0x0446:
+        r2 = r12.readBytesCount;	 Catch:{ Exception -> 0x04a8 }
+        r4 = (long) r0;	 Catch:{ Exception -> 0x04a8 }
         r2 = r2 + r4;
-        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a9 }
+        r12.readBytesCount = r2;	 Catch:{ Exception -> 0x04a8 }
         r2 = r12.currentPartNum;
         r2 = r2 + r1;
         r12.currentPartNum = r2;
@@ -1001,16 +1001,16 @@ public class FileUploadOperation {
         r4 = r1 + 4;
         r3 = r12.operationGuid;
         r1 = r12.slowNetwork;
-        if (r1 == 0) goto L_0x0471;
-    L_0x046e:
+        if (r1 == 0) goto L_0x0470;
+    L_0x046d:
         r25 = 4;
-        goto L_0x0479;
-    L_0x0471:
+        goto L_0x0478;
+    L_0x0470:
         r1 = r13 % 4;
         r1 = r1 << 16;
         r2 = r1 | 4;
         r25 = r2;
-    L_0x0479:
+    L_0x0478:
         r1 = r12.currentAccount;
         r18 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
         r20 = new org.telegram.messenger.-$$Lambda$FileUploadOperation$XMcVvcrqfWd56m49RmvLW8_t4Os;
@@ -1034,7 +1034,7 @@ public class FileUploadOperation {
         r1 = r12.requestTokens;
         r1.put(r13, r0);
         return;
-    L_0x04a9:
+    L_0x04a8:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r1 = 4;
@@ -1049,7 +1049,7 @@ public class FileUploadOperation {
 
     public /* synthetic */ void lambda$startUploadRequest$4$FileUploadOperation(int i, int i2, byte[] bArr, int i3, int i4, int i5, long j, TLObject tLObject, TLObject tLObject2, TL_error tL_error) {
         int i6 = i2;
-        Object obj = bArr;
+        byte[] bArr2 = bArr;
         int i7 = i5;
         TLObject tLObject3 = tLObject2;
         if (i == this.operationGuid) {
@@ -1064,8 +1064,8 @@ public class FileUploadOperation {
             } else if (i8 == 67108864) {
                 StatsController.getInstance(this.currentAccount).incrementSentBytesCount(currentNetworkType, 5, (long) i6);
             }
-            if (obj != null) {
-                this.freeRequestIvs.add(obj);
+            if (bArr2 != null) {
+                this.freeRequestIvs.add(bArr2);
             }
             this.requestTokens.delete(i3);
             if (!(tLObject3 instanceof TL_boolTrue)) {
@@ -1084,7 +1084,7 @@ public class FileUploadOperation {
                 } else {
                     max = this.totalFileSize;
                 }
-                this.delegate.didChangedUploadProgress(this, ((float) this.uploadedBytesCount) / ((float) max));
+                this.delegate.didChangedUploadProgress(this, this.uploadedBytesCount, max);
                 this.currentUploadRequetsCount--;
                 if (this.isLastPart && this.currentUploadRequetsCount == 0 && this.state == 1) {
                     this.state = 3;
@@ -1135,24 +1135,23 @@ public class FileUploadOperation {
                         i6 = this.lastSavedPartNum;
                         if (i7 == i6) {
                             this.lastSavedPartNum = i6 + 1;
-                            byte[] bArr2 = obj;
-                            long j2 = j;
+                            max = j;
                             while (true) {
                                 UploadCachedResult uploadCachedResult = (UploadCachedResult) this.cachedResults.get(this.lastSavedPartNum);
                                 if (uploadCachedResult == null) {
                                     break;
                                 }
-                                j2 = uploadCachedResult.bytesOffset;
+                                max = uploadCachedResult.bytesOffset;
                                 bArr2 = uploadCachedResult.iv;
                                 this.cachedResults.remove(this.lastSavedPartNum);
                                 this.lastSavedPartNum++;
                             }
-                            if ((this.isBigFile && j2 % 1048576 == 0) || (!this.isBigFile && this.saveInfoTimes == 0)) {
+                            if ((this.isBigFile && max % 1048576 == 0) || (!this.isBigFile && this.saveInfoTimes == 0)) {
                                 Editor edit = this.preferences.edit();
                                 StringBuilder stringBuilder = new StringBuilder();
                                 stringBuilder.append(this.fileKey);
                                 stringBuilder.append("_uploaded");
-                                edit.putLong(stringBuilder.toString(), j2);
+                                edit.putLong(stringBuilder.toString(), max);
                                 if (this.isEncrypted) {
                                     StringBuilder stringBuilder2 = new StringBuilder();
                                     stringBuilder2.append(this.fileKey);
@@ -1164,9 +1163,9 @@ public class FileUploadOperation {
                         } else {
                             UploadCachedResult uploadCachedResult2 = new UploadCachedResult();
                             uploadCachedResult2.bytesOffset = j;
-                            if (obj != null) {
+                            if (bArr2 != null) {
                                 uploadCachedResult2.iv = new byte[32];
-                                System.arraycopy(obj, 0, uploadCachedResult2.iv, 0, 32);
+                                System.arraycopy(bArr2, 0, uploadCachedResult2.iv, 0, 32);
                             }
                             this.cachedResults.put(i7, uploadCachedResult2);
                         }

@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
@@ -44,7 +45,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     float animationProgress = 0.0f;
     private int audioInterfaceState;
     private int captionMaxLength = 1024;
+    private Drawable checkDrawable;
     private PhotoViewerCaptionEnterViewDelegate delegate;
+    private Drawable drawable;
     private ImageView emojiButton;
     private int emojiPadding;
     private EmojiView emojiView;
@@ -192,7 +195,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         });
-        CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398), context.getResources().getDrawable(NUM).mutate(), 0, AndroidUtilities.dp(1.0f));
+        this.drawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
+        this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
+        CombinedDrawable combinedDrawable = new CombinedDrawable(this.drawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
         ImageView imageView = new ImageView(context2);
         imageView.setScaleType(ScaleType.CENTER);
@@ -256,6 +261,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void setForceFloatingEmoji(boolean z) {
         this.forceFloatingEmoji = z;
+    }
+
+    public void updateColors() {
+        Theme.setDrawableColor(this.drawable, Theme.getColor("dialogFloatingButton"));
+        Theme.setDrawableColor(this.checkDrawable, Theme.getColor("dialogFloatingIcon"));
     }
 
     private void onWindowSizeChanged() {

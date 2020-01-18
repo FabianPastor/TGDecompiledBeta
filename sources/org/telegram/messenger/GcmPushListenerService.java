@@ -43,73 +43,73 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         Utilities.stageQueue.postRunnable(new -$$Lambda$GcmPushListenerService$mgGQQF3kpbOfBT2rVoACkZ_x-2M(this, map, j));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:866:0x18be  */
-    /* JADX WARNING: Removed duplicated region for block: B:867:0x18ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d5  */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:825:0x17e7, B:834:0x1800] */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:866:0x18bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:867:0x18cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:870:0x18d3  */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:825:0x17e5, B:834:0x17fe] */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:115:0x01df, code skipped:
-            if (r2 == null) goto L_0x185a;
+            if (r2 == null) goto L_0x1858;
      */
     /* JADX WARNING: Missing block: B:116:0x01e1, code skipped:
-            if (r2 == 1) goto L_0x1811;
+            if (r2 == 1) goto L_0x180f;
      */
     /* JADX WARNING: Missing block: B:117:0x01e3, code skipped:
-            if (r2 == 2) goto L_0x17fd;
+            if (r2 == 2) goto L_0x17fb;
      */
     /* JADX WARNING: Missing block: B:118:0x01e5, code skipped:
-            if (r2 == 3) goto L_0x17d9;
+            if (r2 == 3) goto L_0x17d7;
      */
     /* JADX WARNING: Missing block: B:122:0x01ef, code skipped:
             if (r11.has("channel_id") == false) goto L_0x01fa;
@@ -192,7 +192,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r12 = -4294967296L;
      */
     /* JADX WARNING: Missing block: B:165:0x0266, code skipped:
-            if (r12 == 0) goto L_0x17a6;
+            if (r12 == 0) goto L_0x17a4;
      */
     /* JADX WARNING: Missing block: B:168:0x026e, code skipped:
             r10 = " for dialogId = ";
@@ -270,7 +270,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             org.telegram.messenger.MessagesController.getInstance(r15).deleteMessagesByPush(r12, r5, r2);
      */
     /* JADX WARNING: Missing block: B:192:0x0321, code skipped:
-            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x17a6;
+            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x17a4;
      */
     /* JADX WARNING: Missing block: B:193:0x0323, code skipped:
             r2 = new java.lang.StringBuilder();
@@ -283,7 +283,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             org.telegram.messenger.FileLog.d(r2.toString());
      */
     /* JADX WARNING: Missing block: B:196:0x0351, code skipped:
-            if (android.text.TextUtils.isEmpty(r9) != false) goto L_0x17a6;
+            if (android.text.TextUtils.isEmpty(r9) != false) goto L_0x17a4;
      */
     /* JADX WARNING: Missing block: B:198:0x0359, code skipped:
             if (r11.has("msg_id") == false) goto L_0x0364;
@@ -367,7 +367,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r1 = null;
      */
     /* JADX WARNING: Missing block: B:230:0x03ea, code skipped:
-            if (r1 == null) goto L_0x17a0;
+            if (r1 == null) goto L_0x179e;
      */
     /* JADX WARNING: Missing block: B:233:0x03f2, code skipped:
             if (r11.has("chat_from_id") == false) goto L_0x03fb;
@@ -1227,13 +1227,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
      */
     /* JADX WARNING: Missing block: B:593:0x096c, code skipped:
             switch(r10) {
-                case 0: goto L_0x16be;
-                case 1: goto L_0x16be;
-                case 2: goto L_0x169b;
-                case 3: goto L_0x167c;
-                case 4: goto L_0x165d;
-                case 5: goto L_0x163e;
-                case 6: goto L_0x161e;
+                case 0: goto L_0x16bd;
+                case 1: goto L_0x16bd;
+                case 2: goto L_0x169a;
+                case 3: goto L_0x167b;
+                case 4: goto L_0x165c;
+                case 5: goto L_0x163d;
+                case 6: goto L_0x161d;
                 case 7: goto L_0x1603;
                 case 8: goto L_0x15e3;
                 case 9: goto L_0x15c3;
@@ -1936,118 +1936,118 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.getString("ActionTakeScreenshoot", NUM).replace("un1", r15[0]);
      */
-    /* JADX WARNING: Missing block: B:751:0x161a, code skipped:
+    /* JADX WARNING: Missing block: B:751:0x1619, code skipped:
             r7 = r1;
      */
-    /* JADX WARNING: Missing block: B:752:0x161b, code skipped:
+    /* JADX WARNING: Missing block: B:752:0x161a, code skipped:
             r1 = false;
      */
-    /* JADX WARNING: Missing block: B:753:0x161e, code skipped:
+    /* JADX WARNING: Missing block: B:753:0x161d, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessageSDVideo", NUM, r15[0]);
             r7 = org.telegram.messenger.LocaleController.getString("AttachDestructingVideo", NUM);
      */
-    /* JADX WARNING: Missing block: B:754:0x163e, code skipped:
+    /* JADX WARNING: Missing block: B:754:0x163d, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessageVideo", NUM, r15[0]);
             r7 = org.telegram.messenger.LocaleController.getString("AttachVideo", NUM);
      */
-    /* JADX WARNING: Missing block: B:755:0x165d, code skipped:
+    /* JADX WARNING: Missing block: B:755:0x165c, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessageSDPhoto", NUM, r15[0]);
             r7 = org.telegram.messenger.LocaleController.getString("AttachDestructingPhoto", NUM);
      */
-    /* JADX WARNING: Missing block: B:756:0x167c, code skipped:
+    /* JADX WARNING: Missing block: B:756:0x167b, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessagePhoto", NUM, r15[0]);
             r7 = org.telegram.messenger.LocaleController.getString("AttachPhoto", NUM);
      */
-    /* JADX WARNING: Missing block: B:757:0x169b, code skipped:
+    /* JADX WARNING: Missing block: B:757:0x169a, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessageNoText", NUM, r15[0]);
             r7 = org.telegram.messenger.LocaleController.getString("Message", NUM);
      */
-    /* JADX WARNING: Missing block: B:758:0x16b9, code skipped:
+    /* JADX WARNING: Missing block: B:758:0x16b8, code skipped:
             r16 = r7;
             r7 = r1;
      */
-    /* JADX WARNING: Missing block: B:759:0x16bc, code skipped:
+    /* JADX WARNING: Missing block: B:759:0x16bb, code skipped:
             r1 = false;
      */
-    /* JADX WARNING: Missing block: B:760:0x16be, code skipped:
+    /* JADX WARNING: Missing block: B:760:0x16bd, code skipped:
             r21 = r1;
             r10 = r32;
             r1 = org.telegram.messenger.LocaleController.formatString("NotificationMessageText", NUM, r15[0], r15[1]);
             r7 = r15[1];
      */
-    /* JADX WARNING: Missing block: B:761:0x16db, code skipped:
-            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x16f2;
+    /* JADX WARNING: Missing block: B:761:0x16da, code skipped:
+            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x16f0;
      */
-    /* JADX WARNING: Missing block: B:762:0x16dd, code skipped:
+    /* JADX WARNING: Missing block: B:762:0x16dc, code skipped:
             r1 = new java.lang.StringBuilder();
             r1.append("unhandled loc_key = ");
             r1.append(r9);
             org.telegram.messenger.FileLog.w(r1.toString());
      */
-    /* JADX WARNING: Missing block: B:763:0x16f2, code skipped:
+    /* JADX WARNING: Missing block: B:763:0x16f0, code skipped:
             r1 = false;
             r7 = null;
      */
-    /* JADX WARNING: Missing block: B:764:0x16f4, code skipped:
+    /* JADX WARNING: Missing block: B:764:0x16f2, code skipped:
             r16 = null;
      */
-    /* JADX WARNING: Missing block: B:765:0x16f6, code skipped:
-            if (r7 == null) goto L_0x1795;
+    /* JADX WARNING: Missing block: B:765:0x16f4, code skipped:
+            if (r7 == null) goto L_0x1793;
      */
     /* JADX WARNING: Missing block: B:767:?, code skipped:
             r8 = new org.telegram.tgnet.TLRPC.TL_message();
             r8.id = r10;
             r8.random_id = r3;
      */
-    /* JADX WARNING: Missing block: B:768:0x1701, code skipped:
-            if (r16 == null) goto L_0x1706;
+    /* JADX WARNING: Missing block: B:768:0x16ff, code skipped:
+            if (r16 == null) goto L_0x1704;
      */
-    /* JADX WARNING: Missing block: B:769:0x1703, code skipped:
+    /* JADX WARNING: Missing block: B:769:0x1701, code skipped:
             r3 = r16;
      */
-    /* JADX WARNING: Missing block: B:770:0x1706, code skipped:
+    /* JADX WARNING: Missing block: B:770:0x1704, code skipped:
             r3 = r7;
      */
-    /* JADX WARNING: Missing block: B:771:0x1707, code skipped:
+    /* JADX WARNING: Missing block: B:771:0x1705, code skipped:
             r8.message = r3;
             r8.date = (int) (r37 / 1000);
      */
-    /* JADX WARNING: Missing block: B:772:0x1710, code skipped:
-            if (r5 == null) goto L_0x1719;
+    /* JADX WARNING: Missing block: B:772:0x170e, code skipped:
+            if (r5 == null) goto L_0x1717;
      */
     /* JADX WARNING: Missing block: B:774:?, code skipped:
             r8.action = new org.telegram.tgnet.TLRPC.TL_messageActionPinMessage();
      */
-    /* JADX WARNING: Missing block: B:775:0x1719, code skipped:
-            if (r6 == null) goto L_0x1722;
+    /* JADX WARNING: Missing block: B:775:0x1717, code skipped:
+            if (r6 == null) goto L_0x1720;
      */
-    /* JADX WARNING: Missing block: B:776:0x171b, code skipped:
+    /* JADX WARNING: Missing block: B:776:0x1719, code skipped:
             r8.flags |= Integer.MIN_VALUE;
      */
     /* JADX WARNING: Missing block: B:778:?, code skipped:
             r8.dialog_id = r12;
      */
-    /* JADX WARNING: Missing block: B:779:0x1724, code skipped:
-            if (r2 == 0) goto L_0x1732;
+    /* JADX WARNING: Missing block: B:779:0x1722, code skipped:
+            if (r2 == 0) goto L_0x1730;
      */
     /* JADX WARNING: Missing block: B:781:?, code skipped:
             r8.to_id = new org.telegram.tgnet.TLRPC.TL_peerChannel();
             r8.to_id.channel_id = r2;
      */
-    /* JADX WARNING: Missing block: B:782:0x1732, code skipped:
-            if (r22 == 0) goto L_0x1742;
+    /* JADX WARNING: Missing block: B:782:0x1730, code skipped:
+            if (r22 == 0) goto L_0x1740;
      */
-    /* JADX WARNING: Missing block: B:783:0x1734, code skipped:
+    /* JADX WARNING: Missing block: B:783:0x1732, code skipped:
             r8.to_id = new org.telegram.tgnet.TLRPC.TL_peerChat();
             r8.to_id.chat_id = r22;
      */
@@ -2055,23 +2055,23 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r8.to_id = new org.telegram.tgnet.TLRPC.TL_peerUser();
             r8.to_id.user_id = r24;
      */
-    /* JADX WARNING: Missing block: B:786:0x174f, code skipped:
+    /* JADX WARNING: Missing block: B:786:0x174d, code skipped:
             r8.flags |= 256;
             r8.from_id = r21;
      */
-    /* JADX WARNING: Missing block: B:787:0x1759, code skipped:
-            if (r20 != null) goto L_0x1760;
+    /* JADX WARNING: Missing block: B:787:0x1757, code skipped:
+            if (r20 != null) goto L_0x175e;
      */
-    /* JADX WARNING: Missing block: B:788:0x175b, code skipped:
-            if (r5 == null) goto L_0x175e;
+    /* JADX WARNING: Missing block: B:788:0x1759, code skipped:
+            if (r5 == null) goto L_0x175c;
      */
-    /* JADX WARNING: Missing block: B:790:0x175e, code skipped:
+    /* JADX WARNING: Missing block: B:790:0x175c, code skipped:
             r2 = false;
      */
-    /* JADX WARNING: Missing block: B:791:0x1760, code skipped:
+    /* JADX WARNING: Missing block: B:791:0x175e, code skipped:
             r2 = true;
      */
-    /* JADX WARNING: Missing block: B:792:0x1761, code skipped:
+    /* JADX WARNING: Missing block: B:792:0x175f, code skipped:
             r8.mentioned = r2;
             r8.silent = r19;
             r8.from_scheduled = r23;
@@ -2079,110 +2079,110 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r1 = new java.util.ArrayList();
             r1.add(r19);
      */
-    /* JADX WARNING: Missing block: B:793:0x178a, code skipped:
+    /* JADX WARNING: Missing block: B:793:0x1788, code skipped:
             r3 = r35;
      */
     /* JADX WARNING: Missing block: B:795:?, code skipped:
             org.telegram.messenger.NotificationsController.getInstance(r30).processNewMessages(r1, true, true, r3.countDownLatch);
             r28 = null;
      */
-    /* JADX WARNING: Missing block: B:796:0x1795, code skipped:
+    /* JADX WARNING: Missing block: B:796:0x1793, code skipped:
             r3 = r35;
      */
-    /* JADX WARNING: Missing block: B:797:0x1798, code skipped:
+    /* JADX WARNING: Missing block: B:797:0x1796, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:798:0x1799, code skipped:
+    /* JADX WARNING: Missing block: B:798:0x1797, code skipped:
             r3 = r35;
      */
-    /* JADX WARNING: Missing block: B:799:0x179c, code skipped:
+    /* JADX WARNING: Missing block: B:799:0x179a, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:800:0x179d, code skipped:
+    /* JADX WARNING: Missing block: B:800:0x179b, code skipped:
             r3 = r35;
      */
-    /* JADX WARNING: Missing block: B:801:0x17a0, code skipped:
+    /* JADX WARNING: Missing block: B:801:0x179e, code skipped:
             r3 = r35;
      */
-    /* JADX WARNING: Missing block: B:802:0x17a3, code skipped:
+    /* JADX WARNING: Missing block: B:802:0x17a1, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:803:0x17a4, code skipped:
+    /* JADX WARNING: Missing block: B:803:0x17a2, code skipped:
             r3 = r1;
      */
-    /* JADX WARNING: Missing block: B:804:0x17a6, code skipped:
+    /* JADX WARNING: Missing block: B:804:0x17a4, code skipped:
             r3 = r1;
             r29 = r14;
      */
-    /* JADX WARNING: Missing block: B:805:0x17a9, code skipped:
+    /* JADX WARNING: Missing block: B:805:0x17a7, code skipped:
             r30 = r15;
      */
-    /* JADX WARNING: Missing block: B:806:0x17ab, code skipped:
+    /* JADX WARNING: Missing block: B:806:0x17a9, code skipped:
             r28 = 1;
      */
-    /* JADX WARNING: Missing block: B:807:0x17ad, code skipped:
-            if (r28 == null) goto L_0x17b4;
+    /* JADX WARNING: Missing block: B:807:0x17ab, code skipped:
+            if (r28 == null) goto L_0x17b2;
      */
-    /* JADX WARNING: Missing block: B:808:0x17af, code skipped:
+    /* JADX WARNING: Missing block: B:808:0x17ad, code skipped:
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:809:0x17b4, code skipped:
+    /* JADX WARNING: Missing block: B:809:0x17b2, code skipped:
             org.telegram.tgnet.ConnectionsManager.onInternalPushReceived(r30);
             org.telegram.tgnet.ConnectionsManager.getInstance(r30).resumeNetworkMaybe();
      */
-    /* JADX WARNING: Missing block: B:810:0x17c0, code skipped:
+    /* JADX WARNING: Missing block: B:810:0x17be, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:812:0x17c8, code skipped:
+    /* JADX WARNING: Missing block: B:812:0x17c6, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:813:0x17c9, code skipped:
+    /* JADX WARNING: Missing block: B:813:0x17c7, code skipped:
             r3 = r1;
             r29 = r14;
             r30 = r15;
             r1 = r0;
      */
-    /* JADX WARNING: Missing block: B:814:0x17d1, code skipped:
+    /* JADX WARNING: Missing block: B:814:0x17cf, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:815:0x17d2, code skipped:
+    /* JADX WARNING: Missing block: B:815:0x17d0, code skipped:
             r3 = r1;
             r29 = r7;
      */
-    /* JADX WARNING: Missing block: B:816:0x17d5, code skipped:
+    /* JADX WARNING: Missing block: B:816:0x17d3, code skipped:
             r30 = r15;
      */
-    /* JADX WARNING: Missing block: B:817:0x17d9, code skipped:
+    /* JADX WARNING: Missing block: B:817:0x17d7, code skipped:
             r3 = r1;
             r29 = r7;
             r30 = r15;
      */
-    /* JADX WARNING: Missing block: B:822:0x17e2, code skipped:
+    /* JADX WARNING: Missing block: B:822:0x17e0, code skipped:
             r15 = r30;
      */
     /* JADX WARNING: Missing block: B:826:?, code skipped:
             org.telegram.messenger.Utilities.stageQueue.postRunnable(new org.telegram.messenger.-$$Lambda$GcmPushListenerService$aCTiHH_b4RhBMfcCkAHdgReKcg4(r15));
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:827:0x17ef, code skipped:
+    /* JADX WARNING: Missing block: B:827:0x17ed, code skipped:
             return;
      */
-    /* JADX WARNING: Missing block: B:828:0x17f0, code skipped:
+    /* JADX WARNING: Missing block: B:828:0x17ee, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:829:0x17f3, code skipped:
+    /* JADX WARNING: Missing block: B:829:0x17f1, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:830:0x17f4, code skipped:
+    /* JADX WARNING: Missing block: B:830:0x17f2, code skipped:
             r15 = r30;
      */
-    /* JADX WARNING: Missing block: B:831:0x17f8, code skipped:
+    /* JADX WARNING: Missing block: B:831:0x17f6, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:832:0x17f9, code skipped:
+    /* JADX WARNING: Missing block: B:832:0x17f7, code skipped:
             r15 = r30;
      */
-    /* JADX WARNING: Missing block: B:833:0x17fd, code skipped:
+    /* JADX WARNING: Missing block: B:833:0x17fb, code skipped:
             r3 = r1;
             r29 = r7;
      */
@@ -2190,13 +2190,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.-$$Lambda$GcmPushListenerService$A_uUL_LENsDGfvOUUl8zWJ6XmBQ(r15));
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:838:0x180d, code skipped:
+    /* JADX WARNING: Missing block: B:838:0x180b, code skipped:
             return;
      */
-    /* JADX WARNING: Missing block: B:839:0x180e, code skipped:
+    /* JADX WARNING: Missing block: B:839:0x180c, code skipped:
             r0 = th;
      */
-    /* JADX WARNING: Missing block: B:841:0x1811, code skipped:
+    /* JADX WARNING: Missing block: B:841:0x180f, code skipped:
             r3 = r1;
             r29 = r7;
             r1 = new org.telegram.tgnet.TLRPC.TL_updateServiceNotification();
@@ -2214,33 +2214,33 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             org.telegram.tgnet.ConnectionsManager.getInstance(r15).resumeNetworkMaybe();
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:846:0x1859, code skipped:
+    /* JADX WARNING: Missing block: B:846:0x1857, code skipped:
             return;
      */
-    /* JADX WARNING: Missing block: B:847:0x185a, code skipped:
+    /* JADX WARNING: Missing block: B:847:0x1858, code skipped:
             r3 = r1;
             r29 = r7;
             r1 = r11.getInt("dc");
             r2 = r11.getString("addr").split(":");
      */
-    /* JADX WARNING: Missing block: B:848:0x1871, code skipped:
-            if (r2.length == 2) goto L_0x1879;
+    /* JADX WARNING: Missing block: B:848:0x186f, code skipped:
+            if (r2.length == 2) goto L_0x1877;
      */
-    /* JADX WARNING: Missing block: B:849:0x1873, code skipped:
+    /* JADX WARNING: Missing block: B:849:0x1871, code skipped:
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:850:0x1878, code skipped:
+    /* JADX WARNING: Missing block: B:850:0x1876, code skipped:
             return;
      */
-    /* JADX WARNING: Missing block: B:851:0x1879, code skipped:
+    /* JADX WARNING: Missing block: B:851:0x1877, code skipped:
             org.telegram.tgnet.ConnectionsManager.getInstance(r15).applyDatacenterAddress(r1, r2[0], java.lang.Integer.parseInt(r2[1]));
             org.telegram.tgnet.ConnectionsManager.getInstance(r15).resumeNetworkMaybe();
             r3.countDownLatch.countDown();
      */
-    /* JADX WARNING: Missing block: B:852:0x1896, code skipped:
+    /* JADX WARNING: Missing block: B:852:0x1894, code skipped:
             return;
      */
-    /* JADX WARNING: Missing block: B:853:0x1897, code skipped:
+    /* JADX WARNING: Missing block: B:853:0x1895, code skipped:
             r0 = th;
      */
     public /* synthetic */ void lambda$null$3$GcmPushListenerService(java.util.Map r36, long r37) {
@@ -2255,8 +2255,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         org.telegram.messenger.FileLog.d(r3);
     L_0x000d:
         r5 = "p";
-        r5 = r2.get(r5);	 Catch:{ all -> 0x18b5 }
-        r6 = r5 instanceof java.lang.String;	 Catch:{ all -> 0x18b5 }
+        r5 = r2.get(r5);	 Catch:{ all -> 0x18b3 }
+        r6 = r5 instanceof java.lang.String;	 Catch:{ all -> 0x18b3 }
         if (r6 != 0) goto L_0x002d;
     L_0x0017:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x0024 }
@@ -2277,18 +2277,18 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r15 = -1;
     L_0x002a:
         r1 = r0;
-        goto L_0x18bc;
+        goto L_0x18ba;
     L_0x002d:
-        r5 = (java.lang.String) r5;	 Catch:{ all -> 0x18b5 }
+        r5 = (java.lang.String) r5;	 Catch:{ all -> 0x18b3 }
         r6 = 8;
-        r5 = android.util.Base64.decode(r5, r6);	 Catch:{ all -> 0x18b5 }
-        r7 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ all -> 0x18b5 }
-        r8 = r5.length;	 Catch:{ all -> 0x18b5 }
-        r7.<init>(r8);	 Catch:{ all -> 0x18b5 }
-        r7.writeBytes(r5);	 Catch:{ all -> 0x18b5 }
+        r5 = android.util.Base64.decode(r5, r6);	 Catch:{ all -> 0x18b3 }
+        r7 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ all -> 0x18b3 }
+        r8 = r5.length;	 Catch:{ all -> 0x18b3 }
+        r7.<init>(r8);	 Catch:{ all -> 0x18b3 }
+        r7.writeBytes(r5);	 Catch:{ all -> 0x18b3 }
         r8 = 0;
-        r7.position(r8);	 Catch:{ all -> 0x18b5 }
-        r9 = org.telegram.messenger.SharedConfig.pushAuthKeyId;	 Catch:{ all -> 0x18b5 }
+        r7.position(r8);	 Catch:{ all -> 0x18b3 }
+        r9 = org.telegram.messenger.SharedConfig.pushAuthKeyId;	 Catch:{ all -> 0x18b3 }
         if (r9 != 0) goto L_0x0057;
     L_0x0046:
         r9 = new byte[r6];	 Catch:{ all -> 0x0024 }
@@ -2300,11 +2300,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11 = org.telegram.messenger.SharedConfig.pushAuthKeyId;	 Catch:{ all -> 0x0024 }
         java.lang.System.arraycopy(r9, r10, r11, r8, r6);	 Catch:{ all -> 0x0024 }
     L_0x0057:
-        r9 = new byte[r6];	 Catch:{ all -> 0x18b5 }
+        r9 = new byte[r6];	 Catch:{ all -> 0x18b3 }
         r10 = 1;
-        r7.readBytes(r9, r10);	 Catch:{ all -> 0x18b5 }
-        r11 = org.telegram.messenger.SharedConfig.pushAuthKeyId;	 Catch:{ all -> 0x18b5 }
-        r11 = java.util.Arrays.equals(r11, r9);	 Catch:{ all -> 0x18b5 }
+        r7.readBytes(r9, r10);	 Catch:{ all -> 0x18b3 }
+        r11 = org.telegram.messenger.SharedConfig.pushAuthKeyId;	 Catch:{ all -> 0x18b3 }
+        r11 = java.util.Arrays.equals(r11, r9);	 Catch:{ all -> 0x18b3 }
         r12 = 3;
         r13 = 2;
         if (r11 != 0) goto L_0x0092;
@@ -2330,30 +2330,30 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         return;
     L_0x0092:
         r9 = 16;
-        r9 = new byte[r9];	 Catch:{ all -> 0x18b5 }
-        r7.readBytes(r9, r10);	 Catch:{ all -> 0x18b5 }
-        r11 = org.telegram.messenger.SharedConfig.pushAuthKey;	 Catch:{ all -> 0x18b5 }
-        r11 = org.telegram.messenger.MessageKeyData.generateMessageKeyData(r11, r9, r10, r13);	 Catch:{ all -> 0x18b5 }
-        r14 = r7.buffer;	 Catch:{ all -> 0x18b5 }
-        r15 = r11.aesKey;	 Catch:{ all -> 0x18b5 }
-        r11 = r11.aesIv;	 Catch:{ all -> 0x18b5 }
+        r9 = new byte[r9];	 Catch:{ all -> 0x18b3 }
+        r7.readBytes(r9, r10);	 Catch:{ all -> 0x18b3 }
+        r11 = org.telegram.messenger.SharedConfig.pushAuthKey;	 Catch:{ all -> 0x18b3 }
+        r11 = org.telegram.messenger.MessageKeyData.generateMessageKeyData(r11, r9, r10, r13);	 Catch:{ all -> 0x18b3 }
+        r14 = r7.buffer;	 Catch:{ all -> 0x18b3 }
+        r15 = r11.aesKey;	 Catch:{ all -> 0x18b3 }
+        r11 = r11.aesIv;	 Catch:{ all -> 0x18b3 }
         r17 = 0;
         r18 = 0;
         r19 = 24;
-        r5 = r5.length;	 Catch:{ all -> 0x18b5 }
+        r5 = r5.length;	 Catch:{ all -> 0x18b3 }
         r20 = r5 + -24;
         r16 = r11;
-        org.telegram.messenger.Utilities.aesIgeEncryption(r14, r15, r16, r17, r18, r19, r20);	 Catch:{ all -> 0x18b5 }
-        r21 = org.telegram.messenger.SharedConfig.pushAuthKey;	 Catch:{ all -> 0x18b5 }
+        org.telegram.messenger.Utilities.aesIgeEncryption(r14, r15, r16, r17, r18, r19, r20);	 Catch:{ all -> 0x18b3 }
+        r21 = org.telegram.messenger.SharedConfig.pushAuthKey;	 Catch:{ all -> 0x18b3 }
         r22 = 96;
         r23 = 32;
-        r5 = r7.buffer;	 Catch:{ all -> 0x18b5 }
+        r5 = r7.buffer;	 Catch:{ all -> 0x18b3 }
         r25 = 24;
-        r11 = r7.buffer;	 Catch:{ all -> 0x18b5 }
-        r26 = r11.limit();	 Catch:{ all -> 0x18b5 }
+        r11 = r7.buffer;	 Catch:{ all -> 0x18b3 }
+        r26 = r11.limit();	 Catch:{ all -> 0x18b3 }
         r24 = r5;
-        r5 = org.telegram.messenger.Utilities.computeSHA256(r21, r22, r23, r24, r25, r26);	 Catch:{ all -> 0x18b5 }
-        r5 = org.telegram.messenger.Utilities.arraysEquals(r9, r8, r5, r6);	 Catch:{ all -> 0x18b5 }
+        r5 = org.telegram.messenger.Utilities.computeSHA256(r21, r22, r23, r24, r25, r26);	 Catch:{ all -> 0x18b3 }
+        r5 = org.telegram.messenger.Utilities.arraysEquals(r9, r8, r5, r6);	 Catch:{ all -> 0x18b3 }
         if (r5 != 0) goto L_0x00ea;
     L_0x00cf:
         r35.onDecryptError();	 Catch:{ all -> 0x0024 }
@@ -2370,15 +2370,15 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x00e9:
         return;
     L_0x00ea:
-        r5 = r7.readInt32(r10);	 Catch:{ all -> 0x18b5 }
-        r5 = new byte[r5];	 Catch:{ all -> 0x18b5 }
-        r7.readBytes(r5, r10);	 Catch:{ all -> 0x18b5 }
-        r7 = new java.lang.String;	 Catch:{ all -> 0x18b5 }
-        r7.<init>(r5);	 Catch:{ all -> 0x18b5 }
-        r5 = new org.json.JSONObject;	 Catch:{ all -> 0x18ab }
-        r5.<init>(r7);	 Catch:{ all -> 0x18ab }
+        r5 = r7.readInt32(r10);	 Catch:{ all -> 0x18b3 }
+        r5 = new byte[r5];	 Catch:{ all -> 0x18b3 }
+        r7.readBytes(r5, r10);	 Catch:{ all -> 0x18b3 }
+        r7 = new java.lang.String;	 Catch:{ all -> 0x18b3 }
+        r7.<init>(r5);	 Catch:{ all -> 0x18b3 }
+        r5 = new org.json.JSONObject;	 Catch:{ all -> 0x18a9 }
+        r5.<init>(r7);	 Catch:{ all -> 0x18a9 }
         r9 = "loc_key";
-        r9 = r5.has(r9);	 Catch:{ all -> 0x18ab }
+        r9 = r5.has(r9);	 Catch:{ all -> 0x18a9 }
         if (r9 == 0) goto L_0x0113;
     L_0x0105:
         r9 = "loc_key";
@@ -2395,8 +2395,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r9 = "";
     L_0x0115:
         r11 = "custom";
-        r11 = r5.get(r11);	 Catch:{ all -> 0x18a2 }
-        r11 = r11 instanceof org.json.JSONObject;	 Catch:{ all -> 0x18a2 }
+        r11 = r5.get(r11);	 Catch:{ all -> 0x18a0 }
+        r11 = r11 instanceof org.json.JSONObject;	 Catch:{ all -> 0x18a0 }
         if (r11 == 0) goto L_0x012c;
     L_0x011f:
         r11 = "custom";
@@ -2409,11 +2409,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r2 = -1;
         goto L_0x0029;
     L_0x012c:
-        r11 = new org.json.JSONObject;	 Catch:{ all -> 0x18a2 }
-        r11.<init>();	 Catch:{ all -> 0x18a2 }
+        r11 = new org.json.JSONObject;	 Catch:{ all -> 0x18a0 }
+        r11.<init>();	 Catch:{ all -> 0x18a0 }
     L_0x0131:
         r14 = "user_id";
-        r14 = r5.has(r14);	 Catch:{ all -> 0x18a2 }
+        r14 = r5.has(r14);	 Catch:{ all -> 0x18a0 }
         if (r14 == 0) goto L_0x0142;
     L_0x013a:
         r14 = "user_id";
@@ -2429,14 +2429,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r14.getClientUserId();	 Catch:{ all -> 0x0126 }
         goto L_0x0174;
     L_0x0150:
-        r15 = r14 instanceof java.lang.Integer;	 Catch:{ all -> 0x18a2 }
+        r15 = r14 instanceof java.lang.Integer;	 Catch:{ all -> 0x18a0 }
         if (r15 == 0) goto L_0x015b;
     L_0x0154:
         r14 = (java.lang.Integer) r14;	 Catch:{ all -> 0x0126 }
         r14 = r14.intValue();	 Catch:{ all -> 0x0126 }
         goto L_0x0174;
     L_0x015b:
-        r15 = r14 instanceof java.lang.String;	 Catch:{ all -> 0x18a2 }
+        r15 = r14 instanceof java.lang.String;	 Catch:{ all -> 0x18a0 }
         if (r15 == 0) goto L_0x016a;
     L_0x015f:
         r14 = (java.lang.String) r14;	 Catch:{ all -> 0x0126 }
@@ -2444,11 +2444,11 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r14.intValue();	 Catch:{ all -> 0x0126 }
         goto L_0x0174;
     L_0x016a:
-        r14 = org.telegram.messenger.UserConfig.selectedAccount;	 Catch:{ all -> 0x18a2 }
-        r14 = org.telegram.messenger.UserConfig.getInstance(r14);	 Catch:{ all -> 0x18a2 }
-        r14 = r14.getClientUserId();	 Catch:{ all -> 0x18a2 }
+        r14 = org.telegram.messenger.UserConfig.selectedAccount;	 Catch:{ all -> 0x18a0 }
+        r14 = org.telegram.messenger.UserConfig.getInstance(r14);	 Catch:{ all -> 0x18a0 }
+        r14 = r14.getClientUserId();	 Catch:{ all -> 0x18a0 }
     L_0x0174:
-        r15 = org.telegram.messenger.UserConfig.selectedAccount;	 Catch:{ all -> 0x18a2 }
+        r15 = org.telegram.messenger.UserConfig.selectedAccount;	 Catch:{ all -> 0x18a0 }
         r4 = 0;
     L_0x0177:
         if (r4 >= r12) goto L_0x018a;
@@ -2464,8 +2464,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r6 = 8;
         goto L_0x0177;
     L_0x018a:
-        r4 = org.telegram.messenger.UserConfig.getInstance(r15);	 Catch:{ all -> 0x1899 }
-        r4 = r4.isClientActivated();	 Catch:{ all -> 0x1899 }
+        r4 = org.telegram.messenger.UserConfig.getInstance(r15);	 Catch:{ all -> 0x1897 }
+        r4 = r4.isClientActivated();	 Catch:{ all -> 0x1897 }
         if (r4 != 0) goto L_0x01a9;
     L_0x0194:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x01a3 }
@@ -2486,8 +2486,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x002a;
     L_0x01a9:
         r4 = "google.sent_time";
-        r2.get(r4);	 Catch:{ all -> 0x1899 }
-        r2 = r9.hashCode();	 Catch:{ all -> 0x1899 }
+        r2.get(r4);	 Catch:{ all -> 0x1897 }
+        r2 = r9.hashCode();	 Catch:{ all -> 0x1897 }
         switch(r2) {
             case -1963663249: goto L_0x01d4;
             case -920689527: goto L_0x01ca;
@@ -2528,16 +2528,16 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x01de:
         r2 = -1;
     L_0x01df:
-        if (r2 == 0) goto L_0x185a;
+        if (r2 == 0) goto L_0x1858;
     L_0x01e1:
-        if (r2 == r10) goto L_0x1811;
+        if (r2 == r10) goto L_0x180f;
     L_0x01e3:
-        if (r2 == r13) goto L_0x17fd;
+        if (r2 == r13) goto L_0x17fb;
     L_0x01e5:
-        if (r2 == r12) goto L_0x17d9;
+        if (r2 == r12) goto L_0x17d7;
     L_0x01e7:
         r2 = "channel_id";
-        r2 = r11.has(r2);	 Catch:{ all -> 0x17d1 }
+        r2 = r11.has(r2);	 Catch:{ all -> 0x17cf }
         r19 = 0;
         if (r2 == 0) goto L_0x01fa;
     L_0x01f1:
@@ -2551,7 +2551,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r2 = 0;
     L_0x01fd:
         r14 = "from_id";
-        r14 = r11.has(r14);	 Catch:{ all -> 0x17d1 }
+        r14 = r11.has(r14);	 Catch:{ all -> 0x17cf }
         if (r14 == 0) goto L_0x0217;
     L_0x0205:
         r3 = "from_id";
@@ -2573,7 +2573,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r6 = 0;
     L_0x0219:
         r7 = "chat_id";
-        r7 = r11.has(r7);	 Catch:{ all -> 0x17c8 }
+        r7 = r11.has(r7);	 Catch:{ all -> 0x17c6 }
         if (r7 == 0) goto L_0x022c;
     L_0x0221:
         r3 = "chat_id";
@@ -2589,7 +2589,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r3 = 0;
     L_0x022e:
         r4 = "encryption_id";
-        r4 = r11.has(r4);	 Catch:{ all -> 0x17c8 }
+        r4 = r11.has(r4);	 Catch:{ all -> 0x17c6 }
         if (r4 == 0) goto L_0x0240;
     L_0x0236:
         r4 = "encryption_id";
@@ -2599,7 +2599,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r12 = r12 << r4;
     L_0x0240:
         r4 = "schedule";
-        r4 = r11.has(r4);	 Catch:{ all -> 0x17c8 }
+        r4 = r11.has(r4);	 Catch:{ all -> 0x17c6 }
         if (r4 == 0) goto L_0x0252;
     L_0x0248:
         r4 = "schedule";
@@ -2621,10 +2621,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r12 = -NUM; // 0xfffffffvar_ float:0.0 double:NaN;
     L_0x0264:
         r7 = (r12 > r19 ? 1 : (r12 == r19 ? 0 : -1));
-        if (r7 == 0) goto L_0x17a6;
+        if (r7 == 0) goto L_0x17a4;
     L_0x0268:
         r7 = "READ_HISTORY";
-        r7 = r7.equals(r9);	 Catch:{ all -> 0x17c8 }
+        r7 = r7.equals(r9);	 Catch:{ all -> 0x17c6 }
         r10 = " for dialogId = ";
         if (r7 == 0) goto L_0x02e0;
     L_0x0272:
@@ -2681,10 +2681,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = 0;
         r17 = r5;
         r16.processUpdateArray(r17, r18, r19, r20, r21);	 Catch:{ all -> 0x022a }
-        goto L_0x17a6;
+        goto L_0x17a4;
     L_0x02e0:
         r7 = "MESSAGE_DELETED";
-        r7 = r7.equals(r9);	 Catch:{ all -> 0x17c8 }
+        r7 = r7.equals(r9);	 Catch:{ all -> 0x17c6 }
         r8 = "messages";
         if (r7 == 0) goto L_0x034d;
     L_0x02ea:
@@ -2712,7 +2712,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r3 = org.telegram.messenger.MessagesController.getInstance(r15);	 Catch:{ all -> 0x022a }
         r3.deleteMessagesByPush(r12, r5, r2);	 Catch:{ all -> 0x022a }
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x022a }
-        if (r2 == 0) goto L_0x17a6;
+        if (r2 == 0) goto L_0x17a4;
     L_0x0323:
         r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x022a }
         r2.<init>();	 Catch:{ all -> 0x022a }
@@ -2728,13 +2728,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r2.append(r3);	 Catch:{ all -> 0x022a }
         r2 = r2.toString();	 Catch:{ all -> 0x022a }
         org.telegram.messenger.FileLog.d(r2);	 Catch:{ all -> 0x022a }
-        goto L_0x17a6;
+        goto L_0x17a4;
     L_0x034d:
-        r7 = android.text.TextUtils.isEmpty(r9);	 Catch:{ all -> 0x17c8 }
-        if (r7 != 0) goto L_0x17a6;
+        r7 = android.text.TextUtils.isEmpty(r9);	 Catch:{ all -> 0x17c6 }
+        if (r7 != 0) goto L_0x17a4;
     L_0x0353:
         r7 = "msg_id";
-        r7 = r11.has(r7);	 Catch:{ all -> 0x17c8 }
+        r7 = r11.has(r7);	 Catch:{ all -> 0x17c6 }
         if (r7 == 0) goto L_0x0364;
     L_0x035b:
         r7 = "msg_id";
@@ -2746,7 +2746,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7 = 0;
     L_0x0367:
         r14 = "random_id";
-        r14 = r11.has(r14);	 Catch:{ all -> 0x17a3 }
+        r14 = r11.has(r14);	 Catch:{ all -> 0x17a1 }
         if (r14 == 0) goto L_0x038b;
     L_0x036f:
         r14 = "random_id";
@@ -2801,7 +2801,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r3 = r35;
         r1 = r0;
         r14 = r29;
-        goto L_0x18bc;
+        goto L_0x18ba;
     L_0x03d5:
         r24 = r6;
         r23 = r14;
@@ -2817,10 +2817,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x03e9:
         r1 = 0;
     L_0x03ea:
-        if (r1 == 0) goto L_0x17a0;
+        if (r1 == 0) goto L_0x179e;
     L_0x03ec:
         r1 = "chat_from_id";
-        r1 = r11.has(r1);	 Catch:{ all -> 0x179c }
+        r1 = r11.has(r1);	 Catch:{ all -> 0x179a }
         if (r1 == 0) goto L_0x03fb;
     L_0x03f4:
         r1 = "chat_from_id";
@@ -2830,7 +2830,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r1 = 0;
     L_0x03fc:
         r6 = "mention";
-        r6 = r11.has(r6);	 Catch:{ all -> 0x179c }
+        r6 = r11.has(r6);	 Catch:{ all -> 0x179a }
         if (r6 == 0) goto L_0x040e;
     L_0x0404:
         r6 = "mention";
@@ -2843,7 +2843,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r6 = 0;
     L_0x040f:
         r14 = "silent";
-        r14 = r11.has(r14);	 Catch:{ all -> 0x179c }
+        r14 = r11.has(r14);	 Catch:{ all -> 0x179a }
         if (r14 == 0) goto L_0x0423;
     L_0x0417:
         r14 = "silent";
@@ -2858,7 +2858,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = 0;
     L_0x0426:
         r15 = "loc_args";
-        r15 = r5.has(r15);	 Catch:{ all -> 0x1798 }
+        r15 = r5.has(r15);	 Catch:{ all -> 0x1796 }
         if (r15 == 0) goto L_0x0458;
     L_0x042e:
         r15 = "loc_args";
@@ -2886,18 +2886,18 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r1 = r0;
         r14 = r29;
         r15 = r30;
-        goto L_0x18bc;
+        goto L_0x18ba;
     L_0x0458:
         r20 = r6;
         r19 = r14;
         r5 = 0;
         r15 = 0;
     L_0x045e:
-        r6 = r15[r5];	 Catch:{ all -> 0x1798 }
+        r6 = r15[r5];	 Catch:{ all -> 0x1796 }
         r5 = "edit_date";
-        r27 = r11.has(r5);	 Catch:{ all -> 0x1798 }
+        r27 = r11.has(r5);	 Catch:{ all -> 0x1796 }
         r5 = "CHAT_";
-        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1798 }
+        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1796 }
         if (r5 == 0) goto L_0x047c;
     L_0x046e:
         if (r2 == 0) goto L_0x0472;
@@ -2916,7 +2916,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x04a4;
     L_0x047c:
         r5 = "PINNED_";
-        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1798 }
+        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1796 }
         if (r5 == 0) goto L_0x0490;
     L_0x0484:
         if (r1 == 0) goto L_0x0488;
@@ -2934,7 +2934,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x04a4;
     L_0x0490:
         r5 = "CHANNEL_";
-        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1798 }
+        r5 = r9.startsWith(r5);	 Catch:{ all -> 0x1796 }
         r14 = r6;
         if (r5 == 0) goto L_0x049f;
     L_0x0499:
@@ -2949,7 +2949,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11 = 0;
         r26 = 0;
     L_0x04a4:
-        r25 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x1798 }
+        r25 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x1796 }
         if (r25 == 0) goto L_0x04cf;
     L_0x04a8:
         r25 = r14;
@@ -2971,7 +2971,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r31 = r11;
         r25 = r14;
     L_0x04d3:
-        r10 = r9.hashCode();	 Catch:{ all -> 0x1798 }
+        r10 = r9.hashCode();	 Catch:{ all -> 0x1796 }
         switch(r10) {
             case -2100047043: goto L_0x0958;
             case -2091498420: goto L_0x094d;
@@ -3769,13 +3769,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r32 = r7;
         r7 = "AttachSticker";
         switch(r10) {
-            case 0: goto L_0x16be;
-            case 1: goto L_0x16be;
-            case 2: goto L_0x169b;
-            case 3: goto L_0x167c;
-            case 4: goto L_0x165d;
-            case 5: goto L_0x163e;
-            case 6: goto L_0x161e;
+            case 0: goto L_0x16bd;
+            case 1: goto L_0x16bd;
+            case 2: goto L_0x169a;
+            case 3: goto L_0x167b;
+            case 4: goto L_0x165c;
+            case 5: goto L_0x163d;
+            case 6: goto L_0x161d;
             case 7: goto L_0x1603;
             case 8: goto L_0x15e3;
             case 9: goto L_0x15c3;
@@ -3872,30 +3872,30 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x096f:
         r21 = r1;
         r10 = r32;
-        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x1798 }
-        goto L_0x16db;
+        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ all -> 0x1796 }
+        goto L_0x16da;
     L_0x0977:
         r21 = r1;
         r10 = r32;
-        goto L_0x16f2;
+        goto L_0x16f0;
     L_0x097d:
         r7 = "YouHaveNewMessage";
-        r8 = NUM; // 0x7f0e0cad float:1.888162E38 double:1.05316376E-314;
+        r8 = NUM; // 0x7f0e0cd2 float:1.8881694E38 double:1.053163778E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         r8 = "SecretChatName";
-        r10 = NUM; // 0x7f0e09d3 float:1.8880139E38 double:1.053163399E-314;
+        r10 = NUM; // 0x7f0e09e9 float:1.8880183E38 double:1.05316341E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r10);	 Catch:{ all -> 0x044d }
         r21 = r1;
         r25 = r8;
         r10 = r32;
     L_0x0995:
         r1 = 1;
-        goto L_0x16f4;
+        goto L_0x16f2;
     L_0x0998:
         if (r1 == 0) goto L_0x09b2;
     L_0x099a:
         r7 = "NotificationActionPinnedGif";
-        r8 = NUM; // 0x7f0e06df float:1.8878605E38 double:1.0531630257E-314;
+        r8 = NUM; // 0x7f0e06e2 float:1.8878611E38 double:1.053163027E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -3908,7 +3908,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x09b2:
         r7 = "NotificationActionPinnedGifChannel";
-        r8 = NUM; // 0x7f0e06e0 float:1.8878607E38 double:1.053163026E-314;
+        r8 = NUM; // 0x7f0e06e3 float:1.8878613E38 double:1.0531630277E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -3920,7 +3920,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x09df;
     L_0x09c7:
         r7 = "NotificationActionPinnedInvoice";
-        r8 = NUM; // 0x7f0e06e1 float:1.887861E38 double:1.0531630267E-314;
+        r8 = NUM; // 0x7f0e06e4 float:1.8878615E38 double:1.053163028E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -3933,7 +3933,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x09df:
         r7 = "NotificationActionPinnedInvoiceChannel";
-        r8 = NUM; // 0x7f0e06e2 float:1.8878611E38 double:1.053163027E-314;
+        r8 = NUM; // 0x7f0e06e5 float:1.8878617E38 double:1.0531630287E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -3945,7 +3945,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a0c;
     L_0x09f4:
         r7 = "NotificationActionPinnedGameScore";
-        r8 = NUM; // 0x7f0e06d9 float:1.8878593E38 double:1.0531630227E-314;
+        r8 = NUM; // 0x7f0e06dc float:1.88786E38 double:1.053163024E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -3958,7 +3958,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x0a0c:
         r7 = "NotificationActionPinnedGameScoreChannel";
-        r8 = NUM; // 0x7f0e06da float:1.8878595E38 double:1.053163023E-314;
+        r8 = NUM; // 0x7f0e06dd float:1.8878601E38 double:1.0531630247E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -3970,7 +3970,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a38;
     L_0x0a21:
         r7 = "NotificationActionPinnedGame";
-        r8 = NUM; // 0x7f0e06d7 float:1.887859E38 double:1.0531630217E-314;
+        r8 = NUM; // 0x7f0e06da float:1.8878595E38 double:1.053163023E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -3983,7 +3983,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x0a38:
         r7 = "NotificationActionPinnedGameChannel";
-        r8 = NUM; // 0x7f0e06d8 float:1.8878591E38 double:1.053163022E-314;
+        r8 = NUM; // 0x7f0e06db float:1.8878597E38 double:1.0531630237E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -3995,7 +3995,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a63;
     L_0x0a4c:
         r7 = "NotificationActionPinnedGeoLive";
-        r8 = NUM; // 0x7f0e06dd float:1.8878601E38 double:1.0531630247E-314;
+        r8 = NUM; // 0x7f0e06e0 float:1.8878607E38 double:1.053163026E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4008,7 +4008,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x0a63:
         r7 = "NotificationActionPinnedGeoLiveChannel";
-        r8 = NUM; // 0x7f0e06de float:1.8878603E38 double:1.053163025E-314;
+        r8 = NUM; // 0x7f0e06e1 float:1.887861E38 double:1.0531630267E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4020,7 +4020,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a8e;
     L_0x0a77:
         r7 = "NotificationActionPinnedGeo";
-        r8 = NUM; // 0x7f0e06db float:1.8878597E38 double:1.0531630237E-314;
+        r8 = NUM; // 0x7f0e06de float:1.8878603E38 double:1.053163025E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4033,7 +4033,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x0a8e:
         r7 = "NotificationActionPinnedGeoChannel";
-        r8 = NUM; // 0x7f0e06dc float:1.88786E38 double:1.053163024E-314;
+        r8 = NUM; // 0x7f0e06df float:1.8878605E38 double:1.0531630257E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4043,12 +4043,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0a9f:
         r21 = r1;
         r10 = r32;
-        goto L_0x161b;
+        goto L_0x161a;
     L_0x0aa5:
         if (r1 == 0) goto L_0x0ac3;
     L_0x0aa7:
         r7 = "NotificationActionPinnedPoll2";
-        r8 = NUM; // 0x7f0e06e9 float:1.8878625E38 double:1.0531630306E-314;
+        r8 = NUM; // 0x7f0e06ec float:1.8878632E38 double:1.053163032E-314;
         r10 = 3;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4064,7 +4064,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0a9f;
     L_0x0ac3:
         r7 = "NotificationActionPinnedPollChannel2";
-        r8 = NUM; // 0x7f0e06ea float:1.8878628E38 double:1.053163031E-314;
+        r8 = NUM; // 0x7f0e06ed float:1.8878634E38 double:1.0531630326E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4080,7 +4080,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0afb;
     L_0x0ade:
         r8 = "NotificationActionPinnedContact2";
-        r11 = NUM; // 0x7f0e06d3 float:1.887858E38 double:1.05316302E-314;
+        r11 = NUM; // 0x7f0e06d6 float:1.8878587E38 double:1.053163021E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4096,7 +4096,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0afb:
         r7 = "NotificationActionPinnedContactChannel2";
-        r8 = NUM; // 0x7f0e06d4 float:1.8878583E38 double:1.0531630203E-314;
+        r8 = NUM; // 0x7f0e06d7 float:1.887859E38 double:1.0531630217E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4112,7 +4112,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0b2f;
     L_0x0b17:
         r7 = "NotificationActionPinnedVoice";
-        r8 = NUM; // 0x7f0e06f5 float:1.887865E38 double:1.0531630366E-314;
+        r8 = NUM; // 0x7f0e06f8 float:1.8878656E38 double:1.053163038E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4125,7 +4125,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0b2f:
         r7 = "NotificationActionPinnedVoiceChannel";
-        r8 = NUM; // 0x7f0e06f6 float:1.8878652E38 double:1.053163037E-314;
+        r8 = NUM; // 0x7f0e06f9 float:1.8878658E38 double:1.0531630385E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4146,7 +4146,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r8 != 0) goto L_0x0b6f;
     L_0x0b52:
         r8 = "NotificationActionPinnedStickerEmoji";
-        r11 = NUM; // 0x7f0e06ef float:1.8878638E38 double:1.0531630336E-314;
+        r11 = NUM; // 0x7f0e06f2 float:1.8878644E38 double:1.053163035E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4162,7 +4162,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0b6f:
         r7 = "NotificationActionPinnedSticker";
-        r8 = NUM; // 0x7f0e06ed float:1.8878634E38 double:1.0531630326E-314;
+        r8 = NUM; // 0x7f0e06f0 float:1.887864E38 double:1.053163034E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4183,7 +4183,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r7 != 0) goto L_0x0bab;
     L_0x0b93:
         r7 = "NotificationActionPinnedStickerEmojiChannel";
-        r8 = NUM; // 0x7f0e06f0 float:1.887864E38 double:1.053163034E-314;
+        r8 = NUM; // 0x7f0e06f3 float:1.8878646E38 double:1.0531630356E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4196,7 +4196,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0bab:
         r7 = "NotificationActionPinnedStickerChannel";
-        r8 = NUM; // 0x7f0e06ee float:1.8878636E38 double:1.053163033E-314;
+        r8 = NUM; // 0x7f0e06f1 float:1.8878642E38 double:1.0531630346E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4209,7 +4209,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0bda;
     L_0x0bc2:
         r7 = "NotificationActionPinnedFile";
-        r8 = NUM; // 0x7f0e06d5 float:1.8878585E38 double:1.0531630208E-314;
+        r8 = NUM; // 0x7f0e06d8 float:1.8878591E38 double:1.053163022E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4222,7 +4222,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0bda:
         r7 = "NotificationActionPinnedFileChannel";
-        r8 = NUM; // 0x7f0e06d6 float:1.8878587E38 double:1.053163021E-314;
+        r8 = NUM; // 0x7f0e06d9 float:1.8878593E38 double:1.0531630227E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4235,7 +4235,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0bf1:
         r7 = "NotificationActionPinnedRound";
-        r8 = NUM; // 0x7f0e06eb float:1.887863E38 double:1.0531630316E-314;
+        r8 = NUM; // 0x7f0e06ee float:1.8878636E38 double:1.053163033E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4248,7 +4248,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedRoundChannel";
-        r8 = NUM; // 0x7f0e06ec float:1.8878632E38 double:1.053163032E-314;
+        r8 = NUM; // 0x7f0e06ef float:1.8878638E38 double:1.0531630336E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4261,7 +4261,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedVideo";
-        r8 = NUM; // 0x7f0e06f3 float:1.8878646E38 double:1.0531630356E-314;
+        r8 = NUM; // 0x7f0e06f6 float:1.8878652E38 double:1.053163037E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4274,7 +4274,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedVideoChannel";
-        r8 = NUM; // 0x7f0e06f4 float:1.8878648E38 double:1.053163036E-314;
+        r8 = NUM; // 0x7f0e06f7 float:1.8878654E38 double:1.0531630375E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4287,7 +4287,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0c4d:
         r7 = "NotificationActionPinnedPhoto";
-        r8 = NUM; // 0x7f0e06e7 float:1.8878621E38 double:1.0531630296E-314;
+        r8 = NUM; // 0x7f0e06ea float:1.8878628E38 double:1.053163031E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4300,7 +4300,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedPhotoChannel";
-        r8 = NUM; // 0x7f0e06e8 float:1.8878623E38 double:1.05316303E-314;
+        r8 = NUM; // 0x7f0e06eb float:1.887863E38 double:1.0531630316E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4313,7 +4313,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0c7a:
         r7 = "NotificationActionPinnedNoText";
-        r8 = NUM; // 0x7f0e06e5 float:1.8878617E38 double:1.0531630287E-314;
+        r8 = NUM; // 0x7f0e06e8 float:1.8878623E38 double:1.05316303E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4326,7 +4326,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedNoTextChannel";
-        r8 = NUM; // 0x7f0e06e6 float:1.887862E38 double:1.053163029E-314;
+        r8 = NUM; // 0x7f0e06e9 float:1.8878625E38 double:1.0531630306E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4335,13 +4335,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r14);	 Catch:{ all -> 0x044d }
     L_0x0ca2:
         r21 = r1;
-        goto L_0x161b;
+        goto L_0x161a;
     L_0x0ca6:
         r10 = r32;
         if (r1 == 0) goto L_0x0cc6;
     L_0x0caa:
         r8 = "NotificationActionPinnedText";
-        r11 = NUM; // 0x7f0e06f1 float:1.8878642E38 double:1.0531630346E-314;
+        r11 = NUM; // 0x7f0e06f4 float:1.8878648E38 double:1.053163036E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4357,7 +4357,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0ca2;
     L_0x0cc6:
         r7 = "NotificationActionPinnedTextChannel";
-        r8 = NUM; // 0x7f0e06f2 float:1.8878644E38 double:1.053163035E-314;
+        r8 = NUM; // 0x7f0e06f5 float:1.887865E38 double:1.0531630366E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4371,7 +4371,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0cdd:
         r10 = r32;
         r7 = "NotificationGroupAlbum";
-        r8 = NUM; // 0x7f0e06fe float:1.8878668E38 double:1.053163041E-314;
+        r8 = NUM; // 0x7f0e0701 float:1.8878674E38 double:1.0531630425E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4387,7 +4387,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0cf9:
         r10 = r32;
         r8 = "NotificationGroupFew";
-        r11 = NUM; // 0x7f0e06ff float:1.887867E38 double:1.0531630415E-314;
+        r11 = NUM; // 0x7f0e0702 float:1.8878676E38 double:1.053163043E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4408,7 +4408,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d26:
         r10 = r32;
         r8 = "NotificationGroupFew";
-        r11 = NUM; // 0x7f0e06ff float:1.887867E38 double:1.0531630415E-314;
+        r11 = NUM; // 0x7f0e0702 float:1.8878676E38 double:1.053163043E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4429,7 +4429,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d53:
         r10 = r32;
         r11 = "NotificationGroupForwardedFew";
-        r14 = NUM; // 0x7f0e0700 float:1.8878672E38 double:1.053163042E-314;
+        r14 = NUM; // 0x7f0e0703 float:1.8878678E38 double:1.0531630435E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r18 = 0;
@@ -4449,7 +4449,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d81:
         r10 = r32;
         r7 = "NotificationGroupAddSelfMega";
-        r8 = NUM; // 0x7f0e06fd float:1.8878666E38 double:1.0531630405E-314;
+        r8 = NUM; // 0x7f0e0700 float:1.8878672E38 double:1.053163042E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4463,7 +4463,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d9b:
         r10 = r32;
         r7 = "NotificationGroupAddSelf";
-        r8 = NUM; // 0x7f0e06fc float:1.8878664E38 double:1.05316304E-314;
+        r8 = NUM; // 0x7f0e06ff float:1.887867E38 double:1.0531630415E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4477,7 +4477,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0db5:
         r10 = r32;
         r7 = "NotificationGroupLeftMember";
-        r8 = NUM; // 0x7f0e0703 float:1.8878678E38 double:1.0531630435E-314;
+        r8 = NUM; // 0x7f0e0706 float:1.8878684E38 double:1.053163045E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4491,7 +4491,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0dcf:
         r10 = r32;
         r7 = "NotificationGroupKickYou";
-        r8 = NUM; // 0x7f0e0702 float:1.8878676E38 double:1.053163043E-314;
+        r8 = NUM; // 0x7f0e0705 float:1.8878682E38 double:1.0531630445E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4505,7 +4505,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0de9:
         r10 = r32;
         r7 = "NotificationGroupKickMember";
-        r8 = NUM; // 0x7f0e0701 float:1.8878674E38 double:1.0531630425E-314;
+        r8 = NUM; // 0x7f0e0704 float:1.887868E38 double:1.053163044E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4519,7 +4519,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e03:
         r10 = r32;
         r8 = "NotificationGroupAddMember";
-        r11 = NUM; // 0x7f0e06fb float:1.8878662E38 double:1.0531630395E-314;
+        r11 = NUM; // 0x7f0e06fe float:1.8878668E38 double:1.053163041E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4536,7 +4536,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e22:
         r10 = r32;
         r7 = "NotificationEditedGroupPhoto";
-        r8 = NUM; // 0x7f0e06fa float:1.887866E38 double:1.053163039E-314;
+        r8 = NUM; // 0x7f0e06fd float:1.8878666E38 double:1.0531630405E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4550,7 +4550,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e3c:
         r10 = r32;
         r7 = "NotificationEditedGroupName";
-        r8 = NUM; // 0x7f0e06f9 float:1.8878658E38 double:1.0531630385E-314;
+        r8 = NUM; // 0x7f0e06fc float:1.8878664E38 double:1.05316304E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4564,7 +4564,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e56:
         r10 = r32;
         r7 = "NotificationInvitedToGroup";
-        r8 = NUM; // 0x7f0e0708 float:1.8878688E38 double:1.053163046E-314;
+        r8 = NUM; // 0x7f0e070b float:1.8878694E38 double:1.0531630474E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4578,7 +4578,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e70:
         r10 = r32;
         r8 = "NotificationMessageGroupInvoice";
-        r11 = NUM; // 0x7f0e0719 float:1.8878723E38 double:1.0531630543E-314;
+        r11 = NUM; // 0x7f0e071c float:1.8878729E38 double:1.053163056E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4592,13 +4592,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "PaymentInvoice";
-        r11 = NUM; // 0x7f0e087f float:1.8879449E38 double:1.053163231E-314;
+        r11 = NUM; // 0x7f0e0882 float:1.8879455E38 double:1.0531632327E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x0fbe;
     L_0x0e98:
         r10 = r32;
         r8 = "NotificationMessageGroupGameScored";
-        r11 = NUM; // 0x7f0e0717 float:1.8878719E38 double:1.0531630534E-314;
+        r11 = NUM; // 0x7f0e071a float:1.8878725E38 double:1.053163055E-314;
         r14 = 4;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r18 = 0;
@@ -4618,7 +4618,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0ebf:
         r10 = r32;
         r8 = "NotificationMessageGroupGame";
-        r11 = NUM; // 0x7f0e0716 float:1.8878717E38 double:1.053163053E-314;
+        r11 = NUM; // 0x7f0e0719 float:1.8878723E38 double:1.0531630543E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4632,46 +4632,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "AttachGame";
-        r11 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
+        r11 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x0fbe;
     L_0x0ee7:
         r10 = r32;
         r7 = "NotificationMessageGroupGif";
-        r8 = NUM; // 0x7f0e0718 float:1.887872E38 double:1.053163054E-314;
-        r11 = 2;
-        r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
-        r14 = 0;
-        r16 = r15[r14];	 Catch:{ all -> 0x044d }
-        r11[r14] = r16;	 Catch:{ all -> 0x044d }
-        r14 = 1;
-        r15 = r15[r14];	 Catch:{ all -> 0x044d }
-        r11[r14] = r15;	 Catch:{ all -> 0x044d }
-        r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
-        r8 = "AttachGif";
-        r11 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
-        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
-        goto L_0x0fbe;
-    L_0x0f0a:
-        r10 = r32;
-        r7 = "NotificationMessageGroupLiveLocation";
-        r8 = NUM; // 0x7f0e071a float:1.8878725E38 double:1.053163055E-314;
-        r11 = 2;
-        r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
-        r14 = 0;
-        r16 = r15[r14];	 Catch:{ all -> 0x044d }
-        r11[r14] = r16;	 Catch:{ all -> 0x044d }
-        r14 = 1;
-        r15 = r15[r14];	 Catch:{ all -> 0x044d }
-        r11[r14] = r15;	 Catch:{ all -> 0x044d }
-        r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
-        r8 = "AttachLiveLocation";
-        r11 = NUM; // 0x7f0e0154 float:1.8875727E38 double:1.0531623246E-314;
-        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
-        goto L_0x0fbe;
-    L_0x0f2d:
-        r10 = r32;
-        r7 = "NotificationMessageGroupMap";
         r8 = NUM; // 0x7f0e071b float:1.8878727E38 double:1.0531630553E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
@@ -4682,14 +4648,48 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r15 = r15[r14];	 Catch:{ all -> 0x044d }
         r11[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
+        r8 = "AttachGif";
+        r11 = NUM; // 0x7f0e0150 float:1.887572E38 double:1.0531623226E-314;
+        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
+        goto L_0x0fbe;
+    L_0x0f0a:
+        r10 = r32;
+        r7 = "NotificationMessageGroupLiveLocation";
+        r8 = NUM; // 0x7f0e071d float:1.887873E38 double:1.0531630563E-314;
+        r11 = 2;
+        r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
+        r14 = 0;
+        r16 = r15[r14];	 Catch:{ all -> 0x044d }
+        r11[r14] = r16;	 Catch:{ all -> 0x044d }
+        r14 = 1;
+        r15 = r15[r14];	 Catch:{ all -> 0x044d }
+        r11[r14] = r15;	 Catch:{ all -> 0x044d }
+        r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
+        r8 = "AttachLiveLocation";
+        r11 = NUM; // 0x7f0e0155 float:1.887573E38 double:1.053162325E-314;
+        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
+        goto L_0x0fbe;
+    L_0x0f2d:
+        r10 = r32;
+        r7 = "NotificationMessageGroupMap";
+        r8 = NUM; // 0x7f0e071e float:1.8878733E38 double:1.053163057E-314;
+        r11 = 2;
+        r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
+        r14 = 0;
+        r16 = r15[r14];	 Catch:{ all -> 0x044d }
+        r11[r14] = r16;	 Catch:{ all -> 0x044d }
+        r14 = 1;
+        r15 = r15[r14];	 Catch:{ all -> 0x044d }
+        r11[r14] = r15;	 Catch:{ all -> 0x044d }
+        r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
         r8 = "AttachLocation";
-        r11 = NUM; // 0x7f0e0156 float:1.8875731E38 double:1.0531623256E-314;
+        r11 = NUM; // 0x7f0e0157 float:1.8875733E38 double:1.053162326E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x0fbe;
     L_0x0f4f:
         r10 = r32;
         r8 = "NotificationMessageGroupPoll2";
-        r11 = NUM; // 0x7f0e071f float:1.8878735E38 double:1.0531630573E-314;
+        r11 = NUM; // 0x7f0e0722 float:1.8878741E38 double:1.053163059E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4703,13 +4703,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "Poll";
-        r11 = NUM; // 0x7f0e08ee float:1.8879674E38 double:1.053163286E-314;
+        r11 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x0fbe;
     L_0x0var_:
         r10 = r32;
         r8 = "NotificationMessageGroupContact2";
-        r11 = NUM; // 0x7f0e0714 float:1.8878713E38 double:1.053163052E-314;
+        r11 = NUM; // 0x7f0e0717 float:1.8878719E38 double:1.0531630534E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4723,13 +4723,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "AttachContact";
-        r11 = NUM; // 0x7f0e014a float:1.8875707E38 double:1.0531623197E-314;
+        r11 = NUM; // 0x7f0e014b float:1.8875709E38 double:1.05316232E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x0fbe;
     L_0x0f9d:
         r10 = r32;
         r7 = "NotificationMessageGroupAudio";
-        r8 = NUM; // 0x7f0e0713 float:1.887871E38 double:1.0531630514E-314;
+        r8 = NUM; // 0x7f0e0716 float:1.8878717E38 double:1.053163053E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4740,12 +4740,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r7, r8, r11);	 Catch:{ all -> 0x044d }
         r8 = "AttachAudio";
-        r11 = NUM; // 0x7f0e0148 float:1.8875703E38 double:1.0531623187E-314;
+        r11 = NUM; // 0x7f0e0149 float:1.8875705E38 double:1.053162319E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
     L_0x0fbe:
         r21 = r1;
         r16 = r8;
-        goto L_0x16bc;
+        goto L_0x16bb;
     L_0x0fc4:
         r10 = r32;
         r14 = r15.length;	 Catch:{ all -> 0x044d }
@@ -4769,22 +4769,22 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r18 = r15[r17];	 Catch:{ all -> 0x044d }
         r14[r17] = r18;	 Catch:{ all -> 0x044d }
         r21 = r1;
-        r1 = NUM; // 0x7f0e0722 float:1.8878741E38 double:1.053163059E-314;
+        r1 = NUM; // 0x7f0e0725 float:1.8878747E38 double:1.0531630603E-314;
         r1 = org.telegram.messenger.LocaleController.formatString(r8, r1, r14);	 Catch:{ all -> 0x044d }
         r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x044d }
         r8.<init>();	 Catch:{ all -> 0x044d }
         r14 = r15[r17];	 Catch:{ all -> 0x044d }
         r8.append(r14);	 Catch:{ all -> 0x044d }
         r8.append(r11);	 Catch:{ all -> 0x044d }
-        r11 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r11 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r11);	 Catch:{ all -> 0x044d }
         r8.append(r7);	 Catch:{ all -> 0x044d }
         r7 = r8.toString();	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x100f:
         r21 = r1;
         r1 = "NotificationMessageGroupSticker";
-        r8 = NUM; // 0x7f0e0721 float:1.887874E38 double:1.0531630583E-314;
+        r8 = NUM; // 0x7f0e0724 float:1.8878745E38 double:1.05316306E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r16 = 0;
@@ -4799,16 +4799,16 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r16];	 Catch:{ all -> 0x044d }
         r8.append(r14);	 Catch:{ all -> 0x044d }
         r8.append(r11);	 Catch:{ all -> 0x044d }
-        r11 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r11 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r11);	 Catch:{ all -> 0x044d }
         r8.append(r7);	 Catch:{ all -> 0x044d }
         r7 = r8.toString();	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1046:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupDocument";
-        r7 = NUM; // 0x7f0e0715 float:1.8878715E38 double:1.0531630524E-314;
+        r7 = NUM; // 0x7f0e0718 float:1.887872E38 double:1.053163054E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4819,14 +4819,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachDocument";
-        r8 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r8 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x106b:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupRound";
-        r7 = NUM; // 0x7f0e0720 float:1.8878737E38 double:1.053163058E-314;
+        r7 = NUM; // 0x7f0e0723 float:1.8878743E38 double:1.0531630593E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4837,14 +4837,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachRound";
-        r8 = NUM; // 0x7f0e015c float:1.8875743E38 double:1.0531623286E-314;
+        r8 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1090:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupVideo";
-        r7 = NUM; // 0x7f0e0724 float:1.8878745E38 double:1.05316306E-314;
+        r7 = NUM; // 0x7f0e0727 float:1.8878751E38 double:1.0531630613E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4855,14 +4855,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachVideo";
-        r8 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r8 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x10b5:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupPhoto";
-        r7 = NUM; // 0x7f0e071e float:1.8878733E38 double:1.053163057E-314;
+        r7 = NUM; // 0x7f0e0721 float:1.887874E38 double:1.0531630583E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4873,14 +4873,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachPhoto";
-        r8 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r8 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x10da:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupNoText";
-        r7 = NUM; // 0x7f0e071d float:1.887873E38 double:1.0531630563E-314;
+        r7 = NUM; // 0x7f0e0720 float:1.8878737E38 double:1.053163058E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4891,14 +4891,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "Message";
-        r8 = NUM; // 0x7f0e063d float:1.8878277E38 double:1.0531629457E-314;
+        r8 = NUM; // 0x7f0e063e float:1.8878279E38 double:1.053162946E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x10ff:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupText";
-        r8 = NUM; // 0x7f0e0723 float:1.8878743E38 double:1.0531630593E-314;
+        r8 = NUM; // 0x7f0e0726 float:1.887875E38 double:1.053163061E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4912,12 +4912,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r8, r7);	 Catch:{ all -> 0x044d }
         r7 = r15[r11];	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1122:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageAlbum";
-        r7 = NUM; // 0x7f0e0261 float:1.8876273E38 double:1.0531624575E-314;
+        r7 = NUM; // 0x7f0e0262 float:1.8876275E38 double:1.053162458E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -4940,7 +4940,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11 = r11.intValue();	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r11);	 Catch:{ all -> 0x044d }
         r1[r8] = r7;	 Catch:{ all -> 0x044d }
-        r7 = NUM; // 0x7f0e0265 float:1.887628E38 double:1.0531624595E-314;
+        r7 = NUM; // 0x7f0e0266 float:1.8876283E38 double:1.05316246E-314;
         r1 = org.telegram.messenger.LocaleController.formatString(r14, r7, r1);	 Catch:{ all -> 0x044d }
         goto L_0x13b3;
     L_0x1161:
@@ -4958,7 +4958,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11 = r11.intValue();	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r11);	 Catch:{ all -> 0x044d }
         r1[r8] = r7;	 Catch:{ all -> 0x044d }
-        r7 = NUM; // 0x7f0e0265 float:1.887628E38 double:1.0531624595E-314;
+        r7 = NUM; // 0x7f0e0266 float:1.8876283E38 double:1.05316246E-314;
         r1 = org.telegram.messenger.LocaleController.formatString(r14, r7, r1);	 Catch:{ all -> 0x044d }
         goto L_0x13b3;
     L_0x1189:
@@ -4977,14 +4977,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r11);	 Catch:{ all -> 0x044d }
         r7 = r7.toLowerCase();	 Catch:{ all -> 0x044d }
         r1[r8] = r7;	 Catch:{ all -> 0x044d }
-        r7 = NUM; // 0x7f0e0265 float:1.887628E38 double:1.0531624595E-314;
+        r7 = NUM; // 0x7f0e0266 float:1.8876283E38 double:1.05316246E-314;
         r1 = org.telegram.messenger.LocaleController.formatString(r14, r7, r1);	 Catch:{ all -> 0x044d }
         goto L_0x13b3;
     L_0x11b5:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGame";
-        r7 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
+        r7 = NUM; // 0x7f0e0713 float:1.887871E38 double:1.0531630514E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -4992,28 +4992,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachGame";
-        r8 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
+        r8 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x11d5:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageGIF";
-        r7 = NUM; // 0x7f0e0266 float:1.8876283E38 double:1.05316246E-314;
-        r8 = 1;
-        r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
-        r8 = 0;
-        r14 = r15[r8];	 Catch:{ all -> 0x044d }
-        r11[r8] = r14;	 Catch:{ all -> 0x044d }
-        r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
-        r7 = "AttachGif";
-        r8 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
-        r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x11f5:
-        r21 = r1;
-        r10 = r32;
-        r1 = "ChannelMessageLiveLocation";
         r7 = NUM; // 0x7f0e0267 float:1.8876285E38 double:1.0531624605E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
@@ -5021,14 +5006,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r8];	 Catch:{ all -> 0x044d }
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
-        r7 = "AttachLiveLocation";
-        r8 = NUM; // 0x7f0e0154 float:1.8875727E38 double:1.0531623246E-314;
+        r7 = "AttachGif";
+        r8 = NUM; // 0x7f0e0150 float:1.887572E38 double:1.0531623226E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x1215:
+        goto L_0x16b8;
+    L_0x11f5:
         r21 = r1;
         r10 = r32;
-        r1 = "ChannelMessageMap";
+        r1 = "ChannelMessageLiveLocation";
         r7 = NUM; // 0x7f0e0268 float:1.8876287E38 double:1.053162461E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
@@ -5036,15 +5021,30 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r8];	 Catch:{ all -> 0x044d }
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
-        r7 = "AttachLocation";
-        r8 = NUM; // 0x7f0e0156 float:1.8875731E38 double:1.0531623256E-314;
+        r7 = "AttachLiveLocation";
+        r8 = NUM; // 0x7f0e0155 float:1.887573E38 double:1.053162325E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
+    L_0x1215:
+        r21 = r1;
+        r10 = r32;
+        r1 = "ChannelMessageMap";
+        r7 = NUM; // 0x7f0e0269 float:1.8876289E38 double:1.0531624615E-314;
+        r8 = 1;
+        r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
+        r8 = 0;
+        r14 = r15[r8];	 Catch:{ all -> 0x044d }
+        r11[r8] = r14;	 Catch:{ all -> 0x044d }
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
+        r7 = "AttachLocation";
+        r8 = NUM; // 0x7f0e0157 float:1.8875733E38 double:1.053162326E-314;
+        r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
+        goto L_0x16b8;
     L_0x1235:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessagePoll2";
-        r7 = NUM; // 0x7f0e026c float:1.8876295E38 double:1.053162463E-314;
+        r7 = NUM; // 0x7f0e026d float:1.8876297E38 double:1.0531624634E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5055,14 +5055,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "Poll";
-        r8 = NUM; // 0x7f0e08ee float:1.8879674E38 double:1.053163286E-314;
+        r8 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x125a:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageContact2";
-        r7 = NUM; // 0x7f0e0263 float:1.8876277E38 double:1.0531624585E-314;
+        r7 = NUM; // 0x7f0e0264 float:1.8876279E38 double:1.053162459E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5073,14 +5073,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachContact";
-        r8 = NUM; // 0x7f0e014a float:1.8875707E38 double:1.0531623197E-314;
+        r8 = NUM; // 0x7f0e014b float:1.8875709E38 double:1.05316232E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x127f:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageAudio";
-        r7 = NUM; // 0x7f0e0262 float:1.8876275E38 double:1.053162458E-314;
+        r7 = NUM; // 0x7f0e0263 float:1.8876277E38 double:1.0531624585E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5088,9 +5088,9 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachAudio";
-        r8 = NUM; // 0x7f0e0148 float:1.8875703E38 double:1.0531623187E-314;
+        r8 = NUM; // 0x7f0e0149 float:1.8875705E38 double:1.053162319E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x129f:
         r21 = r1;
         r10 = r32;
@@ -5103,7 +5103,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 != 0) goto L_0x12e4;
     L_0x12af:
         r1 = "ChannelMessageStickerEmoji";
-        r8 = NUM; // 0x7f0e026f float:1.8876301E38 double:1.0531624644E-314;
+        r8 = NUM; // 0x7f0e0270 float:1.8876303E38 double:1.053162465E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r16 = 0;
@@ -5118,28 +5118,28 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r16];	 Catch:{ all -> 0x044d }
         r8.append(r14);	 Catch:{ all -> 0x044d }
         r8.append(r11);	 Catch:{ all -> 0x044d }
-        r11 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r11 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r11);	 Catch:{ all -> 0x044d }
         r8.append(r7);	 Catch:{ all -> 0x044d }
         r7 = r8.toString();	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x12e4:
         r1 = "ChannelMessageSticker";
-        r8 = NUM; // 0x7f0e026e float:1.88763E38 double:1.053162464E-314;
+        r8 = NUM; // 0x7f0e026f float:1.8876301E38 double:1.0531624644E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
         r15 = r15[r11];	 Catch:{ all -> 0x044d }
         r14[r11] = r15;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r8, r14);	 Catch:{ all -> 0x044d }
-        r8 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r8 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x12fe:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageDocument";
-        r7 = NUM; // 0x7f0e0264 float:1.8876279E38 double:1.053162459E-314;
+        r7 = NUM; // 0x7f0e0265 float:1.887628E38 double:1.0531624595E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5147,14 +5147,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachDocument";
-        r8 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r8 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x131e:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageRound";
-        r7 = NUM; // 0x7f0e026d float:1.8876297E38 double:1.0531624634E-314;
+        r7 = NUM; // 0x7f0e026e float:1.88763E38 double:1.053162464E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5162,14 +5162,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachRound";
-        r8 = NUM; // 0x7f0e015c float:1.8875743E38 double:1.0531623286E-314;
+        r8 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x133e:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageVideo";
-        r7 = NUM; // 0x7f0e0270 float:1.8876303E38 double:1.053162465E-314;
+        r7 = NUM; // 0x7f0e0271 float:1.8876305E38 double:1.0531624654E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5177,14 +5177,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachVideo";
-        r8 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r8 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x135e:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessagePhoto";
-        r7 = NUM; // 0x7f0e026b float:1.8876293E38 double:1.0531624625E-314;
+        r7 = NUM; // 0x7f0e026c float:1.8876295E38 double:1.053162463E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5192,14 +5192,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachPhoto";
-        r8 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r8 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x137e:
         r21 = r1;
         r10 = r32;
         r1 = "ChannelMessageNoText";
-        r7 = NUM; // 0x7f0e026a float:1.887629E38 double:1.053162462E-314;
+        r7 = NUM; // 0x7f0e026b float:1.8876293E38 double:1.0531624625E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5207,14 +5207,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "Message";
-        r8 = NUM; // 0x7f0e063d float:1.8878277E38 double:1.0531629457E-314;
+        r8 = NUM; // 0x7f0e063e float:1.8878279E38 double:1.053162946E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x139e:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageAlbum";
-        r7 = NUM; // 0x7f0e070a float:1.8878692E38 double:1.053163047E-314;
+        r7 = NUM; // 0x7f0e070d float:1.8878699E38 double:1.0531630484E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5228,7 +5228,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageFew";
-        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r7 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5247,7 +5247,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageFew";
-        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r7 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5266,7 +5266,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageForwardFew";
-        r7 = NUM; // 0x7f0e070f float:1.8878703E38 double:1.0531630494E-314;
+        r7 = NUM; // 0x7f0e0712 float:1.8878709E38 double:1.053163051E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -5284,7 +5284,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageInvoice";
-        r7 = NUM; // 0x7f0e0725 float:1.8878747E38 double:1.0531630603E-314;
+        r7 = NUM; // 0x7f0e0728 float:1.8878753E38 double:1.053163062E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5295,14 +5295,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "PaymentInvoice";
-        r8 = NUM; // 0x7f0e087f float:1.8879449E38 double:1.053163231E-314;
+        r8 = NUM; // 0x7f0e0882 float:1.8879455E38 double:1.0531632327E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1454:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGameScored";
-        r8 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
+        r8 = NUM; // 0x7f0e0714 float:1.8878713E38 double:1.053163052E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5315,12 +5315,12 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r11];	 Catch:{ all -> 0x044d }
         r7[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r8, r7);	 Catch:{ all -> 0x044d }
-        goto L_0x161a;
+        goto L_0x1619;
     L_0x1475:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGame";
-        r7 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
+        r7 = NUM; // 0x7f0e0713 float:1.887871E38 double:1.0531630514E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5331,14 +5331,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachGame";
-        r8 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
+        r8 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x149a:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGif";
-        r7 = NUM; // 0x7f0e0712 float:1.8878709E38 double:1.053163051E-314;
+        r7 = NUM; // 0x7f0e0715 float:1.8878715E38 double:1.0531630524E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5346,14 +5346,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachGif";
-        r8 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
+        r8 = NUM; // 0x7f0e0150 float:1.887572E38 double:1.0531623226E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x14ba:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageLiveLocation";
-        r7 = NUM; // 0x7f0e0726 float:1.887875E38 double:1.053163061E-314;
+        r7 = NUM; // 0x7f0e0729 float:1.8878755E38 double:1.0531630623E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5361,14 +5361,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachLiveLocation";
-        r8 = NUM; // 0x7f0e0154 float:1.8875727E38 double:1.0531623246E-314;
+        r8 = NUM; // 0x7f0e0155 float:1.887573E38 double:1.053162325E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x14da:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageMap";
-        r7 = NUM; // 0x7f0e0727 float:1.8878751E38 double:1.0531630613E-314;
+        r7 = NUM; // 0x7f0e072a float:1.8878757E38 double:1.0531630627E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5376,14 +5376,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachLocation";
-        r8 = NUM; // 0x7f0e0156 float:1.8875731E38 double:1.0531623256E-314;
+        r8 = NUM; // 0x7f0e0157 float:1.8875733E38 double:1.053162326E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x14fa:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessagePoll2";
-        r7 = NUM; // 0x7f0e072b float:1.887876E38 double:1.053163063E-314;
+        r7 = NUM; // 0x7f0e072e float:1.8878765E38 double:1.0531630647E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5394,14 +5394,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "Poll";
-        r8 = NUM; // 0x7f0e08ee float:1.8879674E38 double:1.053163286E-314;
+        r8 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x151f:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageContact2";
-        r7 = NUM; // 0x7f0e070c float:1.8878696E38 double:1.053163048E-314;
+        r7 = NUM; // 0x7f0e070f float:1.8878703E38 double:1.0531630494E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5412,14 +5412,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "AttachContact";
-        r8 = NUM; // 0x7f0e014a float:1.8875707E38 double:1.0531623197E-314;
+        r8 = NUM; // 0x7f0e014b float:1.8875709E38 double:1.05316232E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1544:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageAudio";
-        r7 = NUM; // 0x7f0e070b float:1.8878694E38 double:1.0531630474E-314;
+        r7 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5427,9 +5427,9 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachAudio";
-        r8 = NUM; // 0x7f0e0148 float:1.8875703E38 double:1.0531623187E-314;
+        r8 = NUM; // 0x7f0e0149 float:1.8875705E38 double:1.053162319E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1564:
         r21 = r1;
         r10 = r32;
@@ -5442,7 +5442,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 != 0) goto L_0x15a9;
     L_0x1574:
         r1 = "NotificationMessageStickerEmoji";
-        r8 = NUM; // 0x7f0e0732 float:1.8878774E38 double:1.0531630667E-314;
+        r8 = NUM; // 0x7f0e0735 float:1.887878E38 double:1.053163068E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r16 = 0;
@@ -5457,28 +5457,28 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r16];	 Catch:{ all -> 0x044d }
         r8.append(r14);	 Catch:{ all -> 0x044d }
         r8.append(r11);	 Catch:{ all -> 0x044d }
-        r11 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r11 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r11);	 Catch:{ all -> 0x044d }
         r8.append(r7);	 Catch:{ all -> 0x044d }
         r7 = r8.toString();	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x15a9:
         r1 = "NotificationMessageSticker";
-        r8 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r8 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
         r15 = r15[r11];	 Catch:{ all -> 0x044d }
         r14[r11] = r15;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r8, r14);	 Catch:{ all -> 0x044d }
-        r8 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
+        r8 = NUM; // 0x7f0e015e float:1.8875747E38 double:1.0531623296E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x15c3:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageDocument";
-        r7 = NUM; // 0x7f0e070d float:1.8878699E38 double:1.0531630484E-314;
+        r7 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5486,14 +5486,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachDocument";
-        r8 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r8 = NUM; // 0x7f0e014e float:1.8875715E38 double:1.0531623216E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x15e3:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageRound";
-        r7 = NUM; // 0x7f0e072c float:1.8878761E38 double:1.0531630637E-314;
+        r7 = NUM; // 0x7f0e072f float:1.8878767E38 double:1.053163065E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5501,9 +5501,9 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachRound";
-        r8 = NUM; // 0x7f0e015c float:1.8875743E38 double:1.0531623286E-314;
+        r8 = NUM; // 0x7f0e015d float:1.8875745E38 double:1.053162329E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
+        goto L_0x16b8;
     L_0x1603:
         r21 = r1;
         r10 = r32;
@@ -5514,16 +5514,16 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8 = 0;
         r11 = r15[r8];	 Catch:{ all -> 0x044d }
         r1 = r1.replace(r7, r11);	 Catch:{ all -> 0x044d }
-    L_0x161a:
+    L_0x1619:
         r7 = r1;
-    L_0x161b:
+    L_0x161a:
         r1 = 0;
-        goto L_0x16f4;
-    L_0x161e:
+        goto L_0x16f2;
+    L_0x161d:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageSDVideo";
-        r7 = NUM; // 0x7f0e072e float:1.8878765E38 double:1.0531630647E-314;
+        r7 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5531,14 +5531,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachDestructingVideo";
-        r8 = NUM; // 0x7f0e014c float:1.887571E38 double:1.0531623207E-314;
+        r8 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x163e:
+        goto L_0x16b8;
+    L_0x163d:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageVideo";
-        r7 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
+        r7 = NUM; // 0x7f0e0737 float:1.8878784E38 double:1.053163069E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5546,14 +5546,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachVideo";
-        r8 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r8 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x165d:
+        goto L_0x16b8;
+    L_0x165c:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageSDPhoto";
-        r7 = NUM; // 0x7f0e072d float:1.8878763E38 double:1.053163064E-314;
+        r7 = NUM; // 0x7f0e0730 float:1.887877E38 double:1.0531630657E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5561,14 +5561,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachDestructingPhoto";
-        r8 = NUM; // 0x7f0e014b float:1.8875709E38 double:1.05316232E-314;
+        r8 = NUM; // 0x7f0e014c float:1.887571E38 double:1.0531623207E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x167c:
+        goto L_0x16b8;
+    L_0x167b:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessagePhoto";
-        r7 = NUM; // 0x7f0e072a float:1.8878757E38 double:1.0531630627E-314;
+        r7 = NUM; // 0x7f0e072d float:1.8878763E38 double:1.053163064E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5576,14 +5576,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "AttachPhoto";
-        r8 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r8 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x169b:
+        goto L_0x16b8;
+    L_0x169a:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageNoText";
-        r7 = NUM; // 0x7f0e0729 float:1.8878755E38 double:1.0531630623E-314;
+        r7 = NUM; // 0x7f0e072c float:1.8878761E38 double:1.0531630637E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5591,19 +5591,19 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r11[r8] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11);	 Catch:{ all -> 0x044d }
         r7 = "Message";
-        r8 = NUM; // 0x7f0e063d float:1.8878277E38 double:1.0531629457E-314;
+        r8 = NUM; // 0x7f0e063e float:1.8878279E38 double:1.053162946E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-    L_0x16b9:
+    L_0x16b8:
         r16 = r7;
         r7 = r1;
-    L_0x16bc:
+    L_0x16bb:
         r1 = 0;
-        goto L_0x16f6;
-    L_0x16be:
+        goto L_0x16f4;
+    L_0x16bd:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageText";
-        r7 = NUM; // 0x7f0e0733 float:1.8878776E38 double:1.053163067E-314;
+        r7 = NUM; // 0x7f0e0736 float:1.8878782E38 double:1.0531630687E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5614,10 +5614,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = r15[r11];	 Catch:{ all -> 0x044d }
-        goto L_0x16b9;
-    L_0x16db:
-        if (r1 == 0) goto L_0x16f2;
-    L_0x16dd:
+        goto L_0x16b8;
+    L_0x16da:
+        if (r1 == 0) goto L_0x16f0;
+    L_0x16dc:
         r1 = new java.lang.StringBuilder;	 Catch:{ all -> 0x044d }
         r1.<init>();	 Catch:{ all -> 0x044d }
         r7 = "unhandled loc_key = ";
@@ -5625,92 +5625,92 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r1.append(r9);	 Catch:{ all -> 0x044d }
         r1 = r1.toString();	 Catch:{ all -> 0x044d }
         org.telegram.messenger.FileLog.w(r1);	 Catch:{ all -> 0x044d }
-    L_0x16f2:
+    L_0x16f0:
         r1 = 0;
         r7 = 0;
-    L_0x16f4:
+    L_0x16f2:
         r16 = 0;
+    L_0x16f4:
+        if (r7 == 0) goto L_0x1793;
     L_0x16f6:
-        if (r7 == 0) goto L_0x1795;
-    L_0x16f8:
-        r8 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ all -> 0x1798 }
-        r8.<init>();	 Catch:{ all -> 0x1798 }
-        r8.id = r10;	 Catch:{ all -> 0x1798 }
-        r8.random_id = r3;	 Catch:{ all -> 0x1798 }
-        if (r16 == 0) goto L_0x1706;
-    L_0x1703:
+        r8 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ all -> 0x1796 }
+        r8.<init>();	 Catch:{ all -> 0x1796 }
+        r8.id = r10;	 Catch:{ all -> 0x1796 }
+        r8.random_id = r3;	 Catch:{ all -> 0x1796 }
+        if (r16 == 0) goto L_0x1704;
+    L_0x1701:
         r3 = r16;
-        goto L_0x1707;
-    L_0x1706:
+        goto L_0x1705;
+    L_0x1704:
         r3 = r7;
-    L_0x1707:
-        r8.message = r3;	 Catch:{ all -> 0x1798 }
+    L_0x1705:
+        r8.message = r3;	 Catch:{ all -> 0x1796 }
         r3 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r3 = r37 / r3;
-        r4 = (int) r3;	 Catch:{ all -> 0x1798 }
-        r8.date = r4;	 Catch:{ all -> 0x1798 }
-        if (r5 == 0) goto L_0x1719;
-    L_0x1712:
+        r4 = (int) r3;	 Catch:{ all -> 0x1796 }
+        r8.date = r4;	 Catch:{ all -> 0x1796 }
+        if (r5 == 0) goto L_0x1717;
+    L_0x1710:
         r3 = new org.telegram.tgnet.TLRPC$TL_messageActionPinMessage;	 Catch:{ all -> 0x044d }
         r3.<init>();	 Catch:{ all -> 0x044d }
         r8.action = r3;	 Catch:{ all -> 0x044d }
+    L_0x1717:
+        if (r6 == 0) goto L_0x1720;
     L_0x1719:
-        if (r6 == 0) goto L_0x1722;
-    L_0x171b:
         r3 = r8.flags;	 Catch:{ all -> 0x044d }
         r4 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r3 = r3 | r4;
         r8.flags = r3;	 Catch:{ all -> 0x044d }
-    L_0x1722:
-        r8.dialog_id = r12;	 Catch:{ all -> 0x1798 }
-        if (r2 == 0) goto L_0x1732;
-    L_0x1726:
+    L_0x1720:
+        r8.dialog_id = r12;	 Catch:{ all -> 0x1796 }
+        if (r2 == 0) goto L_0x1730;
+    L_0x1724:
         r3 = new org.telegram.tgnet.TLRPC$TL_peerChannel;	 Catch:{ all -> 0x044d }
         r3.<init>();	 Catch:{ all -> 0x044d }
         r8.to_id = r3;	 Catch:{ all -> 0x044d }
         r3 = r8.to_id;	 Catch:{ all -> 0x044d }
         r3.channel_id = r2;	 Catch:{ all -> 0x044d }
-        goto L_0x174f;
+        goto L_0x174d;
+    L_0x1730:
+        if (r22 == 0) goto L_0x1740;
     L_0x1732:
-        if (r22 == 0) goto L_0x1742;
-    L_0x1734:
         r2 = new org.telegram.tgnet.TLRPC$TL_peerChat;	 Catch:{ all -> 0x044d }
         r2.<init>();	 Catch:{ all -> 0x044d }
         r8.to_id = r2;	 Catch:{ all -> 0x044d }
         r2 = r8.to_id;	 Catch:{ all -> 0x044d }
         r3 = r22;
         r2.chat_id = r3;	 Catch:{ all -> 0x044d }
-        goto L_0x174f;
-    L_0x1742:
-        r2 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ all -> 0x1798 }
-        r2.<init>();	 Catch:{ all -> 0x1798 }
-        r8.to_id = r2;	 Catch:{ all -> 0x1798 }
-        r2 = r8.to_id;	 Catch:{ all -> 0x1798 }
+        goto L_0x174d;
+    L_0x1740:
+        r2 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ all -> 0x1796 }
+        r2.<init>();	 Catch:{ all -> 0x1796 }
+        r8.to_id = r2;	 Catch:{ all -> 0x1796 }
+        r2 = r8.to_id;	 Catch:{ all -> 0x1796 }
         r3 = r24;
-        r2.user_id = r3;	 Catch:{ all -> 0x1798 }
-    L_0x174f:
-        r2 = r8.flags;	 Catch:{ all -> 0x1798 }
+        r2.user_id = r3;	 Catch:{ all -> 0x1796 }
+    L_0x174d:
+        r2 = r8.flags;	 Catch:{ all -> 0x1796 }
         r2 = r2 | 256;
-        r8.flags = r2;	 Catch:{ all -> 0x1798 }
+        r8.flags = r2;	 Catch:{ all -> 0x1796 }
         r2 = r21;
-        r8.from_id = r2;	 Catch:{ all -> 0x1798 }
-        if (r20 != 0) goto L_0x1760;
+        r8.from_id = r2;	 Catch:{ all -> 0x1796 }
+        if (r20 != 0) goto L_0x175e;
+    L_0x1759:
+        if (r5 == 0) goto L_0x175c;
     L_0x175b:
-        if (r5 == 0) goto L_0x175e;
-    L_0x175d:
-        goto L_0x1760;
-    L_0x175e:
+        goto L_0x175e;
+    L_0x175c:
         r2 = 0;
-        goto L_0x1761;
-    L_0x1760:
+        goto L_0x175f;
+    L_0x175e:
         r2 = 1;
-    L_0x1761:
-        r8.mentioned = r2;	 Catch:{ all -> 0x1798 }
+    L_0x175f:
+        r8.mentioned = r2;	 Catch:{ all -> 0x1796 }
         r2 = r19;
-        r8.silent = r2;	 Catch:{ all -> 0x1798 }
+        r8.silent = r2;	 Catch:{ all -> 0x1796 }
         r4 = r23;
-        r8.from_scheduled = r4;	 Catch:{ all -> 0x1798 }
-        r2 = new org.telegram.messenger.MessageObject;	 Catch:{ all -> 0x1798 }
+        r8.from_scheduled = r4;	 Catch:{ all -> 0x1796 }
+        r2 = new org.telegram.messenger.MessageObject;	 Catch:{ all -> 0x1796 }
         r19 = r2;
         r20 = r30;
         r21 = r8;
@@ -5718,193 +5718,193 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r23 = r25;
         r24 = r31;
         r25 = r1;
-        r19.<init>(r20, r21, r22, r23, r24, r25, r26, r27);	 Catch:{ all -> 0x1798 }
-        r1 = new java.util.ArrayList;	 Catch:{ all -> 0x1798 }
-        r1.<init>();	 Catch:{ all -> 0x1798 }
-        r1.add(r2);	 Catch:{ all -> 0x1798 }
-        r2 = org.telegram.messenger.NotificationsController.getInstance(r30);	 Catch:{ all -> 0x1798 }
+        r19.<init>(r20, r21, r22, r23, r24, r25, r26, r27);	 Catch:{ all -> 0x1796 }
+        r1 = new java.util.ArrayList;	 Catch:{ all -> 0x1796 }
+        r1.<init>();	 Catch:{ all -> 0x1796 }
+        r1.add(r2);	 Catch:{ all -> 0x1796 }
+        r2 = org.telegram.messenger.NotificationsController.getInstance(r30);	 Catch:{ all -> 0x1796 }
         r3 = r35;
-        r4 = r3.countDownLatch;	 Catch:{ all -> 0x17c0 }
+        r4 = r3.countDownLatch;	 Catch:{ all -> 0x17be }
         r5 = 1;
-        r2.processNewMessages(r1, r5, r5, r4);	 Catch:{ all -> 0x17c0 }
+        r2.processNewMessages(r1, r5, r5, r4);	 Catch:{ all -> 0x17be }
         r28 = 0;
-        goto L_0x17ad;
-    L_0x1795:
-        r3 = r35;
         goto L_0x17ab;
-    L_0x1798:
-        r0 = move-exception;
-        r3 = r35;
-        goto L_0x17c1;
-    L_0x179c:
-        r0 = move-exception;
-        r3 = r35;
-        goto L_0x17d5;
-    L_0x17a0:
+    L_0x1793:
         r3 = r35;
         goto L_0x17a9;
-    L_0x17a3:
+    L_0x1796:
+        r0 = move-exception;
+        r3 = r35;
+        goto L_0x17bf;
+    L_0x179a:
+        r0 = move-exception;
+        r3 = r35;
+        goto L_0x17d3;
+    L_0x179e:
+        r3 = r35;
+        goto L_0x17a7;
+    L_0x17a1:
         r0 = move-exception;
         r3 = r1;
-        goto L_0x17d5;
-    L_0x17a6:
+        goto L_0x17d3;
+    L_0x17a4:
         r3 = r1;
         r29 = r14;
-    L_0x17a9:
+    L_0x17a7:
         r30 = r15;
-    L_0x17ab:
+    L_0x17a9:
         r28 = 1;
+    L_0x17ab:
+        if (r28 == 0) goto L_0x17b2;
     L_0x17ad:
-        if (r28 == 0) goto L_0x17b4;
-    L_0x17af:
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x17c0 }
-        r1.countDown();	 Catch:{ all -> 0x17c0 }
-    L_0x17b4:
-        org.telegram.tgnet.ConnectionsManager.onInternalPushReceived(r30);	 Catch:{ all -> 0x17c0 }
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r30);	 Catch:{ all -> 0x17c0 }
-        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x17c0 }
-        goto L_0x18f4;
-    L_0x17c0:
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x17be }
+        r1.countDown();	 Catch:{ all -> 0x17be }
+    L_0x17b2:
+        org.telegram.tgnet.ConnectionsManager.onInternalPushReceived(r30);	 Catch:{ all -> 0x17be }
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r30);	 Catch:{ all -> 0x17be }
+        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x17be }
+        goto L_0x18f2;
+    L_0x17be:
         r0 = move-exception;
-    L_0x17c1:
+    L_0x17bf:
         r1 = r0;
         r14 = r29;
         r15 = r30;
-        goto L_0x18a0;
-    L_0x17c8:
+        goto L_0x189e;
+    L_0x17c6:
         r0 = move-exception;
         r3 = r1;
         r29 = r14;
         r30 = r15;
         r1 = r0;
-        goto L_0x18a0;
-    L_0x17d1:
+        goto L_0x189e;
+    L_0x17cf:
         r0 = move-exception;
         r3 = r1;
         r29 = r7;
-    L_0x17d5:
+    L_0x17d3:
         r30 = r15;
-        goto L_0x189d;
-    L_0x17d9:
+        goto L_0x189b;
+    L_0x17d7:
         r3 = r1;
         r29 = r7;
         r30 = r15;
-        r1 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ all -> 0x17f8 }
-        r2 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$aCTiHH_b4RhBMfcCkAHdgReKcg4;	 Catch:{ all -> 0x17f3 }
+        r1 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ all -> 0x17f6 }
+        r2 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$aCTiHH_b4RhBMfcCkAHdgReKcg4;	 Catch:{ all -> 0x17f1 }
         r15 = r30;
-        r2.<init>(r15);	 Catch:{ all -> 0x17f0 }
-        r1.postRunnable(r2);	 Catch:{ all -> 0x1897 }
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1897 }
-        r1.countDown();	 Catch:{ all -> 0x1897 }
+        r2.<init>(r15);	 Catch:{ all -> 0x17ee }
+        r1.postRunnable(r2);	 Catch:{ all -> 0x1895 }
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1895 }
+        r1.countDown();	 Catch:{ all -> 0x1895 }
         return;
-    L_0x17f0:
+    L_0x17ee:
         r0 = move-exception;
-        goto L_0x189d;
-    L_0x17f3:
-        r0 = move-exception;
-        r15 = r30;
-        goto L_0x189d;
-    L_0x17f8:
+        goto L_0x189b;
+    L_0x17f1:
         r0 = move-exception;
         r15 = r30;
-        goto L_0x189d;
-    L_0x17fd:
+        goto L_0x189b;
+    L_0x17f6:
+        r0 = move-exception;
+        r15 = r30;
+        goto L_0x189b;
+    L_0x17fb:
         r3 = r1;
         r29 = r7;
-        r1 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$A_uUL_LENsDGfvOUUl8zWJ6XmBQ;	 Catch:{ all -> 0x180e }
-        r1.<init>(r15);	 Catch:{ all -> 0x180e }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x1897 }
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1897 }
-        r1.countDown();	 Catch:{ all -> 0x1897 }
+        r1 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$A_uUL_LENsDGfvOUUl8zWJ6XmBQ;	 Catch:{ all -> 0x180c }
+        r1.<init>(r15);	 Catch:{ all -> 0x180c }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x1895 }
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1895 }
+        r1.countDown();	 Catch:{ all -> 0x1895 }
         return;
-    L_0x180e:
+    L_0x180c:
         r0 = move-exception;
-        goto L_0x189d;
-    L_0x1811:
+        goto L_0x189b;
+    L_0x180f:
         r3 = r1;
         r29 = r7;
-        r1 = new org.telegram.tgnet.TLRPC$TL_updateServiceNotification;	 Catch:{ all -> 0x1897 }
-        r1.<init>();	 Catch:{ all -> 0x1897 }
+        r1 = new org.telegram.tgnet.TLRPC$TL_updateServiceNotification;	 Catch:{ all -> 0x1895 }
+        r1.<init>();	 Catch:{ all -> 0x1895 }
         r2 = 0;
-        r1.popup = r2;	 Catch:{ all -> 0x1897 }
+        r1.popup = r2;	 Catch:{ all -> 0x1895 }
         r2 = 2;
-        r1.flags = r2;	 Catch:{ all -> 0x1897 }
+        r1.flags = r2;	 Catch:{ all -> 0x1895 }
         r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r6 = r37 / r6;
-        r2 = (int) r6;	 Catch:{ all -> 0x1897 }
-        r1.inbox_date = r2;	 Catch:{ all -> 0x1897 }
+        r2 = (int) r6;	 Catch:{ all -> 0x1895 }
+        r1.inbox_date = r2;	 Catch:{ all -> 0x1895 }
         r2 = "message";
-        r2 = r5.getString(r2);	 Catch:{ all -> 0x1897 }
-        r1.message = r2;	 Catch:{ all -> 0x1897 }
+        r2 = r5.getString(r2);	 Catch:{ all -> 0x1895 }
+        r1.message = r2;	 Catch:{ all -> 0x1895 }
         r2 = "announcement";
-        r1.type = r2;	 Catch:{ all -> 0x1897 }
-        r2 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;	 Catch:{ all -> 0x1897 }
-        r2.<init>();	 Catch:{ all -> 0x1897 }
-        r1.media = r2;	 Catch:{ all -> 0x1897 }
-        r2 = new org.telegram.tgnet.TLRPC$TL_updates;	 Catch:{ all -> 0x1897 }
-        r2.<init>();	 Catch:{ all -> 0x1897 }
-        r4 = r2.updates;	 Catch:{ all -> 0x1897 }
-        r4.add(r1);	 Catch:{ all -> 0x1897 }
-        r1 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ all -> 0x1897 }
-        r4 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$sNJBSY9wYQGtvc_jgrXU5q2KmRo;	 Catch:{ all -> 0x180e }
-        r4.<init>(r15, r2);	 Catch:{ all -> 0x180e }
-        r1.postRunnable(r4);	 Catch:{ all -> 0x1897 }
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1897 }
-        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x1897 }
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1897 }
-        r1.countDown();	 Catch:{ all -> 0x1897 }
+        r1.type = r2;	 Catch:{ all -> 0x1895 }
+        r2 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;	 Catch:{ all -> 0x1895 }
+        r2.<init>();	 Catch:{ all -> 0x1895 }
+        r1.media = r2;	 Catch:{ all -> 0x1895 }
+        r2 = new org.telegram.tgnet.TLRPC$TL_updates;	 Catch:{ all -> 0x1895 }
+        r2.<init>();	 Catch:{ all -> 0x1895 }
+        r4 = r2.updates;	 Catch:{ all -> 0x1895 }
+        r4.add(r1);	 Catch:{ all -> 0x1895 }
+        r1 = org.telegram.messenger.Utilities.stageQueue;	 Catch:{ all -> 0x1895 }
+        r4 = new org.telegram.messenger.-$$Lambda$GcmPushListenerService$sNJBSY9wYQGtvc_jgrXU5q2KmRo;	 Catch:{ all -> 0x180c }
+        r4.<init>(r15, r2);	 Catch:{ all -> 0x180c }
+        r1.postRunnable(r4);	 Catch:{ all -> 0x1895 }
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1895 }
+        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x1895 }
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1895 }
+        r1.countDown();	 Catch:{ all -> 0x1895 }
         return;
-    L_0x185a:
+    L_0x1858:
         r3 = r1;
         r29 = r7;
         r1 = "dc";
-        r1 = r11.getInt(r1);	 Catch:{ all -> 0x1897 }
+        r1 = r11.getInt(r1);	 Catch:{ all -> 0x1895 }
         r2 = "addr";
-        r2 = r11.getString(r2);	 Catch:{ all -> 0x1897 }
+        r2 = r11.getString(r2);	 Catch:{ all -> 0x1895 }
         r4 = ":";
-        r2 = r2.split(r4);	 Catch:{ all -> 0x1897 }
-        r4 = r2.length;	 Catch:{ all -> 0x1897 }
+        r2 = r2.split(r4);	 Catch:{ all -> 0x1895 }
+        r4 = r2.length;	 Catch:{ all -> 0x1895 }
         r5 = 2;
-        if (r4 == r5) goto L_0x1879;
-    L_0x1873:
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1897 }
-        r1.countDown();	 Catch:{ all -> 0x1897 }
+        if (r4 == r5) goto L_0x1877;
+    L_0x1871:
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1895 }
+        r1.countDown();	 Catch:{ all -> 0x1895 }
         return;
-    L_0x1879:
+    L_0x1877:
         r4 = 0;
-        r4 = r2[r4];	 Catch:{ all -> 0x1897 }
+        r4 = r2[r4];	 Catch:{ all -> 0x1895 }
         r5 = 1;
-        r2 = r2[r5];	 Catch:{ all -> 0x1897 }
-        r2 = java.lang.Integer.parseInt(r2);	 Catch:{ all -> 0x1897 }
-        r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1897 }
-        r5.applyDatacenterAddress(r1, r4, r2);	 Catch:{ all -> 0x1897 }
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1897 }
-        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x1897 }
-        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1897 }
-        r1.countDown();	 Catch:{ all -> 0x1897 }
+        r2 = r2[r5];	 Catch:{ all -> 0x1895 }
+        r2 = java.lang.Integer.parseInt(r2);	 Catch:{ all -> 0x1895 }
+        r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1895 }
+        r5.applyDatacenterAddress(r1, r4, r2);	 Catch:{ all -> 0x1895 }
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);	 Catch:{ all -> 0x1895 }
+        r1.resumeNetworkMaybe();	 Catch:{ all -> 0x1895 }
+        r1 = r3.countDownLatch;	 Catch:{ all -> 0x1895 }
+        r1.countDown();	 Catch:{ all -> 0x1895 }
         return;
+    L_0x1895:
+        r0 = move-exception;
+        goto L_0x189b;
     L_0x1897:
         r0 = move-exception;
-        goto L_0x189d;
-    L_0x1899:
-        r0 = move-exception;
         r3 = r1;
         r29 = r7;
-    L_0x189d:
+    L_0x189b:
         r1 = r0;
         r14 = r29;
+    L_0x189e:
+        r2 = -1;
+        goto L_0x18ba;
     L_0x18a0:
-        r2 = -1;
-        goto L_0x18bc;
-    L_0x18a2:
         r0 = move-exception;
         r3 = r1;
         r29 = r7;
         r1 = r0;
         r14 = r29;
         r2 = -1;
-        goto L_0x18bb;
-    L_0x18ab:
+        goto L_0x18b9;
+    L_0x18a9:
         r0 = move-exception;
         r3 = r1;
         r29 = r7;
@@ -5912,31 +5912,31 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r29;
         r2 = -1;
         r9 = 0;
-        goto L_0x18bb;
-    L_0x18b5:
+        goto L_0x18b9;
+    L_0x18b3:
         r0 = move-exception;
         r3 = r1;
         r1 = r0;
         r2 = -1;
         r9 = 0;
         r14 = 0;
-    L_0x18bb:
+    L_0x18b9:
         r15 = -1;
+    L_0x18ba:
+        if (r15 == r2) goto L_0x18cc;
     L_0x18bc:
-        if (r15 == r2) goto L_0x18ce;
-    L_0x18be:
         org.telegram.tgnet.ConnectionsManager.onInternalPushReceived(r15);
         r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r15);
         r2.resumeNetworkMaybe();
         r2 = r3.countDownLatch;
         r2.countDown();
-        goto L_0x18d1;
-    L_0x18ce:
+        goto L_0x18cf;
+    L_0x18cc:
         r35.onDecryptError();
-    L_0x18d1:
+    L_0x18cf:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x18f1;
-    L_0x18d5:
+        if (r2 == 0) goto L_0x18ef;
+    L_0x18d3:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r4 = "error in loc_key = ";
@@ -5947,9 +5947,9 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r2.append(r14);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.e(r2);
-    L_0x18f1:
+    L_0x18ef:
         org.telegram.messenger.FileLog.e(r1);
-    L_0x18f4:
+    L_0x18f2:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.GcmPushListenerService.lambda$null$3$GcmPushListenerService(java.util.Map, long):void");

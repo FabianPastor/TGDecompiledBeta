@@ -30,7 +30,7 @@ public class SharedConfig {
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
-    public static int bubbleRadius = 6;
+    public static int bubbleRadius = 10;
     private static boolean configLoaded = false;
     public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
@@ -74,6 +74,7 @@ public class SharedConfig {
     public static boolean saveIncomingPhotos = false;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery = false;
+    public static int scheduledOrNoSoundHintShows = 0;
     public static int searchMessagesAsListHintShows = 0;
     public static boolean searchMessagesAsListUsed = false;
     public static boolean showNotificationsForAllAccounts = true;
@@ -153,6 +154,7 @@ public class SharedConfig {
                 edit.putBoolean("sortContactsByName", sortContactsByName);
                 edit.putBoolean("sortFilesByName", sortFilesByName);
                 edit.putInt("textSelectionHintShows", textSelectionHintShows);
+                edit.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
                 edit.commit();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -242,6 +244,7 @@ public class SharedConfig {
             searchMessagesAsListHintShows = sharedPreferences.getInt("searchMessagesAsListHintShows", 0);
             searchMessagesAsListUsed = sharedPreferences.getBoolean("searchMessagesAsListUsed", false);
             textSelectionHintShows = sharedPreferences.getInt("textSelectionHintShows", 0);
+            scheduledOrNoSoundHintShows = sharedPreferences.getInt("scheduledOrNoSoundHintShows", 0);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -349,6 +352,7 @@ public class SharedConfig {
         allowScreenCapture = false;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         textSelectionHintShows = 0;
+        scheduledOrNoSoundHintShows = 0;
         saveConfig();
     }
 
@@ -377,6 +381,20 @@ public class SharedConfig {
     public static void removeTextSelectionHint() {
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("textSelectionHintShows", 3);
+        edit.commit();
+    }
+
+    public static void increaseScheduledOrNoSuoundHintShowed() {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        int i = scheduledOrNoSoundHintShows + 1;
+        scheduledOrNoSoundHintShows = i;
+        edit.putInt("scheduledOrNoSoundHintShows", i);
+        edit.commit();
+    }
+
+    public static void removeScheduledOrNoSuoundHint() {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("scheduledOrNoSoundHintShows", 3);
         edit.commit();
     }
 

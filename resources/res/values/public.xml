@@ -234,6 +234,7 @@
     <public type="drawable" name="animationpinleft" id="NUM" />
     <public type="drawable" name="animationpinright" id="NUM" />
     <public type="drawable" name="app_update" id="NUM" />
+    <public type="drawable" name="arrow_more" id="NUM" />
     <public type="drawable" name="attach_audio" id="NUM" />
     <public type="drawable" name="attach_close" id="NUM" />
     <public type="drawable" name="attach_contact" id="NUM" />
@@ -614,6 +615,7 @@
     <public type="drawable" name="msg_callback" id="NUM" />
     <public type="drawable" name="msg_cancel" id="NUM" />
     <public type="drawable" name="msg_check" id="NUM" />
+    <public type="drawable" name="msg_check_s" id="NUM" />
     <public type="drawable" name="msg_clear" id="NUM" />
     <public type="drawable" name="msg_clock" id="NUM" />
     <public type="drawable" name="msg_contact" id="NUM" />
@@ -628,6 +630,7 @@
     <public type="drawable" name="msg_go_down" id="NUM" />
     <public type="drawable" name="msg_go_up" id="NUM" />
     <public type="drawable" name="msg_halfcheck" id="NUM" />
+    <public type="drawable" name="msg_halfcheck_s" id="NUM" />
     <public type="drawable" name="msg_home" id="NUM" />
     <public type="drawable" name="msg_hybrid" id="NUM" />
     <public type="drawable" name="msg_instant" id="NUM" />
@@ -768,6 +771,12 @@
     <public type="drawable" name="play_mini_video" id="NUM" />
     <public type="drawable" name="player" id="NUM" />
     <public type="drawable" name="plus" id="NUM" />
+    <public type="drawable" name="poll_add_circle" id="NUM" />
+    <public type="drawable" name="poll_add_plus" id="NUM" />
+    <public type="drawable" name="poll_remove" id="NUM" />
+    <public type="drawable" name="poll_reorder" id="NUM" />
+    <public type="drawable" name="poll_right" id="NUM" />
+    <public type="drawable" name="poll_wrong" id="NUM" />
     <public type="drawable" name="popup_fixed" id="NUM" />
     <public type="drawable" name="popup_fixed_alert" id="NUM" />
     <public type="drawable" name="popup_fixed_alert2" id="NUM" />
@@ -1420,6 +1429,7 @@
     <public type="string" name="AndOther_zero" id="NUM" />
     <public type="string" name="AnimatedStickers" id="NUM" />
     <public type="string" name="AnonymousPoll" id="NUM" />
+    <public type="string" name="AnonymousQuizPoll" id="NUM" />
     <public type="string" name="ApkRestricted" id="NUM" />
     <public type="string" name="AppFolderInfo" id="NUM" />
     <public type="string" name="AppName" id="NUM" />
@@ -2791,6 +2801,7 @@
     <public type="string" name="MessageScheduledReminderNotification" id="NUM" />
     <public type="string" name="MessageScheduledUntilOnline" id="NUM" />
     <public type="string" name="MessageScheduledVote" id="NUM" />
+    <public type="string" name="MessageScheduledVoteResults" id="NUM" />
     <public type="string" name="MessagesDataUsage" id="NUM" />
     <public type="string" name="MessagesSettings" id="NUM" />
     <public type="string" name="MetersAway2" id="NUM" />
@@ -2917,6 +2928,7 @@
     <public type="string" name="NoStickersFound" id="NUM" />
     <public type="string" name="NoUsernameFound" id="NUM" />
     <public type="string" name="NoVotes" id="NUM" />
+    <public type="string" name="NoVotesQuiz" id="NUM" />
     <public type="string" name="NobodyLikesSpam1" id="NUM" />
     <public type="string" name="NobodyLikesSpam2" id="NUM" />
     <public type="string" name="NobodyLikesSpam3" id="NUM" />
@@ -3461,7 +3473,17 @@
     <public type="string" name="Points_two" id="NUM" />
     <public type="string" name="Points_zero" id="NUM" />
     <public type="string" name="Poll" id="NUM" />
+    <public type="string" name="PollAnonymous" id="NUM" />
+    <public type="string" name="PollCantForwardSecretChat" id="NUM" />
+    <public type="string" name="PollCollapse" id="NUM" />
+    <public type="string" name="PollExpand" id="NUM" />
+    <public type="string" name="PollMultiple" id="NUM" />
     <public type="string" name="PollOptions" id="NUM" />
+    <public type="string" name="PollQuiz" id="NUM" />
+    <public type="string" name="PollResults" id="NUM" />
+    <public type="string" name="PollSubmitVotes" id="NUM" />
+    <public type="string" name="PollTapToSelect" id="NUM" />
+    <public type="string" name="PollViewResults" id="NUM" />
     <public type="string" name="PopupDisabled" id="NUM" />
     <public type="string" name="PopupEnabled" id="NUM" />
     <public type="string" name="PopupNotification" id="NUM" />
@@ -3518,6 +3540,8 @@
     <public type="string" name="ProxyDetails" id="NUM" />
     <public type="string" name="ProxySettings" id="NUM" />
     <public type="string" name="PublicChannelsTooMuch" id="NUM" />
+    <public type="string" name="PublicPoll" id="NUM" />
+    <public type="string" name="PublicPollCantForward" id="NUM" />
     <public type="string" name="Purple" id="NUM" />
     <public type="string" name="Question" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
@@ -3526,6 +3550,12 @@
     <public type="string" name="QuickReplyDefault2" id="NUM" />
     <public type="string" name="QuickReplyDefault3" id="NUM" />
     <public type="string" name="QuickReplyDefault4" id="NUM" />
+    <public type="string" name="QuizInfo" id="NUM" />
+    <public type="string" name="QuizPoll" id="NUM" />
+    <public type="string" name="QuizWellDone" id="NUM" />
+    <public type="string" name="QuizWellDoneInfo" id="NUM" />
+    <public type="string" name="QuizWrongAnswer" id="NUM" />
+    <public type="string" name="QuizWrongAnswerInfo" id="NUM" />
     <public type="string" name="RaiseToSpeak" id="NUM" />
     <public type="string" name="RateCallDistorted" id="NUM" />
     <public type="string" name="RateCallDropped" id="NUM" />
@@ -3653,6 +3683,7 @@
     <public type="string" name="ScheduleMessage" id="NUM" />
     <public type="string" name="ScheduleWhenOnline" id="NUM" />
     <public type="string" name="ScheduledMessages" id="NUM" />
+    <public type="string" name="ScheduledOrNoSoundHint" id="NUM" />
     <public type="string" name="ScreenCapture" id="NUM" />
     <public type="string" name="ScreenCaptureAlert" id="NUM" />
     <public type="string" name="ScreenCaptureInfo" id="NUM" />
@@ -3824,6 +3855,12 @@
     <public type="string" name="ShowInChat" id="NUM" />
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
+    <public type="string" name="ShowVotes_few" id="NUM" />
+    <public type="string" name="ShowVotes_many" id="NUM" />
+    <public type="string" name="ShowVotes_one" id="NUM" />
+    <public type="string" name="ShowVotes_other" id="NUM" />
+    <public type="string" name="ShowVotes_two" id="NUM" />
+    <public type="string" name="ShowVotes_zero" id="NUM" />
     <public type="string" name="Shuffle" id="NUM" />
     <public type="string" name="SignUp" id="NUM" />
     <public type="string" name="SinglePhotosHelp" id="NUM" />
@@ -3883,6 +3920,9 @@
     <public type="string" name="StopPoll" id="NUM" />
     <public type="string" name="StopPollAlertText" id="NUM" />
     <public type="string" name="StopPollAlertTitle" id="NUM" />
+    <public type="string" name="StopQuiz" id="NUM" />
+    <public type="string" name="StopQuizAlertText" id="NUM" />
+    <public type="string" name="StopQuizAlertTitle" id="NUM" />
     <public type="string" name="StopVerification" id="NUM" />
     <public type="string" name="StorageUsage" id="NUM" />
     <public type="string" name="Streaming" id="NUM" />
@@ -4223,6 +4263,12 @@
     <public type="string" name="VoipSettingsRingtone" id="NUM" />
     <public type="string" name="VoipUseLessData" id="NUM" />
     <public type="string" name="VoipWaiting" id="NUM" />
+    <public type="string" name="VoteQuiz_few" id="NUM" />
+    <public type="string" name="VoteQuiz_many" id="NUM" />
+    <public type="string" name="VoteQuiz_one" id="NUM" />
+    <public type="string" name="VoteQuiz_other" id="NUM" />
+    <public type="string" name="VoteQuiz_two" id="NUM" />
+    <public type="string" name="VoteQuiz_zero" id="NUM" />
     <public type="string" name="Vote_few" id="NUM" />
     <public type="string" name="Vote_many" id="NUM" />
     <public type="string" name="Vote_one" id="NUM" />

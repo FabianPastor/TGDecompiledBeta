@@ -43,8 +43,9 @@ public class VideoEncodingService extends Service implements NotificationCenterD
             if (i2 == this.currentAccount) {
                 String str2 = this.path;
                 if (str2 != null && str2.equals(str)) {
-                    Boolean bool = (Boolean) objArr[2];
-                    this.currentProgress = (int) (((Float) objArr[1]).floatValue() * 100.0f);
+                    float min = Math.min(1.0f, ((float) ((Long) objArr[1]).longValue()) / ((float) ((Long) objArr[2]).longValue()));
+                    Boolean bool = (Boolean) objArr[3];
+                    this.currentProgress = (int) (min * 100.0f);
                     Builder builder = this.builder;
                     int i3 = this.currentProgress;
                     if (i3 != 0) {

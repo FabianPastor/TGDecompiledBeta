@@ -65,6 +65,7 @@ public class BottomSheet extends Dialog {
     private View customView;
     private BottomSheetDelegateInterface delegate;
     private boolean dimBehind = true;
+    private boolean disableScroll;
     private Runnable dismissRunnable = new -$$Lambda$wKJSb77Iz9CSKJu9VMkyxGvOd-c(this);
     private boolean dismissed;
     private boolean focusable;
@@ -427,7 +428,7 @@ public class BottomSheet extends Dialog {
                     float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
                     float y = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(motionEvent);
-                    if (this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
+                    if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
                         this.startedTrackingY = (int) motionEvent.getY();
                         this.maybeStartTracking = false;
                         this.startedTracking = true;
@@ -791,6 +792,10 @@ public class BottomSheet extends Dialog {
     /* Access modifiers changed, original: protected */
     public boolean onCustomOpenAnimation() {
         return false;
+    }
+
+    public void setDisableScroll(boolean z) {
+        this.disableScroll = z;
     }
 
     public void onAttachedToWindow() {

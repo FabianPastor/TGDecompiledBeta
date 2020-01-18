@@ -1574,6 +1574,16 @@ public class RecyclerListView extends RecyclerView {
         return z;
     }
 
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (this.sectionsAdapter != null) {
+            View view = this.pinnedHeader;
+            if (!(view == null || view.getAlpha() == 0.0f || !this.pinnedHeader.dispatchTouchEvent(motionEvent))) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(motionEvent);
+    }
+
     private void checkIfEmpty() {
         if (!this.isHidden) {
             int i = 0;

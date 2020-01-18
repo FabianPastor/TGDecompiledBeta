@@ -3376,9 +3376,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         if (!SharedConfig.raiseToSpeak) {
             startRaiseToEarSensors(this.raiseChat);
         }
-        WakeLock wakeLock = this.proximityWakeLock;
-        if (!(wakeLock == null || wakeLock.isHeld() || (!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()))) {
-            this.proximityWakeLock.acquire();
+        if (!ApplicationLoader.mainInterfacePaused) {
+            WakeLock wakeLock = this.proximityWakeLock;
+            if (!(wakeLock == null || wakeLock.isHeld() || (!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()))) {
+                this.proximityWakeLock.acquire();
+            }
         }
         startProgressTimer(this.playingMessageObject);
         NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStart, messageObject2);
@@ -3857,7 +3859,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05e4 float:1.8878096E38 double:1.0531629017E-314;
+        r1 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }
@@ -5497,7 +5499,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: Removed duplicated region for block: B:42:0x00aa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0101  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x010f  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0146 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0145 A:{SKIP} */
     private boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r33) {
         /*
         r32 = this;
@@ -5505,11 +5507,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r0 = r33;
         r1 = r0.messageObject;
         r2 = r0.videoEditedInfo;
-        if (r1 == 0) goto L_0x015f;
+        if (r1 == 0) goto L_0x015e;
     L_0x000a:
         if (r2 != 0) goto L_0x000e;
     L_0x000c:
-        goto L_0x015f;
+        goto L_0x015e;
     L_0x000e:
         r4 = r2.originalPath;
         r5 = r2.startTime;
@@ -5685,7 +5687,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         throw r0;
     L_0x010b:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0132;
+        if (r2 == 0) goto L_0x0131;
     L_0x010f:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -5699,24 +5701,24 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r2.append(r4);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.d(r2);
-    L_0x0132:
+    L_0x0131:
         r2 = r28.edit();
         r5 = "isPreviousOk";
         r2 = r2.putBoolean(r5, r1);
         r2.apply();
         r5 = 1;
         r6 = r31.length();
-        if (r3 != 0) goto L_0x014c;
-    L_0x0146:
-        if (r4 == 0) goto L_0x0149;
+        if (r3 != 0) goto L_0x014b;
+    L_0x0145:
+        if (r4 == 0) goto L_0x0148;
+    L_0x0147:
+        goto L_0x014b;
     L_0x0148:
-        goto L_0x014c;
-    L_0x0149:
         r27 = 0;
-        goto L_0x014e;
-    L_0x014c:
+        goto L_0x014d;
+    L_0x014b:
         r27 = 1;
-    L_0x014e:
+    L_0x014d:
         r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r10 = 1;
         r1 = r32;
@@ -5727,7 +5729,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r7 = r27;
         r1.didWriteData(r2, r3, r4, r5, r7, r8);
         return r10;
-    L_0x015f:
+    L_0x015e:
         r0 = 0;
         return r0;
         */

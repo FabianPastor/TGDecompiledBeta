@@ -255,29 +255,29 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     return;
                 case 3:
                     String string;
-                    ArrayList access$4100;
+                    ArrayList access$3900;
                     int i2;
                     NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) viewHolder.itemView;
                     notificationsSettings = MessagesController.getNotificationsSettings(NotificationsSettingsActivity.this.currentAccount);
                     currentTime = ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).getCurrentTime();
                     if (i == NotificationsSettingsActivity.this.privateRow) {
                         string = LocaleController.getString("NotificationsPrivateChats", NUM);
-                        access$4100 = NotificationsSettingsActivity.this.exceptionUsers;
+                        access$3900 = NotificationsSettingsActivity.this.exceptionUsers;
                         i2 = notificationsSettings.getInt("EnableAll2", 0);
                     } else if (i == NotificationsSettingsActivity.this.groupRow) {
                         string = LocaleController.getString("NotificationsGroups", NUM);
-                        access$4100 = NotificationsSettingsActivity.this.exceptionChats;
+                        access$3900 = NotificationsSettingsActivity.this.exceptionChats;
                         i2 = notificationsSettings.getInt("EnableGroup2", 0);
                     } else {
                         string = LocaleController.getString("NotificationsChannels", NUM);
-                        access$4100 = NotificationsSettingsActivity.this.exceptionChannels;
+                        access$3900 = NotificationsSettingsActivity.this.exceptionChannels;
                         i2 = notificationsSettings.getInt("EnableChannel2", 0);
                     }
                     String str4 = string;
                     boolean z2 = i2 < currentTime;
                     int i3 = (!z2 && i2 - 31536000 < currentTime) ? 2 : 0;
                     StringBuilder stringBuilder = new StringBuilder();
-                    if (access$4100 == null || access$4100.isEmpty()) {
+                    if (access$3900 == null || access$3900.isEmpty()) {
                         stringBuilder.append(LocaleController.getString("TapToChange", NUM));
                     } else {
                         z2 = i2 < currentTime;
@@ -291,7 +291,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         if (stringBuilder.length() != 0) {
                             stringBuilder.append(", ");
                         }
-                        stringBuilder.append(LocaleController.formatPluralString("Exception", access$4100.size()));
+                        stringBuilder.append(LocaleController.formatPluralString("Exception", access$3900.size()));
                     }
                     notificationsCheckCell.setTextAndValueAndCheck(str4, stringBuilder, z2, i3, i != NotificationsSettingsActivity.this.channelsRow);
                     return;
@@ -1369,7 +1369,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r5 = 1;
         if (r3 != r5) goto L_0x0072;
     L_0x005d:
-        r3 = NUM; // 0x7f0e0745 float:1.8878812E38 double:1.053163076E-314;
+        r3 = NUM; // 0x7f0e0748 float:1.8878818E38 double:1.0531630776E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsSingleAlert";
@@ -1378,7 +1378,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r2.setMessage(r0);
         goto L_0x0086;
     L_0x0072:
-        r3 = NUM; // 0x7f0e0744 float:1.887881E38 double:1.0531630756E-314;
+        r3 = NUM; // 0x7f0e0747 float:1.8878816E38 double:1.053163077E-314;
         r5 = new java.lang.Object[r5];
         r5[r4] = r0;
         r0 = "NotificationsExceptionsAlert";
@@ -1386,17 +1386,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);
         r2.setMessage(r0);
     L_0x0086:
-        r0 = NUM; // 0x7f0e0743 float:1.8878808E38 double:1.053163075E-314;
+        r0 = NUM; // 0x7f0e0746 float:1.8878814E38 double:1.0531630766E-314;
         r3 = "NotificationsExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r2.setTitle(r0);
-        r0 = NUM; // 0x7f0e0bbf float:1.8881136E38 double:1.0531636423E-314;
+        r0 = NUM; // 0x7f0e0bde float:1.88812E38 double:1.0531636576E-314;
         r3 = "ViewExceptions";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
         r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE;
         r3.<init>(r6, r7);
         r2.setNeutralButton(r0, r3);
-        r7 = NUM; // 0x7f0e0765 float:1.8878877E38 double:1.053163092E-314;
+        r7 = NUM; // 0x7f0e0768 float:1.8878883E38 double:1.0531630934E-314;
         r0 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r0, r7);
         r2.setNegativeButton(r7, r1);

@@ -191,6 +191,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private boolean floatingHidden;
     private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private int folderId;
+    private int hasPoll;
     private ItemTouchHelper itemTouchhelper;
     private int lastItemsCount;
     private boolean lastSearchScrolledToTop;
@@ -919,6 +920,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.folderId = this.arguments.getInt("folderId", 0);
             this.resetDelegate = this.arguments.getBoolean("resetDelegate", true);
             this.messagesCount = this.arguments.getInt("messagesCount", 0);
+            this.hasPoll = this.arguments.getInt("hasPoll", 0);
         }
         if (this.dialogsType == 0) {
             this.askAboutContacts = MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
@@ -1166,11 +1168,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$7700 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$6900 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$7700);
+                    dialogsActivity.setDelegate(access$6900);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -2070,6 +2072,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
 
                 public void onPreAudioVideoRecord() {
+                }
+
+                public void onSendLongClick() {
                 }
 
                 public void onStickersExpandedChange() {
@@ -3299,7 +3304,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r6 = r6 + r16;
         if (r6 <= r4) goto L_0x0241;
     L_0x0133:
-        r0 = NUM; // 0x7f0e08d9 float:1.8879632E38 double:1.0531632757E-314;
+        r0 = NUM; // 0x7f0e08dc float:1.8879638E38 double:1.053163277E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3337,7 +3342,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01b0;
     L_0x017c:
-        r3 = NUM; // 0x7f0e0397 float:1.8876901E38 double:1.0531626107E-314;
+        r3 = NUM; // 0x7f0e0398 float:1.8876904E38 double:1.053162611E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3345,11 +3350,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "DeleteFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0127 float:1.8875636E38 double:1.0531623024E-314;
+        r1 = NUM; // 0x7f0e0128 float:1.8875638E38 double:1.053162303E-314;
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0382 float:1.8876859E38 double:1.0531626003E-314;
+        r1 = NUM; // 0x7f0e0383 float:1.887686E38 double:1.053162601E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
@@ -3360,7 +3365,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01e8;
     L_0x01b4:
-        r3 = NUM; // 0x7f0e02f5 float:1.8876573E38 double:1.0531625306E-314;
+        r3 = NUM; // 0x7f0e02f6 float:1.8876575E38 double:1.053162531E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3368,11 +3373,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearCacheFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e011c float:1.8875614E38 double:1.053162297E-314;
+        r1 = NUM; // 0x7f0e011d float:1.8875616E38 double:1.0531622974E-314;
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
+        r1 = NUM; // 0x7f0e02fa float:1.8876583E38 double:1.053162533E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$alhJl2oxrWyqDQR9VMC4_CoynGI;
@@ -3380,7 +3385,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x021b;
     L_0x01e8:
-        r3 = NUM; // 0x7f0e02f7 float:1.8876577E38 double:1.0531625316E-314;
+        r3 = NUM; // 0x7f0e02f8 float:1.887658E38 double:1.053162532E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3388,18 +3393,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e011e float:1.8875618E38 double:1.053162298E-314;
+        r1 = NUM; // 0x7f0e011f float:1.887562E38 double:1.0531622984E-314;
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02f8 float:1.887658E38 double:1.053162532E-314;
+        r1 = NUM; // 0x7f0e02f9 float:1.8876581E38 double:1.0531625326E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$1j3JEkAThEHgG6O1BGBF0RX0na8;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x021b:
-        r1 = NUM; // 0x7f0e0214 float:1.8876117E38 double:1.0531624195E-314;
+        r1 = NUM; // 0x7f0e0215 float:1.8876119E38 double:1.05316242E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);
@@ -4564,20 +4569,34 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     private void didSelectResult(long j, boolean z, boolean z2) {
         int i;
-        String str = "SendMessageTitle";
+        String str;
+        String str2 = "SendMessageTitle";
         if (this.addToGroupAlertString == null && this.checkCanWrite) {
             i = (int) j;
+            str = "OK";
+            Builder builder;
             if (i < 0) {
                 i = -i;
                 Chat chat = getMessagesController().getChat(Integer.valueOf(i));
-                if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(i, this.currentAccount))) {
-                    Builder builder = new Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString(str, NUM));
-                    builder.setMessage(LocaleController.getString("ChannelCantSendMessage", NUM));
-                    builder.setNegativeButton(LocaleController.getString("OK", NUM), null);
+                if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(i, this.currentAccount) || this.hasPoll == 2)) {
+                    builder = new Builder(getParentActivity());
+                    builder.setTitle(LocaleController.getString(str2, NUM));
+                    if (this.hasPoll == 2) {
+                        builder.setMessage(LocaleController.getString("PublicPollCantForward", NUM));
+                    } else {
+                        builder.setMessage(LocaleController.getString("ChannelCantSendMessage", NUM));
+                    }
+                    builder.setNegativeButton(LocaleController.getString(str, NUM), null);
                     showDialog(builder.create());
                     return;
                 }
+            } else if (i == 0 && this.hasPoll != 0) {
+                builder = new Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString(str2, NUM));
+                builder.setMessage(LocaleController.getString("PollCantForwardSecretChat", NUM));
+                builder.setNegativeButton(LocaleController.getString(str, NUM), null);
+                showDialog(builder.create());
+                return;
             }
         }
         if (!z || ((this.selectAlertString == null || this.selectAlertStringGroup == null) && this.addToGroupAlertString == null)) {
@@ -4599,19 +4618,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             Builder builder2 = new Builder(getParentActivity());
             int i2 = (int) j;
             i = (int) (j >> 32);
-            String str2 = "Send";
+            str = "Send";
             if (i2 == 0) {
                 if (getMessagesController().getUser(Integer.valueOf(getMessagesController().getEncryptedChat(Integer.valueOf(i)).user_id)) != null) {
-                    string = LocaleController.getString(str, NUM);
+                    string = LocaleController.getString(str2, NUM);
                     formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(r13));
-                    string2 = LocaleController.getString(str2, NUM);
+                    string2 = LocaleController.getString(str, NUM);
                 } else {
                     return;
                 }
             } else if (i2 == getUserConfig().getClientUserId()) {
-                string3 = LocaleController.getString(str, NUM);
+                string3 = LocaleController.getString(str2, NUM);
                 string = LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", NUM));
-                string2 = LocaleController.getString(str2, NUM);
+                string2 = LocaleController.getString(str, NUM);
                 builder2.setTitle(string3);
                 builder2.setMessage(AndroidUtilities.replaceTags(string));
                 builder2.setPositiveButton(string2, new -$$Lambda$DialogsActivity$_d9wRXWZ087epm3Z44uYz0Fl9RA(this, j));
@@ -4619,9 +4638,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 showDialog(builder2.create());
             } else if (i2 > 0) {
                 if (getMessagesController().getUser(Integer.valueOf(i2)) != null) {
-                    string = LocaleController.getString(str, NUM);
+                    string = LocaleController.getString(str2, NUM);
                     formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(r13));
-                    string2 = LocaleController.getString(str2, NUM);
+                    string2 = LocaleController.getString(str, NUM);
                 } else {
                     return;
                 }
@@ -4632,9 +4651,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         formatStringSimple = LocaleController.formatStringSimple(this.addToGroupAlertString, r13.title);
                         string2 = LocaleController.getString("Add", NUM);
                     } else {
-                        string = LocaleController.getString(str, NUM);
+                        string = LocaleController.getString(str2, NUM);
                         formatStringSimple = LocaleController.formatStringSimple(this.selectAlertStringGroup, r13.title);
-                        string2 = LocaleController.getString(str2, NUM);
+                        string2 = LocaleController.getString(str, NUM);
                     }
                 } else {
                     return;

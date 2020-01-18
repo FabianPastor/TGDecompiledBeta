@@ -630,13 +630,11 @@ public class CameraScanActivity extends BaseFragment implements PreviewCallback 
             }
             if (this.needGalleryButton) {
                 if (charSequence.startsWith("ton://transfer/")) {
-                    if (!getTonController().isValidWalletAddress(Uri.parse(charSequence).getPath().replace("/", ""))) {
-                        onNoWalletFound(bitmap2 != null);
-                        return null;
-                    }
+                    Uri.parse(charSequence).getPath().replace("/", "");
+                } else {
+                    onNoWalletFound(bitmap2 != null);
+                    return null;
                 }
-                onNoWalletFound(bitmap2 != null);
-                return null;
             } else if (!charSequence.startsWith("tg://login?token=")) {
                 onNoWalletFound(false);
                 return null;

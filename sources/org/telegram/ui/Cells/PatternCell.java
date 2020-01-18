@@ -51,7 +51,7 @@ public class PatternCell extends BackupImageView implements FileDownloadProgress
         TL_wallPaper getSelectedPattern();
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public PatternCell(Context context, int i, PatternCellDelegate patternCellDelegate) {
@@ -220,8 +220,8 @@ public class PatternCell extends BackupImageView implements FileDownloadProgress
         updateButtonState(this.currentPattern, false, true);
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.radialProgress.setProgress(f, true);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         if (this.radialProgress.getIcon() != 10) {
             updateButtonState(this.currentPattern, false, true);
         }

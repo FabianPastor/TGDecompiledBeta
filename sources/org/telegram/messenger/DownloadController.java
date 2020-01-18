@@ -67,9 +67,9 @@ public class DownloadController extends BaseController implements NotificationCe
 
         void onFailedDownload(String str, boolean z);
 
-        void onProgressDownload(String str, float f);
+        void onProgressDownload(String str, long j, long j2);
 
-        void onProgressUpload(String str, float f, boolean z);
+        void onProgressUpload(String str, long j, long j2, boolean z);
 
         void onSuccessDownload(String str);
     }
@@ -1243,26 +1243,28 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
+        int i3 = i;
         String str;
         int size;
-        int i3;
-        WeakReference weakReference;
         ArrayList arrayList;
         int size2;
-        int i4;
-        if (i == NotificationCenter.fileDidFailToLoad || i == NotificationCenter.httpFileDidFailedLoad) {
+        WeakReference weakReference;
+        Long l;
+        Long l2;
+        int size3;
+        if (i3 == NotificationCenter.fileDidFailToLoad || i3 == NotificationCenter.httpFileDidFailedLoad) {
             str = (String) objArr[0];
             Integer num = (Integer) objArr[1];
             this.listenerInProgress = true;
             ArrayList arrayList2 = (ArrayList) this.loadingFileObservers.get(str);
             if (arrayList2 != null) {
                 size = arrayList2.size();
-                for (i3 = 0; i3 < size; i3++) {
-                    weakReference = (WeakReference) arrayList2.get(i3);
-                    if (weakReference.get() != null) {
-                        ((FileDownloadProgressListener) weakReference.get()).onFailedDownload(str, num.intValue() == 1);
+                for (int i4 = 0; i4 < size; i4++) {
+                    WeakReference weakReference2 = (WeakReference) arrayList2.get(i4);
+                    if (weakReference2.get() != null) {
+                        ((FileDownloadProgressListener) weakReference2.get()).onFailedDownload(str, num.intValue() == 1);
                         if (num.intValue() != 1) {
-                            this.observersByTag.remove(((FileDownloadProgressListener) weakReference.get()).getObserverTag());
+                            this.observersByTag.remove(((FileDownloadProgressListener) weakReference2.get()).getObserverTag());
                         }
                     }
                 }
@@ -1273,13 +1275,14 @@ public class DownloadController extends BaseController implements NotificationCe
             this.listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(str, num.intValue());
-        } else if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.httpFileDidLoad) {
+        } else if (i3 == NotificationCenter.fileDidLoad || i3 == NotificationCenter.httpFileDidLoad) {
+            int size4;
             this.listenerInProgress = true;
             str = (String) objArr[0];
             arrayList = (ArrayList) this.loadingFileMessagesObservers.get(str);
             if (arrayList != null) {
-                size2 = arrayList.size();
-                for (size = 0; size < size2; size++) {
+                size4 = arrayList.size();
+                for (size = 0; size < size4; size++) {
                     ((MessageObject) arrayList.get(size)).mediaExists = true;
                 }
                 this.loadingFileMessagesObservers.remove(str);
@@ -1287,11 +1290,11 @@ public class DownloadController extends BaseController implements NotificationCe
             arrayList = (ArrayList) this.loadingFileObservers.get(str);
             if (arrayList != null) {
                 size2 = arrayList.size();
-                for (i4 = 0; i4 < size2; i4++) {
-                    WeakReference weakReference2 = (WeakReference) arrayList.get(i4);
-                    if (weakReference2.get() != null) {
-                        ((FileDownloadProgressListener) weakReference2.get()).onSuccessDownload(str);
-                        this.observersByTag.remove(((FileDownloadProgressListener) weakReference2.get()).getObserverTag());
+                for (size4 = 0; size4 < size2; size4++) {
+                    weakReference = (WeakReference) arrayList.get(size4);
+                    if (weakReference.get() != null) {
+                        ((FileDownloadProgressListener) weakReference.get()).onSuccessDownload(str);
+                        this.observersByTag.remove(((FileDownloadProgressListener) weakReference.get()).getObserverTag());
                     }
                 }
                 this.loadingFileObservers.remove(str);
@@ -1299,35 +1302,43 @@ public class DownloadController extends BaseController implements NotificationCe
             this.listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(str, 0);
-        } else if (i == NotificationCenter.FileLoadProgressChanged) {
+        } else if (i3 == NotificationCenter.FileLoadProgressChanged) {
             this.listenerInProgress = true;
             str = (String) objArr[0];
             arrayList = (ArrayList) this.loadingFileObservers.get(str);
             if (arrayList != null) {
-                Float f = (Float) objArr[1];
-                i4 = arrayList.size();
-                for (size = 0; size < i4; size++) {
-                    WeakReference weakReference3 = (WeakReference) arrayList.get(size);
-                    if (weakReference3.get() != null) {
-                        ((FileDownloadProgressListener) weakReference3.get()).onProgressDownload(str, f.floatValue());
+                l = (Long) objArr[1];
+                l2 = (Long) objArr[2];
+                size3 = arrayList.size();
+                for (int i5 = 0; i5 < size3; i5++) {
+                    weakReference = (WeakReference) arrayList.get(i5);
+                    if (weakReference.get() != null) {
+                        ((FileDownloadProgressListener) weakReference.get()).onProgressDownload(str, l.longValue(), l2.longValue());
                     }
                 }
             }
             this.listenerInProgress = false;
             processLaterArrays();
-        } else if (i == NotificationCenter.FileUploadProgressChanged) {
+        } else if (i3 == NotificationCenter.FileUploadProgressChanged) {
             this.listenerInProgress = true;
             str = (String) objArr[0];
             arrayList = (ArrayList) this.loadingFileObservers.get(str);
             if (arrayList != null) {
-                Float f2 = (Float) objArr[1];
-                Boolean bool = (Boolean) objArr[2];
-                size = arrayList.size();
-                for (i3 = 0; i3 < size; i3++) {
-                    weakReference = (WeakReference) arrayList.get(i3);
+                l = (Long) objArr[1];
+                l2 = (Long) objArr[2];
+                Boolean bool = (Boolean) objArr[3];
+                int size5 = arrayList.size();
+                size3 = 0;
+                while (size3 < size5) {
+                    int i6;
+                    weakReference = (WeakReference) arrayList.get(size3);
                     if (weakReference.get() != null) {
-                        ((FileDownloadProgressListener) weakReference.get()).onProgressUpload(str, f2.floatValue(), bool.booleanValue());
+                        i6 = size3;
+                        ((FileDownloadProgressListener) weakReference.get()).onProgressUpload(str, l.longValue(), l2.longValue(), bool.booleanValue());
+                    } else {
+                        i6 = size3;
                     }
+                    size3 = i6 + 1;
                 }
             }
             this.listenerInProgress = false;
@@ -1339,10 +1350,10 @@ public class DownloadController extends BaseController implements NotificationCe
                         DelayedMessage delayedMessage = (DelayedMessage) arrayList.get(size2);
                         if (delayedMessage.encryptedChat == null) {
                             long j = delayedMessage.peer;
-                            Long l;
+                            Long l3;
                             if (delayedMessage.type == 4) {
-                                l = (Long) this.typingTimes.get(j);
-                                if (l == null || l.longValue() + 4000 < System.currentTimeMillis()) {
+                                l3 = (Long) this.typingTimes.get(j);
+                                if (l3 == null || l3.longValue() + 4000 < System.currentTimeMillis()) {
                                     HashMap hashMap = delayedMessage.extraHashMap;
                                     StringBuilder stringBuilder = new StringBuilder();
                                     stringBuilder.append(str);
@@ -1356,9 +1367,9 @@ public class DownloadController extends BaseController implements NotificationCe
                                     this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                                 }
                             } else {
-                                l = (Long) this.typingTimes.get(j);
+                                l3 = (Long) this.typingTimes.get(j);
                                 delayedMessage.obj.getDocument();
-                                if (l == null || l.longValue() + 4000 < System.currentTimeMillis()) {
+                                if (l3 == null || l3.longValue() + 4000 < System.currentTimeMillis()) {
                                     if (delayedMessage.obj.isRoundVideo()) {
                                         getMessagesController().sendTyping(j, 8, 0);
                                     } else if (delayedMessage.obj.isVideo()) {
@@ -1380,5 +1391,9 @@ public class DownloadController extends BaseController implements NotificationCe
                 FileLog.e(e);
             }
         }
+    }
+
+    public static float getProgress(long[] jArr) {
+        return (jArr == null || jArr.length < 2 || jArr[1] == 0) ? 0.0f : Math.min(1.0f, ((float) jArr[0]) / ((float) jArr[1]));
     }
 }
