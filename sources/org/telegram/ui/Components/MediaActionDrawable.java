@@ -223,10 +223,8 @@ public class MediaActionDrawable extends Drawable {
         return this.animatingTransition ? this.transitionProgress : 1.0f;
     }
 
-    public void setBackgroundDrawable(Drawable drawable) {
-        if (drawable instanceof MessageDrawable) {
-            this.messageDrawable = (MessageDrawable) drawable;
-        }
+    public void setBackgroundDrawable(MessageDrawable messageDrawable) {
+        this.messageDrawable = messageDrawable;
     }
 
     public void setHasOverlayImage(boolean z) {

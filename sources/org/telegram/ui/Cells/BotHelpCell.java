@@ -273,12 +273,17 @@ public class BotHelpCell extends View {
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
         int width = (getWidth() - this.width) / 2;
-        int dp = AndroidUtilities.dp(4.0f);
+        int dp = AndroidUtilities.dp(2.0f);
         Drawable shadowDrawable = Theme.chat_msgInMediaDrawable.getShadowDrawable();
         if (shadowDrawable != null) {
             shadowDrawable.setBounds(width, dp, this.width + width, this.height + dp);
             shadowDrawable.draw(canvas);
         }
+        int i = AndroidUtilities.displaySize.y;
+        if (getParent() instanceof View) {
+            i = ((View) getParent()).getMeasuredHeight();
+        }
+        Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
         Theme.chat_msgInMediaDrawable.setBounds(width, dp, this.width + width, this.height + dp);
         Theme.chat_msgInMediaDrawable.draw(canvas);
         Theme.chat_msgTextPaint.setColor(Theme.getColor("chat_messageTextIn"));
@@ -287,9 +292,9 @@ public class BotHelpCell extends View {
         int dp2 = AndroidUtilities.dp(11.0f) + width;
         this.textX = dp2;
         float f = (float) dp2;
-        int dp3 = AndroidUtilities.dp(11.0f) + dp;
-        this.textY = dp3;
-        canvas.translate(f, (float) dp3);
+        i = AndroidUtilities.dp(11.0f) + dp;
+        this.textY = i;
+        canvas.translate(f, (float) i);
         if (this.pressedLink != null) {
             canvas.drawPath(this.urlPath, Theme.chat_urlPaint);
         }

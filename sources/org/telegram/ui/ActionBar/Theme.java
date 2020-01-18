@@ -1270,16 +1270,16 @@ public class Theme {
             draw(canvas, null);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x0247  */
-        /* JADX WARNING: Removed duplicated region for block: B:42:0x01f5  */
-        /* JADX WARNING: Removed duplicated region for block: B:91:0x04b0  */
-        /* JADX WARNING: Removed duplicated region for block: B:83:0x045d  */
-        public void draw(android.graphics.Canvas r21, android.graphics.Paint r22) {
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x0256  */
+        /* JADX WARNING: Removed duplicated region for block: B:46:0x0202  */
+        /* JADX WARNING: Removed duplicated region for block: B:104:0x04cb  */
+        /* JADX WARNING: Removed duplicated region for block: B:94:0x0476  */
+        public void draw(android.graphics.Canvas r20, android.graphics.Paint r21) {
             /*
-            r20 = this;
-            r0 = r20;
-            r1 = r21;
-            r2 = r20.getBounds();
+            r19 = this;
+            r0 = r19;
+            r1 = r20;
+            r2 = r19.getBounds();
             r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
             r4 = r0.dp(r3);
             r5 = r0.currentType;
@@ -1301,15 +1301,15 @@ public class Theme {
             r8 = r0.dp(r8);
         L_0x0031:
             r6 = r0.dp(r6);
-            if (r22 != 0) goto L_0x003a;
+            if (r21 != 0) goto L_0x003a;
         L_0x0037:
             r9 = r0.paint;
             goto L_0x003c;
         L_0x003a:
-            r9 = r22;
+            r9 = r21;
         L_0x003c:
             r10 = 0;
-            if (r22 != 0) goto L_0x0058;
+            if (r21 != 0) goto L_0x0058;
         L_0x003f:
             r11 = r0.gradientShader;
             if (r11 == 0) goto L_0x0058;
@@ -1325,292 +1325,301 @@ public class Theme {
             r12 = r0.matrix;
             r11.setLocalMatrix(r12);
         L_0x0058:
-            r11 = r0.path;
-            r11.reset();
-            r11 = r0.isOut;
-            r13 = NUM; // 0x40266666 float:2.6 double:5.317423045E-315;
+            r11 = r2.top;
+            r12 = 0;
+            r11 = java.lang.Math.max(r11, r12);
+            r13 = r0.path;
+            r13.reset();
+            r13 = r0.isOut;
+            r15 = NUM; // 0x40266666 float:2.6 double:5.317423045E-315;
             r14 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
             r10 = 1;
-            r15 = 0;
-            r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            if (r11 == 0) goto L_0x02cc;
-        L_0x006a:
-            if (r22 != 0) goto L_0x00a0;
-        L_0x006c:
-            r11 = r0.topY;
-            r12 = r2.bottom;
-            r11 = r11 + r12;
-            r11 = r11 - r5;
-            r12 = r0.currentBackgroundHeight;
-            if (r11 >= r12) goto L_0x0077;
+            r3 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            if (r13 == 0) goto L_0x02dd;
+        L_0x0070:
+            r13 = r0.currentType;
+            if (r13 == r7) goto L_0x00a8;
+        L_0x0074:
+            if (r21 != 0) goto L_0x00a8;
         L_0x0076:
-            goto L_0x00a0;
-        L_0x0077:
-            r11 = r0.path;
-            r12 = r2.right;
-            r13 = r0.dp(r7);
-            r12 = r12 - r13;
-            r12 = (float) r12;
-            r13 = r2.top;
-            r3 = r0.topY;
-            r13 = r13 - r3;
-            r3 = r0.currentBackgroundHeight;
-            r13 = r13 + r3;
-            r3 = (float) r13;
-            r11.moveTo(r12, r3);
-            r3 = r0.path;
-            r11 = r2.left;
-            r11 = r11 + r4;
-            r11 = (float) r11;
-            r12 = r2.top;
             r13 = r0.topY;
+            r7 = r2.bottom;
+            r13 = r13 + r7;
+            r13 = r13 - r5;
+            r7 = r0.currentBackgroundHeight;
+            if (r13 >= r7) goto L_0x0081;
+        L_0x0080:
+            goto L_0x00a8;
+        L_0x0081:
+            r7 = r0.path;
+            r13 = r2.right;
+            r15 = r0.dp(r3);
+            r13 = r13 - r15;
+            r13 = (float) r13;
+            r15 = r0.topY;
+            r15 = r11 - r15;
+            r12 = r0.currentBackgroundHeight;
+            r15 = r15 + r12;
+            r12 = (float) r15;
+            r7.moveTo(r13, r12);
+            r7 = r0.path;
+            r12 = r2.left;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r13 = r0.topY;
+            r13 = r11 - r13;
+            r15 = r0.currentBackgroundHeight;
+            r13 = r13 + r15;
+            r13 = (float) r13;
+            r7.lineTo(r12, r13);
+            goto L_0x00ff;
+        L_0x00a8:
+            r7 = r0.currentType;
+            if (r7 != r10) goto L_0x00bf;
+        L_0x00ac:
+            r7 = r0.path;
+            r12 = r2.right;
+            r13 = r0.dp(r3);
             r12 = r12 - r13;
-            r13 = r0.currentBackgroundHeight;
-            r12 = r12 + r13;
-            r12 = (float) r12;
-            r3.lineTo(r11, r12);
-            goto L_0x00f6;
-        L_0x00a0:
-            r3 = r0.currentType;
-            if (r3 != r10) goto L_0x00b7;
-        L_0x00a4:
-            r3 = r0.path;
-            r11 = r2.right;
-            r12 = r0.dp(r7);
-            r11 = r11 - r12;
-            r11 = r11 - r5;
-            r11 = (float) r11;
-            r12 = r2.bottom;
-            r12 = r12 - r4;
-            r12 = (float) r12;
-            r3.moveTo(r11, r12);
-            goto L_0x00c8;
-        L_0x00b7:
-            r3 = r0.path;
-            r11 = r2.right;
-            r12 = r0.dp(r13);
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r12 = r2.bottom;
-            r12 = r12 - r4;
-            r12 = (float) r12;
-            r3.moveTo(r11, r12);
-        L_0x00c8:
-            r3 = r0.path;
-            r11 = r2.left;
-            r11 = r11 + r4;
-            r11 = r11 + r5;
-            r11 = (float) r11;
-            r12 = r2.bottom;
-            r12 = r12 - r4;
-            r12 = (float) r12;
-            r3.lineTo(r11, r12);
-            r3 = r0.rect;
-            r11 = r2.left;
-            r12 = r11 + r4;
+            r12 = r12 - r5;
             r12 = (float) r12;
             r13 = r2.bottom;
-            r18 = r13 - r4;
-            r19 = r5 * 2;
-            r7 = r18 - r19;
-            r7 = (float) r7;
-            r11 = r11 + r4;
-            r11 = r11 + r19;
-            r11 = (float) r11;
             r13 = r13 - r4;
             r13 = (float) r13;
-            r3.set(r12, r7, r11, r13);
+            r7.moveTo(r12, r13);
+            goto L_0x00d0;
+        L_0x00bf:
+            r7 = r0.path;
+            r12 = r2.right;
+            r13 = r0.dp(r15);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r13 = r2.bottom;
+            r13 = r13 - r4;
+            r13 = (float) r13;
+            r7.moveTo(r12, r13);
+        L_0x00d0:
+            r7 = r0.path;
+            r12 = r2.left;
+            r12 = r12 + r4;
+            r12 = r12 + r5;
+            r12 = (float) r12;
+            r13 = r2.bottom;
+            r13 = r13 - r4;
+            r13 = (float) r13;
+            r7.lineTo(r12, r13);
+            r7 = r0.rect;
+            r12 = r2.left;
+            r13 = r12 + r4;
+            r13 = (float) r13;
+            r15 = r2.bottom;
+            r17 = r15 - r4;
+            r18 = r5 * 2;
+            r3 = r17 - r18;
+            r3 = (float) r3;
+            r12 = r12 + r4;
+            r12 = r12 + r18;
+            r12 = (float) r12;
+            r15 = r15 - r4;
+            r15 = (float) r15;
+            r7.set(r13, r3, r12, r15);
             r3 = r0.path;
             r7 = r0.rect;
-            r3.arcTo(r7, r14, r14, r15);
-        L_0x00f6:
-            if (r22 != 0) goto L_0x014e;
-        L_0x00f8:
+            r12 = 0;
+            r3.arcTo(r7, r14, r14, r12);
+        L_0x00ff:
+            r3 = r0.currentType;
+            r7 = 2;
+            if (r3 == r7) goto L_0x0159;
+        L_0x0104:
+            if (r21 != 0) goto L_0x0159;
+        L_0x0106:
             r3 = r0.topY;
             r7 = r5 * 2;
             r7 = r7 + r3;
-            if (r7 < 0) goto L_0x0100;
-        L_0x00ff:
-            goto L_0x014e;
-        L_0x0100:
+            if (r7 < 0) goto L_0x010e;
+        L_0x010d:
+            goto L_0x0159;
+        L_0x010e:
             r7 = r0.path;
-            r11 = r2.left;
-            r11 = r11 + r4;
-            r11 = (float) r11;
-            r12 = r2.top;
-            r12 = r12 - r3;
-            r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r13 = r0.dp(r3);
-            r12 = r12 - r13;
-            r3 = (float) r12;
-            r7.lineTo(r11, r3);
+            r12 = r2.left;
+            r12 = r12 + r4;
+            r12 = (float) r12;
+            r3 = r11 - r3;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r15 = r0.dp(r13);
+            r3 = r3 - r15;
+            r3 = (float) r3;
+            r7.lineTo(r12, r3);
             r3 = r0.currentType;
-            if (r3 != r10) goto L_0x0130;
-        L_0x0118:
+            if (r3 != r10) goto L_0x013c;
+        L_0x0125:
             r3 = r0.path;
             r7 = r2.right;
             r7 = r7 - r4;
             r7 = (float) r7;
-            r11 = r2.top;
             r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r12 = r0.dp(r12);
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r3.lineTo(r7, r11);
-            goto L_0x01f0;
-        L_0x0130:
+            r12 = r11 - r12;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r13);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r3.lineTo(r7, r12);
+            goto L_0x01fd;
+        L_0x013c:
             r3 = r0.path;
             r7 = r2.right;
-            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r12 = r0.dp(r11);
-            r7 = r7 - r12;
+            r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r13 = r0.dp(r12);
+            r7 = r7 - r13;
             r7 = (float) r7;
-            r11 = r2.top;
             r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r12 = r0.dp(r12);
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r3.lineTo(r7, r11);
-            goto L_0x01f0;
-        L_0x014e:
+            r12 = r11 - r12;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r13);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r3.lineTo(r7, r12);
+            goto L_0x01fd;
+        L_0x0159:
             r3 = r0.path;
             r7 = r2.left;
             r7 = r7 + r4;
             r7 = (float) r7;
-            r11 = r2.top;
-            r11 = r11 + r4;
-            r11 = r11 + r5;
-            r11 = (float) r11;
-            r3.lineTo(r7, r11);
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = r12 + r5;
+            r12 = (float) r12;
+            r3.lineTo(r7, r12);
             r3 = r0.rect;
             r7 = r2.left;
-            r11 = r7 + r4;
-            r11 = (float) r11;
-            r12 = r2.top;
-            r13 = r12 + r4;
-            r13 = (float) r13;
-            r7 = r7 + r4;
-            r17 = r5 * 2;
-            r7 = r7 + r17;
-            r7 = (float) r7;
-            r12 = r12 + r4;
-            r12 = r12 + r17;
+            r12 = r7 + r4;
             r12 = (float) r12;
-            r3.set(r11, r13, r7, r12);
+            r13 = r2.top;
+            r15 = r13 + r4;
+            r15 = (float) r15;
+            r7 = r7 + r4;
+            r16 = r5 * 2;
+            r7 = r7 + r16;
+            r7 = (float) r7;
+            r13 = r13 + r4;
+            r13 = r13 + r16;
+            r13 = (float) r13;
+            r3.set(r12, r15, r7, r13);
             r3 = r0.path;
             r7 = r0.rect;
-            r11 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
-            r3.arcTo(r7, r11, r14, r15);
+            r12 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
+            r13 = 0;
+            r3.arcTo(r7, r12, r14, r13);
             r3 = r0.isTopNear;
-            if (r3 == 0) goto L_0x0184;
-        L_0x0182:
+            if (r3 == 0) goto L_0x0190;
+        L_0x018e:
             r3 = r8;
-            goto L_0x0185;
-        L_0x0184:
+            goto L_0x0191;
+        L_0x0190:
             r3 = r5;
-        L_0x0185:
+        L_0x0191:
             r7 = r0.currentType;
-            if (r7 != r10) goto L_0x01b0;
-        L_0x0189:
+            if (r7 != r10) goto L_0x01bc;
+        L_0x0195:
             r7 = r0.path;
-            r11 = r2.right;
-            r11 = r11 - r4;
-            r11 = r11 - r3;
-            r11 = (float) r11;
-            r12 = r2.top;
-            r12 = r12 + r4;
-            r12 = (float) r12;
-            r7.lineTo(r11, r12);
-            r7 = r0.rect;
-            r11 = r2.right;
-            r12 = r11 - r4;
-            r13 = 2;
-            r3 = r3 * 2;
+            r12 = r2.right;
+            r12 = r12 - r4;
             r12 = r12 - r3;
             r12 = (float) r12;
             r13 = r2.top;
-            r10 = r13 + r4;
-            r10 = (float) r10;
-            r11 = r11 - r4;
-            r11 = (float) r11;
             r13 = r13 + r4;
-            r13 = r13 + r3;
-            r3 = (float) r13;
-            r7.set(r12, r10, r11, r3);
-            goto L_0x01e7;
-        L_0x01b0:
+            r13 = (float) r13;
+            r7.lineTo(r12, r13);
+            r7 = r0.rect;
+            r12 = r2.right;
+            r13 = r12 - r4;
+            r15 = 2;
+            r3 = r3 * 2;
+            r13 = r13 - r3;
+            r13 = (float) r13;
+            r15 = r2.top;
+            r10 = r15 + r4;
+            r10 = (float) r10;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r15 = r15 + r4;
+            r15 = r15 + r3;
+            r3 = (float) r15;
+            r7.set(r13, r10, r12, r3);
+            goto L_0x01f3;
+        L_0x01bc:
             r7 = r0.path;
             r10 = r2.right;
-            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r12 = r0.dp(r11);
-            r10 = r10 - r12;
+            r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r13 = r0.dp(r12);
+            r10 = r10 - r13;
             r10 = r10 - r3;
             r10 = (float) r10;
-            r12 = r2.top;
-            r12 = r12 + r4;
-            r12 = (float) r12;
-            r7.lineTo(r10, r12);
+            r13 = r2.top;
+            r13 = r13 + r4;
+            r13 = (float) r13;
+            r7.lineTo(r10, r13);
             r7 = r0.rect;
             r10 = r2.right;
-            r12 = r0.dp(r11);
-            r10 = r10 - r12;
-            r12 = 2;
+            r13 = r0.dp(r12);
+            r10 = r10 - r13;
+            r13 = 2;
             r3 = r3 * 2;
             r10 = r10 - r3;
             r10 = (float) r10;
-            r12 = r2.top;
-            r12 = r12 + r4;
-            r12 = (float) r12;
-            r13 = r2.right;
-            r17 = r0.dp(r11);
-            r13 = r13 - r17;
-            r11 = (float) r13;
             r13 = r2.top;
             r13 = r13 + r4;
-            r13 = r13 + r3;
-            r3 = (float) r13;
-            r7.set(r10, r12, r11, r3);
-        L_0x01e7:
+            r13 = (float) r13;
+            r15 = r2.right;
+            r16 = r0.dp(r12);
+            r15 = r15 - r16;
+            r12 = (float) r15;
+            r15 = r2.top;
+            r15 = r15 + r4;
+            r15 = r15 + r3;
+            r3 = (float) r15;
+            r7.set(r10, r13, r12, r3);
+        L_0x01f3:
             r3 = r0.path;
             r7 = r0.rect;
             r10 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
-            r3.arcTo(r7, r10, r14, r15);
-        L_0x01f0:
+            r12 = 0;
+            r3.arcTo(r7, r10, r14, r12);
+        L_0x01fd:
             r3 = r0.currentType;
             r7 = 1;
-            if (r3 != r7) goto L_0x0247;
-        L_0x01f5:
-            if (r22 != 0) goto L_0x0212;
-        L_0x01f7:
+            if (r3 != r7) goto L_0x0256;
+        L_0x0202:
+            r7 = 2;
+            if (r3 == r7) goto L_0x0220;
+        L_0x0205:
+            if (r21 != 0) goto L_0x0220;
+        L_0x0207:
             r3 = r0.topY;
             r6 = r2.bottom;
             r6 = r6 + r3;
             r6 = r6 - r5;
             r7 = r0.currentBackgroundHeight;
-            if (r6 >= r7) goto L_0x0202;
-        L_0x0201:
-            goto L_0x0212;
-        L_0x0202:
-            r5 = r0.path;
-            r6 = r2.right;
-            r6 = r6 - r4;
-            r4 = (float) r6;
-            r2 = r2.top;
-            r2 = r2 - r3;
-            r2 = r2 + r7;
-            r2 = (float) r2;
-            r5.lineTo(r4, r2);
-            goto L_0x0531;
+            if (r6 >= r7) goto L_0x0212;
+        L_0x0211:
+            goto L_0x0220;
         L_0x0212:
+            r5 = r0.path;
+            r2 = r2.right;
+            r2 = r2 - r4;
+            r2 = (float) r2;
+            r11 = r11 - r3;
+            r11 = r11 + r7;
+            r3 = (float) r11;
+            r5.lineTo(r2, r3);
+            goto L_0x054e;
+        L_0x0220:
             r3 = r0.isBottomNear;
-            if (r3 == 0) goto L_0x0217;
-        L_0x0216:
+            if (r3 == 0) goto L_0x0225;
+        L_0x0224:
             r5 = r8;
-        L_0x0217:
+        L_0x0225:
             r3 = r0.path;
             r6 = r2.right;
             r6 = r6 - r4;
@@ -1639,36 +1648,39 @@ public class Theme {
             r2 = r0.path;
             r3 = r0.rect;
             r4 = 0;
-            r2.arcTo(r3, r4, r14, r15);
-            goto L_0x0531;
-        L_0x0247:
-            if (r22 != 0) goto L_0x0270;
-        L_0x0249:
+            r5 = 0;
+            r2.arcTo(r3, r4, r14, r5);
+            goto L_0x054e;
+        L_0x0256:
+            r5 = 2;
+            if (r3 == r5) goto L_0x0280;
+        L_0x0259:
+            if (r21 != 0) goto L_0x0280;
+        L_0x025b:
             r3 = r0.topY;
             r5 = r2.bottom;
             r3 = r3 + r5;
             r5 = r6 * 2;
             r3 = r3 - r5;
             r5 = r0.currentBackgroundHeight;
-            if (r3 >= r5) goto L_0x0256;
-        L_0x0255:
-            goto L_0x0270;
-        L_0x0256:
+            if (r3 >= r5) goto L_0x0268;
+        L_0x0267:
+            goto L_0x0280;
+        L_0x0268:
             r3 = r0.path;
-            r4 = r2.right;
-            r5 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r5 = r0.dp(r5);
-            r4 = r4 - r5;
-            r4 = (float) r4;
-            r2 = r2.top;
-            r5 = r0.topY;
-            r2 = r2 - r5;
-            r5 = r0.currentBackgroundHeight;
-            r2 = r2 + r5;
+            r2 = r2.right;
+            r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r4 = r0.dp(r4);
+            r2 = r2 - r4;
             r2 = (float) r2;
-            r3.lineTo(r4, r2);
-            goto L_0x0531;
-        L_0x0270:
+            r4 = r0.topY;
+            r11 = r11 - r4;
+            r4 = r0.currentBackgroundHeight;
+            r11 = r11 + r4;
+            r4 = (float) r11;
+            r3.lineTo(r2, r4);
+            goto L_0x054e;
+        L_0x0280:
             r3 = r0.path;
             r5 = r2.right;
             r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
@@ -1715,303 +1727,312 @@ public class Theme {
             r3 = r0.rect;
             r4 = -NUM; // 0xffffffffc2a60000 float:-83.0 double:NaN;
             r5 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
-            r2.arcTo(r3, r5, r4, r15);
-            goto L_0x0531;
-        L_0x02cc:
-            r3 = -NUM; // 0xffffffffc2b40000 float:-90.0 double:NaN;
-            if (r22 != 0) goto L_0x0306;
-        L_0x02d0:
-            r7 = r0.topY;
+            r6 = 0;
+            r2.arcTo(r3, r5, r4, r6);
+            goto L_0x054e;
+        L_0x02dd:
+            r3 = r0.currentType;
+            r7 = -NUM; // 0xffffffffc2b40000 float:-90.0 double:NaN;
+            r10 = 2;
+            if (r3 == r10) goto L_0x031a;
+        L_0x02e4:
+            if (r21 != 0) goto L_0x031a;
+        L_0x02e6:
+            r3 = r0.topY;
             r10 = r2.bottom;
-            r7 = r7 + r10;
-            r7 = r7 - r5;
+            r3 = r3 + r10;
+            r3 = r3 - r5;
             r10 = r0.currentBackgroundHeight;
-            if (r7 >= r10) goto L_0x02db;
-        L_0x02da:
-            goto L_0x0306;
-        L_0x02db:
-            r7 = r0.path;
+            if (r3 >= r10) goto L_0x02f1;
+        L_0x02f0:
+            goto L_0x031a;
+        L_0x02f1:
+            r3 = r0.path;
             r10 = r2.left;
-            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r12 = r0.dp(r11);
-            r10 = r10 + r12;
+            r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r13 = r0.dp(r12);
+            r10 = r10 + r13;
             r10 = (float) r10;
-            r11 = r2.top;
             r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = r0.currentBackgroundHeight;
-            r11 = r11 + r12;
-            r11 = (float) r11;
-            r7.moveTo(r10, r11);
-            r7 = r0.path;
+            r12 = r11 - r12;
+            r13 = r0.currentBackgroundHeight;
+            r12 = r12 + r13;
+            r12 = (float) r12;
+            r3.moveTo(r10, r12);
+            r3 = r0.path;
             r10 = r2.right;
             r10 = r10 - r4;
             r10 = (float) r10;
-            r11 = r2.top;
             r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = r0.currentBackgroundHeight;
-            r11 = r11 + r12;
-            r11 = (float) r11;
-            r7.lineTo(r10, r11);
-            goto L_0x035e;
-        L_0x0306:
-            r7 = r0.currentType;
+            r12 = r11 - r12;
+            r13 = r0.currentBackgroundHeight;
+            r12 = r12 + r13;
+            r12 = (float) r12;
+            r3.lineTo(r10, r12);
+            goto L_0x0373;
+        L_0x031a:
+            r3 = r0.currentType;
             r10 = 1;
-            if (r7 != r10) goto L_0x0320;
-        L_0x030b:
-            r7 = r0.path;
+            if (r3 != r10) goto L_0x0334;
+        L_0x031f:
+            r3 = r0.path;
             r10 = r2.left;
-            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r12 = r0.dp(r11);
-            r10 = r10 + r12;
+            r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r13 = r0.dp(r12);
+            r10 = r10 + r13;
             r10 = r10 + r5;
             r10 = (float) r10;
-            r11 = r2.bottom;
-            r11 = r11 - r4;
-            r11 = (float) r11;
-            r7.moveTo(r10, r11);
-            goto L_0x0331;
-        L_0x0320:
-            r7 = r0.path;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3.moveTo(r10, r12);
+            goto L_0x0345;
+        L_0x0334:
+            r3 = r0.path;
             r10 = r2.left;
-            r11 = r0.dp(r13);
-            r10 = r10 + r11;
+            r12 = r0.dp(r15);
+            r10 = r10 + r12;
             r10 = (float) r10;
-            r11 = r2.bottom;
-            r11 = r11 - r4;
-            r11 = (float) r11;
-            r7.moveTo(r10, r11);
-        L_0x0331:
-            r7 = r0.path;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3.moveTo(r10, r12);
+        L_0x0345:
+            r3 = r0.path;
             r10 = r2.right;
             r10 = r10 - r4;
             r10 = r10 - r5;
             r10 = (float) r10;
-            r11 = r2.bottom;
-            r11 = r11 - r4;
-            r11 = (float) r11;
-            r7.lineTo(r10, r11);
-            r7 = r0.rect;
-            r10 = r2.right;
-            r11 = r10 - r4;
-            r12 = r5 * 2;
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r13 = r2.bottom;
-            r19 = r13 - r4;
-            r12 = r19 - r12;
+            r12 = r2.bottom;
+            r12 = r12 - r4;
             r12 = (float) r12;
+            r3.lineTo(r10, r12);
+            r3 = r0.rect;
+            r10 = r2.right;
+            r12 = r10 - r4;
+            r13 = r5 * 2;
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r15 = r2.bottom;
+            r18 = r15 - r4;
+            r13 = r18 - r13;
+            r13 = (float) r13;
             r10 = r10 - r4;
             r10 = (float) r10;
-            r13 = r13 - r4;
-            r13 = (float) r13;
-            r7.set(r11, r12, r10, r13);
-            r7 = r0.path;
+            r15 = r15 - r4;
+            r15 = (float) r15;
+            r3.set(r12, r13, r10, r15);
+            r3 = r0.path;
             r10 = r0.rect;
-            r7.arcTo(r10, r14, r3, r15);
-        L_0x035e:
-            if (r22 != 0) goto L_0x03b7;
-        L_0x0360:
-            r7 = r0.topY;
+            r12 = 0;
+            r3.arcTo(r10, r14, r7, r12);
+        L_0x0373:
+            r3 = r0.currentType;
+            r10 = 2;
+            if (r3 == r10) goto L_0x03ce;
+        L_0x0378:
+            if (r21 != 0) goto L_0x03ce;
+        L_0x037a:
+            r3 = r0.topY;
             r10 = r5 * 2;
-            r10 = r10 + r7;
-            if (r10 < 0) goto L_0x0368;
-        L_0x0367:
-            goto L_0x03b7;
-        L_0x0368:
-            r10 = r0.path;
-            r11 = r2.right;
-            r11 = r11 - r4;
-            r11 = (float) r11;
-            r12 = r2.top;
-            r12 = r12 - r7;
-            r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r13 = r0.dp(r7);
-            r12 = r12 - r13;
-            r7 = (float) r12;
-            r10.lineTo(r11, r7);
-            r7 = r0.currentType;
-            r10 = 1;
-            if (r7 != r10) goto L_0x0399;
+            r10 = r10 + r3;
+            if (r10 < 0) goto L_0x0382;
         L_0x0381:
-            r7 = r0.path;
+            goto L_0x03ce;
+        L_0x0382:
+            r10 = r0.path;
+            r12 = r2.right;
+            r12 = r12 - r4;
+            r12 = (float) r12;
+            r3 = r11 - r3;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r14 = r0.dp(r13);
+            r3 = r3 - r14;
+            r3 = (float) r3;
+            r10.lineTo(r12, r3);
+            r3 = r0.currentType;
+            r10 = 1;
+            if (r3 != r10) goto L_0x03b1;
+        L_0x039a:
+            r3 = r0.path;
             r10 = r2.left;
             r10 = r10 + r4;
             r10 = (float) r10;
-            r11 = r2.top;
             r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r12 = r0.dp(r12);
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r7.lineTo(r10, r11);
-            goto L_0x0458;
-        L_0x0399:
-            r7 = r0.path;
+            r12 = r11 - r12;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r13);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r3.lineTo(r10, r12);
+            goto L_0x0471;
+        L_0x03b1:
+            r3 = r0.path;
             r10 = r2.left;
-            r11 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r12 = r0.dp(r11);
-            r10 = r10 + r12;
-            r10 = (float) r10;
-            r11 = r2.top;
-            r12 = r0.topY;
-            r11 = r11 - r12;
-            r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            r12 = r0.dp(r12);
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r7.lineTo(r10, r11);
-            goto L_0x0458;
-        L_0x03b7:
-            r7 = r0.path;
-            r10 = r2.right;
-            r10 = r10 - r4;
-            r10 = (float) r10;
-            r11 = r2.top;
-            r11 = r11 + r4;
-            r11 = r11 + r5;
-            r11 = (float) r11;
-            r7.lineTo(r10, r11);
-            r7 = r0.rect;
-            r10 = r2.right;
-            r11 = r10 - r4;
-            r12 = r5 * 2;
-            r11 = r11 - r12;
-            r11 = (float) r11;
-            r13 = r2.top;
-            r14 = r13 + r4;
-            r14 = (float) r14;
-            r10 = r10 - r4;
-            r10 = (float) r10;
-            r13 = r13 + r4;
-            r13 = r13 + r12;
-            r12 = (float) r13;
-            r7.set(r11, r14, r10, r12);
-            r7 = r0.path;
-            r10 = r0.rect;
-            r11 = 0;
-            r7.arcTo(r10, r11, r3, r15);
-            r7 = r0.isTopNear;
-            if (r7 == 0) goto L_0x03ea;
-        L_0x03e8:
-            r7 = r8;
-            goto L_0x03eb;
-        L_0x03ea:
-            r7 = r5;
-        L_0x03eb:
-            r10 = r0.currentType;
-            r11 = 1;
-            if (r10 != r11) goto L_0x0418;
-        L_0x03f0:
-            r10 = r0.path;
-            r11 = r2.left;
-            r11 = r11 + r4;
-            r11 = r11 + r7;
-            r11 = (float) r11;
-            r12 = r2.top;
-            r12 = r12 + r4;
-            r12 = (float) r12;
-            r10.lineTo(r11, r12);
-            r10 = r0.rect;
-            r11 = r2.left;
-            r12 = r11 + r4;
-            r12 = (float) r12;
-            r13 = r2.top;
-            r14 = r13 + r4;
-            r14 = (float) r14;
-            r11 = r11 + r4;
-            r16 = 2;
-            r7 = r7 * 2;
-            r11 = r11 + r7;
-            r11 = (float) r11;
-            r13 = r13 + r4;
-            r13 = r13 + r7;
-            r7 = (float) r13;
-            r10.set(r12, r14, r11, r7);
-            goto L_0x044f;
-        L_0x0418:
-            r10 = r0.path;
-            r11 = r2.left;
             r12 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r13 = r0.dp(r12);
-            r11 = r11 + r13;
-            r11 = r11 + r7;
-            r11 = (float) r11;
-            r13 = r2.top;
-            r13 = r13 + r4;
-            r13 = (float) r13;
-            r10.lineTo(r11, r13);
+            r10 = r10 + r13;
+            r10 = (float) r10;
+            r12 = r0.topY;
+            r12 = r11 - r12;
+            r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            r13 = r0.dp(r13);
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r3.lineTo(r10, r12);
+            goto L_0x0471;
+        L_0x03ce:
+            r3 = r0.path;
+            r10 = r2.right;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r12 = r2.top;
+            r12 = r12 + r4;
+            r12 = r12 + r5;
+            r12 = (float) r12;
+            r3.lineTo(r10, r12);
+            r3 = r0.rect;
+            r10 = r2.right;
+            r12 = r10 - r4;
+            r13 = r5 * 2;
+            r12 = r12 - r13;
+            r12 = (float) r12;
+            r14 = r2.top;
+            r15 = r14 + r4;
+            r15 = (float) r15;
+            r10 = r10 - r4;
+            r10 = (float) r10;
+            r14 = r14 + r4;
+            r14 = r14 + r13;
+            r13 = (float) r14;
+            r3.set(r12, r15, r10, r13);
+            r3 = r0.path;
             r10 = r0.rect;
-            r11 = r2.left;
-            r13 = r0.dp(r12);
-            r11 = r11 + r13;
-            r11 = (float) r11;
+            r12 = 0;
+            r13 = 0;
+            r3.arcTo(r10, r12, r7, r13);
+            r3 = r0.isTopNear;
+            if (r3 == 0) goto L_0x0402;
+        L_0x0400:
+            r3 = r8;
+            goto L_0x0403;
+        L_0x0402:
+            r3 = r5;
+        L_0x0403:
+            r10 = r0.currentType;
+            r12 = 1;
+            if (r10 != r12) goto L_0x0430;
+        L_0x0408:
+            r10 = r0.path;
+            r12 = r2.left;
+            r12 = r12 + r4;
+            r12 = r12 + r3;
+            r12 = (float) r12;
             r13 = r2.top;
             r13 = r13 + r4;
             r13 = (float) r13;
-            r14 = r2.left;
-            r17 = r0.dp(r12);
-            r14 = r14 + r17;
-            r12 = 2;
-            r7 = r7 * 2;
-            r14 = r14 + r7;
-            r12 = (float) r14;
+            r10.lineTo(r12, r13);
+            r10 = r0.rect;
+            r12 = r2.left;
+            r13 = r12 + r4;
+            r13 = (float) r13;
+            r14 = r2.top;
+            r15 = r14 + r4;
+            r15 = (float) r15;
+            r12 = r12 + r4;
+            r16 = 2;
+            r3 = r3 * 2;
+            r12 = r12 + r3;
+            r12 = (float) r12;
+            r14 = r14 + r4;
+            r14 = r14 + r3;
+            r3 = (float) r14;
+            r10.set(r13, r15, r12, r3);
+            goto L_0x0467;
+        L_0x0430:
+            r10 = r0.path;
+            r12 = r2.left;
+            r13 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r14 = r0.dp(r13);
+            r12 = r12 + r14;
+            r12 = r12 + r3;
+            r12 = (float) r12;
             r14 = r2.top;
             r14 = r14 + r4;
-            r14 = r14 + r7;
-            r7 = (float) r14;
-            r10.set(r11, r13, r12, r7);
-        L_0x044f:
-            r7 = r0.path;
+            r14 = (float) r14;
+            r10.lineTo(r12, r14);
             r10 = r0.rect;
-            r11 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
-            r7.arcTo(r10, r11, r3, r15);
-        L_0x0458:
-            r7 = r0.currentType;
-            r10 = 1;
-            if (r7 != r10) goto L_0x04b0;
-        L_0x045d:
-            if (r22 != 0) goto L_0x047a;
-        L_0x045f:
-            r6 = r0.topY;
-            r7 = r2.bottom;
-            r7 = r7 + r6;
-            r7 = r7 - r5;
-            r10 = r0.currentBackgroundHeight;
-            if (r7 >= r10) goto L_0x046a;
-        L_0x0469:
-            goto L_0x047a;
-        L_0x046a:
+            r12 = r2.left;
+            r14 = r0.dp(r13);
+            r12 = r12 + r14;
+            r12 = (float) r12;
+            r14 = r2.top;
+            r14 = r14 + r4;
+            r14 = (float) r14;
+            r15 = r2.left;
+            r16 = r0.dp(r13);
+            r15 = r15 + r16;
+            r13 = 2;
+            r3 = r3 * 2;
+            r15 = r15 + r3;
+            r13 = (float) r15;
+            r15 = r2.top;
+            r15 = r15 + r4;
+            r15 = r15 + r3;
+            r3 = (float) r15;
+            r10.set(r12, r14, r13, r3);
+        L_0x0467:
             r3 = r0.path;
-            r5 = r2.left;
-            r5 = r5 + r4;
-            r4 = (float) r5;
-            r2 = r2.top;
-            r2 = r2 - r6;
-            r2 = r2 + r10;
+            r10 = r0.rect;
+            r12 = NUM; // 0x43870000 float:270.0 double:5.597372625E-315;
+            r13 = 0;
+            r3.arcTo(r10, r12, r7, r13);
+        L_0x0471:
+            r3 = r0.currentType;
+            r10 = 1;
+            if (r3 != r10) goto L_0x04cb;
+        L_0x0476:
+            r10 = 2;
+            if (r3 == r10) goto L_0x0494;
+        L_0x0479:
+            if (r21 != 0) goto L_0x0494;
+        L_0x047b:
+            r3 = r0.topY;
+            r6 = r2.bottom;
+            r6 = r6 + r3;
+            r6 = r6 - r5;
+            r10 = r0.currentBackgroundHeight;
+            if (r6 >= r10) goto L_0x0486;
+        L_0x0485:
+            goto L_0x0494;
+        L_0x0486:
+            r5 = r0.path;
+            r2 = r2.left;
+            r2 = r2 + r4;
             r2 = (float) r2;
-            r3.lineTo(r4, r2);
-            goto L_0x0531;
-        L_0x047a:
-            r6 = r0.isBottomNear;
-            if (r6 == 0) goto L_0x047f;
-        L_0x047e:
+            r11 = r11 - r3;
+            r11 = r11 + r10;
+            r3 = (float) r11;
+            r5.lineTo(r2, r3);
+            goto L_0x054e;
+        L_0x0494:
+            r3 = r0.isBottomNear;
+            if (r3 == 0) goto L_0x0499;
+        L_0x0498:
             r5 = r8;
-        L_0x047f:
-            r6 = r0.path;
-            r7 = r2.left;
-            r7 = r7 + r4;
-            r7 = (float) r7;
+        L_0x0499:
+            r3 = r0.path;
+            r6 = r2.left;
+            r6 = r6 + r4;
+            r6 = (float) r6;
             r8 = r2.bottom;
             r8 = r8 - r4;
             r8 = r8 - r5;
             r8 = (float) r8;
-            r6.lineTo(r7, r8);
-            r6 = r0.rect;
-            r7 = r2.left;
-            r8 = r7 + r4;
+            r3.lineTo(r6, r8);
+            r3 = r0.rect;
+            r6 = r2.left;
+            r8 = r6 + r4;
             r8 = (float) r8;
             r2 = r2.bottom;
             r10 = r2 - r4;
@@ -2019,45 +2040,48 @@ public class Theme {
             r5 = r5 * 2;
             r10 = r10 - r5;
             r10 = (float) r10;
-            r7 = r7 + r4;
-            r7 = r7 + r5;
-            r5 = (float) r7;
+            r6 = r6 + r4;
+            r6 = r6 + r5;
+            r5 = (float) r6;
             r2 = r2 - r4;
             r2 = (float) r2;
-            r6.set(r8, r10, r5, r2);
+            r3.set(r8, r10, r5, r2);
             r2 = r0.path;
-            r4 = r0.rect;
-            r5 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
-            r2.arcTo(r4, r5, r3, r15);
-            goto L_0x0531;
-        L_0x04b0:
-            if (r22 != 0) goto L_0x04d8;
-        L_0x04b2:
+            r3 = r0.rect;
+            r4 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
+            r5 = 0;
+            r2.arcTo(r3, r4, r7, r5);
+            goto L_0x054e;
+        L_0x04cb:
+            r5 = 2;
+            if (r3 == r5) goto L_0x04f4;
+        L_0x04ce:
+            if (r21 != 0) goto L_0x04f4;
+        L_0x04d0:
             r3 = r0.topY;
             r5 = r2.bottom;
             r3 = r3 + r5;
             r5 = r6 * 2;
             r3 = r3 - r5;
             r5 = r0.currentBackgroundHeight;
-            if (r3 >= r5) goto L_0x04bf;
-        L_0x04be:
-            goto L_0x04d8;
-        L_0x04bf:
+            if (r3 >= r5) goto L_0x04dd;
+        L_0x04dc:
+            goto L_0x04f4;
+        L_0x04dd:
             r3 = r0.path;
-            r4 = r2.left;
-            r5 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r5 = r0.dp(r5);
-            r4 = r4 + r5;
-            r4 = (float) r4;
-            r2 = r2.top;
-            r5 = r0.topY;
-            r2 = r2 - r5;
-            r5 = r0.currentBackgroundHeight;
-            r2 = r2 + r5;
+            r2 = r2.left;
+            r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            r4 = r0.dp(r4);
+            r2 = r2 + r4;
             r2 = (float) r2;
-            r3.lineTo(r4, r2);
-            goto L_0x0531;
-        L_0x04d8:
+            r4 = r0.topY;
+            r11 = r11 - r4;
+            r4 = r0.currentBackgroundHeight;
+            r11 = r11 + r4;
+            r4 = (float) r11;
+            r3.lineTo(r2, r4);
+            goto L_0x054e;
+        L_0x04f4:
             r3 = r0.path;
             r5 = r2.left;
             r7 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
@@ -2104,18 +2128,19 @@ public class Theme {
             r3 = r0.rect;
             r4 = NUM; // 0x42a60000 float:83.0 double:5.52451968E-315;
             r5 = 0;
-            r2.arcTo(r3, r5, r4, r15);
-        L_0x0531:
+            r6 = 0;
+            r2.arcTo(r3, r5, r4, r6);
+        L_0x054e:
             r2 = r0.path;
             r2.close();
             r2 = r0.path;
             r1.drawPath(r2, r9);
             r2 = r0.gradientShader;
-            if (r2 == 0) goto L_0x0555;
-        L_0x053f:
+            if (r2 == 0) goto L_0x0572;
+        L_0x055c:
             r2 = r0.isSelected;
-            if (r2 == 0) goto L_0x0555;
-        L_0x0543:
+            if (r2 == 0) goto L_0x0572;
+        L_0x0560:
             r2 = r0.selectedPaint;
             r3 = "chat_outBubbleGradientSelectedOverlay";
             r3 = r0.getColor(r3);
@@ -2123,7 +2148,7 @@ public class Theme {
             r2 = r0.path;
             r3 = r0.selectedPaint;
             r1.drawPath(r2, r3);
-        L_0x0555:
+        L_0x0572:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme$MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");
@@ -11702,170 +11727,170 @@ public class Theme {
     }
 
     /* JADX WARNING: Unknown top exception splitter block from list: {B:117:0x0367=Splitter:B:117:0x0367, B:39:0x01bd=Splitter:B:39:0x01bd} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     /* JADX WARNING: Removed duplicated region for block: B:101:0x034d A:{SYNTHETIC, Splitter:B:101:0x034d} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x0361 A:{SYNTHETIC, Splitter:B:113:0x0361} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x046a A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a9 A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x04ce A:{Catch:{ all -> 0x036d, all -> 0x0539 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x03b9 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0381 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x03e4 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0400 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x046f A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04b0 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x04d5 A:{Catch:{ all -> 0x036d, all -> 0x0540 }} */
     public static java.lang.String createThemePreviewImage(java.lang.String r26, java.lang.String r27) {
         /*
         r0 = r26;
         r1 = r27;
         r2 = 0;
         r3 = 1;
-        r4 = new java.lang.String[r3];	 Catch:{ all -> 0x0539 }
-        r5 = new java.io.File;	 Catch:{ all -> 0x0539 }
-        r5.<init>(r0);	 Catch:{ all -> 0x0539 }
-        r5 = getThemeFileValues(r5, r2, r4);	 Catch:{ all -> 0x0539 }
+        r4 = new java.lang.String[r3];	 Catch:{ all -> 0x0540 }
+        r5 = new java.io.File;	 Catch:{ all -> 0x0540 }
+        r5.<init>(r0);	 Catch:{ all -> 0x0540 }
+        r5 = getThemeFileValues(r5, r2, r4);	 Catch:{ all -> 0x0540 }
         r6 = "wallpaperFileOffset";
-        r6 = r5.get(r6);	 Catch:{ all -> 0x0539 }
-        r6 = (java.lang.Integer) r6;	 Catch:{ all -> 0x0539 }
+        r6 = r5.get(r6);	 Catch:{ all -> 0x0540 }
+        r6 = (java.lang.Integer) r6;	 Catch:{ all -> 0x0540 }
         r7 = 560; // 0x230 float:7.85E-43 double:2.767E-321;
         r8 = 678; // 0x2a6 float:9.5E-43 double:3.35E-321;
-        r9 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0539 }
-        r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9);	 Catch:{ all -> 0x0539 }
-        r14 = new android.graphics.Canvas;	 Catch:{ all -> 0x0539 }
-        r14.<init>(r7);	 Catch:{ all -> 0x0539 }
-        r15 = new android.graphics.Paint;	 Catch:{ all -> 0x0539 }
-        r15.<init>();	 Catch:{ all -> 0x0539 }
+        r9 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ all -> 0x0540 }
+        r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9);	 Catch:{ all -> 0x0540 }
+        r14 = new android.graphics.Canvas;	 Catch:{ all -> 0x0540 }
+        r14.<init>(r7);	 Catch:{ all -> 0x0540 }
+        r15 = new android.graphics.Paint;	 Catch:{ all -> 0x0540 }
+        r15.<init>();	 Catch:{ all -> 0x0540 }
         r8 = "actionBarDefault";
-        r8 = getPreviewColor(r5, r8);	 Catch:{ all -> 0x0539 }
+        r8 = getPreviewColor(r5, r8);	 Catch:{ all -> 0x0540 }
         r9 = "actionBarDefaultIcon";
-        r9 = getPreviewColor(r5, r9);	 Catch:{ all -> 0x0539 }
+        r9 = getPreviewColor(r5, r9);	 Catch:{ all -> 0x0540 }
         r10 = "chat_messagePanelBackground";
-        r13 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0539 }
+        r13 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0540 }
         r10 = "chat_messagePanelIcons";
-        r10 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0539 }
+        r10 = getPreviewColor(r5, r10);	 Catch:{ all -> 0x0540 }
         r11 = "chat_inBubble";
-        r11 = getPreviewColor(r5, r11);	 Catch:{ all -> 0x0539 }
+        r11 = getPreviewColor(r5, r11);	 Catch:{ all -> 0x0540 }
         r12 = "chat_outBubble";
-        r12 = getPreviewColor(r5, r12);	 Catch:{ all -> 0x0539 }
+        r12 = getPreviewColor(r5, r12);	 Catch:{ all -> 0x0540 }
         r2 = "chat_outBubbleGradient";
-        r2 = r5.get(r2);	 Catch:{ all -> 0x0539 }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0539 }
+        r2 = r5.get(r2);	 Catch:{ all -> 0x0540 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0540 }
         r2 = "chat_wallpaper";
-        r2 = r5.get(r2);	 Catch:{ all -> 0x0539 }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0539 }
+        r2 = r5.get(r2);	 Catch:{ all -> 0x0540 }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x0540 }
         r3 = "chat_serviceBackground";
-        r3 = r5.get(r3);	 Catch:{ all -> 0x0539 }
-        r3 = (java.lang.Integer) r3;	 Catch:{ all -> 0x0539 }
+        r3 = r5.get(r3);	 Catch:{ all -> 0x0540 }
+        r3 = (java.lang.Integer) r3;	 Catch:{ all -> 0x0540 }
         r16 = r11;
         r11 = "chat_wallpaper_gradient_to";
-        r11 = r5.get(r11);	 Catch:{ all -> 0x0539 }
-        r11 = (java.lang.Integer) r11;	 Catch:{ all -> 0x0539 }
-        r17 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
+        r11 = r5.get(r11);	 Catch:{ all -> 0x0540 }
+        r11 = (java.lang.Integer) r11;	 Catch:{ all -> 0x0540 }
+        r17 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0540 }
         r18 = r12;
-        r12 = r17.getResources();	 Catch:{ all -> 0x0539 }
+        r12 = r17.getResources();	 Catch:{ all -> 0x0540 }
         r17 = r13;
         r13 = NUM; // 0x7var_ float:1.7945848E38 double:1.0529358123E-314;
-        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
-        r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
-        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
-        r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
-        r12 = r12.getResources();	 Catch:{ all -> 0x0539 }
+        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0540 }
+        r13 = r12.mutate();	 Catch:{ all -> 0x0540 }
+        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0540 }
+        r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0540 }
+        r12 = r12.getResources();	 Catch:{ all -> 0x0540 }
         r19 = r13;
         r13 = NUM; // 0x7var_ float:1.7945852E38 double:1.0529358133E-314;
-        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0539 }
-        r13 = r12.mutate();	 Catch:{ all -> 0x0539 }
-        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0539 }
-        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
-        r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
+        r12 = r12.getDrawable(r13);	 Catch:{ all -> 0x0540 }
+        r13 = r12.mutate();	 Catch:{ all -> 0x0540 }
+        setDrawableColor(r13, r9);	 Catch:{ all -> 0x0540 }
+        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0540 }
+        r9 = r9.getResources();	 Catch:{ all -> 0x0540 }
         r12 = NUM; // 0x7var_ float:1.7945858E38 double:1.052935815E-314;
-        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
-        r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
-        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
-        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
-        r9 = r9.getResources();	 Catch:{ all -> 0x0539 }
+        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0540 }
+        r12 = r9.mutate();	 Catch:{ all -> 0x0540 }
+        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0540 }
+        r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0540 }
+        r9 = r9.getResources();	 Catch:{ all -> 0x0540 }
         r20 = r12;
         r12 = NUM; // 0x7var_ float:1.7945854E38 double:1.052935814E-314;
-        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0539 }
-        r12 = r9.mutate();	 Catch:{ all -> 0x0539 }
-        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0539 }
+        r9 = r9.getDrawable(r12);	 Catch:{ all -> 0x0540 }
+        r12 = r9.mutate();	 Catch:{ all -> 0x0540 }
+        setDrawableColor(r12, r10);	 Catch:{ all -> 0x0540 }
         r10 = 2;
-        r9 = new org.telegram.ui.ActionBar.Theme.MessageDrawable[r10];	 Catch:{ all -> 0x0539 }
+        r9 = new org.telegram.ui.ActionBar.Theme.MessageDrawable[r10];	 Catch:{ all -> 0x0540 }
         r21 = r12;
         r12 = 0;
     L_0x00d2:
         if (r12 >= r10) goto L_0x00ff;
     L_0x00d4:
-        r10 = new org.telegram.ui.ActionBar.Theme$8;	 Catch:{ all -> 0x0539 }
+        r10 = new org.telegram.ui.ActionBar.Theme$8;	 Catch:{ all -> 0x0540 }
         r22 = r13;
         r13 = 1;
         r23 = r8;
@@ -11879,9 +11904,9 @@ public class Theme {
         r13 = 0;
     L_0x00e3:
         r15 = 0;
-        r10.<init>(r8, r13, r15, r5);	 Catch:{ all -> 0x0539 }
-        r9[r12] = r10;	 Catch:{ all -> 0x0539 }
-        r8 = r9[r12];	 Catch:{ all -> 0x0539 }
+        r10.<init>(r8, r13, r15, r5);	 Catch:{ all -> 0x0540 }
+        r9[r12] = r10;	 Catch:{ all -> 0x0540 }
+        r8 = r9[r12];	 Catch:{ all -> 0x0540 }
         if (r12 != 0) goto L_0x00f0;
     L_0x00ed:
         r10 = r16;
@@ -11889,7 +11914,7 @@ public class Theme {
     L_0x00f0:
         r10 = r18;
     L_0x00f2:
-        setDrawableColor(r8, r10);	 Catch:{ all -> 0x0539 }
+        setDrawableColor(r8, r10);	 Catch:{ all -> 0x0540 }
         r12 = r12 + 1;
         r13 = r22;
         r8 = r23;
@@ -11900,8 +11925,8 @@ public class Theme {
         r23 = r8;
         r22 = r13;
         r24 = r15;
-        r15 = new android.graphics.RectF;	 Catch:{ all -> 0x0539 }
-        r15.<init>();	 Catch:{ all -> 0x0539 }
+        r15 = new android.graphics.RectF;	 Catch:{ all -> 0x0540 }
+        r15.<init>();	 Catch:{ all -> 0x0540 }
         r8 = 80;
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r12 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
@@ -12005,7 +12030,7 @@ public class Theme {
         r0 = move-exception;
         r1 = 0;
     L_0x01bd:
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0539 }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0540 }
     L_0x01c0:
         r0 = 80;
     L_0x01c2:
@@ -12016,49 +12041,49 @@ public class Theme {
     L_0x01c7:
         if (r11 != 0) goto L_0x01d3;
     L_0x01c9:
-        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0539 }
-        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
-        r0.<init>(r1);	 Catch:{ all -> 0x0539 }
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0540 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0540 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0540 }
         goto L_0x0207;
     L_0x01d3:
         r0 = "chat_wallpaper_gradient_rotation";
-        r0 = r5.get(r0);	 Catch:{ all -> 0x0539 }
-        r0 = (java.lang.Integer) r0;	 Catch:{ all -> 0x0539 }
+        r0 = r5.get(r0);	 Catch:{ all -> 0x0540 }
+        r0 = (java.lang.Integer) r0;	 Catch:{ all -> 0x0540 }
         if (r0 != 0) goto L_0x01e3;
     L_0x01dd:
         r0 = 45;
-        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0539 }
+        r0 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0540 }
     L_0x01e3:
         r1 = 2;
-        r4 = new int[r1];	 Catch:{ all -> 0x0539 }
-        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
+        r4 = new int[r1];	 Catch:{ all -> 0x0540 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0540 }
         r5 = 0;
-        r4[r5] = r1;	 Catch:{ all -> 0x0539 }
-        r1 = r11.intValue();	 Catch:{ all -> 0x0539 }
+        r4[r5] = r1;	 Catch:{ all -> 0x0540 }
+        r1 = r11.intValue();	 Catch:{ all -> 0x0540 }
         r5 = 1;
-        r4[r5] = r1;	 Catch:{ all -> 0x0539 }
-        r0 = r0.intValue();	 Catch:{ all -> 0x0539 }
-        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r5 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r4[r5] = r1;	 Catch:{ all -> 0x0540 }
+        r0 = r0.intValue();	 Catch:{ all -> 0x0540 }
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r5 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r5 = r5 - r9;
-        r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(r0, r4, r1, r5);	 Catch:{ all -> 0x0539 }
+        r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(r0, r4, r1, r5);	 Catch:{ all -> 0x0540 }
         r8 = 90;
     L_0x0207:
-        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r4 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r4 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r4 = r4 - r9;
         r5 = 0;
-        r0.setBounds(r5, r9, r1, r4);	 Catch:{ all -> 0x0539 }
-        r0.draw(r14);	 Catch:{ all -> 0x0539 }
+        r0.setBounds(r5, r9, r1, r4);	 Catch:{ all -> 0x0540 }
+        r0.draw(r14);	 Catch:{ all -> 0x0540 }
         if (r3 != 0) goto L_0x022d;
     L_0x0219:
-        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0539 }
-        r1 = r2.intValue();	 Catch:{ all -> 0x0539 }
-        r0.<init>(r1);	 Catch:{ all -> 0x0539 }
-        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0539 }
+        r0 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x0540 }
+        r1 = r2.intValue();	 Catch:{ all -> 0x0540 }
+        r0.<init>(r1);	 Catch:{ all -> 0x0540 }
+        r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0);	 Catch:{ all -> 0x0540 }
         r1 = 0;
-        r0 = r0[r1];	 Catch:{ all -> 0x0539 }
-        r3 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0539 }
+        r0 = r0[r1];	 Catch:{ all -> 0x0540 }
+        r3 = java.lang.Integer.valueOf(r0);	 Catch:{ all -> 0x0540 }
     L_0x022d:
         r0 = r8;
         r1 = 1;
@@ -12066,12 +12091,12 @@ public class Theme {
     L_0x0230:
         if (r6 == 0) goto L_0x0238;
     L_0x0232:
-        r1 = r6.intValue();	 Catch:{ all -> 0x0539 }
+        r1 = r6.intValue();	 Catch:{ all -> 0x0540 }
         if (r1 >= 0) goto L_0x0241;
     L_0x0238:
         r1 = 0;
-        r2 = r4[r1];	 Catch:{ all -> 0x0539 }
-        r1 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x0539 }
+        r2 = r4[r1];	 Catch:{ all -> 0x0540 }
+        r1 = android.text.TextUtils.isEmpty(r2);	 Catch:{ all -> 0x0540 }
         if (r1 != 0) goto L_0x037b;
     L_0x0241:
         r1 = new android.graphics.BitmapFactory$Options;	 Catch:{ all -> 0x0358 }
@@ -12250,7 +12275,7 @@ public class Theme {
         r0 = move-exception;
         r2 = r0;
     L_0x0367:
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0539 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0540 }
     L_0x036a:
         r0 = 80;
         goto L_0x037f;
@@ -12264,9 +12289,9 @@ public class Theme {
     L_0x0375:
         r0 = move-exception;
         r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0539 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0540 }
     L_0x037a:
-        throw r1;	 Catch:{ all -> 0x0539 }
+        throw r1;	 Catch:{ all -> 0x0540 }
     L_0x037b:
         r10 = 2;
         r0 = 80;
@@ -12274,39 +12299,39 @@ public class Theme {
     L_0x037f:
         if (r1 != 0) goto L_0x03b9;
     L_0x0381:
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0539 }
-        r1 = r1.getResources();	 Catch:{ all -> 0x0539 }
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x0540 }
+        r1 = r1.getResources();	 Catch:{ all -> 0x0540 }
         r2 = NUM; // 0x7var_ float:1.7944842E38 double:1.0529355673E-314;
-        r1 = r1.getDrawable(r2);	 Catch:{ all -> 0x0539 }
-        r1 = r1.mutate();	 Catch:{ all -> 0x0539 }
-        r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0539 }
+        r1 = r1.getDrawable(r2);	 Catch:{ all -> 0x0540 }
+        r1 = r1.mutate();	 Catch:{ all -> 0x0540 }
+        r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0540 }
         if (r3 != 0) goto L_0x03a1;
     L_0x0396:
-        r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0539 }
+        r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1);	 Catch:{ all -> 0x0540 }
         r3 = 0;
-        r2 = r2[r3];	 Catch:{ all -> 0x0539 }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ all -> 0x0539 }
+        r2 = r2[r3];	 Catch:{ all -> 0x0540 }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ all -> 0x0540 }
     L_0x03a1:
-        r2 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0539 }
-        r4 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0539 }
-        r1.setTileModeXY(r2, r4);	 Catch:{ all -> 0x0539 }
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r4 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r2 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0540 }
+        r4 = android.graphics.Shader.TileMode.REPEAT;	 Catch:{ all -> 0x0540 }
+        r1.setTileModeXY(r2, r4);	 Catch:{ all -> 0x0540 }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r4 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r4 = r4 - r9;
         r5 = 0;
-        r1.setBounds(r5, r9, r2, r4);	 Catch:{ all -> 0x0539 }
-        r1.draw(r14);	 Catch:{ all -> 0x0539 }
+        r1.setBounds(r5, r9, r2, r4);	 Catch:{ all -> 0x0540 }
+        r1.draw(r14);	 Catch:{ all -> 0x0540 }
         goto L_0x03ba;
     L_0x03b9:
         r5 = 0;
     L_0x03ba:
         r2 = r23;
         r1 = r24;
-        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
+        r1.setColor(r2);	 Catch:{ all -> 0x0540 }
         r2 = 0;
         r4 = 0;
-        r6 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r11 = (float) r6;	 Catch:{ all -> 0x0539 }
+        r6 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r11 = (float) r6;	 Catch:{ all -> 0x0540 }
         r12 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r8 = r14;
         r6 = r18;
@@ -12322,169 +12347,172 @@ public class Theme {
         r5 = r22;
         r4 = 0;
         r13 = r1;
-        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0539 }
+        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0540 }
         if (r2 == 0) goto L_0x03fe;
     L_0x03e4:
         r8 = 13;
-        r9 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r9 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r9 = 120 - r9;
         r10 = 2;
         r9 = r9 / r10;
-        r10 = r2.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r10 = r2.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r10 = r10 + r8;
-        r11 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r11 = r2.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r11 = r11 + r9;
-        r2.setBounds(r8, r9, r10, r11);	 Catch:{ all -> 0x0539 }
-        r2.draw(r14);	 Catch:{ all -> 0x0539 }
+        r2.setBounds(r8, r9, r10, r11);	 Catch:{ all -> 0x0540 }
+        r2.draw(r14);	 Catch:{ all -> 0x0540 }
     L_0x03fe:
         if (r5 == 0) goto L_0x0423;
     L_0x0400:
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r2 = r2 - r8;
         r2 = r2 + -10;
-        r8 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r8 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r9 = 120 - r8;
         r8 = 2;
         r9 = r9 / r8;
-        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r8 = r5.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r8 = r8 + r2;
-        r10 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r10 = r5.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r10 = r10 + r9;
-        r5.setBounds(r2, r9, r8, r10);	 Catch:{ all -> 0x0539 }
-        r5.draw(r14);	 Catch:{ all -> 0x0539 }
+        r5.setBounds(r2, r9, r8, r10);	 Catch:{ all -> 0x0540 }
+        r5.draw(r14);	 Catch:{ all -> 0x0540 }
     L_0x0423:
         r2 = 1;
-        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0540 }
         r8 = 216; // 0xd8 float:3.03E-43 double:1.067E-321;
-        r9 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r9 = r7.getWidth();	 Catch:{ all -> 0x0540 }
         r10 = 20;
         r9 = r9 - r10;
         r11 = 308; // 0x134 float:4.32E-43 double:1.52E-321;
         r12 = 161; // 0xa1 float:2.26E-43 double:7.95E-322;
-        r5.setBounds(r12, r8, r9, r11);	 Catch:{ all -> 0x0539 }
-        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
+        r5.setBounds(r12, r8, r9, r11);	 Catch:{ all -> 0x0540 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0540 }
         r8 = 522; // 0x20a float:7.31E-43 double:2.58E-321;
-        r5.setTop(r4, r8, r4, r4);	 Catch:{ all -> 0x0539 }
-        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
-        r5.draw(r14);	 Catch:{ all -> 0x0539 }
-        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
-        r9 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r5.setTop(r4, r8, r4, r4);	 Catch:{ all -> 0x0540 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0540 }
+        r5.draw(r14);	 Catch:{ all -> 0x0540 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0540 }
+        r9 = r7.getWidth();	 Catch:{ all -> 0x0540 }
         r9 = r9 - r10;
         r11 = 430; // 0x1ae float:6.03E-43 double:2.124E-321;
-        r5.setBounds(r12, r11, r9, r8);	 Catch:{ all -> 0x0539 }
-        r5 = r6[r2];	 Catch:{ all -> 0x0539 }
-        r5.setTop(r11, r8, r4, r4);	 Catch:{ all -> 0x0539 }
-        r2 = r6[r2];	 Catch:{ all -> 0x0539 }
-        r2.draw(r14);	 Catch:{ all -> 0x0539 }
-        r2 = r6[r4];	 Catch:{ all -> 0x0539 }
-        r5 = 323; // 0x143 float:4.53E-43 double:1.596E-321;
-        r8 = 399; // 0x18f float:5.59E-43 double:1.97E-321;
+        r5.setBounds(r12, r11, r9, r8);	 Catch:{ all -> 0x0540 }
+        r5 = r6[r2];	 Catch:{ all -> 0x0540 }
+        r5.setTop(r11, r8, r4, r4);	 Catch:{ all -> 0x0540 }
+        r2 = r6[r2];	 Catch:{ all -> 0x0540 }
+        r2.draw(r14);	 Catch:{ all -> 0x0540 }
+        r2 = r6[r4];	 Catch:{ all -> 0x0540 }
+        r5 = 399; // 0x18f float:5.59E-43 double:1.97E-321;
         r9 = 415; // 0x19f float:5.82E-43 double:2.05E-321;
-        r2.setBounds(r10, r5, r8, r9);	 Catch:{ all -> 0x0539 }
-        r2 = r6[r4];	 Catch:{ all -> 0x0539 }
-        r2.draw(r14);	 Catch:{ all -> 0x0539 }
-        if (r3 == 0) goto L_0x048b;
-    L_0x046a:
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
+        r11 = 323; // 0x143 float:4.53E-43 double:1.596E-321;
+        r2.setBounds(r10, r11, r5, r9);	 Catch:{ all -> 0x0540 }
+        r2 = r6[r4];	 Catch:{ all -> 0x0540 }
+        r2.setTop(r11, r8, r4, r4);	 Catch:{ all -> 0x0540 }
+        r2 = r6[r4];	 Catch:{ all -> 0x0540 }
+        r2.draw(r14);	 Catch:{ all -> 0x0540 }
+        if (r3 == 0) goto L_0x0492;
+    L_0x046f:
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0540 }
         r2 = r2 + -126;
         r4 = 2;
         r2 = r2 / r4;
         r4 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
-        r5 = (float) r2;	 Catch:{ all -> 0x0539 }
-        r4 = (float) r4;	 Catch:{ all -> 0x0539 }
+        r5 = (float) r2;	 Catch:{ all -> 0x0540 }
+        r4 = (float) r4;	 Catch:{ all -> 0x0540 }
         r2 = r2 + 126;
-        r2 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r2 = (float) r2;	 Catch:{ all -> 0x0540 }
         r6 = 192; // 0xc0 float:2.69E-43 double:9.5E-322;
-        r6 = (float) r6;	 Catch:{ all -> 0x0539 }
-        r15.set(r5, r4, r2, r6);	 Catch:{ all -> 0x0539 }
-        r2 = r3.intValue();	 Catch:{ all -> 0x0539 }
-        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
+        r6 = (float) r6;	 Catch:{ all -> 0x0540 }
+        r15.set(r5, r4, r2, r6);	 Catch:{ all -> 0x0540 }
+        r2 = r3.intValue();	 Catch:{ all -> 0x0540 }
+        r1.setColor(r2);	 Catch:{ all -> 0x0540 }
         r2 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
-        r14.drawRoundRect(r15, r2, r2, r1);	 Catch:{ all -> 0x0539 }
-    L_0x048b:
+        r3 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
+        r14.drawRoundRect(r15, r2, r3, r1);	 Catch:{ all -> 0x0540 }
+    L_0x0492:
         r2 = r25;
-        r1.setColor(r2);	 Catch:{ all -> 0x0539 }
+        r1.setColor(r2);	 Catch:{ all -> 0x0540 }
         r9 = 0;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r2 = r2 + -120;
-        r10 = (float) r2;	 Catch:{ all -> 0x0539 }
-        r2 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r11 = (float) r2;	 Catch:{ all -> 0x0539 }
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
-        r12 = (float) r2;	 Catch:{ all -> 0x0539 }
+        r10 = (float) r2;	 Catch:{ all -> 0x0540 }
+        r2 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r11 = (float) r2;	 Catch:{ all -> 0x0540 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0540 }
+        r12 = (float) r2;	 Catch:{ all -> 0x0540 }
         r8 = r14;
         r13 = r1;
-        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0539 }
-        if (r20 == 0) goto L_0x04cc;
-    L_0x04a9:
+        r8.drawRect(r9, r10, r11, r12, r13);	 Catch:{ all -> 0x0540 }
+        if (r20 == 0) goto L_0x04d3;
+    L_0x04b0:
         r1 = 22;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r2 = r2 + -120;
-        r3 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r3 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r9 = 120 - r3;
         r3 = 2;
         r9 = r9 / r3;
         r2 = r2 + r9;
-        r3 = r20.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r3 = r20.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r3 = r3 + r1;
-        r4 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r4 = r20.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r4 = r4 + r2;
         r5 = r20;
-        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0539 }
-        r5.draw(r14);	 Catch:{ all -> 0x0539 }
-    L_0x04cc:
-        if (r21 == 0) goto L_0x04fa;
-    L_0x04ce:
-        r1 = r7.getWidth();	 Catch:{ all -> 0x0539 }
-        r2 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0540 }
+        r5.draw(r14);	 Catch:{ all -> 0x0540 }
+    L_0x04d3:
+        if (r21 == 0) goto L_0x0501;
+    L_0x04d5:
+        r1 = r7.getWidth();	 Catch:{ all -> 0x0540 }
+        r2 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r1 = r1 - r2;
         r1 = r1 + -22;
-        r2 = r7.getHeight();	 Catch:{ all -> 0x0539 }
+        r2 = r7.getHeight();	 Catch:{ all -> 0x0540 }
         r2 = r2 + -120;
-        r3 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r3 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r9 = 120 - r3;
         r3 = 2;
         r9 = r9 / r3;
         r2 = r2 + r9;
-        r3 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0539 }
+        r3 = r21.getIntrinsicWidth();	 Catch:{ all -> 0x0540 }
         r3 = r3 + r1;
-        r4 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0539 }
+        r4 = r21.getIntrinsicHeight();	 Catch:{ all -> 0x0540 }
         r4 = r4 + r2;
         r5 = r21;
-        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0539 }
-        r5.draw(r14);	 Catch:{ all -> 0x0539 }
-    L_0x04fa:
+        r5.setBounds(r1, r2, r3, r4);	 Catch:{ all -> 0x0540 }
+        r5.draw(r14);	 Catch:{ all -> 0x0540 }
+    L_0x0501:
         r1 = 0;
-        r14.setBitmap(r1);	 Catch:{ all -> 0x0539 }
-        r1 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0539 }
-        r1.<init>();	 Catch:{ all -> 0x0539 }
+        r14.setBitmap(r1);	 Catch:{ all -> 0x0540 }
+        r1 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0540 }
+        r1.<init>();	 Catch:{ all -> 0x0540 }
         r2 = "-2147483648_";
-        r1.append(r2);	 Catch:{ all -> 0x0539 }
-        r2 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ all -> 0x0539 }
-        r1.append(r2);	 Catch:{ all -> 0x0539 }
+        r1.append(r2);	 Catch:{ all -> 0x0540 }
+        r2 = org.telegram.messenger.SharedConfig.getLastLocalId();	 Catch:{ all -> 0x0540 }
+        r1.append(r2);	 Catch:{ all -> 0x0540 }
         r2 = ".jpg";
-        r1.append(r2);	 Catch:{ all -> 0x0539 }
-        r1 = r1.toString();	 Catch:{ all -> 0x0539 }
-        r2 = new java.io.File;	 Catch:{ all -> 0x0539 }
+        r1.append(r2);	 Catch:{ all -> 0x0540 }
+        r1 = r1.toString();	 Catch:{ all -> 0x0540 }
+        r2 = new java.io.File;	 Catch:{ all -> 0x0540 }
         r3 = 4;
-        r3 = org.telegram.messenger.FileLoader.getDirectory(r3);	 Catch:{ all -> 0x0539 }
-        r2.<init>(r3, r1);	 Catch:{ all -> 0x0539 }
-        r1 = new java.io.FileOutputStream;	 Catch:{ all -> 0x0534 }
-        r1.<init>(r2);	 Catch:{ all -> 0x0534 }
-        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x0534 }
-        r7.compress(r3, r0, r1);	 Catch:{ all -> 0x0534 }
-        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ all -> 0x0534 }
-        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x0534 }
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r3);	 Catch:{ all -> 0x0540 }
+        r2.<init>(r3, r1);	 Catch:{ all -> 0x0540 }
+        r1 = new java.io.FileOutputStream;	 Catch:{ all -> 0x053b }
+        r1.<init>(r2);	 Catch:{ all -> 0x053b }
+        r3 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ all -> 0x053b }
+        r7.compress(r3, r0, r1);	 Catch:{ all -> 0x053b }
+        org.telegram.messenger.SharedConfig.saveConfig();	 Catch:{ all -> 0x053b }
+        r0 = r2.getAbsolutePath();	 Catch:{ all -> 0x053b }
         return r0;
-    L_0x0534:
+    L_0x053b:
         r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0539 }
-        goto L_0x053d;
-    L_0x0539:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0540 }
+        goto L_0x0544;
+    L_0x0540:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x053d:
+    L_0x0544:
         r1 = 0;
         return r1;
         */

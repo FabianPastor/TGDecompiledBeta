@@ -66,7 +66,9 @@ public class HintView extends FrameLayout {
             this.textView.setGravity(51);
             this.textView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(str2)));
             int i3 = this.currentType;
-            if (i3 == 2) {
+            if (i3 == 5 || i3 == 4) {
+                this.textView.setPadding(AndroidUtilities.dp(9.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(7.0f));
+            } else if (i3 == 2) {
                 this.textView.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
             } else {
                 this.textView.setPadding(AndroidUtilities.dp(i3 == 0 ? 54.0f : 5.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(7.0f));
@@ -101,11 +103,11 @@ public class HintView extends FrameLayout {
         return showForMessageCell(chatMessageCell, null, 0, 0, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0176  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0157  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x01c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0205  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x01d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x019b  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0205  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0249  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0217  */
     public boolean showForMessageCell(org.telegram.ui.Cells.ChatMessageCell r10, java.lang.Object r11, int r12, int r13, boolean r14) {
         /*
         r9 = this;
@@ -165,41 +167,73 @@ public class HintView extends FrameLayout {
         goto L_0x0063;
     L_0x005d:
         r12 = r10.getNoSoundIconCenterX();
-        goto L_0x00df;
+        goto L_0x0123;
     L_0x0063:
         return r2;
     L_0x0064:
         r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r8 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        if (r5 != r1) goto L_0x008a;
+        if (r5 != r1) goto L_0x00ce;
     L_0x006a:
         r0 = r0 + r13;
         r9.shownY = r13;
-        r13 = r9.textView;
         r11 = (java.lang.Integer) r11;
+        r13 = r10.getMessageObject();
+        r13 = r13.isQuiz();
+        if (r13 == 0) goto L_0x009e;
+    L_0x0079:
+        r13 = r11.intValue();
+        if (r13 != 0) goto L_0x008e;
+    L_0x007f:
+        r11 = r9.textView;
+        r13 = NUM; // 0x7f0e06d7 float:1.887859E38 double:1.0531630217E-314;
+        r5 = "NoVotesQuiz";
+        r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
+        r11.setText(r13);
+        goto L_0x00c2;
+    L_0x008e:
+        r13 = r9.textView;
+        r11 = r11.intValue();
+        r5 = "Answer";
+        r11 = org.telegram.messenger.LocaleController.formatPluralString(r5, r11);
+        r13.setText(r11);
+        goto L_0x00c2;
+    L_0x009e:
+        r13 = r11.intValue();
+        if (r13 != 0) goto L_0x00b3;
+    L_0x00a4:
+        r11 = r9.textView;
+        r13 = NUM; // 0x7f0e06d6 float:1.8878587E38 double:1.053163021E-314;
+        r5 = "NoVotes";
+        r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
+        r11.setText(r13);
+        goto L_0x00c2;
+    L_0x00b3:
+        r13 = r9.textView;
         r11 = r11.intValue();
         r5 = "Vote";
         r11 = org.telegram.messenger.LocaleController.formatPluralString(r5, r11);
         r13.setText(r11);
+    L_0x00c2:
         r11 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
         r13 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
         r9.measure(r11, r13);
-        goto L_0x00df;
-    L_0x008a:
+        goto L_0x0123;
+    L_0x00ce:
         r11 = r10.getMessageObject();
         r12 = r9.overrideText;
-        if (r12 != 0) goto L_0x00a1;
-    L_0x0092:
+        if (r12 != 0) goto L_0x00e5;
+    L_0x00d6:
         r12 = r9.textView;
-        r13 = NUM; // 0x7f0e0555 float:1.8877806E38 double:1.053162831E-314;
+        r13 = NUM; // 0x7f0e055b float:1.8877818E38 double:1.053162834E-314;
         r5 = "HidAccount";
         r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
         r12.setText(r13);
-        goto L_0x00a6;
-    L_0x00a1:
+        goto L_0x00ea;
+    L_0x00e5:
         r13 = r9.textView;
         r13.setText(r12);
-    L_0x00a6:
+    L_0x00ea:
         r12 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
         r13 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
         r9.measure(r12, r13);
@@ -207,50 +241,50 @@ public class HintView extends FrameLayout {
         r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
         r0 = r0 + r12;
         r11 = r11.isOutOwner();
-        if (r11 != 0) goto L_0x00cb;
-    L_0x00be:
+        if (r11 != 0) goto L_0x010f;
+    L_0x0102:
         r11 = r10.isDrawNameLayout();
-        if (r11 == 0) goto L_0x00cb;
-    L_0x00c4:
+        if (r11 == 0) goto L_0x010f;
+    L_0x0108:
         r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
         r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
         r0 = r0 + r11;
-    L_0x00cb:
+    L_0x010f:
         r11 = r9.isTopArrow;
-        if (r11 != 0) goto L_0x00db;
-    L_0x00cf:
+        if (r11 != 0) goto L_0x011f;
+    L_0x0113:
         r11 = r9.getMeasuredHeight();
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r11 = r11 + r12;
-        if (r0 > r11) goto L_0x00db;
-    L_0x00da:
+        if (r0 > r11) goto L_0x011f;
+    L_0x011e:
         return r2;
-    L_0x00db:
+    L_0x011f:
         r12 = r10.getForwardNameCenterX();
-    L_0x00df:
+    L_0x0123:
         r11 = r4.getMeasuredWidth();
         r13 = r9.isTopArrow;
-        if (r13 == 0) goto L_0x00f2;
-    L_0x00e7:
+        if (r13 == 0) goto L_0x0136;
+    L_0x012b:
         r13 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r13 = org.telegram.messenger.AndroidUtilities.dp(r13);
         r13 = (float) r13;
         r9.setTranslationY(r13);
-        goto L_0x00fb;
-    L_0x00f2:
+        goto L_0x013f;
+    L_0x0136:
         r13 = r9.getMeasuredHeight();
         r0 = r0 - r13;
         r13 = (float) r0;
         r9.setTranslationY(r13);
-    L_0x00fb:
+    L_0x013f:
         r13 = r10.getLeft();
         r13 = r13 + r12;
         r0 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r5 = r9.currentType;
         r7 = 2;
-        if (r5 != r1) goto L_0x0120;
-    L_0x010b:
+        if (r5 != r1) goto L_0x0164;
+    L_0x014f:
         r11 = r9.getMeasuredWidth();
         r11 = r11 / r7;
         r11 = r12 - r11;
@@ -259,14 +293,14 @@ public class HintView extends FrameLayout {
         r11 = r11 - r1;
         r1 = (float) r11;
         r9.setTranslationX(r1);
-    L_0x011e:
+    L_0x0162:
         r0 = r0 + r11;
-        goto L_0x013c;
-    L_0x0120:
+        goto L_0x0180;
+    L_0x0164:
         r1 = r4.getMeasuredWidth();
         r1 = r1 / r7;
-        if (r13 <= r1) goto L_0x0138;
-    L_0x0127:
+        if (r13 <= r1) goto L_0x017c;
+    L_0x016b:
         r1 = r9.getMeasuredWidth();
         r11 = r11 - r1;
         r1 = NUM; // 0x42180000 float:38.0 double:5.47854138E-315;
@@ -274,11 +308,11 @@ public class HintView extends FrameLayout {
         r11 = r11 - r1;
         r1 = (float) r11;
         r9.setTranslationX(r1);
-        goto L_0x011e;
-    L_0x0138:
+        goto L_0x0162;
+    L_0x017c:
         r11 = 0;
         r9.setTranslationX(r11);
-    L_0x013c:
+    L_0x0180:
         r11 = r10.getLeft();
         r11 = r11 + r12;
         r11 = r11 - r0;
@@ -291,13 +325,13 @@ public class HintView extends FrameLayout {
         r12.setTranslationX(r11);
         r12 = r4.getMeasuredWidth();
         r12 = r12 / r7;
-        if (r13 <= r12) goto L_0x0176;
-    L_0x0157:
+        if (r13 <= r12) goto L_0x01ba;
+    L_0x019b:
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r12 = (float) r12;
         r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 >= 0) goto L_0x01bb;
-    L_0x0160:
+        if (r12 >= 0) goto L_0x01ff;
+    L_0x01a4:
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r12 = (float) r12;
         r12 = r11 - r12;
@@ -307,16 +341,16 @@ public class HintView extends FrameLayout {
         r13 = r9.arrowImageView;
         r11 = r11 - r12;
         r13.setTranslationX(r11);
-        goto L_0x01bb;
-    L_0x0176:
+        goto L_0x01ff;
+    L_0x01ba:
         r12 = r9.getMeasuredWidth();
         r13 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
         r12 = r12 - r0;
         r12 = (float) r12;
         r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 <= 0) goto L_0x019d;
-    L_0x0186:
+        if (r12 <= 0) goto L_0x01e1;
+    L_0x01ca:
         r12 = r9.getMeasuredWidth();
         r12 = (float) r12;
         r12 = r11 - r12;
@@ -327,13 +361,13 @@ public class HintView extends FrameLayout {
         r13 = r9.arrowImageView;
         r11 = r11 - r12;
         r13.setTranslationX(r11);
-        goto L_0x01bb;
-    L_0x019d:
+        goto L_0x01ff;
+    L_0x01e1:
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r12 = (float) r12;
         r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 >= 0) goto L_0x01bb;
-    L_0x01a6:
+        if (r12 >= 0) goto L_0x01ff;
+    L_0x01ea:
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r12 = (float) r12;
         r12 = r11 - r12;
@@ -343,20 +377,20 @@ public class HintView extends FrameLayout {
         r13 = r9.arrowImageView;
         r11 = r11 - r12;
         r13.setTranslationX(r11);
-    L_0x01bb:
+    L_0x01ff:
         r9.messageCell = r10;
         r10 = r9.animatorSet;
-        if (r10 == 0) goto L_0x01c6;
-    L_0x01c1:
+        if (r10 == 0) goto L_0x020a;
+    L_0x0205:
         r10.cancel();
         r9.animatorSet = r3;
-    L_0x01c6:
+    L_0x020a:
         r10 = 1;
         r11 = java.lang.Integer.valueOf(r10);
         r9.setTag(r11);
         r9.setVisibility(r2);
-        if (r14 == 0) goto L_0x0205;
-    L_0x01d3:
+        if (r14 == 0) goto L_0x0249;
+    L_0x0217:
         r11 = new android.animation.AnimatorSet;
         r11.<init>();
         r9.animatorSet = r11;
@@ -377,11 +411,11 @@ public class HintView extends FrameLayout {
         r11.setDuration(r12);
         r11 = r9.animatorSet;
         r11.start();
-        goto L_0x020a;
-    L_0x0205:
+        goto L_0x024e;
+    L_0x0249:
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r9.setAlpha(r11);
-    L_0x020a:
+    L_0x024e:
         return r10;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.HintView.showForMessageCell(org.telegram.ui.Cells.ChatMessageCell, java.lang.Object, int, int, boolean):boolean");

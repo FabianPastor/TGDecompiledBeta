@@ -91,7 +91,11 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             drawableArr[previewColor4] = new MessageDrawable(2, z, false) {
                 /* Access modifiers changed, original: protected */
                 public int getColor(String str) {
-                    return ((Integer) hashMap.get(str)).intValue();
+                    Integer num = (Integer) hashMap.get(str);
+                    if (num == null) {
+                        return Theme.getColor(str);
+                    }
+                    return num.intValue();
                 }
 
                 /* Access modifiers changed, original: protected */
@@ -209,6 +213,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
         drawableArr2[1].setTop(430, 522, previewColor3, previewColor3);
         drawableArr2[1].draw(canvas);
         drawableArr2[previewColor3].setBounds(20, 323, 399, 415);
+        drawableArr2[previewColor3].setTop(323, 522, previewColor3, previewColor3);
         drawableArr2[previewColor3].draw(canvas);
         if (num5 != null) {
             previewColor = (createBitmap.getWidth() - 126) / 2;

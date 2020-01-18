@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -105,11 +106,16 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null) {
             if (this.wasLayout) {
+                int i = AndroidUtilities.displaySize.y;
+                if (getParent() instanceof View) {
+                    i = ((View) getParent()).getMeasuredHeight();
+                }
+                Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
                 BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
                 Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
                     canvas.save();
-                    int i = this.buttonState;
+                    i = this.buttonState;
                     if (i == 0 || i == 1) {
                         canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                         this.seekBar.draw(canvas);

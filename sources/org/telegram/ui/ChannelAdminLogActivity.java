@@ -2426,7 +2426,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fc:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0e0a48 float:1.8880376E38 double:1.053163457E-314;
+        r3 = NUM; // 0x7f0e0a4e float:1.8880388E38 double:1.05316346E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2468,9 +2468,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0e0768 float:1.8878883E38 double:1.0531630934E-314;
+        r2 = NUM; // 0x7f0e076e float:1.8878895E38 double:1.0531630963E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0e00f9 float:1.8875543E38 double:1.0531622797E-314;
+        r4 = NUM; // 0x7f0e00ff float:1.8875555E38 double:1.0531622826E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02df;
     L_0x025e:
@@ -2525,7 +2525,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0578 float:1.8877877E38 double:1.0531628483E-314;
+        r1 = NUM; // 0x7f0e057e float:1.887789E38 double:1.0531628513E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2556,7 +2556,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0577 float:1.8877875E38 double:1.053162848E-314;
+        r1 = NUM; // 0x7f0e057d float:1.8877887E38 double:1.053162851E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);

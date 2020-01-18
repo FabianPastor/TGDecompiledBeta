@@ -1530,6 +1530,12 @@ public final class R {
         public static final int AnimatedStickers = NUM;
         public static final int AnonymousPoll = NUM;
         public static final int AnonymousQuizPoll = NUM;
+        public static final int Answer_few = NUM;
+        public static final int Answer_many = NUM;
+        public static final int Answer_one = NUM;
+        public static final int Answer_other = NUM;
+        public static final int Answer_two = NUM;
+        public static final int Answer_zero = NUM;
         public static final int ApkRestricted = NUM;
         public static final int AppFolderInfo = NUM;
         public static final int AppName = NUM;
@@ -4363,12 +4369,6 @@ public final class R {
         public static final int VoipSettingsRingtone = NUM;
         public static final int VoipUseLessData = NUM;
         public static final int VoipWaiting = NUM;
-        public static final int VoteQuiz_few = NUM;
-        public static final int VoteQuiz_many = NUM;
-        public static final int VoteQuiz_one = NUM;
-        public static final int VoteQuiz_other = NUM;
-        public static final int VoteQuiz_two = NUM;
-        public static final int VoteQuiz_zero = NUM;
         public static final int Vote_few = NUM;
         public static final int Vote_many = NUM;
         public static final int Vote_one = NUM;

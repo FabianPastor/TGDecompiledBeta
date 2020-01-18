@@ -6,6 +6,7 @@ import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.SystemClock;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.telegram.messenger.BuildVars;
@@ -69,7 +70,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         int i = this.refs + 1;
         this.refs = i;
         if (i == 1) {
-            if (System.currentTimeMillis() - this.enterBackgroundTime < 200) {
+            if (SystemClock.uptimeMillis() - this.enterBackgroundTime < 200) {
                 this.wasInBackground = false;
             }
             if (BuildVars.LOGS_ENABLED) {
@@ -87,7 +88,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
     }
 
     public boolean isWasInBackground(boolean z) {
-        if (z && VERSION.SDK_INT >= 21 && System.currentTimeMillis() - this.enterBackgroundTime < 200) {
+        if (z && VERSION.SDK_INT >= 21 && SystemClock.uptimeMillis() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -101,7 +102,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         int i = this.refs - 1;
         this.refs = i;
         if (i == 0) {
-            this.enterBackgroundTime = System.currentTimeMillis();
+            this.enterBackgroundTime = SystemClock.uptimeMillis();
             this.wasInBackground = true;
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("switch to background");

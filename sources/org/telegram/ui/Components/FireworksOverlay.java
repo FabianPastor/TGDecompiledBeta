@@ -218,11 +218,17 @@ public class FireworksOverlay extends View {
         if (this.particles.isEmpty()) {
             this.started = false;
             if (VERSION.SDK_INT >= 18) {
-                setLayerType(0, null);
+                AndroidUtilities.runOnUIThread(new -$$Lambda$FireworksOverlay$oOSeFZ55fw5HfKPOkZstVG73qlM(this));
                 return;
             }
             return;
         }
         invalidate();
+    }
+
+    public /* synthetic */ void lambda$onDraw$0$FireworksOverlay() {
+        if (!this.started) {
+            setLayerType(0, null);
+        }
     }
 }

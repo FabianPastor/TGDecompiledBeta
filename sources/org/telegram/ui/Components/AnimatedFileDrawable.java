@@ -134,6 +134,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private BitmapShader renderingShader;
     private Path roundPath = new Path();
     private int[] roundRadius = new int[4];
+    private int[] roundRadiusBackup;
     private float scaleX = 1.0f;
     private float scaleY = 1.0f;
     private View secondParentView;
@@ -312,7 +313,14 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setSecondParentView(View view) {
+        Object obj = this.secondParentView != null ? 1 : null;
         this.secondParentView = view;
+        if (obj != null && view == null) {
+            int[] iArr = this.roundRadiusBackup;
+            if (iArr != null) {
+                setRoundRadius(iArr);
+            }
+        }
         if (view == null && this.recycleWithSecond) {
             recycle();
         }
@@ -677,23 +685,18 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setRoundRadius(int[] iArr) {
-        int[] iArr2 = this.roundRadius;
+        int[] iArr2;
+        if (this.secondParentView != null) {
+            if (this.roundRadiusBackup == null) {
+                this.roundRadiusBackup = new int[4];
+            }
+            iArr2 = this.roundRadius;
+            int[] iArr3 = this.roundRadiusBackup;
+            System.arraycopy(iArr2, 0, iArr3, 0, iArr3.length);
+        }
+        iArr2 = this.roundRadius;
         System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
         getPaint().setFlags(3);
-    }
-
-    public void setRoundRadius(int i) {
-        int i2 = 0;
-        while (true) {
-            int[] iArr = this.roundRadius;
-            if (i2 < iArr.length) {
-                iArr[i2] = i;
-                i2++;
-            } else {
-                getPaint().setFlags(3);
-                return;
-            }
-        }
     }
 
     private boolean hasRoundRadius() {

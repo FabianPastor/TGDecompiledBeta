@@ -140,7 +140,7 @@ public class PollEditTextCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i = 3;
         }
-        addView(editTextBoldCursor2, LayoutHelper.createFrame(-1, -2.0f, i | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(editTextBoldCursor2, LayoutHelper.createFrame(-1, -2.0f, i | 16, 19.0f, 0.0f, 19.0f, 0.0f));
     }
 
     public /* synthetic */ void lambda$new$0$PollEditTextCell(View view) {

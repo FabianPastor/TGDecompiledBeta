@@ -2727,7 +2727,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
     /* JADX WARNING: Removed duplicated region for block: B:9:0x0035  */
     /* JADX WARNING: Removed duplicated region for block: B:8:0x001d  */
     /* JADX WARNING: Removed duplicated region for block: B:14:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x0061  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x007b  */
     public /* synthetic */ void lambda$createView$12$ThemePreviewActivity(android.view.View r7) {
         /*
         r6 = this;
@@ -2758,7 +2758,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         org.telegram.ui.ActionBar.Theme.applyTheme(r2, r4);
         r2 = r6.parentLayout;
         r2.rebuildAllFragmentViews(r0, r0);
-        goto L_0x005a;
+        goto L_0x0074;
     L_0x0035:
         r2 = r6.parentLayout;
         r2.rebuildAllFragmentViews(r0, r0);
@@ -2776,11 +2776,20 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r4 = r6.applyingTheme;
         r5 = 0;
         r2.saveTheme(r4, r5, r0, r0);
-    L_0x005a:
+        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
+        r4 = "themeconfig";
+        r2 = r2.getSharedPreferences(r4, r0);
+        r2 = r2.edit();
+        r4 = r6.applyingTheme;
+        r4 = r4.getKey();
+        r5 = "lastDayTheme";
+        r2.putString(r5, r4);
+        r2.commit();
+    L_0x0074:
         r6.finishFragment();
         r2 = r6.screenType;
-        if (r2 != 0) goto L_0x007a;
-    L_0x0061:
+        if (r2 != 0) goto L_0x0094;
+    L_0x007b:
         r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
         r4 = org.telegram.messenger.NotificationCenter.didApplyNewTheme;
         r5 = 3;
@@ -2792,7 +2801,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r0 = java.lang.Boolean.valueOf(r0);
         r5[r7] = r0;
         r2.postNotificationName(r4, r5);
-    L_0x007a:
+    L_0x0094:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity.lambda$createView$12$ThemePreviewActivity(android.view.View):void");
@@ -3092,21 +3101,21 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r7.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0e09b6 float:1.888008E38 double:1.053163385E-314;
+        r1 = NUM; // 0x7f0e09bc float:1.8880092E38 double:1.053163388E-314;
         r2 = "SaveChangesAlertTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e09b5 float:1.8880078E38 double:1.0531633844E-314;
+        r1 = NUM; // 0x7f0e09bb float:1.888009E38 double:1.0531633873E-314;
         r2 = "SaveChangesAlertText";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e09b4 float:1.8880076E38 double:1.053163384E-314;
+        r1 = NUM; // 0x7f0e09ba float:1.8880088E38 double:1.053163387E-314;
         r2 = "Save";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo;
         r2.<init>(r7);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0e07de float:1.8879122E38 double:1.0531631517E-314;
+        r1 = NUM; // 0x7f0e07e4 float:1.8879135E38 double:1.0531631546E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c;

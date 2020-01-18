@@ -221,7 +221,7 @@ public class SharedConfig {
             roundCamera16to9 = true;
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
-            bubbleRadius = sharedPreferences.getInt("bubbleRadius", 6);
+            bubbleRadius = sharedPreferences.getInt("bubbleRadius", 10);
             ivFontSize = sharedPreferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
             useSystemEmoji = sharedPreferences.getBoolean("useSystemEmoji", false);

@@ -1430,6 +1430,12 @@
     <public type="string" name="AnimatedStickers" id="NUM" />
     <public type="string" name="AnonymousPoll" id="NUM" />
     <public type="string" name="AnonymousQuizPoll" id="NUM" />
+    <public type="string" name="Answer_few" id="NUM" />
+    <public type="string" name="Answer_many" id="NUM" />
+    <public type="string" name="Answer_one" id="NUM" />
+    <public type="string" name="Answer_other" id="NUM" />
+    <public type="string" name="Answer_two" id="NUM" />
+    <public type="string" name="Answer_zero" id="NUM" />
     <public type="string" name="ApkRestricted" id="NUM" />
     <public type="string" name="AppFolderInfo" id="NUM" />
     <public type="string" name="AppName" id="NUM" />
@@ -4263,12 +4269,6 @@
     <public type="string" name="VoipSettingsRingtone" id="NUM" />
     <public type="string" name="VoipUseLessData" id="NUM" />
     <public type="string" name="VoipWaiting" id="NUM" />
-    <public type="string" name="VoteQuiz_few" id="NUM" />
-    <public type="string" name="VoteQuiz_many" id="NUM" />
-    <public type="string" name="VoteQuiz_one" id="NUM" />
-    <public type="string" name="VoteQuiz_other" id="NUM" />
-    <public type="string" name="VoteQuiz_two" id="NUM" />
-    <public type="string" name="VoteQuiz_zero" id="NUM" />
     <public type="string" name="Vote_few" id="NUM" />
     <public type="string" name="Vote_many" id="NUM" />
     <public type="string" name="Vote_one" id="NUM" />

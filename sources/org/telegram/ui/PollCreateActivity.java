@@ -239,6 +239,16 @@ public class PollCreateActivity extends BaseFragment {
             }
         }
 
+        public void onViewDetachedFromWindow(ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() == 4) {
+                EditTextBoldCursor textView = ((PollEditTextCell) viewHolder.itemView).getTextView();
+                if (textView.isFocused()) {
+                    textView.clearFocus();
+                    AndroidUtilities.hideKeyboard(textView);
+                }
+            }
+        }
+
         public boolean isEnabled(ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
             return adapterPosition == PollCreateActivity.this.addAnswerRow || adapterPosition == PollCreateActivity.this.anonymousRow || adapterPosition == PollCreateActivity.this.multipleRow || (PollCreateActivity.this.quizOnly == 0 && adapterPosition == PollCreateActivity.this.quizRow);
@@ -371,11 +381,11 @@ public class PollCreateActivity extends BaseFragment {
                 ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder((View) view.getParent());
                 if (findContainingViewHolder != null) {
                     int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                    int access$1900 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                    int access$2100 = adapterPosition - PollCreateActivity.this.answerStartRow;
                     PollCreateActivity.this.listAdapter.notifyItemRemoved(findContainingViewHolder.getAdapterPosition());
-                    int i = access$1900 + 1;
-                    System.arraycopy(PollCreateActivity.this.answers, i, PollCreateActivity.this.answers, access$1900, (PollCreateActivity.this.answers.length - 1) - access$1900);
-                    System.arraycopy(PollCreateActivity.this.answersChecks, i, PollCreateActivity.this.answersChecks, access$1900, (PollCreateActivity.this.answersChecks.length - 1) - access$1900);
+                    int i = access$2100 + 1;
+                    System.arraycopy(PollCreateActivity.this.answers, i, PollCreateActivity.this.answers, access$2100, (PollCreateActivity.this.answers.length - 1) - access$2100);
+                    System.arraycopy(PollCreateActivity.this.answersChecks, i, PollCreateActivity.this.answersChecks, access$2100, (PollCreateActivity.this.answersChecks.length - 1) - access$2100);
                     PollCreateActivity.this.answers[PollCreateActivity.this.answers.length - 1] = null;
                     PollCreateActivity.this.answersChecks[PollCreateActivity.this.answersChecks.length - 1] = false;
                     PollCreateActivity.this.answersCount = PollCreateActivity.this.answersCount - 1;
@@ -403,10 +413,10 @@ public class PollCreateActivity extends BaseFragment {
             ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
             if (findContainingViewHolder != null) {
                 int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                int access$1900 = adapterPosition - PollCreateActivity.this.answerStartRow;
-                if (access$1900 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
+                int access$2100 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                if (access$2100 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
                     PollCreateActivity.this.addNewField();
-                } else if (access$1900 == PollCreateActivity.this.answersCount - 1) {
+                } else if (access$2100 == PollCreateActivity.this.answersCount - 1) {
                     AndroidUtilities.hideKeyboard(pollEditTextCell.getTextView());
                 } else {
                     ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition + 1);
@@ -450,12 +460,12 @@ public class PollCreateActivity extends BaseFragment {
         }
 
         public void swapElements(int i, int i2) {
-            int access$1900 = i - PollCreateActivity.this.answerStartRow;
-            int access$19002 = i2 - PollCreateActivity.this.answerStartRow;
-            if (access$1900 >= 0 && access$19002 >= 0 && access$1900 < PollCreateActivity.this.answersCount && access$19002 < PollCreateActivity.this.answersCount) {
-                String str = PollCreateActivity.this.answers[access$1900];
-                PollCreateActivity.this.answers[access$1900] = PollCreateActivity.this.answers[access$19002];
-                PollCreateActivity.this.answers[access$19002] = str;
+            int access$2100 = i - PollCreateActivity.this.answerStartRow;
+            int access$21002 = i2 - PollCreateActivity.this.answerStartRow;
+            if (access$2100 >= 0 && access$21002 >= 0 && access$2100 < PollCreateActivity.this.answersCount && access$21002 < PollCreateActivity.this.answersCount) {
+                String str = PollCreateActivity.this.answers[access$2100];
+                PollCreateActivity.this.answers[access$2100] = PollCreateActivity.this.answers[access$21002];
+                PollCreateActivity.this.answers[access$21002] = str;
                 notifyItemMoved(i, i2);
             }
         }
@@ -496,40 +506,44 @@ public class PollCreateActivity extends BaseFragment {
                         PollCreateActivity.this.finishFragment();
                     }
                 } else if (i == 1) {
-                    TL_messageMediaPoll tL_messageMediaPoll = new TL_messageMediaPoll();
-                    tL_messageMediaPoll.poll = new TL_poll();
-                    tL_messageMediaPoll.poll.multiple_choice = PollCreateActivity.this.multipleChoise;
-                    tL_messageMediaPoll.poll.quiz = PollCreateActivity.this.quizPoll;
-                    tL_messageMediaPoll.poll.public_voters = PollCreateActivity.this.anonymousPoll ^ 1;
-                    TL_poll tL_poll = tL_messageMediaPoll.poll;
-                    PollCreateActivity pollCreateActivity = PollCreateActivity.this;
-                    tL_poll.question = pollCreateActivity.getFixedString(pollCreateActivity.questionString);
-                    SerializedData serializedData = new SerializedData(10);
-                    int i2 = 0;
-                    while (i2 < PollCreateActivity.this.answers.length) {
-                        PollCreateActivity pollCreateActivity2 = PollCreateActivity.this;
-                        if (!TextUtils.isEmpty(pollCreateActivity2.getFixedString(pollCreateActivity2.answers[i2]))) {
-                            TL_pollAnswer tL_pollAnswer = new TL_pollAnswer();
-                            PollCreateActivity pollCreateActivity3 = PollCreateActivity.this;
-                            tL_pollAnswer.text = pollCreateActivity3.getFixedString(pollCreateActivity3.answers[i2]);
-                            tL_pollAnswer.option = new byte[1];
-                            tL_pollAnswer.option[0] = (byte) (tL_messageMediaPoll.poll.answers.size() + 48);
-                            tL_messageMediaPoll.poll.answers.add(tL_pollAnswer);
-                            if ((PollCreateActivity.this.multipleChoise || PollCreateActivity.this.quizPoll) && PollCreateActivity.this.answersChecks[i2]) {
-                                serializedData.writeByte(tL_pollAnswer.option[0]);
+                    if (!PollCreateActivity.this.quizPoll || PollCreateActivity.this.doneItem.getAlpha() == 1.0f) {
+                        TL_messageMediaPoll tL_messageMediaPoll = new TL_messageMediaPoll();
+                        tL_messageMediaPoll.poll = new TL_poll();
+                        tL_messageMediaPoll.poll.multiple_choice = PollCreateActivity.this.multipleChoise;
+                        tL_messageMediaPoll.poll.quiz = PollCreateActivity.this.quizPoll;
+                        tL_messageMediaPoll.poll.public_voters = PollCreateActivity.this.anonymousPoll ^ 1;
+                        TL_poll tL_poll = tL_messageMediaPoll.poll;
+                        PollCreateActivity pollCreateActivity = PollCreateActivity.this;
+                        tL_poll.question = pollCreateActivity.getFixedString(pollCreateActivity.questionString);
+                        SerializedData serializedData = new SerializedData(10);
+                        int i2 = 0;
+                        while (i2 < PollCreateActivity.this.answers.length) {
+                            PollCreateActivity pollCreateActivity2 = PollCreateActivity.this;
+                            if (!TextUtils.isEmpty(pollCreateActivity2.getFixedString(pollCreateActivity2.answers[i2]))) {
+                                TL_pollAnswer tL_pollAnswer = new TL_pollAnswer();
+                                PollCreateActivity pollCreateActivity3 = PollCreateActivity.this;
+                                tL_pollAnswer.text = pollCreateActivity3.getFixedString(pollCreateActivity3.answers[i2]);
+                                tL_pollAnswer.option = new byte[1];
+                                tL_pollAnswer.option[0] = (byte) (tL_messageMediaPoll.poll.answers.size() + 48);
+                                tL_messageMediaPoll.poll.answers.add(tL_pollAnswer);
+                                if ((PollCreateActivity.this.multipleChoise || PollCreateActivity.this.quizPoll) && PollCreateActivity.this.answersChecks[i2]) {
+                                    serializedData.writeByte(tL_pollAnswer.option[0]);
+                                }
                             }
+                            i2++;
                         }
-                        i2++;
+                        HashMap hashMap = new HashMap();
+                        hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
+                        tL_messageMediaPoll.results = new TL_pollResults();
+                        if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
+                            AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new -$$Lambda$PollCreateActivity$1$7mDxOR-eTq9iu19UCqI6FzmRSHA(this, tL_messageMediaPoll, hashMap));
+                        } else {
+                            PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, hashMap, true, 0);
+                            PollCreateActivity.this.finishFragment();
+                        }
+                    } else {
+                        PollCreateActivity.this.showQuizHint();
                     }
-                    HashMap hashMap = new HashMap();
-                    hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
-                    tL_messageMediaPoll.results = new TL_pollResults();
-                    if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new -$$Lambda$PollCreateActivity$1$7mDxOR-eTq9iu19UCqI6FzmRSHA(this, tL_messageMediaPoll, hashMap));
-                        return;
-                    }
-                    PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, hashMap, true, 0);
-                    PollCreateActivity.this.finishFragment();
                 }
             }
 
@@ -702,35 +716,115 @@ public class PollCreateActivity extends BaseFragment {
         return str;
     }
 
-    private void checkDoneButton() {
-        boolean z = false;
-        if (!TextUtils.isEmpty(getFixedString(this.questionString)) && this.questionString.length() <= 255) {
-            int i = 0;
-            int i2 = 0;
-            int i3 = 0;
-            while (true) {
-                String[] strArr = this.answers;
-                if (i >= strArr.length) {
-                    break;
-                }
-                if (!TextUtils.isEmpty(getFixedString(strArr[i]))) {
-                    if (this.answers[i].length() > 100) {
-                        i2 = 0;
-                        break;
+    private void showQuizHint() {
+        this.listView.getChildCount();
+        for (int i = this.answerStartRow; i < this.answerStartRow + this.answersCount; i++) {
+            ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(i);
+            if (findViewHolderForAdapterPosition != null) {
+                View view = findViewHolderForAdapterPosition.itemView;
+                if (view instanceof PollEditTextCell) {
+                    PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
+                    if (pollEditTextCell.getTop() > AndroidUtilities.dp(40.0f)) {
+                        this.hintView.showForView(pollEditTextCell.getCheckBox(), true);
+                        return;
                     }
-                    if (this.answersChecks[i]) {
-                        i3++;
-                    }
-                    i2++;
+                } else {
+                    continue;
                 }
-                i++;
-            }
-            if (i2 >= 2 && (!this.quizPoll || i3 >= 1)) {
-                z = true;
             }
         }
-        this.doneItem.setEnabled(z);
-        this.doneItem.setAlpha(z ? 1.0f : 0.5f);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0069  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0066  */
+    private void checkDoneButton() {
+        /*
+        r7 = this;
+        r0 = r7.questionString;
+        r0 = r7.getFixedString(r0);
+        r0 = android.text.TextUtils.isEmpty(r0);
+        r1 = 1;
+        r2 = 0;
+        if (r0 != 0) goto L_0x0054;
+    L_0x000e:
+        r0 = r7.questionString;
+        r0 = r0.length();
+        r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        if (r0 <= r3) goto L_0x0019;
+    L_0x0018:
+        goto L_0x0054;
+    L_0x0019:
+        r0 = 0;
+        r3 = 0;
+        r4 = 0;
+    L_0x001c:
+        r5 = r7.answers;
+        r6 = r5.length;
+        if (r0 >= r6) goto L_0x0048;
+    L_0x0021:
+        r5 = r5[r0];
+        r5 = r7.getFixedString(r5);
+        r5 = android.text.TextUtils.isEmpty(r5);
+        if (r5 != 0) goto L_0x0045;
+    L_0x002d:
+        r5 = r7.answers;
+        r5 = r5[r0];
+        r5 = r5.length();
+        r6 = 100;
+        if (r5 <= r6) goto L_0x003b;
+    L_0x0039:
+        r3 = 0;
+        goto L_0x0048;
+    L_0x003b:
+        r5 = r7.answersChecks;
+        r5 = r5[r0];
+        if (r5 == 0) goto L_0x0043;
+    L_0x0041:
+        r4 = r4 + 1;
+    L_0x0043:
+        r3 = r3 + 1;
+    L_0x0045:
+        r0 = r0 + 1;
+        goto L_0x001c;
+    L_0x0048:
+        r0 = 2;
+        if (r3 < r0) goto L_0x0054;
+    L_0x004b:
+        r0 = r7.quizPoll;
+        if (r0 == 0) goto L_0x0052;
+    L_0x004f:
+        if (r4 >= r1) goto L_0x0052;
+    L_0x0051:
+        goto L_0x0054;
+    L_0x0052:
+        r0 = 1;
+        goto L_0x0055;
+    L_0x0054:
+        r0 = 0;
+    L_0x0055:
+        r3 = r7.doneItem;
+        r4 = r7.quizPoll;
+        if (r4 != 0) goto L_0x005f;
+    L_0x005b:
+        if (r0 == 0) goto L_0x005e;
+    L_0x005d:
+        goto L_0x005f;
+    L_0x005e:
+        r1 = 0;
+    L_0x005f:
+        r3.setEnabled(r1);
+        r1 = r7.doneItem;
+        if (r0 == 0) goto L_0x0069;
+    L_0x0066:
+        r0 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        goto L_0x006b;
+    L_0x0069:
+        r0 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
+    L_0x006b:
+        r1.setAlpha(r0);
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PollCreateActivity.checkDoneButton():void");
     }
 
     private void updateRows() {

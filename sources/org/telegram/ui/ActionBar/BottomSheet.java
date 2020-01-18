@@ -81,7 +81,7 @@ public class BottomSheet extends Dialog {
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
     protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
-    private Runnable startAnimationRunnable;
+    protected Runnable startAnimationRunnable;
     private int tag;
     private CharSequence title;
     private TextView titleView;
@@ -708,14 +708,12 @@ public class BottomSheet extends Dialog {
         L_0x011e:
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.layoutCount;
-            if (r1 != 0) goto L_0x0146;
+            if (r1 != 0) goto L_0x013b;
         L_0x0126:
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.startAnimationRunnable;
-            if (r1 == 0) goto L_0x0146;
-        L_0x012e:
-            r1 = org.telegram.ui.ActionBar.BottomSheet.this;
-            r1 = r1.startAnimationRunnable;
+            if (r1 == 0) goto L_0x013b;
+        L_0x012c:
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.startAnimationRunnable;
@@ -723,7 +721,7 @@ public class BottomSheet extends Dialog {
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r2 = 0;
             r1.startAnimationRunnable = r2;
-        L_0x0146:
+        L_0x013b:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BottomSheet$ContainerView.onLayout(boolean, int, int, int, int):void");
@@ -1009,9 +1007,11 @@ public class BottomSheet extends Dialog {
             viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
             AnonymousClass3 anonymousClass3 = new Runnable() {
                 public void run() {
-                    if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
-                        BottomSheet.this.startAnimationRunnable = null;
-                        BottomSheet.this.startOpenAnimation();
+                    BottomSheet bottomSheet = BottomSheet.this;
+                    if (bottomSheet.startAnimationRunnable == this && !bottomSheet.dismissed) {
+                        bottomSheet = BottomSheet.this;
+                        bottomSheet.startAnimationRunnable = null;
+                        bottomSheet.startOpenAnimation();
                     }
                 }
             };

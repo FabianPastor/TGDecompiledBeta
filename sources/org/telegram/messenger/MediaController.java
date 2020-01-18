@@ -3859,7 +3859,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05e5 float:1.8878098E38 double:1.053162902E-314;
+        r1 = NUM; // 0x7f0e05eb float:1.887811E38 double:1.053162905E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }
