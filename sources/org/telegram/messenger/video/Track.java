@@ -71,17 +71,18 @@ public class Track {
     public Track(int i, MediaFormat mediaFormat, boolean z) {
         this.trackId = (long) i;
         this.isAudio = z;
-        String str;
+        String str = "mime";
+        String str2;
         if (this.isAudio) {
             this.volume = 1.0f;
-            str = "sample-rate";
-            this.timeScale = mediaFormat.getInteger(str);
+            str2 = "sample-rate";
+            this.timeScale = mediaFormat.getInteger(str2);
             this.handler = "soun";
             this.headerBox = new SoundMediaHeaderBox();
             this.sampleDescriptionBox = new SampleDescriptionBox();
             AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
             audioSampleEntry.setChannelCount(mediaFormat.getInteger("channel-count"));
-            audioSampleEntry.setSampleRate((long) mediaFormat.getInteger(str));
+            audioSampleEntry.setSampleRate((long) mediaFormat.getInteger(str2));
             audioSampleEntry.setDataReferenceIndex(1);
             audioSampleEntry.setSampleSize(16);
             ESDescriptorBox eSDescriptorBox = new ESDescriptorBox();
@@ -90,13 +91,17 @@ public class Track {
             SLConfigDescriptor sLConfigDescriptor = new SLConfigDescriptor();
             sLConfigDescriptor.setPredefined(2);
             eSDescriptor.setSlConfigDescriptor(sLConfigDescriptor);
+            Object string = mediaFormat.containsKey(str) ? mediaFormat.getString(str) : "audio/mp4-latm";
             DecoderConfigDescriptor decoderConfigDescriptor = new DecoderConfigDescriptor();
-            decoderConfigDescriptor.setObjectTypeIndication(64);
+            if ("audio/mpeg".equals(string)) {
+                decoderConfigDescriptor.setObjectTypeIndication(105);
+            } else {
+                decoderConfigDescriptor.setObjectTypeIndication(64);
+            }
             decoderConfigDescriptor.setStreamType(5);
             decoderConfigDescriptor.setBufferSizeDB(1536);
-            String str2 = "max-bitrate";
-            if (mediaFormat.containsKey(str2)) {
-                decoderConfigDescriptor.setMaxBitRate((long) mediaFormat.getInteger(str2));
+            if (mediaFormat.containsKey("max-bitrate")) {
+                decoderConfigDescriptor.setMaxBitRate((long) mediaFormat.getInteger("max-bitrate"));
             } else {
                 decoderConfigDescriptor.setMaxBitRate(96000);
             }
@@ -121,9 +126,9 @@ public class Track {
         this.handler = "vide";
         this.headerBox = new VideoMediaHeaderBox();
         this.sampleDescriptionBox = new SampleDescriptionBox();
-        str = mediaFormat.getString("mime");
+        str2 = mediaFormat.getString(str);
         VisualSampleEntry visualSampleEntry;
-        if (str.equals("video/avc")) {
+        if (str2.equals("video/avc")) {
             visualSampleEntry = new VisualSampleEntry("avc1");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);
@@ -219,7 +224,7 @@ public class Track {
             avcConfigurationBox.setProfileCompatibility(0);
             visualSampleEntry.addBox(avcConfigurationBox);
             this.sampleDescriptionBox.addBox(visualSampleEntry);
-        } else if (str.equals("video/mp4v")) {
+        } else if (str2.equals("video/mp4v")) {
             visualSampleEntry = new VisualSampleEntry("mp4v");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);

@@ -1024,7 +1024,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0e0ba9 float:1.8881092E38 double:1.0531636314E-314;
+        r1 = NUM; // 0x7f0e0baa float:1.8881094E38 double:1.053163632E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);

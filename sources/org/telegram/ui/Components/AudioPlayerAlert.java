@@ -692,7 +692,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             }
         });
         this.seekBarView.setReportChanges(true);
-        this.playerLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 8.0f, 62.0f, 8.0f, 0.0f));
+        this.playerLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 4.0f, 58.0f, 4.0f, 0.0f));
         this.progressView = new LineProgressView(context2);
         this.progressView.setVisibility(4);
         this.progressView.setBackgroundColor(Theme.getColor("player_progressBackground"));
@@ -1229,7 +1229,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x00b3:
         r6 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
+        r2 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;

@@ -2849,7 +2849,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0.setTextColor(r3);
         r0 = r1.settingsCell;
         r0 = r0[r8];
-        r3 = NUM; // 0x7f0e0992 float:1.8880007E38 double:1.053163367E-314;
+        r3 = NUM; // 0x7f0e0993 float:1.8880009E38 double:1.0531633676E-314;
         r4 = "ResendCode";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r0.setText(r3, r8);

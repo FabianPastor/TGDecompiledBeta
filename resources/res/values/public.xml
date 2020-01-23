@@ -3494,6 +3494,7 @@
     <public type="string" name="PollOptions" id="NUM" />
     <public type="string" name="PollQuiz" id="NUM" />
     <public type="string" name="PollResults" id="NUM" />
+    <public type="string" name="PollSelectOption" id="NUM" />
     <public type="string" name="PollSubmitVotes" id="NUM" />
     <public type="string" name="PollTapToSelect" id="NUM" />
     <public type="string" name="PollViewResults" id="NUM" />

@@ -421,10 +421,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         public SearchAdapter(Context context) {
             this.mContext = context;
             this.searchAdapterHelper = new SearchAdapterHelper(true);
-            this.searchAdapterHelper.setDelegate(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$NL6PHs6aDhfzvxPlGBUnXlLRajA(this));
+            this.searchAdapterHelper.setDelegate(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$5LwIoMVltQ3Jr8T-oc_eUIaWa0Q(this));
         }
 
-        public /* synthetic */ void lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 NotificationsCustomSettingsActivity.this.emptyView.showTextView();
             }
@@ -440,7 +440,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults(null);
-                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -459,7 +459,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$processSearch$3$NotificationsCustomSettingsActivity$SearchAdapter(String str) {
-            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0);
+            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0, 0);
             Utilities.searchQueue.postRunnable(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$o5HWbYaGlE8-ctf1V7rUoVE87jY(this, str, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 

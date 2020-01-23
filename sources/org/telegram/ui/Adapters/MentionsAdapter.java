@@ -136,11 +136,15 @@ public class MentionsAdapter extends SelectionAdapter {
         this.dialog_id = j;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
+            public /* synthetic */ boolean canApplySearchResults(int i) {
+                return -CC.$default$canApplySearchResults(this, i);
+            }
+
             public /* synthetic */ SparseArray<User> getExcludeUsers() {
                 return -CC.$default$getExcludeUsers(this);
             }
 
-            public void onDataSetChanged() {
+            public void onDataSetChanged(int i) {
                 MentionsAdapter.this.notifyDataSetChanged();
             }
 

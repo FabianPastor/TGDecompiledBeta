@@ -2311,6 +2311,7 @@
     <string name="PollOptions">Poll options</string>
     <string name="PollQuiz">Quiz Mode</string>
     <string name="PollResults">Poll Results</string>
+    <string name="PollSelectOption">Select an option first</string>
     <string name="PollSubmitVotes">VOTE</string>
     <string name="PollTapToSelect">Tap to choose the correct answer</string>
     <string name="PollViewResults">VIEW RESULTS</string>

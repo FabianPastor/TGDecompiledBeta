@@ -205,7 +205,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0e09ff float:1.8880228E38 double:1.053163421E-314;
+        r1 = NUM; // 0x7f0e0a00 float:1.888023E38 double:1.0531634214E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -246,7 +246,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
+        r2 = NUM; // 0x7f0e09d7 float:1.8880147E38 double:1.053163401E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r4);

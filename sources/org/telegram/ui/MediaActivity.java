@@ -1279,7 +1279,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r1 == 0) goto L_0x0081;
     L_0x0072:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r1 = NUM; // 0x7f0e09cb float:1.8880122E38 double:1.0531633953E-314;
         r3 = "SavedMessages";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setTitle(r1);
@@ -1333,7 +1333,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 == 0) goto L_0x00f7;
     L_0x00e9:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0e0a66 float:1.8880437E38 double:1.053163472E-314;
+        r1 = NUM; // 0x7f0e0a67 float:1.8880439E38 double:1.0531634723E-314;
         r3 = "SharedContentTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setTitle(r1);
@@ -1409,7 +1409,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r0 = r0.setActionBarMenuItemSearchListener(r1);
         r6.searchItem = r0;
         r0 = r6.searchItem;
-        r1 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
+        r1 = NUM; // 0x7f0e09d7 float:1.8880147E38 double:1.053163401E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setSearchFieldHint(r4);
@@ -2927,7 +2927,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00cf;
     L_0x00c1:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0e0a6b float:1.8880447E38 double:1.0531634743E-314;
+        r2 = NUM; // 0x7f0e0a6c float:1.8880449E38 double:1.053163475E-314;
         r9 = "SharedMediaTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r1, r2);
@@ -2941,14 +2941,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00eb;
     L_0x00dd:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0e0a67 float:1.8880439E38 double:1.0531634723E-314;
+        r2 = NUM; // 0x7f0e0a68 float:1.888044E38 double:1.053163473E-314;
         r9 = "SharedFilesTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r6, r2);
     L_0x00eb:
         r9 = r12.dialog_id;
         r0 = (int) r9;
-        r2 = NUM; // 0x7f0e0a6c float:1.8880449E38 double:1.053163475E-314;
+        r2 = NUM; // 0x7f0e0a6d float:1.888045E38 double:1.0531634753E-314;
         r9 = "SharedMusicTab";
         if (r0 == 0) goto L_0x0129;
     L_0x00f5:
@@ -2961,7 +2961,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0111;
     L_0x0103:
         r0 = r12.scrollSlidingTextTabStrip;
-        r7 = NUM; // 0x7f0e0a69 float:1.8880443E38 double:1.0531634733E-314;
+        r7 = NUM; // 0x7f0e0a6a float:1.8880445E38 double:1.053163474E-314;
         r8 = "SharedLinksTab";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r0.addTextTab(r3, r7);
@@ -3013,7 +3013,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0178;
     L_0x016a:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0e0a6f float:1.8880455E38 double:1.0531634763E-314;
+        r2 = NUM; // 0x7f0e0a70 float:1.8880457E38 double:1.053163477E-314;
         r3 = "SharedVoiceTab";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.addTextTab(r4, r2);

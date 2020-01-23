@@ -1002,7 +1002,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
                 }
             });
-            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 5.0f, 39.0f, 0.0f));
         }
 
         /* Access modifiers changed, original: protected */
@@ -1605,7 +1605,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.radialProgress = new RadialProgress2(this);
             this.radialProgress.setCircleRadius(AndroidUtilities.dp(24.0f));
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
-            this.seekBar = new SeekBar(context);
+            this.seekBar = new SeekBar(this);
             this.seekBar.setDelegate(new -$$Lambda$ArticleViewer$BlockAudioCell$WgP383-edJ263u4ZKo-pJ9bitM4(this));
         }
 
@@ -1620,7 +1620,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public void setBlock(TL_pageBlockAudio tL_pageBlockAudio, boolean z, boolean z2) {
             this.currentBlock = tL_pageBlockAudio;
             this.currentMessageObject = (MessageObject) this.parentAdapter.audioBlocks.get(this.currentBlock);
-            this.currentDocument = this.currentMessageObject.getDocument();
+            MessageObject messageObject = this.currentMessageObject;
+            if (messageObject != null) {
+                this.currentDocument = messageObject.getDocument();
+            }
             this.isFirst = z;
             String str = "chat_inAudioSeekbarFill";
             this.seekBar.setColors(Theme.getColor("chat_inAudioSeekbar"), Theme.getColor("chat_inAudioCacheSeekbar"), Theme.getColor(str), Theme.getColor(str), Theme.getColor("chat_inAudioSeekbarSelected"));
@@ -14140,9 +14143,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.radialProgressViews[1].setBackgroundState(0, false);
         this.radialProgressViews[2] = new RadialProgressView(activity2, this.photoContainerView);
         this.radialProgressViews[2].setBackgroundState(0, false);
-        this.videoPlayerSeekbar = new SeekBar(activity2);
-        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new -$$Lambda$ArticleViewer$r2lkfi3DVCgGL1Psph_wyl_RwRo(this));
         this.videoPlayerControlFrameLayout = new FrameLayout(activity2) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 motionEvent.getX();
@@ -14185,6 +14185,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         };
         this.videoPlayerControlFrameLayout.setWillNotDraw(false);
         this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
+        this.videoPlayerSeekbar = new SeekBar(this.videoPlayerControlFrameLayout);
+        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
+        this.videoPlayerSeekbar.setDelegate(new -$$Lambda$ArticleViewer$r2lkfi3DVCgGL1Psph_wyl_RwRo(this));
         this.videoPlayButton = new ImageView(activity2);
         this.videoPlayButton.setScaleType(ScaleType.CENTER);
         this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48, 51));
@@ -15992,7 +15995,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
+        r3 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;

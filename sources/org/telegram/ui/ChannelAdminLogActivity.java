@@ -2427,7 +2427,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fc:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
+        r3 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);

@@ -448,7 +448,7 @@ public class MediaDataController extends BaseController {
         if (r1 == 0) goto L_0x006b;
     L_0x0058:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0e0972 float:1.8879942E38 double:1.0531633513E-314;
+        r3 = NUM; // 0x7f0e0973 float:1.8879944E38 double:1.053163352E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r9);
@@ -4375,7 +4375,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r9 = NUM; // 0x7f0e09cb float:1.8880122E38 double:1.0531633953E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;

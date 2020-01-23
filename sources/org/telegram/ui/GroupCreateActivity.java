@@ -382,10 +382,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 });
             }
             this.searchAdapterHelper = new SearchAdapterHelper(false);
-            this.searchAdapterHelper.setDelegate(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$E5cKkbpq2FJnJZ0QVy8Qf2zhCrM(this));
+            this.searchAdapterHelper.setDelegate(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$tApe-5O14tqi1pYkSMauURh5pKk(this));
         }
 
-        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter() {
+        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 GroupCreateActivity.this.emptyView.showTextView();
             }
@@ -781,7 +781,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 this.searchAdapterHelper.mergeResults(null);
                 SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
                 boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-                searchAdapterHelper.queryServerSearch(null, true, z, false, false, 0, false, 0);
+                searchAdapterHelper.queryServerSearch(null, true, z, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -798,7 +798,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         public /* synthetic */ void lambda$null$2$GroupCreateActivity$GroupCreateAdapter(String str) {
             SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
             boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-            searchAdapterHelper.queryServerSearch(str, true, z, true, false, 0, false, 0);
+            searchAdapterHelper.queryServerSearch(str, true, z, true, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks = new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs(this, str);
             this.searchRunnable = -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks;

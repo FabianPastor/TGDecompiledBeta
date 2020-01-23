@@ -53,7 +53,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
-        this.seekBar = new SeekBar(getContext());
+        this.seekBar = new SeekBar(this);
         this.seekBar.setDelegate(this);
         this.progressView = new ProgressView();
     }

@@ -1188,7 +1188,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             goto L_0x02e8;
         L_0x0252:
             r3 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
-            r4 = NUM; // 0x7f0e0cc8 float:1.8881674E38 double:1.053163773E-314;
+            r4 = NUM; // 0x7f0e0cc9 float:1.8881676E38 double:1.0531637737E-314;
             r5 = "WillUnmuteIn";
             if (r2 >= r3) goto L_0x026e;
         L_0x025b:
@@ -1301,7 +1301,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r8 = "%d";
             if (r2 != r3) goto L_0x034a;
         L_0x031b:
-            r3 = NUM; // 0x7f0e0a6d float:1.888045E38 double:1.0531634753E-314;
+            r3 = NUM; // 0x7f0e0a6e float:1.8880453E38 double:1.053163476E-314;
             r4 = "SharedPhotosAndVideos";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = new java.lang.Object[r10];
@@ -1351,7 +1351,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.linksRow;
             if (r2 != r3) goto L_0x03b8;
         L_0x0389:
-            r3 = NUM; // 0x7f0e0a68 float:1.888044E38 double:1.053163473E-314;
+            r3 = NUM; // 0x7f0e0a69 float:1.8880443E38 double:1.0531634733E-314;
             r5 = "SharedLinks";
             r3 = org.telegram.messenger.LocaleController.getString(r5, r3);
             r5 = new java.lang.Object[r10];
@@ -1376,7 +1376,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.audioRow;
             if (r2 != r3) goto L_0x03f0;
         L_0x03c0:
-            r3 = NUM; // 0x7f0e0a64 float:1.8880433E38 double:1.053163471E-314;
+            r3 = NUM; // 0x7f0e0a65 float:1.8880435E38 double:1.0531634713E-314;
             r4 = "SharedAudioFiles";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = new java.lang.Object[r10];
@@ -1466,7 +1466,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.ttl;
             if (r2 != 0) goto L_0x0491;
         L_0x0487:
-            r2 = NUM; // 0x7f0e0a74 float:1.8880465E38 double:1.0531634788E-314;
+            r2 = NUM; // 0x7f0e0a75 float:1.8880467E38 double:1.053163479E-314;
             r3 = "ShortMessageLifetimeForever";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             goto L_0x0495;
@@ -1483,7 +1483,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.unblockRow;
             if (r2 != r3) goto L_0x04bf;
         L_0x04ab:
-            r2 = NUM; // 0x7f0e0b66 float:1.8880956E38 double:1.0531635983E-314;
+            r2 = NUM; // 0x7f0e0b67 float:1.8880958E38 double:1.053163599E-314;
             r3 = "Unblock";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1495,7 +1495,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.startSecretChatRow;
             if (r2 != r3) goto L_0x04db;
         L_0x04c7:
-            r2 = NUM; // 0x7f0e0aa1 float:1.8880556E38 double:1.053163501E-314;
+            r2 = NUM; // 0x7f0e0aa2 float:1.8880558E38 double:1.0531635015E-314;
             r3 = "StartEncryptedChat";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1552,13 +1552,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.megagroup;
             if (r2 == 0) goto L_0x0561;
         L_0x0553:
-            r2 = NUM; // 0x7f0e093a float:1.8879828E38 double:1.0531633236E-314;
+            r2 = NUM; // 0x7f0e093b float:1.887983E38 double:1.053163324E-314;
             r3 = "ProfileJoinGroup";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
             goto L_0x0912;
         L_0x0561:
-            r2 = NUM; // 0x7f0e0939 float:1.8879826E38 double:1.053163323E-314;
+            r2 = NUM; // 0x7f0e093a float:1.8879828E38 double:1.0531633236E-314;
             r3 = "ProfileJoinChannel";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2, r9);
@@ -1778,7 +1778,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = org.telegram.ui.ProfileActivity.this;
             r2 = r2.userInfo;
             r2 = r2.about;
-            r3 = NUM; // 0x7f0e0ba0 float:1.8881074E38 double:1.053163627E-314;
+            r3 = NUM; // 0x7f0e0ba1 float:1.8881076E38 double:1.0531636275E-314;
             r4 = "UserBio";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r4 = org.telegram.ui.ProfileActivity.this;
@@ -1875,7 +1875,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         L_0x0815:
             r2 = "-";
         L_0x0817:
-            r3 = NUM; // 0x7f0e0bc4 float:1.8881147E38 double:1.053163645E-314;
+            r3 = NUM; // 0x7f0e0bc5 float:1.8881149E38 double:1.0531636453E-314;
             r4 = "Username";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r1.setTextAndValue(r2, r3, r9);
@@ -1955,7 +1955,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r2 = r2.channelInfoRow;
             if (r2 == r8) goto L_0x08e1;
         L_0x08d4:
-            r2 = NUM; // 0x7f0e0981 float:1.8879972E38 double:1.0531633587E-314;
+            r2 = NUM; // 0x7f0e0982 float:1.8879974E38 double:1.053163359E-314;
             r3 = "ReportChatDescription";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2);
@@ -1971,7 +1971,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             r3 = r3.sharedHeaderRow;
             if (r2 != r3) goto L_0x0903;
         L_0x08f6:
-            r2 = NUM; // 0x7f0e0a65 float:1.8880435E38 double:1.0531634713E-314;
+            r2 = NUM; // 0x7f0e0a66 float:1.8880437E38 double:1.053163472E-314;
             r3 = "SharedContent";
             r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
             r1.setText(r2);
@@ -6259,7 +6259,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r4 = 1;
         if (r1 != r2) goto L_0x0024;
     L_0x001a:
-        r1 = NUM; // 0x7f0e0c1c float:1.8881325E38 double:1.053163688E-314;
+        r1 = NUM; // 0x7f0e0c1d float:1.8881327E38 double:1.0531636887E-314;
         r5 = "WaitingForNetwork";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
@@ -6274,7 +6274,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r5 = 5;
         if (r1 != r5) goto L_0x003d;
     L_0x0033:
-        r1 = NUM; // 0x7f0e0b85 float:1.8881019E38 double:1.0531636136E-314;
+        r1 = NUM; // 0x7f0e0b86 float:1.888102E38 double:1.053163614E-314;
         r5 = "Updating";
         r1 = org.telegram.messenger.LocaleController.getString(r5, r1);
         goto L_0x004b;
@@ -6356,7 +6356,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r9 = org.telegram.messenger.MessagesController.isSupportUser(r5);
         if (r9 == 0) goto L_0x00dd;
     L_0x00d3:
-        r9 = NUM; // 0x7f0e0ad4 float:1.888066E38 double:1.053163526E-314;
+        r9 = NUM; // 0x7f0e0ad5 float:1.8880662E38 double:1.0531635267E-314;
         r10 = "SupportStatus";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         goto L_0x0126;
@@ -6398,7 +6398,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r11.setTextColor(r10);
         goto L_0x0126;
     L_0x011d:
-        r9 = NUM; // 0x7f0e0a33 float:1.8880333E38 double:1.0531634466E-314;
+        r9 = NUM; // 0x7f0e0a34 float:1.8880335E38 double:1.053163447E-314;
         r10 = "ServiceNotifications";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
     L_0x0126:
@@ -6725,7 +6725,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r10);
         if (r2 == 0) goto L_0x038f;
     L_0x0384:
-        r2 = NUM; // 0x7f0e0cdb float:1.8881712E38 double:1.0531637826E-314;
+        r2 = NUM; // 0x7f0e0cdc float:1.8881715E38 double:1.053163783E-314;
         r5 = "YouWereKicked";
         r5 = org.telegram.messenger.LocaleController.getString(r5, r2);
     L_0x038d:
@@ -6735,7 +6735,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r10);
         if (r2 == 0) goto L_0x039f;
     L_0x0395:
-        r2 = NUM; // 0x7f0e0cda float:1.888171E38 double:1.053163782E-314;
+        r2 = NUM; // 0x7f0e0cdb float:1.8881712E38 double:1.0531637826E-314;
         r5 = "YouLeft";
         r5 = org.telegram.messenger.LocaleController.getString(r5, r2);
         goto L_0x038d;

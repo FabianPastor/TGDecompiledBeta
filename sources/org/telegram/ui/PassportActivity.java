@@ -4386,7 +4386,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = (android.widget.FrameLayout) r0;
         r0 = r6.actionBar;
         r1 = "TelegramPassport";
-        r2 = NUM; // 0x7f0e0af0 float:1.8880717E38 double:1.05316354E-314;
+        r2 = NUM; // 0x7f0e0af1 float:1.8880719E38 double:1.0531635405E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r0 = r6.actionBar;
@@ -4455,7 +4455,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.setBackgroundDrawable(r9);
         r0 = r6.deletePassportCell;
         r9 = "TelegramPassportDelete";
-        r10 = NUM; // 0x7f0e0af3 float:1.8880723E38 double:1.0531635415E-314;
+        r10 = NUM; // 0x7f0e0af4 float:1.8880725E38 double:1.053163542E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);
         r10 = 0;
         r0.setText(r9, r10);
@@ -5337,7 +5337,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         r3 = org.telegram.ui.PassportActivity.this;
                         r3 = r3.inputFields;
                         r3 = r3[r7];
-                        r4 = NUM; // 0x7f0e0ccb float:1.888168E38 double:1.0531637747E-314;
+                        r4 = NUM; // 0x7f0e0ccc float:1.8881682E38 double:1.053163775E-314;
                         r5 = "WrongCountry";
                         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
                         r3.setText(r4);

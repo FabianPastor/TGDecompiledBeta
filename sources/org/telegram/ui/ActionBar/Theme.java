@@ -1231,6 +1231,7 @@ public class Theme {
                         draw(canvas, paint);
                     }
                     this.shadowDrawable[i] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
+                    this.shadowDrawableColor = 0;
                 } catch (Throwable unused) {
                 }
             }

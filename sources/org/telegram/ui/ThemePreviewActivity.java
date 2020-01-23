@@ -1881,7 +1881,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                                 ThemePreviewActivity.this.patternsListView.invalidateViews();
                             }
                         });
-                        this.patternLayout[i6].addView(this.intensitySeekBar, LayoutHelper.createFrame(-1, 30.0f, 51, 9.0f, 215.0f, 9.0f, 0.0f));
+                        this.patternLayout[i6].addView(this.intensitySeekBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 211.0f, 5.0f, 0.0f));
                     } else {
                         this.colorPicker = new ColorPicker(context2, this.editingTheme, new ColorPickerDelegate() {
                             public void setColor(int i, int i2, boolean z) {
@@ -3101,15 +3101,15 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r7.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0e09c3 float:1.8880106E38 double:1.0531633913E-314;
+        r1 = NUM; // 0x7f0e09c4 float:1.8880108E38 double:1.053163392E-314;
         r2 = "SaveChangesAlertTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e09c2 float:1.8880104E38 double:1.053163391E-314;
+        r1 = NUM; // 0x7f0e09c3 float:1.8880106E38 double:1.0531633913E-314;
         r2 = "SaveChangesAlertText";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e09c1 float:1.8880102E38 double:1.0531633903E-314;
+        r1 = NUM; // 0x7f0e09c2 float:1.8880104E38 double:1.053163391E-314;
         r2 = "Save";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo;

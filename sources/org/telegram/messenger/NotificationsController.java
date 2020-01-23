@@ -2382,7 +2382,7 @@ public class NotificationsController extends BaseController {
         r8 = 3;
         if (r3 == 0) goto L_0x023f;
     L_0x01e5:
-        r1 = NUM; // 0x7f0e0d05 float:1.8881798E38 double:1.0531638034E-314;
+        r1 = NUM; // 0x7f0e0d06 float:1.88818E38 double:1.053163804E-314;
         r2 = new java.lang.Object[r13];
         r3 = org.telegram.messenger.LocaleController.getInstance();
         r3 = r3.formatterYear;
@@ -3560,7 +3560,7 @@ public class NotificationsController extends BaseController {
         r0 = r0.quiz;
         if (r0 == 0) goto L_0x0ae0;
     L_0x0ad6:
-        r0 = NUM; // 0x7f0e094d float:1.8879867E38 double:1.053163333E-314;
+        r0 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
         r1 = "QuizPoll";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         return r0;
@@ -3908,7 +3908,7 @@ public class NotificationsController extends BaseController {
         r3 = (int) r2;
         if (r3 != 0) goto L_0x0163;
     L_0x0158:
-        r0 = NUM; // 0x7f0e0cd9 float:1.8881708E38 double:1.0531637816E-314;
+        r0 = NUM; // 0x7f0e0cda float:1.888171E38 double:1.053163782E-314;
         r1 = "YouHaveNewMessage";
         r11 = org.telegram.messenger.LocaleController.getString(r1, r0);
         goto L_0x127e;
@@ -3955,7 +3955,7 @@ public class NotificationsController extends BaseController {
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
         if (r2 == 0) goto L_0x0206;
     L_0x01a9:
-        r1 = NUM; // 0x7f0e0d05 float:1.8881798E38 double:1.0531638034E-314;
+        r1 = NUM; // 0x7f0e0d06 float:1.88818E38 double:1.053163804E-314;
         r2 = 2;
         r3 = new java.lang.Object[r2];
         r2 = org.telegram.messenger.LocaleController.getInstance();
@@ -6173,7 +6173,7 @@ public class NotificationsController extends BaseController {
     L_0x127e:
         return r11;
     L_0x127f:
-        r0 = NUM; // 0x7f0e0cd9 float:1.8881708E38 double:1.0531637816E-314;
+        r0 = NUM; // 0x7f0e0cda float:1.888171E38 double:1.053163782E-314;
         r1 = "YouHaveNewMessage";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         return r0;
@@ -8337,7 +8337,7 @@ public class NotificationsController extends BaseController {
     L_0x0ab3:
         r2 = NUM; // 0x7var_fc float:1.794509E38 double:1.0529356275E-314;
         r3 = "Reply";
-        r4 = NUM; // 0x7f0e097c float:1.8879962E38 double:1.053163356E-314;
+        r4 = NUM; // 0x7f0e097d float:1.8879964E38 double:1.0531633567E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0b0f }
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b0f }
         r5 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
@@ -8348,7 +8348,7 @@ public class NotificationsController extends BaseController {
     L_0x0acc:
         r2 = NUM; // 0x7var_fb float:1.7945087E38 double:1.052935627E-314;
         r3 = "Reply";
-        r4 = NUM; // 0x7f0e097c float:1.8879962E38 double:1.053163356E-314;
+        r4 = NUM; // 0x7f0e097d float:1.8879964E38 double:1.0531633567E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0b0f }
         r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b0f }
         r5 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
@@ -8956,7 +8956,7 @@ public class NotificationsController extends BaseController {
     L_0x02ad:
         r6 = 0;
     L_0x02ae:
-        r0 = NUM; // 0x7f0e09f6 float:1.888021E38 double:1.0531634165E-314;
+        r0 = NUM; // 0x7f0e09f7 float:1.8880212E38 double:1.053163417E-314;
         r7 = "SecretChatName";
         r9 = org.telegram.messenger.LocaleController.getString(r7, r0);
         r0 = r9;
@@ -9088,7 +9088,7 @@ public class NotificationsController extends BaseController {
         r3 = new androidx.core.app.RemoteInput$Builder;
         r9 = "extra_voice_reply";
         r3.<init>(r9);
-        r9 = NUM; // 0x7f0e097c float:1.8879962E38 double:1.053163356E-314;
+        r9 = NUM; // 0x7f0e097d float:1.8879964E38 double:1.0531633567E-314;
         r13 = "Reply";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         r3.setLabel(r9);
@@ -9101,12 +9101,12 @@ public class NotificationsController extends BaseController {
         r9[r13] = r7;
         r13 = "ReplyToGroup";
         r42 = r2;
-        r2 = NUM; // 0x7f0e097d float:1.8879964E38 double:1.0531633567E-314;
+        r2 = NUM; // 0x7f0e097e float:1.8879966E38 double:1.053163357E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r13, r2, r9);
         goto L_0x03bd;
     L_0x03ac:
         r42 = r2;
-        r2 = NUM; // 0x7f0e097e float:1.8879966E38 double:1.053163357E-314;
+        r2 = NUM; // 0x7f0e097f float:1.8879968E38 double:1.0531633577E-314;
         r9 = 1;
         r13 = new java.lang.Object[r9];
         r9 = 0;

@@ -134,10 +134,12 @@ public class HintView extends FrameLayout {
                     }
                     i3 = chatMessageCell.getNoSoundIconCenterX();
                 } else if (i6 == 5) {
+                    Integer num = (Integer) obj;
                     i5 += i3;
                     this.shownY = i3;
-                    Integer num = (Integer) obj;
-                    if (chatMessageCell.getMessageObject().isQuiz()) {
+                    if (num.intValue() == -1) {
+                        this.textView.setText(LocaleController.getString("PollSelectOption", NUM));
+                    } else if (chatMessageCell.getMessageObject().isQuiz()) {
                         if (num.intValue() == 0) {
                             this.textView.setText(LocaleController.getString("NoVotesQuiz", NUM));
                         } else {
@@ -177,9 +179,9 @@ public class HintView extends FrameLayout {
                 i5 = chatMessageCell.getLeft() + i3;
                 measuredHeight = AndroidUtilities.dp(19.0f);
                 if (this.currentType == 5) {
-                    int measuredWidth = (i3 - (getMeasuredWidth() / 2)) - AndroidUtilities.dp(19.1f);
-                    setTranslationX((float) measuredWidth);
-                    measuredHeight += measuredWidth;
+                    int max = Math.max(0, (i3 - (getMeasuredWidth() / 2)) - AndroidUtilities.dp(19.1f));
+                    setTranslationX((float) max);
+                    measuredHeight += max;
                 } else if (i5 > view.getMeasuredWidth() / 2) {
                     i6 = (i6 - getMeasuredWidth()) - AndroidUtilities.dp(38.0f);
                     setTranslationX((float) i6);
@@ -215,10 +217,7 @@ public class HintView extends FrameLayout {
                 setVisibility(0);
                 if (z) {
                     this.animatorSet = new AnimatorSet();
-                    animatorSet = this.animatorSet;
-                    Animator[] animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f});
-                    animatorSet.playTogether(animatorArr);
+                    this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
                     this.animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             HintView.this.animatorSet = null;
@@ -316,10 +315,7 @@ public class HintView extends FrameLayout {
         setVisibility(0);
         if (z) {
             this.animatorSet = new AnimatorSet();
-            animatorSet = this.animatorSet;
-            Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f});
-            animatorSet.playTogether(animatorArr);
+            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     HintView.this.animatorSet = null;
@@ -354,7 +350,7 @@ public class HintView extends FrameLayout {
             this.animatorSet = new AnimatorSet();
             AnimatorSet animatorSet2 = this.animatorSet;
             Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f});
             animatorSet2.playTogether(animatorArr);
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {

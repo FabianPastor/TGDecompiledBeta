@@ -3556,9 +3556,19 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         this.recordReplyingMessageObject = messageObject;
     }
 
+    private boolean shouldRequestRecordAudioFocus() {
+        try {
+            if (NotificationsController.audioManager.isBluetoothA2dpOn()) {
+                return false;
+            }
+        } catch (Throwable unused) {
+        }
+        return true;
+    }
+
     public void requestAudioFocus(boolean z) {
         if (z) {
-            if (!this.hasRecordAudioFocus && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
+            if (!this.hasRecordAudioFocus && shouldRequestRecordAudioFocus() && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
                 this.hasRecordAudioFocus = true;
             }
         } else if (this.hasRecordAudioFocus) {

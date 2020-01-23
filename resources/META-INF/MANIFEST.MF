@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: ChzbgWX/PWTWgUUJaDymxm5kb8c=
+SHA1-Digest: mmYqMtXgNHho8L5XthVC4km4/3o=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9498,7 +9498,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: SM+V4dd1e4rej+CtP2L5Gzpk4ow=
+SHA1-Digest: +QrOQMqQ8mNfZceBYmLfc7EIlQU=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9540,16 +9540,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: IlBAhgKS306nRLFsyKcauZH36Oc=
+SHA1-Digest: 7M22t1zVsSrjqeupnxV18x1SwE4=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: 09w6OPANsfiaijev3Rv8ooAgV6A=
+SHA1-Digest: mSrvF6zglHg4FXSCHP7szqsr7Wo=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: KeBA3JcbCKuLEbipu7/A0+HJrxU=
+SHA1-Digest: /2lUpmXypx2tsJajVWuIboEiEOQ=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: b3EjofYX6oyYDFu/w53oZUnjT0Q=
+SHA1-Digest: 68D6sVhZSP4g4VevCC1A5lDBAYw=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -17869,13 +17869,13 @@ Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
 SHA1-Digest: 2CE3JfdXqzrER2GIKXc5wf5a7LY=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: isNOMCsUyVDXC21qu//f5EeEp34=
+SHA1-Digest: OZRJr5lPb+rkLMgAlYxWlZyzXPg=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: ReJzIeeskbyW5N8IQThXeJ4UbdI=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: XeKQME/q4HMjMwyBr97Ov06pJLk=
+SHA1-Digest: kGQtnXI7xkhD1uNwGzei5Q5KvMo=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: 0kDLS2UtnxiOM5BeQbdpwlMBc40=
@@ -17911,13 +17911,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: Ouz///6zr3gupKqMtQ2k4jZskdc=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: J3HSnJp1MOUyprLu124ePIEgJ9c=
+SHA1-Digest: a2QAc1zxNtJZlcF+JXqoBFIs8u8=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: nT16yIQdj88Yx9Q1wS/NPDAKPpc=
+SHA1-Digest: qG7VGS02Z01Bcz2WgH336yWG4HQ=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: LXbWEjz/nXblA7J0Hhdi1o2OTrc=
+SHA1-Digest: f2l0KNmnjwaicGVW1SSZPS9y3uc=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: mhWV3NTa0jcxUDY76tGXjPU8tcs=
@@ -18136,7 +18136,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: DHito8ePU5vO4sWuWqAEbk7DRX8=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: lb5na6Z6jKaGtdP6IHZ8OQ5CzpY=
+SHA1-Digest: Iv/fmnaH9AJ8HssUIcViz2s4JIY=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -18151,7 +18151,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: KydklRhZshuyqpp9SsvSYPA1mew=
+SHA1-Digest: pMv8uU5qjD9AOe/B7hXPDET7w90=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

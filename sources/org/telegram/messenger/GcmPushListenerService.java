@@ -3993,10 +3993,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x17cf;
     L_0x09ad:
         r7 = "YouHaveNewMessage";
-        r8 = NUM; // 0x7f0e0cd9 float:1.8881708E38 double:1.0531637816E-314;
+        r8 = NUM; // 0x7f0e0cda float:1.888171E38 double:1.053163782E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         r8 = "SecretChatName";
-        r10 = NUM; // 0x7f0e09f6 float:1.888021E38 double:1.0531634165E-314;
+        r10 = NUM; // 0x7f0e09f7 float:1.8880212E38 double:1.053163417E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r10);	 Catch:{ all -> 0x044d }
         r21 = r1;
         r25 = r8;
@@ -5238,7 +5238,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "QuizPoll";
-        r8 = NUM; // 0x7f0e094d float:1.8879867E38 double:1.053163333E-314;
+        r8 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x1314:
@@ -5595,7 +5595,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "QuizPoll";
-        r8 = NUM; // 0x7f0e094d float:1.8879867E38 double:1.053163333E-314;
+        r8 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x15fe:

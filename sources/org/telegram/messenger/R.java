@@ -3594,6 +3594,7 @@ public final class R {
         public static final int PollOptions = NUM;
         public static final int PollQuiz = NUM;
         public static final int PollResults = NUM;
+        public static final int PollSelectOption = NUM;
         public static final int PollSubmitVotes = NUM;
         public static final int PollTapToSelect = NUM;
         public static final int PollViewResults = NUM;

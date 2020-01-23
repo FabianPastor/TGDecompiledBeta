@@ -2915,7 +2915,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00a8:
         r1 = r6.parentActivity;	 Catch:{ Exception -> 0x00c1 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
+        r3 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x00c1 }
         r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Exception -> 0x00c1 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -4455,13 +4455,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r7 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
         if (r6 == 0) goto L_0x00d1;
     L_0x00c4:
-        r6 = NUM; // 0x7f0e0a40 float:1.888036E38 double:1.053163453E-314;
+        r6 = NUM; // 0x7f0e0a41 float:1.8880362E38 double:1.0531634536E-314;
         r8 = "SetReminder";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
         goto L_0x00ef;
     L_0x00d1:
-        r6 = NUM; // 0x7f0e09ce float:1.8880128E38 double:1.0531633967E-314;
+        r6 = NUM; // 0x7f0e09cf float:1.888013E38 double:1.053163397E-314;
         r8 = "ScheduleMessage";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
@@ -4469,7 +4469,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00de:
         if (r2 != r6) goto L_0x00ef;
     L_0x00e0:
-        r6 = NUM; // 0x7f0e0a23 float:1.88803E38 double:1.0531634387E-314;
+        r6 = NUM; // 0x7f0e0a24 float:1.8880303E38 double:1.053163439E-314;
         r7 = "SendWithoutSound";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r7 = NUM; // 0x7var_c float:1.7945219E38 double:1.052935659E-314;
@@ -5174,34 +5174,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private void createVideoControlsInterface() {
-        this.videoPlayerSeekbar = new SeekBar(this.containerView.getContext());
-        this.videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4.0f));
-        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
-            public void onSeekBarDrag(float f) {
-                if (PhotoViewer.this.videoPlayer != null) {
-                    if (!PhotoViewer.this.inPreview && PhotoViewer.this.videoTimelineView.getVisibility() == 0) {
-                        f = PhotoViewer.this.videoTimelineView.getLeftProgress() + ((PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress()) * f);
-                    }
-                    long duration = PhotoViewer.this.videoPlayer.getDuration();
-                    if (duration == -9223372036854775807L) {
-                        PhotoViewer.this.seekToProgressPending = f;
-                    } else {
-                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (f * ((float) duration))));
-                    }
-                    PhotoViewer.this.showVideoSeekPreviewPosition(false);
-                    PhotoViewer.this.needShowOnReady = false;
-                }
-            }
-
-            public void onSeekBarContinuousDrag(float f) {
-                if (!(PhotoViewer.this.videoPlayer == null || PhotoViewer.this.videoPreviewFrame == null)) {
-                    PhotoViewer.this.videoPreviewFrame.setProgress(f, PhotoViewer.this.videoPlayerSeekbar.getWidth());
-                }
-                PhotoViewer.this.showVideoSeekPreviewPosition(true);
-                PhotoViewer.this.updateVideoSeekPreviewPosition();
-            }
-        });
         this.videoPlayerControlFrameLayout = new FrameLayout(this.containerView.getContext()) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 motionEvent.getX();
@@ -5268,6 +5240,34 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         };
         this.videoPlayerControlFrameLayout.setWillNotDraw(false);
         this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
+        this.videoPlayerSeekbar = new SeekBar(this.videoPlayerControlFrameLayout);
+        this.videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4.0f));
+        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
+        this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
+            public void onSeekBarDrag(float f) {
+                if (PhotoViewer.this.videoPlayer != null) {
+                    if (!PhotoViewer.this.inPreview && PhotoViewer.this.videoTimelineView.getVisibility() == 0) {
+                        f = PhotoViewer.this.videoTimelineView.getLeftProgress() + ((PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress()) * f);
+                    }
+                    long duration = PhotoViewer.this.videoPlayer.getDuration();
+                    if (duration == -9223372036854775807L) {
+                        PhotoViewer.this.seekToProgressPending = f;
+                    } else {
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (f * ((float) duration))));
+                    }
+                    PhotoViewer.this.showVideoSeekPreviewPosition(false);
+                    PhotoViewer.this.needShowOnReady = false;
+                }
+            }
+
+            public void onSeekBarContinuousDrag(float f) {
+                if (!(PhotoViewer.this.videoPlayer == null || PhotoViewer.this.videoPreviewFrame == null)) {
+                    PhotoViewer.this.videoPreviewFrame.setProgress(f, PhotoViewer.this.videoPlayerSeekbar.getWidth());
+                }
+                PhotoViewer.this.showVideoSeekPreviewPosition(true);
+                PhotoViewer.this.updateVideoSeekPreviewPosition();
+            }
+        });
         this.videoPreviewFrame = new VideoSeekPreviewImage(this.containerView.getContext(), new -$$Lambda$PhotoViewer$om-yNq7QQUVRvzeIpHWwXj19jW8(this)) {
             /* Access modifiers changed, original: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
@@ -7730,7 +7730,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.isEvent = r10;
         r0.sharedMediaType = r8;
         r10 = r0.allMediaItem;
-        r14 = NUM; // 0x7f0e0a76 float:1.888047E38 double:1.0531634797E-314;
+        r14 = NUM; // 0x7f0e0a77 float:1.8880471E38 double:1.05316348E-314;
         r15 = "ShowAllMedia";
         r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
         r10.setText(r14);
@@ -7887,7 +7887,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r15 = 0;
         goto L_0x01f4;
     L_0x0209:
-        r10 = NUM; // 0x7f0e0a75 float:1.8880467E38 double:1.053163479E-314;
+        r10 = NUM; // 0x7f0e0a76 float:1.888047E38 double:1.0531634797E-314;
         r13 = "ShowAllFiles";
         if (r1 == 0) goto L_0x0308;
     L_0x0210:
@@ -8877,7 +8877,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r11 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r11;
-        r7 = NUM; // 0x7f0e0d05 float:1.8881798E38 double:1.0531638034E-314;
+        r7 = NUM; // 0x7f0e0d06 float:1.88818E38 double:1.053163804E-314;
         r11 = new java.lang.Object[r13];
         r12 = org.telegram.messenger.LocaleController.getInstance();
         r12 = r12.formatterYear;
@@ -9723,7 +9723,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r4 == 0) goto L_0x0764;
     L_0x0755:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
+        r4 = NUM; // 0x7f0e09cb float:1.8880122E38 double:1.0531633953E-314;
         r5 = "SavedMessages";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);

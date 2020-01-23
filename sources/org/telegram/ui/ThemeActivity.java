@@ -175,7 +175,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     ThemeActivity.this.setBubbleRadius(Math.round(((float) bubbleRadiusCell.startRadius) + (((float) (BubbleRadiusCell.this.endRadius - BubbleRadiusCell.this.startRadius)) * f)), false);
                 }
             });
-            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 5.0f, 39.0f, 0.0f));
         }
 
         /* Access modifiers changed, original: protected */
@@ -369,6 +369,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
     private class TextSizeCell extends FrameLayout {
         private int endFontSize = 30;
+        private int lastWidth;
         private ThemePreviewMessagesCell messagesCell;
         private SeekBarView sizeBar;
         private int startFontSize = 12;
@@ -390,7 +391,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     ThemeActivity.this.setFontSize(Math.round(((float) textSizeCell.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * f)));
                 }
             });
-            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 5.0f, 39.0f, 0.0f));
             this.messagesCell = new ThemePreviewMessagesCell(context, ThemeActivity.this.parentLayout, 0);
             addView(this.messagesCell, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 53.0f, 0.0f, 0.0f));
         }
@@ -407,10 +408,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         /* Access modifiers changed, original: protected */
         public void onMeasure(int i, int i2) {
             super.onMeasure(i, i2);
-            SeekBarView seekBarView = this.sizeBar;
-            i2 = SharedConfig.fontSize;
-            int i3 = this.startFontSize;
-            seekBarView.setProgress(((float) (i2 - i3)) / ((float) (this.endFontSize - i3)));
+            i = MeasureSpec.getSize(i);
+            if (this.lastWidth != i) {
+                SeekBarView seekBarView = this.sizeBar;
+                int i3 = SharedConfig.fontSize;
+                int i4 = this.startFontSize;
+                seekBarView.setProgress(((float) (i3 - i4)) / ((float) (this.endFontSize - i4)));
+                this.lastWidth = i;
+            }
         }
 
         public void invalidate() {
@@ -684,7 +689,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x0162:
             r9 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x0178 }
             r10 = "ShareFile";
-            r0 = NUM; // 0x7f0e0a55 float:1.8880402E38 double:1.0531634634E-314;
+            r0 = NUM; // 0x7f0e0a56 float:1.8880404E38 double:1.053163464E-314;
             r10 = org.telegram.messenger.LocaleController.getString(r10, r0);	 Catch:{ Exception -> 0x0178 }
             r8 = android.content.Intent.createChooser(r8, r10);	 Catch:{ Exception -> 0x0178 }
             r10 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;

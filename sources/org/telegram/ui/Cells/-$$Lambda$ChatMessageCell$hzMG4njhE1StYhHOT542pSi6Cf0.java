@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import java.util.Comparator;
+import org.telegram.ui.Cells.ChatMessageCell.PollButton;
 
 /* compiled from: lambda */
 public final /* synthetic */ class -$$Lambda$ChatMessageCell$hzMG4njhE1StYhHOT542pSi6Cf0 implements Comparator {
