@@ -198,7 +198,7 @@ public class SharedConfig {
                 pushAuthKey = Base64.decode(string, 0);
             }
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
-                lastPauseTime = (int) ((SystemClock.uptimeMillis() / 1000) - 600);
+                lastPauseTime = (int) ((SystemClock.elapsedRealtime() / 1000) - 600);
             }
             String string2 = sharedPreferences.getString("passcodeSalt", "");
             if (string2.length() > 0) {

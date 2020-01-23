@@ -4067,7 +4067,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (tL_error == null) {
             this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(0));
             getMessagesController().processUpdates((Updates) tLObject, false);
-            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.uptimeMillis()));
+            this.voteSendTime.put(messageObject.getPollId(), Long.valueOf(SystemClock.elapsedRealtime()));
         }
         AndroidUtilities.runOnUIThread(new -$$Lambda$SendMessagesHelper$LwweBgl5GzaYakuYZQFJVy0hJIg(this, str, runnable));
     }

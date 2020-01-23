@@ -16,7 +16,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         String from = remoteMessage.getFrom();
         Map data = remoteMessage.getData();
         long sentTime = remoteMessage.getSentTime();
-        long uptimeMillis = SystemClock.uptimeMillis();
+        long elapsedRealtime = SystemClock.elapsedRealtime();
         if (BuildVars.LOGS_ENABLED) {
             stringBuilder = new StringBuilder();
             stringBuilder.append("GCM received data: ");
@@ -33,7 +33,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (BuildVars.DEBUG_VERSION) {
             stringBuilder = new StringBuilder();
             stringBuilder.append("finished GCM service, time = ");
-            stringBuilder.append(SystemClock.uptimeMillis() - uptimeMillis);
+            stringBuilder.append(SystemClock.elapsedRealtime() - elapsedRealtime);
             FileLog.d(stringBuilder.toString());
         }
     }

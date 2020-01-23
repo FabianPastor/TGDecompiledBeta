@@ -6889,12 +6889,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 this.videoPlayerContainer.setOutlineProvider(new ViewOutlineProvider() {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
-                        if (view.getTag(NUM) != null) {
-                            outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(4.0f));
+                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(NUM);
+                        int i = 0;
+                        if (imageReceiver != null) {
+                            int[] roundRadius = imageReceiver.getRoundRadius();
+                            int i2 = 0;
+                            while (i < 4) {
+                                i2 = Math.max(i2, roundRadius[i]);
+                                i++;
+                            }
+                            outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) i2);
                             return;
                         }
-                        int i = AndroidUtilities.roundMessageSize;
-                        outline.setOval(0, 0, i, i);
+                        int i3 = AndroidUtilities.roundMessageSize;
+                        outline.setOval(0, 0, i3, i3);
                     }
                 });
                 this.videoPlayerContainer.setClipToOutline(true);
@@ -6906,7 +6914,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     public void onSizeChanged(int i, int i2, int i3, int i4) {
                         super.onSizeChanged(i, i2, i3, i4);
                         ChatActivity.this.aspectPath.reset();
-                        if (getTag(NUM) != null) {
+                        ImageReceiver imageReceiver = (ImageReceiver) getTag(NUM);
+                        if (imageReceiver != null) {
+                            int[] roundRadius = imageReceiver.getRoundRadius();
+                            int i5 = 0;
+                            for (i4 = 0; i4 < 4; i4++) {
+                                i5 = Math.max(i5, roundRadius[i4]);
+                            }
                             this.rect.set(0.0f, 0.0f, (float) i, (float) i2);
                             ChatActivity.this.aspectPath.addRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Direction.CW);
                         } else {
@@ -7967,6 +7981,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 hintView.hide();
             }
             hintView = this.searchAsListHint;
+            if (hintView != null) {
+                hintView.hide();
+            }
+            hintView = this.scheduledOrNoSoundHint;
             if (hintView != null) {
                 hintView.hide();
             }
@@ -9891,7 +9909,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             this.videoTextureView.setScaleX(f);
                             this.videoTextureView.setScaleY(f);
                         } else {
-                            this.videoPlayerContainer.setTag(NUM, Integer.valueOf(1));
+                            this.videoPlayerContainer.setTag(NUM, photoImage);
                             if (!(layoutParams.width == photoImage.getImageWidth() && layoutParams.height == photoImage.getImageHeight())) {
                                 this.aspectRatioFrameLayout.setResizeMode(3);
                                 layoutParams.width = photoImage.getImageWidth();
@@ -10892,7 +10910,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             AnimatorSet animatorSet;
             Animator[] animatorArr;
             if (obj != null) {
-                boolean z2 = (!z || SystemClock.uptimeMillis() >= this.openAnimationStartTime + 150) ? z : false;
+                boolean z2 = (!z || SystemClock.elapsedRealtime() >= this.openAnimationStartTime + 150) ? z : false;
                 this.pagedownButtonShowedByScroll = false;
                 if (this.pagedownButton.getTag() == null) {
                     AnimatorSet animatorSet2 = this.pagedownButtonAnimation;
@@ -20687,7 +20705,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             getNotificationCenter().setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.scheduledMessagesUpdated, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad, NotificationCenter.userInfoDidLoad, NotificationCenter.needDeleteDialog});
             this.openAnimationEnded = false;
             if (!z2) {
-                this.openAnimationStartTime = SystemClock.uptimeMillis();
+                this.openAnimationStartTime = SystemClock.elapsedRealtime();
             }
         } else {
             if (UserObject.isUserSelf(this.currentUser)) {

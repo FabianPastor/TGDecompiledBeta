@@ -1246,9 +1246,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             messageObject.audioProgress = bufferedPosition;
                             messageObject.audioProgressSec = (int) (MediaController.this.lastProgress / 1000);
                             messageObject.bufferedProgress = f;
-                            if (bufferedPosition >= 0.0f && MediaController.this.shouldSavePositionForCurrentAudio != null && SystemClock.uptimeMillis() - MediaController.this.lastSaveTime >= 1000) {
+                            if (bufferedPosition >= 0.0f && MediaController.this.shouldSavePositionForCurrentAudio != null && SystemClock.elapsedRealtime() - MediaController.this.lastSaveTime >= 1000) {
                                 MediaController.this.shouldSavePositionForCurrentAudio;
-                                MediaController.this.lastSaveTime = SystemClock.uptimeMillis();
+                                MediaController.this.lastSaveTime = SystemClock.elapsedRealtime();
                                 Utilities.globalQueue.postRunnable(new -$$Lambda$MediaController$4$_1d-mI3DSqZHNDnGss_mjwhPhjQ(this, bufferedPosition));
                             }
                             NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(messageObject.getId()), Float.valueOf(bufferedPosition));

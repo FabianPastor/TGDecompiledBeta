@@ -71,6 +71,8 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimationProperties.FloatProperty;
@@ -642,7 +644,7 @@ public class PollVotesAlert extends BottomSheet {
                 }
                 userCell = PollVotesAlert.this.titleTextView;
             } else if (i != 2) {
-                userCell = new TextCell(this.mContext);
+                userCell = new TextCell(this.mContext, 23, true);
                 userCell.setOffsetFromImage(65);
                 userCell.setColors("switchTrackChecked", "windowBackgroundWhiteBlueText4");
             } else {
@@ -716,9 +718,8 @@ public class PollVotesAlert extends BottomSheet {
 
     public PollVotesAlert(ChatActivity chatActivity, MessageObject messageObject) {
         int i;
-        int i2;
         ChatActivity chatActivity2 = chatActivity;
-        int i3 = 1;
+        int i2 = 1;
         super(chatActivity.getParentActivity(), true);
         this.messageObject = messageObject;
         this.chatActivity = chatActivity2;
@@ -744,47 +745,47 @@ public class PollVotesAlert extends BottomSheet {
         ArrayList arrayList = new ArrayList();
         int size = tL_messageMediaPoll.results.results.size();
         Integer[] numArr = new Integer[size];
-        int i4 = 0;
-        while (i4 < size) {
+        int i3 = 0;
+        while (i3 < size) {
+            int i4;
             int i5;
-            int i6;
-            TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i4);
+            TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i3);
             if (tL_pollAnswerVoters.voters == 0) {
-                i5 = i4;
-                i6 = size;
+                i4 = i3;
+                i5 = size;
             } else {
                 TL_messages_votesList tL_messages_votesList = new TL_messages_votesList();
-                i = tL_pollAnswerVoters.voters;
-                int i7 = 15;
-                if (i > 15) {
-                    i = 10;
+                int i6 = tL_pollAnswerVoters.voters;
+                i = 15;
+                if (i6 > 15) {
+                    i6 = 10;
                 }
-                for (i2 = 0; i2 < i; i2++) {
+                for (int i7 = 0; i7 < i6; i7++) {
                     tL_messages_votesList.votes.add(new TL_messageUserVoteInputOption());
                 }
-                tL_messages_votesList.next_offset = i < tL_pollAnswerVoters.voters ? "empty" : null;
+                tL_messages_votesList.next_offset = i6 < tL_pollAnswerVoters.voters ? "empty" : null;
                 tL_messages_votesList.count = tL_pollAnswerVoters.voters;
                 this.voters.add(new VotesList(tL_messages_votesList, tL_pollAnswerVoters.option));
                 TL_messages_getPollVotes tL_messages_getPollVotes = new TL_messages_getPollVotes();
                 tL_messages_getPollVotes.peer = this.peer;
                 tL_messages_getPollVotes.id = this.messageObject.getId();
                 if (tL_pollAnswerVoters.voters > 15) {
-                    i7 = 10;
+                    i = 10;
                 }
-                tL_messages_getPollVotes.limit = i7;
-                tL_messages_getPollVotes.flags |= i3;
+                tL_messages_getPollVotes.limit = i;
+                tL_messages_getPollVotes.flags |= i2;
                 tL_messages_getPollVotes.option = tL_pollAnswerVoters.option;
                 -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu = r0;
-                i6 = size;
+                i5 = size;
                 ConnectionsManager connectionsManager = chatActivity.getConnectionsManager();
-                i5 = i4;
-                -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu2 = new -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU(this, numArr, i4, chatActivity, arrayList, tL_pollAnswerVoters);
-                numArr[i5] = Integer.valueOf(connectionsManager.sendRequest(tL_messages_getPollVotes, -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu));
-                this.queries.add(numArr[i5]);
+                i4 = i3;
+                -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu2 = new -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU(this, numArr, i3, chatActivity, arrayList, tL_pollAnswerVoters);
+                numArr[i4] = Integer.valueOf(connectionsManager.sendRequest(tL_messages_getPollVotes, -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu));
+                this.queries.add(numArr[i4]);
             }
-            i4 = i5 + 1;
-            size = i6;
-            i3 = 1;
+            i3 = i4 + 1;
+            size = i5;
+            i2 = 1;
         }
         updateButtons();
         Collections.sort(this.voters, new Comparator<VotesList>() {
@@ -807,18 +808,9 @@ public class PollVotesAlert extends BottomSheet {
                 return index < index2 ? -1 : 0;
             }
         });
-        String str = "dialogBackground";
-        i = Theme.getColor(str);
-        int color = Theme.getColor("dialogBackgroundGray");
-        i = AndroidUtilities.getAverageColor(color, i);
-        this.placeholderPaint.setColor(color);
-        float dp = (float) AndroidUtilities.dp(500.0f);
-        this.gradientWidth = dp;
-        this.placeholderGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color, i, color}, new float[]{0.0f, 0.18f, 0.36f}, TileMode.REPEAT);
-        this.placeholderPaint.setShader(this.placeholderGradient);
-        this.placeholderMatrix = new Matrix();
-        this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
+        updatePlaceholder();
         this.shadowDrawable = parentActivity.getResources().getDrawable(NUM).mutate();
+        String str = "dialogBackground";
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
         this.containerView = new FrameLayout(parentActivity) {
             private boolean fullHeight;
@@ -941,8 +933,8 @@ public class PollVotesAlert extends BottomSheet {
         };
         this.containerView.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
-        i2 = this.backgroundPaddingLeft;
-        viewGroup.setPadding(i2, 0, i2, 0);
+        i = this.backgroundPaddingLeft;
+        viewGroup.setPadding(i, 0, i, 0);
         this.listView = new RecyclerListView(parentActivity) {
             long lastUpdateTime;
 
@@ -954,12 +946,12 @@ public class PollVotesAlert extends BottomSheet {
             /* Access modifiers changed, original: protected */
             public void dispatchDraw(Canvas canvas) {
                 if (PollVotesAlert.this.loadingResults) {
-                    long uptimeMillis = SystemClock.uptimeMillis();
-                    long abs = Math.abs(this.lastUpdateTime - uptimeMillis);
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    long abs = Math.abs(this.lastUpdateTime - elapsedRealtime);
                     if (abs > 17) {
                         abs = 16;
                     }
-                    this.lastUpdateTime = uptimeMillis;
+                    this.lastUpdateTime = elapsedRealtime;
                     PollVotesAlert pollVotesAlert = PollVotesAlert.this;
                     pollVotesAlert.totalTranslation = pollVotesAlert.totalTranslation + ((((float) abs) * PollVotesAlert.this.gradientWidth) / 1800.0f);
                     while (PollVotesAlert.this.totalTranslation >= PollVotesAlert.this.gradientWidth * 2.0f) {
@@ -1328,5 +1320,56 @@ public class PollVotesAlert extends BottomSheet {
             recyclerListView2.setTopGlowOffset(top - layoutParams.topMargin);
             this.containerView.invalidate();
         }
+    }
+
+    private void updatePlaceholder() {
+        if (this.placeholderPaint != null) {
+            int color = Theme.getColor("dialogBackground");
+            int color2 = Theme.getColor("dialogBackgroundGray");
+            color = AndroidUtilities.getAverageColor(color2, color);
+            this.placeholderPaint.setColor(color2);
+            float dp = (float) AndroidUtilities.dp(500.0f);
+            this.gradientWidth = dp;
+            this.placeholderGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, color, color2}, new float[]{0.0f, 0.18f, 0.36f}, TileMode.REPEAT);
+            this.placeholderPaint.setShader(this.placeholderGradient);
+            this.placeholderMatrix = new Matrix();
+            this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
+        }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        -$$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng -__lambda_pollvotesalert_dumvuriwrtwbbdejkbeaihpp5ng = new -$$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng(this);
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[20];
+        themeDescriptionArr[0] = new ThemeDescription(this.containerView, 0, null, null, null, null, "key_sheet_scrollUp");
+        themeDescriptionArr[1] = new ThemeDescription(this.containerView, 0, null, null, new Drawable[]{this.shadowDrawable}, null, "dialogBackground");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "dialogBackground");
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "dialogScrollGlow");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "dialogTextBlack");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "dialogTextBlack");
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBTITLECOLOR, null, null, null, null, "player_actionBarSubtitle");
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "dialogTextBlack");
+        themeDescriptionArr[8] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "dialogTextBlack");
+        themeDescriptionArr[9] = new ThemeDescription(this.actionBarShadow, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "dialogShadowLine");
+        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_pollvotesalert_dumvuriwrtwbbdejkbeaihpp5ng;
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, null, null, themeDescriptionDelegate, "dialogBackground");
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, null, null, themeDescriptionDelegate, "dialogBackgroundGray");
+        View view = this.listView;
+        int i = ThemeDescription.FLAG_SECTIONS;
+        Class[] clsArr = new Class[]{SectionCell.class};
+        String[] strArr = new String[1];
+        strArr[0] = "textView";
+        themeDescriptionArr[12] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "key_graySectionText");
+        View view2 = this.listView;
+        View view3 = view2;
+        themeDescriptionArr[13] = new ThemeDescription(view3, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"middleTextView"}, null, null, null, "key_graySectionText");
+        view2 = this.listView;
+        view3 = view2;
+        themeDescriptionArr[14] = new ThemeDescription(view3, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"righTextView"}, null, null, null, "key_graySectionText");
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, null, null, null, "graySection");
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "dialogTextBlack");
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueText4");
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, "switchTrackChecked");
+        return themeDescriptionArr;
     }
 }

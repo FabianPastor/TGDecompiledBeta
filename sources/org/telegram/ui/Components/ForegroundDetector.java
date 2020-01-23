@@ -70,7 +70,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         int i = this.refs + 1;
         this.refs = i;
         if (i == 1) {
-            if (SystemClock.uptimeMillis() - this.enterBackgroundTime < 200) {
+            if (SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
                 this.wasInBackground = false;
             }
             if (BuildVars.LOGS_ENABLED) {
@@ -88,7 +88,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
     }
 
     public boolean isWasInBackground(boolean z) {
-        if (z && VERSION.SDK_INT >= 21 && SystemClock.uptimeMillis() - this.enterBackgroundTime < 200) {
+        if (z && VERSION.SDK_INT >= 21 && SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -102,7 +102,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         int i = this.refs - 1;
         this.refs = i;
         if (i == 0) {
-            this.enterBackgroundTime = SystemClock.uptimeMillis();
+            this.enterBackgroundTime = SystemClock.elapsedRealtime();
             this.wasInBackground = true;
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("switch to background");

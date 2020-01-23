@@ -7,17 +7,18 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
-import android.os.Build.VERSION;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.messenger.MessageObject;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
@@ -103,322 +104,140 @@ public class HintView extends FrameLayout {
         return showForMessageCell(chatMessageCell, null, 0, 0, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x019b  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0205  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0249  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0217  */
-    public boolean showForMessageCell(org.telegram.ui.Cells.ChatMessageCell r10, java.lang.Object r11, int r12, int r13, boolean r14) {
-        /*
-        r9 = this;
-        r0 = r9.currentType;
-        r1 = 5;
-        r2 = 0;
-        if (r0 != r1) goto L_0x000e;
-    L_0x0006:
-        r0 = r9.shownY;
-        if (r13 != r0) goto L_0x000e;
-    L_0x000a:
-        r0 = r9.messageCell;
-        if (r0 == r10) goto L_0x001e;
-    L_0x000e:
-        r0 = r9.currentType;
-        if (r0 == r1) goto L_0x001f;
-    L_0x0012:
-        if (r0 != 0) goto L_0x001a;
-    L_0x0014:
-        r0 = r9.getTag();
-        if (r0 != 0) goto L_0x001e;
-    L_0x001a:
-        r0 = r9.messageCell;
-        if (r0 != r10) goto L_0x001f;
-    L_0x001e:
-        return r2;
-    L_0x001f:
-        r0 = r9.hideRunnable;
-        r3 = 0;
-        if (r0 == 0) goto L_0x0029;
-    L_0x0024:
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0);
-        r9.hideRunnable = r3;
-    L_0x0029:
-        r0 = r10.getTop();
-        r4 = r10.getParent();
-        r4 = (android.view.View) r4;
-        r5 = r9.currentType;
-        r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        if (r5 != 0) goto L_0x0064;
-    L_0x0039:
-        r11 = r10.getPhotoImage();
-        r12 = r11.getImageY();
-        r0 = r0 + r12;
-        r11 = r11.getImageHeight();
-        r12 = r0 + r11;
-        r13 = r4.getMeasuredHeight();
-        r5 = r9.getMeasuredHeight();
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r5 = r5 + r7;
-        if (r0 <= r5) goto L_0x0063;
-    L_0x0057:
-        r11 = r11 / 4;
-        r13 = r13 + r11;
-        if (r12 <= r13) goto L_0x005d;
-    L_0x005c:
-        goto L_0x0063;
-    L_0x005d:
-        r12 = r10.getNoSoundIconCenterX();
-        goto L_0x0123;
-    L_0x0063:
-        return r2;
-    L_0x0064:
-        r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r8 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        if (r5 != r1) goto L_0x00ce;
-    L_0x006a:
-        r0 = r0 + r13;
-        r9.shownY = r13;
-        r11 = (java.lang.Integer) r11;
-        r13 = r10.getMessageObject();
-        r13 = r13.isQuiz();
-        if (r13 == 0) goto L_0x009e;
-    L_0x0079:
-        r13 = r11.intValue();
-        if (r13 != 0) goto L_0x008e;
-    L_0x007f:
-        r11 = r9.textView;
-        r13 = NUM; // 0x7f0e06d7 float:1.887859E38 double:1.0531630217E-314;
-        r5 = "NoVotesQuiz";
-        r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
-        r11.setText(r13);
-        goto L_0x00c2;
-    L_0x008e:
-        r13 = r9.textView;
-        r11 = r11.intValue();
-        r5 = "Answer";
-        r11 = org.telegram.messenger.LocaleController.formatPluralString(r5, r11);
-        r13.setText(r11);
-        goto L_0x00c2;
-    L_0x009e:
-        r13 = r11.intValue();
-        if (r13 != 0) goto L_0x00b3;
-    L_0x00a4:
-        r11 = r9.textView;
-        r13 = NUM; // 0x7f0e06d6 float:1.8878587E38 double:1.053163021E-314;
-        r5 = "NoVotes";
-        r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
-        r11.setText(r13);
-        goto L_0x00c2;
-    L_0x00b3:
-        r13 = r9.textView;
-        r11 = r11.intValue();
-        r5 = "Vote";
-        r11 = org.telegram.messenger.LocaleController.formatPluralString(r5, r11);
-        r13.setText(r11);
-    L_0x00c2:
-        r11 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
-        r13 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
-        r9.measure(r11, r13);
-        goto L_0x0123;
-    L_0x00ce:
-        r11 = r10.getMessageObject();
-        r12 = r9.overrideText;
-        if (r12 != 0) goto L_0x00e5;
-    L_0x00d6:
-        r12 = r9.textView;
-        r13 = NUM; // 0x7f0e055b float:1.8877818E38 double:1.053162834E-314;
-        r5 = "HidAccount";
-        r13 = org.telegram.messenger.LocaleController.getString(r5, r13);
-        r12.setText(r13);
-        goto L_0x00ea;
-    L_0x00e5:
-        r13 = r9.textView;
-        r13.setText(r12);
-    L_0x00ea:
-        r12 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
-        r13 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7);
-        r9.measure(r12, r13);
-        r12 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
-        r0 = r0 + r12;
-        r11 = r11.isOutOwner();
-        if (r11 != 0) goto L_0x010f;
-    L_0x0102:
-        r11 = r10.isDrawNameLayout();
-        if (r11 == 0) goto L_0x010f;
-    L_0x0108:
-        r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
-        r0 = r0 + r11;
-    L_0x010f:
-        r11 = r9.isTopArrow;
-        if (r11 != 0) goto L_0x011f;
-    L_0x0113:
-        r11 = r9.getMeasuredHeight();
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r11 = r11 + r12;
-        if (r0 > r11) goto L_0x011f;
-    L_0x011e:
-        return r2;
-    L_0x011f:
-        r12 = r10.getForwardNameCenterX();
-    L_0x0123:
-        r11 = r4.getMeasuredWidth();
-        r13 = r9.isTopArrow;
-        if (r13 == 0) goto L_0x0136;
-    L_0x012b:
-        r13 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
-        r13 = org.telegram.messenger.AndroidUtilities.dp(r13);
-        r13 = (float) r13;
-        r9.setTranslationY(r13);
-        goto L_0x013f;
-    L_0x0136:
-        r13 = r9.getMeasuredHeight();
-        r0 = r0 - r13;
-        r13 = (float) r0;
-        r9.setTranslationY(r13);
-    L_0x013f:
-        r13 = r10.getLeft();
-        r13 = r13 + r12;
-        r0 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-        r5 = r9.currentType;
-        r7 = 2;
-        if (r5 != r1) goto L_0x0164;
-    L_0x014f:
-        r11 = r9.getMeasuredWidth();
-        r11 = r11 / r7;
-        r11 = r12 - r11;
-        r1 = NUM; // 0x4198cccd float:19.1 double:5.437355183E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r11 = r11 - r1;
-        r1 = (float) r11;
-        r9.setTranslationX(r1);
-    L_0x0162:
-        r0 = r0 + r11;
-        goto L_0x0180;
-    L_0x0164:
-        r1 = r4.getMeasuredWidth();
-        r1 = r1 / r7;
-        if (r13 <= r1) goto L_0x017c;
-    L_0x016b:
-        r1 = r9.getMeasuredWidth();
-        r11 = r11 - r1;
-        r1 = NUM; // 0x42180000 float:38.0 double:5.47854138E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r11 = r11 - r1;
-        r1 = (float) r11;
-        r9.setTranslationX(r1);
-        goto L_0x0162;
-    L_0x017c:
-        r11 = 0;
-        r9.setTranslationX(r11);
-    L_0x0180:
-        r11 = r10.getLeft();
-        r11 = r11 + r12;
-        r11 = r11 - r0;
-        r12 = r9.arrowImageView;
-        r12 = r12.getMeasuredWidth();
-        r12 = r12 / r7;
-        r11 = r11 - r12;
-        r11 = (float) r11;
-        r12 = r9.arrowImageView;
-        r12.setTranslationX(r11);
-        r12 = r4.getMeasuredWidth();
-        r12 = r12 / r7;
-        if (r13 <= r12) goto L_0x01ba;
-    L_0x019b:
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = (float) r12;
-        r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 >= 0) goto L_0x01ff;
-    L_0x01a4:
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = (float) r12;
-        r12 = r11 - r12;
-        r13 = r9.getTranslationX();
-        r13 = r13 + r12;
-        r9.setTranslationX(r13);
-        r13 = r9.arrowImageView;
-        r11 = r11 - r12;
-        r13.setTranslationX(r11);
-        goto L_0x01ff;
-    L_0x01ba:
-        r12 = r9.getMeasuredWidth();
-        r13 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
-        r12 = r12 - r0;
-        r12 = (float) r12;
-        r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 <= 0) goto L_0x01e1;
-    L_0x01ca:
-        r12 = r9.getMeasuredWidth();
-        r12 = (float) r12;
-        r12 = r11 - r12;
-        r13 = org.telegram.messenger.AndroidUtilities.dp(r13);
-        r13 = (float) r13;
-        r12 = r12 + r13;
-        r9.setTranslationX(r12);
-        r13 = r9.arrowImageView;
-        r11 = r11 - r12;
-        r13.setTranslationX(r11);
-        goto L_0x01ff;
-    L_0x01e1:
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = (float) r12;
-        r12 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1));
-        if (r12 >= 0) goto L_0x01ff;
-    L_0x01ea:
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = (float) r12;
-        r12 = r11 - r12;
-        r13 = r9.getTranslationX();
-        r13 = r13 + r12;
-        r9.setTranslationX(r13);
-        r13 = r9.arrowImageView;
-        r11 = r11 - r12;
-        r13.setTranslationX(r11);
-    L_0x01ff:
-        r9.messageCell = r10;
-        r10 = r9.animatorSet;
-        if (r10 == 0) goto L_0x020a;
-    L_0x0205:
-        r10.cancel();
-        r9.animatorSet = r3;
-    L_0x020a:
-        r10 = 1;
-        r11 = java.lang.Integer.valueOf(r10);
-        r9.setTag(r11);
-        r9.setVisibility(r2);
-        if (r14 == 0) goto L_0x0249;
-    L_0x0217:
-        r11 = new android.animation.AnimatorSet;
-        r11.<init>();
-        r9.animatorSet = r11;
-        r11 = r9.animatorSet;
-        r12 = new android.animation.Animator[r10];
-        r13 = new float[r7];
-        r13 = {0, NUM};
-        r14 = "alpha";
-        r13 = android.animation.ObjectAnimator.ofFloat(r9, r14, r13);
-        r12[r2] = r13;
-        r11.playTogether(r12);
-        r11 = r9.animatorSet;
-        r12 = new org.telegram.ui.Components.HintView$1;
-        r12.<init>();
-        r11.addListener(r12);
-        r11 = r9.animatorSet;
-        r12 = 300; // 0x12c float:4.2E-43 double:1.48E-321;
-        r11.setDuration(r12);
-        r11 = r9.animatorSet;
-        r11.start();
-        goto L_0x024e;
-    L_0x0249:
-        r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r9.setAlpha(r11);
-    L_0x024e:
-        return r10;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.HintView.showForMessageCell(org.telegram.ui.Cells.ChatMessageCell, java.lang.Object, int, int, boolean):boolean");
+    public boolean showForMessageCell(ChatMessageCell chatMessageCell, Object obj, int i, int i2, boolean z) {
+        ViewGroup viewGroup = chatMessageCell;
+        int i3 = i2;
+        if (!(this.currentType == 5 && i3 == this.shownY && this.messageCell == viewGroup)) {
+            int i4 = this.currentType;
+            if (i4 == 5 || ((i4 != 0 || getTag() == null) && this.messageCell != viewGroup)) {
+                int measuredHeight;
+                Runnable runnable = this.hideRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                    this.hideRunnable = null;
+                }
+                int[] iArr = new int[2];
+                viewGroup.getLocationInWindow(iArr);
+                int i5 = iArr[1];
+                ((View) getParent()).getLocationInWindow(iArr);
+                i5 -= iArr[1];
+                View view = (View) chatMessageCell.getParent();
+                int i6 = this.currentType;
+                if (i6 == 0) {
+                    ImageReceiver photoImage = chatMessageCell.getPhotoImage();
+                    i5 += photoImage.getImageY();
+                    i3 = photoImage.getImageHeight();
+                    i6 = i5 + i3;
+                    measuredHeight = view.getMeasuredHeight();
+                    if (i5 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f) || i6 > measuredHeight + (i3 / 4)) {
+                        return false;
+                    }
+                    i3 = chatMessageCell.getNoSoundIconCenterX();
+                } else if (i6 == 5) {
+                    i5 += i3;
+                    this.shownY = i3;
+                    Integer num = (Integer) obj;
+                    if (chatMessageCell.getMessageObject().isQuiz()) {
+                        if (num.intValue() == 0) {
+                            this.textView.setText(LocaleController.getString("NoVotesQuiz", NUM));
+                        } else {
+                            this.textView.setText(LocaleController.formatPluralString("Answer", num.intValue()));
+                        }
+                    } else if (num.intValue() == 0) {
+                        this.textView.setText(LocaleController.getString("NoVotes", NUM));
+                    } else {
+                        this.textView.setText(LocaleController.formatPluralString("Vote", num.intValue()));
+                    }
+                    measure(MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
+                    i3 = i;
+                } else {
+                    MessageObject messageObject = chatMessageCell.getMessageObject();
+                    String str = this.overrideText;
+                    if (str == null) {
+                        this.textView.setText(LocaleController.getString("HidAccount", NUM));
+                    } else {
+                        this.textView.setText(str);
+                    }
+                    measure(MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
+                    i5 += AndroidUtilities.dp(22.0f);
+                    if (!messageObject.isOutOwner() && chatMessageCell.isDrawNameLayout()) {
+                        i5 += AndroidUtilities.dp(20.0f);
+                    }
+                    if (!this.isTopArrow && r9 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
+                        return false;
+                    }
+                    i3 = chatMessageCell.getForwardNameCenterX();
+                }
+                i6 = view.getMeasuredWidth();
+                if (this.isTopArrow) {
+                    setTranslationY((float) AndroidUtilities.dp(44.0f));
+                } else {
+                    setTranslationY((float) (i5 - getMeasuredHeight()));
+                }
+                i5 = chatMessageCell.getLeft() + i3;
+                measuredHeight = AndroidUtilities.dp(19.0f);
+                if (this.currentType == 5) {
+                    int measuredWidth = (i3 - (getMeasuredWidth() / 2)) - AndroidUtilities.dp(19.1f);
+                    setTranslationX((float) measuredWidth);
+                    measuredHeight += measuredWidth;
+                } else if (i5 > view.getMeasuredWidth() / 2) {
+                    i6 = (i6 - getMeasuredWidth()) - AndroidUtilities.dp(38.0f);
+                    setTranslationX((float) i6);
+                    measuredHeight += i6;
+                } else {
+                    setTranslationX(0.0f);
+                }
+                float left = (float) (((chatMessageCell.getLeft() + i3) - measuredHeight) - (this.arrowImageView.getMeasuredWidth() / 2));
+                this.arrowImageView.setTranslationX(left);
+                float dp;
+                if (i5 > view.getMeasuredWidth() / 2) {
+                    if (left < ((float) AndroidUtilities.dp(10.0f))) {
+                        dp = left - ((float) AndroidUtilities.dp(10.0f));
+                        setTranslationX(getTranslationX() + dp);
+                        this.arrowImageView.setTranslationX(left - dp);
+                    }
+                } else if (left > ((float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)))) {
+                    dp = (left - ((float) getMeasuredWidth())) + ((float) AndroidUtilities.dp(24.0f));
+                    setTranslationX(dp);
+                    this.arrowImageView.setTranslationX(left - dp);
+                } else if (left < ((float) AndroidUtilities.dp(10.0f))) {
+                    dp = left - ((float) AndroidUtilities.dp(10.0f));
+                    setTranslationX(getTranslationX() + dp);
+                    this.arrowImageView.setTranslationX(left - dp);
+                }
+                this.messageCell = viewGroup;
+                AnimatorSet animatorSet = this.animatorSet;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
+                    this.animatorSet = null;
+                }
+                setTag(Integer.valueOf(1));
+                setVisibility(0);
+                if (z) {
+                    this.animatorSet = new AnimatorSet();
+                    animatorSet = this.animatorSet;
+                    Animator[] animatorArr = new Animator[1];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f});
+                    animatorSet.playTogether(animatorArr);
+                    this.animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            HintView.this.animatorSet = null;
+                            AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new -$$Lambda$HintView$1$Oo-YArBkq6553J0682j2MQqGlbY(this), HintView.this.currentType == 0 ? 10000 : 2000);
+                        }
+
+                        public /* synthetic */ void lambda$onAnimationEnd$0$HintView$1() {
+                            HintView.this.hide();
+                        }
+                    });
+                    this.animatorSet.setDuration(300);
+                    this.animatorSet.start();
+                } else {
+                    setAlpha(1.0f);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean showForView(View view, boolean z) {
@@ -453,17 +272,12 @@ public class HintView extends FrameLayout {
         View view2 = (View) getParent();
         view2.getLocationInWindow(iArr);
         i -= iArr[0];
-        if (this.currentType != 4) {
-            dp -= iArr[1];
-        }
-        if (VERSION.SDK_INT >= 21) {
-            dp -= AndroidUtilities.statusBarHeight;
-        }
+        dp -= iArr[1];
         int measuredWidth2 = view2.getMeasuredWidth();
         if (this.isTopArrow) {
             setTranslationY((float) AndroidUtilities.dp(44.0f));
         } else {
-            setTranslationY((float) ((dp - getMeasuredHeight()) - ActionBar.getCurrentActionBarHeight()));
+            setTranslationY((float) (dp - getMeasuredHeight()));
         }
         if (getLayoutParams() instanceof MarginLayoutParams) {
             dp = ((MarginLayoutParams) getLayoutParams()).leftMargin;

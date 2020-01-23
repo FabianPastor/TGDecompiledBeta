@@ -2033,8 +2033,22 @@ public class AndroidUtilities {
         if (z) {
             ForegroundDetector.getInstance().resetBackgroundVar();
         }
-        int uptimeMillis = (int) (SystemClock.uptimeMillis() / 1000);
-        return SharedConfig.passcodeHash.length() > 0 && isWasInBackground && (SharedConfig.appLocked || (!(SharedConfig.autoLockIn == 0 || SharedConfig.lastPauseTime == 0 || SharedConfig.appLocked || SharedConfig.lastPauseTime + SharedConfig.autoLockIn > uptimeMillis) || uptimeMillis + 5 < SharedConfig.lastPauseTime));
+        int elapsedRealtime = (int) (SystemClock.elapsedRealtime() / 1000);
+        if (BuildVars.LOGS_ENABLED && z && SharedConfig.passcodeHash.length() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("wasInBackground = ");
+            stringBuilder.append(isWasInBackground);
+            stringBuilder.append(" appLocked = ");
+            stringBuilder.append(SharedConfig.appLocked);
+            stringBuilder.append(" autoLockIn = ");
+            stringBuilder.append(SharedConfig.autoLockIn);
+            stringBuilder.append(" lastPauseTime = ");
+            stringBuilder.append(SharedConfig.lastPauseTime);
+            stringBuilder.append(" uptime = ");
+            stringBuilder.append(elapsedRealtime);
+            FileLog.d(stringBuilder.toString());
+        }
+        return SharedConfig.passcodeHash.length() > 0 && isWasInBackground && (SharedConfig.appLocked || (!(SharedConfig.autoLockIn == 0 || SharedConfig.lastPauseTime == 0 || SharedConfig.appLocked || SharedConfig.lastPauseTime + SharedConfig.autoLockIn > elapsedRealtime) || elapsedRealtime + 5 < SharedConfig.lastPauseTime));
     }
 
     public static void shakeView(final View view, final float f, final int i) {

@@ -2363,7 +2363,7 @@
     <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">Proxy Settings</string>
     <string name="PublicChannelsTooMuch">Sorry, the target user has too many public groups or channels already. Please ask them to make one of their existing groups or channels private first.</string>
-    <string name="PublicPoll">Public Poll</string>
+    <string name="PublicPoll">Poll</string>
     <string name="PublicPollCantForward">Sorry, public polls can’t be forwarded to channels.</string>
     <string name="Purple">Purple</string>
     <string name="Question">Question</string>

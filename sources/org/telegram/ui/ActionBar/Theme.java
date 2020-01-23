@@ -10037,7 +10037,7 @@ public class Theme {
     L_0x018c:
         r0 = 2000; // 0x7d0 float:2.803E-42 double:9.88E-321;
         switchNightThemeDelay = r0;	 Catch:{ Exception -> 0x019c }
-        r0 = android.os.SystemClock.uptimeMillis();	 Catch:{ Exception -> 0x019c }
+        r0 = android.os.SystemClock.elapsedRealtime();	 Catch:{ Exception -> 0x019c }
         lastDelayUpdateTime = r0;	 Catch:{ Exception -> 0x019c }
     L_0x0196:
         currentTheme = r6;	 Catch:{ Exception -> 0x019c }
@@ -10512,9 +10512,9 @@ public class Theme {
     public static void checkAutoNightThemeConditions(boolean z) {
         if (previousTheme == null) {
             if (!z && switchNightThemeDelay > 0) {
-                long uptimeMillis = SystemClock.uptimeMillis();
-                long j = uptimeMillis - lastDelayUpdateTime;
-                lastDelayUpdateTime = uptimeMillis;
+                long elapsedRealtime = SystemClock.elapsedRealtime();
+                long j = elapsedRealtime - lastDelayUpdateTime;
+                lastDelayUpdateTime = elapsedRealtime;
                 switchNightThemeDelay = (int) (((long) switchNightThemeDelay) - j);
                 if (switchNightThemeDelay > 0) {
                     return;

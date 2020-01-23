@@ -284,6 +284,10 @@ public class AlertDialog extends Dialog implements Callback {
         }
     }
 
+    public ThemeDescription[] getThemeDescriptions() {
+        return null;
+    }
+
     public /* synthetic */ void lambda$new$0$AlertDialog() {
         if (!isShowing()) {
             try {

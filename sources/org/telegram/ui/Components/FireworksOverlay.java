@@ -190,9 +190,9 @@ public class FireworksOverlay extends View {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        long uptimeMillis = SystemClock.uptimeMillis();
-        int i = (int) (uptimeMillis - this.lastUpdateTime);
-        this.lastUpdateTime = uptimeMillis;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        int i = (int) (elapsedRealtime - this.lastUpdateTime);
+        this.lastUpdateTime = elapsedRealtime;
         if (i > 18) {
             i = 16;
         }

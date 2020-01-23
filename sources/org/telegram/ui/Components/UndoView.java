@@ -260,7 +260,7 @@ public class UndoView extends FrameLayout {
         r6 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
         r0.timeLeft = r6;
         r0.currentInfoObject = r4;
-        r6 = android.os.SystemClock.uptimeMillis();
+        r6 = android.os.SystemClock.elapsedRealtime();
         r0.lastUpdateTime = r6;
         r6 = r17.isTooltipAction();
         r7 = "fonts/rmedium.ttf";
@@ -845,7 +845,7 @@ public class UndoView extends FrameLayout {
             canvas.drawText(this.timeLeftString, this.rect.centerX() - ((float) (this.textWidth / 2)), (float) AndroidUtilities.dp(28.2f), this.textPaint);
             canvas.drawArc(this.rect, -90.0f, (((float) this.timeLeft) / 5000.0f) * -360.0f, false, this.progressPaint);
         }
-        j = SystemClock.uptimeMillis();
+        j = SystemClock.elapsedRealtime();
         this.timeLeft -= j - this.lastUpdateTime;
         this.lastUpdateTime = j;
         if (this.timeLeft <= 0) {

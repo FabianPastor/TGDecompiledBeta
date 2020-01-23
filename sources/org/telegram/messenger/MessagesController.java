@@ -2231,8 +2231,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void loadChannelAdmins(int i, boolean z) {
-        if (SystemClock.uptimeMillis() - ((long) this.loadingChannelAdmins.get(i)) >= 60) {
-            this.loadingChannelAdmins.put(i, (int) (SystemClock.uptimeMillis() / 1000));
+        if (SystemClock.elapsedRealtime() - ((long) this.loadingChannelAdmins.get(i)) >= 60) {
+            this.loadingChannelAdmins.put(i, (int) (SystemClock.elapsedRealtime() / 1000));
             if (z) {
                 getMessagesStorage().loadChannelAdmins(i);
             } else {
@@ -4432,7 +4432,7 @@ public class MessagesController extends BaseController implements NotificationCe
         int i;
         int keyAt;
         ArrayList arrayList;
-        long uptimeMillis;
+        long elapsedRealtime;
         int keyAt2;
         long currentTimeMillis = System.currentTimeMillis();
         checkDeletingTask(false);
@@ -4540,13 +4540,13 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         if (this.shortPollOnlines.size() != 0) {
-            uptimeMillis = SystemClock.uptimeMillis() / 1000;
+            elapsedRealtime = SystemClock.elapsedRealtime() / 1000;
             i = 0;
             while (i < this.shortPollOnlines.size()) {
                 keyAt2 = this.shortPollOnlines.keyAt(i);
-                if (((long) this.shortPollOnlines.valueAt(i)) < uptimeMillis) {
+                if (((long) this.shortPollOnlines.valueAt(i)) < elapsedRealtime) {
                     if (this.needShortPollChannels.indexOfKey(keyAt2) >= 0) {
-                        this.shortPollOnlines.put(keyAt2, (int) (300 + uptimeMillis));
+                        this.shortPollOnlines.put(keyAt2, (int) (300 + elapsedRealtime));
                     } else {
                         this.shortPollOnlines.delete(keyAt2);
                         i--;
@@ -4565,8 +4565,8 @@ public class MessagesController extends BaseController implements NotificationCe
             while (keyAt2 < arrayList.size()) {
                 ArrayList arrayList2;
                 ArrayList arrayList3;
-                uptimeMillis = ((Long) arrayList.get(keyAt2)).longValue();
-                ArrayList arrayList4 = (ArrayList) this.printingUsers.get(Long.valueOf(uptimeMillis));
+                elapsedRealtime = ((Long) arrayList.get(keyAt2)).longValue();
+                ArrayList arrayList4 = (ArrayList) this.printingUsers.get(Long.valueOf(elapsedRealtime));
                 if (arrayList4 != null) {
                     Object obj2 = obj;
                     int i2 = 0;
@@ -4587,7 +4587,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     arrayList2 = arrayList;
                 }
                 if (arrayList4 == null || arrayList4.isEmpty()) {
-                    this.printingUsers.remove(Long.valueOf(uptimeMillis));
+                    this.printingUsers.remove(Long.valueOf(elapsedRealtime));
                     arrayList3 = arrayList2;
                     arrayList3.remove(keyAt2);
                     keyAt2--;
@@ -4668,7 +4668,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$updateTimerProc$98$MessagesController() {
-        long uptimeMillis = SystemClock.uptimeMillis();
+        long elapsedRealtime = SystemClock.elapsedRealtime();
         int size = this.pollsToCheck.size();
         int i = 0;
         while (i < size) {
@@ -4678,8 +4678,8 @@ public class MessagesController extends BaseController implements NotificationCe
                 int i2 = 0;
                 while (i2 < size2) {
                     MessageObject messageObject = (MessageObject) sparseArray.valueAt(i2);
-                    if (Math.abs(uptimeMillis - messageObject.pollLastCheckTime) >= 30000) {
-                        messageObject.pollLastCheckTime = uptimeMillis;
+                    if (Math.abs(elapsedRealtime - messageObject.pollLastCheckTime) >= 30000) {
+                        messageObject.pollLastCheckTime = elapsedRealtime;
                         TL_messages_getPollResults tL_messages_getPollResults = new TL_messages_getPollResults();
                         tL_messages_getPollResults.peer = getInputPeer((int) messageObject.getDialogId());
                         tL_messages_getPollResults.msg_id = messageObject.getId();
@@ -5858,7 +5858,7 @@ public class MessagesController extends BaseController implements NotificationCe
     L_0x008e:
         if (r11 == 0) goto L_0x0138;
     L_0x0090:
-        r3 = android.os.SystemClock.uptimeMillis();
+        r3 = android.os.SystemClock.elapsedRealtime();
         r0 = r15.lastScheduledServerQueryTime;
         r5 = java.lang.Long.valueOf(r1);
         r0 = r0.get(r12, r5);
@@ -5872,7 +5872,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (r11 == 0) goto L_0x00ff;
     L_0x00ae:
         r0 = r15.lastScheduledServerQueryTime;
-        r3 = android.os.SystemClock.uptimeMillis();
+        r3 = android.os.SystemClock.elapsedRealtime();
         r3 = java.lang.Long.valueOf(r3);
         r0.put(r12, r3);
         r0 = r14.messages;
@@ -15989,7 +15989,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r54.getSendMessagesHelper();
         r7 = r5.poll_id;
         r6 = r6.getVoteSendTime(r7);
-        r8 = android.os.SystemClock.uptimeMillis();
+        r8 = android.os.SystemClock.elapsedRealtime();
         r8 = r8 - r6;
         r6 = java.lang.Math.abs(r8);
         r8 = 600; // 0x258 float:8.41E-43 double:2.964E-321;

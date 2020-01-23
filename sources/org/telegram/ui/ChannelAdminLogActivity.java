@@ -61,6 +61,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -783,10 +784,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity());
                         PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 640);
                         if (closestPhotoSizeWithSize != null) {
-                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ChannelAdminLogActivity.this.provider);
-                        } else {
-                            PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChannelAdminLogActivity.this.provider);
+                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ImageLocation.getForPhoto(closestPhotoSizeWithSize, messageObject.messageOwner.action.photo), ChannelAdminLogActivity.this.provider);
+                            return;
                         }
+                        PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChannelAdminLogActivity.this.provider);
                     }
 
                     public void didLongPress(ChatActionCell chatActionCell, float f, float f2) {

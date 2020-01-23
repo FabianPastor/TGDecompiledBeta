@@ -4274,7 +4274,7 @@ public class DialogCell extends BaseCell {
         r0.draw(r8);
         return;
     L_0x002a:
-        r2 = android.os.SystemClock.uptimeMillis();
+        r2 = android.os.SystemClock.elapsedRealtime();
         r4 = r1.lastUpdateTime;
         r4 = r2 - r4;
         r6 = 17;

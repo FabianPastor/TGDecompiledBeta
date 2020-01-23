@@ -417,7 +417,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = org.telegram.messenger.SharedConfig.appLocked;
         if (r0 == 0) goto L_0x015e;
     L_0x0154:
-        r5 = android.os.SystemClock.uptimeMillis();
+        r5 = android.os.SystemClock.elapsedRealtime();
         r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 / r7;
         r0 = (int) r5;
@@ -7486,13 +7486,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void onPasscodePause() {
-        Runnable runnable = this.lockRunnable;
-        if (runnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(runnable);
+        if (this.lockRunnable != null) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("cancel lockRunnable onPasscodePause");
+            }
+            AndroidUtilities.cancelRunOnUIThread(this.lockRunnable);
             this.lockRunnable = null;
         }
         if (SharedConfig.passcodeHash.length() != 0) {
-            SharedConfig.lastPauseTime = (int) (SystemClock.uptimeMillis() / 1000);
+            SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
             this.lockRunnable = new Runnable() {
                 public void run() {
                     if (LaunchActivity.this.lockRunnable == this) {
@@ -7517,8 +7519,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 if (BuildVars.LOGS_ENABLED) {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("schedule app lock in ");
-                    stringBuilder.append(((long) SharedConfig.autoLockIn) * 1000);
-                    stringBuilder.append(1000);
+                    stringBuilder.append((((long) SharedConfig.autoLockIn) * 1000) + 1000);
                     FileLog.d(stringBuilder.toString());
                 }
                 AndroidUtilities.runOnUIThread(this.lockRunnable, (((long) SharedConfig.autoLockIn) * 1000) + 1000);
@@ -7530,9 +7531,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void onPasscodeResume() {
-        Runnable runnable = this.lockRunnable;
-        if (runnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(runnable);
+        if (this.lockRunnable != null) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("cancel lockRunnable onPasscodeResume");
+            }
+            AndroidUtilities.cancelRunOnUIThread(this.lockRunnable);
             this.lockRunnable = null;
         }
         if (AndroidUtilities.needShowPasscode(true)) {

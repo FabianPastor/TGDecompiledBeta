@@ -1944,9 +1944,9 @@ public class RecyclerListView extends RecyclerView {
                     drawable.setBounds(0, this.pinnedHeader.getMeasuredHeight(), getWidth(), this.pinnedHeader.getMeasuredHeight() + this.pinnedHeaderShadowDrawable.getIntrinsicHeight());
                     this.pinnedHeaderShadowDrawable.setAlpha((int) (this.pinnedHeaderShadowAlpha * 255.0f));
                     this.pinnedHeaderShadowDrawable.draw(canvas);
-                    long uptimeMillis = SystemClock.uptimeMillis();
-                    long min = Math.min(20, uptimeMillis - this.lastAlphaAnimationTime);
-                    this.lastAlphaAnimationTime = uptimeMillis;
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    long min = Math.min(20, elapsedRealtime - this.lastAlphaAnimationTime);
+                    this.lastAlphaAnimationTime = elapsedRealtime;
                     float f2 = this.pinnedHeaderShadowAlpha;
                     f = this.pinnedHeaderShadowTargetAlpha;
                     if (f2 < f) {

@@ -2016,7 +2016,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
                         ThemePreviewActivity.this.actionBar2.setTranslationY((float) (-this.loc[1]));
                         ThemePreviewActivity.this.page2.invalidate();
                     }
-                    if (SystemClock.uptimeMillis() < ThemePreviewActivity.this.watchForKeyboardEndTime) {
+                    if (SystemClock.elapsedRealtime() < ThemePreviewActivity.this.watchForKeyboardEndTime) {
                         invalidate();
                     }
                 }
@@ -2716,7 +2716,7 @@ public class ThemePreviewActivity extends BaseFragment implements FileDownloadPr
     }
 
     public /* synthetic */ void lambda$createView$10$ThemePreviewActivity() {
-        this.watchForKeyboardEndTime = SystemClock.uptimeMillis() + 1500;
+        this.watchForKeyboardEndTime = SystemClock.elapsedRealtime() + 1500;
         this.frameLayout.invalidate();
     }
 
