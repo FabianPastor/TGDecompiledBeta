@@ -343,13 +343,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
 
     public boolean hasRecentRearch() {
         int i = this.dialogsType;
-        return (i == 4 || i == 5 || i == 6 || (this.recentSearchObjects.isEmpty() && MediaDataController.getInstance(this.currentAccount).hints.isEmpty())) ? false : true;
+        return (i == 2 || i == 4 || i == 5 || i == 6 || (this.recentSearchObjects.isEmpty() && MediaDataController.getInstance(this.currentAccount).hints.isEmpty())) ? false : true;
     }
 
     public boolean isRecentSearchDisplayed() {
         if (!(this.needMessagesSearch == 2 || this.searchWas || (this.recentSearchObjects.isEmpty() && MediaDataController.getInstance(this.currentAccount).hints.isEmpty()))) {
             int i = this.dialogsType;
-            if (!(i == 4 || i == 5 || i == 6)) {
+            if (!(i == 2 || i == 4 || i == 5 || i == 6)) {
                 return true;
             }
         }
@@ -645,11 +645,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x0244 A:{LOOP_END, LOOP:2: B:68:0x018a->B:98:0x0244, Catch:{ Exception -> 0x0694 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0244 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:2: B:68:0x018a->B:98:0x0244} */
     /* JADX WARNING: Removed duplicated region for block: B:276:0x01dd A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x04f9 A:{LOOP_END, LOOP:6: B:150:0x0383->B:189:0x04f9, Catch:{ Exception -> 0x0694 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x04f9 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:6: B:150:0x0383->B:189:0x04f9} */
     /* JADX WARNING: Removed duplicated region for block: B:295:0x03ce A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0671 A:{LOOP_END, LOOP:10: B:223:0x05be->B:252:0x0671, Catch:{ Exception -> 0x0694 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x0671 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:10: B:223:0x05be->B:252:0x0671} */
     /* JADX WARNING: Removed duplicated region for block: B:305:0x0613 A:{SYNTHETIC} */
     public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String r24, int r25) {
         /*
@@ -1625,7 +1625,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 this.searchResultHashtags.clear();
                 this.searchAdapterHelper.mergeResults(null);
                 if (this.needMessagesSearch != 2) {
-                    this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, this.dialogsType == 0, 0, 0);
+                    this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, this.dialogsType == 2, 0, this.dialogsType == 0, 0, 0);
                 }
                 this.searchWas = false;
                 this.lastSearchId = 0;
@@ -1670,12 +1670,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public /* synthetic */ void lambda$null$10$DialogsSearchAdapter(int i, String str, String str2) {
+        int i2 = i;
         this.searchRunnable2 = null;
-        if (i == this.lastSearchId) {
+        if (i2 == this.lastSearchId) {
             if (this.needMessagesSearch != 2) {
-                this.searchAdapterHelper.queryServerSearch(str, true, this.dialogsType != 4, true, this.dialogsType != 4, 0, this.dialogsType == 0, 0, i);
+                this.searchAdapterHelper.queryServerSearch(str, true, this.dialogsType != 4, true, this.dialogsType != 4, this.dialogsType == 2, 0, this.dialogsType == 0, 0, i);
             }
-            searchMessagesInternal(str2, i);
+            searchMessagesInternal(str2, i2);
         }
     }
 

@@ -877,7 +877,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.searchResultMap.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults(null);
-                this.searchAdapterHelper.queryServerSearch(null, ChatUsersActivity.this.type != 0, false, true, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
+                this.searchAdapterHelper.queryServerSearch(null, ChatUsersActivity.this.type != 0, false, true, false, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -902,7 +902,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (ChatUsersActivity.this.selectType == 1) {
                 arrayList = new ArrayList(ChatUsersActivity.this.getContactsController().contacts);
             }
-            this.searchAdapterHelper.queryServerSearch(str, ChatUsersActivity.this.selectType != 0, false, true, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
+            this.searchAdapterHelper.queryServerSearch(str, ChatUsersActivity.this.selectType != 0, false, true, false, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
             if (arrayList2 != null || arrayList != null) {
                 Utilities.searchQueue.postRunnable(new -$$Lambda$ChatUsersActivity$SearchAdapter$41AXcD0nSkfOW07kKR8CbS87SJY(this, str, arrayList2, arrayList));
             }

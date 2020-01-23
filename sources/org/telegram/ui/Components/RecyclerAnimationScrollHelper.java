@@ -43,7 +43,7 @@ public class RecyclerAnimationScrollHelper {
 
         public void notifyDataSetChanged() {
             if (this.animationRunning) {
-                this.shouldNotifyDataSetChanged = false;
+                this.shouldNotifyDataSetChanged = true;
             } else {
                 super.notifyDataSetChanged();
             }
@@ -75,22 +75,9 @@ public class RecyclerAnimationScrollHelper {
         }
 
         public void onAnimationEnd() {
-            int i = 0;
             this.animationRunning = false;
-            if (this.shouldNotifyDataSetChanged) {
+            if (this.shouldNotifyDataSetChanged || !this.rangeInserted.isEmpty() || !this.rangeRemoved.isEmpty()) {
                 notifyDataSetChanged();
-                return;
-            }
-            if (!this.rangeInserted.isEmpty()) {
-                for (int i2 = 0; i2 < this.rangeInserted.size(); i2 += 2) {
-                    notifyItemRangeInserted(((Integer) this.rangeInserted.get(i2)).intValue(), ((Integer) this.rangeInserted.get(i2 + 1)).intValue());
-                }
-            }
-            if (!this.rangeRemoved.isEmpty()) {
-                while (i < this.rangeRemoved.size()) {
-                    notifyItemRangeRemoved(((Integer) this.rangeRemoved.get(i)).intValue(), ((Integer) this.rangeRemoved.get(i + 1)).intValue());
-                    i += 2;
-                }
             }
         }
     }
@@ -225,13 +212,13 @@ public class RecyclerAnimationScrollHelper {
                                 }
                                 childAt.setTranslationY(0.0f);
                             }
-                            AnimationCallback animationCallback = RecyclerAnimationScrollHelper.this.animationCallback;
-                            if (animationCallback != null) {
-                                animationCallback.onEndAnimation();
-                            }
                             AnimatableAdapter animatableAdapter = animatableAdapter2;
                             if (animatableAdapter != null) {
                                 animatableAdapter.onAnimationEnd();
+                            }
+                            AnimationCallback animationCallback = RecyclerAnimationScrollHelper.this.animationCallback;
+                            if (animationCallback != null) {
+                                animationCallback.onEndAnimation();
                             }
                             RecyclerAnimationScrollHelper.this.animator = null;
                         }

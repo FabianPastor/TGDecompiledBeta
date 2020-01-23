@@ -19874,12 +19874,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     /* JADX WARNING: Removed duplicated region for block: B:63:0x011d  */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x0116  */
-    /* JADX WARNING: Missing block: B:33:0x00b7, code skipped:
-            if (r10.add_admins != false) goto L_0x00bd;
-     */
-    /* JADX WARNING: Missing block: B:35:0x00bb, code skipped:
-            if (r8.creator != false) goto L_0x00bd;
-     */
     public void sortDialogs(android.util.SparseArray<org.telegram.tgnet.TLRPC.Chat> r14) {
         /*
         r13 = this;
@@ -19975,7 +19969,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r8 == 0) goto L_0x00c2;
     L_0x00a9:
         r10 = r8.megagroup;
-        if (r10 == 0) goto L_0x00b9;
+        if (r10 == 0) goto L_0x00c2;
     L_0x00ad:
         r10 = r8.admin_rights;
         if (r10 == 0) goto L_0x00b9;

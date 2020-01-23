@@ -1599,7 +1599,12 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static int getInitFlags() {
-        return EmuDetector.with(ApplicationLoader.applicationContext).detect() ? 1024 : 0;
+        int i = EmuDetector.with(ApplicationLoader.applicationContext).detect() ? 1024 : 0;
+        try {
+            return "com.android.vending".equals(ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName())) ? i | 2048 : i;
+        } catch (Throwable unused) {
+            return i;
+        }
     }
 
     public static void onBytesSent(int i, int i2, int i3) {

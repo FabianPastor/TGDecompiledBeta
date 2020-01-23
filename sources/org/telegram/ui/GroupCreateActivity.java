@@ -781,7 +781,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 this.searchAdapterHelper.mergeResults(null);
                 SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
                 boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-                searchAdapterHelper.queryServerSearch(null, true, z, false, false, 0, false, 0, 0);
+                searchAdapterHelper.queryServerSearch(null, true, z, false, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -798,7 +798,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         public /* synthetic */ void lambda$null$2$GroupCreateActivity$GroupCreateAdapter(String str) {
             SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
             boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-            searchAdapterHelper.queryServerSearch(str, true, z, true, false, 0, false, 0, 0);
+            searchAdapterHelper.queryServerSearch(str, true, z, true, false, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks = new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs(this, str);
             this.searchRunnable = -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks;

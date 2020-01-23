@@ -345,7 +345,10 @@ public class PollCreateActivity extends BaseFragment {
                         super.onCheckBoxClick(pollEditTextCell, z);
                         ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
                         if (findContainingViewHolder != null) {
-                            PollCreateActivity.this.answersChecks[findContainingViewHolder.getAdapterPosition() - PollCreateActivity.this.answerStartRow] = z;
+                            int adapterPosition = findContainingViewHolder.getAdapterPosition();
+                            if (adapterPosition != -1) {
+                                PollCreateActivity.this.answersChecks[adapterPosition - PollCreateActivity.this.answerStartRow] = z;
+                            }
                         }
                         PollCreateActivity.this.checkDoneButton();
                     }
@@ -353,10 +356,13 @@ public class PollCreateActivity extends BaseFragment {
                     /* Access modifiers changed, original: protected */
                     public boolean isChecked(PollEditTextCell pollEditTextCell) {
                         ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
-                        if (findContainingViewHolder == null) {
-                            return false;
+                        if (findContainingViewHolder != null) {
+                            int adapterPosition = findContainingViewHolder.getAdapterPosition();
+                            if (adapterPosition != -1) {
+                                return PollCreateActivity.this.answersChecks[adapterPosition - PollCreateActivity.this.answerStartRow];
+                            }
                         }
-                        return PollCreateActivity.this.answersChecks[findContainingViewHolder.getAdapterPosition() - PollCreateActivity.this.answerStartRow];
+                        return false;
                     }
                 };
                 shadowSectionCell.setBackgroundColor(Theme.getColor(str));
@@ -399,36 +405,38 @@ public class PollCreateActivity extends BaseFragment {
                 ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
                 if (findContainingViewHolder != null) {
                     int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                    int access$2500 = adapterPosition - PollCreateActivity.this.answerStartRow;
-                    PollCreateActivity.this.listAdapter.notifyItemRemoved(findContainingViewHolder.getAdapterPosition());
-                    int i = access$2500 + 1;
-                    System.arraycopy(PollCreateActivity.this.answers, i, PollCreateActivity.this.answers, access$2500, (PollCreateActivity.this.answers.length - 1) - access$2500);
-                    System.arraycopy(PollCreateActivity.this.answersChecks, i, PollCreateActivity.this.answersChecks, access$2500, (PollCreateActivity.this.answersChecks.length - 1) - access$2500);
-                    PollCreateActivity.this.answers[PollCreateActivity.this.answers.length - 1] = null;
-                    PollCreateActivity.this.answersChecks[PollCreateActivity.this.answersChecks.length - 1] = false;
-                    PollCreateActivity.this.answersCount = PollCreateActivity.this.answersCount - 1;
-                    if (PollCreateActivity.this.answersCount == PollCreateActivity.this.answers.length - 1) {
-                        PollCreateActivity.this.listAdapter.notifyItemInserted((PollCreateActivity.this.answerStartRow + PollCreateActivity.this.answers.length) - 1);
-                    }
-                    ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition - 1);
-                    EditTextBoldCursor textView = pollEditTextCell.getTextView();
-                    if (findViewHolderForAdapterPosition != null) {
-                        View view2 = findViewHolderForAdapterPosition.itemView;
-                        if (view2 instanceof PollEditTextCell) {
-                            ((PollEditTextCell) view2).getTextView().requestFocus();
-                            textView.clearFocus();
-                            PollCreateActivity.this.checkDoneButton();
-                            PollCreateActivity.this.updateRows();
-                            PollCreateActivity.this.listAdapter.notifyItemChanged(PollCreateActivity.this.answerSectionRow);
+                    if (adapterPosition != -1) {
+                        int access$2500 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                        PollCreateActivity.this.listAdapter.notifyItemRemoved(adapterPosition);
+                        int i = access$2500 + 1;
+                        System.arraycopy(PollCreateActivity.this.answers, i, PollCreateActivity.this.answers, access$2500, (PollCreateActivity.this.answers.length - 1) - access$2500);
+                        System.arraycopy(PollCreateActivity.this.answersChecks, i, PollCreateActivity.this.answersChecks, access$2500, (PollCreateActivity.this.answersChecks.length - 1) - access$2500);
+                        PollCreateActivity.this.answers[PollCreateActivity.this.answers.length - 1] = null;
+                        PollCreateActivity.this.answersChecks[PollCreateActivity.this.answersChecks.length - 1] = false;
+                        PollCreateActivity.this.answersCount = PollCreateActivity.this.answersCount - 1;
+                        if (PollCreateActivity.this.answersCount == PollCreateActivity.this.answers.length - 1) {
+                            PollCreateActivity.this.listAdapter.notifyItemInserted((PollCreateActivity.this.answerStartRow + PollCreateActivity.this.answers.length) - 1);
                         }
+                        ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition - 1);
+                        EditTextBoldCursor textView = pollEditTextCell.getTextView();
+                        if (findViewHolderForAdapterPosition != null) {
+                            View view2 = findViewHolderForAdapterPosition.itemView;
+                            if (view2 instanceof PollEditTextCell) {
+                                ((PollEditTextCell) view2).getTextView().requestFocus();
+                                textView.clearFocus();
+                                PollCreateActivity.this.checkDoneButton();
+                                PollCreateActivity.this.updateRows();
+                                PollCreateActivity.this.listAdapter.notifyItemChanged(PollCreateActivity.this.answerSectionRow);
+                            }
+                        }
+                        if (textView.isFocused()) {
+                            AndroidUtilities.hideKeyboard(textView);
+                        }
+                        textView.clearFocus();
+                        PollCreateActivity.this.checkDoneButton();
+                        PollCreateActivity.this.updateRows();
+                        PollCreateActivity.this.listAdapter.notifyItemChanged(PollCreateActivity.this.answerSectionRow);
                     }
-                    if (textView.isFocused()) {
-                        AndroidUtilities.hideKeyboard(textView);
-                    }
-                    textView.clearFocus();
-                    PollCreateActivity.this.checkDoneButton();
-                    PollCreateActivity.this.updateRows();
-                    PollCreateActivity.this.listAdapter.notifyItemChanged(PollCreateActivity.this.answerSectionRow);
                 }
             }
         }
@@ -440,17 +448,19 @@ public class PollCreateActivity extends BaseFragment {
             ViewHolder findContainingViewHolder = PollCreateActivity.this.listView.findContainingViewHolder(pollEditTextCell);
             if (findContainingViewHolder != null) {
                 int adapterPosition = findContainingViewHolder.getAdapterPosition();
-                int access$2500 = adapterPosition - PollCreateActivity.this.answerStartRow;
-                if (access$2500 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
-                    PollCreateActivity.this.addNewField();
-                } else if (access$2500 == PollCreateActivity.this.answersCount - 1) {
-                    AndroidUtilities.hideKeyboard(pollEditTextCell.getTextView());
-                } else {
-                    ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition + 1);
-                    if (findViewHolderForAdapterPosition != null) {
-                        View view = findViewHolderForAdapterPosition.itemView;
-                        if (view instanceof PollEditTextCell) {
-                            ((PollEditTextCell) view).getTextView().requestFocus();
+                if (adapterPosition != -1) {
+                    int access$2500 = adapterPosition - PollCreateActivity.this.answerStartRow;
+                    if (access$2500 == PollCreateActivity.this.answersCount - 1 && PollCreateActivity.this.answersCount < 10) {
+                        PollCreateActivity.this.addNewField();
+                    } else if (access$2500 == PollCreateActivity.this.answersCount - 1) {
+                        AndroidUtilities.hideKeyboard(pollEditTextCell.getTextView());
+                    } else {
+                        ViewHolder findViewHolderForAdapterPosition = PollCreateActivity.this.listView.findViewHolderForAdapterPosition(adapterPosition + 1);
+                        if (findViewHolderForAdapterPosition != null) {
+                            View view = findViewHolderForAdapterPosition.itemView;
+                            if (view instanceof PollEditTextCell) {
+                                ((PollEditTextCell) view).getTextView().requestFocus();
+                            }
                         }
                     }
                 }

@@ -440,7 +440,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults(null);
-                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -459,7 +459,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$processSearch$3$NotificationsCustomSettingsActivity$SearchAdapter(String str) {
-            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0, 0);
+            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
             Utilities.searchQueue.postRunnable(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$o5HWbYaGlE8-ctf1V7rUoVE87jY(this, str, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 

@@ -4637,7 +4637,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                 showDialog(builder2.create());
             } else if (i2 > 0) {
-                if (getMessagesController().getUser(Integer.valueOf(i2)) != null) {
+                if (getMessagesController().getUser(Integer.valueOf(i2)) != null && this.selectAlertString != null) {
                     string = LocaleController.getString(str2, NUM);
                     formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(r13));
                     string2 = LocaleController.getString(str, NUM);

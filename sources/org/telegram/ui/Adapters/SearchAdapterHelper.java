@@ -6,30 +6,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Peer;
-import org.telegram.tgnet.TLRPC.TL_channelParticipantsAdmins;
-import org.telegram.tgnet.TLRPC.TL_channelParticipantsBanned;
-import org.telegram.tgnet.TLRPC.TL_channelParticipantsKicked;
-import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_contacts_found;
-import org.telegram.tgnet.TLRPC.TL_contacts_search;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -101,108 +92,252 @@ public class SearchAdapterHelper {
         return (this.reqId == 0 && this.channelReqId == 0) ? false : true;
     }
 
-    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, boolean z5, int i2, int i3) {
-        String str2 = str;
-        int i4 = i;
-        int i5 = i2;
-        int i6 = i3;
-        if (this.reqId != 0) {
-            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
-            this.reqId = 0;
-        }
-        if (this.channelReqId != 0) {
-            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.channelReqId, true);
-            this.channelReqId = 0;
-        }
-        if (str2 == null) {
-            this.groupSearch.clear();
-            this.groupSearchMap.clear();
-            this.globalSearch.clear();
-            this.globalSearchMap.clear();
-            this.localServerSearch.clear();
-            this.phonesSearch.clear();
-            this.phoneSearchMap.clear();
-            this.lastReqId = 0;
-            this.channelLastReqId = 0;
-            this.delegate.onDataSetChanged(i6);
-            return;
-        }
-        int i7;
-        ConnectionsManager instance;
-        if (str.length() <= 0) {
-            this.groupSearch.clear();
-            this.groupSearchMap.clear();
-            this.channelLastReqId = 0;
-            this.delegate.onDataSetChanged(i6);
-        } else if (i4 != 0) {
-            TL_channels_getParticipants tL_channels_getParticipants = new TL_channels_getParticipants();
-            if (i5 == 1) {
-                tL_channels_getParticipants.filter = new TL_channelParticipantsAdmins();
-            } else if (i5 == 3) {
-                tL_channels_getParticipants.filter = new TL_channelParticipantsBanned();
-            } else if (i5 == 0) {
-                tL_channels_getParticipants.filter = new TL_channelParticipantsKicked();
-            } else {
-                tL_channels_getParticipants.filter = new TL_channelParticipantsSearch();
-            }
-            tL_channels_getParticipants.filter.q = str2;
-            tL_channels_getParticipants.limit = 50;
-            tL_channels_getParticipants.offset = 0;
-            tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i4);
-            i7 = this.channelLastReqId + 1;
-            this.channelLastReqId = i7;
-            instance = ConnectionsManager.getInstance(this.currentAccount);
-            -$$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM -__lambda_searchadapterhelper_tvnoks_82nxnkubkel6ilcdljom = r0;
-            -$$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM -__lambda_searchadapterhelper_tvnoks_82nxnkubkel6ilcdljom2 = new -$$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM(this, i7, str, z4, i3);
-            this.channelReqId = instance.sendRequest(tL_channels_getParticipants, -__lambda_searchadapterhelper_tvnoks_82nxnkubkel6ilcdljom, 2);
-        } else {
-            this.lastFoundChannel = str.toLowerCase();
-        }
-        if (z) {
-            if (str.length() > 0) {
-                TL_contacts_search tL_contacts_search = new TL_contacts_search();
-                tL_contacts_search.q = str2;
-                tL_contacts_search.limit = 50;
-                i7 = this.lastReqId + 1;
-                this.lastReqId = i7;
-                instance = ConnectionsManager.getInstance(this.currentAccount);
-                -$$Lambda$SearchAdapterHelper$vMHpk9OJlbeR1DBViyt5uXKzrRA -__lambda_searchadapterhelper_vmhpk9ojlber1dbviyt5uxkzrra = r0;
-                -$$Lambda$SearchAdapterHelper$vMHpk9OJlbeR1DBViyt5uXKzrRA -__lambda_searchadapterhelper_vmhpk9ojlber1dbviyt5uxkzrra2 = new -$$Lambda$SearchAdapterHelper$vMHpk9OJlbeR1DBViyt5uXKzrRA(this, i7, i3, z2, z3, z4, str);
-                this.reqId = instance.sendRequest(tL_contacts_search, -__lambda_searchadapterhelper_vmhpk9ojlber1dbviyt5uxkzrra, 2);
-            } else {
-                this.globalSearch.clear();
-                this.globalSearchMap.clear();
-                this.localServerSearch.clear();
-                this.lastReqId = 0;
-                this.delegate.onDataSetChanged(i6);
-            }
-        }
-        if (z5 && str2.startsWith("+") && str.length() > 3) {
-            this.phonesSearch.clear();
-            this.phoneSearchMap.clear();
-            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
-            ArrayList arrayList = ContactsController.getInstance(this.currentAccount).contacts;
-            i7 = arrayList.size();
-            Object obj = null;
-            for (int i8 = 0; i8 < i7; i8++) {
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(i8)).user_id));
-                if (user != null) {
-                    String str3 = user.phone;
-                    if (str3 != null && str3.startsWith(stripExceptNumbers)) {
-                        if (obj == null) {
-                            obj = user.phone.length() == stripExceptNumbers.length() ? 1 : null;
-                        }
-                        this.phonesSearch.add(user);
-                        this.phoneSearchMap.put(user.id, user);
-                    }
-                }
-            }
-            if (obj == null) {
-                this.phonesSearch.add("section");
-                this.phonesSearch.add(stripExceptNumbers);
-            }
-            this.delegate.onDataSetChanged(i6);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x0165  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x01aa  */
+    public void queryServerSearch(java.lang.String r17, boolean r18, boolean r19, boolean r20, boolean r21, boolean r22, int r23, boolean r24, int r25, int r26) {
+        /*
+        r16 = this;
+        r9 = r16;
+        r10 = r17;
+        r0 = r23;
+        r1 = r25;
+        r11 = r26;
+        r2 = r9.reqId;
+        r12 = 1;
+        r13 = 0;
+        if (r2 == 0) goto L_0x001d;
+    L_0x0010:
+        r2 = r9.currentAccount;
+        r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);
+        r3 = r9.reqId;
+        r2.cancelRequest(r3, r12);
+        r9.reqId = r13;
+    L_0x001d:
+        r2 = r9.channelReqId;
+        if (r2 == 0) goto L_0x002e;
+    L_0x0021:
+        r2 = r9.currentAccount;
+        r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);
+        r3 = r9.channelReqId;
+        r2.cancelRequest(r3, r12);
+        r9.channelReqId = r13;
+    L_0x002e:
+        if (r10 != 0) goto L_0x005d;
+    L_0x0030:
+        r0 = r9.groupSearch;
+        r0.clear();
+        r0 = r9.groupSearchMap;
+        r0.clear();
+        r0 = r9.globalSearch;
+        r0.clear();
+        r0 = r9.globalSearchMap;
+        r0.clear();
+        r0 = r9.localServerSearch;
+        r0.clear();
+        r0 = r9.phonesSearch;
+        r0.clear();
+        r0 = r9.phoneSearchMap;
+        r0.clear();
+        r9.lastReqId = r13;
+        r9.channelLastReqId = r13;
+        r0 = r9.delegate;
+        r0.onDataSetChanged(r11);
+        return;
+    L_0x005d:
+        r2 = r17.length();
+        r14 = 2;
+        r6 = 50;
+        r15 = 3;
+        if (r2 <= 0) goto L_0x00d0;
+    L_0x0067:
+        if (r0 == 0) goto L_0x00c9;
+    L_0x0069:
+        r7 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipants;
+        r7.<init>();
+        if (r1 != r12) goto L_0x0078;
+    L_0x0070:
+        r1 = new org.telegram.tgnet.TLRPC$TL_channelParticipantsAdmins;
+        r1.<init>();
+        r7.filter = r1;
+        goto L_0x0093;
+    L_0x0078:
+        if (r1 != r15) goto L_0x0082;
+    L_0x007a:
+        r1 = new org.telegram.tgnet.TLRPC$TL_channelParticipantsBanned;
+        r1.<init>();
+        r7.filter = r1;
+        goto L_0x0093;
+    L_0x0082:
+        if (r1 != 0) goto L_0x008c;
+    L_0x0084:
+        r1 = new org.telegram.tgnet.TLRPC$TL_channelParticipantsKicked;
+        r1.<init>();
+        r7.filter = r1;
+        goto L_0x0093;
+    L_0x008c:
+        r1 = new org.telegram.tgnet.TLRPC$TL_channelParticipantsSearch;
+        r1.<init>();
+        r7.filter = r1;
+    L_0x0093:
+        r1 = r7.filter;
+        r1.q = r10;
+        r7.limit = r6;
+        r7.offset = r13;
+        r1 = r9.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r0 = r1.getInputChannel(r0);
+        r7.channel = r0;
+        r0 = r9.channelLastReqId;
+        r2 = r0 + 1;
+        r9.channelLastReqId = r2;
+        r0 = r9.currentAccount;
+        r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
+        r5 = new org.telegram.ui.Adapters.-$$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM;
+        r0 = r5;
+        r1 = r16;
+        r3 = r17;
+        r4 = r21;
+        r15 = r5;
+        r5 = r26;
+        r0.<init>(r1, r2, r3, r4, r5);
+        r0 = r8.sendRequest(r7, r15, r14);
+        r9.channelReqId = r0;
+        goto L_0x00e1;
+    L_0x00c9:
+        r0 = r17.toLowerCase();
+        r9.lastFoundChannel = r0;
+        goto L_0x00e1;
+    L_0x00d0:
+        r0 = r9.groupSearch;
+        r0.clear();
+        r0 = r9.groupSearchMap;
+        r0.clear();
+        r9.channelLastReqId = r13;
+        r0 = r9.delegate;
+        r0.onDataSetChanged(r11);
+    L_0x00e1:
+        if (r18 == 0) goto L_0x0133;
+    L_0x00e3:
+        r0 = r17.length();
+        if (r0 <= 0) goto L_0x011b;
+    L_0x00e9:
+        r15 = new org.telegram.tgnet.TLRPC$TL_contacts_search;
+        r15.<init>();
+        r15.q = r10;
+        r15.limit = r6;
+        r0 = r9.lastReqId;
+        r2 = r0 + 1;
+        r9.lastReqId = r2;
+        r0 = r9.currentAccount;
+        r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
+        r7 = new org.telegram.ui.Adapters.-$$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA;
+        r0 = r7;
+        r1 = r16;
+        r3 = r26;
+        r4 = r19;
+        r5 = r22;
+        r6 = r20;
+        r12 = r7;
+        r7 = r21;
+        r13 = r8;
+        r8 = r17;
+        r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8);
+        r0 = r13.sendRequest(r15, r12, r14);
+        r9.reqId = r0;
+        goto L_0x0133;
+    L_0x011b:
+        r0 = r9.globalSearch;
+        r0.clear();
+        r0 = r9.globalSearchMap;
+        r0.clear();
+        r0 = r9.localServerSearch;
+        r0.clear();
+        r0 = 0;
+        r9.lastReqId = r0;
+        r1 = r9.delegate;
+        r1.onDataSetChanged(r11);
+        goto L_0x0134;
+    L_0x0133:
+        r0 = 0;
+    L_0x0134:
+        if (r22 != 0) goto L_0x01bb;
+    L_0x0136:
+        if (r24 == 0) goto L_0x01bb;
+    L_0x0138:
+        r1 = "+";
+        r1 = r10.startsWith(r1);
+        if (r1 == 0) goto L_0x01bb;
+    L_0x0140:
+        r1 = r17.length();
+        r2 = 3;
+        if (r1 <= r2) goto L_0x01bb;
+    L_0x0147:
+        r1 = r9.phonesSearch;
+        r1.clear();
+        r1 = r9.phoneSearchMap;
+        r1.clear();
+        r1 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r17);
+        r2 = r9.currentAccount;
+        r2 = org.telegram.messenger.ContactsController.getInstance(r2);
+        r2 = r2.contacts;
+        r3 = r2.size();
+        r4 = 0;
+        r5 = 0;
+    L_0x0163:
+        if (r4 >= r3) goto L_0x01a8;
+    L_0x0165:
+        r6 = r2.get(r4);
+        r6 = (org.telegram.tgnet.TLRPC.TL_contact) r6;
+        r7 = r9.currentAccount;
+        r7 = org.telegram.messenger.MessagesController.getInstance(r7);
+        r6 = r6.user_id;
+        r6 = java.lang.Integer.valueOf(r6);
+        r6 = r7.getUser(r6);
+        if (r6 != 0) goto L_0x017e;
+    L_0x017d:
+        goto L_0x01a5;
+    L_0x017e:
+        r7 = r6.phone;
+        if (r7 == 0) goto L_0x01a5;
+    L_0x0182:
+        r7 = r7.startsWith(r1);
+        if (r7 == 0) goto L_0x01a5;
+    L_0x0188:
+        if (r5 != 0) goto L_0x0199;
+    L_0x018a:
+        r5 = r6.phone;
+        r5 = r5.length();
+        r7 = r1.length();
+        if (r5 != r7) goto L_0x0198;
+    L_0x0196:
+        r5 = 1;
+        goto L_0x0199;
+    L_0x0198:
+        r5 = 0;
+    L_0x0199:
+        r7 = r9.phonesSearch;
+        r7.add(r6);
+        r7 = r9.phoneSearchMap;
+        r8 = r6.id;
+        r7.put(r8, r6);
+    L_0x01a5:
+        r4 = r4 + 1;
+        goto L_0x0163;
+    L_0x01a8:
+        if (r5 != 0) goto L_0x01b6;
+    L_0x01aa:
+        r0 = r9.phonesSearch;
+        r2 = "section";
+        r0.add(r2);
+        r0 = r9.phonesSearch;
+        r0.add(r1);
+    L_0x01b6:
+        r0 = r9.delegate;
+        r0.onDataSetChanged(r11);
+    L_0x01bb:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.SearchAdapterHelper.queryServerSearch(java.lang.String, boolean, boolean, boolean, boolean, boolean, int, boolean, int, int):void");
     }
 
     public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, int i2, TLObject tLObject, TL_error tL_error) {
@@ -236,11 +371,11 @@ public class SearchAdapterHelper {
         this.channelReqId = 0;
     }
 
-    public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, String str, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$SearchAdapterHelper$0Mt8OZeXgQY12jqbJArDWgm6lmM(this, i, i2, tL_error, tLObject, z, z2, z3, str));
+    public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$SearchAdapterHelper$kNL0ud9mPGvAWOHlIMupT9Jkw8A(this, i, i2, tL_error, tLObject, z, z2, z3, z4, str));
     }
 
-    public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, int i2, TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, String str) {
+    public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, int i2, TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
         int i3 = i2;
         if (i == this.lastReqId && this.delegate.canApplySearchResults(i2)) {
             int i4 = 0;
@@ -275,33 +410,33 @@ public class SearchAdapterHelper {
                     }
                     for (int i6 = 0; i6 < arrayList.size(); i6++) {
                         User user2;
-                        Object obj;
+                        Chat chat2;
                         Peer peer = (Peer) arrayList.get(i6);
                         int i7 = peer.user_id;
                         if (i7 != 0) {
                             user2 = (User) sparseArray2.get(i7);
-                            obj = null;
+                            chat2 = null;
                         } else {
                             i7 = peer.chat_id;
                             if (i7 != 0) {
-                                obj = (Chat) sparseArray.get(i7);
+                                chat2 = (Chat) sparseArray.get(i7);
                             } else {
                                 int i8 = peer.channel_id;
                                 if (i8 != 0) {
-                                    Chat chat2 = (Chat) sparseArray.get(i8);
+                                    chat2 = (Chat) sparseArray.get(i8);
                                 } else {
-                                    obj = null;
-                                    user2 = obj;
+                                    chat2 = null;
+                                    user2 = chat2;
                                 }
                             }
                             user2 = null;
                         }
-                        if (obj != null) {
-                            if (z) {
-                                this.globalSearch.add(obj);
-                                this.globalSearchMap.put(-obj.id, obj);
+                        if (chat2 != null) {
+                            if (z && (!z2 || ChatObject.canAddBotsToChat(chat2))) {
+                                this.globalSearch.add(chat2);
+                                this.globalSearchMap.put(-chat2.id, chat2);
                             }
-                        } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
+                        } else if (!(user2 == null || z2 || ((!z3 && user2.bot) || (!z4 && user2.self)))) {
                             this.globalSearch.add(user2);
                             this.globalSearchMap.put(user2.id, user2);
                         }
@@ -309,33 +444,33 @@ public class SearchAdapterHelper {
                 }
                 if (!this.allResultsAreGlobal) {
                     while (i4 < tL_contacts_found.my_results.size()) {
-                        Object obj2;
+                        Chat chat3;
                         Peer peer2 = (Peer) tL_contacts_found.my_results.get(i4);
                         int i9 = peer2.user_id;
                         if (i9 != 0) {
                             user = (User) sparseArray2.get(i9);
-                            obj2 = null;
+                            chat3 = null;
                         } else {
                             i9 = peer2.chat_id;
                             if (i9 != 0) {
-                                obj2 = (Chat) sparseArray.get(i9);
+                                chat3 = (Chat) sparseArray.get(i9);
                             } else {
                                 i5 = peer2.channel_id;
                                 if (i5 != 0) {
-                                    Chat chat3 = (Chat) sparseArray.get(i5);
+                                    chat3 = (Chat) sparseArray.get(i5);
                                 } else {
-                                    obj2 = null;
-                                    user = obj2;
+                                    chat3 = null;
+                                    user = chat3;
                                 }
                             }
                             user = null;
                         }
-                        if (obj2 != null) {
-                            if (z) {
-                                this.localServerSearch.add(obj2);
-                                this.globalSearchMap.put(-obj2.id, obj2);
+                        if (chat3 != null) {
+                            if (z && (!z2 || ChatObject.canAddBotsToChat(chat3))) {
+                                this.localServerSearch.add(chat3);
+                                this.globalSearchMap.put(-chat3.id, chat3);
                             }
-                        } else if (user != null && ((z2 || !user.bot) && (z3 || !user.self))) {
+                        } else if (!(user == null || z2 || ((!z3 && user.bot) || (!z4 && user.self)))) {
                             this.localServerSearch.add(user);
                             this.globalSearchMap.put(user.id, user);
                         }
