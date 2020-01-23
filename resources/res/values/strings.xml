@@ -141,6 +141,7 @@
     <string name="ActionPinnedNoText">un1 pinned a message</string>
     <string name="ActionPinnedPhoto">un1 pinned a photo</string>
     <string name="ActionPinnedPoll">un1 pinned a poll</string>
+    <string name="ActionPinnedQuiz">un1 pinned a quiz</string>
     <string name="ActionPinnedRound">un1 pinned a video message</string>
     <string name="ActionPinnedSticker">un1 pinned a sticker</string>
     <string name="ActionPinnedText">un1 pinned \"%1$s\"</string>
@@ -628,6 +629,7 @@
     <string name="ChannelMessageNoText">%1$s posted a message</string>
     <string name="ChannelMessagePhoto">%1$s posted a photo</string>
     <string name="ChannelMessagePoll2">%1$s posted a poll %2$s</string>
+    <string name="ChannelMessageQuiz2">%1$s posted a quiz %2$s</string>
     <string name="ChannelMessageRound">%1$s posted a video message</string>
     <string name="ChannelMessageSticker">%1$s posted a sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s posted a %2$s sticker</string>
@@ -1185,6 +1187,7 @@
     <string name="EventLogRestrictedUntil">changed permissions for %1$s\10\10Duration: %2$s</string>
     <string name="EventLogSelectedEvents">Selected actions</string>
     <string name="EventLogStopPoll">un1 stopped the poll:</string>
+    <string name="EventLogStopQuiz">un1 stopped the quiz:</string>
     <string name="EventLogToggledInvitesHistoryOff">un1 made group history hidden for new members</string>
     <string name="EventLogToggledInvitesHistoryOn">un1 made group history visible for new members</string>
     <string name="EventLogToggledInvitesOff">un1 disabled group invites</string>
@@ -1780,6 +1783,8 @@
     <string name="NotificationActionPinnedPhotoChannel">%1$s pinned a photo</string>
     <string name="NotificationActionPinnedPoll2">%1$s pinned a poll %3$s in the group %2$s</string>
     <string name="NotificationActionPinnedPollChannel2">%1$s pinned a poll %2$s</string>
+    <string name="NotificationActionPinnedQuiz2">%1$s pinned a quiz %3$s in the group %2$s</string>
+    <string name="NotificationActionPinnedQuizChannel2">%1$s pinned a quiz %2$s</string>
     <string name="NotificationActionPinnedRound">%1$s pinned a video message in the group %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s pinned a video message</string>
     <string name="NotificationActionPinnedSticker">%1$s pinned a sticker in the group %2$s</string>
@@ -1833,6 +1838,7 @@
     <string name="NotificationMessageGroupNoText">%1$s sent a message to the group %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s sent a photo to the group %2$s</string>
     <string name="NotificationMessageGroupPoll2">%1$s sent a poll %3$s to the group %2$s</string>
+    <string name="NotificationMessageGroupQuiz2">%1$s sent a quiz %3$s to the group %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s sent a sticker to the group %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s sent a %3$s sticker to the group %2$s</string>
@@ -1845,6 +1851,7 @@
     <string name="NotificationMessageNoText">%1$s sent you a message</string>
     <string name="NotificationMessagePhoto">%1$s sent you a photo</string>
     <string name="NotificationMessagePoll2">%1$s sent you a poll %2$s</string>
+    <string name="NotificationMessageQuiz2">%1$s sent you a quiz %2$s</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
     <string name="NotificationMessageSDPhoto">%1$s sent you a self-destructing photo</string>
     <string name="NotificationMessageSDVideo">%1$s sent you a self-destructing video</string>

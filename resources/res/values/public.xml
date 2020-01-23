@@ -1324,6 +1324,7 @@
     <public type="string" name="ActionPinnedNoText" id="NUM" />
     <public type="string" name="ActionPinnedPhoto" id="NUM" />
     <public type="string" name="ActionPinnedPoll" id="NUM" />
+    <public type="string" name="ActionPinnedQuiz" id="NUM" />
     <public type="string" name="ActionPinnedRound" id="NUM" />
     <public type="string" name="ActionPinnedSticker" id="NUM" />
     <public type="string" name="ActionPinnedText" id="NUM" />
@@ -1811,6 +1812,7 @@
     <public type="string" name="ChannelMessageNoText" id="NUM" />
     <public type="string" name="ChannelMessagePhoto" id="NUM" />
     <public type="string" name="ChannelMessagePoll2" id="NUM" />
+    <public type="string" name="ChannelMessageQuiz2" id="NUM" />
     <public type="string" name="ChannelMessageRound" id="NUM" />
     <public type="string" name="ChannelMessageSticker" id="NUM" />
     <public type="string" name="ChannelMessageStickerEmoji" id="NUM" />
@@ -2368,6 +2370,7 @@
     <public type="string" name="EventLogRestrictedUntil" id="NUM" />
     <public type="string" name="EventLogSelectedEvents" id="NUM" />
     <public type="string" name="EventLogStopPoll" id="NUM" />
+    <public type="string" name="EventLogStopQuiz" id="NUM" />
     <public type="string" name="EventLogToggledInvitesHistoryOff" id="NUM" />
     <public type="string" name="EventLogToggledInvitesHistoryOn" id="NUM" />
     <public type="string" name="EventLogToggledInvitesOff" id="NUM" />
@@ -2963,6 +2966,8 @@
     <public type="string" name="NotificationActionPinnedPhotoChannel" id="NUM" />
     <public type="string" name="NotificationActionPinnedPoll2" id="NUM" />
     <public type="string" name="NotificationActionPinnedPollChannel2" id="NUM" />
+    <public type="string" name="NotificationActionPinnedQuiz2" id="NUM" />
+    <public type="string" name="NotificationActionPinnedQuizChannel2" id="NUM" />
     <public type="string" name="NotificationActionPinnedRound" id="NUM" />
     <public type="string" name="NotificationActionPinnedRoundChannel" id="NUM" />
     <public type="string" name="NotificationActionPinnedSticker" id="NUM" />
@@ -3016,6 +3021,7 @@
     <public type="string" name="NotificationMessageGroupNoText" id="NUM" />
     <public type="string" name="NotificationMessageGroupPhoto" id="NUM" />
     <public type="string" name="NotificationMessageGroupPoll2" id="NUM" />
+    <public type="string" name="NotificationMessageGroupQuiz2" id="NUM" />
     <public type="string" name="NotificationMessageGroupRound" id="NUM" />
     <public type="string" name="NotificationMessageGroupSticker" id="NUM" />
     <public type="string" name="NotificationMessageGroupStickerEmoji" id="NUM" />
@@ -3028,6 +3034,7 @@
     <public type="string" name="NotificationMessageNoText" id="NUM" />
     <public type="string" name="NotificationMessagePhoto" id="NUM" />
     <public type="string" name="NotificationMessagePoll2" id="NUM" />
+    <public type="string" name="NotificationMessageQuiz2" id="NUM" />
     <public type="string" name="NotificationMessageRound" id="NUM" />
     <public type="string" name="NotificationMessageSDPhoto" id="NUM" />
     <public type="string" name="NotificationMessageSDVideo" id="NUM" />

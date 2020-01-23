@@ -526,7 +526,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (r3 == 0) goto L_0x00d5;
     L_0x00c5:
         r0 = r6.actionBar;
-        r2 = NUM; // 0x7f0e02ba float:1.8876453E38 double:1.0531625015E-314;
+        r2 = NUM; // 0x7f0e02bc float:1.8876457E38 double:1.0531625025E-314;
         r3 = "ChatLocation";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setTitle(r2);
@@ -539,7 +539,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (r2 == 0) goto L_0x00ef;
     L_0x00df:
         r0 = r6.actionBar;
-        r2 = NUM; // 0x7f0e015b float:1.8875741E38 double:1.053162328E-314;
+        r2 = NUM; // 0x7f0e015c float:1.8875743E38 double:1.0531623286E-314;
         r3 = "AttachLiveLocation";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setTitle(r2);
@@ -555,14 +555,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (r2 <= 0) goto L_0x010e;
     L_0x00ff:
         r2 = r6.actionBar;
-        r3 = NUM; // 0x7f0e0a67 float:1.8880439E38 double:1.0531634723E-314;
+        r3 = NUM; // 0x7f0e0a6e float:1.8880453E38 double:1.053163476E-314;
         r4 = "SharedPlace";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.setTitle(r3);
         goto L_0x011c;
     L_0x010e:
         r2 = r6.actionBar;
-        r3 = NUM; // 0x7f0e02ba float:1.8876453E38 double:1.0531625015E-314;
+        r3 = NUM; // 0x7f0e02bc float:1.8876457E38 double:1.0531625025E-314;
         r4 = "ChatLocation";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.setTitle(r3);
@@ -572,7 +572,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r6.otherItem = r0;
         r0 = r6.otherItem;
         r2 = NUM; // 0x7var_ea float:1.7945572E38 double:1.052935745E-314;
-        r3 = NUM; // 0x7f0e0783 float:1.8878938E38 double:1.0531631067E-314;
+        r3 = NUM; // 0x7f0e078a float:1.8878952E38 double:1.05316311E-314;
         r4 = "OpenInExternalApp";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r0.addSubItem(r9, r2, r3);
@@ -584,7 +584,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r0 = r6.otherItem;
         r2 = 5;
         r3 = NUM; // 0x7var_a5 float:1.7945432E38 double:1.052935711E-314;
-        r4 = NUM; // 0x7f0e0a0e float:1.8880258E38 double:1.0531634284E-314;
+        r4 = NUM; // 0x7f0e0a15 float:1.8880272E38 double:1.053163432E-314;
         r5 = "SendLiveLocationMenu";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.addSubItem(r2, r3, r4);
@@ -597,7 +597,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         goto L_0x01cb;
     L_0x0163:
         r3 = r6.actionBar;
-        r4 = NUM; // 0x7f0e0a50 float:1.8880392E38 double:1.053163461E-314;
+        r4 = NUM; // 0x7f0e0a57 float:1.8880406E38 double:1.0531634644E-314;
         r5 = "ShareLocation";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -615,12 +615,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r0 = r0.setActionBarMenuItemSearchListener(r3);
         r6.searchItem = r0;
         r0 = r6.searchItem;
-        r3 = NUM; // 0x7f0e09cf float:1.888013E38 double:1.053163397E-314;
+        r3 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
         r4 = "Search";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r0.setSearchFieldHint(r3);
         r0 = r6.searchItem;
-        r3 = NUM; // 0x7f0e09cf float:1.888013E38 double:1.053163397E-314;
+        r3 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
         r4 = "Search";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r0.setContentDescription(r3);
@@ -799,7 +799,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3);
         r0.setTypeface(r3);
         r0 = r6.searchAreaButton;
-        r3 = NUM; // 0x7f0e08e8 float:1.8879662E38 double:1.053163283E-314;
+        r3 = NUM; // 0x7f0e08ef float:1.8879676E38 double:1.0531632866E-314;
         r4 = "PlacesInThisArea";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r0.setText(r3);
@@ -863,7 +863,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r0.setAdditionalYOffset(r3);
         r0 = r6.mapTypeButton;
         r3 = NUM; // 0x7var_e3 float:1.7945558E38 double:1.0529357417E-314;
-        r4 = NUM; // 0x7f0e060e float:1.8878181E38 double:1.0531629224E-314;
+        r4 = NUM; // 0x7f0e0611 float:1.8878187E38 double:1.053162924E-314;
         r5 = "Map";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = 2;
@@ -871,13 +871,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r0 = r6.mapTypeButton;
         r3 = 3;
         r4 = NUM; // 0x7var_fc float:1.7945608E38 double:1.052935754E-314;
-        r5 = NUM; // 0x7f0e09b8 float:1.8880084E38 double:1.053163386E-314;
+        r5 = NUM; // 0x7f0e09bf float:1.8880098E38 double:1.0531633893E-314;
         r11 = "Satellite";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r0.addSubItem(r3, r4, r5);
         r0 = r6.mapTypeButton;
         r3 = NUM; // 0x7var_dc float:1.7945543E38 double:1.052935738E-314;
-        r4 = NUM; // 0x7f0e0570 float:1.887786E38 double:1.0531628444E-314;
+        r4 = NUM; // 0x7f0e0573 float:1.8877867E38 double:1.053162846E-314;
         r5 = "Hybrid";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = 4;
@@ -1198,7 +1198,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         r2 = 1;
         r0.setTextSize(r2, r1);
         r0 = r6.emptyTitleTextView;
-        r1 = NUM; // 0x7f0e06c1 float:1.8878544E38 double:1.053163011E-314;
+        r1 = NUM; // 0x7f0e06c4 float:1.887855E38 double:1.0531630124E-314;
         r2 = "NoPlacesFound";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setText(r1);

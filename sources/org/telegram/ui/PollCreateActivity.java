@@ -632,7 +632,7 @@ public class PollCreateActivity extends BaseFragment {
                             this.listAdapter.notifyItemChanged(this.quizRow);
                         }
                     }
-                } else {
+                } else if (this.quizOnly == 0) {
                     boolean z3 = z2 ^ 1;
                     this.quizPoll = z3;
                     if (this.quizPoll && this.multipleChoise) {
@@ -661,6 +661,8 @@ public class PollCreateActivity extends BaseFragment {
                         }
                     }
                     z = z3;
+                } else {
+                    return;
                 }
             }
             if (this.hintShowed && !this.quizPoll) {

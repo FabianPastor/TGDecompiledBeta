@@ -888,7 +888,7 @@ public class DialogCell extends BaseCell {
         r6 = r0.type;
         if (r6 != r2) goto L_0x0316;
     L_0x028e:
-        r0 = NUM; // 0x7f0e0522 float:1.8877703E38 double:1.053162806E-314;
+        r0 = NUM; // 0x7f0e0525 float:1.8877709E38 double:1.0531628073E-314;
         r6 = "FromYou";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         r6 = r1.customDialog;
@@ -1438,7 +1438,7 @@ public class DialogCell extends BaseCell {
         r0 = r1.draftMessage;
         if (r0 == 0) goto L_0x06f0;
     L_0x0645:
-        r0 = NUM; // 0x7f0e03ea float:1.887707E38 double:1.0531626517E-314;
+        r0 = NUM; // 0x7f0e03ec float:1.8877074E38 double:1.0531626527E-314;
         r8 = "Draft";
         r0 = org.telegram.messenger.LocaleController.getString(r8, r0);
         r8 = r1.draftMessage;
@@ -1531,7 +1531,7 @@ public class DialogCell extends BaseCell {
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePrintingPaint;
         r5 = r1.paintIndex;
         r5 = r0[r5];
-        r0 = NUM; // 0x7f0e0560 float:1.8877828E38 double:1.0531628365E-314;
+        r0 = NUM; // 0x7f0e0563 float:1.8877834E38 double:1.053162838E-314;
         r7 = "HistoryCleared";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
     L_0x0703:
@@ -1555,7 +1555,7 @@ public class DialogCell extends BaseCell {
         r7 = r0 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatRequested;
         if (r7 == 0) goto L_0x0726;
     L_0x071c:
-        r0 = NUM; // 0x7f0e0439 float:1.887723E38 double:1.0531626907E-314;
+        r0 = NUM; // 0x7f0e043b float:1.8877234E38 double:1.0531626917E-314;
         r7 = "EncryptionProcessing";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
         goto L_0x0703;
@@ -1563,7 +1563,7 @@ public class DialogCell extends BaseCell {
         r7 = r0 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatWaiting;
         if (r7 == 0) goto L_0x073e;
     L_0x072a:
-        r0 = NUM; // 0x7f0e01be float:1.8875942E38 double:1.053162377E-314;
+        r0 = NUM; // 0x7f0e01bf float:1.8875944E38 double:1.0531623775E-314;
         r7 = new java.lang.Object[r2];
         r8 = r1.user;
         r8 = org.telegram.messenger.UserObject.getFirstName(r8);
@@ -1575,7 +1575,7 @@ public class DialogCell extends BaseCell {
         r7 = r0 instanceof org.telegram.tgnet.TLRPC.TL_encryptedChatDiscarded;
         if (r7 == 0) goto L_0x074c;
     L_0x0742:
-        r0 = NUM; // 0x7f0e043a float:1.8877232E38 double:1.053162691E-314;
+        r0 = NUM; // 0x7f0e043c float:1.8877236E38 double:1.053162692E-314;
         r7 = "EncryptionRejected";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
         goto L_0x0703;
@@ -1589,7 +1589,7 @@ public class DialogCell extends BaseCell {
         r7 = r7.getClientUserId();
         if (r0 != r7) goto L_0x0772;
     L_0x075e:
-        r0 = NUM; // 0x7f0e042e float:1.8877208E38 double:1.0531626853E-314;
+        r0 = NUM; // 0x7f0e0430 float:1.8877212E38 double:1.0531626863E-314;
         r7 = new java.lang.Object[r2];
         r8 = r1.user;
         r8 = org.telegram.messenger.UserObject.getFirstName(r8);
@@ -1598,7 +1598,7 @@ public class DialogCell extends BaseCell {
         r0 = org.telegram.messenger.LocaleController.formatString(r8, r0, r7);
         goto L_0x0703;
     L_0x0772:
-        r0 = NUM; // 0x7f0e042d float:1.8877206E38 double:1.053162685E-314;
+        r0 = NUM; // 0x7f0e042f float:1.887721E38 double:1.053162686E-314;
         r7 = "EncryptedChatStartedIncoming";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
         goto L_0x0703;
@@ -1638,7 +1638,7 @@ public class DialogCell extends BaseCell {
         r11 = org.telegram.messenger.UserObject.isUserSelf(r11);
         if (r11 == 0) goto L_0x07d0;
     L_0x07bf:
-        r0 = NUM; // 0x7f0e09c4 float:1.8880108E38 double:1.053163392E-314;
+        r0 = NUM; // 0x7f0e09cb float:1.8880122E38 double:1.0531633953E-314;
         r6 = "SavedMessagesInfo";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
         r7 = r0;
@@ -1712,7 +1712,7 @@ public class DialogCell extends BaseCell {
         r11 = r11.isOutOwner();
         if (r11 == 0) goto L_0x0830;
     L_0x0825:
-        r0 = NUM; // 0x7f0e0522 float:1.8877703E38 double:1.053162806E-314;
+        r0 = NUM; // 0x7f0e0525 float:1.8877709E38 double:1.0531628073E-314;
         r9 = "FromYou";
         r0 = org.telegram.messenger.LocaleController.getString(r9, r0);
     L_0x082e:
@@ -1737,7 +1737,7 @@ public class DialogCell extends BaseCell {
         r0 = org.telegram.messenger.UserObject.isDeleted(r9);
         if (r0 == 0) goto L_0x0856;
     L_0x084c:
-        r0 = NUM; // 0x7f0e055c float:1.887782E38 double:1.0531628345E-314;
+        r0 = NUM; // 0x7f0e055f float:1.8877826E38 double:1.053162836E-314;
         r9 = "HiddenName";
         r0 = org.telegram.messenger.LocaleController.getString(r9, r0);
         goto L_0x082e;
@@ -2009,7 +2009,7 @@ public class DialogCell extends BaseCell {
         r0 = r0.ttl_seconds;
         if (r0 == 0) goto L_0x0a5e;
     L_0x0a53:
-        r0 = NUM; // 0x7f0e0162 float:1.8875756E38 double:1.0531623315E-314;
+        r0 = NUM; // 0x7f0e0163 float:1.8875758E38 double:1.053162332E-314;
         r7 = "AttachPhotoExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
         goto L_0x0810;
@@ -2027,7 +2027,7 @@ public class DialogCell extends BaseCell {
         r0 = r0.ttl_seconds;
         if (r0 == 0) goto L_0x0a7d;
     L_0x0a72:
-        r0 = NUM; // 0x7f0e0168 float:1.8875768E38 double:1.0531623345E-314;
+        r0 = NUM; // 0x7f0e0169 float:1.887577E38 double:1.053162335E-314;
         r7 = "AttachVideoExpired";
         r0 = org.telegram.messenger.LocaleController.getString(r7, r0);
         goto L_0x0810;
@@ -2350,7 +2350,7 @@ public class DialogCell extends BaseCell {
         if (r6 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r1.drawPinBackground = r2;
-        r6 = NUM; // 0x7f0e0b92 float:1.8881045E38 double:1.05316362E-314;
+        r6 = NUM; // 0x7f0e0b99 float:1.888106E38 double:1.0531636235E-314;
         r11 = "UseProxySponsor";
         r6 = org.telegram.messenger.LocaleController.getString(r11, r6);
         goto L_0x0CLASSNAME;
@@ -2360,7 +2360,7 @@ public class DialogCell extends BaseCell {
         r11 = r1.currentDialogFolderId;
         if (r11 == 0) goto L_0x0cab;
     L_0x0CLASSNAME:
-        r11 = NUM; // 0x7f0e0111 float:1.8875591E38 double:1.0531622915E-314;
+        r11 = NUM; // 0x7f0e0112 float:1.8875593E38 double:1.053162292E-314;
         r14 = "ArchivedChats";
         r11 = org.telegram.messenger.LocaleController.getString(r14, r11);
     L_0x0ca1:
@@ -2387,7 +2387,7 @@ public class DialogCell extends BaseCell {
         r11 = r1.useMeForMyMessages;
         if (r11 == 0) goto L_0x0cca;
     L_0x0cc0:
-        r11 = NUM; // 0x7f0e0522 float:1.8877703E38 double:1.053162806E-314;
+        r11 = NUM; // 0x7f0e0525 float:1.8877709E38 double:1.0531628073E-314;
         r14 = "FromYou";
         r11 = org.telegram.messenger.LocaleController.getString(r14, r11);
         goto L_0x0ce3;
@@ -2398,7 +2398,7 @@ public class DialogCell extends BaseCell {
     L_0x0ccf:
         r1.drawPinBackground = r2;
     L_0x0cd1:
-        r11 = NUM; // 0x7f0e09c3 float:1.8880106E38 double:1.0531633913E-314;
+        r11 = NUM; // 0x7f0e09ca float:1.888012E38 double:1.053163395E-314;
         r14 = "SavedMessages";
         r11 = org.telegram.messenger.LocaleController.getString(r14, r11);
         goto L_0x0ce3;
@@ -2412,7 +2412,7 @@ public class DialogCell extends BaseCell {
         r14 = r11.length();
         if (r14 != 0) goto L_0x0ca1;
     L_0x0ce9:
-        r11 = NUM; // 0x7f0e055c float:1.887782E38 double:1.0531628345E-314;
+        r11 = NUM; // 0x7f0e055f float:1.8877826E38 double:1.053162836E-314;
         r14 = "HiddenName";
         r11 = org.telegram.messenger.LocaleController.getString(r14, r11);
         goto L_0x0ca1;
@@ -4352,7 +4352,7 @@ public class DialogCell extends BaseCell {
     L_0x00a7:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0e0b64 float:1.8880952E38 double:1.0531635973E-314;
+        r3 = NUM; // 0x7f0e0b6b float:1.8880966E38 double:1.053163601E-314;
         r4 = "UnhideFromTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable;
@@ -4361,7 +4361,7 @@ public class DialogCell extends BaseCell {
     L_0x00bd:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r16);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r17);
-        r3 = NUM; // 0x7f0e055e float:1.8877824E38 double:1.0531628355E-314;
+        r3 = NUM; // 0x7f0e0561 float:1.887783E38 double:1.053162837E-314;
         r4 = "HideOnTop";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_pinArchiveDrawable;
@@ -4373,7 +4373,7 @@ public class DialogCell extends BaseCell {
     L_0x00d7:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r16);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r17);
-        r3 = NUM; // 0x7f0e0106 float:1.8875569E38 double:1.053162286E-314;
+        r3 = NUM; // 0x7f0e0107 float:1.887557E38 double:1.0531622866E-314;
         r4 = "Archive";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawable;
@@ -4382,7 +4382,7 @@ public class DialogCell extends BaseCell {
     L_0x00ed:
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r17);
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r3 = NUM; // 0x7f0e0b5b float:1.8880934E38 double:1.053163593E-314;
+        r3 = NUM; // 0x7f0e0b62 float:1.8880948E38 double:1.0531635963E-314;
         r4 = "Unarchive";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable;

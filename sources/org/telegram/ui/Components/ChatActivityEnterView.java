@@ -1268,7 +1268,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r8 = r0.scheduledButton;
         r8.setVisibility(r3);
         r8 = r0.scheduledButton;
-        r9 = NUM; // 0x7f0e09c9 float:1.8880118E38 double:1.0531633943E-314;
+        r9 = NUM; // 0x7f0e09d0 float:1.8880132E38 double:1.0531633977E-314;
         r10 = "ScheduledMessages";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.setContentDescription(r9);
@@ -1490,7 +1490,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r10.<init>(r11, r14);
         r8.setColorFilter(r10);
         r8 = r0.recordDeleteImageView;
-        r10 = NUM; // 0x7f0e0389 float:1.8876873E38 double:1.053162604E-314;
+        r10 = NUM; // 0x7f0e038b float:1.8876877E38 double:1.0531626047E-314;
         r11 = "Delete";
         r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
         r8.setContentDescription(r10);
@@ -1675,7 +1675,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r2.<init>(r1);
         r0.recordCancelText = r2;
         r2 = r0.recordCancelText;
-        r8 = NUM; // 0x7f0e0a7f float:1.8880487E38 double:1.053163484E-314;
+        r8 = NUM; // 0x7f0e0a86 float:1.8880502E38 double:1.0531634876E-314;
         r10 = "SlideToCancel";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r2.setText(r8);
@@ -1696,7 +1696,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r2.<init>(r1);
         r0.recordSendText = r2;
         r2 = r0.recordSendText;
-        r8 = NUM; // 0x7f0e021b float:1.887613E38 double:1.053162423E-314;
+        r8 = NUM; // 0x7f0e021c float:1.8876133E38 double:1.0531624234E-314;
         r10 = "Cancel";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();
@@ -1914,7 +1914,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r0.progressDrawable = r8;
         r2.setImageDrawable(r8);
         r2 = r0.cancelBotButton;
-        r8 = NUM; // 0x7f0e021b float:1.887613E38 double:1.053162423E-314;
+        r8 = NUM; // 0x7f0e021c float:1.8876133E38 double:1.0531624234E-314;
         r9 = "Cancel";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r2.setContentDescription(r8);
@@ -1992,7 +1992,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r2 = "chat_messagePanelSend";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r8 = r0.sendButton;
-        r9 = NUM; // 0x7f0e09fd float:1.8880224E38 double:1.05316342E-314;
+        r9 = NUM; // 0x7f0e0a04 float:1.8880238E38 double:1.0531634234E-314;
         r10 = "Send";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.setContentDescription(r9);
@@ -2162,7 +2162,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r2 = r0.doneButtonImage;
         r2.setImageDrawable(r4);
         r2 = r0.doneButtonImage;
-        r3 = NUM; // 0x7f0e03e9 float:1.8877068E38 double:1.053162651E-314;
+        r3 = NUM; // 0x7f0e03eb float:1.8877072E38 double:1.053162652E-314;
         r4 = "Done";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.setContentDescription(r3);

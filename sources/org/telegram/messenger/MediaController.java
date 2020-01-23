@@ -3859,7 +3859,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05eb float:1.887811E38 double:1.053162905E-314;
+        r1 = NUM; // 0x7f0e05ee float:1.8878116E38 double:1.0531629066E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }
@@ -4771,7 +4771,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r34 = r3;
         r3 = "AllPhotos";
         r35 = r5;
-        r5 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
+        r5 = NUM; // 0x7f0e00d7 float:1.8875474E38 double:1.053162263E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r5);	 Catch:{ all -> 0x01f7 }
         r5 = 0;
         r2.<init>(r5, r3, r1);	 Catch:{ all -> 0x01f7 }
@@ -4788,7 +4788,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x0175 }
         r5 = "AllMedia";
         r36 = r6;
-        r6 = NUM; // 0x7f0e00d5 float:1.887547E38 double:1.053162262E-314;
+        r6 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);	 Catch:{ all -> 0x0175 }
         r6 = 0;
         r3.<init>(r6, r5, r1);	 Catch:{ all -> 0x0175 }
@@ -5098,7 +5098,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r4 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x0413 }
         r5 = "AllVideos";
         r20 = r6;
-        r6 = NUM; // 0x7f0e00d7 float:1.8875474E38 double:1.053162263E-314;
+        r6 = NUM; // 0x7f0e00d8 float:1.8875476E38 double:1.0531622633E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);	 Catch:{ all -> 0x0413 }
         r6 = 0;
         r4.<init>(r6, r5, r3);	 Catch:{ all -> 0x0413 }
@@ -5125,7 +5125,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r5 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x03b6 }
         r6 = "AllMedia";
         r21 = r7;
-        r7 = NUM; // 0x7f0e00d5 float:1.887547E38 double:1.053162262E-314;
+        r7 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);	 Catch:{ all -> 0x03b6 }
         r7 = 0;
         r5.<init>(r7, r6, r3);	 Catch:{ all -> 0x03b6 }

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: yCZdb0TMqWO723QoLlyXkXIOzJU=
+SHA1-Digest-Manifest: b9Zb2ZU8gP6zi2cg0wJi4ihHN2k=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 5hJZ35Glxi4syAq17qnDO3/+w+A=
+SHA1-Digest: uqWIKEYTgkwLfV+YaTopY1LuZa8=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9499,7 +9499,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: e+QQuNbWFlKYCULbRvMX815G0GM=
+SHA1-Digest: nWK12uqdhvIpZaB9Bq4y4+1E5RI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -17870,13 +17870,13 @@ Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
 SHA1-Digest: LgcbwMW3ZUoeSMjioiuOSX7WYLM=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: dZz7D0t+zVI3EyAsEqmdodbd3ko=
+SHA1-Digest: flr2b3jPMVU0D3W4G2C27MT4U4A=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: QlUy79lRpPV0rR3yy/QYcnzY4mU=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: 8dWeasiP2q1+gu3VF82JIIbFi4A=
+SHA1-Digest: pAUQxtxd1flIVHDeHburQjx2EWM=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: 94n77PwKPxxLaycptDeklLHsJLk=
@@ -17912,13 +17912,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: Y7Pm8l1lHHx1O6ur5904uFEqgjQ=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: iHCCY0n/wfwomZhBGaL6arqELn4=
+SHA1-Digest: IlloGf/ZEihfpvf0ehRazX2uji8=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: /G1cLfY8G2xf9sJg+M1tBA5QH/o=
+SHA1-Digest: j9wuH7eULWkiVugyFl8NAwyV0P4=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: sybOb3cMCwFnvQr57cVsMk/4AKU=
+SHA1-Digest: dYMDVvDC28XjqyFzzOcAczDgvYw=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: IOUcoeHbtmqWknKLQxziTT0qQ6M=
@@ -18134,10 +18134,10 @@ Name: res/raw/wallet_toobad.tgs
 SHA1-Digest: zW82Z1oPJDIfvErxFpNxEvp1XQA=
 
 Name: res/xml/auth.xml
-SHA1-Digest: rxTeGU8+WwYNQ6+h3tRtL4yr6Ac=
+SHA1-Digest: D3Ou21r0CVkb58IozGv+pDYhyxA=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: t44nY9aPeJLaLrsAx8CX801GjDc=
+SHA1-Digest: eYhwY6C6Cy3dgFr2lxU0Pl+zrbk=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18152,7 +18152,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: 3hfl7yZZE3dnLxyiTE5iN2MY3oQ=
+SHA1-Digest: Adr4cGCT1wdi5J6QycZQJjbUCWY=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

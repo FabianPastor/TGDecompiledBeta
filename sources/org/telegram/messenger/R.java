@@ -1424,6 +1424,7 @@ public final class R {
         public static final int ActionPinnedNoText = NUM;
         public static final int ActionPinnedPhoto = NUM;
         public static final int ActionPinnedPoll = NUM;
+        public static final int ActionPinnedQuiz = NUM;
         public static final int ActionPinnedRound = NUM;
         public static final int ActionPinnedSticker = NUM;
         public static final int ActionPinnedText = NUM;
@@ -1911,6 +1912,7 @@ public final class R {
         public static final int ChannelMessageNoText = NUM;
         public static final int ChannelMessagePhoto = NUM;
         public static final int ChannelMessagePoll2 = NUM;
+        public static final int ChannelMessageQuiz2 = NUM;
         public static final int ChannelMessageRound = NUM;
         public static final int ChannelMessageSticker = NUM;
         public static final int ChannelMessageStickerEmoji = NUM;
@@ -2468,6 +2470,7 @@ public final class R {
         public static final int EventLogRestrictedUntil = NUM;
         public static final int EventLogSelectedEvents = NUM;
         public static final int EventLogStopPoll = NUM;
+        public static final int EventLogStopQuiz = NUM;
         public static final int EventLogToggledInvitesHistoryOff = NUM;
         public static final int EventLogToggledInvitesHistoryOn = NUM;
         public static final int EventLogToggledInvitesOff = NUM;
@@ -3063,6 +3066,8 @@ public final class R {
         public static final int NotificationActionPinnedPhotoChannel = NUM;
         public static final int NotificationActionPinnedPoll2 = NUM;
         public static final int NotificationActionPinnedPollChannel2 = NUM;
+        public static final int NotificationActionPinnedQuiz2 = NUM;
+        public static final int NotificationActionPinnedQuizChannel2 = NUM;
         public static final int NotificationActionPinnedRound = NUM;
         public static final int NotificationActionPinnedRoundChannel = NUM;
         public static final int NotificationActionPinnedSticker = NUM;
@@ -3116,6 +3121,7 @@ public final class R {
         public static final int NotificationMessageGroupNoText = NUM;
         public static final int NotificationMessageGroupPhoto = NUM;
         public static final int NotificationMessageGroupPoll2 = NUM;
+        public static final int NotificationMessageGroupQuiz2 = NUM;
         public static final int NotificationMessageGroupRound = NUM;
         public static final int NotificationMessageGroupSticker = NUM;
         public static final int NotificationMessageGroupStickerEmoji = NUM;
@@ -3128,6 +3134,7 @@ public final class R {
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
         public static final int NotificationMessagePoll2 = NUM;
+        public static final int NotificationMessageQuiz2 = NUM;
         public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSDPhoto = NUM;
         public static final int NotificationMessageSDVideo = NUM;

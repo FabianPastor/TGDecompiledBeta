@@ -4655,7 +4655,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (baseFragment instanceof ChatActivity) {
                 this.galleryAlbumEntry = MediaController.allMediaAlbumEntry;
                 Chat currentChat = ((ChatActivity) baseFragment).getCurrentChat();
-                ((ChatActivity) this.baseFragment).getCurrentUser();
+                User currentUser = ((ChatActivity) this.baseFragment).getCurrentUser();
                 if (currentChat != null) {
                     this.mediaEnabled = ChatObject.canSendMedia(currentChat);
                     this.pollsEnabled = ChatObject.canSendPolls(currentChat);
@@ -4683,7 +4683,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         this.cameraIcon.setEnabled(this.mediaEnabled);
                     }
                 } else {
-                    this.pollsEnabled = false;
+                    boolean z = currentUser != null && currentUser.bot;
+                    this.pollsEnabled = z;
                 }
             } else {
                 this.galleryAlbumEntry = MediaController.allPhotosAlbumEntry;

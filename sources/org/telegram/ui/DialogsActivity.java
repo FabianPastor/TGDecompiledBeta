@@ -3304,7 +3304,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r6 = r6 + r16;
         if (r6 <= r4) goto L_0x0241;
     L_0x0133:
-        r0 = NUM; // 0x7f0e08e2 float:1.887965E38 double:1.05316328E-314;
+        r0 = NUM; // 0x7f0e08e9 float:1.8879664E38 double:1.0531632836E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -3342,7 +3342,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x01b0;
     L_0x017c:
-        r3 = NUM; // 0x7f0e039e float:1.8876916E38 double:1.053162614E-314;
+        r3 = NUM; // 0x7f0e03a0 float:1.887692E38 double:1.053162615E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3350,11 +3350,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "DeleteFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e012e float:1.887565E38 double:1.053162306E-314;
+        r1 = NUM; // 0x7f0e012f float:1.8875652E38 double:1.0531623063E-314;
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0389 float:1.8876873E38 double:1.053162604E-314;
+        r1 = NUM; // 0x7f0e038b float:1.8876877E38 double:1.0531626047E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
@@ -3365,7 +3365,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01e8;
     L_0x01b4:
-        r3 = NUM; // 0x7f0e02fc float:1.8876587E38 double:1.053162534E-314;
+        r3 = NUM; // 0x7f0e02fe float:1.8876591E38 double:1.053162535E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3373,11 +3373,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearCacheFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0123 float:1.8875628E38 double:1.0531623004E-314;
+        r1 = NUM; // 0x7f0e0124 float:1.887563E38 double:1.053162301E-314;
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e0300 float:1.8876595E38 double:1.053162536E-314;
+        r1 = NUM; // 0x7f0e0302 float:1.88766E38 double:1.053162537E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$alhJl2oxrWyqDQR9VMC4_CoynGI;
@@ -3385,7 +3385,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x021b;
     L_0x01e8:
-        r3 = NUM; // 0x7f0e02fe float:1.8876591E38 double:1.053162535E-314;
+        r3 = NUM; // 0x7f0e0300 float:1.8876595E38 double:1.053162536E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -3393,18 +3393,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0125 float:1.8875632E38 double:1.0531623014E-314;
+        r1 = NUM; // 0x7f0e0126 float:1.8875634E38 double:1.053162302E-314;
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0e02ff float:1.8876593E38 double:1.0531625356E-314;
+        r1 = NUM; // 0x7f0e0301 float:1.8876597E38 double:1.0531625366E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$1j3JEkAThEHgG6O1BGBF0RX0na8;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x021b:
-        r1 = NUM; // 0x7f0e021b float:1.887613E38 double:1.053162423E-314;
+        r1 = NUM; // 0x7f0e021c float:1.8876133E38 double:1.0531624234E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);

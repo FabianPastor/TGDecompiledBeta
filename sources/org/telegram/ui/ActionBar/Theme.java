@@ -1114,6 +1114,7 @@ public class Theme {
         private RectF rect = new RectF();
         private Paint selectedPaint;
         private Drawable[] shadowDrawable = new Drawable[4];
+        private int shadowDrawableColor = -1;
         private int topY;
 
         public int getOpacity() {
@@ -1230,9 +1231,14 @@ public class Theme {
                         draw(canvas, paint);
                     }
                     this.shadowDrawable[i] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), null);
-                    this.shadowDrawable[i].setColorFilter(new PorterDuffColorFilter(getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow"), Mode.MULTIPLY));
                 } catch (Throwable unused) {
                 }
+            }
+            dp = getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow");
+            Drawable[] drawableArr = this.shadowDrawable;
+            if (!(drawableArr[i] == null || this.shadowDrawableColor == dp)) {
+                drawableArr[i].setColorFilter(new PorterDuffColorFilter(dp, Mode.MULTIPLY));
+                this.shadowDrawableColor = dp;
             }
             return this.shadowDrawable[i];
         }

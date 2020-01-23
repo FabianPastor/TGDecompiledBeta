@@ -205,7 +205,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0e09f8 float:1.8880214E38 double:1.0531634175E-314;
+        r1 = NUM; // 0x7f0e09ff float:1.8880228E38 double:1.053163421E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -215,21 +215,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0e0698 float:1.8878461E38 double:1.0531629906E-314;
+        r1 = NUM; // 0x7f0e069b float:1.8878467E38 double:1.053162992E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0e0690 float:1.8878445E38 double:1.0531629867E-314;
+        r1 = NUM; // 0x7f0e0693 float:1.8878451E38 double:1.053162988E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0050:
         r0 = r8.actionBar;
-        r1 = NUM; // 0x7f0e0332 float:1.8876697E38 double:1.053162561E-314;
+        r1 = NUM; // 0x7f0e0334 float:1.88767E38 double:1.053162562E-314;
         r2 = "Contacts";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -246,7 +246,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0e09cf float:1.888013E38 double:1.053163397E-314;
+        r2 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
         r3 = "Search";
         r4 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r4);
@@ -381,7 +381,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r8.emptyView;
         r1.setShowAtCenter(r15);
         r1 = r8.emptyView;
-        r2 = NUM; // 0x7f0e06ad float:1.8878504E38 double:1.053163001E-314;
+        r2 = NUM; // 0x7f0e06b0 float:1.887851E38 double:1.0531630025E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -534,7 +534,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = NUM; // 0x7var_ float:1.7944724E38 double:1.0529355386E-314;
         r0.setImageResource(r1);
         r0 = r8.floatingButtonContainer;
-        r1 = NUM; // 0x7f0e0350 float:1.8876757E38 double:1.0531625756E-314;
+        r1 = NUM; // 0x7f0e0352 float:1.8876762E38 double:1.0531625766E-314;
         r2 = "CreateNewContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
