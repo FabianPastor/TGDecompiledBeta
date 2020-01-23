@@ -1568,16 +1568,16 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x0144 A:{Catch:{ Exception -> 0x0165 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x013d A:{Catch:{ Exception -> 0x0165 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01b8 A:{Catch:{ Exception -> 0x01d4 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0203  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0233  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x017c A:{SYNTHETIC, Splitter:B:66:0x017c} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01b8 A:{Catch:{ Exception -> 0x01d4 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0203  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0233  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0245 A:{SYNTHETIC, Splitter:B:87:0x0245} */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x0143 A:{Catch:{ Exception -> 0x0164 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x013c A:{Catch:{ Exception -> 0x0164 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01b7 A:{Catch:{ Exception -> 0x01d3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0202  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0232  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x017b A:{SYNTHETIC, Splitter:B:66:0x017b} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01b7 A:{Catch:{ Exception -> 0x01d3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0202  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0232  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0244 A:{SYNTHETIC, Splitter:B:87:0x0244} */
     @android.annotation.SuppressLint({"NewApi"})
     private void listRoots() {
         /*
@@ -1597,10 +1597,10 @@ public class DocumentSelectActivity extends BaseFragment {
         r4 = android.os.Environment.getExternalStorageState();
         r5 = "mounted";
         r5 = r4.equals(r5);
-        r6 = NUM; // 0x7f0e04ab float:1.8877461E38 double:1.053162747E-314;
+        r6 = NUM; // 0x7f0e04b6 float:1.8877484E38 double:1.0531627525E-314;
         r7 = "ExternalFolderInfo";
-        r8 = NUM; // 0x7var_c0 float:1.7944967E38 double:1.052935598E-314;
-        r9 = NUM; // 0x7f0e09b1 float:1.888007E38 double:1.0531633824E-314;
+        r8 = NUM; // 0x7var_c1 float:1.794497E38 double:1.0529355984E-314;
+        r9 = NUM; // 0x7f0e09d8 float:1.8880149E38 double:1.0531634017E-314;
         r10 = "SdCard";
         if (r5 != 0) goto L_0x003e;
     L_0x0036:
@@ -1620,13 +1620,13 @@ public class DocumentSelectActivity extends BaseFragment {
         r4.subtitle = r5;
         goto L_0x0073;
     L_0x0058:
-        r5 = NUM; // 0x7f0e057d float:1.8877887E38 double:1.053162851E-314;
+        r5 = NUM; // 0x7f0e0588 float:1.887791E38 double:1.053162856E-314;
         r11 = "InternalStorage";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.title = r5;
-        r5 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
+        r5 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
         r4.icon = r5;
-        r5 = NUM; // 0x7f0e057c float:1.8877885E38 double:1.0531628503E-314;
+        r5 = NUM; // 0x7f0e0587 float:1.8877908E38 double:1.0531628557E-314;
         r11 = "InternalFolderInfo";
         r5 = org.telegram.messenger.LocaleController.getString(r11, r5);
         r4.subtitle = r5;
@@ -1637,242 +1637,242 @@ public class DocumentSelectActivity extends BaseFragment {
         r5.add(r4);
         r2.add(r3);
     L_0x0081:
-        r3 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0175, all -> 0x0171 }
-        r4 = new java.io.FileReader;	 Catch:{ Exception -> 0x0175, all -> 0x0171 }
+        r3 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0174, all -> 0x0170 }
+        r4 = new java.io.FileReader;	 Catch:{ Exception -> 0x0174, all -> 0x0170 }
         r5 = "/proc/mounts";
-        r4.<init>(r5);	 Catch:{ Exception -> 0x0175, all -> 0x0171 }
-        r3.<init>(r4);	 Catch:{ Exception -> 0x0175, all -> 0x0171 }
+        r4.<init>(r5);	 Catch:{ Exception -> 0x0174, all -> 0x0170 }
+        r3.<init>(r4);	 Catch:{ Exception -> 0x0174, all -> 0x0170 }
     L_0x008d:
-        r4 = r3.readLine();	 Catch:{ Exception -> 0x016f }
-        if (r4 == 0) goto L_0x016b;
+        r4 = r3.readLine();	 Catch:{ Exception -> 0x016e }
+        if (r4 == 0) goto L_0x016a;
     L_0x0093:
         r5 = "vfat";
-        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x016f }
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x016e }
         if (r5 != 0) goto L_0x00a4;
     L_0x009c:
         r5 = "/mnt";
-        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x016f }
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x016e }
         if (r5 == 0) goto L_0x008d;
     L_0x00a4:
-        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x016f }
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x016e }
         if (r5 == 0) goto L_0x00ab;
     L_0x00a8:
-        org.telegram.messenger.FileLog.d(r4);	 Catch:{ Exception -> 0x016f }
+        org.telegram.messenger.FileLog.d(r4);	 Catch:{ Exception -> 0x016e }
     L_0x00ab:
-        r5 = new java.util.StringTokenizer;	 Catch:{ Exception -> 0x016f }
+        r5 = new java.util.StringTokenizer;	 Catch:{ Exception -> 0x016e }
         r11 = " ";
-        r5.<init>(r4, r11);	 Catch:{ Exception -> 0x016f }
-        r5.nextToken();	 Catch:{ Exception -> 0x016f }
-        r5 = r5.nextToken();	 Catch:{ Exception -> 0x016f }
-        r11 = r2.contains(r5);	 Catch:{ Exception -> 0x016f }
+        r5.<init>(r4, r11);	 Catch:{ Exception -> 0x016e }
+        r5.nextToken();	 Catch:{ Exception -> 0x016e }
+        r5 = r5.nextToken();	 Catch:{ Exception -> 0x016e }
+        r11 = r2.contains(r5);	 Catch:{ Exception -> 0x016e }
         if (r11 == 0) goto L_0x00c0;
     L_0x00bf:
         goto L_0x008d;
     L_0x00c0:
         r11 = "/dev/block/vold";
-        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r11 == 0) goto L_0x008d;
     L_0x00c8:
         r11 = "/mnt/secure";
-        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r11 != 0) goto L_0x008d;
     L_0x00d0:
         r11 = "/mnt/asec";
-        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r11 != 0) goto L_0x008d;
     L_0x00d8:
         r11 = "/mnt/obb";
-        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r11 != 0) goto L_0x008d;
     L_0x00e0:
         r11 = "/dev/mapper";
-        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r11 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r11 != 0) goto L_0x008d;
     L_0x00e8:
         r11 = "tmpfs";
-        r4 = r4.contains(r11);	 Catch:{ Exception -> 0x016f }
+        r4 = r4.contains(r11);	 Catch:{ Exception -> 0x016e }
         if (r4 != 0) goto L_0x008d;
-    L_0x00f1:
-        r4 = new java.io.File;	 Catch:{ Exception -> 0x016f }
-        r4.<init>(r5);	 Catch:{ Exception -> 0x016f }
-        r4 = r4.isDirectory();	 Catch:{ Exception -> 0x016f }
-        if (r4 != 0) goto L_0x0128;
-    L_0x00fc:
+    L_0x00f0:
+        r4 = new java.io.File;	 Catch:{ Exception -> 0x016e }
+        r4.<init>(r5);	 Catch:{ Exception -> 0x016e }
+        r4 = r4.isDirectory();	 Catch:{ Exception -> 0x016e }
+        if (r4 != 0) goto L_0x0127;
+    L_0x00fb:
         r4 = 47;
-        r4 = r5.lastIndexOf(r4);	 Catch:{ Exception -> 0x016f }
+        r4 = r5.lastIndexOf(r4);	 Catch:{ Exception -> 0x016e }
         r11 = -1;
-        if (r4 == r11) goto L_0x0128;
-    L_0x0105:
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x016f }
-        r11.<init>();	 Catch:{ Exception -> 0x016f }
+        if (r4 == r11) goto L_0x0127;
+    L_0x0104:
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x016e }
+        r11.<init>();	 Catch:{ Exception -> 0x016e }
         r12 = "/storage/";
-        r11.append(r12);	 Catch:{ Exception -> 0x016f }
+        r11.append(r12);	 Catch:{ Exception -> 0x016e }
         r4 = r4 + 1;
-        r4 = r5.substring(r4);	 Catch:{ Exception -> 0x016f }
-        r11.append(r4);	 Catch:{ Exception -> 0x016f }
-        r4 = r11.toString();	 Catch:{ Exception -> 0x016f }
-        r11 = new java.io.File;	 Catch:{ Exception -> 0x016f }
-        r11.<init>(r4);	 Catch:{ Exception -> 0x016f }
-        r11 = r11.isDirectory();	 Catch:{ Exception -> 0x016f }
-        if (r11 == 0) goto L_0x0128;
+        r4 = r5.substring(r4);	 Catch:{ Exception -> 0x016e }
+        r11.append(r4);	 Catch:{ Exception -> 0x016e }
+        r4 = r11.toString();	 Catch:{ Exception -> 0x016e }
+        r11 = new java.io.File;	 Catch:{ Exception -> 0x016e }
+        r11.<init>(r4);	 Catch:{ Exception -> 0x016e }
+        r11 = r11.isDirectory();	 Catch:{ Exception -> 0x016e }
+        if (r11 == 0) goto L_0x0127;
+    L_0x0126:
+        goto L_0x0128;
     L_0x0127:
-        goto L_0x0129;
-    L_0x0128:
         r4 = r5;
-    L_0x0129:
-        r2.add(r4);	 Catch:{ Exception -> 0x016f }
-        r5 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x0165 }
-        r5.<init>(r13, r1);	 Catch:{ Exception -> 0x0165 }
-        r11 = r4.toLowerCase();	 Catch:{ Exception -> 0x0165 }
+    L_0x0128:
+        r2.add(r4);	 Catch:{ Exception -> 0x016e }
+        r5 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x0164 }
+        r5.<init>(r13, r1);	 Catch:{ Exception -> 0x0164 }
+        r11 = r4.toLowerCase();	 Catch:{ Exception -> 0x0164 }
         r12 = "sd";
-        r11 = r11.contains(r12);	 Catch:{ Exception -> 0x0165 }
-        if (r11 == 0) goto L_0x0144;
-    L_0x013d:
-        r11 = org.telegram.messenger.LocaleController.getString(r10, r9);	 Catch:{ Exception -> 0x0165 }
-        r5.title = r11;	 Catch:{ Exception -> 0x0165 }
-        goto L_0x014f;
-    L_0x0144:
+        r11 = r11.contains(r12);	 Catch:{ Exception -> 0x0164 }
+        if (r11 == 0) goto L_0x0143;
+    L_0x013c:
+        r11 = org.telegram.messenger.LocaleController.getString(r10, r9);	 Catch:{ Exception -> 0x0164 }
+        r5.title = r11;	 Catch:{ Exception -> 0x0164 }
+        goto L_0x014e;
+    L_0x0143:
         r11 = "ExternalStorage";
-        r12 = NUM; // 0x7f0e04ac float:1.8877463E38 double:1.0531627475E-314;
-        r11 = org.telegram.messenger.LocaleController.getString(r11, r12);	 Catch:{ Exception -> 0x0165 }
-        r5.title = r11;	 Catch:{ Exception -> 0x0165 }
-    L_0x014f:
-        r11 = org.telegram.messenger.LocaleController.getString(r7, r6);	 Catch:{ Exception -> 0x0165 }
-        r5.subtitle = r11;	 Catch:{ Exception -> 0x0165 }
-        r5.icon = r8;	 Catch:{ Exception -> 0x0165 }
-        r11 = new java.io.File;	 Catch:{ Exception -> 0x0165 }
-        r11.<init>(r4);	 Catch:{ Exception -> 0x0165 }
-        r5.file = r11;	 Catch:{ Exception -> 0x0165 }
-        r4 = r13.items;	 Catch:{ Exception -> 0x0165 }
-        r4.add(r5);	 Catch:{ Exception -> 0x0165 }
+        r12 = NUM; // 0x7f0e04b7 float:1.8877486E38 double:1.053162753E-314;
+        r11 = org.telegram.messenger.LocaleController.getString(r11, r12);	 Catch:{ Exception -> 0x0164 }
+        r5.title = r11;	 Catch:{ Exception -> 0x0164 }
+    L_0x014e:
+        r11 = org.telegram.messenger.LocaleController.getString(r7, r6);	 Catch:{ Exception -> 0x0164 }
+        r5.subtitle = r11;	 Catch:{ Exception -> 0x0164 }
+        r5.icon = r8;	 Catch:{ Exception -> 0x0164 }
+        r11 = new java.io.File;	 Catch:{ Exception -> 0x0164 }
+        r11.<init>(r4);	 Catch:{ Exception -> 0x0164 }
+        r5.file = r11;	 Catch:{ Exception -> 0x0164 }
+        r4 = r13.items;	 Catch:{ Exception -> 0x0164 }
+        r4.add(r5);	 Catch:{ Exception -> 0x0164 }
         goto L_0x008d;
-    L_0x0165:
+    L_0x0164:
         r4 = move-exception;
-        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Exception -> 0x016f }
+        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Exception -> 0x016e }
         goto L_0x008d;
-    L_0x016b:
-        r3.close();	 Catch:{ Exception -> 0x0180 }
-        goto L_0x0184;
-    L_0x016f:
+    L_0x016a:
+        r3.close();	 Catch:{ Exception -> 0x017f }
+        goto L_0x0183;
+    L_0x016e:
         r2 = move-exception;
-        goto L_0x0177;
-    L_0x0171:
+        goto L_0x0176;
+    L_0x0170:
         r0 = move-exception;
         r3 = r1;
-        goto L_0x0243;
-    L_0x0175:
+        goto L_0x0242;
+    L_0x0174:
         r2 = move-exception;
         r3 = r1;
-    L_0x0177:
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0242 }
-        if (r3 == 0) goto L_0x0184;
-    L_0x017c:
-        r3.close();	 Catch:{ Exception -> 0x0180 }
-        goto L_0x0184;
-    L_0x0180:
+    L_0x0176:
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0241 }
+        if (r3 == 0) goto L_0x0183;
+    L_0x017b:
+        r3.close();	 Catch:{ Exception -> 0x017f }
+        goto L_0x0183;
+    L_0x017f:
         r2 = move-exception;
         org.telegram.messenger.FileLog.e(r2);
-    L_0x0184:
+    L_0x0183:
         r2 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r2.<init>(r13, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0e0ab1 float:1.8880589E38 double:1.053163509E-314;
+        r4 = NUM; // 0x7f0e0ae1 float:1.8880686E38 double:1.0531635326E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;
-        r4 = NUM; // 0x7var_be float:1.7944963E38 double:1.052935597E-314;
+        r4 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
         r2.icon = r4;
         r5 = new java.io.File;
         r5.<init>(r3);
         r2.file = r5;
         r3 = r13.items;
         r3.add(r2);
-        r2 = new java.io.File;	 Catch:{ Exception -> 0x01d4 }
-        r3 = android.os.Environment.getExternalStorageDirectory();	 Catch:{ Exception -> 0x01d4 }
-        r2.<init>(r3, r0);	 Catch:{ Exception -> 0x01d4 }
-        r3 = r2.exists();	 Catch:{ Exception -> 0x01d4 }
-        if (r3 == 0) goto L_0x01d8;
-    L_0x01b8:
-        r3 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x01d4 }
-        r3.<init>(r13, r1);	 Catch:{ Exception -> 0x01d4 }
-        r3.title = r0;	 Catch:{ Exception -> 0x01d4 }
+        r2 = new java.io.File;	 Catch:{ Exception -> 0x01d3 }
+        r3 = android.os.Environment.getExternalStorageDirectory();	 Catch:{ Exception -> 0x01d3 }
+        r2.<init>(r3, r0);	 Catch:{ Exception -> 0x01d3 }
+        r3 = r2.exists();	 Catch:{ Exception -> 0x01d3 }
+        if (r3 == 0) goto L_0x01d7;
+    L_0x01b7:
+        r3 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x01d3 }
+        r3.<init>(r13, r1);	 Catch:{ Exception -> 0x01d3 }
+        r3.title = r0;	 Catch:{ Exception -> 0x01d3 }
         r0 = "AppFolderInfo";
-        r5 = NUM; // 0x7f0e00f7 float:1.8875539E38 double:1.0531622787E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r0, r5);	 Catch:{ Exception -> 0x01d4 }
-        r3.subtitle = r0;	 Catch:{ Exception -> 0x01d4 }
-        r3.icon = r4;	 Catch:{ Exception -> 0x01d4 }
-        r3.file = r2;	 Catch:{ Exception -> 0x01d4 }
-        r0 = r13.items;	 Catch:{ Exception -> 0x01d4 }
-        r0.add(r3);	 Catch:{ Exception -> 0x01d4 }
-        goto L_0x01d8;
-    L_0x01d4:
+        r5 = NUM; // 0x7f0e00ff float:1.8875555E38 double:1.0531622826E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r0, r5);	 Catch:{ Exception -> 0x01d3 }
+        r3.subtitle = r0;	 Catch:{ Exception -> 0x01d3 }
+        r3.icon = r4;	 Catch:{ Exception -> 0x01d3 }
+        r3.file = r2;	 Catch:{ Exception -> 0x01d3 }
+        r0 = r13.items;	 Catch:{ Exception -> 0x01d3 }
+        r0.add(r3);	 Catch:{ Exception -> 0x01d3 }
+        goto L_0x01d7;
+    L_0x01d3:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x01d8:
+    L_0x01d7:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r13, r1);
-        r2 = NUM; // 0x7f0e051b float:1.8877688E38 double:1.0531628024E-314;
+        r2 = NUM; // 0x7f0e0526 float:1.887771E38 double:1.053162808E-314;
         r3 = "Gallery";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e051c float:1.887769E38 double:1.053162803E-314;
+        r2 = NUM; // 0x7f0e0527 float:1.8877713E38 double:1.0531628083E-314;
         r3 = "GalleryInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_bf float:1.7944965E38 double:1.0529355974E-314;
+        r2 = NUM; // 0x7var_c0 float:1.7944967E38 double:1.052935598E-314;
         r0.icon = r2;
         r0.file = r1;
         r2 = r13.items;
         r2.add(r0);
         r0 = r13.allowMusic;
-        if (r0 == 0) goto L_0x022a;
-    L_0x0203:
+        if (r0 == 0) goto L_0x0229;
+    L_0x0202:
         r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
         r0.<init>(r13, r1);
-        r2 = NUM; // 0x7f0e0159 float:1.8875737E38 double:1.053162327E-314;
+        r2 = NUM; // 0x7f0e0161 float:1.8875754E38 double:1.053162331E-314;
         r3 = "AttachMusic";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.title = r2;
-        r2 = NUM; // 0x7f0e0671 float:1.8878382E38 double:1.0531629713E-314;
+        r2 = NUM; // 0x7f0e067d float:1.8878406E38 double:1.0531629773E-314;
         r3 = "MusicInfo";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.subtitle = r2;
-        r2 = NUM; // 0x7var_c1 float:1.794497E38 double:1.0529355984E-314;
+        r2 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
         r0.icon = r2;
         r0.file = r1;
         r1 = r13.items;
         r1.add(r0);
-    L_0x022a:
+    L_0x0229:
         r0 = r13.recentItems;
         r0 = r0.isEmpty();
         r1 = 1;
-        if (r0 != 0) goto L_0x0235;
-    L_0x0233:
+        if (r0 != 0) goto L_0x0234;
+    L_0x0232:
         r13.hasFiles = r1;
-    L_0x0235:
+    L_0x0234:
         r0 = r13.listView;
         org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r0);
         r13.scrolling = r1;
         r0 = r13.listAdapter;
         r0.notifyDataSetChanged();
         return;
-    L_0x0242:
+    L_0x0241:
         r0 = move-exception;
-    L_0x0243:
-        if (r3 == 0) goto L_0x024d;
-    L_0x0245:
-        r3.close();	 Catch:{ Exception -> 0x0249 }
-        goto L_0x024d;
-    L_0x0249:
+    L_0x0242:
+        if (r3 == 0) goto L_0x024c;
+    L_0x0244:
+        r3.close();	 Catch:{ Exception -> 0x0248 }
+        goto L_0x024c;
+    L_0x0248:
         r1 = move-exception;
         org.telegram.messenger.FileLog.e(r1);
-    L_0x024d:
-        goto L_0x024f;
-    L_0x024e:
-        throw r0;
-    L_0x024f:
+    L_0x024c:
         goto L_0x024e;
+    L_0x024d:
+        throw r0;
+    L_0x024e:
+        goto L_0x024d;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DocumentSelectActivity.listRoots():void");
     }

@@ -229,6 +229,20 @@ public class ChatObject {
         return canUserDoAction(chat, 3);
     }
 
+    public static boolean canAddBotsToChat(Chat chat) {
+        if (isChannel(chat)) {
+            if (chat != null && chat.megagroup) {
+                TL_chatAdminRights tL_chatAdminRights = chat.admin_rights;
+                if ((tL_chatAdminRights != null && (tL_chatAdminRights.post_messages || tL_chatAdminRights.add_admins)) || chat.creator) {
+                    return true;
+                }
+            }
+        } else if (chat.migrated_to == null) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean canPinMessages(Chat chat) {
         if (!canUserDoAction(chat, 0)) {
             if (!isChannel(chat) || chat.megagroup) {

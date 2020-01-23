@@ -65,6 +65,7 @@ public class BottomSheet extends Dialog {
     private View customView;
     private BottomSheetDelegateInterface delegate;
     private boolean dimBehind = true;
+    private boolean disableScroll;
     private Runnable dismissRunnable = new -$$Lambda$wKJSb77Iz9CSKJu9VMkyxGvOd-c(this);
     private boolean dismissed;
     private boolean focusable;
@@ -80,7 +81,7 @@ public class BottomSheet extends Dialog {
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
     protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
-    private Runnable startAnimationRunnable;
+    protected Runnable startAnimationRunnable;
     private int tag;
     private CharSequence title;
     private TextView titleView;
@@ -427,7 +428,7 @@ public class BottomSheet extends Dialog {
                     float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
                     float y = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(motionEvent);
-                    if (this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
+                    if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
                         this.startedTrackingY = (int) motionEvent.getY();
                         this.maybeStartTracking = false;
                         this.startedTracking = true;
@@ -707,14 +708,12 @@ public class BottomSheet extends Dialog {
         L_0x011e:
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.layoutCount;
-            if (r1 != 0) goto L_0x0146;
+            if (r1 != 0) goto L_0x013b;
         L_0x0126:
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.startAnimationRunnable;
-            if (r1 == 0) goto L_0x0146;
-        L_0x012e:
-            r1 = org.telegram.ui.ActionBar.BottomSheet.this;
-            r1 = r1.startAnimationRunnable;
+            if (r1 == 0) goto L_0x013b;
+        L_0x012c:
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r1 = r1.startAnimationRunnable;
@@ -722,7 +721,7 @@ public class BottomSheet extends Dialog {
             r1 = org.telegram.ui.ActionBar.BottomSheet.this;
             r2 = 0;
             r1.startAnimationRunnable = r2;
-        L_0x0146:
+        L_0x013b:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BottomSheet$ContainerView.onLayout(boolean, int, int, int, int):void");
@@ -791,6 +790,10 @@ public class BottomSheet extends Dialog {
     /* Access modifiers changed, original: protected */
     public boolean onCustomOpenAnimation() {
         return false;
+    }
+
+    public void setDisableScroll(boolean z) {
+        this.disableScroll = z;
     }
 
     public void onAttachedToWindow() {
@@ -1004,9 +1007,11 @@ public class BottomSheet extends Dialog {
             viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
             AnonymousClass3 anonymousClass3 = new Runnable() {
                 public void run() {
-                    if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
-                        BottomSheet.this.startAnimationRunnable = null;
-                        BottomSheet.this.startOpenAnimation();
+                    BottomSheet bottomSheet = BottomSheet.this;
+                    if (bottomSheet.startAnimationRunnable == this && !bottomSheet.dismissed) {
+                        bottomSheet = BottomSheet.this;
+                        bottomSheet.startAnimationRunnable = null;
+                        bottomSheet.startOpenAnimation();
                     }
                 }
             };

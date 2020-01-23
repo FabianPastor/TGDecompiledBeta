@@ -71,6 +71,7 @@ import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_exportedMessageLink;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ShareDialogCell;
@@ -87,6 +88,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private FrameLayout frameLayout;
     private FrameLayout frameLayout2;
     private RecyclerListView gridView;
+    private int hasPoll;
     private boolean isChannel;
     private GridLayoutManager layoutManager;
     private String linkToCopy;
@@ -1090,6 +1092,19 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.searchAdapter = new ShareSearchAdapter(context2);
         this.isChannel = z3;
         this.sendingText = str;
+        ArrayList arrayList3 = this.sendingMessageObjects;
+        if (arrayList3 != null) {
+            int size = arrayList3.size();
+            for (int i = 0; i < size; i++) {
+                MessageObject messageObject = (MessageObject) this.sendingMessageObjects.get(i);
+                if (messageObject.isPoll()) {
+                    this.hasPoll = messageObject.isPublicPoll() ? 2 : 1;
+                    if (this.hasPoll == 2) {
+                        break;
+                    }
+                }
+            }
+        }
         if (z3) {
             this.loadingLink = true;
             TL_channels_exportMessageLink tL_channels_exportMessageLink = new TL_channels_exportMessageLink();
@@ -1579,8 +1594,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.containerView = anonymousClass1;
         this.containerView.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
-        int i = this.backgroundPaddingLeft;
-        viewGroup.setPadding(i, 0, i, 0);
+        int i2 = this.backgroundPaddingLeft;
+        viewGroup.setPadding(i2, 0, i2, 0);
         this.frameLayout = new FrameLayout(context2);
         this.frameLayout.setBackgroundColor(Theme.getColor(str3));
         SearchField searchField = new SearchField(context2);
@@ -1741,9 +1756,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.containerView.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -8.0f, 9.0f));
         updateSelectedCount(0);
         boolean[] zArr = DialogsActivity.dialogsLoaded;
-        int i2 = this.currentAccount;
-        if (!zArr[i2]) {
-            MessagesController.getInstance(i2).loadDialogs(0, 0, 100, true);
+        int i3 = this.currentAccount;
+        if (!zArr[i3]) {
+            MessagesController.getInstance(i3).loadDialogs(0, 0, 100, true);
             ContactsController.getInstance(this.currentAccount).checkInviteText();
             DialogsActivity.dialogsLoaded[this.currentAccount] = true;
         }
@@ -1777,6 +1792,27 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 item = this.searchAdapter.getItem(i);
             }
             if (item != null) {
+                if (this.hasPoll != 0) {
+                    int i2 = (int) item.id;
+                    if (i2 < 0) {
+                        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i2));
+                        Object obj = (ChatObject.isChannel(chat) && this.hasPoll == 2 && !chat.megagroup) ? 1 : null;
+                        if (!(obj == null && ChatObject.canSendPolls(chat))) {
+                            Builder builder = new Builder(getContext());
+                            builder.setTitle(LocaleController.getString("SendMessageTitle", NUM));
+                            if (obj != null) {
+                                builder.setMessage(LocaleController.getString("PublicPollCantForward", NUM));
+                            } else if (ChatObject.isActionBannedByDefault(chat, 10)) {
+                                builder.setMessage(LocaleController.getString("ErrorSendRestrictedPollsAll", NUM));
+                            } else {
+                                builder.setMessage(LocaleController.getString("ErrorSendRestrictedPolls", NUM));
+                            }
+                            builder.setNegativeButton(LocaleController.getString("OK", NUM), null);
+                            builder.show();
+                            return;
+                        }
+                    }
+                }
                 ShareDialogCell shareDialogCell = (ShareDialogCell) view;
                 if (this.selectedDialogs.indexOfKey(item.id) >= 0) {
                     this.selectedDialogs.remove(item.id);
@@ -1786,13 +1822,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     this.selectedDialogs.put(item.id, item);
                     shareDialogCell.setChecked(true, true);
                     updateSelectedCount(2);
-                    int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
+                    int i3 = UserConfig.getInstance(this.currentAccount).clientUserId;
                     if (this.gridView.getAdapter() == this.searchAdapter) {
                         Dialog dialog = (Dialog) this.listAdapter.dialogsMap.get(item.id);
                         if (dialog == null) {
                             this.listAdapter.dialogsMap.put(item.id, item);
                             this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, item);
-                        } else if (dialog.id != ((long) i2)) {
+                        } else if (dialog.id != ((long) i3)) {
                             this.listAdapter.dialogs.remove(dialog);
                             this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ 1, dialog);
                         }

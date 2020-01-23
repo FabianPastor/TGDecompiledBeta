@@ -3329,7 +3329,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_c6 float:1.794498E38 double:1.052935601E-314;
+        r6 = NUM; // 0x7var_c7 float:1.7944982E38 double:1.0529356013E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0012 float:1.8875074E38 double:1.0531621655E-314;
         r0 = "AccDescrCameraFlashAuto";
@@ -3337,7 +3337,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_c8 float:1.7944984E38 double:1.052935602E-314;
+        r6 = NUM; // 0x7var_c9 float:1.7944986E38 double:1.0529356023E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0014 float:1.8875078E38 double:1.0531621665E-314;
         r0 = "AccDescrCameraFlashOn";
@@ -3345,7 +3345,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_c7 float:1.7944982E38 double:1.0529356013E-314;
+        r6 = NUM; // 0x7var_c8 float:1.7944984E38 double:1.052935602E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0e0013 float:1.8875076E38 double:1.053162166E-314;
         r0 = "AccDescrCameraFlashOff";
@@ -4651,70 +4651,74 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
     public void init() {
         BaseFragment baseFragment = this.baseFragment;
-        if (baseFragment instanceof ChatActivity) {
-            this.galleryAlbumEntry = MediaController.allMediaAlbumEntry;
-            Chat currentChat = ((ChatActivity) baseFragment).getCurrentChat();
-            if (currentChat != null) {
-                this.mediaEnabled = ChatObject.canSendMedia(currentChat);
-                this.pollsEnabled = ChatObject.canSendPolls(currentChat);
-                if (this.mediaEnabled) {
-                    this.progressView.setText(LocaleController.getString("NoPhotos", NUM));
-                } else if (ChatObject.isActionBannedByDefault(currentChat, 7)) {
-                    this.progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", NUM));
-                } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                    this.progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", NUM, new Object[0]));
-                } else {
-                    this.progressView.setText(LocaleController.formatString("AttachMediaRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
-                }
-                CameraView cameraView = this.cameraView;
-                float f = 1.0f;
-                if (cameraView != null) {
-                    cameraView.setAlpha(this.mediaEnabled ? 1.0f : 0.2f);
-                    this.cameraView.setEnabled(this.mediaEnabled);
-                }
-                FrameLayout frameLayout = this.cameraIcon;
-                if (frameLayout != null) {
-                    if (!this.mediaEnabled) {
-                        f = 0.2f;
+        if (baseFragment != null) {
+            if (baseFragment instanceof ChatActivity) {
+                this.galleryAlbumEntry = MediaController.allMediaAlbumEntry;
+                Chat currentChat = ((ChatActivity) baseFragment).getCurrentChat();
+                User currentUser = ((ChatActivity) this.baseFragment).getCurrentUser();
+                if (currentChat != null) {
+                    this.mediaEnabled = ChatObject.canSendMedia(currentChat);
+                    this.pollsEnabled = ChatObject.canSendPolls(currentChat);
+                    if (this.mediaEnabled) {
+                        this.progressView.setText(LocaleController.getString("NoPhotos", NUM));
+                    } else if (ChatObject.isActionBannedByDefault(currentChat, 7)) {
+                        this.progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", NUM));
+                    } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
+                        this.progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", NUM, new Object[0]));
+                    } else {
+                        this.progressView.setText(LocaleController.formatString("AttachMediaRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
                     }
-                    frameLayout.setAlpha(f);
-                    this.cameraIcon.setEnabled(this.mediaEnabled);
+                    CameraView cameraView = this.cameraView;
+                    float f = 1.0f;
+                    if (cameraView != null) {
+                        cameraView.setAlpha(this.mediaEnabled ? 1.0f : 0.2f);
+                        this.cameraView.setEnabled(this.mediaEnabled);
+                    }
+                    FrameLayout frameLayout = this.cameraIcon;
+                    if (frameLayout != null) {
+                        if (!this.mediaEnabled) {
+                            f = 0.2f;
+                        }
+                        frameLayout.setAlpha(f);
+                        this.cameraIcon.setEnabled(this.mediaEnabled);
+                    }
+                } else {
+                    boolean z = currentUser != null && currentUser.bot;
+                    this.pollsEnabled = z;
                 }
             } else {
-                this.pollsEnabled = false;
+                this.galleryAlbumEntry = MediaController.allPhotosAlbumEntry;
+                this.commentTextView.setVisibility(4);
             }
-        } else {
-            this.galleryAlbumEntry = MediaController.allPhotosAlbumEntry;
-            this.commentTextView.setVisibility(4);
-        }
-        if (VERSION.SDK_INT >= 23) {
-            this.noGalleryPermissions = this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0;
-        }
-        if (this.galleryAlbumEntry != null) {
-            for (int i = 0; i < Math.min(100, this.galleryAlbumEntry.photos.size()); i++) {
-                ((PhotoEntry) this.galleryAlbumEntry.photos.get(i)).reset();
+            if (VERSION.SDK_INT >= 23) {
+                this.noGalleryPermissions = this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0;
             }
-        }
-        this.commentTextView.hidePopup(true);
-        this.enterCommentEventSent = false;
-        setFocusable(false);
-        this.selectedAlbumEntry = this.galleryAlbumEntry;
-        if (this.selectedAlbumEntry != null) {
-            this.loading = false;
-            EmptyTextProgressView emptyTextProgressView = this.progressView;
-            if (emptyTextProgressView != null) {
-                emptyTextProgressView.showTextView();
+            if (this.galleryAlbumEntry != null) {
+                for (int i = 0; i < Math.min(100, this.galleryAlbumEntry.photos.size()); i++) {
+                    ((PhotoEntry) this.galleryAlbumEntry.photos.get(i)).reset();
+                }
             }
+            this.commentTextView.hidePopup(true);
+            this.enterCommentEventSent = false;
+            setFocusable(false);
+            this.selectedAlbumEntry = this.galleryAlbumEntry;
+            if (this.selectedAlbumEntry != null) {
+                this.loading = false;
+                EmptyTextProgressView emptyTextProgressView = this.progressView;
+                if (emptyTextProgressView != null) {
+                    emptyTextProgressView.showTextView();
+                }
+            }
+            this.dropDown.setText(LocaleController.getString("ChatGallery", NUM));
+            clearSelectedPhotos();
+            updatePhotosCounter(false);
+            this.buttonsAdapter.notifyDataSetChanged();
+            this.commentTextView.setText("");
+            this.cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
+            this.buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
+            this.layoutManager.scrollToPositionWithOffset(0, 1000000);
+            updateAlbumsDropDown();
         }
-        this.dropDown.setText(LocaleController.getString("ChatGallery", NUM));
-        clearSelectedPhotos();
-        updatePhotosCounter(false);
-        this.buttonsAdapter.notifyDataSetChanged();
-        this.commentTextView.setText("");
-        this.cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
-        this.buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
-        this.layoutManager.scrollToPositionWithOffset(0, 1000000);
-        updateAlbumsDropDown();
     }
 
     public HashMap<Object, Object> getSelectedPhotos() {

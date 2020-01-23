@@ -86,7 +86,7 @@ public class AlertDialog extends Dialog implements Callback {
     private AnimatorSet[] shadowAnimation = new AnimatorSet[2];
     private Drawable shadowDrawable;
     private boolean[] shadowVisibility = new boolean[2];
-    private Runnable showRunnable = new -$$Lambda$-i1Go4T4bFhAon1K9U_CB2RZElw(this);
+    private Runnable showRunnable = new -$$Lambda$AlertDialog$_ZXBUz0fDRYyax4GQqQ31q4ZqFg(this);
     private CharSequence subtitle;
     private TextView subtitleTextView;
     private CharSequence title;
@@ -281,6 +281,19 @@ public class AlertDialog extends Dialog implements Callback {
         public Builder setOnDismissListener(OnDismissListener onDismissListener) {
             this.alertDialog.setOnDismissListener(onDismissListener);
             return this;
+        }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        return null;
+    }
+
+    public /* synthetic */ void lambda$new$0$AlertDialog() {
+        if (!isShowing()) {
+            try {
+                show();
+            } catch (Exception unused) {
+            }
         }
     }
 
@@ -932,7 +945,7 @@ public class AlertDialog extends Dialog implements Callback {
                     alertDialogCell.setTag(Integer.valueOf(i4));
                     this.itemViews.add(alertDialogCell);
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
-                    alertDialogCell.setOnClickListener(new -$$Lambda$AlertDialog$iCLASSNAMEx2guh9hO2NrF8CCJRy6v4_w(this));
+                    alertDialogCell.setOnClickListener(new -$$Lambda$AlertDialog$rp49coWDdM6PFZnr9_LTptCU2Ag(this));
                 }
                 i4++;
             }
@@ -1049,7 +1062,7 @@ public class AlertDialog extends Dialog implements Callback {
                 anonymousClass4.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(str2)));
                 anonymousClass4.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 this.buttonsLayout.addView(anonymousClass4, LayoutHelper.createFrame(-2, 36, 53));
-                anonymousClass4.setOnClickListener(new -$$Lambda$AlertDialog$rp49coWDdM6PFZnr9_LTptCU2Ag(this));
+                anonymousClass4.setOnClickListener(new -$$Lambda$AlertDialog$35svlhUpH-M074FLkhJN8iyIwmw(this));
             }
             if (this.negativeButtonText != null) {
                 AnonymousClass5 anonymousClass5 = new TextView(getContext()) {
@@ -1075,7 +1088,7 @@ public class AlertDialog extends Dialog implements Callback {
                 anonymousClass5.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(str2)));
                 anonymousClass5.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 this.buttonsLayout.addView(anonymousClass5, LayoutHelper.createFrame(-2, 36, 53));
-                anonymousClass5.setOnClickListener(new -$$Lambda$AlertDialog$35svlhUpH-M074FLkhJN8iyIwmw(this));
+                anonymousClass5.setOnClickListener(new -$$Lambda$AlertDialog$hCRmQxFHC-EIDauULvRdmfnSEuE(this));
             }
             if (this.neutralButtonText != null) {
                 AnonymousClass6 anonymousClass6 = new TextView(getContext()) {
@@ -1101,7 +1114,7 @@ public class AlertDialog extends Dialog implements Callback {
                 anonymousClass6.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(str2)));
                 anonymousClass6.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 this.buttonsLayout.addView(anonymousClass6, LayoutHelper.createFrame(-2, 36, 51));
-                anonymousClass6.setOnClickListener(new -$$Lambda$AlertDialog$hCRmQxFHC-EIDauULvRdmfnSEuE(this));
+                anonymousClass6.setOnClickListener(new -$$Lambda$AlertDialog$IhNSnuXF0Glcw6KAvwTDldBOKQ4(this));
             }
         }
         Window window = getWindow();
@@ -1138,7 +1151,7 @@ public class AlertDialog extends Dialog implements Callback {
         window.setAttributes(layoutParams);
     }
 
-    public /* synthetic */ void lambda$onCreate$0$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
         OnClickListener onClickListener = this.onClickListener;
         if (onClickListener != null) {
             onClickListener.onClick(this, ((Integer) view.getTag()).intValue());
@@ -1146,7 +1159,7 @@ public class AlertDialog extends Dialog implements Callback {
         dismiss();
     }
 
-    public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
         OnClickListener onClickListener = this.positiveButtonListener;
         if (onClickListener != null) {
             onClickListener.onClick(this, -1);
@@ -1156,7 +1169,7 @@ public class AlertDialog extends Dialog implements Callback {
         }
     }
 
-    public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
         OnClickListener onClickListener = this.negativeButtonListener;
         if (onClickListener != null) {
             onClickListener.onClick(this, -2);
@@ -1166,7 +1179,7 @@ public class AlertDialog extends Dialog implements Callback {
         }
     }
 
-    public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$4$AlertDialog(View view) {
         OnClickListener onClickListener = this.neutralButtonListener;
         if (onClickListener != null) {
             onClickListener.onClick(this, -2);
@@ -1190,8 +1203,8 @@ public class AlertDialog extends Dialog implements Callback {
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("StopLoading", NUM));
             builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), null);
-            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$AlertDialog$1zFp_sikyCYaQ1aMdMAPeCc-86g(this));
-            builder.setOnDismissListener(new -$$Lambda$AlertDialog$_jIiJ2tOQUco_X_BniQD16XJ3QE(this));
+            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$AlertDialog$1g2j0V17jIgDJKxBKuL7hhy3YPQ(this));
+            builder.setOnDismissListener(new -$$Lambda$AlertDialog$Do4M4XINuVaLEgJ1dDprYqiYnqA(this));
             try {
                 this.cancelDialog = builder.show();
             } catch (Exception unused) {
@@ -1199,7 +1212,7 @@ public class AlertDialog extends Dialog implements Callback {
         }
     }
 
-    public /* synthetic */ void lambda$showCancelAlert$4$AlertDialog(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface, int i) {
         OnCancelListener onCancelListener = this.onCancelListener;
         if (onCancelListener != null) {
             onCancelListener.onCancel(this);
@@ -1207,7 +1220,7 @@ public class AlertDialog extends Dialog implements Callback {
         dismiss();
     }
 
-    public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showCancelAlert$6$AlertDialog(DialogInterface dialogInterface) {
         this.cancelDialog = null;
     }
 
@@ -1437,6 +1450,7 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     public void showDelayed(long j) {
+        AndroidUtilities.cancelRunOnUIThread(this.showRunnable);
         AndroidUtilities.runOnUIThread(this.showRunnable, j);
     }
 }

@@ -647,6 +647,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.themeInfo = themeInfo;
             this.isFirst = z2;
             this.isLast = z;
+            this.accentId = themeInfo.currentAccentId;
             LayoutParams layoutParams = (LayoutParams) this.button.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(this.isFirst ? 49.0f : 27.0f);
             this.button.setLayoutParams(layoutParams);
@@ -1237,7 +1238,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             r14 = r14.themeLoaded;
             if (r14 == 0) goto L_0x03d8;
         L_0x03a4:
-            r0 = android.os.SystemClock.uptimeMillis();
+            r0 = android.os.SystemClock.elapsedRealtime();
             r3 = 17;
             r5 = r13.lastDrawTime;
             r5 = r0 - r5;

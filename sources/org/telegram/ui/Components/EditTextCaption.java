@@ -108,7 +108,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1 = r9.getContext();
         r0.<init>(r1);
         r1 = "CreateLink";
-        r2 = NUM; // 0x7f0e0345 float:1.8876735E38 double:1.05316257E-314;
+        r2 = NUM; // 0x7f0e034f float:1.8876755E38 double:1.053162575E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r1 = new org.telegram.ui.Components.EditTextCaption$1;
@@ -123,7 +123,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0e0b34 float:1.8880855E38 double:1.0531635736E-314;
+        r4 = NUM; // 0x7f0e0b64 float:1.8880952E38 double:1.0531635973E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -161,13 +161,13 @@ public class EditTextCaption extends EditTextBoldCursor {
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
     L_0x0091:
-        r7 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
+        r7 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;
         r8.<init>(r9, r5, r6, r1);
         r0.setPositiveButton(r7, r8);
-        r5 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
+        r5 = NUM; // 0x7f0e021c float:1.8876133E38 double:1.0531624234E-314;
         r6 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r0.setNegativeButton(r5, r3);

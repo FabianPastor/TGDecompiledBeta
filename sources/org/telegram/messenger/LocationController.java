@@ -112,7 +112,7 @@ public class LocationController extends BaseController implements NotificationCe
                     LocationController.this.setLastKnownLocation(location);
                 } else if (!LocationController.this.started && location.distanceTo(LocationController.this.lastKnownLocation) > 20.0f) {
                     LocationController.this.setLastKnownLocation(location);
-                    LocationController.this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 5000;
+                    LocationController.this.lastLocationSendTime = (SystemClock.elapsedRealtime() - 30000) + 5000;
                 }
             }
         }
@@ -446,13 +446,13 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     private boolean shouldStopGps() {
-        return SystemClock.uptimeMillis() > this.locationEndWatchTime;
+        return SystemClock.elapsedRealtime() > this.locationEndWatchTime;
     }
 
     /* Access modifiers changed, original: protected */
     public void setNewLocationEndWatchTime() {
         if (!this.sharingLocations.isEmpty()) {
-            this.locationEndWatchTime = SystemClock.uptimeMillis() + 65000;
+            this.locationEndWatchTime = SystemClock.elapsedRealtime() + 65000;
             start();
         }
     }
@@ -474,19 +474,19 @@ public class LocationController extends BaseController implements NotificationCe
                 i++;
             }
             if (this.started) {
-                long uptimeMillis = SystemClock.uptimeMillis();
-                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - uptimeMillis) > 10000 || shouldSendLocationNow()) {
+                long elapsedRealtime = SystemClock.elapsedRealtime();
+                if (this.lastLocationByGoogleMaps || Math.abs(this.lastLocationStartTime - elapsedRealtime) > 10000 || shouldSendLocationNow()) {
                     this.lastLocationByGoogleMaps = false;
                     this.locationSentSinceLastGoogleMapUpdate = true;
-                    if (SystemClock.uptimeMillis() - this.lastLocationSendTime > 2000) {
+                    if (SystemClock.elapsedRealtime() - this.lastLocationSendTime > 2000) {
                         z = true;
                     }
-                    this.lastLocationStartTime = uptimeMillis;
-                    this.lastLocationSendTime = SystemClock.uptimeMillis();
+                    this.lastLocationStartTime = elapsedRealtime;
+                    this.lastLocationSendTime = SystemClock.elapsedRealtime();
                     broadcastLastKnownLocation(z);
                 }
-            } else if (Math.abs(this.lastLocationSendTime - SystemClock.uptimeMillis()) > 30000) {
-                this.lastLocationStartTime = SystemClock.uptimeMillis();
+            } else if (Math.abs(this.lastLocationSendTime - SystemClock.elapsedRealtime()) > 30000) {
+                this.lastLocationStartTime = SystemClock.elapsedRealtime();
                 start();
             }
         }
@@ -502,7 +502,7 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     private boolean shouldSendLocationNow() {
-        if (shouldStopGps() && Math.abs(this.lastLocationSendTime - SystemClock.uptimeMillis()) >= 2000) {
+        if (shouldStopGps() && Math.abs(this.lastLocationSendTime - SystemClock.elapsedRealtime()) >= 2000) {
             return true;
         }
         return false;
@@ -566,7 +566,7 @@ public class LocationController extends BaseController implements NotificationCe
         }
         this.sharingLocations.add(sharingLocationInfo);
         saveSharingLocation(sharingLocationInfo, 0);
-        this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 5000;
+        this.lastLocationSendTime = (SystemClock.elapsedRealtime() - 30000) + 5000;
         AndroidUtilities.runOnUIThread(new -$$Lambda$LocationController$Pu-U11hvPEurl1Ab6Bm2sYLQ1rg(this, sharingLocationInfo2, sharingLocationInfo));
     }
 
@@ -799,13 +799,13 @@ public class LocationController extends BaseController implements NotificationCe
                 Location location2 = this.lastKnownLocation;
                 if (location2 == null || location2.distanceTo(location) < 20.0f) {
                     if (this.locationSentSinceLastGoogleMapUpdate) {
-                        this.lastLocationSendTime = (SystemClock.uptimeMillis() - 30000) + 20000;
+                        this.lastLocationSendTime = (SystemClock.elapsedRealtime() - 30000) + 20000;
                         this.locationSentSinceLastGoogleMapUpdate = false;
                     }
                     setLastKnownLocation(location);
                 }
             }
-            this.lastLocationSendTime = SystemClock.uptimeMillis() - 30000;
+            this.lastLocationSendTime = SystemClock.elapsedRealtime() - 30000;
             this.locationSentSinceLastGoogleMapUpdate = false;
             setLastKnownLocation(location);
         }
@@ -820,7 +820,7 @@ public class LocationController extends BaseController implements NotificationCe
     L_0x0004:
         return;
     L_0x0005:
-        r0 = android.os.SystemClock.uptimeMillis();
+        r0 = android.os.SystemClock.elapsedRealtime();
         r7.lastLocationStartTime = r0;
         r0 = 1;
         r7.started = r0;
@@ -972,11 +972,11 @@ public class LocationController extends BaseController implements NotificationCe
             ArrayList arrayList = (ArrayList) this.locationsCache.get(j);
             if (!(arrayList.isEmpty() || arrayList == null)) {
                 Integer num = (Integer) this.lastReadLocationTime.get(j);
-                int uptimeMillis = (int) (SystemClock.uptimeMillis() / 1000);
-                if (num == null || num.intValue() + 60 <= uptimeMillis) {
+                int elapsedRealtime = (int) (SystemClock.elapsedRealtime() / 1000);
+                if (num == null || num.intValue() + 60 <= elapsedRealtime) {
                     int i2;
                     TLObject tL_channels_readMessageContents;
-                    this.lastReadLocationTime.put(j, Integer.valueOf(uptimeMillis));
+                    this.lastReadLocationTime.put(j, Integer.valueOf(elapsedRealtime));
                     int i3 = 0;
                     if (i < 0) {
                         i2 = -i;

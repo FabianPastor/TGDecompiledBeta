@@ -52,7 +52,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private ImageView statusImageView;
     private BackupImageView thumbImageView;
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public SharedDocumentCell(Context context) {
@@ -482,11 +482,11 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         updateFileExistIcon();
     }
 
-    public void onProgressDownload(String str, float f) {
+    public void onProgressDownload(String str, long j, long j2) {
         if (this.progressView.getVisibility() != 0) {
             updateFileExistIcon();
         }
-        this.progressView.setProgress(f, true);
+        this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
     }
 
     public int getObserverTag() {

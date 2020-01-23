@@ -55,7 +55,7 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         return -1;
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -200,11 +200,11 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         checkFileExist();
     }
 
-    public void onProgressDownload(String str, float f) {
+    public void onProgressDownload(String str, long j, long j2) {
         if (!this.progressVisible) {
             checkFileExist();
         }
-        setProgress(f, true);
+        setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
     }
 
     public int getObserverTag() {

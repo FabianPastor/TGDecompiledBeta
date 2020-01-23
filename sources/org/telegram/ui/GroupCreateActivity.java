@@ -382,10 +382,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 });
             }
             this.searchAdapterHelper = new SearchAdapterHelper(false);
-            this.searchAdapterHelper.setDelegate(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$E5cKkbpq2FJnJZ0QVy8Qf2zhCrM(this));
+            this.searchAdapterHelper.setDelegate(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$tApe-5O14tqi1pYkSMauURh5pKk(this));
         }
 
-        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter() {
+        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 GroupCreateActivity.this.emptyView.showTextView();
             }
@@ -506,16 +506,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r11 = r11.itemView;
             r11 = (org.telegram.ui.Cells.TextCell) r11;
             r0 = r10.inviteViaLink;
-            r2 = NUM; // 0x7var_ float:1.7945862E38 double:1.052935816E-314;
+            r2 = NUM; // 0x7var_d float:1.794587E38 double:1.0529358177E-314;
             if (r0 != r12) goto L_0x0028;
         L_0x001a:
-            r12 = NUM; // 0x7f0e0255 float:1.8876248E38 double:1.0531624516E-314;
+            r12 = NUM; // 0x7f0e025e float:1.8876267E38 double:1.053162456E-314;
             r0 = "ChannelInviteViaLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
             goto L_0x018f;
         L_0x0028:
-            r12 = NUM; // 0x7f0e058f float:1.8877924E38 double:1.0531628597E-314;
+            r12 = NUM; // 0x7f0e059a float:1.8877946E38 double:1.053162865E-314;
             r0 = "InviteToGroupByLink";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setTextAndIcon(r12, r2, r1);
@@ -718,7 +718,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r12 = r10.searching;
             if (r12 == 0) goto L_0x018f;
         L_0x0183:
-            r12 = NUM; // 0x7f0e0526 float:1.887771E38 double:1.053162808E-314;
+            r12 = NUM; // 0x7f0e0531 float:1.8877733E38 double:1.053162813E-314;
             r0 = "GlobalSearch";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -781,7 +781,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 this.searchAdapterHelper.mergeResults(null);
                 SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
                 boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-                searchAdapterHelper.queryServerSearch(null, true, z, false, false, 0, false, 0);
+                searchAdapterHelper.queryServerSearch(null, true, z, false, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -798,7 +798,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         public /* synthetic */ void lambda$null$2$GroupCreateActivity$GroupCreateAdapter(String str) {
             SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
             boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-            searchAdapterHelper.queryServerSearch(str, true, z, true, false, 0, false, 0);
+            searchAdapterHelper.queryServerSearch(str, true, z, true, false, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks = new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs(this, str);
             this.searchRunnable = -__lambda_groupcreateactivity_groupcreateadapter_0gx4esbco5im0ilimnc3qclvsks;

@@ -61,6 +61,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -337,8 +338,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     public void didPressViaBot(ChatMessageCell chatMessageCell, String str) {
                     }
 
-                    public /* synthetic */ void didPressVoteButton(ChatMessageCell chatMessageCell, TL_pollAnswer tL_pollAnswer) {
-                        -CC.$default$didPressVoteButton(this, chatMessageCell, tL_pollAnswer);
+                    public /* synthetic */ void didPressVoteButtons(ChatMessageCell chatMessageCell, ArrayList<TL_pollAnswer> arrayList, int i, int i2, int i3) {
+                        -CC.$default$didPressVoteButtons(this, chatMessageCell, arrayList, i, i2, i3);
                     }
 
                     public /* synthetic */ void didStartVideoStream(MessageObject messageObject) {
@@ -783,10 +784,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this.getParentActivity());
                         PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 640);
                         if (closestPhotoSizeWithSize != null) {
-                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ChannelAdminLogActivity.this.provider);
-                        } else {
-                            PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChannelAdminLogActivity.this.provider);
+                            PhotoViewer.getInstance().openPhoto(closestPhotoSizeWithSize.location, ImageLocation.getForPhoto(closestPhotoSizeWithSize, messageObject.messageOwner.action.photo), ChannelAdminLogActivity.this.provider);
+                            return;
                         }
+                        PhotoViewer.getInstance().openPhoto(messageObject, 0, 0, ChannelAdminLogActivity.this.provider);
                     }
 
                     public void didLongPress(ChatActionCell chatActionCell, float f, float f2) {
@@ -2426,7 +2427,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fc:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
+        r3 = NUM; // 0x7f0e0a58 float:1.8880408E38 double:1.053163465E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2468,9 +2469,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
+        r2 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
+        r4 = NUM; // 0x7f0e0100 float:1.8875557E38 double:1.053162283E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02df;
     L_0x025e:
@@ -2525,7 +2526,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0576 float:1.8877873E38 double:1.0531628473E-314;
+        r1 = NUM; // 0x7f0e0581 float:1.8877895E38 double:1.053162853E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2556,7 +2557,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0e0575 float:1.887787E38 double:1.053162847E-314;
+        r1 = NUM; // 0x7f0e0580 float:1.8877893E38 double:1.0531628523E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -3111,11 +3112,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[28] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "avatar_nameInMessagePink");
         themeDescriptionArr[29] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
         themeDescriptionArr[30] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
-        themeDescriptionArr[31] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
+        themeDescriptionArr[31] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInDrawable.getShadowDrawable(), Theme.chat_msgInMediaDrawable.getShadowDrawable()}, null, "chat_inBubbleShadow");
         themeDescriptionArr[32] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubble");
         themeDescriptionArr[33] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutDrawable, Theme.chat_msgOutMediaDrawable}, null, "chat_outBubbleGradient");
         themeDescriptionArr[34] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutSelectedDrawable, Theme.chat_msgOutMediaSelectedDrawable}, null, "chat_outBubbleSelected");
-        themeDescriptionArr[35] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutShadowDrawable, Theme.chat_msgOutMediaShadowDrawable}, null, "chat_outBubbleShadow");
+        themeDescriptionArr[35] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutDrawable.getShadowDrawable(), Theme.chat_msgOutMediaDrawable.getShadowDrawable()}, null, "chat_outBubbleShadow");
         themeDescriptionArr[36] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, "chat_serviceText");
         themeDescriptionArr[37] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, "chat_serviceLink");
         themeDescriptionArr[38] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawalbe, Theme.chat_goIconDrawable}, null, "chat_serviceIcon");
@@ -3359,9 +3360,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[189] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, "chat_inContactIcon");
         themeDescriptionArr[190] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactBackground");
         themeDescriptionArr[191] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactIcon");
-        themeDescriptionArr[192] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationBackground");
+        themeDescriptionArr[192] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inLocationBackground");
         themeDescriptionArr[193] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationIcon");
-        themeDescriptionArr[194] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationBackground");
+        themeDescriptionArr[194] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outLocationBackground");
         themeDescriptionArr[195] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationIcon");
         themeDescriptionArr[196] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, "chat_messagePanelBackground");
         themeDescriptionArr[197] = new ThemeDescription(this.bottomOverlayChat, 0, null, null, new Drawable[]{Theme.chat_composeShadowDrawable}, null, "chat_messagePanelShadow");

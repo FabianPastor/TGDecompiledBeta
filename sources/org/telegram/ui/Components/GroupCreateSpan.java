@@ -65,7 +65,7 @@ public class GroupCreateSpan extends View {
         r0.colors = r3;
         r0.currentContact = r2;
         r3 = r21.getResources();
-        r4 = NUM; // 0x7var_b5 float:1.7944945E38 double:1.0529355925E-314;
+        r4 = NUM; // 0x7var_b6 float:1.7944947E38 double:1.052935593E-314;
         r3 = r3.getDrawable(r4);
         r0.deleteDrawable = r3;
         r3 = textPaint;

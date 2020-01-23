@@ -90,9 +90,4 @@ public class BaseController {
     public final FileRefController getFileRefController() {
         return this.parentAccountInstance.getFileRefController();
     }
-
-    /* Access modifiers changed, original: protected|final */
-    public final TonController getTonController() {
-        return this.parentAccountInstance.getTonController();
-    }
 }

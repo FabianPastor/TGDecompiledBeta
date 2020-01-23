@@ -223,10 +223,8 @@ public class MediaActionDrawable extends Drawable {
         return this.animatingTransition ? this.transitionProgress : 1.0f;
     }
 
-    public void setBackgroundDrawable(Drawable drawable) {
-        if (drawable instanceof MessageDrawable) {
-            this.messageDrawable = (MessageDrawable) drawable;
-        }
+    public void setBackgroundDrawable(MessageDrawable messageDrawable) {
+        this.messageDrawable = messageDrawable;
     }
 
     public void setHasOverlayImage(boolean z) {
@@ -249,395 +247,395 @@ public class MediaActionDrawable extends Drawable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x088b  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x0884  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0934  */
-    /* JADX WARNING: Removed duplicated region for block: B:331:0x087d  */
-    /* JADX WARNING: Removed duplicated region for block: B:326:0x086f  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x0884  */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x088b  */
-    /* JADX WARNING: Removed duplicated region for block: B:337:0x0891 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x0934  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x09e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:338:0x0899  */
+    /* JADX WARNING: Removed duplicated region for block: B:337:0x0892  */
+    /* JADX WARNING: Removed duplicated region for block: B:369:0x09f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:353:0x0942  */
+    /* JADX WARNING: Removed duplicated region for block: B:335:0x088b  */
+    /* JADX WARNING: Removed duplicated region for block: B:330:0x087d  */
+    /* JADX WARNING: Removed duplicated region for block: B:337:0x0892  */
+    /* JADX WARNING: Removed duplicated region for block: B:338:0x0899  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x089f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:353:0x0942  */
+    /* JADX WARNING: Removed duplicated region for block: B:369:0x09f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
     /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x04fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:176:0x0507  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x0585  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0511  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x058b  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0598  */
     /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0601  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x04fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:176:0x0507  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0511  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x0585  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x058b  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0598  */
     /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x04ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x04f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x0577  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x0503  */
-    /* JADX WARNING: Removed duplicated region for block: B:183:0x057d  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x058a  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0601  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x04ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x04f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x0503  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x0577  */
-    /* JADX WARNING: Removed duplicated region for block: B:183:0x057d  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x058a  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x0601  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0301  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x030f  */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0347  */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x0369  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x039d  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0346  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0355  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0377  */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x03ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x009f  */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x00d7 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0301  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0338  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0347  */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x0369  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x038b  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x039d  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0672  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x068b  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x068e  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x06aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0b2a  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0b4e  */
-    /* JADX WARNING: Removed duplicated region for block: B:399:0x0b6a  */
-    /* JADX WARNING: Removed duplicated region for block: B:402:0x0ba0  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0bc3  */
-    /* JADX WARNING: Removed duplicated region for block: B:413:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:423:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x030f  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0346  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x0355  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0377  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0399  */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x03ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
+    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
+    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
     /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0c9d  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x0cff  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0d19  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d38  */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0d6e  */
-    /* JADX WARNING: Removed duplicated region for block: B:472:0x0d94  */
-    /* JADX WARNING: Removed duplicated region for block: B:483:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Missing block: B:103:0x036d, code skipped:
-            if (r1 != 3) goto L_0x0371;
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
+    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
+    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Missing block: B:107:0x037b, code skipped:
+            if (r1 != 3) goto L_0x037f;
      */
-    /* JADX WARNING: Missing block: B:191:0x058e, code skipped:
-            if (r1 != 3) goto L_0x05fb;
+    /* JADX WARNING: Missing block: B:195:0x059c, code skipped:
+            if (r1 != 3) goto L_0x0609;
      */
-    /* JADX WARNING: Missing block: B:203:0x05ca, code skipped:
-            if (r1 != 3) goto L_0x05ee;
+    /* JADX WARNING: Missing block: B:207:0x05d8, code skipped:
+            if (r1 != 3) goto L_0x05fc;
      */
-    /* JADX WARNING: Missing block: B:452:0x0d1b, code skipped:
-            if (r1 != 13) goto L_0x0d6a;
+    /* JADX WARNING: Missing block: B:456:0x0d29, code skipped:
+            if (r1 != 13) goto L_0x0d78;
      */
     public void draw(android.graphics.Canvas r33) {
         /*
@@ -741,7 +739,7 @@ public class MediaActionDrawable extends Drawable {
         r28 = r8;
         r8 = 14;
         r10 = 2;
-        goto L_0x035e;
+        goto L_0x036c;
     L_0x00ad:
         r1 = (float) r12;
         r21 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
@@ -824,40 +822,51 @@ public class MediaActionDrawable extends Drawable {
         r24 = r5;
     L_0x013d:
         r5 = r0.animatingTransition;
-        if (r5 == 0) goto L_0x0301;
+        if (r5 == 0) goto L_0x030f;
     L_0x0141:
         r5 = r0.nextIcon;
-        if (r5 == r2) goto L_0x02ae;
+        if (r5 == r2) goto L_0x02bc;
     L_0x0145:
         r5 = (r3 > r20 ? 1 : (r3 == r20 ? 0 : -1));
         if (r5 > 0) goto L_0x014b;
     L_0x0149:
-        goto L_0x02ae;
+        goto L_0x02bc;
     L_0x014b:
         r5 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r5 = (float) r5;
         r6 = r0.scale;
         r5 = r5 * r6;
+        r5 = r5 * r6;
+        r6 = r0.isMini;
+        if (r6 == 0) goto L_0x0161;
+    L_0x015c:
+        r15 = org.telegram.messenger.AndroidUtilities.dp(r17);
+        goto L_0x0162;
+    L_0x0161:
+        r15 = 0;
+    L_0x0162:
+        r6 = (float) r15;
+        r5 = r5 + r6;
         r3 = r3 - r20;
         r6 = r3 / r20;
         r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
         r9 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1));
-        if (r9 <= 0) goto L_0x016d;
-    L_0x0161:
+        if (r9 <= 0) goto L_0x017b;
+    L_0x016f:
         r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
         r3 = r3 - r9;
         r9 = NUM; // 0x3e99999a float:0.3 double:5.188942835E-315;
         r3 = r3 / r9;
         r9 = r3;
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0173;
-    L_0x016d:
+        goto L_0x0181;
+    L_0x017b:
         r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
         r3 = r3 / r9;
         r15 = r3;
         r9 = 0;
-    L_0x0173:
+    L_0x0181:
         r3 = r0.rect;
         r10 = (float) r11;
         r2 = r10 - r5;
@@ -888,20 +897,20 @@ public class MediaActionDrawable extends Drawable {
         r24 = r24 + r1;
         r1 = 0;
         r2 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x02a7;
-    L_0x01ac:
+        if (r2 <= 0) goto L_0x02b5;
+    L_0x01ba:
         r1 = r0.nextIcon;
-        if (r1 != r8) goto L_0x01b2;
-    L_0x01b0:
+        if (r1 != r8) goto L_0x01c0;
+    L_0x01be:
         r13 = 0;
-        goto L_0x01bb;
-    L_0x01b2:
+        goto L_0x01c9;
+    L_0x01c0:
         r1 = -NUM; // 0xffffffffCLASSNAME float:-45.0 double:NaN;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r9;
         r1 = r1 * r5;
         r13 = r1;
-    L_0x01bb:
+    L_0x01c9:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r1 = (float) r1;
         r1 = r1 * r9;
@@ -911,13 +920,13 @@ public class MediaActionDrawable extends Drawable {
         r2 = (int) r9;
         r3 = r0.nextIcon;
         r4 = 3;
-        if (r3 == r4) goto L_0x01e4;
-    L_0x01ce:
-        if (r3 == r8) goto L_0x01e4;
-    L_0x01d0:
+        if (r3 == r4) goto L_0x01f2;
+    L_0x01dc:
+        if (r3 == r8) goto L_0x01f2;
+    L_0x01de:
         r9 = 2;
-        if (r3 == r9) goto L_0x01e5;
-    L_0x01d3:
+        if (r3 == r9) goto L_0x01f3;
+    L_0x01e1:
         r3 = r0.transitionProgress;
         r3 = r3 / r20;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -926,29 +935,29 @@ public class MediaActionDrawable extends Drawable {
         r2 = (float) r2;
         r2 = r2 * r5;
         r2 = (int) r2;
-        goto L_0x01e5;
-    L_0x01e4:
+        goto L_0x01f3;
+    L_0x01f2:
         r9 = 2;
-    L_0x01e5:
+    L_0x01f3:
         r15 = r2;
         r2 = 0;
         r3 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x01f4;
-    L_0x01eb:
+        if (r3 == 0) goto L_0x0202;
+    L_0x01f9:
         r33.save();
         r2 = r26;
         r7.rotate(r13, r10, r2);
-        goto L_0x01f6;
-    L_0x01f4:
+        goto L_0x0204;
+    L_0x0202:
         r2 = r26;
-    L_0x01f6:
-        if (r15 == 0) goto L_0x029c;
-    L_0x01f8:
+    L_0x0204:
+        if (r15 == 0) goto L_0x02aa;
+    L_0x0206:
         r3 = r0.paint;
         r3.setAlpha(r15);
         r3 = r0.nextIcon;
-        if (r3 != r8) goto L_0x027c;
-    L_0x0201:
+        if (r3 != r8) goto L_0x028a;
+    L_0x020f:
         r1 = r0.paint3;
         r1.setAlpha(r15);
         r1 = r0.rect;
@@ -979,13 +988,13 @@ public class MediaActionDrawable extends Drawable {
         r2 = (int) r2;
         r1.setAlpha(r2);
         r1 = r0.isMini;
-        if (r1 == 0) goto L_0x0249;
-    L_0x0246:
+        if (r1 == 0) goto L_0x0257;
+    L_0x0254:
         r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        goto L_0x024b;
-    L_0x0249:
+        goto L_0x0259;
+    L_0x0257:
         r1 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x024b:
+    L_0x0259:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r2 = r0.rect;
         r6 = r23;
@@ -1013,8 +1022,8 @@ public class MediaActionDrawable extends Drawable {
         r1.drawArc(r2, r3, r4, r5, r6);
         r1 = r0.paint;
         r1.setAlpha(r15);
-        goto L_0x029e;
-    L_0x027c:
+        goto L_0x02ac;
+    L_0x028a:
         r28 = r23;
         r9 = r10 - r1;
         r15 = r2 - r1;
@@ -1031,40 +1040,40 @@ public class MediaActionDrawable extends Drawable {
         r2 = r23;
         r4 = r9;
         r1.drawLine(r2, r3, r4, r5, r6);
-        goto L_0x029e;
-    L_0x029c:
+        goto L_0x02ac;
+    L_0x02aa:
         r28 = r23;
-    L_0x029e:
+    L_0x02ac:
         r1 = 0;
         r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x02a9;
-    L_0x02a3:
+        if (r2 == 0) goto L_0x02b7;
+    L_0x02b1:
         r33.restore();
-        goto L_0x02a9;
-    L_0x02a7:
+        goto L_0x02b7;
+    L_0x02b5:
         r28 = r23;
-    L_0x02a9:
+    L_0x02b7:
         r1 = r10;
         r2 = r1;
         r3 = r14;
         r10 = 2;
-        goto L_0x02fb;
-    L_0x02ae:
+        goto L_0x0309;
+    L_0x02bc:
         r27 = r4;
         r28 = r8;
         r8 = 14;
         r10 = 2;
         r1 = r0.nextIcon;
-        if (r1 != r10) goto L_0x02be;
-    L_0x02b9:
+        if (r1 != r10) goto L_0x02cc;
+    L_0x02c7:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r1 - r3;
-        goto L_0x02c4;
-    L_0x02be:
+        goto L_0x02d2;
+    L_0x02cc:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r3 / r20;
         r3 = r1 - r5;
-    L_0x02c4:
+    L_0x02d2:
         r24 = r24 - r9;
         r24 = r24 * r5;
         r24 = r9 + r24;
@@ -1093,13 +1102,13 @@ public class MediaActionDrawable extends Drawable {
         r3 = r0.scale;
         r4 = r4 * r3;
         r3 = r14 - r4;
-    L_0x02fb:
+    L_0x0309:
         r15 = r1;
         r9 = r2;
         r13 = r3;
         r3 = r24;
-        goto L_0x0334;
-    L_0x0301:
+        goto L_0x0342;
+    L_0x030f:
         r27 = r4;
         r28 = r8;
         r8 = 14;
@@ -1128,21 +1137,21 @@ public class MediaActionDrawable extends Drawable {
         r14 = r15;
         r15 = r1;
         r9 = r2;
-    L_0x0334:
+    L_0x0342:
         r1 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1));
-        if (r1 == 0) goto L_0x0342;
-    L_0x0338:
+        if (r1 == 0) goto L_0x0350;
+    L_0x0346:
         r4 = (float) r11;
         r6 = r0.paint;
         r1 = r33;
         r2 = r4;
         r5 = r14;
         r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0342:
+    L_0x0350:
         r6 = (float) r11;
         r1 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1));
-        if (r1 == 0) goto L_0x035e;
-    L_0x0347:
+        if (r1 == 0) goto L_0x036c;
+    L_0x0355:
         r5 = r0.paint;
         r1 = r33;
         r2 = r9;
@@ -1157,60 +1166,60 @@ public class MediaActionDrawable extends Drawable {
         r2 = r15;
         r4 = r23;
         r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x035e:
+    L_0x036c:
         r1 = r0.currentIcon;
         r9 = 1;
         r2 = 3;
-        if (r1 == r2) goto L_0x03e4;
-    L_0x0364:
-        if (r1 == r8) goto L_0x03e4;
-    L_0x0366:
+        if (r1 == r2) goto L_0x03f2;
+    L_0x0372:
+        if (r1 == r8) goto L_0x03f2;
+    L_0x0374:
         r3 = 4;
-        if (r1 != r3) goto L_0x0371;
-    L_0x0369:
+        if (r1 != r3) goto L_0x037f;
+    L_0x0377:
         r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x03e4;
-    L_0x036d:
-        if (r1 != r2) goto L_0x0371;
-    L_0x036f:
-        goto L_0x03e4;
-    L_0x0371:
+        if (r1 == r8) goto L_0x03f2;
+    L_0x037b:
+        if (r1 != r2) goto L_0x037f;
+    L_0x037d:
+        goto L_0x03f2;
+    L_0x037f:
         r1 = r0.currentIcon;
         r2 = 10;
-        if (r1 == r2) goto L_0x0386;
-    L_0x0377:
+        if (r1 == r2) goto L_0x0394;
+    L_0x0385:
         r2 = r0.nextIcon;
         r3 = 10;
-        if (r2 == r3) goto L_0x0386;
-    L_0x037d:
+        if (r2 == r3) goto L_0x0394;
+    L_0x038b:
         r2 = 13;
-        if (r1 != r2) goto L_0x0382;
-    L_0x0381:
-        goto L_0x0386;
-    L_0x0382:
+        if (r1 != r2) goto L_0x0390;
+    L_0x038f:
+        goto L_0x0394;
+    L_0x0390:
         r13 = r28;
-        goto L_0x0604;
-    L_0x0386:
+        goto L_0x0612;
+    L_0x0394:
         r1 = r0.nextIcon;
         r2 = 4;
-        if (r1 == r2) goto L_0x0392;
-    L_0x038b:
+        if (r1 == r2) goto L_0x03a0;
+    L_0x0399:
         r2 = 6;
-        if (r1 != r2) goto L_0x038f;
-    L_0x038e:
-        goto L_0x0392;
-    L_0x038f:
+        if (r1 != r2) goto L_0x039d;
+    L_0x039c:
+        goto L_0x03a0;
+    L_0x039d:
         r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x039b;
-    L_0x0392:
+        goto L_0x03a9;
+    L_0x03a0:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
         r5 = r5 * r19;
         r3 = (int) r5;
-    L_0x039b:
-        if (r3 == 0) goto L_0x0382;
-    L_0x039d:
+    L_0x03a9:
+        if (r3 == 0) goto L_0x0390;
+    L_0x03ab:
         r1 = r0.paint;
         r2 = (float) r3;
         r3 = r0.overrideAlpha;
@@ -1223,12 +1232,12 @@ public class MediaActionDrawable extends Drawable {
         r3 = r3 * r2;
         r4 = java.lang.Math.max(r1, r3);
         r1 = r0.isMini;
-        if (r1 == 0) goto L_0x03b9;
-    L_0x03b8:
-        goto L_0x03bb;
-    L_0x03b9:
+        if (r1 == 0) goto L_0x03c7;
+    L_0x03c6:
+        goto L_0x03c9;
+    L_0x03c7:
         r17 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x03bb:
+    L_0x03c9:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r17);
         r2 = r0.rect;
         r13 = r28;
@@ -1251,16 +1260,16 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.paint;
         r1 = r33;
         r1.drawArc(r2, r3, r4, r5, r6);
-        goto L_0x0604;
-    L_0x03e4:
+        goto L_0x0612;
+    L_0x03f2:
         r13 = r28;
         r1 = r0.nextIcon;
-        if (r1 != r10) goto L_0x0412;
-    L_0x03ea:
+        if (r1 != r10) goto L_0x0420;
+    L_0x03f8:
         r1 = r0.transitionProgress;
         r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 > 0) goto L_0x0406;
-    L_0x03f0:
+        if (r2 > 0) goto L_0x0414;
+    L_0x03fe:
         r1 = r1 / r20;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
@@ -1272,44 +1281,44 @@ public class MediaActionDrawable extends Drawable {
         r5 = r5 * r19;
         r15 = (int) r5;
         r3 = r15;
-        goto L_0x0408;
-    L_0x0406:
+        goto L_0x0416;
+    L_0x0414:
         r1 = 0;
         r3 = 0;
-    L_0x0408:
+    L_0x0416:
         r5 = r3;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = 0;
-    L_0x040c:
+    L_0x041a:
         r6 = 0;
         r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r15 = 0;
-        goto L_0x04ea;
-    L_0x0412:
-        if (r1 == 0) goto L_0x04b5;
-    L_0x0414:
-        if (r1 == r9) goto L_0x04b5;
-    L_0x0416:
-        r2 = 5;
-        if (r1 == r2) goto L_0x04b5;
-    L_0x0419:
-        r2 = 8;
-        if (r1 == r2) goto L_0x04b5;
-    L_0x041d:
-        r2 = 9;
-        if (r1 == r2) goto L_0x04b5;
-    L_0x0421:
-        r2 = 7;
-        if (r1 == r2) goto L_0x04b5;
+        goto L_0x04f8;
+    L_0x0420:
+        if (r1 == 0) goto L_0x04c3;
+    L_0x0422:
+        if (r1 == r9) goto L_0x04c3;
     L_0x0424:
-        r2 = 6;
-        if (r1 != r2) goto L_0x0429;
+        r2 = 5;
+        if (r1 == r2) goto L_0x04c3;
     L_0x0427:
-        goto L_0x04b5;
-    L_0x0429:
+        r2 = 8;
+        if (r1 == r2) goto L_0x04c3;
+    L_0x042b:
+        r2 = 9;
+        if (r1 == r2) goto L_0x04c3;
+    L_0x042f:
+        r2 = 7;
+        if (r1 == r2) goto L_0x04c3;
+    L_0x0432:
+        r2 = 6;
+        if (r1 != r2) goto L_0x0437;
+    L_0x0435:
+        goto L_0x04c3;
+    L_0x0437:
         r2 = 4;
-        if (r1 != r2) goto L_0x0465;
-    L_0x042c:
+        if (r1 != r2) goto L_0x0473;
+    L_0x043a:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
@@ -1320,8 +1329,8 @@ public class MediaActionDrawable extends Drawable {
         r3 = r5 * r19;
         r3 = (int) r3;
         r4 = r0.currentIcon;
-        if (r4 != r8) goto L_0x044c;
-    L_0x0442:
+        if (r4 != r8) goto L_0x045a;
+    L_0x0450:
         r1 = r13.left;
         r1 = (float) r1;
         r4 = r13.top;
@@ -1329,8 +1338,8 @@ public class MediaActionDrawable extends Drawable {
         r6 = r4;
         r4 = r1;
         r1 = 0;
-        goto L_0x045d;
-    L_0x044c:
+        goto L_0x046b;
+    L_0x045a:
         r4 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
         r1 = r1 * r4;
         r4 = r13.centerX();
@@ -1339,21 +1348,21 @@ public class MediaActionDrawable extends Drawable {
         r5 = (float) r5;
         r6 = r5;
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x045d:
+    L_0x046b:
         r15 = r1;
         r1 = r2;
         r14 = r5;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r3;
-        goto L_0x04ea;
-    L_0x0465:
-        if (r1 == r8) goto L_0x047a;
-    L_0x0467:
+        goto L_0x04f8;
+    L_0x0473:
+        if (r1 == r8) goto L_0x0488;
+    L_0x0475:
         r2 = 3;
-        if (r1 != r2) goto L_0x046b;
-    L_0x046a:
-        goto L_0x047a;
-    L_0x046b:
+        if (r1 != r2) goto L_0x0479;
+    L_0x0478:
+        goto L_0x0488;
+    L_0x0479:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r1 = (float) r1;
         r2 = r0.scale;
@@ -1361,23 +1370,23 @@ public class MediaActionDrawable extends Drawable {
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = 0;
         r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x040c;
-    L_0x047a:
+        goto L_0x041a;
+    L_0x0488:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
         r2 = r0.currentIcon;
         r3 = 4;
-        if (r2 != r3) goto L_0x0488;
-    L_0x0485:
+        if (r2 != r3) goto L_0x0496;
+    L_0x0493:
         r2 = r1;
         r5 = 0;
-        goto L_0x048e;
-    L_0x0488:
+        goto L_0x049c;
+    L_0x0496:
         r2 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
         r5 = r5 * r2;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x048e:
+    L_0x049c:
         r3 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r3 = (float) r3;
         r4 = r0.scale;
@@ -1385,38 +1394,38 @@ public class MediaActionDrawable extends Drawable {
         r1 = r1 * r19;
         r1 = (int) r1;
         r4 = r0.nextIcon;
-        if (r4 != r8) goto L_0x04a4;
-    L_0x049e:
+        if (r4 != r8) goto L_0x04b2;
+    L_0x04ac:
         r4 = r13.left;
         r4 = (float) r4;
         r6 = r13.top;
-        goto L_0x04ad;
-    L_0x04a4:
+        goto L_0x04bb;
+    L_0x04b2:
         r4 = r13.centerX();
         r4 = (float) r4;
         r6 = r13.centerY();
-    L_0x04ad:
+    L_0x04bb:
         r6 = (float) r6;
         r14 = r2;
         r15 = r5;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r1;
         r1 = r3;
-        goto L_0x04ea;
-    L_0x04b5:
+        goto L_0x04f8;
+    L_0x04c3:
         r1 = r0.nextIcon;
         r2 = 6;
-        if (r1 != r2) goto L_0x04c5;
-    L_0x04ba:
+        if (r1 != r2) goto L_0x04d3;
+    L_0x04c8:
         r1 = r0.transitionProgress;
         r1 = r1 / r20;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r1 = java.lang.Math.min(r2, r1);
-        goto L_0x04c9;
-    L_0x04c5:
+        goto L_0x04d7;
+    L_0x04d3:
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r1 = r0.transitionProgress;
-    L_0x04c9:
+    L_0x04d7:
         r5 = r2 - r1;
         r3 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
         r1 = r1 * r3;
@@ -1435,24 +1444,24 @@ public class MediaActionDrawable extends Drawable {
         r4 = 0;
         r6 = 0;
         r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x04ea:
+    L_0x04f8:
         r3 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x04f4;
-    L_0x04ee:
+        if (r3 == 0) goto L_0x0502;
+    L_0x04fc:
         r33.save();
         r7.scale(r14, r14, r4, r6);
-    L_0x04f4:
+    L_0x0502:
         r2 = 0;
         r3 = (r15 > r2 ? 1 : (r15 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x0501;
-    L_0x04f9:
+        if (r3 == 0) goto L_0x050f;
+    L_0x0507:
         r33.save();
         r2 = (float) r11;
         r3 = (float) r12;
         r7.rotate(r15, r2, r3);
-    L_0x0501:
-        if (r5 == 0) goto L_0x0577;
-    L_0x0503:
+    L_0x050f:
+        if (r5 == 0) goto L_0x0585;
+    L_0x0511:
         r2 = r0.paint;
         r3 = (float) r5;
         r4 = r0.overrideAlpha;
@@ -1460,13 +1469,13 @@ public class MediaActionDrawable extends Drawable {
         r4 = (int) r4;
         r2.setAlpha(r4);
         r2 = r0.currentIcon;
-        if (r2 == r8) goto L_0x053b;
-    L_0x0512:
+        if (r2 == r8) goto L_0x0549;
+    L_0x0520:
         r2 = r0.nextIcon;
-        if (r2 != r8) goto L_0x0517;
-    L_0x0516:
-        goto L_0x053b;
-    L_0x0517:
+        if (r2 != r8) goto L_0x0525;
+    L_0x0524:
+        goto L_0x0549;
+    L_0x0525:
         r2 = (float) r11;
         r16 = r2 - r1;
         r3 = (float) r12;
@@ -1485,8 +1494,8 @@ public class MediaActionDrawable extends Drawable {
         r2 = r24;
         r4 = r16;
         r1.drawLine(r2, r3, r4, r5, r6);
-        goto L_0x0578;
-    L_0x053b:
+        goto L_0x0586;
+    L_0x0549:
         r9 = r5;
         r1 = r0.paint3;
         r2 = r0.overrideAlpha;
@@ -1514,44 +1523,44 @@ public class MediaActionDrawable extends Drawable {
         r3 = (float) r3;
         r4 = r0.paint3;
         r7.drawRoundRect(r1, r2, r3, r4);
-        goto L_0x0578;
-    L_0x0577:
+        goto L_0x0586;
+    L_0x0585:
         r9 = r5;
-    L_0x0578:
+    L_0x0586:
         r1 = 0;
         r2 = (r15 > r1 ? 1 : (r15 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x0580;
-    L_0x057d:
+        if (r2 == 0) goto L_0x058e;
+    L_0x058b:
         r33.restore();
-    L_0x0580:
+    L_0x058e:
         r1 = r0.currentIcon;
         r2 = 3;
-        if (r1 == r2) goto L_0x0590;
-    L_0x0585:
-        if (r1 == r8) goto L_0x0590;
-    L_0x0587:
+        if (r1 == r2) goto L_0x059e;
+    L_0x0593:
+        if (r1 == r8) goto L_0x059e;
+    L_0x0595:
         r3 = 4;
-        if (r1 != r3) goto L_0x05fb;
-    L_0x058a:
+        if (r1 != r3) goto L_0x0609;
+    L_0x0598:
         r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x0590;
-    L_0x058e:
-        if (r1 != r2) goto L_0x05fb;
-    L_0x0590:
-        if (r9 == 0) goto L_0x05fb;
-    L_0x0592:
+        if (r1 == r8) goto L_0x059e;
+    L_0x059c:
+        if (r1 != r2) goto L_0x0609;
+    L_0x059e:
+        if (r9 == 0) goto L_0x0609;
+    L_0x05a0:
         r1 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
         r2 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
         r3 = r0.animatedDownloadProgress;
         r3 = r3 * r2;
         r15 = java.lang.Math.max(r1, r3);
         r1 = r0.isMini;
-        if (r1 == 0) goto L_0x05a3;
-    L_0x05a2:
-        goto L_0x05a5;
-    L_0x05a3:
+        if (r1 == 0) goto L_0x05b1;
+    L_0x05b0:
+        goto L_0x05b3;
+    L_0x05b1:
         r17 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x05a5:
+    L_0x05b3:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r17);
         r2 = r0.rect;
         r3 = r13.left;
@@ -1568,17 +1577,17 @@ public class MediaActionDrawable extends Drawable {
         r1 = (float) r6;
         r2.set(r3, r4, r5, r1);
         r1 = r0.currentIcon;
-        if (r1 == r8) goto L_0x05cc;
-    L_0x05c2:
+        if (r1 == r8) goto L_0x05da;
+    L_0x05d0:
         r2 = 4;
-        if (r1 != r2) goto L_0x05ee;
-    L_0x05c5:
+        if (r1 != r2) goto L_0x05fc;
+    L_0x05d3:
         r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x05cc;
-    L_0x05c9:
+        if (r1 == r8) goto L_0x05da;
+    L_0x05d7:
         r2 = 3;
-        if (r1 != r2) goto L_0x05ee;
-    L_0x05cc:
+        if (r1 != r2) goto L_0x05fc;
+    L_0x05da:
         r1 = r0.paint;
         r2 = (float) r9;
         r3 = NUM; // 0x3e19999a float:0.15 double:5.147497604E-315;
@@ -1596,7 +1605,7 @@ public class MediaActionDrawable extends Drawable {
         r1.drawArc(r2, r3, r4, r5, r6);
         r1 = r0.paint;
         r1.setAlpha(r9);
-    L_0x05ee:
+    L_0x05fc:
         r2 = r0.rect;
         r3 = r0.downloadRadOffset;
         r5 = 0;
@@ -1604,29 +1613,29 @@ public class MediaActionDrawable extends Drawable {
         r1 = r33;
         r4 = r15;
         r1.drawArc(r2, r3, r4, r5, r6);
-    L_0x05fb:
+    L_0x0609:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = (r14 > r1 ? 1 : (r14 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x0604;
-    L_0x0601:
+        if (r2 == 0) goto L_0x0612;
+    L_0x060f:
         r33.restore();
-    L_0x0604:
+    L_0x0612:
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x060f;
-    L_0x060a:
+        if (r1 != r2) goto L_0x061d;
+    L_0x0618:
         r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0630;
-    L_0x060f:
+        goto L_0x063e;
+    L_0x061d:
         r2 = 4;
-        if (r1 != r2) goto L_0x0619;
-    L_0x0612:
+        if (r1 != r2) goto L_0x0627;
+    L_0x0620:
         r5 = r0.transitionProgress;
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = r1 - r5;
-        goto L_0x062e;
-    L_0x0619:
+        goto L_0x063c;
+    L_0x0627:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = r0.transitionProgress;
         r2 = r2 / r20;
@@ -1636,95 +1645,95 @@ public class MediaActionDrawable extends Drawable {
         r2 = r1 - r2;
         r1 = 0;
         r2 = java.lang.Math.max(r1, r2);
-    L_0x062e:
+    L_0x063c:
         r14 = r2;
         r9 = r5;
-    L_0x0630:
+    L_0x063e:
         r1 = r0.nextIcon;
         r2 = 5;
-        if (r1 != r2) goto L_0x063a;
-    L_0x0635:
+        if (r1 != r2) goto L_0x0648;
+    L_0x0643:
         r1 = org.telegram.ui.ActionBar.Theme.chat_filePath;
         r15 = r1;
         r6 = 0;
-        goto L_0x0645;
-    L_0x063a:
+        goto L_0x0653;
+    L_0x0648:
         r1 = r0.currentIcon;
         r2 = 5;
-        if (r1 != r2) goto L_0x0643;
-    L_0x063f:
+        if (r1 != r2) goto L_0x0651;
+    L_0x064d:
         r1 = org.telegram.ui.ActionBar.Theme.chat_filePath;
         r6 = r1;
-        goto L_0x0644;
-    L_0x0643:
+        goto L_0x0652;
+    L_0x0651:
         r6 = 0;
-    L_0x0644:
+    L_0x0652:
         r15 = 0;
-    L_0x0645:
+    L_0x0653:
         r1 = r0.nextIcon;
         r2 = 7;
-        if (r1 != r2) goto L_0x064d;
-    L_0x064a:
+        if (r1 != r2) goto L_0x065b;
+    L_0x0658:
         r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon;
-        goto L_0x0658;
-    L_0x064d:
+        goto L_0x0666;
+    L_0x065b:
         r1 = r0.currentIcon;
         r2 = 7;
-        if (r1 != r2) goto L_0x0657;
-    L_0x0652:
+        if (r1 != r2) goto L_0x0665;
+    L_0x0660:
         r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon;
         r2 = r1;
         r1 = 0;
-        goto L_0x0659;
-    L_0x0657:
+        goto L_0x0667;
+    L_0x0665:
         r1 = 0;
-    L_0x0658:
+    L_0x0666:
         r2 = 0;
-    L_0x0659:
+    L_0x0667:
         r3 = r0.nextIcon;
         r4 = 8;
-        if (r3 != r4) goto L_0x0662;
-    L_0x065f:
+        if (r3 != r4) goto L_0x0670;
+    L_0x066d:
         r1 = org.telegram.ui.ActionBar.Theme.chat_gifIcon;
-        goto L_0x066a;
-    L_0x0662:
+        goto L_0x0678;
+    L_0x0670:
         r3 = r0.currentIcon;
         r4 = 8;
-        if (r3 != r4) goto L_0x066a;
-    L_0x0668:
+        if (r3 != r4) goto L_0x0678;
+    L_0x0676:
         r2 = org.telegram.ui.ActionBar.Theme.chat_gifIcon;
-    L_0x066a:
+    L_0x0678:
         r5 = r1;
         r4 = r2;
         r1 = r0.currentIcon;
         r2 = 9;
-        if (r1 == r2) goto L_0x0683;
-    L_0x0672:
+        if (r1 == r2) goto L_0x0691;
+    L_0x0680:
         r1 = r0.nextIcon;
         r2 = 9;
-        if (r1 != r2) goto L_0x0679;
-    L_0x0678:
-        goto L_0x0683;
-    L_0x0679:
+        if (r1 != r2) goto L_0x0687;
+    L_0x0686:
+        goto L_0x0691;
+    L_0x0687:
         r10 = r4;
         r29 = r6;
         r26 = r14;
         r16 = r15;
         r14 = r5;
-        goto L_0x0708;
-    L_0x0683:
+        goto L_0x0716;
+    L_0x0691:
         r1 = r0.paint;
         r2 = r0.currentIcon;
         r3 = r0.nextIcon;
-        if (r2 != r3) goto L_0x068e;
-    L_0x068b:
+        if (r2 != r3) goto L_0x069c;
+    L_0x0699:
         r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0693;
-    L_0x068e:
+        goto L_0x06a1;
+    L_0x069c:
         r2 = r0.transitionProgress;
         r2 = r2 * r19;
         r3 = (int) r2;
-    L_0x0693:
+    L_0x06a1:
         r1.setAlpha(r3);
         r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r3 = r12 + r1;
@@ -1733,14 +1742,14 @@ public class MediaActionDrawable extends Drawable {
         r2 = r11 - r1;
         r1 = r0.currentIcon;
         r8 = r0.nextIcon;
-        if (r1 == r8) goto L_0x06b4;
-    L_0x06aa:
+        if (r1 == r8) goto L_0x06c2;
+    L_0x06b8:
         r33.save();
         r1 = r0.transitionProgress;
         r8 = (float) r11;
         r10 = (float) r12;
         r7.scale(r1, r1, r8, r10);
-    L_0x06b4:
+    L_0x06c2:
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = r2 - r1;
@@ -1782,59 +1791,59 @@ public class MediaActionDrawable extends Drawable {
         r1.drawLine(r2, r3, r4, r5, r6);
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0708;
-    L_0x0705:
+        if (r1 == r2) goto L_0x0716;
+    L_0x0713:
         r33.restore();
-    L_0x0708:
+    L_0x0716:
         r1 = r0.currentIcon;
         r2 = 12;
-        if (r1 == r2) goto L_0x0714;
-    L_0x070e:
+        if (r1 == r2) goto L_0x0722;
+    L_0x071c:
         r1 = r0.nextIcon;
         r2 = 12;
-        if (r1 != r2) goto L_0x0782;
-    L_0x0714:
+        if (r1 != r2) goto L_0x0790;
+    L_0x0722:
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x071d;
-    L_0x071a:
+        if (r1 != r2) goto L_0x072b;
+    L_0x0728:
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x072a;
-    L_0x071d:
+        goto L_0x0738;
+    L_0x072b:
         r1 = 13;
-        if (r2 != r1) goto L_0x0724;
-    L_0x0721:
+        if (r2 != r1) goto L_0x0732;
+    L_0x072f:
         r5 = r0.transitionProgress;
-        goto L_0x072a;
-    L_0x0724:
+        goto L_0x0738;
+    L_0x0732:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
-    L_0x072a:
+    L_0x0738:
         r1 = r0.paint;
         r2 = r0.currentIcon;
         r3 = r0.nextIcon;
-        if (r2 != r3) goto L_0x0735;
-    L_0x0732:
+        if (r2 != r3) goto L_0x0743;
+    L_0x0740:
         r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0738;
-    L_0x0735:
+        goto L_0x0746;
+    L_0x0743:
         r2 = r5 * r19;
         r3 = (int) r2;
-    L_0x0738:
+    L_0x0746:
         r1.setAlpha(r3);
         org.telegram.messenger.AndroidUtilities.dp(r18);
         r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
         org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0751;
-    L_0x0749:
+        if (r1 == r2) goto L_0x075f;
+    L_0x0757:
         r33.save();
         r1 = (float) r11;
         r2 = (float) r12;
         r7.scale(r5, r5, r1, r2);
-    L_0x0751:
+    L_0x075f:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r1 = (float) r1;
         r2 = r0.scale;
@@ -1858,35 +1867,35 @@ public class MediaActionDrawable extends Drawable {
         r1.drawLine(r2, r3, r4, r5, r6);
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0782;
-    L_0x077f:
+        if (r1 == r2) goto L_0x0790;
+    L_0x078d:
         r33.restore();
-    L_0x0782:
+    L_0x0790:
         r1 = r0.currentIcon;
         r2 = 13;
-        if (r1 == r2) goto L_0x078e;
-    L_0x0788:
+        if (r1 == r2) goto L_0x079c;
+    L_0x0796:
         r1 = r0.nextIcon;
         r2 = 13;
-        if (r1 != r2) goto L_0x080e;
-    L_0x078e:
+        if (r1 != r2) goto L_0x081c;
+    L_0x079c:
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x0797;
-    L_0x0794:
+        if (r1 != r2) goto L_0x07a5;
+    L_0x07a2:
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x07a4;
-    L_0x0797:
+        goto L_0x07b2;
+    L_0x07a5:
         r1 = 13;
-        if (r2 != r1) goto L_0x079e;
-    L_0x079b:
+        if (r2 != r1) goto L_0x07ac;
+    L_0x07a9:
         r5 = r0.transitionProgress;
-        goto L_0x07a4;
-    L_0x079e:
+        goto L_0x07b2;
+    L_0x07ac:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r2 - r1;
-    L_0x07a4:
+    L_0x07b2:
         r1 = r0.textPaint;
         r2 = r5 * r19;
         r2 = (int) r2;
@@ -1900,23 +1909,23 @@ public class MediaActionDrawable extends Drawable {
         r2 = r11 - r2;
         r3 = r0.currentIcon;
         r4 = r0.nextIcon;
-        if (r3 == r4) goto L_0x07c7;
-    L_0x07bf:
+        if (r3 == r4) goto L_0x07d5;
+    L_0x07cd:
         r33.save();
         r3 = (float) r11;
         r4 = (float) r12;
         r7.scale(r5, r5, r3, r4);
-    L_0x07c7:
+    L_0x07d5:
         r3 = r0.animatedDownloadProgress;
         r4 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
         r3 = r3 * r4;
         r3 = (int) r3;
         r4 = r0.percentString;
-        if (r4 == 0) goto L_0x07d6;
-    L_0x07d2:
+        if (r4 == 0) goto L_0x07e4;
+    L_0x07e0:
         r4 = r0.lastPercent;
-        if (r3 == r4) goto L_0x07fc;
-    L_0x07d6:
+        if (r3 == r4) goto L_0x080a;
+    L_0x07e4:
         r0.lastPercent = r3;
         r3 = 1;
         r4 = new java.lang.Object[r3];
@@ -1934,7 +1943,7 @@ public class MediaActionDrawable extends Drawable {
         r3 = java.lang.Math.ceil(r3);
         r3 = (int) r3;
         r0.percentStringWidth = r3;
-    L_0x07fc:
+    L_0x080a:
         r3 = r0.percentString;
         r2 = (float) r2;
         r1 = (float) r1;
@@ -1942,126 +1951,126 @@ public class MediaActionDrawable extends Drawable {
         r7.drawText(r3, r2, r1, r4);
         r1 = r0.currentIcon;
         r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x080e;
-    L_0x080b:
+        if (r1 == r2) goto L_0x081c;
+    L_0x0819:
         r33.restore();
-    L_0x080e:
+    L_0x081c:
         r1 = r0.currentIcon;
         r2 = 1;
-        if (r1 == 0) goto L_0x0828;
-    L_0x0813:
-        if (r1 == r2) goto L_0x0828;
-    L_0x0815:
+        if (r1 == 0) goto L_0x0836;
+    L_0x0821:
+        if (r1 == r2) goto L_0x0836;
+    L_0x0823:
         r1 = r0.nextIcon;
-        if (r1 == 0) goto L_0x0828;
-    L_0x0819:
-        if (r1 != r2) goto L_0x081c;
-    L_0x081b:
-        goto L_0x0828;
-    L_0x081c:
+        if (r1 == 0) goto L_0x0836;
+    L_0x0827:
+        if (r1 != r2) goto L_0x082a;
+    L_0x0829:
+        goto L_0x0836;
+    L_0x082a:
         r23 = r10;
         r30 = r11;
         r24 = r12;
         r17 = r14;
         r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0b1b;
-    L_0x0828:
+        goto L_0x0b29;
+    L_0x0836:
         r1 = r0.currentIcon;
-        if (r1 != 0) goto L_0x0830;
-    L_0x082c:
+        if (r1 != 0) goto L_0x083e;
+    L_0x083a:
         r1 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0838;
-    L_0x0830:
+        if (r1 == r2) goto L_0x0846;
+    L_0x083e:
         r1 = r0.currentIcon;
-        if (r1 != r2) goto L_0x0845;
-    L_0x0834:
+        if (r1 != r2) goto L_0x0853;
+    L_0x0842:
         r1 = r0.nextIcon;
-        if (r1 != 0) goto L_0x0845;
-    L_0x0838:
+        if (r1 != 0) goto L_0x0853;
+    L_0x0846:
         r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x0845;
-    L_0x083c:
+        if (r1 == 0) goto L_0x0853;
+    L_0x084a:
         r1 = r0.interpolator;
         r2 = r0.transitionProgress;
         r1 = r1.getInterpolation(r2);
-        goto L_0x0846;
-    L_0x0845:
+        goto L_0x0854;
+    L_0x0853:
         r1 = 0;
-    L_0x0846:
+    L_0x0854:
         r2 = r0.path1;
         r2.reset();
         r2 = r0.path2;
         r2.reset();
         r2 = r0.currentIcon;
-        if (r2 == 0) goto L_0x0864;
-    L_0x0854:
+        if (r2 == 0) goto L_0x0872;
+    L_0x0862:
         r3 = 1;
-        if (r2 == r3) goto L_0x085c;
-    L_0x0857:
+        if (r2 == r3) goto L_0x086a;
+    L_0x0865:
         r2 = 0;
         r3 = 0;
         r4 = 0;
-    L_0x085a:
+    L_0x0868:
         r15 = 0;
-        goto L_0x086b;
-    L_0x085c:
+        goto L_0x0879;
+    L_0x086a:
         r2 = pausePath1;
         r3 = pausePath2;
         r15 = 90;
         r4 = 0;
-        goto L_0x086b;
-    L_0x0864:
+        goto L_0x0879;
+    L_0x0872:
         r2 = playPath1;
         r3 = playPath2;
         r4 = playFinalPath;
-        goto L_0x085a;
-    L_0x086b:
+        goto L_0x0868;
+    L_0x0879:
         r5 = r0.nextIcon;
-        if (r5 == 0) goto L_0x087d;
-    L_0x086f:
+        if (r5 == 0) goto L_0x088b;
+    L_0x087d:
         r6 = 1;
-        if (r5 == r6) goto L_0x0876;
-    L_0x0872:
+        if (r5 == r6) goto L_0x0884;
+    L_0x0880:
         r5 = 0;
         r6 = 0;
-    L_0x0874:
+    L_0x0882:
         r8 = 0;
-        goto L_0x0882;
-    L_0x0876:
+        goto L_0x0890;
+    L_0x0884:
         r5 = pausePath1;
         r6 = pausePath2;
         r8 = 90;
-        goto L_0x0882;
-    L_0x087d:
+        goto L_0x0890;
+    L_0x088b:
         r5 = playPath1;
         r6 = playPath2;
-        goto L_0x0874;
-    L_0x0882:
-        if (r2 != 0) goto L_0x088b;
-    L_0x0884:
+        goto L_0x0882;
+    L_0x0890:
+        if (r2 != 0) goto L_0x0899;
+    L_0x0892:
         r2 = r5;
         r3 = r6;
         r17 = r14;
         r5 = 0;
         r6 = 0;
-        goto L_0x088d;
-    L_0x088b:
+        goto L_0x089b;
+    L_0x0899:
         r17 = r14;
-    L_0x088d:
+    L_0x089b:
         r14 = r0.animatingTransition;
-        if (r14 != 0) goto L_0x092e;
-    L_0x0891:
-        if (r4 == 0) goto L_0x092e;
-    L_0x0893:
+        if (r14 != 0) goto L_0x093c;
+    L_0x089f:
+        if (r4 == 0) goto L_0x093c;
+    L_0x08a1:
         r2 = 0;
-    L_0x0894:
+    L_0x08a2:
         r3 = r4.length;
         r5 = 2;
         r3 = r3 / r5;
-        if (r2 >= r3) goto L_0x0920;
-    L_0x0899:
-        if (r2 != 0) goto L_0x08da;
-    L_0x089b:
+        if (r2 >= r3) goto L_0x092e;
+    L_0x08a7:
+        if (r2 != 0) goto L_0x08e8;
+    L_0x08a9:
         r3 = r0.path1;
         r5 = r2 * 2;
         r6 = r4[r5];
@@ -2090,8 +2099,8 @@ public class MediaActionDrawable extends Drawable {
         r9 = r0.scale;
         r6 = r6 * r9;
         r3.moveTo(r5, r6);
-        goto L_0x0918;
-    L_0x08da:
+        goto L_0x0926;
+    L_0x08e8:
         r22 = r9;
         r23 = r10;
         r3 = r0.path1;
@@ -2120,32 +2129,32 @@ public class MediaActionDrawable extends Drawable {
         r9 = r0.scale;
         r6 = r6 * r9;
         r3.lineTo(r5, r6);
-    L_0x0918:
+    L_0x0926:
         r2 = r2 + 1;
         r9 = r22;
         r10 = r23;
-        goto L_0x0894;
-    L_0x0920:
+        goto L_0x08a2;
+    L_0x092e:
         r22 = r9;
         r23 = r10;
         r28 = r8;
         r30 = r11;
         r24 = r12;
-    L_0x092a:
+    L_0x0938:
         r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0ac2;
-    L_0x092e:
+        goto L_0x0ad0;
+    L_0x093c:
         r22 = r9;
         r23 = r10;
-        if (r5 != 0) goto L_0x09e6;
-    L_0x0934:
+        if (r5 != 0) goto L_0x09f4;
+    L_0x0942:
         r4 = 0;
-    L_0x0935:
+    L_0x0943:
         r5 = 5;
-        if (r4 >= r5) goto L_0x09b9;
-    L_0x0938:
-        if (r4 != 0) goto L_0x0977;
-    L_0x093a:
+        if (r4 >= r5) goto L_0x09c7;
+    L_0x0946:
+        if (r4 != 0) goto L_0x0985;
+    L_0x0948:
         r5 = r0.path1;
         r6 = r4 * 2;
         r9 = r2[r6];
@@ -2173,8 +2182,8 @@ public class MediaActionDrawable extends Drawable {
         r10 = r0.scale;
         r9 = r9 * r10;
         r5.moveTo(r6, r9);
-        goto L_0x09b3;
-    L_0x0977:
+        goto L_0x09c1;
+    L_0x0985:
         r24 = r12;
         r5 = r0.path1;
         r6 = r4 * 2;
@@ -2202,16 +2211,16 @@ public class MediaActionDrawable extends Drawable {
         r10 = r0.scale;
         r9 = r9 * r10;
         r5.lineTo(r6, r9);
-    L_0x09b3:
+    L_0x09c1:
         r4 = r4 + 1;
         r12 = r24;
-        goto L_0x0935;
-    L_0x09b9:
+        goto L_0x0943;
+    L_0x09c7:
         r24 = r12;
         r2 = r0.nextIcon;
         r3 = 4;
-        if (r2 != r3) goto L_0x09d4;
-    L_0x09c0:
+        if (r2 != r3) goto L_0x09e2;
+    L_0x09ce:
         r2 = r0.paint2;
         r3 = r0.transitionProgress;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -2219,33 +2228,33 @@ public class MediaActionDrawable extends Drawable {
         r5 = r5 * r19;
         r3 = (int) r5;
         r2.setAlpha(r3);
-    L_0x09ce:
+    L_0x09dc:
         r28 = r8;
         r30 = r11;
-        goto L_0x092a;
-    L_0x09d4:
+        goto L_0x0938;
+    L_0x09e2:
         r3 = r0.paint2;
         r4 = r0.currentIcon;
-        if (r4 != r2) goto L_0x09dd;
-    L_0x09da:
+        if (r4 != r2) goto L_0x09eb;
+    L_0x09e8:
         r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x09e2;
-    L_0x09dd:
+        goto L_0x09f0;
+    L_0x09eb:
         r2 = r0.transitionProgress;
         r2 = r2 * r19;
         r2 = (int) r2;
-    L_0x09e2:
+    L_0x09f0:
         r3.setAlpha(r2);
-        goto L_0x09ce;
-    L_0x09e6:
+        goto L_0x09dc;
+    L_0x09f4:
         r24 = r12;
         r4 = 0;
-    L_0x09e9:
+    L_0x09f7:
         r9 = 5;
-        if (r4 >= r9) goto L_0x0ab7;
-    L_0x09ec:
-        if (r4 != 0) goto L_0x0a50;
-    L_0x09ee:
+        if (r4 >= r9) goto L_0x0ac5;
+    L_0x09fa:
+        if (r4 != 0) goto L_0x0a5e;
+    L_0x09fc:
         r9 = r0.path1;
         r10 = r4 * 2;
         r12 = r2[r10];
@@ -2294,8 +2303,8 @@ public class MediaActionDrawable extends Drawable {
         r11 = r0.scale;
         r10 = r10 * r11;
         r8.moveTo(r9, r10);
-        goto L_0x0aaf;
-    L_0x0a50:
+        goto L_0x0abd;
+    L_0x0a5e:
         r28 = r8;
         r30 = r11;
         r8 = r0.path1;
@@ -2344,18 +2353,18 @@ public class MediaActionDrawable extends Drawable {
         r11 = r0.scale;
         r10 = r10 * r11;
         r8.lineTo(r9, r10);
-    L_0x0aaf:
+    L_0x0abd:
         r4 = r4 + 1;
         r8 = r28;
         r11 = r30;
-        goto L_0x09e9;
-    L_0x0ab7:
+        goto L_0x09f7;
+    L_0x0ac5:
         r28 = r8;
         r30 = r11;
         r2 = r0.paint2;
         r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
         r2.setAlpha(r8);
-    L_0x0ac2:
+    L_0x0ad0:
         r2 = r0.path1;
         r2.close();
         r2 = r0.path2;
@@ -2379,15 +2388,15 @@ public class MediaActionDrawable extends Drawable {
         r3 = (float) r12;
         r7.rotate(r2, r1, r3);
         r1 = r0.currentIcon;
-        if (r1 == 0) goto L_0x0af3;
-    L_0x0af0:
+        if (r1 == 0) goto L_0x0b01;
+    L_0x0afe:
         r2 = 1;
-        if (r1 != r2) goto L_0x0af8;
-    L_0x0af3:
+        if (r1 != r2) goto L_0x0b06;
+    L_0x0b01:
         r1 = r0.currentIcon;
         r2 = 4;
-        if (r1 != r2) goto L_0x0b08;
-    L_0x0af8:
+        if (r1 != r2) goto L_0x0b16;
+    L_0x0b06:
         r1 = r13.left;
         r11 = r30 - r1;
         r1 = (float) r11;
@@ -2396,10 +2405,10 @@ public class MediaActionDrawable extends Drawable {
         r2 = (float) r12;
         r9 = r22;
         r7.scale(r9, r9, r1, r2);
-        goto L_0x0b0a;
-    L_0x0b08:
+        goto L_0x0b18;
+    L_0x0b16:
         r9 = r22;
-    L_0x0b0a:
+    L_0x0b18:
         r1 = r0.path1;
         r2 = r0.paint2;
         r7.drawPath(r1, r2);
@@ -2407,23 +2416,23 @@ public class MediaActionDrawable extends Drawable {
         r2 = r0.paint2;
         r7.drawPath(r1, r2);
         r33.restore();
-    L_0x0b1b:
+    L_0x0b29:
         r1 = r0.currentIcon;
         r2 = 6;
-        if (r1 == r2) goto L_0x0b25;
-    L_0x0b20:
+        if (r1 == r2) goto L_0x0b33;
+    L_0x0b2e:
         r1 = r0.nextIcon;
         r2 = 6;
-        if (r1 != r2) goto L_0x0bbf;
-    L_0x0b25:
+        if (r1 != r2) goto L_0x0bcd;
+    L_0x0b33:
         r1 = r0.currentIcon;
         r2 = 6;
-        if (r1 == r2) goto L_0x0b4e;
-    L_0x0b2a:
+        if (r1 == r2) goto L_0x0b5c;
+    L_0x0b38:
         r1 = r0.transitionProgress;
         r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0b4a;
-    L_0x0b30:
+        if (r2 <= 0) goto L_0x0b58;
+    L_0x0b3e:
         r1 = r1 - r20;
         r1 = r1 / r20;
         r2 = r1 / r20;
@@ -2431,24 +2440,24 @@ public class MediaActionDrawable extends Drawable {
         r2 = java.lang.Math.min(r3, r2);
         r10 = r3 - r2;
         r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0b47;
-    L_0x0b42:
+        if (r2 <= 0) goto L_0x0b55;
+    L_0x0b50:
         r1 = r1 - r20;
         r1 = r1 / r20;
-        goto L_0x0b48;
-    L_0x0b47:
+        goto L_0x0b56;
+    L_0x0b55:
         r1 = 0;
-    L_0x0b48:
+    L_0x0b56:
         r11 = r1;
-        goto L_0x0b51;
-    L_0x0b4a:
+        goto L_0x0b5f;
+    L_0x0b58:
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r11 = 0;
-        goto L_0x0b51;
-    L_0x0b4e:
+        goto L_0x0b5f;
+    L_0x0b5c:
         r10 = 0;
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x0b51:
+    L_0x0b5f:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
         r12 = r24 + r1;
         r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -2458,8 +2467,8 @@ public class MediaActionDrawable extends Drawable {
         r1.setAlpha(r8);
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0b9b;
-    L_0x0b6a:
+        if (r2 >= 0) goto L_0x0ba9;
+    L_0x0b78:
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = r13 - r1;
@@ -2483,11 +2492,11 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.paint;
         r1 = r33;
         r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0b9b:
+    L_0x0ba9:
         r1 = 0;
         r2 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0bbf;
-    L_0x0ba0:
+        if (r2 <= 0) goto L_0x0bcd;
+    L_0x0bae:
         r2 = (float) r13;
         r3 = (float) r12;
         r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
@@ -2503,13 +2512,13 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.paint;
         r1 = r33;
         r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0bbf:
+    L_0x0bcd:
         r1 = r17;
         if (r23 == 0) goto L_0x0CLASSNAME;
-    L_0x0bc3:
+    L_0x0bd1:
         r2 = r23;
         if (r2 == r1) goto L_0x0CLASSNAME;
-    L_0x0bc7:
+    L_0x0bd5:
         r3 = r2.getIntrinsicWidth();
         r3 = (float) r3;
         r3 = r3 * r26;
@@ -2522,17 +2531,17 @@ public class MediaActionDrawable extends Drawable {
         r2.setColorFilter(r5);
         r5 = r0.currentIcon;
         r6 = r0.nextIcon;
-        if (r5 != r6) goto L_0x0be5;
-    L_0x0be2:
+        if (r5 != r6) goto L_0x0bf3;
+    L_0x0bf0:
         r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0bee;
-    L_0x0be5:
+        goto L_0x0bfc;
+    L_0x0bf3:
         r5 = r0.transitionProgress;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = r6 - r5;
         r5 = r5 * r19;
         r5 = (int) r5;
-    L_0x0bee:
+    L_0x0bfc:
         r2.setAlpha(r5);
         r5 = 2;
         r3 = r3 / r5;
@@ -2544,7 +2553,7 @@ public class MediaActionDrawable extends Drawable {
         r2.setBounds(r11, r12, r3, r4);
         r2.draw(r7);
     L_0x0CLASSNAME:
-        if (r1 == 0) goto L_0x0c3b;
+        if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r2 = r1.getIntrinsicWidth();
         r2 = (float) r2;
@@ -2559,7 +2568,7 @@ public class MediaActionDrawable extends Drawable {
         r4 = r0.currentIcon;
         r5 = r0.nextIcon;
         if (r4 != r5) goto L_0x0CLASSNAME;
-    L_0x0c1f:
+    L_0x0c2d:
         r4 = 255; // 0xff float:3.57E-43 double:1.26E-321;
         goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
@@ -2577,12 +2586,12 @@ public class MediaActionDrawable extends Drawable {
         r3 = r24 + r3;
         r1.setBounds(r11, r12, r2, r3);
         r1.draw(r7);
-    L_0x0c3b:
+    L_0x0CLASSNAME:
         r1 = r29;
         r2 = r16;
-        if (r1 == 0) goto L_0x0c9b;
-    L_0x0CLASSNAME:
-        if (r1 == r2) goto L_0x0c9b;
+        if (r1 == 0) goto L_0x0ca9;
+    L_0x0c4f:
+        if (r1 == r2) goto L_0x0ca9;
     L_0x0CLASSNAME:
         r3 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -2627,16 +2636,16 @@ public class MediaActionDrawable extends Drawable {
         r7.drawPath(r4, r3);
         r3 = 1;
         r4 = r1[r3];
-        if (r4 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+        if (r4 == 0) goto L_0x0ca6;
+    L_0x0c9f:
         r1 = r1[r3];
         r3 = r0.backPaint;
         r7.drawPath(r1, r3);
-    L_0x0CLASSNAME:
+    L_0x0ca6:
         r33.restore();
-    L_0x0c9b:
-        if (r2 == 0) goto L_0x0cf1;
-    L_0x0c9d:
+    L_0x0ca9:
+        if (r2 == 0) goto L_0x0cff;
+    L_0x0cab:
         r1 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = (float) r1;
@@ -2653,15 +2662,15 @@ public class MediaActionDrawable extends Drawable {
         r4 = r0.paint2;
         r5 = r0.currentIcon;
         r6 = r0.nextIcon;
-        if (r5 != r6) goto L_0x0cc3;
-    L_0x0cc0:
+        if (r5 != r6) goto L_0x0cd1;
+    L_0x0cce:
         r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0cc8;
-    L_0x0cc3:
+        goto L_0x0cd6;
+    L_0x0cd1:
         r5 = r0.transitionProgress;
         r5 = r5 * r19;
         r5 = (int) r5;
-    L_0x0cc8:
+    L_0x0cd6:
         r4.setAlpha(r5);
         r33.save();
         r4 = 2;
@@ -2678,44 +2687,44 @@ public class MediaActionDrawable extends Drawable {
         r7.drawPath(r3, r1);
         r1 = 1;
         r3 = r2[r1];
-        if (r3 == 0) goto L_0x0cee;
-    L_0x0ce7:
+        if (r3 == 0) goto L_0x0cfc;
+    L_0x0cf5:
         r2 = r2[r1];
         r1 = r0.backPaint;
         r7.drawPath(r2, r1);
-    L_0x0cee:
+    L_0x0cfc:
         r33.restore();
-    L_0x0cf1:
+    L_0x0cff:
         r1 = java.lang.System.currentTimeMillis();
         r3 = r0.lastAnimationTime;
         r3 = r1 - r3;
         r5 = 17;
         r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0d01;
-    L_0x0cff:
+        if (r8 <= 0) goto L_0x0d0f;
+    L_0x0d0d:
         r3 = 17;
-    L_0x0d01:
+    L_0x0d0f:
         r0.lastAnimationTime = r1;
         r1 = r0.currentIcon;
         r2 = 3;
-        if (r1 == r2) goto L_0x0d1d;
-    L_0x0d08:
+        if (r1 == r2) goto L_0x0d2b;
+    L_0x0d16:
         r2 = 14;
-        if (r1 == r2) goto L_0x0d1d;
-    L_0x0d0c:
+        if (r1 == r2) goto L_0x0d2b;
+    L_0x0d1a:
         r5 = 4;
-        if (r1 != r5) goto L_0x0d13;
-    L_0x0d0f:
+        if (r1 != r5) goto L_0x0d21;
+    L_0x0d1d:
         r1 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0d1d;
-    L_0x0d13:
+        if (r1 == r2) goto L_0x0d2b;
+    L_0x0d21:
         r1 = r0.currentIcon;
         r2 = 10;
-        if (r1 == r2) goto L_0x0d1d;
-    L_0x0d19:
+        if (r1 == r2) goto L_0x0d2b;
+    L_0x0d27:
         r2 = 13;
-        if (r1 != r2) goto L_0x0d6a;
-    L_0x0d1d:
+        if (r1 != r2) goto L_0x0d78;
+    L_0x0d2b:
         r1 = r0.downloadRadOffset;
         r5 = 360; // 0x168 float:5.04E-43 double:1.78E-321;
         r5 = r5 * r3;
@@ -2729,15 +2738,15 @@ public class MediaActionDrawable extends Drawable {
         r0.downloadRadOffset = r1;
         r1 = r0.nextIcon;
         r2 = 2;
-        if (r1 == r2) goto L_0x0d67;
-    L_0x0d38:
+        if (r1 == r2) goto L_0x0d75;
+    L_0x0d46:
         r1 = r0.downloadProgress;
         r2 = r0.downloadProgressAnimationStart;
         r5 = r1 - r2;
         r6 = 0;
         r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0d67;
-    L_0x0d43:
+        if (r8 <= 0) goto L_0x0d75;
+    L_0x0d51:
         r6 = r0.downloadProgressTime;
         r8 = (float) r3;
         r6 = r6 + r8;
@@ -2745,14 +2754,14 @@ public class MediaActionDrawable extends Drawable {
         r6 = r0.downloadProgressTime;
         r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
         r8 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r8 < 0) goto L_0x0d59;
-    L_0x0d51:
+        if (r8 < 0) goto L_0x0d67;
+    L_0x0d5f:
         r0.animatedDownloadProgress = r1;
         r0.downloadProgressAnimationStart = r1;
         r1 = 0;
         r0.downloadProgressTime = r1;
-        goto L_0x0d67;
-    L_0x0d59:
+        goto L_0x0d75;
+    L_0x0d67:
         r1 = r0.interpolator;
         r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
         r6 = r6 / r8;
@@ -2760,17 +2769,17 @@ public class MediaActionDrawable extends Drawable {
         r5 = r5 * r1;
         r2 = r2 + r5;
         r0.animatedDownloadProgress = r2;
-    L_0x0d67:
+    L_0x0d75:
         r32.invalidateSelf();
-    L_0x0d6a:
+    L_0x0d78:
         r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x0d8f;
-    L_0x0d6e:
+        if (r1 == 0) goto L_0x0d9d;
+    L_0x0d7c:
         r1 = r0.transitionProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0d8f;
-    L_0x0d76:
+        if (r5 >= 0) goto L_0x0d9d;
+    L_0x0d84:
         r3 = (float) r3;
         r4 = r0.transitionAnimationTime;
         r3 = r3 / r4;
@@ -2778,22 +2787,22 @@ public class MediaActionDrawable extends Drawable {
         r0.transitionProgress = r1;
         r1 = r0.transitionProgress;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 < 0) goto L_0x0d8c;
-    L_0x0d83:
+        if (r1 < 0) goto L_0x0d9a;
+    L_0x0d91:
         r1 = r0.nextIcon;
         r0.currentIcon = r1;
         r0.transitionProgress = r2;
         r1 = 0;
         r0.animatingTransition = r1;
-    L_0x0d8c:
+    L_0x0d9a:
         r32.invalidateSelf();
-    L_0x0d8f:
+    L_0x0d9d:
         r1 = r27;
         r2 = 1;
-        if (r1 < r2) goto L_0x0d97;
-    L_0x0d94:
+        if (r1 < r2) goto L_0x0da5;
+    L_0x0da2:
         r7.restoreToCount(r1);
-    L_0x0d97:
+    L_0x0da5:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");

@@ -49,7 +49,7 @@ public class MessageBackgroundDrawable extends Drawable {
         this.isSelected = z;
         this.animationInProgress = z2;
         if (z2) {
-            this.lastAnimationTime = SystemClock.uptimeMillis();
+            this.lastAnimationTime = SystemClock.elapsedRealtime();
         } else {
             if (!z) {
                 f = 0.0f;
@@ -83,7 +83,7 @@ public class MessageBackgroundDrawable extends Drawable {
     public void setTouchCoords(float f, float f2) {
         this.touchX = f;
         this.touchY = f2;
-        this.lastTouchTime = SystemClock.uptimeMillis();
+        this.lastTouchTime = SystemClock.elapsedRealtime();
     }
 
     public void setTouchCoordsOverride(float f, float f2) {
@@ -205,7 +205,7 @@ public class MessageBackgroundDrawable extends Drawable {
         r10 = r9.animationInProgress;
         if (r10 == 0) goto L_0x00b9;
     L_0x006d:
-        r3 = android.os.SystemClock.uptimeMillis();
+        r3 = android.os.SystemClock.elapsedRealtime();
         r5 = r9.lastAnimationTime;
         r5 = r3 - r5;
         r7 = 20;

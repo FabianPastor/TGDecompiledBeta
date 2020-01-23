@@ -99,9 +99,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                     User user = ContactAddActivity.this.getMessagesController().getUser(Integer.valueOf(ContactAddActivity.this.user_id));
                     user.first_name = ContactAddActivity.this.firstNameField.getText().toString();
                     user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
-                    ContactsController access$500 = ContactAddActivity.this.getContactsController();
+                    ContactsController access$400 = ContactAddActivity.this.getContactsController();
                     boolean z = ContactAddActivity.this.checkBoxCell != null && ContactAddActivity.this.checkBoxCell.isChecked();
-                    access$500.addContact(user, z);
+                    access$400.addContact(user, z);
                     Editor edit = MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit();
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("dialog_bar_vis3");

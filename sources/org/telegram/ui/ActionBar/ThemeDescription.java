@@ -545,8 +545,25 @@ public class ThemeDescription {
                     view.invalidate();
                     if ((this.changeFlags & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, view)) {
                         view.invalidate();
-                        int i3 = this.changeFlags;
-                        if ((FLAG_BACKGROUNDFILTER & i3) != 0) {
+                        if (this.listClassesFieldName != null || (this.changeFlags & FLAG_BACKGROUNDFILTER) == 0) {
+                            int i3 = this.changeFlags;
+                            if ((FLAG_CELLBACKGROUNDCOLOR & i3) != 0) {
+                                view.setBackgroundColor(i);
+                            } else if ((FLAG_TEXTCOLOR & i3) != 0) {
+                                if (view instanceof TextView) {
+                                    ((TextView) view).setTextColor(i);
+                                }
+                            } else if ((FLAG_SERVICEBACKGROUND & i3) != 0) {
+                                background = view.getBackground();
+                                if (background != null) {
+                                    background.setColorFilter(Theme.colorFilter);
+                                }
+                            } else if ((FLAG_SELECTOR & i3) != 0) {
+                                view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            } else if ((i3 & FLAG_SELECTORWHITE) != 0) {
+                                view.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+                            }
+                        } else {
                             background = view.getBackground();
                             if (background != null) {
                                 if ((this.changeFlags & FLAG_CELLBACKGROUNDCOLOR) == 0) {
@@ -563,21 +580,6 @@ public class ThemeDescription {
                                     }
                                 }
                             }
-                        } else if ((FLAG_CELLBACKGROUNDCOLOR & i3) != 0) {
-                            view.setBackgroundColor(i);
-                        } else if ((FLAG_TEXTCOLOR & i3) != 0) {
-                            if (view instanceof TextView) {
-                                ((TextView) view).setTextColor(i);
-                            }
-                        } else if ((FLAG_SERVICEBACKGROUND & i3) != 0) {
-                            background = view.getBackground();
-                            if (background != null) {
-                                background.setColorFilter(Theme.colorFilter);
-                            }
-                        } else if ((FLAG_SELECTOR & i3) != 0) {
-                            view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        } else if ((i3 & FLAG_SELECTORWHITE) != 0) {
-                            view.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                         }
                         obj = 1;
                     } else {
@@ -669,7 +671,15 @@ public class ThemeDescription {
                                                     textView.setTextColor(i);
                                                 }
                                             } else if (obj2 instanceof ImageView) {
-                                                ((ImageView) obj2).setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                                                ImageView imageView = (ImageView) obj2;
+                                                background = imageView.getDrawable();
+                                                if (!(background instanceof CombinedDrawable)) {
+                                                    imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                                                } else if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
+                                                    ((CombinedDrawable) background).getBackground().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                                                } else {
+                                                    ((CombinedDrawable) background).getIcon().setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                                                }
                                             } else if (obj2 instanceof BackupImageView) {
                                                 background = ((BackupImageView) obj2).getImageReceiver().getStaticThumb();
                                                 if (background instanceof CombinedDrawable) {

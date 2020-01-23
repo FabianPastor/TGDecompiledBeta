@@ -257,8 +257,8 @@ public class AvatarDrawable extends Drawable {
                     canvas.drawCircle(f2, f2, this.archivedAvatarProgress * f2, Theme.avatar_backgroundPaint);
                     if (Theme.dialogs_archiveAvatarDrawableRecolored) {
                         Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
-                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, Theme.getColor(str3));
-                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, Theme.getColor(str3));
+                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str2, Theme.getNonAnimatedColor(str3));
+                        Theme.dialogs_archiveAvatarDrawable.setLayerColor(str, Theme.getNonAnimatedColor(str3));
                         Theme.dialogs_archiveAvatarDrawable.commitApplyLayerColors();
                         Theme.dialogs_archiveAvatarDrawableRecolored = false;
                     }

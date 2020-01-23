@@ -15,9 +15,11 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TextCell extends FrameLayout {
+    private int imageLeft;
     private ImageView imageView;
     private int leftPadding;
     private boolean needDivider;
+    private int offsetFromImage;
     private SimpleTextView textView;
     private ImageView valueImageView;
     private SimpleTextView valueTextView;
@@ -28,6 +30,8 @@ public class TextCell extends FrameLayout {
 
     public TextCell(Context context, int i, boolean z) {
         super(context);
+        this.offsetFromImage = 71;
+        this.imageLeft = 21;
         this.leftPadding = i;
         this.textView = new SimpleTextView(context);
         this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
@@ -90,24 +94,16 @@ public class TextCell extends FrameLayout {
         SimpleTextView simpleTextView = this.valueTextView;
         simpleTextView.layout(i, textHeight, simpleTextView.getMeasuredWidth() + i, this.valueTextView.getMeasuredHeight() + textHeight);
         textHeight = (i4 - this.textView.getTextHeight()) / 2;
-        float f = 71.0f;
         if (LocaleController.isRTL) {
-            i = getMeasuredWidth() - this.textView.getMeasuredWidth();
-            if (this.imageView.getVisibility() != 0) {
-                f = (float) this.leftPadding;
-            }
-            i -= AndroidUtilities.dp(f);
+            i = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
         } else {
-            if (this.imageView.getVisibility() != 0) {
-                f = (float) this.leftPadding;
-            }
-            i = AndroidUtilities.dp(f);
+            i = AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
         }
         simpleTextView = this.textView;
         simpleTextView.layout(i, textHeight, simpleTextView.getMeasuredWidth() + i, this.textView.getMeasuredHeight() + textHeight);
         if (this.imageView.getVisibility() == 0) {
             textHeight = AndroidUtilities.dp(5.0f);
-            i = !LocaleController.isRTL ? AndroidUtilities.dp(21.0f) : (i3 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(21.0f);
+            i = !LocaleController.isRTL ? AndroidUtilities.dp((float) this.imageLeft) : (i3 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.imageLeft);
             ImageView imageView = this.imageView;
             imageView.layout(i, textHeight, imageView.getMeasuredWidth() + i, this.imageView.getMeasuredHeight() + textHeight);
         }
@@ -152,6 +148,25 @@ public class TextCell extends FrameLayout {
         this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         this.needDivider = z;
         setWillNotDraw(this.needDivider ^ 1);
+    }
+
+    public void setTextAndIcon(String str, Drawable drawable, boolean z) {
+        this.offsetFromImage = 68;
+        this.imageLeft = 18;
+        this.textView.setText(str);
+        this.valueTextView.setText(null);
+        this.imageView.setColorFilter(null);
+        this.imageView.setImageDrawable(drawable);
+        this.imageView.setVisibility(0);
+        this.valueTextView.setVisibility(8);
+        this.valueImageView.setVisibility(8);
+        this.imageView.setPadding(0, AndroidUtilities.dp(6.0f), 0, 0);
+        this.needDivider = z;
+        setWillNotDraw(this.needDivider ^ 1);
+    }
+
+    public void setOffsetFromImage(int i) {
+        this.offsetFromImage = i;
     }
 
     public void setTextAndValue(String str, String str2, boolean z) {

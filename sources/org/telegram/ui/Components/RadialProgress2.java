@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -14,6 +13,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.ui.ActionBar.Theme.MessageDrawable;
 
 public class RadialProgress2 {
     private int backgroundStroke;
@@ -76,9 +76,9 @@ public class RadialProgress2 {
         invalidateParent();
     }
 
-    public void setBackgroundDrawable(Drawable drawable) {
-        this.mediaActionDrawable.setBackgroundDrawable(drawable);
-        this.miniMediaActionDrawable.setBackgroundDrawable(drawable);
+    public void setBackgroundDrawable(MessageDrawable messageDrawable) {
+        this.mediaActionDrawable.setBackgroundDrawable(messageDrawable);
+        this.miniMediaActionDrawable.setBackgroundDrawable(messageDrawable);
     }
 
     public void setImageOverlay(PhotoSize photoSize, Document document, Object obj) {

@@ -152,7 +152,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             boolean z = false;
-            SharedPreferences access$1500;
+            SharedPreferences access$1100;
             String str;
             String string;
             switch (viewHolder.getItemViewType()) {
@@ -165,15 +165,15 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     return;
                 case 1:
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
-                    access$1500 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
+                    access$1100 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
                     if (i == NotificationsCustomSettingsActivity.this.previewRow) {
                         boolean z2;
                         if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                            z2 = access$1500.getBoolean("EnablePreviewAll", true);
+                            z2 = access$1100.getBoolean("EnablePreviewAll", true);
                         } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                            z2 = access$1500.getBoolean("EnablePreviewGroup", true);
+                            z2 = access$1100.getBoolean("EnablePreviewGroup", true);
                         } else {
-                            z2 = access$1500.getBoolean("EnablePreviewChannel", true);
+                            z2 = access$1100.getBoolean("EnablePreviewChannel", true);
                         }
                         textCheckCell.setTextAndCheck(LocaleController.getString("MessagePreview", NUM), z2, true);
                         return;
@@ -189,13 +189,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     return;
                 case 3:
                     TextColorCell textColorCell = (TextColorCell) viewHolder.itemView;
-                    SharedPreferences access$1900 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
+                    SharedPreferences access$1500 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
                     if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                        i = access$1900.getInt("MessagesLed", -16776961);
+                        i = access$1500.getInt("MessagesLed", -16776961);
                     } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                        i = access$1900.getInt("GroupLed", -16776961);
+                        i = access$1500.getInt("GroupLed", -16776961);
                     } else {
-                        i = access$1900.getInt("ChannelLed", -16776961);
+                        i = access$1500.getInt("ChannelLed", -16776961);
                     }
                     int i2;
                     while (i2 < 9) {
@@ -219,15 +219,15 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     }
                 case 5:
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                    access$1500 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
+                    access$1100 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
                     if (i == NotificationsCustomSettingsActivity.this.messageSoundRow) {
                         String str2 = "SoundDefault";
                         if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                            string = access$1500.getString("GlobalSound", LocaleController.getString(str2, NUM));
+                            string = access$1100.getString("GlobalSound", LocaleController.getString(str2, NUM));
                         } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                            string = access$1500.getString("GroupSound", LocaleController.getString(str2, NUM));
+                            string = access$1100.getString("GroupSound", LocaleController.getString(str2, NUM));
                         } else {
-                            string = access$1500.getString("ChannelSound", LocaleController.getString(str2, NUM));
+                            string = access$1100.getString("ChannelSound", LocaleController.getString(str2, NUM));
                         }
                         String str3 = "NoSound";
                         if (string.equals(str3)) {
@@ -237,11 +237,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                         return;
                     } else if (i == NotificationsCustomSettingsActivity.this.messageVibrateRow) {
                         if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                            i = access$1500.getInt("vibrate_messages", 0);
+                            i = access$1100.getInt("vibrate_messages", 0);
                         } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                            i = access$1500.getInt("vibrate_group", 0);
+                            i = access$1100.getInt("vibrate_group", 0);
                         } else {
-                            i = access$1500.getInt("vibrate_channel", 0);
+                            i = access$1100.getInt("vibrate_channel", 0);
                         }
                         str = "Vibrate";
                         if (i == 0) {
@@ -264,11 +264,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                         }
                     } else if (i == NotificationsCustomSettingsActivity.this.messagePriorityRow) {
                         if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                            i = access$1500.getInt("priority_messages", 1);
+                            i = access$1100.getInt("priority_messages", 1);
                         } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                            i = access$1500.getInt("priority_group", 1);
+                            i = access$1100.getInt("priority_group", 1);
                         } else {
-                            i = access$1500.getInt("priority_channel", 1);
+                            i = access$1100.getInt("priority_channel", 1);
                         }
                         str = "NotificationsImportance";
                         if (i == 0) {
@@ -288,11 +288,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                         }
                     } else if (i == NotificationsCustomSettingsActivity.this.messagePopupNotificationRow) {
                         if (NotificationsCustomSettingsActivity.this.currentType == 1) {
-                            i = access$1500.getInt("popupAll", 0);
+                            i = access$1100.getInt("popupAll", 0);
                         } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
-                            i = access$1500.getInt("popupGroup", 0);
+                            i = access$1100.getInt("popupGroup", 0);
                         } else {
-                            i = access$1500.getInt("popupChannel", 0);
+                            i = access$1100.getInt("popupChannel", 0);
                         }
                         if (i == 0) {
                             string = LocaleController.getString("NoPopup", NUM);
@@ -314,16 +314,16 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) viewHolder.itemView;
                     notificationsCheckCell.setDrawLine(false);
                     StringBuilder stringBuilder = new StringBuilder();
-                    SharedPreferences access$2900 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
+                    SharedPreferences access$2500 = NotificationsCustomSettingsActivity.this.getNotificationsSettings();
                     if (NotificationsCustomSettingsActivity.this.currentType == 1) {
                         string = LocaleController.getString("NotificationsForPrivateChats", NUM);
-                        i3 = access$2900.getInt("EnableAll2", 0);
+                        i3 = access$2500.getInt("EnableAll2", 0);
                     } else if (NotificationsCustomSettingsActivity.this.currentType == 0) {
                         string = LocaleController.getString("NotificationsForGroups", NUM);
-                        i3 = access$2900.getInt("EnableGroup2", 0);
+                        i3 = access$2500.getInt("EnableGroup2", 0);
                     } else {
                         string = LocaleController.getString("NotificationsForChannels", NUM);
-                        i3 = access$2900.getInt("EnableChannel2", 0);
+                        i3 = access$2500.getInt("EnableChannel2", 0);
                     }
                     String str4 = string;
                     i = NotificationsCustomSettingsActivity.this.getConnectionsManager().getCurrentTime();
@@ -421,10 +421,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         public SearchAdapter(Context context) {
             this.mContext = context;
             this.searchAdapterHelper = new SearchAdapterHelper(true);
-            this.searchAdapterHelper.setDelegate(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$NL6PHs6aDhfzvxPlGBUnXlLRajA(this));
+            this.searchAdapterHelper.setDelegate(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$5LwIoMVltQ3Jr8T-oc_eUIaWa0Q(this));
         }
 
-        public /* synthetic */ void lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter() {
+        public /* synthetic */ void lambda$new$0$NotificationsCustomSettingsActivity$SearchAdapter(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 NotificationsCustomSettingsActivity.this.emptyView.showTextView();
             }
@@ -440,7 +440,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults(null);
-                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -459,7 +459,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public /* synthetic */ void lambda$processSearch$3$NotificationsCustomSettingsActivity$SearchAdapter(String str) {
-            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, 0, false, 0);
+            this.searchAdapterHelper.queryServerSearch(str, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
             Utilities.searchQueue.postRunnable(new -$$Lambda$NotificationsCustomSettingsActivity$SearchAdapter$o5HWbYaGlE8-ctf1V7rUoVE87jY(this, str, new ArrayList(NotificationsCustomSettingsActivity.this.exceptions)));
         }
 
@@ -939,11 +939,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 Adapter adapter = this.listView.getAdapter();
                 Adapter adapter2 = this.searchAdapter;
                 if (adapter == adapter2) {
-                    ArrayList access$3600;
+                    ArrayList access$3100;
                     NotificationException notificationException2;
                     Object object = adapter2.getObject(i2);
                     if (object instanceof NotificationException) {
-                        access$3600 = this.searchAdapter.searchResult;
+                        access$3100 = this.searchAdapter.searchResult;
                         notificationException2 = (NotificationException) object;
                     } else {
                         int i4;
@@ -967,10 +967,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                             notificationException2 = notificationException3;
                             z = true;
                         }
-                        access$3600 = this.exceptions;
+                        access$3100 = this.exceptions;
                     }
                     notificationException = notificationException2;
-                    arrayList = access$3600;
+                    arrayList = access$3100;
                 } else {
                     ArrayList arrayList2 = this.exceptions;
                     i3 = i2 - this.exceptionsStartRow;

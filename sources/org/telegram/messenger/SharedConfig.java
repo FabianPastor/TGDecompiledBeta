@@ -30,6 +30,7 @@ public class SharedConfig {
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
+    public static int bubbleRadius = 10;
     private static boolean configLoaded = false;
     public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
@@ -38,11 +39,11 @@ public class SharedConfig {
     public static long directShareHash = 0;
     public static int distanceSystemType = 0;
     public static boolean drawDialogIcons = false;
-    public static int fontSize = AndroidUtilities.dp(16.0f);
+    public static int fontSize = 16;
     public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter = false;
-    public static int ivFontSize = AndroidUtilities.dp(16.0f);
+    public static int ivFontSize = 16;
     public static int keepMedia = 2;
     public static int lastKeepMediaCheckTime = 0;
     private static int lastLocalId = -210000;
@@ -73,6 +74,7 @@ public class SharedConfig {
     public static boolean saveIncomingPhotos = false;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery = false;
+    public static int scheduledOrNoSoundHintShows = 0;
     public static int searchMessagesAsListHintShows = 0;
     public static boolean searchMessagesAsListUsed = false;
     public static boolean showNotificationsForAllAccounts = true;
@@ -152,6 +154,7 @@ public class SharedConfig {
                 edit.putBoolean("sortContactsByName", sortContactsByName);
                 edit.putBoolean("sortFilesByName", sortFilesByName);
                 edit.putInt("textSelectionHintShows", textSelectionHintShows);
+                edit.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
                 edit.commit();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -195,7 +198,7 @@ public class SharedConfig {
                 pushAuthKey = Base64.decode(string, 0);
             }
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
-                lastPauseTime = (int) ((SystemClock.uptimeMillis() / 1000) - 600);
+                lastPauseTime = (int) ((SystemClock.elapsedRealtime() / 1000) - 600);
             }
             String string2 = sharedPreferences.getString("passcodeSalt", "");
             if (string2.length() > 0) {
@@ -218,6 +221,7 @@ public class SharedConfig {
             roundCamera16to9 = true;
             repeatMode = sharedPreferences.getInt("repeatMode", 0);
             fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            bubbleRadius = sharedPreferences.getInt("bubbleRadius", 10);
             ivFontSize = sharedPreferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
             useSystemEmoji = sharedPreferences.getBoolean("useSystemEmoji", false);
@@ -240,6 +244,7 @@ public class SharedConfig {
             searchMessagesAsListHintShows = sharedPreferences.getInt("searchMessagesAsListHintShows", 0);
             searchMessagesAsListUsed = sharedPreferences.getBoolean("searchMessagesAsListUsed", false);
             textSelectionHintShows = sharedPreferences.getInt("textSelectionHintShows", 0);
+            scheduledOrNoSoundHintShows = sharedPreferences.getInt("scheduledOrNoSoundHintShows", 0);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -347,6 +352,7 @@ public class SharedConfig {
         allowScreenCapture = false;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         textSelectionHintShows = 0;
+        scheduledOrNoSoundHintShows = 0;
         saveConfig();
     }
 
@@ -375,6 +381,20 @@ public class SharedConfig {
     public static void removeTextSelectionHint() {
         Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("textSelectionHintShows", 3);
+        edit.commit();
+    }
+
+    public static void increaseScheduledOrNoSuoundHintShowed() {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        int i = scheduledOrNoSoundHintShows + 1;
+        scheduledOrNoSoundHintShows = i;
+        edit.putInt("scheduledOrNoSoundHintShows", i);
+        edit.commit();
+    }
+
+    public static void removeScheduledOrNoSuoundHint() {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("scheduledOrNoSoundHintShows", 3);
         edit.commit();
     }
 

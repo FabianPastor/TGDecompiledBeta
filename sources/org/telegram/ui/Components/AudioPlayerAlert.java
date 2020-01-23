@@ -385,7 +385,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     public void onFailedDownload(String str, boolean z) {
     }
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public void onSuccessDownload(String str) {
@@ -634,7 +634,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             public void onDraw(Canvas canvas) {
                 if (AudioPlayerAlert.this.hasNoCover == 1 || (AudioPlayerAlert.this.hasNoCover == 2 && !(getImageReceiver().hasBitmapImage() && getImageReceiver().getCurrentAlpha() == 1.0f))) {
                     this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-                    canvas.drawRoundRect(this.rect, (float) getRoundRadius(), (float) getRoundRadius(), AudioPlayerAlert.this.paint);
+                    canvas.drawRoundRect(this.rect, (float) getRoundRadius()[0], (float) getRoundRadius()[0], AudioPlayerAlert.this.paint);
                     int dp = (int) (((float) AndroidUtilities.dp(63.0f)) * Math.max(((AudioPlayerAlert.this.thumbMaxScale / getScaleX()) / 3.0f) / AudioPlayerAlert.this.thumbMaxScale, 1.0f / AudioPlayerAlert.this.thumbMaxScale));
                     float f = (float) (dp / 2);
                     int centerX = (int) (this.rect.centerX() - f);
@@ -692,7 +692,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
             }
         });
         this.seekBarView.setReportChanges(true);
-        this.playerLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 8.0f, 62.0f, 8.0f, 0.0f));
+        this.playerLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 4.0f, 58.0f, 4.0f, 0.0f));
         this.progressView = new LineProgressView(context2);
         this.progressView.setVisibility(4);
         this.progressView.setBackgroundColor(Theme.getColor("player_progressBackground"));
@@ -1166,7 +1166,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0.<init>(r5, r6);
         r1.setDelegate(r0);
         r6 = r5.parentActivity;
-        r6.lambda$runLinkRequest$32$LaunchActivity(r1);
+        r6.lambda$runLinkRequest$30$LaunchActivity(r1);
         r5.dismiss();
         goto L_0x0175;
     L_0x004b:
@@ -1229,7 +1229,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
     L_0x00b3:
         r6 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r0 = "ShareFile";
-        r2 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
+        r2 = NUM; // 0x7f0e0a58 float:1.8880408E38 double:1.053163465E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r0 = android.content.Intent.createChooser(r1, r0);	 Catch:{ Exception -> 0x00f9 }
         r1 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -1240,15 +1240,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x00f9 }
         r6.<init>(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "AppName";
-        r2 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
+        r2 = NUM; // 0x7f0e0100 float:1.8875557E38 double:1.053162283E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setTitle(r0);	 Catch:{ Exception -> 0x00f9 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
+        r2 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x00f9 }
         r6.setPositiveButton(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r0 = "PleaseDownload";
-        r1 = NUM; // 0x7f0e08df float:1.8879644E38 double:1.0531632787E-314;
+        r1 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);	 Catch:{ Exception -> 0x00f9 }
         r6.setMessage(r0);	 Catch:{ Exception -> 0x00f9 }
         r6.show();	 Catch:{ Exception -> 0x00f9 }
@@ -1504,8 +1504,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenterD
         }
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.progressView.setProgress(f, true);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
     }
 
     public int getObserverTag() {

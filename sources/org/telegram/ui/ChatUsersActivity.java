@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DispatchQueue;
@@ -72,9 +71,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
-import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
-import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
-import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate.-CC;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
@@ -291,9 +287,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         private void setItem(int i) {
             if (ChatUsersActivity.this.info != null) {
                 ChatUsersActivity.this.selectedSlowmode = i;
-                ChatUsersActivity.this.info.slowmode_seconds = ChatUsersActivity.this.getSecondsForIndex(i);
-                ChatFull access$100 = ChatUsersActivity.this.info;
-                access$100.flags |= 131072;
                 for (i = 0; i < 3; i++) {
                     ViewHolder findViewHolderForAdapterPosition = ChatUsersActivity.this.listView.findViewHolderForAdapterPosition(ChatUsersActivity.this.slowmodeInfoRow);
                     if (findViewHolderForAdapterPosition != null) {
@@ -488,12 +481,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             String str = "windowBackgroundGrayShadow";
             boolean z = false;
             boolean z2;
-            String access$3600;
+            String access$3000;
             String str2;
             String string;
             switch (viewHolder.getItemViewType()) {
                 case 0:
-                    int access$3100;
+                    int access$2600;
                     int i3;
                     int i4;
                     int i5;
@@ -504,11 +497,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     manageChatUserCell.setTag(Integer.valueOf(i));
                     TLObject item = getItem(i2);
                     if (i2 >= ChatUsersActivity.this.participantsStartRow && i2 < ChatUsersActivity.this.participantsEndRow) {
-                        access$3100 = ChatUsersActivity.this.participantsEndRow;
+                        access$2600 = ChatUsersActivity.this.participantsEndRow;
                     } else if (i2 < ChatUsersActivity.this.contactsStartRow || i2 >= ChatUsersActivity.this.contactsEndRow) {
-                        access$3100 = ChatUsersActivity.this.botEndRow;
+                        access$2600 = ChatUsersActivity.this.botEndRow;
                     } else {
-                        access$3100 = ChatUsersActivity.this.contactsEndRow;
+                        access$2600 = ChatUsersActivity.this.contactsEndRow;
                     }
                     if (item instanceof ChannelParticipant) {
                         ChannelParticipant channelParticipant = (ChannelParticipant) item;
@@ -535,15 +528,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
                     CharSequence formatString;
                     if (ChatUsersActivity.this.type == 3) {
-                        access$3600 = ChatUsersActivity.this.formatUserPermissions(tL_chatBannedRights);
-                        if (i2 != access$3100 - 1) {
+                        access$3000 = ChatUsersActivity.this.formatUserPermissions(tL_chatBannedRights);
+                        if (i2 != access$2600 - 1) {
                             z = true;
                         }
-                        manageChatUserCell.setData(user, null, access$3600, z);
+                        manageChatUserCell.setData(user, null, access$3000, z);
                         return;
                     } else if (ChatUsersActivity.this.type == 0) {
                         formatString = (!z3 || ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i4)) == null) ? null : LocaleController.formatString("UserRemovedBy", NUM, UserObject.getUserName(ChatUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i4))));
-                        if (i2 != access$3100 - 1) {
+                        if (i2 != access$2600 - 1) {
                             z = true;
                         }
                         manageChatUserCell.setData(user, null, formatString, z);
@@ -560,13 +553,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             }
                             formatString = null;
                         }
-                        if (i2 != access$3100 - 1) {
+                        if (i2 != access$2600 - 1) {
                             z = true;
                         }
                         manageChatUserCell.setData(user, null, formatString, z);
                         return;
                     } else if (ChatUsersActivity.this.type == 2) {
-                        if (i2 != access$3100 - 1) {
+                        if (i2 != access$2600 - 1) {
                             z = true;
                         }
                         manageChatUserCell.setData(user, null, null, z);
@@ -617,25 +610,25 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         }
                     } else if (i2 == ChatUsersActivity.this.slowmodeInfoRow) {
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
-                        if (ChatUsersActivity.this.info == null || ChatUsersActivity.this.info.slowmode_seconds == 0) {
+                        ChatUsersActivity chatUsersActivity = ChatUsersActivity.this;
+                        i2 = chatUsersActivity.getSecondsForIndex(chatUsersActivity.selectedSlowmode);
+                        if (ChatUsersActivity.this.info == null || i2 == 0) {
                             textInfoPrivacyCell.setText(LocaleController.getString("SlowmodeInfoOff", NUM));
                             return;
                         }
                         str2 = "SlowmodeInfoSelected";
                         Object[] objArr;
-                        if (ChatUsersActivity.this.info.slowmode_seconds < 60) {
-                            objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Seconds", ChatUsersActivity.this.info.slowmode_seconds);
-                            textInfoPrivacyCell.setText(LocaleController.formatString(str2, NUM, objArr));
+                        if (i2 < 60) {
+                            textInfoPrivacyCell.setText(LocaleController.formatString(str2, NUM, LocaleController.formatPluralString("Seconds", i2)));
                             return;
-                        } else if (ChatUsersActivity.this.info.slowmode_seconds < 3600) {
+                        } else if (i2 < 3600) {
                             objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Minutes", ChatUsersActivity.this.info.slowmode_seconds / 60);
+                            objArr[0] = LocaleController.formatPluralString("Minutes", i2 / 60);
                             textInfoPrivacyCell.setText(LocaleController.formatString(str2, NUM, objArr));
                             return;
                         } else {
                             objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Hours", (ChatUsersActivity.this.info.slowmode_seconds / 60) / 60);
+                            objArr[0] = LocaleController.formatPluralString("Hours", (i2 / 60) / 60);
                             textInfoPrivacyCell.setText(LocaleController.formatString(str2, NUM, objArr));
                             return;
                         }
@@ -734,15 +727,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     TextCheckCell2 textCheckCell2 = (TextCheckCell2) viewHolder2.itemView;
                     boolean z5;
                     if (i2 == ChatUsersActivity.this.changeInfoRow) {
-                        access$3600 = LocaleController.getString("UserRestrictionsChangeInfo", NUM);
+                        access$3000 = LocaleController.getString("UserRestrictionsChangeInfo", NUM);
                         z5 = !ChatUsersActivity.this.defaultBannedRights.change_info && TextUtils.isEmpty(ChatUsersActivity.this.currentChat.username);
-                        textCheckCell2.setTextAndCheck(access$3600, z5, false);
+                        textCheckCell2.setTextAndCheck(access$3000, z5, false);
                     } else if (i2 == ChatUsersActivity.this.addUsersRow) {
                         textCheckCell2.setTextAndCheck(LocaleController.getString("UserRestrictionsInviteUsers", NUM), ChatUsersActivity.this.defaultBannedRights.invite_users ^ 1, true);
                     } else if (i2 == ChatUsersActivity.this.pinMessagesRow) {
-                        access$3600 = LocaleController.getString("UserRestrictionsPinMessages", NUM);
+                        access$3000 = LocaleController.getString("UserRestrictionsPinMessages", NUM);
                         z5 = !ChatUsersActivity.this.defaultBannedRights.pin_messages && TextUtils.isEmpty(ChatUsersActivity.this.currentChat.username);
-                        textCheckCell2.setTextAndCheck(access$3600, z5, true);
+                        textCheckCell2.setTextAndCheck(access$3000, z5, true);
                     } else if (i2 == ChatUsersActivity.this.sendMessagesRow) {
                         textCheckCell2.setTextAndCheck(LocaleController.getString("UserRestrictionsSend", NUM), ChatUsersActivity.this.defaultBannedRights.send_messages ^ 1, true);
                     } else if (i2 == ChatUsersActivity.this.sendMediaRow) {
@@ -867,18 +860,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         public SearchAdapter(Context context) {
             this.mContext = context;
             this.searchAdapterHelper = new SearchAdapterHelper(true);
-            this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(ChatUsersActivity.this) {
-                public /* synthetic */ SparseArray<User> getExcludeUsers() {
-                    return -CC.$default$getExcludeUsers(this);
-                }
+            this.searchAdapterHelper.setDelegate(new -$$Lambda$ChatUsersActivity$SearchAdapter$nBp0cYuK5s5OlRyVzSMJ1ERFo2Y(this));
+        }
 
-                public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-                }
-
-                public void onDataSetChanged() {
-                    SearchAdapter.this.notifyDataSetChanged();
-                }
-            });
+        public /* synthetic */ void lambda$new$0$ChatUsersActivity$SearchAdapter(int i) {
+            notifyDataSetChanged();
         }
 
         public void searchUsers(String str) {
@@ -891,34 +877,34 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.searchResultMap.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults(null);
-                this.searchAdapterHelper.queryServerSearch(null, ChatUsersActivity.this.type != 0, false, true, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type);
+                this.searchAdapterHelper.queryServerSearch(null, ChatUsersActivity.this.type != 0, false, true, false, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
                 notifyDataSetChanged();
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            -$$Lambda$ChatUsersActivity$SearchAdapter$kTmzLyU1FnpohT9yQUx4Sb0EPJc -__lambda_chatusersactivity_searchadapter_ktmzlyu1fnpoht9yqux4sb0epjc = new -$$Lambda$ChatUsersActivity$SearchAdapter$kTmzLyU1FnpohT9yQUx4Sb0EPJc(this, str);
-            this.searchRunnable = -__lambda_chatusersactivity_searchadapter_ktmzlyu1fnpoht9yqux4sb0epjc;
-            dispatchQueue.postRunnable(-__lambda_chatusersactivity_searchadapter_ktmzlyu1fnpoht9yqux4sb0epjc, 300);
+            -$$Lambda$ChatUsersActivity$SearchAdapter$AmcgAizpk7RD_0P-1gB9DzNaYag -__lambda_chatusersactivity_searchadapter_amcgaizpk7rd_0p-1gb9dznayag = new -$$Lambda$ChatUsersActivity$SearchAdapter$AmcgAizpk7RD_0P-1gB9DzNaYag(this, str);
+            this.searchRunnable = -__lambda_chatusersactivity_searchadapter_amcgaizpk7rd_0p-1gb9dznayag;
+            dispatchQueue.postRunnable(-__lambda_chatusersactivity_searchadapter_amcgaizpk7rd_0p-1gb9dznayag, 300);
         }
 
-        public /* synthetic */ void lambda$searchUsers$0$ChatUsersActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$searchUsers$1$ChatUsersActivity$SearchAdapter(String str) {
             processSearch(str);
         }
 
         private void processSearch(String str) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatUsersActivity$SearchAdapter$zcGPzg6AlSiEVmqjCWms3OvMW4s(this, str));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatUsersActivity$SearchAdapter$ebyhdTaPm59H9XhOfPGzTvar_Y(this, str));
         }
 
-        public /* synthetic */ void lambda$processSearch$2$ChatUsersActivity$SearchAdapter(String str) {
+        public /* synthetic */ void lambda$processSearch$3$ChatUsersActivity$SearchAdapter(String str) {
             ArrayList arrayList = null;
             this.searchRunnable = null;
             ArrayList arrayList2 = (ChatObject.isChannel(ChatUsersActivity.this.currentChat) || ChatUsersActivity.this.info == null) ? null : new ArrayList(ChatUsersActivity.this.info.participants.participants);
             if (ChatUsersActivity.this.selectType == 1) {
                 arrayList = new ArrayList(ChatUsersActivity.this.getContactsController().contacts);
             }
-            this.searchAdapterHelper.queryServerSearch(str, ChatUsersActivity.this.selectType != 0, false, true, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type);
+            this.searchAdapterHelper.queryServerSearch(str, ChatUsersActivity.this.selectType != 0, false, true, false, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 0);
             if (arrayList2 != null || arrayList != null) {
-                Utilities.searchQueue.postRunnable(new -$$Lambda$ChatUsersActivity$SearchAdapter$nCoaqRgr8A9Exi9qEjyQaRMerr0(this, str, arrayList2, arrayList));
+                Utilities.searchQueue.postRunnable(new -$$Lambda$ChatUsersActivity$SearchAdapter$41AXcD0nSkfOW07kKR8CbS87SJY(this, str, arrayList2, arrayList));
             }
         }
 
@@ -932,7 +918,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         /* JADX WARNING: Missing block: B:81:0x01ff, code skipped:
             if (r6.contains(r2.toString()) != false) goto L_0x020e;
      */
-        public /* synthetic */ void lambda$null$1$ChatUsersActivity$SearchAdapter(java.lang.String r22, java.util.ArrayList r23, java.util.ArrayList r24) {
+        public /* synthetic */ void lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String r22, java.util.ArrayList r23, java.util.ArrayList r24) {
             /*
             r21 = this;
             r0 = r21;
@@ -1265,14 +1251,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0.updateSearchResults(r3, r2, r9, r10);
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity$SearchAdapter.lambda$null$1$ChatUsersActivity$SearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity$SearchAdapter.lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<TLObject> arrayList, SparseArray<TLObject> sparseArray, ArrayList<CharSequence> arrayList2, ArrayList<TLObject> arrayList3) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatUsersActivity$SearchAdapter$sRnwiYgDpsrwBx0IuZ6x2bcLLQ4(this, arrayList, sparseArray, arrayList2, arrayList3));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ChatUsersActivity$SearchAdapter$8QJzltWXH8TVGPMYFDo_tdWaX_A(this, arrayList, sparseArray, arrayList2, arrayList3));
         }
 
-        public /* synthetic */ void lambda$updateSearchResults$3$ChatUsersActivity$SearchAdapter(ArrayList arrayList, SparseArray sparseArray, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$updateSearchResults$4$ChatUsersActivity$SearchAdapter(ArrayList arrayList, SparseArray sparseArray, ArrayList arrayList2, ArrayList arrayList3) {
             if (ChatUsersActivity.this.searching) {
                 this.searchResult = arrayList;
                 this.searchResultMap = sparseArray;
@@ -1408,7 +1394,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity$SearchAdapter.getItem(int):org.telegram.tgnet.TLObject");
         }
 
-        public /* synthetic */ boolean lambda$onCreateViewHolder$4$ChatUsersActivity$SearchAdapter(ManageChatUserCell manageChatUserCell, boolean z) {
+        public /* synthetic */ boolean lambda$onCreateViewHolder$5$ChatUsersActivity$SearchAdapter(ManageChatUserCell manageChatUserCell, boolean z) {
             TLObject item = getItem(((Integer) manageChatUserCell.getTag()).intValue());
             if (!(item instanceof ChannelParticipant)) {
                 return false;
@@ -1423,7 +1409,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             } else {
                 graySectionCell = new ManageChatUserCell(this.mContext, 2, 2, ChatUsersActivity.this.selectType == 0);
                 graySectionCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                graySectionCell.setDelegate(new -$$Lambda$ChatUsersActivity$SearchAdapter$fSIulZwDi8NAXDLh6m3-GQxlD8U(this));
+                graySectionCell.setDelegate(new -$$Lambda$ChatUsersActivity$SearchAdapter$CZrxR2bS9Qj-5QfWDSuEIenTxhk(this));
             }
             return new Holder(graySectionCell);
         }
@@ -1459,7 +1445,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r15 = r15.type;
             if (r15 != 0) goto L_0x0029;
         L_0x001b:
-            r15 = NUM; // 0x7f0e0242 float:1.887621E38 double:1.053162442E-314;
+            r15 = NUM; // 0x7f0e024b float:1.8876228E38 double:1.0531624466E-314;
             r0 = "ChannelBlockedUsers";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -1470,7 +1456,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = 3;
             if (r15 != r0) goto L_0x0040;
         L_0x0032:
-            r15 = NUM; // 0x7f0e0281 float:1.8876338E38 double:1.0531624733E-314;
+            r15 = NUM; // 0x7f0e028b float:1.8876358E38 double:1.0531624783E-314;
             r0 = "ChannelRestrictedUsers";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -1480,13 +1466,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r15 = r15.isChannel;
             if (r15 == 0) goto L_0x0056;
         L_0x0048:
-            r15 = NUM; // 0x7f0e0289 float:1.8876354E38 double:1.0531624773E-314;
+            r15 = NUM; // 0x7f0e0293 float:1.8876374E38 double:1.053162482E-314;
             r0 = "ChannelSubscribers";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
             goto L_0x01ad;
         L_0x0056:
-            r15 = NUM; // 0x7f0e025e float:1.8876267E38 double:1.053162456E-314;
+            r15 = NUM; // 0x7f0e0267 float:1.8876285E38 double:1.0531624605E-314;
             r0 = "ChannelMembers";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -1495,7 +1481,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = r13.globalStartRow;
             if (r15 != r0) goto L_0x0076;
         L_0x0068:
-            r15 = NUM; // 0x7f0e0526 float:1.887771E38 double:1.053162808E-314;
+            r15 = NUM; // 0x7f0e0531 float:1.8877733E38 double:1.053162813E-314;
             r0 = "GlobalSearch";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -1504,7 +1490,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = r13.contactsStartRow;
             if (r15 != r0) goto L_0x01ad;
         L_0x007a:
-            r15 = NUM; // 0x7f0e032a float:1.887668E38 double:1.053162557E-314;
+            r15 = NUM; // 0x7f0e0334 float:1.88767E38 double:1.053162562E-314;
             r0 = "Contacts";
             r15 = org.telegram.messenger.LocaleController.getString(r0, r15);
             r14.setText(r15);
@@ -2119,7 +2105,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = 0;
         r9.searching = r0;
         r1 = r9.actionBar;
-        r2 = NUM; // 0x7var_f2 float:1.7945069E38 double:1.0529356226E-314;
+        r2 = NUM; // 0x7var_f3 float:1.794507E38 double:1.052935623E-314;
         r1.setBackButtonImage(r2);
         r1 = r9.actionBar;
         r2 = 1;
@@ -2130,7 +2116,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != r4) goto L_0x0027;
     L_0x0017:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0275 float:1.8876313E38 double:1.0531624674E-314;
+        r5 = NUM; // 0x7f0e027f float:1.8876334E38 double:1.0531624723E-314;
         r6 = "ChannelPermissions";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2139,7 +2125,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != 0) goto L_0x0038;
     L_0x0029:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0240 float:1.8876206E38 double:1.053162441E-314;
+        r5 = NUM; // 0x7f0e0249 float:1.8876224E38 double:1.0531624457E-314;
         r6 = "ChannelBlacklist";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2148,7 +2134,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != r2) goto L_0x0049;
     L_0x003a:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e023b float:1.8876196E38 double:1.0531624387E-314;
+        r5 = NUM; // 0x7f0e0244 float:1.8876214E38 double:1.053162443E-314;
         r6 = "ChannelAdministrators";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2163,14 +2149,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 == 0) goto L_0x0062;
     L_0x0053:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0289 float:1.8876354E38 double:1.0531624773E-314;
+        r5 = NUM; // 0x7f0e0293 float:1.8876374E38 double:1.053162482E-314;
         r6 = "ChannelSubscribers";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
         goto L_0x00a3;
     L_0x0062:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e025e float:1.8876267E38 double:1.053162456E-314;
+        r5 = NUM; // 0x7f0e0267 float:1.8876285E38 double:1.0531624605E-314;
         r6 = "ChannelMembers";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2179,7 +2165,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != r2) goto L_0x0082;
     L_0x0073:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0231 float:1.8876175E38 double:1.053162434E-314;
+        r5 = NUM; // 0x7f0e023a float:1.8876194E38 double:1.0531624382E-314;
         r6 = "ChannelAddAdmin";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2188,7 +2174,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != r3) goto L_0x0093;
     L_0x0084:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0241 float:1.8876208E38 double:1.0531624417E-314;
+        r5 = NUM; // 0x7f0e024a float:1.8876226E38 double:1.053162446E-314;
         r6 = "ChannelBlockUser";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2197,7 +2183,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r1 != r4) goto L_0x00a3;
     L_0x0095:
         r1 = r9.actionBar;
-        r5 = NUM; // 0x7f0e0232 float:1.8876177E38 double:1.0531624343E-314;
+        r5 = NUM; // 0x7f0e023b float:1.8876196E38 double:1.0531624387E-314;
         r6 = "ChannelAddException";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r1.setTitle(r5);
@@ -2221,7 +2207,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r9.searchListViewAdapter = r1;
         r1 = r9.actionBar;
         r1 = r1.createMenu();
-        r5 = NUM; // 0x7var_fc float:1.794509E38 double:1.0529356275E-314;
+        r5 = NUM; // 0x7var_fd float:1.7945091E38 double:1.052935628E-314;
         r5 = r1.addItem(r0, r5);
         r5 = r5.setIsSearchField(r2);
         r6 = new org.telegram.ui.ChatUsersActivity$2;
@@ -2232,14 +2218,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r5 != r4) goto L_0x00ef;
     L_0x00e0:
         r5 = r9.searchItem;
-        r6 = NUM; // 0x7f0e0282 float:1.887634E38 double:1.053162474E-314;
+        r6 = NUM; // 0x7f0e028c float:1.887636E38 double:1.053162479E-314;
         r7 = "ChannelSearchException";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5.setSearchFieldHint(r6);
         goto L_0x00fd;
     L_0x00ef:
         r5 = r9.searchItem;
-        r6 = NUM; // 0x7f0e09b2 float:1.8880072E38 double:1.053163383E-314;
+        r6 = NUM; // 0x7f0e09d9 float:1.888015E38 double:1.053163402E-314;
         r7 = "Search";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5.setSearchFieldHint(r6);
@@ -2247,10 +2233,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r5 = r9.type;
         if (r5 != r4) goto L_0x0119;
     L_0x0101:
-        r5 = NUM; // 0x7var_f float:1.7945128E38 double:1.052935637E-314;
+        r5 = NUM; // 0x7var_ float:1.794513E38 double:1.0529356374E-314;
         r6 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r7 = NUM; // 0x7f0e03e1 float:1.8877052E38 double:1.053162647E-314;
+        r7 = NUM; // 0x7f0e03eb float:1.8877072E38 double:1.053162652E-314;
         r8 = "Done";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r1 = r1.addItemWithWidth(r2, r5, r6, r7);
@@ -2276,7 +2262,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (r5 != r4) goto L_0x014d;
     L_0x013f:
         r4 = r9.emptyView;
-        r5 = NUM; // 0x7f0e06bf float:1.887854E38 double:1.05316301E-314;
+        r5 = NUM; // 0x7f0e06cc float:1.8878567E38 double:1.0531630163E-314;
         r6 = "NoResult";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setText(r5);
@@ -2361,9 +2347,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.createView(android.content.Context):android.view.View");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x04c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x0398  */
+    /* JADX WARNING: Removed duplicated region for block: B:261:0x04c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x04c6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x0397  */
     public /* synthetic */ void lambda$createView$1$ChatUsersActivity(android.view.View r22, int r23) {
         /*
         r21 = this;
@@ -2383,23 +2369,23 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     L_0x0013:
         r2 = 3;
         r5 = 2;
-        if (r1 == 0) goto L_0x029d;
+        if (r1 == 0) goto L_0x029c;
     L_0x0017:
         r6 = r9.addNewRow;
         r7 = "type";
         r8 = "chat_id";
-        if (r0 != r6) goto L_0x00b8;
-    L_0x0020:
+        if (r0 != r6) goto L_0x00b7;
+    L_0x001f:
         r0 = r9.type;
         r1 = "selectType";
-        if (r0 == 0) goto L_0x0095;
-    L_0x0026:
-        if (r0 != r2) goto L_0x0029;
+        if (r0 == 0) goto L_0x0094;
+    L_0x0025:
+        if (r0 != r2) goto L_0x0028;
+    L_0x0027:
+        goto L_0x0094;
     L_0x0028:
-        goto L_0x0095;
-    L_0x0029:
-        if (r0 != r4) goto L_0x0051;
-    L_0x002b:
+        if (r0 != r4) goto L_0x0050;
+    L_0x002a:
         r0 = new android.os.Bundle;
         r0.<init>();
         r2 = r9.chatId;
@@ -2414,22 +2400,22 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = r9.info;
         r1.setInfo(r0);
         r9.presentFragment(r1);
-        goto L_0x00b7;
-    L_0x0051:
-        if (r0 != r5) goto L_0x00b7;
-    L_0x0053:
+        goto L_0x00b6;
+    L_0x0050:
+        if (r0 != r5) goto L_0x00b6;
+    L_0x0052:
         r0 = new android.os.Bundle;
         r0.<init>();
         r1 = "addToGroup";
         r0.putBoolean(r1, r4);
         r1 = r9.isChannel;
-        if (r1 == 0) goto L_0x0064;
-    L_0x0061:
+        if (r1 == 0) goto L_0x0063;
+    L_0x0060:
         r1 = "channelId";
-        goto L_0x0066;
-    L_0x0064:
+        goto L_0x0065;
+    L_0x0063:
         r1 = "chatId";
-    L_0x0066:
+    L_0x0065:
         r2 = r9.currentChat;
         r2 = r2.id;
         r0.putInt(r1, r2);
@@ -2438,54 +2424,54 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = r9.info;
         r1.setInfo(r0);
         r0 = r9.contactsMap;
-        if (r0 == 0) goto L_0x0084;
-    L_0x007b:
+        if (r0 == 0) goto L_0x0083;
+    L_0x007a:
         r0 = r0.size();
-        if (r0 == 0) goto L_0x0084;
-    L_0x0081:
+        if (r0 == 0) goto L_0x0083;
+    L_0x0080:
         r0 = r9.contactsMap;
-        goto L_0x0086;
-    L_0x0084:
+        goto L_0x0085;
+    L_0x0083:
         r0 = r9.participantsMap;
-    L_0x0086:
+    L_0x0085:
         r1.setIgnoreUsers(r0);
         r0 = new org.telegram.ui.ChatUsersActivity$4;
         r0.<init>();
         r1.setDelegate(r0);
         r9.presentFragment(r1);
-        goto L_0x00b7;
-    L_0x0095:
+        goto L_0x00b6;
+    L_0x0094:
         r0 = new android.os.Bundle;
         r0.<init>();
         r3 = r9.chatId;
         r0.putInt(r8, r3);
         r0.putInt(r7, r5);
         r3 = r9.type;
-        if (r3 != 0) goto L_0x00a7;
-    L_0x00a6:
+        if (r3 != 0) goto L_0x00a6;
+    L_0x00a5:
         r2 = 2;
-    L_0x00a7:
+    L_0x00a6:
         r0.putInt(r1, r2);
         r1 = new org.telegram.ui.ChatUsersActivity;
         r1.<init>(r0);
         r0 = r9.info;
         r1.setInfo(r0);
         r9.presentFragment(r1);
-    L_0x00b7:
+    L_0x00b6:
         return;
-    L_0x00b8:
+    L_0x00b7:
         r6 = r9.recentActionsRow;
-        if (r0 != r6) goto L_0x00c7;
-    L_0x00bc:
+        if (r0 != r6) goto L_0x00c6;
+    L_0x00bb:
         r0 = new org.telegram.ui.ChannelAdminLogActivity;
         r1 = r9.currentChat;
         r0.<init>(r1);
         r9.presentFragment(r0);
         return;
-    L_0x00c7:
+    L_0x00c6:
         r6 = r9.removedUsersRow;
-        if (r0 != r6) goto L_0x00e6;
-    L_0x00cb:
+        if (r0 != r6) goto L_0x00e5;
+    L_0x00ca:
         r0 = new android.os.Bundle;
         r0.<init>();
         r1 = r9.chatId;
@@ -2497,113 +2483,113 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1.setInfo(r0);
         r9.presentFragment(r1);
         return;
-    L_0x00e6:
+    L_0x00e5:
         r6 = r9.addNew2Row;
-        if (r0 != r6) goto L_0x00f5;
-    L_0x00ea:
+        if (r0 != r6) goto L_0x00f4;
+    L_0x00e9:
         r0 = new org.telegram.ui.GroupInviteActivity;
         r1 = r9.chatId;
         r0.<init>(r1);
         r9.presentFragment(r0);
         return;
-    L_0x00f5:
+    L_0x00f4:
         r6 = r9.permissionsSectionRow;
-        if (r0 <= r6) goto L_0x029d;
-    L_0x00f9:
+        if (r0 <= r6) goto L_0x029c;
+    L_0x00f8:
         r6 = r9.changeInfoRow;
-        if (r0 > r6) goto L_0x029d;
-    L_0x00fd:
+        if (r0 > r6) goto L_0x029c;
+    L_0x00fc:
         r1 = r22;
         r1 = (org.telegram.ui.Cells.TextCheckCell2) r1;
         r2 = r1.isEnabled();
-        if (r2 != 0) goto L_0x0108;
-    L_0x0107:
+        if (r2 != 0) goto L_0x0107;
+    L_0x0106:
         return;
-    L_0x0108:
+    L_0x0107:
         r2 = r1.hasIcon();
-        if (r2 == 0) goto L_0x014a;
-    L_0x010e:
+        if (r2 == 0) goto L_0x0149;
+    L_0x010d:
         r1 = r9.currentChat;
         r1 = r1.username;
         r1 = android.text.TextUtils.isEmpty(r1);
-        if (r1 != 0) goto L_0x0135;
-    L_0x0118:
+        if (r1 != 0) goto L_0x0134;
+    L_0x0117:
         r1 = r9.pinMessagesRow;
-        if (r0 == r1) goto L_0x0120;
-    L_0x011c:
+        if (r0 == r1) goto L_0x011f;
+    L_0x011b:
         r1 = r9.changeInfoRow;
-        if (r0 != r1) goto L_0x0135;
-    L_0x0120:
+        if (r0 != r1) goto L_0x0134;
+    L_0x011f:
         r0 = r21.getParentActivity();
-        r1 = NUM; // 0x7f0e0404 float:1.8877123E38 double:1.0531626645E-314;
+        r1 = NUM; // 0x7f0e040e float:1.8877143E38 double:1.0531626695E-314;
         r2 = "EditCantEditPermissionsPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0 = android.widget.Toast.makeText(r0, r1, r3);
         r0.show();
-        goto L_0x0149;
-    L_0x0135:
+        goto L_0x0148;
+    L_0x0134:
         r0 = r21.getParentActivity();
-        r1 = NUM; // 0x7f0e0403 float:1.887712E38 double:1.053162664E-314;
+        r1 = NUM; // 0x7f0e040d float:1.887714E38 double:1.053162669E-314;
         r2 = "EditCantEditPermissions";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0 = android.widget.Toast.makeText(r0, r1, r3);
         r0.show();
-    L_0x0149:
+    L_0x0148:
         return;
-    L_0x014a:
+    L_0x0149:
         r2 = r1.isChecked();
         r2 = r2 ^ r4;
         r1.setChecked(r2);
         r2 = r9.changeInfoRow;
-        if (r0 != r2) goto L_0x015f;
-    L_0x0156:
+        if (r0 != r2) goto L_0x015e;
+    L_0x0155:
         r0 = r9.defaultBannedRights;
         r1 = r0.change_info;
         r1 = r1 ^ r4;
         r0.change_info = r1;
-        goto L_0x029c;
-    L_0x015f:
+        goto L_0x029b;
+    L_0x015e:
         r2 = r9.addUsersRow;
-        if (r0 != r2) goto L_0x016c;
-    L_0x0163:
+        if (r0 != r2) goto L_0x016b;
+    L_0x0162:
         r0 = r9.defaultBannedRights;
         r1 = r0.invite_users;
         r1 = r1 ^ r4;
         r0.invite_users = r1;
-        goto L_0x029c;
-    L_0x016c:
+        goto L_0x029b;
+    L_0x016b:
         r2 = r9.pinMessagesRow;
-        if (r0 != r2) goto L_0x0179;
-    L_0x0170:
+        if (r0 != r2) goto L_0x0178;
+    L_0x016f:
         r0 = r9.defaultBannedRights;
         r1 = r0.pin_messages;
         r1 = r1 ^ r4;
         r0.pin_messages = r1;
-        goto L_0x029c;
-    L_0x0179:
+        goto L_0x029b;
+    L_0x0178:
         r1 = r1.isChecked();
         r1 = r1 ^ r4;
         r2 = r9.sendMessagesRow;
-        if (r0 != r2) goto L_0x018a;
-    L_0x0182:
+        if (r0 != r2) goto L_0x0189;
+    L_0x0181:
         r0 = r9.defaultBannedRights;
         r2 = r0.send_messages;
         r2 = r2 ^ r4;
         r0.send_messages = r2;
-        goto L_0x01bf;
-    L_0x018a:
+        goto L_0x01be;
+    L_0x0189:
         r2 = r9.sendMediaRow;
-        if (r0 != r2) goto L_0x0196;
-    L_0x018e:
+        if (r0 != r2) goto L_0x0195;
+    L_0x018d:
         r0 = r9.defaultBannedRights;
         r2 = r0.send_media;
         r2 = r2 ^ r4;
         r0.send_media = r2;
-        goto L_0x01bf;
-    L_0x0196:
+        goto L_0x01be;
+    L_0x0195:
         r2 = r9.sendStickersRow;
-        if (r0 != r2) goto L_0x01a8;
-    L_0x019a:
+        if (r0 != r2) goto L_0x01a7;
+    L_0x0199:
         r0 = r9.defaultBannedRights;
         r2 = r0.send_stickers;
         r2 = r2 ^ r4;
@@ -2611,97 +2597,97 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0.send_gifs = r2;
         r0.send_games = r2;
         r0.send_stickers = r2;
-        goto L_0x01bf;
-    L_0x01a8:
+        goto L_0x01be;
+    L_0x01a7:
         r2 = r9.embedLinksRow;
-        if (r0 != r2) goto L_0x01b4;
-    L_0x01ac:
+        if (r0 != r2) goto L_0x01b3;
+    L_0x01ab:
         r0 = r9.defaultBannedRights;
         r2 = r0.embed_links;
         r2 = r2 ^ r4;
         r0.embed_links = r2;
-        goto L_0x01bf;
-    L_0x01b4:
+        goto L_0x01be;
+    L_0x01b3:
         r2 = r9.sendPollsRow;
-        if (r0 != r2) goto L_0x01bf;
-    L_0x01b8:
+        if (r0 != r2) goto L_0x01be;
+    L_0x01b7:
         r0 = r9.defaultBannedRights;
         r2 = r0.send_polls;
         r2 = r2 ^ r4;
         r0.send_polls = r2;
-    L_0x01bf:
-        if (r1 == 0) goto L_0x0271;
-    L_0x01c1:
+    L_0x01be:
+        if (r1 == 0) goto L_0x0270;
+    L_0x01c0:
         r0 = r9.defaultBannedRights;
         r1 = r0.view_messages;
-        if (r1 == 0) goto L_0x01de;
-    L_0x01c7:
+        if (r1 == 0) goto L_0x01dd;
+    L_0x01c6:
         r1 = r0.send_messages;
-        if (r1 != 0) goto L_0x01de;
-    L_0x01cb:
+        if (r1 != 0) goto L_0x01dd;
+    L_0x01ca:
         r0.send_messages = r4;
         r0 = r9.listView;
         r1 = r9.sendMessagesRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x01de;
-    L_0x01d7:
+        if (r0 == 0) goto L_0x01dd;
+    L_0x01d6:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r3);
-    L_0x01de:
+    L_0x01dd:
         r0 = r9.defaultBannedRights;
         r1 = r0.view_messages;
-        if (r1 != 0) goto L_0x01e8;
-    L_0x01e4:
+        if (r1 != 0) goto L_0x01e7;
+    L_0x01e3:
         r0 = r0.send_messages;
-        if (r0 == 0) goto L_0x0201;
-    L_0x01e8:
+        if (r0 == 0) goto L_0x0200;
+    L_0x01e7:
         r0 = r9.defaultBannedRights;
         r1 = r0.send_media;
-        if (r1 != 0) goto L_0x0201;
-    L_0x01ee:
+        if (r1 != 0) goto L_0x0200;
+    L_0x01ed:
         r0.send_media = r4;
         r0 = r9.listView;
         r1 = r9.sendMediaRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x0201;
-    L_0x01fa:
+        if (r0 == 0) goto L_0x0200;
+    L_0x01f9:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r3);
-    L_0x0201:
+    L_0x0200:
         r0 = r9.defaultBannedRights;
         r1 = r0.view_messages;
-        if (r1 != 0) goto L_0x020b;
-    L_0x0207:
+        if (r1 != 0) goto L_0x020a;
+    L_0x0206:
         r0 = r0.send_messages;
-        if (r0 == 0) goto L_0x0224;
-    L_0x020b:
+        if (r0 == 0) goto L_0x0223;
+    L_0x020a:
         r0 = r9.defaultBannedRights;
         r1 = r0.send_polls;
-        if (r1 != 0) goto L_0x0224;
-    L_0x0211:
+        if (r1 != 0) goto L_0x0223;
+    L_0x0210:
         r0.send_polls = r4;
         r0 = r9.listView;
         r1 = r9.sendPollsRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x0224;
-    L_0x021d:
+        if (r0 == 0) goto L_0x0223;
+    L_0x021c:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r3);
-    L_0x0224:
+    L_0x0223:
         r0 = r9.defaultBannedRights;
         r1 = r0.view_messages;
-        if (r1 != 0) goto L_0x022e;
-    L_0x022a:
+        if (r1 != 0) goto L_0x022d;
+    L_0x0229:
         r0 = r0.send_messages;
-        if (r0 == 0) goto L_0x024d;
-    L_0x022e:
+        if (r0 == 0) goto L_0x024c;
+    L_0x022d:
         r0 = r9.defaultBannedRights;
         r1 = r0.send_stickers;
-        if (r1 != 0) goto L_0x024d;
-    L_0x0234:
+        if (r1 != 0) goto L_0x024c;
+    L_0x0233:
         r0.send_inline = r4;
         r0.send_gifs = r4;
         r0.send_games = r4;
@@ -2709,72 +2695,72 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = r9.listView;
         r1 = r9.sendStickersRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x024d;
-    L_0x0246:
+        if (r0 == 0) goto L_0x024c;
+    L_0x0245:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r3);
-    L_0x024d:
+    L_0x024c:
         r0 = r9.defaultBannedRights;
         r1 = r0.view_messages;
-        if (r1 != 0) goto L_0x0257;
-    L_0x0253:
+        if (r1 != 0) goto L_0x0256;
+    L_0x0252:
         r0 = r0.send_messages;
-        if (r0 == 0) goto L_0x029c;
-    L_0x0257:
+        if (r0 == 0) goto L_0x029b;
+    L_0x0256:
         r0 = r9.defaultBannedRights;
         r1 = r0.embed_links;
-        if (r1 != 0) goto L_0x029c;
-    L_0x025d:
+        if (r1 != 0) goto L_0x029b;
+    L_0x025c:
         r0.embed_links = r4;
         r0 = r9.listView;
         r1 = r9.embedLinksRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x029c;
-    L_0x0269:
+        if (r0 == 0) goto L_0x029b;
+    L_0x0268:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r3);
-        goto L_0x029c;
-    L_0x0271:
+        goto L_0x029b;
+    L_0x0270:
         r0 = r9.defaultBannedRights;
         r1 = r0.embed_links;
-        if (r1 == 0) goto L_0x0283;
-    L_0x0277:
+        if (r1 == 0) goto L_0x0282;
+    L_0x0276:
         r1 = r0.send_inline;
-        if (r1 == 0) goto L_0x0283;
-    L_0x027b:
+        if (r1 == 0) goto L_0x0282;
+    L_0x027a:
         r1 = r0.send_media;
-        if (r1 == 0) goto L_0x0283;
-    L_0x027f:
+        if (r1 == 0) goto L_0x0282;
+    L_0x027e:
         r0 = r0.send_polls;
-        if (r0 != 0) goto L_0x029c;
-    L_0x0283:
+        if (r0 != 0) goto L_0x029b;
+    L_0x0282:
         r0 = r9.defaultBannedRights;
         r1 = r0.send_messages;
-        if (r1 == 0) goto L_0x029c;
-    L_0x0289:
+        if (r1 == 0) goto L_0x029b;
+    L_0x0288:
         r0.send_messages = r3;
         r0 = r9.listView;
         r1 = r9.sendMessagesRow;
         r0 = r0.findViewHolderForAdapterPosition(r1);
-        if (r0 == 0) goto L_0x029c;
-    L_0x0295:
+        if (r0 == 0) goto L_0x029b;
+    L_0x0294:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.TextCheckCell2) r0;
         r0.setChecked(r4);
-    L_0x029c:
+    L_0x029b:
         return;
-    L_0x029d:
+    L_0x029c:
         r8 = 0;
         r6 = "";
-        if (r1 == 0) goto L_0x0321;
-    L_0x02a2:
+        if (r1 == 0) goto L_0x0320;
+    L_0x02a1:
         r1 = r9.listViewAdapter;
         r0 = r1.getItem(r0);
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChannelParticipant;
-        if (r1 == 0) goto L_0x02e8;
-    L_0x02ac:
+        if (r1 == 0) goto L_0x02e7;
+    L_0x02ab:
         r1 = r0;
         r1 = (org.telegram.tgnet.TLRPC.ChannelParticipant) r1;
         r6 = r1.user_id;
@@ -2782,22 +2768,22 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r10 = r1.admin_rights;
         r11 = r1.rank;
         r12 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantAdmin;
-        if (r12 != 0) goto L_0x02bf;
-    L_0x02bb:
+        if (r12 != 0) goto L_0x02be;
+    L_0x02ba:
         r12 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
-        if (r12 == 0) goto L_0x02c3;
-    L_0x02bf:
+        if (r12 == 0) goto L_0x02c2;
+    L_0x02be:
         r1 = r1.can_edit;
-        if (r1 == 0) goto L_0x02c5;
-    L_0x02c3:
+        if (r1 == 0) goto L_0x02c4;
+    L_0x02c2:
         r1 = 1;
-        goto L_0x02c6;
-    L_0x02c5:
+        goto L_0x02c5;
+    L_0x02c4:
         r1 = 0;
-    L_0x02c6:
+    L_0x02c5:
         r12 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
-        if (r12 == 0) goto L_0x02df;
-    L_0x02ca:
+        if (r12 == 0) goto L_0x02de;
+    L_0x02c9:
         r10 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights;
         r10.<init>();
         r10.add_admins = r4;
@@ -2808,26 +2794,26 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r10.edit_messages = r4;
         r10.post_messages = r4;
         r10.change_info = r4;
-    L_0x02df:
+    L_0x02de:
         r13 = r10;
         r16 = r11;
         r11 = r6;
         r10 = r7;
         r6 = r0;
         r7 = r1;
-        goto L_0x0396;
-    L_0x02e8:
+        goto L_0x0395;
+    L_0x02e7:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChatParticipant;
-        if (r1 == 0) goto L_0x0318;
-    L_0x02ec:
+        if (r1 == 0) goto L_0x0317;
+    L_0x02eb:
         r1 = r0;
         r1 = (org.telegram.tgnet.TLRPC.ChatParticipant) r1;
         r1 = r1.user_id;
         r7 = r9.currentChat;
         r7 = r7.creator;
         r10 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantCreator;
-        if (r10 == 0) goto L_0x030f;
-    L_0x02f9:
+        if (r10 == 0) goto L_0x030e;
+    L_0x02f8:
         r10 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights;
         r10.<init>();
         r10.add_admins = r4;
@@ -2838,31 +2824,31 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r10.edit_messages = r4;
         r10.post_messages = r4;
         r10.change_info = r4;
-        goto L_0x0310;
-    L_0x030f:
+        goto L_0x030f;
+    L_0x030e:
         r10 = r8;
-    L_0x0310:
+    L_0x030f:
         r11 = r1;
         r16 = r6;
         r13 = r10;
         r6 = r0;
         r10 = r8;
-        goto L_0x0396;
-    L_0x0318:
+        goto L_0x0395;
+    L_0x0317:
         r16 = r6;
         r10 = r8;
         r13 = r10;
         r7 = 0;
         r11 = 0;
-    L_0x031e:
+    L_0x031d:
         r6 = r0;
-        goto L_0x0396;
-    L_0x0321:
+        goto L_0x0395;
+    L_0x0320:
         r1 = r9.searchListViewAdapter;
         r0 = r1.getItem(r0);
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.User;
-        if (r1 == 0) goto L_0x0340;
-    L_0x032b:
+        if (r1 == 0) goto L_0x033f;
+    L_0x032a:
         r0 = (org.telegram.tgnet.TLRPC.User) r0;
         r1 = r21.getMessagesController();
         r1.putUser(r0, r3);
@@ -2871,61 +2857,61 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r20 = r1;
         r1 = r0;
         r0 = r20;
-        goto L_0x034b;
-    L_0x0340:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChannelParticipant;
-        if (r1 != 0) goto L_0x034a;
-    L_0x0344:
-        r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChatParticipant;
-        if (r1 == 0) goto L_0x0349;
-    L_0x0348:
         goto L_0x034a;
-    L_0x0349:
+    L_0x033f:
+        r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChannelParticipant;
+        if (r1 != 0) goto L_0x0349;
+    L_0x0343:
+        r1 = r0 instanceof org.telegram.tgnet.TLRPC.ChatParticipant;
+        if (r1 == 0) goto L_0x0348;
+    L_0x0347:
+        goto L_0x0349;
+    L_0x0348:
         r0 = r8;
-    L_0x034a:
+    L_0x0349:
         r1 = 0;
-    L_0x034b:
+    L_0x034a:
         r7 = r0 instanceof org.telegram.tgnet.TLRPC.ChannelParticipant;
-        if (r7 == 0) goto L_0x0373;
-    L_0x034f:
+        if (r7 == 0) goto L_0x0372;
+    L_0x034e:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
-        if (r1 == 0) goto L_0x0354;
-    L_0x0353:
+        if (r1 == 0) goto L_0x0353;
+    L_0x0352:
         return;
-    L_0x0354:
+    L_0x0353:
         r1 = r0;
         r1 = (org.telegram.tgnet.TLRPC.ChannelParticipant) r1;
         r6 = r1.user_id;
         r7 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantAdmin;
-        if (r7 != 0) goto L_0x0361;
-    L_0x035d:
+        if (r7 != 0) goto L_0x0360;
+    L_0x035c:
         r7 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
-        if (r7 == 0) goto L_0x0365;
-    L_0x0361:
+        if (r7 == 0) goto L_0x0364;
+    L_0x0360:
         r7 = r1.can_edit;
-        if (r7 == 0) goto L_0x0367;
-    L_0x0365:
+        if (r7 == 0) goto L_0x0366;
+    L_0x0364:
         r7 = 1;
-        goto L_0x0368;
-    L_0x0367:
+        goto L_0x0367;
+    L_0x0366:
         r7 = 0;
-    L_0x0368:
+    L_0x0367:
         r10 = r1.banned_rights;
         r11 = r1.admin_rights;
         r1 = r1.rank;
         r16 = r1;
         r13 = r11;
         r11 = r6;
-        goto L_0x031e;
-    L_0x0373:
+        goto L_0x031d;
+    L_0x0372:
         r7 = r0 instanceof org.telegram.tgnet.TLRPC.ChatParticipant;
-        if (r7 == 0) goto L_0x038b;
-    L_0x0377:
+        if (r7 == 0) goto L_0x038a;
+    L_0x0376:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantCreator;
-        if (r1 == 0) goto L_0x037c;
-    L_0x037b:
+        if (r1 == 0) goto L_0x037b;
+    L_0x037a:
         return;
-    L_0x037c:
+    L_0x037b:
         r1 = r0;
         r1 = (org.telegram.tgnet.TLRPC.ChatParticipant) r1;
         r1 = r1.user_id;
@@ -2935,63 +2921,63 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r16 = r6;
         r10 = r8;
         r13 = r10;
-        goto L_0x031e;
-    L_0x038b:
+        goto L_0x031d;
+    L_0x038a:
         r11 = r1;
         r16 = r6;
         r10 = r8;
         r13 = r10;
-        if (r0 != 0) goto L_0x0394;
-    L_0x0392:
+        if (r0 != 0) goto L_0x0393;
+    L_0x0391:
         r7 = 1;
-        goto L_0x031e;
-    L_0x0394:
+        goto L_0x031d;
+    L_0x0393:
         r7 = 0;
-        goto L_0x031e;
-    L_0x0396:
-        if (r11 == 0) goto L_0x04db;
-    L_0x0398:
+        goto L_0x031d;
+    L_0x0395:
+        if (r11 == 0) goto L_0x04da;
+    L_0x0397:
         r0 = r9.selectType;
-        if (r0 == 0) goto L_0x0438;
-    L_0x039c:
-        if (r0 == r2) goto L_0x03a6;
-    L_0x039e:
-        if (r0 != r4) goto L_0x03a1;
+        if (r0 == 0) goto L_0x0437;
+    L_0x039b:
+        if (r0 == r2) goto L_0x03a5;
+    L_0x039d:
+        if (r0 != r4) goto L_0x03a0;
+    L_0x039f:
+        goto L_0x03a5;
     L_0x03a0:
-        goto L_0x03a6;
-    L_0x03a1:
         r9.removeUser(r11);
-        goto L_0x04db;
-    L_0x03a6:
+        goto L_0x04da;
+    L_0x03a5:
         r0 = r9.selectType;
-        if (r0 == r4) goto L_0x0417;
-    L_0x03aa:
-        if (r7 == 0) goto L_0x0417;
-    L_0x03ac:
+        if (r0 == r4) goto L_0x0416;
+    L_0x03a9:
+        if (r7 == 0) goto L_0x0416;
+    L_0x03ab:
         r0 = r6 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantAdmin;
-        if (r0 != 0) goto L_0x03b4;
-    L_0x03b0:
+        if (r0 != 0) goto L_0x03b3;
+    L_0x03af:
         r0 = r6 instanceof org.telegram.tgnet.TLRPC.TL_chatParticipantAdmin;
-        if (r0 == 0) goto L_0x0417;
-    L_0x03b4:
+        if (r0 == 0) goto L_0x0416;
+    L_0x03b3:
         r0 = r21.getMessagesController();
         r1 = java.lang.Integer.valueOf(r11);
         r2 = r0.getUser(r1);
         r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r0 = r21.getParentActivity();
         r11.<init>(r0);
-        r0 = NUM; // 0x7f0e00f8 float:1.887554E38 double:1.053162279E-314;
+        r0 = NUM; // 0x7f0e0100 float:1.8875557E38 double:1.053162283E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setTitle(r0);
-        r0 = NUM; // 0x7f0e00d1 float:1.8875461E38 double:1.05316226E-314;
+        r0 = NUM; // 0x7f0e00d2 float:1.8875463E38 double:1.0531622604E-314;
         r1 = new java.lang.Object[r4];
         r4 = org.telegram.messenger.UserObject.getUserName(r2);
         r1[r3] = r4;
         r3 = "AdminWillBeRemoved";
         r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1);
         r11.setMessage(r0);
-        r0 = NUM; // 0x7f0e0764 float:1.8878875E38 double:1.0531630914E-314;
+        r0 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r1 = "OK";
         r12 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r14 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$QBAiFB7vQBVLCLASSNAMElkUtoQa9r6rI;
@@ -3003,34 +2989,34 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r6 = r16;
         r0.<init>(r1, r2, r3, r4, r5, r6, r7);
         r11.setPositiveButton(r12, r14);
-        r0 = NUM; // 0x7f0e0213 float:1.8876115E38 double:1.053162419E-314;
+        r0 = NUM; // 0x7f0e021c float:1.8876133E38 double:1.0531624234E-314;
         r1 = "Cancel";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setNegativeButton(r0, r8);
         r0 = r11.create();
         r9.showDialog(r0);
-        goto L_0x04db;
-    L_0x0417:
+        goto L_0x04da;
+    L_0x0416:
         r0 = r9.selectType;
-        if (r0 != r4) goto L_0x041d;
-    L_0x041b:
+        if (r0 != r4) goto L_0x041c;
+    L_0x041a:
         r8 = 0;
-        goto L_0x041e;
-    L_0x041d:
+        goto L_0x041d;
+    L_0x041c:
         r8 = 1;
-    L_0x041e:
+    L_0x041d:
         r0 = r9.selectType;
-        if (r0 == r4) goto L_0x0427;
-    L_0x0422:
-        if (r0 != r2) goto L_0x0425;
+        if (r0 == r4) goto L_0x0426;
+    L_0x0421:
+        if (r0 != r2) goto L_0x0424;
+    L_0x0423:
+        goto L_0x0426;
     L_0x0424:
-        goto L_0x0427;
-    L_0x0425:
         r12 = 0;
-        goto L_0x0428;
-    L_0x0427:
+        goto L_0x0427;
+    L_0x0426:
         r12 = 1;
-    L_0x0428:
+    L_0x0427:
         r0 = r21;
         r1 = r11;
         r2 = r6;
@@ -3041,59 +3027,59 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r7 = r8;
         r8 = r12;
         r0.openRightsEdit(r1, r2, r3, r4, r5, r6, r7, r8);
-        goto L_0x04db;
-    L_0x0438:
+        goto L_0x04da;
+    L_0x0437:
         r0 = r9.type;
-        if (r0 != r4) goto L_0x0452;
-    L_0x043c:
+        if (r0 != r4) goto L_0x0451;
+    L_0x043b:
         r0 = r21.getUserConfig();
         r0 = r0.getClientUserId();
-        if (r11 == r0) goto L_0x0450;
-    L_0x0446:
+        if (r11 == r0) goto L_0x044f;
+    L_0x0445:
         r0 = r9.currentChat;
         r0 = r0.creator;
-        if (r0 != 0) goto L_0x044e;
-    L_0x044c:
-        if (r7 == 0) goto L_0x0450;
-    L_0x044e:
+        if (r0 != 0) goto L_0x044d;
+    L_0x044b:
+        if (r7 == 0) goto L_0x044f;
+    L_0x044d:
         r0 = 1;
-        goto L_0x0460;
-    L_0x0450:
+        goto L_0x045f;
+    L_0x044f:
         r0 = 0;
-        goto L_0x0460;
-    L_0x0452:
-        if (r0 == 0) goto L_0x045a;
-    L_0x0454:
-        if (r0 != r2) goto L_0x0457;
+        goto L_0x045f;
+    L_0x0451:
+        if (r0 == 0) goto L_0x0459;
+    L_0x0453:
+        if (r0 != r2) goto L_0x0456;
+    L_0x0455:
+        goto L_0x0459;
     L_0x0456:
-        goto L_0x045a;
-    L_0x0457:
         r18 = 0;
-        goto L_0x0462;
-    L_0x045a:
+        goto L_0x0461;
+    L_0x0459:
         r0 = r9.currentChat;
         r0 = org.telegram.messenger.ChatObject.canBlockUsers(r0);
-    L_0x0460:
+    L_0x045f:
         r18 = r0;
-    L_0x0462:
+    L_0x0461:
         r0 = r9.type;
-        if (r0 == 0) goto L_0x04bd;
-    L_0x0466:
-        if (r0 == r4) goto L_0x046c;
-    L_0x0468:
+        if (r0 == 0) goto L_0x04bc;
+    L_0x0465:
+        if (r0 == r4) goto L_0x046b;
+    L_0x0467:
         r0 = r9.isChannel;
-        if (r0 != 0) goto L_0x04bd;
-    L_0x046c:
+        if (r0 != 0) goto L_0x04bc;
+    L_0x046b:
         r0 = r9.type;
-        if (r0 != r5) goto L_0x0475;
-    L_0x0470:
+        if (r0 != r5) goto L_0x0474;
+    L_0x046f:
         r0 = r9.selectType;
-        if (r0 != 0) goto L_0x0475;
+        if (r0 != 0) goto L_0x0474;
+    L_0x0473:
+        goto L_0x04bc;
     L_0x0474:
-        goto L_0x04bd;
-    L_0x0475:
-        if (r10 != 0) goto L_0x0496;
-    L_0x0477:
+        if (r10 != 0) goto L_0x0495;
+    L_0x0476:
         r0 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights;
         r0.<init>();
         r0.view_messages = r4;
@@ -3109,42 +3095,42 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0.invite_users = r4;
         r0.change_info = r4;
         r15 = r0;
-        goto L_0x0497;
-    L_0x0496:
+        goto L_0x0496;
+    L_0x0495:
         r15 = r10;
-    L_0x0497:
+    L_0x0496:
         r0 = new org.telegram.ui.ChatRightsEditActivity;
         r12 = r9.chatId;
         r14 = r9.defaultBannedRights;
         r1 = r9.type;
-        if (r1 != r4) goto L_0x04a4;
-    L_0x04a1:
+        if (r1 != r4) goto L_0x04a3;
+    L_0x04a0:
         r17 = 0;
-        goto L_0x04a6;
-    L_0x04a4:
+        goto L_0x04a5;
+    L_0x04a3:
         r17 = 1;
-    L_0x04a6:
-        if (r6 != 0) goto L_0x04ab;
-    L_0x04a8:
+    L_0x04a5:
+        if (r6 != 0) goto L_0x04aa;
+    L_0x04a7:
         r19 = 1;
-        goto L_0x04ad;
-    L_0x04ab:
+        goto L_0x04ac;
+    L_0x04aa:
         r19 = 0;
-    L_0x04ad:
+    L_0x04ac:
         r10 = r0;
         r10.<init>(r11, r12, r13, r14, r15, r16, r17, r18, r19);
         r1 = new org.telegram.ui.ChatUsersActivity$5;
         r1.<init>(r6);
         r0.setDelegate(r1);
         r9.presentFragment(r0);
-        goto L_0x04db;
-    L_0x04bd:
+        goto L_0x04da;
+    L_0x04bc:
         r0 = r21.getUserConfig();
         r0 = r0.getClientUserId();
-        if (r11 != r0) goto L_0x04c8;
-    L_0x04c7:
+        if (r11 != r0) goto L_0x04c7;
+    L_0x04c6:
         return;
-    L_0x04c8:
+    L_0x04c7:
         r0 = new android.os.Bundle;
         r0.<init>();
         r1 = "user_id";
@@ -3152,7 +3138,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1 = new org.telegram.ui.ProfileActivity;
         r1.<init>(r0);
         r9.presentFragment(r1);
-    L_0x04db:
+    L_0x04da:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$createView$1$ChatUsersActivity(android.view.View, int):void");
@@ -3620,11 +3606,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     L_0x00d1:
         if (r0 == 0) goto L_0x00db;
     L_0x00d3:
-        r0 = NUM; // 0x7f0e03f7 float:1.8877096E38 double:1.053162658E-314;
+        r0 = NUM; // 0x7f0e0401 float:1.8877116E38 double:1.053162663E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r12, r0);
         goto L_0x00e4;
     L_0x00db:
-        r0 = NUM; // 0x7f0e0a16 float:1.8880274E38 double:1.0531634323E-314;
+        r0 = NUM; // 0x7f0e0a3d float:1.8880354E38 double:1.0531634516E-314;
         r2 = "SetAsAdmin";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x00e4:
@@ -3659,7 +3645,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r12 = org.telegram.messenger.ChatObject.isChannel(r12);
         if (r12 == 0) goto L_0x0139;
     L_0x011b:
-        r12 = NUM; // 0x7f0e0228 float:1.8876157E38 double:1.0531624294E-314;
+        r12 = NUM; // 0x7f0e0231 float:1.8876175E38 double:1.053162434E-314;
         r15 = "ChangePermissions";
         r12 = org.telegram.messenger.LocaleController.getString(r15, r12);
         r1.add(r12);
@@ -3670,7 +3656,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r15 = java.lang.Integer.valueOf(r12);
         r0.add(r15);
     L_0x0139:
-        r12 = NUM; // 0x7f0e05a9 float:1.8877976E38 double:1.0531628725E-314;
+        r12 = NUM; // 0x7f0e05b4 float:1.8877999E38 double:1.053162878E-314;
         r15 = "KickFromGroup";
         r12 = org.telegram.messenger.LocaleController.getString(r15, r12);
         r1.add(r12);
@@ -3683,7 +3669,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x0179;
     L_0x0158:
         r12 = NUM; // 0x7var_ float:1.7944712E38 double:1.0529355356E-314;
-        r15 = NUM; // 0x7f0e027f float:1.8876334E38 double:1.0531624723E-314;
+        r15 = NUM; // 0x7f0e0289 float:1.8876354E38 double:1.0531624773E-314;
         r12 = "ChannelRemoveUser";
         r12 = org.telegram.messenger.LocaleController.getString(r12, r15);
         r1.add(r12);
@@ -3748,7 +3734,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r19 = r13;
         r20 = r14;
         r0 = 3;
-        r2 = NUM; // 0x7f0e024d float:1.8876232E38 double:1.0531624476E-314;
+        r2 = NUM; // 0x7f0e0256 float:1.887625E38 double:1.053162452E-314;
         r5 = "ChannelDeleteFromList";
         if (r3 != r0) goto L_0x0212;
     L_0x01e4:
@@ -3764,7 +3750,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = 1;
         r1 = 2;
         r3 = new java.lang.CharSequence[r1];
-        r6 = NUM; // 0x7f0e0253 float:1.8876244E38 double:1.0531624506E-314;
+        r6 = NUM; // 0x7f0e025c float:1.8876263E38 double:1.053162455E-314;
         r7 = "ChannelEditPermissions";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r7 = 0;
@@ -3801,11 +3787,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0 = r11.isChannel;
         if (r0 == 0) goto L_0x0237;
     L_0x0231:
-        r0 = NUM; // 0x7f0e0235 float:1.8876183E38 double:1.053162436E-314;
+        r0 = NUM; // 0x7f0e023e float:1.8876202E38 double:1.05316244E-314;
         r3 = "ChannelAddToChannel";
         goto L_0x023c;
     L_0x0237:
-        r0 = NUM; // 0x7f0e0236 float:1.8876186E38 double:1.0531624363E-314;
+        r0 = NUM; // 0x7f0e023f float:1.8876204E38 double:1.0531624407E-314;
         r3 = "ChannelAddToGroup";
     L_0x023c:
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
@@ -3842,7 +3828,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     L_0x0269:
         r0 = r11.currentChat;
         r0 = r0.creator;
-        r2 = NUM; // 0x7f0e0280 float:1.8876336E38 double:1.053162473E-314;
+        r2 = NUM; // 0x7f0e028a float:1.8876356E38 double:1.053162478E-314;
         r3 = "ChannelRemoveUserAdmin";
         r6 = r23;
         if (r0 != 0) goto L_0x0294;
@@ -3874,7 +3860,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1 = 2;
     L_0x0297:
         r7 = new java.lang.CharSequence[r1];
-        r13 = NUM; // 0x7f0e03f7 float:1.8877096E38 double:1.053162658E-314;
+        r13 = NUM; // 0x7f0e0401 float:1.8877116E38 double:1.053162663E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);
         r7[r5] = r12;
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
@@ -4229,8 +4215,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         chat.default_banned_rights = this.defaultBannedRights;
                     }
                 }
-                if (!(this.selectedSlowmode == this.initialSlowmode || this.info == null)) {
-                    getMessagesController().setChannelSlowMode(this.chatId, this.info.slowmode_seconds);
+                int i = this.selectedSlowmode;
+                if (i != this.initialSlowmode) {
+                    ChatFull chatFull = this.info;
+                    if (chatFull != null) {
+                        chatFull.slowmode_seconds = getSecondsForIndex(i);
+                        ChatFull chatFull2 = this.info;
+                        chatFull2.flags |= 131072;
+                        getMessagesController().setChannelSlowMode(this.chatId, this.info.slowmode_seconds);
+                    }
                 }
                 finishFragment();
                 return;

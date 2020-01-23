@@ -208,8 +208,8 @@ public class DialogsAdapter extends SelectionAdapter {
         if (this.onlineContacts == null) {
             return;
         }
-        if (!z || SystemClock.uptimeMillis() - this.lastSortTime >= 2000) {
-            this.lastSortTime = SystemClock.uptimeMillis();
+        if (!z || SystemClock.elapsedRealtime() - this.lastSortTime >= 2000) {
+            this.lastSortTime = SystemClock.elapsedRealtime();
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 Collections.sort(this.onlineContacts, new -$$Lambda$DialogsAdapter$Xl2Fm6ABchAKa8HnZJtWg3ArO0E(MessagesController.getInstance(this.currentAccount), currentTime));

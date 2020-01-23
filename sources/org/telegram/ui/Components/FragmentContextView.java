@@ -272,7 +272,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new -$$Lambda$FragmentContextView$z_fnb_TazpUpwkTqfofStIvH9G8(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$32$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$30$LaunchActivity(locationActivity);
         }
     }
 
@@ -432,7 +432,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.messagePlayingSpeedChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didStartedCall);
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndedCall);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndCall);
     }
 
     /* Access modifiers changed, original: protected */
@@ -456,7 +456,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.messagePlayingSpeedChanged);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didStartedCall);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndedCall);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndCall);
         fragmentContextView = this.additionalContextView;
         if (fragmentContextView != null) {
             fragmentContextView.checkVisibility();
@@ -483,14 +483,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     checkLocationString();
                 }
             }
-        } else if (i == NotificationCenter.messagePlayingDidStart || i == NotificationCenter.messagePlayingPlayStateChanged || i == NotificationCenter.messagePlayingDidReset || i == NotificationCenter.didEndedCall) {
+        } else if (i == NotificationCenter.messagePlayingDidStart || i == NotificationCenter.messagePlayingPlayStateChanged || i == NotificationCenter.messagePlayingDidReset || i == NotificationCenter.didEndCall) {
             checkPlayer(false);
         } else if (i == NotificationCenter.didStartedCall) {
             checkCall(false);
         } else if (i == NotificationCenter.messagePlayingSpeedChanged) {
             updatePlaybackButton();
-        } else {
-            checkPlayer(false);
         }
     }
 

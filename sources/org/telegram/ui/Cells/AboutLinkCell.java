@@ -68,25 +68,21 @@ public class AboutLinkCell extends FrameLayout {
 
     public void setTextAndValue(String str, String str2, boolean z) {
         if (!TextUtils.isEmpty(str)) {
-            if (str != null) {
-                String str3 = this.oldText;
-                if (str3 != null && str.equals(str3)) {
-                    return;
+            if (str == null || !str.equals(this.oldText)) {
+                this.oldText = str;
+                this.stringBuilder = new SpannableStringBuilder(this.oldText);
+                if (z) {
+                    MessageObject.addLinks(false, this.stringBuilder, false, false);
                 }
+                Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                if (TextUtils.isEmpty(str2)) {
+                    this.valueTextView.setVisibility(8);
+                } else {
+                    this.valueTextView.setText(str2);
+                    this.valueTextView.setVisibility(0);
+                }
+                requestLayout();
             }
-            this.oldText = str;
-            this.stringBuilder = new SpannableStringBuilder(this.oldText);
-            if (z) {
-                MessageObject.addLinks(false, this.stringBuilder, false);
-            }
-            Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            if (TextUtils.isEmpty(str2)) {
-                this.valueTextView.setVisibility(8);
-            } else {
-                this.valueTextView.setText(str2);
-                this.valueTextView.setVisibility(0);
-            }
-            requestLayout();
         }
     }
 

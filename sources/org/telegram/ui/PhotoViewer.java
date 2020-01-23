@@ -240,7 +240,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private int animationInProgress;
     private long animationStartTime;
     private float animationValue;
-    private float[][] animationValues = ((float[][]) Array.newInstance(float.class, new int[]{2, 10}));
+    private float[][] animationValues = ((float[][]) Array.newInstance(float.class, new int[]{2, 13}));
     private boolean applying;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private boolean attachedToWindow;
@@ -596,9 +596,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.videoPlayerSeekbar.setProgress(currentPosition);
                     }
                     PhotoViewer.this.videoPlayerControlFrameLayout.invalidate();
-                    if (PhotoViewer.this.shouldSavePositionForCurrentVideo != null && currentPosition >= 0.0f && PhotoViewer.this.shouldSavePositionForCurrentVideo != null && SystemClock.uptimeMillis() - PhotoViewer.this.lastSaveTime >= 1000) {
+                    if (PhotoViewer.this.shouldSavePositionForCurrentVideo != null && currentPosition >= 0.0f && PhotoViewer.this.shouldSavePositionForCurrentVideo != null && SystemClock.elapsedRealtime() - PhotoViewer.this.lastSaveTime >= 1000) {
                         PhotoViewer.this.shouldSavePositionForCurrentVideo;
-                        PhotoViewer.this.lastSaveTime = SystemClock.uptimeMillis();
+                        PhotoViewer.this.lastSaveTime = SystemClock.elapsedRealtime();
                         Utilities.globalQueue.postRunnable(new -$$Lambda$PhotoViewer$2$ttTXp-z309aCIedHZEwyaNdn18I(this, currentPosition));
                     }
                     PhotoViewer.this.updateVideoPlayerTime();
@@ -1078,7 +1078,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         public int index;
         public boolean isEvent;
         public View parentView;
-        public int radius;
+        public int[] radius;
         public float scale = 1.0f;
         public int size;
         public BitmapHolder thumb;
@@ -1766,18 +1766,18 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.blackPaint.setColor(-16777216);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x0548  */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x0548  */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x0548  */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x0548  */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0553  */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0553  */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0553  */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0553  */
     /* JADX WARNING: Missing block: B:48:0x00a8, code skipped:
             if (org.telegram.messenger.MessageObject.isVideoDocument(r0.currentBotInlineResult.document) != false) goto L_0x00aa;
      */
-    /* JADX WARNING: Missing block: B:254:0x04fa, code skipped:
-            if (((org.telegram.messenger.MessageObject) r2.get(r2.size() - 1)).getDialogId() != r0.mergeDialogId) goto L_0x053b;
+    /* JADX WARNING: Missing block: B:254:0x0505, code skipped:
+            if (((org.telegram.messenger.MessageObject) r2.get(r2.size() - 1)).getDialogId() != r0.mergeDialogId) goto L_0x0546;
      */
-    /* JADX WARNING: Missing block: B:267:0x0539, code skipped:
-            if (((org.telegram.messenger.MessageObject) r0.imagesArrTemp.get(0)).getDialogId() != r0.mergeDialogId) goto L_0x053b;
+    /* JADX WARNING: Missing block: B:267:0x0544, code skipped:
+            if (((org.telegram.messenger.MessageObject) r0.imagesArrTemp.get(0)).getDialogId() != r0.mergeDialogId) goto L_0x0546;
      */
     public void didReceivedNotification(int r22, int r23, java.lang.Object... r24) {
         /*
@@ -1796,7 +1796,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = (java.lang.String) r1;
         r2 = 0;
     L_0x0013:
-        if (r2 >= r4) goto L_0x067e;
+        if (r2 >= r4) goto L_0x0689;
     L_0x0015:
         r8 = r0.currentFileNames;
         r9 = r8[r2];
@@ -1831,7 +1831,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = r4[r2];
         r4.setProgress(r3, r1);
         r0.checkProgress(r2, r7, r6);
-        goto L_0x067e;
+        goto L_0x0689;
     L_0x0045:
         r2 = r2 + 1;
         goto L_0x0013;
@@ -1843,7 +1843,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = (java.lang.String) r1;
         r2 = 0;
     L_0x0051:
-        if (r2 >= r4) goto L_0x067e;
+        if (r2 >= r4) goto L_0x0689;
     L_0x0053:
         r8 = r0.currentFileNames;
         r9 = r8[r2];
@@ -1904,156 +1904,162 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00aa:
         r0.onActionClick(r7);
     L_0x00ad:
-        if (r2 != 0) goto L_0x067e;
+        if (r2 != 0) goto L_0x0689;
     L_0x00af:
         r1 = r0.videoPlayer;
-        if (r1 == 0) goto L_0x067e;
+        if (r1 == 0) goto L_0x0689;
     L_0x00b3:
         r0.currentVideoFinishedLoading = r6;
-        goto L_0x067e;
+        goto L_0x0689;
     L_0x00b7:
         r2 = r2 + 1;
         goto L_0x0051;
     L_0x00ba:
         r2 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged;
         r8 = 0;
-        if (r1 != r2) goto L_0x0186;
+        if (r1 != r2) goto L_0x0191;
     L_0x00c0:
         r1 = r24[r7];
         r1 = (java.lang.String) r1;
         r2 = 0;
     L_0x00c5:
-        if (r2 >= r4) goto L_0x067e;
+        if (r2 >= r4) goto L_0x0689;
     L_0x00c7:
         r10 = r0.currentFileNames;
         r11 = r10[r2];
-        if (r11 == 0) goto L_0x017d;
+        if (r11 == 0) goto L_0x0188;
     L_0x00cd:
         r10 = r10[r2];
         r10 = r10.equals(r1);
-        if (r10 == 0) goto L_0x017d;
+        if (r10 == 0) goto L_0x0188;
     L_0x00d5:
         r10 = r24[r6];
-        r10 = (java.lang.Float) r10;
-        if (r2 == 0) goto L_0x00ee;
-    L_0x00db:
-        if (r2 != r6) goto L_0x00e3;
-    L_0x00dd:
+        r10 = (java.lang.Long) r10;
+        r11 = r24[r5];
+        r11 = (java.lang.Long) r11;
+        r12 = r10.longValue();
+        r10 = (float) r12;
+        r11 = r11.longValue();
+        r11 = (float) r11;
+        r10 = r10 / r11;
+        r10 = java.lang.Math.min(r3, r10);
+        if (r2 == 0) goto L_0x0101;
+    L_0x00ee:
+        if (r2 != r6) goto L_0x00f6;
+    L_0x00f0:
         r11 = r0.sideImage;
         r12 = r0.rightImage;
-        if (r11 == r12) goto L_0x00ee;
-    L_0x00e3:
-        if (r2 != r5) goto L_0x00ec;
-    L_0x00e5:
+        if (r11 == r12) goto L_0x0101;
+    L_0x00f6:
+        if (r2 != r5) goto L_0x00ff;
+    L_0x00f8:
         r11 = r0.sideImage;
         r12 = r0.leftImage;
-        if (r11 != r12) goto L_0x00ec;
-    L_0x00eb:
-        goto L_0x00ee;
-    L_0x00ec:
+        if (r11 != r12) goto L_0x00ff;
+    L_0x00fe:
+        goto L_0x0101;
+    L_0x00ff:
         r11 = 0;
-        goto L_0x00ef;
-    L_0x00ee:
+        goto L_0x0102;
+    L_0x0101:
         r11 = 1;
-    L_0x00ef:
+    L_0x0102:
         r12 = r0.photoProgressViews;
         r12 = r12[r2];
-        r13 = r10.floatValue();
-        r12.setProgress(r13, r11);
-        if (r2 != 0) goto L_0x017d;
-    L_0x00fc:
-        r11 = r0.videoPlayer;
-        if (r11 == 0) goto L_0x017d;
-    L_0x0100:
-        r11 = r0.videoPlayerSeekbar;
-        if (r11 == 0) goto L_0x017d;
-    L_0x0104:
-        r11 = r0.currentVideoFinishedLoading;
-        if (r11 == 0) goto L_0x010b;
-    L_0x0108:
-        r4 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        goto L_0x0161;
+        r12.setProgress(r10, r11);
+        if (r2 != 0) goto L_0x0188;
     L_0x010b:
+        r11 = r0.videoPlayer;
+        if (r11 == 0) goto L_0x0188;
+    L_0x010f:
+        r11 = r0.videoPlayerSeekbar;
+        if (r11 == 0) goto L_0x0188;
+    L_0x0113:
+        r11 = r0.currentVideoFinishedLoading;
+        if (r11 == 0) goto L_0x011a;
+    L_0x0117:
+        r4 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        goto L_0x0170;
+    L_0x011a:
         r13 = android.os.SystemClock.elapsedRealtime();
         r5 = r0.lastBufferedPositionCheck;
         r5 = r13 - r5;
         r5 = java.lang.Math.abs(r5);
         r15 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
         r17 = (r5 > r15 ? 1 : (r5 == r15 ? 0 : -1));
-        if (r17 < 0) goto L_0x015e;
-    L_0x011d:
+        if (r17 < 0) goto L_0x016d;
+    L_0x012c:
         r5 = r0.seekToProgressPending;
         r6 = 0;
         r15 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1));
-        if (r15 != 0) goto L_0x0146;
-    L_0x0124:
+        if (r15 != 0) goto L_0x0155;
+    L_0x0133:
         r5 = r0.videoPlayer;
         r3 = r5.getDuration();
         r5 = r0.videoPlayer;
         r11 = r5.getCurrentPosition();
         r5 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1));
-        if (r5 < 0) goto L_0x0145;
-    L_0x0134:
+        if (r5 < 0) goto L_0x0154;
+    L_0x0143:
         r18 = -NUM; // 0xNUM float:1.4E-45 double:-4.9E-324;
         r5 = (r3 > r18 ? 1 : (r3 == r18 ? 0 : -1));
-        if (r5 == 0) goto L_0x0145;
-    L_0x013d:
+        if (r5 == 0) goto L_0x0154;
+    L_0x014c:
         r5 = (r11 > r8 ? 1 : (r11 == r8 ? 0 : -1));
-        if (r5 < 0) goto L_0x0145;
-    L_0x0141:
+        if (r5 < 0) goto L_0x0154;
+    L_0x0150:
         r5 = (float) r11;
         r3 = (float) r3;
         r5 = r5 / r3;
-        goto L_0x0146;
-    L_0x0145:
+        goto L_0x0155;
+    L_0x0154:
         r5 = 0;
-    L_0x0146:
+    L_0x0155:
         r3 = r0.isStreaming;
-        if (r3 == 0) goto L_0x0159;
-    L_0x014a:
+        if (r3 == 0) goto L_0x0168;
+    L_0x0159:
         r3 = r0.currentAccount;
         r3 = org.telegram.messenger.FileLoader.getInstance(r3);
         r4 = r0.currentFileNames;
         r4 = r4[r7];
         r3 = r3.getBufferedProgressFromPosition(r5, r4);
-        goto L_0x015b;
-    L_0x0159:
+        goto L_0x016a;
+    L_0x0168:
         r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x015b:
+    L_0x016a:
         r0.lastBufferedPositionCheck = r13;
-        goto L_0x0108;
-    L_0x015e:
+        goto L_0x0117;
+    L_0x016d:
         r3 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
-        goto L_0x0108;
-    L_0x0161:
+        goto L_0x0117;
+    L_0x0170:
         r4 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
-        if (r4 == 0) goto L_0x0176;
-    L_0x0165:
+        if (r4 == 0) goto L_0x0185;
+    L_0x0174:
         r4 = r0.videoPlayerSeekbar;
         r4.setBufferedProgress(r3);
         r4 = r0.pipVideoView;
-        if (r4 == 0) goto L_0x0171;
-    L_0x016e:
+        if (r4 == 0) goto L_0x0180;
+    L_0x017d:
         r4.setBufferedProgress(r3);
-    L_0x0171:
+    L_0x0180:
         r3 = r0.videoPlayerControlFrameLayout;
         r3.invalidate();
-    L_0x0176:
-        r3 = r10.floatValue();
-        r0.checkBufferedProgress(r3);
-    L_0x017d:
+    L_0x0185:
+        r0.checkBufferedProgress(r10);
+    L_0x0188:
         r2 = r2 + 1;
         r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = 3;
         r5 = 2;
         r6 = 1;
         goto L_0x00c5;
-    L_0x0186:
+    L_0x0191:
         r2 = org.telegram.messenger.NotificationCenter.dialogPhotosLoaded;
         r3 = 4;
         r4 = -1;
-        if (r1 != r2) goto L_0x02d8;
-    L_0x018c:
+        if (r1 != r2) goto L_0x02e3;
+    L_0x0197:
         r2 = 3;
         r1 = r24[r2];
         r1 = (java.lang.Integer) r1;
@@ -2062,11 +2068,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = (java.lang.Integer) r2;
         r2 = r2.intValue();
         r5 = r0.avatarsDialogId;
-        if (r5 != r2) goto L_0x067e;
-    L_0x01a1:
+        if (r5 != r2) goto L_0x0689;
+    L_0x01ac:
         r2 = r0.classGuid;
-        if (r2 != r1) goto L_0x067e;
-    L_0x01a5:
+        if (r2 != r1) goto L_0x0689;
+    L_0x01b0:
         r1 = 2;
         r1 = r24[r1];
         r1 = (java.lang.Boolean) r1;
@@ -2074,10 +2080,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r24[r3];
         r2 = (java.util.ArrayList) r2;
         r3 = r2.isEmpty();
-        if (r3 == 0) goto L_0x01b9;
-    L_0x01b8:
+        if (r3 == 0) goto L_0x01c4;
+    L_0x01c3:
         return;
-    L_0x01b9:
+    L_0x01c4:
         r3 = r0.imagesArrLocations;
         r3.clear();
         r3 = r0.imagesArrLocationsSizes;
@@ -2086,37 +2092,37 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3.clear();
         r3 = 0;
         r5 = -1;
-    L_0x01ca:
+    L_0x01d5:
         r6 = r2.size();
-        if (r3 >= r6) goto L_0x0248;
-    L_0x01d0:
+        if (r3 >= r6) goto L_0x0253;
+    L_0x01db:
         r6 = r2.get(r3);
         r6 = (org.telegram.tgnet.TLRPC.Photo) r6;
-        if (r6 == 0) goto L_0x0245;
-    L_0x01d8:
+        if (r6 == 0) goto L_0x0250;
+    L_0x01e3:
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_photoEmpty;
-        if (r8 != 0) goto L_0x0245;
-    L_0x01dc:
+        if (r8 != 0) goto L_0x0250;
+    L_0x01e7:
         r8 = r6.sizes;
-        if (r8 != 0) goto L_0x01e1;
-    L_0x01e0:
-        goto L_0x0245;
-    L_0x01e1:
+        if (r8 != 0) goto L_0x01ec;
+    L_0x01eb:
+        goto L_0x0250;
+    L_0x01ec:
         r9 = 640; // 0x280 float:8.97E-43 double:3.16E-321;
         r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r9);
-        if (r8 == 0) goto L_0x0245;
-    L_0x01e9:
-        if (r5 != r4) goto L_0x021e;
-    L_0x01eb:
+        if (r8 == 0) goto L_0x0250;
+    L_0x01f4:
+        if (r5 != r4) goto L_0x0229;
+    L_0x01f6:
         r9 = r0.currentFileLocation;
-        if (r9 == 0) goto L_0x021e;
-    L_0x01ef:
+        if (r9 == 0) goto L_0x0229;
+    L_0x01fa:
         r9 = 0;
-    L_0x01f0:
+    L_0x01fb:
         r10 = r6.sizes;
         r10 = r10.size();
-        if (r9 >= r10) goto L_0x021e;
-    L_0x01f8:
+        if (r9 >= r10) goto L_0x0229;
+    L_0x0203:
         r10 = r6.sizes;
         r10 = r10.get(r9);
         r10 = (org.telegram.tgnet.TLRPC.PhotoSize) r10;
@@ -2125,31 +2131,31 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r12 = r0.currentFileLocation;
         r12 = r12.location;
         r13 = r12.local_id;
-        if (r11 != r13) goto L_0x021b;
-    L_0x020c:
+        if (r11 != r13) goto L_0x0226;
+    L_0x0217:
         r10 = r10.volume_id;
         r12 = r12.volume_id;
         r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1));
-        if (r14 != 0) goto L_0x021b;
-    L_0x0214:
+        if (r14 != 0) goto L_0x0226;
+    L_0x021f:
         r5 = r0.imagesArrLocations;
         r5 = r5.size();
-        goto L_0x021e;
-    L_0x021b:
+        goto L_0x0229;
+    L_0x0226:
         r9 = r9 + 1;
-        goto L_0x01f0;
-    L_0x021e:
+        goto L_0x01fb;
+    L_0x0229:
         r9 = r6.dc_id;
-        if (r9 == 0) goto L_0x022a;
-    L_0x0222:
+        if (r9 == 0) goto L_0x0235;
+    L_0x022d:
         r10 = r8.location;
         r10.dc_id = r9;
         r9 = r6.file_reference;
         r10.file_reference = r9;
-    L_0x022a:
+    L_0x0235:
         r9 = org.telegram.messenger.ImageLocation.getForPhoto(r8, r6);
-        if (r9 == 0) goto L_0x0245;
-    L_0x0230:
+        if (r9 == 0) goto L_0x0250;
+    L_0x023b:
         r10 = r0.imagesArrLocations;
         r10.add(r9);
         r9 = r0.imagesArrLocationsSizes;
@@ -2158,41 +2164,41 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r9.add(r8);
         r8 = r0.avatarsArr;
         r8.add(r6);
-    L_0x0245:
+    L_0x0250:
         r3 = r3 + 1;
-        goto L_0x01ca;
-    L_0x0248:
+        goto L_0x01d5;
+    L_0x0253:
         r2 = r0.avatarsArr;
         r2 = r2.isEmpty();
         r3 = 6;
-        if (r2 != 0) goto L_0x0257;
-    L_0x0251:
+        if (r2 != 0) goto L_0x0262;
+    L_0x025c:
         r2 = r0.menuItem;
         r2.showSubItem(r3);
-        goto L_0x025c;
-    L_0x0257:
+        goto L_0x0267;
+    L_0x0262:
         r2 = r0.menuItem;
         r2.hideSubItem(r3);
-    L_0x025c:
+    L_0x0267:
         r0.needSearchImageInArr = r7;
         r0.currentIndex = r4;
-        if (r5 == r4) goto L_0x0267;
-    L_0x0262:
+        if (r5 == r4) goto L_0x0272;
+    L_0x026d:
         r2 = 1;
         r0.setImageIndex(r5, r2);
-        goto L_0x02c2;
-    L_0x0267:
+        goto L_0x02cd;
+    L_0x0272:
         r2 = r0.avatarsDialogId;
         r3 = 0;
-        if (r2 <= 0) goto L_0x027d;
-    L_0x026c:
+        if (r2 <= 0) goto L_0x0288;
+    L_0x0277:
         r2 = r0.currentAccount;
         r2 = org.telegram.messenger.MessagesController.getInstance(r2);
         r4 = r0.avatarsDialogId;
         r4 = java.lang.Integer.valueOf(r4);
         r2 = r2.getUser(r4);
-        goto L_0x0293;
-    L_0x027d:
+        goto L_0x029e;
+    L_0x0288:
         r2 = r0.currentAccount;
         r2 = org.telegram.messenger.MessagesController.getInstance(r2);
         r4 = r0.avatarsDialogId;
@@ -2202,22 +2208,22 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r20 = r3;
         r3 = r2;
         r2 = r20;
-    L_0x0293:
-        if (r2 != 0) goto L_0x0297;
-    L_0x0295:
-        if (r3 == 0) goto L_0x02c2;
-    L_0x0297:
-        if (r2 == 0) goto L_0x029f;
-    L_0x0299:
+    L_0x029e:
+        if (r2 != 0) goto L_0x02a2;
+    L_0x02a0:
+        if (r3 == 0) goto L_0x02cd;
+    L_0x02a2:
+        if (r2 == 0) goto L_0x02aa;
+    L_0x02a4:
         r4 = 1;
         r2 = org.telegram.messenger.ImageLocation.getForUser(r2, r4);
-        goto L_0x02a4;
-    L_0x029f:
+        goto L_0x02af;
+    L_0x02aa:
         r4 = 1;
         r2 = org.telegram.messenger.ImageLocation.getForChat(r3, r4);
-    L_0x02a4:
-        if (r2 == 0) goto L_0x02c2;
-    L_0x02a6:
+    L_0x02af:
+        if (r2 == 0) goto L_0x02cd;
+    L_0x02b1:
         r3 = r0.imagesArrLocations;
         r3.add(r7, r2);
         r2 = r0.avatarsArr;
@@ -2229,9 +2235,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.add(r7, r3);
         r2 = 1;
         r0.setImageIndex(r7, r2);
-    L_0x02c2:
-        if (r1 == 0) goto L_0x067e;
-    L_0x02c4:
+    L_0x02cd:
+        if (r1 == 0) goto L_0x0689;
+    L_0x02cf:
         r1 = r0.currentAccount;
         r2 = org.telegram.messenger.MessagesController.getInstance(r1);
         r3 = r0.avatarsDialogId;
@@ -2240,49 +2246,49 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r7 = 0;
         r8 = r0.classGuid;
         r2.loadDialogPhotos(r3, r4, r5, r7, r8);
-        goto L_0x067e;
-    L_0x02d8:
+        goto L_0x0689;
+    L_0x02e3:
         r2 = org.telegram.messenger.NotificationCenter.mediaCountDidLoad;
-        if (r1 != r2) goto L_0x0398;
-    L_0x02dc:
+        if (r1 != r2) goto L_0x03a3;
+    L_0x02e7:
         r1 = r24[r7];
         r1 = (java.lang.Long) r1;
         r1 = r1.longValue();
         r3 = r0.currentDialogId;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 == 0) goto L_0x02f0;
-    L_0x02ea:
+        if (r5 == 0) goto L_0x02fb;
+    L_0x02f5:
         r3 = r0.mergeDialogId;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 != 0) goto L_0x067e;
-    L_0x02f0:
+        if (r5 != 0) goto L_0x0689;
+    L_0x02fb:
         r3 = r0.currentDialogId;
         r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 != 0) goto L_0x0302;
-    L_0x02f6:
+        if (r5 != 0) goto L_0x030d;
+    L_0x0301:
         r3 = 1;
         r1 = r24[r3];
         r1 = (java.lang.Integer) r1;
         r1 = r1.intValue();
         r0.totalImagesCount = r1;
-        goto L_0x0313;
-    L_0x0302:
+        goto L_0x031e;
+    L_0x030d:
         r3 = 1;
         r4 = r0.mergeDialogId;
         r6 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
-        if (r6 != 0) goto L_0x0313;
-    L_0x0309:
+        if (r6 != 0) goto L_0x031e;
+    L_0x0314:
         r1 = r24[r3];
         r1 = (java.lang.Integer) r1;
         r1 = r1.intValue();
         r0.totalImagesCountMerge = r1;
-    L_0x0313:
+    L_0x031e:
         r1 = r0.needSearchImageInArr;
-        if (r1 == 0) goto L_0x0334;
-    L_0x0317:
+        if (r1 == 0) goto L_0x033f;
+    L_0x0322:
         r1 = r0.isFirstLoading;
-        if (r1 == 0) goto L_0x0334;
-    L_0x031b:
+        if (r1 == 0) goto L_0x033f;
+    L_0x0326:
         r0.isFirstLoading = r7;
         r0.loadingMoreImages = r3;
         r1 = r0.currentAccount;
@@ -2294,17 +2300,17 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r8 = 1;
         r9 = r0.classGuid;
         r2.loadMedia(r3, r5, r6, r7, r8, r9);
-        goto L_0x067e;
-    L_0x0334:
+        goto L_0x0689;
+    L_0x033f:
         r1 = r0.imagesArr;
         r1 = r1.isEmpty();
-        if (r1 != 0) goto L_0x067e;
-    L_0x033c:
+        if (r1 != 0) goto L_0x0689;
+    L_0x0347:
         r1 = r0.opennedFromMedia;
-        r2 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r2 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r3 = "Of";
-        if (r1 == 0) goto L_0x0368;
-    L_0x0345:
+        if (r1 == 0) goto L_0x0373;
+    L_0x0350:
         r1 = r0.actionBar;
         r4 = 2;
         r4 = new java.lang.Object[r4];
@@ -2320,8 +2326,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4[r6] = r5;
         r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4);
         r1.setTitle(r2);
-        goto L_0x067e;
-    L_0x0368:
+        goto L_0x0689;
+    L_0x0373:
         r1 = r0.actionBar;
         r4 = 2;
         r4 = new java.lang.Object[r4];
@@ -2344,11 +2350,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4[r6] = r5;
         r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4);
         r1.setTitle(r2);
-        goto L_0x067e;
-    L_0x0398:
+        goto L_0x0689;
+    L_0x03a3:
         r2 = org.telegram.messenger.NotificationCenter.mediaDidLoad;
-        if (r1 != r2) goto L_0x05ea;
-    L_0x039c:
+        if (r1 != r2) goto L_0x05f5;
+    L_0x03a7:
         r1 = r24[r7];
         r1 = (java.lang.Long) r1;
         r1 = r1.longValue();
@@ -2358,26 +2364,26 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3.intValue();
         r5 = r0.currentDialogId;
         r10 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
-        if (r10 == 0) goto L_0x03b9;
-    L_0x03b3:
+        if (r10 == 0) goto L_0x03c4;
+    L_0x03be:
         r5 = r0.mergeDialogId;
         r10 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
-        if (r10 != 0) goto L_0x067e;
-    L_0x03b9:
+        if (r10 != 0) goto L_0x0689;
+    L_0x03c4:
         r5 = r0.classGuid;
-        if (r3 != r5) goto L_0x067e;
-    L_0x03bd:
+        if (r3 != r5) goto L_0x0689;
+    L_0x03c8:
         r0.loadingMoreImages = r7;
         r5 = r0.currentDialogId;
         r3 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
         r1 = 2;
-        if (r3 != 0) goto L_0x03c8;
-    L_0x03c6:
+        if (r3 != 0) goto L_0x03d3;
+    L_0x03d1:
         r6 = 0;
-        goto L_0x03c9;
-    L_0x03c8:
+        goto L_0x03d4;
+    L_0x03d3:
         r6 = 1;
-    L_0x03c9:
+    L_0x03d4:
         r2 = r24[r1];
         r2 = (java.util.ArrayList) r2;
         r1 = r0.endReached;
@@ -2387,20 +2393,20 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3.booleanValue();
         r1[r6] = r3;
         r1 = r0.needSearchImageInArr;
-        if (r1 == 0) goto L_0x0583;
-    L_0x03de:
+        if (r1 == 0) goto L_0x058e;
+    L_0x03e9:
         r1 = r2.isEmpty();
-        if (r1 == 0) goto L_0x03ef;
-    L_0x03e4:
-        if (r6 != 0) goto L_0x03ec;
-    L_0x03e6:
+        if (r1 == 0) goto L_0x03fa;
+    L_0x03ef:
+        if (r6 != 0) goto L_0x03f7;
+    L_0x03f1:
         r12 = r0.mergeDialogId;
         r1 = (r12 > r8 ? 1 : (r12 == r8 ? 0 : -1));
-        if (r1 != 0) goto L_0x03ef;
-    L_0x03ec:
+        if (r1 != 0) goto L_0x03fa;
+    L_0x03f7:
         r0.needSearchImageInArr = r7;
         return;
-    L_0x03ef:
+    L_0x03fa:
         r1 = r0.imagesArr;
         r3 = r0.currentIndex;
         r1 = r1.get(r3);
@@ -2408,64 +2414,64 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = 0;
         r5 = 0;
         r10 = -1;
-    L_0x03fc:
+    L_0x0407:
         r12 = r2.size();
-        if (r3 >= r12) goto L_0x0451;
-    L_0x0402:
+        if (r3 >= r12) goto L_0x045c;
+    L_0x040d:
         r12 = r2.get(r3);
         r12 = (org.telegram.messenger.MessageObject) r12;
         r13 = r0.imagesByIdsTemp;
         r13 = r13[r6];
         r14 = r12.getId();
         r13 = r13.indexOfKey(r14);
-        if (r13 >= 0) goto L_0x044e;
-    L_0x0416:
+        if (r13 >= 0) goto L_0x0459;
+    L_0x0421:
         r13 = r0.imagesByIdsTemp;
         r13 = r13[r6];
         r14 = r12.getId();
         r13.put(r14, r12);
         r13 = r0.opennedFromMedia;
-        if (r13 == 0) goto L_0x0438;
-    L_0x0425:
+        if (r13 == 0) goto L_0x0443;
+    L_0x0430:
         r13 = r0.imagesArrTemp;
         r13.add(r12);
         r12 = r12.getId();
         r13 = r1.getId();
-        if (r12 != r13) goto L_0x0435;
-    L_0x0434:
+        if (r12 != r13) goto L_0x0440;
+    L_0x043f:
         r10 = r5;
-    L_0x0435:
+    L_0x0440:
         r5 = r5 + 1;
-        goto L_0x044e;
-    L_0x0438:
+        goto L_0x0459;
+    L_0x0443:
         r5 = r5 + 1;
         r13 = r0.imagesArrTemp;
         r13.add(r7, r12);
         r12 = r12.getId();
         r13 = r1.getId();
-        if (r12 != r13) goto L_0x044e;
-    L_0x0449:
+        if (r12 != r13) goto L_0x0459;
+    L_0x0454:
         r10 = r2.size();
         r10 = r10 - r5;
-    L_0x044e:
+    L_0x0459:
         r3 = r3 + 1;
-        goto L_0x03fc;
-    L_0x0451:
-        if (r5 != 0) goto L_0x0465;
-    L_0x0453:
-        if (r6 != 0) goto L_0x045b;
-    L_0x0455:
+        goto L_0x0407;
+    L_0x045c:
+        if (r5 != 0) goto L_0x0470;
+    L_0x045e:
+        if (r6 != 0) goto L_0x0466;
+    L_0x0460:
         r1 = r0.mergeDialogId;
         r3 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1));
-        if (r3 != 0) goto L_0x0465;
-    L_0x045b:
+        if (r3 != 0) goto L_0x0470;
+    L_0x0466:
         r1 = r0.imagesArr;
         r1 = r1.size();
         r0.totalImagesCount = r1;
         r0.totalImagesCountMerge = r7;
-    L_0x0465:
-        if (r10 == r4) goto L_0x04ae;
-    L_0x0467:
+    L_0x0470:
+        if (r10 == r4) goto L_0x04b9;
+    L_0x0472:
         r1 = r0.imagesArr;
         r1.clear();
         r1 = r0.imagesArr;
@@ -2473,9 +2479,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.addAll(r2);
         r1 = 0;
         r2 = 2;
-    L_0x0475:
-        if (r1 >= r2) goto L_0x048d;
-    L_0x0477:
+    L_0x0480:
+        if (r1 >= r2) goto L_0x0498;
+    L_0x0482:
         r3 = r0.imagesByIds;
         r5 = r0.imagesByIdsTemp;
         r5 = r5[r1];
@@ -2485,59 +2491,59 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3[r1];
         r3.clear();
         r1 = r1 + 1;
-        goto L_0x0475;
-    L_0x048d:
+        goto L_0x0480;
+    L_0x0498:
         r1 = r0.imagesArrTemp;
         r1.clear();
         r0.needSearchImageInArr = r7;
         r0.currentIndex = r4;
         r1 = r0.imagesArr;
         r1 = r1.size();
-        if (r10 < r1) goto L_0x04a8;
-    L_0x049e:
+        if (r10 < r1) goto L_0x04b3;
+    L_0x04a9:
         r1 = r0.imagesArr;
         r1 = r1.size();
         r2 = 1;
         r10 = r1 + -1;
-        goto L_0x04a9;
-    L_0x04a8:
+        goto L_0x04b4;
+    L_0x04b3:
         r2 = 1;
-    L_0x04a9:
+    L_0x04b4:
         r0.setImageIndex(r10, r2);
-        goto L_0x067e;
-    L_0x04ae:
+        goto L_0x0689;
+    L_0x04b9:
         r2 = 1;
         r1 = r0.opennedFromMedia;
-        if (r1 == 0) goto L_0x04fd;
-    L_0x04b3:
+        if (r1 == 0) goto L_0x0508;
+    L_0x04be:
         r1 = r0.imagesArrTemp;
         r1 = r1.isEmpty();
-        if (r1 == 0) goto L_0x04bd;
-    L_0x04bb:
+        if (r1 == 0) goto L_0x04c8;
+    L_0x04c6:
         r1 = 0;
-        goto L_0x04ce;
-    L_0x04bd:
+        goto L_0x04d9;
+    L_0x04c8:
         r1 = r0.imagesArrTemp;
         r3 = r1.size();
         r3 = r3 - r2;
         r1 = r1.get(r3);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r1 = r1.getId();
-    L_0x04ce:
-        if (r6 != 0) goto L_0x0541;
-    L_0x04d0:
+    L_0x04d9:
+        if (r6 != 0) goto L_0x054c;
+    L_0x04db:
         r2 = r0.endReached;
         r2 = r2[r6];
-        if (r2 == 0) goto L_0x0541;
-    L_0x04d6:
+        if (r2 == 0) goto L_0x054c;
+    L_0x04e1:
         r2 = r0.mergeDialogId;
         r4 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1));
-        if (r4 == 0) goto L_0x0541;
-    L_0x04dc:
+        if (r4 == 0) goto L_0x054c;
+    L_0x04e7:
         r2 = r0.imagesArrTemp;
         r2 = r2.isEmpty();
-        if (r2 != 0) goto L_0x053e;
-    L_0x04e4:
+        if (r2 != 0) goto L_0x0549;
+    L_0x04ef:
         r2 = r0.imagesArrTemp;
         r3 = r2.size();
         r4 = 1;
@@ -2547,181 +2553,181 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r2.getDialogId();
         r4 = r0.mergeDialogId;
         r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x053e;
-    L_0x04fc:
-        goto L_0x053b;
-    L_0x04fd:
+        if (r6 == 0) goto L_0x0549;
+    L_0x0507:
+        goto L_0x0546;
+    L_0x0508:
         r1 = r0.imagesArrTemp;
         r1 = r1.isEmpty();
-        if (r1 == 0) goto L_0x0507;
-    L_0x0505:
+        if (r1 == 0) goto L_0x0512;
+    L_0x0510:
         r1 = 0;
-        goto L_0x0513;
-    L_0x0507:
+        goto L_0x051e;
+    L_0x0512:
         r1 = r0.imagesArrTemp;
         r1 = r1.get(r7);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r1 = r1.getId();
-    L_0x0513:
-        if (r6 != 0) goto L_0x0541;
-    L_0x0515:
+    L_0x051e:
+        if (r6 != 0) goto L_0x054c;
+    L_0x0520:
         r2 = r0.endReached;
         r2 = r2[r6];
-        if (r2 == 0) goto L_0x0541;
-    L_0x051b:
+        if (r2 == 0) goto L_0x054c;
+    L_0x0526:
         r2 = r0.mergeDialogId;
         r4 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1));
-        if (r4 == 0) goto L_0x0541;
-    L_0x0521:
+        if (r4 == 0) goto L_0x054c;
+    L_0x052c:
         r2 = r0.imagesArrTemp;
         r2 = r2.isEmpty();
-        if (r2 != 0) goto L_0x053e;
-    L_0x0529:
+        if (r2 != 0) goto L_0x0549;
+    L_0x0534:
         r2 = r0.imagesArrTemp;
         r2 = r2.get(r7);
         r2 = (org.telegram.messenger.MessageObject) r2;
         r2 = r2.getDialogId();
         r4 = r0.mergeDialogId;
         r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x053e;
-    L_0x053b:
+        if (r6 == 0) goto L_0x0549;
+    L_0x0546:
         r6 = 1;
         r11 = 0;
-        goto L_0x0542;
-    L_0x053e:
+        goto L_0x054d;
+    L_0x0549:
         r11 = r1;
         r6 = 1;
-        goto L_0x0542;
-    L_0x0541:
+        goto L_0x054d;
+    L_0x054c:
         r11 = r1;
-    L_0x0542:
+    L_0x054d:
         r1 = r0.endReached;
         r1 = r1[r6];
-        if (r1 != 0) goto L_0x067e;
-    L_0x0548:
+        if (r1 != 0) goto L_0x0689;
+    L_0x0553:
         r1 = 1;
         r0.loadingMoreImages = r1;
         r1 = r0.opennedFromMedia;
-        if (r1 == 0) goto L_0x0569;
-    L_0x054f:
-        r1 = r0.currentAccount;
-        r7 = org.telegram.messenger.MediaDataController.getInstance(r1);
-        if (r6 != 0) goto L_0x055a;
-    L_0x0557:
-        r1 = r0.currentDialogId;
-        goto L_0x055c;
+        if (r1 == 0) goto L_0x0574;
     L_0x055a:
-        r1 = r0.mergeDialogId;
-    L_0x055c:
-        r8 = r1;
-        r10 = 80;
-        r12 = r0.sharedMediaType;
-        r13 = 1;
-        r14 = r0.classGuid;
-        r7.loadMedia(r8, r10, r11, r12, r13, r14);
-        goto L_0x067e;
-    L_0x0569:
         r1 = r0.currentAccount;
         r7 = org.telegram.messenger.MediaDataController.getInstance(r1);
-        if (r6 != 0) goto L_0x0574;
-    L_0x0571:
+        if (r6 != 0) goto L_0x0565;
+    L_0x0562:
         r1 = r0.currentDialogId;
-        goto L_0x0576;
-    L_0x0574:
+        goto L_0x0567;
+    L_0x0565:
         r1 = r0.mergeDialogId;
-    L_0x0576:
+    L_0x0567:
         r8 = r1;
         r10 = 80;
         r12 = r0.sharedMediaType;
         r13 = 1;
         r14 = r0.classGuid;
         r7.loadMedia(r8, r10, r11, r12, r13, r14);
-        goto L_0x067e;
-    L_0x0583:
+        goto L_0x0689;
+    L_0x0574:
+        r1 = r0.currentAccount;
+        r7 = org.telegram.messenger.MediaDataController.getInstance(r1);
+        if (r6 != 0) goto L_0x057f;
+    L_0x057c:
+        r1 = r0.currentDialogId;
+        goto L_0x0581;
+    L_0x057f:
+        r1 = r0.mergeDialogId;
+    L_0x0581:
+        r8 = r1;
+        r10 = 80;
+        r12 = r0.sharedMediaType;
+        r13 = 1;
+        r14 = r0.classGuid;
+        r7.loadMedia(r8, r10, r11, r12, r13, r14);
+        goto L_0x0689;
+    L_0x058e:
         r1 = r2.iterator();
         r2 = 0;
-    L_0x0588:
+    L_0x0593:
         r3 = r1.hasNext();
-        if (r3 == 0) goto L_0x05bf;
-    L_0x058e:
+        if (r3 == 0) goto L_0x05ca;
+    L_0x0599:
         r3 = r1.next();
         r3 = (org.telegram.messenger.MessageObject) r3;
         r5 = r0.imagesByIds;
         r5 = r5[r6];
         r8 = r3.getId();
         r5 = r5.indexOfKey(r8);
-        if (r5 >= 0) goto L_0x0588;
-    L_0x05a2:
+        if (r5 >= 0) goto L_0x0593;
+    L_0x05ad:
         r2 = r2 + 1;
         r5 = r0.opennedFromMedia;
-        if (r5 == 0) goto L_0x05ae;
-    L_0x05a8:
+        if (r5 == 0) goto L_0x05b9;
+    L_0x05b3:
         r5 = r0.imagesArr;
         r5.add(r3);
-        goto L_0x05b3;
-    L_0x05ae:
+        goto L_0x05be;
+    L_0x05b9:
         r5 = r0.imagesArr;
         r5.add(r7, r3);
-    L_0x05b3:
+    L_0x05be:
         r5 = r0.imagesByIds;
         r5 = r5[r6];
         r8 = r3.getId();
         r5.put(r8, r3);
-        goto L_0x0588;
-    L_0x05bf:
+        goto L_0x0593;
+    L_0x05ca:
         r1 = r0.opennedFromMedia;
-        if (r1 == 0) goto L_0x05d1;
-    L_0x05c3:
-        if (r2 != 0) goto L_0x067e;
-    L_0x05c5:
+        if (r1 == 0) goto L_0x05dc;
+    L_0x05ce:
+        if (r2 != 0) goto L_0x0689;
+    L_0x05d0:
         r1 = r0.imagesArr;
         r1 = r1.size();
         r0.totalImagesCount = r1;
         r0.totalImagesCountMerge = r7;
-        goto L_0x067e;
-    L_0x05d1:
-        if (r2 == 0) goto L_0x05de;
-    L_0x05d3:
+        goto L_0x0689;
+    L_0x05dc:
+        if (r2 == 0) goto L_0x05e9;
+    L_0x05de:
         r1 = r0.currentIndex;
         r0.currentIndex = r4;
         r1 = r1 + r2;
         r2 = 1;
         r0.setImageIndex(r1, r2);
-        goto L_0x067e;
-    L_0x05de:
+        goto L_0x0689;
+    L_0x05e9:
         r1 = r0.imagesArr;
         r1 = r1.size();
         r0.totalImagesCount = r1;
         r0.totalImagesCountMerge = r7;
-        goto L_0x067e;
-    L_0x05ea:
+        goto L_0x0689;
+    L_0x05f5:
         r2 = org.telegram.messenger.NotificationCenter.emojiDidLoad;
-        if (r1 != r2) goto L_0x05f7;
-    L_0x05ee:
+        if (r1 != r2) goto L_0x0602;
+    L_0x05f9:
         r1 = r0.captionTextView;
-        if (r1 == 0) goto L_0x067e;
-    L_0x05f2:
+        if (r1 == 0) goto L_0x0689;
+    L_0x05fd:
         r1.invalidate();
-        goto L_0x067e;
-    L_0x05f7:
+        goto L_0x0689;
+    L_0x0602:
         r2 = org.telegram.messenger.NotificationCenter.filePreparingFailed;
-        if (r1 != r2) goto L_0x0632;
-    L_0x05fb:
+        if (r1 != r2) goto L_0x063d;
+    L_0x0606:
         r1 = r24[r7];
         r1 = (org.telegram.messenger.MessageObject) r1;
         r2 = r0.loadInitialVideo;
-        if (r2 == 0) goto L_0x0610;
-    L_0x0603:
+        if (r2 == 0) goto L_0x061b;
+    L_0x060e:
         r0.loadInitialVideo = r7;
         r1 = r0.progressView;
         r1.setVisibility(r3);
         r1 = r0.currentPlayingVideoFile;
         r0.preparePlayer(r1, r7, r7);
-        goto L_0x067e;
-    L_0x0610:
+        goto L_0x0689;
+    L_0x061b:
         r2 = r0.tryStartRequestPreviewOnFinish;
-        if (r2 == 0) goto L_0x0626;
-    L_0x0614:
+        if (r2 == 0) goto L_0x0631;
+    L_0x061f:
         r0.releasePlayer(r7);
         r1 = org.telegram.messenger.MediaController.getInstance();
         r2 = r0.videoPreviewMessageObject;
@@ -2729,24 +2735,24 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r1.scheduleVideoConvert(r2, r3);
         r1 = r1 ^ r3;
         r0.tryStartRequestPreviewOnFinish = r1;
-        goto L_0x067e;
-    L_0x0626:
+        goto L_0x0689;
+    L_0x0631:
         r2 = r0.videoPreviewMessageObject;
-        if (r1 != r2) goto L_0x067e;
-    L_0x062a:
+        if (r1 != r2) goto L_0x0689;
+    L_0x0635:
         r0.requestingPreview = r7;
         r1 = r0.progressView;
         r1.setVisibility(r3);
-        goto L_0x067e;
-    L_0x0632:
+        goto L_0x0689;
+    L_0x063d:
         r2 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable;
-        if (r1 != r2) goto L_0x067e;
-    L_0x0636:
+        if (r1 != r2) goto L_0x0689;
+    L_0x0641:
         r1 = r24[r7];
         r1 = (org.telegram.messenger.MessageObject) r1;
         r2 = r0.videoPreviewMessageObject;
-        if (r1 != r2) goto L_0x067e;
-    L_0x063e:
+        if (r1 != r2) goto L_0x0689;
+    L_0x0649:
         r1 = 1;
         r2 = r24[r1];
         r2 = (java.lang.String) r2;
@@ -2761,8 +2767,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r6[r7];
         r6.setProgress(r3, r1);
         r3 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
-        if (r3 == 0) goto L_0x067e;
-    L_0x065f:
+        if (r3 == 0) goto L_0x0689;
+    L_0x066a:
         r0.requestingPreview = r7;
         r3 = r0.photoProgressViews;
         r3 = r3[r7];
@@ -2776,7 +2782,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3.<init>(r2);
         r2 = android.net.Uri.fromFile(r3);
         r0.preparePlayer(r2, r7, r1);
-    L_0x067e:
+    L_0x0689:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -2909,7 +2915,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00a8:
         r1 = r6.parentActivity;	 Catch:{ Exception -> 0x00c1 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0e0a31 float:1.888033E38 double:1.0531634456E-314;
+        r3 = NUM; // 0x7f0e0a58 float:1.8880408E38 double:1.053163465E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x00c1 }
         r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Exception -> 0x00c1 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -2929,12 +2935,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     private void setScaleToFill() {
         float bitmapWidth = (float) this.centerImage.getBitmapWidth();
-        float containerViewWidth = (float) getContainerViewWidth();
         float bitmapHeight = (float) this.centerImage.getBitmapHeight();
-        float containerViewHeight = (float) getContainerViewHeight();
-        float min = Math.min(containerViewHeight / bitmapHeight, containerViewWidth / bitmapWidth);
-        this.scale = Math.max(containerViewWidth / ((float) ((int) (bitmapWidth * min))), containerViewHeight / ((float) ((int) (bitmapHeight * min))));
-        updateMinMax(this.scale);
+        if (bitmapWidth != 0.0f && bitmapHeight != 0.0f) {
+            float containerViewWidth = (float) getContainerViewWidth();
+            float containerViewHeight = (float) getContainerViewHeight();
+            float min = Math.min(containerViewHeight / bitmapHeight, containerViewWidth / bitmapWidth);
+            this.scale = Math.max(containerViewWidth / ((float) ((int) (bitmapWidth * min))), containerViewHeight / ((float) ((int) (bitmapHeight * min))));
+            updateMinMax(this.scale);
+        }
     }
 
     public void setParentAlert(ChatAttachAlert chatAttachAlert) {
@@ -3930,6 +3938,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.pickerViewSendButton.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton")));
             this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(-1, Mode.MULTIPLY));
             this.pickerViewSendButton.setImageResource(NUM);
+            this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
             this.containerView.addView(this.pickerViewSendButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 14.0f, 14.0f));
             this.pickerViewSendButton.setContentDescription(LocaleController.getString("Send", NUM));
             this.pickerViewSendButton.setOnClickListener(new -$$Lambda$PhotoViewer$Ygm2nkEIz52xt8vsvpsgSvg6BwY(this));
@@ -4295,7 +4304,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 clippingImageView.setTranslationX(clippingImageView.getTranslationX() - ((float) getLeftInset()));
                 this.animationValues[0][2] = this.animatingImageView.getTranslationX();
             }
-            this.windowView.requestLayout();
+            FrameLayout frameLayout = this.windowView;
+            if (frameLayout != null) {
+                frameLayout.requestLayout();
+            }
         }
         this.containerView.setPadding(windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), 0);
         return windowInsets.consumeSystemWindowInsets();
@@ -4440,16 +4452,16 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r2 != 0) goto L_0x00de;
     L_0x00bb:
         r6 = org.telegram.messenger.UserObject.isUserSelf(r0);
-        r7 = NUM; // 0x7var_fe float:1.7945612E38 double:1.052935755E-314;
+        r7 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
         if (r6 == 0) goto L_0x00d1;
     L_0x00c4:
-        r6 = NUM; // 0x7f0e0a1c float:1.8880287E38 double:1.0531634353E-314;
+        r6 = NUM; // 0x7f0e0a43 float:1.8880366E38 double:1.0531634545E-314;
         r8 = "SetReminder";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
         goto L_0x00ef;
     L_0x00d1:
-        r6 = NUM; // 0x7f0e09ab float:1.8880057E38 double:1.0531633794E-314;
+        r6 = NUM; // 0x7f0e09d1 float:1.8880135E38 double:1.053163398E-314;
         r8 = "ScheduleMessage";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.setTextAndIcon(r6, r7);
@@ -4457,10 +4469,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00de:
         if (r2 != r6) goto L_0x00ef;
     L_0x00e0:
-        r6 = NUM; // 0x7f0e09ff float:1.8880228E38 double:1.053163421E-314;
+        r6 = NUM; // 0x7f0e0a26 float:1.8880307E38 double:1.05316344E-314;
         r7 = "SendWithoutSound";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r7 = NUM; // 0x7var_b float:1.7945217E38 double:1.0529356587E-314;
+        r7 = NUM; // 0x7var_c float:1.7945219E38 double:1.052935659E-314;
         r5.setTextAndIcon(r6, r7);
     L_0x00ef:
         r6 = NUM; // 0x43440000 float:196.0 double:5.57567864E-315;
@@ -4597,11 +4609,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     public /* synthetic */ void lambda$setParentActivity$12$PhotoViewer(Activity activity, View view) {
         if (this.captionEditText.getTag() == null) {
             if (this.compressItem.getTag() == null) {
-                if (this.tooltip == null) {
-                    this.tooltip = new Tooltip(activity, this.containerView, -NUM, -1);
+                if (this.videoConvertSupported) {
+                    if (this.tooltip == null) {
+                        this.tooltip = new Tooltip(activity, this.containerView, -NUM, -1);
+                    }
+                    this.tooltip.setText(LocaleController.getString("VideoQualityIsTooLow", NUM));
+                    this.tooltip.show(this.compressItem);
                 }
-                this.tooltip.setText(LocaleController.getString("VideoQualityIsTooLow", NUM));
-                this.tooltip.show(this.compressItem);
                 return;
             }
             showQualityView(true);
@@ -5160,34 +5174,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private void createVideoControlsInterface() {
-        this.videoPlayerSeekbar = new SeekBar(this.containerView.getContext());
-        this.videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4.0f));
-        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
-            public void onSeekBarDrag(float f) {
-                if (PhotoViewer.this.videoPlayer != null) {
-                    if (!PhotoViewer.this.inPreview && PhotoViewer.this.videoTimelineView.getVisibility() == 0) {
-                        f = PhotoViewer.this.videoTimelineView.getLeftProgress() + ((PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress()) * f);
-                    }
-                    long duration = PhotoViewer.this.videoPlayer.getDuration();
-                    if (duration == -9223372036854775807L) {
-                        PhotoViewer.this.seekToProgressPending = f;
-                    } else {
-                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (f * ((float) duration))));
-                    }
-                    PhotoViewer.this.showVideoSeekPreviewPosition(false);
-                    PhotoViewer.this.needShowOnReady = false;
-                }
-            }
-
-            public void onSeekBarContinuousDrag(float f) {
-                if (!(PhotoViewer.this.videoPlayer == null || PhotoViewer.this.videoPreviewFrame == null)) {
-                    PhotoViewer.this.videoPreviewFrame.setProgress(f, PhotoViewer.this.videoPlayerSeekbar.getWidth());
-                }
-                PhotoViewer.this.showVideoSeekPreviewPosition(true);
-                PhotoViewer.this.updateVideoSeekPreviewPosition();
-            }
-        });
         this.videoPlayerControlFrameLayout = new FrameLayout(this.containerView.getContext()) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 motionEvent.getX();
@@ -5254,6 +5240,34 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         };
         this.videoPlayerControlFrameLayout.setWillNotDraw(false);
         this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
+        this.videoPlayerSeekbar = new SeekBar(this.videoPlayerControlFrameLayout);
+        this.videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4.0f));
+        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
+        this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
+            public void onSeekBarDrag(float f) {
+                if (PhotoViewer.this.videoPlayer != null) {
+                    if (!PhotoViewer.this.inPreview && PhotoViewer.this.videoTimelineView.getVisibility() == 0) {
+                        f = PhotoViewer.this.videoTimelineView.getLeftProgress() + ((PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress()) * f);
+                    }
+                    long duration = PhotoViewer.this.videoPlayer.getDuration();
+                    if (duration == -9223372036854775807L) {
+                        PhotoViewer.this.seekToProgressPending = f;
+                    } else {
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (f * ((float) duration))));
+                    }
+                    PhotoViewer.this.showVideoSeekPreviewPosition(false);
+                    PhotoViewer.this.needShowOnReady = false;
+                }
+            }
+
+            public void onSeekBarContinuousDrag(float f) {
+                if (!(PhotoViewer.this.videoPlayer == null || PhotoViewer.this.videoPreviewFrame == null)) {
+                    PhotoViewer.this.videoPreviewFrame.setProgress(f, PhotoViewer.this.videoPlayerSeekbar.getWidth());
+                }
+                PhotoViewer.this.showVideoSeekPreviewPosition(true);
+                PhotoViewer.this.updateVideoSeekPreviewPosition();
+            }
+        });
         this.videoPreviewFrame = new VideoSeekPreviewImage(this.containerView.getContext(), new -$$Lambda$PhotoViewer$om-yNq7QQUVRvzeIpHWwXj19jW8(this)) {
             /* Access modifiers changed, original: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
@@ -5505,6 +5519,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             Drawable background = imageView.getBackground();
             Theme.setSelectorDrawableColor(background, color, false);
             Theme.setSelectorDrawableColor(background, Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : str), true);
+            this.pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
         }
         CheckBox checkBox = this.checkImageView;
         if (checkBox != null) {
@@ -5546,6 +5561,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         PhotoFilterView photoFilterView = this.photoFilterView;
         if (photoFilterView != null) {
             photoFilterView.updateColors();
+        }
+        PhotoViewerCaptionEnterView photoViewerCaptionEnterView = this.captionEditText;
+        if (photoViewerCaptionEnterView != null) {
+            photoViewerCaptionEnterView.updateColors();
         }
         RecyclerListView recyclerListView = this.selectedPhotosListView;
         if (recyclerListView != null) {
@@ -6590,7 +6609,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.onAppear();
         r2 = r0.editorDoneLayout;
         r2 = r2.doneButton;
-        r4 = NUM; // 0x7f0e034d float:1.8876751E38 double:1.053162574E-314;
+        r4 = NUM; // 0x7f0e0357 float:1.8876772E38 double:1.053162579E-314;
         r5 = "Crop";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.setText(r4);
@@ -7588,18 +7607,18 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x0562  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x0560  */
-    /* JADX WARNING: Removed duplicated region for block: B:208:0x056b  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x06e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x06e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0679  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0679  */
-    /* JADX WARNING: Missing block: B:53:0x023f, code skipped:
-            if ("telegram_album".equals(r2.type) != false) goto L_0x0241;
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x055e  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x055c  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x0567  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x06e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x06b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:285:0x06e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x060b  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x0675  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x060b  */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x0675  */
+    /* JADX WARNING: Missing block: B:53:0x023e, code skipped:
+            if ("telegram_album".equals(r2.type) != false) goto L_0x0240;
      */
     private void onPhotoShow(org.telegram.messenger.MessageObject r27, org.telegram.tgnet.TLRPC.FileLocation r28, org.telegram.messenger.ImageLocation r29, java.util.ArrayList<org.telegram.messenger.MessageObject> r30, java.util.ArrayList<org.telegram.messenger.SecureDocument> r31, java.util.ArrayList<java.lang.Object> r32, int r33, org.telegram.ui.PhotoViewer.PlaceProviderObject r34) {
         /*
@@ -7711,7 +7730,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.isEvent = r10;
         r0.sharedMediaType = r8;
         r10 = r0.allMediaItem;
-        r14 = NUM; // 0x7f0e0a52 float:1.8880396E38 double:1.053163462E-314;
+        r14 = NUM; // 0x7f0e0a79 float:1.8880475E38 double:1.053163481E-314;
         r15 = "ShowAllMedia";
         r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
         r10.setText(r14);
@@ -7830,7 +7849,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r10.setVisibility(r14);
         r0.muteVideo = r8;
         r10 = r0.muteItem;
-        r13 = NUM; // 0x7var_f2 float:1.7946107E38 double:1.0529358756E-314;
+        r13 = NUM; // 0x7var_f6 float:1.7946115E38 double:1.0529358775E-314;
         r10.setImageResource(r13);
         r10 = r0.editorDoneLayout;
         r10.setVisibility(r14);
@@ -7868,74 +7887,74 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r15 = 0;
         goto L_0x01f4;
     L_0x0209:
-        r10 = NUM; // 0x7f0e0a51 float:1.8880394E38 double:1.0531634615E-314;
+        r10 = NUM; // 0x7f0e0a78 float:1.8880473E38 double:1.0531634807E-314;
         r13 = "ShowAllFiles";
-        if (r1 == 0) goto L_0x0309;
+        if (r1 == 0) goto L_0x0308;
     L_0x0210:
-        if (r2 != 0) goto L_0x0309;
+        if (r2 != 0) goto L_0x0308;
     L_0x0212:
         r2 = r1.messageOwner;
         r2 = r2.media;
         r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r3 == 0) goto L_0x02a1;
+        if (r3 == 0) goto L_0x02a0;
     L_0x021a:
         r2 = r2.webpage;
-        if (r2 == 0) goto L_0x02a1;
+        if (r2 == 0) goto L_0x02a0;
     L_0x021e:
         r3 = r2.site_name;
-        if (r3 == 0) goto L_0x02a1;
+        if (r3 == 0) goto L_0x02a0;
     L_0x0222:
         r3 = r3.toLowerCase();
         r4 = "instagram";
         r4 = r3.equals(r4);
-        if (r4 != 0) goto L_0x0241;
+        if (r4 != 0) goto L_0x0240;
     L_0x022e:
         r4 = "twitter";
         r3 = r3.equals(r4);
-        if (r3 != 0) goto L_0x0241;
-    L_0x0237:
+        if (r3 != 0) goto L_0x0240;
+    L_0x0236:
         r3 = r2.type;
         r4 = "telegram_album";
         r3 = r4.equals(r3);
-        if (r3 == 0) goto L_0x02a1;
-    L_0x0241:
+        if (r3 == 0) goto L_0x02a0;
+    L_0x0240:
         r3 = r2.author;
         r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x024d;
-    L_0x0249:
+        if (r3 != 0) goto L_0x024c;
+    L_0x0248:
         r3 = r2.author;
         r0.nameOverride = r3;
-    L_0x024d:
+    L_0x024c:
         r3 = r2.cached_page;
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_page;
-        if (r3 == 0) goto L_0x0276;
-    L_0x0253:
+        if (r3 == 0) goto L_0x0275;
+    L_0x0252:
         r3 = 0;
-    L_0x0254:
+    L_0x0253:
         r4 = r2.cached_page;
         r4 = r4.blocks;
         r4 = r4.size();
-        if (r3 >= r4) goto L_0x0276;
-    L_0x025e:
+        if (r3 >= r4) goto L_0x0275;
+    L_0x025d:
         r4 = r2.cached_page;
         r4 = r4.blocks;
         r4 = r4.get(r3);
         r4 = (org.telegram.tgnet.TLRPC.PageBlock) r4;
         r6 = r4 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate;
-        if (r6 == 0) goto L_0x0273;
-    L_0x026c:
+        if (r6 == 0) goto L_0x0272;
+    L_0x026b:
         r4 = (org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate) r4;
         r2 = r4.published_date;
         r0.dateOverride = r2;
-        goto L_0x0276;
-    L_0x0273:
+        goto L_0x0275;
+    L_0x0272:
         r3 = r3 + 1;
-        goto L_0x0254;
-    L_0x0276:
+        goto L_0x0253;
+    L_0x0275:
         r2 = r1.getWebPagePhotos(r7, r7);
         r3 = r2.isEmpty();
-        if (r3 != 0) goto L_0x02a1;
-    L_0x0280:
+        if (r3 != 0) goto L_0x02a0;
+    L_0x027f:
         r3 = r27.getId();
         r0.slideshowMessageId = r3;
         r0.needSearchImageInArr = r8;
@@ -7946,57 +7965,57 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.totalImagesCount = r2;
         r2 = r0.imagesArr;
         r2 = r2.indexOf(r1);
-        if (r2 >= 0) goto L_0x029e;
-    L_0x029d:
+        if (r2 >= 0) goto L_0x029d;
+    L_0x029c:
         r2 = 0;
-    L_0x029e:
+    L_0x029d:
         r0.setImageIndex(r2, r11);
-    L_0x02a1:
+    L_0x02a0:
         r2 = r27.canPreviewDocument();
-        if (r2 == 0) goto L_0x02b2;
-    L_0x02a7:
+        if (r2 == 0) goto L_0x02b1;
+    L_0x02a6:
         r0.sharedMediaType = r11;
         r2 = r0.allMediaItem;
         r3 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r2.setText(r3);
-    L_0x02b2:
+    L_0x02b1:
         r2 = r0.slideshowMessageId;
-        if (r2 != 0) goto L_0x0313;
-    L_0x02b6:
+        if (r2 != 0) goto L_0x0312;
+    L_0x02b5:
         r2 = r0.imagesArr;
         r2.add(r1);
         r2 = r1.eventId;
         r4 = (r2 > r16 ? 1 : (r2 == r16 ? 0 : -1));
-        if (r4 == 0) goto L_0x02c4;
-    L_0x02c1:
+        if (r4 == 0) goto L_0x02c3;
+    L_0x02c0:
         r0.needSearchImageInArr = r8;
-        goto L_0x0305;
-    L_0x02c4:
+        goto L_0x0304;
+    L_0x02c3:
         r2 = r0.currentAnimation;
-        if (r2 == 0) goto L_0x02d0;
-    L_0x02c8:
+        if (r2 == 0) goto L_0x02cf;
+    L_0x02c7:
         r0.needSearchImageInArr = r8;
         r1 = r0.sendItem;
         r1.setVisibility(r8);
-        goto L_0x0305;
-    L_0x02d0:
+        goto L_0x0304;
+    L_0x02cf:
         r2 = r1.scheduled;
-        if (r2 != 0) goto L_0x0305;
-    L_0x02d4:
+        if (r2 != 0) goto L_0x0304;
+    L_0x02d3:
         r2 = r1.messageOwner;
         r3 = r2.media;
         r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
-        if (r4 != 0) goto L_0x0305;
-    L_0x02dc:
+        if (r4 != 0) goto L_0x0304;
+    L_0x02db:
         r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r3 != 0) goto L_0x0305;
-    L_0x02e0:
+        if (r3 != 0) goto L_0x0304;
+    L_0x02df:
         r2 = r2.action;
-        if (r2 == 0) goto L_0x02e8;
-    L_0x02e4:
+        if (r2 == 0) goto L_0x02e7;
+    L_0x02e3:
         r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
-        if (r2 == 0) goto L_0x0305;
-    L_0x02e8:
+        if (r2 == 0) goto L_0x0304;
+    L_0x02e7:
         r0.needSearchImageInArr = r11;
         r2 = r0.imagesByIds;
         r2 = r2[r8];
@@ -8009,36 +8028,36 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.showSubItem(r2);
         r1 = r0.sendItem;
         r1.setVisibility(r8);
-    L_0x0305:
+    L_0x0304:
         r0.setImageIndex(r8, r11);
-        goto L_0x0313;
-    L_0x0309:
-        if (r3 == 0) goto L_0x0316;
-    L_0x030b:
+        goto L_0x0312;
+    L_0x0308:
+        if (r3 == 0) goto L_0x0315;
+    L_0x030a:
         r1 = r0.secureDocuments;
         r1.addAll(r3);
         r0.setImageIndex(r5, r11);
-    L_0x0313:
+    L_0x0312:
         r3 = r7;
-        goto L_0x05d5;
-    L_0x0316:
-        if (r28 == 0) goto L_0x03a3;
-    L_0x0318:
+        goto L_0x05d1;
+    L_0x0315:
+        if (r28 == 0) goto L_0x039f;
+    L_0x0317:
         r1 = r6.dialogId;
         r0.avatarsDialogId = r1;
-        if (r29 != 0) goto L_0x034d;
-    L_0x031e:
+        if (r29 != 0) goto L_0x034c;
+    L_0x031d:
         r1 = r0.avatarsDialogId;
-        if (r1 <= 0) goto L_0x0337;
-    L_0x0322:
+        if (r1 <= 0) goto L_0x0336;
+    L_0x0321:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r0.avatarsDialogId;
         r2 = java.lang.Integer.valueOf(r2);
         r1 = r1.getUser(r2);
         r1 = org.telegram.messenger.ImageLocation.getForUser(r1, r11);
-        goto L_0x034f;
-    L_0x0337:
+        goto L_0x034e;
+    L_0x0336:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
         r2 = r0.avatarsDialogId;
@@ -8046,15 +8065,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = java.lang.Integer.valueOf(r2);
         r1 = r1.getChat(r2);
         r1 = org.telegram.messenger.ImageLocation.getForChat(r1, r11);
-        goto L_0x034f;
-    L_0x034d:
+        goto L_0x034e;
+    L_0x034c:
         r1 = r29;
-    L_0x034f:
-        if (r1 != 0) goto L_0x0355;
-    L_0x0351:
-        r0.closePhoto(r8, r8);
+    L_0x034e:
+        if (r1 != 0) goto L_0x0351;
+    L_0x0350:
         return;
-    L_0x0355:
+    L_0x0351:
         r2 = r0.imagesArrLocations;
         r2.add(r1);
         r0.currentUserAvatarLocation = r1;
@@ -8069,10 +8087,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r0.shareButton;
         r2 = r0.videoPlayerControlFrameLayout;
         r2 = r2.getVisibility();
-        if (r2 == 0) goto L_0x037c;
-    L_0x037b:
+        if (r2 == 0) goto L_0x0378;
+    L_0x0377:
         r14 = 0;
-    L_0x037c:
+    L_0x0378:
         r1.setVisibility(r14);
         r0.allowShare = r11;
         r1 = r0.menuItem;
@@ -8080,30 +8098,30 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.hideSubItem(r2);
         r1 = r0.shareButton;
         r1 = r1.getVisibility();
-        if (r1 != 0) goto L_0x0397;
-    L_0x038f:
+        if (r1 != 0) goto L_0x0393;
+    L_0x038b:
         r1 = r0.menuItem;
         r2 = 10;
         r1.hideSubItem(r2);
-        goto L_0x039e;
-    L_0x0397:
+        goto L_0x039a;
+    L_0x0393:
         r2 = 10;
         r1 = r0.menuItem;
         r1.showSubItem(r2);
-    L_0x039e:
+    L_0x039a:
         r0.setImageIndex(r8, r11);
-        goto L_0x0313;
-    L_0x03a3:
-        if (r2 == 0) goto L_0x0410;
-    L_0x03a5:
+        goto L_0x0312;
+    L_0x039f:
+        if (r2 == 0) goto L_0x040c;
+    L_0x03a1:
         r1 = r0.imagesArr;
         r1.addAll(r2);
         r1 = 0;
-    L_0x03ab:
+    L_0x03a7:
         r2 = r0.imagesArr;
         r2 = r2.size();
-        if (r1 >= r2) goto L_0x03d8;
-    L_0x03b3:
+        if (r1 >= r2) goto L_0x03d4;
+    L_0x03af:
         r2 = r0.imagesArr;
         r2 = r2.get(r1);
         r2 = (org.telegram.messenger.MessageObject) r2;
@@ -8111,27 +8129,27 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r14 = r2.getDialogId();
         r7 = r0.currentDialogId;
         r4 = (r14 > r7 ? 1 : (r14 == r7 ? 0 : -1));
-        if (r4 != 0) goto L_0x03c9;
-    L_0x03c7:
+        if (r4 != 0) goto L_0x03c5;
+    L_0x03c3:
         r4 = 0;
-        goto L_0x03ca;
-    L_0x03c9:
+        goto L_0x03c6;
+    L_0x03c5:
         r4 = 1;
-    L_0x03ca:
+    L_0x03c6:
         r3 = r3[r4];
         r4 = r2.getId();
         r3.put(r4, r2);
         r1 = r1 + 1;
         r7 = 0;
         r8 = 0;
-        goto L_0x03ab;
-    L_0x03d8:
+        goto L_0x03a7;
+    L_0x03d4:
         r1 = r0.imagesArr;
         r1 = r1.get(r5);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r2 = r1.scheduled;
-        if (r2 != 0) goto L_0x0403;
-    L_0x03e4:
+        if (r2 != 0) goto L_0x03ff;
+    L_0x03e0:
         r0.opennedFromMedia = r11;
         r2 = r0.menuItem;
         r2.showSubItem(r9);
@@ -8139,37 +8157,37 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = 0;
         r2.setVisibility(r3);
         r1 = r1.canPreviewDocument();
-        if (r1 == 0) goto L_0x040b;
-    L_0x03f7:
+        if (r1 == 0) goto L_0x0407;
+    L_0x03f3:
         r0.sharedMediaType = r11;
         r1 = r0.allMediaItem;
         r2 = org.telegram.messenger.LocaleController.getString(r13, r10);
         r1.setText(r2);
-        goto L_0x040b;
-    L_0x0403:
+        goto L_0x0407;
+    L_0x03ff:
         r1 = r0.imagesArr;
         r1 = r1.size();
         r0.totalImagesCount = r1;
-    L_0x040b:
+    L_0x0407:
         r0.setImageIndex(r5, r11);
-        goto L_0x05d4;
-    L_0x0410:
-        if (r4 == 0) goto L_0x05d4;
-    L_0x0412:
+        goto L_0x05d0;
+    L_0x040c:
+        if (r4 == 0) goto L_0x05d0;
+    L_0x040e:
         r1 = r0.sendPhotoType;
         r2 = 5;
-        if (r1 == 0) goto L_0x0424;
-    L_0x0417:
-        if (r1 == r9) goto L_0x0424;
-    L_0x0419:
+        if (r1 == 0) goto L_0x0420;
+    L_0x0413:
+        if (r1 == r9) goto L_0x0420;
+    L_0x0415:
         r3 = 2;
-        if (r1 == r3) goto L_0x041e;
-    L_0x041c:
-        if (r1 != r2) goto L_0x043a;
-    L_0x041e:
+        if (r1 == r3) goto L_0x041a;
+    L_0x0418:
+        if (r1 != r2) goto L_0x0436;
+    L_0x041a:
         r1 = r32.size();
-        if (r1 <= r11) goto L_0x043a;
-    L_0x0424:
+        if (r1 <= r11) goto L_0x0436;
+    L_0x0420:
         r1 = r0.checkImageView;
         r3 = 0;
         r1.setVisibility(r3);
@@ -8179,23 +8197,23 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r1.setTitleRightMargin(r3);
-    L_0x043a:
+    L_0x0436:
         r1 = r0.sendPhotoType;
         r3 = 2;
-        if (r1 == r3) goto L_0x0441;
-    L_0x043f:
-        if (r1 != r2) goto L_0x0454;
-    L_0x0441:
+        if (r1 == r3) goto L_0x043d;
+    L_0x043b:
+        if (r1 != r2) goto L_0x0450;
+    L_0x043d:
         r1 = r0.placeProvider;
         r1 = r1.canCaptureMorePhotos();
-        if (r1 == 0) goto L_0x0454;
-    L_0x0449:
+        if (r1 == 0) goto L_0x0450;
+    L_0x0445:
         r1 = r0.cameraItem;
         r3 = 0;
         r1.setVisibility(r3);
         r1 = r0.cameraItem;
         r1.setTag(r12);
-    L_0x0454:
+    L_0x0450:
         r1 = r0.menuItem;
         r1.setVisibility(r14);
         r1 = r0.imagesArrLocals;
@@ -8203,21 +8221,21 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r0.imagesArrLocals;
         r1 = r1.get(r5);
         r3 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r3 == 0) goto L_0x04e7;
-    L_0x0468:
+        if (r3 == 0) goto L_0x04e3;
+    L_0x0464:
         r3 = r0.sendPhotoType;
         r4 = 10;
-        if (r3 != r4) goto L_0x0479;
-    L_0x046e:
+        if (r3 != r4) goto L_0x0475;
+    L_0x046a:
         r1 = r0.cropItem;
         r1.setVisibility(r14);
         r1 = r0.rotateItem;
         r1.setVisibility(r14);
-        goto L_0x04e2;
-    L_0x0479:
+        goto L_0x04de;
+    L_0x0475:
         r4 = r0.isDocumentsPicker;
-        if (r4 == 0) goto L_0x04a1;
-    L_0x047d:
+        if (r4 == 0) goto L_0x049d;
+    L_0x0479:
         r1 = r0.cropItem;
         r1.setVisibility(r14);
         r1 = r0.rotateItem;
@@ -8232,12 +8250,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = NUM; // 0x42a80000 float:84.0 double:5.525167263E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r1.height = r3;
-        goto L_0x04e2;
-    L_0x04a1:
+        goto L_0x04de;
+    L_0x049d:
         r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1;
         r1 = r1.isVideo;
-        if (r1 == 0) goto L_0x04ca;
-    L_0x04a7:
+        if (r1 == 0) goto L_0x04c6;
+    L_0x04a3:
         r1 = r0.cropItem;
         r1.setVisibility(r14);
         r1 = r0.rotateItem;
@@ -8253,76 +8271,76 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = -r3;
         r3 = (float) r3;
         r1.setTranslationY(r3);
-        goto L_0x04e2;
-    L_0x04ca:
+        goto L_0x04de;
+    L_0x04c6:
         r1 = r0.cropItem;
-        if (r3 == r11) goto L_0x04d0;
-    L_0x04ce:
+        if (r3 == r11) goto L_0x04cc;
+    L_0x04ca:
         r3 = 0;
-        goto L_0x04d2;
-    L_0x04d0:
+        goto L_0x04ce;
+    L_0x04cc:
         r3 = 8;
-    L_0x04d2:
+    L_0x04ce:
         r1.setVisibility(r3);
         r1 = r0.rotateItem;
         r3 = r0.sendPhotoType;
-        if (r3 == r11) goto L_0x04de;
-    L_0x04db:
+        if (r3 == r11) goto L_0x04da;
+    L_0x04d7:
         r3 = 8;
-        goto L_0x04df;
-    L_0x04de:
+        goto L_0x04db;
+    L_0x04da:
         r3 = 0;
-    L_0x04df:
+    L_0x04db:
         r1.setVisibility(r3);
-    L_0x04e2:
+    L_0x04de:
         r1 = r0.isDocumentsPicker;
         r8 = r1 ^ 1;
-        goto L_0x0518;
-    L_0x04e7:
+        goto L_0x0514;
+    L_0x04e3:
         r3 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
-        if (r3 == 0) goto L_0x04f7;
-    L_0x04eb:
+        if (r3 == 0) goto L_0x04f3;
+    L_0x04e7:
         r1 = r0.cropItem;
         r1.setVisibility(r14);
         r1 = r0.rotateItem;
         r1.setVisibility(r14);
-    L_0x04f5:
+    L_0x04f1:
         r8 = 0;
-        goto L_0x0518;
-    L_0x04f7:
+        goto L_0x0514;
+    L_0x04f3:
         r3 = r0.cropItem;
         r4 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r4 == 0) goto L_0x0505;
-    L_0x04fd:
+        if (r4 == 0) goto L_0x0501;
+    L_0x04f9:
         r1 = (org.telegram.messenger.MediaController.SearchImage) r1;
         r1 = r1.type;
-        if (r1 != 0) goto L_0x0505;
-    L_0x0503:
+        if (r1 != 0) goto L_0x0501;
+    L_0x04ff:
         r1 = 0;
-        goto L_0x0507;
-    L_0x0505:
+        goto L_0x0503;
+    L_0x0501:
         r1 = 8;
-    L_0x0507:
+    L_0x0503:
         r3.setVisibility(r1);
         r1 = r0.rotateItem;
         r1.setVisibility(r14);
         r1 = r0.cropItem;
         r1 = r1.getVisibility();
-        if (r1 != 0) goto L_0x04f5;
-    L_0x0517:
+        if (r1 != 0) goto L_0x04f1;
+    L_0x0513:
         r8 = 1;
-    L_0x0518:
+    L_0x0514:
         r1 = r0.parentChatActivity;
-        if (r1 == 0) goto L_0x0570;
-    L_0x051c:
+        if (r1 == 0) goto L_0x056c;
+    L_0x0518:
         r1 = r1.currentEncryptedChat;
-        if (r1 == 0) goto L_0x052a;
-    L_0x0520:
+        if (r1 == 0) goto L_0x0526;
+    L_0x051c:
         r1 = r1.layer;
         r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
         r3 = 46;
-        if (r1 < r3) goto L_0x0570;
-    L_0x052a:
+        if (r1 < r3) goto L_0x056c;
+    L_0x0526:
         r1 = r0.mentionsAdapter;
         r3 = r0.parentChatActivity;
         r3 = r3.chatInfo;
@@ -8330,49 +8348,49 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1 = r0.mentionsAdapter;
         r3 = r0.parentChatActivity;
         r3 = r3.currentChat;
-        if (r3 == 0) goto L_0x053d;
-    L_0x053b:
+        if (r3 == 0) goto L_0x0539;
+    L_0x0537:
         r3 = 1;
-        goto L_0x053e;
-    L_0x053d:
+        goto L_0x053a;
+    L_0x0539:
         r3 = 0;
-    L_0x053e:
+    L_0x053a:
         r1.setNeedUsernames(r3);
         r1 = r0.mentionsAdapter;
         r3 = 0;
         r1.setNeedBotContext(r3);
-        if (r8 == 0) goto L_0x0557;
-    L_0x0549:
+        if (r8 == 0) goto L_0x0553;
+    L_0x0545:
         r1 = r0.placeProvider;
-        if (r1 == 0) goto L_0x0555;
-    L_0x054d:
-        if (r1 == 0) goto L_0x0557;
-    L_0x054f:
+        if (r1 == 0) goto L_0x0551;
+    L_0x0549:
+        if (r1 == 0) goto L_0x0553;
+    L_0x054b:
         r1 = r1.allowCaption();
-        if (r1 == 0) goto L_0x0557;
-    L_0x0555:
+        if (r1 == 0) goto L_0x0553;
+    L_0x0551:
         r1 = 1;
-        goto L_0x0558;
-    L_0x0557:
+        goto L_0x0554;
+    L_0x0553:
         r1 = 0;
-    L_0x0558:
+    L_0x0554:
         r0.needCaptionLayout = r1;
         r1 = r0.captionEditText;
         r3 = r0.needCaptionLayout;
-        if (r3 == 0) goto L_0x0562;
-    L_0x0560:
+        if (r3 == 0) goto L_0x055e;
+    L_0x055c:
         r3 = 0;
-        goto L_0x0564;
-    L_0x0562:
+        goto L_0x0560;
+    L_0x055e:
         r3 = 8;
-    L_0x0564:
+    L_0x0560:
         r1.setVisibility(r3);
         r1 = r0.needCaptionLayout;
-        if (r1 == 0) goto L_0x0570;
-    L_0x056b:
+        if (r1 == 0) goto L_0x056c;
+    L_0x0567:
         r1 = r0.captionEditText;
         r1.onCreate();
-    L_0x0570:
+    L_0x056c:
         r1 = r0.pickerView;
         r3 = 0;
         r1.setVisibility(r3);
@@ -8393,19 +8411,19 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.setTag(r3);
         r0.setImageIndex(r5, r11);
         r1 = r0.sendPhotoType;
-        if (r1 != r11) goto L_0x05ab;
-    L_0x059f:
+        if (r1 != r11) goto L_0x05a7;
+    L_0x059b:
         r1 = r0.paintItem;
         r2 = 0;
         r1.setVisibility(r2);
         r1 = r0.tuneItem;
         r1.setVisibility(r2);
-        goto L_0x05d0;
+        goto L_0x05cc;
+    L_0x05a7:
+        if (r1 == r9) goto L_0x05c2;
+    L_0x05a9:
+        if (r1 == r2) goto L_0x05c2;
     L_0x05ab:
-        if (r1 == r9) goto L_0x05c6;
-    L_0x05ad:
-        if (r1 == r2) goto L_0x05c6;
-    L_0x05af:
         r1 = r0.paintItem;
         r2 = r0.cropItem;
         r2 = r2.getVisibility();
@@ -8414,37 +8432,37 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r0.cropItem;
         r2 = r2.getVisibility();
         r1.setVisibility(r2);
-        goto L_0x05d0;
-    L_0x05c6:
+        goto L_0x05cc;
+    L_0x05c2:
         r1 = r0.paintItem;
         r1.setVisibility(r14);
         r1 = r0.tuneItem;
         r1.setVisibility(r14);
-    L_0x05d0:
+    L_0x05cc:
         r26.updateSelectedCount();
-        goto L_0x05d5;
-    L_0x05d4:
+        goto L_0x05d1;
+    L_0x05d0:
         r3 = 0;
-    L_0x05d5:
+    L_0x05d1:
         r1 = r0.currentAnimation;
-        if (r1 != 0) goto L_0x0645;
-    L_0x05d9:
+        if (r1 != 0) goto L_0x0641;
+    L_0x05d5:
         r1 = r0.isEvent;
-        if (r1 != 0) goto L_0x0645;
-    L_0x05dd:
+        if (r1 != 0) goto L_0x0641;
+    L_0x05d9:
         r1 = r0.currentDialogId;
         r4 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1));
-        if (r4 == 0) goto L_0x062a;
-    L_0x05e3:
+        if (r4 == 0) goto L_0x0626;
+    L_0x05df:
         r1 = r0.totalImagesCount;
-        if (r1 != 0) goto L_0x062a;
-    L_0x05e7:
+        if (r1 != 0) goto L_0x0626;
+    L_0x05e3:
         r1 = r0.currentMessageObject;
-        if (r1 == 0) goto L_0x062a;
-    L_0x05eb:
+        if (r1 == 0) goto L_0x0626;
+    L_0x05e7:
         r1 = r1.scheduled;
-        if (r1 != 0) goto L_0x062a;
-    L_0x05ef:
+        if (r1 != 0) goto L_0x0626;
+    L_0x05eb:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.MediaDataController.getInstance(r1);
         r6 = r0.currentDialogId;
@@ -8459,8 +8477,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r27.getMediaCount(r28, r30, r31, r32);
         r1 = r0.mergeDialogId;
         r4 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1));
-        if (r4 == 0) goto L_0x0645;
-    L_0x060f:
+        if (r4 == 0) goto L_0x0641;
+    L_0x060b:
         r1 = r0.currentAccount;
         r1 = org.telegram.messenger.MediaDataController.getInstance(r1);
         r6 = r0.mergeDialogId;
@@ -8473,11 +8491,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r31 = r4;
         r32 = r8;
         r27.getMediaCount(r28, r30, r31, r32);
-        goto L_0x0645;
-    L_0x062a:
+        goto L_0x0641;
+    L_0x0626:
         r1 = r0.avatarsDialogId;
-        if (r1 == 0) goto L_0x0645;
-    L_0x062e:
+        if (r1 == 0) goto L_0x0641;
+    L_0x062a:
         r1 = r0.currentAccount;
         r19 = org.telegram.messenger.MessagesController.getInstance(r1);
         r1 = r0.avatarsDialogId;
@@ -8488,118 +8506,118 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r20 = r1;
         r25 = r2;
         r19.loadDialogPhotos(r20, r21, r22, r24, r25);
-    L_0x0645:
+    L_0x0641:
         r1 = r0.currentMessageObject;
-        if (r1 == 0) goto L_0x0652;
-    L_0x0649:
+        if (r1 == 0) goto L_0x064e;
+    L_0x0645:
         r1 = r1.isVideo();
-        if (r1 != 0) goto L_0x0650;
-    L_0x064f:
-        goto L_0x0652;
-    L_0x0650:
+        if (r1 != 0) goto L_0x064c;
+    L_0x064b:
+        goto L_0x064e;
+    L_0x064c:
         r1 = 0;
-        goto L_0x066c;
-    L_0x0652:
+        goto L_0x0668;
+    L_0x064e:
         r1 = r0.currentBotInlineResult;
-        if (r1 == 0) goto L_0x0671;
-    L_0x0656:
+        if (r1 == 0) goto L_0x066d;
+    L_0x0652:
         r1 = r1.type;
         r2 = "video";
         r1 = r1.equals(r2);
-        if (r1 != 0) goto L_0x0650;
-    L_0x0661:
+        if (r1 != 0) goto L_0x064c;
+    L_0x065d:
         r1 = r0.currentBotInlineResult;
         r1 = r1.document;
         r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1);
-        if (r1 == 0) goto L_0x0671;
-    L_0x066b:
-        goto L_0x0650;
-    L_0x066c:
+        if (r1 == 0) goto L_0x066d;
+    L_0x0667:
+        goto L_0x064c;
+    L_0x0668:
         r0.onActionClick(r1);
-        goto L_0x06eb;
-    L_0x0671:
+        goto L_0x06e7;
+    L_0x066d:
         r1 = r0.imagesArrLocals;
         r1 = r1.isEmpty();
-        if (r1 != 0) goto L_0x06eb;
-    L_0x0679:
+        if (r1 != 0) goto L_0x06e7;
+    L_0x0675:
         r1 = r0.imagesArrLocals;
         r1 = r1.get(r5);
         r2 = r0.parentChatActivity;
-        if (r2 == 0) goto L_0x0688;
-    L_0x0683:
+        if (r2 == 0) goto L_0x0684;
+    L_0x067f:
         r7 = r2.getCurrentUser();
-        goto L_0x0689;
-    L_0x0688:
+        goto L_0x0685;
+    L_0x0684:
         r7 = r3;
-    L_0x0689:
+    L_0x0685:
         r2 = r0.isDocumentsPicker;
-        if (r2 != 0) goto L_0x06b5;
-    L_0x068d:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x0689:
         r2 = r0.parentChatActivity;
-        if (r2 == 0) goto L_0x06b5;
-    L_0x0691:
+        if (r2 == 0) goto L_0x06b1;
+    L_0x068d:
         r2 = r2.isSecretChat();
-        if (r2 != 0) goto L_0x06b5;
-    L_0x0697:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x0693:
         r2 = r0.parentChatActivity;
         r2 = r2.isInScheduleMode();
-        if (r2 != 0) goto L_0x06b5;
-    L_0x069f:
-        if (r7 == 0) goto L_0x06b5;
-    L_0x06a1:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x069b:
+        if (r7 == 0) goto L_0x06b1;
+    L_0x069d:
         r2 = r7.bot;
-        if (r2 != 0) goto L_0x06b5;
-    L_0x06a5:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x06a1:
         r2 = org.telegram.messenger.UserObject.isUserSelf(r7);
-        if (r2 != 0) goto L_0x06b5;
-    L_0x06ab:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x06a7:
         r2 = r0.parentChatActivity;
         r2 = r2.isEditingMessageMedia();
-        if (r2 != 0) goto L_0x06b5;
-    L_0x06b3:
+        if (r2 != 0) goto L_0x06b1;
+    L_0x06af:
         r8 = 1;
-        goto L_0x06b6;
-    L_0x06b5:
+        goto L_0x06b2;
+    L_0x06b1:
         r8 = 0;
-    L_0x06b6:
+    L_0x06b2:
         r2 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
-        if (r2 == 0) goto L_0x06bc;
-    L_0x06ba:
+        if (r2 == 0) goto L_0x06b8;
+    L_0x06b6:
         r8 = 0;
-        goto L_0x06e3;
-    L_0x06bc:
+        goto L_0x06df;
+    L_0x06b8:
         r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r2 == 0) goto L_0x06d6;
-    L_0x06c0:
+        if (r2 == 0) goto L_0x06d2;
+    L_0x06bc:
         r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1;
         r2 = r1.isVideo;
-        if (r2 == 0) goto L_0x06e3;
-    L_0x06c6:
+        if (r2 == 0) goto L_0x06df;
+    L_0x06c2:
         r2 = new java.io.File;
         r1 = r1.path;
         r2.<init>(r1);
         r1 = android.net.Uri.fromFile(r2);
         r2 = 0;
         r0.preparePlayer(r1, r2, r2);
-        goto L_0x06e3;
-    L_0x06d6:
-        if (r8 == 0) goto L_0x06e3;
-    L_0x06d8:
+        goto L_0x06df;
+    L_0x06d2:
+        if (r8 == 0) goto L_0x06df;
+    L_0x06d4:
         r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r2 == 0) goto L_0x06e3;
-    L_0x06dc:
+        if (r2 == 0) goto L_0x06df;
+    L_0x06d8:
         r1 = (org.telegram.messenger.MediaController.SearchImage) r1;
         r1 = r1.type;
-        if (r1 != 0) goto L_0x06ba;
-    L_0x06e2:
+        if (r1 != 0) goto L_0x06b6;
+    L_0x06de:
         r8 = 1;
-    L_0x06e3:
-        if (r8 == 0) goto L_0x06eb;
-    L_0x06e5:
+    L_0x06df:
+        if (r8 == 0) goto L_0x06e7;
+    L_0x06e1:
         r1 = r0.timeItem;
         r2 = 0;
         r1.setVisibility(r2);
-    L_0x06eb:
+    L_0x06e7:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onPhotoShow(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PlaceProviderObject):void");
@@ -8859,7 +8877,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r11 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r11;
-        r7 = NUM; // 0x7f0e0cd8 float:1.8881706E38 double:1.053163781E-314;
+        r7 = NUM; // 0x7f0e0d08 float:1.8881804E38 double:1.053163805E-314;
         r11 = new java.lang.Object[r13];
         r12 = org.telegram.messenger.LocaleController.getInstance();
         r12 = r12.formatterYear;
@@ -8930,7 +8948,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r0.shareButton;
         r3.setVisibility(r8);
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e014f float:1.8875717E38 double:1.053162322E-314;
+        r4 = NUM; // 0x7f0e0157 float:1.8875733E38 double:1.053162326E-314;
         r5 = "AttachGif";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -9048,7 +9066,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r6 + r7;
         r6 = java.lang.Integer.valueOf(r6);
         r5[r3] = r6;
-        r3 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r3 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r3 = org.telegram.messenger.LocaleController.formatString(r9, r3, r5);
         r4.setTitle(r3);
         goto L_0x0412;
@@ -9150,7 +9168,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5 + r7;
         r5 = java.lang.Integer.valueOf(r5);
         r4[r6] = r5;
-        r5 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r5 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r9, r5, r4);
         r3.setTitle(r4);
         goto L_0x0412;
@@ -9167,7 +9185,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r3 == 0) goto L_0x03bb;
     L_0x03ac:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r4 = NUM; // 0x7f0e0155 float:1.887573E38 double:1.053162325E-314;
         r5 = "AttachDocument";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -9177,14 +9195,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r3 == 0) goto L_0x03ce;
     L_0x03c1:
         r3 = r0.actionBar;
-        r5 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r5 = NUM; // 0x7f0e0168 float:1.8875768E38 double:1.0531623345E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setTitle(r4);
         goto L_0x0412;
     L_0x03ce:
         r3 = r0.actionBar;
         r5 = r17;
-        r4 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r4 = NUM; // 0x7f0e0162 float:1.8875756E38 double:1.0531623315E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
         goto L_0x0412;
@@ -9202,7 +9220,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r3 == 0) goto L_0x03fe;
     L_0x03f1:
         r3 = r0.actionBar;
-        r5 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r5 = NUM; // 0x7f0e0168 float:1.8875768E38 double:1.0531623345E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setTitle(r4);
         goto L_0x0412;
@@ -9211,7 +9229,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r3 == 0) goto L_0x0412;
     L_0x0404:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e014d float:1.8875713E38 double:1.053162321E-314;
+        r4 = NUM; // 0x7f0e0155 float:1.887573E38 double:1.053162325E-314;
         r5 = "AttachDocument";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -9300,7 +9318,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = r4.size();
         r4 = java.lang.Integer.valueOf(r4);
         r3[r2] = r4;
-        r2 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r2 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r9, r2, r3);
         r1.setTitle(r2);
         goto L_0x07cd;
@@ -9342,7 +9360,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r1 == 0) goto L_0x0508;
     L_0x04fa:
         r1 = r0.actionBar;
-        r2 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r2 = NUM; // 0x7f0e0162 float:1.8875756E38 double:1.0531623315E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r1.setTitle(r2);
         r4 = 1;
@@ -9359,7 +9377,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3.size();
         r3 = java.lang.Integer.valueOf(r3);
         r2[r4] = r3;
-        r3 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r3 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r9, r3, r2);
         r1.setTitle(r2);
     L_0x052c:
@@ -9660,13 +9678,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r3 == 0) goto L_0x0706;
     L_0x06f9:
         r3 = r0.actionBar;
-        r5 = NUM; // 0x7f0e0160 float:1.8875751E38 double:1.0531623305E-314;
+        r5 = NUM; // 0x7f0e0168 float:1.8875768E38 double:1.0531623345E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setTitle(r4);
         goto L_0x0737;
     L_0x0706:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e015a float:1.887574E38 double:1.0531623276E-314;
+        r4 = NUM; // 0x7f0e0162 float:1.8875756E38 double:1.0531623315E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
         goto L_0x0737;
@@ -9682,7 +9700,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5.size();
         r5 = java.lang.Integer.valueOf(r5);
         r4[r12] = r5;
-        r5 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r5 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r9, r5, r4);
         r3.setTitle(r4);
     L_0x0737:
@@ -9705,7 +9723,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r4 == 0) goto L_0x0764;
     L_0x0755:
         r3 = r0.actionBar;
-        r4 = NUM; // 0x7f0e09a7 float:1.888005E38 double:1.0531633775E-314;
+        r4 = NUM; // 0x7f0e09cd float:1.8880126E38 double:1.053163396E-314;
         r5 = "SavedMessages";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r3.setTitle(r4);
@@ -10342,10 +10360,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             if (messageObject2 == null || messageObject2.messageOwner.entities.isEmpty()) {
                 replaceEmoji = Emoji.replaceEmoji(new SpannableStringBuilder(charSequence), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
-                SpannableString valueOf = SpannableString.valueOf(charSequence.toString());
+                CharSequence valueOf = SpannableString.valueOf(charSequence.toString());
                 messageObject2.addEntitiesToText(valueOf, true, false);
                 if (messageObject.isVideo()) {
-                    MessageObject.addUrlsByPattern(messageObject.isOutOwner(), valueOf, false, 3, messageObject.getDuration());
+                    MessageObject.addUrlsByPattern(messageObject.isOutOwner(), valueOf, false, 3, messageObject.getDuration(), false);
                 }
                 replaceEmoji = Emoji.replaceEmoji(valueOf, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
@@ -10635,10 +10653,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         }
                         return;
                     }
-                    Drawable drawable = this.currentAnimation;
-                    if (drawable != null) {
-                        imageReceiver2.setImageBitmap(drawable);
-                        this.currentAnimation.setSecondParentView(this.containerView);
+                    AnimatedFileDrawable animatedFileDrawable = this.currentAnimation;
+                    if (animatedFileDrawable != null) {
+                        animatedFileDrawable.setSecondParentView(this.containerView);
+                        imageReceiver2.setImageBitmap(this.currentAnimation);
                         return;
                     } else if (this.sharedMediaType == 1) {
                         if (obj.canPreviewDocument()) {
@@ -10925,7 +10943,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     i6 = 0;
                 }
                 Drawable bitmapDrawable;
-                Drawable drawable2;
+                Drawable drawable;
                 if (document2 != null) {
                     imageReceiver.setImage(ImageLocation.getForDocument(document2), "d", bitmapHolder3 == null ? ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2) : null, String.format(Locale.US, str, new Object[]{Integer.valueOf(photoSize2), Integer.valueOf(photoSize2)}), bitmapHolder3 != null ? new BitmapDrawable(bitmapHolder3.bitmap) : null, i5, null, obj, i6);
                 } else if (photoSize != null) {
@@ -10941,11 +10959,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 bitmapDrawable = activity.getResources().getDrawable(NUM);
                             }
                         }
-                        drawable2 = null;
-                        imageReceiver.setImage(forWebFile, str2, drawable2, null, obj, i6);
+                        drawable = null;
+                        imageReceiver.setImage(forWebFile, str2, drawable, null, obj, i6);
                     }
-                    drawable2 = bitmapDrawable;
-                    imageReceiver.setImage(forWebFile, str2, drawable2, null, obj, i6);
+                    drawable = bitmapDrawable;
+                    imageReceiver.setImage(forWebFile, str2, drawable, null, obj, i6);
                 } else {
                     if (bitmapHolder3 != null) {
                         bitmapDrawable = new BitmapDrawable(bitmapHolder3.bitmap);
@@ -10956,11 +10974,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 bitmapDrawable = activity2.getResources().getDrawable(NUM);
                             }
                         }
-                        drawable2 = null;
-                        imageReceiver.setImage(str3, str2, drawable2, null, i5);
+                        drawable = null;
+                        imageReceiver.setImage(str3, str2, drawable, null, i5);
                     }
-                    drawable2 = bitmapDrawable;
-                    imageReceiver.setImage(str3, str2, drawable2, null, i5);
+                    drawable = bitmapDrawable;
+                    imageReceiver.setImage(str3, str2, drawable, null, i5);
                 }
             }
         } else if (i2 >= 0 && i2 < this.secureDocuments.size()) {
@@ -11160,21 +11178,21 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005b A:{Catch:{ Exception -> 0x035a }} */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0053 A:{Catch:{ Exception -> 0x035a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005b A:{Catch:{ Exception -> 0x034e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0053 A:{Catch:{ Exception -> 0x034e }} */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x0126  */
     /* JADX WARNING: Removed duplicated region for block: B:34:0x013d  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0139  */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x02dd A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x02d1 A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0156  */
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x033d  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0331  */
     /* JADX WARNING: Missing exception handler attribute for start block: B:17:0x0047 */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Can't wrap try/catch for region: R(16:13|(2:15|16)|17|18|(1:20)(1:21)|(1:26)(1:25)|27|28|(1:30)|31|(1:33)(2:34|(1:36)(1:37))|38|(18:40|(2:42|(2:44|(5:46|(1:48)|49|(1:58)(1:57)|59)(2:60|(1:62))))|63|(1:65)|66|(1:68)|69|(4:72|(2:74|112)(2:75|111)|76|70)|110|77|(1:79)|80|(1:82)|83|(1:85)|(4:88|(2:90|115)(2:91|114)|92|86)|113|93)(2:(3:97|(1:99)(1:100)|101)|102)|103|(1:105)|106) */
-    /* JADX WARNING: Missing block: B:107:0x035a, code skipped:
+    /* JADX WARNING: Can't wrap try/catch for region: R(16:13|(2:15|16)|17|18|(1:20)(1:21)|(1:26)(1:25)|27|28|(1:30)|31|(1:33)(2:34|(1:36)(1:37))|38|(18:40|(2:42|(2:44|(5:46|(1:48)|49|(1:58)(1:57)|59)(2:60|(1:62))))|63|(1:65)|66|(1:68)|69|(2:72|70)|106|73|(1:75)|76|(1:78)|79|(1:81)|(4:84|(2:86|109)(2:87|108)|88|82)|107|89)(2:(3:93|(1:95)(1:96)|97)|98)|99|(1:101)|102) */
+    /* JADX WARNING: Missing block: B:103:0x034e, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:108:0x035b, code skipped:
+    /* JADX WARNING: Missing block: B:104:0x034f, code skipped:
             org.telegram.messenger.FileLog.e(r0);
      */
     public boolean openPhoto(org.telegram.messenger.MessageObject r17, org.telegram.tgnet.TLRPC.FileLocation r18, org.telegram.messenger.ImageLocation r19, java.util.ArrayList<org.telegram.messenger.MessageObject> r20, java.util.ArrayList<org.telegram.messenger.SecureDocument> r21, java.util.ArrayList<java.lang.Object> r22, int r23, org.telegram.ui.PhotoViewer.PhotoViewerProvider r24, org.telegram.ui.ChatActivity r25, long r26, long r28, boolean r30) {
@@ -11187,15 +11205,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2 = r25;
         r4 = r10.parentActivity;
         r11 = 0;
-        if (r4 == 0) goto L_0x035e;
+        if (r4 == 0) goto L_0x0352;
     L_0x000f:
         r4 = r10.isVisible;
-        if (r4 != 0) goto L_0x035e;
+        if (r4 != 0) goto L_0x0352;
     L_0x0013:
         if (r1 != 0) goto L_0x001b;
     L_0x0015:
         r4 = r16.checkAnimation();
-        if (r4 != 0) goto L_0x035e;
+        if (r4 != 0) goto L_0x0352;
     L_0x001b:
         if (r0 != 0) goto L_0x0029;
     L_0x001d:
@@ -11209,7 +11227,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x0025:
         if (r19 != 0) goto L_0x0029;
     L_0x0027:
-        goto L_0x035e;
+        goto L_0x0352;
     L_0x0029:
         r12 = 1;
         r8 = r23;
@@ -11226,52 +11244,52 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r10.windowView;	 Catch:{ Exception -> 0x0047 }
         r5.removeView(r6);	 Catch:{ Exception -> 0x0047 }
     L_0x0047:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
         r7 = 99;
-        r6.type = r7;	 Catch:{ Exception -> 0x035a }
-        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x035a }
+        r6.type = r7;	 Catch:{ Exception -> 0x034e }
+        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x034e }
         r7 = 21;
         if (r6 < r7) goto L_0x005b;
     L_0x0053:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
         r9 = -NUM; // 0xfffffffvar_ float:-2.75865E-40 double:NaN;
-        r6.flags = r9;	 Catch:{ Exception -> 0x035a }
+        r6.flags = r9;	 Catch:{ Exception -> 0x034e }
         goto L_0x0061;
     L_0x005b:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
         r9 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
-        r6.flags = r9;	 Catch:{ Exception -> 0x035a }
+        r6.flags = r9;	 Catch:{ Exception -> 0x034e }
     L_0x0061:
         if (r2 == 0) goto L_0x0072;
     L_0x0063:
-        r6 = r25.getCurrentEncryptedChat();	 Catch:{ Exception -> 0x035a }
+        r6 = r25.getCurrentEncryptedChat();	 Catch:{ Exception -> 0x034e }
         if (r6 == 0) goto L_0x0072;
     L_0x0069:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
-        r9 = r6.flags;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
+        r9 = r6.flags;	 Catch:{ Exception -> 0x034e }
         r9 = r9 | 8192;
-        r6.flags = r9;	 Catch:{ Exception -> 0x035a }
+        r6.flags = r9;	 Catch:{ Exception -> 0x034e }
         goto L_0x007a;
     L_0x0072:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
-        r9 = r6.flags;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
+        r9 = r6.flags;	 Catch:{ Exception -> 0x034e }
         r9 = r9 & -8193;
-        r6.flags = r9;	 Catch:{ Exception -> 0x035a }
+        r6.flags = r9;	 Catch:{ Exception -> 0x034e }
     L_0x007a:
-        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
+        r6 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
         r9 = 272; // 0x110 float:3.81E-43 double:1.344E-321;
-        r6.softInputMode = r9;	 Catch:{ Exception -> 0x035a }
-        r6 = r10.windowView;	 Catch:{ Exception -> 0x035a }
-        r6.setFocusable(r11);	 Catch:{ Exception -> 0x035a }
-        r6 = r10.containerView;	 Catch:{ Exception -> 0x035a }
-        r6.setFocusable(r11);	 Catch:{ Exception -> 0x035a }
-        r6 = r10.windowView;	 Catch:{ Exception -> 0x035a }
-        r14 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x035a }
-        r5.addView(r6, r14);	 Catch:{ Exception -> 0x035a }
+        r6.softInputMode = r9;	 Catch:{ Exception -> 0x034e }
+        r6 = r10.windowView;	 Catch:{ Exception -> 0x034e }
+        r6.setFocusable(r11);	 Catch:{ Exception -> 0x034e }
+        r6 = r10.containerView;	 Catch:{ Exception -> 0x034e }
+        r6.setFocusable(r11);	 Catch:{ Exception -> 0x034e }
+        r6 = r10.windowView;	 Catch:{ Exception -> 0x034e }
+        r14 = r10.windowLayoutParams;	 Catch:{ Exception -> 0x034e }
+        r5.addView(r6, r14);	 Catch:{ Exception -> 0x034e }
         r10.doneButtonPressed = r11;
         r10.parentChatActivity = r2;
         r2 = r10.actionBar;
-        r6 = NUM; // 0x7f0e0766 float:1.887888E38 double:1.0531630924E-314;
+        r6 = NUM; // 0x7f0e0778 float:1.8878916E38 double:1.0531631013E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];
         r15 = java.lang.Integer.valueOf(r12);
@@ -11353,7 +11371,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r10.skipFirstBufferingProgress = r11;
         r10.playerInjected = r11;
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r13 == 0) goto L_0x02dd;
+        if (r13 == 0) goto L_0x02d1;
     L_0x0156:
         r10.disableShowCheck = r12;
         r10.animationInProgress = r12;
@@ -11449,7 +11467,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = 0;
     L_0x020b:
         r6 = r4.length;
-        if (r5 >= r6) goto L_0x023c;
+        if (r5 >= r6) goto L_0x0230;
     L_0x020e:
         r6 = r4[r5];
         r7 = r10.animationValues;
@@ -11462,30 +11480,20 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r4[r5];
         r6.setOrientation(r3);
         r6 = r4[r5];
-        r7 = r13.radius;
-        if (r7 == 0) goto L_0x022e;
-    L_0x022c:
-        r7 = 1;
-        goto L_0x022f;
-    L_0x022e:
-        r7 = 0;
-    L_0x022f:
-        r6.setNeedRadius(r7);
-        r6 = r4[r5];
         r7 = r13.thumb;
         r6.setImageBitmap(r7);
         r5 = r5 + 1;
         goto L_0x020b;
-    L_0x023c:
+    L_0x0230:
         r16.initCropView();
         r3 = r10.sendPhotoType;
-        if (r3 != r12) goto L_0x024d;
-    L_0x0243:
+        if (r3 != r12) goto L_0x0241;
+    L_0x0237:
         r3 = r10.photoCropView;
         r3.hideBackView();
         r3 = r10.photoCropView;
         r3.setAspectRatio(r15);
-    L_0x024d:
+    L_0x0241:
         r3 = r10.animatingImageView;
         r3 = r3.getLayoutParams();
         r5 = r0.width();
@@ -11496,28 +11504,28 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3.height = r5;
         r5 = r3.width;
         r6 = 100;
-        if (r5 > 0) goto L_0x0269;
-    L_0x0267:
+        if (r5 > 0) goto L_0x025d;
+    L_0x025b:
         r3.width = r6;
-    L_0x0269:
+    L_0x025d:
         r5 = r3.height;
-        if (r5 > 0) goto L_0x026f;
-    L_0x026d:
+        if (r5 > 0) goto L_0x0263;
+    L_0x0261:
         r3.height = r6;
-    L_0x026f:
+    L_0x0263:
         r5 = r4.length;
-        if (r11 >= r5) goto L_0x02be;
-    L_0x0272:
+        if (r11 >= r5) goto L_0x02b2;
+    L_0x0266:
         r5 = r4.length;
-        if (r5 <= r12) goto L_0x027b;
-    L_0x0275:
+        if (r5 <= r12) goto L_0x026f;
+    L_0x0269:
         r5 = r4[r11];
         r5.setAlpha(r14);
-        goto L_0x0280;
-    L_0x027b:
+        goto L_0x0274;
+    L_0x026f:
         r5 = r4[r11];
         r5.setAlpha(r15);
-    L_0x0280:
+    L_0x0274:
         r5 = r4[r11];
         r5.setPivotX(r14);
         r5 = r4[r11];
@@ -11547,8 +11555,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r4[r11];
         r5.setLayoutParams(r3);
         r11 = r11 + 1;
-        goto L_0x026f;
-    L_0x02be:
+        goto L_0x0263;
+    L_0x02b2:
         r0 = r10.windowView;
         r0 = r0.getViewTreeObserver();
         r5 = new org.telegram.ui.PhotoViewer$41;
@@ -11562,25 +11570,25 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r30 = r22;
         r23.<init>(r25, r26, r27, r28, r29, r30);
         r0.addOnPreDrawListener(r5);
-        goto L_0x032d;
-    L_0x02dd:
-        if (r22 == 0) goto L_0x0307;
-    L_0x02df:
+        goto L_0x0321;
+    L_0x02d1:
+        if (r22 == 0) goto L_0x02fb;
+    L_0x02d3:
         r1 = r10.sendPhotoType;
         r2 = 3;
-        if (r1 == r2) goto L_0x0307;
-    L_0x02e4:
+        if (r1 == r2) goto L_0x02fb;
+    L_0x02d8:
         r1 = android.os.Build.VERSION.SDK_INT;
-        if (r1 < r7) goto L_0x02f0;
-    L_0x02e8:
+        if (r1 < r7) goto L_0x02e4;
+    L_0x02dc:
         r1 = r10.windowLayoutParams;
         r2 = -NUM; // 0xfffffffvar_ float:-9.2194E-41 double:NaN;
         r1.flags = r2;
-        goto L_0x02f4;
-    L_0x02f0:
+        goto L_0x02e8;
+    L_0x02e4:
         r1 = r10.windowLayoutParams;
         r1.flags = r11;
-    L_0x02f4:
+    L_0x02e8:
         r1 = r10.windowLayoutParams;
         r1.softInputMode = r9;
         r2 = r10.windowView;
@@ -11589,7 +11597,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.setFocusable(r12);
         r1 = r10.containerView;
         r1.setFocusable(r12);
-    L_0x0307:
+    L_0x02fb:
         r1 = r10.backgroundDrawable;
         r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
         r1.setAlpha(r2);
@@ -11607,14 +11615,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8, r9);
         r16.initCropView();
         r16.setCropBitmap();
-    L_0x032d:
+    L_0x0321:
         r0 = r10.parentActivity;
         r1 = "accessibility";
         r0 = r0.getSystemService(r1);
         r0 = (android.view.accessibility.AccessibilityManager) r0;
         r1 = r0.isTouchExplorationEnabled();
-        if (r1 == 0) goto L_0x0359;
-    L_0x033d:
+        if (r1 == 0) goto L_0x034d;
+    L_0x0331:
         r1 = android.view.accessibility.AccessibilityEvent.obtain();
         r2 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
         r1.setEventType(r2);
@@ -11624,12 +11632,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2.add(r3);
         r0.sendAccessibilityEvent(r1);
-    L_0x0359:
+    L_0x034d:
         return r12;
-    L_0x035a:
+    L_0x034e:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x035e:
+    L_0x0352:
         return r11;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.openPhoto(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.messenger.ImageLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PhotoViewerProvider, org.telegram.ui.ChatActivity, long, long, boolean):boolean");
@@ -11759,7 +11767,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 orientation = animatedOrientation;
                             }
                             for (animatedOrientation = 0; animatedOrientation < animatingImageViews.length; animatedOrientation++) {
-                                animatingImageViews[animatedOrientation].setNeedRadius(placeForPhoto.radius != 0);
                                 animatingImageViews[animatedOrientation].setOrientation(orientation);
                                 animatingImageViews[animatedOrientation].setImageBitmap(placeForPhoto.thumb);
                             }
@@ -11767,7 +11774,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             layoutParams.width = this.centerImage.getImageWidth();
                             layoutParams.height = this.centerImage.getImageHeight();
                             for (i2 = 0; i2 < animatingImageViews.length; i2++) {
-                                animatingImageViews[i2].setNeedRadius(false);
                                 animatingImageViews[i2].setOrientation(this.centerImage.getOrientation());
                                 animatingImageViews[i2].setImageBitmap(this.centerImage.getBitmapSafe());
                             }
@@ -11798,6 +11804,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         }
                         int abs;
                         if (placeForPhoto != null) {
+                            int i5;
+                            float[] fArr;
                             placeForPhoto.imageReceiver.setVisible(false, true);
                             abs = (int) Math.abs(drawRegion.left - ((float) placeForPhoto.imageReceiver.getImageX()));
                             int abs2 = (int) Math.abs(drawRegion.top - ((float) placeForPhoto.imageReceiver.getImageY()));
@@ -11819,26 +11827,38 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             this.animationValues[0][1] = this.animatingImageView.getScaleY();
                             this.animationValues[0][2] = this.animatingImageView.getTranslationX();
                             this.animationValues[0][3] = this.animatingImageView.getTranslationY();
-                            float[][] fArr = this.animationValues;
-                            fArr[0][4] = 0.0f;
-                            fArr[0][5] = 0.0f;
-                            fArr[0][6] = 0.0f;
-                            fArr[0][7] = 0.0f;
-                            fArr[0][8] = 0.0f;
-                            fArr[0][9] = 0.0f;
-                            float[] fArr2 = fArr[1];
+                            float[][] fArr2 = this.animationValues;
+                            fArr2[0][4] = 0.0f;
+                            fArr2[0][5] = 0.0f;
+                            fArr2[0][6] = 0.0f;
+                            fArr2[0][7] = 0.0f;
+                            fArr2[0][8] = 0.0f;
+                            fArr2[0][9] = 0.0f;
+                            fArr2[0][10] = 0.0f;
+                            fArr2[0][11] = 0.0f;
+                            fArr2[0][12] = 0.0f;
+                            float[] fArr3 = fArr2[1];
                             f3 = placeForPhoto.scale;
-                            fArr2[0] = f3;
-                            fArr[1][1] = f3;
-                            fArr[1][2] = ((float) placeForPhoto.viewX) + (drawRegion.left * f3);
-                            fArr[1][3] = ((float) placeForPhoto.viewY) + (drawRegion.top * f3);
+                            fArr3[0] = f3;
+                            fArr2[1][1] = f3;
+                            fArr2[1][2] = ((float) placeForPhoto.viewX) + (drawRegion.left * f3);
+                            fArr2[1][3] = ((float) placeForPhoto.viewY) + (drawRegion.top * f3);
                             f4 = (float) abs;
-                            fArr[1][4] = f4 * f3;
-                            fArr[1][5] = ((float) i2) * f3;
-                            fArr[1][6] = ((float) height) * f3;
-                            fArr[1][7] = (float) placeForPhoto.radius;
-                            fArr[1][8] = ((float) abs2) * f3;
-                            fArr[1][9] = f4 * f3;
+                            fArr2[1][4] = f4 * f3;
+                            fArr2[1][5] = ((float) i2) * f3;
+                            fArr2[1][6] = ((float) height) * f3;
+                            for (i5 = 0; i5 < 4; i5++) {
+                                fArr = this.animationValues[1];
+                                i2 = i5 + 7;
+                                int[] iArr2 = placeForPhoto.radius;
+                                fArr[i2] = iArr2 != null ? (float) iArr2[i5] : 0.0f;
+                            }
+                            float[][] fArr4 = this.animationValues;
+                            fArr = fArr4[1];
+                            float f5 = (float) abs2;
+                            f = placeForPhoto.scale;
+                            fArr[11] = f5 * f;
+                            fArr4[1][12] = f4 * f;
                             ArrayList arrayList = new ArrayList(((this.sendPhotoType == 1 ? 3 : 2) + animatingImageViews.length) + (animatingImageViews.length > 1 ? 1 : 0));
                             for (Object ofFloat : animatingImageViews) {
                                 arrayList.add(ObjectAnimator.ofFloat(ofFloat, AnimationProperties.CLIPPING_IMAGE_VIEW_PROGRESS, new float[]{0.0f, 1.0f}));
@@ -11846,10 +11866,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             if (animatingImageViews.length > 1) {
                                 ClippingImageView clippingImageView = this.animatingImageView;
                                 Property property = View.ALPHA;
-                                float[] fArr3 = new float[1];
+                                fArr = new float[1];
                                 i3 = 0;
-                                fArr3[0] = 0.0f;
-                                arrayList.add(ObjectAnimator.ofFloat(clippingImageView, property, fArr3));
+                                fArr[0] = 0.0f;
+                                arrayList.add(ObjectAnimator.ofFloat(clippingImageView, property, fArr));
                             } else {
                                 i3 = 0;
                             }
@@ -11866,12 +11886,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             r3[1] = ObjectAnimator.ofFloat(this.animatingImageView, View.ALPHA, new float[]{0.0f});
                             ClippingImageView clippingImageView2 = this.animatingImageView;
                             Property property2 = View.TRANSLATION_Y;
-                            float[] fArr4 = new float[1];
+                            float[] fArr5 = new float[1];
                             if (this.translationY < 0.0f) {
                                 abs = -abs;
                             }
-                            fArr4[0] = (float) abs;
-                            r3[2] = ObjectAnimator.ofFloat(clippingImageView2, property2, fArr4);
+                            fArr5[0] = (float) abs;
+                            r3[2] = ObjectAnimator.ofFloat(clippingImageView2, property2, fArr5);
                             r3[3] = ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f});
                             animatorSet.playTogether(r3);
                         }
@@ -13478,20 +13498,20 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         setImageIndex(this.currentIndex - 1, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x023f  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x023f  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x023f  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x018d  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
     /* JADX WARNING: Missing block: B:14:0x0037, code skipped:
             if (r1.exists() == false) goto L_0x0039;
      */
-    /* JADX WARNING: Missing block: B:46:0x0140, code skipped:
-            if (r0.exists() == false) goto L_0x0181;
+    /* JADX WARNING: Missing block: B:46:0x013f, code skipped:
+            if (r0.exists() == false) goto L_0x0180;
      */
-    /* JADX WARNING: Missing block: B:50:0x017f, code skipped:
-            if (r0.exists() == false) goto L_0x0181;
+    /* JADX WARNING: Missing block: B:50:0x017e, code skipped:
+            if (r0.exists() == false) goto L_0x0180;
      */
     private void onActionClick(boolean r11) {
         /*
@@ -13515,7 +13535,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = "mp4";
         r4 = 1;
         r5 = 0;
-        if (r1 == 0) goto L_0x0130;
+        if (r1 == 0) goto L_0x012f;
     L_0x001c:
         r1 = r1.messageOwner;
         r1 = r1.attachPath;
@@ -13534,133 +13554,133 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x0039:
         r1 = r5;
     L_0x003a:
-        if (r1 != 0) goto L_0x012d;
+        if (r1 != 0) goto L_0x012c;
     L_0x003c:
         r1 = r10.currentMessageObject;
         r1 = r1.messageOwner;
         r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1);
         r6 = r1.exists();
-        if (r6 != 0) goto L_0x012d;
+        if (r6 != 0) goto L_0x012c;
     L_0x004a:
         r1 = org.telegram.messenger.SharedConfig.streamMedia;
-        if (r1 == 0) goto L_0x0181;
+        if (r1 == 0) goto L_0x0180;
     L_0x004e:
         r1 = r10.currentMessageObject;
         r6 = r1.getDialogId();
         r1 = (int) r6;
-        if (r1 == 0) goto L_0x0181;
+        if (r1 == 0) goto L_0x0180;
     L_0x0057:
         r1 = r10.currentMessageObject;
         r1 = r1.isVideo();
-        if (r1 == 0) goto L_0x0181;
+        if (r1 == 0) goto L_0x0180;
     L_0x005f:
         r1 = r10.currentMessageObject;
         r1 = r1.canStreamVideo();
-        if (r1 == 0) goto L_0x0181;
+        if (r1 == 0) goto L_0x0180;
     L_0x0067:
-        r1 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r1 = r1.currentAccount;	 Catch:{ Exception -> 0x0129 }
-        r1 = org.telegram.messenger.FileLoader.getInstance(r1);	 Catch:{ Exception -> 0x0129 }
-        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r1 = r1.getFileReference(r6);	 Catch:{ Exception -> 0x0129 }
-        r6 = r10.currentAccount;	 Catch:{ Exception -> 0x0129 }
-        r6 = org.telegram.messenger.FileLoader.getInstance(r6);	 Catch:{ Exception -> 0x0129 }
-        r7 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r7 = r7.getDocument();	 Catch:{ Exception -> 0x0129 }
-        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r6.loadFile(r7, r8, r4, r2);	 Catch:{ Exception -> 0x0129 }
-        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r6 = r6.getDocument();	 Catch:{ Exception -> 0x0129 }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0129 }
-        r7.<init>();	 Catch:{ Exception -> 0x0129 }
+        r1 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r1 = r1.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r1 = org.telegram.messenger.FileLoader.getInstance(r1);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r1 = r1.getFileReference(r6);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r6 = org.telegram.messenger.FileLoader.getInstance(r6);	 Catch:{ Exception -> 0x0128 }
+        r7 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r7 = r7.getDocument();	 Catch:{ Exception -> 0x0128 }
+        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6.loadFile(r7, r8, r4, r2);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6 = r6.getDocument();	 Catch:{ Exception -> 0x0128 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0128 }
+        r7.<init>();	 Catch:{ Exception -> 0x0128 }
         r8 = "?account=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r8 = r8.currentAccount;	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r8 = r8.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&id=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r6.id;	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.id;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&hash=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r6.access_hash;	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.access_hash;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&dc=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r6.dc_id;	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.dc_id;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&size=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r6.size;	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.size;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&mime=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r8 = r6.mime_type;	 Catch:{ Exception -> 0x0129 }
-        r8 = java.net.URLEncoder.encode(r8, r0);	 Catch:{ Exception -> 0x0129 }
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.mime_type;	 Catch:{ Exception -> 0x0128 }
+        r8 = java.net.URLEncoder.encode(r8, r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
         r8 = "&rid=";
-        r7.append(r8);	 Catch:{ Exception -> 0x0129 }
-        r7.append(r1);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r1);	 Catch:{ Exception -> 0x0128 }
         r1 = "&name=";
-        r7.append(r1);	 Catch:{ Exception -> 0x0129 }
-        r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r6);	 Catch:{ Exception -> 0x0129 }
-        r0 = java.net.URLEncoder.encode(r1, r0);	 Catch:{ Exception -> 0x0129 }
-        r7.append(r0);	 Catch:{ Exception -> 0x0129 }
+        r7.append(r1);	 Catch:{ Exception -> 0x0128 }
+        r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r6);	 Catch:{ Exception -> 0x0128 }
+        r0 = java.net.URLEncoder.encode(r1, r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
         r0 = "&reference=";
-        r7.append(r0);	 Catch:{ Exception -> 0x0129 }
-        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0129 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0128 }
         if (r0 == 0) goto L_0x00f7;
     L_0x00f4:
-        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0129 }
+        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0128 }
         goto L_0x00f9;
     L_0x00f7:
-        r0 = new byte[r2];	 Catch:{ Exception -> 0x0129 }
+        r0 = new byte[r2];	 Catch:{ Exception -> 0x0128 }
     L_0x00f9:
-        r0 = org.telegram.messenger.Utilities.bytesToHex(r0);	 Catch:{ Exception -> 0x0129 }
-        r7.append(r0);	 Catch:{ Exception -> 0x0129 }
-        r0 = r7.toString();	 Catch:{ Exception -> 0x0129 }
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0129 }
-        r1.<init>();	 Catch:{ Exception -> 0x0129 }
+        r0 = org.telegram.messenger.Utilities.bytesToHex(r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r7.toString();	 Catch:{ Exception -> 0x0128 }
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0128 }
+        r1.<init>();	 Catch:{ Exception -> 0x0128 }
         r6 = "tg://";
-        r1.append(r6);	 Catch:{ Exception -> 0x0129 }
-        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0129 }
-        r6 = r6.getFileName();	 Catch:{ Exception -> 0x0129 }
-        r1.append(r6);	 Catch:{ Exception -> 0x0129 }
-        r1.append(r0);	 Catch:{ Exception -> 0x0129 }
-        r0 = r1.toString();	 Catch:{ Exception -> 0x0129 }
-        r0 = android.net.Uri.parse(r0);	 Catch:{ Exception -> 0x0129 }
-        r10.isStreaming = r4;	 Catch:{ Exception -> 0x012a }
-        r10.checkProgress(r2, r2, r2);	 Catch:{ Exception -> 0x012a }
-        goto L_0x012a;
-    L_0x0129:
+        r1.append(r6);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6 = r6.getFileName();	 Catch:{ Exception -> 0x0128 }
+        r1.append(r6);	 Catch:{ Exception -> 0x0128 }
+        r1.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r1.toString();	 Catch:{ Exception -> 0x0128 }
+        r0 = android.net.Uri.parse(r0);	 Catch:{ Exception -> 0x0128 }
+        r10.isStreaming = r4;	 Catch:{ Exception -> 0x0129 }
+        r10.checkProgress(r2, r2, r2);	 Catch:{ Exception -> 0x0129 }
+        goto L_0x0129;
+    L_0x0128:
         r0 = r5;
-    L_0x012a:
+    L_0x0129:
         r1 = r0;
         r0 = r5;
-        goto L_0x0183;
-    L_0x012d:
+        goto L_0x0182;
+    L_0x012c:
         r0 = r1;
-    L_0x012e:
+    L_0x012d:
         r1 = r5;
-        goto L_0x0183;
-    L_0x0130:
+        goto L_0x0182;
+    L_0x012f:
         r0 = r10.currentBotInlineResult;
-        if (r0 == 0) goto L_0x0181;
-    L_0x0134:
+        if (r0 == 0) goto L_0x0180;
+    L_0x0133:
         r1 = r0.document;
-        if (r1 == 0) goto L_0x0143;
-    L_0x0138:
+        if (r1 == 0) goto L_0x0142;
+    L_0x0137:
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r1);
         r1 = r0.exists();
-        if (r1 != 0) goto L_0x012e;
+        if (r1 != 0) goto L_0x012d;
+    L_0x0141:
+        goto L_0x0180;
     L_0x0142:
-        goto L_0x0181;
-    L_0x0143:
         r0 = r0.content;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r0 == 0) goto L_0x0181;
-    L_0x0149:
+        if (r0 == 0) goto L_0x0180;
+    L_0x0148:
         r0 = new java.io.File;
         r1 = 4;
         r1 = org.telegram.messenger.FileLoader.getDirectory(r1);
@@ -13681,122 +13701,122 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r6.toString();
         r0.<init>(r1, r6);
         r1 = r0.exists();
-        if (r1 != 0) goto L_0x012e;
-    L_0x0181:
+        if (r1 != 0) goto L_0x012d;
+    L_0x0180:
         r0 = r5;
         r1 = r0;
-    L_0x0183:
-        if (r0 == 0) goto L_0x018b;
-    L_0x0185:
-        if (r1 != 0) goto L_0x018b;
-    L_0x0187:
+    L_0x0182:
+        if (r0 == 0) goto L_0x018a;
+    L_0x0184:
+        if (r1 != 0) goto L_0x018a;
+    L_0x0186:
         r1 = android.net.Uri.fromFile(r0);
-    L_0x018b:
-        if (r1 != 0) goto L_0x023f;
-    L_0x018d:
-        if (r11 == 0) goto L_0x0256;
-    L_0x018f:
+    L_0x018a:
+        if (r1 != 0) goto L_0x023e;
+    L_0x018c:
+        if (r11 == 0) goto L_0x0255;
+    L_0x018e:
         r11 = r10.currentMessageObject;
-        if (r11 == 0) goto L_0x01c6;
-    L_0x0193:
+        if (r11 == 0) goto L_0x01c5;
+    L_0x0192:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentFileNames;
         r0 = r0[r2];
         r11 = r11.isLoadingFile(r0);
-        if (r11 != 0) goto L_0x01b6;
-    L_0x01a3:
+        if (r11 != 0) goto L_0x01b5;
+    L_0x01a2:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentMessageObject;
         r0 = r0.getDocument();
         r1 = r10.currentMessageObject;
         r11.loadFile(r0, r1, r4, r2);
-        goto L_0x022f;
-    L_0x01b6:
+        goto L_0x022e;
+    L_0x01b5:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentMessageObject;
         r0 = r0.getDocument();
         r11.cancelLoadFile(r0);
-        goto L_0x022f;
-    L_0x01c6:
+        goto L_0x022e;
+    L_0x01c5:
         r11 = r10.currentBotInlineResult;
-        if (r11 == 0) goto L_0x022f;
-    L_0x01ca:
+        if (r11 == 0) goto L_0x022e;
+    L_0x01c9:
         r0 = r11.document;
-        if (r0 == 0) goto L_0x01fc;
-    L_0x01ce:
+        if (r0 == 0) goto L_0x01fb;
+    L_0x01cd:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentFileNames;
         r0 = r0[r2];
         r11 = r11.isLoadingFile(r0);
-        if (r11 != 0) goto L_0x01ee;
-    L_0x01de:
+        if (r11 != 0) goto L_0x01ed;
+    L_0x01dd:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentBotInlineResult;
         r0 = r0.document;
         r1 = r10.currentMessageObject;
         r11.loadFile(r0, r1, r4, r2);
-        goto L_0x022f;
-    L_0x01ee:
+        goto L_0x022e;
+    L_0x01ed:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.FileLoader.getInstance(r11);
         r0 = r10.currentBotInlineResult;
         r0 = r0.document;
         r11.cancelLoadFile(r0);
-        goto L_0x022f;
-    L_0x01fc:
+        goto L_0x022e;
+    L_0x01fb:
         r11 = r11.content;
         r11 = r11 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r11 == 0) goto L_0x022f;
-    L_0x0202:
+        if (r11 == 0) goto L_0x022e;
+    L_0x0201:
         r11 = org.telegram.messenger.ImageLoader.getInstance();
         r0 = r10.currentBotInlineResult;
         r0 = r0.content;
         r0 = r0.url;
         r11 = r11.isLoadingHttpFile(r0);
-        if (r11 != 0) goto L_0x0222;
-    L_0x0212:
+        if (r11 != 0) goto L_0x0221;
+    L_0x0211:
         r11 = org.telegram.messenger.ImageLoader.getInstance();
         r0 = r10.currentBotInlineResult;
         r0 = r0.content;
         r0 = r0.url;
         r1 = r10.currentAccount;
         r11.loadHttpFile(r0, r3, r1);
-        goto L_0x022f;
-    L_0x0222:
+        goto L_0x022e;
+    L_0x0221:
         r11 = org.telegram.messenger.ImageLoader.getInstance();
         r0 = r10.currentBotInlineResult;
         r0 = r0.content;
         r0 = r0.url;
         r11.cancelLoadHttpFile(r0);
-    L_0x022f:
+    L_0x022e:
         r11 = r10.centerImage;
         r11 = r11.getStaticThumb();
         r0 = r11 instanceof org.telegram.ui.Components.OtherDocumentPlaceholderDrawable;
-        if (r0 == 0) goto L_0x0256;
-    L_0x0239:
+        if (r0 == 0) goto L_0x0255;
+    L_0x0238:
         r11 = (org.telegram.ui.Components.OtherDocumentPlaceholderDrawable) r11;
         r11.checkFileExist();
-        goto L_0x0256;
-    L_0x023f:
+        goto L_0x0255;
+    L_0x023e:
         r11 = r10.sharedMediaType;
-        if (r11 != r4) goto L_0x0253;
-    L_0x0243:
+        if (r11 != r4) goto L_0x0252;
+    L_0x0242:
         r11 = r10.currentMessageObject;
         r11 = r11.canPreviewDocument();
-        if (r11 != 0) goto L_0x0253;
-    L_0x024b:
+        if (r11 != 0) goto L_0x0252;
+    L_0x024a:
         r11 = r10.currentMessageObject;
         r0 = r10.parentActivity;
         org.telegram.messenger.AndroidUtilities.openDocument(r11, r0, r5);
         return;
-    L_0x0253:
+    L_0x0252:
         r10.preparePlayer(r1, r4, r2);
-    L_0x0256:
+    L_0x0255:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onActionClick(boolean):void");

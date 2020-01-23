@@ -17,7 +17,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
         try {
             int i = UserConfig.selectedAccount;
             ApplicationLoader.postInitApplication();
-            if (!AndroidUtilities.needShowPasscode(false)) {
+            if (!AndroidUtilities.needShowPasscode()) {
                 if (!SharedConfig.isWaitingForPasscodeEnter) {
                     String stringExtra = intent.getStringExtra("android.intent.extra.TEXT");
                     if (!TextUtils.isEmpty(stringExtra)) {

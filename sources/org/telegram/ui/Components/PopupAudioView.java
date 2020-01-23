@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -41,7 +42,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     private int timeX;
     private boolean wasLayout = false;
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public /* synthetic */ void onSeekBarContinuousDrag(float f) {
@@ -52,7 +53,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
-        this.seekBar = new SeekBar(getContext());
+        this.seekBar = new SeekBar(this);
         this.seekBar.setDelegate(this);
         this.progressView = new ProgressView();
     }
@@ -105,11 +106,16 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null) {
             if (this.wasLayout) {
+                int i = AndroidUtilities.displaySize.y;
+                if (getParent() instanceof View) {
+                    i = ((View) getParent()).getMeasuredHeight();
+                }
+                Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
                 BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
                 Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
                     canvas.save();
-                    int i = this.buttonState;
+                    i = this.buttonState;
                     if (i == 0 || i == 1) {
                         canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                         this.seekBar.draw(canvas);
@@ -361,8 +367,8 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         updateButtonState();
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.progressView.setProgress(f);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)));
         if (this.buttonState != 3) {
             updateButtonState();
         }

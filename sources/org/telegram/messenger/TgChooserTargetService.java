@@ -29,16 +29,15 @@ public class TgChooserTargetService extends ChooserTargetService {
     public List<ChooserTarget> onGetChooserTargets(ComponentName componentName, IntentFilter intentFilter) {
         int i = UserConfig.selectedAccount;
         ArrayList arrayList = new ArrayList();
-        if (!UserConfig.getInstance(i).isClientActivated() || !MessagesController.getGlobalMainSettings().getBoolean("direct_share", true)) {
-            return arrayList;
-        }
-        ImageLoader.getInstance();
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        MessagesStorage.getInstance(i).getStorageQueue().postRunnable(new -$$Lambda$TgChooserTargetService$Tk7TkprF_pFKgMncgdcbNzQeTqs(this, i, arrayList, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch));
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            FileLog.e(e);
+        if (UserConfig.getInstance(i).isClientActivated() && MessagesController.getGlobalMainSettings().getBoolean("direct_share", true) && !AndroidUtilities.needShowPasscode() && !SharedConfig.isWaitingForPasscodeEnter) {
+            ImageLoader.getInstance();
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            MessagesStorage.getInstance(i).getStorageQueue().postRunnable(new -$$Lambda$TgChooserTargetService$Tk7TkprF_pFKgMncgdcbNzQeTqs(this, i, arrayList, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch));
+            try {
+                countDownLatch.await();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
         return arrayList;
     }
@@ -179,7 +178,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         r7 = org.telegram.messenger.UserObject.isUserSelf(r12);
         if (r7 == 0) goto L_0x0134;
     L_0x0121:
-        r7 = NUM; // 0x7f0e09a7 float:1.888005E38 double:1.0531633775E-314;
+        r7 = NUM; // 0x7f0e09cd float:1.8880126E38 double:1.053163396E-314;
         r8 = "SavedMessages";
         r10 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r17.createSavedMessagesIcon();
@@ -257,7 +256,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         if (r10 != 0) goto L_0x01a5;
     L_0x019b:
         r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r8 = NUM; // 0x7var_a float:1.7945345E38 double:1.05293569E-314;
+        r8 = NUM; // 0x7var_b float:1.7945347E38 double:1.0529356903E-314;
         r7 = android.graphics.drawable.Icon.createWithResource(r7, r8);
         r10 = r7;
     L_0x01a5:

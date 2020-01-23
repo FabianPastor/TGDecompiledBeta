@@ -44,7 +44,7 @@ public class BrightnessControlCell extends FrameLayout {
                 BrightnessControlCell.this.didChangedValue(f);
             }
         });
-        addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 58.0f, 9.0f, 58.0f, 0.0f));
+        addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 54.0f, 5.0f, 54.0f, 0.0f));
         this.rightImageView = new ImageView(context);
         this.rightImageView.setImageResource(NUM);
         addView(this.rightImageView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 12.0f, 17.0f, 0.0f));

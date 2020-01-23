@@ -1246,9 +1246,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             messageObject.audioProgress = bufferedPosition;
                             messageObject.audioProgressSec = (int) (MediaController.this.lastProgress / 1000);
                             messageObject.bufferedProgress = f;
-                            if (bufferedPosition >= 0.0f && MediaController.this.shouldSavePositionForCurrentAudio != null && SystemClock.uptimeMillis() - MediaController.this.lastSaveTime >= 1000) {
+                            if (bufferedPosition >= 0.0f && MediaController.this.shouldSavePositionForCurrentAudio != null && SystemClock.elapsedRealtime() - MediaController.this.lastSaveTime >= 1000) {
                                 MediaController.this.shouldSavePositionForCurrentAudio;
-                                MediaController.this.lastSaveTime = SystemClock.uptimeMillis();
+                                MediaController.this.lastSaveTime = SystemClock.elapsedRealtime();
                                 Utilities.globalQueue.postRunnable(new -$$Lambda$MediaController$4$_1d-mI3DSqZHNDnGss_mjwhPhjQ(this, bufferedPosition));
                             }
                             NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(messageObject.getId()), Float.valueOf(bufferedPosition));
@@ -3376,9 +3376,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         if (!SharedConfig.raiseToSpeak) {
             startRaiseToEarSensors(this.raiseChat);
         }
-        WakeLock wakeLock = this.proximityWakeLock;
-        if (!(wakeLock == null || wakeLock.isHeld() || (!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()))) {
-            this.proximityWakeLock.acquire();
+        if (!ApplicationLoader.mainInterfacePaused) {
+            WakeLock wakeLock = this.proximityWakeLock;
+            if (!(wakeLock == null || wakeLock.isHeld() || (!this.playingMessageObject.isVoice() && !this.playingMessageObject.isRoundVideo()))) {
+                this.proximityWakeLock.acquire();
+            }
         }
         startProgressTimer(this.playingMessageObject);
         NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStart, messageObject2);
@@ -3493,7 +3495,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         return false;
     }
 
-    public boolean resumeAudio(MessageObject messageObject) {
+    private boolean resumeAudio(MessageObject messageObject) {
         if (!((this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject))) {
             try {
                 startProgressTimer(this.playingMessageObject);
@@ -3554,9 +3556,19 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         this.recordReplyingMessageObject = messageObject;
     }
 
+    private boolean shouldRequestRecordAudioFocus() {
+        try {
+            if (NotificationsController.audioManager.isBluetoothA2dpOn()) {
+                return false;
+            }
+        } catch (Throwable unused) {
+        }
+        return true;
+    }
+
     public void requestAudioFocus(boolean z) {
         if (z) {
-            if (!this.hasRecordAudioFocus && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
+            if (!this.hasRecordAudioFocus && shouldRequestRecordAudioFocus() && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
                 this.hasRecordAudioFocus = true;
             }
         } else if (this.hasRecordAudioFocus) {
@@ -3857,7 +3869,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = 2;
         r2.<init>(r10, r3);	 Catch:{ Exception -> 0x005e }
         r10 = "Loading";
-        r1 = NUM; // 0x7f0e05e3 float:1.8878094E38 double:1.053162901E-314;
+        r1 = NUM; // 0x7f0e05ee float:1.8878116E38 double:1.0531629066E-314;
         r10 = org.telegram.messenger.LocaleController.getString(r10, r1);	 Catch:{ Exception -> 0x005b }
         r2.setMessage(r10);	 Catch:{ Exception -> 0x005b }
         r2.setCanceledOnTouchOutside(r0);	 Catch:{ Exception -> 0x005b }
@@ -4769,7 +4781,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r34 = r3;
         r3 = "AllPhotos";
         r35 = r5;
-        r5 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
+        r5 = NUM; // 0x7f0e00d7 float:1.8875474E38 double:1.053162263E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r5);	 Catch:{ all -> 0x01f7 }
         r5 = 0;
         r2.<init>(r5, r3, r1);	 Catch:{ all -> 0x01f7 }
@@ -4786,7 +4798,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r3 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x0175 }
         r5 = "AllMedia";
         r36 = r6;
-        r6 = NUM; // 0x7f0e00d5 float:1.887547E38 double:1.053162262E-314;
+        r6 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);	 Catch:{ all -> 0x0175 }
         r6 = 0;
         r3.<init>(r6, r5, r1);	 Catch:{ all -> 0x0175 }
@@ -5096,7 +5108,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r4 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x0413 }
         r5 = "AllVideos";
         r20 = r6;
-        r6 = NUM; // 0x7f0e00d7 float:1.8875474E38 double:1.053162263E-314;
+        r6 = NUM; // 0x7f0e00d8 float:1.8875476E38 double:1.0531622633E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);	 Catch:{ all -> 0x0413 }
         r6 = 0;
         r4.<init>(r6, r5, r3);	 Catch:{ all -> 0x0413 }
@@ -5123,7 +5135,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r5 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ all -> 0x03b6 }
         r6 = "AllMedia";
         r21 = r7;
-        r7 = NUM; // 0x7f0e00d5 float:1.887547E38 double:1.053162262E-314;
+        r7 = NUM; // 0x7f0e00d6 float:1.8875472E38 double:1.0531622624E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);	 Catch:{ all -> 0x03b6 }
         r7 = 0;
         r5.<init>(r7, r6, r3);	 Catch:{ all -> 0x03b6 }
@@ -5497,7 +5509,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: Removed duplicated region for block: B:42:0x00aa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0101  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x010f  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0146 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0145 A:{SKIP} */
     private boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r33) {
         /*
         r32 = this;
@@ -5505,11 +5517,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r0 = r33;
         r1 = r0.messageObject;
         r2 = r0.videoEditedInfo;
-        if (r1 == 0) goto L_0x015f;
+        if (r1 == 0) goto L_0x015e;
     L_0x000a:
         if (r2 != 0) goto L_0x000e;
     L_0x000c:
-        goto L_0x015f;
+        goto L_0x015e;
     L_0x000e:
         r4 = r2.originalPath;
         r5 = r2.startTime;
@@ -5685,7 +5697,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         throw r0;
     L_0x010b:
         r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r2 == 0) goto L_0x0132;
+        if (r2 == 0) goto L_0x0131;
     L_0x010f:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -5699,24 +5711,24 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r2.append(r4);
         r2 = r2.toString();
         org.telegram.messenger.FileLog.d(r2);
-    L_0x0132:
+    L_0x0131:
         r2 = r28.edit();
         r5 = "isPreviousOk";
         r2 = r2.putBoolean(r5, r1);
         r2.apply();
         r5 = 1;
         r6 = r31.length();
-        if (r3 != 0) goto L_0x014c;
-    L_0x0146:
-        if (r4 == 0) goto L_0x0149;
+        if (r3 != 0) goto L_0x014b;
+    L_0x0145:
+        if (r4 == 0) goto L_0x0148;
+    L_0x0147:
+        goto L_0x014b;
     L_0x0148:
-        goto L_0x014c;
-    L_0x0149:
         r27 = 0;
-        goto L_0x014e;
-    L_0x014c:
+        goto L_0x014d;
+    L_0x014b:
         r27 = 1;
-    L_0x014e:
+    L_0x014d:
         r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r10 = 1;
         r1 = r32;
@@ -5727,7 +5739,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         r7 = r27;
         r1.didWriteData(r2, r3, r4, r5, r7, r8);
         return r10;
-    L_0x015f:
+    L_0x015e:
         r0 = 0;
         return r0;
         */

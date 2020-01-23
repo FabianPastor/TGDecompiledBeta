@@ -26,6 +26,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
+import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate.-CC;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.TextCell;
@@ -62,10 +63,15 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowPhoneNumbers = z6;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
-            public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+            public /* synthetic */ boolean canApplySearchResults(int i) {
+                return -CC.$default$canApplySearchResults(this, i);
             }
 
-            public void onDataSetChanged() {
+            public /* synthetic */ void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+                -CC.$default$onSetHashtags(this, arrayList, hashMap);
+            }
+
+            public void onDataSetChanged(int i) {
                 SearchAdapter.this.notifyDataSetChanged();
             }
 
@@ -95,7 +101,7 @@ public class SearchAdapter extends SelectionAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, 0, 0);
             }
             notifyDataSetChanged();
             return;
@@ -120,7 +126,7 @@ public class SearchAdapter extends SelectionAdapter {
 
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
-            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, -1);
+            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 0);
         }
         int i = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new -$$Lambda$SearchAdapter$MJ9cur0I3ZiqQGm3sZTS0MY0LdM(this, str, new ArrayList(ContactsController.getInstance(i).contacts), i));
