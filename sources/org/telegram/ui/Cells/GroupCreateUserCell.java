@@ -322,7 +322,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0e0779 float:1.8878918E38 double:1.053163102E-314;
+        r1 = NUM; // 0x7f0e077a float:1.887892E38 double:1.0531631023E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);

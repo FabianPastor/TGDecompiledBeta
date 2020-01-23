@@ -123,7 +123,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0e0b62 float:1.8880948E38 double:1.0531635963E-314;
+        r4 = NUM; // 0x7f0e0b64 float:1.8880952E38 double:1.0531635973E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -161,7 +161,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
     L_0x0091:
-        r7 = NUM; // 0x7f0e0775 float:1.887891E38 double:1.0531631E-314;
+        r7 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;

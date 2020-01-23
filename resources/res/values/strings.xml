@@ -1691,6 +1691,7 @@
     <string name="NewMessages_two">%1$d new messages</string>
     <string name="NewMessages_zero">%1$d new messages</string>
     <string name="NewPoll">New Poll</string>
+    <string name="NewQuiz">New Quiz</string>
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="NewTheme">New color theme</string>
     <string name="NewThemePreviewLine1">Do you know what time it is?</string>
@@ -2381,6 +2382,7 @@
     <string name="QuickReplyDefault2">I\'ll call you right back.</string>
     <string name="QuickReplyDefault3">I\'ll call you later.</string>
     <string name="QuickReplyDefault4">Can\'t talk now. Call me later?</string>
+    <string name="QuizAnswers">Quiz answers</string>
     <string name="QuizInfo">Polls in Quiz Mode have one correct answer. Users can\'t revoke their answers.</string>
     <string name="QuizPoll">Quiz</string>
     <string name="QuizWellDone">Well done!</string>

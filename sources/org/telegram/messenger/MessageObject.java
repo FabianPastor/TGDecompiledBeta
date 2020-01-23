@@ -2846,7 +2846,7 @@ public class MessageObject {
         goto L_0x0672;
     L_0x06c5:
         r11 = new java.lang.StringBuilder;
-        r2 = NUM; // 0x7f0e0bc3 float:1.8881145E38 double:1.0531636443E-314;
+        r2 = NUM; // 0x7f0e0bc5 float:1.8881149E38 double:1.0531636453E-314;
         r9 = "UserRestrictionsUntilForever";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r11.<init>(r2);
@@ -4710,7 +4710,7 @@ public class MessageObject {
         r13 = r13 & 4;
         if (r13 == 0) goto L_0x008a;
     L_0x0080:
-        r12 = NUM; // 0x7f0e089c float:1.8879508E38 double:1.0531632456E-314;
+        r12 = NUM; // 0x7f0e089d float:1.887951E38 double:1.053163246E-314;
         r13 = "PaymentReceipt";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         goto L_0x009a;

@@ -34,518 +34,580 @@ public class MediaCodecVideoConvertor {
         return convertVideoInternal(str, file2, i6, z3, i7, i8, i9, i10, j4, j5, j6, z4, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x010d A:{Catch:{ Exception -> 0x011e, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00de A:{Catch:{ Exception -> 0x011e, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00de A:{Catch:{ Exception -> 0x011e, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x010d A:{Catch:{ Exception -> 0x011e, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:314:0x054b A:{Catch:{ Exception -> 0x0562, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:583:0x0a16 A:{Catch:{ Exception -> 0x0acd, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:564:0x09d7 A:{Catch:{ Exception -> 0x0a1c, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:564:0x09d7 A:{Catch:{ Exception -> 0x0a1c, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:583:0x0a16 A:{Catch:{ Exception -> 0x0acd, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:522:0x08a8 A:{SYNTHETIC, Splitter:B:522:0x08a8} */
-    /* JADX WARNING: Removed duplicated region for block: B:583:0x0a16 A:{Catch:{ Exception -> 0x0acd, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:564:0x09d7 A:{Catch:{ Exception -> 0x0a1c, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x089d A:{Catch:{ Exception -> 0x0823, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:512:0x0879 A:{Catch:{ Exception -> 0x0823, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x07ce A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x07bd A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x0304  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x0302  */
-    /* JADX WARNING: Removed duplicated region for block: B:225:0x0399  */
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0308  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x03c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x03c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x03de A:{Catch:{ Exception -> 0x0b00, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x042e A:{SYNTHETIC, Splitter:B:254:0x042e} */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x05c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x05bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x05e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:339:0x05d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x07bd A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x07ce A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01c7 A:{SYNTHETIC, Splitter:B:97:0x01c7} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x01be A:{SYNTHETIC, Splitter:B:94:0x01be} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x01d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x01f7 A:{SYNTHETIC, Splitter:B:109:0x01f7} */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x021c A:{SYNTHETIC, Splitter:B:124:0x021c} */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x025d  */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x023b A:{SYNTHETIC, Splitter:B:137:0x023b} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0283 A:{SYNTHETIC, Splitter:B:157:0x0283} */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x0273 A:{SYNTHETIC, Splitter:B:153:0x0273} */
-    /* JADX WARNING: Removed duplicated region for block: B:175:0x02bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x029e A:{SYNTHETIC, Splitter:B:166:0x029e} */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x02c4 A:{SYNTHETIC, Splitter:B:177:0x02c4} */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x03c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x03c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x03de A:{Catch:{ Exception -> 0x0b00, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x03fd A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x042e A:{SYNTHETIC, Splitter:B:254:0x042e} */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x059e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x05bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x05c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:339:0x05d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x05e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x07ce A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x07bd A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x01be A:{SYNTHETIC, Splitter:B:94:0x01be} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01c7 A:{SYNTHETIC, Splitter:B:97:0x01c7} */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x01d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x01f7 A:{SYNTHETIC, Splitter:B:109:0x01f7} */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x021c A:{SYNTHETIC, Splitter:B:124:0x021c} */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x023b A:{SYNTHETIC, Splitter:B:137:0x023b} */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x025d  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x0273 A:{SYNTHETIC, Splitter:B:153:0x0273} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0283 A:{SYNTHETIC, Splitter:B:157:0x0283} */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x029e A:{SYNTHETIC, Splitter:B:166:0x029e} */
-    /* JADX WARNING: Removed duplicated region for block: B:175:0x02bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x02c4 A:{SYNTHETIC, Splitter:B:177:0x02c4} */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x03c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x03c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x03de A:{Catch:{ Exception -> 0x0b00, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x03fd A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x042e A:{SYNTHETIC, Splitter:B:254:0x042e} */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x059e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x05c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x05bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x05e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:339:0x05d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x07bd A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x07ce A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01c7 A:{SYNTHETIC, Splitter:B:97:0x01c7} */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x01be A:{SYNTHETIC, Splitter:B:94:0x01be} */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x01d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x01f7 A:{SYNTHETIC, Splitter:B:109:0x01f7} */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x021c A:{SYNTHETIC, Splitter:B:124:0x021c} */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x025d  */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x023b A:{SYNTHETIC, Splitter:B:137:0x023b} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0283 A:{SYNTHETIC, Splitter:B:157:0x0283} */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x0273 A:{SYNTHETIC, Splitter:B:153:0x0273} */
-    /* JADX WARNING: Removed duplicated region for block: B:175:0x02bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x029e A:{SYNTHETIC, Splitter:B:166:0x029e} */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x03b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x02c4 A:{SYNTHETIC, Splitter:B:177:0x02c4} */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x03c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x03c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x03de A:{Catch:{ Exception -> 0x0b00, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x03fd A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x042e A:{SYNTHETIC, Splitter:B:254:0x042e} */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x059e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x05bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:334:0x05c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:339:0x05d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x05e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:462:0x07ce A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x07bd A:{Catch:{ Exception -> 0x0a45, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:729:0x0d2d  */
-    /* JADX WARNING: Removed duplicated region for block: B:732:0x0d34 A:{SYNTHETIC, Splitter:B:732:0x0d34} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:713:0x0cf2  */
-    /* JADX WARNING: Removed duplicated region for block: B:716:0x0cf9 A:{SYNTHETIC, Splitter:B:716:0x0cf9} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0cab A:{ExcHandler: all (r0_67 'th' java.lang.Throwable), Splitter:B:60:0x0137} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:652:0x0c0a A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:654:0x0c0f A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:656:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:658:0x0c1c A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c2d, all -> 0x0cab }} */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0c8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:694:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:694:0x0CLASSNAME} */
-    /* JADX WARNING: Removed duplicated region for block: B:724:0x0d24 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:722:0x0d05  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0147 A:{Catch:{ Exception -> 0x017d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0147 A:{Catch:{ Exception -> 0x017d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x034e  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x040b  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x0352  */
+    /* JADX WARNING: Removed duplicated region for block: B:620:0x0a5c A:{Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:601:0x0a20 A:{Catch:{ Exception -> 0x0a63, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:601:0x0a20 A:{Catch:{ Exception -> 0x0a63, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:620:0x0a5c A:{Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:553:0x0902 A:{Catch:{ Exception -> 0x0888, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:549:0x08de A:{Catch:{ Exception -> 0x0888, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:558:0x090b A:{SYNTHETIC, Splitter:B:558:0x090b} */
+    /* JADX WARNING: Removed duplicated region for block: B:620:0x0a5c A:{Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:601:0x0a20 A:{Catch:{ Exception -> 0x0a63, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:497:0x082e  */
+    /* JADX WARNING: Removed duplicated region for block: B:496:0x081e  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0221  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x021a A:{SYNTHETIC, Splitter:B:124:0x021a} */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0252 A:{SYNTHETIC, Splitter:B:136:0x0252} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0272 A:{SYNTHETIC, Splitter:B:149:0x0272} */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x02b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x0295 A:{SYNTHETIC, Splitter:B:160:0x0295} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x02d8 A:{SYNTHETIC, Splitter:B:182:0x02d8} */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x02cb A:{SYNTHETIC, Splitter:B:178:0x02cb} */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x02f5 A:{SYNTHETIC, Splitter:B:191:0x02f5} */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x0432  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x031a A:{SYNTHETIC, Splitter:B:201:0x031a} */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x0449  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0465 A:{Catch:{ Exception -> 0x0b39, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:366:0x05ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x0499 A:{SYNTHETIC, Splitter:B:287:0x0499} */
+    /* JADX WARNING: Removed duplicated region for block: B:375:0x0632  */
+    /* JADX WARNING: Removed duplicated region for block: B:374:0x0627  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x064f  */
+    /* JADX WARNING: Removed duplicated region for block: B:380:0x063f  */
+    /* JADX WARNING: Removed duplicated region for block: B:496:0x081e  */
+    /* JADX WARNING: Removed duplicated region for block: B:497:0x082e  */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x021a A:{SYNTHETIC, Splitter:B:124:0x021a} */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0221  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0252 A:{SYNTHETIC, Splitter:B:136:0x0252} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0272 A:{SYNTHETIC, Splitter:B:149:0x0272} */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x0295 A:{SYNTHETIC, Splitter:B:160:0x0295} */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x02b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x02cb A:{SYNTHETIC, Splitter:B:178:0x02cb} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x02d8 A:{SYNTHETIC, Splitter:B:182:0x02d8} */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x02f5 A:{SYNTHETIC, Splitter:B:191:0x02f5} */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x031a A:{SYNTHETIC, Splitter:B:201:0x031a} */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x0432  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x0449  */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0465 A:{Catch:{ Exception -> 0x0b39, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x047c A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x0499 A:{SYNTHETIC, Splitter:B:287:0x0499} */
+    /* JADX WARNING: Removed duplicated region for block: B:366:0x05ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:369:0x0608 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:374:0x0627  */
+    /* JADX WARNING: Removed duplicated region for block: B:375:0x0632  */
+    /* JADX WARNING: Removed duplicated region for block: B:380:0x063f  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x064f  */
+    /* JADX WARNING: Removed duplicated region for block: B:497:0x082e  */
+    /* JADX WARNING: Removed duplicated region for block: B:496:0x081e  */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0221  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x021a A:{SYNTHETIC, Splitter:B:124:0x021a} */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0252 A:{SYNTHETIC, Splitter:B:136:0x0252} */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0272 A:{SYNTHETIC, Splitter:B:149:0x0272} */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x02b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:160:0x0295 A:{SYNTHETIC, Splitter:B:160:0x0295} */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x02d8 A:{SYNTHETIC, Splitter:B:182:0x02d8} */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x02cb A:{SYNTHETIC, Splitter:B:178:0x02cb} */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x02f5 A:{SYNTHETIC, Splitter:B:191:0x02f5} */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x0432  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x031a A:{SYNTHETIC, Splitter:B:201:0x031a} */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x0449  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0465 A:{Catch:{ Exception -> 0x0b39, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x047c A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:366:0x05ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x0499 A:{SYNTHETIC, Splitter:B:287:0x0499} */
+    /* JADX WARNING: Removed duplicated region for block: B:369:0x0608 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:375:0x0632  */
+    /* JADX WARNING: Removed duplicated region for block: B:374:0x0627  */
+    /* JADX WARNING: Removed duplicated region for block: B:382:0x064f  */
+    /* JADX WARNING: Removed duplicated region for block: B:380:0x063f  */
+    /* JADX WARNING: Removed duplicated region for block: B:496:0x081e  */
+    /* JADX WARNING: Removed duplicated region for block: B:497:0x082e  */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:700:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00d8 A:{SYNTHETIC, Splitter:B:43:0x00d8} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:740:0x0ccd  */
+    /* JADX WARNING: Removed duplicated region for block: B:743:0x0cd4 A:{SYNTHETIC, Splitter:B:743:0x0cd4} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:724:0x0c8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:727:0x0CLASSNAME A:{SYNTHETIC, Splitter:B:727:0x0CLASSNAME} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:713:0x0c4d A:{Splitter:B:91:0x0196, ExcHandler: all (r0_75 'th' java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:673:0x0bb8 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:683:0x0bfa A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x0bff A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:687:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:689:0x0c0c A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:691:0x0CLASSNAME A:{Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:703:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:706:0x0c3b A:{SYNTHETIC, Splitter:B:706:0x0c3b} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x0cc4 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x0ca4  */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:27:0x0091, B:91:0x0196] */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:34:0x00b2, B:91:0x0196] */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -566,11 +628,6 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:60:0x0137, B:679:0x0c6a] */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:60:0x0137, B:686:0x0CLASSNAME] */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -581,2570 +638,2508 @@ public class MediaCodecVideoConvertor {
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:116:0x020d, code skipped:
+    /* JADX WARNING: Missing block: B:37:0x00bf, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:117:0x020e, code skipped:
+    /* JADX WARNING: Missing block: B:38:0x00c0, code skipped:
+            r9 = r79;
+            r4 = r80;
             r1 = r0;
-            r10 = r2;
+            r8 = r13;
      */
-    /* JADX WARNING: Missing block: B:126:0x0229, code skipped:
+    /* JADX WARNING: Missing block: B:39:0x00c8, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:127:0x022a, code skipped:
+    /* JADX WARNING: Missing block: B:40:0x00c9, code skipped:
+            r15 = r77;
+            r9 = r79;
+            r4 = r80;
             r1 = r0;
      */
-    /* JADX WARNING: Missing block: B:142:0x0249, code skipped:
+    /* JADX WARNING: Missing block: B:143:0x0268, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:151:0x027f, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:152:0x0280, code skipped:
+            r10 = r1;
+            r4 = r11;
+     */
+    /* JADX WARNING: Missing block: B:165:0x02a3, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:166:0x02a4, code skipped:
+            r10 = r1;
+            r11 = r4;
+            r8 = r13;
+            r6 = null;
+            r47 = null;
+     */
+    /* JADX WARNING: Missing block: B:167:0x02aa, code skipped:
+            r56 = null;
+     */
+    /* JADX WARNING: Missing block: B:168:0x02ac, code skipped:
+            r4 = r80;
+     */
+    /* JADX WARNING: Missing block: B:169:0x02b2, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:170:0x02b3, code skipped:
+            r4 = r80;
+            r10 = r1;
+            r8 = r13;
+     */
+    /* JADX WARNING: Missing block: B:180:0x02d1, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:181:0x02d2, code skipped:
+            r4 = r80;
+            r10 = r1;
+            r8 = r13;
+     */
+    /* JADX WARNING: Missing block: B:197:0x030d, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:198:0x030e, code skipped:
+            r10 = r1;
+            r47 = r4;
+            r8 = r13;
+            r11 = r19;
+     */
+    /* JADX WARNING: Missing block: B:231:0x03a4, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:232:0x03a7, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:233:0x03a8, code skipped:
+            r11 = r81;
+     */
+    /* JADX WARNING: Missing block: B:243:0x03d0, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:254:0x03f8, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:255:0x03fa, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:256:0x03fb, code skipped:
+            r8 = r83;
+     */
+    /* JADX WARNING: Missing block: B:257:0x03fd, code skipped:
+            r4 = r80;
+            r10 = r1;
+            r56 = r7;
+            r8 = r13;
+            r11 = r19;
+     */
+    /* JADX WARNING: Missing block: B:258:0x0407, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:259:0x0408, code skipped:
+            r8 = r83;
+     */
+    /* JADX WARNING: Missing block: B:261:0x0423, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:262:0x0424, code skipped:
+            r11 = r81;
+            r8 = r83;
+     */
+    /* JADX WARNING: Missing block: B:263:0x0428, code skipped:
+            r47 = r4;
+     */
+    /* JADX WARNING: Missing block: B:264:0x042a, code skipped:
+            r4 = r80;
+            r10 = r1;
+            r8 = r13;
+            r11 = r19;
+     */
+    /* JADX WARNING: Missing block: B:282:0x0487, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:283:0x0488, code skipped:
+            r8 = r78;
+            r10 = r1;
+            r56 = r4;
+            r11 = r19;
+     */
+    /* JADX WARNING: Missing block: B:303:0x04fa, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:329:0x0542, code skipped:
+            if (r11.presentationTimeUs < r8) goto L_0x0544;
+     */
+    /* JADX WARNING: Missing block: B:348:0x059d, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:349:0x059e, code skipped:
+            r2 = r81;
+     */
+    /* JADX WARNING: Missing block: B:359:0x05d2, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:360:0x05d3, code skipped:
+            r8 = r78;
+     */
+    /* JADX WARNING: Missing block: B:361:0x05d5, code skipped:
+            r4 = r80;
+            r1 = r0;
+            r11 = r19;
+            r5 = r30;
+     */
+    /* JADX WARNING: Missing block: B:363:0x05e2, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:364:0x05e3, code skipped:
+            r2 = r11;
+     */
+    /* JADX WARNING: Missing block: B:390:0x0669, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:391:0x066a, code skipped:
+            r8 = r78;
+     */
+    /* JADX WARNING: Missing block: B:486:0x07fa, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:514:0x0888, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:576:0x093e, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:577:0x0940, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:578:0x0941, code skipped:
+            r7 = r19;
+     */
+    /* JADX WARNING: Missing block: B:579:0x0943, code skipped:
+            r1 = r0;
+            r47 = r4;
+            r11 = r7;
+            r5 = r30;
+            r10 = r61;
+            r4 = r80;
+     */
+    /* JADX WARNING: Missing block: B:591:0x09d7, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:143:0x024a, code skipped:
+    /* JADX WARNING: Missing block: B:592:0x09d8, code skipped:
+            r64 = r3;
+            r22 = r4;
+            r68 = r6;
+            r69 = r7;
+            r10 = r61;
+            r4 = r80;
             r1 = r0;
-            r4 = r3;
-            r13 = r12;
-            r9 = r25;
-            r2 = null;
-            r3 = null;
+            r47 = r22;
      */
-    /* JADX WARNING: Missing block: B:144:0x0253, code skipped:
+    /* JADX WARNING: Missing block: B:593:0x09ea, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:145:0x0254, code skipped:
+    /* JADX WARNING: Missing block: B:594:0x09eb, code skipped:
+            r68 = r6;
+            r69 = r19;
+            r64 = r30;
+            r22 = r47;
+            r10 = r61;
+            r4 = r80;
             r1 = r0;
-            r13 = r12;
-            r9 = r25;
-            r2 = null;
-            r3 = null;
-            r4 = null;
      */
-    /* JADX WARNING: Missing block: B:155:0x0279, code skipped:
+    /* JADX WARNING: Missing block: B:595:0x09fa, code skipped:
+            r5 = r64;
+     */
+    /* JADX WARNING: Missing block: B:605:0x0a2a, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:156:0x027a, code skipped:
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:606:0x0a2b, code skipped:
+            r4 = r80;
             r1 = r0;
-            r13 = r12;
-            r9 = r25;
-            r2 = null;
+            r47 = r22;
+            r5 = r64;
      */
-    /* JADX WARNING: Missing block: B:172:0x02b6, code skipped:
+    /* JADX WARNING: Missing block: B:621:0x0a63, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:622:0x0a64, code skipped:
+            r3 = r64;
+     */
+    /* JADX WARNING: Missing block: B:625:0x0a8b, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:630:0x0abf, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:636:0x0b0e, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:637:0x0b0f, code skipped:
+            r4 = r80;
+            r1 = r0;
+            r5 = r3;
+            r47 = r22;
+     */
+    /* JADX WARNING: Missing block: B:638:0x0b15, code skipped:
+            r6 = r68;
+     */
+    /* JADX WARNING: Missing block: B:639:0x0b18, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:640:0x0b19, code skipped:
+            r8 = r78;
+     */
+    /* JADX WARNING: Missing block: B:641:0x0b1b, code skipped:
+            r3 = r5;
+            r68 = r6;
+            r69 = r19;
+            r22 = r47;
+            r10 = r61;
+     */
+    /* JADX WARNING: Missing block: B:642:0x0b25, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:643:0x0b26, code skipped:
+            r8 = r78;
+     */
+    /* JADX WARNING: Missing block: B:644:0x0b28, code skipped:
+            r68 = r6;
+            r69 = r19;
+            r22 = r47;
+            r10 = r61;
+            r4 = r80;
+            r1 = r0;
+            r5 = r30;
+     */
+    /* JADX WARNING: Missing block: B:645:0x0b39, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:646:0x0b3a, code skipped:
+            r10 = r1;
+            r56 = r4;
+            r3 = r5;
+            r68 = r6;
+            r8 = r13;
+            r69 = r19;
+            r22 = r47;
+     */
+    /* JADX WARNING: Missing block: B:647:0x0b45, code skipped:
+            r4 = r80;
+            r1 = r0;
+     */
+    /* JADX WARNING: Missing block: B:648:0x0b4a, code skipped:
+            r11 = r69;
+     */
+    /* JADX WARNING: Missing block: B:649:0x0b4e, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:173:0x02b7, code skipped:
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:650:0x0b4f, code skipped:
+            r10 = r1;
+            r22 = r4;
+            r3 = r5;
+            r68 = r6;
+            r8 = r13;
+            r4 = r80;
             r1 = r0;
-            r13 = r12;
+            r47 = r22;
+            r11 = r19;
      */
-    /* JADX WARNING: Missing block: B:202:0x034a, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:222:0x038b, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:223:0x038c, code skipped:
-            r10 = r73;
-     */
-    /* JADX WARNING: Missing block: B:226:0x03a6, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:227:0x03a7, code skipped:
-            r10 = r73;
-     */
-    /* JADX WARNING: Missing block: B:248:0x040e, code skipped:
+    /* JADX WARNING: Missing block: B:651:0x0b63, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:249:0x040f, code skipped:
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:652:0x0b64, code skipped:
+            r10 = r1;
+            r22 = r4;
+            r3 = r5;
+            r68 = r6;
+            r69 = r11;
+            r8 = r13;
+            r4 = r80;
             r1 = r0;
-            r57 = r13;
-            r9 = r25;
-            r4 = r28;
-            r2 = r53;
+            r47 = r22;
      */
-    /* JADX WARNING: Missing block: B:250:0x041a, code skipped:
-            r53 = null;
-            r60 = true;
-            r13 = r67;
-     */
-    /* JADX WARNING: Missing block: B:271:0x0490, code skipped:
+    /* JADX WARNING: Missing block: B:653:0x0b75, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:272:0x0491, code skipped:
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:654:0x0b76, code skipped:
+            r10 = r1;
+            r3 = r5;
+            r68 = r6;
+            r69 = r11;
+            r8 = r13;
+            r4 = r80;
             r1 = r0;
-            r9 = r13;
-            r4 = r28;
-            r2 = r53;
-            r5 = r56;
      */
-    /* JADX WARNING: Missing block: B:306:0x052e, code skipped:
+    /* JADX WARNING: Missing block: B:655:0x0b83, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:307:0x052f, code skipped:
-            r13 = r67;
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:656:0x0b84, code skipped:
+            r10 = r1;
+            r3 = r5;
+            r69 = r11;
+            r8 = r13;
+            r4 = r80;
             r1 = r0;
-            r9 = r5;
+            r6 = null;
      */
-    /* JADX WARNING: Missing block: B:318:0x0562, code skipped:
+    /* JADX WARNING: Missing block: B:657:0x0b90, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:319:0x0563, code skipped:
-            r13 = r67;
-            r10 = r70;
+    /* JADX WARNING: Missing block: B:658:0x0b91, code skipped:
+            r10 = r1;
+            r3 = r5;
+            r8 = r13;
+            r4 = r80;
             r1 = r0;
-            r4 = r28;
-            r2 = r53;
-            r5 = r56;
      */
-    /* JADX WARNING: Missing block: B:321:0x0571, code skipped:
+    /* JADX WARNING: Missing block: B:659:0x0b9a, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:660:0x0b9b, code skipped:
+            r10 = r1;
+            r80 = r11;
+     */
+    /* JADX WARNING: Missing block: B:661:0x0b9f, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:662:0x0ba0, code skipped:
+            r10 = r1;
+            r8 = r13;
+     */
+    /* JADX WARNING: Missing block: B:663:0x0ba5, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:664:0x0ba6, code skipped:
+            r10 = r1;
+     */
+    /* JADX WARNING: Missing block: B:665:0x0ba7, code skipped:
+            r8 = r13;
+            r4 = r80;
+     */
+    /* JADX WARNING: Missing block: B:666:0x0bac, code skipped:
+            r1 = r0;
+            r5 = null;
+     */
+    /* JADX WARNING: Missing block: B:667:0x0bae, code skipped:
+            r6 = null;
+            r11 = null;
+     */
+    /* JADX WARNING: Missing block: B:668:0x0bb0, code skipped:
+            r47 = null;
+     */
+    /* JADX WARNING: Missing block: B:669:0x0bb2, code skipped:
+            r56 = null;
+     */
+    /* JADX WARNING: Missing block: B:674:0x0bba, code skipped:
+            r3 = true;
+     */
+    /* JADX WARNING: Missing block: B:694:0x0c1d, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:695:0x0c1f, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:696:0x0CLASSNAME, code skipped:
+            r9 = r79;
+     */
+    /* JADX WARNING: Missing block: B:697:0x0CLASSNAME, code skipped:
+            r1 = r0;
+     */
+    /* JADX WARNING: Missing block: B:698:0x0CLASSNAME, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:699:0x0CLASSNAME, code skipped:
+            r9 = r79;
+     */
+    /* JADX WARNING: Missing block: B:713:0x0c4d, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:322:0x0572, code skipped:
-            r57 = r13;
-            r13 = r67;
-            r10 = r70;
-            r1 = r0;
-            r9 = r25;
-     */
-    /* JADX WARNING: Missing block: B:323:0x057b, code skipped:
-            r4 = r28;
-            r2 = r53;
-            r5 = r56;
-     */
-    /* JADX WARNING: Missing block: B:349:0x0600, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:350:0x0601, code skipped:
-            r13 = r67;
-     */
-    /* JADX WARNING: Missing block: B:451:0x0798, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:452:0x0799, code skipped:
-            r13 = r67;
-            r9 = r68;
-     */
-    /* JADX WARNING: Missing block: B:477:0x0823, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:525:0x08ad, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:528:?, code skipped:
-            org.telegram.messenger.FileLog.e(r0);
-            r1 = true;
-     */
-    /* JADX WARNING: Missing block: B:540:0x08ee, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:541:0x08f0, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:542:0x08f1, code skipped:
-            r1 = r28;
-     */
-    /* JADX WARNING: Missing block: B:543:0x08f3, code skipped:
-            r10 = r70;
-            r4 = r1;
-            r9 = r60;
-            r53 = null;
-            r60 = true;
-     */
-    /* JADX WARNING: Missing block: B:555:0x0989, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:556:0x098a, code skipped:
-            r59 = r1;
-            r16 = r2;
-            r28 = r3;
-            r20 = r5;
-            r9 = r60;
-            r53 = null;
-            r60 = true;
-            r10 = r70;
-            r1 = r0;
-     */
-    /* JADX WARNING: Missing block: B:557:0x099c, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:558:0x099d, code skipped:
-            r20 = r5;
-            r59 = r28;
-            r16 = r53;
-            r9 = r60;
-            r53 = null;
-            r60 = true;
-            r28 = r3;
-            r10 = r70;
-            r1 = r0;
-            r2 = r16;
-     */
-    /* JADX WARNING: Missing block: B:568:0x09e1, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:569:0x09e2, code skipped:
-            r10 = r70;
-            r1 = r0;
-            r2 = r16;
-            r5 = r20;
-            r3 = r28;
-     */
-    /* JADX WARNING: Missing block: B:584:0x0a1c, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:585:0x0a1d, code skipped:
-            r1 = r20;
-     */
-    /* JADX WARNING: Missing block: B:588:0x0a45, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:596:0x0acd, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:597:0x0ace, code skipped:
-            r10 = r70;
-            r5 = r1;
-            r2 = r16;
-            r3 = r28;
-     */
-    /* JADX WARNING: Missing block: B:598:0x0ad6, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:599:0x0ad7, code skipped:
-            r13 = r67;
-     */
-    /* JADX WARNING: Missing block: B:600:0x0ad9, code skipped:
-            r1 = r5;
-            r59 = r28;
-            r16 = r53;
-            r9 = r60;
-            r53 = null;
-            r60 = true;
-            r28 = r3;
-            r10 = r70;
-     */
-    /* JADX WARNING: Missing block: B:601:0x0ae9, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:602:0x0aea, code skipped:
-            r13 = r67;
-            r59 = r28;
-            r16 = r53;
-            r9 = r60;
-            r53 = null;
-            r60 = true;
-            r28 = r3;
-            r10 = r70;
-            r5 = r56;
-     */
-    /* JADX WARNING: Missing block: B:603:0x0afd, code skipped:
-            r2 = r16;
-     */
-    /* JADX WARNING: Missing block: B:604:0x0b00, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:605:0x0b01, code skipped:
-            r16 = r2;
-            r1 = r5;
-            r57 = r13;
-            r9 = r25;
-            r59 = r28;
-            r53 = null;
-            r60 = true;
-            r13 = r67;
-            r28 = r3;
-            r10 = r70;
-     */
-    /* JADX WARNING: Missing block: B:606:0x0b14, code skipped:
-            r4 = r59;
-     */
-    /* JADX WARNING: Missing block: B:607:0x0b18, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:608:0x0b19, code skipped:
-            r16 = r2;
-            r28 = r3;
-            r59 = r4;
-            r1 = r5;
-            r30 = null;
-            r13 = r12;
-            r9 = r25;
-     */
-    /* JADX WARNING: Missing block: B:609:0x0b26, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:610:0x0b27, code skipped:
-            r16 = r2;
-            r28 = r3;
-            r59 = r4;
-            r1 = r5;
-            r13 = r12;
-            r9 = r25;
-            r30 = null;
-     */
-    /* JADX WARNING: Missing block: B:611:0x0b33, code skipped:
-            r53 = null;
-            r60 = true;
-            r10 = r70;
-            r57 = r30;
-     */
-    /* JADX WARNING: Missing block: B:612:0x0b3d, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:613:0x0b3e, code skipped:
-            r28 = r3;
-            r59 = r4;
-            r1 = r5;
-            r13 = r12;
-            r9 = r25;
-            r30 = null;
-            r53 = null;
-            r60 = true;
-            r10 = r70;
-     */
-    /* JADX WARNING: Missing block: B:614:0x0b4f, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:615:0x0b50, code skipped:
-            r28 = r3;
-            r59 = r4;
-            r1 = r5;
-            r70 = r10;
-            r13 = r12;
-            r9 = r25;
-            r30 = null;
-            r53 = null;
-            r60 = true;
-     */
-    /* JADX WARNING: Missing block: B:616:0x0b60, code skipped:
-            r2 = r30;
-            r57 = r2;
-     */
-    /* JADX WARNING: Missing block: B:617:0x0b65, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:618:0x0b66, code skipped:
-            r59 = r4;
-            r1 = r5;
-            r70 = r10;
-            r13 = r12;
-            r9 = r25;
-            r53 = null;
-            r60 = true;
-            r2 = null;
-            r3 = r2;
-            r57 = r3;
-     */
-    /* JADX WARNING: Missing block: B:619:0x0b7a, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:620:0x0b7b, code skipped:
-            r1 = r5;
-            r70 = r10;
-            r13 = r12;
-            r9 = r25;
-            r53 = null;
-            r60 = true;
-            r2 = null;
-     */
-    /* JADX WARNING: Missing block: B:621:0x0b8a, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:622:0x0b8b, code skipped:
-            r30 = null;
-            r1 = r5;
-            r70 = r10;
-            r13 = r12;
-            r9 = r25;
-            r53 = null;
-            r60 = true;
-     */
-    /* JADX WARNING: Missing block: B:623:0x0b97, code skipped:
-            r3 = r2;
-            r4 = r3;
-            r57 = r4;
-     */
-    /* JADX WARNING: Missing block: B:624:0x0b9b, code skipped:
-            r1 = r0;
-     */
-    /* JADX WARNING: Missing block: B:625:0x0b9d, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:626:0x0b9e, code skipped:
-            r70 = r10;
-     */
-    /* JADX WARNING: Missing block: B:627:0x0ba1, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:628:0x0ba2, code skipped:
-            r13 = r12;
-            r9 = r25;
-            r30 = null;
-            r53 = null;
-            r60 = true;
-            r1 = r0;
-            r10 = r2;
-     */
-    /* JADX WARNING: Missing block: B:629:0x0bae, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:630:0x0baf, code skipped:
-            r13 = r12;
-            r9 = r25;
-     */
-    /* JADX WARNING: Missing block: B:631:0x0bb3, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:632:0x0bb4, code skipped:
-            r9 = r4;
-            r13 = r12;
-     */
-    /* JADX WARNING: Missing block: B:633:0x0bb6, code skipped:
-            r30 = null;
-            r53 = null;
-            r60 = true;
-            r1 = r0;
-     */
-    /* JADX WARNING: Missing block: B:634:0x0bbd, code skipped:
-            r2 = r30;
-            r3 = r2;
-            r4 = r3;
-            r5 = r4;
-            r57 = r5;
-     */
-    /* JADX WARNING: Missing block: B:663:0x0c2d, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:664:0x0c2e, code skipped:
-            r1 = r0;
-            r13 = r11;
-            r3 = r17;
-     */
-    /* JADX WARNING: Missing block: B:665:0x0CLASSNAME, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:666:0x0CLASSNAME, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:667:0x0CLASSNAME, code skipped:
-            r12 = r68;
-     */
-    /* JADX WARNING: Missing block: B:668:0x0CLASSNAME, code skipped:
-            r1 = r0;
-            r13 = r11;
-     */
-    /* JADX WARNING: Missing block: B:669:0x0c3c, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:670:0x0c3d, code skipped:
-            r12 = r68;
-            r13 = r69;
-            r1 = r0;
-     */
-    /* JADX WARNING: Missing block: B:671:0x0CLASSNAME, code skipped:
-            r3 = r53;
-     */
-    /* JADX WARNING: Missing block: B:672:0x0CLASSNAME, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:673:0x0CLASSNAME, code skipped:
-            r12 = r68;
-            r13 = r69;
-     */
-    /* JADX WARNING: Missing block: B:699:0x0ca6, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:700:0x0ca8, code skipped:
-            r0 = e;
-     */
-    /* JADX WARNING: Missing block: B:701:0x0ca9, code skipped:
-            r13 = r11;
-     */
-    /* JADX WARNING: Missing block: B:702:0x0cab, code skipped:
-            r0 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:703:0x0cac, code skipped:
+    /* JADX WARNING: Missing block: B:714:0x0c4e, code skipped:
             r2 = r0;
             r1 = r14;
      */
-    /* JADX WARNING: Missing block: B:713:0x0cf2, code skipped:
+    /* JADX WARNING: Missing block: B:724:0x0c8f, code skipped:
             r1.release();
      */
-    /* JADX WARNING: Missing block: B:717:?, code skipped:
+    /* JADX WARNING: Missing block: B:728:?, code skipped:
             r1.finishMovie();
      */
-    /* JADX WARNING: Missing block: B:718:0x0cfd, code skipped:
+    /* JADX WARNING: Missing block: B:729:0x0c9a, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:719:0x0cfe, code skipped:
+    /* JADX WARNING: Missing block: B:730:0x0c9b, code skipped:
             org.telegram.messenger.FileLog.e(r0);
      */
-    /* JADX WARNING: Missing block: B:729:0x0d2d, code skipped:
+    /* JADX WARNING: Missing block: B:740:0x0ccd, code skipped:
             r3.release();
      */
-    /* JADX WARNING: Missing block: B:733:?, code skipped:
+    /* JADX WARNING: Missing block: B:744:?, code skipped:
             r3.finishMovie();
      */
-    /* JADX WARNING: Missing block: B:734:0x0d38, code skipped:
+    /* JADX WARNING: Missing block: B:745:0x0cd8, code skipped:
             r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:735:0x0d39, code skipped:
+    /* JADX WARNING: Missing block: B:746:0x0cd9, code skipped:
             org.telegram.messenger.FileLog.e(r0);
      */
-    private boolean convertVideoInternal(java.lang.String r63, java.io.File r64, int r65, boolean r66, int r67, int r68, int r69, int r70, long r71, long r73, long r75, boolean r77, boolean r78) {
+    private boolean convertVideoInternal(java.lang.String r73, java.io.File r74, int r75, boolean r76, int r77, int r78, int r79, int r80, long r81, long r83, long r85, boolean r87, boolean r88) {
         /*
-        r62 = this;
-        r14 = r62;
-        r13 = r63;
-        r15 = r65;
-        r12 = r67;
-        r11 = r68;
-        r9 = r69;
-        r10 = r70;
-        r7 = r71;
-        r5 = r73;
-        r2 = new android.media.MediaCodec$BufferInfo;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r2.<init>();	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1 = new org.telegram.messenger.video.Mp4Movie;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1.<init>();	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r4 = r64;
-        r1.setCacheFile(r4);	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1.setRotation(r15);	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1.setSize(r12, r11);	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r3 = new org.telegram.messenger.video.MP4Builder;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r3.<init>();	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r4 = r66;
-        r1 = r3.createMovie(r1, r4);	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r14.mediaMuxer = r1;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1 = new android.media.MediaExtractor;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1.<init>();	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r14.extractor = r1;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r1.setDataSource(r13);	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r3 = r75;
-        r1 = (float) r3;	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        r18 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        r18 = r1 / r18;
-        r62.checkConversionCanceled();	 Catch:{ Exception -> 0x0cb0, all -> 0x0cab }
-        if (r77 == 0) goto L_0x0CLASSNAME;
-    L_0x004c:
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
+        r72 = this;
+        r14 = r72;
+        r13 = r73;
+        r15 = r75;
+        r12 = r77;
+        r11 = r78;
+        r9 = r79;
+        r10 = r80;
+        r7 = r81;
+        r5 = r83;
+        r2 = new android.media.MediaCodec$BufferInfo;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r2.<init>();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1 = new org.telegram.messenger.video.Mp4Movie;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1.<init>();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r4 = r74;
+        r1.setCacheFile(r4);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1.setRotation(r15);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1.setSize(r12, r11);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r3 = new org.telegram.messenger.video.MP4Builder;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r3.<init>();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r15 = r76;
+        r1 = r3.createMovie(r1, r15);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r14.mediaMuxer = r1;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1 = new android.media.MediaExtractor;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1.<init>();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r14.extractor = r1;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1 = r14.extractor;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1.setDataSource(r13);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r12 = r85;
+        r1 = (float) r12;
+        r3 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r18 = r1 / r3;
+        r72.checkConversionCanceled();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r1 = r14.extractor;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
         r3 = 0;
-        r4 = org.telegram.messenger.MediaController.findTrack(r1, r3);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        r1 = -1;
-        if (r10 == r1) goto L_0x0066;
-    L_0x0056:
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x005e, all -> 0x0cab }
-        r3 = 1;
-        r1 = org.telegram.messenger.MediaController.findTrack(r1, r3);	 Catch:{ Exception -> 0x005e, all -> 0x0cab }
-        goto L_0x0067;
-    L_0x005e:
+        r1 = org.telegram.messenger.MediaController.findTrack(r1, r3);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        r8 = -1;
+        if (r10 == r8) goto L_0x0064;
+    L_0x0054:
+        r7 = r14.extractor;	 Catch:{ Exception -> 0x005c, all -> 0x0c4d }
+        r8 = 1;
+        r7 = org.telegram.messenger.MediaController.findTrack(r7, r8);	 Catch:{ Exception -> 0x005c, all -> 0x0c4d }
+        goto L_0x0066;
+    L_0x005c:
         r0 = move-exception;
+        r15 = r77;
         r1 = r0;
-        r13 = r9;
-        r3 = 0;
-        r60 = 1;
-        goto L_0x0cba;
+        r4 = r10;
+        r8 = r11;
+        goto L_0x0c5b;
+    L_0x0064:
+        r8 = 1;
+        r7 = -1;
     L_0x0066:
+        r3 = "mime";
+        r8 = "video/avc";
+        if (r1 < 0) goto L_0x0089;
+    L_0x006d:
+        r20 = r2;
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x0081, all -> 0x0c4d }
+        r2 = r2.getTrackFormat(r1);	 Catch:{ Exception -> 0x0081, all -> 0x0c4d }
+        r2 = r2.getString(r3);	 Catch:{ Exception -> 0x0081, all -> 0x0c4d }
+        r2 = r2.equals(r8);	 Catch:{ Exception -> 0x0081, all -> 0x0c4d }
+        if (r2 != 0) goto L_0x008b;
+    L_0x007f:
+        r2 = 1;
+        goto L_0x008c;
+    L_0x0081:
+        r0 = move-exception;
+        r15 = r77;
+        r1 = r0;
+        r4 = r10;
+    L_0x0086:
+        r8 = r11;
+        goto L_0x0c5a;
+    L_0x0089:
+        r20 = r2;
+    L_0x008b:
+        r2 = 0;
+    L_0x008c:
+        if (r87 != 0) goto L_0x00d1;
+    L_0x008e:
+        if (r2 == 0) goto L_0x0091;
+    L_0x0090:
+        goto L_0x00d1;
+    L_0x0091:
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x00c8, all -> 0x0c4d }
+        r3 = r14.mediaMuxer;	 Catch:{ Exception -> 0x00c8, all -> 0x0c4d }
         r1 = -1;
-    L_0x0067:
-        if (r4 < 0) goto L_0x0c4d;
-    L_0x0069:
-        r20 = -1;
-        r22 = android.os.Build.MANUFACTURER;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r3 = r22.toLowerCase();	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r22 = r2;
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r6 = "video/avc";
-        r27 = 4;
-        r5 = 18;
-        if (r2 >= r5) goto L_0x012e;
-    L_0x007e:
-        r2 = org.telegram.messenger.MediaController.selectCodec(r6);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r28 = org.telegram.messenger.MediaController.selectColorFormat(r2, r6);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r28 == 0) goto L_0x0116;
-    L_0x0088:
-        r5 = r2.getName();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r13 = "OMX.qcom.";
-        r13 = r5.contains(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r13 == 0) goto L_0x00b0;
-    L_0x0094:
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r13 = 16;
-        if (r5 != r13) goto L_0x00ad;
-    L_0x009a:
-        r5 = "lge";
-        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r5 != 0) goto L_0x00aa;
-    L_0x00a2:
-        r5 = "nokia";
-        r5 = r3.equals(r5);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r5 == 0) goto L_0x00ad;
-    L_0x00aa:
-        r5 = 1;
-    L_0x00ab:
-        r13 = 1;
-        goto L_0x00da;
-    L_0x00ad:
-        r5 = 1;
-    L_0x00ae:
-        r13 = 0;
-        goto L_0x00da;
-    L_0x00b0:
-        r13 = "OMX.Intel.";
-        r13 = r5.contains(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r13 == 0) goto L_0x00ba;
-    L_0x00b8:
-        r5 = 2;
-        goto L_0x00ae;
-    L_0x00ba:
-        r13 = "OMX.MTK.VIDEO.ENCODER.AVC";
-        r13 = r5.equals(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r13 == 0) goto L_0x00c4;
-    L_0x00c2:
-        r5 = 3;
-        goto L_0x00ae;
-    L_0x00c4:
-        r13 = "OMX.SEC.AVC.Encoder";
-        r13 = r5.equals(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r13 == 0) goto L_0x00ce;
-    L_0x00cc:
-        r5 = 4;
-        goto L_0x00ab;
-    L_0x00ce:
-        r13 = "OMX.TI.DUCATI1.VIDEO.H264E";
-        r5 = r5.equals(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r5 == 0) goto L_0x00d8;
-    L_0x00d6:
-        r5 = 5;
-        goto L_0x00ae;
-    L_0x00d8:
-        r5 = 0;
-        goto L_0x00ae;
-    L_0x00da:
-        r30 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r30 == 0) goto L_0x010d;
-    L_0x00de:
-        r30 = r5;
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.<init>();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r31 = r13;
-        r13 = "codec = ";
-        r5.append(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = r2.getName();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.append(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = " manufacturer = ";
-        r5.append(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.append(r3);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = "device = ";
-        r5.append(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = android.os.Build.MODEL;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.append(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = r5.toString();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        goto L_0x0111;
-    L_0x010d:
-        r30 = r5;
-        r31 = r13;
-    L_0x0111:
-        r13 = r28;
-        r2 = r30;
-        goto L_0x0137;
-    L_0x0116:
-        r1 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = "no supported color format";
-        r1.<init>(r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        throw r1;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-    L_0x011e:
-        r0 = move-exception;
-        r1 = r0;
-        r9 = r4;
-        r13 = r12;
-    L_0x0122:
-        r2 = 0;
-        r3 = 0;
-        r4 = 0;
-        r5 = 0;
-    L_0x0126:
-        r53 = 0;
-        r57 = 0;
-    L_0x012a:
-        r60 = 1;
-        goto L_0x0bc4;
-    L_0x012e:
-        r2 = NUM; // 0x7var_ float:1.701803E38 double:1.0527098025E-314;
-        r2 = 0;
-        r13 = NUM; // 0x7var_ float:1.701803E38 double:1.0527098025E-314;
-        r31 = 0;
-    L_0x0137:
-        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        if (r5 == 0) goto L_0x0152;
-    L_0x013b:
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.<init>();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r28 = r1;
-        r1 = "colorFormat = ";
-        r5.append(r1);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r5.append(r13);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r1 = r5.toString();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        goto L_0x0154;
-    L_0x0152:
-        r28 = r1;
-    L_0x0154:
-        r1 = r12 * r11;
-        r5 = r1 * 3;
-        r26 = 2;
-        r5 = r5 / 2;
-        if (r2 != 0) goto L_0x0175;
-    L_0x015e:
-        r1 = r11 % 16;
-        if (r1 == 0) goto L_0x01aa;
-    L_0x0162:
-        r1 = r11 % 16;
-        r2 = 16;
-        r1 = 16 - r1;
-        r1 = r1 + r11;
-        r1 = r1 - r11;
-        r1 = r1 * r12;
-        r2 = r1 * 5;
-        r2 = r2 / 4;
-    L_0x0170:
-        r5 = r5 + r2;
-        r15 = r1;
-    L_0x0172:
-        r24 = r5;
-        goto L_0x01ad;
-    L_0x0175:
-        r15 = 1;
-        if (r2 != r15) goto L_0x018c;
-    L_0x0178:
-        r2 = r3.toLowerCase();	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r3 = "lge";
-        r2 = r2.equals(r3);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r2 != 0) goto L_0x01aa;
-    L_0x0184:
-        r2 = r1 + 2047;
-        r2 = r2 & -2048;
-        r2 = r2 - r1;
-        r5 = r5 + r2;
-        r15 = r2;
-        goto L_0x0172;
-    L_0x018c:
-        r1 = 5;
-        if (r2 != r1) goto L_0x0190;
-    L_0x018f:
-        goto L_0x01aa;
-    L_0x0190:
-        r1 = 3;
-        if (r2 != r1) goto L_0x01aa;
-    L_0x0193:
-        r1 = "baidu";
-        r1 = r3.equals(r1);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        if (r1 == 0) goto L_0x01aa;
-    L_0x019b:
-        r1 = r11 % 16;
-        r2 = 16;
-        r1 = 16 - r1;
-        r1 = r1 + r11;
-        r1 = r1 - r11;
-        r1 = r1 * r12;
-        r2 = r1 * 5;
-        r2 = r2 / 4;
-        goto L_0x0170;
-    L_0x01aa:
-        r24 = r5;
-        r15 = 0;
-    L_0x01ad:
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r1.selectTrack(r4);	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r1 = r1.getTrackFormat(r4);	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r2 = 0;
-        r5 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
-        if (r5 <= 0) goto L_0x01c7;
-    L_0x01be:
-        r5 = r14.extractor;	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r2 = 0;
-        r5.seekTo(r7, r2);	 Catch:{ Exception -> 0x011e, all -> 0x0cab }
-        r25 = r4;
-        goto L_0x01d1;
-    L_0x01c7:
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0bb3, all -> 0x0cab }
-        r25 = r4;
-        r3 = 0;
-        r5 = 0;
-        r2.seekTo(r3, r5);	 Catch:{ Exception -> 0x0bae, all -> 0x0cab }
-    L_0x01d1:
-        if (r10 > 0) goto L_0x01d7;
-    L_0x01d3:
-        r2 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
-        goto L_0x01d8;
-    L_0x01d7:
-        r2 = r10;
-    L_0x01d8:
-        r3 = android.media.MediaFormat.createVideoFormat(r6, r12, r11);	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r4 = "color-format";
-        r3.setInteger(r4, r13);	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r4 = "bitrate";
-        r3.setInteger(r4, r2);	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r4 = "frame-rate";
-        r3.setInteger(r4, r9);	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r4 = "i-frame-interval";
-        r5 = 2;
-        r3.setInteger(r4, r5);	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0ba1, all -> 0x0cab }
-        r5 = 23;
-        if (r4 >= r5) goto L_0x0215;
-    L_0x01f7:
-        r4 = java.lang.Math.min(r11, r12);	 Catch:{ Exception -> 0x020d, all -> 0x0cab }
-        r5 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
-        if (r4 > r5) goto L_0x0215;
-    L_0x01ff:
-        r4 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
-        if (r2 <= r4) goto L_0x0207;
-    L_0x0204:
-        r2 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
-    L_0x0207:
-        r4 = "bitrate";
-        r3.setInteger(r4, r2);	 Catch:{ Exception -> 0x020d, all -> 0x0cab }
-        goto L_0x0215;
-    L_0x020d:
-        r0 = move-exception;
-        r1 = r0;
-        r10 = r2;
-    L_0x0210:
-        r13 = r12;
-        r9 = r25;
-        goto L_0x0122;
-    L_0x0215:
-        r10 = r2;
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b9d, all -> 0x0cab }
-        r4 = 18;
-        if (r2 >= r4) goto L_0x022c;
-    L_0x021c:
-        r2 = "stride";
-        r4 = r12 + 32;
-        r3.setInteger(r2, r4);	 Catch:{ Exception -> 0x0229, all -> 0x0cab }
-        r2 = "slice-height";
-        r3.setInteger(r2, r11);	 Catch:{ Exception -> 0x0229, all -> 0x0cab }
-        goto L_0x022c;
-    L_0x0229:
-        r0 = move-exception;
-        r1 = r0;
-        goto L_0x0210;
-    L_0x022c:
-        r5 = android.media.MediaCodec.createEncoderByType(r6);	 Catch:{ Exception -> 0x0b9d, all -> 0x0cab }
-        r2 = 0;
-        r4 = 1;
-        r5.configure(r3, r2, r2, r4);	 Catch:{ Exception -> 0x0b8a, all -> 0x0cab }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b7a, all -> 0x0cab }
-        r3 = 18;
-        if (r2 < r3) goto L_0x025d;
-    L_0x023b:
-        r3 = new org.telegram.messenger.video.InputSurface;	 Catch:{ Exception -> 0x0253, all -> 0x0cab }
-        r2 = r5.createInputSurface();	 Catch:{ Exception -> 0x0253, all -> 0x0cab }
-        r3.<init>(r2);	 Catch:{ Exception -> 0x0253, all -> 0x0cab }
-        r3.makeCurrent();	 Catch:{ Exception -> 0x0249, all -> 0x0cab }
-        r4 = r3;
-        goto L_0x025e;
-    L_0x0249:
-        r0 = move-exception;
-        r1 = r0;
-        r4 = r3;
-        r13 = r12;
-        r9 = r25;
-        r2 = 0;
-        r3 = 0;
-        goto L_0x0126;
-    L_0x0253:
-        r0 = move-exception;
-        r1 = r0;
-        r13 = r12;
-        r9 = r25;
-        r2 = 0;
-        r3 = 0;
-        r4 = 0;
-        goto L_0x0126;
-    L_0x025d:
-        r4 = 0;
-    L_0x025e:
-        r5.start();	 Catch:{ Exception -> 0x0b65, all -> 0x0cab }
-        r2 = "mime";
-        r2 = r1.getString(r2);	 Catch:{ Exception -> 0x0b65, all -> 0x0cab }
-        r3 = android.media.MediaCodec.createDecoderByType(r2);	 Catch:{ Exception -> 0x0b65, all -> 0x0cab }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b4f, all -> 0x0cab }
-        r70 = r10;
-        r10 = 18;
-        if (r2 < r10) goto L_0x0283;
-    L_0x0273:
-        r2 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x0279, all -> 0x0cab }
-        r2.<init>();	 Catch:{ Exception -> 0x0279, all -> 0x0cab }
-        goto L_0x028a;
-    L_0x0279:
-        r0 = move-exception;
-        r10 = r70;
-        r1 = r0;
-        r13 = r12;
-        r9 = r25;
-        r2 = 0;
-        goto L_0x0126;
-    L_0x0283:
-        r2 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x0b3d, all -> 0x0cab }
-        r10 = r65;
-        r2.<init>(r12, r11, r10);	 Catch:{ Exception -> 0x0b3d, all -> 0x0cab }
-    L_0x028a:
-        r10 = r2.getSurface();	 Catch:{ Exception -> 0x0b26, all -> 0x0cab }
-        r23 = r15;
-        r9 = 0;
-        r15 = 0;
-        r3.configure(r1, r10, r9, r15);	 Catch:{ Exception -> 0x0b18, all -> 0x0cab }
-        r3.start();	 Catch:{ Exception -> 0x0b18, all -> 0x0cab }
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b18, all -> 0x0cab }
-        r10 = 21;
-        if (r1 >= r10) goto L_0x02bf;
-    L_0x029e:
-        r1 = r3.getInputBuffers();	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r15 = r5.getOutputBuffers();	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r9 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r10 = 18;
-        if (r9 >= r10) goto L_0x02b3;
-    L_0x02ac:
-        r9 = r5.getInputBuffers();	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r10 = r9;
-        r9 = r1;
-        goto L_0x02c2;
-    L_0x02b3:
-        r9 = r1;
-        r10 = 0;
-        goto L_0x02c2;
-    L_0x02b6:
-        r0 = move-exception;
-        r10 = r70;
-        r1 = r0;
-        r13 = r12;
-    L_0x02bb:
-        r9 = r25;
-        goto L_0x0126;
-    L_0x02bf:
-        r9 = 0;
-        r10 = 0;
-        r15 = 0;
-    L_0x02c2:
-        if (r28 < 0) goto L_0x03b0;
-    L_0x02c4:
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r34 = r15;
-        r15 = r28;
-        r1 = r1.getTrackFormat(r15);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r28 = r15;
-        r15 = "mime";
-        r15 = r1.getString(r15);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r42 = r13;
-        r13 = "audio/mp4a-latm";
-        r13 = r15.equals(r13);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        if (r13 != 0) goto L_0x02f1;
-    L_0x02e0:
-        r13 = "mime";
-        r13 = r1.getString(r13);	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r15 = "audio/mpeg";
-        r13 = r13.equals(r15);	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        if (r13 == 0) goto L_0x02ef;
-    L_0x02ee:
-        goto L_0x02f1;
-    L_0x02ef:
-        r13 = 0;
-        goto L_0x02f2;
-    L_0x02f1:
-        r13 = 1;
-    L_0x02f2:
-        r15 = "mime";
-        r15 = r1.getString(r15);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r43 = r10;
-        r10 = "audio/unknown";
-        r10 = r15.equals(r10);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        if (r10 == 0) goto L_0x0304;
-    L_0x0302:
-        r10 = -1;
-        goto L_0x0306;
-    L_0x0304:
-        r10 = r28;
-    L_0x0306:
-        if (r10 < 0) goto L_0x0399;
-    L_0x0308:
-        if (r13 == 0) goto L_0x034d;
-    L_0x030a:
-        r15 = r14.mediaMuxer;	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r35 = r13;
-        r13 = 1;
-        r15 = r15.addTrack(r1, r13);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r13 = r14.extractor;	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r13.selectTrack(r10);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r13 = "max-input-size";
-        r1 = r1.getInteger(r13);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r1 = java.nio.ByteBuffer.allocateDirect(r1);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r32 = 0;
-        r13 = (r7 > r32 ? 1 : (r7 == r32 ? 0 : -1));
-        if (r13 <= 0) goto L_0x0331;
-    L_0x0328:
-        r13 = r14.extractor;	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        r28 = r1;
-        r1 = 0;
-        r13.seekTo(r7, r1);	 Catch:{ Exception -> 0x02b6, all -> 0x0cab }
-        goto L_0x033b;
-    L_0x0331:
-        r28 = r1;
-        r1 = r14.extractor;	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        r11 = 0;
-        r13 = 0;
-        r1.seekTo(r11, r13);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-    L_0x033b:
-        r12 = r10;
-        r1 = r15;
-        r15 = r35;
-        r13 = 0;
-        r10 = r73;
-        r61 = r28;
-        r28 = r4;
-        r4 = r61;
-        goto L_0x03c0;
-    L_0x034a:
-        r0 = move-exception;
-        goto L_0x03a9;
-    L_0x034d:
-        r35 = r13;
-        r11 = new android.media.MediaExtractor;	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r11.<init>();	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r13 = r63;
-        r11.setDataSource(r13);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r11.selectTrack(r10);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r12 = 0;
-        r15 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1));
-        if (r15 <= 0) goto L_0x0367;
-    L_0x0362:
-        r15 = 0;
-        r11.seekTo(r7, r15);	 Catch:{ Exception -> 0x034a, all -> 0x0cab }
-        goto L_0x036b;
-    L_0x0367:
-        r15 = 0;
-        r11.seekTo(r12, r15);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-    L_0x036b:
-        r12 = new org.telegram.messenger.video.AudioRecoder;	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r12.<init>(r1, r11, r10);	 Catch:{ Exception -> 0x03a6, all -> 0x0cab }
-        r12.startTime = r7;	 Catch:{ Exception -> 0x038b, all -> 0x0cab }
-        r1 = r10;
-        r10 = r73;
-        r12.endTime = r10;	 Catch:{ Exception -> 0x0389, all -> 0x0cab }
-        r13 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0389, all -> 0x0cab }
-        r15 = r12.format;	 Catch:{ Exception -> 0x0389, all -> 0x0cab }
-        r28 = r1;
-        r1 = 1;
-        r13 = r13.addTrack(r15, r1);	 Catch:{ Exception -> 0x0389, all -> 0x0cab }
-        r1 = r13;
-        r15 = r35;
-        r13 = r12;
-        r12 = r28;
-        goto L_0x03bd;
-    L_0x0389:
-        r0 = move-exception;
-        goto L_0x038e;
-    L_0x038b:
-        r0 = move-exception;
-        r10 = r73;
-    L_0x038e:
-        r13 = r67;
-        r10 = r70;
-        r1 = r0;
-        r57 = r12;
-        r9 = r25;
-        goto L_0x0581;
-    L_0x0399:
-        r28 = r10;
-        r35 = r13;
-        r10 = r73;
-        r12 = r28;
-        r15 = r35;
-        r1 = -5;
-        r13 = 0;
-        goto L_0x03bd;
-    L_0x03a6:
-        r0 = move-exception;
-        r10 = r73;
-    L_0x03a9:
-        r13 = r67;
-        r10 = r70;
-        r1 = r0;
-        goto L_0x02bb;
-    L_0x03b0:
-        r43 = r10;
-        r42 = r13;
-        r34 = r15;
-        r10 = r73;
-        r12 = r28;
-        r1 = -5;
-        r13 = 0;
-        r15 = 1;
-    L_0x03bd:
-        r28 = r4;
-        r4 = 0;
-    L_0x03c0:
-        if (r12 >= 0) goto L_0x03c5;
-    L_0x03c2:
-        r35 = 1;
-        goto L_0x03c7;
-    L_0x03c5:
-        r35 = 0;
-    L_0x03c7:
-        r62.checkConversionCanceled();	 Catch:{ Exception -> 0x0b00, all -> 0x0cab }
-        r49 = r20;
-        r46 = r34;
-        r20 = 0;
-        r21 = 0;
-        r44 = 0;
-        r45 = -5;
-        r47 = 0;
-        r48 = 1;
-        r51 = 0;
-    L_0x03dc:
-        if (r20 == 0) goto L_0x03f8;
-    L_0x03de:
-        if (r15 != 0) goto L_0x03e3;
-    L_0x03e0:
-        if (r35 != 0) goto L_0x03e3;
-    L_0x03e2:
-        goto L_0x03f8;
-    L_0x03e3:
-        r12 = r68;
-        r11 = r69;
-        r10 = r70;
-        r57 = r13;
-        r9 = r25;
-        r4 = r28;
-        r1 = 0;
+        if (r10 == r1) goto L_0x009b;
+    L_0x0098:
+        r17 = 1;
+        goto L_0x009d;
+    L_0x009b:
         r17 = 0;
-        r60 = 1;
-        r13 = r67;
-        goto L_0x0CLASSNAME;
-    L_0x03f8:
-        r62.checkConversionCanceled();	 Catch:{ Exception -> 0x0b00, all -> 0x0cab }
-        if (r15 != 0) goto L_0x0422;
-    L_0x03fd:
-        if (r13 == 0) goto L_0x0422;
-    L_0x03ff:
-        r53 = r2;
-        r2 = r14.mediaMuxer;	 Catch:{ Exception -> 0x040e, all -> 0x0cab }
-        r2 = r13.step(r2, r1);	 Catch:{ Exception -> 0x040e, all -> 0x0cab }
-        r54 = r2;
-        r56 = r5;
-        r55 = r6;
-        goto L_0x042a;
-    L_0x040e:
-        r0 = move-exception;
-        r10 = r70;
-        r1 = r0;
-        r57 = r13;
-        r9 = r25;
-        r4 = r28;
-        r2 = r53;
-    L_0x041a:
-        r53 = 0;
-        r60 = 1;
-        r13 = r67;
-        goto L_0x0bc4;
-    L_0x0422:
-        r53 = r2;
-        r56 = r5;
-        r55 = r6;
-        r54 = r35;
-    L_0x042a:
-        r5 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        if (r21 != 0) goto L_0x0585;
-    L_0x042e:
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0571, all -> 0x0cab }
-        r2 = r2.getSampleTrackIndex();	 Catch:{ Exception -> 0x0571, all -> 0x0cab }
-        r57 = r13;
-        r13 = r25;
-        if (r2 != r13) goto L_0x049d;
-    L_0x043a:
-        r2 = r3.dequeueInputBuffer(r5);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        if (r2 < 0) goto L_0x0481;
-    L_0x0440:
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r6 = 21;
-        if (r5 >= r6) goto L_0x0449;
-    L_0x0446:
-        r5 = r9[r2];	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        goto L_0x044d;
-    L_0x0449:
-        r5 = r3.getInputBuffer(r2);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-    L_0x044d:
-        r6 = r14.extractor;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r25 = r9;
-        r9 = 0;
-        r37 = r6.readSampleData(r5, r9);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        if (r37 >= 0) goto L_0x046a;
-    L_0x0458:
-        r36 = 0;
-        r37 = 0;
-        r38 = 0;
-        r40 = 4;
-        r34 = r3;
-        r35 = r2;
-        r34.queueInputBuffer(r35, r36, r37, r38, r40);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r21 = 1;
-        goto L_0x0483;
-    L_0x046a:
-        r36 = 0;
-        r5 = r14.extractor;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r38 = r5.getSampleTime();	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r40 = 0;
-        r34 = r3;
-        r35 = r2;
-        r34.queueInputBuffer(r35, r36, r37, r38, r40);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r2.advance();	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        goto L_0x0483;
-    L_0x0481:
-        r25 = r9;
-    L_0x0483:
-        r59 = r4;
-        r9 = r12;
-        r60 = r13;
-        r4 = r21;
-        r6 = r22;
-        r22 = r1;
-        goto L_0x0548;
-    L_0x0490:
-        r0 = move-exception;
-        r10 = r70;
-        r1 = r0;
-        r9 = r13;
-        r4 = r28;
-        r2 = r53;
-        r5 = r56;
-        goto L_0x041a;
-    L_0x049d:
-        r25 = r9;
-        if (r15 == 0) goto L_0x0536;
-    L_0x04a1:
-        r5 = -1;
-        if (r12 == r5) goto L_0x0536;
-    L_0x04a4:
-        if (r2 != r12) goto L_0x0536;
-    L_0x04a6:
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r5 = 0;
-        r2 = r2.readSampleData(r4, r5);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r6 = r22;
-        r6.size = r2;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r9 = 21;
-        if (r2 >= r9) goto L_0x04bf;
-    L_0x04b7:
-        r4.position(r5);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r2 = r6.size;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r4.limit(r2);	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-    L_0x04bf:
-        r2 = r6.size;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        if (r2 < 0) goto L_0x04d3;
-    L_0x04c3:
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0490, all -> 0x0cab }
-        r9 = r12;
-        r5 = r13;
-        r12 = r2.getSampleTime();	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r6.presentationTimeUs = r12;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r2.advance();	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        goto L_0x04da;
-    L_0x04d3:
-        r9 = r12;
-        r5 = r13;
-        r2 = 0;
-        r6.size = r2;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r21 = 1;
-    L_0x04da:
-        r2 = r6.size;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        if (r2 <= 0) goto L_0x0527;
-    L_0x04de:
+    L_0x009d:
+        r1 = r72;
+        r7 = r20;
+        r8 = 0;
+        r13 = 1;
+        r4 = r7;
+        r5 = r81;
         r12 = 0;
-        r2 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1));
-        if (r2 < 0) goto L_0x04ea;
-    L_0x04e4:
-        r12 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r2 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0527;
-    L_0x04ea:
-        r2 = 0;
-        r6.offset = r2;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r12 = r14.extractor;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r12 = r12.getSampleFlags();	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r6.flags = r12;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r12 = r14.mediaMuxer;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r12 = r12.writeSampleData(r1, r4, r6, r2);	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r32 = 0;
-        r2 = (r12 > r32 ? 1 : (r12 == r32 ? 0 : -1));
-        if (r2 == 0) goto L_0x0527;
-    L_0x0501:
-        r2 = r14.callback;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        if (r2 == 0) goto L_0x0527;
-    L_0x0505:
-        r22 = r1;
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r1 = r1 - r7;
-        r34 = (r1 > r51 ? 1 : (r1 == r51 ? 0 : -1));
-        if (r34 <= 0) goto L_0x0512;
-    L_0x050e:
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r51 = r1 - r7;
-    L_0x0512:
-        r59 = r4;
-        r1 = r51;
-        r4 = r14.callback;	 Catch:{ Exception -> 0x052e, all -> 0x0cab }
-        r60 = r5;
-        r5 = (float) r1;
-        r34 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        r5 = r5 / r34;
-        r5 = r5 / r18;
-        r4.didWriteData(r12, r5);	 Catch:{ Exception -> 0x0562, all -> 0x0cab }
-        r51 = r1;
-        goto L_0x0546;
-    L_0x0527:
-        r22 = r1;
-        r59 = r4;
-        r60 = r5;
-        goto L_0x0546;
-    L_0x052e:
+        r7 = r83;
+        r9 = r85;
+        r13 = r11;
+        r11 = r74;
+        r15 = r77;
+        r12 = r17;
+        r1.readAndWriteTracks(r2, r3, r4, r5, r7, r9, r11, r12);	 Catch:{ Exception -> 0x00bf, all -> 0x0c4d }
+        r9 = r79;
+        r4 = r80;
+        r8 = r13;
+        r3 = 0;
+        r67 = 0;
+        goto L_0x0CLASSNAME;
+    L_0x00bf:
         r0 = move-exception;
-        r13 = r67;
-        r10 = r70;
+        r9 = r79;
+        r4 = r80;
         r1 = r0;
-        r9 = r5;
-        goto L_0x057b;
-    L_0x0536:
-        r59 = r4;
-        r9 = r12;
-        r60 = r13;
-        r6 = r22;
-        r22 = r1;
-        r1 = -1;
-        if (r2 != r1) goto L_0x0546;
-    L_0x0542:
-        r4 = r21;
-        r1 = 1;
-        goto L_0x0549;
-    L_0x0546:
-        r4 = r21;
-    L_0x0548:
-        r1 = 0;
-    L_0x0549:
-        if (r1 == 0) goto L_0x0594;
-    L_0x054b:
-        r1 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        r35 = r3.dequeueInputBuffer(r1);	 Catch:{ Exception -> 0x0562, all -> 0x0cab }
-        if (r35 < 0) goto L_0x0594;
-    L_0x0553:
-        r36 = 0;
-        r37 = 0;
-        r38 = 0;
-        r40 = 4;
-        r34 = r3;
-        r34.queueInputBuffer(r35, r36, r37, r38, r40);	 Catch:{ Exception -> 0x0562, all -> 0x0cab }
+        r8 = r13;
+        goto L_0x0c5a;
+    L_0x00c8:
+        r0 = move-exception;
+        r15 = r77;
+        r9 = r79;
+        r4 = r80;
+        r1 = r0;
+        goto L_0x0086;
+    L_0x00d1:
+        r15 = r77;
+        r13 = r11;
+        r9 = r20;
+        if (r1 < 0) goto L_0x0CLASSNAME;
+    L_0x00d8:
+        r2 = android.os.Build.MANUFACTURER;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r2 = r2.toLowerCase();	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r11 = 16;
+        r12 = 2;
+        r20 = 4;
+        r10 = 18;
+        if (r6 >= r10) goto L_0x018e;
+    L_0x00e9:
+        r6 = org.telegram.messenger.MediaController.selectCodec(r8);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r23 = org.telegram.messenger.MediaController.selectColorFormat(r6, r8);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r23 == 0) goto L_0x0175;
+    L_0x00f3:
+        r4 = r6.getName();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r5 = "OMX.qcom.";
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x0119;
+    L_0x00ff:
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r4 != r11) goto L_0x0116;
+    L_0x0103:
+        r4 = "lge";
+        r4 = r2.equals(r4);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r4 != 0) goto L_0x0113;
+    L_0x010b:
+        r4 = "nokia";
+        r4 = r2.equals(r4);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r4 == 0) goto L_0x0116;
+    L_0x0113:
         r4 = 1;
-        goto L_0x0594;
-    L_0x0562:
+    L_0x0114:
+        r5 = 1;
+        goto L_0x0143;
+    L_0x0116:
+        r4 = 1;
+    L_0x0117:
+        r5 = 0;
+        goto L_0x0143;
+    L_0x0119:
+        r5 = "OMX.Intel.";
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x0123;
+    L_0x0121:
+        r4 = 2;
+        goto L_0x0117;
+    L_0x0123:
+        r5 = "OMX.MTK.VIDEO.ENCODER.AVC";
+        r5 = r4.equals(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x012d;
+    L_0x012b:
+        r4 = 3;
+        goto L_0x0117;
+    L_0x012d:
+        r5 = "OMX.SEC.AVC.Encoder";
+        r5 = r4.equals(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x0137;
+    L_0x0135:
+        r4 = 4;
+        goto L_0x0114;
+    L_0x0137:
+        r5 = "OMX.TI.DUCATI1.VIDEO.H264E";
+        r4 = r4.equals(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r4 == 0) goto L_0x0141;
+    L_0x013f:
+        r4 = 5;
+        goto L_0x0117;
+    L_0x0141:
+        r4 = 0;
+        goto L_0x0117;
+    L_0x0143:
+        r26 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r26 == 0) goto L_0x0171;
+    L_0x0147:
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r10.<init>();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r11 = "codec = ";
+        r10.append(r11);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = r6.getName();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r10.append(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = " manufacturer = ";
+        r10.append(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r10.append(r2);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = "device = ";
+        r10.append(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = android.os.Build.MODEL;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r10.append(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = r10.toString();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.d(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+    L_0x0171:
+        r11 = r5;
+        r10 = r23;
+        goto L_0x0196;
+    L_0x0175:
+        r2 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r3 = "no supported color format";
+        r2.<init>(r3);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        throw r2;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+    L_0x017d:
         r0 = move-exception;
-        r13 = r67;
-        r10 = r70;
+        r4 = r80;
+    L_0x0180:
+        r10 = r1;
+    L_0x0181:
+        r8 = r13;
+        r5 = 0;
+    L_0x0183:
+        r6 = 0;
+        r11 = 0;
+    L_0x0185:
+        r47 = 0;
+    L_0x0187:
+        r56 = 0;
+    L_0x0189:
+        r67 = 0;
+    L_0x018b:
         r1 = r0;
-        r4 = r28;
-        r2 = r53;
-        r5 = r56;
-    L_0x056e:
-        r9 = r60;
-        goto L_0x0581;
-    L_0x0571:
-        r0 = move-exception;
-        r57 = r13;
-        r13 = r67;
-        r10 = r70;
-        r1 = r0;
-        r9 = r25;
-    L_0x057b:
-        r4 = r28;
-        r2 = r53;
-        r5 = r56;
-    L_0x0581:
-        r53 = 0;
-        goto L_0x012a;
-    L_0x0585:
-        r59 = r4;
-        r57 = r13;
-        r6 = r22;
-        r60 = r25;
-        r22 = r1;
-        r25 = r9;
-        r9 = r12;
-        r4 = r21;
-    L_0x0594:
-        r1 = r44 ^ 1;
-        r12 = r1;
-        r21 = r4;
-        r2 = r45;
-        r1 = 1;
-    L_0x059c:
-        if (r12 != 0) goto L_0x05ba;
-    L_0x059e:
-        if (r1 == 0) goto L_0x05a1;
-    L_0x05a0:
-        goto L_0x05ba;
-    L_0x05a1:
-        r45 = r2;
-        r12 = r9;
-        r1 = r22;
-        r9 = r25;
-        r2 = r53;
-        r35 = r54;
-        r5 = r56;
-        r13 = r57;
-        r4 = r59;
-        r25 = r60;
-        r22 = r6;
-        r6 = r55;
-        goto L_0x03dc;
-    L_0x05ba:
-        r62.checkConversionCanceled();	 Catch:{ Exception -> 0x0ae9, all -> 0x0cab }
-        if (r78 == 0) goto L_0x05c7;
-    L_0x05bf:
-        r4 = 22000; // 0x55f0 float:3.0829E-41 double:1.08694E-319;
-        r39 = r12;
-        r12 = r4;
-        r5 = r56;
-        goto L_0x05cd;
-    L_0x05c7:
-        r39 = r12;
-        r5 = r56;
-        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-    L_0x05cd:
-        r4 = r5.dequeueOutputBuffer(r6, r12);	 Catch:{ Exception -> 0x0ad6, all -> 0x0cab }
-        r12 = -1;
-        if (r4 != r12) goto L_0x05e6;
-    L_0x05d4:
-        r13 = r67;
+        goto L_0x0bb4;
+    L_0x018e:
+        r4 = NUM; // 0x7var_ float:1.701803E38 double:1.0527098025E-314;
+        r4 = 0;
+        r10 = NUM; // 0x7var_ float:1.701803E38 double:1.0527098025E-314;
+        r11 = 0;
+    L_0x0196:
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x01ae;
+    L_0x019a:
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r5.<init>();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r6 = "colorFormat = ";
+        r5.append(r6);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r5.append(r10);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r5 = r5.toString();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.d(r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+    L_0x01ae:
+        r5 = r15 * r13;
+        r6 = r5 * 3;
+        r6 = r6 / r12;
+        if (r4 != 0) goto L_0x01cc;
+    L_0x01b5:
+        r2 = r13 % 16;
+        if (r2 == 0) goto L_0x0200;
+    L_0x01b9:
+        r2 = r13 % 16;
+        r4 = 16;
+        r2 = 16 - r2;
+        r2 = r2 + r13;
+        r2 = r2 - r13;
+        r2 = r2 * r15;
+        r4 = r2 * 5;
+        r4 = r4 / 4;
+    L_0x01c7:
+        r6 = r6 + r4;
+    L_0x01c8:
         r12 = r2;
-        r45 = r9;
-        r11 = r20;
-        r10 = r55;
-        r1 = -1;
-        r19 = 0;
-    L_0x05e0:
-        r20 = 2;
-        r9 = r68;
-        goto L_0x07bb;
-    L_0x05e6:
-        r12 = -3;
-        if (r4 != r12) goto L_0x060c;
-    L_0x05e9:
-        r12 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = 21;
-        if (r12 >= r13) goto L_0x05f3;
-    L_0x05ef:
-        r46 = r5.getOutputBuffers();	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-    L_0x05f3:
-        r13 = r67;
-        r19 = r1;
-        r12 = r2;
-        r45 = r9;
-        r11 = r20;
-    L_0x05fc:
-        r10 = r55;
-        r1 = -1;
-        goto L_0x05e0;
-    L_0x0600:
-        r0 = move-exception;
-        r13 = r67;
-    L_0x0603:
-        r10 = r70;
-        r1 = r0;
-        r4 = r28;
-        r2 = r53;
-        goto L_0x056e;
-    L_0x060c:
-        r12 = -2;
-        if (r4 != r12) goto L_0x0656;
-    L_0x060f:
-        r12 = r5.getOutputFormat();	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = -5;
-        if (r2 != r13) goto L_0x064a;
-    L_0x0616:
-        if (r12 == 0) goto L_0x064a;
-    L_0x0618:
-        r2 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = 0;
-        r2 = r2.addTrack(r12, r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = "prepend-sps-pps-to-idr-frames";
-        r13 = r12.containsKey(r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r13 == 0) goto L_0x064a;
-    L_0x0627:
-        r13 = "prepend-sps-pps-to-idr-frames";
-        r13 = r12.getInteger(r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r34 = r1;
-        r1 = 1;
-        if (r13 != r1) goto L_0x064c;
-    L_0x0632:
-        r1 = "csd-0";
-        r1 = r12.getByteBuffer(r1);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = "csd-1";
-        r12 = r12.getByteBuffer(r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r1 = r1.limit();	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r12.limit();	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r1 = r1 + r12;
-        r47 = r1;
-        goto L_0x064c;
-    L_0x064a:
-        r34 = r1;
-    L_0x064c:
-        r13 = r67;
-        r12 = r2;
-        r45 = r9;
-        r11 = r20;
-        r19 = r34;
-        goto L_0x05fc;
-    L_0x0656:
-        r34 = r1;
-        if (r4 < 0) goto L_0x0aa7;
-    L_0x065a:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0ad6, all -> 0x0cab }
-        r12 = 21;
-        if (r1 >= r12) goto L_0x0663;
-    L_0x0660:
-        r1 = r46[r4];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        goto L_0x0667;
-    L_0x0663:
-        r1 = r5.getOutputBuffer(r4);	 Catch:{ Exception -> 0x0ad6, all -> 0x0cab }
-    L_0x0667:
-        if (r1 == 0) goto L_0x0a7c;
-    L_0x0669:
-        r13 = r6.size;	 Catch:{ Exception -> 0x0ad6, all -> 0x0cab }
+        r34 = r6;
+        goto L_0x0203;
+    L_0x01cc:
         r12 = 1;
-        if (r13 <= r12) goto L_0x079f;
-    L_0x066e:
-        r13 = r6.flags;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r20 = 2;
-        r13 = r13 & 2;
-        if (r13 != 0) goto L_0x071a;
+        if (r4 != r12) goto L_0x01e2;
+    L_0x01cf:
+        r2 = r2.toLowerCase();	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r4 = "lge";
+        r2 = r2.equals(r4);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r2 != 0) goto L_0x0200;
+    L_0x01db:
+        r2 = r5 + 2047;
+        r2 = r2 & -2048;
+        r2 = r2 - r5;
+        r6 = r6 + r2;
+        goto L_0x01c8;
+    L_0x01e2:
+        r5 = 5;
+        if (r4 != r5) goto L_0x01e6;
+    L_0x01e5:
+        goto L_0x0200;
+    L_0x01e6:
+        r5 = 3;
+        if (r4 != r5) goto L_0x0200;
+    L_0x01e9:
+        r4 = "baidu";
+        r2 = r2.equals(r4);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        if (r2 == 0) goto L_0x0200;
+    L_0x01f1:
+        r2 = r13 % 16;
+        r4 = 16;
+        r2 = 16 - r2;
+        r2 = r2 + r13;
+        r2 = r2 - r13;
+        r2 = r2 * r15;
+        r4 = r2 * 5;
+        r4 = r4 / 4;
+        goto L_0x01c7;
+    L_0x0200:
+        r34 = r6;
+        r12 = 0;
+    L_0x0203:
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r2.selectTrack(r1);	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r2 = r2.getTrackFormat(r1);	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r5 = 0;
+        r35 = r11;
+        r36 = r12;
+        r11 = r81;
+        r4 = (r11 > r5 ? 1 : (r11 == r5 ? 0 : -1));
+        if (r4 <= 0) goto L_0x0221;
+    L_0x021a:
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        r5 = 0;
+        r4.seekTo(r11, r5);	 Catch:{ Exception -> 0x017d, all -> 0x0c4d }
+        goto L_0x0229;
+    L_0x0221:
+        r5 = 0;
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+        r11 = 0;
+        r4.seekTo(r11, r5);	 Catch:{ Exception -> 0x0ba5, all -> 0x0c4d }
+    L_0x0229:
+        if (r80 > 0) goto L_0x022f;
+    L_0x022b:
+        r4 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
+        goto L_0x0231;
+    L_0x022f:
+        r4 = r80;
+    L_0x0231:
+        r6 = android.media.MediaFormat.createVideoFormat(r8, r15, r13);	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r11 = "color-format";
+        r6.setInteger(r11, r10);	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r11 = "bitrate";
+        r6.setInteger(r11, r4);	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r11 = "frame-rate";
+        r12 = r79;
+        r6.setInteger(r11, r12);	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r11 = "i-frame-interval";
+        r5 = 2;
+        r6.setInteger(r11, r5);	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b9f, all -> 0x0c4d }
+        r11 = 23;
+        if (r5 >= r11) goto L_0x026b;
+    L_0x0252:
+        r5 = java.lang.Math.min(r13, r15);	 Catch:{ Exception -> 0x0268, all -> 0x0c4d }
+        r11 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        if (r5 > r11) goto L_0x026b;
+    L_0x025a:
+        r5 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
+        if (r4 <= r5) goto L_0x0262;
+    L_0x025f:
+        r4 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;
+    L_0x0262:
+        r5 = "bitrate";
+        r6.setInteger(r5, r4);	 Catch:{ Exception -> 0x0268, all -> 0x0c4d }
+        goto L_0x026b;
+    L_0x0268:
+        r0 = move-exception;
+        goto L_0x0180;
+    L_0x026b:
+        r11 = r4;
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b9a, all -> 0x0c4d }
+        r5 = 18;
+        if (r4 >= r5) goto L_0x0284;
+    L_0x0272:
+        r4 = "stride";
+        r5 = r15 + 32;
+        r6.setInteger(r4, r5);	 Catch:{ Exception -> 0x027f, all -> 0x0c4d }
+        r4 = "slice-height";
+        r6.setInteger(r4, r13);	 Catch:{ Exception -> 0x027f, all -> 0x0c4d }
+        goto L_0x0284;
+    L_0x027f:
+        r0 = move-exception;
+        r10 = r1;
+        r4 = r11;
+        goto L_0x0181;
+    L_0x0284:
+        r5 = android.media.MediaCodec.createEncoderByType(r8);	 Catch:{ Exception -> 0x0b9a, all -> 0x0c4d }
+        r80 = r11;
+        r4 = 0;
+        r11 = 1;
+        r5.configure(r6, r4, r4, r11);	 Catch:{ Exception -> 0x0b90, all -> 0x0c4d }
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b90, all -> 0x0c4d }
+        r6 = 18;
+        if (r4 < r6) goto L_0x02b9;
+    L_0x0295:
+        r4 = new org.telegram.messenger.video.InputSurface;	 Catch:{ Exception -> 0x02b2, all -> 0x0c4d }
+        r6 = r5.createInputSurface();	 Catch:{ Exception -> 0x02b2, all -> 0x0c4d }
+        r4.<init>(r6);	 Catch:{ Exception -> 0x02b2, all -> 0x0c4d }
+        r4.makeCurrent();	 Catch:{ Exception -> 0x02a3, all -> 0x0c4d }
+        r11 = r4;
+        goto L_0x02ba;
+    L_0x02a3:
+        r0 = move-exception;
+        r10 = r1;
+        r11 = r4;
+        r8 = r13;
+        r6 = 0;
+        r47 = 0;
+    L_0x02aa:
+        r56 = 0;
+    L_0x02ac:
+        r67 = 0;
+        r4 = r80;
+        goto L_0x018b;
+    L_0x02b2:
+        r0 = move-exception;
+        r4 = r80;
+        r10 = r1;
+        r8 = r13;
+        goto L_0x0183;
+    L_0x02b9:
+        r11 = 0;
+    L_0x02ba:
+        r5.start();	 Catch:{ Exception -> 0x0b83, all -> 0x0c4d }
+        r4 = r2.getString(r3);	 Catch:{ Exception -> 0x0b83, all -> 0x0c4d }
+        r6 = android.media.MediaCodec.createDecoderByType(r4);	 Catch:{ Exception -> 0x0b83, all -> 0x0c4d }
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b75, all -> 0x0c4d }
+        r12 = 18;
+        if (r4 < r12) goto L_0x02d8;
+    L_0x02cb:
+        r4 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x02d1, all -> 0x0c4d }
+        r4.<init>();	 Catch:{ Exception -> 0x02d1, all -> 0x0c4d }
+        goto L_0x02df;
+    L_0x02d1:
+        r0 = move-exception;
+        r4 = r80;
+        r10 = r1;
+        r8 = r13;
+        goto L_0x0185;
+    L_0x02d8:
+        r4 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x0b75, all -> 0x0c4d }
+        r12 = r75;
+        r4.<init>(r15, r13, r12);	 Catch:{ Exception -> 0x0b75, all -> 0x0c4d }
+    L_0x02df:
+        r12 = r4.getSurface();	 Catch:{ Exception -> 0x0b63, all -> 0x0c4d }
+        r44 = r10;
+        r19 = r11;
+        r10 = 0;
+        r11 = 0;
+        r6.configure(r2, r12, r10, r11);	 Catch:{ Exception -> 0x0b4e, all -> 0x0c4d }
+        r6.start();	 Catch:{ Exception -> 0x0b4e, all -> 0x0c4d }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b4e, all -> 0x0c4d }
+        r11 = 21;
+        if (r2 >= r11) goto L_0x0315;
+    L_0x02f5:
+        r2 = r6.getInputBuffers();	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r12 = r5.getOutputBuffers();	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r10 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r11 = 18;
+        if (r10 >= r11) goto L_0x030a;
+    L_0x0303:
+        r10 = r5.getInputBuffers();	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r11 = r10;
+        r10 = r2;
+        goto L_0x0318;
+    L_0x030a:
+        r10 = r2;
+        r11 = 0;
+        goto L_0x0318;
+    L_0x030d:
+        r0 = move-exception;
+        r10 = r1;
+        r47 = r4;
+        r8 = r13;
+        r11 = r19;
+        goto L_0x02aa;
+    L_0x0315:
+        r10 = 0;
+        r11 = 0;
+        r12 = 0;
+    L_0x0318:
+        if (r7 < 0) goto L_0x0432;
+    L_0x031a:
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        r2 = r2.getTrackFormat(r7);	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        r30 = r7;
+        r7 = r2.getString(r3);	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        r31 = r12;
+        r12 = "audio/mp4a-latm";
+        r7 = r7.equals(r12);	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        if (r7 != 0) goto L_0x033f;
+    L_0x0330:
+        r7 = r2.getString(r3);	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r12 = "audio/mpeg";
+        r7 = r7.equals(r12);	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        if (r7 == 0) goto L_0x033d;
+    L_0x033c:
+        goto L_0x033f;
+    L_0x033d:
+        r7 = 0;
+        goto L_0x0340;
+    L_0x033f:
+        r7 = 1;
+    L_0x0340:
+        r3 = r2.getString(r3);	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        r12 = "audio/unknown";
+        r3 = r3.equals(r12);	 Catch:{ Exception -> 0x0423, all -> 0x0c4d }
+        if (r3 == 0) goto L_0x034e;
+    L_0x034c:
+        r3 = -1;
+        goto L_0x0350;
+    L_0x034e:
+        r3 = r30;
+    L_0x0350:
+        if (r3 < 0) goto L_0x040b;
+    L_0x0352:
+        if (r7 == 0) goto L_0x03ac;
+    L_0x0354:
+        r12 = r14.mediaMuxer;	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r32 = r7;
+        r7 = 1;
+        r12 = r12.addTrack(r2, r7);	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r7 = r14.extractor;	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r7.selectTrack(r3);	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r7 = "max-input-size";
+        r2 = r2.getInteger(r7);	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r2 = java.nio.ByteBuffer.allocateDirect(r2);	 Catch:{ Exception -> 0x03a7, all -> 0x0c4d }
+        r45 = r11;
+        r7 = r12;
+        r27 = 0;
+        r11 = r81;
+        r30 = (r11 > r27 ? 1 : (r11 == r27 ? 0 : -1));
+        if (r30 <= 0) goto L_0x0386;
+    L_0x0377:
+        r30 = r2;
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r33 = r7;
+        r7 = 0;
+        r2.seekTo(r11, r7);	 Catch:{ Exception -> 0x030d, all -> 0x0c4d }
+        r47 = r4;
+        r46 = r8;
+        goto L_0x0396;
+    L_0x0386:
+        r30 = r2;
+        r33 = r7;
+        r2 = r14.extractor;	 Catch:{ Exception -> 0x03a4, all -> 0x0c4d }
+        r47 = r4;
+        r46 = r8;
+        r4 = 0;
+        r7 = 0;
+        r2.seekTo(r7, r4);	 Catch:{ Exception -> 0x03d0, all -> 0x0c4d }
+    L_0x0396:
+        r7 = r3;
+        r48 = r9;
+        r2 = r30;
+        r49 = r32;
+        r3 = r33;
+        r4 = 0;
+        r8 = r83;
+        goto L_0x0447;
+    L_0x03a4:
+        r0 = move-exception;
+        goto L_0x0428;
+    L_0x03a7:
+        r0 = move-exception;
+        r11 = r81;
+        goto L_0x0428;
+    L_0x03ac:
+        r47 = r4;
+        r32 = r7;
+        r46 = r8;
+        r45 = r11;
+        r11 = r81;
+        r4 = new android.media.MediaExtractor;	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r4.<init>();	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r8 = r73;
+        r4.setDataSource(r8);	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r4.selectTrack(r3);	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r7 = 0;
+        r27 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1));
+        if (r27 <= 0) goto L_0x03d3;
+    L_0x03c9:
+        r7 = 0;
+        r4.seekTo(r11, r7);	 Catch:{ Exception -> 0x03d0, all -> 0x0c4d }
+        r48 = r9;
+        goto L_0x03da;
+    L_0x03d0:
+        r0 = move-exception;
+        goto L_0x042a;
+    L_0x03d3:
+        r48 = r9;
+        r8 = r7;
+        r7 = 0;
+        r4.seekTo(r8, r7);	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+    L_0x03da:
+        r7 = new org.telegram.messenger.video.AudioRecoder;	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r7.<init>(r2, r4, r3);	 Catch:{ Exception -> 0x0407, all -> 0x0c4d }
+        r7.startTime = r11;	 Catch:{ Exception -> 0x03fa, all -> 0x0c4d }
+        r8 = r83;
+        r7.endTime = r8;	 Catch:{ Exception -> 0x03f8, all -> 0x0c4d }
+        r2 = r14.mediaMuxer;	 Catch:{ Exception -> 0x03f8, all -> 0x0c4d }
+        r4 = r7.format;	 Catch:{ Exception -> 0x03f8, all -> 0x0c4d }
+        r30 = r3;
+        r3 = 1;
+        r2 = r2.addTrack(r4, r3);	 Catch:{ Exception -> 0x03f8, all -> 0x0c4d }
+        r3 = r2;
+        r4 = r7;
+        r7 = r30;
+        r49 = r32;
+        r2 = 0;
+        goto L_0x0447;
+    L_0x03f8:
+        r0 = move-exception;
+        goto L_0x03fd;
+    L_0x03fa:
+        r0 = move-exception;
+        r8 = r83;
+    L_0x03fd:
+        r4 = r80;
+        r10 = r1;
+        r56 = r7;
+        r8 = r13;
+        r11 = r19;
+        goto L_0x0189;
+    L_0x0407:
+        r0 = move-exception;
+        r8 = r83;
+        goto L_0x042a;
+    L_0x040b:
+        r30 = r3;
+        r47 = r4;
+        r32 = r7;
+        r46 = r8;
+        r48 = r9;
+        r45 = r11;
+        r11 = r81;
+        r8 = r83;
+        r7 = r30;
+        r49 = r32;
+        r2 = 0;
+        r3 = -5;
+        r4 = 0;
+        goto L_0x0447;
+    L_0x0423:
+        r0 = move-exception;
+        r11 = r81;
+        r8 = r83;
+    L_0x0428:
+        r47 = r4;
+    L_0x042a:
+        r4 = r80;
+        r10 = r1;
+        r8 = r13;
+        r11 = r19;
+        goto L_0x0187;
+    L_0x0432:
+        r47 = r4;
+        r30 = r7;
+        r46 = r8;
+        r48 = r9;
+        r45 = r11;
+        r31 = r12;
+        r11 = r81;
+        r8 = r83;
+        r2 = 0;
+        r3 = -5;
+        r4 = 0;
+        r49 = 1;
+    L_0x0447:
+        if (r7 >= 0) goto L_0x044c;
+    L_0x0449:
+        r30 = 1;
+        goto L_0x044e;
+    L_0x044c:
+        r30 = 0;
+    L_0x044e:
+        r72.checkConversionCanceled();	 Catch:{ Exception -> 0x0b39, all -> 0x0c4d }
+        r33 = r31;
+        r24 = 0;
+        r25 = 0;
+        r31 = 0;
+        r32 = -5;
+        r50 = 0;
+        r51 = 1;
+        r52 = -1;
+        r54 = 0;
+    L_0x0463:
+        if (r24 == 0) goto L_0x0477;
+    L_0x0465:
+        if (r49 != 0) goto L_0x046a;
+    L_0x0467:
+        if (r30 != 0) goto L_0x046a;
+    L_0x0469:
+        goto L_0x0477;
+    L_0x046a:
+        r9 = r79;
+        r10 = r1;
+        r56 = r4;
+        r8 = r13;
+        r3 = 0;
+        r21 = 0;
+        r4 = r80;
+        goto L_0x0bf3;
+    L_0x0477:
+        r72.checkConversionCanceled();	 Catch:{ Exception -> 0x0b39, all -> 0x0c4d }
+        if (r49 != 0) goto L_0x0491;
+    L_0x047c:
+        if (r4 == 0) goto L_0x0491;
+    L_0x047e:
+        r13 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0487, all -> 0x0c4d }
+        r13 = r4.step(r13, r3);	 Catch:{ Exception -> 0x0487, all -> 0x0c4d }
+        r56 = r4;
+        goto L_0x0495;
+    L_0x0487:
+        r0 = move-exception;
+        r8 = r78;
+        r10 = r1;
+        r56 = r4;
+        r11 = r19;
+        goto L_0x02ac;
+    L_0x0491:
+        r56 = r4;
+        r13 = r30;
+    L_0x0495:
+        r30 = r5;
+        if (r25 != 0) goto L_0x05ef;
+    L_0x0499:
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x05e2, all -> 0x0c4d }
+        r4 = r4.getSampleTrackIndex();	 Catch:{ Exception -> 0x05e2, all -> 0x0c4d }
+        if (r4 != r1) goto L_0x04fd;
+    L_0x04a1:
+        r11 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+        r4 = r6.dequeueInputBuffer(r11);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        if (r4 < 0) goto L_0x04e7;
+    L_0x04a9:
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r11 = 21;
+        if (r5 >= r11) goto L_0x04b2;
+    L_0x04af:
+        r5 = r10[r4];	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        goto L_0x04b6;
+    L_0x04b2:
+        r5 = r6.getInputBuffer(r4);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+    L_0x04b6:
+        r11 = r14.extractor;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r12 = 0;
+        r40 = r11.readSampleData(r5, r12);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        if (r40 >= 0) goto L_0x04d1;
+    L_0x04bf:
+        r39 = 0;
+        r40 = 0;
+        r41 = 0;
+        r43 = 4;
+        r37 = r6;
+        r38 = r4;
+        r37.queueInputBuffer(r38, r39, r40, r41, r43);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r25 = 1;
+        goto L_0x04e7;
+    L_0x04d1:
+        r39 = 0;
+        r5 = r14.extractor;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r41 = r5.getSampleTime();	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r43 = 0;
+        r37 = r6;
+        r38 = r4;
+        r37.queueInputBuffer(r38, r39, r40, r41, r43);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4.advance();	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+    L_0x04e7:
+        r61 = r1;
+        r60 = r2;
+        r59 = r3;
+        r62 = r7;
+        r4 = r25;
+        r11 = r48;
+        r1 = 0;
+        r2 = r81;
+        r48 = r13;
+        goto L_0x05b9;
+    L_0x04fa:
+        r0 = move-exception;
+        goto L_0x05e4;
+    L_0x04fd:
+        if (r49 == 0) goto L_0x05a1;
+    L_0x04ff:
+        r5 = -1;
+        if (r7 == r5) goto L_0x05a1;
+    L_0x0502:
+        if (r4 != r7) goto L_0x05a1;
+    L_0x0504:
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r5 = 0;
+        r4 = r4.readSampleData(r2, r5);	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r11 = r48;
+        r11.size = r4;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r12 = 21;
+        if (r4 >= r12) goto L_0x051d;
+    L_0x0515:
+        r2.position(r5);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4 = r11.size;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r2.limit(r4);	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+    L_0x051d:
+        r4 = r11.size;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        if (r4 < 0) goto L_0x052f;
+    L_0x0521:
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4 = r4.getSampleTime();	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r11.presentationTimeUs = r4;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4 = r14.extractor;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r4.advance();	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        goto L_0x0534;
+    L_0x052f:
+        r4 = 0;
+        r11.size = r4;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r25 = 1;
+    L_0x0534:
+        r4 = r11.size;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        if (r4 <= 0) goto L_0x0592;
+    L_0x0538:
+        r4 = 0;
+        r12 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
+        if (r12 < 0) goto L_0x0544;
+    L_0x053e:
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r12 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
+        if (r12 >= 0) goto L_0x0592;
+    L_0x0544:
+        r4 = 0;
+        r11.offset = r4;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r5 = r14.extractor;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r5 = r5.getSampleFlags();	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r11.flags = r5;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r5 = r14.mediaMuxer;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r48 = r13;
+        r12 = r5.writeSampleData(r3, r2, r11, r4);	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r4 = 0;
+        r37 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
+        if (r37 == 0) goto L_0x0587;
+    L_0x055d:
+        r4 = r14.callback;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        if (r4 == 0) goto L_0x0587;
+    L_0x0561:
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x059d, all -> 0x0c4d }
+        r60 = r2;
+        r59 = r3;
+        r2 = r81;
+        r4 = r4 - r2;
+        r37 = (r4 > r54 ? 1 : (r4 == r54 ? 0 : -1));
+        if (r37 <= 0) goto L_0x0572;
+    L_0x056e:
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x04fa, all -> 0x0c4d }
+        r54 = r4 - r2;
+    L_0x0572:
+        r61 = r1;
+        r4 = r54;
+        r1 = r14.callback;	 Catch:{ Exception -> 0x05d2, all -> 0x0c4d }
+        r62 = r7;
+        r7 = (float) r4;	 Catch:{ Exception -> 0x05d2, all -> 0x0c4d }
+        r37 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r7 = r7 / r37;
+        r7 = r7 / r18;
+        r1.didWriteData(r12, r7);	 Catch:{ Exception -> 0x05d2, all -> 0x0c4d }
+        r54 = r4;
+        goto L_0x05b6;
+    L_0x0587:
+        r61 = r1;
+        r60 = r2;
+        r59 = r3;
+        r62 = r7;
+    L_0x058f:
+        r2 = r81;
+        goto L_0x05b6;
+    L_0x0592:
+        r61 = r1;
+        r60 = r2;
+        r59 = r3;
+        r62 = r7;
+        r48 = r13;
+        goto L_0x058f;
+    L_0x059d:
+        r0 = move-exception;
+        r2 = r81;
+        goto L_0x05e4;
+    L_0x05a1:
+        r61 = r1;
+        r60 = r2;
+        r59 = r3;
+        r62 = r7;
+        r11 = r48;
+        r2 = r81;
+        r48 = r13;
+        r1 = -1;
+        if (r4 != r1) goto L_0x05b6;
+    L_0x05b2:
+        r4 = r25;
+        r1 = 1;
+        goto L_0x05b9;
+    L_0x05b6:
+        r4 = r25;
+        r1 = 0;
+    L_0x05b9:
+        if (r1 == 0) goto L_0x05fe;
+    L_0x05bb:
+        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+        r38 = r6.dequeueInputBuffer(r12);	 Catch:{ Exception -> 0x05d2, all -> 0x0c4d }
+        if (r38 < 0) goto L_0x05fe;
+    L_0x05c3:
+        r39 = 0;
+        r40 = 0;
+        r41 = 0;
+        r43 = 4;
+        r37 = r6;
+        r37.queueInputBuffer(r38, r39, r40, r41, r43);	 Catch:{ Exception -> 0x05d2, all -> 0x0c4d }
+        r4 = 1;
+        goto L_0x05fe;
+    L_0x05d2:
+        r0 = move-exception;
+        r8 = r78;
+    L_0x05d5:
+        r4 = r80;
+        r1 = r0;
+        r11 = r19;
+        r5 = r30;
+    L_0x05dc:
+        r10 = r61;
+        r67 = 0;
+        goto L_0x0bb4;
+    L_0x05e2:
+        r0 = move-exception;
+        r2 = r11;
+    L_0x05e4:
+        r8 = r78;
+        r4 = r80;
+        r10 = r1;
+        r11 = r19;
+        r5 = r30;
+        goto L_0x0189;
+    L_0x05ef:
+        r61 = r1;
+        r60 = r2;
+        r59 = r3;
+        r62 = r7;
+        r2 = r11;
+        r11 = r48;
+        r48 = r13;
+        r4 = r25;
+    L_0x05fe:
+        r1 = r31 ^ 1;
+        r12 = r1;
+        r25 = r4;
+        r4 = r32;
+        r1 = 1;
+    L_0x0606:
+        if (r12 != 0) goto L_0x0622;
+    L_0x0608:
+        if (r1 == 0) goto L_0x060b;
+    L_0x060a:
+        goto L_0x0622;
+    L_0x060b:
+        r13 = r78;
+        r32 = r4;
+        r5 = r30;
+        r30 = r48;
+        r4 = r56;
+        r1 = r61;
+        r7 = r62;
+        r48 = r11;
+        r11 = r2;
+        r3 = r59;
+        r2 = r60;
+        goto L_0x0463;
+    L_0x0622:
+        r72.checkConversionCanceled();	 Catch:{ Exception -> 0x0b25, all -> 0x0c4d }
+        if (r88 == 0) goto L_0x0632;
+    L_0x0627:
+        r37 = 22000; // 0x55f0 float:3.0829E-41 double:1.08694E-319;
+        r5 = r30;
+        r70 = r37;
+        r37 = r12;
+        r12 = r70;
+        goto L_0x0638;
+    L_0x0632:
+        r37 = r12;
+        r5 = r30;
+        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+    L_0x0638:
+        r7 = r5.dequeueOutputBuffer(r11, r12);	 Catch:{ Exception -> 0x0b18, all -> 0x0c4d }
+        r12 = -1;
+        if (r7 != r12) goto L_0x064f;
+    L_0x063f:
+        r8 = r78;
+        r12 = r4;
+        r63 = r10;
+        r17 = r33;
+        r9 = r46;
+        r4 = -1;
+        r10 = 3;
+        r13 = 0;
+    L_0x064b:
+        r23 = 2;
+        goto L_0x081c;
+    L_0x064f:
+        r12 = -3;
+        if (r7 != r12) goto L_0x0673;
+    L_0x0652:
+        r12 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = 21;
+        if (r12 >= r13) goto L_0x065c;
+    L_0x0658:
+        r33 = r5.getOutputBuffers();	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+    L_0x065c:
+        r8 = r78;
+        r13 = r1;
+        r12 = r4;
+        r63 = r10;
+    L_0x0662:
+        r17 = r33;
+        r9 = r46;
+        r4 = -1;
+        r10 = 3;
+        goto L_0x064b;
+    L_0x0669:
+        r0 = move-exception;
+        r8 = r78;
+    L_0x066c:
+        r4 = r80;
+        r1 = r0;
+        r11 = r19;
+        goto L_0x05dc;
+    L_0x0673:
+        r12 = -2;
+        if (r7 != r12) goto L_0x06bb;
     L_0x0676:
-        if (r47 == 0) goto L_0x0689;
-    L_0x0678:
-        r13 = r6.flags;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = r13 & r12;
-        if (r13 == 0) goto L_0x0689;
+        r12 = r5.getOutputFormat();	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = -5;
+        if (r4 != r13) goto L_0x06b1;
     L_0x067d:
-        r12 = r6.offset;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r12 + r47;
-        r6.offset = r12;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r6.size;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r12 - r47;
-        r6.size = r12;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-    L_0x0689:
-        if (r48 == 0) goto L_0x06e4;
-    L_0x068b:
-        r12 = r6.flags;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
+        if (r12 == 0) goto L_0x06b1;
+    L_0x067f:
+        r4 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = 0;
+        r4 = r4.addTrack(r12, r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = "prepend-sps-pps-to-idr-frames";
+        r13 = r12.containsKey(r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r13 == 0) goto L_0x06b1;
+    L_0x068e:
+        r13 = "prepend-sps-pps-to-idr-frames";
+        r13 = r12.getInteger(r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r30 = r1;
+        r1 = 1;
+        if (r13 != r1) goto L_0x06b3;
+    L_0x0699:
+        r1 = "csd-0";
+        r1 = r12.getByteBuffer(r1);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = "csd-1";
+        r12 = r12.getByteBuffer(r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1 = r1.limit();	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r12.limit();	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1 = r1 + r12;
+        r50 = r1;
+        goto L_0x06b3;
+    L_0x06b1:
+        r30 = r1;
+    L_0x06b3:
+        r8 = r78;
+        r12 = r4;
+        r63 = r10;
+        r13 = r30;
+        goto L_0x0662;
+    L_0x06bb:
+        r30 = r1;
+        if (r7 < 0) goto L_0x0aea;
+    L_0x06bf:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b18, all -> 0x0c4d }
+        r12 = 21;
+        if (r1 >= r12) goto L_0x06c8;
+    L_0x06c5:
+        r1 = r33[r7];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        goto L_0x06cc;
+    L_0x06c8:
+        r1 = r5.getOutputBuffer(r7);	 Catch:{ Exception -> 0x0b18, all -> 0x0c4d }
+    L_0x06cc:
+        if (r1 == 0) goto L_0x0ac1;
+    L_0x06ce:
+        r13 = r11.size;	 Catch:{ Exception -> 0x0b18, all -> 0x0c4d }
+        r12 = 1;
+        if (r13 <= r12) goto L_0x07fd;
+    L_0x06d3:
+        r13 = r11.flags;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r23 = 2;
+        r13 = r13 & 2;
+        if (r13 != 0) goto L_0x077e;
+    L_0x06db:
+        if (r50 == 0) goto L_0x06ee;
+    L_0x06dd:
+        r13 = r11.flags;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r13 = r13 & r12;
+        if (r13 == 0) goto L_0x06ee;
+    L_0x06e2:
+        r12 = r11.offset;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r12 + r50;
+        r11.offset = r12;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r12 - r50;
+        r11.size = r12;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+    L_0x06ee:
+        if (r51 == 0) goto L_0x0749;
+    L_0x06f0:
+        r12 = r11.flags;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
         r13 = 1;
         r12 = r12 & r13;
-        if (r12 == 0) goto L_0x06e4;
-    L_0x0691:
-        r12 = r6.size;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
+        if (r12 == 0) goto L_0x0749;
+    L_0x06f6:
+        r12 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
         r13 = 100;
-        if (r12 <= r13) goto L_0x06df;
-    L_0x0697:
-        r12 = r6.offset;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r1.position(r12);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
+        if (r12 <= r13) goto L_0x0744;
+    L_0x06fc:
+        r12 = r11.offset;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1.position(r12);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
         r12 = 100;
-        r12 = new byte[r12];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r1.get(r12);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r45 = r9;
+        r12 = new byte[r12];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1.get(r12);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r63 = r10;
         r13 = 0;
-        r26 = 0;
-    L_0x06a8:
-        r9 = r12.length;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r9 + -4;
-        if (r13 >= r9) goto L_0x06e1;
-    L_0x06ad:
-        r9 = r12[r13];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r9 != 0) goto L_0x06d8;
-    L_0x06b1:
-        r9 = r13 + 1;
-        r9 = r12[r9];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r9 != 0) goto L_0x06d8;
-    L_0x06b7:
-        r9 = r13 + 2;
-        r9 = r12[r9];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r9 != 0) goto L_0x06d8;
-    L_0x06bd:
-        r9 = r13 + 3;
-        r9 = r12[r9];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r35 = r12;
-        r12 = 1;
-        if (r9 != r12) goto L_0x06da;
-    L_0x06c6:
-        r9 = r26 + 1;
-        if (r9 <= r12) goto L_0x06d5;
-    L_0x06ca:
-        r9 = r6.offset;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r9 + r13;
-        r6.offset = r9;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r6.size;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r9 - r13;
-        r6.size = r9;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        goto L_0x06e1;
-    L_0x06d5:
-        r26 = r9;
-        goto L_0x06da;
-    L_0x06d8:
-        r35 = r12;
-    L_0x06da:
-        r13 = r13 + 1;
-        r12 = r35;
-        goto L_0x06a8;
-    L_0x06df:
-        r45 = r9;
-    L_0x06e1:
-        r48 = 0;
-        goto L_0x06e6;
-    L_0x06e4:
-        r45 = r9;
-    L_0x06e6:
-        r9 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = 1;
-        r9 = r9.writeSampleData(r2, r1, r6, r12);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r11 = 0;
-        r1 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r1 == 0) goto L_0x0712;
-    L_0x06f3:
-        r1 = r14.callback;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r1 == 0) goto L_0x0712;
-    L_0x06f7:
-        r11 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r11 = r11 - r7;
-        r1 = (r11 > r51 ? 1 : (r11 == r51 ? 0 : -1));
-        if (r1 <= 0) goto L_0x0702;
-    L_0x06fe:
-        r11 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r51 = r11 - r7;
-    L_0x0702:
-        r11 = r51;
-        r1 = r14.callback;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r13 = (float) r11;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r26 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        r13 = r13 / r26;
-        r13 = r13 / r18;
-        r1.didWriteData(r9, r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r51 = r11;
+        r24 = 0;
+    L_0x070d:
+        r10 = r12.length;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = r10 + -4;
+        if (r13 >= r10) goto L_0x0746;
     L_0x0712:
-        r13 = r67;
-        r9 = r68;
-        r10 = r55;
-        goto L_0x07a9;
-    L_0x071a:
-        r45 = r9;
-        r9 = -5;
-        if (r2 != r9) goto L_0x0712;
-    L_0x071f:
-        r2 = r6.size;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r2 = new byte[r2];	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r10 = r6.offset;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r11 = r6.size;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r10 = r10 + r11;
-        r1.limit(r10);	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r10 = r6.offset;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r1.position(r10);	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r1.get(r2);	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r1 = r6.size;	 Catch:{ Exception -> 0x0798, all -> 0x0cab }
-        r10 = 1;
-        r1 = r1 - r10;
-    L_0x0737:
-        r11 = 3;
-        if (r1 < 0) goto L_0x0775;
+        r10 = r12[r13];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r10 != 0) goto L_0x073d;
+    L_0x0716:
+        r10 = r13 + 1;
+        r10 = r12[r10];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r10 != 0) goto L_0x073d;
+    L_0x071c:
+        r10 = r13 + 2;
+        r10 = r12[r10];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r10 != 0) goto L_0x073d;
+    L_0x0722:
+        r10 = r13 + 3;
+        r10 = r12[r10];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r32 = r12;
+        r12 = 1;
+        if (r10 != r12) goto L_0x073f;
+    L_0x072b:
+        r10 = r24 + 1;
+        if (r10 <= r12) goto L_0x073a;
+    L_0x072f:
+        r10 = r11.offset;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = r10 + r13;
+        r11.offset = r10;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = r10 - r13;
+        r11.size = r10;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        goto L_0x0746;
     L_0x073a:
-        if (r1 <= r11) goto L_0x0775;
-    L_0x073c:
-        r12 = r2[r1];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r12 != r10) goto L_0x0770;
-    L_0x0740:
-        r10 = r1 + -1;
-        r10 = r2[r10];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r10 != 0) goto L_0x0770;
+        r24 = r10;
+        goto L_0x073f;
+    L_0x073d:
+        r32 = r12;
+    L_0x073f:
+        r13 = r13 + 1;
+        r12 = r32;
+        goto L_0x070d;
+    L_0x0744:
+        r63 = r10;
     L_0x0746:
-        r10 = r1 + -2;
-        r10 = r2[r10];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r10 != 0) goto L_0x0770;
-    L_0x074c:
-        r10 = r1 + -3;
-        r12 = r2[r10];	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        if (r12 != 0) goto L_0x0770;
-    L_0x0752:
-        r1 = java.nio.ByteBuffer.allocate(r10);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r6.size;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r12 = r12 - r10;
-        r12 = java.nio.ByteBuffer.allocate(r12);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
+        r51 = 0;
+        goto L_0x074b;
+    L_0x0749:
+        r63 = r10;
+    L_0x074b:
+        r10 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = 1;
+        r8 = r10.writeSampleData(r4, r1, r11, r12);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = 0;
+        r1 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
+        if (r1 == 0) goto L_0x0777;
+    L_0x0758:
+        r1 = r14.callback;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r1 == 0) goto L_0x0777;
+    L_0x075c:
+        r12 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r12 - r2;
+        r1 = (r12 > r54 ? 1 : (r12 == r54 ? 0 : -1));
+        if (r1 <= 0) goto L_0x0767;
+    L_0x0763:
+        r12 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r54 = r12 - r2;
+    L_0x0767:
+        r12 = r54;
+        r1 = r14.callback;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = (float) r12;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r24 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r10 = r10 / r24;
+        r10 = r10 / r18;
+        r1.didWriteData(r8, r10);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r54 = r12;
+    L_0x0777:
+        r8 = r78;
+        r9 = r46;
+        r10 = 3;
+        goto L_0x0806;
+    L_0x077e:
+        r63 = r10;
+        r8 = -5;
+        if (r4 != r8) goto L_0x0777;
+    L_0x0783:
+        r4 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r4 = new byte[r4];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r9 = r11.offset;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r10 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r9 = r9 + r10;
+        r1.limit(r9);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r9 = r11.offset;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1.position(r9);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1.get(r4);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r1 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r9 = 1;
+        r1 = r1 - r9;
+    L_0x079b:
+        r10 = 3;
+        if (r1 < 0) goto L_0x07d9;
+    L_0x079e:
+        if (r1 <= r10) goto L_0x07d9;
+    L_0x07a0:
+        r12 = r4[r1];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r12 != r9) goto L_0x07d4;
+    L_0x07a4:
+        r9 = r1 + -1;
+        r9 = r4[r9];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r9 != 0) goto L_0x07d4;
+    L_0x07aa:
+        r9 = r1 + -2;
+        r9 = r4[r9];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r9 != 0) goto L_0x07d4;
+    L_0x07b0:
+        r9 = r1 + -3;
+        r12 = r4[r9];	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        if (r12 != 0) goto L_0x07d4;
+    L_0x07b6:
+        r1 = java.nio.ByteBuffer.allocate(r9);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r12 = r12 - r9;
+        r12 = java.nio.ByteBuffer.allocate(r12);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
         r13 = 0;
-        r9 = r1.put(r2, r13, r10);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9.position(r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r6.size;	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r9 = r9 - r10;
-        r2 = r12.put(r2, r10, r9);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        r2.position(r13);	 Catch:{ Exception -> 0x0600, all -> 0x0cab }
-        goto L_0x0777;
-    L_0x0770:
+        r8 = r1.put(r4, r13, r9);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r8.position(r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r8 = r11.size;	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r8 = r8 - r9;
+        r4 = r12.put(r4, r9, r8);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        r4.position(r13);	 Catch:{ Exception -> 0x0669, all -> 0x0c4d }
+        goto L_0x07db;
+    L_0x07d4:
         r1 = r1 + -1;
-        r9 = -5;
-        r10 = 1;
-        goto L_0x0737;
-    L_0x0775:
+        r8 = -5;
+        r9 = 1;
+        goto L_0x079b;
+    L_0x07d9:
         r1 = 0;
         r12 = 0;
-    L_0x0777:
-        r13 = r67;
-        r9 = r68;
-        r10 = r55;
-        r2 = android.media.MediaFormat.createVideoFormat(r10, r13, r9);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        if (r1 == 0) goto L_0x078f;
-    L_0x0783:
-        if (r12 == 0) goto L_0x078f;
-    L_0x0785:
-        r11 = "csd-0";
-        r2.setByteBuffer(r11, r1);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
+    L_0x07db:
+        r8 = r78;
+        r9 = r46;
+        r4 = android.media.MediaFormat.createVideoFormat(r9, r15, r8);	 Catch:{ Exception -> 0x07fa, all -> 0x0c4d }
+        if (r1 == 0) goto L_0x07f1;
+    L_0x07e5:
+        if (r12 == 0) goto L_0x07f1;
+    L_0x07e7:
+        r13 = "csd-0";
+        r4.setByteBuffer(r13, r1);	 Catch:{ Exception -> 0x07fa, all -> 0x0c4d }
         r1 = "csd-1";
-        r2.setByteBuffer(r1, r12);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-    L_0x078f:
-        r1 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r11 = 0;
-        r1 = r1.addTrack(r2, r11);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r2 = r1;
-        goto L_0x07a9;
-    L_0x0798:
-        r0 = move-exception;
-        r13 = r67;
-        r9 = r68;
-        goto L_0x0603;
-    L_0x079f:
-        r13 = r67;
-        r45 = r9;
-        r10 = r55;
-        r20 = 2;
-        r9 = r68;
-    L_0x07a9:
-        r1 = r6.flags;	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        r1 = r1 & 4;
-        if (r1 == 0) goto L_0x07b1;
-    L_0x07af:
-        r1 = 1;
-        goto L_0x07b2;
-    L_0x07b1:
-        r1 = 0;
-    L_0x07b2:
-        r11 = 0;
-        r5.releaseOutputBuffer(r4, r11);	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        r11 = r1;
-        r12 = r2;
-        r19 = r34;
-        r1 = -1;
-    L_0x07bb:
-        if (r4 == r1) goto L_0x07ce;
-    L_0x07bd:
-        r56 = r5;
-        r55 = r10;
-        r20 = r11;
-        r2 = r12;
-        r1 = r19;
-        r12 = r39;
-        r9 = r45;
-        r10 = r73;
-        goto L_0x059c;
-    L_0x07ce:
-        if (r44 != 0) goto L_0x0a48;
-    L_0x07d0:
-        r1 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        r4 = r3.dequeueOutputBuffer(r6, r1);	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        r1 = -1;
-        if (r4 != r1) goto L_0x07fd;
-    L_0x07d9:
-        r1 = r5;
-        r8 = r6;
-        r41 = r22;
-        r16 = r53;
-        r22 = r59;
-        r9 = r60;
-        r2 = 18;
-        r26 = -5;
-        r29 = 2;
-        r30 = 0;
-        r39 = 0;
-    L_0x07ed:
-        r53 = 0;
-        r55 = 0;
-        r58 = 3;
-        r60 = 1;
-        r59 = r28;
-        r28 = r3;
-    L_0x07f9:
-        r3 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        goto L_0x0a5c;
-    L_0x07fd:
-        r2 = -3;
-        if (r4 != r2) goto L_0x0802;
-    L_0x0800:
-        goto L_0x0a48;
-    L_0x0802:
-        r2 = -2;
-        if (r4 != r2) goto L_0x0826;
-    L_0x0805:
-        r2 = r3.getOutputFormat();	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        if (r4 == 0) goto L_0x0a48;
-    L_0x080d:
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r4.<init>();	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1 = "newFormat = ";
-        r4.append(r1);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r4.append(r2);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1 = r4.toString();	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        goto L_0x0a48;
-    L_0x0823:
-        r0 = move-exception;
-        goto L_0x0603;
-    L_0x0826:
-        if (r4 < 0) goto L_0x0a21;
-    L_0x0828:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        r2 = 18;
-        if (r1 < r2) goto L_0x0838;
-    L_0x082e:
-        r1 = r6.size;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        if (r1 == 0) goto L_0x0834;
-    L_0x0832:
-        r1 = 1;
-        goto L_0x0835;
-    L_0x0834:
-        r1 = 0;
-    L_0x0835:
-        r32 = 0;
-        goto L_0x084a;
-    L_0x0838:
-        r1 = r6.size;	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        if (r1 != 0) goto L_0x0847;
-    L_0x083c:
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r32 = 0;
-        r34 = (r1 > r32 ? 1 : (r1 == r32 ? 0 : -1));
-        if (r34 == 0) goto L_0x0845;
-    L_0x0844:
-        goto L_0x0849;
-    L_0x0845:
-        r1 = 0;
-        goto L_0x084a;
-    L_0x0847:
-        r32 = 0;
-    L_0x0849:
-        r1 = 1;
-    L_0x084a:
-        r2 = (r73 > r32 ? 1 : (r73 == r32 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0865;
-    L_0x084e:
-        r34 = r1;
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r35 = (r1 > r73 ? 1 : (r1 == r73 ? 0 : -1));
-        if (r35 < 0) goto L_0x0867;
-    L_0x0856:
-        r1 = r6.flags;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1 = r1 | 4;
-        r6.flags = r1;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r21 = 1;
-        r32 = 0;
-        r34 = 0;
-        r44 = 1;
-        goto L_0x0869;
-    L_0x0865:
-        r34 = r1;
-    L_0x0867:
-        r32 = 0;
-    L_0x0869:
-        r1 = (r7 > r32 ? 1 : (r7 == r32 ? 0 : -1));
-        if (r1 <= 0) goto L_0x08a1;
-    L_0x086d:
-        r1 = -1;
-        r35 = (r49 > r1 ? 1 : (r49 == r1 ? 0 : -1));
-        if (r35 != 0) goto L_0x08a1;
-    L_0x0873:
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r35 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
-        if (r35 >= 0) goto L_0x089d;
-    L_0x0879:
-        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        if (r1 == 0) goto L_0x089b;
-    L_0x087d:
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1.<init>();	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r2 = "drop frame startTime = ";
-        r1.append(r2);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1.append(r7);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r2 = " present time = ";
-        r1.append(r2);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r7 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1.append(r7);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r1 = r1.toString();	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-    L_0x089b:
-        r1 = 0;
-        goto L_0x08a3;
-    L_0x089d:
-        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0823, all -> 0x0cab }
-        r49 = r1;
-    L_0x08a1:
-        r1 = r34;
-    L_0x08a3:
-        r3.releaseOutputBuffer(r4, r1);	 Catch:{ Exception -> 0x0a45, all -> 0x0cab }
-        if (r1 == 0) goto L_0x09b4;
-    L_0x08a8:
-        r53.awaitNewImage();	 Catch:{ Exception -> 0x08ad, all -> 0x0cab }
-        r1 = 0;
-        goto L_0x08b3;
-    L_0x08ad:
-        r0 = move-exception;
-        r1 = r0;
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x099c, all -> 0x0cab }
-        r1 = 1;
-    L_0x08b3:
-        if (r1 != 0) goto L_0x09b4;
-    L_0x08b5:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x099c, all -> 0x0cab }
-        r7 = 18;
-        if (r1 < r7) goto L_0x08fe;
-    L_0x08bb:
-        r2 = r53;
-        r4 = 0;
-        r2.drawImage(r4);	 Catch:{ Exception -> 0x08f0, all -> 0x0cab }
-        r7 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x08f0, all -> 0x0cab }
-        r34 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r7 = r7 * r34;
-        r1 = r28;
-        r1.setPresentationTime(r7);	 Catch:{ Exception -> 0x08ee, all -> 0x0cab }
-        r1.swapBuffers();	 Catch:{ Exception -> 0x08ee, all -> 0x0cab }
-        r16 = r2;
-        r28 = r3;
-        r20 = r5;
-        r8 = r6;
-        r41 = r22;
-        r55 = r32;
-        r22 = r59;
-        r9 = r60;
-        r26 = -5;
-        r29 = 2;
-        r30 = 0;
-        r53 = 0;
-        r58 = 3;
-        r60 = 1;
-        r59 = r1;
-        goto L_0x09d1;
-    L_0x08ee:
-        r0 = move-exception;
-        goto L_0x08f3;
-    L_0x08f0:
-        r0 = move-exception;
-        r1 = r28;
-    L_0x08f3:
-        r10 = r70;
+        r4.setByteBuffer(r1, r12);	 Catch:{ Exception -> 0x07fa, all -> 0x0c4d }
+    L_0x07f1:
+        r1 = r14.mediaMuxer;	 Catch:{ Exception -> 0x07fa, all -> 0x0c4d }
+        r12 = 0;
+        r1 = r1.addTrack(r4, r12);	 Catch:{ Exception -> 0x07fa, all -> 0x0c4d }
         r4 = r1;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        goto L_0x0b9b;
-    L_0x08fe:
-        r1 = r28;
-        r2 = r53;
-        r4 = 0;
-        r7 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        r17 = r5.dequeueInputBuffer(r7);	 Catch:{ Exception -> 0x0989, all -> 0x0cab }
-        if (r17 < 0) goto L_0x0962;
-    L_0x090b:
-        r4 = 1;
-        r2.drawImage(r4);	 Catch:{ Exception -> 0x0989, all -> 0x0cab }
-        r16 = r2.getFrame();	 Catch:{ Exception -> 0x0989, all -> 0x0cab }
-        r34 = r43[r17];	 Catch:{ Exception -> 0x0989, all -> 0x0cab }
-        r34.clear();	 Catch:{ Exception -> 0x0989, all -> 0x0cab }
-        r41 = r22;
-        r8 = -1;
-        r26 = -5;
-        r22 = r1;
-        r1 = r16;
-        r16 = r2;
-        r7 = r6;
-        r55 = r32;
-        r2 = r34;
-        r28 = r3;
-        r30 = 0;
-        r53 = 0;
-        r3 = r42;
-        r6 = r60;
-        r60 = 1;
-        r61 = r59;
-        r59 = r22;
-        r22 = r61;
-        r4 = r67;
-        r20 = r5;
-        r8 = 18;
-        r29 = 2;
-        r58 = 3;
-        r5 = r68;
-        r9 = r6;
-        r6 = r23;
-        r8 = r7;
-        r7 = r31;
-        org.telegram.messenger.Utilities.convertVideoFrame(r1, r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        r34 = 0;
-        r1 = r8.presentationTimeUs;	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        r38 = 0;
-        r32 = r20;
-        r33 = r17;
-        r35 = r24;
-        r36 = r1;
-        r32.queueInputBuffer(r33, r34, r35, r36, r38);	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        goto L_0x09d1;
-    L_0x0962:
-        r16 = r2;
-        r28 = r3;
-        r20 = r5;
-        r8 = r6;
-        r41 = r22;
-        r55 = r32;
-        r22 = r59;
-        r9 = r60;
-        r26 = -5;
-        r29 = 2;
-        r30 = 0;
-        r53 = 0;
-        r58 = 3;
-        r60 = 1;
-        r59 = r1;
-        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        if (r1 == 0) goto L_0x09d1;
-    L_0x0983:
-        r1 = "input buffer not available";
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        goto L_0x09d1;
-    L_0x0989:
+        goto L_0x0806;
+    L_0x07fa:
         r0 = move-exception;
-        r59 = r1;
-        r16 = r2;
-        r28 = r3;
-        r20 = r5;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r10 = r70;
-        r1 = r0;
-        goto L_0x09b0;
-    L_0x099c:
-        r0 = move-exception;
-        r20 = r5;
-        r59 = r28;
-        r16 = r53;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r10 = r70;
-        r1 = r0;
-        r2 = r16;
-    L_0x09b0:
-        r4 = r59;
-        goto L_0x0bc4;
-    L_0x09b4:
-        r20 = r5;
-        r8 = r6;
-        r41 = r22;
-        r55 = r32;
-        r16 = r53;
-        r22 = r59;
-        r9 = r60;
-        r26 = -5;
-        r29 = 2;
-        r30 = 0;
-        r53 = 0;
-        r58 = 3;
-        r60 = 1;
-        r59 = r28;
-        r28 = r3;
-    L_0x09d1:
-        r1 = r8.flags;	 Catch:{ Exception -> 0x0a1c, all -> 0x0cab }
+        goto L_0x066c;
+    L_0x07fd:
+        r8 = r78;
+        r63 = r10;
+        r9 = r46;
+        r10 = 3;
+        r23 = 2;
+    L_0x0806:
+        r1 = r11.flags;	 Catch:{ Exception -> 0x0abf, all -> 0x0c4d }
         r1 = r1 & 4;
-        if (r1 == 0) goto L_0x0a16;
-    L_0x09d7:
-        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0a1c, all -> 0x0cab }
-        if (r1 == 0) goto L_0x09ec;
-    L_0x09db:
-        r1 = "decoder stream end";
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        goto L_0x09ec;
-    L_0x09e1:
+        if (r1 == 0) goto L_0x0810;
+    L_0x080c:
+        r1 = 0;
+        r24 = 1;
+        goto L_0x0813;
+    L_0x0810:
+        r1 = 0;
+        r24 = 0;
+    L_0x0813:
+        r5.releaseOutputBuffer(r7, r1);	 Catch:{ Exception -> 0x0abf, all -> 0x0c4d }
+        r12 = r4;
+        r13 = r30;
+        r17 = r33;
+        r4 = -1;
+    L_0x081c:
+        if (r7 == r4) goto L_0x082e;
+    L_0x081e:
+        r30 = r5;
+        r46 = r9;
+        r4 = r12;
+        r1 = r13;
+        r33 = r17;
+        r12 = r37;
+        r10 = r63;
+        r8 = r83;
+        goto L_0x0606;
+    L_0x082e:
+        if (r31 != 0) goto L_0x0a8e;
+    L_0x0830:
+        r30 = r5;
+        r4 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+        r1 = r6.dequeueOutputBuffer(r11, r4);	 Catch:{ Exception -> 0x0a8b, all -> 0x0c4d }
+        r4 = -1;
+        if (r1 != r4) goto L_0x085d;
+    L_0x083b:
+        r68 = r6;
+        r69 = r19;
+        r3 = r30;
+        r22 = r47;
+        r58 = r59;
+        r47 = r60;
+        r10 = r61;
+        r2 = 18;
+        r37 = 0;
+    L_0x084d:
+        r57 = -5;
+        r61 = -1;
+        r65 = 0;
+        r67 = 0;
+        r59 = r12;
+        r60 = r13;
+        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+        goto L_0x0a9f;
+    L_0x085d:
+        r5 = -3;
+        if (r1 != r5) goto L_0x0868;
+    L_0x0860:
+        r68 = r6;
+        r69 = r19;
+        r3 = r30;
+        goto L_0x0a93;
+    L_0x0868:
+        r5 = -2;
+        if (r1 != r5) goto L_0x088b;
+    L_0x086b:
+        r1 = r6.getOutputFormat();	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x0860;
+    L_0x0873:
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r5.<init>();	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r7 = "newFormat = ";
+        r5.append(r7);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r5.append(r1);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r1 = r5.toString();	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        goto L_0x0860;
+    L_0x0888:
         r0 = move-exception;
-        r10 = r70;
+        goto L_0x05d5;
+    L_0x088b:
+        if (r1 < 0) goto L_0x0a68;
+    L_0x088d:
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0a8b, all -> 0x0c4d }
+        r7 = 18;
+        if (r5 < r7) goto L_0x089e;
+    L_0x0893:
+        r5 = r11.size;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        if (r5 == 0) goto L_0x0899;
+    L_0x0897:
+        r5 = 1;
+        goto L_0x089a;
+    L_0x0899:
+        r5 = 0;
+    L_0x089a:
+        r4 = r5;
+        r27 = 0;
+        goto L_0x08b0;
+    L_0x089e:
+        r5 = r11.size;	 Catch:{ Exception -> 0x0a8b, all -> 0x0c4d }
+        if (r5 != 0) goto L_0x08ad;
+    L_0x08a2:
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r27 = 0;
+        r7 = (r4 > r27 ? 1 : (r4 == r27 ? 0 : -1));
+        if (r7 == 0) goto L_0x08ab;
+    L_0x08aa:
+        goto L_0x08af;
+    L_0x08ab:
+        r4 = 0;
+        goto L_0x08b0;
+    L_0x08ad:
+        r27 = 0;
+    L_0x08af:
+        r4 = 1;
+    L_0x08b0:
+        r5 = (r83 > r27 ? 1 : (r83 == r27 ? 0 : -1));
+        if (r5 <= 0) goto L_0x08c9;
+    L_0x08b4:
+        r7 = r4;
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r32 = (r4 > r83 ? 1 : (r4 == r83 ? 0 : -1));
+        if (r32 < 0) goto L_0x08ca;
+    L_0x08bb:
+        r4 = r11.flags;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r4 = r4 | 4;
+        r11.flags = r4;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r7 = 0;
+        r25 = 1;
+        r27 = 0;
+        r46 = 1;
+        goto L_0x08ce;
+    L_0x08c9:
+        r7 = r4;
+    L_0x08ca:
+        r46 = r31;
+        r27 = 0;
+    L_0x08ce:
+        r4 = (r2 > r27 ? 1 : (r2 == r27 ? 0 : -1));
+        if (r4 <= 0) goto L_0x0906;
+    L_0x08d2:
+        r4 = -1;
+        r31 = (r52 > r4 ? 1 : (r52 == r4 ? 0 : -1));
+        if (r31 != 0) goto L_0x0906;
+    L_0x08d8:
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r31 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1));
+        if (r31 >= 0) goto L_0x0902;
+    L_0x08de:
+        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        if (r4 == 0) goto L_0x0900;
+    L_0x08e2:
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r4.<init>();	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r5 = "drop frame startTime = ";
+        r4.append(r5);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r4.append(r2);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r5 = " present time = ";
+        r4.append(r5);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r2 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r4.append(r2);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r2 = r4.toString();	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.d(r2);	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+    L_0x0900:
+        r7 = 0;
+        goto L_0x0906;
+    L_0x0902:
+        r2 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0888, all -> 0x0c4d }
+        r52 = r2;
+    L_0x0906:
+        r6.releaseOutputBuffer(r1, r7);	 Catch:{ Exception -> 0x0a8b, all -> 0x0c4d }
+        if (r7 == 0) goto L_0x09fe;
+    L_0x090b:
+        r47.awaitNewImage();	 Catch:{ Exception -> 0x0910, all -> 0x0c4d }
+        r1 = 0;
+        goto L_0x0916;
+    L_0x0910:
+        r0 = move-exception;
         r1 = r0;
-        r2 = r16;
-        r5 = r20;
-        r3 = r28;
-        goto L_0x09b0;
-    L_0x09ec:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0a1c, all -> 0x0cab }
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x09ea, all -> 0x0c4d }
+        r1 = 1;
+    L_0x0916:
+        if (r1 != 0) goto L_0x09fe;
+    L_0x0918:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x09ea, all -> 0x0c4d }
         r2 = 18;
-        if (r1 < r2) goto L_0x09fa;
-    L_0x09f2:
-        r20.signalEndOfInputStream();	 Catch:{ Exception -> 0x09e1, all -> 0x0cab }
-        r1 = r20;
-        r3 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        goto L_0x0a13;
+        if (r1 < r2) goto L_0x0951;
+    L_0x091e:
+        r4 = r47;
+        r5 = 0;
+        r4.drawImage(r5);	 Catch:{ Exception -> 0x0940, all -> 0x0c4d }
+        r1 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0940, all -> 0x0c4d }
+        r31 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r1 = r1 * r31;
+        r7 = r19;
+        r7.setPresentationTime(r1);	 Catch:{ Exception -> 0x093e, all -> 0x0c4d }
+        r7.swapBuffers();	 Catch:{ Exception -> 0x093e, all -> 0x0c4d }
+        r22 = r4;
+        r68 = r6;
+        r69 = r7;
+        r65 = r27;
+        r64 = r30;
+        goto L_0x0a08;
+    L_0x093e:
+        r0 = move-exception;
+        goto L_0x0943;
+    L_0x0940:
+        r0 = move-exception;
+        r7 = r19;
+    L_0x0943:
+        r1 = r0;
+        r47 = r4;
+        r11 = r7;
+        r5 = r30;
+        r10 = r61;
+        r67 = 0;
+        r4 = r80;
+        goto L_0x0bb4;
+    L_0x0951:
+        r7 = r19;
+        r3 = r30;
+        r4 = r47;
+        r1 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+        r5 = 0;
+        r19 = r3.dequeueInputBuffer(r1);	 Catch:{ Exception -> 0x09d7, all -> 0x0c4d }
+        if (r19 < 0) goto L_0x09b2;
+    L_0x0960:
+        r10 = 1;
+        r4.drawImage(r10);	 Catch:{ Exception -> 0x09d7, all -> 0x0c4d }
+        r16 = r4.getFrame();	 Catch:{ Exception -> 0x09d7, all -> 0x0c4d }
+        r30 = r45[r19];	 Catch:{ Exception -> 0x09d7, all -> 0x0c4d }
+        r30.clear();	 Catch:{ Exception -> 0x09d7, all -> 0x0c4d }
+        r31 = r1;
+        r2 = r61;
+        r1 = r16;
+        r10 = r2;
+        r47 = r60;
+        r57 = -5;
+        r2 = r30;
+        r29 = r3;
+        r58 = r59;
+        r3 = r44;
+        r22 = r4;
+        r59 = r12;
+        r60 = r13;
+        r12 = r31;
+        r61 = -1;
+        r4 = r77;
+        r65 = r27;
+        r64 = r29;
+        r67 = 0;
+        r5 = r78;
+        r68 = r6;
+        r6 = r36;
+        r69 = r7;
+        r7 = r35;
+        org.telegram.messenger.Utilities.convertVideoFrame(r1, r2, r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        r29 = 0;
+        r1 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        r33 = 0;
+        r27 = r64;
+        r28 = r19;
+        r30 = r34;
+        r31 = r1;
+        r27.queueInputBuffer(r28, r29, r30, r31, r33);	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        goto L_0x0a1a;
+    L_0x09b2:
+        r64 = r3;
+        r22 = r4;
+        r68 = r6;
+        r69 = r7;
+        r65 = r27;
+        r58 = r59;
+        r47 = r60;
+        r10 = r61;
+        r57 = -5;
+        r61 = -1;
+        r67 = 0;
+        r59 = r12;
+        r60 = r13;
+        r12 = r1;
+        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        if (r1 == 0) goto L_0x0a1a;
+    L_0x09d1:
+        r1 = "input buffer not available";
+        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        goto L_0x0a1a;
+    L_0x09d7:
+        r0 = move-exception;
+        r64 = r3;
+        r22 = r4;
+        r68 = r6;
+        r69 = r7;
+        r10 = r61;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        r47 = r22;
+        goto L_0x09fa;
+    L_0x09ea:
+        r0 = move-exception;
+        r68 = r6;
+        r69 = r19;
+        r64 = r30;
+        r22 = r47;
+        r10 = r61;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
     L_0x09fa:
-        r1 = r20;
-        r3 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
-        r35 = r1.dequeueInputBuffer(r3);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        if (r35 < 0) goto L_0x0a13;
-    L_0x0a04:
-        r36 = 0;
-        r37 = 1;
-        r5 = r8.presentationTimeUs;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r40 = 4;
-        r34 = r1;
-        r38 = r5;
-        r34.queueInputBuffer(r35, r36, r37, r38, r40);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-    L_0x0a13:
-        r39 = 0;
-        goto L_0x0a5c;
-    L_0x0a16:
-        r1 = r20;
+        r5 = r64;
+        goto L_0x0b4a;
+    L_0x09fe:
+        r68 = r6;
+        r69 = r19;
+        r65 = r27;
+        r64 = r30;
+        r22 = r47;
+    L_0x0a08:
+        r58 = r59;
+        r47 = r60;
+        r10 = r61;
+        r57 = -5;
+        r61 = -1;
+        r67 = 0;
+        r59 = r12;
+        r60 = r13;
+        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+    L_0x0a1a:
+        r1 = r11.flags;	 Catch:{ Exception -> 0x0a63, all -> 0x0c4d }
+        r1 = r1 & 4;
+        if (r1 == 0) goto L_0x0a5c;
+    L_0x0a20:
+        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0a63, all -> 0x0c4d }
+        if (r1 == 0) goto L_0x0a34;
+    L_0x0a24:
+        r1 = "decoder stream end";
+        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        goto L_0x0a34;
+    L_0x0a2a:
+        r0 = move-exception;
+        r4 = r80;
+        r1 = r0;
+        r47 = r22;
+        r5 = r64;
+        goto L_0x0b15;
+    L_0x0a34:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0a63, all -> 0x0c4d }
         r2 = 18;
-        goto L_0x07f9;
-    L_0x0a1c:
-        r0 = move-exception;
-        r1 = r20;
-        goto L_0x0ace;
-    L_0x0a21:
-        r1 = r5;
-        r59 = r28;
-        r16 = r53;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r2 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.<init>();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r5 = "unexpected result from decoder.dequeueOutputBuffer: ";
-        r3.append(r5);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.append(r4);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        throw r2;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-    L_0x0a45:
-        r0 = move-exception;
-        goto L_0x0ad9;
+        if (r1 < r2) goto L_0x0a40;
+    L_0x0a3a:
+        r64.signalEndOfInputStream();	 Catch:{ Exception -> 0x0a2a, all -> 0x0c4d }
+        r3 = r64;
+        goto L_0x0a57;
+    L_0x0a40:
+        r3 = r64;
+        r38 = r3.dequeueInputBuffer(r12);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        if (r38 < 0) goto L_0x0a57;
     L_0x0a48:
-        r1 = r5;
-        r8 = r6;
-        r41 = r22;
-        r16 = r53;
-        r22 = r59;
-        r9 = r60;
-        r2 = 18;
-        r26 = -5;
-        r29 = 2;
-        r30 = 0;
-        goto L_0x07ed;
+        r39 = 0;
+        r40 = 1;
+        r4 = r11.presentationTimeUs;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r43 = 4;
+        r37 = r3;
+        r41 = r4;
+        r37.queueInputBuffer(r38, r39, r40, r41, r43);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+    L_0x0a57:
+        r31 = r46;
+        r37 = 0;
+        goto L_0x0a9f;
     L_0x0a5c:
-        r56 = r1;
-        r6 = r8;
-        r60 = r9;
-        r55 = r10;
-        r20 = r11;
-        r2 = r12;
-        r53 = r16;
-        r1 = r19;
-        r3 = r28;
-        r12 = r39;
-        r9 = r45;
-        r28 = r59;
-        r7 = r71;
-        r10 = r73;
-        r59 = r22;
-        r22 = r41;
-        goto L_0x059c;
-    L_0x0a7c:
-        r13 = r67;
-        r1 = r5;
-        r59 = r28;
-        r16 = r53;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r2 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.<init>();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r5 = "encoderOutputBuffer ";
-        r3.append(r5);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.append(r4);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r4 = " was null";
-        r3.append(r4);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        throw r2;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-    L_0x0aa7:
-        r13 = r67;
-        r1 = r5;
-        r59 = r28;
-        r16 = r53;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r2 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.<init>();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r5 = "unexpected result from encoder.dequeueOutputBuffer: ";
-        r3.append(r5);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3.append(r4);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        r2.<init>(r3);	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-        throw r2;	 Catch:{ Exception -> 0x0acd, all -> 0x0cab }
-    L_0x0acd:
+        r3 = r64;
+        r2 = 18;
+        r31 = r46;
+        goto L_0x0a9f;
+    L_0x0a63:
         r0 = move-exception;
-    L_0x0ace:
-        r10 = r70;
-        r5 = r1;
-        r2 = r16;
-        r3 = r28;
-        goto L_0x0b14;
-    L_0x0ad6:
+        r3 = r64;
+        goto L_0x0b0f;
+    L_0x0a68:
+        r68 = r6;
+        r69 = r19;
+        r3 = r30;
+        r22 = r47;
+        r10 = r61;
+        r67 = 0;
+        r2 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4.<init>();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r5 = "unexpected result from decoder.dequeueOutputBuffer: ";
+        r4.append(r5);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4.append(r1);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r1 = r4.toString();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2.<init>(r1);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        throw r2;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+    L_0x0a8b:
         r0 = move-exception;
-        r13 = r67;
-    L_0x0ad9:
-        r1 = r5;
-        r59 = r28;
-        r16 = r53;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r10 = r70;
-        goto L_0x0afd;
-    L_0x0ae9:
-        r0 = move-exception;
-        r13 = r67;
-        r59 = r28;
-        r16 = r53;
-        r1 = r56;
-        r9 = r60;
-        r53 = 0;
-        r60 = 1;
-        r28 = r3;
-        r10 = r70;
-        r5 = r1;
-    L_0x0afd:
-        r2 = r16;
-        goto L_0x0b14;
-    L_0x0b00:
-        r0 = move-exception;
-        r16 = r2;
-        r1 = r5;
-        r57 = r13;
-        r9 = r25;
-        r59 = r28;
-        r53 = 0;
-        r60 = 1;
-        r13 = r67;
-        r28 = r3;
-        r10 = r70;
-    L_0x0b14:
+        goto L_0x0b28;
+    L_0x0a8e:
+        r3 = r5;
+        r68 = r6;
+        r69 = r19;
+    L_0x0a93:
+        r22 = r47;
+        r58 = r59;
+        r47 = r60;
+        r10 = r61;
+        r2 = 18;
+        goto L_0x084d;
+    L_0x0a9f:
+        r30 = r3;
+        r46 = r9;
+        r61 = r10;
+        r33 = r17;
+        r12 = r37;
         r4 = r59;
-        goto L_0x0b9b;
+        r1 = r60;
+        r10 = r63;
+        r6 = r68;
+        r19 = r69;
+        r2 = r81;
+        r8 = r83;
+        r60 = r47;
+        r59 = r58;
+        r47 = r22;
+        goto L_0x0606;
+    L_0x0abf:
+        r0 = move-exception;
+        goto L_0x0b1b;
+    L_0x0ac1:
+        r8 = r78;
+        r3 = r5;
+        r68 = r6;
+        r69 = r19;
+        r22 = r47;
+        r10 = r61;
+        r67 = 0;
+        r1 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2.<init>();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4 = "encoderOutputBuffer ";
+        r2.append(r4);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2.append(r7);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4 = " was null";
+        r2.append(r4);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r1.<init>(r2);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        throw r1;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+    L_0x0aea:
+        r8 = r78;
+        r3 = r5;
+        r68 = r6;
+        r69 = r19;
+        r22 = r47;
+        r10 = r61;
+        r67 = 0;
+        r1 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2.<init>();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r4 = "unexpected result from encoder.dequeueOutputBuffer: ";
+        r2.append(r4);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2.append(r7);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        r1.<init>(r2);	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+        throw r1;	 Catch:{ Exception -> 0x0b0e, all -> 0x0c4d }
+    L_0x0b0e:
+        r0 = move-exception;
+    L_0x0b0f:
+        r4 = r80;
+        r1 = r0;
+        r5 = r3;
+        r47 = r22;
+    L_0x0b15:
+        r6 = r68;
+        goto L_0x0b4a;
     L_0x0b18:
         r0 = move-exception;
-        r16 = r2;
-        r28 = r3;
-        r59 = r4;
-        r1 = r5;
-        r30 = r9;
-        r13 = r12;
-        r9 = r25;
-        goto L_0x0b33;
-    L_0x0b26:
+        r8 = r78;
+    L_0x0b1b:
+        r3 = r5;
+        r68 = r6;
+        r69 = r19;
+        r22 = r47;
+        r10 = r61;
+        goto L_0x0b45;
+    L_0x0b25:
         r0 = move-exception;
-        r16 = r2;
-        r28 = r3;
-        r59 = r4;
-        r1 = r5;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-    L_0x0b33:
-        r53 = 0;
-        r60 = 1;
-        r10 = r70;
-        r57 = r30;
-        goto L_0x0b9b;
-    L_0x0b3d:
-        r0 = move-exception;
-        r28 = r3;
-        r59 = r4;
-        r1 = r5;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
-        r10 = r70;
-        goto L_0x0b60;
-    L_0x0b4f:
-        r0 = move-exception;
-        r28 = r3;
-        r59 = r4;
-        r1 = r5;
-        r70 = r10;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
-    L_0x0b60:
-        r2 = r30;
-        r57 = r2;
-        goto L_0x0b9b;
-    L_0x0b65:
-        r0 = move-exception;
-        r59 = r4;
-        r1 = r5;
-        r70 = r10;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
-        r2 = r30;
-        r3 = r2;
-        r57 = r3;
-        goto L_0x0b9b;
-    L_0x0b7a:
-        r0 = move-exception;
-        r1 = r5;
-        r70 = r10;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
-        r2 = r30;
-        goto L_0x0b97;
-    L_0x0b8a:
-        r0 = move-exception;
-        r30 = r2;
-        r1 = r5;
-        r70 = r10;
-        r13 = r12;
-        r9 = r25;
-        r53 = 0;
-        r60 = 1;
-    L_0x0b97:
-        r3 = r2;
-        r4 = r3;
-        r57 = r4;
-    L_0x0b9b:
+        r8 = r78;
+    L_0x0b28:
+        r68 = r6;
+        r69 = r19;
+        r3 = r30;
+        r22 = r47;
+        r10 = r61;
+        r67 = 0;
+        r4 = r80;
         r1 = r0;
-        goto L_0x0bc4;
-    L_0x0b9d:
+        r5 = r3;
+        goto L_0x0b4a;
+    L_0x0b39:
         r0 = move-exception;
-        r70 = r10;
-        goto L_0x0baf;
-    L_0x0ba1:
-        r0 = move-exception;
-        r13 = r12;
-        r9 = r25;
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
+        r10 = r1;
+        r56 = r4;
+        r3 = r5;
+        r68 = r6;
+        r8 = r13;
+        r69 = r19;
+        r22 = r47;
+    L_0x0b45:
+        r67 = 0;
+        r4 = r80;
         r1 = r0;
-        r10 = r2;
-        goto L_0x0bbd;
-    L_0x0bae:
-        r0 = move-exception;
-    L_0x0baf:
-        r13 = r12;
-        r9 = r25;
-        goto L_0x0bb6;
-    L_0x0bb3:
-        r0 = move-exception;
-        r9 = r4;
-        r13 = r12;
-    L_0x0bb6:
-        r30 = 0;
-        r53 = 0;
-        r60 = 1;
-        r1 = r0;
-    L_0x0bbd:
-        r2 = r30;
-        r3 = r2;
-        r4 = r3;
-        r5 = r4;
-        r57 = r5;
-    L_0x0bc4:
-        r6 = r1 instanceof java.lang.IllegalStateException;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        if (r6 == 0) goto L_0x0bcc;
-    L_0x0bc8:
-        if (r78 != 0) goto L_0x0bcc;
-    L_0x0bca:
-        r53 = 1;
-    L_0x0bcc:
-        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0c3c, all -> 0x0cab }
-        r6.<init>();	 Catch:{ Exception -> 0x0c3c, all -> 0x0cab }
-        r7 = "bitrate: ";
-        r6.append(r7);	 Catch:{ Exception -> 0x0c3c, all -> 0x0cab }
-        r6.append(r10);	 Catch:{ Exception -> 0x0c3c, all -> 0x0cab }
-        r7 = " framerate: ";
-        r6.append(r7);	 Catch:{ Exception -> 0x0c3c, all -> 0x0cab }
+    L_0x0b4a:
         r11 = r69;
-        r6.append(r11);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
+        goto L_0x0bb4;
+    L_0x0b4e:
+        r0 = move-exception;
+        r10 = r1;
+        r22 = r4;
+        r3 = r5;
+        r68 = r6;
+        r8 = r13;
+        r69 = r19;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        r47 = r22;
+        r11 = r69;
+        goto L_0x0bb2;
+    L_0x0b63:
+        r0 = move-exception;
+        r10 = r1;
+        r22 = r4;
+        r3 = r5;
+        r68 = r6;
+        r69 = r11;
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        r47 = r22;
+        goto L_0x0bb2;
+    L_0x0b75:
+        r0 = move-exception;
+        r10 = r1;
+        r3 = r5;
+        r68 = r6;
+        r69 = r11;
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        goto L_0x0bb0;
+    L_0x0b83:
+        r0 = move-exception;
+        r10 = r1;
+        r3 = r5;
+        r69 = r11;
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        r6 = 0;
+        goto L_0x0bb0;
+    L_0x0b90:
+        r0 = move-exception;
+        r10 = r1;
+        r3 = r5;
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+        r1 = r0;
+        goto L_0x0bae;
+    L_0x0b9a:
+        r0 = move-exception;
+        r10 = r1;
+        r80 = r11;
+        goto L_0x0ba7;
+    L_0x0b9f:
+        r0 = move-exception;
+        r10 = r1;
+        r8 = r13;
+        r67 = 0;
+        goto L_0x0bac;
+    L_0x0ba5:
+        r0 = move-exception;
+        r10 = r1;
+    L_0x0ba7:
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+    L_0x0bac:
+        r1 = r0;
+        r5 = 0;
+    L_0x0bae:
+        r6 = 0;
+        r11 = 0;
+    L_0x0bb0:
+        r47 = 0;
+    L_0x0bb2:
+        r56 = 0;
+    L_0x0bb4:
+        r2 = r1 instanceof java.lang.IllegalStateException;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c4d }
+        if (r2 == 0) goto L_0x0bbc;
+    L_0x0bb8:
+        if (r88 != 0) goto L_0x0bbc;
+    L_0x0bba:
+        r3 = 1;
+        goto L_0x0bbd;
+    L_0x0bbc:
+        r3 = 0;
+    L_0x0bbd:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0c1f, all -> 0x0c4d }
+        r2.<init>();	 Catch:{ Exception -> 0x0c1f, all -> 0x0c4d }
+        r7 = "bitrate: ";
+        r2.append(r7);	 Catch:{ Exception -> 0x0c1f, all -> 0x0c4d }
+        r2.append(r4);	 Catch:{ Exception -> 0x0c1f, all -> 0x0c4d }
+        r7 = " framerate: ";
+        r2.append(r7);	 Catch:{ Exception -> 0x0c1f, all -> 0x0c4d }
+        r9 = r79;
+        r2.append(r9);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
         r7 = " size: ";
-        r6.append(r7);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        r12 = r68;
-        r6.append(r12);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
+        r2.append(r7);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r2.append(r8);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
         r7 = "x";
-        r6.append(r7);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        r6.append(r13);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        r6 = r6.toString();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        org.telegram.messenger.FileLog.e(r6);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0cab }
-        r17 = r53;
-        r1 = 1;
+        r2.append(r7);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r2.append(r15);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r19 = r11;
+        r21 = 1;
+    L_0x0bf3:
+        r1 = r14.extractor;	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r1.unselectTrack(r10);	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        if (r47 == 0) goto L_0x0bfd;
+    L_0x0bfa:
+        r47.release();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+    L_0x0bfd:
+        if (r19 == 0) goto L_0x0CLASSNAME;
+    L_0x0bff:
+        r19.release();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
     L_0x0CLASSNAME:
-        r6 = r14.extractor;	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-        r6.unselectTrack(r9);	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-        if (r2 == 0) goto L_0x0c0d;
+        if (r6 == 0) goto L_0x0c0a;
+    L_0x0CLASSNAME:
+        r6.stop();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r6.release();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
     L_0x0c0a:
-        r2.release();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-    L_0x0c0d:
-        if (r4 == 0) goto L_0x0CLASSNAME;
-    L_0x0c0f:
-        r4.release();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-    L_0x0CLASSNAME:
-        if (r3 == 0) goto L_0x0c1a;
-    L_0x0CLASSNAME:
-        r3.stop();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-        r3.release();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-    L_0x0c1a:
         if (r5 == 0) goto L_0x0CLASSNAME;
-    L_0x0c1c:
-        r5.stop();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-        r5.release();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
+    L_0x0c0c:
+        r5.stop();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r5.release();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
     L_0x0CLASSNAME:
-        if (r57 == 0) goto L_0x0CLASSNAME;
+        if (r56 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
-        r57.release();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
+        r56.release();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
     L_0x0CLASSNAME:
-        r62.checkConversionCanceled();	 Catch:{ Exception -> 0x0c2d, all -> 0x0cab }
-        r3 = r17;
+        r72.checkConversionCanceled();	 Catch:{ Exception -> 0x0c1d, all -> 0x0c4d }
+        r67 = r21;
         goto L_0x0CLASSNAME;
-    L_0x0c2d:
-        r0 = move-exception;
-        r1 = r0;
-        r13 = r11;
-        r3 = r17;
-        goto L_0x0cba;
-    L_0x0CLASSNAME:
+    L_0x0c1d:
         r0 = move-exception;
         goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c1f:
         r0 = move-exception;
-        r12 = r68;
+        r9 = r79;
     L_0x0CLASSNAME:
         r1 = r0;
-        r13 = r11;
+        goto L_0x0c5b;
+    L_0x0CLASSNAME:
+        r0 = move-exception;
+        r9 = r79;
         goto L_0x0CLASSNAME;
-    L_0x0c3c:
+    L_0x0CLASSNAME:
+        r9 = r79;
+        r8 = r13;
+        r67 = 0;
+        r4 = r80;
+        r3 = 0;
+    L_0x0CLASSNAME:
+        r1 = r14.extractor;
+        if (r1 == 0) goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
+        r1.release();
+    L_0x0CLASSNAME:
+        r1 = r14.mediaMuxer;
+        if (r1 == 0) goto L_0x0CLASSNAME;
+    L_0x0c3b:
+        r1.finishMovie();	 Catch:{ Exception -> 0x0c3f }
+        goto L_0x0CLASSNAME;
+    L_0x0c3f:
         r0 = move-exception;
-        r12 = r68;
-        r13 = r69;
         r1 = r0;
+        org.telegram.messenger.FileLog.e(r1);
     L_0x0CLASSNAME:
-        r3 = r53;
-        goto L_0x0cba;
+        r10 = r4;
+        r16 = r67;
+        goto L_0x0ca2;
     L_0x0CLASSNAME:
         r0 = move-exception;
-        r12 = r68;
-        r13 = r69;
-        goto L_0x0cb8;
+        r15 = r77;
+        r8 = r11;
+        goto L_0x0CLASSNAME;
     L_0x0c4d:
-        r13 = r12;
-        r53 = 0;
-        r12 = r11;
-        r11 = r9;
-        r1 = 0;
-        r3 = 0;
-    L_0x0CLASSNAME:
-        r4 = r1;
-        r13 = r11;
-        goto L_0x0c8b;
+        r0 = move-exception;
+        r2 = r0;
+        r1 = r14;
+        goto L_0x0cc9;
     L_0x0CLASSNAME:
         r0 = move-exception;
-        r13 = r12;
-        r53 = 0;
-        r60 = 1;
-        r12 = r11;
+        r8 = r11;
+        r15 = r12;
+    L_0x0CLASSNAME:
+        r67 = 0;
+        r4 = r80;
+    L_0x0CLASSNAME:
         r1 = r0;
-        r13 = r9;
-        goto L_0x0cb9;
-    L_0x0CLASSNAME:
-        r8 = r2;
-        r13 = r12;
-        r53 = 0;
-        r60 = 1;
-        r12 = r11;
-        r11 = r9;
-        r2 = r14.extractor;	 Catch:{ Exception -> 0x0ca8, all -> 0x0cab }
-        r3 = r14.mediaMuxer;	 Catch:{ Exception -> 0x0ca8, all -> 0x0cab }
-        r1 = -1;
-        if (r10 == r1) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r15 = 1;
-        goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r15 = 0;
-    L_0x0CLASSNAME:
-        r1 = r62;
-        r4 = r8;
-        r5 = r71;
-        r7 = r73;
-        r12 = r11;
-        r9 = r75;
-        r13 = r68;
-        r11 = r64;
-        r13 = r12;
-        r12 = r15;
-        r1.readAndWriteTracks(r2, r3, r4, r5, r7, r9, r11, r12);	 Catch:{ Exception -> 0x0ca6, all -> 0x0cab }
-        r10 = r70;
+    L_0x0c5a:
         r3 = 0;
-        r4 = 0;
-    L_0x0c8b:
+    L_0x0c5b:
+        r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0cc5 }
+        r2.<init>();	 Catch:{ all -> 0x0cc5 }
+        r5 = "bitrate: ";
+        r2.append(r5);	 Catch:{ all -> 0x0cc5 }
+        r2.append(r4);	 Catch:{ all -> 0x0cc5 }
+        r5 = " framerate: ";
+        r2.append(r5);	 Catch:{ all -> 0x0cc5 }
+        r2.append(r9);	 Catch:{ all -> 0x0cc5 }
+        r5 = " size: ";
+        r2.append(r5);	 Catch:{ all -> 0x0cc5 }
+        r2.append(r8);	 Catch:{ all -> 0x0cc5 }
+        r5 = "x";
+        r2.append(r5);	 Catch:{ all -> 0x0cc5 }
+        r2.append(r15);	 Catch:{ all -> 0x0cc5 }
+        r2 = r2.toString();	 Catch:{ all -> 0x0cc5 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0cc5 }
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x0cc5 }
         r1 = r14.extractor;
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0c8f:
@@ -3160,149 +3155,85 @@ public class MediaCodecVideoConvertor {
         r1 = r0;
         org.telegram.messenger.FileLog.e(r1);
     L_0x0c9f:
-        r6 = r67;
-        r7 = r68;
-        r60 = r4;
-        goto L_0x0d02;
-    L_0x0ca6:
-        r0 = move-exception;
-        goto L_0x0cb6;
-    L_0x0ca8:
-        r0 = move-exception;
-        r13 = r11;
-        goto L_0x0cb6;
-    L_0x0cab:
-        r0 = move-exception;
-        r2 = r0;
-        r1 = r14;
-        goto L_0x0d29;
-    L_0x0cb0:
-        r0 = move-exception;
-        r13 = r9;
-        r53 = 0;
-        r60 = 1;
-    L_0x0cb6:
-        r10 = r70;
-    L_0x0cb8:
-        r1 = r0;
-    L_0x0cb9:
-        r3 = 0;
-    L_0x0cba:
-        r2 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0d25 }
-        r2.<init>();	 Catch:{ all -> 0x0d25 }
-        r4 = "bitrate: ";
-        r2.append(r4);	 Catch:{ all -> 0x0d25 }
-        r2.append(r10);	 Catch:{ all -> 0x0d25 }
-        r4 = " framerate: ";
-        r2.append(r4);	 Catch:{ all -> 0x0d25 }
-        r2.append(r13);	 Catch:{ all -> 0x0d25 }
-        r4 = " size: ";
-        r2.append(r4);	 Catch:{ all -> 0x0d25 }
-        r7 = r68;
-        r2.append(r7);	 Catch:{ all -> 0x0d25 }
-        r4 = "x";
-        r2.append(r4);	 Catch:{ all -> 0x0d25 }
-        r6 = r67;
-        r2.append(r6);	 Catch:{ all -> 0x0d25 }
-        r2 = r2.toString();	 Catch:{ all -> 0x0d25 }
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0d25 }
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x0d25 }
-        r1 = r14.extractor;
-        if (r1 == 0) goto L_0x0cf5;
-    L_0x0cf2:
-        r1.release();
-    L_0x0cf5:
-        r1 = r14.mediaMuxer;
-        if (r1 == 0) goto L_0x0d02;
-    L_0x0cf9:
-        r1.finishMovie();	 Catch:{ Exception -> 0x0cfd }
-        goto L_0x0d02;
-    L_0x0cfd:
-        r0 = move-exception;
-        r1 = r0;
-        org.telegram.messenger.FileLog.e(r1);
-    L_0x0d02:
-        r9 = r10;
-        if (r3 == 0) goto L_0x0d24;
-    L_0x0d05:
+        r10 = r4;
+        r16 = 1;
+    L_0x0ca2:
+        if (r3 == 0) goto L_0x0cc4;
+    L_0x0ca4:
         r17 = 1;
-        r1 = r62;
-        r2 = r63;
-        r3 = r64;
-        r4 = r65;
-        r5 = r66;
-        r6 = r67;
-        r7 = r68;
-        r8 = r69;
-        r10 = r71;
-        r12 = r73;
-        r14 = r75;
-        r16 = r77;
+        r1 = r72;
+        r2 = r73;
+        r3 = r74;
+        r4 = r75;
+        r5 = r76;
+        r6 = r77;
+        r7 = r78;
+        r8 = r79;
+        r9 = r10;
+        r10 = r81;
+        r12 = r83;
+        r14 = r85;
+        r16 = r87;
         r1 = r1.convertVideoInternal(r2, r3, r4, r5, r6, r7, r8, r9, r10, r12, r14, r16, r17);
         return r1;
-    L_0x0d24:
-        return r60;
-    L_0x0d25:
+    L_0x0cc4:
+        return r16;
+    L_0x0cc5:
         r0 = move-exception;
-        r1 = r62;
+        r1 = r72;
         r2 = r0;
-    L_0x0d29:
+    L_0x0cc9:
         r3 = r1.extractor;
-        if (r3 == 0) goto L_0x0d30;
-    L_0x0d2d:
+        if (r3 == 0) goto L_0x0cd0;
+    L_0x0ccd:
         r3.release();
-    L_0x0d30:
+    L_0x0cd0:
         r3 = r1.mediaMuxer;
-        if (r3 == 0) goto L_0x0d3d;
-    L_0x0d34:
-        r3.finishMovie();	 Catch:{ Exception -> 0x0d38 }
-        goto L_0x0d3d;
-    L_0x0d38:
+        if (r3 == 0) goto L_0x0cdd;
+    L_0x0cd4:
+        r3.finishMovie();	 Catch:{ Exception -> 0x0cd8 }
+        goto L_0x0cdd;
+    L_0x0cd8:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0d3d:
-        goto L_0x0d3f;
-    L_0x0d3e:
+    L_0x0cdd:
+        goto L_0x0cdf;
+    L_0x0cde:
         throw r2;
-    L_0x0d3f:
-        goto L_0x0d3e;
+    L_0x0cdf:
+        goto L_0x0cde;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.MediaCodecVideoConvertor.convertVideoInternal(java.lang.String, java.io.File, int, boolean, int, int, int, int, long, long, long, boolean, boolean):boolean");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0125  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x011d  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x016d  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x0188  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x009a  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x019d  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x019b  */
-    /* JADX WARNING: Missing block: B:48:0x00dc, code skipped:
-            if (r8[r9 + 3] != (byte) 1) goto L_0x00e2;
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x0196  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x013a  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0132  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x0196  */
+    /* JADX WARNING: Missing block: B:51:0x00f2, code skipped:
+            if (r9[r15 + 3] != (byte) 1) goto L_0x00f8;
      */
-    private long readAndWriteTracks(android.media.MediaExtractor r30, org.telegram.messenger.video.MP4Builder r31, android.media.MediaCodec.BufferInfo r32, long r33, long r35, long r37, java.io.File r39, boolean r40) throws java.lang.Exception {
+    private long readAndWriteTracks(android.media.MediaExtractor r29, org.telegram.messenger.video.MP4Builder r30, android.media.MediaCodec.BufferInfo r31, long r32, long r34, long r36, java.io.File r38, boolean r39) throws java.lang.Exception {
         /*
-        r29 = this;
-        r0 = r29;
-        r1 = r30;
-        r2 = r31;
-        r3 = r32;
-        r4 = r33;
+        r28 = this;
+        r0 = r28;
+        r1 = r29;
+        r2 = r30;
+        r3 = r31;
+        r4 = r32;
         r6 = 0;
         r7 = org.telegram.messenger.MediaController.findTrack(r1, r6);
         r9 = 1;
-        if (r40 == 0) goto L_0x001a;
+        if (r39 == 0) goto L_0x001a;
     L_0x0012:
         r10 = org.telegram.messenger.MediaController.findTrack(r1, r9);
         r12 = r10;
-        r10 = r37;
+        r10 = r36;
         goto L_0x001d;
     L_0x001a:
-        r10 = r37;
+        r10 = r36;
         r12 = -1;
     L_0x001d:
         r10 = (float) r10;
@@ -3328,275 +3259,284 @@ public class MediaCodecVideoConvertor {
         r11 = 0;
         r16 = -1;
     L_0x0045:
-        if (r12 < 0) goto L_0x0068;
+        if (r12 < 0) goto L_0x007c;
     L_0x0047:
         r1.selectTrack(r12);
         r8 = r1.getTrackFormat(r12);
-        r17 = r2.addTrack(r8, r9);
+        r6 = "mime";
+        r6 = r8.getString(r6);
+        r14 = "audio/unknown";
+        r6 = r6.equals(r14);
+        if (r6 == 0) goto L_0x005f;
+    L_0x005c:
+        r8 = -1;
+        r12 = -1;
+        goto L_0x007d;
+    L_0x005f:
+        r6 = r2.addTrack(r8, r9);
         r8 = r8.getInteger(r13);
         r11 = java.lang.Math.max(r8, r11);
-        r8 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0062;
-    L_0x005e:
-        r1.seekTo(r4, r6);
-        goto L_0x0065;
-    L_0x0062:
-        r1.seekTo(r14, r6);
-    L_0x0065:
-        r8 = r17;
-        goto L_0x0069;
-    L_0x0068:
-        r8 = -1;
-    L_0x0069:
-        r11 = java.nio.ByteBuffer.allocateDirect(r11);
-        r17 = -1;
-        if (r12 >= 0) goto L_0x0075;
-    L_0x0071:
-        if (r7 < 0) goto L_0x0074;
-    L_0x0073:
-        goto L_0x0075;
-    L_0x0074:
-        return r17;
-    L_0x0075:
-        r29.checkConversionCanceled();
-        r21 = r14;
-        r19 = r17;
         r13 = 0;
+        r8 = (r4 > r13 ? 1 : (r4 == r13 ? 0 : -1));
+        if (r8 <= 0) goto L_0x0076;
+    L_0x0071:
+        r8 = 0;
+        r1.seekTo(r4, r8);
+        goto L_0x007a;
+    L_0x0076:
+        r8 = 0;
+        r1.seekTo(r13, r8);
+    L_0x007a:
+        r8 = r6;
+        goto L_0x007d;
+    L_0x007c:
+        r8 = -1;
     L_0x007d:
-        if (r13 != 0) goto L_0x01ac;
-    L_0x007f:
-        r29.checkConversionCanceled();
-        r14 = r1.readSampleData(r11, r6);
-        r3.size = r14;
-        r14 = r30.getSampleTrackIndex();
-        if (r14 != r7) goto L_0x0092;
-    L_0x008e:
-        r15 = r16;
-    L_0x0090:
-        r9 = -1;
-        goto L_0x0098;
-    L_0x0092:
-        if (r14 != r12) goto L_0x0096;
-    L_0x0094:
-        r15 = r8;
-        goto L_0x0090;
-    L_0x0096:
-        r9 = -1;
+        r6 = java.nio.ByteBuffer.allocateDirect(r11);
+        r13 = -1;
+        if (r12 >= 0) goto L_0x0089;
+    L_0x0085:
+        if (r7 < 0) goto L_0x0088;
+    L_0x0087:
+        goto L_0x0089;
+    L_0x0088:
+        return r13;
+    L_0x0089:
+        r28.checkConversionCanceled();
+        r20 = r13;
+        r11 = 0;
+        r22 = 0;
+    L_0x0091:
+        if (r11 != 0) goto L_0x01be;
+    L_0x0093:
+        r28.checkConversionCanceled();
+        r15 = 0;
+        r13 = r1.readSampleData(r6, r15);
+        r3.size = r13;
+        r13 = r29.getSampleTrackIndex();
+        if (r13 != r7) goto L_0x00a7;
+    L_0x00a3:
+        r14 = r16;
+    L_0x00a5:
         r15 = -1;
-    L_0x0098:
-        if (r15 == r9) goto L_0x0188;
-    L_0x009a:
-        r9 = android.os.Build.VERSION.SDK_INT;
-        r38 = r8;
-        r8 = 21;
-        if (r9 >= r8) goto L_0x00aa;
-    L_0x00a2:
-        r11.position(r6);
-        r8 = r3.size;
-        r11.limit(r8);
-    L_0x00aa:
-        if (r14 == r12) goto L_0x0115;
-    L_0x00ac:
-        r8 = r11.array();
-        if (r8 == 0) goto L_0x0115;
-    L_0x00b2:
-        r9 = r11.arrayOffset();
-        r25 = r11.limit();
-        r25 = r9 + r25;
-        r6 = -1;
-    L_0x00bd:
-        r26 = 4;
-        r40 = r13;
-        r13 = r25 + -4;
-        if (r9 > r13) goto L_0x0112;
-    L_0x00c5:
-        r27 = r8[r9];
-        if (r27 != 0) goto L_0x00df;
-    L_0x00c9:
-        r27 = r9 + 1;
-        r27 = r8[r27];
-        if (r27 != 0) goto L_0x00df;
-    L_0x00cf:
-        r27 = r9 + 2;
-        r27 = r8[r27];
-        if (r27 != 0) goto L_0x00df;
-    L_0x00d5:
-        r27 = r9 + 3;
-        r28 = r12;
-        r12 = r8[r27];
-        r1 = 1;
-        if (r12 == r1) goto L_0x00e4;
-    L_0x00de:
-        goto L_0x00e2;
+        goto L_0x00ad;
+    L_0x00a7:
+        if (r13 != r12) goto L_0x00ab;
+    L_0x00a9:
+        r14 = r8;
+        goto L_0x00a5;
+    L_0x00ab:
+        r14 = -1;
+        goto L_0x00a5;
+    L_0x00ad:
+        if (r14 == r15) goto L_0x019c;
+    L_0x00af:
+        r15 = android.os.Build.VERSION.SDK_INT;
+        r9 = 21;
+        if (r15 >= r9) goto L_0x00be;
+    L_0x00b5:
+        r9 = 0;
+        r6.position(r9);
+        r9 = r3.size;
+        r6.limit(r9);
+    L_0x00be:
+        if (r13 == r12) goto L_0x0128;
+    L_0x00c0:
+        r9 = r6.array();
+        if (r9 == 0) goto L_0x0128;
+    L_0x00c6:
+        r15 = r6.arrayOffset();
+        r24 = r6.limit();
+        r24 = r15 + r24;
+        r37 = r8;
+        r8 = -1;
+    L_0x00d3:
+        r25 = 4;
+        r39 = r11;
+        r11 = r24 + -4;
+        if (r15 > r11) goto L_0x012c;
+    L_0x00db:
+        r26 = r9[r15];
+        if (r26 != 0) goto L_0x00f5;
     L_0x00df:
-        r28 = r12;
-        r1 = 1;
-    L_0x00e2:
-        if (r9 != r13) goto L_0x0109;
-    L_0x00e4:
-        r12 = -1;
-        if (r6 == r12) goto L_0x0108;
-    L_0x00e7:
-        r12 = r9 - r6;
-        if (r9 == r13) goto L_0x00ec;
+        r26 = r15 + 1;
+        r26 = r9[r26];
+        if (r26 != 0) goto L_0x00f5;
+    L_0x00e5:
+        r26 = r15 + 2;
+        r26 = r9[r26];
+        if (r26 != 0) goto L_0x00f5;
     L_0x00eb:
-        goto L_0x00ee;
-    L_0x00ec:
-        r26 = 0;
-    L_0x00ee:
-        r12 = r12 - r26;
-        r13 = r12 >> 24;
-        r13 = (byte) r13;
-        r8[r6] = r13;
-        r13 = r6 + 1;
+        r26 = r15 + 3;
+        r27 = r12;
+        r12 = r9[r26];
+        r1 = 1;
+        if (r12 == r1) goto L_0x00fa;
+    L_0x00f4:
+        goto L_0x00f8;
+    L_0x00f5:
+        r27 = r12;
+        r1 = 1;
+    L_0x00f8:
+        if (r15 != r11) goto L_0x011f;
+    L_0x00fa:
+        r12 = -1;
+        if (r8 == r12) goto L_0x011e;
+    L_0x00fd:
+        r12 = r15 - r8;
+        if (r15 == r11) goto L_0x0102;
+    L_0x0101:
+        goto L_0x0104;
+    L_0x0102:
+        r25 = 0;
+    L_0x0104:
+        r12 = r12 - r25;
+        r11 = r12 >> 24;
+        r11 = (byte) r11;
+        r9[r8] = r11;
+        r11 = r8 + 1;
         r1 = r12 >> 16;
         r1 = (byte) r1;
-        r8[r13] = r1;
-        r1 = r6 + 2;
-        r13 = r12 >> 8;
-        r13 = (byte) r13;
-        r8[r1] = r13;
-        r6 = r6 + 3;
+        r9[r11] = r1;
+        r1 = r8 + 2;
+        r11 = r12 >> 8;
+        r11 = (byte) r11;
+        r9[r1] = r11;
+        r8 = r8 + 3;
         r1 = (byte) r12;
-        r8[r6] = r1;
-    L_0x0108:
-        r6 = r9;
-    L_0x0109:
-        r9 = r9 + 1;
-        r1 = r30;
-        r13 = r40;
-        r12 = r28;
-        goto L_0x00bd;
-    L_0x0112:
-        r28 = r12;
-        goto L_0x0119;
-    L_0x0115:
-        r28 = r12;
-        r40 = r13;
-    L_0x0119:
+        r9[r8] = r1;
+    L_0x011e:
+        r8 = r15;
+    L_0x011f:
+        r15 = r15 + 1;
+        r1 = r29;
+        r11 = r39;
+        r12 = r27;
+        goto L_0x00d3;
+    L_0x0128:
+        r37 = r8;
+        r39 = r11;
+    L_0x012c:
+        r27 = r12;
         r1 = r3.size;
-        if (r1 < 0) goto L_0x0125;
-    L_0x011d:
-        r8 = r30.getSampleTime();
+        if (r1 < 0) goto L_0x013a;
+    L_0x0132:
+        r8 = r29.getSampleTime();
         r3.presentationTimeUs = r8;
         r1 = 0;
-        goto L_0x0129;
-    L_0x0125:
+        goto L_0x013e;
+    L_0x013a:
         r1 = 0;
         r3.size = r1;
         r1 = 1;
-    L_0x0129:
-        r6 = r3.size;
-        if (r6 <= 0) goto L_0x017e;
-    L_0x012d:
-        if (r1 != 0) goto L_0x017e;
-    L_0x012f:
+    L_0x013e:
+        r8 = r3.size;
+        if (r8 <= 0) goto L_0x0162;
+    L_0x0142:
+        if (r1 != 0) goto L_0x0162;
+    L_0x0144:
         r8 = 0;
-        if (r14 != r7) goto L_0x013f;
-    L_0x0133:
-        r6 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
-        if (r6 <= 0) goto L_0x013f;
-    L_0x0137:
-        r6 = (r19 > r17 ? 1 : (r19 == r17 ? 0 : -1));
-        if (r6 != 0) goto L_0x013f;
-    L_0x013b:
-        r12 = r3.presentationTimeUs;
-        r19 = r12;
-    L_0x013f:
-        r6 = (r35 > r8 ? 1 : (r35 == r8 ? 0 : -1));
-        if (r6 < 0) goto L_0x014e;
-    L_0x0143:
+        if (r13 != r7) goto L_0x0156;
+    L_0x0148:
+        r11 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
+        if (r11 <= 0) goto L_0x0156;
+    L_0x014c:
+        r11 = -1;
+        r13 = (r20 > r11 ? 1 : (r20 == r11 ? 0 : -1));
+        if (r13 != 0) goto L_0x0156;
+    L_0x0152:
+        r11 = r3.presentationTimeUs;
+        r20 = r11;
+    L_0x0156:
+        r11 = (r34 > r8 ? 1 : (r34 == r8 ? 0 : -1));
+        if (r11 < 0) goto L_0x0165;
+    L_0x015a:
         r8 = r3.presentationTimeUs;
-        r6 = (r8 > r35 ? 1 : (r8 == r35 ? 0 : -1));
-        if (r6 >= 0) goto L_0x014a;
-    L_0x0149:
-        goto L_0x014e;
-    L_0x014a:
-        r6 = 1;
-        r13 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        goto L_0x0181;
-    L_0x014e:
-        r6 = 0;
-        r3.offset = r6;
-        r8 = r30.getSampleFlags();
-        r3.flags = r8;
-        r8 = r2.writeSampleData(r15, r11, r3, r6);
-        r12 = 0;
-        r14 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1));
-        if (r14 == 0) goto L_0x017e;
+        r11 = (r8 > r34 ? 1 : (r8 == r34 ? 0 : -1));
+        if (r11 >= 0) goto L_0x0161;
+    L_0x0160:
+        goto L_0x0165;
     L_0x0161:
-        r14 = r0.callback;
-        if (r14 == 0) goto L_0x017e;
+        r1 = 1;
+    L_0x0162:
+        r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        goto L_0x0194;
     L_0x0165:
-        r14 = r3.presentationTimeUs;
-        r23 = r14 - r19;
-        r25 = (r23 > r21 ? 1 : (r23 == r21 ? 0 : -1));
-        if (r25 <= 0) goto L_0x016f;
-    L_0x016d:
-        r21 = r14 - r19;
-    L_0x016f:
-        r14 = r21;
-        r6 = r0.callback;
-        r12 = (float) r14;
-        r13 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        r12 = r12 / r13;
-        r12 = r12 / r10;
-        r6.didWriteData(r8, r12);
-        r21 = r14;
-        goto L_0x0180;
-    L_0x017e:
-        r13 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-    L_0x0180:
-        r6 = r1;
-    L_0x0181:
-        if (r6 != 0) goto L_0x0186;
-    L_0x0183:
-        r30.advance();
-    L_0x0186:
-        r1 = -1;
-        goto L_0x0199;
-    L_0x0188:
-        r38 = r8;
-        r28 = r12;
-        r40 = r13;
-        r1 = -1;
-        r13 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-        if (r14 != r1) goto L_0x0195;
-    L_0x0193:
-        r6 = 1;
-        goto L_0x0199;
-    L_0x0195:
-        r30.advance();
-        r6 = 0;
-    L_0x0199:
-        if (r6 == 0) goto L_0x019d;
-    L_0x019b:
-        r6 = 1;
-        goto L_0x019f;
-    L_0x019d:
-        r6 = r40;
-    L_0x019f:
-        r1 = r30;
-        r8 = r38;
-        r13 = r6;
-        r12 = r28;
-        r6 = 0;
-        r9 = 1;
+        r8 = 0;
+        r3.offset = r8;
+        r9 = r29.getSampleFlags();
+        r3.flags = r9;
+        r11 = r2.writeSampleData(r14, r6, r3, r8);
         r14 = 0;
-        goto L_0x007d;
-    L_0x01ac:
-        r28 = r12;
-        r1 = r30;
-        if (r7 < 0) goto L_0x01b5;
-    L_0x01b2:
+        r9 = (r11 > r14 ? 1 : (r11 == r14 ? 0 : -1));
+        if (r9 == 0) goto L_0x0162;
+    L_0x0178:
+        r9 = r0.callback;
+        if (r9 == 0) goto L_0x0162;
+    L_0x017c:
+        r8 = r3.presentationTimeUs;
+        r18 = r8 - r20;
+        r13 = (r18 > r22 ? 1 : (r18 == r22 ? 0 : -1));
+        if (r13 <= 0) goto L_0x0186;
+    L_0x0184:
+        r22 = r8 - r20;
+    L_0x0186:
+        r8 = r22;
+        r13 = r0.callback;
+        r14 = (float) r8;
+        r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r14 = r14 / r15;
+        r14 = r14 / r10;
+        r13.didWriteData(r11, r14);
+        r22 = r8;
+    L_0x0194:
+        if (r1 != 0) goto L_0x0199;
+    L_0x0196:
+        r29.advance();
+    L_0x0199:
+        r8 = r1;
+        r1 = -1;
+        goto L_0x01ad;
+    L_0x019c:
+        r37 = r8;
+        r39 = r11;
+        r27 = r12;
+        r1 = -1;
+        r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        if (r13 != r1) goto L_0x01a9;
+    L_0x01a7:
+        r8 = 1;
+        goto L_0x01ad;
+    L_0x01a9:
+        r29.advance();
+        r8 = 0;
+    L_0x01ad:
+        if (r8 == 0) goto L_0x01b1;
+    L_0x01af:
+        r11 = 1;
+        goto L_0x01b3;
+    L_0x01b1:
+        r11 = r39;
+    L_0x01b3:
+        r1 = r29;
+        r8 = r37;
+        r12 = r27;
+        r9 = 1;
+        r13 = -1;
+        goto L_0x0091;
+    L_0x01be:
+        r27 = r12;
+        r1 = r29;
+        if (r7 < 0) goto L_0x01c7;
+    L_0x01c4:
         r1.unselectTrack(r7);
-    L_0x01b5:
-        if (r28 < 0) goto L_0x01bc;
-    L_0x01b7:
-        r8 = r28;
-        r1.unselectTrack(r8);
-    L_0x01bc:
-        return r19;
+    L_0x01c7:
+        if (r27 < 0) goto L_0x01ce;
+    L_0x01c9:
+        r12 = r27;
+        r1.unselectTrack(r12);
+    L_0x01ce:
+        return r20;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.MediaCodecVideoConvertor.readAndWriteTracks(android.media.MediaExtractor, org.telegram.messenger.video.MP4Builder, android.media.MediaCodec$BufferInfo, long, long, long, java.io.File, boolean):long");
     }

@@ -2874,6 +2874,7 @@
     <public type="string" name="NewMessages_two" id="NUM" />
     <public type="string" name="NewMessages_zero" id="NUM" />
     <public type="string" name="NewPoll" id="NUM" />
+    <public type="string" name="NewQuiz" id="NUM" />
     <public type="string" name="NewSecretChat" id="NUM" />
     <public type="string" name="NewTheme" id="NUM" />
     <public type="string" name="NewThemePreviewLine1" id="NUM" />
@@ -3564,6 +3565,7 @@
     <public type="string" name="QuickReplyDefault2" id="NUM" />
     <public type="string" name="QuickReplyDefault3" id="NUM" />
     <public type="string" name="QuickReplyDefault4" id="NUM" />
+    <public type="string" name="QuizAnswers" id="NUM" />
     <public type="string" name="QuizInfo" id="NUM" />
     <public type="string" name="QuizPoll" id="NUM" />
     <public type="string" name="QuizWellDone" id="NUM" />

@@ -2974,6 +2974,7 @@ public final class R {
         public static final int NewMessages_two = NUM;
         public static final int NewMessages_zero = NUM;
         public static final int NewPoll = NUM;
+        public static final int NewQuiz = NUM;
         public static final int NewSecretChat = NUM;
         public static final int NewTheme = NUM;
         public static final int NewThemePreviewLine1 = NUM;
@@ -3664,6 +3665,7 @@ public final class R {
         public static final int QuickReplyDefault2 = NUM;
         public static final int QuickReplyDefault3 = NUM;
         public static final int QuickReplyDefault4 = NUM;
+        public static final int QuizAnswers = NUM;
         public static final int QuizInfo = NUM;
         public static final int QuizPoll = NUM;
         public static final int QuizWellDone = NUM;

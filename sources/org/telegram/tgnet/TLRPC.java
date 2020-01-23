@@ -14094,6 +14094,33 @@ public class TLRPC {
         }
     }
 
+    public static class TL_messages_toggleStickerSets extends TLObject {
+        public static int constructor = -NUM;
+        public boolean archive;
+        public int flags;
+        public ArrayList<InputStickerSet> stickersets = new ArrayList();
+        public boolean unarchive;
+        public boolean uninstall;
+
+        public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+            return Bool.TLdeserialize(abstractSerializedData, i, z);
+        }
+
+        public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+            abstractSerializedData.writeInt32(constructor);
+            this.flags = this.uninstall ? this.flags | 1 : this.flags & -2;
+            this.flags = this.archive ? this.flags | 2 : this.flags & -3;
+            this.flags = this.unarchive ? this.flags | 4 : this.flags & -5;
+            abstractSerializedData.writeInt32(this.flags);
+            abstractSerializedData.writeInt32(NUM);
+            int size = this.stickersets.size();
+            abstractSerializedData.writeInt32(size);
+            for (int i = 0; i < size; i++) {
+                ((InputStickerSet) this.stickersets.get(i)).serializeToStream(abstractSerializedData);
+            }
+        }
+    }
+
     public static class TL_messages_uninstallStickerSet extends TLObject {
         public static int constructor = -NUM;
         public InputStickerSet stickerset;

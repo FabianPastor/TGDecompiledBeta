@@ -1600,7 +1600,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r6 = NUM; // 0x7f0e04b6 float:1.8877484E38 double:1.0531627525E-314;
         r7 = "ExternalFolderInfo";
         r8 = NUM; // 0x7var_c1 float:1.794497E38 double:1.0529355984E-314;
-        r9 = NUM; // 0x7f0e09d6 float:1.8880145E38 double:1.0531634007E-314;
+        r9 = NUM; // 0x7f0e09d8 float:1.8880149E38 double:1.0531634017E-314;
         r10 = "SdCard";
         if (r5 != 0) goto L_0x003e;
     L_0x0036:
@@ -1777,7 +1777,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r2.<init>(r13, r1);
         r3 = "/";
         r2.title = r3;
-        r4 = NUM; // 0x7f0e0adf float:1.8880682E38 double:1.0531635316E-314;
+        r4 = NUM; // 0x7f0e0ae1 float:1.8880686E38 double:1.0531635326E-314;
         r5 = "SystemRoot";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.subtitle = r4;

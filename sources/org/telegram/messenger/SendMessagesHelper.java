@@ -4476,7 +4476,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r4 = r17.getParentActivity();
         r3.<init>(r4);
         r3.setTitle(r1);
-        r1 = NUM; // 0x7f0e0775 float:1.887891E38 double:1.0531631E-314;
+        r1 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r4 = "OK";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r3.setPositiveButton(r1, r7);
@@ -15606,15 +15606,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x022c  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0274  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x024a  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x02d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x0269  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x02b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0287  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x030d  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x031d  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x012e  */
-    /* JADX WARNING: Removed duplicated region for block: B:119:0x0320  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x0328  */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0331  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x035d  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x0365  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x036e  */
     static /* synthetic */ void lambda$prepareSendingVideo$74(org.telegram.messenger.VideoEditedInfo r32, java.lang.String r33, long r34, long r36, int r38, org.telegram.messenger.AccountInstance r39, int r40, int r41, long r42, java.lang.CharSequence r44, org.telegram.messenger.MessageObject r45, org.telegram.messenger.MessageObject r46, java.util.ArrayList r47, boolean r48, int r49) {
         /*
         r6 = r33;
@@ -15673,7 +15673,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r12 = r48;
         r13 = r49;
         prepareSendingDocumentInternal(r0, r1, r2, r3, r4, r5, r7, r8, r9, r10, r11, r12, r13);
-        goto L_0x0359;
+        goto L_0x0396;
     L_0x004d:
         r3 = new java.io.File;
         r3.<init>(r6);
@@ -15805,7 +15805,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r5 = 0;
         r21 = 0;
     L_0x012c:
-        if (r21 != 0) goto L_0x02e0;
+        if (r21 != 0) goto L_0x031d;
     L_0x012e:
         r0 = r24;
         r0 = createVideoThumbnail(r6, r0);
@@ -15835,24 +15835,54 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r2 = 55;
     L_0x014f:
         r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r3, r2, r14);
-        if (r0 == 0) goto L_0x0223;
+        if (r0 == 0) goto L_0x0260;
     L_0x0155:
-        if (r2 == 0) goto L_0x0223;
+        if (r2 == 0) goto L_0x0260;
     L_0x0157:
-        if (r9 == 0) goto L_0x0220;
+        if (r9 == 0) goto L_0x025d;
     L_0x0159:
         r3 = 21;
-        if (r14 == 0) goto L_0x01c0;
+        if (r14 == 0) goto L_0x01fd;
     L_0x015d:
+        r4 = 1;
+        r0 = android.graphics.Bitmap.createScaledBitmap(r0, r1, r1, r4);
         r25 = 7;
         r4 = android.os.Build.VERSION.SDK_INT;
-        if (r4 >= r3) goto L_0x0166;
-    L_0x0163:
-        r26 = 0;
-        goto L_0x0168;
-    L_0x0166:
-        r26 = 1;
+        if (r4 >= r3) goto L_0x016b;
     L_0x0168:
+        r26 = 0;
+        goto L_0x016d;
+    L_0x016b:
+        r26 = 1;
+    L_0x016d:
+        r27 = r0.getWidth();
+        r28 = r0.getHeight();
+        r29 = r0.getRowBytes();
+        r24 = r0;
+        org.telegram.messenger.Utilities.blurBitmap(r24, r25, r26, r27, r28, r29);
+        r25 = 7;
+        r4 = android.os.Build.VERSION.SDK_INT;
+        if (r4 >= r3) goto L_0x0187;
+    L_0x0184:
+        r26 = 0;
+        goto L_0x0189;
+    L_0x0187:
+        r26 = 1;
+    L_0x0189:
+        r27 = r0.getWidth();
+        r28 = r0.getHeight();
+        r29 = r0.getRowBytes();
+        r24 = r0;
+        org.telegram.messenger.Utilities.blurBitmap(r24, r25, r26, r27, r28, r29);
+        r25 = 7;
+        r4 = android.os.Build.VERSION.SDK_INT;
+        if (r4 >= r3) goto L_0x01a3;
+    L_0x01a0:
+        r26 = 0;
+        goto L_0x01a5;
+    L_0x01a3:
+        r26 = 1;
+    L_0x01a5:
         r27 = r0.getWidth();
         r28 = r0.getHeight();
         r29 = r0.getRowBytes();
@@ -15891,18 +15921,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r15 = 1;
         r3[r15] = r4;
         r15 = java.lang.String.format(r2, r3);
-        goto L_0x0225;
-    L_0x01c0:
+        goto L_0x0262;
+    L_0x01fd:
         r1 = r2;
         r25 = 3;
         r2 = android.os.Build.VERSION.SDK_INT;
-        if (r2 >= r3) goto L_0x01ca;
-    L_0x01c7:
+        if (r2 >= r3) goto L_0x0207;
+    L_0x0204:
         r26 = 0;
-        goto L_0x01cc;
-    L_0x01ca:
+        goto L_0x0209;
+    L_0x0207:
         r26 = 1;
-    L_0x01cc:
+    L_0x0209:
         r27 = r0.getWidth();
         r28 = r0.getHeight();
         r29 = r0.getRowBytes();
@@ -15939,27 +15969,27 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r15 = 1;
         r3[r15] = r4;
         r15 = java.lang.String.format(r2, r3);
-        goto L_0x0225;
-    L_0x0220:
+        goto L_0x0262;
+    L_0x025d:
         r1 = r2;
         r0 = 0;
-        goto L_0x0224;
-    L_0x0223:
+        goto L_0x0261;
+    L_0x0260:
         r1 = r2;
-    L_0x0224:
+    L_0x0261:
         r15 = 0;
-    L_0x0225:
+    L_0x0262:
         r2 = new org.telegram.tgnet.TLRPC$TL_document;
         r2.<init>();
-        if (r1 == 0) goto L_0x0237;
-    L_0x022c:
+        if (r1 == 0) goto L_0x0274;
+    L_0x0269:
         r3 = r2.thumbs;
         r3.add(r1);
         r1 = r2.flags;
         r3 = 1;
         r1 = r1 | r3;
         r2.flags = r1;
-    L_0x0237:
+    L_0x0274:
         r1 = 0;
         r3 = new byte[r1];
         r2.file_reference = r3;
@@ -15967,47 +15997,47 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r2.mime_type = r3;
         r3 = r39.getUserConfig();
         r3.saveConfig(r1);
-        if (r14 == 0) goto L_0x0274;
-    L_0x024a:
+        if (r14 == 0) goto L_0x02b1;
+    L_0x0287:
         r1 = 32;
         r3 = r10 >> r1;
         r1 = (int) r3;
         r3 = r39.getMessagesController();
         r1 = java.lang.Integer.valueOf(r1);
         r1 = r3.getEncryptedChat(r1);
-        if (r1 != 0) goto L_0x025e;
-    L_0x025d:
+        if (r1 != 0) goto L_0x029b;
+    L_0x029a:
         return;
-    L_0x025e:
+    L_0x029b:
         r1 = r1.layer;
         r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
         r3 = 66;
-        if (r1 < r3) goto L_0x026e;
-    L_0x0268:
+        if (r1 < r3) goto L_0x02ab;
+    L_0x02a5:
         r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
         r1.<init>();
-        goto L_0x027c;
-    L_0x026e:
+        goto L_0x02b9;
+    L_0x02ab:
         r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo_layer65;
         r1.<init>();
-        goto L_0x027c;
-    L_0x0274:
+        goto L_0x02b9;
+    L_0x02b1:
         r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
         r1.<init>();
         r3 = 1;
         r1.supports_streaming = r3;
-    L_0x027c:
+    L_0x02b9:
         r1.round_message = r9;
         r3 = r2.attributes;
         r3.add(r1);
-        if (r13 == 0) goto L_0x02ca;
-    L_0x0285:
+        if (r13 == 0) goto L_0x0307;
+    L_0x02c2:
         r3 = r13.needConvert();
-        if (r3 == 0) goto L_0x02ca;
-    L_0x028b:
+        if (r3 == 0) goto L_0x0307;
+    L_0x02c8:
         r3 = r13.muted;
-        if (r3 == 0) goto L_0x02a5;
-    L_0x028f:
+        if (r3 == 0) goto L_0x02e2;
+    L_0x02cc:
         r3 = r2.attributes;
         r4 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
         r4.<init>();
@@ -16017,60 +16047,60 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r13.originalWidth = r3;
         r3 = r1.h;
         r13.originalHeight = r3;
-        goto L_0x02ac;
-    L_0x02a5:
+        goto L_0x02e9;
+    L_0x02e2:
         r3 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r3 = r7 / r3;
         r4 = (int) r3;
         r1.duration = r4;
-    L_0x02ac:
+    L_0x02e9:
         r3 = r13.rotationValue;
         r4 = 90;
-        if (r3 == r4) goto L_0x02be;
-    L_0x02b2:
+        if (r3 == r4) goto L_0x02fb;
+    L_0x02ef:
         r4 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
-        if (r3 != r4) goto L_0x02b7;
-    L_0x02b6:
-        goto L_0x02be;
-    L_0x02b7:
+        if (r3 != r4) goto L_0x02f4;
+    L_0x02f3:
+        goto L_0x02fb;
+    L_0x02f4:
         r1.w = r12;
         r3 = r40;
         r1.h = r3;
-        goto L_0x02c4;
-    L_0x02be:
+        goto L_0x0301;
+    L_0x02fb:
         r3 = r40;
         r1.w = r3;
         r1.h = r12;
-    L_0x02c4:
+    L_0x0301:
         r3 = r42;
         r1 = (int) r3;
         r2.size = r1;
-        goto L_0x02db;
-    L_0x02ca:
+        goto L_0x0318;
+    L_0x0307:
         r3 = r22.exists();
-        if (r3 == 0) goto L_0x02d7;
-    L_0x02d0:
+        if (r3 == 0) goto L_0x0314;
+    L_0x030d:
         r3 = r22.length();
         r4 = (int) r3;
         r2.size = r4;
-    L_0x02d7:
+    L_0x0314:
         r3 = 0;
         fillVideoAttribute(r6, r1, r3);
-    L_0x02db:
+    L_0x0318:
         r1 = r0;
         r21 = r2;
         r2 = r15;
-        goto L_0x02e3;
-    L_0x02e0:
+        goto L_0x0320;
+    L_0x031d:
         r3 = 0;
         r1 = r3;
         r2 = r1;
-    L_0x02e3:
-        if (r13 == 0) goto L_0x0318;
-    L_0x02e5:
+    L_0x0320:
+        if (r13 == 0) goto L_0x0355;
+    L_0x0322:
         r0 = r13.needConvert();
-        if (r0 == 0) goto L_0x0318;
-    L_0x02eb:
+        if (r0 == 0) goto L_0x0355;
+    L_0x0328:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
         r3 = "-2147483648_";
@@ -16087,28 +16117,28 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         org.telegram.messenger.SharedConfig.saveConfig();
         r0 = r3.getAbsolutePath();
         r7 = r0;
-        goto L_0x0319;
-    L_0x0318:
+        goto L_0x0356;
+    L_0x0355:
         r7 = r6;
-    L_0x0319:
+    L_0x0356:
         r8 = new java.util.HashMap;
         r8.<init>();
-        if (r44 == 0) goto L_0x0326;
-    L_0x0320:
+        if (r44 == 0) goto L_0x0363;
+    L_0x035d:
         r0 = r44.toString();
         r19 = r0;
-    L_0x0326:
-        if (r23 == 0) goto L_0x032f;
-    L_0x0328:
+    L_0x0363:
+        if (r23 == 0) goto L_0x036c;
+    L_0x0365:
         r0 = "originalPath";
         r3 = r23;
         r8.put(r0, r3);
-    L_0x032f:
-        if (r5 == 0) goto L_0x0336;
-    L_0x0331:
+    L_0x036c:
+        if (r5 == 0) goto L_0x0373;
+    L_0x036e:
         r0 = "parentObject";
         r8.put(r0, r5);
-    L_0x0336:
+    L_0x0373:
         r18 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$sEG1r9eCF9TKK2nk0jbM2n33M88;
         r0 = r18;
         r3 = r45;
@@ -16126,7 +16156,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r17 = r38;
         r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r12, r13, r14, r15, r16, r17);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r18);
-    L_0x0359:
+    L_0x0396:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingVideo$74(org.telegram.messenger.VideoEditedInfo, java.lang.String, long, long, int, org.telegram.messenger.AccountInstance, int, int, long, java.lang.CharSequence, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, java.util.ArrayList, boolean, int):void");

@@ -613,13 +613,13 @@ public class AlertsCreator {
         showSimpleAlert(r1, r0);
         goto L_0x061b;
     L_0x0379:
-        r0 = NUM; // 0x7f0e0bcb float:1.888116E38 double:1.053163648E-314;
+        r0 = NUM; // 0x7f0e0bcd float:1.8881165E38 double:1.053163649E-314;
         r2 = "UsernameInUse";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
         goto L_0x061b;
     L_0x0387:
-        r0 = NUM; // 0x7f0e0bcc float:1.8881163E38 double:1.0531636487E-314;
+        r0 = NUM; // 0x7f0e0bce float:1.8881167E38 double:1.0531636497E-314;
         r2 = "UsernameInvalid";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleAlert(r1, r0);
@@ -697,13 +697,13 @@ public class AlertsCreator {
         showSimpleToast(r1, r0);
         goto L_0x061b;
     L_0x040c:
-        r0 = NUM; // 0x7f0e088e float:1.887948E38 double:1.0531632386E-314;
+        r0 = NUM; // 0x7f0e088f float:1.8879481E38 double:1.053163239E-314;
         r2 = "PaymentFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
         goto L_0x061b;
     L_0x041a:
-        r0 = NUM; // 0x7f0e089b float:1.8879506E38 double:1.053163245E-314;
+        r0 = NUM; // 0x7f0e089c float:1.8879508E38 double:1.0531632456E-314;
         r2 = "PaymentPrecheckoutFailed";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
@@ -733,7 +733,7 @@ public class AlertsCreator {
         showSimpleToast(r1, r0);
         goto L_0x061b;
     L_0x044c:
-        r0 = NUM; // 0x7f0e0890 float:1.8879483E38 double:1.0531632396E-314;
+        r0 = NUM; // 0x7f0e0891 float:1.8879485E38 double:1.05316324E-314;
         r2 = "PaymentNoShippingMethod";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         showSimpleToast(r1, r0);
@@ -966,7 +966,7 @@ public class AlertsCreator {
         if (r2 == 0) goto L_0x05fd;
     L_0x05eb:
         r0 = r20.getParentActivity();
-        r1 = NUM; // 0x7f0e0b7b float:1.8880999E38 double:1.0531636087E-314;
+        r1 = NUM; // 0x7f0e0b7d float:1.8881003E38 double:1.0531636097E-314;
         r2 = "UpdateAppAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = 1;
@@ -1341,7 +1341,7 @@ public class AlertsCreator {
     L_0x0138:
         if (r24 == 0) goto L_0x0174;
     L_0x013a:
-        r2 = NUM; // 0x7f0e0990 float:1.8880003E38 double:1.053163366E-314;
+        r2 = NUM; // 0x7f0e0992 float:1.8880007E38 double:1.053163367E-314;
         r6 = "ReportUnrelatedGroup";
         r2 = org.telegram.messenger.LocaleController.getString(r6, r2);
         r11.setTitle(r2);
@@ -1352,7 +1352,7 @@ public class AlertsCreator {
         if (r2 == 0) goto L_0x0167;
     L_0x014e:
         r1 = (org.telegram.tgnet.TLRPC.TL_channelLocation) r1;
-        r2 = NUM; // 0x7f0e0991 float:1.8880005E38 double:1.0531633666E-314;
+        r2 = NUM; // 0x7f0e0993 float:1.8880009E38 double:1.0531633676E-314;
         r4 = new java.lang.Object[r4];
         r1 = r1.address;
         r4[r5] = r1;
@@ -1362,13 +1362,13 @@ public class AlertsCreator {
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0167:
-        r1 = NUM; // 0x7f0e0992 float:1.8880007E38 double:1.053163367E-314;
+        r1 = NUM; // 0x7f0e0994 float:1.888001E38 double:1.053163368E-314;
         r2 = "ReportUnrelatedGroupTextNoAddress";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0174:
-        r1 = NUM; // 0x7f0e098e float:1.8879999E38 double:1.053163365E-314;
+        r1 = NUM; // 0x7f0e0990 float:1.8880003E38 double:1.053163366E-314;
         r2 = "ReportSpamTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setTitle(r1);
@@ -1378,18 +1378,18 @@ public class AlertsCreator {
         r1 = r7.megagroup;
         if (r1 != 0) goto L_0x0197;
     L_0x018a:
-        r1 = NUM; // 0x7f0e098a float:1.887999E38 double:1.053163363E-314;
+        r1 = NUM; // 0x7f0e098c float:1.8879995E38 double:1.053163364E-314;
         r2 = "ReportSpamAlertChannel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
         goto L_0x01a3;
     L_0x0197:
-        r1 = NUM; // 0x7f0e098b float:1.8879993E38 double:1.0531633636E-314;
+        r1 = NUM; // 0x7f0e098d float:1.8879997E38 double:1.0531633646E-314;
         r2 = "ReportSpamAlertGroup";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r11.setMessage(r1);
     L_0x01a3:
-        r1 = NUM; // 0x7f0e0980 float:1.887997E38 double:1.053163358E-314;
+        r1 = NUM; // 0x7f0e0982 float:1.8879974E38 double:1.053163359E-314;
         r2 = "ReportChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r12 = r1;
@@ -2299,13 +2299,13 @@ public class AlertsCreator {
         r17 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1));
         if (r17 != 0) goto L_0x0089;
     L_0x007c:
-        r1 = NUM; // 0x7f0e0a41 float:1.8880362E38 double:1.0531634536E-314;
+        r1 = NUM; // 0x7f0e0a43 float:1.8880366E38 double:1.0531634545E-314;
         r12 = "SetReminder";
         r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
         r3.setText(r1);
         goto L_0x0095;
     L_0x0089:
-        r1 = NUM; // 0x7f0e09cf float:1.888013E38 double:1.053163397E-314;
+        r1 = NUM; // 0x7f0e09d1 float:1.8880135E38 double:1.053163398E-314;
         r12 = "ScheduleMessage";
         r1 = org.telegram.messenger.LocaleController.getString(r12, r1);
         r3.setText(r1);
@@ -2393,7 +2393,7 @@ public class AlertsCreator {
         r28 = 0;
         r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28);
         r2.addView(r3, r4);
-        r2 = NUM; // 0x7f0e09d0 float:1.8880132E38 double:1.0531633977E-314;
+        r2 = NUM; // 0x7f0e09d2 float:1.8880137E38 double:1.0531633987E-314;
         r4 = 1;
         r5 = new java.lang.Object[r4];
         r6 = 0;

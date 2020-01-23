@@ -2695,7 +2695,7 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0e0775 float:1.887891E38 double:1.0531631E-314;
+        r7 = NUM; // 0x7f0e0776 float:1.8878911E38 double:1.0531631003E-314;
         r8 = "OK";
         r9 = NUM; // 0x7f0e0100 float:1.8875557E38 double:1.053162283E-314;
         r10 = "AppName";
@@ -2818,7 +2818,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0e06b8 float:1.8878526E38 double:1.0531630064E-314;
+        r1 = NUM; // 0x7f0e06b9 float:1.8878528E38 double:1.053163007E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2948,7 +2948,7 @@ public class AndroidUtilities {
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0e08c3 float:1.8879587E38 double:1.053163265E-314;
+        r0 = NUM; // 0x7f0e08c4 float:1.8879589E38 double:1.0531632653E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw;

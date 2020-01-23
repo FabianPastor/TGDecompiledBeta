@@ -731,7 +731,7 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.MessagesController.isSupportUser(r4);
         if (r4 == 0) goto L_0x03ee;
     L_0x03e4:
-        r4 = NUM; // 0x7f0e0ad5 float:1.8880662E38 double:1.0531635267E-314;
+        r4 = NUM; // 0x7f0e0ad7 float:1.8880666E38 double:1.0531635277E-314;
         r6 = "SupportStatus";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
         goto L_0x044e;
@@ -776,12 +776,12 @@ public class ProfileSearchCell extends BaseCell {
         if (r4 <= r6) goto L_0x044e;
     L_0x0437:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlinePaint;
-        r4 = NUM; // 0x7f0e0779 float:1.8878918E38 double:1.053163102E-314;
+        r4 = NUM; // 0x7f0e077a float:1.887892E38 double:1.0531631023E-314;
         r6 = "Online";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
         goto L_0x044e;
     L_0x0443:
-        r4 = NUM; // 0x7f0e0a34 float:1.8880335E38 double:1.053163447E-314;
+        r4 = NUM; // 0x7f0e0a36 float:1.888034E38 double:1.053163448E-314;
         r6 = "ServiceNotifications";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r4);
         goto L_0x044e;

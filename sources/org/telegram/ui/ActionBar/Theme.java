@@ -5294,7 +5294,7 @@ public class Theme {
         r15 = "chat_attachCheckBoxBackground";
         r9.put(r15, r14);
         r9 = defaultColors;
-        r14 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
+        r14 = NUM; // 0xCLASSNAME float:9.8607613E-32 double:9.94685527E-316;
         r14 = java.lang.Integer.valueOf(r14);
         r15 = "chat_attachPhotoBackground";
         r9.put(r15, r14);

@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.5.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: mmYqMtXgNHho8L5XthVC4km4/3o=
+SHA1-Digest: N7CFlN2KmexrQJIy+qQjjGZrzm0=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9498,7 +9498,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: +QrOQMqQ8mNfZceBYmLfc7EIlQU=
+SHA1-Digest: SpcmJfvzda9geEy3QpuNZlvW4nE=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9810,7 +9810,7 @@ Name: res/drawable-hdpi-v4/authorize.png
 SHA1-Digest: 8xl263c3pKMTMMW0PY0KK5eVVUo=
 
 Name: res/drawable-hdpi-v4/background_hd.jpg
-SHA1-Digest: 8hcnxWxYg4WGpI+GSQGtyUp1alA=
+SHA1-Digest: F7rCbtTmT3oQBLn/oSLhEE/gH54=
 
 Name: res/drawable-hdpi-v4/background_selected.png
 SHA1-Digest: cTUE0QsOEwsl7sDoVLtWxD3rg3Q=
@@ -11755,7 +11755,7 @@ Name: res/drawable-mdpi-v4/authorize.png
 SHA1-Digest: LVAgszuVn3HM+AoGeH/GjbrImWA=
 
 Name: res/drawable-mdpi-v4/background_hd.jpg
-SHA1-Digest: rJSxrLOvljcMJPg004Y0s7KWPsA=
+SHA1-Digest: J5O4Ve4leN+GcCdPqLfZcZrgBdQ=
 
 Name: res/drawable-mdpi-v4/background_selected.png
 SHA1-Digest: B0b8X4f8pWu8IYaFlnxYYTKbAls=
@@ -13742,7 +13742,7 @@ Name: res/drawable-xhdpi-v4/authorize.png
 SHA1-Digest: 2CgT+kn4NtCpB/C60D19rJ3vgjc=
 
 Name: res/drawable-xhdpi-v4/background_hd.jpg
-SHA1-Digest: PszlDvcms6hFN48vwOwoxRtBYEY=
+SHA1-Digest: eMIcnqkOFEs5g580MVVs/hoe7d4=
 
 Name: res/drawable-xhdpi-v4/background_selected.png
 SHA1-Digest: UP+cfiOc4IO/8wqtgI9fqIbi1Wg=
@@ -15687,7 +15687,7 @@ Name: res/drawable-xxhdpi-v4/authorize.png
 SHA1-Digest: 0A3YIr2RnR7FbFMTDDvD5cQx4mg=
 
 Name: res/drawable-xxhdpi-v4/background_hd.jpg
-SHA1-Digest: +ynhZj9dHPHpj2vlWx5HN5mMwf4=
+SHA1-Digest: fEEaPIStmKQn1KV5vfUAdHjU9rs=
 
 Name: res/drawable-xxhdpi-v4/background_selected.png
 SHA1-Digest: fPsZA4sEomDzxEzTgCIEZFlJTKc=
@@ -17869,13 +17869,13 @@ Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
 SHA1-Digest: 2CE3JfdXqzrER2GIKXc5wf5a7LY=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: OZRJr5lPb+rkLMgAlYxWlZyzXPg=
+SHA1-Digest: Ri8Q3YWozLnw9IITsGaBxthqkfU=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: ReJzIeeskbyW5N8IQThXeJ4UbdI=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: kGQtnXI7xkhD1uNwGzei5Q5KvMo=
+SHA1-Digest: mlPX3wgQ9SIlbRm93koblWof2Ew=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: 0kDLS2UtnxiOM5BeQbdpwlMBc40=
@@ -17911,13 +17911,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: Ouz///6zr3gupKqMtQ2k4jZskdc=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: a2QAc1zxNtJZlcF+JXqoBFIs8u8=
+SHA1-Digest: qXwj5RyXlJM7ay8n+aKjl/+/ATs=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: qG7VGS02Z01Bcz2WgH336yWG4HQ=
+SHA1-Digest: 2G65bknZr4rB8pgkz+MiNcteKr4=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: f2l0KNmnjwaicGVW1SSZPS9y3uc=
+SHA1-Digest: NAWwPtVv3QuBW1ilYQvgNumXfdo=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: mhWV3NTa0jcxUDY76tGXjPU8tcs=
@@ -18136,7 +18136,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: DHito8ePU5vO4sWuWqAEbk7DRX8=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: Iv/fmnaH9AJ8HssUIcViz2s4JIY=
+SHA1-Digest: 4bzbkdcX7tN0pAKC2PuwCUbizd8=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -18151,7 +18151,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: pMv8uU5qjD9AOe/B7hXPDET7w90=
+SHA1-Digest: Lac2+5diNqTSqZ+RaaO3kCFH+0I=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

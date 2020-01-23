@@ -3993,10 +3993,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x17cf;
     L_0x09ad:
         r7 = "YouHaveNewMessage";
-        r8 = NUM; // 0x7f0e0cda float:1.888171E38 double:1.053163782E-314;
+        r8 = NUM; // 0x7f0e0cdc float:1.8881715E38 double:1.053163783E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         r8 = "SecretChatName";
-        r10 = NUM; // 0x7f0e09f7 float:1.8880212E38 double:1.053163417E-314;
+        r10 = NUM; // 0x7f0e09f9 float:1.8880216E38 double:1.053163418E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r10);	 Catch:{ all -> 0x044d }
         r21 = r1;
         r25 = r8;
@@ -4008,7 +4008,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x09e2;
     L_0x09ca:
         r7 = "NotificationActionPinnedGif";
-        r8 = NUM; // 0x7f0e06eb float:1.887863E38 double:1.0531630316E-314;
+        r8 = NUM; // 0x7f0e06ec float:1.8878632E38 double:1.053163032E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4021,7 +4021,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x09e2:
         r7 = "NotificationActionPinnedGifChannel";
-        r8 = NUM; // 0x7f0e06ec float:1.8878632E38 double:1.053163032E-314;
+        r8 = NUM; // 0x7f0e06ed float:1.8878634E38 double:1.0531630326E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4033,7 +4033,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a0f;
     L_0x09f7:
         r7 = "NotificationActionPinnedInvoice";
-        r8 = NUM; // 0x7f0e06ed float:1.8878634E38 double:1.0531630326E-314;
+        r8 = NUM; // 0x7f0e06ee float:1.8878636E38 double:1.053163033E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4046,7 +4046,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0a0f:
         r7 = "NotificationActionPinnedInvoiceChannel";
-        r8 = NUM; // 0x7f0e06ee float:1.8878636E38 double:1.053163033E-314;
+        r8 = NUM; // 0x7f0e06ef float:1.8878638E38 double:1.0531630336E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4058,7 +4058,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a3c;
     L_0x0a24:
         r7 = "NotificationActionPinnedGameScore";
-        r8 = NUM; // 0x7f0e06e5 float:1.8878617E38 double:1.0531630287E-314;
+        r8 = NUM; // 0x7f0e06e6 float:1.887862E38 double:1.053163029E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4071,7 +4071,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0a3c:
         r7 = "NotificationActionPinnedGameScoreChannel";
-        r8 = NUM; // 0x7f0e06e6 float:1.887862E38 double:1.053163029E-314;
+        r8 = NUM; // 0x7f0e06e7 float:1.8878621E38 double:1.0531630296E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4083,7 +4083,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a68;
     L_0x0a51:
         r7 = "NotificationActionPinnedGame";
-        r8 = NUM; // 0x7f0e06e3 float:1.8878613E38 double:1.0531630277E-314;
+        r8 = NUM; // 0x7f0e06e4 float:1.8878615E38 double:1.053163028E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4096,7 +4096,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0a68:
         r7 = "NotificationActionPinnedGameChannel";
-        r8 = NUM; // 0x7f0e06e4 float:1.8878615E38 double:1.053163028E-314;
+        r8 = NUM; // 0x7f0e06e5 float:1.8878617E38 double:1.0531630287E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4108,7 +4108,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0a93;
     L_0x0a7c:
         r7 = "NotificationActionPinnedGeoLive";
-        r8 = NUM; // 0x7f0e06e9 float:1.8878625E38 double:1.0531630306E-314;
+        r8 = NUM; // 0x7f0e06ea float:1.8878628E38 double:1.053163031E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4121,7 +4121,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0a93:
         r7 = "NotificationActionPinnedGeoLiveChannel";
-        r8 = NUM; // 0x7f0e06ea float:1.8878628E38 double:1.053163031E-314;
+        r8 = NUM; // 0x7f0e06eb float:1.887863E38 double:1.0531630316E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4133,7 +4133,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0abe;
     L_0x0aa7:
         r7 = "NotificationActionPinnedGeo";
-        r8 = NUM; // 0x7f0e06e7 float:1.8878621E38 double:1.0531630296E-314;
+        r8 = NUM; // 0x7f0e06e8 float:1.8878623E38 double:1.05316303E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4146,7 +4146,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0abe:
         r7 = "NotificationActionPinnedGeoChannel";
-        r8 = NUM; // 0x7f0e06e8 float:1.8878623E38 double:1.05316303E-314;
+        r8 = NUM; // 0x7f0e06e9 float:1.8878625E38 double:1.0531630306E-314;
         r10 = 1;
         r11 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r10 = 0;
@@ -4161,7 +4161,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0af4;
     L_0x0ad7:
         r7 = "NotificationActionPinnedPoll2";
-        r8 = NUM; // 0x7f0e06f5 float:1.887865E38 double:1.0531630366E-314;
+        r8 = NUM; // 0x7f0e06f6 float:1.8878652E38 double:1.053163037E-314;
         r10 = 3;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4177,7 +4177,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0acf;
     L_0x0af4:
         r7 = "NotificationActionPinnedPollChannel2";
-        r8 = NUM; // 0x7f0e06f6 float:1.8878652E38 double:1.053163037E-314;
+        r8 = NUM; // 0x7f0e06f7 float:1.8878654E38 double:1.0531630375E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4193,7 +4193,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0b2d;
     L_0x0b0f:
         r8 = "NotificationActionPinnedQuiz2";
-        r11 = NUM; // 0x7f0e06f7 float:1.8878654E38 double:1.0531630375E-314;
+        r11 = NUM; // 0x7f0e06f8 float:1.8878656E38 double:1.053163038E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4209,7 +4209,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0b2d:
         r7 = "NotificationActionPinnedQuizChannel2";
-        r8 = NUM; // 0x7f0e06f8 float:1.8878656E38 double:1.053163038E-314;
+        r8 = NUM; // 0x7f0e06f9 float:1.8878658E38 double:1.0531630385E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4225,7 +4225,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0b67;
     L_0x0b49:
         r8 = "NotificationActionPinnedContact2";
-        r11 = NUM; // 0x7f0e06df float:1.8878605E38 double:1.0531630257E-314;
+        r11 = NUM; // 0x7f0e06e0 float:1.8878607E38 double:1.053163026E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4241,7 +4241,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0b67:
         r7 = "NotificationActionPinnedContactChannel2";
-        r8 = NUM; // 0x7f0e06e0 float:1.8878607E38 double:1.053163026E-314;
+        r8 = NUM; // 0x7f0e06e1 float:1.887861E38 double:1.0531630267E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4257,7 +4257,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0b9b;
     L_0x0b83:
         r7 = "NotificationActionPinnedVoice";
-        r8 = NUM; // 0x7f0e0703 float:1.8878678E38 double:1.0531630435E-314;
+        r8 = NUM; // 0x7f0e0704 float:1.887868E38 double:1.053163044E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4270,7 +4270,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0b9b:
         r7 = "NotificationActionPinnedVoiceChannel";
-        r8 = NUM; // 0x7f0e0704 float:1.887868E38 double:1.053163044E-314;
+        r8 = NUM; // 0x7f0e0705 float:1.8878682E38 double:1.0531630445E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4291,7 +4291,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r8 != 0) goto L_0x0bdc;
     L_0x0bbe:
         r8 = "NotificationActionPinnedStickerEmoji";
-        r11 = NUM; // 0x7f0e06fd float:1.8878666E38 double:1.0531630405E-314;
+        r11 = NUM; // 0x7f0e06fe float:1.8878668E38 double:1.053163041E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4307,7 +4307,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0bdc:
         r7 = "NotificationActionPinnedSticker";
-        r8 = NUM; // 0x7f0e06fb float:1.8878662E38 double:1.0531630395E-314;
+        r8 = NUM; // 0x7f0e06fc float:1.8878664E38 double:1.05316304E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4328,7 +4328,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r7 != 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedStickerEmojiChannel";
-        r8 = NUM; // 0x7f0e06fe float:1.8878668E38 double:1.053163041E-314;
+        r8 = NUM; // 0x7f0e06ff float:1.887867E38 double:1.0531630415E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4341,7 +4341,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedStickerChannel";
-        r8 = NUM; // 0x7f0e06fc float:1.8878664E38 double:1.05316304E-314;
+        r8 = NUM; // 0x7f0e06fd float:1.8878666E38 double:1.0531630405E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4354,7 +4354,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0c2f:
         r7 = "NotificationActionPinnedFile";
-        r8 = NUM; // 0x7f0e06e1 float:1.887861E38 double:1.0531630267E-314;
+        r8 = NUM; // 0x7f0e06e2 float:1.8878611E38 double:1.053163027E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4367,7 +4367,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedFileChannel";
-        r8 = NUM; // 0x7f0e06e2 float:1.8878611E38 double:1.053163027E-314;
+        r8 = NUM; // 0x7f0e06e3 float:1.8878613E38 double:1.0531630277E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4380,7 +4380,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0c5e:
         r7 = "NotificationActionPinnedRound";
-        r8 = NUM; // 0x7f0e06f9 float:1.8878658E38 double:1.0531630385E-314;
+        r8 = NUM; // 0x7f0e06fa float:1.887866E38 double:1.053163039E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4393,7 +4393,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0CLASSNAME:
         r7 = "NotificationActionPinnedRoundChannel";
-        r8 = NUM; // 0x7f0e06fa float:1.887866E38 double:1.053163039E-314;
+        r8 = NUM; // 0x7f0e06fb float:1.8878662E38 double:1.0531630395E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4406,7 +4406,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0ca4;
     L_0x0c8d:
         r7 = "NotificationActionPinnedVideo";
-        r8 = NUM; // 0x7f0e0701 float:1.8878674E38 double:1.0531630425E-314;
+        r8 = NUM; // 0x7f0e0702 float:1.8878676E38 double:1.053163043E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4419,7 +4419,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0ca4:
         r7 = "NotificationActionPinnedVideoChannel";
-        r8 = NUM; // 0x7f0e0702 float:1.8878676E38 double:1.053163043E-314;
+        r8 = NUM; // 0x7f0e0703 float:1.8878678E38 double:1.0531630435E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4432,7 +4432,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0cd1;
     L_0x0cba:
         r7 = "NotificationActionPinnedPhoto";
-        r8 = NUM; // 0x7f0e06f3 float:1.8878646E38 double:1.0531630356E-314;
+        r8 = NUM; // 0x7f0e06f4 float:1.8878648E38 double:1.053163036E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4445,7 +4445,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0cd1:
         r7 = "NotificationActionPinnedPhotoChannel";
-        r8 = NUM; // 0x7f0e06f4 float:1.8878648E38 double:1.053163036E-314;
+        r8 = NUM; // 0x7f0e06f5 float:1.887865E38 double:1.0531630366E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4458,7 +4458,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0cfe;
     L_0x0ce7:
         r7 = "NotificationActionPinnedNoText";
-        r8 = NUM; // 0x7f0e06f1 float:1.8878642E38 double:1.0531630346E-314;
+        r8 = NUM; // 0x7f0e06f2 float:1.8878644E38 double:1.053163035E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4471,7 +4471,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0cfe:
         r7 = "NotificationActionPinnedNoTextChannel";
-        r8 = NUM; // 0x7f0e06f2 float:1.8878644E38 double:1.053163035E-314;
+        r8 = NUM; // 0x7f0e06f3 float:1.8878646E38 double:1.0531630356E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4486,7 +4486,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 == 0) goto L_0x0d33;
     L_0x0d17:
         r8 = "NotificationActionPinnedText";
-        r11 = NUM; // 0x7f0e06ff float:1.887867E38 double:1.0531630415E-314;
+        r11 = NUM; // 0x7f0e0700 float:1.8878672E38 double:1.053163042E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4502,7 +4502,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x0d0f;
     L_0x0d33:
         r7 = "NotificationActionPinnedTextChannel";
-        r8 = NUM; // 0x7f0e0700 float:1.8878672E38 double:1.053163042E-314;
+        r8 = NUM; // 0x7f0e0701 float:1.8878674E38 double:1.0531630425E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4516,7 +4516,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d4a:
         r10 = r32;
         r7 = "NotificationGroupAlbum";
-        r8 = NUM; // 0x7f0e070c float:1.8878696E38 double:1.053163048E-314;
+        r8 = NUM; // 0x7f0e070d float:1.8878699E38 double:1.0531630484E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4532,7 +4532,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d66:
         r10 = r32;
         r8 = "NotificationGroupFew";
-        r11 = NUM; // 0x7f0e070d float:1.8878699E38 double:1.0531630484E-314;
+        r11 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4553,7 +4553,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0d93:
         r10 = r32;
         r8 = "NotificationGroupFew";
-        r11 = NUM; // 0x7f0e070d float:1.8878699E38 double:1.0531630484E-314;
+        r11 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4574,7 +4574,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0dc0:
         r10 = r32;
         r11 = "NotificationGroupForwardedFew";
-        r14 = NUM; // 0x7f0e070e float:1.88787E38 double:1.053163049E-314;
+        r14 = NUM; // 0x7f0e070f float:1.8878703E38 double:1.0531630494E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r18 = 0;
@@ -4594,7 +4594,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0dee:
         r10 = r32;
         r7 = "NotificationGroupAddSelfMega";
-        r8 = NUM; // 0x7f0e070b float:1.8878694E38 double:1.0531630474E-314;
+        r8 = NUM; // 0x7f0e070c float:1.8878696E38 double:1.053163048E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4608,7 +4608,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e08:
         r10 = r32;
         r7 = "NotificationGroupAddSelf";
-        r8 = NUM; // 0x7f0e070a float:1.8878692E38 double:1.053163047E-314;
+        r8 = NUM; // 0x7f0e070b float:1.8878694E38 double:1.0531630474E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4622,7 +4622,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e22:
         r10 = r32;
         r7 = "NotificationGroupLeftMember";
-        r8 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
+        r8 = NUM; // 0x7f0e0712 float:1.8878709E38 double:1.053163051E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4636,7 +4636,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e3c:
         r10 = r32;
         r7 = "NotificationGroupKickYou";
-        r8 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
+        r8 = NUM; // 0x7f0e0711 float:1.8878707E38 double:1.0531630504E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4650,7 +4650,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e56:
         r10 = r32;
         r7 = "NotificationGroupKickMember";
-        r8 = NUM; // 0x7f0e070f float:1.8878703E38 double:1.0531630494E-314;
+        r8 = NUM; // 0x7f0e0710 float:1.8878705E38 double:1.05316305E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4664,7 +4664,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e70:
         r10 = r32;
         r8 = "NotificationGroupAddMember";
-        r11 = NUM; // 0x7f0e0709 float:1.887869E38 double:1.0531630464E-314;
+        r11 = NUM; // 0x7f0e070a float:1.8878692E38 double:1.053163047E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4681,7 +4681,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0e8f:
         r10 = r32;
         r7 = "NotificationEditedGroupPhoto";
-        r8 = NUM; // 0x7f0e0708 float:1.8878688E38 double:1.053163046E-314;
+        r8 = NUM; // 0x7f0e0709 float:1.887869E38 double:1.0531630464E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4695,7 +4695,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0ea9:
         r10 = r32;
         r7 = "NotificationEditedGroupName";
-        r8 = NUM; // 0x7f0e0707 float:1.8878686E38 double:1.0531630455E-314;
+        r8 = NUM; // 0x7f0e0708 float:1.8878688E38 double:1.053163046E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4709,7 +4709,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0ec3:
         r10 = r32;
         r7 = "NotificationInvitedToGroup";
-        r8 = NUM; // 0x7f0e0716 float:1.8878717E38 double:1.053163053E-314;
+        r8 = NUM; // 0x7f0e0717 float:1.8878719E38 double:1.0531630534E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4723,7 +4723,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0edd:
         r10 = r32;
         r8 = "NotificationMessageGroupInvoice";
-        r11 = NUM; // 0x7f0e0727 float:1.8878751E38 double:1.0531630613E-314;
+        r11 = NUM; // 0x7f0e0728 float:1.8878753E38 double:1.053163062E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4737,13 +4737,13 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "PaymentInvoice";
-        r11 = NUM; // 0x7f0e088f float:1.8879481E38 double:1.053163239E-314;
+        r11 = NUM; // 0x7f0e0890 float:1.8879483E38 double:1.0531632396E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x1053;
     L_0x0var_:
         r10 = r32;
         r8 = "NotificationMessageGroupGameScored";
-        r11 = NUM; // 0x7f0e0725 float:1.8878747E38 double:1.0531630603E-314;
+        r11 = NUM; // 0x7f0e0726 float:1.887875E38 double:1.053163061E-314;
         r14 = 4;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r18 = 0;
@@ -4763,7 +4763,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0f2c:
         r10 = r32;
         r8 = "NotificationMessageGroupGame";
-        r11 = NUM; // 0x7f0e0724 float:1.8878745E38 double:1.05316306E-314;
+        r11 = NUM; // 0x7f0e0725 float:1.8878747E38 double:1.0531630603E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4783,7 +4783,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0var_:
         r10 = r32;
         r7 = "NotificationMessageGroupGif";
-        r8 = NUM; // 0x7f0e0726 float:1.887875E38 double:1.053163061E-314;
+        r8 = NUM; // 0x7f0e0727 float:1.8878751E38 double:1.0531630613E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4800,7 +4800,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0var_:
         r10 = r32;
         r7 = "NotificationMessageGroupLiveLocation";
-        r8 = NUM; // 0x7f0e0728 float:1.8878753E38 double:1.053163062E-314;
+        r8 = NUM; // 0x7f0e0729 float:1.8878755E38 double:1.0531630623E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4817,7 +4817,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0f9a:
         r10 = r32;
         r7 = "NotificationMessageGroupMap";
-        r8 = NUM; // 0x7f0e0729 float:1.8878755E38 double:1.0531630623E-314;
+        r8 = NUM; // 0x7f0e072a float:1.8878757E38 double:1.0531630627E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4834,26 +4834,6 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x0fbd:
         r10 = r32;
         r8 = "NotificationMessageGroupPoll2";
-        r11 = NUM; // 0x7f0e072d float:1.8878763E38 double:1.053163064E-314;
-        r7 = 3;
-        r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
-        r14 = 0;
-        r16 = r15[r14];	 Catch:{ all -> 0x044d }
-        r7[r14] = r16;	 Catch:{ all -> 0x044d }
-        r14 = 1;
-        r16 = r15[r14];	 Catch:{ all -> 0x044d }
-        r7[r14] = r16;	 Catch:{ all -> 0x044d }
-        r14 = 2;
-        r15 = r15[r14];	 Catch:{ all -> 0x044d }
-        r7[r14] = r15;	 Catch:{ all -> 0x044d }
-        r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
-        r8 = "Poll";
-        r11 = NUM; // 0x7f0e08fe float:1.8879707E38 double:1.053163294E-314;
-        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
-        goto L_0x1053;
-    L_0x0fe4:
-        r10 = r32;
-        r8 = "NotificationMessageGroupQuiz2";
         r11 = NUM; // 0x7f0e072e float:1.8878765E38 double:1.0531630647E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
@@ -4867,14 +4847,34 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r15 = r15[r14];	 Catch:{ all -> 0x044d }
         r7[r14] = r15;	 Catch:{ all -> 0x044d }
         r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
+        r8 = "Poll";
+        r11 = NUM; // 0x7f0e08ff float:1.8879709E38 double:1.0531632945E-314;
+        r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
+        goto L_0x1053;
+    L_0x0fe4:
+        r10 = r32;
+        r8 = "NotificationMessageGroupQuiz2";
+        r11 = NUM; // 0x7f0e072f float:1.8878767E38 double:1.053163065E-314;
+        r7 = 3;
+        r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
+        r14 = 0;
+        r16 = r15[r14];	 Catch:{ all -> 0x044d }
+        r7[r14] = r16;	 Catch:{ all -> 0x044d }
+        r14 = 1;
+        r16 = r15[r14];	 Catch:{ all -> 0x044d }
+        r7[r14] = r16;	 Catch:{ all -> 0x044d }
+        r14 = 2;
+        r15 = r15[r14];	 Catch:{ all -> 0x044d }
+        r7[r14] = r15;	 Catch:{ all -> 0x044d }
+        r7 = org.telegram.messenger.LocaleController.formatString(r8, r11, r7);	 Catch:{ all -> 0x044d }
         r8 = "PollQuiz";
-        r11 = NUM; // 0x7f0e0905 float:1.887972E38 double:1.0531632974E-314;
+        r11 = NUM; // 0x7f0e0906 float:1.8879723E38 double:1.053163298E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r11);	 Catch:{ all -> 0x044d }
         goto L_0x1053;
     L_0x100b:
         r10 = r32;
         r8 = "NotificationMessageGroupContact2";
-        r11 = NUM; // 0x7f0e0722 float:1.8878741E38 double:1.053163059E-314;
+        r11 = NUM; // 0x7f0e0723 float:1.8878743E38 double:1.0531630593E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4894,7 +4894,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x1032:
         r10 = r32;
         r7 = "NotificationMessageGroupAudio";
-        r8 = NUM; // 0x7f0e0721 float:1.887874E38 double:1.0531630583E-314;
+        r8 = NUM; // 0x7f0e0722 float:1.8878741E38 double:1.053163059E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -4934,7 +4934,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r18 = r15[r17];	 Catch:{ all -> 0x044d }
         r14[r17] = r18;	 Catch:{ all -> 0x044d }
         r21 = r1;
-        r1 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
+        r1 = NUM; // 0x7f0e0732 float:1.8878774E38 double:1.0531630667E-314;
         r1 = org.telegram.messenger.LocaleController.formatString(r8, r1, r14);	 Catch:{ all -> 0x044d }
         r8 = new java.lang.StringBuilder;	 Catch:{ all -> 0x044d }
         r8.<init>();	 Catch:{ all -> 0x044d }
@@ -4949,7 +4949,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
     L_0x10a4:
         r21 = r1;
         r1 = "NotificationMessageGroupSticker";
-        r8 = NUM; // 0x7f0e0730 float:1.887877E38 double:1.0531630657E-314;
+        r8 = NUM; // 0x7f0e0731 float:1.8878772E38 double:1.053163066E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r16 = 0;
@@ -4973,7 +4973,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupDocument";
-        r7 = NUM; // 0x7f0e0723 float:1.8878743E38 double:1.0531630593E-314;
+        r7 = NUM; // 0x7f0e0724 float:1.8878745E38 double:1.05316306E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -4991,7 +4991,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupRound";
-        r7 = NUM; // 0x7f0e072f float:1.8878767E38 double:1.053163065E-314;
+        r7 = NUM; // 0x7f0e0730 float:1.887877E38 double:1.0531630657E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5009,7 +5009,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupVideo";
-        r7 = NUM; // 0x7f0e0733 float:1.8878776E38 double:1.053163067E-314;
+        r7 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5027,7 +5027,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupPhoto";
-        r7 = NUM; // 0x7f0e072c float:1.8878761E38 double:1.0531630637E-314;
+        r7 = NUM; // 0x7f0e072d float:1.8878763E38 double:1.053163064E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5045,7 +5045,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupNoText";
-        r7 = NUM; // 0x7f0e072b float:1.887876E38 double:1.053163063E-314;
+        r7 = NUM; // 0x7f0e072c float:1.8878761E38 double:1.0531630637E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5063,7 +5063,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGroupText";
-        r8 = NUM; // 0x7f0e0732 float:1.8878774E38 double:1.0531630667E-314;
+        r8 = NUM; // 0x7f0e0733 float:1.8878776E38 double:1.053163067E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5149,7 +5149,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGame";
-        r7 = NUM; // 0x7f0e071e float:1.8878733E38 double:1.053163057E-314;
+        r7 = NUM; // 0x7f0e071f float:1.8878735E38 double:1.0531630573E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5220,7 +5220,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "Poll";
-        r8 = NUM; // 0x7f0e08fe float:1.8879707E38 double:1.053163294E-314;
+        r8 = NUM; // 0x7f0e08ff float:1.8879709E38 double:1.0531632945E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x12ef:
@@ -5238,7 +5238,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "QuizPoll";
-        r8 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
+        r8 = NUM; // 0x7f0e0950 float:1.8879873E38 double:1.0531633345E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x1314:
@@ -5397,7 +5397,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageAlbum";
-        r7 = NUM; // 0x7f0e0718 float:1.887872E38 double:1.053163054E-314;
+        r7 = NUM; // 0x7f0e0719 float:1.8878723E38 double:1.0531630543E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5411,7 +5411,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageFew";
-        r7 = NUM; // 0x7f0e071c float:1.8878729E38 double:1.053163056E-314;
+        r7 = NUM; // 0x7f0e071d float:1.887873E38 double:1.0531630563E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5430,7 +5430,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageFew";
-        r7 = NUM; // 0x7f0e071c float:1.8878729E38 double:1.053163056E-314;
+        r7 = NUM; // 0x7f0e071d float:1.887873E38 double:1.0531630563E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5449,7 +5449,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageForwardFew";
-        r7 = NUM; // 0x7f0e071d float:1.887873E38 double:1.0531630563E-314;
+        r7 = NUM; // 0x7f0e071e float:1.8878733E38 double:1.053163057E-314;
         r11 = 2;
         r11 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r14 = 0;
@@ -5467,7 +5467,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageInvoice";
-        r7 = NUM; // 0x7f0e0734 float:1.8878778E38 double:1.0531630677E-314;
+        r7 = NUM; // 0x7f0e0735 float:1.887878E38 double:1.053163068E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5478,14 +5478,14 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "PaymentInvoice";
-        r8 = NUM; // 0x7f0e088f float:1.8879481E38 double:1.053163239E-314;
+        r8 = NUM; // 0x7f0e0890 float:1.8879483E38 double:1.0531632396E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x150e:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGameScored";
-        r8 = NUM; // 0x7f0e071f float:1.8878735E38 double:1.0531630573E-314;
+        r8 = NUM; // 0x7f0e0720 float:1.8878737E38 double:1.053163058E-314;
         r7 = 3;
         r7 = new java.lang.Object[r7];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5503,7 +5503,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGame";
-        r7 = NUM; // 0x7f0e071e float:1.8878733E38 double:1.053163057E-314;
+        r7 = NUM; // 0x7f0e071f float:1.8878735E38 double:1.0531630573E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5521,7 +5521,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageGif";
-        r7 = NUM; // 0x7f0e0720 float:1.8878737E38 double:1.053163058E-314;
+        r7 = NUM; // 0x7f0e0721 float:1.887874E38 double:1.0531630583E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5536,7 +5536,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageLiveLocation";
-        r7 = NUM; // 0x7f0e0735 float:1.887878E38 double:1.053163068E-314;
+        r7 = NUM; // 0x7f0e0736 float:1.8878782E38 double:1.0531630687E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5551,7 +5551,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageMap";
-        r7 = NUM; // 0x7f0e0736 float:1.8878782E38 double:1.0531630687E-314;
+        r7 = NUM; // 0x7f0e0737 float:1.8878784E38 double:1.053163069E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5566,24 +5566,6 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessagePoll2";
-        r7 = NUM; // 0x7f0e073a float:1.887879E38 double:1.0531630707E-314;
-        r8 = 2;
-        r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
-        r11 = 0;
-        r14 = r15[r11];	 Catch:{ all -> 0x044d }
-        r8[r11] = r14;	 Catch:{ all -> 0x044d }
-        r11 = 1;
-        r14 = r15[r11];	 Catch:{ all -> 0x044d }
-        r8[r11] = r14;	 Catch:{ all -> 0x044d }
-        r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
-        r7 = "Poll";
-        r8 = NUM; // 0x7f0e08fe float:1.8879707E38 double:1.053163294E-314;
-        r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
-        goto L_0x1797;
-    L_0x15d9:
-        r21 = r1;
-        r10 = r32;
-        r1 = "NotificationMessageQuiz2";
         r7 = NUM; // 0x7f0e073b float:1.8878792E38 double:1.053163071E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
@@ -5594,15 +5576,33 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r14 = r15[r11];	 Catch:{ all -> 0x044d }
         r8[r11] = r14;	 Catch:{ all -> 0x044d }
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
+        r7 = "Poll";
+        r8 = NUM; // 0x7f0e08ff float:1.8879709E38 double:1.0531632945E-314;
+        r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
+        goto L_0x1797;
+    L_0x15d9:
+        r21 = r1;
+        r10 = r32;
+        r1 = "NotificationMessageQuiz2";
+        r7 = NUM; // 0x7f0e073c float:1.8878794E38 double:1.0531630716E-314;
+        r8 = 2;
+        r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
+        r11 = 0;
+        r14 = r15[r11];	 Catch:{ all -> 0x044d }
+        r8[r11] = r14;	 Catch:{ all -> 0x044d }
+        r11 = 1;
+        r14 = r15[r11];	 Catch:{ all -> 0x044d }
+        r8[r11] = r14;	 Catch:{ all -> 0x044d }
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r8);	 Catch:{ all -> 0x044d }
         r7 = "QuizPoll";
-        r8 = NUM; // 0x7f0e094e float:1.8879869E38 double:1.0531633335E-314;
+        r8 = NUM; // 0x7f0e0950 float:1.8879873E38 double:1.0531633345E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r8);	 Catch:{ all -> 0x044d }
         goto L_0x1797;
     L_0x15fe:
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageContact2";
-        r7 = NUM; // 0x7f0e071a float:1.8878725E38 double:1.053163055E-314;
+        r7 = NUM; // 0x7f0e071b float:1.8878727E38 double:1.0531630553E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5620,7 +5620,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageAudio";
-        r7 = NUM; // 0x7f0e0719 float:1.8878723E38 double:1.0531630543E-314;
+        r7 = NUM; // 0x7f0e071a float:1.8878725E38 double:1.053163055E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5643,7 +5643,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         if (r1 != 0) goto L_0x1688;
     L_0x1653:
         r1 = "NotificationMessageStickerEmoji";
-        r8 = NUM; // 0x7f0e0742 float:1.8878806E38 double:1.0531630746E-314;
+        r8 = NUM; // 0x7f0e0743 float:1.8878808E38 double:1.053163075E-314;
         r14 = 2;
         r14 = new java.lang.Object[r14];	 Catch:{ all -> 0x044d }
         r16 = 0;
@@ -5665,7 +5665,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         goto L_0x1797;
     L_0x1688:
         r1 = "NotificationMessageSticker";
-        r8 = NUM; // 0x7f0e0741 float:1.8878804E38 double:1.053163074E-314;
+        r8 = NUM; // 0x7f0e0742 float:1.8878806E38 double:1.0531630746E-314;
         r11 = 1;
         r14 = new java.lang.Object[r11];	 Catch:{ all -> 0x044d }
         r11 = 0;
@@ -5679,7 +5679,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageDocument";
-        r7 = NUM; // 0x7f0e071b float:1.8878727E38 double:1.0531630553E-314;
+        r7 = NUM; // 0x7f0e071c float:1.8878729E38 double:1.053163056E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5694,7 +5694,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageRound";
-        r7 = NUM; // 0x7f0e073c float:1.8878794E38 double:1.0531630716E-314;
+        r7 = NUM; // 0x7f0e073d float:1.8878796E38 double:1.053163072E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5724,7 +5724,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageSDVideo";
-        r7 = NUM; // 0x7f0e073e float:1.8878798E38 double:1.0531630726E-314;
+        r7 = NUM; // 0x7f0e073f float:1.88788E38 double:1.053163073E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5739,7 +5739,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageVideo";
-        r7 = NUM; // 0x7f0e0744 float:1.887881E38 double:1.0531630756E-314;
+        r7 = NUM; // 0x7f0e0745 float:1.8878812E38 double:1.053163076E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5754,7 +5754,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageSDPhoto";
-        r7 = NUM; // 0x7f0e073d float:1.8878796E38 double:1.053163072E-314;
+        r7 = NUM; // 0x7f0e073e float:1.8878798E38 double:1.0531630726E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5769,7 +5769,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessagePhoto";
-        r7 = NUM; // 0x7f0e0739 float:1.8878788E38 double:1.05316307E-314;
+        r7 = NUM; // 0x7f0e073a float:1.887879E38 double:1.0531630707E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5784,7 +5784,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageNoText";
-        r7 = NUM; // 0x7f0e0738 float:1.8878786E38 double:1.0531630697E-314;
+        r7 = NUM; // 0x7f0e0739 float:1.8878788E38 double:1.05316307E-314;
         r8 = 1;
         r11 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r8 = 0;
@@ -5804,7 +5804,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         r21 = r1;
         r10 = r32;
         r1 = "NotificationMessageText";
-        r7 = NUM; // 0x7f0e0743 float:1.8878808E38 double:1.053163075E-314;
+        r7 = NUM; // 0x7f0e0744 float:1.887881E38 double:1.0531630756E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];	 Catch:{ all -> 0x044d }
         r11 = 0;
