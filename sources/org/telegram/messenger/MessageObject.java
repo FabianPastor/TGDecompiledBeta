@@ -15,7 +15,6 @@ import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -4373,56 +4372,153 @@ public class MessageObject {
         return (tL_messageReactions == null || tL_messageReactions.results.isEmpty()) ? false : true;
     }
 
-    public static void updatePollResults(TL_messageMediaPoll tL_messageMediaPoll, PollResults pollResults) {
-        if (tL_messageMediaPoll != null && pollResults != null) {
-            PollResults pollResults2;
-            if ((pollResults.flags & 2) != 0) {
-                int i;
-                TL_pollAnswerVoters tL_pollAnswerVoters;
-                boolean z;
-                byte[] bArr = null;
-                if (pollResults.min) {
-                    ArrayList arrayList = tL_messageMediaPoll.results.results;
-                    if (arrayList != null) {
-                        int size = arrayList.size();
-                        for (i = 0; i < size; i++) {
-                            tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i);
-                            if (tL_pollAnswerVoters.chosen) {
-                                bArr = tL_pollAnswerVoters.option;
-                                z = tL_pollAnswerVoters.correct;
-                                break;
-                            }
-                        }
-                    }
-                }
-                z = false;
-                PollResults pollResults3 = tL_messageMediaPoll.results;
-                pollResults3.results = pollResults.results;
-                if (bArr != null) {
-                    i = pollResults3.results.size();
-                    for (int i2 = 0; i2 < i; i2++) {
-                        tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i2);
-                        if (Arrays.equals(tL_pollAnswerVoters.option, bArr)) {
-                            tL_pollAnswerVoters.chosen = true;
-                            tL_pollAnswerVoters.correct = z;
-                            break;
-                        }
-                    }
-                }
-                pollResults2 = tL_messageMediaPoll.results;
-                pollResults2.flags |= 2;
-            }
-            if ((pollResults.flags & 4) != 0) {
-                pollResults2 = tL_messageMediaPoll.results;
-                pollResults2.total_voters = pollResults.total_voters;
-                pollResults2.flags |= 4;
-            }
-            if ((pollResults.flags & 8) != 0) {
-                PollResults pollResults4 = tL_messageMediaPoll.results;
-                pollResults4.recent_voters = pollResults.recent_voters;
-                pollResults4.flags |= 8;
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x005b  */
+    public static void updatePollResults(org.telegram.tgnet.TLRPC.TL_messageMediaPoll r12, org.telegram.tgnet.TLRPC.PollResults r13) {
+        /*
+        if (r12 == 0) goto L_0x00ce;
+    L_0x0002:
+        if (r13 != 0) goto L_0x0006;
+    L_0x0004:
+        goto L_0x00ce;
+    L_0x0006:
+        r0 = r13.flags;
+        r0 = r0 & 2;
+        if (r0 == 0) goto L_0x00aa;
+    L_0x000c:
+        r0 = r13.min;
+        r1 = 0;
+        r2 = 0;
+        if (r0 == 0) goto L_0x0044;
+    L_0x0012:
+        r0 = r12.results;
+        r0 = r0.results;
+        if (r0 == 0) goto L_0x0044;
+    L_0x0018:
+        r0 = r0.size();
+        r4 = r2;
+        r5 = r4;
+        r3 = 0;
+    L_0x001f:
+        if (r3 >= r0) goto L_0x0046;
+    L_0x0021:
+        r6 = r12.results;
+        r6 = r6.results;
+        r6 = r6.get(r3);
+        r6 = (org.telegram.tgnet.TLRPC.TL_pollAnswerVoters) r6;
+        r7 = r6.chosen;
+        if (r7 == 0) goto L_0x003b;
+    L_0x002f:
+        if (r4 != 0) goto L_0x0036;
+    L_0x0031:
+        r4 = new java.util.ArrayList;
+        r4.<init>();
+    L_0x0036:
+        r7 = r6.option;
+        r4.add(r7);
+    L_0x003b:
+        r7 = r6.correct;
+        if (r7 == 0) goto L_0x0041;
+    L_0x003f:
+        r5 = r6.option;
+    L_0x0041:
+        r3 = r3 + 1;
+        goto L_0x001f;
+    L_0x0044:
+        r4 = r2;
+        r5 = r4;
+    L_0x0046:
+        r0 = r12.results;
+        r3 = r13.results;
+        r0.results = r3;
+        if (r4 != 0) goto L_0x0050;
+    L_0x004e:
+        if (r5 == 0) goto L_0x00a2;
+    L_0x0050:
+        r0 = r12.results;
+        r0 = r0.results;
+        r0 = r0.size();
+        r3 = 0;
+    L_0x0059:
+        if (r3 >= r0) goto L_0x00a2;
+    L_0x005b:
+        r6 = r12.results;
+        r6 = r6.results;
+        r6 = r6.get(r3);
+        r6 = (org.telegram.tgnet.TLRPC.TL_pollAnswerVoters) r6;
+        r7 = 1;
+        if (r4 == 0) goto L_0x008d;
+    L_0x0068:
+        r8 = r4.size();
+        r9 = 0;
+    L_0x006d:
+        if (r9 >= r8) goto L_0x0086;
+    L_0x006f:
+        r10 = r6.option;
+        r11 = r4.get(r9);
+        r11 = (byte[]) r11;
+        r10 = java.util.Arrays.equals(r10, r11);
+        if (r10 == 0) goto L_0x0083;
+    L_0x007d:
+        r6.chosen = r7;
+        r4.remove(r9);
+        goto L_0x0086;
+    L_0x0083:
+        r9 = r9 + 1;
+        goto L_0x006d;
+    L_0x0086:
+        r8 = r4.isEmpty();
+        if (r8 == 0) goto L_0x008d;
+    L_0x008c:
+        r4 = r2;
+    L_0x008d:
+        if (r5 == 0) goto L_0x009a;
+    L_0x008f:
+        r8 = r6.option;
+        r8 = java.util.Arrays.equals(r8, r5);
+        if (r8 == 0) goto L_0x009a;
+    L_0x0097:
+        r6.correct = r7;
+        r5 = r2;
+    L_0x009a:
+        if (r4 != 0) goto L_0x009f;
+    L_0x009c:
+        if (r5 != 0) goto L_0x009f;
+    L_0x009e:
+        goto L_0x00a2;
+    L_0x009f:
+        r3 = r3 + 1;
+        goto L_0x0059;
+    L_0x00a2:
+        r0 = r12.results;
+        r1 = r0.flags;
+        r1 = r1 | 2;
+        r0.flags = r1;
+    L_0x00aa:
+        r0 = r13.flags;
+        r0 = r0 & 4;
+        if (r0 == 0) goto L_0x00bc;
+    L_0x00b0:
+        r0 = r12.results;
+        r1 = r13.total_voters;
+        r0.total_voters = r1;
+        r1 = r0.flags;
+        r1 = r1 | 4;
+        r0.flags = r1;
+    L_0x00bc:
+        r0 = r13.flags;
+        r0 = r0 & 8;
+        if (r0 == 0) goto L_0x00ce;
+    L_0x00c2:
+        r12 = r12.results;
+        r13 = r13.recent_voters;
+        r12.recent_voters = r13;
+        r13 = r12.flags;
+        r13 = r13 | 8;
+        r12.flags = r13;
+    L_0x00ce:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updatePollResults(org.telegram.tgnet.TLRPC$TL_messageMediaPoll, org.telegram.tgnet.TLRPC$PollResults):void");
     }
 
     public boolean isPollClosed() {

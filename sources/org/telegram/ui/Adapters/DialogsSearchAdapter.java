@@ -645,11 +645,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x0244 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:2: B:68:0x018a->B:98:0x0244} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0244 A:{LOOP_END, LOOP:2: B:68:0x018a->B:98:0x0244, Catch:{ Exception -> 0x0694 }} */
     /* JADX WARNING: Removed duplicated region for block: B:276:0x01dd A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x04f9 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:6: B:150:0x0383->B:189:0x04f9} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x04f9 A:{LOOP_END, LOOP:6: B:150:0x0383->B:189:0x04f9, Catch:{ Exception -> 0x0694 }} */
     /* JADX WARNING: Removed duplicated region for block: B:295:0x03ce A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0671 A:{LOOP_END, Catch:{ Exception -> 0x0694 }, LOOP:10: B:223:0x05be->B:252:0x0671} */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x0671 A:{LOOP_END, LOOP:10: B:223:0x05be->B:252:0x0671, Catch:{ Exception -> 0x0694 }} */
     /* JADX WARNING: Removed duplicated region for block: B:305:0x0613 A:{SYNTHETIC} */
     public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String r24, int r25) {
         /*
