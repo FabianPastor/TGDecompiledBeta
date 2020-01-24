@@ -26436,35 +26436,35 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x0d93  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x0d91  */
-    /* JADX WARNING: Removed duplicated region for block: B:509:0x0da6  */
-    /* JADX WARNING: Removed duplicated region for block: B:508:0x0d9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:527:0x0e3e  */
-    /* JADX WARNING: Removed duplicated region for block: B:526:0x0e39  */
-    /* JADX WARNING: Removed duplicated region for block: B:545:0x0ef4  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:549:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:561:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:591:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:587:0x0fc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:549:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:553:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:561:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:573:0x0fa1  */
-    /* JADX WARNING: Removed duplicated region for block: B:587:0x0fc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:591:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:603:0x0ffd  */
-    /* JADX WARNING: Removed duplicated region for block: B:607:0x1011  */
-    /* JADX WARNING: Removed duplicated region for block: B:606:0x100a  */
-    /* JADX WARNING: Removed duplicated region for block: B:627:0x1063  */
-    /* JADX WARNING: Removed duplicated region for block: B:641:0x10f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:658:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:645:0x1105  */
-    /* JADX WARNING: Missing block: B:446:0x0cbd, code skipped:
-            if (r0.miniButtonState != 1) goto L_0x0CLASSNAME;
+    /* JADX WARNING: Removed duplicated region for block: B:511:0x0da8  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x0da6  */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0dbb  */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x0db4  */
+    /* JADX WARNING: Removed duplicated region for block: B:533:0x0e53  */
+    /* JADX WARNING: Removed duplicated region for block: B:532:0x0e4e  */
+    /* JADX WARNING: Removed duplicated region for block: B:551:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:559:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:555:0x0f3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:571:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x0f7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:597:0x0fe8  */
+    /* JADX WARNING: Removed duplicated region for block: B:593:0x0fd5  */
+    /* JADX WARNING: Removed duplicated region for block: B:555:0x0f3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:559:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x0f7c  */
+    /* JADX WARNING: Removed duplicated region for block: B:571:0x0var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:579:0x0fb6  */
+    /* JADX WARNING: Removed duplicated region for block: B:593:0x0fd5  */
+    /* JADX WARNING: Removed duplicated region for block: B:597:0x0fe8  */
+    /* JADX WARNING: Removed duplicated region for block: B:609:0x1012  */
+    /* JADX WARNING: Removed duplicated region for block: B:613:0x1026  */
+    /* JADX WARNING: Removed duplicated region for block: B:612:0x101f  */
+    /* JADX WARNING: Removed duplicated region for block: B:633:0x1078  */
+    /* JADX WARNING: Removed duplicated region for block: B:647:0x110c  */
+    /* JADX WARNING: Removed duplicated region for block: B:664:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:651:0x111a  */
+    /* JADX WARNING: Missing block: B:452:0x0cd2, code skipped:
+            if (r0.miniButtonState != 1) goto L_0x0c7d;
      */
     public void drawOverlays(android.graphics.Canvas r28) {
         /*
@@ -26524,23 +26524,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r13 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r14 = 0;
-        if (r5 == r6) goto L_0x0bbb;
+        if (r5 == r6) goto L_0x0bd0;
     L_0x005e:
-        if (r5 == r10) goto L_0x0bbb;
+        if (r5 == r10) goto L_0x0bd0;
     L_0x0060:
         r6 = r0.documentAttachType;
-        if (r6 == r2) goto L_0x0bbb;
+        if (r6 == r2) goto L_0x0bd0;
     L_0x0064:
         if (r6 != r8) goto L_0x0068;
     L_0x0066:
-        goto L_0x0bbb;
+        goto L_0x0bd0;
     L_0x0068:
         r16 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r17 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
         if (r5 != r2) goto L_0x029b;
     L_0x006e:
         r2 = r0.docTitleLayout;
-        if (r2 == 0) goto L_0x0fe9;
+        if (r2 == 0) goto L_0x0ffe;
     L_0x0072:
         r1 = r1.isOutOwner();
         if (r1 == 0) goto L_0x0098;
@@ -26761,7 +26761,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3.setImageCoords(r1, r2, r4, r5);
         r1 = r0.locationImageReceiver;
         r1.draw(r7);
-        goto L_0x0fe9;
+        goto L_0x0ffe;
     L_0x0260:
         r28.save();
         r1 = r0.photoImage;
@@ -26788,7 +26788,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.draw(r7);
     L_0x0296:
         r28.restore();
-        goto L_0x0fe9;
+        goto L_0x0ffe;
     L_0x029b:
         r2 = 16;
         if (r5 != r2) goto L_0x03c6;
@@ -26956,11 +26956,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.otherY = r2;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r3, r1, r2);
         r3.draw(r7);
-        goto L_0x0fe9;
+        goto L_0x0ffe;
     L_0x03c6:
         r2 = 17;
         r18 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        if (r5 != r2) goto L_0x0a25;
+        if (r5 != r2) goto L_0x0a3a;
     L_0x03cc:
         r1 = r1.isOutOwner();
         if (r1 == 0) goto L_0x03e8;
@@ -27219,7 +27219,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = 0;
         r12 = 0;
     L_0x0597:
-        if (r11 >= r8) goto L_0x0958;
+        if (r11 >= r8) goto L_0x096d;
     L_0x0599:
         r1 = r0.pollButtons;
         r1 = r1.get(r11);
@@ -27267,69 +27267,84 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r1 != 0) goto L_0x05ea;
     L_0x05e6:
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x0784;
+        if (r1 == 0) goto L_0x0799;
     L_0x05ea:
         r1 = r0.lastPoll;
         r1 = r1.quiz;
-        if (r1 == 0) goto L_0x0636;
+        if (r1 == 0) goto L_0x064b;
     L_0x05f0:
         r1 = r0.pollVoted;
-        if (r1 == 0) goto L_0x0636;
+        if (r1 == 0) goto L_0x064b;
     L_0x05f4:
         r1 = r5.chosen;
-        if (r1 == 0) goto L_0x0636;
+        if (r1 == 0) goto L_0x064b;
     L_0x05fa:
-        r1 = r0.currentBackgroundDrawable;
-        r1 = r1.hasGradient();
-        if (r1 != 0) goto L_0x0636;
-    L_0x0602:
         r1 = r5.correct;
-        if (r1 == 0) goto L_0x061f;
+        if (r1 == 0) goto L_0x060e;
+    L_0x0600:
+        r1 = r0.currentMessageObject;
+        r1 = r1.isOutOwner();
+        if (r1 == 0) goto L_0x060b;
     L_0x0608:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
-        r2 = r0.currentMessageObject;
-        r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x0615;
-    L_0x0612:
-        r2 = "chat_outPollCorrectAnswer";
-        goto L_0x0617;
-    L_0x0615:
-        r2 = "chat_inPollCorrectAnswer";
-    L_0x0617:
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r1.setColor(r2);
-        goto L_0x064c;
-    L_0x061f:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
-        r2 = r0.currentMessageObject;
-        r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x062c;
+        r1 = "chat_outPollCorrectAnswer";
+        goto L_0x061b;
+    L_0x060b:
+        r1 = "chat_inPollCorrectAnswer";
+        goto L_0x061b;
+    L_0x060e:
+        r1 = r0.currentMessageObject;
+        r1 = r1.isOutOwner();
+        if (r1 == 0) goto L_0x0619;
+    L_0x0616:
+        r1 = "chat_outPollWrongAnswer";
+        goto L_0x061b;
+    L_0x0619:
+        r1 = "chat_inPollWrongAnswer";
+    L_0x061b:
+        r2 = r0.currentBackgroundDrawable;
+        r2 = r2.hasGradient();
+        if (r2 == 0) goto L_0x0641;
+    L_0x0623:
+        r2 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r1);
+        if (r2 == 0) goto L_0x062a;
     L_0x0629:
-        r2 = "chat_outPollWrongAnswer";
-        goto L_0x062e;
-    L_0x062c:
-        r2 = "chat_inPollWrongAnswer";
-    L_0x062e:
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r1.setColor(r2);
-        goto L_0x064c;
-    L_0x0636:
+        goto L_0x0641;
+    L_0x062a:
         r1 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
         r2 = r0.currentMessageObject;
         r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x0643;
-    L_0x0640:
+        if (r2 == 0) goto L_0x0637;
+    L_0x0634:
         r2 = "chat_outAudioSeekbarFill";
-        goto L_0x0645;
-    L_0x0643:
+        goto L_0x0639;
+    L_0x0637:
         r2 = "chat_inAudioSeekbarFill";
-    L_0x0645:
+    L_0x0639:
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
-    L_0x064c:
+        goto L_0x0661;
+    L_0x0641:
+        r2 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
+        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
+        r2.setColor(r1);
+        goto L_0x0661;
+    L_0x064b:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
+        r2 = r0.currentMessageObject;
+        r2 = r2.isOutOwner();
+        if (r2 == 0) goto L_0x0658;
+    L_0x0655:
+        r2 = "chat_outAudioSeekbarFill";
+        goto L_0x065a;
+    L_0x0658:
+        r2 = "chat_inAudioSeekbarFill";
+    L_0x065a:
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r1.setColor(r2);
+    L_0x0661:
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x0673;
-    L_0x0650:
+        if (r1 == 0) goto L_0x0688;
+    L_0x0665:
         r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewPaint;
         r1 = r1.getAlpha();
         r1 = (float) r1;
@@ -27348,7 +27363,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = r15 * r1;
         r1 = (int) r15;
         r2.setAlpha(r1);
-    L_0x0673:
+    L_0x0688:
         r1 = r5.prevPercent;
         r1 = (float) r1;
         r2 = r5.percent;
@@ -27413,24 +27428,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r15 = org.telegram.ui.ActionBar.Theme.chat_docBackPaint;
         r7.drawRoundRect(r1, r2, r3, r15);
         r1 = r5.chosen;
-        if (r1 != 0) goto L_0x0724;
-    L_0x070a:
+        if (r1 != 0) goto L_0x0739;
+    L_0x071f:
         r1 = r5.prevChosen;
-        if (r1 != 0) goto L_0x0724;
-    L_0x0710:
+        if (r1 != 0) goto L_0x0739;
+    L_0x0725:
         r1 = r0.lastPoll;
         r1 = r1.quiz;
-        if (r1 == 0) goto L_0x0784;
-    L_0x0716:
+        if (r1 == 0) goto L_0x0799;
+    L_0x072b:
         r1 = r5.correct;
-        if (r1 == 0) goto L_0x0784;
-    L_0x071c:
+        if (r1 == 0) goto L_0x0799;
+    L_0x0731:
         r1 = r0.pollVoted;
-        if (r1 != 0) goto L_0x0724;
-    L_0x0720:
+        if (r1 != 0) goto L_0x0739;
+    L_0x0735:
         r1 = r0.pollClosed;
-        if (r1 == 0) goto L_0x0784;
-    L_0x0724:
+        if (r1 == 0) goto L_0x0799;
+    L_0x0739:
         r1 = r0.rect;
         r1 = r1.left;
         r2 = NUM; // 0x41580000 float:13.5 double:5.416373534E-315;
@@ -27446,25 +27461,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.drawCircle(r1, r2, r3, r15);
         r3 = r0.lastPoll;
         r3 = r3.quiz;
-        if (r3 == 0) goto L_0x075f;
-    L_0x0748:
+        if (r3 == 0) goto L_0x0774;
+    L_0x075d:
         r3 = r5.chosen;
-        if (r3 == 0) goto L_0x075f;
-    L_0x074e:
+        if (r3 == 0) goto L_0x0774;
+    L_0x0763:
         r3 = r5.correct;
-        if (r3 != 0) goto L_0x075f;
-    L_0x0754:
+        if (r3 != 0) goto L_0x0774;
+    L_0x0769:
         r3 = org.telegram.ui.ActionBar.Theme.chat_pollCrossDrawable;
         r15 = r0.currentMessageObject;
         r15 = r15.isOutOwner();
         r3 = r3[r15];
-        goto L_0x0769;
-    L_0x075f:
+        goto L_0x077e;
+    L_0x0774:
         r3 = org.telegram.ui.ActionBar.Theme.chat_pollCheckDrawable;
         r15 = r0.currentMessageObject;
         r15 = r15.isOutOwner();
         r3 = r3[r15];
-    L_0x0769:
+    L_0x077e:
         r3.setAlpha(r4);
         r15 = r3.getIntrinsicWidth();
         r21 = 2;
@@ -27477,49 +27492,49 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r2 - r15;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r3, r1, r2);
         r3.draw(r7);
-    L_0x0784:
+    L_0x0799:
         r1 = r0.pollVoted;
-        if (r1 != 0) goto L_0x078c;
-    L_0x0788:
+        if (r1 != 0) goto L_0x07a1;
+    L_0x079d:
         r1 = r0.pollClosed;
-        if (r1 == 0) goto L_0x0790;
-    L_0x078c:
+        if (r1 == 0) goto L_0x07a5;
+    L_0x07a1:
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x093c;
-    L_0x0790:
-        r1 = r27.isDrawSelectionBackground();
-        if (r1 == 0) goto L_0x07ad;
-    L_0x0796:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_replyLinePaint;
-        r2 = r0.currentMessageObject;
-        r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x07a3;
-    L_0x07a0:
-        r2 = "chat_outVoiceSeekbarSelected";
-        goto L_0x07a5;
-    L_0x07a3:
-        r2 = "chat_inVoiceSeekbarSelected";
+        if (r1 == 0) goto L_0x0951;
     L_0x07a5:
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r1.setColor(r2);
-        goto L_0x07c3;
-    L_0x07ad:
+        r1 = r27.isDrawSelectionBackground();
+        if (r1 == 0) goto L_0x07c2;
+    L_0x07ab:
         r1 = org.telegram.ui.ActionBar.Theme.chat_replyLinePaint;
         r2 = r0.currentMessageObject;
         r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x07ba;
-    L_0x07b7:
-        r2 = "chat_outVoiceSeekbar";
-        goto L_0x07bc;
+        if (r2 == 0) goto L_0x07b8;
+    L_0x07b5:
+        r2 = "chat_outVoiceSeekbarSelected";
+        goto L_0x07ba;
+    L_0x07b8:
+        r2 = "chat_inVoiceSeekbarSelected";
     L_0x07ba:
-        r2 = "chat_inVoiceSeekbar";
-    L_0x07bc:
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
-    L_0x07c3:
+        goto L_0x07d8;
+    L_0x07c2:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_replyLinePaint;
+        r2 = r0.currentMessageObject;
+        r2 = r2.isOutOwner();
+        if (r2 == 0) goto L_0x07cf;
+    L_0x07cc:
+        r2 = "chat_outVoiceSeekbar";
+        goto L_0x07d1;
+    L_0x07cf:
+        r2 = "chat_inVoiceSeekbar";
+    L_0x07d1:
+        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r1.setColor(r2);
+    L_0x07d8:
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x07dc;
-    L_0x07c7:
+        if (r1 == 0) goto L_0x07f1;
+    L_0x07dc:
         r1 = org.telegram.ui.ActionBar.Theme.chat_replyLinePaint;
         r1 = r1.getAlpha();
         r1 = (float) r1;
@@ -27531,7 +27546,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 * r1;
         r1 = (int) r3;
         r2.setAlpha(r1);
-    L_0x07dc:
+    L_0x07f1:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r13);
         r1 = -r1;
         r2 = (float) r1;
@@ -27560,26 +27575,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.drawLine(r2, r3, r4, r5, r6);
         r1 = r0.pollVoteInProgress;
         r2 = NUM; // 0x41080000 float:8.5 double:5.390470265E-315;
-        if (r1 == 0) goto L_0x088b;
-    L_0x0815:
+        if (r1 == 0) goto L_0x08a0;
+    L_0x082a:
         r1 = r0.pollVoteInProgressNum;
-        if (r11 != r1) goto L_0x088b;
-    L_0x0819:
+        if (r11 != r1) goto L_0x08a0;
+    L_0x082e:
         r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r3 = r0.currentMessageObject;
         r3 = r3.isOutOwner();
-        if (r3 == 0) goto L_0x0826;
-    L_0x0823:
+        if (r3 == 0) goto L_0x083b;
+    L_0x0838:
         r3 = "chat_outAudioSeekbarFill";
-        goto L_0x0828;
-    L_0x0826:
+        goto L_0x083d;
+    L_0x083b:
         r3 = "chat_inAudioSeekbarFill";
-    L_0x0828:
+    L_0x083d:
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setColor(r3);
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x0848;
-    L_0x0833:
+        if (r1 == 0) goto L_0x085d;
+    L_0x0848:
         r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r1 = r1.getAlpha();
         r1 = (float) r1;
@@ -27591,7 +27606,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 * r1;
         r1 = (int) r4;
         r3.setAlpha(r1);
-    L_0x0848:
+    L_0x085d:
         r1 = r0.rect;
         r3 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -27621,40 +27636,40 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r1 = r28;
         r1.drawArc(r2, r3, r4, r5, r6);
-        goto L_0x093f;
-    L_0x088b:
+        goto L_0x0954;
+    L_0x08a0:
         r1 = r0.currentMessageObject;
         r1 = r1.isOutOwner();
-        if (r1 == 0) goto L_0x08a8;
-    L_0x0893:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
-        r3 = r27.isDrawSelectionBackground();
-        if (r3 == 0) goto L_0x089e;
-    L_0x089b:
-        r3 = "chat_outMenuSelected";
-        goto L_0x08a0;
-    L_0x089e:
-        r3 = "chat_outMenu";
-    L_0x08a0:
-        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
-        r1.setColor(r3);
-        goto L_0x08bc;
+        if (r1 == 0) goto L_0x08bd;
     L_0x08a8:
         r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r3 = r27.isDrawSelectionBackground();
         if (r3 == 0) goto L_0x08b3;
     L_0x08b0:
-        r3 = "chat_inMenuSelected";
+        r3 = "chat_outMenuSelected";
         goto L_0x08b5;
     L_0x08b3:
-        r3 = "chat_inMenu";
+        r3 = "chat_outMenu";
     L_0x08b5:
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setColor(r3);
-    L_0x08bc:
+        goto L_0x08d1;
+    L_0x08bd:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
+        r3 = r27.isDrawSelectionBackground();
+        if (r3 == 0) goto L_0x08c8;
+    L_0x08c5:
+        r3 = "chat_inMenuSelected";
+        goto L_0x08ca;
+    L_0x08c8:
+        r3 = "chat_inMenu";
+    L_0x08ca:
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r1.setColor(r3);
+    L_0x08d1:
         r1 = r0.animatePollAnswerAlpha;
-        if (r1 == 0) goto L_0x08d5;
-    L_0x08c0:
+        if (r1 == 0) goto L_0x08ea;
+    L_0x08d5:
         r1 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r1 = r1.getAlpha();
         r1 = (float) r1;
@@ -27666,7 +27681,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 * r1;
         r1 = (int) r4;
         r3.setAlpha(r1);
-    L_0x08d5:
+    L_0x08ea:
         r1 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r1 = -r1;
@@ -27679,32 +27694,32 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.drawCircle(r1, r3, r4, r5);
         r1 = r0.lastPoll;
         r1 = r1.multiple_choice;
-        if (r1 == 0) goto L_0x093f;
-    L_0x08f2:
+        if (r1 == 0) goto L_0x0954;
+    L_0x0907:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = "checkboxCheck";
         r3 = r0.currentMessageObject;
         r3 = r3.isOutOwner();
-        if (r3 == 0) goto L_0x0909;
-    L_0x0900:
+        if (r3 == 0) goto L_0x091e;
+    L_0x0915:
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r4 = -1;
-        if (r3 != r4) goto L_0x0909;
-    L_0x0907:
+        if (r3 != r4) goto L_0x091e;
+    L_0x091c:
         r2 = "chat_outBubble";
-    L_0x0909:
+    L_0x091e:
         r3 = r0.pollCheckBox;
         r3 = r3[r11];
         r4 = 0;
         r5 = r0.currentMessageObject;
         r5 = r5.isOutOwner();
-        if (r5 == 0) goto L_0x0919;
-    L_0x0916:
+        if (r5 == 0) goto L_0x092e;
+    L_0x092b:
         r5 = "chat_outAudioSeekbarFill";
-        goto L_0x091b;
-    L_0x0919:
+        goto L_0x0930;
+    L_0x092e:
         r5 = "chat_inAudioSeekbarFill";
-    L_0x091b:
+    L_0x0930:
         r3.setColor(r4, r5, r2);
         r2 = r0.pollCheckBox;
         r2 = r2[r11];
@@ -27719,71 +27734,71 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.pollCheckBox;
         r1 = r1[r11];
         r1.draw(r7);
-        goto L_0x093f;
-    L_0x093c:
+        goto L_0x0954;
+    L_0x0951:
         r15 = r5;
         r23 = r6;
-    L_0x093f:
+    L_0x0954:
         r28.restore();
         r1 = r8 + -1;
-        if (r11 != r1) goto L_0x094f;
-    L_0x0946:
+        if (r11 != r1) goto L_0x0964;
+    L_0x095b:
         r1 = r15.y;
         r2 = r0.namesOffset;
         r1 = r1 + r2;
         r2 = r15.height;
         r1 = r1 + r2;
         r12 = r1;
-    L_0x094f:
+    L_0x0964:
         r11 = r11 + 1;
         r6 = r23;
         r14 = 0;
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         goto L_0x0597;
-    L_0x0958:
+    L_0x096d:
         r23 = r6;
         r1 = r0.drawInstantView;
-        if (r1 == 0) goto L_0x09f2;
-    L_0x095e:
+        if (r1 == 0) goto L_0x0a07;
+    L_0x0973:
         r1 = r0.currentBackgroundDrawable;
         r1 = r1.getBounds();
         r1 = r1.left;
         r2 = r0.currentMessageObject;
         r2 = r2.isOutOwner();
-        if (r2 != 0) goto L_0x097a;
-    L_0x096e:
+        if (r2 != 0) goto L_0x098f;
+    L_0x0983:
         r2 = r0.mediaBackground;
-        if (r2 != 0) goto L_0x097a;
-    L_0x0972:
+        if (r2 != 0) goto L_0x098f;
+    L_0x0987:
         r2 = r0.drawPinnedBottom;
-        if (r2 == 0) goto L_0x0977;
-    L_0x0976:
-        goto L_0x097a;
-    L_0x0977:
+        if (r2 == 0) goto L_0x098c;
+    L_0x098b:
+        goto L_0x098f;
+    L_0x098c:
         r20 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        goto L_0x097c;
-    L_0x097a:
+        goto L_0x0991;
+    L_0x098f:
         r20 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-    L_0x097c:
+    L_0x0991:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r20);
         r1 = r1 + r2;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r17);
         r12 = r12 + r2;
         r2 = r0.currentMessageObject;
         r2 = r2.isOutOwner();
-        if (r2 == 0) goto L_0x099a;
-    L_0x098e:
+        if (r2 == 0) goto L_0x09af;
+    L_0x09a3:
         r2 = org.telegram.ui.ActionBar.Theme.chat_instantViewPaint;
         r3 = "chat_outPreviewInstantText";
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r2.setColor(r3);
-        goto L_0x09a5;
-    L_0x099a:
+        goto L_0x09ba;
+    L_0x09af:
         r2 = org.telegram.ui.ActionBar.Theme.chat_instantViewPaint;
         r3 = "chat_inPreviewInstantText";
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r2.setColor(r3);
-    L_0x09a5:
+    L_0x09ba:
         r2 = r0.instantButtonRect;
         r3 = (float) r1;
         r4 = (float) r12;
@@ -27796,12 +27811,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = (float) r6;
         r2.set(r3, r4, r5, r6);
         r2 = r0.selectorDrawable;
-        if (r2 == 0) goto L_0x09d3;
-    L_0x09bc:
+        if (r2 == 0) goto L_0x09e8;
+    L_0x09d1:
         r3 = r0.selectorDrawableMaskType;
         r4 = 2;
-        if (r3 != r4) goto L_0x09d3;
-    L_0x09c1:
+        if (r3 != r4) goto L_0x09e8;
+    L_0x09d6:
         r3 = r0.instantWidth;
         r3 = r3 + r1;
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
@@ -27810,10 +27825,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.setBounds(r1, r12, r3, r4);
         r2 = r0.selectorDrawable;
         r2.draw(r7);
-    L_0x09d3:
+    L_0x09e8:
         r2 = r0.instantViewLayout;
-        if (r2 == 0) goto L_0x0a20;
-    L_0x09d7:
+        if (r2 == 0) goto L_0x0a35;
+    L_0x09ec:
         r28.save();
         r2 = r0.instantTextX;
         r1 = r1 + r2;
@@ -27826,21 +27841,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.instantViewLayout;
         r1.draw(r7);
         r28.restore();
-        goto L_0x0a20;
-    L_0x09f2:
+        goto L_0x0a35;
+    L_0x0a07:
         r1 = r0.infoLayout;
-        if (r1 == 0) goto L_0x0a20;
-    L_0x09f6:
+        if (r1 == 0) goto L_0x0a35;
+    L_0x0a0b:
         r1 = r0.lastPoll;
         r2 = r1.public_voters;
-        if (r2 != 0) goto L_0x0a00;
-    L_0x09fc:
+        if (r2 != 0) goto L_0x0a15;
+    L_0x0a11:
         r1 = r1.multiple_choice;
-        if (r1 == 0) goto L_0x0a05;
-    L_0x0a00:
+        if (r1 == 0) goto L_0x0a1a;
+    L_0x0a15:
         r1 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r12 = r12 + r1;
-    L_0x0a05:
+    L_0x0a1a:
         r28.save();
         r1 = r0.infoX;
         r6 = r23 + r1;
@@ -27853,52 +27868,52 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.infoLayout;
         r1.draw(r7);
         r28.restore();
-    L_0x0a20:
+    L_0x0a35:
         r27.updatePollAnimations();
-        goto L_0x0fe9;
-    L_0x0a25:
+        goto L_0x0ffe;
+    L_0x0a3a:
         r2 = 12;
-        if (r5 != r2) goto L_0x0fe9;
-    L_0x0a29:
+        if (r5 != r2) goto L_0x0ffe;
+    L_0x0a3e:
         r1 = r1.isOutOwner();
-        if (r1 == 0) goto L_0x0a4f;
-    L_0x0a2f:
+        if (r1 == 0) goto L_0x0a64;
+    L_0x0a44:
         r1 = org.telegram.ui.ActionBar.Theme.chat_contactNamePaint;
         r2 = "chat_outContactNameText";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
         r1 = org.telegram.ui.ActionBar.Theme.chat_contactPhonePaint;
         r2 = r27.isDrawSelectionBackground();
-        if (r2 == 0) goto L_0x0a45;
-    L_0x0a42:
+        if (r2 == 0) goto L_0x0a5a;
+    L_0x0a57:
         r2 = "chat_outContactPhoneSelectedText";
-        goto L_0x0a47;
-    L_0x0a45:
+        goto L_0x0a5c;
+    L_0x0a5a:
         r2 = "chat_outContactPhoneText";
-    L_0x0a47:
+    L_0x0a5c:
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
-        goto L_0x0a6e;
-    L_0x0a4f:
+        goto L_0x0a83;
+    L_0x0a64:
         r1 = org.telegram.ui.ActionBar.Theme.chat_contactNamePaint;
         r2 = "chat_inContactNameText";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
         r1 = org.telegram.ui.ActionBar.Theme.chat_contactPhonePaint;
         r2 = r27.isDrawSelectionBackground();
-        if (r2 == 0) goto L_0x0a65;
-    L_0x0a62:
+        if (r2 == 0) goto L_0x0a7a;
+    L_0x0a77:
         r2 = "chat_inContactPhoneSelectedText";
-        goto L_0x0a67;
-    L_0x0a65:
+        goto L_0x0a7c;
+    L_0x0a7a:
         r2 = "chat_inContactPhoneText";
-    L_0x0a67:
+    L_0x0a7c:
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r1.setColor(r2);
-    L_0x0a6e:
+    L_0x0a83:
         r1 = r0.titleLayout;
-        if (r1 == 0) goto L_0x0a9d;
-    L_0x0a72:
+        if (r1 == 0) goto L_0x0ab2;
+    L_0x0a87:
         r28.save();
         r1 = r0.photoImage;
         r1 = r1.getImageX();
@@ -27917,10 +27932,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.titleLayout;
         r1.draw(r7);
         r28.restore();
-    L_0x0a9d:
+    L_0x0ab2:
         r1 = r0.docTitleLayout;
-        if (r1 == 0) goto L_0x0acc;
-    L_0x0aa1:
+        if (r1 == 0) goto L_0x0ae1;
+    L_0x0ab6:
         r28.save();
         r1 = r0.photoImage;
         r1 = r1.getImageX();
@@ -27939,28 +27954,28 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.docTitleLayout;
         r1.draw(r7);
         r28.restore();
-    L_0x0acc:
+    L_0x0ae1:
         r1 = r0.currentMessageObject;
         r1 = r1.isOutOwner();
-        if (r1 == 0) goto L_0x0ae0;
-    L_0x0ad4:
-        r1 = r27.isDrawSelectionBackground();
-        if (r1 == 0) goto L_0x0add;
-    L_0x0ada:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_msgOutMenuSelectedDrawable;
-        goto L_0x0aeb;
-    L_0x0add:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_msgOutMenuDrawable;
-        goto L_0x0aeb;
-    L_0x0ae0:
-        r1 = r27.isDrawSelectionBackground();
-        if (r1 == 0) goto L_0x0ae9;
-    L_0x0ae6:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_msgInMenuSelectedDrawable;
-        goto L_0x0aeb;
+        if (r1 == 0) goto L_0x0af5;
     L_0x0ae9:
+        r1 = r27.isDrawSelectionBackground();
+        if (r1 == 0) goto L_0x0af2;
+    L_0x0aef:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_msgOutMenuSelectedDrawable;
+        goto L_0x0b00;
+    L_0x0af2:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_msgOutMenuDrawable;
+        goto L_0x0b00;
+    L_0x0af5:
+        r1 = r27.isDrawSelectionBackground();
+        if (r1 == 0) goto L_0x0afe;
+    L_0x0afb:
+        r1 = org.telegram.ui.ActionBar.Theme.chat_msgInMenuSelectedDrawable;
+        goto L_0x0b00;
+    L_0x0afe:
         r1 = org.telegram.ui.ActionBar.Theme.chat_msgInMenuDrawable;
-    L_0x0aeb:
+    L_0x0b00:
         r2 = r0.photoImage;
         r2 = r2.getImageX();
         r3 = r0.backgroundWidth;
@@ -27977,8 +27992,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r1, r2, r3);
         r1.draw(r7);
         r1 = r0.drawInstantView;
-        if (r1 == 0) goto L_0x0fe9;
-    L_0x0b14:
+        if (r1 == 0) goto L_0x0ffe;
+    L_0x0b29:
         r1 = r0.photoImage;
         r1 = r1.getImageX();
         r2 = org.telegram.messenger.AndroidUtilities.dp(r13);
@@ -27990,8 +28005,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = org.telegram.ui.ActionBar.Theme.chat_instantViewRectPaint;
         r4 = r0.currentMessageObject;
         r4 = r4.isOutOwner();
-        if (r4 == 0) goto L_0x0b49;
-    L_0x0b34:
+        if (r4 == 0) goto L_0x0b5e;
+    L_0x0b49:
         r4 = org.telegram.ui.ActionBar.Theme.chat_instantViewPaint;
         r5 = "chat_outPreviewInstantText";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
@@ -27999,8 +28014,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = "chat_outPreviewInstantText";
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r3.setColor(r4);
-        goto L_0x0b5d;
-    L_0x0b49:
+        goto L_0x0b72;
+    L_0x0b5e:
         r4 = org.telegram.ui.ActionBar.Theme.chat_instantViewPaint;
         r5 = "chat_inPreviewInstantText";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
@@ -28008,7 +28023,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = "chat_inPreviewInstantText";
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         r3.setColor(r4);
-    L_0x0b5d:
+    L_0x0b72:
         r4 = r0.instantButtonRect;
         r5 = (float) r1;
         r6 = (float) r2;
@@ -28022,8 +28037,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4.set(r5, r6, r8, r10);
         r4 = android.os.Build.VERSION.SDK_INT;
         r5 = 21;
-        if (r4 < r5) goto L_0x0b8c;
-    L_0x0b76:
+        if (r4 < r5) goto L_0x0ba1;
+    L_0x0b8b:
         r0.selectorDrawableMaskType = r9;
         r4 = r0.selectorDrawable;
         r5 = r0.instantWidth;
@@ -28034,7 +28049,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4.setBounds(r1, r2, r5, r6);
         r4 = r0.selectorDrawable;
         r4.draw(r7);
-    L_0x0b8c:
+    L_0x0ba1:
         r4 = r0.instantButtonRect;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r5 = (float) r5;
@@ -28042,8 +28057,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = (float) r6;
         r7.drawRoundRect(r4, r5, r6, r3);
         r3 = r0.instantViewLayout;
-        if (r3 == 0) goto L_0x0fe9;
-    L_0x0b9f:
+        if (r3 == 0) goto L_0x0ffe;
+    L_0x0bb4:
         r28.save();
         r3 = r0.instantTextX;
         r1 = r1 + r3;
@@ -28056,26 +28071,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.instantViewLayout;
         r1.draw(r7);
         r28.restore();
-        goto L_0x0fe9;
-    L_0x0bbb:
+        goto L_0x0ffe;
+    L_0x0bd0:
         r1 = r0.photoImage;
         r1 = r1.getVisible();
-        if (r1 == 0) goto L_0x0fe9;
-    L_0x0bc3:
+        if (r1 == 0) goto L_0x0ffe;
+    L_0x0bd8:
         r1 = r0.currentMessageObject;
         r1 = r1.needDrawBluredPreview();
         if (r1 != 0) goto L_0x0CLASSNAME;
-    L_0x0bcb:
+    L_0x0be0:
         r1 = r0.documentAttachType;
         if (r1 != r2) goto L_0x0CLASSNAME;
-    L_0x0bcf:
+    L_0x0be4:
         r1 = org.telegram.ui.ActionBar.Theme.chat_msgMediaMenuDrawable;
         r1 = (android.graphics.drawable.BitmapDrawable) r1;
         r1 = r1.getPaint();
         r1 = r1.getAlpha();
         r5 = r0.drawPhotoCheckBox;
-        if (r5 == 0) goto L_0x0bf3;
-    L_0x0bdf:
+        if (r5 == 0) goto L_0x0CLASSNAME;
+    L_0x0bf4:
         r5 = org.telegram.ui.ActionBar.Theme.chat_msgMediaMenuDrawable;
         r6 = (float) r1;
         r8 = r0.controlsAlpha;
@@ -28086,15 +28101,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r6 * r15;
         r6 = (int) r6;
         r5.setAlpha(r6);
-        goto L_0x0bfe;
-    L_0x0bf3:
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r5 = org.telegram.ui.ActionBar.Theme.chat_msgMediaMenuDrawable;
         r6 = (float) r1;
         r8 = r0.controlsAlpha;
         r6 = r6 * r8;
         r6 = (int) r6;
         r5.setAlpha(r6);
-    L_0x0bfe:
+    L_0x0CLASSNAME:
         r5 = org.telegram.ui.ActionBar.Theme.chat_msgMediaMenuDrawable;
         r6 = r0.photoImage;
         r6 = r6.getImageX();
@@ -28124,203 +28139,203 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r5 == r1) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         r0.animatingNoSoundPlaying = r1;
+        if (r1 == 0) goto L_0x0c5c;
+    L_0x0c5a:
+        r5 = 1;
+        goto L_0x0c5d;
+    L_0x0c5c:
+        r5 = 2;
+    L_0x0c5d:
+        r0.animatingNoSound = r5;
         if (r1 == 0) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
-        r5 = 1;
-        goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r5 = 2;
-    L_0x0CLASSNAME:
-        r0.animatingNoSound = r5;
-        if (r1 == 0) goto L_0x0c4f;
-    L_0x0c4c:
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         goto L_0x0CLASSNAME;
-    L_0x0c4f:
+    L_0x0CLASSNAME:
         r5 = 0;
     L_0x0CLASSNAME:
         r0.animatingNoSoundProgress = r5;
     L_0x0CLASSNAME:
         r5 = r0.currentPosition;
-        if (r5 == 0) goto L_0x0c5f;
-    L_0x0CLASSNAME:
+        if (r5 == 0) goto L_0x0CLASSNAME;
+    L_0x0c6b:
         r5 = r5.flags;
         r6 = 3;
         r5 = r5 & r6;
-        if (r5 != r6) goto L_0x0c5d;
-    L_0x0c5c:
-        goto L_0x0c5f;
-    L_0x0c5d:
+        if (r5 != r6) goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
         r5 = 0;
         goto L_0x0CLASSNAME;
-    L_0x0c5f:
+    L_0x0CLASSNAME:
         r5 = 1;
     L_0x0CLASSNAME:
         r6 = r0.documentAttachType;
         r8 = 2;
-        if (r6 == r2) goto L_0x0c6e;
-    L_0x0CLASSNAME:
-        if (r6 != r8) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        goto L_0x0c6e;
-    L_0x0CLASSNAME:
+        if (r6 == r2) goto L_0x0CLASSNAME;
+    L_0x0c7a:
+        if (r6 != r8) goto L_0x0c7d;
+    L_0x0c7c:
+        goto L_0x0CLASSNAME;
+    L_0x0c7d:
         r24 = r3;
         r22 = r5;
         goto L_0x0var_;
-    L_0x0c6e:
+    L_0x0CLASSNAME:
         r6 = r0.buttonState;
         if (r6 == r10) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         if (r6 == r8) goto L_0x0CLASSNAME;
     L_0x0CLASSNAME:
         if (r6 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c8b:
         r8 = 3;
         if (r6 == r8) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+    L_0x0c8e:
         r8 = -1;
         if (r6 == r8) goto L_0x0CLASSNAME;
-    L_0x0c7c:
+    L_0x0CLASSNAME:
         r6 = r0.currentMessageObject;
         r6 = r6.needDrawBluredPreview();
-        if (r6 == 0) goto L_0x0CLASSNAME;
+        if (r6 == 0) goto L_0x0c7d;
     L_0x0CLASSNAME:
         r6 = r0.autoPlayingMedia;
-        if (r6 == 0) goto L_0x0c8b;
-    L_0x0CLASSNAME:
+        if (r6 == 0) goto L_0x0ca0;
+    L_0x0c9d:
         r27.updatePlayingMessageProgress();
-    L_0x0c8b:
+    L_0x0ca0:
         r6 = r0.infoLayout;
-        if (r6 != 0) goto L_0x0CLASSNAME;
-    L_0x0c8f:
+        if (r6 != 0) goto L_0x0ca8;
+    L_0x0ca4:
         r6 = r0.loadingProgressLayout;
-        if (r6 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
+        if (r6 == 0) goto L_0x0c7d;
+    L_0x0ca8:
         r6 = r0.forceNotDrawTime;
-        if (r6 == 0) goto L_0x0cbf;
-    L_0x0CLASSNAME:
+        if (r6 == 0) goto L_0x0cd4;
+    L_0x0cac:
         r6 = r0.autoPlayingMedia;
-        if (r6 != 0) goto L_0x0cbf;
-    L_0x0c9b:
+        if (r6 != 0) goto L_0x0cd4;
+    L_0x0cb0:
         r6 = r0.drawVideoImageButton;
-        if (r6 != 0) goto L_0x0cbf;
-    L_0x0c9f:
+        if (r6 != 0) goto L_0x0cd4;
+    L_0x0cb4:
         r6 = r0.animatingLoadingProgressProgress;
         r8 = 0;
         r6 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r6 != 0) goto L_0x0cbf;
-    L_0x0ca6:
-        if (r5 == 0) goto L_0x0cac;
-    L_0x0ca8:
-        r6 = r0.docTitleLayout;
-        if (r6 != 0) goto L_0x0cbf;
-    L_0x0cac:
-        r6 = r0.loadingProgressLayout;
-        if (r6 == 0) goto L_0x0CLASSNAME;
-    L_0x0cb0:
-        r6 = r0.currentPosition;
-        if (r6 == 0) goto L_0x0CLASSNAME;
-    L_0x0cb4:
-        r6 = r0.buttonState;
-        if (r6 == r10) goto L_0x0cbf;
-    L_0x0cb8:
-        r8 = 3;
-        if (r6 != r8) goto L_0x0CLASSNAME;
+        if (r6 != 0) goto L_0x0cd4;
     L_0x0cbb:
-        r6 = r0.miniButtonState;
-        if (r6 != r10) goto L_0x0CLASSNAME;
-    L_0x0cbf:
-        if (r5 != 0) goto L_0x0cc8;
+        if (r5 == 0) goto L_0x0cc1;
+    L_0x0cbd:
+        r6 = r0.docTitleLayout;
+        if (r6 != 0) goto L_0x0cd4;
     L_0x0cc1:
+        r6 = r0.loadingProgressLayout;
+        if (r6 == 0) goto L_0x0c7d;
+    L_0x0cc5:
+        r6 = r0.currentPosition;
+        if (r6 == 0) goto L_0x0c7d;
+    L_0x0cc9:
+        r6 = r0.buttonState;
+        if (r6 == r10) goto L_0x0cd4;
+    L_0x0ccd:
+        r8 = 3;
+        if (r6 != r8) goto L_0x0c7d;
+    L_0x0cd0:
+        r6 = r0.miniButtonState;
+        if (r6 != r10) goto L_0x0c7d;
+    L_0x0cd4:
+        if (r5 != 0) goto L_0x0cdd;
+    L_0x0cd6:
         r15 = r0.animatingLoadingProgressProgress;
         r2 = 0;
         r6 = 1;
         r14 = 0;
-        goto L_0x0d28;
-    L_0x0cc8:
+        goto L_0x0d3d;
+    L_0x0cdd:
         r6 = r0.buttonState;
-        if (r6 == r10) goto L_0x0cd7;
-    L_0x0ccc:
+        if (r6 == r10) goto L_0x0cec;
+    L_0x0ce1:
         r6 = r0.miniButtonState;
-        if (r6 == r10) goto L_0x0cd7;
-    L_0x0cd0:
+        if (r6 == r10) goto L_0x0cec;
+    L_0x0ce5:
         r6 = r0.animatingLoadingProgressProgress;
         r8 = 0;
         r6 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r6 == 0) goto L_0x0cea;
-    L_0x0cd7:
+        if (r6 == 0) goto L_0x0cff;
+    L_0x0cec:
         r6 = r0.currentMessageObject;
         r6 = r6.isSecretMedia();
-        if (r6 != 0) goto L_0x0cea;
-    L_0x0cdf:
+        if (r6 != 0) goto L_0x0cff;
+    L_0x0cf4:
         r6 = r0.documentAttachType;
-        if (r6 == r2) goto L_0x0ce8;
-    L_0x0ce3:
+        if (r6 == r2) goto L_0x0cfd;
+    L_0x0cf8:
         r8 = 2;
-        if (r6 == r8) goto L_0x0ce8;
-    L_0x0ce6:
-        if (r6 != r10) goto L_0x0cea;
-    L_0x0ce8:
+        if (r6 == r8) goto L_0x0cfd;
+    L_0x0cfb:
+        if (r6 != r10) goto L_0x0cff;
+    L_0x0cfd:
         r6 = 1;
-        goto L_0x0ceb;
-    L_0x0cea:
+        goto L_0x0d00;
+    L_0x0cff:
         r6 = 0;
-    L_0x0ceb:
+    L_0x0d00:
         r8 = r0.currentMessageObject;
         r8 = r8.type;
         r11 = 3;
-        if (r8 == r11) goto L_0x0cfe;
-    L_0x0cf2:
+        if (r8 == r11) goto L_0x0d13;
+    L_0x0d07:
         r11 = 8;
-        if (r8 == r11) goto L_0x0cfe;
-    L_0x0cf6:
+        if (r8 == r11) goto L_0x0d13;
+    L_0x0d0b:
         r8 = r0.documentAttachType;
-        if (r8 != r2) goto L_0x0cfb;
-    L_0x0cfa:
-        goto L_0x0cfe;
-    L_0x0cfb:
+        if (r8 != r2) goto L_0x0d10;
+    L_0x0d0f:
+        goto L_0x0d13;
+    L_0x0d10:
         r2 = 0;
         r14 = 0;
-        goto L_0x0d10;
-    L_0x0cfe:
+        goto L_0x0d25;
+    L_0x0d13:
         r2 = r0.currentMessageObject;
         r2 = r2.needDrawBluredPreview();
-        if (r2 == 0) goto L_0x0d0c;
-    L_0x0d06:
+        if (r2 == 0) goto L_0x0d21;
+    L_0x0d1b:
         r2 = r0.docTitleLayout;
-        if (r2 != 0) goto L_0x0d0c;
-    L_0x0d0a:
+        if (r2 != 0) goto L_0x0d21;
+    L_0x0d1f:
         r14 = 0;
-        goto L_0x0d0f;
-    L_0x0d0c:
+        goto L_0x0d24;
+    L_0x0d21:
         r2 = r0.animatingDrawVideoImageButtonProgress;
         r14 = r2;
-    L_0x0d0f:
+    L_0x0d24:
         r2 = 0;
-    L_0x0d10:
+    L_0x0d25:
         r8 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0d1a;
-    L_0x0d14:
+        if (r8 <= 0) goto L_0x0d2f;
+    L_0x0d29:
         r2 = r0.docTitleLayout;
-        if (r2 == 0) goto L_0x0d1a;
-    L_0x0d18:
+        if (r2 == 0) goto L_0x0d2f;
+    L_0x0d2d:
         r2 = 1;
-        goto L_0x0d1b;
-    L_0x0d1a:
+        goto L_0x0d30;
+    L_0x0d2f:
         r2 = 0;
-    L_0x0d1b:
-        if (r2 != 0) goto L_0x0d26;
-    L_0x0d1d:
-        if (r6 != 0) goto L_0x0d23;
-    L_0x0d1f:
+    L_0x0d30:
+        if (r2 != 0) goto L_0x0d3b;
+    L_0x0d32:
+        if (r6 != 0) goto L_0x0d38;
+    L_0x0d34:
         r8 = r0.infoLayout;
-        if (r8 != 0) goto L_0x0d26;
-    L_0x0d23:
+        if (r8 != 0) goto L_0x0d3b;
+    L_0x0d38:
         r15 = r0.animatingLoadingProgressProgress;
-        goto L_0x0d28;
-    L_0x0d26:
+        goto L_0x0d3d;
+    L_0x0d3b:
         r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x0d28:
+    L_0x0d3d:
         r8 = org.telegram.ui.ActionBar.Theme.chat_infoPaint;
         r11 = "chat_mediaInfoText";
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);
@@ -28335,13 +28350,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r16 = org.telegram.messenger.AndroidUtilities.dp(r11);
         r12 = r12 + r16;
         r11 = r0.autoPlayingMedia;
-        if (r11 == 0) goto L_0x0d6b;
-    L_0x0d50:
-        if (r1 == 0) goto L_0x0d56;
-    L_0x0d52:
-        r1 = r0.animatingNoSound;
+        if (r11 == 0) goto L_0x0d80;
+    L_0x0d65:
         if (r1 == 0) goto L_0x0d6b;
-    L_0x0d56:
+    L_0x0d67:
+        r1 = r0.animatingNoSound;
+        if (r1 == 0) goto L_0x0d80;
+    L_0x0d6b:
         r1 = org.telegram.ui.ActionBar.Theme.chat_msgNoSoundDrawable;
         r1 = r1.getIntrinsicWidth();
         r11 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
@@ -28351,51 +28366,51 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = r0.animatingNoSoundProgress;
         r1 = r1 * r11;
         r1 = (int) r1;
-        goto L_0x0d6c;
-    L_0x0d6b:
+        goto L_0x0d81;
+    L_0x0d80:
         r1 = 0;
-    L_0x0d6c:
-        if (r6 == 0) goto L_0x0d7b;
-    L_0x0d6e:
+    L_0x0d81:
+        if (r6 == 0) goto L_0x0d90;
+    L_0x0d83:
         r11 = r0.loadingProgressLayout;
-        if (r11 == 0) goto L_0x0d7b;
-    L_0x0d72:
+        if (r11 == 0) goto L_0x0d90;
+    L_0x0d87:
         r1 = r11.getLineWidth(r9);
         r1 = (int) r1;
         r11 = 0;
         r16 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        goto L_0x0d84;
-    L_0x0d7b:
+        goto L_0x0d99;
+    L_0x0d90:
         r11 = r0.infoWidth;
         r16 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r26 = r11;
         r11 = r1;
         r1 = r26;
-    L_0x0d84:
+    L_0x0d99:
         r17 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r17 = r1 + r17;
         r13 = r17 + r11;
         r13 = (float) r13;
         r10 = r0.infoWidth;
-        if (r10 != r1) goto L_0x0d93;
-    L_0x0d91:
+        if (r10 != r1) goto L_0x0da8;
+    L_0x0da6:
         r10 = r11;
-        goto L_0x0d94;
-    L_0x0d93:
+        goto L_0x0da9;
+    L_0x0da8:
         r10 = 0;
-    L_0x0d94:
+    L_0x0da9:
         r10 = r10 + r1;
         r9 = r0.docTitleWidth;
         r9 = java.lang.Math.max(r10, r9);
         r10 = r0.canStreamVideo;
-        if (r10 == 0) goto L_0x0da6;
-    L_0x0d9f:
+        if (r10 == 0) goto L_0x0dbb;
+    L_0x0db4:
         r10 = NUM; // 0x42000000 float:32.0 double:5.4707704E-315;
         r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        goto L_0x0da7;
-    L_0x0da6:
+        goto L_0x0dbc;
+    L_0x0dbb:
         r10 = 0;
-    L_0x0da7:
+    L_0x0dbc:
         r9 = r9 + r10;
         r9 = r9 - r1;
         r9 = r9 - r11;
@@ -28407,13 +28422,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = (int) r9;
         r9 = 0;
         r10 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1));
-        if (r10 == 0) goto L_0x0dbe;
-    L_0x0db9:
+        if (r10 == 0) goto L_0x0dd3;
+    L_0x0dce:
         r9 = r0.docTitleLayout;
-        if (r9 != 0) goto L_0x0dbe;
-    L_0x0dbd:
+        if (r9 != 0) goto L_0x0dd3;
+    L_0x0dd2:
         r14 = 0;
-    L_0x0dbe:
+    L_0x0dd3:
         r28.save();
         r9 = (float) r8;
         r10 = (float) r12;
@@ -28429,18 +28444,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 * r15;
         r3 = (int) r3;
         r5.setAlpha(r3);
-        if (r2 != 0) goto L_0x0deb;
-    L_0x0ddf:
-        if (r6 == 0) goto L_0x0de5;
-    L_0x0de1:
+        if (r2 != 0) goto L_0x0e00;
+    L_0x0df4:
+        if (r6 == 0) goto L_0x0dfa;
+    L_0x0df6:
         r3 = r0.loadingProgressLayout;
-        if (r3 != 0) goto L_0x0deb;
-    L_0x0de5:
-        if (r6 != 0) goto L_0x0e21;
-    L_0x0de7:
+        if (r3 != 0) goto L_0x0e00;
+    L_0x0dfa:
+        if (r6 != 0) goto L_0x0e36;
+    L_0x0dfc:
         r3 = r0.infoLayout;
-        if (r3 == 0) goto L_0x0e21;
-    L_0x0deb:
+        if (r3 == 0) goto L_0x0e36;
+    L_0x0e00:
         r3 = r0.rect;
         r8 = r8 + r1;
         r1 = (float) r8;
@@ -28466,7 +28481,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = (float) r1;
         r4 = org.telegram.ui.ActionBar.Theme.chat_timeBackgroundPaint;
         r7.drawRoundRect(r3, r1, r1, r4);
-    L_0x0e21:
+    L_0x0e36:
         r1 = org.telegram.ui.ActionBar.Theme.chat_infoPaint;
         r3 = r0.controlsAlpha;
         r4 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
@@ -28477,14 +28492,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.photoImage;
         r1 = r1.getImageX();
         r3 = r0.canStreamVideo;
-        if (r3 == 0) goto L_0x0e3e;
-    L_0x0e39:
+        if (r3 == 0) goto L_0x0e53;
+    L_0x0e4e:
         r3 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
         r3 = r3 * r14;
-        goto L_0x0e3f;
-    L_0x0e3e:
+        goto L_0x0e54;
+    L_0x0e53:
         r3 = 0;
-    L_0x0e3f:
+    L_0x0e54:
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r3 = r3 + r4;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -28502,21 +28517,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = (float) r3;
         r7.translate(r1, r3);
         r1 = r0.infoLayout;
-        if (r1 == 0) goto L_0x0e6e;
-    L_0x0e65:
-        if (r6 == 0) goto L_0x0e69;
-    L_0x0e67:
-        if (r2 == 0) goto L_0x0e6e;
-    L_0x0e69:
+        if (r1 == 0) goto L_0x0e83;
+    L_0x0e7a:
+        if (r6 == 0) goto L_0x0e7e;
+    L_0x0e7c:
+        if (r2 == 0) goto L_0x0e83;
+    L_0x0e7e:
         r1 = r0.infoLayout;
         r1.draw(r7);
-    L_0x0e6e:
-        if (r11 == 0) goto L_0x0ec2;
-    L_0x0e70:
-        if (r6 == 0) goto L_0x0e74;
-    L_0x0e72:
-        if (r2 == 0) goto L_0x0ec2;
-    L_0x0e74:
+    L_0x0e83:
+        if (r11 == 0) goto L_0x0ed7;
+    L_0x0e85:
+        if (r6 == 0) goto L_0x0e89;
+    L_0x0e87:
+        if (r2 == 0) goto L_0x0ed7;
+    L_0x0e89:
         r28.save();
         r1 = org.telegram.ui.ActionBar.Theme.chat_msgNoSoundDrawable;
         r3 = r0.animatingNoSoundProgress;
@@ -28556,15 +28571,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 + r4;
         r0.noSoundCenterX = r3;
         r28.restore();
-    L_0x0ec2:
-        if (r6 == 0) goto L_0x0ef2;
-    L_0x0ec4:
+    L_0x0ed7:
+        if (r6 == 0) goto L_0x0var_;
+    L_0x0ed9:
         r1 = r0.loadingProgressLayout;
-        if (r1 == 0) goto L_0x0ef2;
-    L_0x0ec8:
+        if (r1 == 0) goto L_0x0var_;
+    L_0x0edd:
         r28.save();
-        if (r2 == 0) goto L_0x0ee9;
-    L_0x0ecd:
+        if (r2 == 0) goto L_0x0efe;
+    L_0x0ee2:
         r1 = org.telegram.ui.ActionBar.Theme.chat_infoPaint;
         r2 = r0.controlsAlpha;
         r3 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
@@ -28578,14 +28593,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = (float) r1;
         r2 = 0;
         r7.translate(r2, r1);
-    L_0x0ee9:
+    L_0x0efe:
         r1 = r0.loadingProgressLayout;
         r1.draw(r7);
         r28.restore();
-        goto L_0x0var_;
-    L_0x0ef2:
-        if (r2 == 0) goto L_0x0var_;
-    L_0x0ef4:
+        goto L_0x0f2a;
+    L_0x0var_:
+        if (r2 == 0) goto L_0x0f2a;
+    L_0x0var_:
         r1 = org.telegram.ui.ActionBar.Theme.chat_infoPaint;
         r2 = r0.controlsAlpha;
         r3 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
@@ -28601,7 +28616,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r7.translate(r2, r1);
         r1 = r0.docTitleLayout;
         r1.draw(r7);
-    L_0x0var_:
+    L_0x0f2a:
         r28.restore();
         r1 = org.telegram.ui.ActionBar.Theme.chat_infoPaint;
         r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
@@ -28612,7 +28627,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.animatingDrawVideoImageButton;
         r2 = 1;
         if (r1 != r2) goto L_0x0var_;
-    L_0x0var_:
+    L_0x0f3e:
         r1 = r0.animatingDrawVideoImageButtonProgress;
         r3 = r24;
         r2 = (float) r3;
@@ -28624,7 +28639,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = 0;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
         if (r1 > 0) goto L_0x0var_;
-    L_0x0f3b:
+    L_0x0var_:
         r0.animatingDrawVideoImageButtonProgress = r2;
         r1 = 0;
         r0.animatingDrawVideoImageButton = r1;
@@ -28635,7 +28650,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r24;
         r2 = 2;
         if (r1 != r2) goto L_0x0var_;
-    L_0x0var_:
+    L_0x0f5e:
         r1 = r0.animatingDrawVideoImageButtonProgress;
         r2 = (float) r3;
         r5 = NUM; // 0x43200000 float:160.0 double:5.564022167E-315;
@@ -28645,18 +28660,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.animatingDrawVideoImageButtonProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 < 0) goto L_0x0f5f;
-    L_0x0f5a:
+        if (r1 < 0) goto L_0x0var_;
+    L_0x0f6f:
         r0.animatingDrawVideoImageButtonProgress = r2;
         r1 = 0;
         r0.animatingDrawVideoImageButton = r1;
-    L_0x0f5f:
+    L_0x0var_:
         r27.invalidate();
     L_0x0var_:
         r1 = r0.animatingNoSound;
         r2 = 1;
         if (r1 != r2) goto L_0x0var_;
-    L_0x0var_:
+    L_0x0f7c:
         r1 = r0.animatingNoSoundProgress;
         r2 = (float) r3;
         r5 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
@@ -28666,17 +28681,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.animatingNoSoundProgress;
         r2 = 0;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 > 0) goto L_0x0f7c;
-    L_0x0var_:
+        if (r1 > 0) goto L_0x0var_;
+    L_0x0f8c:
         r0.animatingNoSoundProgress = r2;
         r1 = 0;
         r0.animatingNoSound = r1;
-    L_0x0f7c:
+    L_0x0var_:
         r27.invalidate();
-        goto L_0x0f9c;
+        goto L_0x0fb1;
     L_0x0var_:
         r2 = 2;
-        if (r1 != r2) goto L_0x0f9c;
+        if (r1 != r2) goto L_0x0fb1;
     L_0x0var_:
         r1 = r0.animatingNoSoundProgress;
         r2 = (float) r3;
@@ -28687,44 +28702,44 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r0.animatingNoSoundProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 < 0) goto L_0x0var_;
-    L_0x0var_:
+        if (r1 < 0) goto L_0x0fae;
+    L_0x0fa9:
         r0.animatingNoSoundProgress = r2;
         r1 = 0;
         r0.animatingNoSound = r1;
-    L_0x0var_:
+    L_0x0fae:
         r27.invalidate();
-    L_0x0f9c:
+    L_0x0fb1:
         r1 = r0.buttonState;
         r2 = 1;
-        if (r1 == r2) goto L_0x0fa5;
-    L_0x0fa1:
+        if (r1 == r2) goto L_0x0fba;
+    L_0x0fb6:
         r1 = r0.miniButtonState;
-        if (r1 != r2) goto L_0x0fac;
-    L_0x0fa5:
+        if (r1 != r2) goto L_0x0fc1;
+    L_0x0fba:
         r1 = r0.loadingProgressLayout;
-        if (r1 == 0) goto L_0x0fac;
-    L_0x0fa9:
+        if (r1 == 0) goto L_0x0fc1;
+    L_0x0fbe:
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0fad;
-    L_0x0fac:
+        goto L_0x0fc2;
+    L_0x0fc1:
         r1 = 0;
-    L_0x0fad:
+    L_0x0fc2:
         r2 = 0;
         r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r5 != 0) goto L_0x0fba;
-    L_0x0fb2:
+        if (r5 != 0) goto L_0x0fcf;
+    L_0x0fc7:
         r5 = r0.infoLayout;
-        if (r5 == 0) goto L_0x0fba;
-    L_0x0fb6:
-        if (r22 == 0) goto L_0x0fba;
-    L_0x0fb8:
+        if (r5 == 0) goto L_0x0fcf;
+    L_0x0fcb:
+        if (r22 == 0) goto L_0x0fcf;
+    L_0x0fcd:
         r0.animatingLoadingProgressProgress = r2;
-    L_0x0fba:
+    L_0x0fcf:
         r2 = r0.animatingLoadingProgressProgress;
         r5 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0fd3;
-    L_0x0fc0:
+        if (r5 >= 0) goto L_0x0fe8;
+    L_0x0fd5:
         r3 = (float) r3;
         r4 = NUM; // 0x43200000 float:160.0 double:5.564022167E-315;
         r3 = r3 / r4;
@@ -28732,16 +28747,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.animatingLoadingProgressProgress = r2;
         r2 = r0.animatingLoadingProgressProgress;
         r2 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0fcf;
-    L_0x0fcd:
+        if (r2 <= 0) goto L_0x0fe4;
+    L_0x0fe2:
         r0.animatingLoadingProgressProgress = r1;
-    L_0x0fcf:
+    L_0x0fe4:
         r27.invalidate();
-        goto L_0x0fe9;
-    L_0x0fd3:
+        goto L_0x0ffe;
+    L_0x0fe8:
         r5 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1));
-        if (r5 == 0) goto L_0x0fe9;
-    L_0x0fd7:
+        if (r5 == 0) goto L_0x0ffe;
+    L_0x0fec:
         r3 = (float) r3;
         r4 = NUM; // 0x43200000 float:160.0 double:5.564022167E-315;
         r3 = r3 / r4;
@@ -28749,84 +28764,84 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0.animatingLoadingProgressProgress = r2;
         r2 = r0.animatingLoadingProgressProgress;
         r2 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0fe6;
-    L_0x0fe4:
+        if (r2 >= 0) goto L_0x0ffb;
+    L_0x0ff9:
         r0.animatingLoadingProgressProgress = r1;
-    L_0x0fe6:
+    L_0x0ffb:
         r27.invalidate();
-    L_0x0fe9:
+    L_0x0ffe:
         r1 = r0.drawImageButton;
-        if (r1 == 0) goto L_0x103a;
-    L_0x0fed:
+        if (r1 == 0) goto L_0x104f;
+    L_0x1002:
         r1 = r0.photoImage;
         r1 = r1.getVisible();
-        if (r1 == 0) goto L_0x103a;
-    L_0x0ff5:
+        if (r1 == 0) goto L_0x104f;
+    L_0x100a:
         r1 = r0.controlsAlpha;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r3 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x1002;
-    L_0x0ffd:
+        if (r3 == 0) goto L_0x1017;
+    L_0x1012:
         r2 = r0.radialProgress;
         r2.setOverrideAlpha(r1);
-    L_0x1002:
+    L_0x1017:
         r1 = r0.photoImage;
         r1 = r1.hasImageSet();
-        if (r1 == 0) goto L_0x1011;
-    L_0x100a:
+        if (r1 == 0) goto L_0x1026;
+    L_0x101f:
         r1 = r0.radialProgress;
         r2 = 0;
         r1.setBackgroundDrawable(r2);
-        goto L_0x1021;
-    L_0x1011:
+        goto L_0x1036;
+    L_0x1026:
         r1 = r0.radialProgress;
         r2 = r27.isDrawSelectionBackground();
-        if (r2 == 0) goto L_0x101c;
-    L_0x1019:
+        if (r2 == 0) goto L_0x1031;
+    L_0x102e:
         r2 = r0.currentBackgroundSelectedDrawable;
-        goto L_0x101e;
-    L_0x101c:
+        goto L_0x1033;
+    L_0x1031:
         r2 = r0.currentBackgroundDrawable;
-    L_0x101e:
+    L_0x1033:
         r1.setBackgroundDrawable(r2);
-    L_0x1021:
+    L_0x1036:
         r1 = r0.currentMessageObject;
         r1 = r1.needDrawBluredPreview();
-        if (r1 == 0) goto L_0x1035;
-    L_0x1029:
+        if (r1 == 0) goto L_0x104a;
+    L_0x103e:
         r1 = org.telegram.messenger.MediaController.getInstance();
         r2 = r0.currentMessageObject;
         r1 = r1.isPlayingMessage(r2);
-        if (r1 != 0) goto L_0x103a;
-    L_0x1035:
+        if (r1 != 0) goto L_0x104f;
+    L_0x104a:
         r1 = r0.radialProgress;
         r1.draw(r7);
-    L_0x103a:
+    L_0x104f:
         r1 = r0.buttonState;
         r2 = -1;
-        if (r1 != r2) goto L_0x10df;
-    L_0x103f:
+        if (r1 != r2) goto L_0x10f4;
+    L_0x1054:
         r1 = r0.currentMessageObject;
         r1 = r1.needDrawBluredPreview();
-        if (r1 == 0) goto L_0x10df;
-    L_0x1047:
+        if (r1 == 0) goto L_0x10f4;
+    L_0x105c:
         r1 = org.telegram.messenger.MediaController.getInstance();
         r2 = r0.currentMessageObject;
         r1 = r1.isPlayingMessage(r2);
-        if (r1 != 0) goto L_0x10df;
-    L_0x1053:
+        if (r1 != 0) goto L_0x10f4;
+    L_0x1068:
         r1 = r0.photoImage;
         r1 = r1.getVisible();
-        if (r1 == 0) goto L_0x10df;
-    L_0x105b:
+        if (r1 == 0) goto L_0x10f4;
+    L_0x1070:
         r1 = r0.currentMessageObject;
         r2 = r1.messageOwner;
         r2 = r2.destroyTime;
-        if (r2 == 0) goto L_0x10df;
-    L_0x1063:
+        if (r2 == 0) goto L_0x10f4;
+    L_0x1078:
         r1 = r1.isOutOwner();
-        if (r1 != 0) goto L_0x10da;
-    L_0x1069:
+        if (r1 != 0) goto L_0x10ef;
+    L_0x107e:
         r1 = java.lang.System.currentTimeMillis();
         r3 = r0.currentAccount;
         r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3);
@@ -28867,8 +28882,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.drawArc(r2, r3, r4, r5, r6);
         r1 = 0;
         r1 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1));
-        if (r1 == 0) goto L_0x10da;
-    L_0x10bc:
+        if (r1 == 0) goto L_0x10ef;
+    L_0x10d1:
         r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r2 = r0.deleteProgressRect;
@@ -28887,34 +28902,34 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = (int) r2;
         r2 = r2 + r1;
         r0.invalidate(r3, r4, r5, r2);
-    L_0x10da:
+    L_0x10ef:
         r1 = r0.currentMessageObject;
         r0.updateSecretTimeText(r1);
-    L_0x10df:
+    L_0x10f4:
         r1 = r0.drawVideoImageButton;
-        if (r1 != 0) goto L_0x10e7;
-    L_0x10e3:
+        if (r1 != 0) goto L_0x10fc;
+    L_0x10f8:
         r1 = r0.animatingDrawVideoImageButton;
-        if (r1 == 0) goto L_0x1101;
-    L_0x10e7:
+        if (r1 == 0) goto L_0x1116;
+    L_0x10fc:
         r1 = r0.photoImage;
         r1 = r1.getVisible();
-        if (r1 == 0) goto L_0x1101;
-    L_0x10ef:
+        if (r1 == 0) goto L_0x1116;
+    L_0x1104:
         r1 = r0.controlsAlpha;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r2 == 0) goto L_0x10fc;
-    L_0x10f7:
+        if (r2 == 0) goto L_0x1111;
+    L_0x110c:
         r2 = r0.videoRadialProgress;
         r2.setOverrideAlpha(r1);
-    L_0x10fc:
+    L_0x1111:
         r1 = r0.videoRadialProgress;
         r1.draw(r7);
-    L_0x1101:
+    L_0x1116:
         r1 = r0.drawPhotoCheckBox;
-        if (r1 == 0) goto L_0x1143;
-    L_0x1105:
+        if (r1 == 0) goto L_0x1158;
+    L_0x111a:
         r1 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
         r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
         r2 = r0.photoCheckBox;
@@ -28922,13 +28937,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = 0;
         r5 = r0.currentMessageObject;
         r5 = r5.isOutOwner();
-        if (r5 == 0) goto L_0x111a;
-    L_0x1117:
+        if (r5 == 0) goto L_0x112f;
+    L_0x112c:
         r5 = "chat_outBubbleSelected";
-        goto L_0x111c;
-    L_0x111a:
+        goto L_0x1131;
+    L_0x112f:
         r5 = "chat_inBubbleSelected";
-    L_0x111c:
+    L_0x1131:
         r2.setColor(r3, r4, r5);
         r2 = r0.photoCheckBox;
         r3 = r0.photoImage;
@@ -28944,7 +28959,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2.setBounds(r3, r4, r1, r1);
         r1 = r0.photoCheckBox;
         r1.draw(r7);
-    L_0x1143:
+    L_0x1158:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawOverlays(android.graphics.Canvas):void");
