@@ -1,8 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
+import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -31,12 +30,12 @@ public class LocationDirectionCell extends FrameLayout {
         this.frameLayout.addView(this.buttonTextView, LayoutHelper.createFrame(-1, -1.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(73.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(73.0f), NUM));
     }
 
-    public void setOnButtonClick(OnClickListener onClickListener) {
+    public void setOnButtonClick(View.OnClickListener onClickListener) {
         this.frameLayout.setOnClickListener(onClickListener);
     }
 }

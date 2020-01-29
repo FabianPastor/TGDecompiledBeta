@@ -3,12 +3,12 @@ package org.telegram.messenger;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import androidx.core.app.NotificationCompat.Builder;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.NotificationCenter;
 
-public class VideoEncodingService extends Service implements NotificationCenterDelegate {
-    private Builder builder;
+public class VideoEncodingService extends Service implements NotificationCenter.NotificationCenterDelegate {
+    private NotificationCompat.Builder builder;
     private int currentAccount;
     private int currentProgress;
     private String path;
@@ -36,35 +36,32 @@ public class VideoEncodingService extends Service implements NotificationCenterD
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        boolean z = true;
         String str;
+        boolean z = true;
         if (i == NotificationCenter.FileUploadProgressChanged) {
-            str = (String) objArr[0];
-            if (i2 == this.currentAccount) {
-                String str2 = this.path;
-                if (str2 != null && str2.equals(str)) {
-                    float min = Math.min(1.0f, ((float) ((Long) objArr[1]).longValue()) / ((float) ((Long) objArr[2]).longValue()));
-                    Boolean bool = (Boolean) objArr[3];
-                    this.currentProgress = (int) (min * 100.0f);
-                    Builder builder = this.builder;
-                    int i3 = this.currentProgress;
-                    if (i3 != 0) {
-                        z = false;
-                    }
-                    builder.setProgress(100, i3, z);
-                    try {
-                        NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
-                    } catch (Throwable th) {
-                        FileLog.e(th);
-                    }
+            String str2 = objArr[0];
+            if (i2 == this.currentAccount && (str = this.path) != null && str.equals(str2)) {
+                float min = Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue()));
+                Boolean bool = objArr[3];
+                this.currentProgress = (int) (min * 100.0f);
+                NotificationCompat.Builder builder2 = this.builder;
+                int i3 = this.currentProgress;
+                if (i3 != 0) {
+                    z = false;
+                }
+                builder2.setProgress(100, i3, z);
+                try {
+                    NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
         } else if (i == NotificationCenter.stopEncodingService) {
-            str = (String) objArr[0];
-            if (((Integer) objArr[1]).intValue() != this.currentAccount) {
+            String str3 = objArr[0];
+            if (objArr[1].intValue() != this.currentAccount) {
                 return;
             }
-            if (str == null || str.equals(this.path)) {
+            if (str3 == null || str3.equals(this.path)) {
                 stopSelf();
             }
         }
@@ -72,10 +69,10 @@ public class VideoEncodingService extends Service implements NotificationCenterD
 
     public int onStartCommand(Intent intent, int i, int i2) {
         this.path = intent.getStringExtra("path");
-        i = this.currentAccount;
+        int i3 = this.currentAccount;
         this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
-        if (i != this.currentAccount) {
-            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
+        if (i3 != this.currentAccount) {
+            NotificationCenter.getInstance(i3).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
         }
         boolean z = false;
@@ -89,29 +86,26 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         }
         if (this.builder == null) {
             NotificationsController.checkOtherNotificationsChannel();
-            this.builder = new Builder(ApplicationLoader.applicationContext);
+            this.builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
             this.builder.setSmallIcon(17301640);
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
-            String str;
             if (booleanExtra) {
-                str = "SendingGif";
-                this.builder.setTicker(LocaleController.getString(str, NUM));
-                this.builder.setContentText(LocaleController.getString(str, NUM));
+                this.builder.setTicker(LocaleController.getString("SendingGif", NUM));
+                this.builder.setContentText(LocaleController.getString("SendingGif", NUM));
             } else {
-                str = "SendingVideo";
-                this.builder.setTicker(LocaleController.getString(str, NUM));
-                this.builder.setContentText(LocaleController.getString(str, NUM));
+                this.builder.setTicker(LocaleController.getString("SendingVideo", NUM));
+                this.builder.setContentText(LocaleController.getString("SendingVideo", NUM));
             }
         }
         this.currentProgress = 0;
-        Builder builder = this.builder;
-        int i3 = this.currentProgress;
-        if (i3 == 0) {
+        NotificationCompat.Builder builder2 = this.builder;
+        int i4 = this.currentProgress;
+        if (i4 == 0) {
             z = true;
         }
-        builder.setProgress(100, i3, z);
+        builder2.setProgress(100, i4, z);
         startForeground(4, this.builder.build());
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         return 2;

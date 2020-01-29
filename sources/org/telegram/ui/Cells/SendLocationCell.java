@@ -1,21 +1,18 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
-import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -27,7 +24,8 @@ public class SendLocationCell extends FrameLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private long dialogId;
     private ImageView imageView;
-    private Runnable invalidateRunnable = new Runnable() {
+    /* access modifiers changed from: private */
+    public Runnable invalidateRunnable = new Runnable() {
         public void run() {
             SendLocationCell.this.checkText();
             SendLocationCell sendLocationCell = SendLocationCell.this;
@@ -35,58 +33,40 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(SendLocationCell.this.invalidateRunnable, 1000);
         }
     };
-    private RectF rect;
+    /* access modifiers changed from: private */
+    public RectF rect;
     private SimpleTextView titleTextView;
 
     public SendLocationCell(Context context, boolean z) {
         super(context);
         this.imageView = new ImageView(context);
         this.imageView.setTag(z ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
-        int dp = AndroidUtilities.dp(42.0f);
         String str = "location_sendLiveLocationBackground";
-        String str2 = "location_sendLocationBackground";
-        int color = Theme.getColor(z ? str : str2);
-        if (!z) {
-            str = str2;
-        }
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
-        CombinedDrawable combinedDrawable;
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(z ? str : "location_sendLocationBackground"), Theme.getColor(!z ? "location_sendLocationBackground" : str));
         if (z) {
             this.rect = new RectF();
             ShareLocationDrawable shareLocationDrawable = new ShareLocationDrawable(context, 4);
-            shareLocationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLiveLocationIcon"), Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, shareLocationDrawable);
+            shareLocationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLiveLocationIcon"), PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, shareLocationDrawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable);
             AndroidUtilities.runOnUIThread(this.invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
             Drawable drawable = getResources().getDrawable(NUM);
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLocationIcon"), Mode.MULTIPLY));
-            combinedDrawable = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
-            combinedDrawable.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
-            combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
-            this.imageView.setBackgroundDrawable(combinedDrawable);
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLocationIcon"), PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable2 = new CombinedDrawable(createSimpleSelectorCircleDrawable, drawable);
+            combinedDrawable2.setCustomSize(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f));
+            combinedDrawable2.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
+            this.imageView.setBackgroundDrawable(combinedDrawable2);
         }
-        ImageView imageView = this.imageView;
         int i = 5;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f = 15.0f;
-        float f2 = LocaleController.isRTL ? 0.0f : 15.0f;
-        if (!LocaleController.isRTL) {
-            f = 0.0f;
-        }
-        addView(imageView, LayoutHelper.createFrame(42, 42.0f, i2, f2, 12.0f, f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, !LocaleController.isRTL ? 0.0f : 15.0f, 0.0f));
         this.titleTextView = new SimpleTextView(context);
         this.titleTextView.setTextSize(16);
-        String str3 = "location_sendLiveLocationText";
-        str = "location_sendLocationText";
-        this.titleTextView.setTag(z ? str3 : str);
-        SimpleTextView simpleTextView = this.titleTextView;
-        if (!z) {
-            str3 = str;
-        }
-        simpleTextView.setTextColor(Theme.getColor(str3));
+        String str2 = "location_sendLiveLocationText";
+        this.titleTextView.setTag(z ? str2 : "location_sendLocationText");
+        this.titleTextView.setTextColor(Theme.getColor(!z ? "location_sendLocationText" : str2));
         this.titleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
@@ -94,11 +74,7 @@ public class SendLocationCell extends FrameLayout {
         this.accurateTextView.setTextSize(14);
         this.accurateTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.accurateTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        SimpleTextView simpleTextView2 = this.accurateTextView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
+        addView(this.accurateTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
     }
 
     private ImageView getImageView() {
@@ -110,26 +86,26 @@ public class SendLocationCell extends FrameLayout {
             float f = 1.0f;
             this.titleTextView.setAlpha(z ? 1.0f : 0.5f);
             this.accurateTextView.setAlpha(z ? 1.0f : 0.5f);
-            ImageView imageView = this.imageView;
+            ImageView imageView2 = this.imageView;
             if (!z) {
                 f = 0.5f;
             }
-            imageView.setAlpha(f);
+            imageView2.setAlpha(f);
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         AndroidUtilities.cancelRunOnUIThread(this.invalidateRunnable);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.rect != null) {
@@ -147,11 +123,12 @@ public class SendLocationCell extends FrameLayout {
         checkText();
     }
 
-    private void checkText() {
-        SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
+    /* access modifiers changed from: private */
+    public void checkText() {
+        LocationController.SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (sharingLocationInfo != null) {
             String string = LocaleController.getString("StopLiveLocation", NUM);
-            Message message = sharingLocationInfo.messageObject.messageOwner;
+            TLRPC.Message message = sharingLocationInfo.messageObject.messageOwner;
             int i = message.edit_date;
             setText(string, LocaleController.formatLocationUpdateDate(i != 0 ? (long) i : (long) message.date));
             return;
@@ -159,26 +136,99 @@ public class SendLocationCell extends FrameLayout {
         setText(LocaleController.getString("SendLiveLocation", NUM), LocaleController.getString("SendLiveLocationInfo", NUM));
     }
 
-    /* Access modifiers changed, original: protected */
-    public void onDraw(Canvas canvas) {
-        SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
-        if (sharingLocationInfo != null) {
-            int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            int i = sharingLocationInfo.stopTime;
-            if (i >= currentTime) {
-                float abs = ((float) Math.abs(i - currentTime)) / ((float) sharingLocationInfo.period);
-                if (LocaleController.isRTL) {
-                    this.rect.set((float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(43.0f), (float) AndroidUtilities.dp(48.0f));
-                } else {
-                    this.rect.set((float) (getMeasuredWidth() - AndroidUtilities.dp(43.0f)), (float) AndroidUtilities.dp(18.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(13.0f)), (float) AndroidUtilities.dp(48.0f));
-                }
-                int color = Theme.getColor("location_liveLocationProgress");
-                Theme.chat_radialProgress2Paint.setColor(color);
-                Theme.chat_livePaint.setColor(color);
-                canvas.drawArc(this.rect, -90.0f, abs * -360.0f, false, Theme.chat_radialProgress2Paint);
-                String formatLocationLeftTime = LocaleController.formatLocationLeftTime(Math.abs(sharingLocationInfo.stopTime - currentTime));
-                canvas.drawText(formatLocationLeftTime, this.rect.centerX() - (Theme.chat_livePaint.measureText(formatLocationLeftTime) / 2.0f), (float) AndroidUtilities.dp(37.0f), Theme.chat_livePaint);
-            }
-        }
+    /* access modifiers changed from: protected */
+    /* JADX WARNING: Code restructure failed: missing block: B:3:0x000f, code lost:
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r11.currentAccount).getCurrentTime();
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onDraw(android.graphics.Canvas r12) {
+        /*
+            r11 = this;
+            int r0 = r11.currentAccount
+            org.telegram.messenger.LocationController r0 = org.telegram.messenger.LocationController.getInstance(r0)
+            long r1 = r11.dialogId
+            org.telegram.messenger.LocationController$SharingLocationInfo r0 = r0.getSharingLocationInfo(r1)
+            if (r0 != 0) goto L_0x000f
+            return
+        L_0x000f:
+            int r1 = r11.currentAccount
+            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+            int r1 = r1.getCurrentTime()
+            int r2 = r0.stopTime
+            if (r2 >= r1) goto L_0x001e
+            return
+        L_0x001e:
+            int r2 = r2 - r1
+            int r2 = java.lang.Math.abs(r2)
+            float r2 = (float) r2
+            int r3 = r0.period
+            float r3 = (float) r3
+            float r2 = r2 / r3
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            r4 = 1111490560(0x42400000, float:48.0)
+            r5 = 1095761920(0x41500000, float:13.0)
+            r6 = 1099956224(0x41900000, float:18.0)
+            r7 = 1110179840(0x422CLASSNAME, float:43.0)
+            if (r3 == 0) goto L_0x004e
+            android.graphics.RectF r3 = r11.rect
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r7 = (float) r7
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            r3.set(r5, r6, r7, r4)
+            goto L_0x0071
+        L_0x004e:
+            android.graphics.RectF r3 = r11.rect
+            int r8 = r11.getMeasuredWidth()
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r8 = r8 - r7
+            float r7 = (float) r8
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            int r8 = r11.getMeasuredWidth()
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r8 = r8 - r5
+            float r5 = (float) r8
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            r3.set(r7, r6, r5, r4)
+        L_0x0071:
+            java.lang.String r3 = "location_liveLocationProgress"
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.chat_radialProgress2Paint
+            r4.setColor(r3)
+            android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_livePaint
+            r4.setColor(r3)
+            android.graphics.RectF r6 = r11.rect
+            r7 = -1028390912(0xffffffffc2b40000, float:-90.0)
+            r3 = -1011613696(0xffffffffc3b40000, float:-360.0)
+            float r8 = r2 * r3
+            r9 = 0
+            android.graphics.Paint r10 = org.telegram.ui.ActionBar.Theme.chat_radialProgress2Paint
+            r5 = r12
+            r5.drawArc(r6, r7, r8, r9, r10)
+            int r0 = r0.stopTime
+            int r0 = r0 - r1
+            int r0 = java.lang.Math.abs(r0)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatLocationLeftTime(r0)
+            android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_livePaint
+            float r1 = r1.measureText(r0)
+            android.graphics.RectF r2 = r11.rect
+            float r2 = r2.centerX()
+            r3 = 1073741824(0x40000000, float:2.0)
+            float r1 = r1 / r3
+            float r2 = r2 - r1
+            r1 = 1108606976(0x42140000, float:37.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_livePaint
+            r12.drawText(r0, r2, r1, r3)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SendLocationCell.onDraw(android.graphics.Canvas):void");
     }
 }

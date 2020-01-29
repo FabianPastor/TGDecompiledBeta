@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class DialogRadioCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 23.0f : 61.0f, 0.0f, LocaleController.isRTL ? 61.0f : 23.0f, 0.0f));
@@ -47,19 +47,15 @@ public class DialogRadioCell extends FrameLayout {
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
-        RadioButton radioButton = this.radioButton;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i | 48, 20.0f, 15.0f, 20.0f, 0.0f));
+        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (!LocaleController.isRTL ? 3 : i) | 48, 20.0f, 15.0f, 20.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + this.needDivider);
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
-        this.radioButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
+        int measuredWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        this.radioButton.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, NUM), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
     public void setTextColor(int i) {
@@ -70,7 +66,7 @@ public class DialogRadioCell extends FrameLayout {
         this.textView.setText(str);
         this.radioButton.setChecked(z, false);
         this.needDivider = z2;
-        setWillNotDraw(z2 ^ 1);
+        setWillNotDraw(!z2);
     }
 
     public boolean isChecked() {
@@ -84,29 +80,28 @@ public class DialogRadioCell extends FrameLayout {
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView = this.textView;
+            TextView textView2 = this.textView;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            String str = "alpha";
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
-            RadioButton radioButton = this.radioButton;
+            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
+            RadioButton radioButton2 = this.radioButton;
             float[] fArr2 = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(radioButton, str, fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(radioButton2, "alpha", fArr2));
             return;
         }
         this.textView.setAlpha(z ? 1.0f : 0.5f);
-        RadioButton radioButton2 = this.radioButton;
+        RadioButton radioButton3 = this.radioButton;
         if (!z) {
             f = 0.5f;
         }
-        radioButton2.setAlpha(f);
+        radioButton3.setAlpha(f);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             float f = 0.0f;

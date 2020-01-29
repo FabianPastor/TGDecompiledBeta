@@ -1,11 +1,8 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
-import androidx.recyclerview.widget.RecyclerView.ItemAnimator;
-import androidx.recyclerview.widget.RecyclerView.LayoutParams;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
@@ -19,41 +16,21 @@ import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.RecyclerListView;
 
-public class DrawerLayoutAdapter extends SelectionAdapter {
-    private ArrayList<Integer> accountNumbers = new ArrayList();
+public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
+    private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShowed;
-    private ItemAnimator itemAnimator;
-    private ArrayList<Item> items = new ArrayList(11);
+    private RecyclerView.ItemAnimator itemAnimator;
+    private ArrayList<Item> items = new ArrayList<>(11);
     private Context mContext;
     private DrawerProfileCell profileCell;
 
-    private class Item {
-        public int icon;
-        public int id;
-        public String text;
-
-        public Item(int i, String str, int i2) {
-            this.icon = i2;
-            this.id = i;
-            this.text = str;
-        }
-
-        public void bind(DrawerActionCell drawerActionCell) {
-            drawerActionCell.setTextAndIcon(this.text, this.icon);
-        }
-    }
-
-    public DrawerLayoutAdapter(Context context, ItemAnimator itemAnimator) {
+    public DrawerLayoutAdapter(Context context, RecyclerView.ItemAnimator itemAnimator2) {
         this.mContext = context;
-        this.itemAnimator = itemAnimator;
+        this.itemAnimator = itemAnimator2;
         boolean z = true;
-        if (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShowed", true)) {
-            z = false;
-        }
-        this.accountsShowed = z;
+        this.accountsShowed = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShowed", true)) ? false : z;
         Theme.createDialogsResources(context);
         resetItems();
     }
@@ -95,45 +72,46 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         super.notifyDataSetChanged();
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
         return itemViewType == 3 || itemViewType == 4 || itemViewType == 5;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View drawerProfileCell;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        EmptyCell emptyCell;
         if (i == 0) {
-            drawerProfileCell = new DrawerProfileCell(this.mContext);
+            DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext);
             this.profileCell = drawerProfileCell;
+            emptyCell = drawerProfileCell;
         } else if (i == 2) {
-            drawerProfileCell = new DividerCell(this.mContext);
+            emptyCell = new DividerCell(this.mContext);
         } else if (i == 3) {
-            drawerProfileCell = new DrawerActionCell(this.mContext);
+            emptyCell = new DrawerActionCell(this.mContext);
         } else if (i == 4) {
-            drawerProfileCell = new DrawerUserCell(this.mContext);
+            emptyCell = new DrawerUserCell(this.mContext);
         } else if (i != 5) {
-            drawerProfileCell = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
+            emptyCell = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
         } else {
-            drawerProfileCell = new DrawerAddCell(this.mContext);
+            emptyCell = new DrawerAddCell(this.mContext);
         }
-        drawerProfileCell.setLayoutParams(new LayoutParams(-1, -2));
-        return new Holder(drawerProfileCell);
+        emptyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+        return new RecyclerListView.Holder(emptyCell);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
             ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
         } else if (itemViewType == 3) {
-            i -= 2;
+            int i2 = i - 2;
             if (this.accountsShowed) {
-                i -= getAccountRowsCount();
+                i2 -= getAccountRowsCount();
             }
             DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
-            ((Item) this.items.get(i)).bind(drawerActionCell);
+            this.items.get(i2).bind(drawerActionCell);
             drawerActionCell.setPadding(0, 0, 0, 0);
         } else if (itemViewType == 4) {
-            ((DrawerUserCell) viewHolder.itemView).setAccount(((Integer) this.accountNumbers.get(i - 2)).intValue());
+            ((DrawerUserCell) viewHolder.itemView).setAccount(this.accountNumbers.get(i - 2).intValue());
         }
     }
 
@@ -144,24 +122,24 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         if (i == 1) {
             return 1;
         }
-        i -= 2;
+        int i2 = i - 2;
         if (this.accountsShowed) {
-            if (i < this.accountNumbers.size()) {
+            if (i2 < this.accountNumbers.size()) {
                 return 4;
             }
             if (this.accountNumbers.size() < 3) {
-                if (i == this.accountNumbers.size()) {
+                if (i2 == this.accountNumbers.size()) {
                     return 5;
                 }
-                if (i == this.accountNumbers.size() + 1) {
+                if (i2 == this.accountNumbers.size() + 1) {
                     return 2;
                 }
-            } else if (i == this.accountNumbers.size()) {
+            } else if (i2 == this.accountNumbers.size()) {
                 return 2;
             }
-            i -= getAccountRowsCount();
+            i2 -= getAccountRowsCount();
         }
-        return this.items.get(i) == null ? 2 : 3;
+        return this.items.get(i2) == null ? 2 : 3;
     }
 
     private void resetItems() {
@@ -171,37 +149,32 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(i));
             }
         }
-        Collections.sort(this.accountNumbers, -$$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrA-JKuc.INSTANCE);
+        Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrAJKuc.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
-            String str = "Calls";
-            String str2 = "Contacts";
-            String str3 = "NewChannel";
-            String str4 = "NewSecretChat";
-            String str5 = "NewGroup";
             if (Theme.getEventType() == 0) {
-                this.items.add(new Item(2, LocaleController.getString(str5, NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString(str4, NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString(str3, NUM), NUM));
-                this.items.add(new Item(6, LocaleController.getString(str2, NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString(str, NUM), NUM));
+                this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
+                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
+                this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
+                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
                 this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                this.items.add(null);
+                this.items.add((Object) null);
                 this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
                 this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
-            } else {
-                this.items.add(new Item(2, LocaleController.getString(str5, NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString(str4, NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString(str3, NUM), NUM));
-                this.items.add(new Item(6, LocaleController.getString(str2, NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString(str, NUM), NUM));
-                this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
-                this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                this.items.add(null);
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
-                this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
+                return;
             }
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
+            this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
+            this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
+            this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
+            this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
+            this.items.add((Object) null);
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
+            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
         }
     }
 
@@ -215,17 +188,30 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public int getId(int i) {
-        i -= 2;
+        Item item;
+        int i2 = i - 2;
         if (this.accountsShowed) {
-            i -= getAccountRowsCount();
+            i2 -= getAccountRowsCount();
         }
-        if (i < 0 || i >= this.items.size()) {
+        if (i2 < 0 || i2 >= this.items.size() || (item = this.items.get(i2)) == null) {
             return -1;
         }
-        Item item = (Item) this.items.get(i);
-        if (item != null) {
-            return item.id;
+        return item.id;
+    }
+
+    private class Item {
+        public int icon;
+        public int id;
+        public String text;
+
+        public Item(int i, String str, int i2) {
+            this.icon = i2;
+            this.id = i;
+            this.text = str;
         }
-        return -1;
+
+        public void bind(DrawerActionCell drawerActionCell) {
+            drawerActionCell.setTextAndIcon(this.text, this.icon);
+        }
     }
 }

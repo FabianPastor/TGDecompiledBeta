@@ -63,12 +63,12 @@ public class MenuDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        float dp;
-        float dp2;
-        float dp3;
         float f;
-        float dp4;
-        float abs;
+        float f2;
+        float f3;
+        float f4;
+        float f5;
+        float f6;
         if (this.currentRotation != this.finalRotation) {
             long elapsedRealtime = SystemClock.elapsedRealtime();
             long j = this.lastFrameTime;
@@ -93,29 +93,29 @@ public class MenuDrawable extends Drawable {
             canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -180 : 180)));
             this.paint.setColor(color);
             canvas.drawLine((float) (-AndroidUtilities.dp(9.0f)), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
-            dp = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
-            dp2 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
-            dp3 = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
-            f = (float) (-AndroidUtilities.dp(9.0f));
-            dp4 = (float) AndroidUtilities.dp(7.5f);
-            abs = Math.abs(this.currentRotation);
+            f6 = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
+            f5 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
+            f4 = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
+            f3 = (float) (-AndroidUtilities.dp(9.0f));
+            f2 = (float) AndroidUtilities.dp(7.5f);
+            f = Math.abs(this.currentRotation);
         } else {
             canvas.rotate(this.currentRotation * ((float) (this.reverseAngle ? -225 : 135)));
             this.paint.setColor(AndroidUtilities.getOffsetColor(color, Theme.getColor("actionBarActionModeDefaultIcon"), this.currentRotation, 1.0f));
             canvas.drawLine(((float) (-AndroidUtilities.dp(9.0f))) + (((float) AndroidUtilities.dp(1.0f)) * this.currentRotation), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(1.0f)) * this.currentRotation), 0.0f, this.paint);
-            dp = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
-            dp2 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(9.0f)) * Math.abs(this.currentRotation));
-            dp3 = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(3.0f)) * Math.abs(this.currentRotation));
-            f = (float) (-AndroidUtilities.dp(9.0f));
-            dp4 = (float) AndroidUtilities.dp(9.0f);
-            abs = Math.abs(this.currentRotation);
+            f6 = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
+            f5 = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(9.0f)) * Math.abs(this.currentRotation));
+            f4 = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(3.0f)) * Math.abs(this.currentRotation));
+            f3 = (float) (-AndroidUtilities.dp(9.0f));
+            f2 = (float) AndroidUtilities.dp(9.0f);
+            f = Math.abs(this.currentRotation);
         }
-        f += dp4 * abs;
+        float f7 = f3 + (f2 * f);
         Canvas canvas2 = canvas;
-        abs = f;
-        float f2 = dp2;
-        canvas2.drawLine(abs, -dp3, f2, -dp, this.paint);
-        canvas2.drawLine(abs, dp3, f2, dp, this.paint);
+        float f8 = f7;
+        float f9 = f5;
+        canvas2.drawLine(f8, -f4, f9, -f6, this.paint);
+        canvas2.drawLine(f8, f4, f9, f6, this.paint);
         canvas.restore();
     }
 

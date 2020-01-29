@@ -3,81 +3,76 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.location.Location;
-import android.os.Build.VERSION;
+import android.os.Build;
+import android.text.TextUtils;
 import android.util.SparseArray;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController.KeywordResult;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.SendMessagesHelper.LocationProvider;
-import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProviderDelegate;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.BotInfo;
-import org.telegram.tgnet.TLRPC.BotInlineResult;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.ChatFull;
-import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaAuto;
-import org.telegram.tgnet.TLRPC.TL_channelFull;
-import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
-import org.telegram.tgnet.TLRPC.TL_document;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_inlineBotSwitchPM;
-import org.telegram.tgnet.TLRPC.TL_messages_botResults;
-import org.telegram.tgnet.TLRPC.TL_photo;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
-import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
-import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate.-CC;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Adapters.MentionsAdapter;
+import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.MentionCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.RecyclerListView;
 
-public class MentionsAdapter extends SelectionAdapter {
+public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     private static final String punctuationsChars = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n";
-    private SparseArray<BotInfo> botInfo;
+    private SparseArray<TLRPC.BotInfo> botInfo;
     private int botsCount;
     private Runnable cancelDelayRunnable;
-    private int channelLastReqId;
-    private int channelReqId;
+    /* access modifiers changed from: private */
+    public int channelLastReqId;
+    /* access modifiers changed from: private */
+    public int channelReqId;
     private boolean contextMedia;
     private int contextQueryReqid;
-    private Runnable contextQueryRunnable;
-    private int contextUsernameReqid;
-    private int currentAccount = UserConfig.selectedAccount;
-    private MentionsAdapterDelegate delegate;
+    /* access modifiers changed from: private */
+    public Runnable contextQueryRunnable;
+    /* access modifiers changed from: private */
+    public int contextUsernameReqid;
+    /* access modifiers changed from: private */
+    public int currentAccount = UserConfig.selectedAccount;
+    /* access modifiers changed from: private */
+    public MentionsAdapterDelegate delegate;
     private long dialog_id;
-    private User foundContextBot;
-    private ChatFull info;
+    /* access modifiers changed from: private */
+    public TLRPC.User foundContextBot;
+    private TLRPC.ChatFull info;
     private boolean inlineMediaEnabled = true;
     private boolean isDarkTheme;
-    private boolean isSearchingMentions;
-    private Location lastKnownLocation;
-    private int lastPosition;
+    /* access modifiers changed from: private */
+    public boolean isSearchingMentions;
+    /* access modifiers changed from: private */
+    public Location lastKnownLocation;
+    /* access modifiers changed from: private */
+    public int lastPosition;
     private String[] lastSearchKeyboardLanguage;
-    private String lastText;
-    private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new LocationProviderDelegate() {
+    /* access modifiers changed from: private */
+    public String lastText;
+    /* access modifiers changed from: private */
+    public boolean lastUsernameOnly;
+    private SendMessagesHelper.LocationProvider locationProvider = new SendMessagesHelper.LocationProvider(new SendMessagesHelper.LocationProvider.LocationProviderDelegate() {
         public void onLocationAcquired(Location location) {
             if (MentionsAdapter.this.foundContextBot != null && MentionsAdapter.this.foundContextBot.bot_inline_geo) {
-                MentionsAdapter.this.lastKnownLocation = location;
+                Location unused = MentionsAdapter.this.lastKnownLocation = location;
                 MentionsAdapter mentionsAdapter = MentionsAdapter.this;
                 mentionsAdapter.searchForContextBotResults(true, mentionsAdapter.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
             }
@@ -89,36 +84,43 @@ public class MentionsAdapter extends SelectionAdapter {
     }) {
         public void stop() {
             super.stop();
-            MentionsAdapter.this.lastKnownLocation = null;
+            Location unused = MentionsAdapter.this.lastKnownLocation = null;
         }
     };
     private Context mContext;
-    private ArrayList<MessageObject> messages;
+    /* access modifiers changed from: private */
+    public ArrayList<MessageObject> messages;
     private boolean needBotContext = true;
     private boolean needUsernames = true;
     private String nextQueryOffset;
-    private boolean noUserName;
+    /* access modifiers changed from: private */
+    public boolean noUserName;
     private ChatActivity parentFragment;
     private int resultLength;
     private int resultStartPosition;
     private SearchAdapterHelper searchAdapterHelper;
-    private Runnable searchGlobalRunnable;
-    private ArrayList<BotInlineResult> searchResultBotContext;
-    private TL_inlineBotSwitchPM searchResultBotContextSwitch;
+    /* access modifiers changed from: private */
+    public Runnable searchGlobalRunnable;
+    private ArrayList<TLRPC.BotInlineResult> searchResultBotContext;
+    private TLRPC.TL_inlineBotSwitchPM searchResultBotContextSwitch;
     private ArrayList<String> searchResultCommands;
     private ArrayList<String> searchResultCommandsHelp;
-    private ArrayList<User> searchResultCommandsUsers;
+    private ArrayList<TLRPC.User> searchResultCommandsUsers;
     private ArrayList<String> searchResultHashtags;
-    private ArrayList<KeywordResult> searchResultSuggestions;
-    private ArrayList<User> searchResultUsernames;
-    private SparseArray<User> searchResultUsernamesMap;
-    private String searchingContextQuery;
-    private String searchingContextUsername;
+    private ArrayList<MediaDataController.KeywordResult> searchResultSuggestions;
+    /* access modifiers changed from: private */
+    public ArrayList<TLRPC.User> searchResultUsernames;
+    /* access modifiers changed from: private */
+    public SparseArray<TLRPC.User> searchResultUsernamesMap;
+    /* access modifiers changed from: private */
+    public String searchingContextQuery;
+    /* access modifiers changed from: private */
+    public String searchingContextUsername;
 
     public interface MentionsAdapterDelegate {
         void needChangePanelVisibility(boolean z);
 
-        void onContextClick(BotInlineResult botInlineResult);
+        void onContextClick(TLRPC.BotInlineResult botInlineResult);
 
         void onContextSearch(boolean z);
     }
@@ -135,20 +137,20 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = z;
         this.dialog_id = j;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
+        this.searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
             public /* synthetic */ boolean canApplySearchResults(int i) {
-                return -CC.$default$canApplySearchResults(this, i);
+                return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
 
-            public /* synthetic */ SparseArray<User> getExcludeUsers() {
-                return -CC.$default$getExcludeUsers(this);
+            public /* synthetic */ SparseArray<TLRPC.User> getExcludeUsers() {
+                return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
             }
 
             public void onDataSetChanged(int i) {
                 MentionsAdapter.this.notifyDataSetChanged();
             }
 
-            public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+            public void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
                 if (MentionsAdapter.this.lastText != null) {
                     MentionsAdapter mentionsAdapter = MentionsAdapter.this;
                     mentionsAdapter.searchUsernameOrHashtag(mentionsAdapter.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
@@ -158,9 +160,9 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public void onDestroy() {
-        LocationProvider locationProvider = this.locationProvider;
-        if (locationProvider != null) {
-            locationProvider.stop();
+        SendMessagesHelper.LocationProvider locationProvider2 = this.locationProvider;
+        if (locationProvider2 != null) {
+            locationProvider2.stop();
         }
         Runnable runnable = this.contextQueryRunnable;
         if (runnable != null) {
@@ -186,22 +188,18 @@ public class MentionsAdapter extends SelectionAdapter {
         this.parentFragment = chatActivity;
     }
 
-    public void setChatInfo(ChatFull chatFull) {
+    public void setChatInfo(TLRPC.ChatFull chatFull) {
+        ChatActivity chatActivity;
+        TLRPC.Chat currentChat;
         this.currentAccount = UserConfig.selectedAccount;
         this.info = chatFull;
-        if (!(this.inlineMediaEnabled || this.foundContextBot == null)) {
-            ChatActivity chatActivity = this.parentFragment;
-            if (chatActivity != null) {
-                Chat currentChat = chatActivity.getCurrentChat();
-                if (currentChat != null) {
-                    this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
-                    if (this.inlineMediaEnabled) {
-                        this.searchResultUsernames = null;
-                        notifyDataSetChanged();
-                        this.delegate.needChangePanelVisibility(false);
-                        processFoundUser(this.foundContextBot);
-                    }
-                }
+        if (!(this.inlineMediaEnabled || this.foundContextBot == null || (chatActivity = this.parentFragment) == null || (currentChat = chatActivity.getCurrentChat()) == null)) {
+            this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
+            if (this.inlineMediaEnabled) {
+                this.searchResultUsernames = null;
+                notifyDataSetChanged();
+                this.delegate.needChangePanelVisibility(false);
+                processFoundUser(this.foundContextBot);
             }
         }
         String str = this.lastText;
@@ -218,7 +216,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.needBotContext = z;
     }
 
-    public void setBotInfo(SparseArray<BotInfo> sparseArray) {
+    public void setBotInfo(SparseArray<TLRPC.BotInfo> sparseArray) {
         this.botInfo = sparseArray;
     }
 
@@ -236,25 +234,31 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    public TL_inlineBotSwitchPM getBotContextSwitch() {
+    public TLRPC.TL_inlineBotSwitchPM getBotContextSwitch() {
         return this.searchResultBotContextSwitch;
     }
 
     public int getContextBotId() {
-        User user = this.foundContextBot;
-        return user != null ? user.id : 0;
+        TLRPC.User user = this.foundContextBot;
+        if (user != null) {
+            return user.id;
+        }
+        return 0;
     }
 
-    public User getContextBotUser() {
+    public TLRPC.User getContextBotUser() {
         return this.foundContextBot;
     }
 
     public String getContextBotName() {
-        User user = this.foundContextBot;
+        TLRPC.User user = this.foundContextBot;
         return user != null ? user.username : "";
     }
 
-    private void processFoundUser(User user) {
+    /* access modifiers changed from: private */
+    public void processFoundUser(TLRPC.User user) {
+        ChatActivity chatActivity;
+        TLRPC.Chat currentChat;
         this.contextUsernameReqid = 0;
         this.locationProvider.stop();
         if (user == null || !user.bot || user.bot_inline_placeholder == null) {
@@ -262,58 +266,79 @@ public class MentionsAdapter extends SelectionAdapter {
             this.inlineMediaEnabled = true;
         } else {
             this.foundContextBot = user;
-            ChatActivity chatActivity = this.parentFragment;
-            if (chatActivity != null) {
-                Chat currentChat = chatActivity.getCurrentChat();
-                if (currentChat != null) {
-                    this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
-                    if (!this.inlineMediaEnabled) {
-                        notifyDataSetChanged();
-                        this.delegate.needChangePanelVisibility(true);
-                        return;
-                    }
+            ChatActivity chatActivity2 = this.parentFragment;
+            if (!(chatActivity2 == null || (currentChat = chatActivity2.getCurrentChat()) == null)) {
+                this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
+                if (!this.inlineMediaEnabled) {
+                    notifyDataSetChanged();
+                    this.delegate.needChangePanelVisibility(true);
+                    return;
                 }
             }
             if (this.foundContextBot.bot_inline_geo) {
                 SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("inlinegeo_");
-                stringBuilder.append(this.foundContextBot.id);
-                if (!notificationsSettings.getBoolean(stringBuilder.toString(), false)) {
-                    chatActivity = this.parentFragment;
-                    if (!(chatActivity == null || chatActivity.getParentActivity() == null)) {
-                        user = this.foundContextBot;
-                        Builder builder = new Builder(this.parentFragment.getParentActivity());
-                        builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
-                        builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
-                        boolean[] zArr = new boolean[1];
-                        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$MentionsAdapter$3hBy3ePtH3hOR9uoZtzoQOcheTs(this, zArr, user));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new -$$Lambda$MentionsAdapter$CT1DE5mOMJY5cACE3GAb-uXrprc(this, zArr));
-                        this.parentFragment.showDialog(builder.create(), new -$$Lambda$MentionsAdapter$MgskdrDXUdlxFwtdPn3PQRymvWA(this, zArr));
-                    }
+                if (notificationsSettings.getBoolean("inlinegeo_" + this.foundContextBot.id, false) || (chatActivity = this.parentFragment) == null || chatActivity.getParentActivity() == null) {
+                    checkLocationPermissionsOrStart();
+                } else {
+                    TLRPC.User user2 = this.foundContextBot;
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
+                    boolean[] zArr = new boolean[1];
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(zArr, user2) {
+                        private final /* synthetic */ boolean[] f$1;
+                        private final /* synthetic */ TLRPC.User f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void onClick(DialogInterface dialogInterface, int i) {
+                            MentionsAdapter.this.lambda$processFoundUser$0$MentionsAdapter(this.f$1, this.f$2, dialogInterface, i);
+                        }
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new DialogInterface.OnClickListener(zArr) {
+                        private final /* synthetic */ boolean[] f$1;
+
+                        {
+                            this.f$1 = r2;
+                        }
+
+                        public final void onClick(DialogInterface dialogInterface, int i) {
+                            MentionsAdapter.this.lambda$processFoundUser$1$MentionsAdapter(this.f$1, dialogInterface, i);
+                        }
+                    });
+                    this.parentFragment.showDialog(builder.create(), new DialogInterface.OnDismissListener(zArr) {
+                        private final /* synthetic */ boolean[] f$1;
+
+                        {
+                            this.f$1 = r2;
+                        }
+
+                        public final void onDismiss(DialogInterface dialogInterface) {
+                            MentionsAdapter.this.lambda$processFoundUser$2$MentionsAdapter(this.f$1, dialogInterface);
+                        }
+                    });
                 }
-                checkLocationPermissionsOrStart();
             }
         }
         if (this.foundContextBot == null) {
             this.noUserName = true;
-        } else {
-            MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
-            if (mentionsAdapterDelegate != null) {
-                mentionsAdapterDelegate.onContextSearch(true);
-            }
-            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
+            return;
         }
+        MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+        if (mentionsAdapterDelegate != null) {
+            mentionsAdapterDelegate.onContextSearch(true);
+        }
+        searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
     }
 
-    public /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] zArr, User user, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] zArr, TLRPC.User user, DialogInterface dialogInterface, int i) {
         zArr[0] = true;
         if (user != null) {
-            Editor edit = MessagesController.getNotificationsSettings(this.currentAccount).edit();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("inlinegeo_");
-            stringBuilder.append(user.id);
-            edit.putBoolean(stringBuilder.toString(), true).commit();
+            SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(this.currentAccount).edit();
+            edit.putBoolean("inlinegeo_" + user.id, true).commit();
             checkLocationPermissionsOrStart();
         }
     }
@@ -329,164 +354,158 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Missing block: B:27:0x004c, code skipped:
-            if (r1.equals(r8) == false) goto L_0x004e;
-     */
-    /* JADX WARNING: Missing block: B:39:0x008c, code skipped:
-            if (r8.length() != 0) goto L_0x008f;
-     */
-    private void searchForContextBot(java.lang.String r8, java.lang.String r9) {
-        /*
-        r7 = this;
-        r0 = r7.foundContextBot;
-        if (r0 == 0) goto L_0x0019;
-    L_0x0004:
-        r0 = r0.username;
-        if (r0 == 0) goto L_0x0019;
-    L_0x0008:
-        r0 = r0.equals(r8);
-        if (r0 == 0) goto L_0x0019;
-    L_0x000e:
-        r0 = r7.searchingContextQuery;
-        if (r0 == 0) goto L_0x0019;
-    L_0x0012:
-        r0 = r0.equals(r9);
-        if (r0 == 0) goto L_0x0019;
-    L_0x0018:
-        return;
-    L_0x0019:
-        r0 = 0;
-        r7.searchResultBotContext = r0;
-        r7.searchResultBotContextSwitch = r0;
-        r7.notifyDataSetChanged();
-        r1 = r7.foundContextBot;
-        r2 = 0;
-        if (r1 == 0) goto L_0x0034;
-    L_0x0026:
-        r1 = r7.inlineMediaEnabled;
-        if (r1 != 0) goto L_0x002f;
-    L_0x002a:
-        if (r8 == 0) goto L_0x002f;
-    L_0x002c:
-        if (r9 == 0) goto L_0x002f;
-    L_0x002e:
-        return;
-    L_0x002f:
-        r1 = r7.delegate;
-        r1.needChangePanelVisibility(r2);
-    L_0x0034:
-        r1 = r7.contextQueryRunnable;
-        if (r1 == 0) goto L_0x003d;
-    L_0x0038:
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
-        r7.contextQueryRunnable = r0;
-    L_0x003d:
-        r1 = android.text.TextUtils.isEmpty(r8);
-        r3 = 1;
-        if (r1 != 0) goto L_0x004e;
-    L_0x0044:
-        r1 = r7.searchingContextUsername;
-        if (r1 == 0) goto L_0x008f;
-    L_0x0048:
-        r1 = r1.equals(r8);
-        if (r1 != 0) goto L_0x008f;
-    L_0x004e:
-        r1 = r7.contextUsernameReqid;
-        if (r1 == 0) goto L_0x005f;
-    L_0x0052:
-        r1 = r7.currentAccount;
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
-        r4 = r7.contextUsernameReqid;
-        r1.cancelRequest(r4, r3);
-        r7.contextUsernameReqid = r2;
-    L_0x005f:
-        r1 = r7.contextQueryReqid;
-        if (r1 == 0) goto L_0x0070;
-    L_0x0063:
-        r1 = r7.currentAccount;
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
-        r4 = r7.contextQueryReqid;
-        r1.cancelRequest(r4, r3);
-        r7.contextQueryReqid = r2;
-    L_0x0070:
-        r7.foundContextBot = r0;
-        r7.inlineMediaEnabled = r3;
-        r7.searchingContextUsername = r0;
-        r7.searchingContextQuery = r0;
-        r1 = r7.locationProvider;
-        r1.stop();
-        r7.noUserName = r2;
-        r1 = r7.delegate;
-        if (r1 == 0) goto L_0x0086;
-    L_0x0083:
-        r1.onContextSearch(r2);
-    L_0x0086:
-        if (r8 == 0) goto L_0x00e7;
-    L_0x0088:
-        r1 = r8.length();
-        if (r1 != 0) goto L_0x008f;
-    L_0x008e:
-        goto L_0x00e7;
-    L_0x008f:
-        if (r9 != 0) goto L_0x00ac;
-    L_0x0091:
-        r8 = r7.contextQueryReqid;
-        if (r8 == 0) goto L_0x00a2;
-    L_0x0095:
-        r8 = r7.currentAccount;
-        r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r8);
-        r9 = r7.contextQueryReqid;
-        r8.cancelRequest(r9, r3);
-        r7.contextQueryReqid = r2;
-    L_0x00a2:
-        r7.searchingContextQuery = r0;
-        r8 = r7.delegate;
-        if (r8 == 0) goto L_0x00ab;
-    L_0x00a8:
-        r8.onContextSearch(r2);
-    L_0x00ab:
-        return;
-    L_0x00ac:
-        r0 = r7.delegate;
-        if (r0 == 0) goto L_0x00c7;
-    L_0x00b0:
-        r1 = r7.foundContextBot;
-        if (r1 == 0) goto L_0x00b8;
-    L_0x00b4:
-        r0.onContextSearch(r3);
-        goto L_0x00c7;
-    L_0x00b8:
-        r0 = "gif";
-        r1 = r8.equals(r0);
-        if (r1 == 0) goto L_0x00c7;
-    L_0x00c0:
-        r7.searchingContextUsername = r0;
-        r0 = r7.delegate;
-        r0.onContextSearch(r2);
-    L_0x00c7:
-        r0 = r7.currentAccount;
-        r5 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r0 = r7.currentAccount;
-        r6 = org.telegram.messenger.MessagesStorage.getInstance(r0);
-        r7.searchingContextQuery = r9;
-        r0 = new org.telegram.ui.Adapters.MentionsAdapter$4;
-        r1 = r0;
-        r2 = r7;
-        r3 = r9;
-        r4 = r8;
-        r1.<init>(r3, r4, r5, r6);
-        r7.contextQueryRunnable = r0;
-        r8 = r7.contextQueryRunnable;
-        r0 = 400; // 0x190 float:5.6E-43 double:1.976E-321;
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0);
-    L_0x00e7:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchForContextBot(java.lang.String, java.lang.String):void");
+    private void searchForContextBot(String str, String str2) {
+        String str3;
+        String str4;
+        String str5;
+        TLRPC.User user = this.foundContextBot;
+        if (user == null || (str4 = user.username) == null || !str4.equals(str) || (str5 = this.searchingContextQuery) == null || !str5.equals(str2)) {
+            this.searchResultBotContext = null;
+            this.searchResultBotContextSwitch = null;
+            notifyDataSetChanged();
+            if (this.foundContextBot != null) {
+                if (this.inlineMediaEnabled || str == null || str2 == null) {
+                    this.delegate.needChangePanelVisibility(false);
+                } else {
+                    return;
+                }
+            }
+            Runnable runnable = this.contextQueryRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.contextQueryRunnable = null;
+            }
+            if (TextUtils.isEmpty(str) || ((str3 = this.searchingContextUsername) != null && !str3.equals(str))) {
+                if (this.contextUsernameReqid != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextUsernameReqid, true);
+                    this.contextUsernameReqid = 0;
+                }
+                if (this.contextQueryReqid != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
+                    this.contextQueryReqid = 0;
+                }
+                this.foundContextBot = null;
+                this.inlineMediaEnabled = true;
+                this.searchingContextUsername = null;
+                this.searchingContextQuery = null;
+                this.locationProvider.stop();
+                this.noUserName = false;
+                MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+                if (mentionsAdapterDelegate != null) {
+                    mentionsAdapterDelegate.onContextSearch(false);
+                }
+                if (str == null || str.length() == 0) {
+                    return;
+                }
+            }
+            if (str2 == null) {
+                if (this.contextQueryReqid != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
+                    this.contextQueryReqid = 0;
+                }
+                this.searchingContextQuery = null;
+                MentionsAdapterDelegate mentionsAdapterDelegate2 = this.delegate;
+                if (mentionsAdapterDelegate2 != null) {
+                    mentionsAdapterDelegate2.onContextSearch(false);
+                    return;
+                }
+                return;
+            }
+            MentionsAdapterDelegate mentionsAdapterDelegate3 = this.delegate;
+            if (mentionsAdapterDelegate3 != null) {
+                if (this.foundContextBot != null) {
+                    mentionsAdapterDelegate3.onContextSearch(true);
+                } else if (str.equals("gif")) {
+                    this.searchingContextUsername = "gif";
+                    this.delegate.onContextSearch(false);
+                }
+            }
+            final MessagesController instance = MessagesController.getInstance(this.currentAccount);
+            final MessagesStorage instance2 = MessagesStorage.getInstance(this.currentAccount);
+            this.searchingContextQuery = str2;
+            final String str6 = str2;
+            final String str7 = str;
+            this.contextQueryRunnable = new Runnable() {
+                public void run() {
+                    if (MentionsAdapter.this.contextQueryRunnable == this) {
+                        Runnable unused = MentionsAdapter.this.contextQueryRunnable = null;
+                        if (MentionsAdapter.this.foundContextBot == null && !MentionsAdapter.this.noUserName) {
+                            String unused2 = MentionsAdapter.this.searchingContextUsername = str7;
+                            TLObject userOrChat = instance.getUserOrChat(MentionsAdapter.this.searchingContextUsername);
+                            if (userOrChat instanceof TLRPC.User) {
+                                MentionsAdapter.this.processFoundUser((TLRPC.User) userOrChat);
+                                return;
+                            }
+                            TLRPC.TL_contacts_resolveUsername tL_contacts_resolveUsername = new TLRPC.TL_contacts_resolveUsername();
+                            tL_contacts_resolveUsername.username = MentionsAdapter.this.searchingContextUsername;
+                            MentionsAdapter mentionsAdapter = MentionsAdapter.this;
+                            int unused3 = mentionsAdapter.contextUsernameReqid = ConnectionsManager.getInstance(mentionsAdapter.currentAccount).sendRequest(tL_contacts_resolveUsername, new RequestDelegate(str7, instance, instance2) {
+                                private final /* synthetic */ String f$1;
+                                private final /* synthetic */ MessagesController f$2;
+                                private final /* synthetic */ MessagesStorage f$3;
+
+                                {
+                                    this.f$1 = r2;
+                                    this.f$2 = r3;
+                                    this.f$3 = r4;
+                                }
+
+                                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                                    MentionsAdapter.AnonymousClass4.this.lambda$run$1$MentionsAdapter$4(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
+                                }
+                            });
+                        } else if (!MentionsAdapter.this.noUserName) {
+                            MentionsAdapter mentionsAdapter2 = MentionsAdapter.this;
+                            mentionsAdapter2.searchForContextBotResults(true, mentionsAdapter2.foundContextBot, str6, "");
+                        }
+                    }
+                }
+
+                public /* synthetic */ void lambda$run$1$MentionsAdapter$4(String str, MessagesController messagesController, MessagesStorage messagesStorage, TLObject tLObject, TLRPC.TL_error tL_error) {
+                    AndroidUtilities.runOnUIThread(new Runnable(str, tL_error, tLObject, messagesController, messagesStorage) {
+                        private final /* synthetic */ String f$1;
+                        private final /* synthetic */ TLRPC.TL_error f$2;
+                        private final /* synthetic */ TLObject f$3;
+                        private final /* synthetic */ MessagesController f$4;
+                        private final /* synthetic */ MessagesStorage f$5;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                            this.f$3 = r4;
+                            this.f$4 = r5;
+                            this.f$5 = r6;
+                        }
+
+                        public final void run() {
+                            MentionsAdapter.AnonymousClass4.this.lambda$null$0$MentionsAdapter$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                        }
+                    });
+                }
+
+                public /* synthetic */ void lambda$null$0$MentionsAdapter$4(String str, TLRPC.TL_error tL_error, TLObject tLObject, MessagesController messagesController, MessagesStorage messagesStorage) {
+                    if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(str)) {
+                        TLRPC.User user = null;
+                        if (tL_error == null) {
+                            TLRPC.TL_contacts_resolvedPeer tL_contacts_resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) tLObject;
+                            if (!tL_contacts_resolvedPeer.users.isEmpty()) {
+                                TLRPC.User user2 = tL_contacts_resolvedPeer.users.get(0);
+                                messagesController.putUser(user2, false);
+                                messagesStorage.putUsersAndChats(tL_contacts_resolvedPeer.users, (ArrayList<TLRPC.Chat>) null, true, true);
+                                user = user2;
+                            }
+                        }
+                        MentionsAdapter.this.processFoundUser(user);
+                    }
+                }
+            };
+            AndroidUtilities.runOnUIThread(this.contextQueryRunnable, 400);
+        }
     }
 
-    private void onLocationUnavailable() {
-        User user = this.foundContextBot;
+    /* access modifiers changed from: private */
+    public void onLocationUnavailable() {
+        TLRPC.User user = this.foundContextBot;
         if (user != null && user.bot_inline_geo) {
             this.lastKnownLocation = new Location("network");
             this.lastKnownLocation.setLatitude(-1000.0d);
@@ -497,17 +516,16 @@ public class MentionsAdapter extends SelectionAdapter {
 
     private void checkLocationPermissionsOrStart() {
         ChatActivity chatActivity = this.parentFragment;
-        if (!(chatActivity == null || chatActivity.getParentActivity() == null)) {
-            if (VERSION.SDK_INT >= 23) {
-                if (this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != 0) {
-                    this.parentFragment.getParentActivity().requestPermissions(new String[]{r1, "android.permission.ACCESS_FINE_LOCATION"}, 2);
+        if (chatActivity != null && chatActivity.getParentActivity() != null) {
+            if (Build.VERSION.SDK_INT < 23 || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
+                TLRPC.User user = this.foundContextBot;
+                if (user != null && user.bot_inline_geo) {
+                    this.locationProvider.start();
                     return;
                 }
+                return;
             }
-            User user = this.foundContextBot;
-            if (user != null && user.bot_inline_geo) {
-                this.locationProvider.start();
-            }
+            this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
         }
     }
 
@@ -516,218 +534,224 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public String getBotCaption() {
-        User user = this.foundContextBot;
+        TLRPC.User user = this.foundContextBot;
         if (user != null) {
             return user.bot_inline_placeholder;
         }
         String str = this.searchingContextUsername;
-        return (str == null || !str.equals("gif")) ? null : "Search GIFs";
+        if (str == null || !str.equals("gif")) {
+            return null;
+        }
+        return "Search GIFs";
     }
 
     public void searchForContextBotForNextOffset() {
-        if (this.contextQueryReqid == 0) {
-            String str = this.nextQueryOffset;
-            if (str != null && str.length() != 0) {
-                User user = this.foundContextBot;
-                if (user != null) {
-                    String str2 = this.searchingContextQuery;
-                    if (str2 != null) {
-                        searchForContextBotResults(true, user, str2, this.nextQueryOffset);
-                    }
-                }
-            }
+        String str;
+        TLRPC.User user;
+        String str2;
+        if (this.contextQueryReqid == 0 && (str = this.nextQueryOffset) != null && str.length() != 0 && (user = this.foundContextBot) != null && (str2 = this.searchingContextQuery) != null) {
+            searchForContextBotResults(true, user, str2, this.nextQueryOffset);
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x00ad  */
-    private void searchForContextBotResults(boolean r17, org.telegram.tgnet.TLRPC.User r18, java.lang.String r19, java.lang.String r20) {
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Code restructure failed: missing block: B:17:0x006a, code lost:
+        r1 = r8.lastKnownLocation;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void searchForContextBotResults(boolean r17, org.telegram.tgnet.TLRPC.User r18, java.lang.String r19, java.lang.String r20) {
         /*
-        r16 = this;
-        r8 = r16;
-        r9 = r18;
-        r10 = r19;
-        r11 = r20;
-        r0 = r8.contextQueryReqid;
-        r1 = 0;
-        r12 = 1;
-        if (r0 == 0) goto L_0x001b;
-    L_0x000e:
-        r0 = r8.currentAccount;
-        r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
-        r2 = r8.contextQueryReqid;
-        r0.cancelRequest(r2, r12);
-        r8.contextQueryReqid = r1;
-    L_0x001b:
-        r0 = r8.inlineMediaEnabled;
-        if (r0 != 0) goto L_0x0027;
-    L_0x001f:
-        r0 = r8.delegate;
-        if (r0 == 0) goto L_0x0026;
-    L_0x0023:
-        r0.onContextSearch(r1);
-    L_0x0026:
-        return;
-    L_0x0027:
-        if (r10 == 0) goto L_0x012c;
-    L_0x0029:
-        if (r9 != 0) goto L_0x002d;
-    L_0x002b:
-        goto L_0x012c;
-    L_0x002d:
-        r0 = r9.bot_inline_geo;
-        if (r0 == 0) goto L_0x0036;
-    L_0x0031:
-        r0 = r8.lastKnownLocation;
-        if (r0 != 0) goto L_0x0036;
-    L_0x0035:
-        return;
-    L_0x0036:
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = r8.dialog_id;
-        r0.append(r1);
-        r1 = "_";
-        r0.append(r1);
-        r0.append(r10);
-        r0.append(r1);
-        r0.append(r11);
-        r0.append(r1);
-        r2 = r8.dialog_id;
-        r0.append(r2);
-        r0.append(r1);
-        r2 = r9.id;
-        r0.append(r2);
-        r0.append(r1);
-        r1 = r9.bot_inline_geo;
-        r13 = -NUM; // 0xCLASSNAMEfNUM float:0.0 double:-1000.0;
-        if (r1 == 0) goto L_0x0088;
-    L_0x006a:
-        r1 = r8.lastKnownLocation;
-        if (r1 == 0) goto L_0x0088;
-    L_0x006e:
-        r1 = r1.getLatitude();
-        r3 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1));
-        if (r3 == 0) goto L_0x0088;
-    L_0x0076:
-        r1 = r8.lastKnownLocation;
-        r1 = r1.getLatitude();
-        r3 = r8.lastKnownLocation;
-        r3 = r3.getLongitude();
-        r1 = r1 + r3;
-        r1 = java.lang.Double.valueOf(r1);
-        goto L_0x008a;
-    L_0x0088:
-        r1 = "";
-    L_0x008a:
-        r0.append(r1);
-        r15 = r0.toString();
-        r0 = r8.currentAccount;
-        r7 = org.telegram.messenger.MessagesStorage.getInstance(r0);
-        r6 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$5habXq1r64920QdCkG9j6xMgM4U;
-        r0 = r6;
-        r1 = r16;
-        r2 = r19;
-        r3 = r17;
-        r4 = r18;
-        r5 = r20;
-        r12 = r6;
-        r6 = r7;
-        r13 = r7;
-        r7 = r15;
-        r0.<init>(r1, r2, r3, r4, r5, r6, r7);
-        if (r17 == 0) goto L_0x00b2;
-    L_0x00ad:
-        r13.getBotCache(r15, r12);
-        goto L_0x012b;
-    L_0x00b2:
-        r0 = new org.telegram.tgnet.TLRPC$TL_messages_getInlineBotResults;
-        r0.<init>();
-        r1 = r8.currentAccount;
-        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
-        r1 = r1.getInputUser(r9);
-        r0.bot = r1;
-        r0.query = r10;
-        r0.offset = r11;
-        r1 = r9.bot_inline_geo;
-        if (r1 == 0) goto L_0x0105;
-    L_0x00cb:
-        r1 = r8.lastKnownLocation;
-        if (r1 == 0) goto L_0x0105;
-    L_0x00cf:
-        r1 = r1.getLatitude();
-        r3 = -NUM; // 0xCLASSNAMEfNUM float:0.0 double:-1000.0;
-        r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 == 0) goto L_0x0105;
-    L_0x00dc:
-        r1 = r0.flags;
-        r2 = 1;
-        r1 = r1 | r2;
-        r0.flags = r1;
-        r1 = new org.telegram.tgnet.TLRPC$TL_inputGeoPoint;
-        r1.<init>();
-        r0.geo_point = r1;
-        r1 = r0.geo_point;
-        r2 = r8.lastKnownLocation;
-        r2 = r2.getLatitude();
-        r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2);
-        r1.lat = r2;
-        r1 = r0.geo_point;
-        r2 = r8.lastKnownLocation;
-        r2 = r2.getLongitude();
-        r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2);
-        r1._long = r2;
-    L_0x0105:
-        r1 = r8.dialog_id;
-        r2 = (int) r1;
-        if (r2 == 0) goto L_0x0117;
-    L_0x010a:
-        r1 = r8.currentAccount;
-        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
-        r1 = r1.getInputPeer(r2);
-        r0.peer = r1;
-        goto L_0x011e;
-    L_0x0117:
-        r1 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
-        r1.<init>();
-        r0.peer = r1;
-    L_0x011e:
-        r1 = r8.currentAccount;
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
-        r2 = 2;
-        r0 = r1.sendRequest(r0, r12, r2);
-        r8.contextQueryReqid = r0;
-    L_0x012b:
-        return;
-    L_0x012c:
-        r0 = 0;
-        r8.searchingContextQuery = r0;
-        return;
+            r16 = this;
+            r8 = r16
+            r9 = r18
+            r10 = r19
+            r11 = r20
+            int r0 = r8.contextQueryReqid
+            r1 = 0
+            r12 = 1
+            if (r0 == 0) goto L_0x001b
+            int r0 = r8.currentAccount
+            org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
+            int r2 = r8.contextQueryReqid
+            r0.cancelRequest(r2, r12)
+            r8.contextQueryReqid = r1
+        L_0x001b:
+            boolean r0 = r8.inlineMediaEnabled
+            if (r0 != 0) goto L_0x0027
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r8.delegate
+            if (r0 == 0) goto L_0x0026
+            r0.onContextSearch(r1)
+        L_0x0026:
+            return
+        L_0x0027:
+            if (r10 == 0) goto L_0x012c
+            if (r9 != 0) goto L_0x002d
+            goto L_0x012c
+        L_0x002d:
+            boolean r0 = r9.bot_inline_geo
+            if (r0 == 0) goto L_0x0036
+            android.location.Location r0 = r8.lastKnownLocation
+            if (r0 != 0) goto L_0x0036
+            return
+        L_0x0036:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder
+            r0.<init>()
+            long r1 = r8.dialog_id
+            r0.append(r1)
+            java.lang.String r1 = "_"
+            r0.append(r1)
+            r0.append(r10)
+            r0.append(r1)
+            r0.append(r11)
+            r0.append(r1)
+            long r2 = r8.dialog_id
+            r0.append(r2)
+            r0.append(r1)
+            int r2 = r9.id
+            r0.append(r2)
+            r0.append(r1)
+            boolean r1 = r9.bot_inline_geo
+            r13 = -4571364728013586432(0xCLASSNAMEfNUM, double:-1000.0)
+            if (r1 == 0) goto L_0x0088
+            android.location.Location r1 = r8.lastKnownLocation
+            if (r1 == 0) goto L_0x0088
+            double r1 = r1.getLatitude()
+            int r3 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
+            if (r3 == 0) goto L_0x0088
+            android.location.Location r1 = r8.lastKnownLocation
+            double r1 = r1.getLatitude()
+            android.location.Location r3 = r8.lastKnownLocation
+            double r3 = r3.getLongitude()
+            double r1 = r1 + r3
+            java.lang.Double r1 = java.lang.Double.valueOf(r1)
+            goto L_0x008a
+        L_0x0088:
+            java.lang.String r1 = ""
+        L_0x008a:
+            r0.append(r1)
+            java.lang.String r15 = r0.toString()
+            int r0 = r8.currentAccount
+            org.telegram.messenger.MessagesStorage r7 = org.telegram.messenger.MessagesStorage.getInstance(r0)
+            org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$5habXq1r64920QdCkG9j6xMgM4U r6 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$5habXq1r64920QdCkG9j6xMgM4U
+            r0 = r6
+            r1 = r16
+            r2 = r19
+            r3 = r17
+            r4 = r18
+            r5 = r20
+            r12 = r6
+            r6 = r7
+            r13 = r7
+            r7 = r15
+            r0.<init>(r2, r3, r4, r5, r6, r7)
+            if (r17 == 0) goto L_0x00b2
+            r13.getBotCache(r15, r12)
+            goto L_0x012b
+        L_0x00b2:
+            org.telegram.tgnet.TLRPC$TL_messages_getInlineBotResults r0 = new org.telegram.tgnet.TLRPC$TL_messages_getInlineBotResults
+            r0.<init>()
+            int r1 = r8.currentAccount
+            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
+            org.telegram.tgnet.TLRPC$InputUser r1 = r1.getInputUser((org.telegram.tgnet.TLRPC.User) r9)
+            r0.bot = r1
+            r0.query = r10
+            r0.offset = r11
+            boolean r1 = r9.bot_inline_geo
+            if (r1 == 0) goto L_0x0105
+            android.location.Location r1 = r8.lastKnownLocation
+            if (r1 == 0) goto L_0x0105
+            double r1 = r1.getLatitude()
+            r3 = -4571364728013586432(0xCLASSNAMEfNUM, double:-1000.0)
+            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
+            if (r5 == 0) goto L_0x0105
+            int r1 = r0.flags
+            r2 = 1
+            r1 = r1 | r2
+            r0.flags = r1
+            org.telegram.tgnet.TLRPC$TL_inputGeoPoint r1 = new org.telegram.tgnet.TLRPC$TL_inputGeoPoint
+            r1.<init>()
+            r0.geo_point = r1
+            org.telegram.tgnet.TLRPC$InputGeoPoint r1 = r0.geo_point
+            android.location.Location r2 = r8.lastKnownLocation
+            double r2 = r2.getLatitude()
+            double r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2)
+            r1.lat = r2
+            org.telegram.tgnet.TLRPC$InputGeoPoint r1 = r0.geo_point
+            android.location.Location r2 = r8.lastKnownLocation
+            double r2 = r2.getLongitude()
+            double r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2)
+            r1._long = r2
+        L_0x0105:
+            long r1 = r8.dialog_id
+            int r2 = (int) r1
+            if (r2 == 0) goto L_0x0117
+            int r1 = r8.currentAccount
+            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
+            org.telegram.tgnet.TLRPC$InputPeer r1 = r1.getInputPeer(r2)
+            r0.peer = r1
+            goto L_0x011e
+        L_0x0117:
+            org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r1 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
+            r1.<init>()
+            r0.peer = r1
+        L_0x011e:
+            int r1 = r8.currentAccount
+            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+            r2 = 2
+            int r0 = r1.sendRequest(r0, r12, r2)
+            r8.contextQueryReqid = r0
+        L_0x012b:
+            return
+        L_0x012c:
+            r0 = 0
+            r8.searchingContextQuery = r0
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchForContextBotResults(boolean, org.telegram.tgnet.TLRPC$User, java.lang.String, java.lang.String):void");
     }
 
-    public /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String str, boolean z, User user, String str2, MessagesStorage messagesStorage, String str3, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MentionsAdapter$HVDPv79fAM1RehGsWWysAxv-W1Q(this, str, z, tLObject, user, str2, messagesStorage, str3));
+    public /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String str, boolean z, TLRPC.User user, String str2, MessagesStorage messagesStorage, String str3, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(str, z, tLObject, user, str2, messagesStorage, str3) {
+            private final /* synthetic */ String f$1;
+            private final /* synthetic */ boolean f$2;
+            private final /* synthetic */ TLObject f$3;
+            private final /* synthetic */ TLRPC.User f$4;
+            private final /* synthetic */ String f$5;
+            private final /* synthetic */ MessagesStorage f$6;
+            private final /* synthetic */ String f$7;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r6;
+                this.f$6 = r7;
+                this.f$7 = r8;
+            }
+
+            public final void run() {
+                MentionsAdapter.this.lambda$null$3$MentionsAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$3$MentionsAdapter(String str, boolean z, TLObject tLObject, User user, String str2, MessagesStorage messagesStorage, String str3) {
+    public /* synthetic */ void lambda$null$3$MentionsAdapter(String str, boolean z, TLObject tLObject, TLRPC.User user, String str2, MessagesStorage messagesStorage, String str3) {
+        boolean z2;
+        boolean z3;
         if (str.equals(this.searchingContextQuery)) {
-            MentionsAdapterDelegate mentionsAdapterDelegate;
             this.contextQueryReqid = 0;
-            if (z && tLObject == null) {
-                searchForContextBotResults(false, user, str, str2);
-            } else {
-                mentionsAdapterDelegate = this.delegate;
+            if (!z || tLObject != null) {
+                MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
                 if (mentionsAdapterDelegate != null) {
                     mentionsAdapterDelegate.onContextSearch(false);
                 }
+            } else {
+                searchForContextBotResults(false, user, str, str2);
             }
-            if (tLObject instanceof TL_messages_botResults) {
-                boolean z2;
-                Object obj;
-                TL_messages_botResults tL_messages_botResults = (TL_messages_botResults) tLObject;
-                if (!(z || tL_messages_botResults.cache_time == 0)) {
+            if (tLObject instanceof TLRPC.TL_messages_botResults) {
+                TLRPC.TL_messages_botResults tL_messages_botResults = (TLRPC.TL_messages_botResults) tLObject;
+                if (!z && tL_messages_botResults.cache_time != 0) {
                     messagesStorage.saveBotCache(str3, tL_messages_botResults);
                 }
                 this.nextQueryOffset = tL_messages_botResults.next_offset;
@@ -740,12 +764,10 @@ public class MentionsAdapter extends SelectionAdapter {
                     if (i >= tL_messages_botResults.results.size()) {
                         break;
                     }
-                    BotInlineResult botInlineResult = (BotInlineResult) tL_messages_botResults.results.get(i);
-                    if (!((botInlineResult.document instanceof TL_document) || (botInlineResult.photo instanceof TL_photo))) {
-                        if (!"game".equals(botInlineResult.type) && botInlineResult.content == null && (botInlineResult.send_message instanceof TL_botInlineMessageMediaAuto)) {
-                            tL_messages_botResults.results.remove(i);
-                            i--;
-                        }
+                    TLRPC.BotInlineResult botInlineResult = tL_messages_botResults.results.get(i);
+                    if (!(botInlineResult.document instanceof TLRPC.TL_document) && !(botInlineResult.photo instanceof TLRPC.TL_photo) && !"game".equals(botInlineResult.type) && botInlineResult.content == null && (botInlineResult.send_message instanceof TLRPC.TL_botInlineMessageMediaAuto)) {
+                        tL_messages_botResults.results.remove(i);
+                        i--;
                     }
                     botInlineResult.query_id = tL_messages_botResults.query_id;
                     i++;
@@ -753,13 +775,13 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (this.searchResultBotContext == null || str2.length() == 0) {
                     this.searchResultBotContext = tL_messages_botResults.results;
                     this.contextMedia = tL_messages_botResults.gallery;
-                    obj = null;
+                    z3 = false;
                 } else {
                     this.searchResultBotContext.addAll(tL_messages_botResults.results);
                     if (tL_messages_botResults.results.isEmpty()) {
                         this.nextQueryOffset = "";
                     }
-                    obj = 1;
+                    z3 = true;
                 }
                 Runnable runnable = this.cancelDelayRunnable;
                 if (runnable != null) {
@@ -773,772 +795,677 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultSuggestions = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;
-                if (obj != null) {
-                    i = this.searchResultBotContextSwitch != null ? 1 : 0;
-                    notifyItemChanged(((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i) - 1);
-                    notifyItemRangeInserted((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i, tL_messages_botResults.results.size());
+                if (z3) {
+                    int i2 = this.searchResultBotContextSwitch != null ? 1 : 0;
+                    notifyItemChanged(((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i2) - 1);
+                    notifyItemRangeInserted((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i2, tL_messages_botResults.results.size());
                 } else {
                     notifyDataSetChanged();
                 }
-                mentionsAdapterDelegate = this.delegate;
+                MentionsAdapterDelegate mentionsAdapterDelegate2 = this.delegate;
                 if (this.searchResultBotContext.isEmpty() && this.searchResultBotContextSwitch == null) {
                     z2 = false;
                 }
-                mentionsAdapterDelegate.needChangePanelVisibility(z2);
+                mentionsAdapterDelegate2.needChangePanelVisibility(z2);
             }
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:120:0x01d5  */
     /* JADX WARNING: Removed duplicated region for block: B:118:0x01cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01d5  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void searchUsernameOrHashtag(java.lang.String r17, int r18, java.util.ArrayList<org.telegram.messenger.MessageObject> r19, boolean r20) {
         /*
-        r16 = this;
-        r7 = r16;
-        r0 = r17;
-        r1 = r18;
-        r2 = r19;
-        r3 = r20;
-        r4 = r7.cancelDelayRunnable;
-        r5 = 0;
-        if (r4 == 0) goto L_0x0014;
-    L_0x000f:
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4);
-        r7.cancelDelayRunnable = r5;
-    L_0x0014:
-        r4 = r7.channelReqId;
-        r6 = 0;
-        r8 = 1;
-        if (r4 == 0) goto L_0x0027;
-    L_0x001a:
-        r4 = r7.currentAccount;
-        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
-        r9 = r7.channelReqId;
-        r4.cancelRequest(r9, r8);
-        r7.channelReqId = r6;
-    L_0x0027:
-        r4 = r7.searchGlobalRunnable;
-        if (r4 == 0) goto L_0x0030;
-    L_0x002b:
-        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4);
-        r7.searchGlobalRunnable = r5;
-    L_0x0030:
-        r4 = android.text.TextUtils.isEmpty(r17);
-        if (r4 == 0) goto L_0x0041;
-    L_0x0036:
-        r7.searchForContextBot(r5, r5);
-        r0 = r7.delegate;
-        r0.needChangePanelVisibility(r6);
-        r7.lastText = r5;
-        return;
-    L_0x0041:
-        r4 = r17.length();
-        if (r4 <= 0) goto L_0x004a;
-    L_0x0047:
-        r4 = r1 + -1;
-        goto L_0x004b;
-    L_0x004a:
-        r4 = r1;
-    L_0x004b:
-        r7.lastText = r5;
-        r7.lastUsernameOnly = r3;
-        r9 = new java.lang.StringBuilder;
-        r9.<init>();
-        r10 = 64;
-        r11 = 3;
-        r12 = 32;
-        if (r3 != 0) goto L_0x00de;
-    L_0x005b:
-        r13 = r7.needBotContext;
-        if (r13 == 0) goto L_0x00de;
-    L_0x005f:
-        r13 = r0.charAt(r6);
-        if (r13 != r10) goto L_0x00de;
-    L_0x0065:
-        r13 = r0.indexOf(r12);
-        r14 = r17.length();
-        r15 = "";
-        if (r13 <= 0) goto L_0x007b;
-    L_0x0071:
-        r14 = r0.substring(r8, r13);
-        r13 = r13 + r8;
-        r13 = r0.substring(r13);
-        goto L_0x00a4;
-    L_0x007b:
-        r13 = r14 + -1;
-        r13 = r0.charAt(r13);
-        r10 = 116; // 0x74 float:1.63E-43 double:5.73E-322;
-        if (r13 != r10) goto L_0x009f;
-    L_0x0085:
-        r10 = r14 + -2;
-        r10 = r0.charAt(r10);
-        r13 = 111; // 0x6f float:1.56E-43 double:5.5E-322;
-        if (r10 != r13) goto L_0x009f;
-    L_0x008f:
-        r14 = r14 - r11;
-        r10 = r0.charAt(r14);
-        r13 = 98;
-        if (r10 != r13) goto L_0x009f;
-    L_0x0098:
-        r10 = r0.substring(r8);
-        r14 = r10;
-        r13 = r15;
-        goto L_0x00a4;
-    L_0x009f:
-        r7.searchForContextBot(r5, r5);
-        r13 = r5;
-        r14 = r13;
-    L_0x00a4:
-        if (r14 == 0) goto L_0x00da;
-    L_0x00a6:
-        r10 = r14.length();
-        if (r10 < r8) goto L_0x00da;
-    L_0x00ac:
-        r10 = 1;
-    L_0x00ad:
-        r11 = r14.length();
-        if (r10 >= r11) goto L_0x00d9;
-    L_0x00b3:
-        r11 = r14.charAt(r10);
-        r12 = 48;
-        if (r11 < r12) goto L_0x00bf;
-    L_0x00bb:
-        r12 = 57;
-        if (r11 <= r12) goto L_0x00d4;
-    L_0x00bf:
-        r12 = 97;
-        if (r11 < r12) goto L_0x00c7;
-    L_0x00c3:
-        r12 = 122; // 0x7a float:1.71E-43 double:6.03E-322;
-        if (r11 <= r12) goto L_0x00d4;
-    L_0x00c7:
-        r12 = 65;
-        if (r11 < r12) goto L_0x00cf;
-    L_0x00cb:
-        r12 = 90;
-        if (r11 <= r12) goto L_0x00d4;
-    L_0x00cf:
-        r12 = 95;
-        if (r11 == r12) goto L_0x00d4;
-    L_0x00d3:
-        goto L_0x00da;
-    L_0x00d4:
-        r10 = r10 + 1;
-        r12 = 32;
-        goto L_0x00ad;
-    L_0x00d9:
-        r15 = r14;
-    L_0x00da:
-        r7.searchForContextBot(r15, r13);
-        goto L_0x00e1;
-    L_0x00de:
-        r7.searchForContextBot(r5, r5);
-    L_0x00e1:
-        r10 = r7.foundContextBot;
-        if (r10 == 0) goto L_0x00e6;
-    L_0x00e5:
-        return;
-    L_0x00e6:
-        r10 = r7.currentAccount;
-        r10 = org.telegram.messenger.MessagesController.getInstance(r10);
-        r12 = -1;
-        if (r3 == 0) goto L_0x0102;
-    L_0x00ef:
-        r0 = r0.substring(r8);
-        r9.append(r0);
-        r7.resultStartPosition = r6;
-        r0 = r9.length();
-        r7.resultLength = r0;
-        r0 = 0;
-    L_0x00ff:
-        r4 = -1;
-        goto L_0x01cd;
-    L_0x0102:
-        if (r4 < 0) goto L_0x01ca;
-    L_0x0104:
-        r13 = r17.length();
-        if (r4 < r13) goto L_0x010e;
-    L_0x010a:
-        r5 = 64;
-        goto L_0x01c5;
-    L_0x010e:
-        r13 = r0.charAt(r4);
-        r14 = 58;
-        if (r4 == 0) goto L_0x012f;
-    L_0x0116:
-        r15 = r4 + -1;
-        r11 = r0.charAt(r15);
-        r5 = 32;
-        if (r11 == r5) goto L_0x012f;
-    L_0x0120:
-        r5 = r0.charAt(r15);
-        r11 = 10;
-        if (r5 == r11) goto L_0x012f;
-    L_0x0128:
-        if (r13 != r14) goto L_0x012b;
-    L_0x012a:
-        goto L_0x012f;
-    L_0x012b:
-        r5 = 64;
-        goto L_0x01c2;
-    L_0x012f:
-        r5 = 64;
-        if (r13 != r5) goto L_0x015b;
-    L_0x0133:
-        r11 = r7.needUsernames;
-        if (r11 != 0) goto L_0x013d;
-    L_0x0137:
-        r11 = r7.needBotContext;
-        if (r11 == 0) goto L_0x01c2;
-    L_0x013b:
-        if (r4 != 0) goto L_0x01c2;
-    L_0x013d:
-        r5 = r7.info;
-        if (r5 != 0) goto L_0x014f;
-    L_0x0141:
-        if (r4 == 0) goto L_0x014f;
-    L_0x0143:
-        r7.lastText = r0;
-        r7.lastPosition = r1;
-        r7.messages = r2;
-        r0 = r7.delegate;
-        r0.needChangePanelVisibility(r6);
-        return;
-    L_0x014f:
-        r7.resultStartPosition = r4;
-        r0 = r9.length();
-        r0 = r0 + r8;
-        r7.resultLength = r0;
-        r0 = 0;
-        goto L_0x01cd;
-    L_0x015b:
-        r11 = 35;
-        if (r13 != r11) goto L_0x0181;
-    L_0x015f:
-        r5 = r7.searchAdapterHelper;
-        r5 = r5.loadRecentHashtags();
-        if (r5 == 0) goto L_0x0175;
-    L_0x0167:
-        r7.resultStartPosition = r4;
-        r0 = r9.length();
-        r0 = r0 + r8;
-        r7.resultLength = r0;
-        r9.insert(r6, r13);
-        r0 = 1;
-        goto L_0x00ff;
-    L_0x0175:
-        r7.lastText = r0;
-        r7.lastPosition = r1;
-        r7.messages = r2;
-        r0 = r7.delegate;
-        r0.needChangePanelVisibility(r6);
-        return;
-    L_0x0181:
-        if (r4 != 0) goto L_0x0197;
-    L_0x0183:
-        r11 = r7.botInfo;
-        if (r11 == 0) goto L_0x0197;
-    L_0x0187:
-        r11 = 47;
-        if (r13 != r11) goto L_0x0197;
-    L_0x018b:
-        r7.resultStartPosition = r4;
-        r0 = r9.length();
-        r0 = r0 + r8;
-        r7.resultLength = r0;
-        r0 = 2;
-        goto L_0x00ff;
-    L_0x0197:
-        if (r13 != r14) goto L_0x01c2;
-    L_0x0199:
-        r11 = r9.length();
-        if (r11 <= 0) goto L_0x01c2;
-    L_0x019f:
-        r11 = r9.charAt(r6);
-        r14 = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n";
-        r11 = r14.indexOf(r11);
-        if (r11 < 0) goto L_0x01ad;
-    L_0x01ab:
-        r11 = 1;
-        goto L_0x01ae;
-    L_0x01ad:
-        r11 = 0;
-    L_0x01ae:
-        if (r11 == 0) goto L_0x01b6;
-    L_0x01b0:
-        r11 = r9.length();
-        if (r11 <= r8) goto L_0x01c2;
-    L_0x01b6:
-        r7.resultStartPosition = r4;
-        r0 = r9.length();
-        r0 = r0 + r8;
-        r7.resultLength = r0;
-        r0 = 3;
-        goto L_0x00ff;
-    L_0x01c2:
-        r9.insert(r6, r13);
-    L_0x01c5:
-        r4 = r4 + -1;
-        r5 = 0;
-        goto L_0x0102;
-    L_0x01ca:
-        r0 = -1;
-        goto L_0x00ff;
-    L_0x01cd:
-        if (r0 != r12) goto L_0x01d5;
-    L_0x01cf:
-        r0 = r7.delegate;
-        r0.needChangePanelVisibility(r6);
-        return;
-    L_0x01d5:
-        if (r0 != 0) goto L_0x03d0;
-    L_0x01d7:
-        r0 = new java.util.ArrayList;
-        r0.<init>();
-        r1 = 0;
-    L_0x01dd:
-        r5 = 100;
-        r11 = r19.size();
-        r5 = java.lang.Math.min(r5, r11);
-        if (r1 >= r5) goto L_0x0207;
-    L_0x01e9:
-        r5 = r2.get(r1);
-        r5 = (org.telegram.messenger.MessageObject) r5;
-        r5 = r5.messageOwner;
-        r5 = r5.from_id;
-        r11 = java.lang.Integer.valueOf(r5);
-        r11 = r0.contains(r11);
-        if (r11 != 0) goto L_0x0204;
-    L_0x01fd:
-        r5 = java.lang.Integer.valueOf(r5);
-        r0.add(r5);
-    L_0x0204:
-        r1 = r1 + 1;
-        goto L_0x01dd;
-    L_0x0207:
-        r1 = r9.toString();
-        r5 = r1.toLowerCase();
-        r1 = 32;
-        r1 = r5.indexOf(r1);
-        if (r1 < 0) goto L_0x0219;
-    L_0x0217:
-        r1 = 1;
-        goto L_0x021a;
-    L_0x0219:
-        r1 = 0;
-    L_0x021a:
-        r9 = new java.util.ArrayList;
-        r9.<init>();
-        r2 = new android.util.SparseArray;
-        r2.<init>();
-        r11 = new android.util.SparseArray;
-        r11.<init>();
-        r12 = r7.currentAccount;
-        r12 = org.telegram.messenger.MediaDataController.getInstance(r12);
-        r12 = r12.inlineBots;
-        r13 = 5;
-        if (r3 != 0) goto L_0x0290;
-    L_0x0234:
-        r14 = r7.needBotContext;
-        if (r14 == 0) goto L_0x0290;
-    L_0x0238:
-        if (r4 != 0) goto L_0x0290;
-    L_0x023a:
-        r4 = r12.isEmpty();
-        if (r4 != 0) goto L_0x0290;
-    L_0x0240:
-        r4 = 0;
-        r14 = 0;
-    L_0x0242:
-        r15 = r12.size();
-        if (r4 >= r15) goto L_0x0290;
-    L_0x0248:
-        r15 = r12.get(r4);
-        r15 = (org.telegram.tgnet.TLRPC.TL_topPeer) r15;
-        r15 = r15.peer;
-        r15 = r15.user_id;
-        r15 = java.lang.Integer.valueOf(r15);
-        r15 = r10.getUser(r15);
-        if (r15 != 0) goto L_0x025d;
-    L_0x025c:
-        goto L_0x028c;
-    L_0x025d:
-        r6 = r15.username;
-        if (r6 == 0) goto L_0x0289;
-    L_0x0261:
-        r6 = r6.length();
-        if (r6 <= 0) goto L_0x0289;
-    L_0x0267:
-        r6 = r5.length();
-        if (r6 <= 0) goto L_0x0279;
-    L_0x026d:
-        r6 = r15.username;
-        r6 = r6.toLowerCase();
-        r6 = r6.startsWith(r5);
-        if (r6 != 0) goto L_0x027f;
-    L_0x0279:
-        r6 = r5.length();
-        if (r6 != 0) goto L_0x0289;
-    L_0x027f:
-        r9.add(r15);
-        r6 = r15.id;
-        r2.put(r6, r15);
-        r14 = r14 + 1;
-    L_0x0289:
-        if (r14 != r13) goto L_0x028c;
-    L_0x028b:
-        goto L_0x0290;
-    L_0x028c:
-        r4 = r4 + 1;
-        r6 = 0;
-        goto L_0x0242;
-    L_0x0290:
-        r4 = r7.parentFragment;
-        if (r4 == 0) goto L_0x0299;
-    L_0x0294:
-        r4 = r4.getCurrentChat();
-        goto L_0x02a9;
-    L_0x0299:
-        r4 = r7.info;
-        if (r4 == 0) goto L_0x02a8;
-    L_0x029d:
-        r4 = r4.id;
-        r4 = java.lang.Integer.valueOf(r4);
-        r4 = r10.getChat(r4);
-        goto L_0x02a9;
-    L_0x02a8:
-        r4 = 0;
-    L_0x02a9:
-        if (r4 == 0) goto L_0x0380;
-    L_0x02ab:
-        r6 = r7.info;
-        if (r6 == 0) goto L_0x0380;
-    L_0x02af:
-        r6 = r6.participants;
-        if (r6 == 0) goto L_0x0380;
-    L_0x02b3:
-        r6 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r6 == 0) goto L_0x02bd;
-    L_0x02b9:
-        r6 = r4.megagroup;
-        if (r6 == 0) goto L_0x0380;
-    L_0x02bd:
-        r6 = 0;
-    L_0x02be:
-        r12 = r7.info;
-        r12 = r12.participants;
-        r12 = r12.participants;
-        r12 = r12.size();
-        if (r6 >= r12) goto L_0x0380;
-    L_0x02ca:
-        r12 = r7.info;
-        r12 = r12.participants;
-        r12 = r12.participants;
-        r12 = r12.get(r6);
-        r12 = (org.telegram.tgnet.TLRPC.ChatParticipant) r12;
-        r12 = r12.user_id;
-        r12 = java.lang.Integer.valueOf(r12);
-        r12 = r10.getUser(r12);
-        if (r12 == 0) goto L_0x037c;
-    L_0x02e2:
-        if (r3 != 0) goto L_0x02ea;
-    L_0x02e4:
-        r14 = org.telegram.messenger.UserObject.isUserSelf(r12);
-        if (r14 != 0) goto L_0x037c;
-    L_0x02ea:
-        r14 = r12.id;
-        r14 = r2.indexOfKey(r14);
-        if (r14 < 0) goto L_0x02f4;
-    L_0x02f2:
-        goto L_0x037c;
-    L_0x02f4:
-        r14 = r5.length();
-        if (r14 != 0) goto L_0x0303;
-    L_0x02fa:
-        r14 = r12.deleted;
-        if (r14 != 0) goto L_0x037c;
-    L_0x02fe:
-        r9.add(r12);
-        goto L_0x037c;
-    L_0x0303:
-        r14 = r12.username;
-        if (r14 == 0) goto L_0x0322;
-    L_0x0307:
-        r14 = r14.length();
-        if (r14 <= 0) goto L_0x0322;
-    L_0x030d:
-        r14 = r12.username;
-        r14 = r14.toLowerCase();
-        r14 = r14.startsWith(r5);
-        if (r14 == 0) goto L_0x0322;
-    L_0x0319:
-        r9.add(r12);
-        r14 = r12.id;
-        r11.put(r14, r12);
-        goto L_0x037c;
-    L_0x0322:
-        r14 = r12.first_name;
-        if (r14 == 0) goto L_0x0341;
-    L_0x0326:
-        r14 = r14.length();
-        if (r14 <= 0) goto L_0x0341;
-    L_0x032c:
-        r14 = r12.first_name;
-        r14 = r14.toLowerCase();
-        r14 = r14.startsWith(r5);
-        if (r14 == 0) goto L_0x0341;
-    L_0x0338:
-        r9.add(r12);
-        r14 = r12.id;
-        r11.put(r14, r12);
-        goto L_0x037c;
-    L_0x0341:
-        r14 = r12.last_name;
-        if (r14 == 0) goto L_0x0360;
-    L_0x0345:
-        r14 = r14.length();
-        if (r14 <= 0) goto L_0x0360;
-    L_0x034b:
-        r14 = r12.last_name;
-        r14 = r14.toLowerCase();
-        r14 = r14.startsWith(r5);
-        if (r14 == 0) goto L_0x0360;
-    L_0x0357:
-        r9.add(r12);
-        r14 = r12.id;
-        r11.put(r14, r12);
-        goto L_0x037c;
-    L_0x0360:
-        if (r1 == 0) goto L_0x037c;
-    L_0x0362:
-        r14 = r12.first_name;
-        r15 = r12.last_name;
-        r14 = org.telegram.messenger.ContactsController.formatName(r14, r15);
-        r14 = r14.toLowerCase();
-        r14 = r14.startsWith(r5);
-        if (r14 == 0) goto L_0x037c;
-    L_0x0374:
-        r9.add(r12);
-        r14 = r12.id;
-        r11.put(r14, r12);
-    L_0x037c:
-        r6 = r6 + 1;
-        goto L_0x02be;
-    L_0x0380:
-        r1 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$RtUwcbbmysCllxWaHytbPO9oFzY;
-        r1.<init>(r11, r0);
-        java.util.Collections.sort(r9, r1);
-        r0 = 0;
-        r7.searchResultHashtags = r0;
-        r7.searchResultCommands = r0;
-        r7.searchResultCommandsHelp = r0;
-        r7.searchResultCommandsUsers = r0;
-        r7.searchResultSuggestions = r0;
-        if (r4 == 0) goto L_0x03cb;
-    L_0x0395:
-        r0 = r4.megagroup;
-        if (r0 == 0) goto L_0x03cb;
-    L_0x0399:
-        r0 = r5.length();
-        if (r0 <= 0) goto L_0x03cb;
-    L_0x039f:
-        r0 = r9.size();
-        if (r0 >= r13) goto L_0x03b2;
-    L_0x03a5:
-        r0 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$_MTgLbVZU0vjX841sg9FU0IKm0g;
-        r0.<init>(r7, r9, r11);
-        r7.cancelDelayRunnable = r0;
-        r1 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1);
-        goto L_0x03b5;
-    L_0x03b2:
-        r7.showUsersResult(r9, r11, r8);
-    L_0x03b5:
-        r8 = new org.telegram.ui.Adapters.MentionsAdapter$5;
-        r0 = r8;
-        r1 = r16;
-        r2 = r4;
-        r3 = r5;
-        r4 = r9;
-        r5 = r11;
-        r6 = r10;
-        r0.<init>(r2, r3, r4, r5, r6);
-        r7.searchGlobalRunnable = r8;
-        r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0);
-        goto L_0x04e6;
-    L_0x03cb:
-        r7.showUsersResult(r9, r11, r8);
-        goto L_0x04e6;
-    L_0x03d0:
-        if (r0 != r8) goto L_0x0424;
-    L_0x03d2:
-        r0 = new java.util.ArrayList;
-        r0.<init>();
-        r1 = r9.toString();
-        r1 = r1.toLowerCase();
-        r2 = r7.searchAdapterHelper;
-        r2 = r2.getHashtags();
-        r3 = 0;
-    L_0x03e6:
-        r4 = r2.size();
-        if (r3 >= r4) goto L_0x0406;
-    L_0x03ec:
-        r4 = r2.get(r3);
-        r4 = (org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject) r4;
-        if (r4 == 0) goto L_0x0403;
-    L_0x03f4:
-        r5 = r4.hashtag;
-        if (r5 == 0) goto L_0x0403;
-    L_0x03f8:
-        r5 = r5.startsWith(r1);
-        if (r5 == 0) goto L_0x0403;
-    L_0x03fe:
-        r4 = r4.hashtag;
-        r0.add(r4);
-    L_0x0403:
-        r3 = r3 + 1;
-        goto L_0x03e6;
-    L_0x0406:
-        r7.searchResultHashtags = r0;
-        r1 = 0;
-        r7.searchResultUsernames = r1;
-        r7.searchResultUsernamesMap = r1;
-        r7.searchResultCommands = r1;
-        r7.searchResultCommandsHelp = r1;
-        r7.searchResultCommandsUsers = r1;
-        r7.searchResultSuggestions = r1;
-        r16.notifyDataSetChanged();
-        r1 = r7.delegate;
-        r0 = r0.isEmpty();
-        r0 = r0 ^ r8;
-        r1.needChangePanelVisibility(r0);
-        goto L_0x04e6;
-    L_0x0424:
-        r1 = 2;
-        if (r0 != r1) goto L_0x04b7;
-    L_0x0427:
-        r0 = new java.util.ArrayList;
-        r0.<init>();
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r2 = new java.util.ArrayList;
-        r2.<init>();
-        r3 = r9.toString();
-        r3 = r3.toLowerCase();
-        r4 = 0;
-    L_0x043f:
-        r5 = r7.botInfo;
-        r5 = r5.size();
-        if (r4 >= r5) goto L_0x049a;
-    L_0x0447:
-        r5 = r7.botInfo;
-        r5 = r5.valueAt(r4);
-        r5 = (org.telegram.tgnet.TLRPC.BotInfo) r5;
-        r6 = 0;
-    L_0x0450:
-        r9 = r5.commands;
-        r9 = r9.size();
-        if (r6 >= r9) goto L_0x0497;
-    L_0x0458:
-        r9 = r5.commands;
-        r9 = r9.get(r6);
-        r9 = (org.telegram.tgnet.TLRPC.TL_botCommand) r9;
-        if (r9 == 0) goto L_0x0494;
-    L_0x0462:
-        r11 = r9.command;
-        if (r11 == 0) goto L_0x0494;
-    L_0x0466:
-        r11 = r11.startsWith(r3);
-        if (r11 == 0) goto L_0x0494;
-    L_0x046c:
-        r11 = new java.lang.StringBuilder;
-        r11.<init>();
-        r12 = "/";
-        r11.append(r12);
-        r12 = r9.command;
-        r11.append(r12);
-        r11 = r11.toString();
-        r0.add(r11);
-        r9 = r9.description;
-        r1.add(r9);
-        r9 = r5.user_id;
-        r9 = java.lang.Integer.valueOf(r9);
-        r9 = r10.getUser(r9);
-        r2.add(r9);
-    L_0x0494:
-        r6 = r6 + 1;
-        goto L_0x0450;
-    L_0x0497:
-        r4 = r4 + 1;
-        goto L_0x043f;
-    L_0x049a:
-        r4 = 0;
-        r7.searchResultHashtags = r4;
-        r7.searchResultUsernames = r4;
-        r7.searchResultUsernamesMap = r4;
-        r7.searchResultSuggestions = r4;
-        r7.searchResultCommands = r0;
-        r7.searchResultCommandsHelp = r1;
-        r7.searchResultCommandsUsers = r2;
-        r16.notifyDataSetChanged();
-        r1 = r7.delegate;
-        r0 = r0.isEmpty();
-        r0 = r0 ^ r8;
-        r1.needChangePanelVisibility(r0);
-        goto L_0x04e6;
-    L_0x04b7:
-        r1 = 3;
-        if (r0 != r1) goto L_0x04e6;
-    L_0x04ba:
-        r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage();
-        r1 = r7.lastSearchKeyboardLanguage;
-        r1 = java.util.Arrays.equals(r0, r1);
-        if (r1 != 0) goto L_0x04cf;
-    L_0x04c6:
-        r1 = r7.currentAccount;
-        r1 = org.telegram.messenger.MediaDataController.getInstance(r1);
-        r1.fetchNewEmojiKeywords(r0);
-    L_0x04cf:
-        r7.lastSearchKeyboardLanguage = r0;
-        r0 = r7.currentAccount;
-        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);
-        r1 = r7.lastSearchKeyboardLanguage;
-        r2 = r9.toString();
-        r3 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$791x1Cqm32fnVWdshTaskYBglKQ;
-        r3.<init>(r7);
-        r4 = 0;
-        r0.getEmojiSuggestions(r1, r2, r4, r3);
-    L_0x04e6:
-        return;
+            r16 = this;
+            r7 = r16
+            r0 = r17
+            r1 = r18
+            r2 = r19
+            r3 = r20
+            java.lang.Runnable r4 = r7.cancelDelayRunnable
+            r5 = 0
+            if (r4 == 0) goto L_0x0014
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4)
+            r7.cancelDelayRunnable = r5
+        L_0x0014:
+            int r4 = r7.channelReqId
+            r6 = 0
+            r8 = 1
+            if (r4 == 0) goto L_0x0027
+            int r4 = r7.currentAccount
+            org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
+            int r9 = r7.channelReqId
+            r4.cancelRequest(r9, r8)
+            r7.channelReqId = r6
+        L_0x0027:
+            java.lang.Runnable r4 = r7.searchGlobalRunnable
+            if (r4 == 0) goto L_0x0030
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4)
+            r7.searchGlobalRunnable = r5
+        L_0x0030:
+            boolean r4 = android.text.TextUtils.isEmpty(r17)
+            if (r4 == 0) goto L_0x0041
+            r7.searchForContextBot(r5, r5)
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r7.delegate
+            r0.needChangePanelVisibility(r6)
+            r7.lastText = r5
+            return
+        L_0x0041:
+            int r4 = r17.length()
+            if (r4 <= 0) goto L_0x004a
+            int r4 = r1 + -1
+            goto L_0x004b
+        L_0x004a:
+            r4 = r1
+        L_0x004b:
+            r7.lastText = r5
+            r7.lastUsernameOnly = r3
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder
+            r9.<init>()
+            r10 = 64
+            r11 = 3
+            r12 = 32
+            if (r3 != 0) goto L_0x00de
+            boolean r13 = r7.needBotContext
+            if (r13 == 0) goto L_0x00de
+            char r13 = r0.charAt(r6)
+            if (r13 != r10) goto L_0x00de
+            int r13 = r0.indexOf(r12)
+            int r14 = r17.length()
+            java.lang.String r15 = ""
+            if (r13 <= 0) goto L_0x007b
+            java.lang.String r14 = r0.substring(r8, r13)
+            int r13 = r13 + r8
+            java.lang.String r13 = r0.substring(r13)
+            goto L_0x00a4
+        L_0x007b:
+            int r13 = r14 + -1
+            char r13 = r0.charAt(r13)
+            r10 = 116(0x74, float:1.63E-43)
+            if (r13 != r10) goto L_0x009f
+            int r10 = r14 + -2
+            char r10 = r0.charAt(r10)
+            r13 = 111(0x6f, float:1.56E-43)
+            if (r10 != r13) goto L_0x009f
+            int r14 = r14 - r11
+            char r10 = r0.charAt(r14)
+            r13 = 98
+            if (r10 != r13) goto L_0x009f
+            java.lang.String r10 = r0.substring(r8)
+            r14 = r10
+            r13 = r15
+            goto L_0x00a4
+        L_0x009f:
+            r7.searchForContextBot(r5, r5)
+            r13 = r5
+            r14 = r13
+        L_0x00a4:
+            if (r14 == 0) goto L_0x00da
+            int r10 = r14.length()
+            if (r10 < r8) goto L_0x00da
+            r10 = 1
+        L_0x00ad:
+            int r11 = r14.length()
+            if (r10 >= r11) goto L_0x00d9
+            char r11 = r14.charAt(r10)
+            r12 = 48
+            if (r11 < r12) goto L_0x00bf
+            r12 = 57
+            if (r11 <= r12) goto L_0x00d4
+        L_0x00bf:
+            r12 = 97
+            if (r11 < r12) goto L_0x00c7
+            r12 = 122(0x7a, float:1.71E-43)
+            if (r11 <= r12) goto L_0x00d4
+        L_0x00c7:
+            r12 = 65
+            if (r11 < r12) goto L_0x00cf
+            r12 = 90
+            if (r11 <= r12) goto L_0x00d4
+        L_0x00cf:
+            r12 = 95
+            if (r11 == r12) goto L_0x00d4
+            goto L_0x00da
+        L_0x00d4:
+            int r10 = r10 + 1
+            r12 = 32
+            goto L_0x00ad
+        L_0x00d9:
+            r15 = r14
+        L_0x00da:
+            r7.searchForContextBot(r15, r13)
+            goto L_0x00e1
+        L_0x00de:
+            r7.searchForContextBot(r5, r5)
+        L_0x00e1:
+            org.telegram.tgnet.TLRPC$User r10 = r7.foundContextBot
+            if (r10 == 0) goto L_0x00e6
+            return
+        L_0x00e6:
+            int r10 = r7.currentAccount
+            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+            r12 = -1
+            if (r3 == 0) goto L_0x0102
+            java.lang.String r0 = r0.substring(r8)
+            r9.append(r0)
+            r7.resultStartPosition = r6
+            int r0 = r9.length()
+            r7.resultLength = r0
+            r0 = 0
+        L_0x00ff:
+            r4 = -1
+            goto L_0x01cd
+        L_0x0102:
+            if (r4 < 0) goto L_0x01ca
+            int r13 = r17.length()
+            if (r4 < r13) goto L_0x010e
+            r5 = 64
+            goto L_0x01c5
+        L_0x010e:
+            char r13 = r0.charAt(r4)
+            r14 = 58
+            if (r4 == 0) goto L_0x012f
+            int r15 = r4 + -1
+            char r11 = r0.charAt(r15)
+            r5 = 32
+            if (r11 == r5) goto L_0x012f
+            char r5 = r0.charAt(r15)
+            r11 = 10
+            if (r5 == r11) goto L_0x012f
+            if (r13 != r14) goto L_0x012b
+            goto L_0x012f
+        L_0x012b:
+            r5 = 64
+            goto L_0x01c2
+        L_0x012f:
+            r5 = 64
+            if (r13 != r5) goto L_0x015b
+            boolean r11 = r7.needUsernames
+            if (r11 != 0) goto L_0x013d
+            boolean r11 = r7.needBotContext
+            if (r11 == 0) goto L_0x01c2
+            if (r4 != 0) goto L_0x01c2
+        L_0x013d:
+            org.telegram.tgnet.TLRPC$ChatFull r5 = r7.info
+            if (r5 != 0) goto L_0x014f
+            if (r4 == 0) goto L_0x014f
+            r7.lastText = r0
+            r7.lastPosition = r1
+            r7.messages = r2
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r7.delegate
+            r0.needChangePanelVisibility(r6)
+            return
+        L_0x014f:
+            r7.resultStartPosition = r4
+            int r0 = r9.length()
+            int r0 = r0 + r8
+            r7.resultLength = r0
+            r0 = 0
+            goto L_0x01cd
+        L_0x015b:
+            r11 = 35
+            if (r13 != r11) goto L_0x0181
+            org.telegram.ui.Adapters.SearchAdapterHelper r5 = r7.searchAdapterHelper
+            boolean r5 = r5.loadRecentHashtags()
+            if (r5 == 0) goto L_0x0175
+            r7.resultStartPosition = r4
+            int r0 = r9.length()
+            int r0 = r0 + r8
+            r7.resultLength = r0
+            r9.insert(r6, r13)
+            r0 = 1
+            goto L_0x00ff
+        L_0x0175:
+            r7.lastText = r0
+            r7.lastPosition = r1
+            r7.messages = r2
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r7.delegate
+            r0.needChangePanelVisibility(r6)
+            return
+        L_0x0181:
+            if (r4 != 0) goto L_0x0197
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$BotInfo> r11 = r7.botInfo
+            if (r11 == 0) goto L_0x0197
+            r11 = 47
+            if (r13 != r11) goto L_0x0197
+            r7.resultStartPosition = r4
+            int r0 = r9.length()
+            int r0 = r0 + r8
+            r7.resultLength = r0
+            r0 = 2
+            goto L_0x00ff
+        L_0x0197:
+            if (r13 != r14) goto L_0x01c2
+            int r11 = r9.length()
+            if (r11 <= 0) goto L_0x01c2
+            char r11 = r9.charAt(r6)
+            java.lang.String r14 = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n"
+            int r11 = r14.indexOf(r11)
+            if (r11 < 0) goto L_0x01ad
+            r11 = 1
+            goto L_0x01ae
+        L_0x01ad:
+            r11 = 0
+        L_0x01ae:
+            if (r11 == 0) goto L_0x01b6
+            int r11 = r9.length()
+            if (r11 <= r8) goto L_0x01c2
+        L_0x01b6:
+            r7.resultStartPosition = r4
+            int r0 = r9.length()
+            int r0 = r0 + r8
+            r7.resultLength = r0
+            r0 = 3
+            goto L_0x00ff
+        L_0x01c2:
+            r9.insert(r6, r13)
+        L_0x01c5:
+            int r4 = r4 + -1
+            r5 = 0
+            goto L_0x0102
+        L_0x01ca:
+            r0 = -1
+            goto L_0x00ff
+        L_0x01cd:
+            if (r0 != r12) goto L_0x01d5
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r0 = r7.delegate
+            r0.needChangePanelVisibility(r6)
+            return
+        L_0x01d5:
+            if (r0 != 0) goto L_0x03d0
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            r1 = 0
+        L_0x01dd:
+            r5 = 100
+            int r11 = r19.size()
+            int r5 = java.lang.Math.min(r5, r11)
+            if (r1 >= r5) goto L_0x0207
+            java.lang.Object r5 = r2.get(r1)
+            org.telegram.messenger.MessageObject r5 = (org.telegram.messenger.MessageObject) r5
+            org.telegram.tgnet.TLRPC$Message r5 = r5.messageOwner
+            int r5 = r5.from_id
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r5)
+            boolean r11 = r0.contains(r11)
+            if (r11 != 0) goto L_0x0204
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            r0.add(r5)
+        L_0x0204:
+            int r1 = r1 + 1
+            goto L_0x01dd
+        L_0x0207:
+            java.lang.String r1 = r9.toString()
+            java.lang.String r5 = r1.toLowerCase()
+            r1 = 32
+            int r1 = r5.indexOf(r1)
+            if (r1 < 0) goto L_0x0219
+            r1 = 1
+            goto L_0x021a
+        L_0x0219:
+            r1 = 0
+        L_0x021a:
+            java.util.ArrayList r9 = new java.util.ArrayList
+            r9.<init>()
+            android.util.SparseArray r2 = new android.util.SparseArray
+            r2.<init>()
+            android.util.SparseArray r11 = new android.util.SparseArray
+            r11.<init>()
+            int r12 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_topPeer> r12 = r12.inlineBots
+            r13 = 5
+            if (r3 != 0) goto L_0x0290
+            boolean r14 = r7.needBotContext
+            if (r14 == 0) goto L_0x0290
+            if (r4 != 0) goto L_0x0290
+            boolean r4 = r12.isEmpty()
+            if (r4 != 0) goto L_0x0290
+            r4 = 0
+            r14 = 0
+        L_0x0242:
+            int r15 = r12.size()
+            if (r4 >= r15) goto L_0x0290
+            java.lang.Object r15 = r12.get(r4)
+            org.telegram.tgnet.TLRPC$TL_topPeer r15 = (org.telegram.tgnet.TLRPC.TL_topPeer) r15
+            org.telegram.tgnet.TLRPC$Peer r15 = r15.peer
+            int r15 = r15.user_id
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
+            org.telegram.tgnet.TLRPC$User r15 = r10.getUser(r15)
+            if (r15 != 0) goto L_0x025d
+            goto L_0x028c
+        L_0x025d:
+            java.lang.String r6 = r15.username
+            if (r6 == 0) goto L_0x0289
+            int r6 = r6.length()
+            if (r6 <= 0) goto L_0x0289
+            int r6 = r5.length()
+            if (r6 <= 0) goto L_0x0279
+            java.lang.String r6 = r15.username
+            java.lang.String r6 = r6.toLowerCase()
+            boolean r6 = r6.startsWith(r5)
+            if (r6 != 0) goto L_0x027f
+        L_0x0279:
+            int r6 = r5.length()
+            if (r6 != 0) goto L_0x0289
+        L_0x027f:
+            r9.add(r15)
+            int r6 = r15.id
+            r2.put(r6, r15)
+            int r14 = r14 + 1
+        L_0x0289:
+            if (r14 != r13) goto L_0x028c
+            goto L_0x0290
+        L_0x028c:
+            int r4 = r4 + 1
+            r6 = 0
+            goto L_0x0242
+        L_0x0290:
+            org.telegram.ui.ChatActivity r4 = r7.parentFragment
+            if (r4 == 0) goto L_0x0299
+            org.telegram.tgnet.TLRPC$Chat r4 = r4.getCurrentChat()
+            goto L_0x02a9
+        L_0x0299:
+            org.telegram.tgnet.TLRPC$ChatFull r4 = r7.info
+            if (r4 == 0) goto L_0x02a8
+            int r4 = r4.id
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            org.telegram.tgnet.TLRPC$Chat r4 = r10.getChat(r4)
+            goto L_0x02a9
+        L_0x02a8:
+            r4 = 0
+        L_0x02a9:
+            if (r4 == 0) goto L_0x0380
+            org.telegram.tgnet.TLRPC$ChatFull r6 = r7.info
+            if (r6 == 0) goto L_0x0380
+            org.telegram.tgnet.TLRPC$ChatParticipants r6 = r6.participants
+            if (r6 == 0) goto L_0x0380
+            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r4)
+            if (r6 == 0) goto L_0x02bd
+            boolean r6 = r4.megagroup
+            if (r6 == 0) goto L_0x0380
+        L_0x02bd:
+            r6 = 0
+        L_0x02be:
+            org.telegram.tgnet.TLRPC$ChatFull r12 = r7.info
+            org.telegram.tgnet.TLRPC$ChatParticipants r12 = r12.participants
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r12 = r12.participants
+            int r12 = r12.size()
+            if (r6 >= r12) goto L_0x0380
+            org.telegram.tgnet.TLRPC$ChatFull r12 = r7.info
+            org.telegram.tgnet.TLRPC$ChatParticipants r12 = r12.participants
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r12 = r12.participants
+            java.lang.Object r12 = r12.get(r6)
+            org.telegram.tgnet.TLRPC$ChatParticipant r12 = (org.telegram.tgnet.TLRPC.ChatParticipant) r12
+            int r12 = r12.user_id
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
+            org.telegram.tgnet.TLRPC$User r12 = r10.getUser(r12)
+            if (r12 == 0) goto L_0x037c
+            if (r3 != 0) goto L_0x02ea
+            boolean r14 = org.telegram.messenger.UserObject.isUserSelf(r12)
+            if (r14 != 0) goto L_0x037c
+        L_0x02ea:
+            int r14 = r12.id
+            int r14 = r2.indexOfKey(r14)
+            if (r14 < 0) goto L_0x02f4
+            goto L_0x037c
+        L_0x02f4:
+            int r14 = r5.length()
+            if (r14 != 0) goto L_0x0303
+            boolean r14 = r12.deleted
+            if (r14 != 0) goto L_0x037c
+            r9.add(r12)
+            goto L_0x037c
+        L_0x0303:
+            java.lang.String r14 = r12.username
+            if (r14 == 0) goto L_0x0322
+            int r14 = r14.length()
+            if (r14 <= 0) goto L_0x0322
+            java.lang.String r14 = r12.username
+            java.lang.String r14 = r14.toLowerCase()
+            boolean r14 = r14.startsWith(r5)
+            if (r14 == 0) goto L_0x0322
+            r9.add(r12)
+            int r14 = r12.id
+            r11.put(r14, r12)
+            goto L_0x037c
+        L_0x0322:
+            java.lang.String r14 = r12.first_name
+            if (r14 == 0) goto L_0x0341
+            int r14 = r14.length()
+            if (r14 <= 0) goto L_0x0341
+            java.lang.String r14 = r12.first_name
+            java.lang.String r14 = r14.toLowerCase()
+            boolean r14 = r14.startsWith(r5)
+            if (r14 == 0) goto L_0x0341
+            r9.add(r12)
+            int r14 = r12.id
+            r11.put(r14, r12)
+            goto L_0x037c
+        L_0x0341:
+            java.lang.String r14 = r12.last_name
+            if (r14 == 0) goto L_0x0360
+            int r14 = r14.length()
+            if (r14 <= 0) goto L_0x0360
+            java.lang.String r14 = r12.last_name
+            java.lang.String r14 = r14.toLowerCase()
+            boolean r14 = r14.startsWith(r5)
+            if (r14 == 0) goto L_0x0360
+            r9.add(r12)
+            int r14 = r12.id
+            r11.put(r14, r12)
+            goto L_0x037c
+        L_0x0360:
+            if (r1 == 0) goto L_0x037c
+            java.lang.String r14 = r12.first_name
+            java.lang.String r15 = r12.last_name
+            java.lang.String r14 = org.telegram.messenger.ContactsController.formatName(r14, r15)
+            java.lang.String r14 = r14.toLowerCase()
+            boolean r14 = r14.startsWith(r5)
+            if (r14 == 0) goto L_0x037c
+            r9.add(r12)
+            int r14 = r12.id
+            r11.put(r14, r12)
+        L_0x037c:
+            int r6 = r6 + 1
+            goto L_0x02be
+        L_0x0380:
+            org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$RtUwcbbmysCllxWaHytbPO9oFzY r1 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$RtUwcbbmysCllxWaHytbPO9oFzY
+            r1.<init>(r11, r0)
+            java.util.Collections.sort(r9, r1)
+            r0 = 0
+            r7.searchResultHashtags = r0
+            r7.searchResultCommands = r0
+            r7.searchResultCommandsHelp = r0
+            r7.searchResultCommandsUsers = r0
+            r7.searchResultSuggestions = r0
+            if (r4 == 0) goto L_0x03cb
+            boolean r0 = r4.megagroup
+            if (r0 == 0) goto L_0x03cb
+            int r0 = r5.length()
+            if (r0 <= 0) goto L_0x03cb
+            int r0 = r9.size()
+            if (r0 >= r13) goto L_0x03b2
+            org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$_MTgLbVZU0vjX841sg9FU0IKm0g r0 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$_MTgLbVZU0vjX841sg9FU0IKm0g
+            r0.<init>(r9, r11)
+            r7.cancelDelayRunnable = r0
+            r1 = 1000(0x3e8, double:4.94E-321)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
+            goto L_0x03b5
+        L_0x03b2:
+            r7.showUsersResult(r9, r11, r8)
+        L_0x03b5:
+            org.telegram.ui.Adapters.MentionsAdapter$5 r8 = new org.telegram.ui.Adapters.MentionsAdapter$5
+            r0 = r8
+            r1 = r16
+            r2 = r4
+            r3 = r5
+            r4 = r9
+            r5 = r11
+            r6 = r10
+            r0.<init>(r2, r3, r4, r5, r6)
+            r7.searchGlobalRunnable = r8
+            r0 = 200(0xc8, double:9.9E-322)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0)
+            goto L_0x04e6
+        L_0x03cb:
+            r7.showUsersResult(r9, r11, r8)
+            goto L_0x04e6
+        L_0x03d0:
+            if (r0 != r8) goto L_0x0424
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            java.lang.String r1 = r9.toString()
+            java.lang.String r1 = r1.toLowerCase()
+            org.telegram.ui.Adapters.SearchAdapterHelper r2 = r7.searchAdapterHelper
+            java.util.ArrayList r2 = r2.getHashtags()
+            r3 = 0
+        L_0x03e6:
+            int r4 = r2.size()
+            if (r3 >= r4) goto L_0x0406
+            java.lang.Object r4 = r2.get(r3)
+            org.telegram.ui.Adapters.SearchAdapterHelper$HashtagObject r4 = (org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject) r4
+            if (r4 == 0) goto L_0x0403
+            java.lang.String r5 = r4.hashtag
+            if (r5 == 0) goto L_0x0403
+            boolean r5 = r5.startsWith(r1)
+            if (r5 == 0) goto L_0x0403
+            java.lang.String r4 = r4.hashtag
+            r0.add(r4)
+        L_0x0403:
+            int r3 = r3 + 1
+            goto L_0x03e6
+        L_0x0406:
+            r7.searchResultHashtags = r0
+            r1 = 0
+            r7.searchResultUsernames = r1
+            r7.searchResultUsernamesMap = r1
+            r7.searchResultCommands = r1
+            r7.searchResultCommandsHelp = r1
+            r7.searchResultCommandsUsers = r1
+            r7.searchResultSuggestions = r1
+            r16.notifyDataSetChanged()
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r1 = r7.delegate
+            boolean r0 = r0.isEmpty()
+            r0 = r0 ^ r8
+            r1.needChangePanelVisibility(r0)
+            goto L_0x04e6
+        L_0x0424:
+            r1 = 2
+            if (r0 != r1) goto L_0x04b7
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            java.util.ArrayList r2 = new java.util.ArrayList
+            r2.<init>()
+            java.lang.String r3 = r9.toString()
+            java.lang.String r3 = r3.toLowerCase()
+            r4 = 0
+        L_0x043f:
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$BotInfo> r5 = r7.botInfo
+            int r5 = r5.size()
+            if (r4 >= r5) goto L_0x049a
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$BotInfo> r5 = r7.botInfo
+            java.lang.Object r5 = r5.valueAt(r4)
+            org.telegram.tgnet.TLRPC$BotInfo r5 = (org.telegram.tgnet.TLRPC.BotInfo) r5
+            r6 = 0
+        L_0x0450:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_botCommand> r9 = r5.commands
+            int r9 = r9.size()
+            if (r6 >= r9) goto L_0x0497
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_botCommand> r9 = r5.commands
+            java.lang.Object r9 = r9.get(r6)
+            org.telegram.tgnet.TLRPC$TL_botCommand r9 = (org.telegram.tgnet.TLRPC.TL_botCommand) r9
+            if (r9 == 0) goto L_0x0494
+            java.lang.String r11 = r9.command
+            if (r11 == 0) goto L_0x0494
+            boolean r11 = r11.startsWith(r3)
+            if (r11 == 0) goto L_0x0494
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = "/"
+            r11.append(r12)
+            java.lang.String r12 = r9.command
+            r11.append(r12)
+            java.lang.String r11 = r11.toString()
+            r0.add(r11)
+            java.lang.String r9 = r9.description
+            r1.add(r9)
+            int r9 = r5.user_id
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            org.telegram.tgnet.TLRPC$User r9 = r10.getUser(r9)
+            r2.add(r9)
+        L_0x0494:
+            int r6 = r6 + 1
+            goto L_0x0450
+        L_0x0497:
+            int r4 = r4 + 1
+            goto L_0x043f
+        L_0x049a:
+            r4 = 0
+            r7.searchResultHashtags = r4
+            r7.searchResultUsernames = r4
+            r7.searchResultUsernamesMap = r4
+            r7.searchResultSuggestions = r4
+            r7.searchResultCommands = r0
+            r7.searchResultCommandsHelp = r1
+            r7.searchResultCommandsUsers = r2
+            r16.notifyDataSetChanged()
+            org.telegram.ui.Adapters.MentionsAdapter$MentionsAdapterDelegate r1 = r7.delegate
+            boolean r0 = r0.isEmpty()
+            r0 = r0 ^ r8
+            r1.needChangePanelVisibility(r0)
+            goto L_0x04e6
+        L_0x04b7:
+            r1 = 3
+            if (r0 != r1) goto L_0x04e6
+            java.lang.String[] r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
+            java.lang.String[] r1 = r7.lastSearchKeyboardLanguage
+            boolean r1 = java.util.Arrays.equals(r0, r1)
+            if (r1 != 0) goto L_0x04cf
+            int r1 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
+            r1.fetchNewEmojiKeywords(r0)
+        L_0x04cf:
+            r7.lastSearchKeyboardLanguage = r0
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            java.lang.String[] r1 = r7.lastSearchKeyboardLanguage
+            java.lang.String r2 = r9.toString()
+            org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$791x1Cqm32fnVWdshTaskYBglKQ r3 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$791x1Cqm32fnVWdshTaskYBglKQ
+            r3.<init>()
+            r4 = 0
+            r0.getEmojiSuggestions(r1, r2, r4, r3)
+        L_0x04e6:
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchUsernameOrHashtag(java.lang.String, int, java.util.ArrayList, boolean):void");
     }
 
-    static /* synthetic */ int lambda$searchUsernameOrHashtag$5(SparseArray sparseArray, ArrayList arrayList, User user, User user2) {
+    static /* synthetic */ int lambda$searchUsernameOrHashtag$5(SparseArray sparseArray, ArrayList arrayList, TLRPC.User user, TLRPC.User user2) {
         if (sparseArray.indexOfKey(user.id) >= 0 && sparseArray.indexOfKey(user2.id) >= 0) {
             return 0;
         }
         if (sparseArray.indexOfKey(user.id) >= 0) {
             return -1;
         }
-        int i = 1;
         if (sparseArray.indexOfKey(user2.id) >= 0) {
             return 1;
         }
         int indexOf = arrayList.indexOf(Integer.valueOf(user.id));
         int indexOf2 = arrayList.indexOf(Integer.valueOf(user2.id));
-        if (indexOf != -1 && indexOf2 != -1) {
-            if (indexOf < indexOf2) {
-                i = -1;
-            } else if (indexOf == indexOf2) {
-                i = 0;
+        if (indexOf == -1 || indexOf2 == -1) {
+            if (indexOf != -1 && indexOf2 == -1) {
+                return -1;
             }
-            return i;
-        } else if (indexOf != -1 && indexOf2 == -1) {
+            if (indexOf != -1 || indexOf2 == -1) {
+                return 0;
+            }
+            return 1;
+        } else if (indexOf < indexOf2) {
             return -1;
         } else {
-            if (indexOf != -1 || indexOf2 == -1) {
+            if (indexOf == indexOf2) {
                 return 0;
             }
             return 1;
@@ -1560,12 +1487,12 @@ public class MentionsAdapter extends SelectionAdapter {
         this.searchResultCommandsUsers = null;
         notifyDataSetChanged();
         MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
-        ArrayList arrayList2 = this.searchResultSuggestions;
-        boolean z = (arrayList2 == null || arrayList2.isEmpty()) ? false : true;
-        mentionsAdapterDelegate.needChangePanelVisibility(z);
+        ArrayList<MediaDataController.KeywordResult> arrayList2 = this.searchResultSuggestions;
+        mentionsAdapterDelegate.needChangePanelVisibility(arrayList2 != null && !arrayList2.isEmpty());
     }
 
-    private void showUsersResult(ArrayList<User> arrayList, SparseArray<User> sparseArray, boolean z) {
+    /* access modifiers changed from: private */
+    public void showUsersResult(ArrayList<TLRPC.User> arrayList, SparseArray<TLRPC.User> sparseArray, boolean z) {
         this.searchResultUsernames = arrayList;
         this.searchResultUsernamesMap = sparseArray;
         Runnable runnable = this.cancelDelayRunnable;
@@ -1575,7 +1502,7 @@ public class MentionsAdapter extends SelectionAdapter {
         }
         if (z) {
             notifyDataSetChanged();
-            this.delegate.needChangePanelVisibility(this.searchResultUsernames.isEmpty() ^ 1);
+            this.delegate.needChangePanelVisibility(!this.searchResultUsernames.isEmpty());
         }
     }
 
@@ -1587,7 +1514,7 @@ public class MentionsAdapter extends SelectionAdapter {
         return this.resultLength;
     }
 
-    public ArrayList<BotInlineResult> getSearchResultBotContext() {
+    public ArrayList<TLRPC.BotInlineResult> getSearchResultBotContext() {
         return this.searchResultBotContext;
     }
 
@@ -1596,7 +1523,7 @@ public class MentionsAdapter extends SelectionAdapter {
         if (this.foundContextBot != null && !this.inlineMediaEnabled) {
             return 1;
         }
-        ArrayList arrayList = this.searchResultBotContext;
+        ArrayList<TLRPC.BotInlineResult> arrayList = this.searchResultBotContext;
         if (arrayList != null) {
             int size = arrayList.size();
             if (this.searchResultBotContextSwitch == null) {
@@ -1604,21 +1531,21 @@ public class MentionsAdapter extends SelectionAdapter {
             }
             return size + i;
         }
-        arrayList = this.searchResultUsernames;
-        if (arrayList != null) {
-            return arrayList.size();
+        ArrayList<TLRPC.User> arrayList2 = this.searchResultUsernames;
+        if (arrayList2 != null) {
+            return arrayList2.size();
         }
-        arrayList = this.searchResultHashtags;
-        if (arrayList != null) {
-            return arrayList.size();
+        ArrayList<String> arrayList3 = this.searchResultHashtags;
+        if (arrayList3 != null) {
+            return arrayList3.size();
         }
-        arrayList = this.searchResultCommands;
-        if (arrayList != null) {
-            return arrayList.size();
+        ArrayList<String> arrayList4 = this.searchResultCommands;
+        if (arrayList4 != null) {
+            return arrayList4.size();
         }
-        arrayList = this.searchResultSuggestions;
-        if (arrayList != null) {
-            return arrayList.size();
+        ArrayList<MediaDataController.KeywordResult> arrayList5 = this.searchResultSuggestions;
+        if (arrayList5 != null) {
+            return arrayList5.size();
         }
         return 0;
     }
@@ -1629,9 +1556,8 @@ public class MentionsAdapter extends SelectionAdapter {
         }
         if (this.searchResultBotContext != null) {
             return (i != 0 || this.searchResultBotContextSwitch == null) ? 1 : 2;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     public void addHashtagsFromMessage(CharSequence charSequence) {
@@ -1644,7 +1570,7 @@ public class MentionsAdapter extends SelectionAdapter {
 
     public Object getItem(int i) {
         if (this.searchResultBotContext != null) {
-            TL_inlineBotSwitchPM tL_inlineBotSwitchPM = this.searchResultBotContextSwitch;
+            TLRPC.TL_inlineBotSwitchPM tL_inlineBotSwitchPM = this.searchResultBotContextSwitch;
             if (tL_inlineBotSwitchPM != null) {
                 if (i == 0) {
                     return tL_inlineBotSwitchPM;
@@ -1656,32 +1582,32 @@ public class MentionsAdapter extends SelectionAdapter {
             }
             return this.searchResultBotContext.get(i);
         }
-        ArrayList arrayList = this.searchResultUsernames;
+        ArrayList<TLRPC.User> arrayList = this.searchResultUsernames;
         if (arrayList == null) {
-            arrayList = this.searchResultHashtags;
-            if (arrayList == null) {
-                arrayList = this.searchResultSuggestions;
-                if (arrayList == null) {
-                    arrayList = this.searchResultCommands;
-                    if (arrayList == null || i < 0 || i >= arrayList.size()) {
+            ArrayList<String> arrayList2 = this.searchResultHashtags;
+            if (arrayList2 == null) {
+                ArrayList<MediaDataController.KeywordResult> arrayList3 = this.searchResultSuggestions;
+                if (arrayList3 == null) {
+                    ArrayList<String> arrayList4 = this.searchResultCommands;
+                    if (arrayList4 == null || i < 0 || i >= arrayList4.size()) {
                         return null;
                     }
-                    if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TL_channelFull))) {
+                    if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TLRPC.TL_channelFull))) {
                         return this.searchResultCommands.get(i);
                     }
                     if (this.searchResultCommandsUsers.get(i) != null) {
                         Object[] objArr = new Object[2];
                         objArr[0] = this.searchResultCommands.get(i);
-                        objArr[1] = this.searchResultCommandsUsers.get(i) != null ? ((User) this.searchResultCommandsUsers.get(i)).username : "";
+                        objArr[1] = this.searchResultCommandsUsers.get(i) != null ? this.searchResultCommandsUsers.get(i).username : "";
                         return String.format("%s@%s", objArr);
                     }
                     return String.format("%s", new Object[]{this.searchResultCommands.get(i)});
-                } else if (i < 0 || i >= arrayList.size()) {
+                } else if (i < 0 || i >= arrayList3.size()) {
                     return null;
                 } else {
                     return this.searchResultSuggestions.get(i);
                 }
-            } else if (i < 0 || i >= arrayList.size()) {
+            } else if (i < 0 || i >= arrayList2.size()) {
                 return null;
             } else {
                 return this.searchResultHashtags.get(i);
@@ -1706,14 +1632,14 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public boolean isBannedInline() {
-        return (this.foundContextBot == null || this.inlineMediaEnabled) ? false : true;
+        return this.foundContextBot != null && !this.inlineMediaEnabled;
     }
 
     public boolean isMediaLayout() {
         return this.contextMedia;
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         return this.foundContextBot == null || this.inlineMediaEnabled;
     }
 
@@ -1721,97 +1647,131 @@ public class MentionsAdapter extends SelectionAdapter {
         this.delegate.onContextClick(contextLinkCell.getResult());
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View mentionCell;
-        if (i == 0) {
-            mentionCell = new MentionCell(this.mContext);
-            mentionCell.setIsDarkTheme(this.isDarkTheme);
-        } else if (i == 1) {
-            mentionCell = new ContextLinkCell(this.mContext);
-            mentionCell.setDelegate(new -$$Lambda$MentionsAdapter$VoCNDYNNW-mhCQ-lScxh9-TCNkI(this));
-        } else if (i != 2) {
-            mentionCell = new TextView(this.mContext);
-            mentionCell.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            mentionCell.setTextSize(1, 14.0f);
-            mentionCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-        } else {
-            mentionCell = new BotSwitchCell(this.mContext);
-        }
-        return new Holder(mentionCell);
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: org.telegram.ui.Cells.MentionCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v3, resolved type: org.telegram.ui.Cells.ContextLinkCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v6, resolved type: org.telegram.ui.Cells.MentionCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v7, resolved type: org.telegram.ui.Cells.MentionCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.ui.Cells.BotSwitchCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v9, resolved type: android.widget.TextView} */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
+        /*
+            r4 = this;
+            if (r6 == 0) goto L_0x004c
+            r5 = 1
+            if (r6 == r5) goto L_0x003c
+            r0 = 2
+            if (r6 == r0) goto L_0x0034
+            android.widget.TextView r6 = new android.widget.TextView
+            android.content.Context r0 = r4.mContext
+            r6.<init>(r0)
+            r0 = 1090519040(0x41000000, float:8.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r6.setPadding(r1, r2, r3, r0)
+            r0 = 1096810496(0x41600000, float:14.0)
+            r6.setTextSize(r5, r0)
+            java.lang.String r5 = "windowBackgroundWhiteGrayText2"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r6.setTextColor(r5)
+            goto L_0x0058
+        L_0x0034:
+            org.telegram.ui.Cells.BotSwitchCell r6 = new org.telegram.ui.Cells.BotSwitchCell
+            android.content.Context r5 = r4.mContext
+            r6.<init>(r5)
+            goto L_0x0058
+        L_0x003c:
+            org.telegram.ui.Cells.ContextLinkCell r6 = new org.telegram.ui.Cells.ContextLinkCell
+            android.content.Context r5 = r4.mContext
+            r6.<init>(r5)
+            org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$VoCNDYNNW-mhCQ-lScxh9-TCNkI r5 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$VoCNDYNNW-mhCQ-lScxh9-TCNkI
+            r5.<init>()
+            r6.setDelegate(r5)
+            goto L_0x0058
+        L_0x004c:
+            org.telegram.ui.Cells.MentionCell r6 = new org.telegram.ui.Cells.MentionCell
+            android.content.Context r5 = r4.mContext
+            r6.<init>(r5)
+            boolean r5 = r4.isDarkTheme
+            r6.setIsDarkTheme(r5)
+        L_0x0058:
+            org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
+            r5.<init>(r6)
+            return r5
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        TLRPC.TL_chatBannedRights tL_chatBannedRights;
         boolean z = false;
         if (viewHolder.getItemViewType() == 3) {
             TextView textView = (TextView) viewHolder.itemView;
-            Chat currentChat = this.parentFragment.getCurrentChat();
-            if (currentChat != null) {
-                if (!ChatObject.hasAdminRights(currentChat)) {
-                    TL_chatBannedRights tL_chatBannedRights = currentChat.default_banned_rights;
-                    if (tL_chatBannedRights != null && tL_chatBannedRights.send_inline) {
-                        textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
-                        return;
-                    }
-                }
-                if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                    textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
-                } else {
-                    textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
-                }
+            TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
+            if (currentChat == null) {
+                return;
+            }
+            if (!ChatObject.hasAdminRights(currentChat) && (tL_chatBannedRights = currentChat.default_banned_rights) != null && tL_chatBannedRights.send_inline) {
+                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
+            } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
+            } else {
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
-            Object obj = this.searchResultBotContextSwitch != null ? 1 : null;
+            boolean z2 = this.searchResultBotContextSwitch != null;
             if (viewHolder.getItemViewType() != 2) {
-                if (obj != null) {
+                if (z2) {
                     i--;
                 }
                 ContextLinkCell contextLinkCell = (ContextLinkCell) viewHolder.itemView;
-                BotInlineResult botInlineResult = (BotInlineResult) this.searchResultBotContext.get(i);
-                boolean z2 = this.contextMedia;
-                boolean z3 = i != this.searchResultBotContext.size() - 1;
-                if (obj != null && i == 0) {
+                TLRPC.BotInlineResult botInlineResult = this.searchResultBotContext.get(i);
+                boolean z3 = this.contextMedia;
+                boolean z4 = i != this.searchResultBotContext.size() - 1;
+                if (z2 && i == 0) {
                     z = true;
                 }
-                contextLinkCell.setLink(botInlineResult, z2, z3, z);
-            } else if (obj != null) {
+                contextLinkCell.setLink(botInlineResult, z3, z4, z);
+            } else if (z2) {
                 ((BotSwitchCell) viewHolder.itemView).setText(this.searchResultBotContextSwitch.text);
             }
         } else {
-            ArrayList arrayList = this.searchResultUsernames;
+            ArrayList<TLRPC.User> arrayList = this.searchResultUsernames;
             if (arrayList != null) {
-                ((MentionCell) viewHolder.itemView).setUser((User) arrayList.get(i));
+                ((MentionCell) viewHolder.itemView).setUser(arrayList.get(i));
                 return;
             }
-            arrayList = this.searchResultHashtags;
-            if (arrayList != null) {
-                ((MentionCell) viewHolder.itemView).setText((String) arrayList.get(i));
+            ArrayList<String> arrayList2 = this.searchResultHashtags;
+            if (arrayList2 != null) {
+                ((MentionCell) viewHolder.itemView).setText(arrayList2.get(i));
                 return;
             }
-            arrayList = this.searchResultSuggestions;
-            if (arrayList != null) {
-                ((MentionCell) viewHolder.itemView).setEmojiSuggestion((KeywordResult) arrayList.get(i));
+            ArrayList<MediaDataController.KeywordResult> arrayList3 = this.searchResultSuggestions;
+            if (arrayList3 != null) {
+                ((MentionCell) viewHolder.itemView).setEmojiSuggestion(arrayList3.get(i));
                 return;
             }
-            arrayList = this.searchResultCommands;
-            if (arrayList != null) {
+            ArrayList<String> arrayList4 = this.searchResultCommands;
+            if (arrayList4 != null) {
                 MentionCell mentionCell = (MentionCell) viewHolder.itemView;
-                String str = (String) arrayList.get(i);
-                String str2 = (String) this.searchResultCommandsHelp.get(i);
-                ArrayList arrayList2 = this.searchResultCommandsUsers;
-                mentionCell.setBotCommand(str, str2, arrayList2 != null ? (User) arrayList2.get(i) : null);
+                String str = arrayList4.get(i);
+                String str2 = this.searchResultCommandsHelp.get(i);
+                ArrayList<TLRPC.User> arrayList5 = this.searchResultCommandsUsers;
+                mentionCell.setBotCommand(str, str2, arrayList5 != null ? arrayList5.get(i) : null);
             }
         }
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        if (i == 2) {
-            User user = this.foundContextBot;
-            if (user != null && user.bot_inline_geo) {
-                if (iArr.length <= 0 || iArr[0] != 0) {
-                    onLocationUnavailable();
-                } else {
-                    this.locationProvider.start();
-                }
+        TLRPC.User user;
+        if (i == 2 && (user = this.foundContextBot) != null && user.bot_inline_geo) {
+            if (iArr.length <= 0 || iArr[0] != 0) {
+                onLocationUnavailable();
+            } else {
+                this.locationProvider.start();
             }
         }
     }

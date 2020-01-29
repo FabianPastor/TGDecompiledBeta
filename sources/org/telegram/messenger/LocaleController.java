@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -20,28 +19,14 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.TimeZone;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.LangPackString;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_langPackDifference;
-import org.telegram.tgnet.TLRPC.TL_langPackLanguage;
-import org.telegram.tgnet.TLRPC.TL_langPackString;
-import org.telegram.tgnet.TLRPC.TL_langPackStringDeleted;
-import org.telegram.tgnet.TLRPC.TL_langPackStringPluralized;
-import org.telegram.tgnet.TLRPC.TL_langpack_getDifference;
-import org.telegram.tgnet.TLRPC.TL_langpack_getLangPack;
-import org.telegram.tgnet.TLRPC.TL_langpack_getLanguages;
-import org.telegram.tgnet.TLRPC.TL_userEmpty;
-import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
-import org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
-import org.telegram.tgnet.TLRPC.TL_userStatusRecently;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.UserStatus;
-import org.telegram.tgnet.TLRPC.Vector;
+import org.telegram.tgnet.TLRPC;
 
 public class LocaleController {
     private static volatile LocaleController Instance = null;
@@ -55,7 +40,7 @@ public class LocaleController {
     public static boolean isRTL = false;
     public static int nameDisplayOrder = 1;
     private static Boolean useImperialSystemType;
-    private HashMap<String, PluralRules> allRules = new HashMap();
+    private HashMap<String, PluralRules> allRules = new HashMap<>();
     private boolean changingConfiguration;
     public FastDateFormat chatDate;
     public FastDateFormat chatFullDate;
@@ -79,7 +64,7 @@ public class LocaleController {
     public ArrayList<LocaleInfo> languages;
     public HashMap<String, LocaleInfo> languagesDict;
     private boolean loadingRemoteLanguages;
-    private HashMap<String, String> localeValues = new HashMap();
+    private HashMap<String, String> localeValues = new HashMap<>();
     private ArrayList<LocaleInfo> otherLanguages;
     private boolean reloadLastFile;
     public ArrayList<LocaleInfo> remoteLanguages;
@@ -88,6 +73,130 @@ public class LocaleController {
     private Locale systemDefaultLocale;
     private HashMap<String, String> translitChars;
     public ArrayList<LocaleInfo> unofficialLanguages;
+
+    public static abstract class PluralRules {
+        /* access modifiers changed from: package-private */
+        public abstract int quantityForNumber(int i);
+    }
+
+    public static class PluralRules_Breton extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 0) {
+                return 1;
+            }
+            if (i == 1) {
+                return 2;
+            }
+            if (i == 2) {
+                return 4;
+            }
+            if (i == 3) {
+                return 8;
+            }
+            return i == 6 ? 16 : 0;
+        }
+    }
+
+    public static class PluralRules_Czech extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 1) {
+                return 2;
+            }
+            return (i < 2 || i > 4) ? 0 : 8;
+        }
+    }
+
+    public static class PluralRules_French extends PluralRules {
+        public int quantityForNumber(int i) {
+            return (i < 0 || i >= 2) ? 0 : 2;
+        }
+    }
+
+    public static class PluralRules_Langi extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 0) {
+                return 1;
+            }
+            return (i <= 0 || i >= 2) ? 0 : 2;
+        }
+    }
+
+    public static class PluralRules_None extends PluralRules {
+        public int quantityForNumber(int i) {
+            return 0;
+        }
+    }
+
+    public static class PluralRules_One extends PluralRules {
+        public int quantityForNumber(int i) {
+            return i == 1 ? 2 : 0;
+        }
+    }
+
+    public static class PluralRules_Tachelhit extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i < 0 || i > 1) {
+                return (i < 2 || i > 10) ? 0 : 8;
+            }
+            return 2;
+        }
+    }
+
+    public static class PluralRules_Two extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 1) {
+                return 2;
+            }
+            return i == 2 ? 4 : 0;
+        }
+    }
+
+    public static class PluralRules_Welsh extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 0) {
+                return 1;
+            }
+            if (i == 1) {
+                return 2;
+            }
+            if (i == 2) {
+                return 4;
+            }
+            if (i == 3) {
+                return 8;
+            }
+            return i == 6 ? 16 : 0;
+        }
+    }
+
+    public static class PluralRules_Zero extends PluralRules {
+        public int quantityForNumber(int i) {
+            return (i == 0 || i == 1) ? 2 : 0;
+        }
+    }
+
+    private String stringForQuantity(int i) {
+        return i != 1 ? i != 2 ? i != 4 ? i != 8 ? i != 16 ? "other" : "many" : "few" : "two" : "one" : "zero";
+    }
+
+    private class TimeZoneChangedReceiver extends BroadcastReceiver {
+        private TimeZoneChangedReceiver() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            ApplicationLoader.applicationHandler.post(new Runnable() {
+                public final void run() {
+                    LocaleController.TimeZoneChangedReceiver.this.lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver();
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
+            if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
+                LocaleController.getInstance().recreateFormatters();
+            }
+        }
+    }
 
     public static class LocaleInfo {
         public String baseLangCode;
@@ -108,28 +217,7 @@ public class LocaleController {
                 str = "";
             }
             boolean isEmpty = TextUtils.isEmpty(this.pluralLangCode);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(this.name);
-            String str2 = "|";
-            stringBuilder.append(str2);
-            stringBuilder.append(this.nameEnglish);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.shortName);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.pathToFile);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.version);
-            stringBuilder.append(str2);
-            stringBuilder.append(str);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.pluralLangCode);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.isRtl);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.baseVersion);
-            stringBuilder.append(str2);
-            stringBuilder.append(this.serverIndex);
-            return stringBuilder.toString();
+            return this.name + "|" + this.nameEnglish + "|" + this.shortName + "|" + this.pathToFile + "|" + this.version + "|" + str + "|" + this.pluralLangCode + "|" + (this.isRtl ? 1 : 0) + "|" + this.baseVersion + "|" + this.serverIndex;
         }
 
         public static LocaleInfo createWithString(String str) {
@@ -171,25 +259,16 @@ public class LocaleController {
         }
 
         public File getPathToFile() {
-            String str = ".xml";
-            File filesDirFixed;
-            StringBuilder stringBuilder;
             if (isRemote()) {
-                filesDirFixed = ApplicationLoader.getFilesDirFixed();
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("remote_");
-                stringBuilder.append(this.shortName);
-                stringBuilder.append(str);
-                return new File(filesDirFixed, stringBuilder.toString());
+                File filesDirFixed = ApplicationLoader.getFilesDirFixed();
+                return new File(filesDirFixed, "remote_" + this.shortName + ".xml");
             } else if (isUnofficial()) {
-                filesDirFixed = ApplicationLoader.getFilesDirFixed();
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("unofficial_");
-                stringBuilder.append(this.shortName);
-                stringBuilder.append(str);
-                return new File(filesDirFixed, stringBuilder.toString());
+                File filesDirFixed2 = ApplicationLoader.getFilesDirFixed();
+                return new File(filesDirFixed2, "unofficial_" + this.shortName + ".xml");
+            } else if (!TextUtils.isEmpty(this.pathToFile)) {
+                return new File(this.pathToFile);
             } else {
-                return !TextUtils.isEmpty(this.pathToFile) ? new File(this.pathToFile) : null;
+                return null;
             }
         }
 
@@ -198,32 +277,21 @@ public class LocaleController {
                 return null;
             }
             File filesDirFixed = ApplicationLoader.getFilesDirFixed();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("unofficial_base_");
-            stringBuilder.append(this.shortName);
-            stringBuilder.append(".xml");
-            return new File(filesDirFixed, stringBuilder.toString());
+            return new File(filesDirFixed, "unofficial_base_" + this.shortName + ".xml");
         }
 
         public String getKey() {
-            StringBuilder stringBuilder;
             if (this.pathToFile != null && !isRemote() && !isUnofficial()) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("local_");
-                stringBuilder.append(this.shortName);
-                return stringBuilder.toString();
+                return "local_" + this.shortName;
             } else if (!isUnofficial()) {
                 return this.shortName;
             } else {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("unofficial_");
-                stringBuilder.append(this.shortName);
-                return stringBuilder.toString();
+                return "unofficial_" + this.shortName;
             }
         }
 
         public boolean hasBaseLang() {
-            return (!isUnofficial() || TextUtils.isEmpty(this.baseLangCode) || this.baseLangCode.equals(this.shortName)) ? false : true;
+            return isUnofficial() && !TextUtils.isEmpty(this.baseLangCode) && !this.baseLangCode.equals(this.shortName);
         }
 
         public boolean isRemote() {
@@ -235,7 +303,7 @@ public class LocaleController {
         }
 
         public boolean isLocal() {
-            return (TextUtils.isEmpty(this.pathToFile) || isRemote() || isUnofficial()) ? false : true;
+            return !TextUtils.isEmpty(this.pathToFile) && !isRemote() && !isUnofficial();
         }
 
         public boolean isBuiltIn() {
@@ -250,202 +318,6 @@ public class LocaleController {
             String str = this.baseLangCode;
             return str == null ? "" : str.replace("_", "-");
         }
-    }
-
-    public static abstract class PluralRules {
-        public abstract int quantityForNumber(int i);
-    }
-
-    private class TimeZoneChangedReceiver extends BroadcastReceiver {
-        private TimeZoneChangedReceiver() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.applicationHandler.post(new -$$Lambda$LocaleController$TimeZoneChangedReceiver$-tvar_vTwTBeR7FivZoJHGJKUvY(this));
-        }
-
-        public /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
-            if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
-                LocaleController.getInstance().recreateFormatters();
-            }
-        }
-    }
-
-    public static class PluralRules_Arabic extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            if (i == 0) {
-                return 1;
-            }
-            if (i == 1) {
-                return 2;
-            }
-            if (i == 2) {
-                return 4;
-            }
-            if (i2 < 3 || i2 > 10) {
-                return (i2 < 11 || i2 > 99) ? 0 : 16;
-            } else {
-                return 8;
-            }
-        }
-    }
-
-    public static class PluralRules_Balkan extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            i %= 10;
-            if (i == 1 && i2 != 11) {
-                return 2;
-            }
-            if (i < 2 || i > 4 || (i2 >= 12 && i2 <= 14)) {
-                return (i == 0 || ((i >= 5 && i <= 9) || (i2 >= 11 && i2 <= 14))) ? 16 : 0;
-            } else {
-                return 8;
-            }
-        }
-    }
-
-    public static class PluralRules_Breton extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 0 ? 1 : i == 1 ? 2 : i == 2 ? 4 : i == 3 ? 8 : i == 6 ? 16 : 0;
-        }
-    }
-
-    public static class PluralRules_Czech extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 1 ? 2 : (i < 2 || i > 4) ? 0 : 8;
-        }
-    }
-
-    public static class PluralRules_French extends PluralRules {
-        public int quantityForNumber(int i) {
-            return (i < 0 || i >= 2) ? 0 : 2;
-        }
-    }
-
-    public static class PluralRules_Langi extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 0 ? 1 : (i <= 0 || i >= 2) ? 0 : 2;
-        }
-    }
-
-    public static class PluralRules_Latvian extends PluralRules {
-        public int quantityForNumber(int i) {
-            if (i == 0) {
-                return 1;
-            }
-            return (i % 10 != 1 || i % 100 == 11) ? 0 : 2;
-        }
-    }
-
-    public static class PluralRules_Lithuanian extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            i %= 10;
-            if (i != 1 || (i2 >= 11 && i2 <= 19)) {
-                return (i < 2 || i > 9 || (i2 >= 11 && i2 <= 19)) ? 0 : 8;
-            } else {
-                return 2;
-            }
-        }
-    }
-
-    public static class PluralRules_Macedonian extends PluralRules {
-        public int quantityForNumber(int i) {
-            return (i % 10 != 1 || i == 11) ? 0 : 2;
-        }
-    }
-
-    public static class PluralRules_Maltese extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            if (i == 1) {
-                return 2;
-            }
-            if (i == 0 || (i2 >= 2 && i2 <= 10)) {
-                return 8;
-            }
-            return (i2 < 11 || i2 > 19) ? 0 : 16;
-        }
-    }
-
-    public static class PluralRules_None extends PluralRules {
-        public int quantityForNumber(int i) {
-            return 0;
-        }
-    }
-
-    public static class PluralRules_One extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 1 ? 2 : 0;
-        }
-    }
-
-    public static class PluralRules_Polish extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            int i3 = i % 10;
-            if (i == 1) {
-                return 2;
-            }
-            if (i3 < 2 || i3 > 4 || (i2 >= 12 && i2 <= 14)) {
-                return ((i3 < 0 || i3 > 1) && ((i3 < 5 || i3 > 9) && (i2 < 12 || i2 > 14))) ? 0 : 16;
-            } else {
-                return 8;
-            }
-        }
-    }
-
-    public static class PluralRules_Romanian extends PluralRules {
-        public int quantityForNumber(int i) {
-            int i2 = i % 100;
-            if (i == 1) {
-                return 2;
-            }
-            return (i == 0 || (i2 >= 1 && i2 <= 19)) ? 8 : 0;
-        }
-    }
-
-    public static class PluralRules_Slovenian extends PluralRules {
-        public int quantityForNumber(int i) {
-            i %= 100;
-            if (i == 1) {
-                return 2;
-            }
-            if (i == 2) {
-                return 4;
-            }
-            return (i < 3 || i > 4) ? 0 : 8;
-        }
-    }
-
-    public static class PluralRules_Tachelhit extends PluralRules {
-        public int quantityForNumber(int i) {
-            return (i < 0 || i > 1) ? (i < 2 || i > 10) ? 0 : 8 : 2;
-        }
-    }
-
-    public static class PluralRules_Two extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 1 ? 2 : i == 2 ? 4 : 0;
-        }
-    }
-
-    public static class PluralRules_Welsh extends PluralRules {
-        public int quantityForNumber(int i) {
-            return i == 0 ? 1 : i == 1 ? 2 : i == 2 ? 4 : i == 3 ? 8 : i == 6 ? 16 : 0;
-        }
-    }
-
-    public static class PluralRules_Zero extends PluralRules {
-        public int quantityForNumber(int i) {
-            return (i == 0 || i == 1) ? 2 : 0;
-        }
-    }
-
-    private String stringForQuantity(int i) {
-        return i != 1 ? i != 2 ? i != 4 ? i != 8 ? i != 16 ? "other" : "many" : "few" : "two" : "one" : "zero";
     }
 
     public static LocaleController getInstance() {
@@ -463,71 +335,16 @@ public class LocaleController {
     }
 
     public LocaleController() {
-        int i;
         LocaleInfo localeInfo;
-        LocaleInfo languageFromDict;
         boolean z = false;
         this.changingConfiguration = false;
-        this.languages = new ArrayList();
-        this.unofficialLanguages = new ArrayList();
-        this.remoteLanguages = new ArrayList();
-        this.remoteLanguagesDict = new HashMap();
-        this.languagesDict = new HashMap();
-        this.otherLanguages = new ArrayList();
-        r3 = new String[56];
-        String str = "en";
-        r3[5] = str;
-        r3[6] = "eo";
-        r3[7] = "es";
-        r3[8] = "et";
-        r3[9] = "fi";
-        r3[10] = "fo";
-        r3[11] = "gl";
-        r3[12] = "he";
-        r3[13] = "iw";
-        r3[14] = "it";
-        r3[15] = "nb";
-        r3[16] = "nl";
-        r3[17] = "nn";
-        r3[18] = "no";
-        r3[19] = "sv";
-        r3[20] = "af";
-        r3[21] = "bg";
-        r3[22] = "bn";
-        r3[23] = "ca";
-        r3[24] = "eu";
-        r3[25] = "fur";
-        r3[26] = "fy";
-        r3[27] = "gu";
-        r3[28] = "ha";
-        r3[29] = "is";
-        r3[30] = "ku";
-        r3[31] = "lb";
-        r3[32] = "ml";
-        r3[33] = "mr";
-        r3[34] = "nah";
-        r3[35] = "ne";
-        r3[36] = "om";
-        r3[37] = "or";
-        r3[38] = "pa";
-        r3[39] = "pap";
-        r3[40] = "ps";
-        r3[41] = "so";
-        r3[42] = "sq";
-        r3[43] = "sw";
-        r3[44] = "ta";
-        r3[45] = "te";
-        r3[46] = "tk";
-        r3[47] = "ur";
-        r3[48] = "zu";
-        r3[49] = "mn";
-        r3[50] = "gsw";
-        r3[51] = "chr";
-        r3[52] = "rm";
-        r3[53] = "pt";
-        r3[54] = "an";
-        r3[55] = "ast";
-        addRules(r3, new PluralRules_One());
+        this.languages = new ArrayList<>();
+        this.unofficialLanguages = new ArrayList<>();
+        this.remoteLanguages = new ArrayList<>();
+        this.remoteLanguagesDict = new HashMap<>();
+        this.languagesDict = new HashMap<>();
+        this.otherLanguages = new ArrayList<>();
+        addRules(new String[]{"bem", "brx", "da", "de", "el", "en", "eo", "es", "et", "fi", "fo", "gl", "he", "iw", "it", "nb", "nl", "nn", "no", "sv", "af", "bg", "bn", "ca", "eu", "fur", "fy", "gu", "ha", "is", "ku", "lb", "ml", "mr", "nah", "ne", "om", "or", "pa", "pap", "ps", "so", "sq", "sw", "ta", "te", "tk", "ur", "zu", "mn", "gsw", "chr", "rm", "pt", "an", "ast"}, new PluralRules_One());
         addRules(new String[]{"cs", "sk"}, new PluralRules_Czech());
         addRules(new String[]{"ff", "fr", "kab"}, new PluralRules_French());
         addRules(new String[]{"hr", "ru", "sr", "uk", "be", "bs", "sh"}, new PluralRules_Balkan());
@@ -549,149 +366,147 @@ public class LocaleController {
         LocaleInfo localeInfo2 = new LocaleInfo();
         localeInfo2.name = "English";
         localeInfo2.nameEnglish = "English";
-        localeInfo2.pluralLangCode = str;
-        localeInfo2.shortName = str;
+        localeInfo2.pluralLangCode = "en";
+        localeInfo2.shortName = "en";
         localeInfo2.pathToFile = null;
         localeInfo2.builtIn = true;
         this.languages.add(localeInfo2);
         this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "Italiano";
-        localeInfo2.nameEnglish = "Italian";
-        String str2 = "it";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "Español";
-        localeInfo2.nameEnglish = "Spanish";
-        str2 = "es";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "Deutsch";
-        localeInfo2.nameEnglish = "German";
-        str2 = "de";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "Nederlands";
-        localeInfo2.nameEnglish = "Dutch";
-        str2 = "nl";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "العربية";
-        localeInfo2.nameEnglish = "Arabic";
-        str2 = "ar";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        localeInfo2.isRtl = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "Português (Brasil)";
-        localeInfo2.nameEnglish = "Portuguese (Brazil)";
-        str2 = "pt_br";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
-        localeInfo2 = new LocaleInfo();
-        localeInfo2.name = "한국어";
-        localeInfo2.nameEnglish = "Korean";
-        str2 = "ko";
-        localeInfo2.pluralLangCode = str2;
-        localeInfo2.shortName = str2;
-        localeInfo2.pathToFile = null;
-        localeInfo2.builtIn = true;
-        this.languages.add(localeInfo2);
-        this.languagesDict.put(localeInfo2.shortName, localeInfo2);
+        LocaleInfo localeInfo3 = new LocaleInfo();
+        localeInfo3.name = "Italiano";
+        localeInfo3.nameEnglish = "Italian";
+        localeInfo3.pluralLangCode = "it";
+        localeInfo3.shortName = "it";
+        localeInfo3.pathToFile = null;
+        localeInfo3.builtIn = true;
+        this.languages.add(localeInfo3);
+        this.languagesDict.put(localeInfo3.shortName, localeInfo3);
+        LocaleInfo localeInfo4 = new LocaleInfo();
+        localeInfo4.name = "Español";
+        localeInfo4.nameEnglish = "Spanish";
+        localeInfo4.pluralLangCode = "es";
+        localeInfo4.shortName = "es";
+        localeInfo4.builtIn = true;
+        this.languages.add(localeInfo4);
+        this.languagesDict.put(localeInfo4.shortName, localeInfo4);
+        LocaleInfo localeInfo5 = new LocaleInfo();
+        localeInfo5.name = "Deutsch";
+        localeInfo5.nameEnglish = "German";
+        localeInfo5.pluralLangCode = "de";
+        localeInfo5.shortName = "de";
+        localeInfo5.pathToFile = null;
+        localeInfo5.builtIn = true;
+        this.languages.add(localeInfo5);
+        this.languagesDict.put(localeInfo5.shortName, localeInfo5);
+        LocaleInfo localeInfo6 = new LocaleInfo();
+        localeInfo6.name = "Nederlands";
+        localeInfo6.nameEnglish = "Dutch";
+        localeInfo6.pluralLangCode = "nl";
+        localeInfo6.shortName = "nl";
+        localeInfo6.pathToFile = null;
+        localeInfo6.builtIn = true;
+        this.languages.add(localeInfo6);
+        this.languagesDict.put(localeInfo6.shortName, localeInfo6);
+        LocaleInfo localeInfo7 = new LocaleInfo();
+        localeInfo7.name = "العربية";
+        localeInfo7.nameEnglish = "Arabic";
+        localeInfo7.pluralLangCode = "ar";
+        localeInfo7.shortName = "ar";
+        localeInfo7.pathToFile = null;
+        localeInfo7.builtIn = true;
+        localeInfo7.isRtl = true;
+        this.languages.add(localeInfo7);
+        this.languagesDict.put(localeInfo7.shortName, localeInfo7);
+        LocaleInfo localeInfo8 = new LocaleInfo();
+        localeInfo8.name = "Português (Brasil)";
+        localeInfo8.nameEnglish = "Portuguese (Brazil)";
+        localeInfo8.pluralLangCode = "pt_br";
+        localeInfo8.shortName = "pt_br";
+        localeInfo8.pathToFile = null;
+        localeInfo8.builtIn = true;
+        this.languages.add(localeInfo8);
+        this.languagesDict.put(localeInfo8.shortName, localeInfo8);
+        LocaleInfo localeInfo9 = new LocaleInfo();
+        localeInfo9.name = "한국어";
+        localeInfo9.nameEnglish = "Korean";
+        localeInfo9.pluralLangCode = "ko";
+        localeInfo9.shortName = "ko";
+        localeInfo9.pathToFile = null;
+        localeInfo9.builtIn = true;
+        this.languages.add(localeInfo9);
+        this.languagesDict.put(localeInfo9.shortName, localeInfo9);
         loadOtherLanguages();
         if (this.remoteLanguages.isEmpty()) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$NNZIDoHieDUSrd9BgBq36GRonDE(this));
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    LocaleController.this.lambda$new$0$LocaleController();
+                }
+            });
         }
-        for (i = 0; i < this.otherLanguages.size(); i++) {
-            localeInfo = (LocaleInfo) this.otherLanguages.get(i);
-            this.languages.add(localeInfo);
-            this.languagesDict.put(localeInfo.getKey(), localeInfo);
+        for (int i = 0; i < this.otherLanguages.size(); i++) {
+            LocaleInfo localeInfo10 = this.otherLanguages.get(i);
+            this.languages.add(localeInfo10);
+            this.languagesDict.put(localeInfo10.getKey(), localeInfo10);
         }
-        for (i = 0; i < this.remoteLanguages.size(); i++) {
-            localeInfo = (LocaleInfo) this.remoteLanguages.get(i);
-            languageFromDict = getLanguageFromDict(localeInfo.getKey());
+        for (int i2 = 0; i2 < this.remoteLanguages.size(); i2++) {
+            LocaleInfo localeInfo11 = this.remoteLanguages.get(i2);
+            LocaleInfo languageFromDict = getLanguageFromDict(localeInfo11.getKey());
             if (languageFromDict != null) {
-                languageFromDict.pathToFile = localeInfo.pathToFile;
-                languageFromDict.version = localeInfo.version;
-                languageFromDict.baseVersion = localeInfo.baseVersion;
-                languageFromDict.serverIndex = localeInfo.serverIndex;
-                this.remoteLanguages.set(i, languageFromDict);
+                languageFromDict.pathToFile = localeInfo11.pathToFile;
+                languageFromDict.version = localeInfo11.version;
+                languageFromDict.baseVersion = localeInfo11.baseVersion;
+                languageFromDict.serverIndex = localeInfo11.serverIndex;
+                this.remoteLanguages.set(i2, languageFromDict);
             } else {
-                this.languages.add(localeInfo);
-                this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                this.languages.add(localeInfo11);
+                this.languagesDict.put(localeInfo11.getKey(), localeInfo11);
             }
         }
-        for (i = 0; i < this.unofficialLanguages.size(); i++) {
-            localeInfo = (LocaleInfo) this.unofficialLanguages.get(i);
-            languageFromDict = getLanguageFromDict(localeInfo.getKey());
-            if (languageFromDict != null) {
-                languageFromDict.pathToFile = localeInfo.pathToFile;
-                languageFromDict.version = localeInfo.version;
-                languageFromDict.baseVersion = localeInfo.baseVersion;
-                languageFromDict.serverIndex = localeInfo.serverIndex;
-                this.unofficialLanguages.set(i, languageFromDict);
+        for (int i3 = 0; i3 < this.unofficialLanguages.size(); i3++) {
+            LocaleInfo localeInfo12 = this.unofficialLanguages.get(i3);
+            LocaleInfo languageFromDict2 = getLanguageFromDict(localeInfo12.getKey());
+            if (languageFromDict2 != null) {
+                languageFromDict2.pathToFile = localeInfo12.pathToFile;
+                languageFromDict2.version = localeInfo12.version;
+                languageFromDict2.baseVersion = localeInfo12.baseVersion;
+                languageFromDict2.serverIndex = localeInfo12.serverIndex;
+                this.unofficialLanguages.set(i3, languageFromDict2);
             } else {
-                this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                this.languagesDict.put(localeInfo12.getKey(), localeInfo12);
             }
         }
         this.systemDefaultLocale = Locale.getDefault();
         is24HourFormat = DateFormat.is24HourFormat(ApplicationLoader.applicationContext);
         try {
-            String string = MessagesController.getGlobalMainSettings().getString("language", null);
+            String string = MessagesController.getGlobalMainSettings().getString("language", (String) null);
             if (string != null) {
-                localeInfo2 = getLanguageFromDict(string);
-                if (localeInfo2 != null) {
+                localeInfo = getLanguageFromDict(string);
+                if (localeInfo != null) {
                     z = true;
                 }
             } else {
-                localeInfo2 = null;
+                localeInfo = null;
             }
-            if (localeInfo2 == null && this.systemDefaultLocale.getLanguage() != null) {
-                localeInfo2 = getLanguageFromDict(this.systemDefaultLocale.getLanguage());
+            if (localeInfo == null && this.systemDefaultLocale.getLanguage() != null) {
+                localeInfo = getLanguageFromDict(this.systemDefaultLocale.getLanguage());
             }
-            if (localeInfo2 == null) {
-                localeInfo2 = getLanguageFromDict(getLocaleString(this.systemDefaultLocale));
-                if (localeInfo2 == null) {
-                    localeInfo2 = getLanguageFromDict(str);
-                }
+            if (localeInfo == null && (localeInfo = getLanguageFromDict(getLocaleString(this.systemDefaultLocale))) == null) {
+                localeInfo = getLanguageFromDict("en");
             }
-            applyLanguage(localeInfo2, z, true, UserConfig.selectedAccount);
+            applyLanguage(localeInfo, z, true, UserConfig.selectedAccount);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
         try {
             ApplicationLoader.applicationContext.registerReceiver(new TimeZoneChangedReceiver(), new IntentFilter("android.intent.action.TIMEZONE_CHANGED"));
         } catch (Exception e2) {
-            FileLog.e(e2);
+            FileLog.e((Throwable) e2);
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$U712xrnt9cCu1iJYrRj7Tc-xRYo(this));
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                LocaleController.this.lambda$new$1$LocaleController();
+            }
+        });
     }
 
     public /* synthetic */ void lambda$new$0$LocaleController() {
@@ -703,11 +518,14 @@ public class LocaleController {
     }
 
     public LocaleInfo getLanguageFromDict(String str) {
-        return str == null ? null : (LocaleInfo) this.languagesDict.get(str.toLowerCase().replace("-", "_"));
+        if (str == null) {
+            return null;
+        }
+        return this.languagesDict.get(str.toLowerCase().replace("-", "_"));
     }
 
     private void addRules(String[] strArr, PluralRules pluralRules) {
-        for (Object put : strArr) {
+        for (String put : strArr) {
             this.allRules.put(put, pluralRules);
         }
     }
@@ -729,7 +547,7 @@ public class LocaleController {
             if (localeInfo == null) {
                 return;
             }
-            if (!(str.equals(localeInfo.shortName) || str.equals(this.currentLocaleInfo.baseLangCode))) {
+            if (!str.equals(localeInfo.shortName) && !str.equals(this.currentLocaleInfo.baseLangCode)) {
                 return;
             }
         }
@@ -743,65 +561,63 @@ public class LocaleController {
         }
         if (localeInfo == null || localeInfo.isRemote() || this.currentLocaleInfo.isUnofficial()) {
             if (this.currentLocaleInfo.hasBaseLang()) {
-                localeInfo = this.currentLocaleInfo;
-                if (localeInfo.baseVersion < i3) {
-                    applyRemoteLanguage(localeInfo, localeInfo.baseLangCode, false, i);
+                LocaleInfo localeInfo2 = this.currentLocaleInfo;
+                if (localeInfo2.baseVersion < i3) {
+                    applyRemoteLanguage(localeInfo2, localeInfo2.baseLangCode, false, i);
                 }
             }
-            LocaleInfo localeInfo2 = this.currentLocaleInfo;
-            if (localeInfo2.version < i2) {
-                applyRemoteLanguage(localeInfo2, localeInfo2.shortName, false, i);
+            LocaleInfo localeInfo3 = this.currentLocaleInfo;
+            if (localeInfo3.version < i2) {
+                applyRemoteLanguage(localeInfo3, localeInfo3.shortName, false, i);
             }
         }
     }
 
     private String getLocaleString(Locale locale) {
-        String str = "en";
         if (locale == null) {
-            return str;
+            return "en";
         }
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = locale.getVariant();
         if (language.length() == 0 && country.length() == 0) {
-            return str;
+            return "en";
         }
-        StringBuilder stringBuilder = new StringBuilder(11);
-        stringBuilder.append(language);
+        StringBuilder sb = new StringBuilder(11);
+        sb.append(language);
         if (country.length() > 0 || variant.length() > 0) {
-            stringBuilder.append('_');
+            sb.append('_');
         }
-        stringBuilder.append(country);
+        sb.append(country);
         if (variant.length() > 0) {
-            stringBuilder.append('_');
+            sb.append('_');
         }
-        stringBuilder.append(variant);
-        return stringBuilder.toString();
+        sb.append(variant);
+        return sb.toString();
     }
 
     public static String getSystemLocaleStringIso639() {
-        Locale systemDefaultLocale = getInstance().getSystemDefaultLocale();
-        String str = "en";
-        if (systemDefaultLocale == null) {
-            return str;
+        Locale systemDefaultLocale2 = getInstance().getSystemDefaultLocale();
+        if (systemDefaultLocale2 == null) {
+            return "en";
         }
-        String language = systemDefaultLocale.getLanguage();
-        String country = systemDefaultLocale.getCountry();
-        String variant = systemDefaultLocale.getVariant();
+        String language = systemDefaultLocale2.getLanguage();
+        String country = systemDefaultLocale2.getCountry();
+        String variant = systemDefaultLocale2.getVariant();
         if (language.length() == 0 && country.length() == 0) {
-            return str;
+            return "en";
         }
-        StringBuilder stringBuilder = new StringBuilder(11);
-        stringBuilder.append(language);
+        StringBuilder sb = new StringBuilder(11);
+        sb.append(language);
         if (country.length() > 0 || variant.length() > 0) {
-            stringBuilder.append('-');
+            sb.append('-');
         }
-        stringBuilder.append(country);
+        sb.append(country);
         if (variant.length() > 0) {
-            stringBuilder.append('_');
+            sb.append('_');
         }
-        stringBuilder.append(variant);
-        return stringBuilder.toString();
+        sb.append(variant);
+        return sb.toString();
     }
 
     public static String getLocaleStringIso639() {
@@ -810,394 +626,218 @@ public class LocaleController {
             return localeInfo.getLangCode();
         }
         Locale locale = getInstance().currentLocale;
-        String str = "en";
         if (locale == null) {
-            return str;
+            return "en";
         }
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = locale.getVariant();
         if (language.length() == 0 && country.length() == 0) {
-            return str;
+            return "en";
         }
-        StringBuilder stringBuilder = new StringBuilder(11);
-        stringBuilder.append(language);
+        StringBuilder sb = new StringBuilder(11);
+        sb.append(language);
         if (country.length() > 0 || variant.length() > 0) {
-            stringBuilder.append('-');
+            sb.append('-');
         }
-        stringBuilder.append(country);
+        sb.append(country);
         if (variant.length() > 0) {
-            stringBuilder.append('_');
+            sb.append('_');
         }
-        stringBuilder.append(variant);
-        return stringBuilder.toString();
+        sb.append(variant);
+        return sb.toString();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A:{RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A[RETURN] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String getLocaleAlias(java.lang.String r16) {
         /*
-        r0 = r16;
-        r1 = 0;
-        if (r0 != 0) goto L_0x0006;
-    L_0x0005:
-        return r1;
-    L_0x0006:
-        r3 = r16.hashCode();
-        r4 = 3325; // 0xcfd float:4.66E-42 double:1.643E-320;
-        r5 = "fil";
-        r6 = "yi";
-        r7 = "tl";
-        r8 = "no";
-        r9 = "nb";
-        r10 = "jw";
-        r11 = "jv";
-        r12 = "ji";
-        r13 = "iw";
-        r14 = "in";
-        r15 = "id";
-        r2 = "he";
-        if (r3 == r4) goto L_0x00b3;
-    L_0x0027:
-        r4 = 3355; // 0xd1b float:4.701E-42 double:1.6576E-320;
-        if (r3 == r4) goto L_0x00ab;
-    L_0x002b:
-        r4 = 3365; // 0xd25 float:4.715E-42 double:1.6625E-320;
-        if (r3 == r4) goto L_0x00a3;
-    L_0x002f:
-        r4 = 3374; // 0xd2e float:4.728E-42 double:1.667E-320;
-        if (r3 == r4) goto L_0x009b;
-    L_0x0033:
-        r4 = 3391; // 0xd3f float:4.752E-42 double:1.6754E-320;
-        if (r3 == r4) goto L_0x0093;
-    L_0x0037:
-        r4 = 3508; // 0xdb4 float:4.916E-42 double:1.733E-320;
-        if (r3 == r4) goto L_0x008a;
-    L_0x003b:
-        r4 = 3521; // 0xdc1 float:4.934E-42 double:1.7396E-320;
-        if (r3 == r4) goto L_0x0082;
-    L_0x003f:
-        r4 = 3704; // 0xe78 float:5.19E-42 double:1.83E-320;
-        if (r3 == r4) goto L_0x007a;
-    L_0x0043:
-        r4 = 3856; // 0xvar_ float:5.403E-42 double:1.905E-320;
-        if (r3 == r4) goto L_0x0071;
-    L_0x0047:
-        r4 = 101385; // 0x18CLASSNAME float:1.4207E-40 double:5.0091E-319;
-        if (r3 == r4) goto L_0x0068;
-    L_0x004c:
-        r4 = 3404; // 0xd4c float:4.77E-42 double:1.682E-320;
-        if (r3 == r4) goto L_0x005f;
-    L_0x0050:
-        r4 = 3405; // 0xd4d float:4.771E-42 double:1.6823E-320;
-        if (r3 == r4) goto L_0x0056;
-    L_0x0054:
-        goto L_0x00bb;
-    L_0x0056:
-        r0 = r0.equals(r10);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x005c:
-        r0 = 2;
-        goto L_0x00bc;
-    L_0x005f:
-        r0 = r0.equals(r11);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0065:
-        r0 = 8;
-        goto L_0x00bc;
-    L_0x0068:
-        r0 = r0.equals(r5);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x006e:
-        r0 = 10;
-        goto L_0x00bc;
-    L_0x0071:
-        r0 = r0.equals(r6);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0077:
-        r0 = 11;
-        goto L_0x00bc;
-    L_0x007a:
-        r0 = r0.equals(r7);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0080:
-        r0 = 4;
-        goto L_0x00bc;
-    L_0x0082:
-        r0 = r0.equals(r8);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0088:
-        r0 = 3;
-        goto L_0x00bc;
-    L_0x008a:
-        r0 = r0.equals(r9);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0090:
-        r0 = 9;
-        goto L_0x00bc;
-    L_0x0093:
-        r0 = r0.equals(r12);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x0099:
-        r0 = 5;
-        goto L_0x00bc;
-    L_0x009b:
-        r0 = r0.equals(r13);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x00a1:
-        r0 = 1;
-        goto L_0x00bc;
-    L_0x00a3:
-        r0 = r0.equals(r14);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x00a9:
-        r0 = 0;
-        goto L_0x00bc;
-    L_0x00ab:
-        r0 = r0.equals(r15);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x00b1:
-        r0 = 6;
-        goto L_0x00bc;
-    L_0x00b3:
-        r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x00bb;
-    L_0x00b9:
-        r0 = 7;
-        goto L_0x00bc;
-    L_0x00bb:
-        r0 = -1;
-    L_0x00bc:
-        switch(r0) {
-            case 0: goto L_0x00cb;
-            case 1: goto L_0x00ca;
-            case 2: goto L_0x00c9;
-            case 3: goto L_0x00c8;
-            case 4: goto L_0x00c7;
-            case 5: goto L_0x00c6;
-            case 6: goto L_0x00c5;
-            case 7: goto L_0x00c4;
-            case 8: goto L_0x00c3;
-            case 9: goto L_0x00c2;
-            case 10: goto L_0x00c1;
-            case 11: goto L_0x00c0;
-            default: goto L_0x00bf;
-        };
-    L_0x00bf:
-        return r1;
-    L_0x00c0:
-        return r12;
-    L_0x00c1:
-        return r7;
-    L_0x00c2:
-        return r8;
-    L_0x00c3:
-        return r10;
-    L_0x00c4:
-        return r13;
-    L_0x00c5:
-        return r14;
-    L_0x00c6:
-        return r6;
-    L_0x00c7:
-        return r5;
-    L_0x00c8:
-        return r9;
-    L_0x00c9:
-        return r11;
-    L_0x00ca:
-        return r2;
-    L_0x00cb:
-        return r15;
+            r0 = r16
+            r1 = 0
+            if (r0 != 0) goto L_0x0006
+            return r1
+        L_0x0006:
+            int r3 = r16.hashCode()
+            r4 = 3325(0xcfd, float:4.66E-42)
+            java.lang.String r5 = "fil"
+            java.lang.String r6 = "yi"
+            java.lang.String r7 = "tl"
+            java.lang.String r8 = "no"
+            java.lang.String r9 = "nb"
+            java.lang.String r10 = "jw"
+            java.lang.String r11 = "jv"
+            java.lang.String r12 = "ji"
+            java.lang.String r13 = "iw"
+            java.lang.String r14 = "in"
+            java.lang.String r15 = "id"
+            java.lang.String r2 = "he"
+            if (r3 == r4) goto L_0x00b3
+            r4 = 3355(0xd1b, float:4.701E-42)
+            if (r3 == r4) goto L_0x00ab
+            r4 = 3365(0xd25, float:4.715E-42)
+            if (r3 == r4) goto L_0x00a3
+            r4 = 3374(0xd2e, float:4.728E-42)
+            if (r3 == r4) goto L_0x009b
+            r4 = 3391(0xd3f, float:4.752E-42)
+            if (r3 == r4) goto L_0x0093
+            r4 = 3508(0xdb4, float:4.916E-42)
+            if (r3 == r4) goto L_0x008a
+            r4 = 3521(0xdc1, float:4.934E-42)
+            if (r3 == r4) goto L_0x0082
+            r4 = 3704(0xe78, float:5.19E-42)
+            if (r3 == r4) goto L_0x007a
+            r4 = 3856(0xvar_, float:5.403E-42)
+            if (r3 == r4) goto L_0x0071
+            r4 = 101385(0x18CLASSNAME, float:1.4207E-40)
+            if (r3 == r4) goto L_0x0068
+            r4 = 3404(0xd4c, float:4.77E-42)
+            if (r3 == r4) goto L_0x005f
+            r4 = 3405(0xd4d, float:4.771E-42)
+            if (r3 == r4) goto L_0x0056
+            goto L_0x00bb
+        L_0x0056:
+            boolean r0 = r0.equals(r10)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 2
+            goto L_0x00bc
+        L_0x005f:
+            boolean r0 = r0.equals(r11)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 8
+            goto L_0x00bc
+        L_0x0068:
+            boolean r0 = r0.equals(r5)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 10
+            goto L_0x00bc
+        L_0x0071:
+            boolean r0 = r0.equals(r6)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 11
+            goto L_0x00bc
+        L_0x007a:
+            boolean r0 = r0.equals(r7)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 4
+            goto L_0x00bc
+        L_0x0082:
+            boolean r0 = r0.equals(r8)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 3
+            goto L_0x00bc
+        L_0x008a:
+            boolean r0 = r0.equals(r9)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 9
+            goto L_0x00bc
+        L_0x0093:
+            boolean r0 = r0.equals(r12)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 5
+            goto L_0x00bc
+        L_0x009b:
+            boolean r0 = r0.equals(r13)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 1
+            goto L_0x00bc
+        L_0x00a3:
+            boolean r0 = r0.equals(r14)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 0
+            goto L_0x00bc
+        L_0x00ab:
+            boolean r0 = r0.equals(r15)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 6
+            goto L_0x00bc
+        L_0x00b3:
+            boolean r0 = r0.equals(r2)
+            if (r0 == 0) goto L_0x00bb
+            r0 = 7
+            goto L_0x00bc
+        L_0x00bb:
+            r0 = -1
+        L_0x00bc:
+            switch(r0) {
+                case 0: goto L_0x00cb;
+                case 1: goto L_0x00ca;
+                case 2: goto L_0x00c9;
+                case 3: goto L_0x00c8;
+                case 4: goto L_0x00c7;
+                case 5: goto L_0x00c6;
+                case 6: goto L_0x00c5;
+                case 7: goto L_0x00c4;
+                case 8: goto L_0x00c3;
+                case 9: goto L_0x00c2;
+                case 10: goto L_0x00c1;
+                case 11: goto L_0x00c0;
+                default: goto L_0x00bf;
+            }
+        L_0x00bf:
+            return r1
+        L_0x00c0:
+            return r12
+        L_0x00c1:
+            return r7
+        L_0x00c2:
+            return r8
+        L_0x00c3:
+            return r10
+        L_0x00c4:
+            return r13
+        L_0x00c5:
+            return r14
+        L_0x00c6:
+            return r6
+        L_0x00c7:
+            return r5
+        L_0x00c8:
+            return r9
+        L_0x00c9:
+            return r11
+        L_0x00ca:
+            return r2
+        L_0x00cb:
+            return r15
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleAlias(java.lang.String):java.lang.String");
     }
 
     public boolean applyLanguageFile(File file, int i) {
-        String str = "|";
-        String str2 = "&";
         try {
-            HashMap localeFileStrings = getLocaleFileStrings(file);
-            String str3 = (String) localeFileStrings.get("LanguageName");
-            String str4 = (String) localeFileStrings.get("LanguageNameInEnglish");
-            String str5 = (String) localeFileStrings.get("LanguageCode");
-            if (!(str3 == null || str3.length() <= 0 || str4 == null || str4.length() <= 0 || str5 == null || str5.length() <= 0 || str3.contains(str2))) {
-                if (!str3.contains(str)) {
-                    if (!str4.contains(str2)) {
-                        if (!str4.contains(str)) {
-                            if (!(str5.contains(str2) || str5.contains(str) || str5.contains("/"))) {
-                                if (!str5.contains("\\")) {
+            HashMap<String, String> localeFileStrings = getLocaleFileStrings(file);
+            String str = localeFileStrings.get("LanguageName");
+            String str2 = localeFileStrings.get("LanguageNameInEnglish");
+            String str3 = localeFileStrings.get("LanguageCode");
+            if (str != null && str.length() > 0 && str2 != null && str2.length() > 0 && str3 != null && str3.length() > 0 && !str.contains("&")) {
+                if (!str.contains("|")) {
+                    if (!str2.contains("&")) {
+                        if (!str2.contains("|")) {
+                            if (!str3.contains("&") && !str3.contains("|") && !str3.contains("/")) {
+                                if (!str3.contains("\\")) {
                                     File filesDirFixed = ApplicationLoader.getFilesDirFixed();
-                                    StringBuilder stringBuilder = new StringBuilder();
-                                    stringBuilder.append(str5);
-                                    stringBuilder.append(".xml");
-                                    File file2 = new File(filesDirFixed, stringBuilder.toString());
+                                    File file2 = new File(filesDirFixed, str3 + ".xml");
                                     if (!AndroidUtilities.copyFile(file, file2)) {
                                         return false;
                                     }
-                                    StringBuilder stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append("local_");
-                                    stringBuilder2.append(str5.toLowerCase());
-                                    LocaleInfo languageFromDict = getLanguageFromDict(stringBuilder2.toString());
+                                    LocaleInfo languageFromDict = getLanguageFromDict("local_" + str3.toLowerCase());
                                     if (languageFromDict == null) {
                                         languageFromDict = new LocaleInfo();
-                                        languageFromDict.name = str3;
-                                        languageFromDict.nameEnglish = str4;
-                                        languageFromDict.shortName = str5.toLowerCase();
+                                        languageFromDict.name = str;
+                                        languageFromDict.nameEnglish = str2;
+                                        languageFromDict.shortName = str3.toLowerCase();
                                         languageFromDict.pluralLangCode = languageFromDict.shortName;
                                         languageFromDict.pathToFile = file2.getAbsolutePath();
                                         this.languages.add(languageFromDict);
@@ -1205,9 +845,8 @@ public class LocaleController {
                                         this.otherLanguages.add(languageFromDict);
                                         saveOtherLanguages();
                                     }
-                                    LocaleInfo localeInfo = languageFromDict;
                                     this.localeValues = localeFileStrings;
-                                    applyLanguage(localeInfo, true, false, true, false, i);
+                                    applyLanguage(languageFromDict, true, false, true, false, i);
                                     return true;
                                 }
                             }
@@ -1217,56 +856,46 @@ public class LocaleController {
             }
             return false;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
         return false;
     }
 
     private void saveOtherLanguages() {
-        String str;
-        String saveString;
-        int i = 0;
-        Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("langconfig", 0).edit();
-        StringBuilder stringBuilder = new StringBuilder();
-        int i2 = 0;
-        while (true) {
-            str = "&";
-            if (i2 >= this.otherLanguages.size()) {
-                break;
-            }
-            saveString = ((LocaleInfo) this.otherLanguages.get(i2)).getSaveString();
+        SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("langconfig", 0).edit();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < this.otherLanguages.size(); i++) {
+            String saveString = this.otherLanguages.get(i).getSaveString();
             if (saveString != null) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(str);
+                if (sb.length() != 0) {
+                    sb.append("&");
                 }
-                stringBuilder.append(saveString);
-            }
-            i2++;
-        }
-        edit.putString("locales", stringBuilder.toString());
-        stringBuilder.setLength(0);
-        for (i2 = 0; i2 < this.remoteLanguages.size(); i2++) {
-            saveString = ((LocaleInfo) this.remoteLanguages.get(i2)).getSaveString();
-            if (saveString != null) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(str);
-                }
-                stringBuilder.append(saveString);
+                sb.append(saveString);
             }
         }
-        edit.putString("remote", stringBuilder.toString());
-        stringBuilder.setLength(0);
-        while (i < this.unofficialLanguages.size()) {
-            String saveString2 = ((LocaleInfo) this.unofficialLanguages.get(i)).getSaveString();
+        edit.putString("locales", sb.toString());
+        sb.setLength(0);
+        for (int i2 = 0; i2 < this.remoteLanguages.size(); i2++) {
+            String saveString2 = this.remoteLanguages.get(i2).getSaveString();
             if (saveString2 != null) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(str);
+                if (sb.length() != 0) {
+                    sb.append("&");
                 }
-                stringBuilder.append(saveString2);
+                sb.append(saveString2);
             }
-            i++;
         }
-        edit.putString("unofficial", stringBuilder.toString());
+        edit.putString("remote", sb.toString());
+        sb.setLength(0);
+        for (int i3 = 0; i3 < this.unofficialLanguages.size(); i3++) {
+            String saveString3 = this.unofficialLanguages.get(i3).getSaveString();
+            if (saveString3 != null) {
+                if (sb.length() != 0) {
+                    sb.append("&");
+                }
+                sb.append(saveString3);
+            }
+        }
+        edit.putString("unofficial", sb.toString());
         edit.commit();
     }
 
@@ -1299,42 +928,35 @@ public class LocaleController {
     }
 
     private void loadOtherLanguages() {
-        int i = 0;
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("langconfig", 0);
-        String string = sharedPreferences.getString("locales", null);
-        String str = "&";
+        String string = sharedPreferences.getString("locales", (String) null);
         if (!TextUtils.isEmpty(string)) {
-            for (String createWithString : string.split(str)) {
+            for (String createWithString : string.split("&")) {
                 LocaleInfo createWithString2 = LocaleInfo.createWithString(createWithString);
                 if (createWithString2 != null) {
                     this.otherLanguages.add(createWithString2);
                 }
             }
         }
-        string = sharedPreferences.getString("remote", null);
-        String str2 = "_";
-        String createWithString3 = "-";
-        if (!TextUtils.isEmpty(string)) {
-            for (String createWithString4 : string.split(str)) {
-                LocaleInfo createWithString5 = LocaleInfo.createWithString(createWithString4);
-                createWithString5.shortName = createWithString5.shortName.replace(createWithString3, str2);
-                if (!(this.remoteLanguagesDict.containsKey(createWithString5.getKey()) || createWithString5 == null)) {
-                    this.remoteLanguages.add(createWithString5);
-                    this.remoteLanguagesDict.put(createWithString5.getKey(), createWithString5);
+        String string2 = sharedPreferences.getString("remote", (String) null);
+        if (!TextUtils.isEmpty(string2)) {
+            for (String createWithString3 : string2.split("&")) {
+                LocaleInfo createWithString4 = LocaleInfo.createWithString(createWithString3);
+                createWithString4.shortName = createWithString4.shortName.replace("-", "_");
+                if (!this.remoteLanguagesDict.containsKey(createWithString4.getKey()) && createWithString4 != null) {
+                    this.remoteLanguages.add(createWithString4);
+                    this.remoteLanguagesDict.put(createWithString4.getKey(), createWithString4);
                 }
             }
         }
-        String string2 = sharedPreferences.getString("unofficial", null);
-        if (!TextUtils.isEmpty(string2)) {
-            String[] split = string2.split(str);
-            int length = split.length;
-            while (i < length) {
-                LocaleInfo createWithString6 = LocaleInfo.createWithString(split[i]);
-                createWithString6.shortName = createWithString6.shortName.replace(createWithString3, str2);
+        String string3 = sharedPreferences.getString("unofficial", (String) null);
+        if (!TextUtils.isEmpty(string3)) {
+            for (String createWithString5 : string3.split("&")) {
+                LocaleInfo createWithString6 = LocaleInfo.createWithString(createWithString5);
+                createWithString6.shortName = createWithString6.shortName.replace("-", "_");
                 if (createWithString6 != null) {
                     this.unofficialLanguages.add(createWithString6);
                 }
-                i++;
             }
         }
     }
@@ -1343,171 +965,153 @@ public class LocaleController {
         return getLocaleFileStrings(file, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00da A:{SYNTHETIC, Splitter:B:61:0x00da} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00ea A:{SYNTHETIC, Splitter:B:68:0x00ea} */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x00da A[SYNTHETIC, Splitter:B:61:0x00da] */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00ea A[SYNTHETIC, Splitter:B:68:0x00ea] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private java.util.HashMap<java.lang.String, java.lang.String> getLocaleFileStrings(java.io.File r13, boolean r14) {
         /*
-        r12 = this;
-        r0 = 0;
-        r12.reloadLastFile = r0;
-        r1 = 1;
-        r2 = 0;
-        r3 = r13.exists();	 Catch:{ Exception -> 0x00d2 }
-        if (r3 != 0) goto L_0x0011;
-    L_0x000b:
-        r13 = new java.util.HashMap;	 Catch:{ Exception -> 0x00d2 }
-        r13.<init>();	 Catch:{ Exception -> 0x00d2 }
-        return r13;
-    L_0x0011:
-        r3 = new java.util.HashMap;	 Catch:{ Exception -> 0x00d2 }
-        r3.<init>();	 Catch:{ Exception -> 0x00d2 }
-        r4 = android.util.Xml.newPullParser();	 Catch:{ Exception -> 0x00d2 }
-        r5 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x00d2 }
-        r5.<init>(r13);	 Catch:{ Exception -> 0x00d2 }
-        r13 = "UTF-8";
-        r4.setInput(r5, r13);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r13 = r4.getEventType();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r6 = r2;
-        r7 = r6;
-        r8 = r7;
-    L_0x002b:
-        if (r13 == r1) goto L_0x00c1;
-    L_0x002d:
-        r9 = 2;
-        if (r13 != r9) goto L_0x0040;
-    L_0x0030:
-        r13 = r4.getName();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r7 = r4.getAttributeCount();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r7 <= 0) goto L_0x003e;
-    L_0x003a:
-        r6 = r4.getAttributeValue(r0);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-    L_0x003e:
-        r7 = r13;
-        goto L_0x009b;
-    L_0x0040:
-        r9 = 4;
-        if (r13 != r9) goto L_0x0095;
-    L_0x0043:
-        if (r6 == 0) goto L_0x009b;
-    L_0x0045:
-        r13 = r4.getText();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r13 == 0) goto L_0x0093;
-    L_0x004b:
-        r13 = r13.trim();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r8 = "&lt;";
-        r9 = "<";
-        if (r14 == 0) goto L_0x0072;
-    L_0x0055:
-        r13 = r13.replace(r9, r8);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r8 = ">";
-        r9 = "&gt;";
-        r13 = r13.replace(r8, r9);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r8 = "'";
-        r9 = "\\'";
-        r13 = r13.replace(r8, r9);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r8 = "& ";
-        r9 = "&amp; ";
-        r13 = r13.replace(r8, r9);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        goto L_0x0093;
-    L_0x0072:
-        r10 = "\\n";
-        r11 = "\n";
-        r13 = r13.replace(r10, r11);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r10 = "\\";
-        r11 = "";
-        r13 = r13.replace(r10, r11);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r8 = r13.replace(r8, r9);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r9 = r12.reloadLastFile;	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r9 != 0) goto L_0x009b;
-    L_0x008a:
-        r13 = r8.equals(r13);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r13 != 0) goto L_0x009b;
-    L_0x0090:
-        r12.reloadLastFile = r1;	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        goto L_0x009b;
-    L_0x0093:
-        r8 = r13;
-        goto L_0x009b;
-    L_0x0095:
-        r9 = 3;
-        if (r13 != r9) goto L_0x009b;
-    L_0x0098:
-        r6 = r2;
-        r7 = r6;
-        r8 = r7;
-    L_0x009b:
-        if (r7 == 0) goto L_0x00bb;
-    L_0x009d:
-        r13 = "string";
-        r13 = r7.equals(r13);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r13 == 0) goto L_0x00bb;
-    L_0x00a5:
-        if (r8 == 0) goto L_0x00bb;
-    L_0x00a7:
-        if (r6 == 0) goto L_0x00bb;
-    L_0x00a9:
-        r13 = r8.length();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r13 == 0) goto L_0x00bb;
-    L_0x00af:
-        r13 = r6.length();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        if (r13 == 0) goto L_0x00bb;
-    L_0x00b5:
-        r3.put(r6, r8);	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        r6 = r2;
-        r7 = r6;
-        r8 = r7;
-    L_0x00bb:
-        r13 = r4.next();	 Catch:{ Exception -> 0x00cc, all -> 0x00ca }
-        goto L_0x002b;
-    L_0x00c1:
-        r5.close();	 Catch:{ Exception -> 0x00c5 }
-        goto L_0x00c9;
-    L_0x00c5:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.e(r13);
-    L_0x00c9:
-        return r3;
-    L_0x00ca:
-        r13 = move-exception;
-        goto L_0x00e8;
-    L_0x00cc:
-        r13 = move-exception;
-        r2 = r5;
-        goto L_0x00d3;
-    L_0x00cf:
-        r13 = move-exception;
-        r5 = r2;
-        goto L_0x00e8;
-    L_0x00d2:
-        r13 = move-exception;
-    L_0x00d3:
-        org.telegram.messenger.FileLog.e(r13);	 Catch:{ all -> 0x00cf }
-        r12.reloadLastFile = r1;	 Catch:{ all -> 0x00cf }
-        if (r2 == 0) goto L_0x00e2;
-    L_0x00da:
-        r2.close();	 Catch:{ Exception -> 0x00de }
-        goto L_0x00e2;
-    L_0x00de:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.e(r13);
-    L_0x00e2:
-        r13 = new java.util.HashMap;
-        r13.<init>();
-        return r13;
-    L_0x00e8:
-        if (r5 == 0) goto L_0x00f2;
-    L_0x00ea:
-        r5.close();	 Catch:{ Exception -> 0x00ee }
-        goto L_0x00f2;
-    L_0x00ee:
-        r14 = move-exception;
-        org.telegram.messenger.FileLog.e(r14);
-    L_0x00f2:
-        goto L_0x00f4;
-    L_0x00f3:
-        throw r13;
-    L_0x00f4:
-        goto L_0x00f3;
+            r12 = this;
+            r0 = 0
+            r12.reloadLastFile = r0
+            r1 = 1
+            r2 = 0
+            boolean r3 = r13.exists()     // Catch:{ Exception -> 0x00d2 }
+            if (r3 != 0) goto L_0x0011
+            java.util.HashMap r13 = new java.util.HashMap     // Catch:{ Exception -> 0x00d2 }
+            r13.<init>()     // Catch:{ Exception -> 0x00d2 }
+            return r13
+        L_0x0011:
+            java.util.HashMap r3 = new java.util.HashMap     // Catch:{ Exception -> 0x00d2 }
+            r3.<init>()     // Catch:{ Exception -> 0x00d2 }
+            org.xmlpull.v1.XmlPullParser r4 = android.util.Xml.newPullParser()     // Catch:{ Exception -> 0x00d2 }
+            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ Exception -> 0x00d2 }
+            r5.<init>(r13)     // Catch:{ Exception -> 0x00d2 }
+            java.lang.String r13 = "UTF-8"
+            r4.setInput(r5, r13)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            int r13 = r4.getEventType()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            r6 = r2
+            r7 = r6
+            r8 = r7
+        L_0x002b:
+            if (r13 == r1) goto L_0x00c1
+            r9 = 2
+            if (r13 != r9) goto L_0x0040
+            java.lang.String r13 = r4.getName()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            int r7 = r4.getAttributeCount()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r7 <= 0) goto L_0x003e
+            java.lang.String r6 = r4.getAttributeValue(r0)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+        L_0x003e:
+            r7 = r13
+            goto L_0x009b
+        L_0x0040:
+            r9 = 4
+            if (r13 != r9) goto L_0x0095
+            if (r6 == 0) goto L_0x009b
+            java.lang.String r13 = r4.getText()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r13 == 0) goto L_0x0093
+            java.lang.String r13 = r13.trim()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r8 = "&lt;"
+            java.lang.String r9 = "<"
+            if (r14 == 0) goto L_0x0072
+            java.lang.String r13 = r13.replace(r9, r8)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r8 = ">"
+            java.lang.String r9 = "&gt;"
+            java.lang.String r13 = r13.replace(r8, r9)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r8 = "'"
+            java.lang.String r9 = "\\'"
+            java.lang.String r13 = r13.replace(r8, r9)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r8 = "& "
+            java.lang.String r9 = "&amp; "
+            java.lang.String r13 = r13.replace(r8, r9)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            goto L_0x0093
+        L_0x0072:
+            java.lang.String r10 = "\\n"
+            java.lang.String r11 = "\n"
+            java.lang.String r13 = r13.replace(r10, r11)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r10 = "\\"
+            java.lang.String r11 = ""
+            java.lang.String r13 = r13.replace(r10, r11)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            java.lang.String r8 = r13.replace(r8, r9)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            boolean r9 = r12.reloadLastFile     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r9 != 0) goto L_0x009b
+            boolean r13 = r8.equals(r13)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r13 != 0) goto L_0x009b
+            r12.reloadLastFile = r1     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            goto L_0x009b
+        L_0x0093:
+            r8 = r13
+            goto L_0x009b
+        L_0x0095:
+            r9 = 3
+            if (r13 != r9) goto L_0x009b
+            r6 = r2
+            r7 = r6
+            r8 = r7
+        L_0x009b:
+            if (r7 == 0) goto L_0x00bb
+            java.lang.String r13 = "string"
+            boolean r13 = r7.equals(r13)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r13 == 0) goto L_0x00bb
+            if (r8 == 0) goto L_0x00bb
+            if (r6 == 0) goto L_0x00bb
+            int r13 = r8.length()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r13 == 0) goto L_0x00bb
+            int r13 = r6.length()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            if (r13 == 0) goto L_0x00bb
+            r3.put(r6, r8)     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            r6 = r2
+            r7 = r6
+            r8 = r7
+        L_0x00bb:
+            int r13 = r4.next()     // Catch:{ Exception -> 0x00cc, all -> 0x00ca }
+            goto L_0x002b
+        L_0x00c1:
+            r5.close()     // Catch:{ Exception -> 0x00c5 }
+            goto L_0x00c9
+        L_0x00c5:
+            r13 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+        L_0x00c9:
+            return r3
+        L_0x00ca:
+            r13 = move-exception
+            goto L_0x00e8
+        L_0x00cc:
+            r13 = move-exception
+            r2 = r5
+            goto L_0x00d3
+        L_0x00cf:
+            r13 = move-exception
+            r5 = r2
+            goto L_0x00e8
+        L_0x00d2:
+            r13 = move-exception
+        L_0x00d3:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x00cf }
+            r12.reloadLastFile = r1     // Catch:{ all -> 0x00cf }
+            if (r2 == 0) goto L_0x00e2
+            r2.close()     // Catch:{ Exception -> 0x00de }
+            goto L_0x00e2
+        L_0x00de:
+            r13 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+        L_0x00e2:
+            java.util.HashMap r13 = new java.util.HashMap
+            r13.<init>()
+            return r13
+        L_0x00e8:
+            if (r5 == 0) goto L_0x00f2
+            r5.close()     // Catch:{ Exception -> 0x00ee }
+            goto L_0x00f2
+        L_0x00ee:
+            r14 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r14)
+        L_0x00f2:
+            goto L_0x00f4
+        L_0x00f3:
+            throw r13
+        L_0x00f4:
+            goto L_0x00f3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleFileStrings(java.io.File, boolean):java.util.HashMap");
     }
@@ -1517,6 +1121,8 @@ public class LocaleController {
     }
 
     public void applyLanguage(LocaleInfo localeInfo, boolean z, boolean z2, boolean z3, boolean z4, int i) {
+        String[] strArr;
+        Locale locale;
         if (localeInfo != null) {
             boolean hasBaseLang = localeInfo.hasBaseLang();
             File pathToFile = localeInfo.getPathToFile();
@@ -1540,38 +1146,42 @@ public class LocaleController {
             }
             if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (z4 || !pathToFile.exists() || (hasBaseLang && !pathToBaseFile.exists()))) {
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("reload locale because one of file doesn't exist");
-                    stringBuilder.append(pathToFile);
-                    stringBuilder.append(" ");
-                    stringBuilder.append(pathToBaseFile);
-                    FileLog.d(stringBuilder.toString());
+                    FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
                 }
                 if (z2) {
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$rPqRyQsgkE1_kSvpx5ngOlMyIY4(this, localeInfo, i));
+                    AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i) {
+                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        private final /* synthetic */ int f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void run() {
+                            LocaleController.this.lambda$applyLanguage$2$LocaleController(this.f$1, this.f$2);
+                        }
+                    });
                 } else {
-                    applyRemoteLanguage(localeInfo, null, true, i);
+                    applyRemoteLanguage(localeInfo, (String) null, true, i);
                 }
             }
             try {
-                String[] split;
-                Locale locale;
-                str = "_";
                 if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
-                    split = localeInfo.pluralLangCode.split(str);
-                } else if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
-                    split = localeInfo.shortName.split(str);
+                    strArr = localeInfo.pluralLangCode.split("_");
+                } else if (!TextUtils.isEmpty(localeInfo.baseLangCode)) {
+                    strArr = localeInfo.baseLangCode.split("_");
                 } else {
-                    split = localeInfo.baseLangCode.split(str);
+                    strArr = localeInfo.shortName.split("_");
                 }
-                if (split.length == 1) {
-                    locale = new Locale(split[0]);
+                if (strArr.length == 1) {
+                    locale = new Locale(strArr[0]);
                 } else {
-                    locale = new Locale(split[0], split[1]);
+                    locale = new Locale(strArr[0], strArr[1]);
                 }
                 if (z) {
                     this.languageOverride = localeInfo.shortName;
-                    Editor edit = MessagesController.getGlobalMainSettings().edit();
+                    SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
                     edit.putString("language", localeInfo.getKey());
                     edit.commit();
                 }
@@ -1585,13 +1195,13 @@ public class LocaleController {
                 }
                 this.currentLocale = locale;
                 this.currentLocaleInfo = localeInfo;
-                if (!(this.currentLocaleInfo == null || TextUtils.isEmpty(this.currentLocaleInfo.pluralLangCode))) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocaleInfo.pluralLangCode);
+                if (this.currentLocaleInfo != null && !TextUtils.isEmpty(this.currentLocaleInfo.pluralLangCode)) {
+                    this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(split[0]);
+                    this.currentPluralRules = this.allRules.get(strArr[0]);
                     if (this.currentPluralRules == null) {
-                        this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocale.getLanguage());
+                        this.currentPluralRules = this.allRules.get(this.currentLocale.getLanguage());
                         if (this.currentPluralRules == null) {
                             this.currentPluralRules = new PluralRules_None();
                         }
@@ -1605,14 +1215,24 @@ public class LocaleController {
                 this.changingConfiguration = false;
                 if (this.reloadLastFile) {
                     if (z2) {
-                        AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$TG7Fd9ju6kk9LWo1RB9e1CZ_6mk(this, i));
+                        AndroidUtilities.runOnUIThread(new Runnable(i) {
+                            private final /* synthetic */ int f$1;
+
+                            {
+                                this.f$1 = r2;
+                            }
+
+                            public final void run() {
+                                LocaleController.this.lambda$applyLanguage$3$LocaleController(this.f$1);
+                            }
+                        });
                     } else {
-                        reloadCurrentRemoteLocale(i, null);
+                        reloadCurrentRemoteLocale(i, (String) null);
                     }
                     this.reloadLastFile = false;
                 }
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
                 this.changingConfiguration = false;
             }
             recreateFormatters();
@@ -1620,11 +1240,11 @@ public class LocaleController {
     }
 
     public /* synthetic */ void lambda$applyLanguage$2$LocaleController(LocaleInfo localeInfo, int i) {
-        applyRemoteLanguage(localeInfo, null, true, i);
+        applyRemoteLanguage(localeInfo, (String) null, true, i);
     }
 
     public /* synthetic */ void lambda$applyLanguage$3$LocaleController(int i) {
-        reloadCurrentRemoteLocale(i, null);
+        reloadCurrentRemoteLocale(i, (String) null);
     }
 
     public LocaleInfo getCurrentLocaleInfo() {
@@ -1637,30 +1257,44 @@ public class LocaleController {
     }
 
     private String getStringInternal(String str, int i) {
-        String str2 = BuildVars.USE_CLOUD_STRINGS ? (String) this.localeValues.get(str) : null;
+        String str2 = BuildVars.USE_CLOUD_STRINGS ? this.localeValues.get(str) : null;
         if (str2 == null) {
             try {
                 str2 = ApplicationLoader.applicationContext.getString(i);
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
         }
         if (str2 != null) {
             return str2;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("LOC_ERR:");
-        stringBuilder.append(str);
-        return stringBuilder.toString();
+        return "LOC_ERR:" + str;
     }
 
-    public static String getServerString(String str) {
-        String str2 = (String) getInstance().localeValues.get(str);
-        if (str2 != null) {
-            return str2;
-        }
-        int identifier = ApplicationLoader.applicationContext.getResources().getIdentifier(str, "string", ApplicationLoader.applicationContext.getPackageName());
-        return identifier != 0 ? ApplicationLoader.applicationContext.getString(identifier) : str2;
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x000e, code lost:
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext.getResources().getIdentifier(r4, "string", org.telegram.messenger.ApplicationLoader.applicationContext.getPackageName());
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String getServerString(java.lang.String r4) {
+        /*
+            org.telegram.messenger.LocaleController r0 = getInstance()
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = r0.localeValues
+            java.lang.Object r0 = r0.get(r4)
+            java.lang.String r0 = (java.lang.String) r0
+            if (r0 != 0) goto L_0x0028
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
+            android.content.res.Resources r1 = r1.getResources()
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r2 = r2.getPackageName()
+            java.lang.String r3 = "string"
+            int r4 = r1.getIdentifier(r4, r3, r2)
+            if (r4 == 0) goto L_0x0028
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r0 = r0.getString(r4)
+        L_0x0028:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getServerString(java.lang.String):java.lang.String");
     }
 
     public static String getString(String str, int i) {
@@ -1669,80 +1303,52 @@ public class LocaleController {
 
     public static String getPluralString(String str, int i) {
         if (str == null || str.length() == 0 || getInstance().currentPluralRules == null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("LOC_ERR:");
-            stringBuilder.append(str);
-            return stringBuilder.toString();
+            return "LOC_ERR:" + str;
         }
-        String stringForQuantity = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append(str);
-        stringBuilder2.append("_");
-        stringBuilder2.append(stringForQuantity);
-        str = stringBuilder2.toString();
-        return getString(str, ApplicationLoader.applicationContext.getResources().getIdentifier(str, "string", ApplicationLoader.applicationContext.getPackageName()));
+        String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
+        return getString(str2, ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
     }
 
     public static String formatPluralString(String str, int i) {
         if (str == null || str.length() == 0 || getInstance().currentPluralRules == null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("LOC_ERR:");
-            stringBuilder.append(str);
-            return stringBuilder.toString();
+            return "LOC_ERR:" + str;
         }
-        String stringForQuantity = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append(str);
-        stringBuilder2.append("_");
-        stringBuilder2.append(stringForQuantity);
-        str = stringBuilder2.toString();
-        return formatString(str, ApplicationLoader.applicationContext.getResources().getIdentifier(str, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
+        String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
+        return formatString(str2, ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
     }
 
     public static String formatPluralStringComma(String str, int i) {
-        StringBuilder stringBuilder;
         if (str != null) {
             try {
                 if (str.length() != 0) {
                     if (getInstance().currentPluralRules != null) {
-                        String stringForQuantity = getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append(str);
-                        stringBuilder2.append("_");
-                        stringBuilder2.append(stringForQuantity);
-                        stringForQuantity = stringBuilder2.toString();
-                        stringBuilder2 = new StringBuilder(String.format(Locale.US, "%d", new Object[]{Integer.valueOf(i)}));
-                        for (i = stringBuilder2.length() - 3; i > 0; i -= 3) {
-                            stringBuilder2.insert(i, ',');
+                        String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
+                        StringBuilder sb = new StringBuilder(String.format(Locale.US, "%d", new Object[]{Integer.valueOf(i)}));
+                        for (int length = sb.length() - 3; length > 0; length -= 3) {
+                            sb.insert(length, ',');
                         }
-                        String str2 = BuildVars.USE_CLOUD_STRINGS ? (String) getInstance().localeValues.get(stringForQuantity) : null;
-                        if (str2 == null) {
-                            str2 = ApplicationLoader.applicationContext.getString(ApplicationLoader.applicationContext.getResources().getIdentifier(stringForQuantity, "string", ApplicationLoader.applicationContext.getPackageName()));
+                        String str3 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str2) : null;
+                        if (str3 == null) {
+                            str3 = ApplicationLoader.applicationContext.getString(ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
                         }
-                        str2 = str2.replace("%1$d", "%1$s");
+                        String replace = str3.replace("%1$d", "%1$s");
                         if (getInstance().currentLocale != null) {
-                            return String.format(getInstance().currentLocale, str2, new Object[]{stringBuilder2});
+                            return String.format(getInstance().currentLocale, replace, new Object[]{sb});
                         }
-                        return String.format(str2, new Object[]{stringBuilder2});
+                        return String.format(replace, new Object[]{sb});
                     }
                 }
             } catch (Exception e) {
-                FileLog.e(e);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("LOC_ERR: ");
-                stringBuilder.append(str);
-                return stringBuilder.toString();
+                FileLog.e((Throwable) e);
+                return "LOC_ERR: " + str;
             }
         }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append("LOC_ERR:");
-        stringBuilder.append(str);
-        return stringBuilder.toString();
+        return "LOC_ERR:" + str;
     }
 
     public static String formatString(String str, int i, Object... objArr) {
         try {
-            String str2 = BuildVars.USE_CLOUD_STRINGS ? (String) getInstance().localeValues.get(str) : null;
+            String str2 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str) : null;
             if (str2 == null) {
                 str2 = ApplicationLoader.applicationContext.getString(i);
             }
@@ -1751,11 +1357,8 @@ public class LocaleController {
             }
             return String.format(str2, objArr);
         } catch (Exception e) {
-            FileLog.e(e);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("LOC_ERR: ");
-            stringBuilder.append(str);
-            return stringBuilder.toString();
+            FileLog.e((Throwable) e);
+            return "LOC_ERR: " + str;
         }
     }
 
@@ -1765,227 +1368,223 @@ public class LocaleController {
         }
         if (i < 3600) {
             return formatPluralString("Minutes", i / 60);
-        } else if (i < 86400) {
-            return formatPluralString("Hours", (i / 60) / 60);
-        } else {
-            String str = "Days";
-            if (i < 604800) {
-                return formatPluralString(str, ((i / 60) / 60) / 24);
-            }
-            int i2 = ((i / 60) / 60) / 24;
-            String str2 = "Weeks";
-            if (i % 7 == 0) {
-                return formatPluralString(str2, i2 / 7);
-            }
-            return String.format("%s %s", new Object[]{formatPluralString(str2, i2 / 7), formatPluralString(str, i2 % 7)});
         }
+        if (i < 86400) {
+            return formatPluralString("Hours", (i / 60) / 60);
+        }
+        if (i < 604800) {
+            return formatPluralString("Days", ((i / 60) / 60) / 24);
+        }
+        int i2 = ((i / 60) / 60) / 24;
+        if (i % 7 == 0) {
+            return formatPluralString("Weeks", i2 / 7);
+        }
+        return String.format("%s %s", new Object[]{formatPluralString("Weeks", i2 / 7), formatPluralString("Days", i2 % 7)});
     }
 
     public String formatCurrencyString(long j, String str) {
         double d;
-        String toUpperCase = str.toUpperCase();
-        Object obj = j < 0 ? 1 : null;
+        String upperCase = str.toUpperCase();
+        boolean z = j < 0;
         long abs = Math.abs(j);
-        Currency instance = Currency.getInstance(toUpperCase);
-        Object obj2 = -1;
-        String str2 = "IRR";
-        switch (toUpperCase.hashCode()) {
+        Currency instance = Currency.getInstance(upperCase);
+        char c = 65535;
+        switch (upperCase.hashCode()) {
             case 65726:
-                if (toUpperCase.equals("BHD")) {
-                    obj2 = 2;
+                if (upperCase.equals("BHD")) {
+                    c = 2;
                     break;
                 }
                 break;
             case 65759:
-                if (toUpperCase.equals("BIF")) {
-                    obj2 = 9;
+                if (upperCase.equals("BIF")) {
+                    c = 9;
                     break;
                 }
                 break;
             case 66267:
-                if (toUpperCase.equals("BYR")) {
-                    obj2 = 10;
+                if (upperCase.equals("BYR")) {
+                    c = 10;
                     break;
                 }
                 break;
             case 66813:
-                if (toUpperCase.equals("CLF")) {
-                    obj2 = null;
+                if (upperCase.equals("CLF")) {
+                    c = 0;
                     break;
                 }
                 break;
             case 66823:
-                if (toUpperCase.equals("CLP")) {
-                    obj2 = 11;
+                if (upperCase.equals("CLP")) {
+                    c = 11;
                     break;
                 }
                 break;
             case 67122:
-                if (toUpperCase.equals("CVE")) {
-                    obj2 = 12;
+                if (upperCase.equals("CVE")) {
+                    c = 12;
                     break;
                 }
                 break;
             case 67712:
-                if (toUpperCase.equals("DJF")) {
-                    obj2 = 13;
+                if (upperCase.equals("DJF")) {
+                    c = 13;
                     break;
                 }
                 break;
             case 70719:
-                if (toUpperCase.equals("GNF")) {
-                    obj2 = 14;
+                if (upperCase.equals("GNF")) {
+                    c = 14;
                     break;
                 }
                 break;
             case 72732:
-                if (toUpperCase.equals("IQD")) {
-                    obj2 = 3;
+                if (upperCase.equals("IQD")) {
+                    c = 3;
                     break;
                 }
                 break;
             case 72777:
-                if (toUpperCase.equals(str2)) {
-                    obj2 = 1;
+                if (upperCase.equals("IRR")) {
+                    c = 1;
                     break;
                 }
                 break;
             case 72801:
-                if (toUpperCase.equals("ISK")) {
-                    obj2 = 15;
+                if (upperCase.equals("ISK")) {
+                    c = 15;
                     break;
                 }
                 break;
             case 73631:
-                if (toUpperCase.equals("JOD")) {
-                    obj2 = 4;
+                if (upperCase.equals("JOD")) {
+                    c = 4;
                     break;
                 }
                 break;
             case 73683:
-                if (toUpperCase.equals("JPY")) {
-                    obj2 = 16;
+                if (upperCase.equals("JPY")) {
+                    c = 16;
                     break;
                 }
                 break;
             case 74532:
-                if (toUpperCase.equals("KMF")) {
-                    obj2 = 17;
+                if (upperCase.equals("KMF")) {
+                    c = 17;
                     break;
                 }
                 break;
             case 74704:
-                if (toUpperCase.equals("KRW")) {
-                    obj2 = 18;
+                if (upperCase.equals("KRW")) {
+                    c = 18;
                     break;
                 }
                 break;
             case 74840:
-                if (toUpperCase.equals("KWD")) {
-                    obj2 = 5;
+                if (upperCase.equals("KWD")) {
+                    c = 5;
                     break;
                 }
                 break;
             case 75863:
-                if (toUpperCase.equals("LYD")) {
-                    obj2 = 6;
+                if (upperCase.equals("LYD")) {
+                    c = 6;
                     break;
                 }
                 break;
             case 76263:
-                if (toUpperCase.equals("MGA")) {
-                    obj2 = 19;
+                if (upperCase.equals("MGA")) {
+                    c = 19;
                     break;
                 }
                 break;
             case 76618:
-                if (toUpperCase.equals("MRO")) {
-                    obj2 = 29;
+                if (upperCase.equals("MRO")) {
+                    c = 29;
                     break;
                 }
                 break;
             case 78388:
-                if (toUpperCase.equals("OMR")) {
-                    obj2 = 7;
+                if (upperCase.equals("OMR")) {
+                    c = 7;
                     break;
                 }
                 break;
             case 79710:
-                if (toUpperCase.equals("PYG")) {
-                    obj2 = 20;
+                if (upperCase.equals("PYG")) {
+                    c = 20;
                     break;
                 }
                 break;
             case 81569:
-                if (toUpperCase.equals("RWF")) {
-                    obj2 = 21;
+                if (upperCase.equals("RWF")) {
+                    c = 21;
                     break;
                 }
                 break;
             case 83210:
-                if (toUpperCase.equals("TND")) {
-                    obj2 = 8;
+                if (upperCase.equals("TND")) {
+                    c = 8;
                     break;
                 }
                 break;
             case 83974:
-                if (toUpperCase.equals("UGX")) {
-                    obj2 = 22;
+                if (upperCase.equals("UGX")) {
+                    c = 22;
                     break;
                 }
                 break;
             case 84517:
-                if (toUpperCase.equals("UYI")) {
-                    obj2 = 23;
+                if (upperCase.equals("UYI")) {
+                    c = 23;
                     break;
                 }
                 break;
             case 85132:
-                if (toUpperCase.equals("VND")) {
-                    obj2 = 24;
+                if (upperCase.equals("VND")) {
+                    c = 24;
                     break;
                 }
                 break;
             case 85367:
-                if (toUpperCase.equals("VUV")) {
-                    obj2 = 25;
+                if (upperCase.equals("VUV")) {
+                    c = 25;
                     break;
                 }
                 break;
             case 86653:
-                if (toUpperCase.equals("XAF")) {
-                    obj2 = 26;
+                if (upperCase.equals("XAF")) {
+                    c = 26;
                     break;
                 }
                 break;
             case 87087:
-                if (toUpperCase.equals("XOF")) {
-                    obj2 = 27;
+                if (upperCase.equals("XOF")) {
+                    c = 27;
                     break;
                 }
                 break;
             case 87118:
-                if (toUpperCase.equals("XPF")) {
-                    obj2 = 28;
+                if (upperCase.equals("XPF")) {
+                    c = 28;
                     break;
                 }
                 break;
         }
-        String str3 = " %.0f";
-        String str4 = " %.2f";
-        switch (obj2) {
-            case null:
-                d = (double) abs;
-                Double.isNaN(d);
-                d /= 10000.0d;
-                str3 = " %.4f";
+        String str2 = " %.0f";
+        switch (c) {
+            case 0:
+                double d2 = (double) abs;
+                Double.isNaN(d2);
+                d = d2 / 10000.0d;
+                str2 = " %.4f";
                 break;
             case 1:
-                double d2 = (double) (((float) abs) / 100.0f);
+                double d3 = (double) (((float) abs) / 100.0f);
                 if (abs % 100 != 0) {
-                    str3 = str4;
+                    str2 = " %.2f";
                 }
-                d = d2;
+                d = d3;
                 break;
             case 2:
             case 3:
@@ -1994,10 +1593,10 @@ public class LocaleController {
             case 6:
             case 7:
             case 8:
-                d = (double) abs;
-                Double.isNaN(d);
-                d /= 1000.0d;
-                str3 = " %.3f";
+                double d4 = (double) abs;
+                Double.isNaN(d4);
+                d = d4 / 1000.0d;
+                str2 = " %.3f";
                 break;
             case 9:
             case 10:
@@ -2022,20 +1621,19 @@ public class LocaleController {
                 d = (double) abs;
                 break;
             case 29:
-                d = (double) abs;
-                Double.isNaN(d);
-                d /= 10.0d;
-                str3 = " %.1f";
+                double d5 = (double) abs;
+                Double.isNaN(d5);
+                d = d5 / 10.0d;
+                str2 = " %.1f";
                 break;
             default:
-                d = (double) abs;
-                Double.isNaN(d);
-                d /= 100.0d;
-                str3 = str4;
+                double d6 = (double) abs;
+                Double.isNaN(d6);
+                d = d6 / 100.0d;
+                str2 = " %.2f";
                 break;
         }
-        String str5 = "-";
-        String str6 = "";
+        String str3 = "-";
         if (instance != null) {
             Locale locale = this.currentLocale;
             if (locale == null) {
@@ -2043,387 +1641,354 @@ public class LocaleController {
             }
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(locale);
             currencyInstance.setCurrency(instance);
-            if (toUpperCase.equals(str2)) {
+            if (upperCase.equals("IRR")) {
                 currencyInstance.setMaximumFractionDigits(0);
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            if (obj == null) {
-                str5 = str6;
+            StringBuilder sb = new StringBuilder();
+            if (!z) {
+                str3 = "";
             }
-            stringBuilder.append(str5);
-            stringBuilder.append(currencyInstance.format(d));
-            return stringBuilder.toString();
+            sb.append(str3);
+            sb.append(currencyInstance.format(d));
+            return sb.toString();
         }
-        StringBuilder stringBuilder2 = new StringBuilder();
-        if (obj == null) {
-            str5 = str6;
+        StringBuilder sb2 = new StringBuilder();
+        if (!z) {
+            str3 = "";
         }
-        stringBuilder2.append(str5);
+        sb2.append(str3);
         Locale locale2 = Locale.US;
-        StringBuilder stringBuilder3 = new StringBuilder();
-        stringBuilder3.append(toUpperCase);
-        stringBuilder3.append(str3);
-        stringBuilder2.append(String.format(locale2, stringBuilder3.toString(), new Object[]{Double.valueOf(d)}));
-        return stringBuilder2.toString();
+        sb2.append(String.format(locale2, upperCase + str2, new Object[]{Double.valueOf(d)}));
+        return sb2.toString();
     }
 
+    /* JADX WARNING: Can't fix incorrect switch cases order */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public java.lang.String formatCurrencyDecimalString(long r10, java.lang.String r12, boolean r13) {
         /*
-        r9 = this;
-        r12 = r12.toUpperCase();
-        r10 = java.lang.Math.abs(r10);
-        r0 = r12.hashCode();
-        r1 = 1;
-        r2 = 0;
-        switch(r0) {
-            case 65726: goto L_0x015f;
-            case 65759: goto L_0x0154;
-            case 66267: goto L_0x0149;
-            case 66813: goto L_0x013f;
-            case 66823: goto L_0x0134;
-            case 67122: goto L_0x0129;
-            case 67712: goto L_0x011e;
-            case 70719: goto L_0x0113;
-            case 72732: goto L_0x0109;
-            case 72777: goto L_0x00ff;
-            case 72801: goto L_0x00f3;
-            case 73631: goto L_0x00e8;
-            case 73683: goto L_0x00dc;
-            case 74532: goto L_0x00d0;
-            case 74704: goto L_0x00c4;
-            case 74840: goto L_0x00b9;
-            case 75863: goto L_0x00ae;
-            case 76263: goto L_0x00a2;
-            case 76618: goto L_0x0096;
-            case 78388: goto L_0x008b;
-            case 79710: goto L_0x007f;
-            case 81569: goto L_0x0073;
-            case 83210: goto L_0x0067;
-            case 83974: goto L_0x005b;
-            case 84517: goto L_0x004f;
-            case 85132: goto L_0x0043;
-            case 85367: goto L_0x0037;
-            case 86653: goto L_0x002b;
-            case 87087: goto L_0x001f;
-            case 87118: goto L_0x0013;
-            default: goto L_0x0011;
-        };
-    L_0x0011:
-        goto L_0x0169;
-    L_0x0013:
-        r0 = "XPF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x001b:
-        r0 = 28;
-        goto L_0x016a;
-    L_0x001f:
-        r0 = "XOF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0027:
-        r0 = 27;
-        goto L_0x016a;
-    L_0x002b:
-        r0 = "XAF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0033:
-        r0 = 26;
-        goto L_0x016a;
-    L_0x0037:
-        r0 = "VUV";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x003f:
-        r0 = 25;
-        goto L_0x016a;
-    L_0x0043:
-        r0 = "VND";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x004b:
-        r0 = 24;
-        goto L_0x016a;
-    L_0x004f:
-        r0 = "UYI";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0057:
-        r0 = 23;
-        goto L_0x016a;
-    L_0x005b:
-        r0 = "UGX";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0063:
-        r0 = 22;
-        goto L_0x016a;
-    L_0x0067:
-        r0 = "TND";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x006f:
-        r0 = 8;
-        goto L_0x016a;
-    L_0x0073:
-        r0 = "RWF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x007b:
-        r0 = 21;
-        goto L_0x016a;
-    L_0x007f:
-        r0 = "PYG";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0087:
-        r0 = 20;
-        goto L_0x016a;
-    L_0x008b:
-        r0 = "OMR";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0093:
-        r0 = 7;
-        goto L_0x016a;
-    L_0x0096:
-        r0 = "MRO";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x009e:
-        r0 = 29;
-        goto L_0x016a;
-    L_0x00a2:
-        r0 = "MGA";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00aa:
-        r0 = 19;
-        goto L_0x016a;
-    L_0x00ae:
-        r0 = "LYD";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00b6:
-        r0 = 6;
-        goto L_0x016a;
-    L_0x00b9:
-        r0 = "KWD";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00c1:
-        r0 = 5;
-        goto L_0x016a;
-    L_0x00c4:
-        r0 = "KRW";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00cc:
-        r0 = 18;
-        goto L_0x016a;
-    L_0x00d0:
-        r0 = "KMF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00d8:
-        r0 = 17;
-        goto L_0x016a;
-    L_0x00dc:
-        r0 = "JPY";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00e4:
-        r0 = 16;
-        goto L_0x016a;
-    L_0x00e8:
-        r0 = "JOD";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00f0:
-        r0 = 4;
-        goto L_0x016a;
-    L_0x00f3:
-        r0 = "ISK";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x00fb:
-        r0 = 15;
-        goto L_0x016a;
-    L_0x00ff:
-        r0 = "IRR";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0107:
-        r0 = 1;
-        goto L_0x016a;
-    L_0x0109:
-        r0 = "IQD";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0111:
-        r0 = 3;
-        goto L_0x016a;
-    L_0x0113:
-        r0 = "GNF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x011b:
-        r0 = 14;
-        goto L_0x016a;
-    L_0x011e:
-        r0 = "DJF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0126:
-        r0 = 13;
-        goto L_0x016a;
-    L_0x0129:
-        r0 = "CVE";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0131:
-        r0 = 12;
-        goto L_0x016a;
-    L_0x0134:
-        r0 = "CLP";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x013c:
-        r0 = 11;
-        goto L_0x016a;
-    L_0x013f:
-        r0 = "CLF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0147:
-        r0 = 0;
-        goto L_0x016a;
-    L_0x0149:
-        r0 = "BYR";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0151:
-        r0 = 10;
-        goto L_0x016a;
-    L_0x0154:
-        r0 = "BIF";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x015c:
-        r0 = 9;
-        goto L_0x016a;
-    L_0x015f:
-        r0 = "BHD";
-        r0 = r12.equals(r0);
-        if (r0 == 0) goto L_0x0169;
-    L_0x0167:
-        r0 = 2;
-        goto L_0x016a;
-    L_0x0169:
-        r0 = -1;
-    L_0x016a:
-        r3 = " %.0f";
-        r4 = " %.2f";
-        switch(r0) {
-            case 0: goto L_0x01a5;
-            case 1: goto L_0x0193;
-            case 2: goto L_0x0186;
-            case 3: goto L_0x0186;
-            case 4: goto L_0x0186;
-            case 5: goto L_0x0186;
-            case 6: goto L_0x0186;
-            case 7: goto L_0x0186;
-            case 8: goto L_0x0186;
-            case 9: goto L_0x0184;
-            case 10: goto L_0x0184;
-            case 11: goto L_0x0184;
-            case 12: goto L_0x0184;
-            case 13: goto L_0x0184;
-            case 14: goto L_0x0184;
-            case 15: goto L_0x0184;
-            case 16: goto L_0x0184;
-            case 17: goto L_0x0184;
-            case 18: goto L_0x0184;
-            case 19: goto L_0x0184;
-            case 20: goto L_0x0184;
-            case 21: goto L_0x0184;
-            case 22: goto L_0x0184;
-            case 23: goto L_0x0184;
-            case 24: goto L_0x0184;
-            case 25: goto L_0x0184;
-            case 26: goto L_0x0184;
-            case 27: goto L_0x0184;
-            case 28: goto L_0x0184;
-            case 29: goto L_0x017a;
-            default: goto L_0x0171;
-        };
-    L_0x0171:
-        r10 = (double) r10;
-        r5 = NUM; // 0xNUM float:0.0 double:100.0;
-        java.lang.Double.isNaN(r10);
-        r10 = r10 / r5;
-        r3 = r4;
-        goto L_0x01b1;
-    L_0x017a:
-        r10 = (double) r10;
-        r3 = NUM; // 0xNUM float:0.0 double:10.0;
-        java.lang.Double.isNaN(r10);
-        r10 = r10 / r3;
-        r3 = " %.1f";
-        goto L_0x01b1;
-    L_0x0184:
-        r10 = (double) r10;
-        goto L_0x01b1;
-    L_0x0186:
-        r10 = (double) r10;
-        r3 = NUM; // 0x408fNUM float:0.0 double:1000.0;
-        java.lang.Double.isNaN(r10);
-        r10 = r10 / r3;
-        r3 = " %.3f";
-        goto L_0x01b1;
-    L_0x0193:
-        r0 = (float) r10;
-        r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r0 = r0 / r5;
-        r5 = (double) r0;
-        r7 = 100;
-        r10 = r10 % r7;
-        r7 = 0;
-        r0 = (r10 > r7 ? 1 : (r10 == r7 ? 0 : -1));
-        if (r0 != 0) goto L_0x01a2;
-    L_0x01a1:
-        goto L_0x01a3;
-    L_0x01a2:
-        r3 = r4;
-    L_0x01a3:
-        r10 = r5;
-        goto L_0x01b1;
-    L_0x01a5:
-        r10 = (double) r10;
-        r3 = NUM; // 0x40cNUM float:0.0 double:10000.0;
-        java.lang.Double.isNaN(r10);
-        r10 = r10 / r3;
-        r3 = " %.4f";
-    L_0x01b1:
-        r0 = java.util.Locale.US;
-        if (r13 == 0) goto L_0x01b6;
-    L_0x01b5:
-        goto L_0x01c7;
-    L_0x01b6:
-        r12 = new java.lang.StringBuilder;
-        r12.<init>();
-        r13 = "";
-        r12.append(r13);
-        r12.append(r3);
-        r12 = r12.toString();
-    L_0x01c7:
-        r13 = new java.lang.Object[r1];
-        r10 = java.lang.Double.valueOf(r10);
-        r13[r2] = r10;
-        r10 = java.lang.String.format(r0, r12, r13);
-        r10 = r10.trim();
-        return r10;
+            r9 = this;
+            java.lang.String r12 = r12.toUpperCase()
+            long r10 = java.lang.Math.abs(r10)
+            int r0 = r12.hashCode()
+            r1 = 1
+            r2 = 0
+            switch(r0) {
+                case 65726: goto L_0x015f;
+                case 65759: goto L_0x0154;
+                case 66267: goto L_0x0149;
+                case 66813: goto L_0x013f;
+                case 66823: goto L_0x0134;
+                case 67122: goto L_0x0129;
+                case 67712: goto L_0x011e;
+                case 70719: goto L_0x0113;
+                case 72732: goto L_0x0109;
+                case 72777: goto L_0x00ff;
+                case 72801: goto L_0x00f3;
+                case 73631: goto L_0x00e8;
+                case 73683: goto L_0x00dc;
+                case 74532: goto L_0x00d0;
+                case 74704: goto L_0x00c4;
+                case 74840: goto L_0x00b9;
+                case 75863: goto L_0x00ae;
+                case 76263: goto L_0x00a2;
+                case 76618: goto L_0x0096;
+                case 78388: goto L_0x008b;
+                case 79710: goto L_0x007f;
+                case 81569: goto L_0x0073;
+                case 83210: goto L_0x0067;
+                case 83974: goto L_0x005b;
+                case 84517: goto L_0x004f;
+                case 85132: goto L_0x0043;
+                case 85367: goto L_0x0037;
+                case 86653: goto L_0x002b;
+                case 87087: goto L_0x001f;
+                case 87118: goto L_0x0013;
+                default: goto L_0x0011;
+            }
+        L_0x0011:
+            goto L_0x0169
+        L_0x0013:
+            java.lang.String r0 = "XPF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 28
+            goto L_0x016a
+        L_0x001f:
+            java.lang.String r0 = "XOF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 27
+            goto L_0x016a
+        L_0x002b:
+            java.lang.String r0 = "XAF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 26
+            goto L_0x016a
+        L_0x0037:
+            java.lang.String r0 = "VUV"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 25
+            goto L_0x016a
+        L_0x0043:
+            java.lang.String r0 = "VND"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 24
+            goto L_0x016a
+        L_0x004f:
+            java.lang.String r0 = "UYI"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 23
+            goto L_0x016a
+        L_0x005b:
+            java.lang.String r0 = "UGX"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 22
+            goto L_0x016a
+        L_0x0067:
+            java.lang.String r0 = "TND"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 8
+            goto L_0x016a
+        L_0x0073:
+            java.lang.String r0 = "RWF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 21
+            goto L_0x016a
+        L_0x007f:
+            java.lang.String r0 = "PYG"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 20
+            goto L_0x016a
+        L_0x008b:
+            java.lang.String r0 = "OMR"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 7
+            goto L_0x016a
+        L_0x0096:
+            java.lang.String r0 = "MRO"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 29
+            goto L_0x016a
+        L_0x00a2:
+            java.lang.String r0 = "MGA"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 19
+            goto L_0x016a
+        L_0x00ae:
+            java.lang.String r0 = "LYD"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 6
+            goto L_0x016a
+        L_0x00b9:
+            java.lang.String r0 = "KWD"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 5
+            goto L_0x016a
+        L_0x00c4:
+            java.lang.String r0 = "KRW"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 18
+            goto L_0x016a
+        L_0x00d0:
+            java.lang.String r0 = "KMF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 17
+            goto L_0x016a
+        L_0x00dc:
+            java.lang.String r0 = "JPY"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 16
+            goto L_0x016a
+        L_0x00e8:
+            java.lang.String r0 = "JOD"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 4
+            goto L_0x016a
+        L_0x00f3:
+            java.lang.String r0 = "ISK"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 15
+            goto L_0x016a
+        L_0x00ff:
+            java.lang.String r0 = "IRR"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 1
+            goto L_0x016a
+        L_0x0109:
+            java.lang.String r0 = "IQD"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 3
+            goto L_0x016a
+        L_0x0113:
+            java.lang.String r0 = "GNF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 14
+            goto L_0x016a
+        L_0x011e:
+            java.lang.String r0 = "DJF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 13
+            goto L_0x016a
+        L_0x0129:
+            java.lang.String r0 = "CVE"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 12
+            goto L_0x016a
+        L_0x0134:
+            java.lang.String r0 = "CLP"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 11
+            goto L_0x016a
+        L_0x013f:
+            java.lang.String r0 = "CLF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 0
+            goto L_0x016a
+        L_0x0149:
+            java.lang.String r0 = "BYR"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 10
+            goto L_0x016a
+        L_0x0154:
+            java.lang.String r0 = "BIF"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 9
+            goto L_0x016a
+        L_0x015f:
+            java.lang.String r0 = "BHD"
+            boolean r0 = r12.equals(r0)
+            if (r0 == 0) goto L_0x0169
+            r0 = 2
+            goto L_0x016a
+        L_0x0169:
+            r0 = -1
+        L_0x016a:
+            java.lang.String r3 = " %.0f"
+            java.lang.String r4 = " %.2f"
+            switch(r0) {
+                case 0: goto L_0x01a5;
+                case 1: goto L_0x0193;
+                case 2: goto L_0x0186;
+                case 3: goto L_0x0186;
+                case 4: goto L_0x0186;
+                case 5: goto L_0x0186;
+                case 6: goto L_0x0186;
+                case 7: goto L_0x0186;
+                case 8: goto L_0x0186;
+                case 9: goto L_0x0184;
+                case 10: goto L_0x0184;
+                case 11: goto L_0x0184;
+                case 12: goto L_0x0184;
+                case 13: goto L_0x0184;
+                case 14: goto L_0x0184;
+                case 15: goto L_0x0184;
+                case 16: goto L_0x0184;
+                case 17: goto L_0x0184;
+                case 18: goto L_0x0184;
+                case 19: goto L_0x0184;
+                case 20: goto L_0x0184;
+                case 21: goto L_0x0184;
+                case 22: goto L_0x0184;
+                case 23: goto L_0x0184;
+                case 24: goto L_0x0184;
+                case 25: goto L_0x0184;
+                case 26: goto L_0x0184;
+                case 27: goto L_0x0184;
+                case 28: goto L_0x0184;
+                case 29: goto L_0x017a;
+                default: goto L_0x0171;
+            }
+        L_0x0171:
+            double r10 = (double) r10
+            r5 = 4636737291354636288(0xNUM, double:100.0)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r5
+            r3 = r4
+            goto L_0x01b1
+        L_0x017a:
+            double r10 = (double) r10
+            r3 = 4621819117588971520(0xNUM, double:10.0)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r3
+            java.lang.String r3 = " %.1f"
+            goto L_0x01b1
+        L_0x0184:
+            double r10 = (double) r10
+            goto L_0x01b1
+        L_0x0186:
+            double r10 = (double) r10
+            r3 = 4652007308841189376(0x408fNUM, double:1000.0)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r3
+            java.lang.String r3 = " %.3f"
+            goto L_0x01b1
+        L_0x0193:
+            float r0 = (float) r10
+            r5 = 1120403456(0x42CLASSNAME, float:100.0)
+            float r0 = r0 / r5
+            double r5 = (double) r0
+            r7 = 100
+            long r10 = r10 % r7
+            r7 = 0
+            int r0 = (r10 > r7 ? 1 : (r10 == r7 ? 0 : -1))
+            if (r0 != 0) goto L_0x01a2
+            goto L_0x01a3
+        L_0x01a2:
+            r3 = r4
+        L_0x01a3:
+            r10 = r5
+            goto L_0x01b1
+        L_0x01a5:
+            double r10 = (double) r10
+            r3 = 4666723172467343360(0x40cNUM, double:10000.0)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r3
+            java.lang.String r3 = " %.4f"
+        L_0x01b1:
+            java.util.Locale r0 = java.util.Locale.US
+            if (r13 == 0) goto L_0x01b6
+            goto L_0x01c7
+        L_0x01b6:
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder
+            r12.<init>()
+            java.lang.String r13 = ""
+            r12.append(r13)
+            r12.append(r3)
+            java.lang.String r12 = r12.toString()
+        L_0x01c7:
+            java.lang.Object[] r13 = new java.lang.Object[r1]
+            java.lang.Double r10 = java.lang.Double.valueOf(r10)
+            r13[r2] = r10
+            java.lang.String r10 = java.lang.String.format(r0, r12, r13)
+            java.lang.String r10 = r10.trim()
+            return r10
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.formatCurrencyDecimalString(long, java.lang.String, boolean):java.lang.String");
     }
@@ -2435,29 +2000,21 @@ public class LocaleController {
             }
             return String.format(str, objArr);
         } catch (Exception e) {
-            FileLog.e(e);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("LOC_ERR: ");
-            stringBuilder.append(str);
-            return stringBuilder.toString();
+            FileLog.e((Throwable) e);
+            return "LOC_ERR: " + str;
         }
     }
 
     public static String formatCallDuration(int i) {
-        String str = "Minutes";
         if (i > 3600) {
             String formatPluralString = formatPluralString("Hours", i / 3600);
-            i = (i % 3600) / 60;
-            if (i > 0) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(formatPluralString);
-                stringBuilder.append(", ");
-                stringBuilder.append(formatPluralString(str, i));
-                formatPluralString = stringBuilder.toString();
+            int i2 = (i % 3600) / 60;
+            if (i2 <= 0) {
+                return formatPluralString;
             }
-            return formatPluralString;
+            return formatPluralString + ", " + formatPluralString("Minutes", i2);
         } else if (i > 60) {
-            return formatPluralString(str, i / 60);
+            return formatPluralString("Minutes", i / 60);
         } else {
             return formatPluralString("Seconds", i);
         }
@@ -2465,36 +2022,34 @@ public class LocaleController {
 
     public void onDeviceConfigurationChange(Configuration configuration) {
         if (!this.changingConfiguration) {
-            String displayName;
             is24HourFormat = DateFormat.is24HourFormat(ApplicationLoader.applicationContext);
             Locale locale = configuration.locale;
             this.systemDefaultLocale = locale;
-            LocaleInfo localeInfo;
             if (this.languageOverride != null) {
-                localeInfo = this.currentLocaleInfo;
+                LocaleInfo localeInfo = this.currentLocaleInfo;
                 this.currentLocaleInfo = null;
                 applyLanguage(localeInfo, false, false, UserConfig.selectedAccount);
             } else if (locale != null) {
-                displayName = locale.getDisplayName();
+                String displayName = locale.getDisplayName();
                 String displayName2 = this.currentLocale.getDisplayName();
                 if (!(displayName == null || displayName2 == null || displayName.equals(displayName2))) {
                     recreateFormatters();
                 }
                 this.currentLocale = locale;
-                localeInfo = this.currentLocaleInfo;
-                if (!(localeInfo == null || TextUtils.isEmpty(localeInfo.pluralLangCode))) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocaleInfo.pluralLangCode);
+                LocaleInfo localeInfo2 = this.currentLocaleInfo;
+                if (localeInfo2 != null && !TextUtils.isEmpty(localeInfo2.pluralLangCode)) {
+                    this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocale.getLanguage());
+                    this.currentPluralRules = this.allRules.get(this.currentLocale.getLanguage());
                     if (this.currentPluralRules == null) {
-                        this.currentPluralRules = (PluralRules) this.allRules.get("en");
+                        this.currentPluralRules = this.allRules.get("en");
                     }
                 }
             }
             String systemLocaleStringIso639 = getSystemLocaleStringIso639();
-            displayName = this.currentSystemLocale;
-            if (!(displayName == null || systemLocaleStringIso639.equals(displayName))) {
+            String str = this.currentSystemLocale;
+            if (str != null && !systemLocaleStringIso639.equals(str)) {
                 this.currentSystemLocale = systemLocaleStringIso639;
                 ConnectionsManager.setSystemLangCode(this.currentSystemLocale);
             }
@@ -2510,193 +2065,168 @@ public class LocaleController {
             Calendar instance = Calendar.getInstance();
             instance.setTimeInMillis(System.currentTimeMillis());
             int i = instance.get(1);
-            j *= 1000;
-            instance.setTimeInMillis(j);
-            if ((!z || i != instance.get(1)) && (z || Math.abs(System.currentTimeMillis() - j) >= 31536000000L)) {
-                return getInstance().chatFullDate.format(j);
+            long j2 = j * 1000;
+            instance.setTimeInMillis(j2);
+            if ((!z || i != instance.get(1)) && (z || Math.abs(System.currentTimeMillis() - j2) >= 31536000000L)) {
+                return getInstance().chatFullDate.format(j2);
             }
-            return getInstance().chatDate.format(j);
+            return getInstance().chatDate.format(j2);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR: formatDateChat";
         }
     }
 
     public static String formatDate(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i3 = instance.get(6);
             int i4 = instance.get(1);
             if (i3 == i && i2 == i4) {
-                return getInstance().formatterDay.format(new Date(j));
+                return getInstance().formatterDay.format(new Date(j2));
             }
             if (i3 + 1 == i && i2 == i4) {
                 return getString("Yesterday", NUM);
             }
-            if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                return getInstance().formatterDayMonth.format(new Date(j));
+            if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
+                return getInstance().formatterDayMonth.format(new Date(j2));
             }
-            return getInstance().formatterYear.format(new Date(j));
+            return getInstance().formatterYear.format(new Date(j2));
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR: formatDate";
         }
     }
 
     public static String formatDateAudio(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i3 = instance.get(6);
             int i4 = instance.get(1);
             if (i3 == i && i2 == i4) {
-                return formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
+                return formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2)));
             } else if (i3 + 1 == i && i2 == i4) {
-                return formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
+                return formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2)));
+            } else if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
+                return formatString("formatDateAtTime", NUM, getInstance().formatterDayMonth.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2)));
             } else {
-                String str = "formatDateAtTime";
-                if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                    return formatString(str, NUM, getInstance().formatterDayMonth.format(new Date(j)), getInstance().formatterDay.format(new Date(j)));
-                }
-                return formatString(str, NUM, getInstance().formatterYear.format(new Date(j)), getInstance().formatterDay.format(new Date(j)));
+                return formatString("formatDateAtTime", NUM, getInstance().formatterYear.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2)));
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String formatDateCallLog(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i3 = instance.get(6);
             int i4 = instance.get(1);
             if (i3 == i && i2 == i4) {
-                return getInstance().formatterDay.format(new Date(j));
+                return getInstance().formatterDay.format(new Date(j2));
             }
             if (i3 + 1 == i && i2 == i4) {
-                return formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
+                return formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2)));
+            } else if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
+                return formatString("formatDateAtTime", NUM, getInstance().chatDate.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2)));
+            } else {
+                return formatString("formatDateAtTime", NUM, getInstance().chatFullDate.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2)));
             }
-            String str = "formatDateAtTime";
-            if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                return formatString(str, NUM, getInstance().chatDate.format(new Date(j)), getInstance().formatterDay.format(new Date(j)));
-            }
-            return formatString(str, NUM, getInstance().chatFullDate.format(new Date(j)), getInstance().formatterDay.format(new Date(j)));
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String formatLocationUpdateDate(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i3 = instance.get(6);
             int i4 = instance.get(1);
-            String str = "LocationUpdatedFormatted";
-            Object[] objArr;
             if (i3 == i && i2 == i4) {
-                int currentTime = ((int) (((long) ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime()) - (j / 1000))) / 60;
+                int currentTime = ((int) (((long) ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime()) - (j2 / 1000))) / 60;
                 if (currentTime < 1) {
                     return getString("LocationUpdatedJustNow", NUM);
                 }
                 if (currentTime < 60) {
                     return formatPluralString("UpdatedMinutes", currentTime);
                 }
-                objArr = new Object[1];
-                objArr[0] = formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
-                return formatString(str, NUM, objArr);
+                return formatString("LocationUpdatedFormatted", NUM, formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
             } else if (i3 + 1 == i && i2 == i4) {
-                objArr = new Object[1];
-                objArr[0] = formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
-                return formatString(str, NUM, objArr);
+                return formatString("LocationUpdatedFormatted", NUM, formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
+            } else if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
+                return formatString("LocationUpdatedFormatted", NUM, formatString("formatDateAtTime", NUM, getInstance().formatterDayMonth.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2))));
             } else {
-                String str2 = "formatDateAtTime";
-                if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                    objArr = new Object[]{getInstance().formatterDayMonth.format(new Date(j)), getInstance().formatterDay.format(new Date(j))};
-                    return formatString(str, NUM, formatString(str2, NUM, objArr));
-                }
-                objArr = new Object[]{getInstance().formatterYear.format(new Date(j)), getInstance().formatterDay.format(new Date(j))};
-                return formatString(str, NUM, formatString(str2, NUM, objArr));
+                return formatString("LocationUpdatedFormatted", NUM, formatString("formatDateAtTime", NUM, getInstance().formatterYear.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2))));
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String formatLocationLeftTime(int i) {
         int i2 = (i / 60) / 60;
-        i -= (i2 * 60) * 60;
-        int i3 = i / 60;
-        i -= i3 * 60;
-        int i4 = 1;
+        int i3 = i - ((i2 * 60) * 60);
+        int i4 = i3 / 60;
+        int i5 = i3 - (i4 * 60);
+        int i6 = 1;
         if (i2 != 0) {
             Object[] objArr = new Object[1];
-            if (i3 <= 30) {
-                i4 = 0;
+            if (i4 <= 30) {
+                i6 = 0;
             }
-            objArr[0] = Integer.valueOf(i2 + i4);
+            objArr[0] = Integer.valueOf(i2 + i6);
             return String.format("%dh", objArr);
-        }
-        String str = "%d";
-        if (i3 != 0) {
+        } else if (i4 != 0) {
             Object[] objArr2 = new Object[1];
-            if (i <= 30) {
-                i4 = 0;
+            if (i5 <= 30) {
+                i6 = 0;
             }
-            objArr2[0] = Integer.valueOf(i3 + i4);
-            return String.format(str, objArr2);
+            objArr2[0] = Integer.valueOf(i4 + i6);
+            return String.format("%d", objArr2);
+        } else {
+            return String.format("%d", new Object[]{Integer.valueOf(i5)});
         }
-        return String.format(str, new Object[]{Integer.valueOf(i)});
     }
 
     public static String formatDateOnline(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
             int i2 = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i3 = instance.get(6);
             int i4 = instance.get(1);
-            String str = "LastSeenFormatted";
-            Object[] objArr;
             if (i3 == i && i2 == i4) {
-                objArr = new Object[1];
-                objArr[0] = formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
-                return formatString(str, NUM, objArr);
+                return formatString("LastSeenFormatted", NUM, formatString("TodayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
             } else if (i3 + 1 == i && i2 == i4) {
-                objArr = new Object[1];
-                objArr[0] = formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j)));
-                return formatString(str, NUM, objArr);
+                return formatString("LastSeenFormatted", NUM, formatString("YesterdayAtFormatted", NUM, getInstance().formatterDay.format(new Date(j2))));
+            } else if (Math.abs(System.currentTimeMillis() - j2) < 31536000000L) {
+                return formatString("LastSeenDateFormatted", NUM, formatString("formatDateAtTime", NUM, getInstance().formatterDayMonth.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2))));
             } else {
-                str = "LastSeenDateFormatted";
-                String str2 = "formatDateAtTime";
-                if (Math.abs(System.currentTimeMillis() - j) < 31536000000L) {
-                    objArr = new Object[]{getInstance().formatterDayMonth.format(new Date(j)), getInstance().formatterDay.format(new Date(j))};
-                    return formatString(str, NUM, formatString(str2, NUM, objArr));
-                }
-                objArr = new Object[]{getInstance().formatterYear.format(new Date(j)), getInstance().formatterDay.format(new Date(j))};
-                return formatString(str, NUM, formatString(str2, NUM, objArr));
+                return formatString("LastSeenDateFormatted", NUM, formatString("formatDateAtTime", NUM, getInstance().formatterYear.format(new Date(j2)), getInstance().formatterDay.format(new Date(j2))));
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
@@ -2706,465 +2236,414 @@ public class LocaleController {
             str = str2;
         }
         try {
-            locale = FastDateFormat.getInstance(str, locale);
-            return locale;
+            return FastDateFormat.getInstance(str, locale);
         } catch (Exception unused) {
             return FastDateFormat.getInstance(str2, locale);
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0075  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0073  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0123  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x011d  */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x0133  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0130  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0145  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x013f  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0158  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0156  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0169  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0163  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0177  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0188  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0182  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0198  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0195  */
+    /* JADX WARNING: Code restructure failed: missing block: B:24:0x005d, code lost:
+        r2 = r9.currentLocaleInfo;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void recreateFormatters() {
         /*
-        r9 = this;
-        r0 = r9.currentLocale;
-        if (r0 != 0) goto L_0x0008;
-    L_0x0004:
-        r0 = java.util.Locale.getDefault();
-    L_0x0008:
-        r1 = r0.getLanguage();
-        if (r1 != 0) goto L_0x0010;
-    L_0x000e:
-        r1 = "en";
-    L_0x0010:
-        r1 = r1.toLowerCase();
-        r2 = r1.length();
-        r3 = 0;
-        r4 = "ar";
-        r5 = 1;
-        r6 = 2;
-        if (r2 != r6) goto L_0x003d;
-    L_0x001f:
-        r2 = r1.equals(r4);
-        if (r2 != 0) goto L_0x0068;
-    L_0x0025:
-        r2 = "fa";
-        r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x002d:
-        r2 = "he";
-        r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x0035:
-        r2 = "iw";
-        r2 = r1.equals(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x003d:
-        r2 = "ar_";
-        r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x0045:
-        r2 = "fa_";
-        r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x004d:
-        r2 = "he_";
-        r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x0055:
-        r2 = "iw_";
-        r2 = r1.startsWith(r2);
-        if (r2 != 0) goto L_0x0068;
-    L_0x005d:
-        r2 = r9.currentLocaleInfo;
-        if (r2 == 0) goto L_0x0066;
-    L_0x0061:
-        r2 = r2.isRtl;
-        if (r2 == 0) goto L_0x0066;
-    L_0x0065:
-        goto L_0x0068;
-    L_0x0066:
-        r2 = 0;
-        goto L_0x0069;
-    L_0x0068:
-        r2 = 1;
-    L_0x0069:
-        isRTL = r2;
-        r2 = "ko";
-        r7 = r1.equals(r2);
-        if (r7 == 0) goto L_0x0075;
-    L_0x0073:
-        r7 = 2;
-        goto L_0x0076;
-    L_0x0075:
-        r7 = 1;
-    L_0x0076:
-        nameDisplayOrder = r7;
-        r7 = NUM; // 0x7f0e0d11 float:1.8881822E38 double:1.0531638093E-314;
-        r8 = "formatterMonth";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "dd MMM";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterDayMonth = r7;
-        r7 = NUM; // 0x7f0e0d17 float:1.8881834E38 double:1.053163812E-314;
-        r8 = "formatterYear";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "dd.MM.yy";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterYear = r7;
-        r7 = NUM; // 0x7f0e0d18 float:1.8881836E38 double:1.0531638127E-314;
-        r8 = "formatterYearMax";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "dd.MM.yyyy";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterYearMax = r7;
-        r7 = NUM; // 0x7f0e0cf1 float:1.8881757E38 double:1.0531637935E-314;
-        r8 = "chatDate";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "d MMMM";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.chatDate = r7;
-        r7 = NUM; // 0x7f0e0cf2 float:1.888176E38 double:1.053163794E-314;
-        r8 = "chatFullDate";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "d MMMM yyyy";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.chatFullDate = r7;
-        r7 = NUM; // 0x7f0e0d16 float:1.8881832E38 double:1.0531638118E-314;
-        r8 = "formatterWeek";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "EEE";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterWeek = r7;
-        r7 = NUM; // 0x7f0e0d09 float:1.8881806E38 double:1.0531638053E-314;
-        r8 = "formatDateSchedule";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "MMM d";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterScheduleDay = r7;
-        r7 = NUM; // 0x7f0e0d0a float:1.8881808E38 double:1.053163806E-314;
-        r8 = "formatDateScheduleYear";
-        r7 = r9.getStringInternal(r8, r7);
-        r8 = "MMM d yyyy";
-        r7 = r9.createFormatter(r0, r7, r8);
-        r9.formatterScheduleYear = r7;
-        r7 = r1.toLowerCase();
-        r4 = r7.equals(r4);
-        if (r4 != 0) goto L_0x0118;
-    L_0x010a:
-        r1 = r1.toLowerCase();
-        r1 = r1.equals(r2);
-        if (r1 == 0) goto L_0x0115;
-    L_0x0114:
-        goto L_0x0118;
-    L_0x0115:
-        r1 = java.util.Locale.US;
-        goto L_0x0119;
-    L_0x0118:
-        r1 = r0;
-    L_0x0119:
-        r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x0123;
-    L_0x011d:
-        r2 = NUM; // 0x7f0e0d10 float:1.888182E38 double:1.053163809E-314;
-        r4 = "formatterDay24H";
-        goto L_0x0128;
-    L_0x0123:
-        r2 = NUM; // 0x7f0e0d0f float:1.8881818E38 double:1.0531638083E-314;
-        r4 = "formatterDay12H";
-    L_0x0128:
-        r2 = r9.getStringInternal(r4, r2);
-        r4 = is24HourFormat;
-        if (r4 == 0) goto L_0x0133;
-    L_0x0130:
-        r4 = "HH:mm";
-        goto L_0x0135;
-    L_0x0133:
-        r4 = "h:mm a";
-    L_0x0135:
-        r1 = r9.createFormatter(r1, r2, r4);
-        r9.formatterDay = r1;
-        r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0145;
-    L_0x013f:
-        r1 = NUM; // 0x7f0e0d15 float:1.888183E38 double:1.0531638113E-314;
-        r2 = "formatterStats24H";
-        goto L_0x014a;
-    L_0x0145:
-        r1 = NUM; // 0x7f0e0d14 float:1.8881828E38 double:1.053163811E-314;
-        r2 = "formatterStats12H";
-    L_0x014a:
-        r1 = r9.getStringInternal(r2, r1);
-        r2 = is24HourFormat;
-        r4 = "MMM dd yyyy, HH:mm";
-        r7 = "MMM dd yyyy, h:mm a";
-        if (r2 == 0) goto L_0x0158;
-    L_0x0156:
-        r2 = r4;
-        goto L_0x0159;
-    L_0x0158:
-        r2 = r7;
-    L_0x0159:
-        r1 = r9.createFormatter(r0, r1, r2);
-        r9.formatterStats = r1;
-        r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0169;
-    L_0x0163:
-        r1 = NUM; // 0x7f0e0d0c float:1.8881812E38 double:1.053163807E-314;
-        r2 = "formatterBannedUntil24H";
-        goto L_0x016e;
-    L_0x0169:
-        r1 = NUM; // 0x7f0e0d0b float:1.888181E38 double:1.0531638063E-314;
-        r2 = "formatterBannedUntil12H";
-    L_0x016e:
-        r1 = r9.getStringInternal(r2, r1);
-        r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x0177;
-    L_0x0176:
-        goto L_0x0178;
-    L_0x0177:
-        r4 = r7;
-    L_0x0178:
-        r1 = r9.createFormatter(r0, r1, r4);
-        r9.formatterBannedUntil = r1;
-        r1 = is24HourFormat;
-        if (r1 == 0) goto L_0x0188;
-    L_0x0182:
-        r1 = NUM; // 0x7f0e0d0e float:1.8881816E38 double:1.053163808E-314;
-        r2 = "formatterBannedUntilThisYear24H";
-        goto L_0x018d;
-    L_0x0188:
-        r1 = NUM; // 0x7f0e0d0d float:1.8881814E38 double:1.0531638073E-314;
-        r2 = "formatterBannedUntilThisYear12H";
-    L_0x018d:
-        r1 = r9.getStringInternal(r2, r1);
-        r2 = is24HourFormat;
-        if (r2 == 0) goto L_0x0198;
-    L_0x0195:
-        r2 = "MMM dd, HH:mm";
-        goto L_0x019a;
-    L_0x0198:
-        r2 = "MMM dd, h:mm a";
-    L_0x019a:
-        r1 = r9.createFormatter(r0, r1, r2);
-        r9.formatterBannedUntilThisYear = r1;
-        r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0a23 float:1.88803E38 double:1.0531634387E-314;
-        r4 = "SendTodayAt";
-        r2 = r9.getStringInternal(r4, r2);
-        r4 = "'Send today at' HH:mm";
-        r2 = r9.createFormatter(r0, r2, r4);
-        r1[r3] = r2;
-        r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0a0d float:1.8880256E38 double:1.053163428E-314;
-        r3 = "SendDayAt";
-        r2 = r9.getStringInternal(r3, r2);
-        r3 = "'Send on' MMM d 'at' HH:mm";
-        r2 = r9.createFormatter(r0, r2, r3);
-        r1[r5] = r2;
-        r1 = r9.formatterScheduleSend;
-        r2 = NUM; // 0x7f0e0a0e float:1.8880258E38 double:1.0531634284E-314;
-        r3 = "SendDayYearAt";
-        r2 = r9.getStringInternal(r3, r2);
-        r3 = "'Send on' MMM d yyyy 'at' HH:mm";
-        r2 = r9.createFormatter(r0, r2, r3);
-        r1[r6] = r2;
-        r1 = r9.formatterScheduleSend;
-        r2 = 3;
-        r3 = NUM; // 0x7f0e0971 float:1.887994E38 double:1.053163351E-314;
-        r4 = "RemindTodayAt";
-        r3 = r9.getStringInternal(r4, r3);
-        r4 = "'Remind today at' HH:mm";
-        r3 = r9.createFormatter(r0, r3, r4);
-        r1[r2] = r3;
-        r1 = r9.formatterScheduleSend;
-        r2 = 4;
-        r3 = NUM; // 0x7f0e096f float:1.8879936E38 double:1.05316335E-314;
-        r4 = "RemindDayAt";
-        r3 = r9.getStringInternal(r4, r3);
-        r4 = "'Remind on' MMM d 'at' HH:mm";
-        r3 = r9.createFormatter(r0, r3, r4);
-        r1[r2] = r3;
-        r1 = r9.formatterScheduleSend;
-        r2 = 5;
-        r3 = NUM; // 0x7f0e0970 float:1.8879938E38 double:1.0531633503E-314;
-        r4 = "RemindDayYearAt";
-        r3 = r9.getStringInternal(r4, r3);
-        r4 = "'Remind on' MMM d yyyy 'at' HH:mm";
-        r0 = r9.createFormatter(r0, r3, r4);
-        r1[r2] = r0;
-        return;
+            r9 = this;
+            java.util.Locale r0 = r9.currentLocale
+            if (r0 != 0) goto L_0x0008
+            java.util.Locale r0 = java.util.Locale.getDefault()
+        L_0x0008:
+            java.lang.String r1 = r0.getLanguage()
+            if (r1 != 0) goto L_0x0010
+            java.lang.String r1 = "en"
+        L_0x0010:
+            java.lang.String r1 = r1.toLowerCase()
+            int r2 = r1.length()
+            r3 = 0
+            java.lang.String r4 = "ar"
+            r5 = 1
+            r6 = 2
+            if (r2 != r6) goto L_0x003d
+            boolean r2 = r1.equals(r4)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "fa"
+            boolean r2 = r1.equals(r2)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "he"
+            boolean r2 = r1.equals(r2)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "iw"
+            boolean r2 = r1.equals(r2)
+            if (r2 != 0) goto L_0x0068
+        L_0x003d:
+            java.lang.String r2 = "ar_"
+            boolean r2 = r1.startsWith(r2)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "fa_"
+            boolean r2 = r1.startsWith(r2)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "he_"
+            boolean r2 = r1.startsWith(r2)
+            if (r2 != 0) goto L_0x0068
+            java.lang.String r2 = "iw_"
+            boolean r2 = r1.startsWith(r2)
+            if (r2 != 0) goto L_0x0068
+            org.telegram.messenger.LocaleController$LocaleInfo r2 = r9.currentLocaleInfo
+            if (r2 == 0) goto L_0x0066
+            boolean r2 = r2.isRtl
+            if (r2 == 0) goto L_0x0066
+            goto L_0x0068
+        L_0x0066:
+            r2 = 0
+            goto L_0x0069
+        L_0x0068:
+            r2 = 1
+        L_0x0069:
+            isRTL = r2
+            java.lang.String r2 = "ko"
+            boolean r7 = r1.equals(r2)
+            if (r7 == 0) goto L_0x0075
+            r7 = 2
+            goto L_0x0076
+        L_0x0075:
+            r7 = 1
+        L_0x0076:
+            nameDisplayOrder = r7
+            r7 = 2131627281(0x7f0e0d11, float:1.8881822E38)
+            java.lang.String r8 = "formatterMonth"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "dd MMM"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterDayMonth = r7
+            r7 = 2131627287(0x7f0e0d17, float:1.8881834E38)
+            java.lang.String r8 = "formatterYear"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "dd.MM.yy"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterYear = r7
+            r7 = 2131627288(0x7f0e0d18, float:1.8881836E38)
+            java.lang.String r8 = "formatterYearMax"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "dd.MM.yyyy"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterYearMax = r7
+            r7 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
+            java.lang.String r8 = "chatDate"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "d MMMM"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.chatDate = r7
+            r7 = 2131627250(0x7f0e0cf2, float:1.888176E38)
+            java.lang.String r8 = "chatFullDate"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "d MMMM yyyy"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.chatFullDate = r7
+            r7 = 2131627286(0x7f0e0d16, float:1.8881832E38)
+            java.lang.String r8 = "formatterWeek"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "EEE"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterWeek = r7
+            r7 = 2131627273(0x7f0e0d09, float:1.8881806E38)
+            java.lang.String r8 = "formatDateSchedule"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "MMM d"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterScheduleDay = r7
+            r7 = 2131627274(0x7f0e0d0a, float:1.8881808E38)
+            java.lang.String r8 = "formatDateScheduleYear"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "MMM d yyyy"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterScheduleYear = r7
+            java.lang.String r7 = r1.toLowerCase()
+            boolean r4 = r7.equals(r4)
+            if (r4 != 0) goto L_0x0118
+            java.lang.String r1 = r1.toLowerCase()
+            boolean r1 = r1.equals(r2)
+            if (r1 == 0) goto L_0x0115
+            goto L_0x0118
+        L_0x0115:
+            java.util.Locale r1 = java.util.Locale.US
+            goto L_0x0119
+        L_0x0118:
+            r1 = r0
+        L_0x0119:
+            boolean r2 = is24HourFormat
+            if (r2 == 0) goto L_0x0123
+            r2 = 2131627280(0x7f0e0d10, float:1.888182E38)
+            java.lang.String r4 = "formatterDay24H"
+            goto L_0x0128
+        L_0x0123:
+            r2 = 2131627279(0x7f0e0d0f, float:1.8881818E38)
+            java.lang.String r4 = "formatterDay12H"
+        L_0x0128:
+            java.lang.String r2 = r9.getStringInternal(r4, r2)
+            boolean r4 = is24HourFormat
+            if (r4 == 0) goto L_0x0133
+            java.lang.String r4 = "HH:mm"
+            goto L_0x0135
+        L_0x0133:
+            java.lang.String r4 = "h:mm a"
+        L_0x0135:
+            org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r1, r2, r4)
+            r9.formatterDay = r1
+            boolean r1 = is24HourFormat
+            if (r1 == 0) goto L_0x0145
+            r1 = 2131627285(0x7f0e0d15, float:1.888183E38)
+            java.lang.String r2 = "formatterStats24H"
+            goto L_0x014a
+        L_0x0145:
+            r1 = 2131627284(0x7f0e0d14, float:1.8881828E38)
+            java.lang.String r2 = "formatterStats12H"
+        L_0x014a:
+            java.lang.String r1 = r9.getStringInternal(r2, r1)
+            boolean r2 = is24HourFormat
+            java.lang.String r4 = "MMM dd yyyy, HH:mm"
+            java.lang.String r7 = "MMM dd yyyy, h:mm a"
+            if (r2 == 0) goto L_0x0158
+            r2 = r4
+            goto L_0x0159
+        L_0x0158:
+            r2 = r7
+        L_0x0159:
+            org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
+            r9.formatterStats = r1
+            boolean r1 = is24HourFormat
+            if (r1 == 0) goto L_0x0169
+            r1 = 2131627276(0x7f0e0d0c, float:1.8881812E38)
+            java.lang.String r2 = "formatterBannedUntil24H"
+            goto L_0x016e
+        L_0x0169:
+            r1 = 2131627275(0x7f0e0d0b, float:1.888181E38)
+            java.lang.String r2 = "formatterBannedUntil12H"
+        L_0x016e:
+            java.lang.String r1 = r9.getStringInternal(r2, r1)
+            boolean r2 = is24HourFormat
+            if (r2 == 0) goto L_0x0177
+            goto L_0x0178
+        L_0x0177:
+            r4 = r7
+        L_0x0178:
+            org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r4)
+            r9.formatterBannedUntil = r1
+            boolean r1 = is24HourFormat
+            if (r1 == 0) goto L_0x0188
+            r1 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
+            java.lang.String r2 = "formatterBannedUntilThisYear24H"
+            goto L_0x018d
+        L_0x0188:
+            r1 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
+            java.lang.String r2 = "formatterBannedUntilThisYear12H"
+        L_0x018d:
+            java.lang.String r1 = r9.getStringInternal(r2, r1)
+            boolean r2 = is24HourFormat
+            if (r2 == 0) goto L_0x0198
+            java.lang.String r2 = "MMM dd, HH:mm"
+            goto L_0x019a
+        L_0x0198:
+            java.lang.String r2 = "MMM dd, h:mm a"
+        L_0x019a:
+            org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
+            r9.formatterBannedUntilThisYear = r1
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 2131626531(0x7f0e0a23, float:1.88803E38)
+            java.lang.String r4 = "SendTodayAt"
+            java.lang.String r2 = r9.getStringInternal(r4, r2)
+            java.lang.String r4 = "'Send today at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
+            r1[r3] = r2
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 2131626509(0x7f0e0a0d, float:1.8880256E38)
+            java.lang.String r3 = "SendDayAt"
+            java.lang.String r2 = r9.getStringInternal(r3, r2)
+            java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
+            r1[r5] = r2
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 2131626510(0x7f0e0a0e, float:1.8880258E38)
+            java.lang.String r3 = "SendDayYearAt"
+            java.lang.String r2 = r9.getStringInternal(r3, r2)
+            java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
+            r1[r6] = r2
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 3
+            r3 = 2131626353(0x7f0e0971, float:1.887994E38)
+            java.lang.String r4 = "RemindTodayAt"
+            java.lang.String r3 = r9.getStringInternal(r4, r3)
+            java.lang.String r4 = "'Remind today at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r3 = r9.createFormatter(r0, r3, r4)
+            r1[r2] = r3
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 4
+            r3 = 2131626351(0x7f0e096f, float:1.8879936E38)
+            java.lang.String r4 = "RemindDayAt"
+            java.lang.String r3 = r9.getStringInternal(r4, r3)
+            java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r3 = r9.createFormatter(r0, r3, r4)
+            r1[r2] = r3
+            org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
+            r2 = 5
+            r3 = 2131626352(0x7f0e0970, float:1.8879938E38)
+            java.lang.String r4 = "RemindDayYearAt"
+            java.lang.String r3 = r9.getStringInternal(r4, r3)
+            java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
+            org.telegram.messenger.time.FastDateFormat r0 = r9.createFormatter(r0, r3, r4)
+            r1[r2] = r0
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.recreateFormatters():void");
     }
 
     public static boolean isRTLCharacter(char c) {
-        return Character.getDirectionality(c) == (byte) 1 || Character.getDirectionality(c) == (byte) 2 || Character.getDirectionality(c) == (byte) 16 || Character.getDirectionality(c) == (byte) 17;
+        return Character.getDirectionality(c) == 1 || Character.getDirectionality(c) == 2 || Character.getDirectionality(c) == 16 || Character.getDirectionality(c) == 17;
     }
 
     public static String formatSectionDate(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i2 = instance.get(1);
             int i3 = instance.get(2);
-            String[] strArr = new String[]{getString("January", NUM), getString("February", NUM), getString("March", NUM), getString("April", NUM), getString("May", NUM), getString("June", NUM), getString("July", NUM), getString("August", NUM), getString("September", NUM), getString("October", NUM), getString("November", NUM), getString("December", NUM)};
+            String[] strArr = {getString("January", NUM), getString("February", NUM), getString("March", NUM), getString("April", NUM), getString("May", NUM), getString("June", NUM), getString("July", NUM), getString("August", NUM), getString("September", NUM), getString("October", NUM), getString("November", NUM), getString("December", NUM)};
             if (i == i2) {
                 return strArr[i3];
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(strArr[i3]);
-            stringBuilder.append(" ");
-            stringBuilder.append(i2);
-            return stringBuilder.toString();
+            return strArr[i3] + " " + i2;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String formatDateForBan(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(1);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             if (i == instance.get(1)) {
-                return getInstance().formatterBannedUntilThisYear.format(new Date(j));
+                return getInstance().formatterBannedUntilThisYear.format(new Date(j2));
             }
-            return getInstance().formatterBannedUntil.format(new Date(j));
+            return getInstance().formatterBannedUntil.format(new Date(j2));
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String stringForMessageListDate(long j) {
-        j *= 1000;
+        long j2 = j * 1000;
         try {
             Calendar instance = Calendar.getInstance();
             int i = instance.get(6);
-            instance.setTimeInMillis(j);
+            instance.setTimeInMillis(j2);
             int i2 = instance.get(6);
-            if (Math.abs(System.currentTimeMillis() - j) >= 31536000000L) {
-                return getInstance().formatterYear.format(new Date(j));
+            if (Math.abs(System.currentTimeMillis() - j2) >= 31536000000L) {
+                return getInstance().formatterYear.format(new Date(j2));
             }
-            i2 -= i;
-            if (i2 != 0) {
-                if (i2 != -1 || System.currentTimeMillis() - j >= 28800000) {
-                    if (i2 <= -7 || i2 > -1) {
-                        return getInstance().formatterDayMonth.format(new Date(j));
+            int i3 = i2 - i;
+            if (i3 != 0) {
+                if (i3 != -1 || System.currentTimeMillis() - j2 >= 28800000) {
+                    if (i3 <= -7 || i3 > -1) {
+                        return getInstance().formatterDayMonth.format(new Date(j2));
                     }
-                    return getInstance().formatterWeek.format(new Date(j));
+                    return getInstance().formatterWeek.format(new Date(j2));
                 }
             }
-            return getInstance().formatterDay.format(new Date(j));
+            return getInstance().formatterDay.format(new Date(j2));
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return "LOC_ERR";
         }
     }
 
     public static String formatShortNumber(int i, int[] iArr) {
-        int i2;
-        StringBuilder stringBuilder = new StringBuilder();
-        int i3 = 0;
+        StringBuilder sb = new StringBuilder();
+        int i2 = 0;
         while (true) {
-            i2 = i / 1000;
-            if (i2 <= 0) {
+            int i3 = i / 1000;
+            if (i3 <= 0) {
                 break;
             }
-            stringBuilder.append("K");
-            i3 = (i % 1000) / 100;
-            i = i2;
+            sb.append("K");
+            i2 = (i % 1000) / 100;
+            i = i3;
         }
         if (iArr != null) {
             double d = (double) i;
-            double d2 = (double) i3;
+            double d2 = (double) i2;
             Double.isNaN(d2);
-            d2 /= 10.0d;
             Double.isNaN(d);
-            double d3 = d + d2;
-            for (i2 = 0; i2 < stringBuilder.length(); i2++) {
+            double d3 = d + (d2 / 10.0d);
+            for (int i4 = 0; i4 < sb.length(); i4++) {
                 d3 *= 1000.0d;
             }
             iArr[0] = (int) d3;
         }
-        if (i3 == 0 || stringBuilder.length() <= 0) {
-            if (stringBuilder.length() == 2) {
+        if (i2 == 0 || sb.length() <= 0) {
+            if (sb.length() == 2) {
                 return String.format(Locale.US, "%dM", new Object[]{Integer.valueOf(i)});
             }
-            return String.format(Locale.US, "%d%s", new Object[]{Integer.valueOf(i), stringBuilder.toString()});
-        } else if (stringBuilder.length() == 2) {
-            return String.format(Locale.US, "%d.%dM", new Object[]{Integer.valueOf(i), Integer.valueOf(i3)});
+            return String.format(Locale.US, "%d%s", new Object[]{Integer.valueOf(i), sb.toString()});
+        } else if (sb.length() == 2) {
+            return String.format(Locale.US, "%d.%dM", new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
         } else {
-            return String.format(Locale.US, "%d.%d%s", new Object[]{Integer.valueOf(i), Integer.valueOf(i3), stringBuilder.toString()});
+            return String.format(Locale.US, "%d.%d%s", new Object[]{Integer.valueOf(i), Integer.valueOf(i2), sb.toString()});
         }
     }
 
-    public static String formatUserStatus(int i, User user) {
-        return formatUserStatus(i, user, null);
+    public static String formatUserStatus(int i, TLRPC.User user) {
+        return formatUserStatus(i, user, (boolean[]) null);
     }
 
-    public static String formatUserStatus(int i, User user, boolean[] zArr) {
-        UserStatus userStatus;
-        if (user != null) {
-            UserStatus userStatus2 = user.status;
-            if (userStatus2 != null && userStatus2.expires == 0) {
-                if (userStatus2 instanceof TL_userStatusRecently) {
-                    userStatus2.expires = -100;
-                } else if (userStatus2 instanceof TL_userStatusLastWeek) {
-                    userStatus2.expires = -101;
-                } else if (userStatus2 instanceof TL_userStatusLastMonth) {
-                    userStatus2.expires = -102;
-                }
+    public static String formatUserStatus(int i, TLRPC.User user, boolean[] zArr) {
+        TLRPC.UserStatus userStatus;
+        TLRPC.UserStatus userStatus2;
+        TLRPC.UserStatus userStatus3;
+        if (!(user == null || (userStatus3 = user.status) == null || userStatus3.expires != 0)) {
+            if (userStatus3 instanceof TLRPC.TL_userStatusRecently) {
+                userStatus3.expires = -100;
+            } else if (userStatus3 instanceof TLRPC.TL_userStatusLastWeek) {
+                userStatus3.expires = -101;
+            } else if (userStatus3 instanceof TLRPC.TL_userStatusLastMonth) {
+                userStatus3.expires = -102;
             }
         }
-        String str = "Online";
-        if (user != null) {
-            userStatus = user.status;
-            if (userStatus != null && userStatus.expires <= 0 && MessagesController.getInstance(i).onlinePrivacy.containsKey(Integer.valueOf(user.id))) {
+        if (user != null && (userStatus2 = user.status) != null && userStatus2.expires <= 0 && MessagesController.getInstance(i).onlinePrivacy.containsKey(Integer.valueOf(user.id))) {
+            if (zArr != null) {
+                zArr[0] = true;
+            }
+            return getString("Online", NUM);
+        } else if (user == null || (userStatus = user.status) == null || userStatus.expires == 0 || UserObject.isDeleted(user) || (user instanceof TLRPC.TL_userEmpty)) {
+            return getString("ALongTimeAgo", NUM);
+        } else {
+            int currentTime = ConnectionsManager.getInstance(i).getCurrentTime();
+            int i2 = user.status.expires;
+            if (i2 > currentTime) {
                 if (zArr != null) {
                     zArr[0] = true;
                 }
-                return getString(str, NUM);
-            }
-        }
-        if (user != null) {
-            userStatus = user.status;
-            if (!(userStatus == null || userStatus.expires == 0 || UserObject.isDeleted(user) || (user instanceof TL_userEmpty))) {
-                i = ConnectionsManager.getInstance(i).getCurrentTime();
-                int i2 = user.status.expires;
-                if (i2 > i) {
-                    if (zArr != null) {
-                        zArr[0] = true;
-                    }
-                    return getString(str, NUM);
-                } else if (i2 == -1) {
-                    return getString("Invisible", NUM);
-                } else {
-                    if (i2 == -100) {
-                        return getString("Lately", NUM);
-                    }
-                    if (i2 == -101) {
-                        return getString("WithinAWeek", NUM);
-                    }
-                    if (i2 == -102) {
-                        return getString("WithinAMonth", NUM);
-                    }
-                    return formatDateOnline((long) i2);
+                return getString("Online", NUM);
+            } else if (i2 == -1) {
+                return getString("Invisible", NUM);
+            } else {
+                if (i2 == -100) {
+                    return getString("Lately", NUM);
                 }
+                if (i2 == -101) {
+                    return getString("WithinAWeek", NUM);
+                }
+                if (i2 == -102) {
+                    return getString("WithinAMonth", NUM);
+                }
+                return formatDateOnline((long) i2);
             }
         }
-        return getString("ALongTimeAgo", NUM);
     }
 
     private String escapeString(String str) {
@@ -3174,99 +2653,101 @@ public class LocaleController {
         return str.replace("<", "&lt;").replace(">", "&gt;").replace("& ", "&amp; ");
     }
 
-    public void saveRemoteLocaleStringsForCurrentLocale(TL_langPackDifference tL_langPackDifference, int i) {
+    public void saveRemoteLocaleStringsForCurrentLocale(TLRPC.TL_langPackDifference tL_langPackDifference, int i) {
         if (this.currentLocaleInfo != null) {
-            String toLowerCase = tL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
-            if (toLowerCase.equals(this.currentLocaleInfo.shortName) || toLowerCase.equals(this.currentLocaleInfo.baseLangCode)) {
+            String lowerCase = tL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
+            if (lowerCase.equals(this.currentLocaleInfo.shortName) || lowerCase.equals(this.currentLocaleInfo.baseLangCode)) {
                 lambda$null$9$LocaleController(this.currentLocaleInfo, tL_langPackDifference, i);
             }
         }
     }
 
     /* renamed from: saveRemoteLocaleStrings */
-    public void lambda$null$9$LocaleController(LocaleInfo localeInfo, TL_langPackDifference tL_langPackDifference, int i) {
-        if (!(tL_langPackDifference == null || tL_langPackDifference.strings.isEmpty() || localeInfo == null || localeInfo.isLocal())) {
-            String toLowerCase = tL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
-            int i2 = toLowerCase.equals(localeInfo.shortName) ? 0 : toLowerCase.equals(localeInfo.baseLangCode) ? 1 : -1;
+    public void lambda$null$9$LocaleController(LocaleInfo localeInfo, TLRPC.TL_langPackDifference tL_langPackDifference, int i) {
+        int i2;
+        File file;
+        HashMap<String, String> hashMap;
+        if (tL_langPackDifference != null && !tL_langPackDifference.strings.isEmpty() && localeInfo != null && !localeInfo.isLocal()) {
+            String lowerCase = tL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
+            if (lowerCase.equals(localeInfo.shortName)) {
+                i2 = 0;
+            } else {
+                i2 = lowerCase.equals(localeInfo.baseLangCode) ? 1 : -1;
+            }
             if (i2 != -1) {
-                File pathToFile;
                 if (i2 == 0) {
-                    pathToFile = localeInfo.getPathToFile();
+                    file = localeInfo.getPathToFile();
                 } else {
-                    pathToFile = localeInfo.getPathToBaseFile();
+                    file = localeInfo.getPathToBaseFile();
                 }
                 try {
-                    HashMap hashMap;
                     if (tL_langPackDifference.from_version == 0) {
-                        hashMap = new HashMap();
+                        hashMap = new HashMap<>();
                     } else {
-                        hashMap = getLocaleFileStrings(pathToFile, true);
+                        hashMap = getLocaleFileStrings(file, true);
                     }
                     for (int i3 = 0; i3 < tL_langPackDifference.strings.size(); i3++) {
-                        LangPackString langPackString = (LangPackString) tL_langPackDifference.strings.get(i3);
-                        if (langPackString instanceof TL_langPackString) {
+                        TLRPC.LangPackString langPackString = tL_langPackDifference.strings.get(i3);
+                        if (langPackString instanceof TLRPC.TL_langPackString) {
                             hashMap.put(langPackString.key, escapeString(langPackString.value));
-                        } else if (langPackString instanceof TL_langPackStringPluralized) {
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_zero");
-                            Object obj = "";
-                            hashMap.put(stringBuilder.toString(), langPackString.zero_value != null ? escapeString(langPackString.zero_value) : obj);
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_one");
-                            hashMap.put(stringBuilder.toString(), langPackString.one_value != null ? escapeString(langPackString.one_value) : obj);
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_two");
-                            hashMap.put(stringBuilder.toString(), langPackString.two_value != null ? escapeString(langPackString.two_value) : obj);
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_few");
-                            hashMap.put(stringBuilder.toString(), langPackString.few_value != null ? escapeString(langPackString.few_value) : obj);
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_many");
-                            hashMap.put(stringBuilder.toString(), langPackString.many_value != null ? escapeString(langPackString.many_value) : obj);
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(langPackString.key);
-                            stringBuilder.append("_other");
-                            String stringBuilder2 = stringBuilder.toString();
+                        } else if (langPackString instanceof TLRPC.TL_langPackStringPluralized) {
+                            String str = "";
+                            hashMap.put(langPackString.key + "_zero", langPackString.zero_value != null ? escapeString(langPackString.zero_value) : str);
+                            hashMap.put(langPackString.key + "_one", langPackString.one_value != null ? escapeString(langPackString.one_value) : str);
+                            hashMap.put(langPackString.key + "_two", langPackString.two_value != null ? escapeString(langPackString.two_value) : str);
+                            hashMap.put(langPackString.key + "_few", langPackString.few_value != null ? escapeString(langPackString.few_value) : str);
+                            hashMap.put(langPackString.key + "_many", langPackString.many_value != null ? escapeString(langPackString.many_value) : str);
+                            String str2 = langPackString.key + "_other";
                             if (langPackString.other_value != null) {
-                                obj = escapeString(langPackString.other_value);
+                                str = escapeString(langPackString.other_value);
                             }
-                            hashMap.put(stringBuilder2, obj);
-                        } else if (langPackString instanceof TL_langPackStringDeleted) {
+                            hashMap.put(str2, str);
+                        } else if (langPackString instanceof TLRPC.TL_langPackStringDeleted) {
                             hashMap.remove(langPackString.key);
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        StringBuilder stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append("save locale file to ");
-                        stringBuilder3.append(pathToFile);
-                        FileLog.d(stringBuilder3.toString());
+                        FileLog.d("save locale file to " + file);
                     }
-                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathToFile));
+                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
                     bufferedWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
                     bufferedWriter.write("<resources>\n");
-                    for (Entry entry : hashMap.entrySet()) {
-                        bufferedWriter.write(String.format("<string name=\"%1$s\">%2$s</string>\n", new Object[]{entry.getKey(), entry.getValue()}));
+                    for (Map.Entry next : hashMap.entrySet()) {
+                        bufferedWriter.write(String.format("<string name=\"%1$s\">%2$s</string>\n", new Object[]{next.getKey(), next.getValue()}));
                     }
                     bufferedWriter.write("</resources>");
                     bufferedWriter.close();
                     boolean hasBaseLang = localeInfo.hasBaseLang();
-                    HashMap localeFileStrings = getLocaleFileStrings(hasBaseLang ? localeInfo.getPathToBaseFile() : localeInfo.getPathToFile());
+                    HashMap<String, String> localeFileStrings = getLocaleFileStrings(hasBaseLang ? localeInfo.getPathToBaseFile() : localeInfo.getPathToFile());
                     if (hasBaseLang) {
                         localeFileStrings.putAll(getLocaleFileStrings(localeInfo.getPathToFile()));
                     }
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$byYfLkXSOjQxKwpHcMJU1BFCcao(this, localeInfo, i2, tL_langPackDifference, localeFileStrings));
+                    AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i2, tL_langPackDifference, localeFileStrings) {
+                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        private final /* synthetic */ int f$2;
+                        private final /* synthetic */ TLRPC.TL_langPackDifference f$3;
+                        private final /* synthetic */ HashMap f$4;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                            this.f$3 = r4;
+                            this.f$4 = r5;
+                        }
+
+                        public final void run() {
+                            LocaleController.this.lambda$saveRemoteLocaleStrings$4$LocaleController(this.f$1, this.f$2, this.f$3, this.f$4);
+                        }
+                    });
                 } catch (Exception unused) {
                 }
             }
         }
     }
 
-    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(LocaleInfo localeInfo, int i, TL_langPackDifference tL_langPackDifference, HashMap hashMap) {
+    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(LocaleInfo localeInfo, int i, TLRPC.TL_langPackDifference tL_langPackDifference, HashMap hashMap) {
+        String[] strArr;
+        Locale locale;
         if (localeInfo != null) {
             if (i == 0) {
                 localeInfo.version = tL_langPackDifference.version;
@@ -3277,35 +2758,32 @@ public class LocaleController {
         saveOtherLanguages();
         try {
             if (this.currentLocaleInfo == localeInfo) {
-                String[] split;
-                Locale locale;
-                String str = "_";
                 if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
-                    split = localeInfo.pluralLangCode.split(str);
-                } else if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
-                    split = localeInfo.shortName.split(str);
+                    strArr = localeInfo.pluralLangCode.split("_");
+                } else if (!TextUtils.isEmpty(localeInfo.baseLangCode)) {
+                    strArr = localeInfo.baseLangCode.split("_");
                 } else {
-                    split = localeInfo.baseLangCode.split(str);
+                    strArr = localeInfo.shortName.split("_");
                 }
-                if (split.length == 1) {
-                    locale = new Locale(split[0]);
+                if (strArr.length == 1) {
+                    locale = new Locale(strArr[0]);
                 } else {
-                    locale = new Locale(split[0], split[1]);
+                    locale = new Locale(strArr[0], strArr[1]);
                 }
                 this.languageOverride = localeInfo.shortName;
-                Editor edit = MessagesController.getGlobalMainSettings().edit();
+                SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
                 edit.putString("language", localeInfo.getKey());
                 edit.commit();
                 this.localeValues = hashMap;
                 this.currentLocale = locale;
                 this.currentLocaleInfo = localeInfo;
-                if (!(this.currentLocaleInfo == null || TextUtils.isEmpty(this.currentLocaleInfo.pluralLangCode))) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocaleInfo.pluralLangCode);
+                if (this.currentLocaleInfo != null && !TextUtils.isEmpty(this.currentLocaleInfo.pluralLangCode)) {
+                    this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
-                    this.currentPluralRules = (PluralRules) this.allRules.get(this.currentLocale.getLanguage());
+                    this.currentPluralRules = this.allRules.get(this.currentLocale.getLanguage());
                     if (this.currentPluralRules == null) {
-                        this.currentPluralRules = (PluralRules) this.allRules.get("en");
+                        this.currentPluralRules = this.allRules.get("en");
                     }
                 }
                 this.changingConfiguration = true;
@@ -3316,7 +2794,7 @@ public class LocaleController {
                 this.changingConfiguration = false;
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             this.changingConfiguration = false;
         }
         recreateFormatters();
@@ -3326,32 +2804,50 @@ public class LocaleController {
     public void loadRemoteLanguages(int i) {
         if (!this.loadingRemoteLanguages) {
             this.loadingRemoteLanguages = true;
-            ConnectionsManager.getInstance(i).sendRequest(new TL_langpack_getLanguages(), new -$$Lambda$LocaleController$OO-St8W4lBDCp1N4EzTA2EggA1M(this, i), 8);
+            ConnectionsManager.getInstance(i).sendRequest(new TLRPC.TL_langpack_getLanguages(), new RequestDelegate(i) {
+                private final /* synthetic */ int f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    LocaleController.this.lambda$loadRemoteLanguages$6$LocaleController(this.f$1, tLObject, tL_error);
+                }
+            }, 8);
         }
     }
 
-    public /* synthetic */ void lambda$loadRemoteLanguages$6$LocaleController(int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadRemoteLanguages$6$LocaleController(int i, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$Y6efM2co6N3bq4nUuZDi5VasNV4(this, tLObject, i));
+            AndroidUtilities.runOnUIThread(new Runnable(tLObject, i) {
+                private final /* synthetic */ TLObject f$1;
+                private final /* synthetic */ int f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    LocaleController.this.lambda$null$5$LocaleController(this.f$1, this.f$2);
+                }
+            });
         }
     }
 
     public /* synthetic */ void lambda$null$5$LocaleController(TLObject tLObject, int i) {
-        int i2;
         this.loadingRemoteLanguages = false;
-        Vector vector = (Vector) tLObject;
+        TLRPC.Vector vector = (TLRPC.Vector) tLObject;
         int size = this.remoteLanguages.size();
-        for (i2 = 0; i2 < size; i2++) {
-            ((LocaleInfo) this.remoteLanguages.get(i2)).serverIndex = Integer.MAX_VALUE;
+        for (int i2 = 0; i2 < size; i2++) {
+            this.remoteLanguages.get(i2).serverIndex = Integer.MAX_VALUE;
         }
-        size = vector.objects.size();
-        for (i2 = 0; i2 < size; i2++) {
-            TL_langPackLanguage tL_langPackLanguage = (TL_langPackLanguage) vector.objects.get(i2);
+        int size2 = vector.objects.size();
+        for (int i3 = 0; i3 < size2; i3++) {
+            TLRPC.TL_langPackLanguage tL_langPackLanguage = (TLRPC.TL_langPackLanguage) vector.objects.get(i3);
             if (BuildVars.LOGS_ENABLED) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("loaded lang ");
-                stringBuilder.append(tL_langPackLanguage.name);
-                FileLog.d(stringBuilder.toString());
+                FileLog.d("loaded lang " + tL_langPackLanguage.name);
             }
             LocaleInfo localeInfo = new LocaleInfo();
             localeInfo.nameEnglish = tL_langPackLanguage.name;
@@ -3366,7 +2862,7 @@ public class LocaleController {
             localeInfo.pluralLangCode = tL_langPackLanguage.plural_code.replace('-', '_').toLowerCase();
             localeInfo.isRtl = tL_langPackLanguage.rtl;
             localeInfo.pathToFile = "remote";
-            localeInfo.serverIndex = i2;
+            localeInfo.serverIndex = i3;
             LocaleInfo languageFromDict = getLanguageFromDict(localeInfo.getKey());
             if (languageFromDict == null) {
                 this.languages.add(localeInfo);
@@ -3385,23 +2881,20 @@ public class LocaleController {
                 this.remoteLanguagesDict.put(languageFromDict.getKey(), languageFromDict);
             }
         }
-        int i3 = 0;
-        while (i3 < this.remoteLanguages.size()) {
-            LocaleInfo localeInfo2 = (LocaleInfo) this.remoteLanguages.get(i3);
+        int i4 = 0;
+        while (i4 < this.remoteLanguages.size()) {
+            LocaleInfo localeInfo2 = this.remoteLanguages.get(i4);
             if (localeInfo2.serverIndex == Integer.MAX_VALUE && localeInfo2 != this.currentLocaleInfo) {
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("remove lang ");
-                    stringBuilder2.append(localeInfo2.getKey());
-                    FileLog.d(stringBuilder2.toString());
+                    FileLog.d("remove lang " + localeInfo2.getKey());
                 }
-                this.remoteLanguages.remove(i3);
+                this.remoteLanguages.remove(i4);
                 this.remoteLanguagesDict.remove(localeInfo2.getKey());
                 this.languages.remove(localeInfo2);
                 this.languagesDict.remove(localeInfo2.getKey());
-                i3--;
+                i4--;
             }
-            i3++;
+            i4++;
         }
         saveOtherLanguages();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.suggestedLangpack, new Object[0]);
@@ -3413,18 +2906,41 @@ public class LocaleController {
             return;
         }
         if (localeInfo == null || localeInfo.isRemote() || localeInfo.isUnofficial()) {
-            String str2 = "";
             if (localeInfo.hasBaseLang() && (str == null || str.equals(localeInfo.baseLangCode))) {
                 if (localeInfo.baseVersion == 0 || z) {
-                    TL_langpack_getLangPack tL_langpack_getLangPack = new TL_langpack_getLangPack();
+                    TLRPC.TL_langpack_getLangPack tL_langpack_getLangPack = new TLRPC.TL_langpack_getLangPack();
                     tL_langpack_getLangPack.lang_code = localeInfo.getBaseLangCode();
-                    ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getLangPack, new -$$Lambda$LocaleController$C7GeSsDILXp-14TJUT5eNNANB6o(this, localeInfo, i), 8);
+                    ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getLangPack, new RequestDelegate(localeInfo, i) {
+                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        private final /* synthetic */ int f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                            LocaleController.this.lambda$applyRemoteLanguage$10$LocaleController(this.f$1, this.f$2, tLObject, tL_error);
+                        }
+                    }, 8);
                 } else if (localeInfo.hasBaseLang()) {
-                    TL_langpack_getDifference tL_langpack_getDifference = new TL_langpack_getDifference();
+                    TLRPC.TL_langpack_getDifference tL_langpack_getDifference = new TLRPC.TL_langpack_getDifference();
                     tL_langpack_getDifference.from_version = localeInfo.baseVersion;
                     tL_langpack_getDifference.lang_code = localeInfo.getBaseLangCode();
-                    tL_langpack_getDifference.lang_pack = str2;
-                    ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getDifference, new -$$Lambda$LocaleController$s_X_ikLryDU_N2xVuPEFJJqkOk0(this, localeInfo, i), 8);
+                    tL_langpack_getDifference.lang_pack = "";
+                    ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getDifference, new RequestDelegate(localeInfo, i) {
+                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        private final /* synthetic */ int f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                            LocaleController.this.lambda$applyRemoteLanguage$8$LocaleController(this.f$1, this.f$2, tLObject, tL_error);
+                        }
+                    }, 8);
                 }
             }
             if (str != null && !str.equals(localeInfo.shortName)) {
@@ -3434,40 +2950,120 @@ public class LocaleController {
                 for (int i2 = 0; i2 < 3; i2++) {
                     ConnectionsManager.setLangCode(localeInfo.getLangCode());
                 }
-                TL_langpack_getLangPack tL_langpack_getLangPack2 = new TL_langpack_getLangPack();
+                TLRPC.TL_langpack_getLangPack tL_langpack_getLangPack2 = new TLRPC.TL_langpack_getLangPack();
                 tL_langpack_getLangPack2.lang_code = localeInfo.getLangCode();
-                ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getLangPack2, new -$$Lambda$LocaleController$h0eSozyCLW0Mpog1omLBJ_00K-I(this, localeInfo, i), 8);
+                ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getLangPack2, new RequestDelegate(localeInfo, i) {
+                    private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                    private final /* synthetic */ int f$2;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                    }
+
+                    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                        LocaleController.this.lambda$applyRemoteLanguage$14$LocaleController(this.f$1, this.f$2, tLObject, tL_error);
+                    }
+                }, 8);
                 return;
             }
-            TL_langpack_getDifference tL_langpack_getDifference2 = new TL_langpack_getDifference();
+            TLRPC.TL_langpack_getDifference tL_langpack_getDifference2 = new TLRPC.TL_langpack_getDifference();
             tL_langpack_getDifference2.from_version = localeInfo.version;
             tL_langpack_getDifference2.lang_code = localeInfo.getLangCode();
-            tL_langpack_getDifference2.lang_pack = str2;
-            ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getDifference2, new -$$Lambda$LocaleController$JT38tfE7-oOUNrZDivXXSv-b-vg(this, localeInfo, i), 8);
+            tL_langpack_getDifference2.lang_pack = "";
+            ConnectionsManager.getInstance(i).sendRequest(tL_langpack_getDifference2, new RequestDelegate(localeInfo, i) {
+                private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                private final /* synthetic */ int f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    LocaleController.this.lambda$applyRemoteLanguage$12$LocaleController(this.f$1, this.f$2, tLObject, tL_error);
+                }
+            }, 8);
         }
     }
 
-    public /* synthetic */ void lambda$applyRemoteLanguage$8$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$8$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$sjCg-VQEumFUYAgaZUDI3dk-dz4(this, localeInfo, tLObject, i));
+            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
+                private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                private final /* synthetic */ TLObject f$2;
+                private final /* synthetic */ int f$3;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                }
+
+                public final void run() {
+                    LocaleController.this.lambda$null$7$LocaleController(this.f$1, this.f$2, this.f$3);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$applyRemoteLanguage$10$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$10$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$e6CsiR21q6PI2LDNrAzXcAWuMTk(this, localeInfo, tLObject, i));
+            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
+                private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                private final /* synthetic */ TLObject f$2;
+                private final /* synthetic */ int f$3;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                }
+
+                public final void run() {
+                    LocaleController.this.lambda$null$9$LocaleController(this.f$1, this.f$2, this.f$3);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$applyRemoteLanguage$12$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$12$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$BieyCwrY21__jPaUyC1vcjWcFcw(this, localeInfo, tLObject, i));
+            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
+                private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                private final /* synthetic */ TLObject f$2;
+                private final /* synthetic */ int f$3;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                }
+
+                public final void run() {
+                    LocaleController.this.lambda$null$11$LocaleController(this.f$1, this.f$2, this.f$3);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$applyRemoteLanguage$14$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$applyRemoteLanguage$14$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$LocaleController$9Gyg-n_UT33Nf2VkVVHA1KrlD90(this, localeInfo, tLObject, i));
+            AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
+                private final /* synthetic */ LocaleController.LocaleInfo f$1;
+                private final /* synthetic */ TLObject f$2;
+                private final /* synthetic */ int f$3;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                }
+
+                public final void run() {
+                    LocaleController.this.lambda$null$13$LocaleController(this.f$1, this.f$2, this.f$3);
+                }
+            });
         }
     }
 
@@ -3480,640 +3076,745 @@ public class LocaleController {
     }
 
     public String getTranslitString(String str, boolean z, boolean z2) {
+        Object obj;
+        Object obj2;
+        Object obj3;
+        boolean z3;
+        String str2;
         if (str == null) {
             return null;
         }
-        String str2;
-        String str3;
-        Object obj;
-        String str4 = "h";
-        String str5 = "z";
-        String str6 = "g";
-        String str7 = "d";
-        String str8 = "n";
-        String str9 = "t";
-        String str10 = "s";
-        String str11 = "l";
-        String str12 = "i";
-        String str13 = "r";
-        String str14 = "u";
-        String str15 = "a";
-        String str16 = "e";
-        String str17 = "o";
         if (this.ruTranslitChars == null) {
-            str2 = str4;
-            this.ruTranslitChars = new HashMap(33);
-            this.ruTranslitChars.put("а", str15);
-            str3 = str15;
+            this.ruTranslitChars = new HashMap<>(33);
+            this.ruTranslitChars.put("а", "a");
+            obj = "a";
             this.ruTranslitChars.put("б", "b");
             this.ruTranslitChars.put("в", "v");
-            this.ruTranslitChars.put("г", str6);
-            this.ruTranslitChars.put("д", str7);
-            this.ruTranslitChars.put("е", str16);
+            this.ruTranslitChars.put("г", "g");
+            this.ruTranslitChars.put("д", "d");
+            this.ruTranslitChars.put("е", "e");
             this.ruTranslitChars.put("ё", "yo");
             this.ruTranslitChars.put("ж", "zh");
-            this.ruTranslitChars.put("з", str5);
-            this.ruTranslitChars.put("и", str12);
-            this.ruTranslitChars.put("й", str12);
+            this.ruTranslitChars.put("з", "z");
+            this.ruTranslitChars.put("и", "i");
+            this.ruTranslitChars.put("й", "i");
             this.ruTranslitChars.put("к", "k");
-            this.ruTranslitChars.put("л", str11);
+            this.ruTranslitChars.put("л", "l");
             this.ruTranslitChars.put("м", "m");
-            this.ruTranslitChars.put("н", str8);
-            this.ruTranslitChars.put("о", str17);
+            this.ruTranslitChars.put("н", "n");
+            this.ruTranslitChars.put("о", "o");
             this.ruTranslitChars.put("п", "p");
-            this.ruTranslitChars.put("р", str13);
-            this.ruTranslitChars.put("с", str10);
-            this.ruTranslitChars.put("т", str9);
-            this.ruTranslitChars.put("у", str14);
+            this.ruTranslitChars.put("р", "r");
+            this.ruTranslitChars.put("с", "s");
+            this.ruTranslitChars.put("т", "t");
+            this.ruTranslitChars.put("у", "u");
             this.ruTranslitChars.put("ф", "f");
-            obj = str2;
-            this.ruTranslitChars.put("х", obj);
-            str2 = str9;
+            obj3 = "h";
+            this.ruTranslitChars.put("х", obj3);
+            obj2 = "t";
             this.ruTranslitChars.put("ц", "ts");
             this.ruTranslitChars.put("ч", "ch");
             this.ruTranslitChars.put("ш", "sh");
             this.ruTranslitChars.put("щ", "sch");
-            this.ruTranslitChars.put("ы", str12);
+            this.ruTranslitChars.put("ы", "i");
             this.ruTranslitChars.put("ь", "");
             this.ruTranslitChars.put("ъ", "");
-            this.ruTranslitChars.put("э", str16);
+            this.ruTranslitChars.put("э", "e");
             this.ruTranslitChars.put("ю", "yu");
             this.ruTranslitChars.put("я", "ya");
         } else {
-            str2 = str9;
-            str3 = str15;
-            obj = str4;
+            obj2 = "t";
+            obj = "a";
+            obj3 = "h";
         }
         if (this.translitChars == null) {
-            this.translitChars = new HashMap(487);
+            this.translitChars = new HashMap<>(487);
             this.translitChars.put("ȼ", "c");
-            this.translitChars.put("ᶇ", str8);
-            this.translitChars.put("ɖ", str7);
-            str4 = "y";
-            this.translitChars.put("ỿ", str4);
-            this.translitChars.put("ᴓ", str17);
-            this.translitChars.put("ø", str17);
-            String str18 = str5;
-            str5 = str3;
-            this.translitChars.put("ḁ", str5);
-            this.translitChars.put("ʯ", obj);
-            this.translitChars.put("ŷ", str4);
-            str3 = str8;
+            this.translitChars.put("ᶇ", "n");
+            this.translitChars.put("ɖ", "d");
+            this.translitChars.put("ỿ", "y");
+            this.translitChars.put("ᴓ", "o");
+            this.translitChars.put("ø", "o");
+            Object obj4 = obj;
+            this.translitChars.put("ḁ", obj4);
+            this.translitChars.put("ʯ", obj3);
+            this.translitChars.put("ŷ", "y");
             this.translitChars.put("ʞ", "k");
-            this.translitChars.put("ừ", str14);
+            this.translitChars.put("ừ", "u");
             this.translitChars.put("ꜳ", "aa");
             this.translitChars.put("ĳ", "ij");
-            this.translitChars.put("ḽ", str11);
-            this.translitChars.put("ɪ", str12);
+            this.translitChars.put("ḽ", "l");
+            this.translitChars.put("ɪ", "i");
             this.translitChars.put("ḇ", "b");
-            this.translitChars.put("ʀ", str13);
-            this.translitChars.put("ě", str16);
+            this.translitChars.put("ʀ", "r");
+            this.translitChars.put("ě", "e");
             this.translitChars.put("ﬃ", "ffi");
-            this.translitChars.put("ơ", str17);
-            this.translitChars.put("ⱹ", str13);
-            this.translitChars.put("ồ", str17);
-            this.translitChars.put("ǐ", str12);
+            this.translitChars.put("ơ", "o");
+            this.translitChars.put("ⱹ", "r");
+            this.translitChars.put("ồ", "o");
+            this.translitChars.put("ǐ", "i");
             this.translitChars.put("ꝕ", "p");
-            this.translitChars.put("ý", str4);
-            this.translitChars.put("ḝ", str16);
-            this.translitChars.put("ₒ", str17);
-            this.translitChars.put("ⱥ", str5);
+            this.translitChars.put("ý", "y");
+            this.translitChars.put("ḝ", "e");
+            this.translitChars.put("ₒ", "o");
+            this.translitChars.put("ⱥ", obj4);
             this.translitChars.put("ʙ", "b");
-            this.translitChars.put("ḛ", str16);
+            this.translitChars.put("ḛ", "e");
             this.translitChars.put("ƈ", "c");
-            this.translitChars.put("ɦ", obj);
+            this.translitChars.put("ɦ", obj3);
             this.translitChars.put("ᵬ", "b");
-            this.translitChars.put("ṣ", str10);
-            this.translitChars.put("đ", str7);
-            this.translitChars.put("ỗ", str17);
+            this.translitChars.put("ṣ", "s");
+            this.translitChars.put("đ", "d");
+            this.translitChars.put("ỗ", "o");
             this.translitChars.put("ɟ", "j");
-            this.translitChars.put("ẚ", str5);
-            this.translitChars.put("ɏ", str4);
+            this.translitChars.put("ẚ", obj4);
+            this.translitChars.put("ɏ", "y");
             this.translitChars.put("ʌ", "v");
             this.translitChars.put("ꝓ", "p");
             this.translitChars.put("ﬁ", "fi");
             this.translitChars.put("ᶄ", "k");
-            this.translitChars.put("ḏ", str7);
-            this.translitChars.put("ᴌ", str11);
-            this.translitChars.put("ė", str16);
+            this.translitChars.put("ḏ", "d");
+            this.translitChars.put("ᴌ", "l");
+            this.translitChars.put("ė", "e");
             this.translitChars.put("ᴋ", "k");
             this.translitChars.put("ċ", "c");
-            this.translitChars.put("ʁ", str13);
+            this.translitChars.put("ʁ", "r");
             this.translitChars.put("ƕ", "hv");
             this.translitChars.put("ƀ", "b");
-            this.translitChars.put("ṍ", str17);
+            this.translitChars.put("ṍ", "o");
             this.translitChars.put("ȣ", "ou");
             this.translitChars.put("ǰ", "j");
-            this.translitChars.put("ᶃ", str6);
-            str9 = str3;
-            this.translitChars.put("ṋ", str9);
-            str3 = str7;
+            this.translitChars.put("ᶃ", "g");
+            Object obj5 = "n";
+            this.translitChars.put("ṋ", obj5);
             this.translitChars.put("ɉ", "j");
-            this.translitChars.put("ǧ", str6);
+            this.translitChars.put("ǧ", "g");
             this.translitChars.put("ǳ", "dz");
-            str8 = str18;
-            this.translitChars.put("ź", str8);
-            Object obj2 = obj;
+            Object obj6 = "z";
+            this.translitChars.put("ź", obj6);
+            Object obj7 = obj3;
             this.translitChars.put("ꜷ", "au");
-            this.translitChars.put("ǖ", str14);
-            this.translitChars.put("ᵹ", str6);
-            this.translitChars.put("ȯ", str17);
-            this.translitChars.put("ɐ", str5);
-            this.translitChars.put("ą", str5);
-            this.translitChars.put("õ", str17);
-            this.translitChars.put("ɻ", str13);
-            this.translitChars.put("ꝍ", str17);
-            this.translitChars.put("ǟ", str5);
-            this.translitChars.put("ȴ", str11);
-            this.translitChars.put("ʂ", str10);
+            this.translitChars.put("ǖ", "u");
+            this.translitChars.put("ᵹ", "g");
+            this.translitChars.put("ȯ", "o");
+            this.translitChars.put("ɐ", obj4);
+            this.translitChars.put("ą", obj4);
+            this.translitChars.put("õ", "o");
+            this.translitChars.put("ɻ", "r");
+            this.translitChars.put("ꝍ", "o");
+            this.translitChars.put("ǟ", obj4);
+            this.translitChars.put("ȴ", "l");
+            this.translitChars.put("ʂ", "s");
             this.translitChars.put("ﬂ", "fl");
-            this.translitChars.put("ȉ", str12);
-            this.translitChars.put("ⱻ", str16);
-            this.translitChars.put("ṉ", str9);
-            this.translitChars.put("ï", str12);
-            this.translitChars.put("ñ", str9);
-            this.translitChars.put("ᴉ", str12);
-            str15 = str2;
-            this.translitChars.put("ʇ", str15);
-            this.translitChars.put("ẓ", str8);
-            this.translitChars.put("ỷ", str4);
-            this.translitChars.put("ȳ", str4);
-            this.translitChars.put("ṩ", str10);
-            this.translitChars.put("ɽ", str13);
-            this.translitChars.put("ĝ", str6);
-            this.translitChars.put("ᴝ", str14);
-            str2 = str4;
+            this.translitChars.put("ȉ", "i");
+            this.translitChars.put("ⱻ", "e");
+            this.translitChars.put("ṉ", obj5);
+            this.translitChars.put("ï", "i");
+            this.translitChars.put("ñ", obj5);
+            this.translitChars.put("ᴉ", "i");
+            Object obj8 = obj2;
+            this.translitChars.put("ʇ", obj8);
+            this.translitChars.put("ẓ", obj6);
+            this.translitChars.put("ỷ", "y");
+            this.translitChars.put("ȳ", "y");
+            this.translitChars.put("ṩ", "s");
+            this.translitChars.put("ɽ", "r");
+            this.translitChars.put("ĝ", "g");
+            this.translitChars.put("ᴝ", "u");
             this.translitChars.put("ḳ", "k");
             this.translitChars.put("ꝫ", "et");
-            this.translitChars.put("ī", str12);
-            this.translitChars.put("ť", str15);
+            this.translitChars.put("ī", "i");
+            this.translitChars.put("ť", obj8);
             this.translitChars.put("ꜿ", "c");
-            this.translitChars.put("ʟ", str11);
+            this.translitChars.put("ʟ", "l");
             this.translitChars.put("ꜹ", "av");
-            this.translitChars.put("û", str14);
+            this.translitChars.put("û", "u");
             this.translitChars.put("æ", "ae");
-            this.translitChars.put("ă", str5);
-            this.translitChars.put("ǘ", str14);
-            this.translitChars.put("ꞅ", str10);
-            this.translitChars.put("ᵣ", str13);
-            this.translitChars.put("ᴀ", str5);
+            this.translitChars.put("ă", obj4);
+            this.translitChars.put("ǘ", "u");
+            this.translitChars.put("ꞅ", "s");
+            this.translitChars.put("ᵣ", "r");
+            this.translitChars.put("ᴀ", obj4);
             this.translitChars.put("ƃ", "b");
-            Object obj3 = obj2;
-            this.translitChars.put("ḩ", obj3);
-            this.translitChars.put("ṧ", str10);
-            this.translitChars.put("ₑ", str16);
-            this.translitChars.put("ʜ", obj3);
-            str18 = str10;
+            Object obj9 = obj7;
+            this.translitChars.put("ḩ", obj9);
+            this.translitChars.put("ṧ", "s");
+            this.translitChars.put("ₑ", "e");
+            this.translitChars.put("ʜ", obj9);
             this.translitChars.put("ẋ", "x");
             this.translitChars.put("ꝅ", "k");
-            str10 = str3;
-            this.translitChars.put("ḋ", str10);
-            str3 = str11;
+            Object obj10 = "d";
+            this.translitChars.put("ḋ", obj10);
+            Object obj11 = "l";
             this.translitChars.put("ƣ", "oi");
             this.translitChars.put("ꝑ", "p");
-            this.translitChars.put("ħ", obj3);
+            this.translitChars.put("ħ", obj9);
             this.translitChars.put("ⱴ", "v");
             this.translitChars.put("ẇ", "w");
-            this.translitChars.put("ǹ", str9);
+            this.translitChars.put("ǹ", obj5);
             this.translitChars.put("ɯ", "m");
-            this.translitChars.put("ɡ", str6);
-            this.translitChars.put("ɴ", str9);
+            this.translitChars.put("ɡ", "g");
+            this.translitChars.put("ɴ", obj5);
             this.translitChars.put("ᴘ", "p");
             this.translitChars.put("ᵥ", "v");
-            this.translitChars.put("ū", str14);
+            this.translitChars.put("ū", "u");
             this.translitChars.put("ḃ", "b");
             this.translitChars.put("ṗ", "p");
-            this.translitChars.put("å", str5);
+            this.translitChars.put("å", obj4);
             this.translitChars.put("ɕ", "c");
-            this.translitChars.put("ọ", str17);
-            this.translitChars.put("ắ", str5);
+            this.translitChars.put("ọ", "o");
+            this.translitChars.put("ắ", obj4);
             this.translitChars.put("ƒ", "f");
             this.translitChars.put("ǣ", "ae");
             this.translitChars.put("ꝡ", "vy");
             this.translitChars.put("ﬀ", "ff");
-            this.translitChars.put("ᶉ", str13);
-            this.translitChars.put("ô", str17);
-            this.translitChars.put("ǿ", str17);
-            this.translitChars.put("ṳ", str14);
-            this.translitChars.put("ȥ", str8);
+            this.translitChars.put("ᶉ", "r");
+            this.translitChars.put("ô", "o");
+            this.translitChars.put("ǿ", "o");
+            this.translitChars.put("ṳ", "u");
+            this.translitChars.put("ȥ", obj6);
             this.translitChars.put("ḟ", "f");
-            this.translitChars.put("ḓ", str10);
-            this.translitChars.put("ȇ", str16);
-            this.translitChars.put("ȕ", str14);
-            this.translitChars.put("ȵ", str9);
+            this.translitChars.put("ḓ", obj10);
+            this.translitChars.put("ȇ", "e");
+            this.translitChars.put("ȕ", "u");
+            this.translitChars.put("ȵ", obj5);
             this.translitChars.put("ʠ", "q");
-            this.translitChars.put("ấ", str5);
+            this.translitChars.put("ấ", obj4);
             this.translitChars.put("ǩ", "k");
-            this.translitChars.put("ĩ", str12);
-            this.translitChars.put("ṵ", str14);
-            this.translitChars.put("ŧ", str15);
-            this.translitChars.put("ɾ", str13);
+            this.translitChars.put("ĩ", "i");
+            this.translitChars.put("ṵ", "u");
+            this.translitChars.put("ŧ", obj8);
+            this.translitChars.put("ɾ", "r");
             this.translitChars.put("ƙ", "k");
-            this.translitChars.put("ṫ", str15);
+            this.translitChars.put("ṫ", obj8);
             this.translitChars.put("ꝗ", "q");
-            this.translitChars.put("ậ", str5);
+            this.translitChars.put("ậ", obj4);
             this.translitChars.put("ʄ", "j");
-            this.translitChars.put("ƚ", str3);
+            this.translitChars.put("ƚ", obj11);
             this.translitChars.put("ᶂ", "f");
-            str11 = str18;
-            this.translitChars.put("ᵴ", str11);
-            this.translitChars.put("ꞃ", str13);
-            str18 = str6;
+            Object obj12 = "s";
+            this.translitChars.put("ᵴ", obj12);
+            this.translitChars.put("ꞃ", "r");
+            Object obj13 = "g";
             this.translitChars.put("ᶌ", "v");
-            this.translitChars.put("ɵ", str17);
+            this.translitChars.put("ɵ", "o");
             this.translitChars.put("ḉ", "c");
-            this.translitChars.put("ᵤ", str14);
-            this.translitChars.put("ẑ", str8);
-            this.translitChars.put("ṹ", str14);
-            this.translitChars.put("ň", str9);
+            this.translitChars.put("ᵤ", "u");
+            this.translitChars.put("ẑ", obj6);
+            this.translitChars.put("ṹ", "u");
+            this.translitChars.put("ň", obj5);
             this.translitChars.put("ʍ", "w");
-            this.translitChars.put("ầ", str5);
+            this.translitChars.put("ầ", obj4);
             this.translitChars.put("ǉ", "lj");
             this.translitChars.put("ɓ", "b");
-            this.translitChars.put("ɼ", str13);
-            this.translitChars.put("ò", str17);
+            this.translitChars.put("ɼ", "r");
+            this.translitChars.put("ò", "o");
             this.translitChars.put("ẘ", "w");
-            this.translitChars.put("ɗ", str10);
+            this.translitChars.put("ɗ", obj10);
             this.translitChars.put("ꜽ", "ay");
-            this.translitChars.put("ư", str14);
+            this.translitChars.put("ư", "u");
             this.translitChars.put("ᶀ", "b");
-            this.translitChars.put("ǜ", str14);
-            this.translitChars.put("ẹ", str16);
-            this.translitChars.put("ǡ", str5);
-            this.translitChars.put("ɥ", obj3);
-            this.translitChars.put("ṏ", str17);
-            this.translitChars.put("ǔ", str14);
-            str6 = str2;
-            this.translitChars.put("ʎ", str6);
-            this.translitChars.put("ȱ", str17);
-            this.translitChars.put("ệ", str16);
-            this.translitChars.put("ế", str16);
-            this.translitChars.put("ĭ", str12);
-            this.translitChars.put("ⱸ", str16);
-            this.translitChars.put("ṯ", str15);
-            this.translitChars.put("ᶑ", str10);
-            this.translitChars.put("ḧ", obj3);
-            this.translitChars.put("ṥ", str11);
-            this.translitChars.put("ë", str16);
-            str2 = str15;
+            this.translitChars.put("ǜ", "u");
+            this.translitChars.put("ẹ", "e");
+            this.translitChars.put("ǡ", obj4);
+            this.translitChars.put("ɥ", obj9);
+            this.translitChars.put("ṏ", "o");
+            this.translitChars.put("ǔ", "u");
+            Object obj14 = "y";
+            this.translitChars.put("ʎ", obj14);
+            this.translitChars.put("ȱ", "o");
+            this.translitChars.put("ệ", "e");
+            this.translitChars.put("ế", "e");
+            this.translitChars.put("ĭ", "i");
+            this.translitChars.put("ⱸ", "e");
+            this.translitChars.put("ṯ", obj8);
+            this.translitChars.put("ᶑ", obj10);
+            this.translitChars.put("ḧ", obj9);
+            this.translitChars.put("ṥ", obj12);
+            this.translitChars.put("ë", "e");
             this.translitChars.put("ᴍ", "m");
-            this.translitChars.put("ö", str17);
-            this.translitChars.put("é", str16);
-            this.translitChars.put("ı", str12);
-            this.translitChars.put("ď", str10);
+            this.translitChars.put("ö", "o");
+            this.translitChars.put("é", "e");
+            this.translitChars.put("ı", "i");
+            this.translitChars.put("ď", obj10);
             this.translitChars.put("ᵯ", "m");
-            this.translitChars.put("ỵ", str6);
+            this.translitChars.put("ỵ", obj14);
             this.translitChars.put("ŵ", "w");
-            this.translitChars.put("ề", str16);
-            this.translitChars.put("ứ", str14);
-            this.translitChars.put("ƶ", str8);
+            this.translitChars.put("ề", "e");
+            this.translitChars.put("ứ", "u");
+            this.translitChars.put("ƶ", obj6);
             this.translitChars.put("ĵ", "j");
-            this.translitChars.put("ḍ", str10);
-            this.translitChars.put("ŭ", str14);
+            this.translitChars.put("ḍ", obj10);
+            this.translitChars.put("ŭ", "u");
             this.translitChars.put("ʝ", "j");
-            this.translitChars.put("ê", str16);
-            this.translitChars.put("ǚ", str14);
-            this.translitChars.put("ġ", str18);
-            this.translitChars.put("ṙ", str13);
-            this.translitChars.put("ƞ", str9);
-            this.translitChars.put("ḗ", str16);
-            this.translitChars.put("ẝ", str11);
-            this.translitChars.put("ᶁ", str10);
+            this.translitChars.put("ê", "e");
+            this.translitChars.put("ǚ", "u");
+            this.translitChars.put("ġ", obj13);
+            this.translitChars.put("ṙ", "r");
+            this.translitChars.put("ƞ", obj5);
+            this.translitChars.put("ḗ", "e");
+            this.translitChars.put("ẝ", obj12);
+            this.translitChars.put("ᶁ", obj10);
             this.translitChars.put("ķ", "k");
             this.translitChars.put("ᴂ", "ae");
-            this.translitChars.put("ɘ", str16);
-            this.translitChars.put("ợ", str17);
+            this.translitChars.put("ɘ", "e");
+            this.translitChars.put("ợ", "o");
             this.translitChars.put("ḿ", "m");
             this.translitChars.put("ꜰ", "f");
-            this.translitChars.put("ẵ", str5);
+            this.translitChars.put("ẵ", obj4);
             this.translitChars.put("ꝏ", "oo");
             this.translitChars.put("ᶆ", "m");
             this.translitChars.put("ᵽ", "p");
-            this.translitChars.put("ữ", str14);
+            this.translitChars.put("ữ", "u");
             this.translitChars.put("ⱪ", "k");
-            this.translitChars.put("ḥ", obj3);
-            str15 = str2;
-            this.translitChars.put("ţ", str15);
-            str2 = str17;
+            this.translitChars.put("ḥ", obj9);
+            Object obj15 = obj8;
+            this.translitChars.put("ţ", obj15);
             this.translitChars.put("ᵱ", "p");
             this.translitChars.put("ṁ", "m");
-            this.translitChars.put("á", str5);
-            this.translitChars.put("ᴎ", str9);
+            this.translitChars.put("á", obj4);
+            this.translitChars.put("ᴎ", obj5);
             this.translitChars.put("ꝟ", "v");
-            this.translitChars.put("è", str16);
-            this.translitChars.put("ᶎ", str8);
-            this.translitChars.put("ꝺ", str10);
+            this.translitChars.put("è", "e");
+            this.translitChars.put("ᶎ", obj6);
+            this.translitChars.put("ꝺ", obj10);
             this.translitChars.put("ᶈ", "p");
-            this.translitChars.put("ɫ", str3);
-            this.translitChars.put("ᴢ", str8);
+            this.translitChars.put("ɫ", obj11);
+            this.translitChars.put("ᴢ", obj6);
             this.translitChars.put("ɱ", "m");
-            this.translitChars.put("ṝ", str13);
+            this.translitChars.put("ṝ", "r");
             this.translitChars.put("ṽ", "v");
-            this.translitChars.put("ũ", str14);
+            this.translitChars.put("ũ", "u");
             this.translitChars.put("ß", "ss");
-            this.translitChars.put("ĥ", obj3);
-            this.translitChars.put("ᵵ", str15);
-            this.translitChars.put("ʐ", str8);
-            this.translitChars.put("ṟ", str13);
-            this.translitChars.put("ɲ", str9);
-            this.translitChars.put("à", str5);
-            this.translitChars.put("ẙ", str6);
-            this.translitChars.put("ỳ", str6);
+            this.translitChars.put("ĥ", obj9);
+            this.translitChars.put("ᵵ", obj15);
+            this.translitChars.put("ʐ", obj6);
+            this.translitChars.put("ṟ", "r");
+            this.translitChars.put("ɲ", obj5);
+            this.translitChars.put("à", obj4);
+            this.translitChars.put("ẙ", obj14);
+            this.translitChars.put("ỳ", obj14);
             this.translitChars.put("ᴔ", "oe");
             this.translitChars.put("ₓ", "x");
-            this.translitChars.put("ȗ", str14);
+            this.translitChars.put("ȗ", "u");
             this.translitChars.put("ⱼ", "j");
-            this.translitChars.put("ẫ", str5);
-            this.translitChars.put("ʑ", str8);
-            this.translitChars.put("ẛ", str11);
-            this.translitChars.put("ḭ", str12);
+            this.translitChars.put("ẫ", obj4);
+            this.translitChars.put("ʑ", obj6);
+            this.translitChars.put("ẛ", obj12);
+            this.translitChars.put("ḭ", "i");
             this.translitChars.put("ꜵ", "ao");
-            this.translitChars.put("ɀ", str8);
-            this.translitChars.put("ÿ", str6);
-            this.translitChars.put("ǝ", str16);
-            str4 = str2;
-            this.translitChars.put("ǭ", str4);
-            this.translitChars.put("ᴅ", str10);
-            str2 = str9;
-            str9 = str3;
-            this.translitChars.put("ᶅ", str9);
-            this.translitChars.put("ù", str14);
-            this.translitChars.put("ạ", str5);
-            str3 = str10;
+            this.translitChars.put("ɀ", obj6);
+            this.translitChars.put("ÿ", obj14);
+            this.translitChars.put("ǝ", "e");
+            Object obj16 = "o";
+            this.translitChars.put("ǭ", obj16);
+            this.translitChars.put("ᴅ", obj10);
+            Object obj17 = obj5;
+            Object obj18 = obj11;
+            this.translitChars.put("ᶅ", obj18);
+            this.translitChars.put("ù", "u");
+            this.translitChars.put("ạ", obj4);
+            Object obj19 = obj10;
             this.translitChars.put("ḅ", "b");
-            this.translitChars.put("ụ", str14);
-            this.translitChars.put("ằ", str5);
-            this.translitChars.put("ᴛ", str15);
-            this.translitChars.put("ƴ", str6);
-            this.translitChars.put("ⱦ", str15);
-            this.translitChars.put("ⱡ", str9);
+            this.translitChars.put("ụ", "u");
+            this.translitChars.put("ằ", obj4);
+            this.translitChars.put("ᴛ", obj15);
+            this.translitChars.put("ƴ", obj14);
+            this.translitChars.put("ⱦ", obj15);
+            this.translitChars.put("ⱡ", obj18);
             this.translitChars.put("ȷ", "j");
-            this.translitChars.put("ᵶ", str8);
-            this.translitChars.put("ḫ", obj3);
+            this.translitChars.put("ᵶ", obj6);
+            this.translitChars.put("ḫ", obj9);
             this.translitChars.put("ⱳ", "w");
             this.translitChars.put("ḵ", "k");
-            this.translitChars.put("ờ", str4);
-            this.translitChars.put("î", str12);
-            str10 = str18;
-            this.translitChars.put("ģ", str10);
-            this.translitChars.put("ȅ", str16);
-            this.translitChars.put("ȧ", str5);
-            this.translitChars.put("ẳ", str5);
-            obj2 = obj3;
+            this.translitChars.put("ờ", obj16);
+            this.translitChars.put("î", "i");
+            Object obj20 = obj13;
+            this.translitChars.put("ģ", obj20);
+            this.translitChars.put("ȅ", "e");
+            this.translitChars.put("ȧ", obj4);
+            this.translitChars.put("ẳ", obj4);
+            Object obj21 = obj9;
             this.translitChars.put("ɋ", "q");
-            this.translitChars.put("ṭ", str15);
+            this.translitChars.put("ṭ", obj15);
             this.translitChars.put("ꝸ", "um");
             this.translitChars.put("ᴄ", "c");
             this.translitChars.put("ẍ", "x");
-            this.translitChars.put("ủ", str14);
-            this.translitChars.put("ỉ", str12);
-            this.translitChars.put("ᴚ", str13);
-            this.translitChars.put("ś", str11);
-            this.translitChars.put("ꝋ", str4);
-            this.translitChars.put("ỹ", str6);
-            this.translitChars.put("ṡ", str11);
+            this.translitChars.put("ủ", "u");
+            this.translitChars.put("ỉ", "i");
+            this.translitChars.put("ᴚ", "r");
+            this.translitChars.put("ś", obj12);
+            this.translitChars.put("ꝋ", obj16);
+            this.translitChars.put("ỹ", obj14);
+            this.translitChars.put("ṡ", obj12);
             this.translitChars.put("ǌ", "nj");
-            this.translitChars.put("ȁ", str5);
-            this.translitChars.put("ẗ", str15);
-            this.translitChars.put("ĺ", str9);
-            this.translitChars.put("ž", str8);
+            this.translitChars.put("ȁ", obj4);
+            this.translitChars.put("ẗ", obj15);
+            this.translitChars.put("ĺ", obj18);
+            this.translitChars.put("ž", obj6);
             this.translitChars.put("ᵺ", "th");
-            str7 = str3;
-            this.translitChars.put("ƌ", str7);
-            this.translitChars.put("ș", str11);
-            this.translitChars.put("š", str11);
-            this.translitChars.put("ᶙ", str14);
-            this.translitChars.put("ẽ", str16);
-            this.translitChars.put("ẜ", str11);
-            this.translitChars.put("ɇ", str16);
-            this.translitChars.put("ṷ", str14);
-            this.translitChars.put("ố", str4);
-            this.translitChars.put("ȿ", str11);
-            str3 = str6;
+            Object obj22 = obj19;
+            this.translitChars.put("ƌ", obj22);
+            this.translitChars.put("ș", obj12);
+            this.translitChars.put("š", obj12);
+            this.translitChars.put("ᶙ", "u");
+            this.translitChars.put("ẽ", "e");
+            this.translitChars.put("ẜ", obj12);
+            this.translitChars.put("ɇ", "e");
+            this.translitChars.put("ṷ", "u");
+            this.translitChars.put("ố", obj16);
+            this.translitChars.put("ȿ", obj12);
+            Object obj23 = obj14;
             this.translitChars.put("ᴠ", "v");
             this.translitChars.put("ꝭ", "is");
-            this.translitChars.put("ᴏ", str4);
-            this.translitChars.put("ɛ", str16);
-            this.translitChars.put("ǻ", str5);
+            this.translitChars.put("ᴏ", obj16);
+            this.translitChars.put("ɛ", "e");
+            this.translitChars.put("ǻ", obj4);
             this.translitChars.put("ﬄ", "ffl");
-            this.translitChars.put("ⱺ", str4);
-            this.translitChars.put("ȋ", str12);
+            this.translitChars.put("ⱺ", obj16);
+            this.translitChars.put("ȋ", "i");
             this.translitChars.put("ᵫ", "ue");
-            this.translitChars.put("ȡ", str7);
-            this.translitChars.put("ⱬ", str8);
+            this.translitChars.put("ȡ", obj22);
+            this.translitChars.put("ⱬ", obj6);
             this.translitChars.put("ẁ", "w");
-            this.translitChars.put("ᶏ", str5);
-            this.translitChars.put("ꞇ", str15);
-            this.translitChars.put("ğ", str10);
-            str6 = str2;
-            this.translitChars.put("ɳ", str6);
-            this.translitChars.put("ʛ", str10);
-            this.translitChars.put("ᴜ", str14);
-            this.translitChars.put("ẩ", str5);
-            this.translitChars.put("ṅ", str6);
-            this.translitChars.put("ɨ", str12);
-            this.translitChars.put("ᴙ", str13);
-            this.translitChars.put("ǎ", str5);
-            this.translitChars.put("ſ", str11);
-            this.translitChars.put("ȫ", str4);
-            this.translitChars.put("ɿ", str13);
-            this.translitChars.put("ƭ", str15);
-            this.translitChars.put("ḯ", str12);
+            this.translitChars.put("ᶏ", obj4);
+            this.translitChars.put("ꞇ", obj15);
+            this.translitChars.put("ğ", obj20);
+            Object obj24 = obj17;
+            this.translitChars.put("ɳ", obj24);
+            this.translitChars.put("ʛ", obj20);
+            this.translitChars.put("ᴜ", "u");
+            this.translitChars.put("ẩ", obj4);
+            this.translitChars.put("ṅ", obj24);
+            this.translitChars.put("ɨ", "i");
+            this.translitChars.put("ᴙ", "r");
+            this.translitChars.put("ǎ", obj4);
+            this.translitChars.put("ſ", obj12);
+            this.translitChars.put("ȫ", obj16);
+            this.translitChars.put("ɿ", "r");
+            this.translitChars.put("ƭ", obj15);
+            this.translitChars.put("ḯ", "i");
             this.translitChars.put("ǽ", "ae");
             this.translitChars.put("ⱱ", "v");
             this.translitChars.put("ɶ", "oe");
             this.translitChars.put("ṃ", "m");
-            this.translitChars.put("ż", str8);
-            this.translitChars.put("ĕ", str16);
+            this.translitChars.put("ż", obj6);
+            this.translitChars.put("ĕ", "e");
             this.translitChars.put("ꜻ", "av");
-            this.translitChars.put("ở", str4);
-            this.translitChars.put("ễ", str16);
-            this.translitChars.put("ɬ", str9);
-            this.translitChars.put("ị", str12);
-            this.translitChars.put("ᵭ", str7);
+            this.translitChars.put("ở", obj16);
+            this.translitChars.put("ễ", "e");
+            this.translitChars.put("ɬ", obj18);
+            this.translitChars.put("ị", "i");
+            this.translitChars.put("ᵭ", obj22);
             this.translitChars.put("ﬆ", "st");
-            this.translitChars.put("ḷ", str9);
-            this.translitChars.put("ŕ", str13);
+            this.translitChars.put("ḷ", obj18);
+            this.translitChars.put("ŕ", "r");
             this.translitChars.put("ᴕ", "ou");
-            this.translitChars.put("ʈ", str15);
-            this.translitChars.put("ā", str5);
-            this.translitChars.put("ḙ", str16);
-            this.translitChars.put("ᴑ", str4);
+            this.translitChars.put("ʈ", obj15);
+            this.translitChars.put("ā", obj4);
+            this.translitChars.put("ḙ", "e");
+            this.translitChars.put("ᴑ", obj16);
             this.translitChars.put("ç", "c");
-            this.translitChars.put("ᶊ", str11);
-            this.translitChars.put("ặ", str5);
-            this.translitChars.put("ų", str14);
-            this.translitChars.put("ả", str5);
-            this.translitChars.put("ǥ", str10);
+            this.translitChars.put("ᶊ", obj12);
+            this.translitChars.put("ặ", obj4);
+            this.translitChars.put("ų", "u");
+            this.translitChars.put("ả", obj4);
+            this.translitChars.put("ǥ", obj20);
             this.translitChars.put("ꝁ", "k");
-            this.translitChars.put("ẕ", str8);
-            this.translitChars.put("ŝ", str11);
-            this.translitChars.put("ḕ", str16);
-            this.translitChars.put("ɠ", str10);
-            this.translitChars.put("ꝉ", str9);
+            this.translitChars.put("ẕ", obj6);
+            this.translitChars.put("ŝ", obj12);
+            this.translitChars.put("ḕ", "e");
+            this.translitChars.put("ɠ", obj20);
+            this.translitChars.put("ꝉ", obj18);
             this.translitChars.put("ꝼ", "f");
             this.translitChars.put("ᶍ", "x");
-            this.translitChars.put("ǒ", str4);
-            this.translitChars.put("ę", str16);
-            this.translitChars.put("ổ", str4);
-            this.translitChars.put("ƫ", str15);
-            this.translitChars.put("ǫ", str4);
-            this.translitChars.put("i̇", str12);
-            str6 = str2;
-            this.translitChars.put("ṇ", str6);
+            this.translitChars.put("ǒ", obj16);
+            this.translitChars.put("ę", "e");
+            this.translitChars.put("ổ", obj16);
+            this.translitChars.put("ƫ", obj15);
+            this.translitChars.put("ǫ", obj16);
+            this.translitChars.put("i̇", "i");
+            Object obj25 = obj17;
+            this.translitChars.put("ṇ", obj25);
             this.translitChars.put("ć", "c");
-            this.translitChars.put("ᵷ", str10);
+            this.translitChars.put("ᵷ", obj20);
             this.translitChars.put("ẅ", "w");
-            this.translitChars.put("ḑ", str7);
-            this.translitChars.put("ḹ", str9);
+            this.translitChars.put("ḑ", obj22);
+            this.translitChars.put("ḹ", obj18);
             this.translitChars.put("œ", "oe");
-            this.translitChars.put("ᵳ", str13);
-            this.translitChars.put("ļ", str9);
-            this.translitChars.put("ȑ", str13);
-            this.translitChars.put("ȭ", str4);
-            this.translitChars.put("ᵰ", str6);
+            this.translitChars.put("ᵳ", "r");
+            this.translitChars.put("ļ", obj18);
+            this.translitChars.put("ȑ", "r");
+            this.translitChars.put("ȭ", obj16);
+            this.translitChars.put("ᵰ", obj25);
             this.translitChars.put("ᴁ", "ae");
-            this.translitChars.put("ŀ", str9);
-            this.translitChars.put("ä", str5);
+            this.translitChars.put("ŀ", obj18);
+            this.translitChars.put("ä", obj4);
             this.translitChars.put("ƥ", "p");
-            this.translitChars.put("ỏ", str4);
-            this.translitChars.put("į", str12);
-            this.translitChars.put("ȓ", str13);
+            this.translitChars.put("ỏ", obj16);
+            this.translitChars.put("į", "i");
+            this.translitChars.put("ȓ", "r");
             this.translitChars.put("ǆ", "dz");
-            this.translitChars.put("ḡ", str10);
-            this.translitChars.put("ṻ", str14);
-            this.translitChars.put("ō", str4);
-            this.translitChars.put("ľ", str9);
+            this.translitChars.put("ḡ", obj20);
+            this.translitChars.put("ṻ", "u");
+            this.translitChars.put("ō", obj16);
+            this.translitChars.put("ľ", obj18);
             this.translitChars.put("ẃ", "w");
-            this.translitChars.put("ț", str15);
-            this.translitChars.put("ń", str6);
-            this.translitChars.put("ɍ", str13);
-            this.translitChars.put("ȃ", str5);
-            this.translitChars.put("ü", str14);
-            this.translitChars.put("ꞁ", str9);
-            this.translitChars.put("ᴐ", str4);
-            this.translitChars.put("ớ", str4);
+            this.translitChars.put("ț", obj15);
+            this.translitChars.put("ń", obj25);
+            this.translitChars.put("ɍ", "r");
+            this.translitChars.put("ȃ", obj4);
+            this.translitChars.put("ü", "u");
+            this.translitChars.put("ꞁ", obj18);
+            this.translitChars.put("ᴐ", obj16);
+            this.translitChars.put("ớ", obj16);
             this.translitChars.put("ᴃ", "b");
-            this.translitChars.put("ɹ", str13);
-            this.translitChars.put("ᵲ", str13);
-            str7 = str3;
-            this.translitChars.put("ʏ", str7);
+            this.translitChars.put("ɹ", "r");
+            this.translitChars.put("ᵲ", "r");
+            Object obj26 = obj23;
+            this.translitChars.put("ʏ", obj26);
             this.translitChars.put("ᵮ", "f");
-            Object obj4 = obj2;
-            this.translitChars.put("ⱨ", obj4);
-            this.translitChars.put("ŏ", str4);
-            this.translitChars.put("ú", str14);
-            this.translitChars.put("ṛ", str13);
-            this.translitChars.put("ʮ", obj4);
-            this.translitChars.put("ó", str4);
-            this.translitChars.put("ů", str14);
-            this.translitChars.put("ỡ", str4);
-            str18 = str11;
+            Object obj27 = obj21;
+            this.translitChars.put("ⱨ", obj27);
+            this.translitChars.put("ŏ", obj16);
+            this.translitChars.put("ú", "u");
+            this.translitChars.put("ṛ", "r");
+            this.translitChars.put("ʮ", obj27);
+            this.translitChars.put("ó", obj16);
+            this.translitChars.put("ů", "u");
+            this.translitChars.put("ỡ", obj16);
             this.translitChars.put("ṕ", "p");
-            this.translitChars.put("ᶖ", str12);
-            this.translitChars.put("ự", str14);
-            this.translitChars.put("ã", str5);
-            this.translitChars.put("ᵢ", str12);
-            this.translitChars.put("ṱ", str15);
-            this.translitChars.put("ể", str16);
-            this.translitChars.put("ử", str14);
-            this.translitChars.put("í", str12);
-            this.translitChars.put("ɔ", str4);
-            this.translitChars.put("ɺ", str13);
-            this.translitChars.put("ɢ", str10);
-            this.translitChars.put("ř", str13);
-            this.translitChars.put("ẖ", obj4);
-            this.translitChars.put("ű", str14);
-            this.translitChars.put("ȍ", str4);
-            this.translitChars.put("ḻ", str9);
-            this.translitChars.put("ḣ", obj4);
-            this.translitChars.put("ȶ", str15);
-            this.translitChars.put("ņ", str6);
-            this.translitChars.put("ᶒ", str16);
-            this.translitChars.put("ì", str12);
+            this.translitChars.put("ᶖ", "i");
+            this.translitChars.put("ự", "u");
+            this.translitChars.put("ã", obj4);
+            this.translitChars.put("ᵢ", "i");
+            this.translitChars.put("ṱ", obj15);
+            this.translitChars.put("ể", "e");
+            this.translitChars.put("ử", "u");
+            this.translitChars.put("í", "i");
+            this.translitChars.put("ɔ", obj16);
+            this.translitChars.put("ɺ", "r");
+            this.translitChars.put("ɢ", obj20);
+            this.translitChars.put("ř", "r");
+            this.translitChars.put("ẖ", obj27);
+            this.translitChars.put("ű", "u");
+            this.translitChars.put("ȍ", obj16);
+            this.translitChars.put("ḻ", obj18);
+            this.translitChars.put("ḣ", obj27);
+            this.translitChars.put("ȶ", obj15);
+            this.translitChars.put("ņ", obj25);
+            this.translitChars.put("ᶒ", "e");
+            this.translitChars.put("ì", "i");
             this.translitChars.put("ẉ", "w");
-            this.translitChars.put("ē", str16);
-            this.translitChars.put("ᴇ", str16);
-            this.translitChars.put("ł", str9);
-            this.translitChars.put("ộ", str4);
-            this.translitChars.put("ɭ", str9);
-            this.translitChars.put("ẏ", str7);
+            this.translitChars.put("ē", "e");
+            this.translitChars.put("ᴇ", "e");
+            this.translitChars.put("ł", obj18);
+            this.translitChars.put("ộ", obj16);
+            this.translitChars.put("ɭ", obj18);
+            this.translitChars.put("ẏ", obj26);
             this.translitChars.put("ᴊ", "j");
             this.translitChars.put("ḱ", "k");
             this.translitChars.put("ṿ", "v");
-            this.translitChars.put("ȩ", str16);
-            this.translitChars.put("â", str5);
-            str6 = str18;
-            this.translitChars.put("ş", str6);
-            this.translitChars.put("ŗ", str13);
+            this.translitChars.put("ȩ", "e");
+            this.translitChars.put("â", obj4);
+            Object obj28 = obj12;
+            this.translitChars.put("ş", obj28);
+            this.translitChars.put("ŗ", "r");
             this.translitChars.put("ʋ", "v");
-            this.translitChars.put("ₐ", str5);
+            this.translitChars.put("ₐ", obj4);
             this.translitChars.put("ↄ", "c");
-            this.translitChars.put("ᶓ", str16);
+            this.translitChars.put("ᶓ", "e");
             this.translitChars.put("ɰ", "m");
             this.translitChars.put("ᴡ", "w");
-            this.translitChars.put("ȏ", str4);
+            this.translitChars.put("ȏ", obj16);
             this.translitChars.put("č", "c");
-            this.translitChars.put("ǵ", str10);
+            this.translitChars.put("ǵ", obj20);
             this.translitChars.put("ĉ", "c");
-            this.translitChars.put("ᶗ", str4);
+            this.translitChars.put("ᶗ", obj16);
             this.translitChars.put("ꝃ", "k");
             this.translitChars.put("ꝙ", "q");
-            this.translitChars.put("ṑ", str4);
-            this.translitChars.put("ꜱ", str6);
-            this.translitChars.put("ṓ", str4);
-            this.translitChars.put("ȟ", obj4);
-            this.translitChars.put("ő", str4);
+            this.translitChars.put("ṑ", obj16);
+            this.translitChars.put("ꜱ", obj28);
+            this.translitChars.put("ṓ", obj16);
+            this.translitChars.put("ȟ", obj27);
+            this.translitChars.put("ő", obj16);
             this.translitChars.put("ꜩ", "tz");
-            this.translitChars.put("ẻ", str16);
+            this.translitChars.put("ẻ", "e");
         }
-        StringBuilder stringBuilder = new StringBuilder(str.length());
+        StringBuilder sb = new StringBuilder(str.length());
         int length = str.length();
+        boolean z4 = false;
         int i = 0;
-        int i2 = 0;
-        while (i2 < length) {
-            int i3 = i2 + 1;
-            str5 = str.substring(i2, i3);
+        while (i < length) {
+            int i2 = i + 1;
+            String substring = str.substring(i, i2);
             if (z2) {
-                str4 = str5.toLowerCase();
-                i2 = str5.equals(str4) ^ 1;
+                str2 = substring.toLowerCase();
+                z3 = !substring.equals(str2);
             } else {
-                String str19 = str5;
-                i2 = i;
-                str4 = str19;
+                String str3 = substring;
+                z3 = z4;
+                str2 = str3;
             }
-            str8 = (String) this.translitChars.get(str4);
-            if (str8 == null && z) {
-                str8 = (String) this.ruTranslitChars.get(str4);
+            String str4 = this.translitChars.get(str2);
+            if (str4 == null && z) {
+                str4 = this.ruTranslitChars.get(str2);
             }
-            if (str8 != null) {
-                if (z2 && i2 != 0) {
-                    if (str8.length() > 1) {
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append(str8.substring(0, 1).toUpperCase());
-                        stringBuilder2.append(str8.substring(1));
-                        str8 = stringBuilder2.toString();
+            if (str4 != null) {
+                if (z2 && z3) {
+                    if (str4.length() > 1) {
+                        str4 = str4.substring(0, 1).toUpperCase() + str4.substring(1);
                     } else {
-                        str8 = str8.toUpperCase();
-                    }
-                }
-                stringBuilder.append(str8);
-            } else {
-                if (z2) {
-                    char charAt = str4.charAt(0);
-                    if ((charAt < 'a' || charAt > 'z' || charAt < '0' || charAt > '9') && charAt != ' ' && charAt != '\'' && charAt != ',' && charAt != '.' && charAt != '&' && charAt != '-' && charAt != '/') {
-                        return null;
-                    }
-                    if (i2 != 0) {
                         str4 = str4.toUpperCase();
                     }
                 }
-                stringBuilder.append(str4);
+                sb.append(str4);
+            } else {
+                if (z2) {
+                    char charAt = str2.charAt(0);
+                    if ((charAt < 'a' || charAt > 'z' || charAt < '0' || charAt > '9') && charAt != ' ' && charAt != '\'' && charAt != ',' && charAt != '.' && charAt != '&' && charAt != '-' && charAt != '/') {
+                        return null;
+                    }
+                    if (z3) {
+                        str2 = str2.toUpperCase();
+                    }
+                }
+                sb.append(str2);
             }
+            z4 = z3;
             i = i2;
-            i2 = i3;
         }
-        return stringBuilder.toString();
+        return sb.toString();
+    }
+
+    public static class PluralRules_Slovenian extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            if (i2 == 1) {
+                return 2;
+            }
+            if (i2 == 2) {
+                return 4;
+            }
+            return (i2 < 3 || i2 > 4) ? 0 : 8;
+        }
+    }
+
+    public static class PluralRules_Romanian extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            if (i == 1) {
+                return 2;
+            }
+            if (i != 0) {
+                return (i2 < 1 || i2 > 19) ? 0 : 8;
+            }
+            return 8;
+        }
+    }
+
+    public static class PluralRules_Polish extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            int i3 = i % 10;
+            if (i == 1) {
+                return 2;
+            }
+            if (i3 >= 2 && i3 <= 4 && (i2 < 12 || i2 > 14)) {
+                return 8;
+            }
+            if (i3 >= 0 && i3 <= 1) {
+                return 16;
+            }
+            if (i3 < 5 || i3 > 9) {
+                return (i2 < 12 || i2 > 14) ? 0 : 16;
+            }
+            return 16;
+        }
+    }
+
+    public static class PluralRules_Maltese extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            if (i == 1) {
+                return 2;
+            }
+            if (i == 0) {
+                return 8;
+            }
+            if (i2 < 2 || i2 > 10) {
+                return (i2 < 11 || i2 > 19) ? 0 : 16;
+            }
+            return 8;
+        }
+    }
+
+    public static class PluralRules_Macedonian extends PluralRules {
+        public int quantityForNumber(int i) {
+            return (i % 10 != 1 || i == 11) ? 0 : 2;
+        }
+    }
+
+    public static class PluralRules_Lithuanian extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            int i3 = i % 10;
+            if (i3 == 1 && (i2 < 11 || i2 > 19)) {
+                return 2;
+            }
+            if (i3 < 2 || i3 > 9) {
+                return 0;
+            }
+            return (i2 < 11 || i2 > 19) ? 8 : 0;
+        }
+    }
+
+    public static class PluralRules_Latvian extends PluralRules {
+        public int quantityForNumber(int i) {
+            if (i == 0) {
+                return 1;
+            }
+            return (i % 10 != 1 || i % 100 == 11) ? 0 : 2;
+        }
+    }
+
+    public static class PluralRules_Balkan extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            int i3 = i % 10;
+            if (i3 == 1 && i2 != 11) {
+                return 2;
+            }
+            if (i3 >= 2 && i3 <= 4 && (i2 < 12 || i2 > 14)) {
+                return 8;
+            }
+            if (i3 == 0) {
+                return 16;
+            }
+            if (i3 < 5 || i3 > 9) {
+                return (i2 < 11 || i2 > 14) ? 0 : 16;
+            }
+            return 16;
+        }
+    }
+
+    public static class PluralRules_Arabic extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            if (i == 0) {
+                return 1;
+            }
+            if (i == 1) {
+                return 2;
+            }
+            if (i == 2) {
+                return 4;
+            }
+            if (i2 < 3 || i2 > 10) {
+                return (i2 < 11 || i2 > 99) ? 0 : 16;
+            }
+            return 8;
+        }
     }
 
     public static String addNbsp(String str) {
@@ -4125,16 +3826,18 @@ public class LocaleController {
     }
 
     public static String formatDistance(float f) {
+        String str;
+        String str2;
+        boolean z;
         if (useImperialSystemType == null) {
             int i = SharedConfig.distanceSystemType;
             if (i == 0) {
                 try {
                     TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                     if (telephonyManager != null) {
-                        boolean z;
-                        String toUpperCase = telephonyManager.getSimCountryIso().toUpperCase();
-                        if (!("US".equals(toUpperCase) || "GB".equals(toUpperCase) || "MM".equals(toUpperCase))) {
-                            if (!"LR".equals(toUpperCase)) {
+                        String upperCase = telephonyManager.getSimCountryIso().toUpperCase();
+                        if (!"US".equals(upperCase) && !"GB".equals(upperCase) && !"MM".equals(upperCase)) {
+                            if (!"LR".equals(upperCase)) {
                                 z = false;
                                 useImperialSystemType = Boolean.valueOf(z);
                             }
@@ -4143,41 +3846,33 @@ public class LocaleController {
                         useImperialSystemType = Boolean.valueOf(z);
                     }
                 } catch (Exception e) {
-                    useImperialSystemType = Boolean.valueOf(false);
-                    FileLog.e(e);
+                    useImperialSystemType = false;
+                    FileLog.e((Throwable) e);
                 }
             } else {
                 useImperialSystemType = Boolean.valueOf(i == 2);
             }
         }
-        String str = "%.2f";
-        String str2 = "%d";
-        Object[] objArr;
-        String format;
         if (useImperialSystemType.booleanValue()) {
-            f *= 3.28084f;
-            if (f < 1000.0f) {
-                objArr = new Object[1];
-                objArr[0] = String.format(str2, new Object[]{Integer.valueOf((int) Math.max(1.0f, f))});
-                return formatString("FootsAway", NUM, objArr);
+            float f2 = f * 3.28084f;
+            if (f2 < 1000.0f) {
+                return formatString("FootsAway", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
             }
-            if (f % 5280.0f == 0.0f) {
-                format = String.format(str2, new Object[]{Integer.valueOf((int) (f / 5280.0f))});
+            if (f2 % 5280.0f == 0.0f) {
+                str2 = String.format("%d", new Object[]{Integer.valueOf((int) (f2 / 5280.0f))});
             } else {
-                format = String.format(str, new Object[]{Float.valueOf(f / 5280.0f)});
+                str2 = String.format("%.2f", new Object[]{Float.valueOf(f2 / 5280.0f)});
             }
-            return formatString("MilesAway", NUM, format);
+            return formatString("MilesAway", NUM, str2);
         } else if (f < 1000.0f) {
-            objArr = new Object[1];
-            objArr[0] = String.format(str2, new Object[]{Integer.valueOf((int) Math.max(1.0f, f))});
-            return formatString("MetersAway2", NUM, objArr);
+            return formatString("MetersAway2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
         } else {
             if (f % 1000.0f == 0.0f) {
-                format = String.format(str2, new Object[]{Integer.valueOf((int) (f / 1000.0f))});
+                str = String.format("%d", new Object[]{Integer.valueOf((int) (f / 1000.0f))});
             } else {
-                format = String.format(str, new Object[]{Float.valueOf(f / 1000.0f)});
+                str = String.format("%.2f", new Object[]{Float.valueOf(f / 1000.0f)});
             }
-            return formatString("KMetersAway2", NUM, format);
+            return formatString("KMetersAway2", NUM, str);
         }
     }
 }

@@ -6,7 +6,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 import androidx.core.app.BundleCompat;
-import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
+import org.telegram.messenger.support.customtabs.ICustomTabsCallback;
 
 public class CustomTabsSessionToken {
     private static final String TAG = "CustomTabsSessionToken";
@@ -43,9 +43,10 @@ public class CustomTabsSessionToken {
             }
         }
     };
-    private final ICustomTabsCallback mCallbackBinder;
+    /* access modifiers changed from: private */
+    public final ICustomTabsCallback mCallbackBinder;
 
-    static class DummyCallback extends Stub {
+    static class DummyCallback extends ICustomTabsCallback.Stub {
         public IBinder asBinder() {
             return this;
         }
@@ -71,7 +72,7 @@ public class CustomTabsSessionToken {
         if (binder == null) {
             return null;
         }
-        return new CustomTabsSessionToken(Stub.asInterface(binder));
+        return new CustomTabsSessionToken(ICustomTabsCallback.Stub.asInterface(binder));
     }
 
     public static CustomTabsSessionToken createDummySessionTokenForTesting() {
@@ -82,7 +83,7 @@ public class CustomTabsSessionToken {
         this.mCallbackBinder = iCustomTabsCallback;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public IBinder getCallbackBinder() {
         return this.mCallbackBinder.asBinder();
     }
@@ -92,10 +93,10 @@ public class CustomTabsSessionToken {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof CustomTabsSessionToken) {
-            return ((CustomTabsSessionToken) obj).getCallbackBinder().equals(this.mCallbackBinder.asBinder());
+        if (!(obj instanceof CustomTabsSessionToken)) {
+            return false;
         }
-        return false;
+        return ((CustomTabsSessionToken) obj).getCallbackBinder().equals(this.mCallbackBinder.asBinder());
     }
 
     public CustomTabsCallback getCallback() {

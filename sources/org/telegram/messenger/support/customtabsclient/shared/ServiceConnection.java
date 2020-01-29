@@ -9,7 +9,7 @@ public class ServiceConnection extends CustomTabsServiceConnection {
     private WeakReference<ServiceConnectionCallback> mConnectionCallback;
 
     public ServiceConnection(ServiceConnectionCallback serviceConnectionCallback) {
-        this.mConnectionCallback = new WeakReference(serviceConnectionCallback);
+        this.mConnectionCallback = new WeakReference<>(serviceConnectionCallback);
     }
 
     public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {

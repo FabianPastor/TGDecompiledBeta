@@ -3,52 +3,32 @@ package developers.mobile.abt;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ExtensionRegistryLite;
 import com.google.protobuf.GeneratedMessageLite;
-import com.google.protobuf.GeneratedMessageLite.MethodToInvoke;
-import com.google.protobuf.Internal.ProtobufList;
+import com.google.protobuf.Internal;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import java.io.IOException;
 
 /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
 public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
-    private static final FirebaseAbt$ExperimentPayload DEFAULT_INSTANCE = new FirebaseAbt$ExperimentPayload();
+    /* access modifiers changed from: private */
+    public static final FirebaseAbt$ExperimentPayload DEFAULT_INSTANCE = new FirebaseAbt$ExperimentPayload();
     private static volatile Parser<FirebaseAbt$ExperimentPayload> PARSER;
-    private String activateEventToLog_;
+    private String activateEventToLog_ = "";
     private int bitField0_;
-    private String clearEventToLog_;
-    private String experimentId_;
+    private String clearEventToLog_ = "";
+    private String experimentId_ = "";
     private long experimentStartTimeMillis_;
-    private ProtobufList<FirebaseAbt$ExperimentLite> ongoingExperiments_ = GeneratedMessageLite.emptyProtobufList();
+    private Internal.ProtobufList<FirebaseAbt$ExperimentLite> ongoingExperiments_ = GeneratedMessageLite.emptyProtobufList();
     private int overflowPolicy_;
-    private String setEventToLog_;
+    private String setEventToLog_ = "";
     private long timeToLiveMillis_;
-    private String timeoutEventToLog_;
-    private String triggerEvent_;
+    private String timeoutEventToLog_ = "";
+    private String triggerEvent_ = "";
     private long triggerTimeoutMillis_;
-    private String ttlExpiryEventToLog_;
-    private String variantId_;
-
-    /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
-    public static final class Builder extends com.google.protobuf.GeneratedMessageLite.Builder<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
-        /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
-            this();
-        }
-
-        private Builder() {
-            super(FirebaseAbt$ExperimentPayload.DEFAULT_INSTANCE);
-        }
-    }
+    private String ttlExpiryEventToLog_ = "";
+    private String variantId_ = "";
 
     private FirebaseAbt$ExperimentPayload() {
-        String str = "";
-        this.experimentId_ = str;
-        this.variantId_ = str;
-        this.triggerEvent_ = str;
-        this.setEventToLog_ = str;
-        this.activateEventToLog_ = str;
-        this.clearEventToLog_ = str;
-        this.timeoutEventToLog_ = str;
-        this.ttlExpiryEventToLog_ = str;
     }
 
     public String getExperimentId() {
@@ -79,8 +59,19 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
         return (FirebaseAbt$ExperimentPayload) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, bArr);
     }
 
-    /* Access modifiers changed, original: protected|final */
-    public final Object dynamicMethod(MethodToInvoke methodToInvoke, Object obj, Object obj2) {
+    /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+    public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
+        /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
+            this();
+        }
+
+        private Builder() {
+            super(FirebaseAbt$ExperimentPayload.DEFAULT_INSTANCE);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
         boolean z = false;
         switch (FirebaseAbt$1.$SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[methodToInvoke.ordinal()]) {
             case 1:
@@ -91,21 +82,21 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
                 this.ongoingExperiments_.makeImmutable();
                 return null;
             case 4:
-                return new Builder();
+                return new Builder((FirebaseAbt$1) null);
             case 5:
-                Visitor visitor = (Visitor) obj;
+                GeneratedMessageLite.Visitor visitor = (GeneratedMessageLite.Visitor) obj;
                 FirebaseAbt$ExperimentPayload firebaseAbt$ExperimentPayload = (FirebaseAbt$ExperimentPayload) obj2;
-                this.experimentId_ = visitor.visitString(this.experimentId_.isEmpty() ^ 1, this.experimentId_, firebaseAbt$ExperimentPayload.experimentId_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.experimentId_);
-                this.variantId_ = visitor.visitString(this.variantId_.isEmpty() ^ 1, this.variantId_, firebaseAbt$ExperimentPayload.variantId_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.variantId_);
+                this.experimentId_ = visitor.visitString(!this.experimentId_.isEmpty(), this.experimentId_, !firebaseAbt$ExperimentPayload.experimentId_.isEmpty(), firebaseAbt$ExperimentPayload.experimentId_);
+                this.variantId_ = visitor.visitString(!this.variantId_.isEmpty(), this.variantId_, !firebaseAbt$ExperimentPayload.variantId_.isEmpty(), firebaseAbt$ExperimentPayload.variantId_);
                 this.experimentStartTimeMillis_ = visitor.visitLong(this.experimentStartTimeMillis_ != 0, this.experimentStartTimeMillis_, firebaseAbt$ExperimentPayload.experimentStartTimeMillis_ != 0, firebaseAbt$ExperimentPayload.experimentStartTimeMillis_);
-                this.triggerEvent_ = visitor.visitString(this.triggerEvent_.isEmpty() ^ 1, this.triggerEvent_, firebaseAbt$ExperimentPayload.triggerEvent_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.triggerEvent_);
+                this.triggerEvent_ = visitor.visitString(!this.triggerEvent_.isEmpty(), this.triggerEvent_, !firebaseAbt$ExperimentPayload.triggerEvent_.isEmpty(), firebaseAbt$ExperimentPayload.triggerEvent_);
                 this.triggerTimeoutMillis_ = visitor.visitLong(this.triggerTimeoutMillis_ != 0, this.triggerTimeoutMillis_, firebaseAbt$ExperimentPayload.triggerTimeoutMillis_ != 0, firebaseAbt$ExperimentPayload.triggerTimeoutMillis_);
                 this.timeToLiveMillis_ = visitor.visitLong(this.timeToLiveMillis_ != 0, this.timeToLiveMillis_, firebaseAbt$ExperimentPayload.timeToLiveMillis_ != 0, firebaseAbt$ExperimentPayload.timeToLiveMillis_);
-                this.setEventToLog_ = visitor.visitString(this.setEventToLog_.isEmpty() ^ 1, this.setEventToLog_, firebaseAbt$ExperimentPayload.setEventToLog_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.setEventToLog_);
-                this.activateEventToLog_ = visitor.visitString(this.activateEventToLog_.isEmpty() ^ 1, this.activateEventToLog_, firebaseAbt$ExperimentPayload.activateEventToLog_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.activateEventToLog_);
-                this.clearEventToLog_ = visitor.visitString(this.clearEventToLog_.isEmpty() ^ 1, this.clearEventToLog_, firebaseAbt$ExperimentPayload.clearEventToLog_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.clearEventToLog_);
-                this.timeoutEventToLog_ = visitor.visitString(this.timeoutEventToLog_.isEmpty() ^ 1, this.timeoutEventToLog_, firebaseAbt$ExperimentPayload.timeoutEventToLog_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.timeoutEventToLog_);
-                this.ttlExpiryEventToLog_ = visitor.visitString(this.ttlExpiryEventToLog_.isEmpty() ^ 1, this.ttlExpiryEventToLog_, firebaseAbt$ExperimentPayload.ttlExpiryEventToLog_.isEmpty() ^ 1, firebaseAbt$ExperimentPayload.ttlExpiryEventToLog_);
+                this.setEventToLog_ = visitor.visitString(!this.setEventToLog_.isEmpty(), this.setEventToLog_, !firebaseAbt$ExperimentPayload.setEventToLog_.isEmpty(), firebaseAbt$ExperimentPayload.setEventToLog_);
+                this.activateEventToLog_ = visitor.visitString(!this.activateEventToLog_.isEmpty(), this.activateEventToLog_, !firebaseAbt$ExperimentPayload.activateEventToLog_.isEmpty(), firebaseAbt$ExperimentPayload.activateEventToLog_);
+                this.clearEventToLog_ = visitor.visitString(!this.clearEventToLog_.isEmpty(), this.clearEventToLog_, !firebaseAbt$ExperimentPayload.clearEventToLog_.isEmpty(), firebaseAbt$ExperimentPayload.clearEventToLog_);
+                this.timeoutEventToLog_ = visitor.visitString(!this.timeoutEventToLog_.isEmpty(), this.timeoutEventToLog_, !firebaseAbt$ExperimentPayload.timeoutEventToLog_.isEmpty(), firebaseAbt$ExperimentPayload.timeoutEventToLog_);
+                this.ttlExpiryEventToLog_ = visitor.visitString(!this.ttlExpiryEventToLog_.isEmpty(), this.ttlExpiryEventToLog_, !firebaseAbt$ExperimentPayload.ttlExpiryEventToLog_.isEmpty(), firebaseAbt$ExperimentPayload.ttlExpiryEventToLog_);
                 boolean z2 = this.overflowPolicy_ != 0;
                 int i = this.overflowPolicy_;
                 if (firebaseAbt$ExperimentPayload.overflowPolicy_ != 0) {
@@ -113,7 +104,7 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
                 }
                 this.overflowPolicy_ = visitor.visitInt(z2, i, z, firebaseAbt$ExperimentPayload.overflowPolicy_);
                 this.ongoingExperiments_ = visitor.visitList(this.ongoingExperiments_, firebaseAbt$ExperimentPayload.ongoingExperiments_);
-                if (visitor == MergeFromVisitor.INSTANCE) {
+                if (visitor == GeneratedMessageLite.MergeFromVisitor.INSTANCE) {
                     this.bitField0_ |= firebaseAbt$ExperimentPayload.bitField0_;
                 }
                 return this;
@@ -192,7 +183,7 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
                 if (PARSER == null) {
                     synchronized (FirebaseAbt$ExperimentPayload.class) {
                         if (PARSER == null) {
-                            PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+                            PARSER = new GeneratedMessageLite.DefaultInstanceBasedParser(DEFAULT_INSTANCE);
                         }
                     }
                 }

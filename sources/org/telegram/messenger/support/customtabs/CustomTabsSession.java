@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.widget.RemoteViews;
 import java.util.List;
+import org.telegram.messenger.support.customtabs.CustomTabsSessionToken;
 
 public final class CustomTabsSession {
     private static final String TAG = "CustomTabsSession";
@@ -18,7 +19,7 @@ public final class CustomTabsSession {
     private final ICustomTabsService mService;
 
     public static CustomTabsSession createDummySessionForTesting(ComponentName componentName) {
-        return new CustomTabsSession(null, new DummyCallback(), componentName);
+        return new CustomTabsSession((ICustomTabsService) null, new CustomTabsSessionToken.DummyCallback(), componentName);
     }
 
     CustomTabsSession(ICustomTabsService iCustomTabsService, ICustomTabsCallback iCustomTabsCallback, ComponentName componentName) {
@@ -91,17 +92,18 @@ public final class CustomTabsSession {
             } catch (RemoteException unused) {
                 return -2;
             } catch (Throwable th) {
+                throw th;
             }
         }
         return postMessage;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public IBinder getBinder() {
         return this.mCallback.asBinder();
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public ComponentName getComponentName() {
         return this.mComponentName;
     }

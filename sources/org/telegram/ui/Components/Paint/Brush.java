@@ -2,10 +2,48 @@ package org.telegram.ui.Components.Paint;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import org.telegram.messenger.ApplicationLoader;
 
 public interface Brush {
+    float getAlpha();
+
+    float getAngle();
+
+    float getScale();
+
+    float getSpacing();
+
+    Bitmap getStamp();
+
+    boolean isLightSaber();
+
+    public static class Radial implements Brush {
+        public float getAlpha() {
+            return 0.85f;
+        }
+
+        public float getAngle() {
+            return 0.0f;
+        }
+
+        public float getScale() {
+            return 1.0f;
+        }
+
+        public float getSpacing() {
+            return 0.15f;
+        }
+
+        public boolean isLightSaber() {
+            return false;
+        }
+
+        public Bitmap getStamp() {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
+        }
+    }
 
     public static class Elliptical implements Brush {
         public float getAlpha() {
@@ -29,7 +67,7 @@ public interface Brush {
         }
 
         public Bitmap getStamp() {
-            Options options = new Options();
+            BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
             return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
         }
@@ -57,49 +95,9 @@ public interface Brush {
         }
 
         public Bitmap getStamp() {
-            Options options = new Options();
+            BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
             return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
         }
     }
-
-    public static class Radial implements Brush {
-        public float getAlpha() {
-            return 0.85f;
-        }
-
-        public float getAngle() {
-            return 0.0f;
-        }
-
-        public float getScale() {
-            return 1.0f;
-        }
-
-        public float getSpacing() {
-            return 0.15f;
-        }
-
-        public boolean isLightSaber() {
-            return false;
-        }
-
-        public Bitmap getStamp() {
-            Options options = new Options();
-            options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
-        }
-    }
-
-    float getAlpha();
-
-    float getAngle();
-
-    float getScale();
-
-    float getSpacing();
-
-    Bitmap getStamp();
-
-    boolean isLightSaber();
 }

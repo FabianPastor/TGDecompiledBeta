@@ -1,11 +1,6 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Dialog;
-import org.telegram.tgnet.TLRPC.DraftMessage;
-import org.telegram.tgnet.TLRPC.InputPeer;
-import org.telegram.tgnet.TLRPC.Peer;
-import org.telegram.tgnet.TLRPC.TL_dialog;
-import org.telegram.tgnet.TLRPC.TL_dialogFolder;
+import org.telegram.tgnet.TLRPC;
 
 public class DialogObject {
     public static boolean isFolderDialogId(long j) {
@@ -29,76 +24,87 @@ public class DialogObject {
         return ((long) i) << 32;
     }
 
-    public static boolean isChannel(Dialog dialog) {
+    public static boolean isChannel(TLRPC.Dialog dialog) {
         return (dialog == null || (dialog.flags & 1) == 0) ? false : true;
     }
 
-    public static void initDialog(Dialog dialog) {
+    public static void initDialog(TLRPC.Dialog dialog) {
         if (dialog != null && dialog.id == 0) {
-            if (dialog instanceof TL_dialog) {
-                Peer peer = dialog.peer;
+            if (dialog instanceof TLRPC.TL_dialog) {
+                TLRPC.Peer peer = dialog.peer;
                 if (peer != null) {
                     int i = peer.user_id;
                     if (i != 0) {
                         dialog.id = (long) i;
+                        return;
+                    }
+                    int i2 = peer.chat_id;
+                    if (i2 != 0) {
+                        dialog.id = (long) (-i2);
                     } else {
-                        i = peer.chat_id;
-                        if (i != 0) {
-                            dialog.id = (long) (-i);
-                        } else {
-                            dialog.id = (long) (-peer.channel_id);
-                        }
+                        dialog.id = (long) (-peer.channel_id);
                     }
                 }
-            } else if (dialog instanceof TL_dialogFolder) {
-                dialog.id = makeFolderDialogId(((TL_dialogFolder) dialog).folder.id);
+            } else if (dialog instanceof TLRPC.TL_dialogFolder) {
+                dialog.id = makeFolderDialogId(((TLRPC.TL_dialogFolder) dialog).folder.id);
             }
         }
     }
 
-    public static long getPeerDialogId(Peer peer) {
+    public static long getPeerDialogId(TLRPC.Peer peer) {
+        int i;
         if (peer == null) {
             return 0;
         }
-        int i = peer.user_id;
-        if (i != 0) {
-            return (long) i;
+        int i2 = peer.user_id;
+        if (i2 != 0) {
+            return (long) i2;
         }
-        int i2;
-        i = peer.chat_id;
-        if (i != 0) {
-            i2 = -i;
+        int i3 = peer.chat_id;
+        if (i3 != 0) {
+            i = -i3;
         } else {
-            i2 = -peer.channel_id;
+            i = -peer.channel_id;
         }
-        return (long) i2;
+        return (long) i;
     }
 
-    public static long getPeerDialogId(InputPeer inputPeer) {
+    public static long getPeerDialogId(TLRPC.InputPeer inputPeer) {
+        int i;
         if (inputPeer == null) {
             return 0;
         }
-        int i = inputPeer.user_id;
-        if (i != 0) {
-            return (long) i;
+        int i2 = inputPeer.user_id;
+        if (i2 != 0) {
+            return (long) i2;
         }
-        int i2;
-        i = inputPeer.chat_id;
-        if (i != 0) {
-            i2 = -i;
+        int i3 = inputPeer.chat_id;
+        if (i3 != 0) {
+            i = -i3;
         } else {
-            i2 = -inputPeer.channel_id;
+            i = -inputPeer.channel_id;
         }
-        return (long) i2;
+        return (long) i;
     }
 
-    public static long getLastMessageOrDraftDate(Dialog dialog, DraftMessage draftMessage) {
-        if (draftMessage != null) {
-            int i = draftMessage.date;
-            if (i >= dialog.last_message_date) {
-                return (long) i;
-            }
-        }
-        return (long) dialog.last_message_date;
+    /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:
+        r2 = r2.date;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static long getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC.Dialog r1, org.telegram.tgnet.TLRPC.DraftMessage r2) {
+        /*
+            if (r2 == 0) goto L_0x000a
+            int r2 = r2.date
+            int r0 = r1.last_message_date
+            if (r2 < r0) goto L_0x000a
+            long r1 = (long) r2
+            goto L_0x000d
+        L_0x000a:
+            int r1 = r1.last_message_date
+            long r1 = (long) r1
+        L_0x000d:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DialogObject.getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC$Dialog, org.telegram.tgnet.TLRPC$DraftMessage):long");
     }
 }

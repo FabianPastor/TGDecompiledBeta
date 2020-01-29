@@ -3189,9 +3189,7 @@
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
     <string name="google_assistant_verification_channel_name">Verificador del Asistente</string>
-    <string name="google_assistant_verification_channel_name">Verificador del Asistente</string>
     <string name="google_assistant_verification_notification_title">El Asistente de Google está enviando el mensaje</string>
-    <string name="google_assistant_verification_notification_title">El Asistente de Google está enviando el mensaje</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Esta aplicación</string>
     <string name="hockeyapp_crash_dialog_message">¿Te gustaría enviar un informe anónimo para que podamos arreglar el problema?</string>
     <string name="hockeyapp_crash_dialog_negative_button">No enviar</string>

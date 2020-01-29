@@ -3,10 +3,9 @@ package org.telegram.ui.Components;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener;
 import org.telegram.messenger.AndroidUtilities;
 
-public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
+public class RecyclerViewItemRangeSelector implements RecyclerView.OnItemTouchListener {
     private static final int AUTO_SCROLL_DELAY = 15;
     private Runnable autoScrollRunnable = new Runnable() {
         public void run() {
@@ -21,7 +20,8 @@ public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
             }
         }
     };
-    private int autoScrollVelocity;
+    /* access modifiers changed from: private */
+    public int autoScrollVelocity;
     private RecyclerViewItemRangeSelectorDelegate delegate;
     private boolean dragSelectActive;
     private int hotspotBottomBoundEnd;
@@ -31,12 +31,15 @@ public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
     private int hotspotOffsetTop;
     private int hotspotTopBoundEnd;
     private int hotspotTopBoundStart;
-    private boolean inBottomHotspot;
-    private boolean inTopHotspot;
+    /* access modifiers changed from: private */
+    public boolean inBottomHotspot;
+    /* access modifiers changed from: private */
+    public boolean inTopHotspot;
     private int initialSelection;
     private boolean isAutoScrolling;
     private int lastDraggedIndex = -1;
-    private RecyclerView recyclerView;
+    /* access modifiers changed from: private */
+    public RecyclerView recyclerView;
 
     public interface RecyclerViewItemRangeSelectorDelegate {
         int getItemCount();
@@ -63,21 +66,21 @@ public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
         this.hotspotOffsetBottom = -1;
     }
 
-    public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+    public boolean onInterceptTouchEvent(RecyclerView recyclerView2, MotionEvent motionEvent) {
         boolean z = false;
-        Object obj = (recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() == 0) ? 1 : null;
-        if (this.dragSelectActive && obj == null) {
+        boolean z2 = recyclerView2.getAdapter() == null || recyclerView2.getAdapter().getItemCount() == 0;
+        if (this.dragSelectActive && !z2) {
             z = true;
         }
         if (z) {
-            this.recyclerView = recyclerView;
+            this.recyclerView = recyclerView2;
             int i = this.hotspotHeight;
             if (i > -1) {
                 int i2 = this.hotspotOffsetTop;
                 this.hotspotTopBoundStart = i2;
                 this.hotspotTopBoundEnd = i2 + i;
-                this.hotspotBottomBoundStart = (recyclerView.getMeasuredHeight() - this.hotspotHeight) - this.hotspotOffsetBottom;
-                this.hotspotBottomBoundEnd = recyclerView.getMeasuredHeight() - this.hotspotOffsetBottom;
+                this.hotspotBottomBoundStart = (recyclerView2.getMeasuredHeight() - this.hotspotHeight) - this.hotspotOffsetBottom;
+                this.hotspotBottomBoundEnd = recyclerView2.getMeasuredHeight() - this.hotspotOffsetBottom;
             }
         }
         if (z && motionEvent.getAction() == 1) {
@@ -86,51 +89,47 @@ public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
         return z;
     }
 
-    public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-        View findChildViewUnder = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-        int childAdapterPosition = findChildViewUnder != null ? recyclerView.getChildAdapterPosition(findChildViewUnder) : -1;
+    public void onTouchEvent(RecyclerView recyclerView2, MotionEvent motionEvent) {
+        View findChildViewUnder = recyclerView2.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+        int childAdapterPosition = findChildViewUnder != null ? recyclerView2.getChildAdapterPosition(findChildViewUnder) : -1;
         float y = motionEvent.getY();
         int action = motionEvent.getAction();
-        if (action != 1) {
-            if (action == 2) {
-                if (this.hotspotHeight > -1) {
-                    if (y >= ((float) this.hotspotTopBoundStart) && y <= ((float) this.hotspotTopBoundEnd)) {
-                        this.inBottomHotspot = false;
-                        if (!this.inTopHotspot) {
-                            this.inTopHotspot = true;
-                            AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
-                            AndroidUtilities.runOnUIThread(this.autoScrollRunnable);
-                        }
-                        action = this.hotspotTopBoundEnd;
-                        int i = this.hotspotTopBoundStart;
-                        this.autoScrollVelocity = ((int) (((float) (action - i)) - (y - ((float) i)))) / 2;
-                    } else if (y >= ((float) this.hotspotBottomBoundStart) && y <= ((float) this.hotspotBottomBoundEnd)) {
-                        this.inTopHotspot = false;
-                        if (!this.inBottomHotspot) {
-                            this.inBottomHotspot = true;
-                            AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
-                            AndroidUtilities.runOnUIThread(this.autoScrollRunnable);
-                        }
-                        action = this.hotspotBottomBoundEnd;
-                        this.autoScrollVelocity = ((int) ((y + ((float) action)) - ((float) (this.hotspotBottomBoundStart + action)))) / 2;
-                    } else if (this.inTopHotspot || this.inBottomHotspot) {
+        if (action == 1) {
+            onDragSelectionStop();
+        } else if (action == 2) {
+            if (this.hotspotHeight > -1) {
+                if (y >= ((float) this.hotspotTopBoundStart) && y <= ((float) this.hotspotTopBoundEnd)) {
+                    this.inBottomHotspot = false;
+                    if (!this.inTopHotspot) {
+                        this.inTopHotspot = true;
                         AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
-                        this.inTopHotspot = false;
-                        this.inBottomHotspot = false;
+                        AndroidUtilities.runOnUIThread(this.autoScrollRunnable);
                     }
-                }
-                if (childAdapterPosition != -1 && this.lastDraggedIndex != childAdapterPosition) {
-                    this.lastDraggedIndex = childAdapterPosition;
-                    RecyclerViewItemRangeSelectorDelegate recyclerViewItemRangeSelectorDelegate = this.delegate;
-                    action = this.lastDraggedIndex;
-                    recyclerViewItemRangeSelectorDelegate.setSelected(findChildViewUnder, action, recyclerViewItemRangeSelectorDelegate.isSelected(action) ^ 1);
-                } else {
-                    return;
+                    int i = this.hotspotTopBoundEnd;
+                    int i2 = this.hotspotTopBoundStart;
+                    this.autoScrollVelocity = ((int) (((float) (i - i2)) - (y - ((float) i2)))) / 2;
+                } else if (y >= ((float) this.hotspotBottomBoundStart) && y <= ((float) this.hotspotBottomBoundEnd)) {
+                    this.inTopHotspot = false;
+                    if (!this.inBottomHotspot) {
+                        this.inBottomHotspot = true;
+                        AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
+                        AndroidUtilities.runOnUIThread(this.autoScrollRunnable);
+                    }
+                    int i3 = this.hotspotBottomBoundEnd;
+                    this.autoScrollVelocity = ((int) ((y + ((float) i3)) - ((float) (this.hotspotBottomBoundStart + i3)))) / 2;
+                } else if (this.inTopHotspot || this.inBottomHotspot) {
+                    AndroidUtilities.cancelRunOnUIThread(this.autoScrollRunnable);
+                    this.inTopHotspot = false;
+                    this.inBottomHotspot = false;
                 }
             }
-            return;
+            if (childAdapterPosition != -1 && this.lastDraggedIndex != childAdapterPosition) {
+                this.lastDraggedIndex = childAdapterPosition;
+                RecyclerViewItemRangeSelectorDelegate recyclerViewItemRangeSelectorDelegate = this.delegate;
+                int i4 = this.lastDraggedIndex;
+                recyclerViewItemRangeSelectorDelegate.setSelected(findChildViewUnder, i4, !recyclerViewItemRangeSelectorDelegate.isSelected(i4));
+            }
         }
-        onDragSelectionStop();
     }
 
     public boolean setIsActive(View view, boolean z, int i, boolean z2) {
@@ -144,17 +143,17 @@ public class RecyclerViewItemRangeSelector implements OnItemTouchListener {
         if (!z) {
             this.initialSelection = -1;
             return false;
-        } else if (this.delegate.isIndexSelectable(i)) {
+        } else if (!this.delegate.isIndexSelectable(i)) {
+            this.dragSelectActive = false;
+            this.initialSelection = -1;
+            return false;
+        } else {
             this.delegate.onStartStopSelection(true);
             this.delegate.setSelected(view, this.initialSelection, z2);
             this.dragSelectActive = z;
             this.initialSelection = i;
             this.lastDraggedIndex = i;
             return true;
-        } else {
-            this.dragSelectActive = false;
-            this.initialSelection = -1;
-            return false;
         }
     }
 

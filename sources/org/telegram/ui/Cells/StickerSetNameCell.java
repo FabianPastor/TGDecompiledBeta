@@ -1,16 +1,14 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils.TruncateAt;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -29,23 +27,22 @@ public class StickerSetNameCell extends FrameLayout {
         super(context);
         this.isEmoji = z;
         this.textView = new TextView(context);
-        String str = "chat_emojiPanelStickerSetName";
-        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setSingleLine(true);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, z ? 15.0f : 17.0f, 4.0f, 57.0f, 0.0f));
         this.urlTextView = new TextView(context);
-        this.urlTextView.setTextColor(Theme.getColor(str));
+        this.urlTextView.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
         this.urlTextView.setTextSize(1, 12.0f);
-        this.urlTextView.setEllipsize(TruncateAt.END);
+        this.urlTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.urlTextView.setSingleLine(true);
         this.urlTextView.setVisibility(4);
         addView(this.urlTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 17.0f, 6.0f, 17.0f, 0.0f));
         this.buttonView = new ImageView(context);
-        this.buttonView.setScaleType(ScaleType.CENTER);
-        this.buttonView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelStickerSetNameIcon"), Mode.MULTIPLY));
+        this.buttonView.setScaleType(ImageView.ScaleType.CENTER);
+        this.buttonView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelStickerSetNameIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.buttonView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
     }
 
@@ -83,8 +80,8 @@ public class StickerSetNameCell extends FrameLayout {
             }
             this.textView.setText(spannableStringBuilder);
         } else {
-            TextView textView = this.textView;
-            textView.setText(Emoji.replaceEmoji(charSequence, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+            TextView textView2 = this.textView;
+            textView2.setText(Emoji.replaceEmoji(charSequence, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         }
         if (i != 0) {
             this.buttonView.setImageResource(i);
@@ -94,7 +91,7 @@ public class StickerSetNameCell extends FrameLayout {
         this.buttonView.setVisibility(4);
     }
 
-    public void setOnIconClickListener(OnClickListener onClickListener) {
+    public void setOnIconClickListener(View.OnClickListener onClickListener) {
         this.buttonView.setOnClickListener(onClickListener);
     }
 
@@ -103,12 +100,12 @@ public class StickerSetNameCell extends FrameLayout {
         super.invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         if (this.empty) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(1, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(1, NUM));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 28.0f : 24.0f), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.isEmoji ? 28.0f : 24.0f), NUM));
         }
     }
 }

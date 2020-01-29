@@ -30,15 +30,14 @@ public class TelegramConnectionService extends ConnectionService {
             FileLog.d("onCreateIncomingConnection ");
         }
         Bundle extras = connectionRequest.getExtras();
-        String str = "call_type";
-        if (extras.getInt(str) == 1) {
+        if (extras.getInt("call_type") == 1) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance == null || sharedInstance.isOutgoing()) {
-                return null;
+            if (sharedInstance != null && !sharedInstance.isOutgoing()) {
+                return sharedInstance.getConnectionAndStartCall();
             }
-            return sharedInstance.getConnectionAndStartCall();
+            return null;
         }
-        extras.getInt(str);
+        extras.getInt("call_type");
         return null;
     }
 
@@ -65,15 +64,14 @@ public class TelegramConnectionService extends ConnectionService {
             FileLog.d("onCreateOutgoingConnection ");
         }
         Bundle extras = connectionRequest.getExtras();
-        String str = "call_type";
-        if (extras.getInt(str) == 1) {
+        if (extras.getInt("call_type") == 1) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
             if (sharedInstance == null) {
                 return null;
             }
             return sharedInstance.getConnectionAndStartCall();
         }
-        extras.getInt(str);
+        extras.getInt("call_type");
         return null;
     }
 }

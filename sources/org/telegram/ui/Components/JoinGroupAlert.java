@@ -1,176 +1,257 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.LayoutParams;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.ChatInvite;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
-import org.telegram.tgnet.TLRPC.Updates;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.JoinSheetUserCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.RecyclerListView;
 
 public class JoinGroupAlert extends BottomSheet {
-    private ChatInvite chatInvite;
+    /* access modifiers changed from: private */
+    public TLRPC.ChatInvite chatInvite;
     private BaseFragment fragment;
     private String hash;
 
-    private class UsersAdapter extends SelectionAdapter {
-        private Context context;
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return false;
-        }
-
-        public UsersAdapter(Context context) {
-            this.context = context;
-        }
-
-        public int getItemCount() {
-            int i;
-            int size = JoinGroupAlert.this.chatInvite.participants.size();
-            if (JoinGroupAlert.this.chatInvite.chat != null) {
-                i = JoinGroupAlert.this.chatInvite.chat.participants_count;
-            } else {
-                i = JoinGroupAlert.this.chatInvite.participants_count;
-            }
-            return size != i ? size + 1 : size;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            JoinSheetUserCell joinSheetUserCell = new JoinSheetUserCell(this.context);
-            joinSheetUserCell.setLayoutParams(new LayoutParams(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(90.0f)));
-            return new Holder(joinSheetUserCell);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            JoinSheetUserCell joinSheetUserCell = (JoinSheetUserCell) viewHolder.itemView;
-            if (i < JoinGroupAlert.this.chatInvite.participants.size()) {
-                joinSheetUserCell.setUser((User) JoinGroupAlert.this.chatInvite.participants.get(i));
-                return;
-            }
-            if (JoinGroupAlert.this.chatInvite.chat != null) {
-                i = JoinGroupAlert.this.chatInvite.chat.participants_count;
-            } else {
-                i = JoinGroupAlert.this.chatInvite.participants_count;
-            }
-            joinSheetUserCell.setCount(i - JoinGroupAlert.this.chatInvite.participants.size());
-        }
-    }
-
-    public JoinGroupAlert(Context context, ChatInvite chatInvite, String str, BaseFragment baseFragment) {
-        CharSequence charSequence;
-        int i;
-        Context context2 = context;
-        Object obj = chatInvite;
-        super(context2, false);
-        setApplyBottomPadding(false);
-        setApplyTopPadding(false);
-        this.fragment = baseFragment;
-        this.chatInvite = obj;
-        this.hash = str;
-        LinearLayout linearLayout = new LinearLayout(context2);
-        linearLayout.setOrientation(1);
-        linearLayout.setClickable(true);
-        setCustomView(linearLayout);
-        BackupImageView backupImageView = new BackupImageView(context2);
-        backupImageView.setRoundRadius(AndroidUtilities.dp(35.0f));
-        linearLayout.addView(backupImageView, LayoutHelper.createLinear(70, 70, 49, 0, 29, 0, 0));
-        Chat chat = obj.chat;
-        String str2 = "50_50";
-        if (chat != null) {
-            Drawable avatarDrawable = new AvatarDrawable(chat);
-            chat = obj.chat;
-            charSequence = chat.title;
-            i = chat.participants_count;
-            backupImageView.setImage(ImageLocation.getForChat(chat, false), str2, avatarDrawable, obj);
-        } else {
-            Drawable avatarDrawable2 = new AvatarDrawable();
-            avatarDrawable2.setInfo(0, obj.title, null);
-            charSequence = obj.title;
-            i = obj.participants_count;
-            backupImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(obj.photo.sizes, 50), obj.photo), str2, avatarDrawable2, obj);
-        }
-        TextView textView = new TextView(context2);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setTextSize(1, 17.0f);
-        textView.setTextColor(Theme.getColor("dialogTextBlack"));
-        textView.setText(charSequence);
-        textView.setSingleLine(true);
-        textView.setEllipsize(TruncateAt.END);
-        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 9, 10, i > 0 ? 0 : 20));
-        if (i > 0) {
-            textView = new TextView(context2);
-            textView.setTextSize(1, 14.0f);
-            textView.setTextColor(Theme.getColor("dialogTextGray3"));
-            textView.setSingleLine(true);
-            textView.setEllipsize(TruncateAt.END);
-            textView.setText(LocaleController.formatPluralString("Members", i));
-            linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 3, 10, 20));
-        }
-        if (!obj.participants.isEmpty()) {
-            RecyclerListView recyclerListView = new RecyclerListView(context2);
-            recyclerListView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-            recyclerListView.setNestedScrollingEnabled(false);
-            recyclerListView.setClipToPadding(false);
-            recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), 0, false));
-            recyclerListView.setHorizontalScrollBarEnabled(false);
-            recyclerListView.setVerticalScrollBarEnabled(false);
-            recyclerListView.setAdapter(new UsersAdapter(context2));
-            recyclerListView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-            linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 7));
-        }
-        View view = new View(context2);
-        view.setBackgroundColor(Theme.getColor("dialogShadowLine"));
-        linearLayout.addView(view, new LinearLayout.LayoutParams(-1, AndroidUtilities.getShadowHeight()));
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context2, false);
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        String str3 = "dialogTextBlue2";
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(str3));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new -$$Lambda$JoinGroupAlert$HWwkTLyyGhrlSGGzuTHLEOoFKaE(this));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setVisibility(0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(str3));
-        if ((!obj.channel || obj.megagroup) && (!ChatObject.isChannel(obj.chat) || obj.chat.megagroup)) {
-            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", NUM));
-        } else {
-            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ProfileJoinChannel", NUM).toUpperCase());
-        }
-        pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw(this));
+    /* JADX WARNING: Illegal instructions before constructor call */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public JoinGroupAlert(android.content.Context r20, org.telegram.tgnet.TLRPC.ChatInvite r21, java.lang.String r22, org.telegram.ui.ActionBar.BaseFragment r23) {
+        /*
+            r19 = this;
+            r0 = r19
+            r1 = r20
+            r2 = r21
+            r3 = 0
+            r0.<init>(r1, r3)
+            r0.setApplyBottomPadding(r3)
+            r0.setApplyTopPadding(r3)
+            r4 = r23
+            r0.fragment = r4
+            r0.chatInvite = r2
+            r4 = r22
+            r0.hash = r4
+            android.widget.LinearLayout r4 = new android.widget.LinearLayout
+            r4.<init>(r1)
+            r5 = 1
+            r4.setOrientation(r5)
+            r4.setClickable(r5)
+            r0.setCustomView(r4)
+            org.telegram.ui.Components.BackupImageView r6 = new org.telegram.ui.Components.BackupImageView
+            r6.<init>(r1)
+            r7 = 1108082688(0x420CLASSNAME, float:35.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r6.setRoundRadius(r7)
+            r8 = 70
+            r9 = 70
+            r10 = 49
+            r11 = 0
+            r12 = 29
+            r13 = 0
+            r14 = 0
+            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+            r4.addView(r6, r7)
+            org.telegram.tgnet.TLRPC$Chat r7 = r2.chat
+            java.lang.String r8 = "50_50"
+            if (r7 == 0) goto L_0x0062
+            org.telegram.ui.Components.AvatarDrawable r9 = new org.telegram.ui.Components.AvatarDrawable
+            r9.<init>((org.telegram.tgnet.TLRPC.Chat) r7)
+            org.telegram.tgnet.TLRPC$Chat r7 = r2.chat
+            java.lang.String r10 = r7.title
+            int r11 = r7.participants_count
+            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForChat(r7, r3)
+            r6.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r8, (android.graphics.drawable.Drawable) r9, (java.lang.Object) r2)
+            goto L_0x0084
+        L_0x0062:
+            org.telegram.ui.Components.AvatarDrawable r7 = new org.telegram.ui.Components.AvatarDrawable
+            r7.<init>()
+            java.lang.String r9 = r2.title
+            r10 = 0
+            r7.setInfo(r3, r9, r10)
+            java.lang.String r10 = r2.title
+            int r11 = r2.participants_count
+            org.telegram.tgnet.TLRPC$Photo r9 = r2.photo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.sizes
+            r12 = 50
+            org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r12)
+            org.telegram.tgnet.TLRPC$Photo r12 = r2.photo
+            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForPhoto(r9, r12)
+            r6.setImage((org.telegram.messenger.ImageLocation) r9, (java.lang.String) r8, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r2)
+        L_0x0084:
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r6.setTypeface(r7)
+            r7 = 1099431936(0x41880000, float:17.0)
+            r6.setTextSize(r5, r7)
+            java.lang.String r7 = "dialogTextBlack"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r6.setTextColor(r7)
+            r6.setText(r10)
+            r6.setSingleLine(r5)
+            android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
+            r6.setEllipsize(r7)
+            r12 = -2
+            r13 = -2
+            r14 = 49
+            r15 = 10
+            r16 = 9
+            r17 = 10
+            if (r11 <= 0) goto L_0x00ba
+            r18 = 0
+            goto L_0x00be
+        L_0x00ba:
+            r7 = 20
+            r18 = 20
+        L_0x00be:
+            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
+            r4.addView(r6, r7)
+            if (r11 <= 0) goto L_0x00fd
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            r7 = 1096810496(0x41600000, float:14.0)
+            r6.setTextSize(r5, r7)
+            java.lang.String r7 = "dialogTextGray3"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r6.setTextColor(r7)
+            r6.setSingleLine(r5)
+            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
+            r6.setEllipsize(r5)
+            java.lang.String r5 = "Members"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r5, r11)
+            r6.setText(r5)
+            r7 = -2
+            r8 = -2
+            r9 = 49
+            r10 = 10
+            r11 = 3
+            r12 = 10
+            r13 = 20
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
+            r4.addView(r6, r5)
+        L_0x00fd:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r2.participants
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x014c
+            org.telegram.ui.Components.RecyclerListView r5 = new org.telegram.ui.Components.RecyclerListView
+            r5.<init>(r1)
+            r6 = 1090519040(0x41000000, float:8.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.setPadding(r3, r3, r3, r6)
+            r5.setNestedScrollingEnabled(r3)
+            r5.setClipToPadding(r3)
+            androidx.recyclerview.widget.LinearLayoutManager r6 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r7 = r19.getContext()
+            r6.<init>(r7, r3, r3)
+            r5.setLayoutManager(r6)
+            r5.setHorizontalScrollBarEnabled(r3)
+            r5.setVerticalScrollBarEnabled(r3)
+            org.telegram.ui.Components.JoinGroupAlert$UsersAdapter r6 = new org.telegram.ui.Components.JoinGroupAlert$UsersAdapter
+            r6.<init>(r1)
+            r5.setAdapter(r6)
+            java.lang.String r6 = "dialogScrollGlow"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r5.setGlowColor(r6)
+            r7 = -2
+            r8 = 90
+            r9 = 49
+            r10 = 0
+            r11 = 0
+            r12 = 0
+            r13 = 7
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
+            r4.addView(r5, r6)
+        L_0x014c:
+            android.view.View r5 = new android.view.View
+            r5.<init>(r1)
+            java.lang.String r6 = "dialogShadowLine"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r5.setBackgroundColor(r6)
+            android.widget.LinearLayout$LayoutParams r6 = new android.widget.LinearLayout$LayoutParams
+            int r7 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r8 = -1
+            r6.<init>(r8, r7)
+            r4.addView(r5, r6)
+            org.telegram.ui.Components.PickerBottomLayout r5 = new org.telegram.ui.Components.PickerBottomLayout
+            r5.<init>(r1, r3)
+            r1 = 48
+            r6 = 83
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r8, (int) r1, (int) r6)
+            r4.addView(r5, r1)
+            android.widget.TextView r1 = r5.cancelButton
+            r4 = 1099956224(0x41900000, float:18.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r1.setPadding(r6, r3, r7, r3)
+            android.widget.TextView r1 = r5.cancelButton
+            java.lang.String r6 = "dialogTextBlue2"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r1.setTextColor(r7)
+            android.widget.TextView r1 = r5.cancelButton
+            r7 = 2131624476(0x7f0e021c, float:1.8876133E38)
+            java.lang.String r8 = "Cancel"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            java.lang.String r7 = r7.toUpperCase()
+            r1.setText(r7)
+            android.widget.TextView r1 = r5.cancelButton
+            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$HWwkTLyyGhrlSGGzuTHLEOoFKaE r7 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$HWwkTLyyGhrlSGGzuTHLEOoFKaE
+            r7.<init>()
+            r1.setOnClickListener(r7)
+            android.widget.LinearLayout r1 = r5.doneButton
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r1.setPadding(r7, r3, r4, r3)
+            android.widget.LinearLayout r1 = r5.doneButton
+            r1.setVisibility(r3)
+            android.widget.TextView r1 = r5.doneButtonBadgeTextView
+            r3 = 8
+            r1.setVisibility(r3)
+            android.widget.TextView r1 = r5.doneButtonTextView
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r1.setTextColor(r3)
+            boolean r1 = r2.channel
+            if (r1 == 0) goto L_0x01d7
+            boolean r1 = r2.megagroup
+            if (r1 == 0) goto L_0x01e5
+        L_0x01d7:
+            org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
+            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
+            if (r1 == 0) goto L_0x01f8
+            org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
+            boolean r1 = r1.megagroup
+            if (r1 != 0) goto L_0x01f8
+        L_0x01e5:
+            android.widget.TextView r1 = r5.doneButtonTextView
+            r2 = 2131626299(0x7f0e093b, float:1.887983E38)
+            java.lang.String r3 = "ProfileJoinChannel"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            java.lang.String r2 = r2.toUpperCase()
+            r1.setText(r2)
+            goto L_0x0206
+        L_0x01f8:
+            android.widget.TextView r1 = r5.doneButtonTextView
+            r2 = 2131625385(0x7f0e05a9, float:1.8877976E38)
+            java.lang.String r3 = "JoinGroup"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+        L_0x0206:
+            android.widget.LinearLayout r1 = r5.doneButton
+            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw
+            r2.<init>()
+            r1.setOnClickListener(r2)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.JoinGroupAlert.<init>(android.content.Context, org.telegram.tgnet.TLRPC$ChatInvite, java.lang.String, org.telegram.ui.ActionBar.BaseFragment):void");
     }
 
     public /* synthetic */ void lambda$new$0$JoinGroupAlert(View view) {
@@ -179,25 +260,49 @@ public class JoinGroupAlert extends BottomSheet {
 
     public /* synthetic */ void lambda$new$3$JoinGroupAlert(View view) {
         dismiss();
-        TL_messages_importChatInvite tL_messages_importChatInvite = new TL_messages_importChatInvite();
+        TLRPC.TL_messages_importChatInvite tL_messages_importChatInvite = new TLRPC.TL_messages_importChatInvite();
         tL_messages_importChatInvite.hash = this.hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_importChatInvite, new -$$Lambda$JoinGroupAlert$mdXFwxXoZ3zIuXYK2Qsi9b4N8JY(this, tL_messages_importChatInvite), 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_importChatInvite, new RequestDelegate(tL_messages_importChatInvite) {
+            private final /* synthetic */ TLRPC.TL_messages_importChatInvite f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                JoinGroupAlert.this.lambda$null$2$JoinGroupAlert(this.f$1, tLObject, tL_error);
+            }
+        }, 2);
     }
 
-    public /* synthetic */ void lambda$null$2$JoinGroupAlert(TL_messages_importChatInvite tL_messages_importChatInvite, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$null$2$JoinGroupAlert(TLRPC.TL_messages_importChatInvite tL_messages_importChatInvite, TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tL_error == null) {
-            MessagesController.getInstance(this.currentAccount).processUpdates((Updates) tLObject, false);
+            MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC.Updates) tLObject, false);
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$JoinGroupAlert$IWx-squ4_I5Qyjo-N06x9CUQNvc(this, tL_error, tLObject, tL_messages_importChatInvite));
+        AndroidUtilities.runOnUIThread(new Runnable(tL_error, tLObject, tL_messages_importChatInvite) {
+            private final /* synthetic */ TLRPC.TL_error f$1;
+            private final /* synthetic */ TLObject f$2;
+            private final /* synthetic */ TLRPC.TL_messages_importChatInvite f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                JoinGroupAlert.this.lambda$null$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$1$JoinGroupAlert(TL_error tL_error, TLObject tLObject, TL_messages_importChatInvite tL_messages_importChatInvite) {
+    public /* synthetic */ void lambda$null$1$JoinGroupAlert(TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_messages_importChatInvite tL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tL_error == null) {
-                Updates updates = (Updates) tLObject;
+                TLRPC.Updates updates = (TLRPC.Updates) tLObject;
                 if (!updates.chats.isEmpty()) {
-                    Chat chat = (Chat) updates.chats.get(0);
+                    TLRPC.Chat chat = updates.chats.get(0);
                     chat.left = false;
                     chat.kicked = false;
                     MessagesController.getInstance(this.currentAccount).putUsers(updates.users, false);
@@ -215,6 +320,58 @@ public class JoinGroupAlert extends BottomSheet {
                 return;
             }
             AlertsCreator.processError(this.currentAccount, tL_error, this.fragment, tL_messages_importChatInvite, new Object[0]);
+        }
+    }
+
+    private class UsersAdapter extends RecyclerListView.SelectionAdapter {
+        private Context context;
+
+        public long getItemId(int i) {
+            return (long) i;
+        }
+
+        public int getItemViewType(int i) {
+            return 0;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return false;
+        }
+
+        public UsersAdapter(Context context2) {
+            this.context = context2;
+        }
+
+        public int getItemCount() {
+            int i;
+            int size = JoinGroupAlert.this.chatInvite.participants.size();
+            if (JoinGroupAlert.this.chatInvite.chat != null) {
+                i = JoinGroupAlert.this.chatInvite.chat.participants_count;
+            } else {
+                i = JoinGroupAlert.this.chatInvite.participants_count;
+            }
+            return size != i ? size + 1 : size;
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            JoinSheetUserCell joinSheetUserCell = new JoinSheetUserCell(this.context);
+            joinSheetUserCell.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(90.0f)));
+            return new RecyclerListView.Holder(joinSheetUserCell);
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            int i2;
+            JoinSheetUserCell joinSheetUserCell = (JoinSheetUserCell) viewHolder.itemView;
+            if (i < JoinGroupAlert.this.chatInvite.participants.size()) {
+                joinSheetUserCell.setUser(JoinGroupAlert.this.chatInvite.participants.get(i));
+                return;
+            }
+            if (JoinGroupAlert.this.chatInvite.chat != null) {
+                i2 = JoinGroupAlert.this.chatInvite.chat.participants_count;
+            } else {
+                i2 = JoinGroupAlert.this.chatInvite.participants_count;
+            }
+            joinSheetUserCell.setCount(i2 - JoinGroupAlert.this.chatInvite.participants.size());
         }
     }
 }

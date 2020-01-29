@@ -23,9 +23,9 @@ public class BottomPagesView extends View {
     private String selectedColorKey;
     private ViewPager viewPager;
 
-    public BottomPagesView(Context context, ViewPager viewPager, int i) {
+    public BottomPagesView(Context context, ViewPager viewPager2, int i) {
         super(context);
-        this.viewPager = viewPager;
+        this.viewPager = viewPager2;
         this.pagesCount = i;
     }
 
@@ -45,9 +45,8 @@ public class BottomPagesView extends View {
         this.selectedColorKey = str2;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int i;
         AndroidUtilities.dp(5.0f);
         String str = this.colorKey;
         if (str != null) {
@@ -56,26 +55,26 @@ public class BottomPagesView extends View {
             this.paint.setColor(-4473925);
         }
         this.currentPage = this.viewPager.getCurrentItem();
-        for (i = 0; i < this.pagesCount; i++) {
+        for (int i = 0; i < this.pagesCount; i++) {
             if (i != this.currentPage) {
                 int dp = AndroidUtilities.dp(11.0f) * i;
                 this.rect.set((float) dp, 0.0f, (float) (dp + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
                 canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
             }
         }
-        str = this.selectedColorKey;
-        if (str != null) {
-            this.paint.setColor(Theme.getColor(str));
+        String str2 = this.selectedColorKey;
+        if (str2 != null) {
+            this.paint.setColor(Theme.getColor(str2));
         } else {
             this.paint.setColor(-13851168);
         }
-        i = this.currentPage * AndroidUtilities.dp(11.0f);
+        int dp2 = this.currentPage * AndroidUtilities.dp(11.0f);
         if (this.progress == 0.0f) {
-            this.rect.set((float) i, 0.0f, (float) (i + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
+            this.rect.set((float) dp2, 0.0f, (float) (dp2 + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
         } else if (this.scrollPosition >= this.currentPage) {
-            this.rect.set((float) i, 0.0f, ((float) (i + AndroidUtilities.dp(5.0f))) + (((float) AndroidUtilities.dp(11.0f)) * this.progress), (float) AndroidUtilities.dp(5.0f));
+            this.rect.set((float) dp2, 0.0f, ((float) (dp2 + AndroidUtilities.dp(5.0f))) + (((float) AndroidUtilities.dp(11.0f)) * this.progress), (float) AndroidUtilities.dp(5.0f));
         } else {
-            this.rect.set(((float) i) - (((float) AndroidUtilities.dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (i + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
+            this.rect.set(((float) dp2) - (((float) AndroidUtilities.dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (dp2 + AndroidUtilities.dp(5.0f)), (float) AndroidUtilities.dp(5.0f));
         }
         canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
     }

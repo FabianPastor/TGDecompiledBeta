@@ -7,7 +7,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
+import org.telegram.messenger.support.customtabs.ICustomTabsCallback;
+import org.telegram.messenger.support.customtabs.IPostMessageService;
 
 public abstract class PostMessageServiceConnection implements ServiceConnection {
     private final Object mLock = new Object();
@@ -21,7 +22,7 @@ public abstract class PostMessageServiceConnection implements ServiceConnection 
     }
 
     public PostMessageServiceConnection(CustomTabsSessionToken customTabsSessionToken) {
-        this.mSessionBinder = Stub.asInterface(customTabsSessionToken.getCallbackBinder());
+        this.mSessionBinder = ICustomTabsCallback.Stub.asInterface(customTabsSessionToken.getCallbackBinder());
     }
 
     public boolean bindSessionToPostMessageService(Context context, String str) {
@@ -54,6 +55,7 @@ public abstract class PostMessageServiceConnection implements ServiceConnection 
             } catch (RemoteException unused) {
                 return false;
             } catch (Throwable th) {
+                throw th;
             }
         }
         return true;
@@ -69,6 +71,7 @@ public abstract class PostMessageServiceConnection implements ServiceConnection 
             } catch (RemoteException unused) {
                 return false;
             } catch (Throwable th) {
+                throw th;
             }
         }
         return true;

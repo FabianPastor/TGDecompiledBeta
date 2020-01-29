@@ -5,27 +5,27 @@ public class MP3Frame {
     private final Header header;
 
     static final class CRCLASSNAME {
-        private short crc = (short) -1;
+        private short crc = -1;
 
         CRCLASSNAME() {
         }
 
         public void update(int i, int i2) {
-            i2 = 1 << (i2 - 1);
+            int i3 = 1 << (i2 - 1);
             do {
-                int i3 = 0;
-                int i4 = (this.crc & 32768) == 0 ? 1 : 0;
-                if ((i & i2) == 0) {
-                    i3 = 1;
+                boolean z = false;
+                boolean z2 = (this.crc & 32768) == 0;
+                if ((i & i3) == 0) {
+                    z = true;
                 }
-                if ((i4 ^ i3) != 0) {
+                if (z2 ^ z) {
                     this.crc = (short) (this.crc << 1);
                     this.crc = (short) (this.crc ^ 32773);
                 } else {
                     this.crc = (short) (this.crc << 1);
                 }
-                i2 >>>= 1;
-            } while (i2 != 0);
+                i3 >>>= 1;
+            } while (i3 != 0);
         }
 
         public void update(byte b) {
@@ -37,14 +37,14 @@ public class MP3Frame {
         }
 
         public void reset() {
-            this.crc = (short) -1;
+            this.crc = -1;
         }
     }
 
     public static class Header {
-        private static final int[][] BITRATES = new int[][]{new int[]{0, 0, 0, 0, 0}, new int[]{32000, 32000, 32000, 32000, 8000}, new int[]{64000, 48000, 40000, 48000, 16000}, new int[]{96000, 56000, 48000, 56000, 24000}, new int[]{128000, 64000, 56000, 64000, 32000}, new int[]{160000, 80000, 64000, 80000, 40000}, new int[]{192000, 96000, 80000, 96000, 48000}, new int[]{224000, 112000, 96000, 112000, 56000}, new int[]{256000, 128000, 112000, 128000, 64000}, new int[]{288000, 160000, 128000, 144000, 80000}, new int[]{320000, 192000, 160000, 160000, 96000}, new int[]{352000, 224000, 192000, 176000, 112000}, new int[]{384000, 256000, 224000, 192000, 128000}, new int[]{416000, 320000, 256000, 224000, 144000}, new int[]{448000, 384000, 320000, 256000, 160000}, new int[]{-1, -1, -1, -1, -1}};
-        private static final int[][] BITRATES_COLUMN = new int[][]{new int[]{-1, 4, 4, 3}, new int[]{-1, -1, -1, -1}, new int[]{-1, 4, 4, 3}, new int[]{-1, 2, 1, 0}};
-        private static final int[][] FREQUENCIES = new int[][]{new int[]{11025, -1, 22050, 44100}, new int[]{12000, -1, 24000, 48000}, new int[]{8000, -1, 16000, 32000}, new int[]{-1, -1, -1, -1}};
+        private static final int[][] BITRATES = {new int[]{0, 0, 0, 0, 0}, new int[]{32000, 32000, 32000, 32000, 8000}, new int[]{64000, 48000, 40000, 48000, 16000}, new int[]{96000, 56000, 48000, 56000, 24000}, new int[]{128000, 64000, 56000, 64000, 32000}, new int[]{160000, 80000, 64000, 80000, 40000}, new int[]{192000, 96000, 80000, 96000, 48000}, new int[]{224000, 112000, 96000, 112000, 56000}, new int[]{256000, 128000, 112000, 128000, 64000}, new int[]{288000, 160000, 128000, 144000, 80000}, new int[]{320000, 192000, 160000, 160000, 96000}, new int[]{352000, 224000, 192000, 176000, 112000}, new int[]{384000, 256000, 224000, 192000, 128000}, new int[]{416000, 320000, 256000, 224000, 144000}, new int[]{448000, 384000, 320000, 256000, 160000}, new int[]{-1, -1, -1, -1, -1}};
+        private static final int[][] BITRATES_COLUMN = {new int[]{-1, 4, 4, 3}, new int[]{-1, -1, -1, -1}, new int[]{-1, 4, 4, 3}, new int[]{-1, 2, 1, 0}};
+        private static final int[][] FREQUENCIES = {new int[]{11025, -1, 22050, 44100}, new int[]{12000, -1, 24000, 48000}, new int[]{8000, -1, 16000, 32000}, new int[]{-1, -1, -1, -1}};
         private static final int MPEG_BITRATE_FREE = 0;
         private static final int MPEG_BITRATE_RESERVED = 15;
         public static final int MPEG_CHANNEL_MODE_MONO = 3;
@@ -58,9 +58,9 @@ public class MP3Frame {
         public static final int MPEG_VERSION_2 = 2;
         public static final int MPEG_VERSION_2_5 = 0;
         private static final int MPEG_VERSION_RESERVED = 1;
-        private static final int[][] SIDE_INFO_SIZES = new int[][]{new int[]{17, -1, 17, 32}, new int[]{17, -1, 17, 32}, new int[]{17, -1, 17, 32}, new int[]{9, -1, 9, 17}};
-        private static final int[][] SIZE_COEFFICIENTS = new int[][]{new int[]{-1, 72, 144, 12}, new int[]{-1, -1, -1, -1}, new int[]{-1, 72, 144, 12}, new int[]{-1, 144, 144, 12}};
-        private static final int[] SLOT_SIZES = new int[]{-1, 1, 1, 4};
+        private static final int[][] SIDE_INFO_SIZES = {new int[]{17, -1, 17, 32}, new int[]{17, -1, 17, 32}, new int[]{17, -1, 17, 32}, new int[]{9, -1, 9, 17}};
+        private static final int[][] SIZE_COEFFICIENTS = {new int[]{-1, 72, 144, 12}, new int[]{-1, -1, -1, -1}, new int[]{-1, 72, 144, 12}, new int[]{-1, 144, 144, 12}};
+        private static final int[] SLOT_SIZES = {-1, 1, 1, 4};
         private final int bitrate;
         private final int channelMode;
         private final int frequency;
@@ -85,21 +85,14 @@ public class MP3Frame {
                     } else if (i4 != 0) {
                         this.frequency = (i2 >> 2) & 3;
                         if (this.frequency != 3) {
-                            i4 = 6;
+                            int i5 = 6;
                             this.channelMode = (i3 >> 6) & 3;
                             this.padding = (i2 >> 1) & 1;
                             this.protection = i & 1;
-                            if (this.protection != 0) {
-                                i4 = 4;
-                            }
-                            if (this.layer == 1) {
-                                i4 += getSideInfoSize();
-                            }
-                            if (getFrameSize() < i4) {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append("Frame size must be at least ");
-                                stringBuilder.append(i4);
-                                throw new MP3Exception(stringBuilder.toString());
+                            i5 = this.protection != 0 ? 4 : i5;
+                            i5 = this.layer == 1 ? i5 + getSideInfoSize() : i5;
+                            if (getFrameSize() < i5) {
+                                throw new MP3Exception("Frame size must be at least " + i5);
                             }
                             return;
                         }
@@ -107,10 +100,12 @@ public class MP3Frame {
                     } else {
                         throw new MP3Exception("Free bitrate");
                     }
+                } else {
+                    throw new MP3Exception("Reserved layer");
                 }
-                throw new MP3Exception("Reserved layer");
+            } else {
+                throw new MP3Exception("Reserved version");
             }
-            throw new MP3Exception("Reserved version");
         }
 
         public int getVersion() {
@@ -167,12 +162,12 @@ public class MP3Frame {
         }
     }
 
-    MP3Frame(Header header, byte[] bArr) {
-        this.header = header;
+    MP3Frame(Header header2, byte[] bArr) {
+        this.header = header2;
         this.bytes = bArr;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean isChecksumError() {
         if (this.header.getProtection() != 0 || this.header.getLayer() != 1) {
             return false;
@@ -199,16 +194,16 @@ public class MP3Frame {
         return this.header;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean isXingFrame() {
         int xingOffset = this.header.getXingOffset();
         byte[] bArr = this.bytes;
         if (bArr.length >= xingOffset + 12 && xingOffset >= 0 && bArr.length >= xingOffset + 8) {
-            if (bArr[xingOffset] == (byte) 88 && bArr[xingOffset + 1] == (byte) 105 && bArr[xingOffset + 2] == (byte) 110 && bArr[xingOffset + 3] == (byte) 103) {
+            if (bArr[xingOffset] == 88 && bArr[xingOffset + 1] == 105 && bArr[xingOffset + 2] == 110 && bArr[xingOffset + 3] == 103) {
                 return true;
             }
-            bArr = this.bytes;
-            if (bArr[xingOffset] == (byte) 73 && bArr[xingOffset + 1] == (byte) 110 && bArr[xingOffset + 2] == (byte) 102 && bArr[xingOffset + 3] == (byte) 111) {
+            byte[] bArr2 = this.bytes;
+            if (bArr2[xingOffset] == 73 && bArr2[xingOffset + 1] == 110 && bArr2[xingOffset + 2] == 102 && bArr2[xingOffset + 3] == 111) {
                 return true;
             }
             return false;
@@ -216,40 +211,35 @@ public class MP3Frame {
         return false;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean isVBRIFrame() {
         int vBRIOffset = this.header.getVBRIOffset();
         byte[] bArr = this.bytes;
-        boolean z = false;
-        if (bArr.length < vBRIOffset + 26) {
-            return false;
+        if (bArr.length >= vBRIOffset + 26 && bArr[vBRIOffset] == 86 && bArr[vBRIOffset + 1] == 66 && bArr[vBRIOffset + 2] == 82 && bArr[vBRIOffset + 3] == 73) {
+            return true;
         }
-        if (bArr[vBRIOffset] == (byte) 86 && bArr[vBRIOffset + 1] == (byte) 66 && bArr[vBRIOffset + 2] == (byte) 82 && bArr[vBRIOffset + 3] == (byte) 73) {
-            z = true;
-        }
-        return z;
+        return false;
     }
 
     public int getNumberOfFrames() {
-        int xingOffset;
-        int i;
-        byte[] bArr;
+        byte b;
+        byte b2;
         if (isXingFrame()) {
-            xingOffset = this.header.getXingOffset();
-            bArr = this.bytes;
-            if ((bArr[xingOffset + 7] & 1) != 0) {
-                i = (((bArr[xingOffset + 8] & 255) << 24) | ((bArr[xingOffset + 9] & 255) << 16)) | ((bArr[xingOffset + 10] & 255) << 8);
-                xingOffset = bArr[xingOffset + 11];
+            int xingOffset = this.header.getXingOffset();
+            byte[] bArr = this.bytes;
+            if ((bArr[xingOffset + 7] & 1) == 0) {
+                return -1;
             }
+            b = ((bArr[xingOffset + 8] & 255) << 24) | ((bArr[xingOffset + 9] & 255) << 16) | ((bArr[xingOffset + 10] & 255) << 8);
+            b2 = bArr[xingOffset + 11];
+        } else if (!isVBRIFrame()) {
             return -1;
+        } else {
+            int vBRIOffset = this.header.getVBRIOffset();
+            byte[] bArr2 = this.bytes;
+            b = ((bArr2[vBRIOffset + 14] & 255) << 24) | ((bArr2[vBRIOffset + 15] & 255) << 16) | ((bArr2[vBRIOffset + 16] & 255) << 8);
+            b2 = bArr2[vBRIOffset + 17];
         }
-        if (isVBRIFrame()) {
-            xingOffset = this.header.getVBRIOffset();
-            bArr = this.bytes;
-            i = (((bArr[xingOffset + 14] & 255) << 24) | ((bArr[xingOffset + 15] & 255) << 16)) | ((bArr[xingOffset + 16] & 255) << 8);
-            xingOffset = bArr[xingOffset + 17];
-        }
-        return -1;
-        return (xingOffset & 255) | i;
+        return (b2 & 255) | b;
     }
 }

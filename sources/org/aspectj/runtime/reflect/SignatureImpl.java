@@ -20,40 +20,7 @@ abstract class SignatureImpl implements Signature {
         void set(int i, String str);
     }
 
-    private static final class CacheImpl implements Cache {
-        private SoftReference toStringCacheRef;
-
-        public CacheImpl() {
-            makeCache();
-        }
-
-        public String get(int i) {
-            String[] array = array();
-            if (array == null) {
-                return null;
-            }
-            return array[i];
-        }
-
-        public void set(int i, String str) {
-            String[] array = array();
-            if (array == null) {
-                array = makeCache();
-            }
-            array[i] = str;
-        }
-
-        private String[] array() {
-            return (String[]) this.toStringCacheRef.get();
-        }
-
-        private String[] makeCache() {
-            String[] strArr = new String[3];
-            this.toStringCacheRef = new SoftReference(strArr);
-            return strArr;
-        }
-    }
-
+    /* access modifiers changed from: protected */
     public abstract String createToString(StringMaker stringMaker);
 
     SignatureImpl(int i, String str, Class cls) {
@@ -62,45 +29,42 @@ abstract class SignatureImpl implements Signature {
         this.declaringType = cls;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x001e  */
     /* JADX WARNING: Removed duplicated region for block: B:14:0x0026  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public java.lang.String toString(org.aspectj.runtime.reflect.StringMaker r3) {
         /*
-        r2 = this;
-        r0 = useCache;
-        if (r0 == 0) goto L_0x001b;
-    L_0x0004:
-        r0 = r2.stringCache;
-        if (r0 != 0) goto L_0x0014;
-    L_0x0008:
-        r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl;	 Catch:{ all -> 0x0010 }
-        r0.<init>();	 Catch:{ all -> 0x0010 }
-        r2.stringCache = r0;	 Catch:{ all -> 0x0010 }
-        goto L_0x001b;
-    L_0x0010:
-        r0 = 0;
-        useCache = r0;
-        goto L_0x001b;
-    L_0x0014:
-        r1 = r3.cacheOffset;
-        r0 = r0.get(r1);
-        goto L_0x001c;
-    L_0x001b:
-        r0 = 0;
-    L_0x001c:
-        if (r0 != 0) goto L_0x0022;
-    L_0x001e:
-        r0 = r2.createToString(r3);
-    L_0x0022:
-        r1 = useCache;
-        if (r1 == 0) goto L_0x002d;
-    L_0x0026:
-        r1 = r2.stringCache;
-        r3 = r3.cacheOffset;
-        r1.set(r3, r0);
-    L_0x002d:
-        return r0;
+            r2 = this;
+            boolean r0 = useCache
+            if (r0 == 0) goto L_0x001b
+            org.aspectj.runtime.reflect.SignatureImpl$Cache r0 = r2.stringCache
+            if (r0 != 0) goto L_0x0014
+            org.aspectj.runtime.reflect.SignatureImpl$CacheImpl r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl     // Catch:{ all -> 0x0010 }
+            r0.<init>()     // Catch:{ all -> 0x0010 }
+            r2.stringCache = r0     // Catch:{ all -> 0x0010 }
+            goto L_0x001b
+        L_0x0010:
+            r0 = 0
+            useCache = r0
+            goto L_0x001b
+        L_0x0014:
+            int r1 = r3.cacheOffset
+            java.lang.String r0 = r0.get(r1)
+            goto L_0x001c
+        L_0x001b:
+            r0 = 0
+        L_0x001c:
+            if (r0 != 0) goto L_0x0022
+            java.lang.String r0 = r2.createToString(r3)
+        L_0x0022:
+            boolean r1 = useCache
+            if (r1 == 0) goto L_0x002d
+            org.aspectj.runtime.reflect.SignatureImpl$Cache r1 = r2.stringCache
+            int r3 = r3.cacheOffset
+            r1.set(r3, r0)
+        L_0x002d:
+            return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.aspectj.runtime.reflect.SignatureImpl.toString(org.aspectj.runtime.reflect.StringMaker):java.lang.String");
     }
@@ -144,7 +108,7 @@ abstract class SignatureImpl implements Signature {
         return this.lookupClassLoader;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String extractString(int i) {
         int indexOf = this.stringRep.indexOf(45);
         int i2 = 0;
@@ -163,24 +127,58 @@ abstract class SignatureImpl implements Signature {
         return this.stringRep.substring(i2, indexOf);
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public int extractInt(int i) {
         return Integer.parseInt(extractString(i), 16);
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public Class extractType(int i) {
         return Factory.makeClass(extractString(i), getLookupClassLoader());
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public Class[] extractTypes(int i) {
         StringTokenizer stringTokenizer = new StringTokenizer(extractString(i), ":");
-        i = stringTokenizer.countTokens();
-        Class[] clsArr = new Class[i];
-        for (int i2 = 0; i2 < i; i2++) {
+        int countTokens = stringTokenizer.countTokens();
+        Class[] clsArr = new Class[countTokens];
+        for (int i2 = 0; i2 < countTokens; i2++) {
             clsArr[i2] = Factory.makeClass(stringTokenizer.nextToken(), getLookupClassLoader());
         }
         return clsArr;
+    }
+
+    private static final class CacheImpl implements Cache {
+        private SoftReference toStringCacheRef;
+
+        public CacheImpl() {
+            makeCache();
+        }
+
+        public String get(int i) {
+            String[] array = array();
+            if (array == null) {
+                return null;
+            }
+            return array[i];
+        }
+
+        public void set(int i, String str) {
+            String[] array = array();
+            if (array == null) {
+                array = makeCache();
+            }
+            array[i] = str;
+        }
+
+        private String[] array() {
+            return (String[]) this.toStringCacheRef.get();
+        }
+
+        private String[] makeCache() {
+            String[] strArr = new String[3];
+            this.toStringCacheRef = new SoftReference(strArr);
+            return strArr;
+        }
     }
 }

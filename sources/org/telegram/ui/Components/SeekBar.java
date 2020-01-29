@@ -32,7 +32,8 @@ public class SeekBar {
 
     public interface SeekBarDelegate {
 
-        public final /* synthetic */ class -CC {
+        /* renamed from: org.telegram.ui.Components.SeekBar$SeekBarDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
             public static void $default$onSeekBarContinuousDrag(SeekBarDelegate seekBarDelegate, float f) {
             }
         }
@@ -56,61 +57,56 @@ public class SeekBar {
     }
 
     public boolean onTouch(int i, float f, float f2) {
-        int i2;
         SeekBarDelegate seekBarDelegate;
         if (i == 0) {
-            i = this.height;
+            int i2 = this.height;
             int i3 = thumbWidth;
-            int i4 = (i - i3) / 2;
-            if (f >= ((float) (-i4)) && f <= ((float) (this.width + i4)) && f2 >= 0.0f && f2 <= ((float) i)) {
-                i = this.thumbX;
-                if (((float) (i - i4)) > f || f > ((float) ((i + i3) + i4))) {
-                    i = (int) f;
-                    i2 = thumbWidth;
-                    this.thumbX = i - (i2 / 2);
-                    i = this.thumbX;
-                    if (i < 0) {
+            int i4 = (i2 - i3) / 2;
+            if (f >= ((float) (-i4)) && f <= ((float) (this.width + i4)) && f2 >= 0.0f && f2 <= ((float) i2)) {
+                int i5 = this.thumbX;
+                if (((float) (i5 - i4)) > f || f > ((float) (i5 + i3 + i4))) {
+                    int i6 = thumbWidth;
+                    this.thumbX = ((int) f) - (i6 / 2);
+                    int i7 = this.thumbX;
+                    if (i7 < 0) {
                         this.thumbX = 0;
                     } else {
-                        int i5 = this.width;
-                        if (i > i5 - i2) {
-                            this.thumbX = i2 - i5;
+                        int i8 = this.width;
+                        if (i7 > i8 - i6) {
+                            this.thumbX = i6 - i8;
                         }
                     }
                 }
                 this.pressed = true;
-                i = this.thumbX;
-                this.draggingThumbX = i;
-                this.thumbDX = (int) (f - ((float) i));
+                int i9 = this.thumbX;
+                this.draggingThumbX = i9;
+                this.thumbDX = (int) (f - ((float) i9));
                 return true;
             }
         } else if (i == 1 || i == 3) {
             if (this.pressed) {
                 this.thumbX = this.draggingThumbX;
-                if (i == 1) {
-                    seekBarDelegate = this.delegate;
-                    if (seekBarDelegate != null) {
-                        seekBarDelegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
-                    }
+                if (i == 1 && (seekBarDelegate = this.delegate) != null) {
+                    seekBarDelegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
                 }
                 this.pressed = false;
                 return true;
             }
         } else if (i == 2 && this.pressed) {
             this.draggingThumbX = (int) (f - ((float) this.thumbDX));
-            i = this.draggingThumbX;
-            if (i < 0) {
+            int i10 = this.draggingThumbX;
+            if (i10 < 0) {
                 this.draggingThumbX = 0;
             } else {
-                int i6 = this.width;
-                i2 = thumbWidth;
-                if (i > i6 - i2) {
-                    this.draggingThumbX = i6 - i2;
+                int i11 = this.width;
+                int i12 = thumbWidth;
+                if (i10 > i11 - i12) {
+                    this.draggingThumbX = i11 - i12;
                 }
             }
-            seekBarDelegate = this.delegate;
-            if (seekBarDelegate != null) {
-                seekBarDelegate.onSeekBarContinuousDrag(((float) this.draggingThumbX) / ((float) (this.width - thumbWidth)));
+            SeekBarDelegate seekBarDelegate2 = this.delegate;
+            if (seekBarDelegate2 != null) {
+                seekBarDelegate2.onSeekBarContinuousDrag(((float) this.draggingThumbX) / ((float) (this.width - thumbWidth)));
             }
             return true;
         }
@@ -175,35 +171,31 @@ public class SeekBar {
     public void draw(Canvas canvas) {
         RectF rectF = this.rect;
         int i = thumbWidth;
-        float f = (float) (i / 2);
         int i2 = this.height;
-        int i3 = i2 / 2;
-        int i4 = this.lineHeight;
-        rectF.set(f, (float) (i3 - (i4 / 2)), (float) (this.width - (i / 2)), (float) ((i2 / 2) + (i4 / 2)));
+        int i3 = this.lineHeight;
+        rectF.set((float) (i / 2), (float) ((i2 / 2) - (i3 / 2)), (float) (this.width - (i / 2)), (float) ((i2 / 2) + (i3 / 2)));
         paint.setColor(this.selected ? this.backgroundSelectedColor : this.backgroundColor);
-        rectF = this.rect;
-        i = thumbWidth;
-        canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
+        RectF rectF2 = this.rect;
+        int i4 = thumbWidth;
+        canvas.drawRoundRect(rectF2, (float) (i4 / 2), (float) (i4 / 2), paint);
         if (this.bufferedProgress > 0.0f) {
             paint.setColor(this.selected ? this.backgroundSelectedColor : this.cacheColor);
-            rectF = this.rect;
-            i = thumbWidth;
-            f = (float) (i / 2);
-            i2 = this.height;
-            i3 = i2 / 2;
-            i4 = this.lineHeight;
-            rectF.set(f, (float) (i3 - (i4 / 2)), ((float) (i / 2)) + (this.bufferedProgress * ((float) (this.width - i))), (float) ((i2 / 2) + (i4 / 2)));
-            rectF = this.rect;
-            i = thumbWidth;
-            canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
+            RectF rectF3 = this.rect;
+            int i5 = thumbWidth;
+            int i6 = this.height;
+            int i7 = this.lineHeight;
+            rectF3.set((float) (i5 / 2), (float) ((i6 / 2) - (i7 / 2)), ((float) (i5 / 2)) + (this.bufferedProgress * ((float) (this.width - i5))), (float) ((i6 / 2) + (i7 / 2)));
+            RectF rectF4 = this.rect;
+            int i8 = thumbWidth;
+            canvas.drawRoundRect(rectF4, (float) (i8 / 2), (float) (i8 / 2), paint);
         }
-        rectF = this.rect;
-        i = thumbWidth;
-        rectF.set((float) (i / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) ((i / 2) + (this.pressed ? this.draggingThumbX : this.thumbX)), (float) ((this.height / 2) + (this.lineHeight / 2)));
+        RectF rectF5 = this.rect;
+        int i9 = thumbWidth;
+        rectF5.set((float) (i9 / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) ((i9 / 2) + (this.pressed ? this.draggingThumbX : this.thumbX)), (float) ((this.height / 2) + (this.lineHeight / 2)));
         paint.setColor(this.progressColor);
-        rectF = this.rect;
-        i = thumbWidth;
-        canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
+        RectF rectF6 = this.rect;
+        int i10 = thumbWidth;
+        canvas.drawRoundRect(rectF6, (float) (i10 / 2), (float) (i10 / 2), paint);
         paint.setColor(this.circleColor);
         float dp = (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f);
         if (this.currentRadius != dp) {
@@ -211,14 +203,14 @@ public class SeekBar {
             if (elapsedRealtime > 18) {
                 elapsedRealtime = 16;
             }
-            float f2 = this.currentRadius;
-            if (f2 < dp) {
-                this.currentRadius = f2 + (((float) AndroidUtilities.dp(1.0f)) * (((float) elapsedRealtime) / 60.0f));
+            float f = this.currentRadius;
+            if (f < dp) {
+                this.currentRadius = f + (((float) AndroidUtilities.dp(1.0f)) * (((float) elapsedRealtime) / 60.0f));
                 if (this.currentRadius > dp) {
                     this.currentRadius = dp;
                 }
             } else {
-                this.currentRadius = f2 - (((float) AndroidUtilities.dp(1.0f)) * (((float) elapsedRealtime) / 60.0f));
+                this.currentRadius = f - (((float) AndroidUtilities.dp(1.0f)) * (((float) elapsedRealtime) / 60.0f));
                 if (this.currentRadius < dp) {
                     this.currentRadius = dp;
                 }

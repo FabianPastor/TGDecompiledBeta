@@ -3,19 +3,16 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.FontMetricsInt;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils.TruncateAt;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -34,17 +31,17 @@ public class SettingsSearchCell extends FrameLayout {
             super(drawable);
         }
 
-        public int getSize(Paint paint, CharSequence charSequence, int i, int i2, FontMetricsInt fontMetricsInt) {
+        public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
             Rect bounds = getDrawable().getBounds();
             if (fontMetricsInt != null) {
-                FontMetricsInt fontMetricsInt2 = paint.getFontMetricsInt();
-                i = fontMetricsInt2.descent;
-                int i3 = fontMetricsInt2.ascent;
-                i3 += (i - i3) / 2;
-                i2 = (bounds.bottom - bounds.top) / 2;
-                fontMetricsInt.ascent = i3 - i2;
+                Paint.FontMetricsInt fontMetricsInt2 = paint.getFontMetricsInt();
+                int i3 = fontMetricsInt2.descent;
+                int i4 = fontMetricsInt2.ascent;
+                int i5 = i4 + ((i3 - i4) / 2);
+                int i6 = (bounds.bottom - bounds.top) / 2;
+                fontMetricsInt.ascent = i5 - i6;
                 fontMetricsInt.top = fontMetricsInt.ascent;
-                fontMetricsInt.bottom = i3 + i2;
+                fontMetricsInt.bottom = i5 + i6;
                 fontMetricsInt.descent = fontMetricsInt.bottom;
             }
             return bounds.right;
@@ -53,9 +50,9 @@ public class SettingsSearchCell extends FrameLayout {
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             Drawable drawable = getDrawable();
             canvas.save();
-            FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
-            i2 = fontMetricsInt.descent;
-            canvas.translate(f, (float) (((i4 + i2) - ((i2 - fontMetricsInt.ascent) / 2)) - ((drawable.getBounds().bottom - drawable.getBounds().top) / 2)));
+            Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
+            int i6 = fontMetricsInt.descent;
+            canvas.translate(f, (float) (((i4 + i6) - ((i6 - fontMetricsInt.ascent) / 2)) - ((drawable.getBounds().bottom - drawable.getBounds().top) / 2)));
             if (LocaleController.isRTL) {
                 canvas.scale(-1.0f, 1.0f, (float) (drawable.getIntrinsicWidth() / 2), (float) (drawable.getIntrinsicHeight() / 2));
             }
@@ -73,7 +70,7 @@ public class SettingsSearchCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
@@ -84,19 +81,19 @@ public class SettingsSearchCell extends FrameLayout {
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 33.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, LocaleController.isRTL ? 5 : 3, 10.0f, 8.0f, 10.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setTextAndValueAndIcon(CharSequence charSequence, String[] strArr, int i, boolean z) {
         this.textView.setText(charSequence);
-        LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textView.getLayoutParams();
         float f = 16.0f;
         layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 71.0f);
         layoutParams.rightMargin = AndroidUtilities.dp(LocaleController.isRTL ? 71.0f : 16.0f);
@@ -107,7 +104,7 @@ public class SettingsSearchCell extends FrameLayout {
                     spannableStringBuilder.append(" > ");
                     Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
-                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
+                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
                     spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i2]);
@@ -115,12 +112,12 @@ public class SettingsSearchCell extends FrameLayout {
             this.valueTextView.setText(spannableStringBuilder);
             this.valueTextView.setVisibility(0);
             layoutParams.topMargin = AndroidUtilities.dp(10.0f);
-            layoutParams = (LayoutParams) this.valueTextView.getLayoutParams();
-            layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 71.0f);
+            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.valueTextView.getLayoutParams();
+            layoutParams2.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 71.0f);
             if (LocaleController.isRTL) {
                 f = 71.0f;
             }
-            layoutParams.rightMargin = AndroidUtilities.dp(f);
+            layoutParams2.rightMargin = AndroidUtilities.dp(f);
         } else {
             layoutParams.topMargin = AndroidUtilities.dp(21.0f);
             this.valueTextView.setVisibility(8);
@@ -133,24 +130,20 @@ public class SettingsSearchCell extends FrameLayout {
         }
         this.left = 69;
         this.needDivider = z;
-        setWillNotDraw(this.needDivider ^ 1);
+        setWillNotDraw(!this.needDivider);
     }
 
     public void setTextAndValue(CharSequence charSequence, String[] strArr, boolean z, boolean z2) {
-        LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
-        String str = " > ";
-        SpannableStringBuilder spannableStringBuilder;
-        int i;
-        Drawable mutate;
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textView.getLayoutParams();
         if (z) {
             this.valueTextView.setText(charSequence);
-            spannableStringBuilder = new SpannableStringBuilder();
-            for (i = 0; i < strArr.length; i++) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+            for (int i = 0; i < strArr.length; i++) {
                 if (i != 0) {
-                    spannableStringBuilder.append(str);
-                    mutate = getContext().getResources().getDrawable(NUM).mutate();
+                    spannableStringBuilder.append(" > ");
+                    Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
-                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), Mode.MULTIPLY));
+                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
                     spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i]);
@@ -161,18 +154,18 @@ public class SettingsSearchCell extends FrameLayout {
         } else {
             this.textView.setText(charSequence);
             if (strArr != null) {
-                spannableStringBuilder = new SpannableStringBuilder();
-                for (i = 0; i < strArr.length; i++) {
-                    if (i != 0) {
-                        spannableStringBuilder.append(str);
-                        mutate = getContext().getResources().getDrawable(NUM).mutate();
-                        mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
-                        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
-                        spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
+                SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
+                for (int i2 = 0; i2 < strArr.length; i2++) {
+                    if (i2 != 0) {
+                        spannableStringBuilder2.append(" > ");
+                        Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
+                        mutate2.setBounds(0, 0, mutate2.getIntrinsicWidth(), mutate2.getIntrinsicHeight());
+                        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
+                        spannableStringBuilder2.setSpan(new VerticalImageSpan(mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);
                     }
-                    spannableStringBuilder.append(strArr[i]);
+                    spannableStringBuilder2.append(strArr[i2]);
                 }
-                this.valueTextView.setText(spannableStringBuilder);
+                this.valueTextView.setText(spannableStringBuilder2);
                 this.valueTextView.setVisibility(0);
                 layoutParams.topMargin = AndroidUtilities.dp(10.0f);
             } else {
@@ -183,17 +176,17 @@ public class SettingsSearchCell extends FrameLayout {
         int dp = AndroidUtilities.dp(16.0f);
         layoutParams.rightMargin = dp;
         layoutParams.leftMargin = dp;
-        LayoutParams layoutParams2 = (LayoutParams) this.valueTextView.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.valueTextView.getLayoutParams();
         int dp2 = AndroidUtilities.dp(16.0f);
         layoutParams2.rightMargin = dp2;
         layoutParams2.leftMargin = dp2;
         this.imageView.setVisibility(8);
         this.needDivider = z2;
-        setWillNotDraw(this.needDivider ^ 1);
+        setWillNotDraw(!this.needDivider);
         this.left = 16;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp((float) this.left), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp((float) this.left) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

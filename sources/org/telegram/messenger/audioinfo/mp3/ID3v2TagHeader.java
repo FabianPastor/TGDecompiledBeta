@@ -30,7 +30,6 @@ public class ID3v2TagHeader {
         long position = positionInputStream.getPosition();
         ID3v2DataInput iD3v2DataInput = new ID3v2DataInput(positionInputStream);
         String str = new String(iD3v2DataInput.readFully(3), "ISO-8859-1");
-        StringBuilder stringBuilder;
         if ("ID3".equals(str)) {
             this.version = iD3v2DataInput.readByte();
             int i = this.version;
@@ -40,15 +39,9 @@ public class ID3v2TagHeader {
                 this.totalTagSize = iD3v2DataInput.readSyncsafeInt() + 10;
                 if (this.version == 2) {
                     this.unsynchronization = (readByte & 128) != 0;
-                    if ((readByte & 64) != 0) {
-                        z = true;
-                    }
-                    this.compression = z;
+                    this.compression = (readByte & 64) != 0 ? true : z;
                 } else {
-                    if ((readByte & 128) != 0) {
-                        z = true;
-                    }
-                    this.unsynchronization = z;
+                    this.unsynchronization = (readByte & 128) != 0 ? true : z;
                     if ((readByte & 64) != 0) {
                         if (this.version == 3) {
                             int readInt = iD3v2DataInput.readInt();
@@ -68,15 +61,9 @@ public class ID3v2TagHeader {
                 this.headerSize = (int) (positionInputStream.getPosition() - position);
                 return;
             }
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("Unsupported ID3v2 version: ");
-            stringBuilder.append(this.version);
-            throw new ID3v2Exception(stringBuilder.toString());
+            throw new ID3v2Exception("Unsupported ID3v2 version: " + this.version);
         }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid ID3 identifier: ");
-        stringBuilder.append(str);
-        throw new ID3v2Exception(stringBuilder.toString());
+        throw new ID3v2Exception("Invalid ID3 identifier: " + str);
     }
 
     public ID3v2TagBody tagBody(InputStream inputStream) throws IOException, ID3v2Exception {
@@ -87,15 +74,16 @@ public class ID3v2TagHeader {
             return new ID3v2TagBody(inputStream, (long) i, (this.totalTagSize - i) - this.footerSize, this);
         } else {
             byte[] readFully = new ID3v2DataInput(inputStream).readFully(this.totalTagSize - this.headerSize);
+            int length = readFully.length;
             int i2 = 0;
-            Object obj = null;
-            for (byte b : readFully) {
-                if (obj == null || b != (byte) 0) {
-                    int i3 = i2 + 1;
+            boolean z = false;
+            for (int i3 = 0; i3 < length; i3++) {
+                byte b = readFully[i3];
+                if (!z || b != 0) {
                     readFully[i2] = b;
-                    i2 = i3;
+                    i2++;
                 }
-                obj = b == (byte) -1 ? 1 : null;
+                z = b == -1;
             }
             return new ID3v2TagBody(new ByteArrayInputStream(readFully, 0, i2), (long) this.headerSize, i2, this);
         }

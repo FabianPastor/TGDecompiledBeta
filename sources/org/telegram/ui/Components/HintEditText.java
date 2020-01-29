@@ -30,7 +30,7 @@ public class HintEditText extends EditTextBoldCursor {
         setText(getText());
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         onTextChange();
@@ -43,22 +43,22 @@ public class HintEditText extends EditTextBoldCursor {
         invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        float f;
         super.onDraw(canvas);
         if (this.hintText != null && length() < this.hintText.length()) {
             int measuredHeight = getMeasuredHeight() / 2;
-            float f = this.textOffset;
+            float f2 = this.textOffset;
             for (int length = length(); length < this.hintText.length(); length++) {
-                float f2;
                 if (this.hintText.charAt(length) == ' ') {
-                    f2 = this.spaceSize;
+                    f = this.spaceSize;
                 } else {
-                    this.rect.set(((int) f) + AndroidUtilities.dp(1.0f), measuredHeight, ((int) (this.numberSize + f)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + measuredHeight);
+                    this.rect.set(((int) f2) + AndroidUtilities.dp(1.0f), measuredHeight, ((int) (this.numberSize + f2)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + measuredHeight);
                     canvas.drawRect(this.rect, this.paint);
-                    f2 = this.numberSize;
+                    f = this.numberSize;
                 }
-                f += f2;
+                f2 += f;
             }
         }
     }

@@ -3,8 +3,6 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -32,8 +30,8 @@ public class RadialProgressView extends View {
 
     public RadialProgressView(Context context) {
         super(context);
-        this.progressPaint.setStyle(Style.STROKE);
-        this.progressPaint.setStrokeCap(Cap.ROUND);
+        this.progressPaint.setStyle(Paint.Style.STROKE);
+        this.progressPaint.setStrokeCap(Paint.Cap.ROUND);
         this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.progressPaint.setColor(this.progressColor);
     }
@@ -79,7 +77,7 @@ public class RadialProgressView extends View {
                 this.radOffset += 270.0f;
                 this.currentCircleLength = -266.0f;
             }
-            this.risingCircleLength ^= 1;
+            this.risingCircleLength = !this.risingCircleLength;
             this.currentProgressTime = 0.0f;
         }
         invalidate();
@@ -99,13 +97,13 @@ public class RadialProgressView extends View {
         this.progressPaint.setColor(this.progressColor);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int measuredWidth = (getMeasuredWidth() - this.size) / 2;
         int measuredHeight = getMeasuredHeight();
         int i = this.size;
-        measuredHeight = (measuredHeight - i) / 2;
-        this.cicleRect.set((float) measuredWidth, (float) measuredHeight, (float) (measuredWidth + i), (float) (measuredHeight + i));
+        int i2 = (measuredHeight - i) / 2;
+        this.cicleRect.set((float) measuredWidth, (float) i2, (float) (measuredWidth + i), (float) (i2 + i));
         canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
         updateAnimation();
     }

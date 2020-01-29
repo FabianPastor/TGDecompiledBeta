@@ -1,12 +1,11 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -24,8 +23,8 @@ public class InviteTextCell extends FrameLayout {
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }
 
@@ -33,27 +32,27 @@ public class InviteTextCell extends FrameLayout {
         return this.textView;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        i = MeasureSpec.getSize(i);
+        int size = View.MeasureSpec.getSize(i);
         int dp = AndroidUtilities.dp(72.0f);
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.imageView.measure(MeasureSpec.makeMeasureSpec(i, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
-        setMeasuredDimension(i, AndroidUtilities.dp(72.0f));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
+        setMeasuredDimension(size, AndroidUtilities.dp(72.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        i4 -= i2;
-        i3 -= i;
-        int textHeight = (i4 - this.textView.getTextHeight()) / 2;
-        i = AndroidUtilities.dp(!LocaleController.isRTL ? 71.0f : 24.0f);
+        int i5 = i4 - i2;
+        int i6 = i3 - i;
+        int textHeight = (i5 - this.textView.getTextHeight()) / 2;
+        int dp = AndroidUtilities.dp(!LocaleController.isRTL ? 71.0f : 24.0f);
         SimpleTextView simpleTextView = this.textView;
-        simpleTextView.layout(i, textHeight, simpleTextView.getMeasuredWidth() + i, this.textView.getMeasuredHeight() + textHeight);
-        i4 = (i4 - this.imageView.getMeasuredHeight()) / 2;
-        textHeight = !LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : (i3 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
-        ImageView imageView = this.imageView;
-        imageView.layout(textHeight, i4, imageView.getMeasuredWidth() + textHeight, this.imageView.getMeasuredHeight() + i4);
+        simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.textView.getMeasuredHeight() + textHeight);
+        int measuredHeight = (i5 - this.imageView.getMeasuredHeight()) / 2;
+        int dp2 = !LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
+        ImageView imageView2 = this.imageView;
+        imageView2.layout(dp2, measuredHeight, imageView2.getMeasuredWidth() + dp2, this.imageView.getMeasuredHeight() + measuredHeight);
     }
 
     public void setTextColor(int i) {

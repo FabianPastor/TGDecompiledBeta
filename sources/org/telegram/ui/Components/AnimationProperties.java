@@ -26,8 +26,24 @@ public class AnimationProperties {
             return Float.valueOf(dialogCell.getClipProgress());
         }
     };
-    public static final Property<ColorDrawable, Integer> COLOR_DRAWABLE_ALPHA;
-    public static final Property<Paint, Integer> PAINT_ALPHA;
+    public static final Property<ColorDrawable, Integer> COLOR_DRAWABLE_ALPHA = new IntProperty<ColorDrawable>("alpha") {
+        public void setValue(ColorDrawable colorDrawable, int i) {
+            colorDrawable.setAlpha(i);
+        }
+
+        public Integer get(ColorDrawable colorDrawable) {
+            return Integer.valueOf(colorDrawable.getAlpha());
+        }
+    };
+    public static final Property<Paint, Integer> PAINT_ALPHA = new IntProperty<Paint>("alpha") {
+        public void setValue(Paint paint, int i) {
+            paint.setAlpha(i);
+        }
+
+        public Integer get(Paint paint) {
+            return Integer.valueOf(paint.getAlpha());
+        }
+    };
     public static final Property<PhotoViewer, Float> PHOTO_VIEWER_ANIMATION_VALUE = new FloatProperty<PhotoViewer>("animationValue") {
         public void setValue(PhotoViewer photoViewer, float f) {
             photoViewer.setAnimationValue(f);
@@ -37,7 +53,15 @@ public class AnimationProperties {
             return Float.valueOf(photoViewer.getAnimationValue());
         }
     };
-    public static final Property<ShapeDrawable, Integer> SHAPE_DRAWABLE_ALPHA;
+    public static final Property<ShapeDrawable, Integer> SHAPE_DRAWABLE_ALPHA = new IntProperty<ShapeDrawable>("alpha") {
+        public void setValue(ShapeDrawable shapeDrawable, int i) {
+            shapeDrawable.getPaint().setAlpha(i);
+        }
+
+        public Integer get(ShapeDrawable shapeDrawable) {
+            return Integer.valueOf(shapeDrawable.getPaint().getAlpha());
+        }
+    };
 
     public static abstract class FloatProperty<T> extends Property<T, Float> {
         public abstract void setValue(T t, float f);
@@ -61,36 +85,5 @@ public class AnimationProperties {
         public final void set(T t, Integer num) {
             setValue(t, num.intValue());
         }
-    }
-
-    static {
-        String str = "alpha";
-        PAINT_ALPHA = new IntProperty<Paint>(str) {
-            public void setValue(Paint paint, int i) {
-                paint.setAlpha(i);
-            }
-
-            public Integer get(Paint paint) {
-                return Integer.valueOf(paint.getAlpha());
-            }
-        };
-        COLOR_DRAWABLE_ALPHA = new IntProperty<ColorDrawable>(str) {
-            public void setValue(ColorDrawable colorDrawable, int i) {
-                colorDrawable.setAlpha(i);
-            }
-
-            public Integer get(ColorDrawable colorDrawable) {
-                return Integer.valueOf(colorDrawable.getAlpha());
-            }
-        };
-        SHAPE_DRAWABLE_ALPHA = new IntProperty<ShapeDrawable>(str) {
-            public void setValue(ShapeDrawable shapeDrawable, int i) {
-                shapeDrawable.getPaint().setAlpha(i);
-            }
-
-            public Integer get(ShapeDrawable shapeDrawable) {
-                return Integer.valueOf(shapeDrawable.getPaint().getAlpha());
-            }
-        };
     }
 }

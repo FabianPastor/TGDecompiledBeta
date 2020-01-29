@@ -6,7 +6,7 @@ import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class ID3v2FrameBody {
     static final ThreadLocal<Buffer> textBuffer = new ThreadLocal<Buffer>() {
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public Buffer initialValue() {
             return new Buffer(4096);
         }
@@ -23,17 +23,14 @@ public class ID3v2FrameBody {
             this.bytes = new byte[i];
         }
 
-        /* Access modifiers changed, original: 0000 */
+        /* access modifiers changed from: package-private */
         public byte[] bytes(int i) {
             byte[] bArr = this.bytes;
             if (i > bArr.length) {
                 int length = bArr.length;
-                while (true) {
+                do {
                     length *= 2;
-                    if (i <= length) {
-                        break;
-                    }
-                }
+                } while (i > length);
                 this.bytes = new byte[length];
             }
             return this.bytes;
@@ -69,90 +66,77 @@ public class ID3v2FrameBody {
     private String extractString(byte[] bArr, int i, int i2, ID3v2Encoding iD3v2Encoding, boolean z) {
         if (z) {
             int i3 = 0;
-            for (int i4 = 0; i4 < i2; i4++) {
-                int i5 = i + i4;
-                if (bArr[i5] != (byte) 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i3 == 0 && i5 % 2 != 0)) {
-                    i3 = 0;
-                } else {
-                    i3++;
-                    if (i3 == iD3v2Encoding.getZeroBytes()) {
-                        i2 = (i4 + 1) - iD3v2Encoding.getZeroBytes();
-                        break;
+            int i4 = 0;
+            while (true) {
+                if (i3 < i2) {
+                    int i5 = i + i3;
+                    if (bArr[i5] != 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i4 == 0 && i5 % 2 != 0)) {
+                        i4 = 0;
+                    } else {
+                        i4++;
+                        if (i4 == iD3v2Encoding.getZeroBytes()) {
+                            i2 = (i3 + 1) - iD3v2Encoding.getZeroBytes();
+                            break;
+                        }
                     }
+                    i3++;
                 }
             }
         }
         try {
             String str = new String(bArr, i, i2, iD3v2Encoding.getCharset().name());
-            if (str.length() > 0 && str.charAt(0) == 65279) {
-                str = str.substring(1);
-            }
-            return str;
+            return (str.length() <= 0 || str.charAt(0) != 65279) ? str : str.substring(1);
         } catch (Exception unused) {
             return "";
         }
     }
 
     public String readZeroTerminatedString(int i, ID3v2Encoding iD3v2Encoding) throws IOException, ID3v2Exception {
-        i = Math.min(i, (int) getRemainingLength());
-        byte[] bytes = ((Buffer) textBuffer.get()).bytes(i);
+        int min = Math.min(i, (int) getRemainingLength());
+        byte[] bytes = textBuffer.get().bytes(min);
         int i2 = 0;
-        int i3 = 0;
-        while (i2 < i) {
+        for (int i3 = 0; i3 < min; i3++) {
             byte readByte = this.data.readByte();
-            bytes[i2] = readByte;
-            if (readByte != (byte) 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i3 == 0 && i2 % 2 != 0)) {
-                i3 = 0;
+            bytes[i3] = readByte;
+            if (readByte != 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i2 == 0 && i3 % 2 != 0)) {
+                i2 = 0;
             } else {
-                i3++;
-                if (i3 == iD3v2Encoding.getZeroBytes()) {
-                    return extractString(bytes, 0, (i2 + 1) - iD3v2Encoding.getZeroBytes(), iD3v2Encoding, false);
+                i2++;
+                if (i2 == iD3v2Encoding.getZeroBytes()) {
+                    return extractString(bytes, 0, (i3 + 1) - iD3v2Encoding.getZeroBytes(), iD3v2Encoding, false);
                 }
             }
-            i2++;
         }
         throw new ID3v2Exception("Could not read zero-termiated string");
     }
 
     public String readFixedLengthString(int i, ID3v2Encoding iD3v2Encoding) throws IOException, ID3v2Exception {
         if (((long) i) <= getRemainingLength()) {
-            byte[] bytes = ((Buffer) textBuffer.get()).bytes(i);
+            byte[] bytes = textBuffer.get().bytes(i);
             this.data.readFully(bytes, 0, i);
             return extractString(bytes, 0, i, iD3v2Encoding, true);
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Could not read fixed-length string of length: ");
-        stringBuilder.append(i);
-        throw new ID3v2Exception(stringBuilder.toString());
+        throw new ID3v2Exception("Could not read fixed-length string of length: " + i);
     }
 
     public ID3v2Encoding readEncoding() throws IOException, ID3v2Exception {
         byte readByte = this.data.readByte();
-        if (readByte == (byte) 0) {
+        if (readByte == 0) {
             return ID3v2Encoding.ISO_8859_1;
         }
-        if (readByte == (byte) 1) {
+        if (readByte == 1) {
             return ID3v2Encoding.UTF_16;
         }
-        if (readByte == (byte) 2) {
+        if (readByte == 2) {
             return ID3v2Encoding.UTF_16BE;
         }
-        if (readByte == (byte) 3) {
+        if (readByte == 3) {
             return ID3v2Encoding.UTF_8;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid encoding: ");
-        stringBuilder.append(readByte);
-        throw new ID3v2Exception(stringBuilder.toString());
+        throw new ID3v2Exception("Invalid encoding: " + readByte);
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("id3v2frame[pos=");
-        stringBuilder.append(getPosition());
-        stringBuilder.append(", ");
-        stringBuilder.append(getRemainingLength());
-        stringBuilder.append(" left]");
-        return stringBuilder.toString();
+        return "id3v2frame[pos=" + getPosition() + ", " + getRemainingLength() + " left]";
     }
 }

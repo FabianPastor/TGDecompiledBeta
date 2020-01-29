@@ -5,11 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Property;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,24 +18,26 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController.PhotoEntry;
-import org.telegram.messenger.MediaController.SearchImage;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.PhotoViewer;
 
 public class PhotoPickerPhotoCell extends FrameLayout {
-    private AnimatorSet animator;
-    private AnimatorSet animatorSet;
+    /* access modifiers changed from: private */
+    public AnimatorSet animator;
+    /* access modifiers changed from: private */
+    public AnimatorSet animatorSet;
     private Paint backgroundPaint = new Paint();
     public CheckBox checkBox;
     public FrameLayout checkFrame;
     public BackupImageView imageView;
     public int itemWidth;
-    private PhotoEntry photoEntry;
+    private MediaController.PhotoEntry photoEntry;
     public FrameLayout videoInfoContainer;
     public TextView videoTextView;
     private boolean zoomOnSelect;
@@ -52,9 +54,9 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.videoInfoContainer.setBackgroundResource(NUM);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(NUM);
-        this.videoInfoContainer.addView(imageView, LayoutHelper.createFrame(-2, -2, 19));
+        ImageView imageView2 = new ImageView(context);
+        imageView2.setImageResource(NUM);
+        this.videoInfoContainer.addView(imageView2, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
@@ -69,12 +71,12 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         setFocusable(true);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(this.itemWidth, NUM), MeasureSpec.makeMeasureSpec(this.itemWidth, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(this.itemWidth, NUM), View.MeasureSpec.makeMeasureSpec(this.itemWidth, NUM));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateColors();
@@ -85,34 +87,33 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void showCheck(boolean z) {
-        AnimatorSet animatorSet = this.animatorSet;
-        if (animatorSet != null) {
-            animatorSet.cancel();
+        AnimatorSet animatorSet2 = this.animatorSet;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
             this.animatorSet = null;
         }
         this.animatorSet = new AnimatorSet();
         this.animatorSet.setInterpolator(new DecelerateInterpolator());
         this.animatorSet.setDuration(180);
-        animatorSet = this.animatorSet;
+        AnimatorSet animatorSet3 = this.animatorSet;
         Animator[] animatorArr = new Animator[2];
         FrameLayout frameLayout = this.videoInfoContainer;
         float[] fArr = new float[1];
         float f = 1.0f;
         fArr[0] = z ? 1.0f : 0.0f;
-        String str = "alpha";
-        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-        CheckBox checkBox = this.checkBox;
-        fArr = new float[1];
+        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, "alpha", fArr);
+        CheckBox checkBox2 = this.checkBox;
+        float[] fArr2 = new float[1];
         if (!z) {
             f = 0.0f;
         }
-        fArr[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str, fArr);
-        animatorSet.playTogether(animatorArr);
+        fArr2[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(checkBox2, "alpha", fArr2);
+        animatorSet3.playTogether(animatorArr);
         this.animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (animator.equals(PhotoPickerPhotoCell.this.animatorSet)) {
-                    PhotoPickerPhotoCell.this.animatorSet = null;
+                    AnimatorSet unused = PhotoPickerPhotoCell.this.animatorSet = null;
                 }
             }
         });
@@ -123,71 +124,54 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkBox.setNum(i);
     }
 
-    public void setImage(PhotoEntry photoEntry) {
+    public void setImage(MediaController.PhotoEntry photoEntry2) {
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
-        this.photoEntry = photoEntry;
-        photoEntry = this.photoEntry;
-        String str = photoEntry.thumbPath;
+        this.photoEntry = photoEntry2;
+        MediaController.PhotoEntry photoEntry3 = this.photoEntry;
+        String str = photoEntry3.thumbPath;
         if (str != null) {
-            this.imageView.setImage(str, null, drawable);
-        } else if (photoEntry.path != null) {
-            this.imageView.setOrientation(photoEntry.orientation, true);
-            str = ":";
-            BackupImageView backupImageView;
-            StringBuilder stringBuilder;
+            this.imageView.setImage(str, (String) null, drawable);
+        } else if (photoEntry3.path != null) {
+            this.imageView.setOrientation(photoEntry3.orientation, true);
             if (this.photoEntry.isVideo) {
                 this.videoInfoContainer.setVisibility(0);
                 this.videoTextView.setText(AndroidUtilities.formatShortDuration(this.photoEntry.duration));
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(LocaleController.getString("AttachVideo", NUM));
-                stringBuilder2.append(", ");
-                stringBuilder2.append(LocaleController.formatCallDuration(this.photoEntry.duration));
-                setContentDescription(stringBuilder2.toString());
-                backupImageView = this.imageView;
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("vthumb://");
-                stringBuilder.append(this.photoEntry.imageId);
-                stringBuilder.append(str);
-                stringBuilder.append(this.photoEntry.path);
-                backupImageView.setImage(stringBuilder.toString(), null, drawable);
+                setContentDescription(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatCallDuration(this.photoEntry.duration));
+                BackupImageView backupImageView = this.imageView;
+                backupImageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, (String) null, drawable);
                 return;
             }
             this.videoInfoContainer.setVisibility(4);
             setContentDescription(LocaleController.getString("AttachPhoto", NUM));
-            backupImageView = this.imageView;
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("thumb://");
-            stringBuilder.append(this.photoEntry.imageId);
-            stringBuilder.append(str);
-            stringBuilder.append(this.photoEntry.path);
-            backupImageView.setImage(stringBuilder.toString(), null, drawable);
+            BackupImageView backupImageView2 = this.imageView;
+            backupImageView2.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, (String) null, drawable);
         } else {
             this.imageView.setImageDrawable(drawable);
         }
     }
 
-    public void setImage(SearchImage searchImage) {
+    public void setImage(MediaController.SearchImage searchImage) {
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
-        PhotoSize photoSize = searchImage.thumbPhotoSize;
+        TLRPC.PhotoSize photoSize = searchImage.thumbPhotoSize;
         if (photoSize != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), null, drawable, (Object) searchImage);
+            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
             return;
         }
-        photoSize = searchImage.photoSize;
-        if (photoSize != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), "80_80", drawable, (Object) searchImage);
+        TLRPC.PhotoSize photoSize2 = searchImage.photoSize;
+        if (photoSize2 != null) {
+            this.imageView.setImage(ImageLocation.getForPhoto(photoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
             return;
         }
         String str = searchImage.thumbPath;
         if (str != null) {
-            this.imageView.setImage(str, null, drawable);
+            this.imageView.setImage(str, (String) null, drawable);
             return;
         }
-        str = searchImage.thumbUrl;
-        if (str != null && str.length() > 0) {
-            this.imageView.setImage(searchImage.thumbUrl, null, drawable);
+        String str2 = searchImage.thumbUrl;
+        if (str2 != null && str2.length() > 0) {
+            this.imageView.setImage(searchImage.thumbUrl, (String) null, drawable);
         } else if (MessageObject.isDocumentHasThumb(searchImage.document)) {
-            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), null, drawable, (Object) searchImage);
+            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), (String) null, drawable, (Object) searchImage);
         } else {
             this.imageView.setImageDrawable(drawable);
         }
@@ -195,36 +179,36 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
     public void setChecked(int i, final boolean z, boolean z2) {
         this.checkBox.setChecked(i, z, z2);
-        AnimatorSet animatorSet = this.animator;
-        if (animatorSet != null) {
-            animatorSet.cancel();
+        AnimatorSet animatorSet2 = this.animator;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
             this.animator = null;
         }
         if (this.zoomOnSelect) {
             float f = 0.85f;
             if (z2) {
                 this.animator = new AnimatorSet();
-                AnimatorSet animatorSet2 = this.animator;
+                AnimatorSet animatorSet3 = this.animator;
                 Animator[] animatorArr = new Animator[2];
                 BackupImageView backupImageView = this.imageView;
                 Property property = View.SCALE_X;
                 float[] fArr = new float[1];
                 fArr[0] = z ? 0.85f : 1.0f;
                 animatorArr[0] = ObjectAnimator.ofFloat(backupImageView, property, fArr);
-                backupImageView = this.imageView;
-                property = View.SCALE_Y;
-                fArr = new float[1];
+                BackupImageView backupImageView2 = this.imageView;
+                Property property2 = View.SCALE_Y;
+                float[] fArr2 = new float[1];
                 if (!z) {
                     f = 1.0f;
                 }
-                fArr[0] = f;
-                animatorArr[1] = ObjectAnimator.ofFloat(backupImageView, property, fArr);
-                animatorSet2.playTogether(animatorArr);
+                fArr2[0] = f;
+                animatorArr[1] = ObjectAnimator.ofFloat(backupImageView2, property2, fArr2);
+                animatorSet3.playTogether(animatorArr);
                 this.animator.setDuration(200);
                 this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animator)) {
-                            PhotoPickerPhotoCell.this.animator = null;
+                            AnimatorSet unused = PhotoPickerPhotoCell.this.animator = null;
                             if (!z) {
                                 PhotoPickerPhotoCell.this.setBackgroundColor(0);
                             }
@@ -233,7 +217,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
                     public void onAnimationCancel(Animator animator) {
                         if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animator)) {
-                            PhotoPickerPhotoCell.this.animator = null;
+                            AnimatorSet unused = PhotoPickerPhotoCell.this.animator = null;
                         }
                     }
                 });
@@ -241,72 +225,22 @@ public class PhotoPickerPhotoCell extends FrameLayout {
                 return;
             }
             this.imageView.setScaleX(z ? 0.85f : 1.0f);
-            BackupImageView backupImageView2 = this.imageView;
+            BackupImageView backupImageView3 = this.imageView;
             if (!z) {
                 f = 1.0f;
             }
-            backupImageView2.setScaleY(f);
+            backupImageView3.setScaleY(f);
         }
     }
 
-    /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Missing block: B:14:0x003d, code skipped:
-            if (org.telegram.ui.PhotoViewer.isShowingImage(r0.path) != false) goto L_0x003f;
-     */
-    public void onDraw(android.graphics.Canvas r9) {
-        /*
-        r8 = this;
-        r0 = r8.zoomOnSelect;
-        if (r0 != 0) goto L_0x0005;
-    L_0x0004:
-        return;
-    L_0x0005:
-        r0 = r8.checkBox;
-        r0 = r0.isChecked();
-        if (r0 != 0) goto L_0x003f;
-    L_0x000d:
-        r0 = r8.imageView;
-        r0 = r0.getScaleX();
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1));
-        if (r0 != 0) goto L_0x003f;
-    L_0x0019:
-        r0 = r8.imageView;
-        r0 = r0.getImageReceiver();
-        r0 = r0.hasNotThumb();
-        if (r0 == 0) goto L_0x003f;
-    L_0x0025:
-        r0 = r8.imageView;
-        r0 = r0.getImageReceiver();
-        r0 = r0.getCurrentAlpha();
-        r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1));
-        if (r0 != 0) goto L_0x003f;
-    L_0x0033:
-        r0 = r8.photoEntry;
-        if (r0 == 0) goto L_0x0060;
-    L_0x0037:
-        r0 = r0.path;
-        r0 = org.telegram.ui.PhotoViewer.isShowingImage(r0);
-        if (r0 == 0) goto L_0x0060;
-    L_0x003f:
-        r0 = r8.backgroundPaint;
-        r1 = "chat_attachPhotoBackground";
-        r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
-        r0.setColor(r1);
-        r3 = 0;
-        r4 = 0;
-        r0 = r8.imageView;
-        r0 = r0.getMeasuredWidth();
-        r5 = (float) r0;
-        r0 = r8.imageView;
-        r0 = r0.getMeasuredHeight();
-        r6 = (float) r0;
-        r7 = r8.backgroundPaint;
-        r2 = r9;
-        r2.drawRect(r3, r4, r5, r6, r7);
-    L_0x0060:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.PhotoPickerPhotoCell.onDraw(android.graphics.Canvas):void");
+    /* access modifiers changed from: protected */
+    public void onDraw(Canvas canvas) {
+        MediaController.PhotoEntry photoEntry2;
+        if (this.zoomOnSelect) {
+            if (this.checkBox.isChecked() || this.imageView.getScaleX() != 1.0f || !this.imageView.getImageReceiver().hasNotThumb() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f || ((photoEntry2 = this.photoEntry) != null && PhotoViewer.isShowingImage(photoEntry2.path))) {
+                this.backgroundPaint.setColor(Theme.getColor("chat_attachPhotoBackground"));
+                canvas.drawRect(0.0f, 0.0f, (float) this.imageView.getMeasuredWidth(), (float) this.imageView.getMeasuredHeight(), this.backgroundPaint);
+            }
+        }
     }
 }

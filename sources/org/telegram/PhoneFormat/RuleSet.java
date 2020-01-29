@@ -10,51 +10,49 @@ public class RuleSet {
     public boolean hasRuleWithIntlPrefix;
     public boolean hasRuleWithTrunkPrefix;
     public int matchLen;
-    public ArrayList<PhoneRule> rules = new ArrayList();
+    public ArrayList<PhoneRule> rules = new ArrayList<>();
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String format(String str, String str2, String str3, boolean z) {
         int length = str.length();
         int i = this.matchLen;
         if (length >= i) {
-            length = 0;
+            int i2 = 0;
             Matcher matcher = pattern.matcher(str.substring(0, i));
             if (matcher.find()) {
-                length = Integer.parseInt(matcher.group(0));
+                i2 = Integer.parseInt(matcher.group(0));
             }
-            Iterator it = this.rules.iterator();
+            Iterator<PhoneRule> it = this.rules.iterator();
             while (it.hasNext()) {
-                PhoneRule phoneRule = (PhoneRule) it.next();
-                if (length >= phoneRule.minVal && length <= phoneRule.maxVal && str.length() <= phoneRule.maxLen) {
+                PhoneRule next = it.next();
+                if (i2 >= next.minVal && i2 <= next.maxVal && str.length() <= next.maxLen) {
                     if (z) {
-                        if (((phoneRule.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
-                            return phoneRule.format(str, str2, str3);
+                        if (((next.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
+                            return next.format(str, str2, str3);
                         }
-                    } else if ((str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
-                        return phoneRule.format(str, str2, str3);
+                    } else if ((str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
+                        return next.format(str, str2, str3);
                     }
                 }
             }
             if (!z) {
-                Iterator it2;
-                PhoneRule phoneRule2;
                 if (str2 != null) {
-                    it2 = this.rules.iterator();
+                    Iterator<PhoneRule> it2 = this.rules.iterator();
                     while (it2.hasNext()) {
-                        phoneRule2 = (PhoneRule) it2.next();
-                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() <= phoneRule2.maxLen) {
-                            if (str3 == null || (phoneRule2.flag12 & 1) != 0) {
-                                return phoneRule2.format(str, str2, str3);
+                        PhoneRule next2 = it2.next();
+                        if (i2 >= next2.minVal && i2 <= next2.maxVal && str.length() <= next2.maxLen) {
+                            if (str3 == null || (next2.flag12 & 1) != 0) {
+                                return next2.format(str, str2, str3);
                             }
                         }
                     }
                 } else if (str3 != null) {
-                    it2 = this.rules.iterator();
-                    while (it2.hasNext()) {
-                        phoneRule2 = (PhoneRule) it2.next();
-                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() <= phoneRule2.maxLen) {
-                            if (str2 == null || (phoneRule2.flag12 & 2) != 0) {
-                                return phoneRule2.format(str, str2, str3);
+                    Iterator<PhoneRule> it3 = this.rules.iterator();
+                    while (it3.hasNext()) {
+                        PhoneRule next3 = it3.next();
+                        if (i2 >= next3.minVal && i2 <= next3.maxVal && str.length() <= next3.maxLen) {
+                            if (str2 == null || (next3.flag12 & 2) != 0) {
+                                return next3.format(str, str2, str3);
                             }
                         }
                     }
@@ -64,44 +62,43 @@ public class RuleSet {
         return null;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean isValid(String str, String str2, String str3, boolean z) {
         int length = str.length();
         int i = this.matchLen;
         if (length >= i) {
             Matcher matcher = pattern.matcher(str.substring(0, i));
-            length = matcher.find() ? Integer.parseInt(matcher.group(0)) : 0;
-            Iterator it = this.rules.iterator();
+            int parseInt = matcher.find() ? Integer.parseInt(matcher.group(0)) : 0;
+            Iterator<PhoneRule> it = this.rules.iterator();
             while (it.hasNext()) {
-                PhoneRule phoneRule = (PhoneRule) it.next();
-                if (length >= phoneRule.minVal && length <= phoneRule.maxVal && str.length() == phoneRule.maxLen) {
+                PhoneRule next = it.next();
+                if (parseInt >= next.minVal && parseInt <= next.maxVal && str.length() == next.maxLen) {
                     if (z) {
-                        if (((phoneRule.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
+                        if (((next.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
                             return true;
                         }
-                    } else if ((str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
+                    } else if ((str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
                         return true;
                     }
                 }
             }
             if (!z) {
-                PhoneRule phoneRule2;
                 if (str2 != null && !this.hasRuleWithIntlPrefix) {
-                    Iterator it2 = this.rules.iterator();
+                    Iterator<PhoneRule> it2 = this.rules.iterator();
                     while (it2.hasNext()) {
-                        phoneRule2 = (PhoneRule) it2.next();
-                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() == phoneRule2.maxLen) {
-                            if (str3 == null || (phoneRule2.flag12 & 1) != 0) {
+                        PhoneRule next2 = it2.next();
+                        if (parseInt >= next2.minVal && parseInt <= next2.maxVal && str.length() == next2.maxLen) {
+                            if (str3 == null || (next2.flag12 & 1) != 0) {
                                 return true;
                             }
                         }
                     }
-                } else if (!(str3 == null || this.hasRuleWithTrunkPrefix)) {
-                    Iterator it3 = this.rules.iterator();
+                } else if (str3 != null && !this.hasRuleWithTrunkPrefix) {
+                    Iterator<PhoneRule> it3 = this.rules.iterator();
                     while (it3.hasNext()) {
-                        phoneRule2 = (PhoneRule) it3.next();
-                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() == phoneRule2.maxLen) {
-                            if (str2 == null || (phoneRule2.flag12 & 2) != 0) {
+                        PhoneRule next3 = it3.next();
+                        if (parseInt >= next3.minVal && parseInt <= next3.maxVal && str.length() == next3.maxLen) {
+                            if (str2 == null || (next3.flag12 & 2) != 0) {
                                 return true;
                             }
                         }

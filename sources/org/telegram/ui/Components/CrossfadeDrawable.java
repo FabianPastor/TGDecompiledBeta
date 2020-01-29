@@ -25,7 +25,7 @@ public class CrossfadeDrawable extends Drawable {
         this.bottomDrawable = drawable2;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onBoundsChange(Rect rect) {
         this.topDrawable.setBounds(rect);
         this.bottomDrawable.setBounds(rect);
@@ -37,9 +37,9 @@ public class CrossfadeDrawable extends Drawable {
             this.topDrawable.setAlpha((int) ((1.0f - f) * 255.0f));
             this.topDrawable.draw(canvas);
         }
-        f = this.progress;
-        if (f > 0.0f) {
-            this.bottomDrawable.setAlpha((int) (f * 255.0f));
+        float f2 = this.progress;
+        if (f2 > 0.0f) {
+            this.bottomDrawable.setAlpha((int) (f2 * 255.0f));
             this.bottomDrawable.draw(canvas);
         }
     }

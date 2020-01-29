@@ -5,30 +5,25 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
+import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanNoUnderline extends URLSpan {
-    private TextStyleRun style;
+    private TextStyleSpan.TextStyleRun style;
 
     public URLSpanNoUnderline(String str) {
-        this(str, null);
+        this(str, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanNoUnderline(String str, TextStyleRun textStyleRun) {
-        if (str != null) {
-            str = str.replace(8238, ' ');
-        }
-        super(str);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public URLSpanNoUnderline(String str, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str != null ? str.replace(8238, ' ') : str);
         this.style = textStyleRun;
     }
 
     public void onClick(View view) {
         String url = getURL();
         if (url.startsWith("@")) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("https://t.me/");
-            stringBuilder.append(url.substring(1));
-            Browser.openUrl(view.getContext(), Uri.parse(stringBuilder.toString()));
+            Browser.openUrl(view.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
             return;
         }
         Browser.openUrl(view.getContext(), url);
@@ -38,7 +33,7 @@ public class URLSpanNoUnderline extends URLSpan {
         int i = textPaint.linkColor;
         int color = textPaint.getColor();
         super.updateDrawState(textPaint);
-        TextStyleRun textStyleRun = this.style;
+        TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
         }

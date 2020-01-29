@@ -3,11 +3,11 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.text.Layout.Alignment;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
 import android.text.StaticLayout;
-import android.text.TextUtils.TruncateAt;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -16,10 +16,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.Dialog;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.UserStatus;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -30,7 +27,7 @@ public class HintDialogCell extends FrameLayout {
     private StaticLayout countLayout;
     private int countWidth;
     private int currentAccount = UserConfig.selectedAccount;
-    private User currentUser;
+    private TLRPC.User currentUser;
     private long dialog_id;
     private BackupImageView imageView;
     private int lastUnreadCount;
@@ -48,43 +45,40 @@ public class HintDialogCell extends FrameLayout {
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setGravity(49);
         this.nameTextView.setLines(1);
-        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(86.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(86.0f), NUM));
     }
 
     public void update(int i) {
+        int i2;
         if (!((i & 4) == 0 || this.currentUser == null)) {
             this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
             this.imageView.invalidate();
             invalidate();
         }
         if (i == 0 || (i & 256) != 0 || (i & 2048) != 0) {
-            Dialog dialog = (Dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
-            if (dialog != null) {
-                int i2 = dialog.unread_count;
-                if (i2 != 0) {
-                    if (this.lastUnreadCount != i2) {
-                        this.lastUnreadCount = i2;
-                        String format = String.format("%d", new Object[]{Integer.valueOf(i2)});
-                        this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(format)));
-                        this.countLayout = new StaticLayout(format, Theme.dialogs_countTextPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                        if (i != 0) {
-                            invalidate();
-                        }
+            TLRPC.Dialog dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
+            if (dialog == null || (i2 = dialog.unread_count) == 0) {
+                if (this.countLayout != null) {
+                    if (i != 0) {
+                        invalidate();
                     }
+                    this.lastUnreadCount = 0;
+                    this.countLayout = null;
                 }
-            }
-            if (this.countLayout != null) {
+            } else if (this.lastUnreadCount != i2) {
+                this.lastUnreadCount = i2;
+                String format = String.format("%d", new Object[]{Integer.valueOf(i2)});
+                this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(format)));
+                this.countLayout = new StaticLayout(format, Theme.dialogs_countTextPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 if (i != 0) {
                     invalidate();
                 }
-                this.lastUnreadCount = 0;
-                this.countLayout = null;
             }
         }
     }
@@ -102,34 +96,32 @@ public class HintDialogCell extends FrameLayout {
 
     public void setDialog(int i, boolean z, CharSequence charSequence) {
         this.dialog_id = (long) i;
-        String str = "50_50";
-        String str2 = "";
         if (i > 0) {
             this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
             } else {
-                User user = this.currentUser;
+                TLRPC.User user = this.currentUser;
                 if (user != null) {
                     this.nameTextView.setText(UserObject.getFirstName(user));
                 } else {
-                    this.nameTextView.setText(str2);
+                    this.nameTextView.setText("");
                 }
             }
             this.avatarDrawable.setInfo(this.currentUser);
-            this.imageView.setImage(ImageLocation.getForUser(this.currentUser, false), str, this.avatarDrawable, this.currentUser);
+            this.imageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
         } else {
-            Object chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+            TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
             } else if (chat != null) {
                 this.nameTextView.setText(chat.title);
             } else {
-                this.nameTextView.setText(str2);
+                this.nameTextView.setText("");
             }
-            this.avatarDrawable.setInfo((Chat) chat);
+            this.avatarDrawable.setInfo(chat);
             this.currentUser = null;
-            this.imageView.setImage(ImageLocation.getForChat(chat, false), str, this.avatarDrawable, chat);
+            this.imageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
         }
         if (z) {
             update(0);
@@ -138,17 +130,16 @@ public class HintDialogCell extends FrameLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
+        TLRPC.UserStatus userStatus;
         boolean drawChild = super.drawChild(canvas, view, j);
         if (view == this.imageView) {
-            int dp;
-            int dp2;
             if (this.countLayout != null) {
-                dp = AndroidUtilities.dp(6.0f);
-                dp2 = AndroidUtilities.dp(54.0f);
+                int dp = AndroidUtilities.dp(6.0f);
+                int dp2 = AndroidUtilities.dp(54.0f);
                 int dp3 = dp2 - AndroidUtilities.dp(5.5f);
-                this.rect.set((float) dp3, (float) dp, (float) ((dp3 + this.countWidth) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + dp));
+                this.rect.set((float) dp3, (float) dp, (float) (dp3 + this.countWidth + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + dp));
                 RectF rectF = this.rect;
                 float f = AndroidUtilities.density;
                 canvas.drawRoundRect(rectF, f * 11.5f, f * 11.5f, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
@@ -157,19 +148,16 @@ public class HintDialogCell extends FrameLayout {
                 this.countLayout.draw(canvas);
                 canvas.restore();
             }
-            User user = this.currentUser;
-            if (!(user == null || user.bot)) {
-                UserStatus userStatus = user.status;
-                if ((userStatus != null && userStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id))) {
-                    dp = AndroidUtilities.dp(53.0f);
-                    dp2 = AndroidUtilities.dp(59.0f);
-                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("windowBackgroundWhite"));
-                    float f2 = (float) dp2;
-                    float f3 = (float) dp;
-                    canvas.drawCircle(f2, f3, (float) AndroidUtilities.dp(7.0f), Theme.dialogs_onlineCirclePaint);
-                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("chats_onlineCircle"));
-                    canvas.drawCircle(f2, f3, (float) AndroidUtilities.dp(5.0f), Theme.dialogs_onlineCirclePaint);
-                }
+            TLRPC.User user = this.currentUser;
+            if (user != null && !user.bot && (((userStatus = user.status) != null && userStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+                int dp4 = AndroidUtilities.dp(53.0f);
+                int dp5 = AndroidUtilities.dp(59.0f);
+                Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("windowBackgroundWhite"));
+                float f2 = (float) dp5;
+                float f3 = (float) dp4;
+                canvas.drawCircle(f2, f3, (float) AndroidUtilities.dp(7.0f), Theme.dialogs_onlineCirclePaint);
+                Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("chats_onlineCircle"));
+                canvas.drawCircle(f2, f3, (float) AndroidUtilities.dp(5.0f), Theme.dialogs_onlineCirclePaint);
             }
         }
         return drawChild;

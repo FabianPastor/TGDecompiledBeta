@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.MotionEvent;
@@ -21,12 +20,16 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class CallSwipeView extends View {
-    private boolean animatingArrows = false;
+    /* access modifiers changed from: private */
+    public boolean animatingArrows = false;
     private Path arrow = new Path();
-    private int[] arrowAlphas = new int[]{64, 64, 64};
-    private AnimatorSet arrowAnim;
+    /* access modifiers changed from: private */
+    public int[] arrowAlphas = {64, 64, 64};
+    /* access modifiers changed from: private */
+    public AnimatorSet arrowAnim;
     private Paint arrowsPaint;
-    private boolean canceled = false;
+    /* access modifiers changed from: private */
+    public boolean canceled = false;
     private boolean dragFromRight;
     private float dragStartX;
     private boolean dragging = false;
@@ -34,24 +37,6 @@ public class CallSwipeView extends View {
     private Paint pullBgPaint;
     private RectF tmpRect = new RectF();
     private View viewToDrag;
-
-    private class ArrowAnimWrapper {
-        private int index;
-
-        public ArrowAnimWrapper(int i) {
-            this.index = i;
-        }
-
-        @Keep
-        public int getArrowAlpha() {
-            return CallSwipeView.this.arrowAlphas[this.index];
-        }
-
-        @Keep
-        public void setArrowAlpha(int i) {
-            CallSwipeView.this.arrowAlphas[this.index] = i;
-        }
-    }
 
     public interface Listener {
         void onDragCancel();
@@ -70,7 +55,7 @@ public class CallSwipeView extends View {
         setClickable(true);
         this.arrowsPaint = new Paint(1);
         this.arrowsPaint.setColor(-1);
-        this.arrowsPaint.setStyle(Style.STROKE);
+        this.arrowsPaint.setStyle(Paint.Style.STROKE);
         this.arrowsPaint.setStrokeWidth((float) AndroidUtilities.dp(2.5f));
         this.pullBgPaint = new Paint(1);
         ArrayList arrayList = new ArrayList();
@@ -97,15 +82,13 @@ public class CallSwipeView extends View {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.w("Not repeating animation because previous loop was too fast");
                     }
-                    return;
-                }
-                if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
+                } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                     CallSwipeView.this.post(this.restarter);
                 }
             }
 
             public void onAnimationCancel(Animator animator) {
-                CallSwipeView.this.canceled = true;
+                boolean unused = CallSwipeView.this.canceled = true;
             }
 
             public void onAnimationStart(Animator animator) {
@@ -114,7 +97,7 @@ public class CallSwipeView extends View {
         });
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         AnimatorSet animatorSet = this.arrowAnim;
@@ -136,8 +119,8 @@ public class CallSwipeView extends View {
         updateArrowPath();
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
+    public void setListener(Listener listener2) {
+        this.listener = listener2;
     }
 
     private int getDraggedViewWidth() {
@@ -186,13 +169,11 @@ public class CallSwipeView extends View {
     }
 
     public void startAnimatingArrows() {
-        if (!this.animatingArrows) {
-            AnimatorSet animatorSet = this.arrowAnim;
+        AnimatorSet animatorSet;
+        if (!this.animatingArrows && (animatorSet = this.arrowAnim) != null) {
+            this.animatingArrows = true;
             if (animatorSet != null) {
-                this.animatingArrows = true;
-                if (animatorSet != null) {
-                    animatorSet.start();
-                }
+                animatorSet.start();
             }
         }
     }
@@ -207,7 +188,7 @@ public class CallSwipeView extends View {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.viewToDrag.getTranslationX() != 0.0f) {
             if (this.dragFromRight) {
@@ -262,5 +243,23 @@ public class CallSwipeView extends View {
             this.listener.onDragComplete();
         }
         super.onPopulateAccessibilityEvent(accessibilityEvent);
+    }
+
+    private class ArrowAnimWrapper {
+        private int index;
+
+        public ArrowAnimWrapper(int i) {
+            this.index = i;
+        }
+
+        @Keep
+        public int getArrowAlpha() {
+            return CallSwipeView.this.arrowAlphas[this.index];
+        }
+
+        @Keep
+        public void setArrowAlpha(int i) {
+            CallSwipeView.this.arrowAlphas[this.index] = i;
+        }
     }
 }

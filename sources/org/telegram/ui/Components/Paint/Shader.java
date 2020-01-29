@@ -13,19 +13,8 @@ public class Shader {
     protected Map<String, Integer> uniformsMap = new HashMap();
     private int vertexShader;
 
-    private class CompilationResult {
-        int shader;
-        int status;
-
-        CompilationResult(int i, int i2) {
-            this.shader = i;
-            this.status = i2;
-        }
-    }
-
     public Shader(String str, String str2, String[] strArr, String[] strArr2) {
         CompilationResult compileShader = compileShader(35633, str);
-        int i = 0;
         if (compileShader.status == 0) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.e("Vertex shader compilation failed");
@@ -43,24 +32,21 @@ public class Shader {
         }
         GLES20.glAttachShader(this.program, compileShader.shader);
         GLES20.glAttachShader(this.program, compileShader2.shader);
-        for (int i2 = 0; i2 < strArr.length; i2++) {
-            GLES20.glBindAttribLocation(this.program, i2, strArr[i2]);
+        for (int i = 0; i < strArr.length; i++) {
+            GLES20.glBindAttribLocation(this.program, i, strArr[i]);
         }
         if (linkProgram(this.program) == 0) {
             destroyShader(compileShader.shader, compileShader2.shader, this.program);
             return;
         }
-        int length = strArr2.length;
-        while (i < length) {
-            String str3 = strArr2[i];
+        for (String str3 : strArr2) {
             this.uniformsMap.put(str3, Integer.valueOf(GLES20.glGetUniformLocation(this.program, str3)));
-            i++;
         }
-        int i3 = compileShader.shader;
-        if (i3 != 0) {
-            GLES20.glDeleteShader(i3);
+        int i2 = compileShader.shader;
+        if (i2 != 0) {
+            GLES20.glDeleteShader(i2);
         }
-        i3 = compileShader2.shader;
+        int i3 = compileShader2.shader;
         if (i3 != 0) {
             GLES20.glDeleteShader(i3);
         }
@@ -73,20 +59,30 @@ public class Shader {
         }
     }
 
+    private class CompilationResult {
+        int shader;
+        int status;
+
+        CompilationResult(int i, int i2) {
+            this.shader = i;
+            this.status = i2;
+        }
+    }
+
     public int getUniform(String str) {
-        return ((Integer) this.uniformsMap.get(str)).intValue();
+        return this.uniformsMap.get(str).intValue();
     }
 
     private CompilationResult compileShader(int i, String str) {
-        i = GLES20.glCreateShader(i);
-        GLES20.glShaderSource(i, str);
-        GLES20.glCompileShader(i);
+        int glCreateShader = GLES20.glCreateShader(i);
+        GLES20.glShaderSource(glCreateShader, str);
+        GLES20.glCompileShader(glCreateShader);
         int[] iArr = new int[1];
-        GLES20.glGetShaderiv(i, 35713, iArr, 0);
+        GLES20.glGetShaderiv(glCreateShader, 35713, iArr, 0);
         if (iArr[0] == 0 && BuildVars.LOGS_ENABLED) {
-            FileLog.e(GLES20.glGetShaderInfoLog(i));
+            FileLog.e(GLES20.glGetShaderInfoLog(glCreateShader));
         }
-        return new CompilationResult(i, iArr[0]);
+        return new CompilationResult(glCreateShader, iArr[0]);
     }
 
     private int linkProgram(int i) {

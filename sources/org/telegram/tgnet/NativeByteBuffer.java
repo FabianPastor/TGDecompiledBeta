@@ -7,9 +7,9 @@ import org.telegram.messenger.FileLog;
 
 public class NativeByteBuffer extends AbstractSerializedData {
     private static final ThreadLocal<NativeByteBuffer> addressWrapper = new ThreadLocal<NativeByteBuffer>() {
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public NativeByteBuffer initialValue() {
-            return new NativeByteBuffer(0, true, null);
+            return new NativeByteBuffer(0, true);
         }
     };
     protected long address;
@@ -29,15 +29,11 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public static native void native_reuse(long j);
 
     public int getIntFromByte(byte b) {
-        return b >= (byte) 0 ? b : b + 256;
-    }
-
-    /* synthetic */ NativeByteBuffer(int i, boolean z, AnonymousClass1 anonymousClass1) {
-        this(i, z);
+        return b >= 0 ? b : b + 256;
     }
 
     public static NativeByteBuffer wrap(long j) {
-        NativeByteBuffer nativeByteBuffer = (NativeByteBuffer) addressWrapper.get();
+        NativeByteBuffer nativeByteBuffer = addressWrapper.get();
         if (j != 0) {
             if (!nativeByteBuffer.reused && BuildVars.LOGS_ENABLED) {
                 FileLog.e("forgot to reuse?");
@@ -123,10 +119,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeInt32(int i) {
         try {
-            if (this.justCalc) {
-                this.len += 4;
-            } else {
+            if (!this.justCalc) {
                 this.buffer.putInt(i);
+            } else {
+                this.len += 4;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -137,10 +133,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeInt64(long j) {
         try {
-            if (this.justCalc) {
-                this.len += 8;
-            } else {
+            if (!this.justCalc) {
                 this.buffer.putLong(j);
+            } else {
+                this.len += 8;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -161,10 +157,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeBytes(byte[] bArr) {
         try {
-            if (this.justCalc) {
-                this.len += bArr.length;
-            } else {
+            if (!this.justCalc) {
                 this.buffer.put(bArr);
+            } else {
+                this.len += bArr.length;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -175,10 +171,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeBytes(byte[] bArr, int i, int i2) {
         try {
-            if (this.justCalc) {
-                this.len += i2;
-            } else {
+            if (!this.justCalc) {
                 this.buffer.put(bArr, i, i2);
+            } else {
+                this.len += i2;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -193,10 +189,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public void writeByte(byte b) {
         try {
-            if (this.justCalc) {
-                this.len++;
-            } else {
+            if (!this.justCalc) {
                 this.buffer.put(b);
+            } else {
+                this.len++;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -218,10 +214,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public void writeByteArray(byte[] bArr, int i, int i2) {
         if (i2 <= 253) {
             try {
-                if (this.justCalc) {
-                    this.len++;
-                } else {
+                if (!this.justCalc) {
                     this.buffer.put((byte) i2);
+                } else {
+                    this.len++;
                 }
             } catch (Exception unused) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -230,59 +226,55 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 }
                 return;
             }
-        } else if (this.justCalc) {
-            this.len += 4;
-        } else {
+        } else if (!this.justCalc) {
             this.buffer.put((byte) -2);
             this.buffer.put((byte) i2);
             this.buffer.put((byte) (i2 >> 8));
             this.buffer.put((byte) (i2 >> 16));
-        }
-        if (this.justCalc) {
-            this.len += i2;
         } else {
-            this.buffer.put(bArr, i, i2);
+            this.len += 4;
         }
-        int i3 = i2 <= 253 ? 1 : 4;
-        while ((i2 + i3) % 4 != 0) {
-            if (this.justCalc) {
-                this.len++;
-            } else {
+        if (!this.justCalc) {
+            this.buffer.put(bArr, i, i2);
+        } else {
+            this.len += i2;
+        }
+        for (int i3 = i2 <= 253 ? 1 : 4; (i2 + i3) % 4 != 0; i3++) {
+            if (!this.justCalc) {
                 this.buffer.put((byte) 0);
+            } else {
+                this.len++;
             }
-            i3++;
         }
     }
 
     public void writeByteArray(byte[] bArr) {
         try {
             if (bArr.length <= 253) {
-                if (this.justCalc) {
-                    this.len++;
-                } else {
+                if (!this.justCalc) {
                     this.buffer.put((byte) bArr.length);
+                } else {
+                    this.len++;
                 }
-            } else if (this.justCalc) {
-                this.len += 4;
-            } else {
+            } else if (!this.justCalc) {
                 this.buffer.put((byte) -2);
                 this.buffer.put((byte) bArr.length);
                 this.buffer.put((byte) (bArr.length >> 8));
                 this.buffer.put((byte) (bArr.length >> 16));
-            }
-            if (this.justCalc) {
-                this.len += bArr.length;
             } else {
-                this.buffer.put(bArr);
+                this.len += 4;
             }
-            int i = bArr.length <= 253 ? 1 : 4;
-            while ((bArr.length + i) % 4 != 0) {
-                if (this.justCalc) {
-                    this.len++;
-                } else {
+            if (!this.justCalc) {
+                this.buffer.put(bArr);
+            } else {
+                this.len += bArr.length;
+            }
+            for (int i = bArr.length <= 253 ? 1 : 4; (bArr.length + i) % 4 != 0; i++) {
+                if (!this.justCalc) {
                     this.buffer.put((byte) 0);
+                } else {
+                    this.len++;
                 }
-                i++;
             }
         } catch (Exception unused) {
             if (BuildVars.LOGS_ENABLED) {
@@ -305,36 +297,34 @@ public class NativeByteBuffer extends AbstractSerializedData {
         try {
             int limit = nativeByteBuffer.limit();
             if (limit <= 253) {
-                if (this.justCalc) {
-                    this.len++;
-                } else {
+                if (!this.justCalc) {
                     this.buffer.put((byte) limit);
+                } else {
+                    this.len++;
                 }
-            } else if (this.justCalc) {
-                this.len += 4;
-            } else {
+            } else if (!this.justCalc) {
                 this.buffer.put((byte) -2);
                 this.buffer.put((byte) limit);
                 this.buffer.put((byte) (limit >> 8));
                 this.buffer.put((byte) (limit >> 16));
-            }
-            if (this.justCalc) {
-                this.len += limit;
             } else {
+                this.len += 4;
+            }
+            if (!this.justCalc) {
                 nativeByteBuffer.rewind();
                 this.buffer.put(nativeByteBuffer.buffer);
+            } else {
+                this.len += limit;
             }
-            int i = limit <= 253 ? 1 : 4;
-            while ((limit + i) % 4 != 0) {
-                if (this.justCalc) {
-                    this.len++;
-                } else {
+            for (int i = limit <= 253 ? 1 : 4; (limit + i) % 4 != 0; i++) {
+                if (!this.justCalc) {
                     this.buffer.put((byte) 0);
+                } else {
+                    this.len++;
                 }
-                i++;
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -348,20 +338,20 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public int length() {
-        if (this.justCalc) {
-            return this.len;
+        if (!this.justCalc) {
+            return this.buffer.position();
         }
-        return this.buffer.position();
+        return this.len;
     }
 
     public void skip(int i) {
         if (i != 0) {
-            if (this.justCalc) {
-                this.len += i;
-            } else {
+            if (!this.justCalc) {
                 ByteBuffer byteBuffer = this.buffer;
                 byteBuffer.position(byteBuffer.position() + i);
+                return;
             }
+            this.len += i;
         }
     }
 
@@ -371,17 +361,16 @@ public class NativeByteBuffer extends AbstractSerializedData {
 
     public int readInt32(boolean z) {
         try {
-            z = this.buffer.getInt();
-            return z;
+            return this.buffer.getInt();
         } catch (Exception e) {
-            String str = "read int32 error";
             if (z) {
-                throw new RuntimeException(str, e);
+                throw new RuntimeException("read int32 error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return 0;
+            } else {
+                FileLog.e("read int32 error");
+                return 0;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(str);
-            }
-            return 0;
         }
     }
 
@@ -393,28 +382,27 @@ public class NativeByteBuffer extends AbstractSerializedData {
         if (readInt32 == -NUM) {
             return false;
         }
-        String str = "Not bool value!";
-        if (z) {
-            throw new RuntimeException(str);
+        if (!z) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Not bool value!");
+            }
+            return false;
         }
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.e(str);
-        }
-        return false;
+        throw new RuntimeException("Not bool value!");
     }
 
     public long readInt64(boolean z) {
         try {
             return this.buffer.getLong();
         } catch (Exception e) {
-            String str = "read int64 error";
             if (z) {
-                throw new RuntimeException(str, e);
+                throw new RuntimeException("read int64 error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return 0;
+            } else {
+                FileLog.e("read int64 error");
+                return 0;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(str);
-            }
-            return 0;
         }
     }
 
@@ -422,11 +410,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
         try {
             this.buffer.get(bArr);
         } catch (Exception e) {
-            String str = "read raw error";
             if (z) {
-                throw new RuntimeException(str, e);
+                throw new RuntimeException("read raw error", e);
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(str);
+                FileLog.e("read raw error");
             }
         }
     }
@@ -435,11 +422,10 @@ public class NativeByteBuffer extends AbstractSerializedData {
         try {
             this.buffer.get(bArr, i, i2);
         } catch (Exception e) {
-            String str = "read raw error";
             if (z) {
-                throw new RuntimeException(str, e);
+                throw new RuntimeException("read raw error", e);
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(str);
+                FileLog.e("read raw error");
             }
         }
     }
@@ -451,102 +437,69 @@ public class NativeByteBuffer extends AbstractSerializedData {
     }
 
     public String readString(boolean z) {
+        int i;
         int position = getPosition();
         try {
-            int i;
             int intFromByte = getIntFromByte(this.buffer.get());
             if (intFromByte >= 254) {
-                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                intFromByte = getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8) | (getIntFromByte(this.buffer.get()) << 16);
                 i = 4;
             } else {
                 i = 1;
             }
             byte[] bArr = new byte[intFromByte];
             this.buffer.get(bArr);
-            for (i = 
-/*
-Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readString(boolean):java.lang.String, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r2_11 'i' int) = (r2_9 'i' int), (r2_10 'i' int) binds: {(r2_9 'i' int)=B:4:0x0013, (r2_10 'i' int)=B:5:0x0039} in method: org.telegram.tgnet.NativeByteBuffer.readString(boolean):java.lang.String, dex: classes.dex
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
-	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
-	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
-	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
-	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
-	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
-	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
-	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
-	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
-	at jadx.core.ProcessClass.process(ProcessClass.java:38)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
-	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
-	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
-	... 20 more
-
-*/
+            while ((intFromByte + i) % 4 != 0) {
+                this.buffer.get();
+                i++;
+            }
+            return new String(bArr, "UTF-8");
+        } catch (Exception e) {
+            if (!z) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("read string error");
+                }
+                position(position);
+                return "";
+            }
+            throw new RuntimeException("read string error", e);
+        }
+    }
 
     public byte[] readByteArray(boolean z) {
+        int i;
         try {
-            int i;
             int intFromByte = getIntFromByte(this.buffer.get());
             if (intFromByte >= 254) {
-                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                intFromByte = getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8) | (getIntFromByte(this.buffer.get()) << 16);
                 i = 4;
             } else {
                 i = 1;
             }
             byte[] bArr = new byte[intFromByte];
             this.buffer.get(bArr);
-            for (i = 
-/*
-Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readByteArray(boolean):byte[], dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r1_11 'i' int) = (r1_9 'i' int), (r1_10 'i' int) binds: {(r1_9 'i' int)=B:3:0x000f, (r1_10 'i' int)=B:4:0x0035} in method: org.telegram.tgnet.NativeByteBuffer.readByteArray(boolean):byte[], dex: classes.dex
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
-	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
-	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
-	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
-	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
-	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
-	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
-	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
-	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
-	at jadx.core.ProcessClass.process(ProcessClass.java:38)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
-	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
-	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
-	... 20 more
-
-*/
+            while ((intFromByte + i) % 4 != 0) {
+                this.buffer.get();
+                i++;
+            }
+            return bArr;
+        } catch (Exception e) {
+            if (!z) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("read byte array error");
+                }
+                return new byte[0];
+            }
+            throw new RuntimeException("read byte array error", e);
+        }
+    }
 
     public NativeByteBuffer readByteBuffer(boolean z) {
+        int i;
         try {
-            int i;
             int intFromByte = getIntFromByte(this.buffer.get());
             if (intFromByte >= 254) {
-                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                intFromByte = getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8) | (getIntFromByte(this.buffer.get()) << 16);
                 i = 4;
             } else {
                 i = 1;
@@ -557,51 +510,35 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             nativeByteBuffer.buffer.put(this.buffer);
             this.buffer.limit(limit);
             nativeByteBuffer.buffer.position(0);
-            for (i = 
-/*
-Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readByteBuffer(boolean):org.telegram.tgnet.NativeByteBuffer, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r1_11 'i' int) = (r1_9 'i' int), (r1_10 'i' int) binds: {(r1_9 'i' int)=B:3:0x000f, (r1_10 'i' int)=B:4:0x0035} in method: org.telegram.tgnet.NativeByteBuffer.readByteBuffer(boolean):org.telegram.tgnet.NativeByteBuffer, dex: classes.dex
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
-	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
-	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
-	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
-	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
-	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
-	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
-	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
-	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
-	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
-	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
-	at jadx.core.ProcessClass.process(ProcessClass.java:38)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
-	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
-	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
-	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
-	... 20 more
-
-*/
+            while ((intFromByte + i) % 4 != 0) {
+                this.buffer.get();
+                i++;
+            }
+            return nativeByteBuffer;
+        } catch (Exception e) {
+            if (z) {
+                throw new RuntimeException("read byte array error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return null;
+            } else {
+                FileLog.e("read byte array error");
+                return null;
+            }
+        }
+    }
 
     public double readDouble(boolean z) {
         try {
             return Double.longBitsToDouble(readInt64(z));
         } catch (Exception e) {
-            String str = "read double error";
             if (z) {
-                throw new RuntimeException(str, e);
+                throw new RuntimeException("read double error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return 0.0d;
+            } else {
+                FileLog.e("read double error");
+                return 0.0d;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(str);
-            }
-            return 0.0d;
         }
     }
 

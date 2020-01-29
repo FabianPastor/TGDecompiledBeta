@@ -17,50 +17,48 @@ public class PhotoFace {
     private float width;
 
     public PhotoFace(Face face, Bitmap bitmap, Size size, boolean z) {
-        Point point;
-        float f;
+        Point point = null;
         Point point2 = null;
         Point point3 = null;
-        Point point4 = point3;
-        Point point5 = point4;
-        for (Landmark landmark : face.getLandmarks()) {
-            PointF position = landmark.getPosition();
-            int type = landmark.getType();
+        Point point4 = null;
+        for (Landmark next : face.getLandmarks()) {
+            PointF position = next.getPosition();
+            int type = next.getType();
             if (type == 4) {
-                point2 = transposePoint(position, bitmap, size, z);
+                point = transposePoint(position, bitmap, size, z);
             } else if (type == 5) {
-                point4 = transposePoint(position, bitmap, size, z);
-            } else if (type == 10) {
                 point3 = transposePoint(position, bitmap, size, z);
+            } else if (type == 10) {
+                point2 = transposePoint(position, bitmap, size, z);
             } else if (type == 11) {
-                point5 = transposePoint(position, bitmap, size, z);
+                point4 = transposePoint(position, bitmap, size, z);
             }
         }
-        if (!(point2 == null || point3 == null)) {
-            if (point2.x < point3.x) {
-                point = point3;
-                point3 = point2;
+        if (!(point == null || point2 == null)) {
+            if (point.x < point2.x) {
+                Point point5 = point2;
                 point2 = point;
-            }
-            this.eyesCenterPoint = new Point((point2.x * 0.5f) + (point3.x * 0.5f), (point2.y * 0.5f) + (point3.y * 0.5f));
-            this.eyesDistance = (float) Math.hypot((double) (point3.x - point2.x), (double) (point3.y - point2.y));
-            this.angle = (float) Math.toDegrees(Math.atan2((double) (point3.y - point2.y), (double) (point3.x - point2.x)) + 3.141592653589793d);
-            f = this.eyesDistance;
-            this.width = 2.35f * f;
-            f *= 0.8f;
-            double toRadians = (double) ((float) Math.toRadians((double) (this.angle - 90.0f)));
-            this.foreheadPoint = new Point(this.eyesCenterPoint.x + (((float) Math.cos(toRadians)) * f), this.eyesCenterPoint.y + (f * ((float) Math.sin(toRadians))));
-        }
-        if (point4 != null && point5 != null) {
-            if (point4.x < point5.x) {
                 point = point5;
-                point5 = point4;
-                point4 = point;
             }
-            this.mouthPoint = new Point((point4.x * 0.5f) + (point5.x * 0.5f), (point4.y * 0.5f) + (point5.y * 0.5f));
-            f = this.eyesDistance * 0.7f;
-            double toRadians2 = (double) ((float) Math.toRadians((double) (this.angle + 90.0f)));
-            this.chinPoint = new Point(this.mouthPoint.x + (((float) Math.cos(toRadians2)) * f), this.mouthPoint.y + (f * ((float) Math.sin(toRadians2))));
+            this.eyesCenterPoint = new Point((point.x * 0.5f) + (point2.x * 0.5f), (point.y * 0.5f) + (point2.y * 0.5f));
+            this.eyesDistance = (float) Math.hypot((double) (point2.x - point.x), (double) (point2.y - point.y));
+            this.angle = (float) Math.toDegrees(Math.atan2((double) (point2.y - point.y), (double) (point2.x - point.x)) + 3.141592653589793d);
+            float f = this.eyesDistance;
+            this.width = 2.35f * f;
+            float f2 = f * 0.8f;
+            double radians = (double) ((float) Math.toRadians((double) (this.angle - 90.0f)));
+            this.foreheadPoint = new Point(this.eyesCenterPoint.x + (((float) Math.cos(radians)) * f2), this.eyesCenterPoint.y + (f2 * ((float) Math.sin(radians))));
+        }
+        if (point3 != null && point4 != null) {
+            if (point3.x < point4.x) {
+                Point point6 = point4;
+                point4 = point3;
+                point3 = point6;
+            }
+            this.mouthPoint = new Point((point3.x * 0.5f) + (point4.x * 0.5f), (point3.y * 0.5f) + (point4.y * 0.5f));
+            float f3 = this.eyesDistance * 0.7f;
+            double radians2 = (double) ((float) Math.toRadians((double) (this.angle + 90.0f)));
+            this.chinPoint = new Point(this.mouthPoint.x + (((float) Math.cos(radians2)) * f3), this.mouthPoint.y + (f3 * ((float) Math.sin(radians2))));
         }
     }
 
@@ -79,11 +77,13 @@ public class PhotoFace {
         if (i == 1) {
             return this.eyesCenterPoint;
         }
-        if (i != 2) {
-            return i != 3 ? null : this.chinPoint;
-        } else {
+        if (i == 2) {
             return this.mouthPoint;
         }
+        if (i != 3) {
+            return null;
+        }
+        return this.chinPoint;
     }
 
     public float getWidthForAnchor(int i) {

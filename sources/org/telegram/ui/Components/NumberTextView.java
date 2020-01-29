@@ -6,7 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
-import android.text.Layout.Alignment;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.View;
@@ -15,10 +15,12 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 
 public class NumberTextView extends View {
-    private ObjectAnimator animator;
+    /* access modifiers changed from: private */
+    public ObjectAnimator animator;
     private int currentNumber = 1;
-    private ArrayList<StaticLayout> letters = new ArrayList();
-    private ArrayList<StaticLayout> oldLetters = new ArrayList();
+    private ArrayList<StaticLayout> letters = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public ArrayList<StaticLayout> oldLetters = new ArrayList<>();
     private float progress = 0.0f;
     private TextPaint textPaint = new TextPaint(1);
 
@@ -48,10 +50,9 @@ public class NumberTextView extends View {
             this.oldLetters.clear();
             this.oldLetters.addAll(this.letters);
             this.letters.clear();
-            String str = "%d";
-            String format = String.format(Locale.US, str, new Object[]{Integer.valueOf(this.currentNumber)});
-            String format2 = String.format(Locale.US, str, new Object[]{Integer.valueOf(i)});
-            Object obj = i2 > this.currentNumber ? 1 : null;
+            String format = String.format(Locale.US, "%d", new Object[]{Integer.valueOf(this.currentNumber)});
+            String format2 = String.format(Locale.US, "%d", new Object[]{Integer.valueOf(i)});
+            boolean z2 = i2 > this.currentNumber;
             this.currentNumber = i2;
             this.progress = 0.0f;
             int i3 = 0;
@@ -60,23 +61,23 @@ public class NumberTextView extends View {
                 String substring = format2.substring(i3, i4);
                 String substring2 = (this.oldLetters.isEmpty() || i3 >= format.length()) ? null : format.substring(i3, i4);
                 if (substring2 == null || !substring2.equals(substring)) {
-                    TextPaint textPaint = this.textPaint;
-                    this.letters.add(new StaticLayout(substring, textPaint, (int) Math.ceil((double) textPaint.measureText(substring)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
+                    TextPaint textPaint2 = this.textPaint;
+                    this.letters.add(new StaticLayout(substring, textPaint2, (int) Math.ceil((double) textPaint2.measureText(substring)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
                 } else {
                     this.letters.add(this.oldLetters.get(i3));
-                    this.oldLetters.set(i3, null);
+                    this.oldLetters.set(i3, (Object) null);
                 }
                 i3 = i4;
             }
             if (z && !this.oldLetters.isEmpty()) {
                 float[] fArr = new float[2];
-                fArr[0] = obj != null ? -1.0f : 1.0f;
+                fArr[0] = z2 ? -1.0f : 1.0f;
                 fArr[1] = 0.0f;
                 this.animator = ObjectAnimator.ofFloat(this, "progress", fArr);
                 this.animator.setDuration(150);
                 this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
-                        NumberTextView.this.animator = null;
+                        ObjectAnimator unused = NumberTextView.this.animator = null;
                         NumberTextView.this.oldLetters.clear();
                     }
                 });
@@ -105,10 +106,10 @@ public class NumberTextView extends View {
         setNumber(this.currentNumber, false);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (!this.letters.isEmpty()) {
-            float height = (float) ((StaticLayout) this.letters.get(0)).getHeight();
+            float height = (float) this.letters.get(0).getHeight();
             canvas.save();
             canvas.translate((float) getPaddingLeft(), (((float) getMeasuredHeight()) - height) / 2.0f);
             int max = Math.max(this.letters.size(), this.oldLetters.size());
@@ -116,9 +117,9 @@ public class NumberTextView extends View {
             while (i < max) {
                 canvas.save();
                 StaticLayout staticLayout = null;
-                StaticLayout staticLayout2 = i < this.oldLetters.size() ? (StaticLayout) this.oldLetters.get(i) : null;
+                StaticLayout staticLayout2 = i < this.oldLetters.size() ? this.oldLetters.get(i) : null;
                 if (i < this.letters.size()) {
-                    staticLayout = (StaticLayout) this.letters.get(i);
+                    staticLayout = this.letters.get(i);
                 }
                 float f = this.progress;
                 if (f > 0.0f) {

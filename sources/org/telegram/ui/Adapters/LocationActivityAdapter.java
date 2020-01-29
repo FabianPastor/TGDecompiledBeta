@@ -4,23 +4,21 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
-import org.telegram.messenger.LocationController.LocationFetchCallback;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC.TL_channelLocation;
-import org.telegram.tgnet.TLRPC.TL_geoPoint;
-import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Adapters.LocationActivityAdapter;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.LocationCell;
@@ -31,14 +29,14 @@ import org.telegram.ui.Cells.SendLocationCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharingLiveLocationCell;
 import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.LocationActivity.LiveLocation;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.LocationActivity;
 
-public class LocationActivityAdapter extends BaseLocationAdapter implements LocationFetchCallback {
+public class LocationActivityAdapter extends BaseLocationAdapter implements LocationController.LocationFetchCallback {
     private String addressName;
-    private TL_channelLocation chatLocation;
+    private TLRPC.TL_channelLocation chatLocation;
     private int currentAccount = UserConfig.selectedAccount;
-    private ArrayList<LiveLocation> currentLiveLocations = new ArrayList();
+    private ArrayList<LocationActivity.LiveLocation> currentLiveLocations = new ArrayList<>();
     private MessageObject currentMessageObject;
     private Location customLocation;
     private long dialogId;
@@ -50,9 +48,10 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     private Location previousFetchedLocation;
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
-    private Runnable updateRunnable;
+    /* access modifiers changed from: private */
+    public Runnable updateRunnable;
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDirectionClick() {
     }
 
@@ -71,16 +70,14 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     }
 
     public void setGpsLocation(Location location) {
-        Object obj = this.gpsLocation == null ? 1 : null;
+        int i;
+        boolean z = this.gpsLocation == null;
         this.gpsLocation = location;
         if (this.customLocation == null) {
             fetchLocationAddress();
         }
-        if (obj != null) {
-            int i = this.shareLiveLocationPotistion;
-            if (i > 0) {
-                notifyItemChanged(i);
-            }
+        if (z && (i = this.shareLiveLocationPotistion) > 0) {
+            notifyItemChanged(i);
         }
         if (this.currentMessageObject != null) {
             notifyItemChanged(1, new Object());
@@ -104,13 +101,18 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         updateCell();
     }
 
-    public void setLiveLocations(ArrayList<LiveLocation> arrayList) {
-        this.currentLiveLocations = new ArrayList(arrayList);
+    public void setLiveLocations(ArrayList<LocationActivity.LiveLocation> arrayList) {
+        this.currentLiveLocations = new ArrayList<>(arrayList);
         int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-        for (int i = 0; i < this.currentLiveLocations.size(); i++) {
-            if (((LiveLocation) this.currentLiveLocations.get(i)).id == clientUserId) {
+        int i = 0;
+        while (true) {
+            if (i >= this.currentLiveLocations.size()) {
+                break;
+            } else if (this.currentLiveLocations.get(i).id == clientUserId) {
                 this.currentLiveLocations.remove(i);
                 break;
+            } else {
+                i++;
             }
         }
         notifyDataSetChanged();
@@ -121,50 +123,43 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         notifyDataSetChanged();
     }
 
-    public void setChatLocation(TL_channelLocation tL_channelLocation) {
+    public void setChatLocation(TLRPC.TL_channelLocation tL_channelLocation) {
         this.chatLocation = tL_channelLocation;
     }
 
     private void updateCell() {
-        SendLocationCell sendLocationCell = this.sendLocationCell;
-        if (sendLocationCell != null) {
-            String str = "Loading";
-            String str2;
-            if (this.locationType == 4 || this.customLocation != null) {
-                String str3;
-                if (!TextUtils.isEmpty(this.addressName)) {
-                    str3 = this.addressName;
-                } else if ((this.customLocation == null && this.gpsLocation == null) || this.fetchingLocation) {
-                    str3 = LocaleController.getString(str, NUM);
+        String str;
+        SendLocationCell sendLocationCell2 = this.sendLocationCell;
+        if (sendLocationCell2 == null) {
+            return;
+        }
+        if (this.locationType == 4 || this.customLocation != null) {
+            if (!TextUtils.isEmpty(this.addressName)) {
+                str = this.addressName;
+            } else if (!(this.customLocation == null && this.gpsLocation == null) && !this.fetchingLocation) {
+                Location location = this.customLocation;
+                if (location != null) {
+                    str = String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
                 } else {
-                    str2 = "(%f,%f)";
-                    if (this.customLocation != null) {
-                        str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
+                    Location location2 = this.gpsLocation;
+                    if (location2 != null) {
+                        str = String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(location2.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
                     } else {
-                        if (this.gpsLocation != null) {
-                            str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
-                        } else {
-                            str3 = LocaleController.getString(str, NUM);
-                        }
+                        str = LocaleController.getString("Loading", NUM);
                     }
                 }
-                if (this.locationType == 4) {
-                    this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str3);
-                    return;
-                } else {
-                    this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), str3);
-                    return;
-                }
+            } else {
+                str = LocaleController.getString("Loading", NUM);
             }
-            str2 = "SendLocation";
-            if (this.gpsLocation != null) {
-                String string = LocaleController.getString(str2, NUM);
-                Object[] objArr = new Object[1];
-                objArr[0] = LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy());
-                sendLocationCell.setText(string, LocaleController.formatString("AccurateTo", NUM, objArr));
-                return;
+            if (this.locationType == 4) {
+                this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str);
+            } else {
+                this.sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), str);
             }
-            sendLocationCell.setText(LocaleController.getString(str2, NUM), LocaleController.getString(str, NUM));
+        } else if (this.gpsLocation != null) {
+            sendLocationCell2.setText(LocaleController.getString("SendLocation", NUM), LocaleController.formatString("AccurateTo", NUM, LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy())));
+        } else {
+            sendLocationCell2.setText(LocaleController.getString("SendLocation", NUM), LocaleController.getString("Loading", NUM));
         }
     }
 
@@ -180,62 +175,56 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     }
 
     public void fetchLocationAddress() {
-        Location location;
-        Location location2;
         if (this.locationType == 4) {
-            location = this.customLocation;
-            if (location == null) {
-                location = this.gpsLocation;
-                if (location == null) {
-                    return;
-                }
-            }
-            location2 = this.previousFetchedLocation;
-            if (location2 == null || location2.distanceTo(location) > 100.0f) {
-                this.addressName = null;
-            }
-            this.fetchingLocation = true;
-            updateCell();
-            LocationController.fetchLocationAddress(location, this);
-        } else {
-            location = this.customLocation;
-            if (location != null) {
-                location2 = this.previousFetchedLocation;
-                if (location2 == null || location2.distanceTo(location) > 20.0f) {
+            Location location = this.customLocation;
+            if (location != null || (location = this.gpsLocation) != null) {
+                Location location2 = this.previousFetchedLocation;
+                if (location2 == null || location2.distanceTo(location) > 100.0f) {
                     this.addressName = null;
                 }
                 this.fetchingLocation = true;
                 updateCell();
                 LocationController.fetchLocationAddress(location, this);
+                return;
             }
+            return;
+        }
+        Location location3 = this.customLocation;
+        if (location3 != null) {
+            Location location4 = this.previousFetchedLocation;
+            if (location4 == null || location4.distanceTo(location3) > 20.0f) {
+                this.addressName = null;
+            }
+            this.fetchingLocation = true;
+            updateCell();
+            LocationController.fetchLocationAddress(location3, this);
         }
     }
 
     public int getItemCount() {
         int i = this.locationType;
-        int i2 = 5;
         if (i == 5 || i == 4) {
             return 2;
         }
-        int i3 = 1;
+        int i2 = 1;
         if (this.currentMessageObject != null) {
             if (!this.currentLiveLocations.isEmpty()) {
-                i3 = this.currentLiveLocations.size() + 3;
+                i2 = this.currentLiveLocations.size() + 3;
             }
-            return i3 + 2;
+            return i2 + 2;
         } else if (i == 2) {
             return this.currentLiveLocations.size() + 2;
         } else {
             boolean z = this.searching;
             if (z || (!z && this.places.isEmpty())) {
                 if (this.locationType != 0) {
-                    i2 = 6;
+                    return 6;
                 }
-                return i2;
+                return 5;
             } else if (this.locationType == 1) {
-                return (this.places.size() + 5) + (this.places.isEmpty() ^ 1);
+                return this.places.size() + 5 + (this.places.isEmpty() ^ true ? 1 : 0);
             } else {
-                return (this.places.size() + 4) + (this.places.isEmpty() ^ 1);
+                return this.places.size() + 4 + (this.places.isEmpty() ^ true ? 1 : 0);
             }
         }
     }
@@ -244,16 +233,20 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         onDirectionClick();
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View anonymousClass1;
-        View sendLocationCell;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        ShadowSectionCell shadowSectionCell;
+        View view;
         switch (i) {
             case 0:
-                anonymousClass1 = new EmptyCell(this.mContext) {
+                shadowSectionCell = new EmptyCell(this.mContext) {
                     public ViewPropertyAnimator animate() {
                         ViewPropertyAnimator animate = super.animate();
-                        if (VERSION.SDK_INT >= 19) {
-                            animate.setUpdateListener(new -$$Lambda$LocationActivityAdapter$1$6y19GSH-Lhc1zUdDmThcePJaAMQ(this));
+                        if (Build.VERSION.SDK_INT >= 19) {
+                            animate.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    LocationActivityAdapter.AnonymousClass1.this.lambda$animate$0$LocationActivityAdapter$1(valueAnimator);
+                                }
+                            });
                         }
                         return animate;
                     }
@@ -266,46 +259,52 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 };
                 break;
             case 1:
-                sendLocationCell = new SendLocationCell(this.mContext, false);
+                view = new SendLocationCell(this.mContext, false);
                 break;
             case 2:
-                anonymousClass1 = new HeaderCell(this.mContext);
+                shadowSectionCell = new HeaderCell(this.mContext);
                 break;
             case 3:
-                sendLocationCell = new LocationCell(this.mContext, false);
+                view = new LocationCell(this.mContext, false);
                 break;
             case 4:
-                anonymousClass1 = new LocationLoadingCell(this.mContext);
+                shadowSectionCell = new LocationLoadingCell(this.mContext);
                 break;
             case 5:
-                anonymousClass1 = new LocationPoweredCell(this.mContext);
+                shadowSectionCell = new LocationPoweredCell(this.mContext);
                 break;
             case 6:
-                anonymousClass1 = new SendLocationCell(this.mContext, true);
-                anonymousClass1.setDialogId(this.dialogId);
+                SendLocationCell sendLocationCell2 = new SendLocationCell(this.mContext, true);
+                sendLocationCell2.setDialogId(this.dialogId);
+                shadowSectionCell = sendLocationCell2;
                 break;
             case 7:
                 Context context = this.mContext;
                 int i2 = this.locationType;
-                i2 = (i2 == 4 || i2 == 5) ? 16 : 54;
-                anonymousClass1 = new SharingLiveLocationCell(context, true, i2);
+                shadowSectionCell = new SharingLiveLocationCell(context, true, (i2 == 4 || i2 == 5) ? 16 : 54);
                 break;
             case 8:
-                anonymousClass1 = new LocationDirectionCell(this.mContext);
-                anonymousClass1.setOnButtonClick(new -$$Lambda$LocationActivityAdapter$ZI5zffERDWGSr7GTCgcNce6b1mE(this));
+                LocationDirectionCell locationDirectionCell = new LocationDirectionCell(this.mContext);
+                locationDirectionCell.setOnButtonClick(new View.OnClickListener() {
+                    public final void onClick(View view) {
+                        LocationActivityAdapter.this.lambda$onCreateViewHolder$0$LocationActivityAdapter(view);
+                    }
+                });
+                shadowSectionCell = locationDirectionCell;
                 break;
             default:
-                anonymousClass1 = new ShadowSectionCell(this.mContext);
+                ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(this.mContext);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
-                anonymousClass1.setBackgroundDrawable(combinedDrawable);
+                shadowSectionCell2.setBackgroundDrawable(combinedDrawable);
+                shadowSectionCell = shadowSectionCell2;
                 break;
         }
-        anonymousClass1 = sendLocationCell;
-        return new Holder(anonymousClass1);
+        shadowSectionCell = view;
+        return new RecyclerListView.Holder(shadowSectionCell);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType != 0) {
             boolean z = true;
@@ -315,53 +314,46 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                     if (this.currentMessageObject != null) {
                         headerCell.setText(LocaleController.getString("LiveLocations", NUM));
-                        return;
                     } else {
                         headerCell.setText(LocaleController.getString("NearbyVenue", NUM));
-                        return;
                     }
                 } else if (itemViewType == 3) {
                     LocationCell locationCell = (LocationCell) viewHolder.itemView;
-                    i = this.locationType == 0 ? i - 4 : i - 5;
-                    locationCell.setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), i, true);
-                    return;
+                    int i3 = this.locationType == 0 ? i - 4 : i - 5;
+                    locationCell.setLocation(this.places.get(i3), this.iconUrls.get(i3), i3, true);
                 } else if (itemViewType == 4) {
                     ((LocationLoadingCell) viewHolder.itemView).setLoading(this.searching);
-                    return;
                 } else if (itemViewType == 6) {
-                    SendLocationCell sendLocationCell = (SendLocationCell) viewHolder.itemView;
+                    SendLocationCell sendLocationCell2 = (SendLocationCell) viewHolder.itemView;
                     if (this.gpsLocation == null) {
                         z = false;
                     }
-                    sendLocationCell.setHasLocation(z);
-                    return;
+                    sendLocationCell2.setHasLocation(z);
                 } else if (itemViewType == 7) {
                     SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
-                    TL_channelLocation tL_channelLocation = this.chatLocation;
+                    TLRPC.TL_channelLocation tL_channelLocation = this.chatLocation;
                     if (tL_channelLocation != null) {
                         sharingLiveLocationCell.setDialog(this.dialogId, tL_channelLocation);
                         return;
                     }
                     MessageObject messageObject = this.currentMessageObject;
                     if (messageObject == null || i != 1) {
-                        ArrayList arrayList = this.currentLiveLocations;
+                        ArrayList<LocationActivity.LiveLocation> arrayList = this.currentLiveLocations;
                         if (this.currentMessageObject != null) {
                             i2 = 5;
                         }
-                        sharingLiveLocationCell.setDialog((LiveLocation) arrayList.get(i - i2), this.gpsLocation);
+                        sharingLiveLocationCell.setDialog(arrayList.get(i - i2), this.gpsLocation);
                         return;
                     }
                     sharingLiveLocationCell.setDialog(messageObject, this.gpsLocation);
-                    return;
-                } else {
-                    return;
                 }
+            } else {
+                this.sendLocationCell = (SendLocationCell) viewHolder.itemView;
+                updateCell();
             }
-            this.sendLocationCell = (SendLocationCell) viewHolder.itemView;
-            updateCell();
-            return;
+        } else {
+            ((EmptyCell) viewHolder.itemView).setHeight(this.overScrollHeight);
         }
-        ((EmptyCell) viewHolder.itemView).setHeight(this.overScrollHeight);
     }
 
     public Object getItem(int i) {
@@ -391,17 +383,17 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         } else if (this.addressName == null) {
             return null;
         } else {
-            TL_messageMediaVenue tL_messageMediaVenue = new TL_messageMediaVenue();
+            TLRPC.TL_messageMediaVenue tL_messageMediaVenue = new TLRPC.TL_messageMediaVenue();
             tL_messageMediaVenue.address = this.addressName;
-            tL_messageMediaVenue.geo = new TL_geoPoint();
+            tL_messageMediaVenue.geo = new TLRPC.TL_geoPoint();
             Location location = this.customLocation;
             if (location != null) {
                 tL_messageMediaVenue.geo.lat = location.getLatitude();
                 tL_messageMediaVenue.geo._long = this.customLocation.getLongitude();
             } else {
-                location = this.gpsLocation;
-                if (location != null) {
-                    tL_messageMediaVenue.geo.lat = location.getLatitude();
+                Location location2 = this.gpsLocation;
+                if (location2 != null) {
+                    tL_messageMediaVenue.geo.lat = location2.getLatitude();
                     tL_messageMediaVenue.geo._long = this.gpsLocation.getLongitude();
                 }
             }
@@ -438,7 +430,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             }
             return 7;
         } else if (i2 != 2) {
-            boolean z;
             if (i2 == 1) {
                 if (i == 1) {
                     return 1;
@@ -452,7 +443,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     if (i == 4) {
                         return 2;
                     }
-                    z = this.searching;
+                    boolean z = this.searching;
                     if (z || (!z && this.places.isEmpty())) {
                         return 4;
                     }
@@ -469,8 +460,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 if (i == 3) {
                     return 2;
                 }
-                z = this.searching;
-                if (z || (!z && this.places.isEmpty())) {
+                boolean z2 = this.searching;
+                if (z2 || (!z2 && this.places.isEmpty())) {
                     return 4;
                 }
                 if (i == this.places.size() + 4) {
@@ -486,18 +477,17 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         }
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
-        boolean z = false;
         if (itemViewType == 6) {
-            if (!(LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null)) {
-                z = true;
+            if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null) {
+                return false;
             }
-            return z;
+            return true;
+        } else if (itemViewType == 1 || itemViewType == 3 || itemViewType == 7) {
+            return true;
+        } else {
+            return false;
         }
-        if (itemViewType == 1 || itemViewType == 3 || itemViewType == 7) {
-            z = true;
-        }
-        return z;
     }
 }

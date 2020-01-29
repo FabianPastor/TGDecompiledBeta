@@ -72,18 +72,18 @@ public class CropState {
         this.rotation = 0.0f;
         this.minimumScale = cropAreaView.getCropWidth() / this.width;
         this.scale = this.minimumScale;
-        Matrix matrix = this.matrix;
+        Matrix matrix2 = this.matrix;
         float f = this.scale;
-        matrix.postScale(f, f);
+        matrix2.postScale(f, f);
     }
 
-    public void getConcatMatrix(Matrix matrix) {
-        matrix.postConcat(this.matrix);
+    public void getConcatMatrix(Matrix matrix2) {
+        matrix2.postConcat(this.matrix);
     }
 
     public Matrix getMatrix() {
-        Matrix matrix = new Matrix();
-        matrix.set(this.matrix);
-        return matrix;
+        Matrix matrix2 = new Matrix();
+        matrix2.set(this.matrix);
+        return matrix2;
     }
 }

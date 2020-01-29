@@ -12,19 +12,17 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -37,25 +35,12 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.ExportedChatInvite;
-import org.telegram.tgnet.TLRPC.FileLocation;
-import org.telegram.tgnet.TLRPC.InputFile;
-import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_boolTrue;
-import org.telegram.tgnet.TLRPC.TL_channels_checkUsername;
-import org.telegram.tgnet.TLRPC.TL_channels_getAdminedPublicChannels;
-import org.telegram.tgnet.TLRPC.TL_channels_updateUsername;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_inputChannelEmpty;
-import org.telegram.tgnet.TLRPC.TL_messages_chats;
-import org.telegram.tgnet.TLRPC.TL_messages_exportChatInvite;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -66,64 +51,85 @@ import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextBlockCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.ChannelCreateActivity;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.ImageUpdater;
-import org.telegram.ui.Components.ImageUpdater.ImageUpdaterDelegate;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
-public class ChannelCreateActivity extends BaseFragment implements NotificationCenterDelegate, ImageUpdaterDelegate {
+public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
     private static final int done_button = 1;
-    private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList();
+    private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList<>();
     private TextInfoPrivacyCell adminedInfoCell;
     private LinearLayout adminnedChannelsLayout;
-    private FileLocation avatar;
-    private AnimatorSet avatarAnimation;
-    private FileLocation avatarBig;
+    private TLRPC.FileLocation avatar;
+    /* access modifiers changed from: private */
+    public AnimatorSet avatarAnimation;
+    private TLRPC.FileLocation avatarBig;
     private AvatarDrawable avatarDrawable;
-    private ImageView avatarEditor;
-    private BackupImageView avatarImage;
-    private View avatarOverlay;
-    private RadialProgressView avatarProgressView;
+    /* access modifiers changed from: private */
+    public ImageView avatarEditor;
+    /* access modifiers changed from: private */
+    public BackupImageView avatarImage;
+    /* access modifiers changed from: private */
+    public View avatarOverlay;
+    /* access modifiers changed from: private */
+    public RadialProgressView avatarProgressView;
     private boolean canCreatePublic = true;
-    private int chatId;
+    /* access modifiers changed from: private */
+    public int chatId;
     private int checkReqId;
     private Runnable checkRunnable;
-    private TextView checkTextView;
-    private boolean createAfterUpload;
-    private int currentStep;
-    private EditTextBoldCursor descriptionTextView;
+    /* access modifiers changed from: private */
+    public TextView checkTextView;
+    /* access modifiers changed from: private */
+    public boolean createAfterUpload;
+    /* access modifiers changed from: private */
+    public int currentStep;
+    /* access modifiers changed from: private */
+    public EditTextBoldCursor descriptionTextView;
     private View doneButton;
-    private boolean donePressed;
+    /* access modifiers changed from: private */
+    public boolean donePressed;
     private EditTextBoldCursor editText;
     private HeaderCell headerCell;
     private HeaderCell headerCell2;
     private TextView helpTextView;
-    private ImageUpdater imageUpdater;
-    private ExportedChatInvite invite;
-    private boolean isPrivate;
-    private String lastCheckName;
-    private boolean lastNameAvailable;
+    /* access modifiers changed from: private */
+    public ImageUpdater imageUpdater;
+    private TLRPC.ExportedChatInvite invite;
+    /* access modifiers changed from: private */
+    public boolean isPrivate;
+    /* access modifiers changed from: private */
+    public String lastCheckName;
+    /* access modifiers changed from: private */
+    public boolean lastNameAvailable;
     private LinearLayout linearLayout;
     private LinearLayout linearLayout2;
     private LinearLayout linkContainer;
     private LoadingCell loadingAdminedCell;
     private boolean loadingAdminedChannels;
     private boolean loadingInvite;
-    private EditTextEmoji nameTextView;
+    /* access modifiers changed from: private */
+    public EditTextEmoji nameTextView;
     private String nameToSet;
     private TextBlockCell privateContainer;
-    private AlertDialog progressDialog;
+    /* access modifiers changed from: private */
+    public AlertDialog progressDialog;
     private LinearLayout publicContainer;
     private RadioButtonCell radioButtonCell1;
     private RadioButtonCell radioButtonCell2;
     private ShadowSectionCell sectionCell;
     private TextInfoPrivacyCell typeInfoCell;
-    private InputFile uploadedAvatar;
+    private TLRPC.InputFile uploadedAvatar;
+
+    static /* synthetic */ boolean lambda$createView$2(View view, MotionEvent motionEvent) {
+        return true;
+    }
 
     public ChannelCreateActivity(Bundle bundle) {
         super(bundle);
@@ -132,16 +138,20 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (i == 0) {
             this.avatarDrawable = new AvatarDrawable();
             this.imageUpdater = new ImageUpdater();
-            TL_channels_checkUsername tL_channels_checkUsername = new TL_channels_checkUsername();
+            TLRPC.TL_channels_checkUsername tL_channels_checkUsername = new TLRPC.TL_channels_checkUsername();
             tL_channels_checkUsername.username = "1";
-            tL_channels_checkUsername.channel = new TL_inputChannelEmpty();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_checkUsername, new -$$Lambda$ChannelCreateActivity$Dgmh8FVFPsTpRB5V7O64UrcVHdE(this));
+            tL_channels_checkUsername.channel = new TLRPC.TL_inputChannelEmpty();
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_checkUsername, new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    ChannelCreateActivity.this.lambda$new$1$ChannelCreateActivity(tLObject, tL_error);
+                }
+            });
             return;
         }
         if (i == 1) {
             this.canCreatePublic = bundle.getBoolean("canCreatePublic", true);
             boolean z = this.canCreatePublic;
-            this.isPrivate = z ^ 1;
+            this.isPrivate = !z;
             if (!z) {
                 loadAdminedChannels();
             }
@@ -149,13 +159,22 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         this.chatId = bundle.getInt("chat_id", 0);
     }
 
-    public /* synthetic */ void lambda$new$1$ChannelCreateActivity(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$3ctYbjqxEmY29fuS63ZiDPUydpA(this, tL_error));
+    public /* synthetic */ void lambda$new$1$ChannelCreateActivity(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(tL_error) {
+            private final /* synthetic */ TLRPC.TL_error f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                ChannelCreateActivity.this.lambda$null$0$ChannelCreateActivity(this.f$1);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$0$ChannelCreateActivity(TL_error tL_error) {
-        boolean z = tL_error == null || !tL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH");
-        this.canCreatePublic = z;
+    public /* synthetic */ void lambda$null$0$ChannelCreateActivity(TLRPC.TL_error tL_error) {
+        this.canCreatePublic = tL_error == null || !tL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH");
     }
 
     public boolean onFragmentCreate() {
@@ -164,10 +183,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (this.currentStep == 1) {
             generateLink();
         }
-        ImageUpdater imageUpdater = this.imageUpdater;
-        if (imageUpdater != null) {
-            imageUpdater.parentFragment = this;
-            imageUpdater.delegate = this;
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.parentFragment = this;
+            imageUpdater2.delegate = this;
         }
         return super.onFragmentCreate();
     }
@@ -176,9 +195,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidFailCreate);
-        ImageUpdater imageUpdater = this.imageUpdater;
-        if (imageUpdater != null) {
-            imageUpdater.clear();
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.clear();
         }
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
         EditTextEmoji editTextEmoji = this.nameTextView;
@@ -221,56 +240,69 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     ChannelCreateActivity.this.finishFragment();
-                } else if (i == 1) {
-                    String str = "vibrator";
-                    Vibrator vibrator;
+                } else if (i != 1) {
+                } else {
                     if (ChannelCreateActivity.this.currentStep == 0) {
                         if (!ChannelCreateActivity.this.donePressed && ChannelCreateActivity.this.getParentActivity() != null) {
                             if (ChannelCreateActivity.this.nameTextView.length() == 0) {
-                                vibrator = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService(str);
+                                Vibrator vibrator = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
                                 if (vibrator != null) {
                                     vibrator.vibrate(200);
                                 }
                                 AndroidUtilities.shakeView(ChannelCreateActivity.this.nameTextView, 2.0f, 0);
                                 return;
                             }
-                            ChannelCreateActivity.this.donePressed = true;
+                            boolean unused = ChannelCreateActivity.this.donePressed = true;
                             if (ChannelCreateActivity.this.imageUpdater.uploadingImage != null) {
-                                ChannelCreateActivity.this.createAfterUpload = true;
+                                boolean unused2 = ChannelCreateActivity.this.createAfterUpload = true;
                                 ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
-                                channelCreateActivity.progressDialog = new AlertDialog(channelCreateActivity.getParentActivity(), 3);
-                                ChannelCreateActivity.this.progressDialog.setOnCancelListener(new -$$Lambda$ChannelCreateActivity$1$b7xFRmQZDJGprfBGkWoRomCKvDQ(this));
+                                AlertDialog unused3 = channelCreateActivity.progressDialog = new AlertDialog(channelCreateActivity.getParentActivity(), 3);
+                                ChannelCreateActivity.this.progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    public final void onCancel(DialogInterface dialogInterface) {
+                                        ChannelCreateActivity.AnonymousClass1.this.lambda$onItemClick$0$ChannelCreateActivity$1(dialogInterface);
+                                    }
+                                });
                                 ChannelCreateActivity.this.progressDialog.show();
                                 return;
                             }
-                            i = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, null, null, ChannelCreateActivity.this);
+                            int createChat = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, (Location) null, (String) null, ChannelCreateActivity.this);
                             ChannelCreateActivity channelCreateActivity2 = ChannelCreateActivity.this;
-                            channelCreateActivity2.progressDialog = new AlertDialog(channelCreateActivity2.getParentActivity(), 3);
-                            ChannelCreateActivity.this.progressDialog.setOnCancelListener(new -$$Lambda$ChannelCreateActivity$1$q1TLoAihH5rBozhaNhmW5QGac-s(this, i));
+                            AlertDialog unused4 = channelCreateActivity2.progressDialog = new AlertDialog(channelCreateActivity2.getParentActivity(), 3);
+                            ChannelCreateActivity.this.progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(createChat) {
+                                private final /* synthetic */ int f$1;
+
+                                {
+                                    this.f$1 = r2;
+                                }
+
+                                public final void onCancel(DialogInterface dialogInterface) {
+                                    ChannelCreateActivity.AnonymousClass1.this.lambda$onItemClick$1$ChannelCreateActivity$1(this.f$1, dialogInterface);
+                                }
+                            });
                             ChannelCreateActivity.this.progressDialog.show();
                         }
                     } else if (ChannelCreateActivity.this.currentStep == 1) {
                         if (!ChannelCreateActivity.this.isPrivate) {
                             if (ChannelCreateActivity.this.descriptionTextView.length() == 0) {
-                                Builder builder = new Builder(ChannelCreateActivity.this.getParentActivity());
+                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) ChannelCreateActivity.this.getParentActivity());
                                 builder.setTitle(LocaleController.getString("ChannelPublicEmptyUsernameTitle", NUM));
                                 builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", NUM));
-                                builder.setPositiveButton(LocaleController.getString("Close", NUM), null);
+                                builder.setPositiveButton(LocaleController.getString("Close", NUM), (DialogInterface.OnClickListener) null);
                                 ChannelCreateActivity.this.showDialog(builder.create());
                                 return;
-                            } else if (ChannelCreateActivity.this.lastNameAvailable) {
-                                MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).updateChannelUserName(ChannelCreateActivity.this.chatId, ChannelCreateActivity.this.lastCheckName);
-                            } else {
-                                vibrator = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService(str);
-                                if (vibrator != null) {
-                                    vibrator.vibrate(200);
+                            } else if (!ChannelCreateActivity.this.lastNameAvailable) {
+                                Vibrator vibrator2 = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
+                                if (vibrator2 != null) {
+                                    vibrator2.vibrate(200);
                                 }
                                 AndroidUtilities.shakeView(ChannelCreateActivity.this.checkTextView, 2.0f, 0);
                                 return;
+                            } else {
+                                MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).updateChannelUserName(ChannelCreateActivity.this.chatId, ChannelCreateActivity.this.lastCheckName);
                             }
                         }
                         Bundle bundle = new Bundle();
@@ -283,200 +315,180 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public /* synthetic */ void lambda$onItemClick$0$ChannelCreateActivity$1(DialogInterface dialogInterface) {
-                ChannelCreateActivity.this.createAfterUpload = false;
-                ChannelCreateActivity.this.progressDialog = null;
-                ChannelCreateActivity.this.donePressed = false;
+                boolean unused = ChannelCreateActivity.this.createAfterUpload = false;
+                AlertDialog unused2 = ChannelCreateActivity.this.progressDialog = null;
+                boolean unused3 = ChannelCreateActivity.this.donePressed = false;
             }
 
             public /* synthetic */ void lambda$onItemClick$1$ChannelCreateActivity$1(int i, DialogInterface dialogInterface) {
                 ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).cancelRequest(i, true);
-                ChannelCreateActivity.this.donePressed = false;
+                boolean unused = ChannelCreateActivity.this.donePressed = false;
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         int i = this.currentStep;
-        String str = "windowBackgroundWhiteHintText";
-        String str2 = "windowBackgroundWhiteBlackText";
-        String str3 = "windowBackgroundWhite";
         if (i == 0) {
             this.actionBar.setTitle(LocaleController.getString("NewChannel", NUM));
-            AnonymousClass2 anonymousClass2 = new SizeNotifierFrameLayout(context2) {
+            AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
                 private boolean ignoreLayout;
 
-                /* Access modifiers changed, original: protected */
+                /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
-                    int size = MeasureSpec.getSize(i);
-                    int size2 = MeasureSpec.getSize(i2);
+                    int size = View.MeasureSpec.getSize(i);
+                    int size2 = View.MeasureSpec.getSize(i2);
                     setMeasuredDimension(size, size2);
-                    size2 -= getPaddingTop();
+                    int paddingTop = size2 - getPaddingTop();
                     measureChildWithMargins(ChannelCreateActivity.this.actionBar, i, 0, i2, 0);
-                    int i3 = 0;
                     if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
                         this.ignoreLayout = true;
                         ChannelCreateActivity.this.nameTextView.hideEmojiView();
                         this.ignoreLayout = false;
                     }
                     int childCount = getChildCount();
-                    while (i3 < childCount) {
+                    for (int i3 = 0; i3 < childCount; i3++) {
                         View childAt = getChildAt(i3);
                         if (!(childAt == null || childAt.getVisibility() == 8 || childAt == ChannelCreateActivity.this.actionBar)) {
                             if (ChannelCreateActivity.this.nameTextView == null || !ChannelCreateActivity.this.nameTextView.isPopupView(childAt)) {
                                 measureChildWithMargins(childAt, i, 0, i2, 0);
                             } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
-                                childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
+                                childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
                             } else if (AndroidUtilities.isTablet()) {
-                                childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (size2 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
+                                childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (paddingTop - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                             } else {
-                                childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec((size2 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
+                                childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((paddingTop - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                             }
                         }
-                        i3++;
                     }
                 }
 
-                /* Access modifiers changed, original: protected */
-                /* JADX WARNING: Removed duplicated region for block: B:41:0x00bc  */
-                /* JADX WARNING: Removed duplicated region for block: B:40:0x00b3  */
-                /* JADX WARNING: Removed duplicated region for block: B:32:0x008c  */
+                /* access modifiers changed from: protected */
                 /* JADX WARNING: Removed duplicated region for block: B:25:0x0072  */
+                /* JADX WARNING: Removed duplicated region for block: B:32:0x008c  */
                 /* JADX WARNING: Removed duplicated region for block: B:40:0x00b3  */
                 /* JADX WARNING: Removed duplicated region for block: B:41:0x00bc  */
+                /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
                     /*
-                    r9 = this;
-                    r10 = r9.getChildCount();
-                    r0 = r9.getKeyboardHeight();
-                    r1 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-                    r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-                    r2 = 0;
-                    if (r0 > r1) goto L_0x0026;
-                L_0x0011:
-                    r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
-                    if (r0 != 0) goto L_0x0026;
-                L_0x0015:
-                    r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-                    if (r0 != 0) goto L_0x0026;
-                L_0x001b:
-                    r0 = org.telegram.ui.ChannelCreateActivity.this;
-                    r0 = r0.nameTextView;
-                    r0 = r0.getEmojiPadding();
-                    goto L_0x0027;
-                L_0x0026:
-                    r0 = 0;
-                L_0x0027:
-                    r9.setBottomClip(r0);
-                L_0x002a:
-                    if (r2 >= r10) goto L_0x00d3;
-                L_0x002c:
-                    r1 = r9.getChildAt(r2);
-                    r3 = r1.getVisibility();
-                    r4 = 8;
-                    if (r3 != r4) goto L_0x003a;
-                L_0x0038:
-                    goto L_0x00cf;
-                L_0x003a:
-                    r3 = r1.getLayoutParams();
-                    r3 = (android.widget.FrameLayout.LayoutParams) r3;
-                    r4 = r1.getMeasuredWidth();
-                    r5 = r1.getMeasuredHeight();
-                    r6 = r3.gravity;
-                    r7 = -1;
-                    if (r6 != r7) goto L_0x004f;
-                L_0x004d:
-                    r6 = 51;
-                L_0x004f:
-                    r7 = r6 & 7;
-                    r6 = r6 & 112;
-                    r7 = r7 & 7;
-                    r8 = 1;
-                    if (r7 == r8) goto L_0x0063;
-                L_0x0058:
-                    r8 = 5;
-                    if (r7 == r8) goto L_0x005e;
-                L_0x005b:
-                    r7 = r3.leftMargin;
-                    goto L_0x006e;
-                L_0x005e:
-                    r7 = r13 - r4;
-                    r8 = r3.rightMargin;
-                    goto L_0x006d;
-                L_0x0063:
-                    r7 = r13 - r11;
-                    r7 = r7 - r4;
-                    r7 = r7 / 2;
-                    r8 = r3.leftMargin;
-                    r7 = r7 + r8;
-                    r8 = r3.rightMargin;
-                L_0x006d:
-                    r7 = r7 - r8;
-                L_0x006e:
-                    r8 = 16;
-                    if (r6 == r8) goto L_0x008c;
-                L_0x0072:
-                    r8 = 48;
-                    if (r6 == r8) goto L_0x0084;
-                L_0x0076:
-                    r8 = 80;
-                    if (r6 == r8) goto L_0x007d;
-                L_0x007a:
-                    r3 = r3.topMargin;
-                    goto L_0x0099;
-                L_0x007d:
-                    r6 = r14 - r0;
-                    r6 = r6 - r12;
-                    r6 = r6 - r5;
-                    r3 = r3.bottomMargin;
-                    goto L_0x0097;
-                L_0x0084:
-                    r3 = r3.topMargin;
-                    r6 = r9.getPaddingTop();
-                    r3 = r3 + r6;
-                    goto L_0x0099;
-                L_0x008c:
-                    r6 = r14 - r0;
-                    r6 = r6 - r12;
-                    r6 = r6 - r5;
-                    r6 = r6 / 2;
-                    r8 = r3.topMargin;
-                    r6 = r6 + r8;
-                    r3 = r3.bottomMargin;
-                L_0x0097:
-                    r3 = r6 - r3;
-                L_0x0099:
-                    r6 = org.telegram.ui.ChannelCreateActivity.this;
-                    r6 = r6.nameTextView;
-                    if (r6 == 0) goto L_0x00ca;
-                L_0x00a1:
-                    r6 = org.telegram.ui.ChannelCreateActivity.this;
-                    r6 = r6.nameTextView;
-                    r6 = r6.isPopupView(r1);
-                    if (r6 == 0) goto L_0x00ca;
-                L_0x00ad:
-                    r3 = org.telegram.messenger.AndroidUtilities.isTablet();
-                    if (r3 == 0) goto L_0x00bc;
-                L_0x00b3:
-                    r3 = r9.getMeasuredHeight();
-                    r6 = r1.getMeasuredHeight();
-                    goto L_0x00c9;
-                L_0x00bc:
-                    r3 = r9.getMeasuredHeight();
-                    r6 = r9.getKeyboardHeight();
-                    r3 = r3 + r6;
-                    r6 = r1.getMeasuredHeight();
-                L_0x00c9:
-                    r3 = r3 - r6;
-                L_0x00ca:
-                    r4 = r4 + r7;
-                    r5 = r5 + r3;
-                    r1.layout(r7, r3, r4, r5);
-                L_0x00cf:
-                    r2 = r2 + 1;
-                    goto L_0x002a;
-                L_0x00d3:
-                    r9.notifyHeightChanged();
-                    return;
+                        r9 = this;
+                        int r10 = r9.getChildCount()
+                        int r0 = r9.getKeyboardHeight()
+                        r1 = 1101004800(0x41a00000, float:20.0)
+                        int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                        r2 = 0
+                        if (r0 > r1) goto L_0x0026
+                        boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                        if (r0 != 0) goto L_0x0026
+                        boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
+                        if (r0 != 0) goto L_0x0026
+                        org.telegram.ui.ChannelCreateActivity r0 = org.telegram.ui.ChannelCreateActivity.this
+                        org.telegram.ui.Components.EditTextEmoji r0 = r0.nameTextView
+                        int r0 = r0.getEmojiPadding()
+                        goto L_0x0027
+                    L_0x0026:
+                        r0 = 0
+                    L_0x0027:
+                        r9.setBottomClip(r0)
+                    L_0x002a:
+                        if (r2 >= r10) goto L_0x00d3
+                        android.view.View r1 = r9.getChildAt(r2)
+                        int r3 = r1.getVisibility()
+                        r4 = 8
+                        if (r3 != r4) goto L_0x003a
+                        goto L_0x00cf
+                    L_0x003a:
+                        android.view.ViewGroup$LayoutParams r3 = r1.getLayoutParams()
+                        android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
+                        int r4 = r1.getMeasuredWidth()
+                        int r5 = r1.getMeasuredHeight()
+                        int r6 = r3.gravity
+                        r7 = -1
+                        if (r6 != r7) goto L_0x004f
+                        r6 = 51
+                    L_0x004f:
+                        r7 = r6 & 7
+                        r6 = r6 & 112(0x70, float:1.57E-43)
+                        r7 = r7 & 7
+                        r8 = 1
+                        if (r7 == r8) goto L_0x0063
+                        r8 = 5
+                        if (r7 == r8) goto L_0x005e
+                        int r7 = r3.leftMargin
+                        goto L_0x006e
+                    L_0x005e:
+                        int r7 = r13 - r4
+                        int r8 = r3.rightMargin
+                        goto L_0x006d
+                    L_0x0063:
+                        int r7 = r13 - r11
+                        int r7 = r7 - r4
+                        int r7 = r7 / 2
+                        int r8 = r3.leftMargin
+                        int r7 = r7 + r8
+                        int r8 = r3.rightMargin
+                    L_0x006d:
+                        int r7 = r7 - r8
+                    L_0x006e:
+                        r8 = 16
+                        if (r6 == r8) goto L_0x008c
+                        r8 = 48
+                        if (r6 == r8) goto L_0x0084
+                        r8 = 80
+                        if (r6 == r8) goto L_0x007d
+                        int r3 = r3.topMargin
+                        goto L_0x0099
+                    L_0x007d:
+                        int r6 = r14 - r0
+                        int r6 = r6 - r12
+                        int r6 = r6 - r5
+                        int r3 = r3.bottomMargin
+                        goto L_0x0097
+                    L_0x0084:
+                        int r3 = r3.topMargin
+                        int r6 = r9.getPaddingTop()
+                        int r3 = r3 + r6
+                        goto L_0x0099
+                    L_0x008c:
+                        int r6 = r14 - r0
+                        int r6 = r6 - r12
+                        int r6 = r6 - r5
+                        int r6 = r6 / 2
+                        int r8 = r3.topMargin
+                        int r6 = r6 + r8
+                        int r3 = r3.bottomMargin
+                    L_0x0097:
+                        int r3 = r6 - r3
+                    L_0x0099:
+                        org.telegram.ui.ChannelCreateActivity r6 = org.telegram.ui.ChannelCreateActivity.this
+                        org.telegram.ui.Components.EditTextEmoji r6 = r6.nameTextView
+                        if (r6 == 0) goto L_0x00ca
+                        org.telegram.ui.ChannelCreateActivity r6 = org.telegram.ui.ChannelCreateActivity.this
+                        org.telegram.ui.Components.EditTextEmoji r6 = r6.nameTextView
+                        boolean r6 = r6.isPopupView(r1)
+                        if (r6 == 0) goto L_0x00ca
+                        boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+                        if (r3 == 0) goto L_0x00bc
+                        int r3 = r9.getMeasuredHeight()
+                        int r6 = r1.getMeasuredHeight()
+                        goto L_0x00c9
+                    L_0x00bc:
+                        int r3 = r9.getMeasuredHeight()
+                        int r6 = r9.getKeyboardHeight()
+                        int r3 = r3 + r6
+                        int r6 = r1.getMeasuredHeight()
+                    L_0x00c9:
+                        int r3 = r3 - r6
+                    L_0x00ca:
+                        int r4 = r4 + r7
+                        int r5 = r5 + r3
+                        r1.layout(r7, r3, r4, r5)
+                    L_0x00cf:
+                        int r2 = r2 + 1
+                        goto L_0x002a
+                    L_0x00d3:
+                        r9.notifyHeightChanged()
+                        return
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelCreateActivity$AnonymousClass2.onLayout(boolean, int, int, int, int):void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelCreateActivity.AnonymousClass2.onLayout(boolean, int, int, int, int):void");
                 }
 
                 public void requestLayout() {
@@ -485,13 +497,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     }
                 }
             };
-            anonymousClass2.setOnTouchListener(-$$Lambda$ChannelCreateActivity$lIiXta2UxN2m1Vi-R2Lzg4Rdjg4.INSTANCE);
-            this.fragmentView = anonymousClass2;
-            this.fragmentView.setTag(str3);
-            this.fragmentView.setBackgroundColor(Theme.getColor(str3));
+            r2.setOnTouchListener($$Lambda$ChannelCreateActivity$lIiXta2UxN2m1ViR2Lzg4Rdjg4.INSTANCE);
+            this.fragmentView = r2;
+            this.fragmentView.setTag("windowBackgroundWhite");
+            this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.linearLayout = new LinearLayout(context2);
             this.linearLayout.setOrientation(1);
-            anonymousClass2.addView(this.linearLayout, new LayoutParams(-1, -2));
+            r2.addView(this.linearLayout, new FrameLayout.LayoutParams(-1, -2));
             FrameLayout frameLayout = new FrameLayout(context2);
             this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
             this.avatarImage = new BackupImageView(context2) {
@@ -510,13 +522,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             };
             this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
-            this.avatarDrawable.setInfo(5, null, null);
+            this.avatarDrawable.setInfo(5, (String) null, (String) null);
             this.avatarImage.setImageDrawable(this.avatarDrawable);
             frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
             final Paint paint = new Paint(1);
             paint.setColor(NUM);
             this.avatarOverlay = new View(context2) {
-                /* Access modifiers changed, original: protected */
+                /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     if (ChannelCreateActivity.this.avatarImage != null && ChannelCreateActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                         paint.setAlpha((int) (ChannelCreateActivity.this.avatarImage.getImageReceiver().getCurrentAlpha() * 85.0f));
@@ -525,7 +537,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             };
             frameLayout.addView(this.avatarOverlay, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
-            this.avatarOverlay.setOnClickListener(new -$$Lambda$ChannelCreateActivity$s4ZwNFyULCtdH_y7TaKdhDy0a3c(this));
+            this.avatarOverlay.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChannelCreateActivity.this.lambda$createView$4$ChannelCreateActivity(view);
+                }
+            });
             this.avatarEditor = new ImageView(context2) {
                 public void invalidate(int i, int i2, int i3, int i4) {
                     super.invalidate(i, i2, i3, i4);
@@ -537,7 +553,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     ChannelCreateActivity.this.avatarOverlay.invalidate();
                 }
             };
-            this.avatarEditor.setScaleType(ScaleType.CENTER);
+            this.avatarEditor.setScaleType(ImageView.ScaleType.CENTER);
             this.avatarEditor.setImageResource(NUM);
             this.avatarEditor.setEnabled(false);
             this.avatarEditor.setClickable(false);
@@ -547,31 +563,35 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.avatarProgressView.setProgressColor(-1);
             frameLayout.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
             showAvatarProgress(false, false);
-            this.nameTextView = new EditTextEmoji(context2, anonymousClass2, this, 0);
+            this.nameTextView = new EditTextEmoji(context2, r2, this, 0);
             this.nameTextView.setHint(LocaleController.getString("EnterChannelName", NUM));
-            String str4 = this.nameToSet;
-            if (str4 != null) {
-                this.nameTextView.setText(str4);
+            String str = this.nameToSet;
+            if (str != null) {
+                this.nameTextView.setText(str);
                 this.nameToSet = null;
             }
-            this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
+            this.nameTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? 5.0f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : 5.0f, 0.0f));
             this.descriptionTextView = new EditTextBoldCursor(context2);
             this.descriptionTextView.setTextSize(1, 18.0f);
-            this.descriptionTextView.setHintTextColor(Theme.getColor(str));
-            this.descriptionTextView.setTextColor(Theme.getColor(str2));
+            this.descriptionTextView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.descriptionTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
             this.descriptionTextView.setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.descriptionTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.descriptionTextView.setInputType(180225);
             this.descriptionTextView.setImeOptions(6);
-            this.descriptionTextView.setFilters(new InputFilter[]{new LengthFilter(120)});
+            this.descriptionTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(120)});
             this.descriptionTextView.setHint(LocaleController.getString("DescriptionPlaceholder", NUM));
-            this.descriptionTextView.setCursorColor(Theme.getColor(str2));
+            this.descriptionTextView.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             this.descriptionTextView.setCursorWidth(1.5f);
             this.linearLayout.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
-            this.descriptionTextView.setOnEditorActionListener(new -$$Lambda$ChannelCreateActivity$MiQ4URkqTYXvUua86XByJz6HPDg(this));
+            this.descriptionTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    return ChannelCreateActivity.this.lambda$createView$5$ChannelCreateActivity(textView, i, keyEvent);
+                }
+            });
             this.descriptionTextView.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                 }
@@ -594,34 +614,42 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             scrollView.setFillViewport(true);
             this.linearLayout = new LinearLayout(context2);
             this.linearLayout.setOrientation(1);
-            scrollView.addView(this.linearLayout, new LayoutParams(-1, -2));
+            scrollView.addView(this.linearLayout, new FrameLayout.LayoutParams(-1, -2));
             this.actionBar.setTitle(LocaleController.getString("ChannelSettingsTitle", NUM));
             this.fragmentView.setTag("windowBackgroundGray");
             this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
             this.headerCell2 = new HeaderCell(context2, 23);
             this.headerCell2.setHeight(46);
-            this.headerCell2.setBackgroundColor(Theme.getColor(str3));
+            this.headerCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.headerCell2.setText(LocaleController.getString("ChannelTypeHeader", NUM));
             this.linearLayout.addView(this.headerCell2);
             this.linearLayout2 = new LinearLayout(context2);
             this.linearLayout2.setOrientation(1);
-            this.linearLayout2.setBackgroundColor(Theme.getColor(str3));
+            this.linearLayout2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.linearLayout.addView(this.linearLayout2, LayoutHelper.createLinear(-1, -2));
             this.radioButtonCell1 = new RadioButtonCell(context2);
             this.radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", NUM), LocaleController.getString("ChannelPublicInfo", NUM), false, this.isPrivate ^ 1);
+            this.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", NUM), LocaleController.getString("ChannelPublicInfo", NUM), false, !this.isPrivate);
             this.linearLayout2.addView(this.radioButtonCell1, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell1.setOnClickListener(new -$$Lambda$ChannelCreateActivity$ERDUGoRSlmYfCpWGH5A0thCtafY(this));
+            this.radioButtonCell1.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChannelCreateActivity.this.lambda$createView$6$ChannelCreateActivity(view);
+                }
+            });
             this.radioButtonCell2 = new RadioButtonCell(context2);
             this.radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             this.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", NUM), LocaleController.getString("ChannelPrivateInfo", NUM), false, this.isPrivate);
             this.linearLayout2.addView(this.radioButtonCell2, LayoutHelper.createLinear(-1, -2));
-            this.radioButtonCell2.setOnClickListener(new -$$Lambda$ChannelCreateActivity$4I7Y-V5uH9YemI181a2NrRWSAsc(this));
+            this.radioButtonCell2.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChannelCreateActivity.this.lambda$createView$7$ChannelCreateActivity(view);
+                }
+            });
             this.sectionCell = new ShadowSectionCell(context2);
             this.linearLayout.addView(this.sectionCell, LayoutHelper.createLinear(-1, -2));
             this.linkContainer = new LinearLayout(context2);
             this.linkContainer.setOrientation(1);
-            this.linkContainer.setBackgroundColor(Theme.getColor(str3));
+            this.linkContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.linearLayout.addView(this.linkContainer, LayoutHelper.createLinear(-1, -2));
             this.headerCell = new HeaderCell(context2);
             this.linkContainer.addView(this.headerCell);
@@ -630,17 +658,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
             this.editText = new EditTextBoldCursor(context2);
             EditTextBoldCursor editTextBoldCursor = this.editText;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
-            stringBuilder.append("/");
-            editTextBoldCursor.setText(stringBuilder.toString());
+            editTextBoldCursor.setText(MessagesController.getInstance(this.currentAccount).linkPrefix + "/");
             this.editText.setTextSize(1, 18.0f);
-            this.editText.setHintTextColor(Theme.getColor(str));
-            this.editText.setTextColor(Theme.getColor(str2));
+            this.editText.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.editText.setMaxLines(1);
             this.editText.setLines(1);
             this.editText.setEnabled(false);
-            this.editText.setBackgroundDrawable(null);
+            this.editText.setBackgroundDrawable((Drawable) null);
             this.editText.setPadding(0, 0, 0, 0);
             this.editText.setSingleLine(true);
             this.editText.setInputType(163840);
@@ -648,17 +673,17 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.publicContainer.addView(this.editText, LayoutHelper.createLinear(-2, 36));
             this.descriptionTextView = new EditTextBoldCursor(context2);
             this.descriptionTextView.setTextSize(1, 18.0f);
-            this.descriptionTextView.setHintTextColor(Theme.getColor(str));
-            this.descriptionTextView.setTextColor(Theme.getColor(str2));
+            this.descriptionTextView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.descriptionTextView.setMaxLines(1);
             this.descriptionTextView.setLines(1);
-            this.descriptionTextView.setBackgroundDrawable(null);
+            this.descriptionTextView.setBackgroundDrawable((Drawable) null);
             this.descriptionTextView.setPadding(0, 0, 0, 0);
             this.descriptionTextView.setSingleLine(true);
             this.descriptionTextView.setInputType(163872);
             this.descriptionTextView.setImeOptions(6);
             this.descriptionTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", NUM));
-            this.descriptionTextView.setCursorColor(Theme.getColor(str2));
+            this.descriptionTextView.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             this.descriptionTextView.setCursorWidth(1.5f);
             this.publicContainer.addView(this.descriptionTextView, LayoutHelper.createLinear(-1, 36));
@@ -671,13 +696,17 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
                 public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     ChannelCreateActivity channelCreateActivity = ChannelCreateActivity.this;
-                    channelCreateActivity.checkUserName(channelCreateActivity.descriptionTextView.getText().toString());
+                    boolean unused = channelCreateActivity.checkUserName(channelCreateActivity.descriptionTextView.getText().toString());
                 }
             });
             this.privateContainer = new TextBlockCell(context2);
             this.privateContainer.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             this.linkContainer.addView(this.privateContainer);
-            this.privateContainer.setOnClickListener(new -$$Lambda$ChannelCreateActivity$9kLD_6LVZi1jry2jmUaAGbUgTCw(this));
+            this.privateContainer.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChannelCreateActivity.this.lambda$createView$8$ChannelCreateActivity(view);
+                }
+            });
             this.checkTextView = new TextView(context2);
             this.checkTextView.setTextSize(1, 15.0f);
             this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -689,7 +718,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.loadingAdminedCell = new LoadingCell(context2);
             this.linearLayout.addView(this.loadingAdminedCell, LayoutHelper.createLinear(-1, -2));
             this.adminnedChannelsLayout = new LinearLayout(context2);
-            this.adminnedChannelsLayout.setBackgroundColor(Theme.getColor(str3));
+            this.adminnedChannelsLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.adminnedChannelsLayout.setOrientation(1);
             this.linearLayout.addView(this.adminnedChannelsLayout, LayoutHelper.createLinear(-1, -2));
             this.adminedInfoCell = new TextInfoPrivacyCell(context2);
@@ -701,7 +730,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public /* synthetic */ void lambda$createView$4$ChannelCreateActivity(View view) {
-        this.imageUpdater.openMenu(this.avatar != null, new -$$Lambda$ChannelCreateActivity$B1GdgGV1tK78Cjzb4rWLcAqpV0M(this));
+        this.imageUpdater.openMenu(this.avatar != null, new Runnable() {
+            public final void run() {
+                ChannelCreateActivity.this.lambda$null$3$ChannelCreateActivity();
+            }
+        });
     }
 
     public /* synthetic */ void lambda$null$3$ChannelCreateActivity() {
@@ -709,18 +742,16 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         this.avatarBig = null;
         this.uploadedAvatar = null;
         showAvatarProgress(false, true);
-        this.avatarImage.setImage(null, null, this.avatarDrawable, null);
+        this.avatarImage.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) null);
     }
 
     public /* synthetic */ boolean lambda$createView$5$ChannelCreateActivity(TextView textView, int i, KeyEvent keyEvent) {
-        if (i == 6) {
-            View view = this.doneButton;
-            if (view != null) {
-                view.performClick();
-                return true;
-            }
+        View view;
+        if (i != 6 || (view = this.doneButton) == null) {
+            return false;
         }
-        return false;
+        view.performClick();
+        return true;
     }
 
     public /* synthetic */ void lambda$createView$6$ChannelCreateActivity(View view) {
@@ -743,7 +774,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.invite.link));
                 Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
         }
     }
@@ -751,106 +782,134 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private void generateLink() {
         if (!this.loadingInvite && this.invite == null) {
             this.loadingInvite = true;
-            TL_messages_exportChatInvite tL_messages_exportChatInvite = new TL_messages_exportChatInvite();
+            TLRPC.TL_messages_exportChatInvite tL_messages_exportChatInvite = new TLRPC.TL_messages_exportChatInvite();
             tL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_exportChatInvite, new -$$Lambda$ChannelCreateActivity$B1f5C5wPqlSBUACduCE1syb6pss(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_exportChatInvite, new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    ChannelCreateActivity.this.lambda$generateLink$10$ChannelCreateActivity(tLObject, tL_error);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$generateLink$10$ChannelCreateActivity(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$02OCxzLG_caeGKZbAxcXnBPRtU4(this, tL_error, tLObject));
+    public /* synthetic */ void lambda$generateLink$10$ChannelCreateActivity(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(tL_error, tLObject) {
+            private final /* synthetic */ TLRPC.TL_error f$1;
+            private final /* synthetic */ TLObject f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                ChannelCreateActivity.this.lambda$null$9$ChannelCreateActivity(this.f$1, this.f$2);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$9$ChannelCreateActivity(TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$null$9$ChannelCreateActivity(TLRPC.TL_error tL_error, TLObject tLObject) {
         if (tL_error == null) {
-            this.invite = (ExportedChatInvite) tLObject;
+            this.invite = (TLRPC.ExportedChatInvite) tLObject;
         }
         this.loadingInvite = false;
         TextBlockCell textBlockCell = this.privateContainer;
-        ExportedChatInvite exportedChatInvite = this.invite;
+        TLRPC.ExportedChatInvite exportedChatInvite = this.invite;
         textBlockCell.setText(exportedChatInvite != null ? exportedChatInvite.link : LocaleController.getString("Loading", NUM), false);
     }
 
     private void updatePrivatePublic() {
+        String str;
+        int i;
+        String str2;
+        int i2;
         if (this.sectionCell != null) {
-            String str = "windowBackgroundGrayShadow";
-            int i = 8;
-            String str2;
-            TextInfoPrivacyCell textInfoPrivacyCell;
+            int i3 = 8;
             if (this.isPrivate || this.canCreatePublic) {
-                int i2;
-                str2 = "windowBackgroundWhiteGrayText4";
-                this.typeInfoCell.setTag(str2);
-                this.typeInfoCell.setTextColor(Theme.getColor(str2));
+                this.typeInfoCell.setTag("windowBackgroundWhiteGrayText4");
+                this.typeInfoCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
                 this.sectionCell.setVisibility(0);
                 this.adminedInfoCell.setVisibility(8);
                 this.adminnedChannelsLayout.setVisibility(8);
-                textInfoPrivacyCell = this.typeInfoCell;
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, str));
+                TextInfoPrivacyCell textInfoPrivacyCell = this.typeInfoCell;
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, "windowBackgroundGrayShadow"));
                 this.linkContainer.setVisibility(0);
                 this.loadingAdminedCell.setVisibility(8);
-                textInfoPrivacyCell = this.typeInfoCell;
+                TextInfoPrivacyCell textInfoPrivacyCell2 = this.typeInfoCell;
                 if (this.isPrivate) {
-                    i2 = NUM;
+                    i = NUM;
                     str = "ChannelPrivateLinkHelp";
                 } else {
-                    i2 = NUM;
+                    i = NUM;
                     str = "ChannelUsernameHelp";
                 }
-                textInfoPrivacyCell.setText(LocaleController.getString(str, i2));
-                HeaderCell headerCell = this.headerCell;
+                textInfoPrivacyCell2.setText(LocaleController.getString(str, i));
+                HeaderCell headerCell3 = this.headerCell;
                 if (this.isPrivate) {
                     i2 = NUM;
-                    str = "ChannelInviteLinkTitle";
+                    str2 = "ChannelInviteLinkTitle";
                 } else {
                     i2 = NUM;
-                    str = "ChannelLinkTitle";
+                    str2 = "ChannelLinkTitle";
                 }
-                headerCell.setText(LocaleController.getString(str, i2));
+                headerCell3.setText(LocaleController.getString(str2, i2));
                 this.publicContainer.setVisibility(this.isPrivate ? 8 : 0);
                 this.privateContainer.setVisibility(this.isPrivate ? 0 : 8);
                 this.linkContainer.setPadding(0, 0, 0, this.isPrivate ? 0 : AndroidUtilities.dp(7.0f));
                 TextBlockCell textBlockCell = this.privateContainer;
-                ExportedChatInvite exportedChatInvite = this.invite;
+                TLRPC.ExportedChatInvite exportedChatInvite = this.invite;
                 textBlockCell.setText(exportedChatInvite != null ? exportedChatInvite.link : LocaleController.getString("Loading", NUM), false);
                 TextView textView = this.checkTextView;
-                if (!(this.isPrivate || textView.length() == 0)) {
-                    i = 0;
+                if (!this.isPrivate && textView.length() != 0) {
+                    i3 = 0;
                 }
-                textView.setVisibility(i);
+                textView.setVisibility(i3);
             } else {
                 this.typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", NUM));
-                str2 = "windowBackgroundWhiteRedText4";
-                this.typeInfoCell.setTag(str2);
-                this.typeInfoCell.setTextColor(Theme.getColor(str2));
+                this.typeInfoCell.setTag("windowBackgroundWhiteRedText4");
+                this.typeInfoCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                 this.linkContainer.setVisibility(8);
                 this.sectionCell.setVisibility(8);
                 if (this.loadingAdminedChannels) {
                     this.loadingAdminedCell.setVisibility(0);
                     this.adminnedChannelsLayout.setVisibility(8);
-                    textInfoPrivacyCell = this.typeInfoCell;
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, str));
+                    TextInfoPrivacyCell textInfoPrivacyCell3 = this.typeInfoCell;
+                    textInfoPrivacyCell3.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell3.getContext(), NUM, "windowBackgroundGrayShadow"));
                     this.adminedInfoCell.setVisibility(8);
                 } else {
-                    textInfoPrivacyCell = this.typeInfoCell;
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, str));
+                    TextInfoPrivacyCell textInfoPrivacyCell4 = this.typeInfoCell;
+                    textInfoPrivacyCell4.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell4.getContext(), NUM, "windowBackgroundGrayShadow"));
                     this.loadingAdminedCell.setVisibility(8);
                     this.adminnedChannelsLayout.setVisibility(0);
                     this.adminedInfoCell.setVisibility(0);
                 }
             }
-            this.radioButtonCell1.setChecked(this.isPrivate ^ 1, true);
+            this.radioButtonCell1.setChecked(!this.isPrivate, true);
             this.radioButtonCell2.setChecked(this.isPrivate, true);
             this.descriptionTextView.clearFocus();
             AndroidUtilities.hideKeyboard(this.descriptionTextView);
         }
     }
 
-    public void didUploadPhoto(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$m0E-xD_NIIwbm9llzALGLpdnpvI(this, inputFile, photoSize2, photoSize));
+    public void didUploadPhoto(TLRPC.InputFile inputFile, TLRPC.PhotoSize photoSize, TLRPC.PhotoSize photoSize2) {
+        AndroidUtilities.runOnUIThread(new Runnable(inputFile, photoSize2, photoSize) {
+            private final /* synthetic */ TLRPC.InputFile f$1;
+            private final /* synthetic */ TLRPC.PhotoSize f$2;
+            private final /* synthetic */ TLRPC.PhotoSize f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                ChannelCreateActivity.this.lambda$didUploadPhoto$11$ChannelCreateActivity(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(TLRPC.InputFile inputFile, TLRPC.PhotoSize photoSize, TLRPC.PhotoSize photoSize2) {
         if (inputFile != null) {
             this.uploadedAvatar = inputFile;
             if (this.createAfterUpload) {
@@ -860,7 +919,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         this.progressDialog = null;
                     }
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
                 this.donePressed = false;
                 this.doneButton.performClick();
@@ -870,7 +929,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
         this.avatar = photoSize.location;
         this.avatarBig = photoSize2.location;
-        this.avatarImage.setImage(ImageLocation.getForLocal(this.avatar), "50_50", this.avatarDrawable, null);
+        this.avatarImage.setImage(ImageLocation.getForLocal(this.avatar), "50_50", (Drawable) this.avatarDrawable, (Object) null);
         showAvatarProgress(true, false);
     }
 
@@ -887,22 +946,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
             if (z2) {
                 this.avatarAnimation = new AnimatorSet();
-                AnimatorSet animatorSet2;
-                Animator[] animatorArr;
                 if (z) {
                     this.avatarProgressView.setVisibility(0);
-                    animatorSet2 = this.avatarAnimation;
-                    animatorArr = new Animator[2];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f});
-                    animatorSet2.playTogether(animatorArr);
+                    this.avatarAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{1.0f})});
                 } else {
                     this.avatarEditor.setVisibility(0);
-                    animatorSet2 = this.avatarAnimation;
-                    animatorArr = new Animator[2];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f});
-                    animatorSet2.playTogether(animatorArr);
+                    this.avatarAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, new float[]{0.0f})});
                 }
                 this.avatarAnimation.setDuration(180);
                 this.avatarAnimation.addListener(new AnimatorListenerAdapter() {
@@ -913,12 +962,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             } else {
                                 ChannelCreateActivity.this.avatarProgressView.setVisibility(4);
                             }
-                            ChannelCreateActivity.this.avatarAnimation = null;
+                            AnimatorSet unused = ChannelCreateActivity.this.avatarAnimation = null;
                         }
                     }
 
                     public void onAnimationCancel(Animator animator) {
-                        ChannelCreateActivity.this.avatarAnimation = null;
+                        AnimatorSet unused = ChannelCreateActivity.this.avatarAnimation = null;
                     }
                 });
                 this.avatarAnimation.start();
@@ -937,37 +986,32 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public void onActivityResultFragment(int i, int i2, Intent intent) {
-        ImageUpdater imageUpdater = this.imageUpdater;
-        if (imageUpdater != null) {
-            imageUpdater.onActivityResult(i, i2, intent);
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.onActivityResult(i, i2, intent);
         }
     }
 
     public void saveSelfArgs(Bundle bundle) {
+        String obj;
+        String str;
         if (this.currentStep == 0) {
-            String str;
-            ImageUpdater imageUpdater = this.imageUpdater;
-            if (imageUpdater != null) {
-                str = imageUpdater.currentPicturePath;
-                if (str != null) {
-                    bundle.putString("path", str);
-                }
+            ImageUpdater imageUpdater2 = this.imageUpdater;
+            if (!(imageUpdater2 == null || (str = imageUpdater2.currentPicturePath) == null)) {
+                bundle.putString("path", str);
             }
             EditTextEmoji editTextEmoji = this.nameTextView;
-            if (editTextEmoji != null) {
-                str = editTextEmoji.getText().toString();
-                if (str != null && str.length() != 0) {
-                    bundle.putString("nameTextView", str);
-                }
+            if (editTextEmoji != null && (obj = editTextEmoji.getText().toString()) != null && obj.length() != 0) {
+                bundle.putString("nameTextView", obj);
             }
         }
     }
 
     public void restoreSelfArgs(Bundle bundle) {
         if (this.currentStep == 0) {
-            ImageUpdater imageUpdater = this.imageUpdater;
-            if (imageUpdater != null) {
-                imageUpdater.currentPicturePath = bundle.getString("path");
+            ImageUpdater imageUpdater2 = this.imageUpdater;
+            if (imageUpdater2 != null) {
+                imageUpdater2.currentPicturePath = bundle.getString("path");
             }
             String string = bundle.getString("nameTextView");
             if (string != null) {
@@ -989,33 +1033,32 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        AlertDialog alertDialog;
         if (i == NotificationCenter.chatDidFailCreate) {
-            alertDialog = this.progressDialog;
+            AlertDialog alertDialog = this.progressDialog;
             if (alertDialog != null) {
                 try {
                     alertDialog.dismiss();
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
             }
             this.donePressed = false;
         } else if (i == NotificationCenter.chatDidCreated) {
-            alertDialog = this.progressDialog;
-            if (alertDialog != null) {
+            AlertDialog alertDialog2 = this.progressDialog;
+            if (alertDialog2 != null) {
                 try {
-                    alertDialog.dismiss();
+                    alertDialog2.dismiss();
                 } catch (Exception e2) {
-                    FileLog.e(e2);
+                    FileLog.e((Throwable) e2);
                 }
             }
-            i = ((Integer) objArr[0]).intValue();
+            int intValue = objArr[0].intValue();
             Bundle bundle = new Bundle();
             bundle.putInt("step", 1);
-            bundle.putInt("chat_id", i);
+            bundle.putInt("chat_id", intValue);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(i, this.uploadedAvatar, this.avatar, this.avatarBig);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, this.uploadedAvatar, this.avatar, this.avatarBig);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }
@@ -1025,28 +1068,45 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (!this.loadingAdminedChannels) {
             this.loadingAdminedChannels = true;
             updatePrivatePublic();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_channels_getAdminedPublicChannels(), new -$$Lambda$ChannelCreateActivity$sX4Ap2SwpMlriw_rHlFC0Efiffk(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC.TL_channels_getAdminedPublicChannels(), new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    ChannelCreateActivity.this.lambda$loadAdminedChannels$17$ChannelCreateActivity(tLObject, tL_error);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$loadAdminedChannels$17$ChannelCreateActivity(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$HGsozgXd5QuUD9PHWrJWhWbHHQs(this, tLObject));
+    public /* synthetic */ void lambda$loadAdminedChannels$17$ChannelCreateActivity(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
+            private final /* synthetic */ TLObject f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                ChannelCreateActivity.this.lambda$null$16$ChannelCreateActivity(this.f$1);
+            }
+        });
     }
 
     public /* synthetic */ void lambda$null$16$ChannelCreateActivity(TLObject tLObject) {
         this.loadingAdminedChannels = false;
         if (tLObject != null && getParentActivity() != null) {
-            int i;
-            for (i = 0; i < this.adminedChannelCells.size(); i++) {
-                this.linearLayout.removeView((View) this.adminedChannelCells.get(i));
+            for (int i = 0; i < this.adminedChannelCells.size(); i++) {
+                this.linearLayout.removeView(this.adminedChannelCells.get(i));
             }
             this.adminedChannelCells.clear();
-            TL_messages_chats tL_messages_chats = (TL_messages_chats) tLObject;
-            for (i = 0; i < tL_messages_chats.chats.size(); i++) {
-                AdminedChannelCell adminedChannelCell = new AdminedChannelCell(getParentActivity(), new -$$Lambda$ChannelCreateActivity$v16kHitJ-P9-5lDgeOrLxNNrfqc(this));
-                Chat chat = (Chat) tL_messages_chats.chats.get(i);
+            TLRPC.TL_messages_chats tL_messages_chats = (TLRPC.TL_messages_chats) tLObject;
+            for (int i2 = 0; i2 < tL_messages_chats.chats.size(); i2++) {
+                AdminedChannelCell adminedChannelCell = new AdminedChannelCell(getParentActivity(), new View.OnClickListener() {
+                    public final void onClick(View view) {
+                        ChannelCreateActivity.this.lambda$null$15$ChannelCreateActivity(view);
+                    }
+                });
+                TLRPC.Chat chat = tL_messages_chats.chats.get(i2);
                 boolean z = true;
-                if (i != tL_messages_chats.chats.size() - 1) {
+                if (i2 != tL_messages_chats.chats.size() - 1) {
                     z = false;
                 }
                 adminedChannelCell.setChannel(chat, z);
@@ -1058,46 +1118,47 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public /* synthetic */ void lambda$null$15$ChannelCreateActivity(View view) {
-        Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
-        Builder builder = new Builder(getParentActivity());
+        TLRPC.Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
-        String str = "/";
-        Object[] objArr;
-        StringBuilder stringBuilder;
         if (currentChannel.megagroup) {
-            objArr = new Object[2];
-            stringBuilder = new StringBuilder();
-            stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
-            stringBuilder.append(str);
-            stringBuilder.append(currentChannel.username);
-            objArr[0] = stringBuilder.toString();
-            objArr[1] = currentChannel.title;
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", NUM, objArr)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", NUM, MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + currentChannel.username, currentChannel.title)));
         } else {
-            objArr = new Object[2];
-            stringBuilder = new StringBuilder();
-            stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
-            stringBuilder.append(str);
-            stringBuilder.append(currentChannel.username);
-            objArr[0] = stringBuilder.toString();
-            objArr[1] = currentChannel.title;
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", NUM, objArr)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", NUM, MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + currentChannel.username, currentChannel.title)));
         }
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new -$$Lambda$ChannelCreateActivity$XKw5YNSkvJyf-2lbcB8fcZcxM-I(this, currentChannel));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener(currentChannel) {
+            private final /* synthetic */ TLRPC.Chat f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                ChannelCreateActivity.this.lambda$null$14$ChannelCreateActivity(this.f$1, dialogInterface, i);
+            }
+        });
         showDialog(builder.create());
     }
 
-    public /* synthetic */ void lambda$null$14$ChannelCreateActivity(Chat chat, DialogInterface dialogInterface, int i) {
-        TL_channels_updateUsername tL_channels_updateUsername = new TL_channels_updateUsername();
+    public /* synthetic */ void lambda$null$14$ChannelCreateActivity(TLRPC.Chat chat, DialogInterface dialogInterface, int i) {
+        TLRPC.TL_channels_updateUsername tL_channels_updateUsername = new TLRPC.TL_channels_updateUsername();
         tL_channels_updateUsername.channel = MessagesController.getInputChannel(chat);
         tL_channels_updateUsername.username = "";
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_updateUsername, new -$$Lambda$ChannelCreateActivity$itNfNKVGl3ReRwzmbqq8toziSoA(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_updateUsername, new RequestDelegate() {
+            public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                ChannelCreateActivity.this.lambda$null$13$ChannelCreateActivity(tLObject, tL_error);
+            }
+        }, 64);
     }
 
-    public /* synthetic */ void lambda$null$13$ChannelCreateActivity(TLObject tLObject, TL_error tL_error) {
-        if (tLObject instanceof TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$L_G3GfO7KOkNy_wD7C5sV0zstvg(this));
+    public /* synthetic */ void lambda$null$13$ChannelCreateActivity(TLObject tLObject, TLRPC.TL_error tL_error) {
+        if (tLObject instanceof TLRPC.TL_boolTrue) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    ChannelCreateActivity.this.lambda$null$12$ChannelCreateActivity();
+                }
+            });
         }
     }
 
@@ -1109,7 +1170,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         updatePrivatePublic();
     }
 
-    private boolean checkUserName(String str) {
+    /* access modifiers changed from: private */
+    public boolean checkUserName(String str) {
         if (str == null || str.length() <= 0) {
             this.checkTextView.setVisibility(8);
         } else {
@@ -1125,14 +1187,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
         }
         this.lastNameAvailable = false;
-        String str2 = "windowBackgroundWhiteRedText4";
         if (str != null) {
-            String str3 = "_";
-            String str4 = "LinkInvalid";
-            if (str.startsWith(str3) || str.endsWith(str3)) {
-                this.checkTextView.setText(LocaleController.getString(str4, NUM));
-                this.checkTextView.setTag(str2);
-                this.checkTextView.setTextColor(Theme.getColor(str2));
+            if (str.startsWith("_") || str.endsWith("_")) {
+                this.checkTextView.setText(LocaleController.getString("LinkInvalid", NUM));
+                this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+                this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                 return false;
             }
             int i = 0;
@@ -1140,13 +1199,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 char charAt = str.charAt(i);
                 if (i == 0 && charAt >= '0' && charAt <= '9') {
                     this.checkTextView.setText(LocaleController.getString("LinkInvalidStartNumber", NUM));
-                    this.checkTextView.setTag(str2);
-                    this.checkTextView.setTextColor(Theme.getColor(str2));
+                    this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+                    this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                     return false;
                 } else if ((charAt < '0' || charAt > '9') && ((charAt < 'a' || charAt > 'z') && ((charAt < 'A' || charAt > 'Z') && charAt != '_'))) {
-                    this.checkTextView.setText(LocaleController.getString(str4, NUM));
-                    this.checkTextView.setTag(str2);
-                    this.checkTextView.setTextColor(Theme.getColor(str2));
+                    this.checkTextView.setText(LocaleController.getString("LinkInvalid", NUM));
+                    this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+                    this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                     return false;
                 } else {
                     i++;
@@ -1155,173 +1214,132 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
         if (str == null || str.length() < 5) {
             this.checkTextView.setText(LocaleController.getString("LinkInvalidShort", NUM));
-            this.checkTextView.setTag(str2);
-            this.checkTextView.setTextColor(Theme.getColor(str2));
+            this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
             return false;
         } else if (str.length() > 32) {
             this.checkTextView.setText(LocaleController.getString("LinkInvalidLong", NUM));
-            this.checkTextView.setTag(str2);
-            this.checkTextView.setTextColor(Theme.getColor(str2));
+            this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
             return false;
         } else {
             this.checkTextView.setText(LocaleController.getString("LinkChecking", NUM));
-            str2 = "windowBackgroundWhiteGrayText8";
-            this.checkTextView.setTag(str2);
-            this.checkTextView.setTextColor(Theme.getColor(str2));
+            this.checkTextView.setTag("windowBackgroundWhiteGrayText8");
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
             this.lastCheckName = str;
-            this.checkRunnable = new -$$Lambda$ChannelCreateActivity$mDP7DqCeyyygG_tNsvar_xfQvY(this, str);
+            this.checkRunnable = new Runnable(str) {
+                private final /* synthetic */ String f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    ChannelCreateActivity.this.lambda$checkUserName$20$ChannelCreateActivity(this.f$1);
+                }
+            };
             AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
             return true;
         }
     }
 
     public /* synthetic */ void lambda$checkUserName$20$ChannelCreateActivity(String str) {
-        TL_channels_checkUsername tL_channels_checkUsername = new TL_channels_checkUsername();
+        TLRPC.TL_channels_checkUsername tL_channels_checkUsername = new TLRPC.TL_channels_checkUsername();
         tL_channels_checkUsername.username = str;
         tL_channels_checkUsername.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_checkUsername, new -$$Lambda$ChannelCreateActivity$btlKiyTzqeUa7MaXnitfG9ByjcI(this, str), 2);
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_checkUsername, new RequestDelegate(str) {
+            private final /* synthetic */ String f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                ChannelCreateActivity.this.lambda$null$19$ChannelCreateActivity(this.f$1, tLObject, tL_error);
+            }
+        }, 2);
     }
 
-    public /* synthetic */ void lambda$null$19$ChannelCreateActivity(String str, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ChannelCreateActivity$ONcbh_gtesiOrY2PbEXECoYX8sk(this, str, tL_error, tLObject));
+    public /* synthetic */ void lambda$null$19$ChannelCreateActivity(String str, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(str, tL_error, tLObject) {
+            private final /* synthetic */ String f$1;
+            private final /* synthetic */ TLRPC.TL_error f$2;
+            private final /* synthetic */ TLObject f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                ChannelCreateActivity.this.lambda$null$18$ChannelCreateActivity(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$18$ChannelCreateActivity(String str, TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$null$18$ChannelCreateActivity(String str, TLRPC.TL_error tL_error, TLObject tLObject) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
-            String str3;
-            if (tL_error == null && (tLObject instanceof TL_boolTrue)) {
-                this.checkTextView.setText(LocaleController.formatString("LinkAvailable", NUM, str));
-                str3 = "windowBackgroundWhiteGreenText";
-                this.checkTextView.setTag(str3);
-                this.checkTextView.setTextColor(Theme.getColor(str3));
-                this.lastNameAvailable = true;
+            if (tL_error != null || !(tLObject instanceof TLRPC.TL_boolTrue)) {
+                if (tL_error == null || !tL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
+                    this.checkTextView.setText(LocaleController.getString("LinkInUse", NUM));
+                } else {
+                    this.canCreatePublic = false;
+                    loadAdminedChannels();
+                }
+                this.checkTextView.setTag("windowBackgroundWhiteRedText4");
+                this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+                this.lastNameAvailable = false;
                 return;
             }
-            if (tL_error == null || !tL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
-                this.checkTextView.setText(LocaleController.getString("LinkInUse", NUM));
-            } else {
-                this.canCreatePublic = false;
-                loadAdminedChannels();
-            }
-            str3 = "windowBackgroundWhiteRedText4";
-            this.checkTextView.setTag(str3);
-            this.checkTextView.setTextColor(Theme.getColor(str3));
-            this.lastNameAvailable = false;
+            this.checkTextView.setText(LocaleController.formatString("LinkAvailable", NUM, str));
+            this.checkTextView.setTag("windowBackgroundWhiteGreenText");
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+            this.lastNameAvailable = true;
         }
     }
 
     private void showErrorAlert(String str) {
         if (getParentActivity() != null) {
-            Builder builder = new Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
-            int i = -1;
+            char c = 65535;
             int hashCode = str.hashCode();
             if (hashCode != NUM) {
                 if (hashCode == NUM && str.equals("USERNAME_OCCUPIED")) {
-                    i = 1;
+                    c = 1;
                 }
             } else if (str.equals("USERNAME_INVALID")) {
-                i = 0;
+                c = 0;
             }
-            if (i == 0) {
+            if (c == 0) {
                 builder.setMessage(LocaleController.getString("LinkInvalid", NUM));
-            } else if (i != 1) {
+            } else if (c != 1) {
                 builder.setMessage(LocaleController.getString("ErrorOccurred", NUM));
             } else {
                 builder.setMessage(LocaleController.getString("LinkInUse", NUM));
             }
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             showDialog(builder.create());
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c = new -$$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[55];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[6] = new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[7] = new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[8] = new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[9] = new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        themeDescriptionArr[10] = new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[11] = new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[12] = new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[13] = new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        themeDescriptionArr[14] = new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText8");
-        themeDescriptionArr[15] = new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[16] = new ThemeDescription(this.linkContainer, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[17] = new ThemeDescription(this.sectionCell, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundGrayShadow");
-        View view = this.headerCell;
-        Class[] clsArr = new Class[]{HeaderCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        themeDescriptionArr[18] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[19] = new ThemeDescription(this.headerCell2, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[20] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[21] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[22] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhiteRedText4");
-        themeDescriptionArr[23] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhiteGrayText8");
-        themeDescriptionArr[24] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhiteGreenText");
-        themeDescriptionArr[25] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[26] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[27] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteRedText4");
-        themeDescriptionArr[28] = new ThemeDescription(this.adminedInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[29] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[30] = new ThemeDescription(this.privateContainer, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[31] = new ThemeDescription(this.privateContainer, 0, new Class[]{TextBlockCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[32] = new ThemeDescription(this.loadingAdminedCell, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
-        themeDescriptionArr[33] = new ThemeDescription(this.radioButtonCell1, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        view = this.radioButtonCell1;
-        int i = ThemeDescription.FLAG_CHECKBOX;
-        clsArr = new Class[]{RadioButtonCell.class};
-        strArr = new String[1];
-        strArr[0] = "radioButton";
-        themeDescriptionArr[34] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "radioBackground");
-        themeDescriptionArr[35] = new ThemeDescription(this.radioButtonCell1, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, "radioBackgroundChecked");
-        themeDescriptionArr[36] = new ThemeDescription(this.radioButtonCell1, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.radioButtonCell1;
-        i = ThemeDescription.FLAG_TEXTCOLOR;
-        clsArr = new Class[]{RadioButtonCell.class};
-        strArr = new String[1];
-        strArr[0] = "valueTextView";
-        themeDescriptionArr[37] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[38] = new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[39] = new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, "radioBackground");
-        themeDescriptionArr[40] = new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, "radioBackgroundChecked");
-        themeDescriptionArr[41] = new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[42] = new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[43] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.adminnedChannelsLayout;
-        i = ThemeDescription.FLAG_TEXTCOLOR;
-        clsArr = new Class[]{AdminedChannelCell.class};
-        strArr = new String[1];
-        strArr[0] = "statusTextView";
-        themeDescriptionArr[44] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText");
-        themeDescriptionArr[45] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteLinkText");
-        themeDescriptionArr[46] = new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"deleteButton"}, null, null, null, "windowBackgroundWhiteGrayText");
-        -$$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2 = -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c;
-        themeDescriptionArr[47] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_savedDrawable}, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_text");
-        themeDescriptionArr[48] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundRed");
-        themeDescriptionArr[49] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundOrange");
-        themeDescriptionArr[50] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundViolet");
-        themeDescriptionArr[51] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundGreen");
-        themeDescriptionArr[52] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundCyan");
-        themeDescriptionArr[53] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundBlue");
-        themeDescriptionArr[54] = new ThemeDescription(null, 0, null, null, null, -__lambda_channelcreateactivity_ieybfs24yeouvitbu135ywldd4c2, "avatar_backgroundPink");
-        return themeDescriptionArr;
+        $$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c r9 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                ChannelCreateActivity.this.lambda$getThemeDescriptions$21$ChannelCreateActivity();
+            }
+        };
+        $$Lambda$ChannelCreateActivity$ieYbFS24yeOuvItbU135YWldd4c r7 = r9;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.nameTextView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.descriptionTextView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText8"), new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.linkContainer, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.sectionCell, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.headerCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.headerCell2, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText4"), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText8"), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGreenText"), new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"), new ThemeDescription((View) this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText4"), new ThemeDescription(this.adminedInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.privateContainer, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription((View) this.privateContainer, 0, new Class[]{TextBlockCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.loadingAdminedCell, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.radioButtonCell1, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription((View) this.radioButtonCell1, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"), new ThemeDescription((View) this.radioButtonCell1, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"), new ThemeDescription((View) this.radioButtonCell1, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.radioButtonCell1, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription(this.radioButtonCell2, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription((View) this.radioButtonCell2, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"), new ThemeDescription((View) this.radioButtonCell2, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"), new ThemeDescription((View) this.radioButtonCell2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.radioButtonCell2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"), new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"deleteButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, r7, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$21$ChannelCreateActivity() {
-        LinearLayout linearLayout = this.adminnedChannelsLayout;
-        if (linearLayout != null) {
-            int childCount = linearLayout.getChildCount();
+        LinearLayout linearLayout3 = this.adminnedChannelsLayout;
+        if (linearLayout3 != null) {
+            int childCount = linearLayout3.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childAt = this.adminnedChannelsLayout.getChildAt(i);
                 if (childAt instanceof AdminedChannelCell) {

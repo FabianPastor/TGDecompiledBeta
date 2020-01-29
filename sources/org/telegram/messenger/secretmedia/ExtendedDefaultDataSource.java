@@ -9,10 +9,12 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.FileDataSource;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Log;
+import com.google.android.exoplayer2.util.Predicate;
 import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,33 +41,33 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private DataSource rtmpDataSource;
     private final List<TransferListener> transferListeners;
 
-    public ExtendedDefaultDataSource(Context context, String str, boolean z) {
-        this(context, str, 8000, 8000, z);
+    public ExtendedDefaultDataSource(Context context2, String str, boolean z) {
+        this(context2, str, 8000, 8000, z);
     }
 
-    public ExtendedDefaultDataSource(Context context, String str, int i, int i2, boolean z) {
-        this(context, new DefaultHttpDataSource(str, null, i, i2, z, null));
+    public ExtendedDefaultDataSource(Context context2, String str, int i, int i2, boolean z) {
+        this(context2, new DefaultHttpDataSource(str, (Predicate<String>) null, i, i2, z, (HttpDataSource.RequestProperties) null));
     }
 
-    public ExtendedDefaultDataSource(Context context, DataSource dataSource) {
-        this.context = context.getApplicationContext();
-        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource);
+    public ExtendedDefaultDataSource(Context context2, DataSource dataSource2) {
+        this.context = context2.getApplicationContext();
+        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource2);
         this.transferListeners = new ArrayList();
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context, TransferListener transferListener, String str, boolean z) {
-        this(context, transferListener, str, 8000, 8000, z);
+    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, String str, boolean z) {
+        this(context2, transferListener, str, 8000, 8000, z);
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context, TransferListener transferListener, String str, int i, int i2, boolean z) {
-        this(context, transferListener, new DefaultHttpDataSource(str, null, transferListener, i, i2, z, null));
+    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, String str, int i, int i2, boolean z) {
+        this(context2, transferListener, (DataSource) new DefaultHttpDataSource(str, (Predicate<String>) null, transferListener, i, i2, z, (HttpDataSource.RequestProperties) null));
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context, TransferListener transferListener, DataSource dataSource) {
-        this(context, dataSource);
+    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, DataSource dataSource2) {
+        this(context2, dataSource2);
         if (transferListener != null) {
             this.transferListeners.add(transferListener);
         }
@@ -86,8 +88,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
         Assertions.checkState(this.dataSource == null);
         String scheme = dataSpec.uri.getScheme();
         if (Util.isLocalFileUri(dataSpec.uri)) {
-            scheme = dataSpec.uri.getPath();
-            if (scheme != null && scheme.startsWith("/android_asset/")) {
+            String path = dataSpec.uri.getPath();
+            if (path != null && path.startsWith("/android_asset/")) {
                 this.dataSource = getAssetDataSource();
             } else if (dataSpec.uri.getPath().endsWith(".enc")) {
                 this.dataSource = getEncryptedFileDataSource();
@@ -117,20 +119,23 @@ public final class ExtendedDefaultDataSource implements DataSource {
     }
 
     public Uri getUri() {
-        DataSource dataSource = this.dataSource;
-        return dataSource == null ? null : dataSource.getUri();
+        DataSource dataSource2 = this.dataSource;
+        if (dataSource2 == null) {
+            return null;
+        }
+        return dataSource2.getUri();
     }
 
     public Map<String, List<String>> getResponseHeaders() {
-        DataSource dataSource = this.dataSource;
-        return dataSource == null ? Collections.emptyMap() : dataSource.getResponseHeaders();
+        DataSource dataSource2 = this.dataSource;
+        return dataSource2 == null ? Collections.emptyMap() : dataSource2.getResponseHeaders();
     }
 
     public void close() throws IOException {
-        DataSource dataSource = this.dataSource;
-        if (dataSource != null) {
+        DataSource dataSource2 = this.dataSource;
+        if (dataSource2 != null) {
             try {
-                dataSource.close();
+                dataSource2.close();
             } finally {
                 this.dataSource = null;
             }
@@ -208,15 +213,15 @@ public final class ExtendedDefaultDataSource implements DataSource {
         return this.rawResourceDataSource;
     }
 
-    private void addListenersToDataSource(DataSource dataSource) {
+    private void addListenersToDataSource(DataSource dataSource2) {
         for (int i = 0; i < this.transferListeners.size(); i++) {
-            dataSource.addTransferListener((TransferListener) this.transferListeners.get(i));
+            dataSource2.addTransferListener(this.transferListeners.get(i));
         }
     }
 
-    private void maybeAddListenerToDataSource(DataSource dataSource, TransferListener transferListener) {
-        if (dataSource != null) {
-            dataSource.addTransferListener(transferListener);
+    private void maybeAddListenerToDataSource(DataSource dataSource2, TransferListener transferListener) {
+        if (dataSource2 != null) {
+            dataSource2.addTransferListener(transferListener);
         }
     }
 }

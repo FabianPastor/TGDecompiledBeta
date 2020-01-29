@@ -2,30 +2,25 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
 import org.telegram.ui.Cells.ManageChatUserCell;
@@ -34,182 +29,42 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
-import org.telegram.ui.ContactsActivity.ContactsActivityDelegate;
+import org.telegram.ui.ContactsActivity;
+import org.telegram.ui.GroupCreateActivity;
 
-public class PrivacyUsersActivity extends BaseFragment implements NotificationCenterDelegate, ContactsActivityDelegate {
-    private int blockUserDetailRow;
-    private int blockUserRow;
-    private boolean blockedUsersActivity = true;
+public class PrivacyUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ContactsActivity.ContactsActivityDelegate {
+    /* access modifiers changed from: private */
+    public int blockUserDetailRow;
+    /* access modifiers changed from: private */
+    public int blockUserRow;
+    /* access modifiers changed from: private */
+    public boolean blockedUsersActivity = true;
     private PrivacyActivityDelegate delegate;
     private EmptyTextProgressView emptyView;
     private boolean isAlwaysShare;
     private boolean isGroup;
-    private LinearLayoutManager layoutManager;
+    /* access modifiers changed from: private */
+    public LinearLayoutManager layoutManager;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
-    private int rowCount;
-    private ArrayList<Integer> uidArray;
-    private int usersDetailRow;
-    private int usersEndRow;
-    private int usersHeaderRow;
-    private int usersStartRow;
+    /* access modifiers changed from: private */
+    public int rowCount;
+    /* access modifiers changed from: private */
+    public ArrayList<Integer> uidArray;
+    /* access modifiers changed from: private */
+    public int usersDetailRow;
+    /* access modifiers changed from: private */
+    public int usersEndRow;
+    /* access modifiers changed from: private */
+    public int usersHeaderRow;
+    /* access modifiers changed from: private */
+    public int usersStartRow;
 
     public interface PrivacyActivityDelegate {
         void didUpdateUserList(ArrayList<Integer> arrayList, boolean z);
     }
 
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public int getItemCount() {
-            return PrivacyUsersActivity.this.rowCount;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            int itemViewType = viewHolder.getItemViewType();
-            return itemViewType == 0 || itemViewType == 2;
-        }
-
-        public /* synthetic */ boolean lambda$onCreateViewHolder$0$PrivacyUsersActivity$ListAdapter(ManageChatUserCell manageChatUserCell, boolean z) {
-            if (z) {
-                PrivacyUsersActivity.this.showUnblockAlert(((Integer) manageChatUserCell.getTag()).intValue());
-            }
-            return true;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
-            String str = "windowBackgroundWhite";
-            if (i == 0) {
-                View manageChatUserCell = new ManageChatUserCell(this.mContext, 7, 6, true);
-                manageChatUserCell.setBackgroundColor(Theme.getColor(str));
-                manageChatUserCell.setDelegate(new -$$Lambda$PrivacyUsersActivity$ListAdapter$ah_jQyMOHlRewlEcZgEQccTwPTg(this));
-                view = manageChatUserCell;
-            } else if (i == 1) {
-                view = new TextInfoPrivacyCell(this.mContext);
-            } else if (i != 2) {
-                View headerCell = new HeaderCell(this.mContext, false, 21, 11, false);
-                headerCell.setBackgroundColor(Theme.getColor(str));
-                headerCell.setHeight(43);
-            } else {
-                view = new ManageChatTextCell(this.mContext);
-                view.setBackgroundColor(Theme.getColor(str));
-            }
-            return new Holder(view);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            boolean z = false;
-            if (itemViewType == 0) {
-                ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
-                if (PrivacyUsersActivity.this.blockedUsersActivity) {
-                    itemViewType = PrivacyUsersActivity.this.getMessagesController().blockedUsers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
-                } else {
-                    itemViewType = ((Integer) PrivacyUsersActivity.this.uidArray.get(i - PrivacyUsersActivity.this.usersStartRow)).intValue();
-                }
-                manageChatUserCell.setTag(Integer.valueOf(itemViewType));
-                CharSequence stringBuilder;
-                if (itemViewType > 0) {
-                    User user = PrivacyUsersActivity.this.getMessagesController().getUser(Integer.valueOf(itemViewType));
-                    if (user != null) {
-                        if (user.bot) {
-                            StringBuilder stringBuilder2 = new StringBuilder();
-                            String str = "Bot";
-                            stringBuilder2.append(LocaleController.getString(str, NUM).substring(0, 1).toUpperCase());
-                            stringBuilder2.append(LocaleController.getString(str, NUM).substring(1));
-                            stringBuilder = stringBuilder2.toString();
-                        } else {
-                            String str2 = user.phone;
-                            if (str2 == null || str2.length() == 0) {
-                                stringBuilder = LocaleController.getString("NumberUnknown", NUM);
-                            } else {
-                                PhoneFormat instance = PhoneFormat.getInstance();
-                                StringBuilder stringBuilder3 = new StringBuilder();
-                                stringBuilder3.append("+");
-                                stringBuilder3.append(user.phone);
-                                stringBuilder = instance.format(stringBuilder3.toString());
-                            }
-                        }
-                        if (i != PrivacyUsersActivity.this.usersEndRow - 1) {
-                            z = true;
-                        }
-                        manageChatUserCell.setData(user, null, stringBuilder, z);
-                        return;
-                    }
-                    return;
-                }
-                Chat chat = PrivacyUsersActivity.this.getMessagesController().getChat(Integer.valueOf(-itemViewType));
-                if (chat != null) {
-                    int i2 = chat.participants_count;
-                    if (i2 != 0) {
-                        stringBuilder = LocaleController.formatPluralString("Members", i2);
-                    } else if (chat.has_geo) {
-                        stringBuilder = LocaleController.getString("MegaLocation", NUM);
-                    } else if (TextUtils.isEmpty(chat.username)) {
-                        stringBuilder = LocaleController.getString("MegaPrivate", NUM);
-                    } else {
-                        stringBuilder = LocaleController.getString("MegaPublic", NUM);
-                    }
-                    if (i != PrivacyUsersActivity.this.usersEndRow - 1) {
-                        z = true;
-                    }
-                    manageChatUserCell.setData(chat, null, stringBuilder, z);
-                }
-            } else if (itemViewType == 1) {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                String str3 = "windowBackgroundGrayShadow";
-                if (i == PrivacyUsersActivity.this.blockUserDetailRow) {
-                    if (PrivacyUsersActivity.this.blockedUsersActivity) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("BlockedUsersInfo", NUM));
-                    } else {
-                        textInfoPrivacyCell.setText(null);
-                    }
-                    if (PrivacyUsersActivity.this.usersStartRow == -1) {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str3));
-                    } else {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str3));
-                    }
-                } else if (i == PrivacyUsersActivity.this.usersDetailRow) {
-                    textInfoPrivacyCell.setText("");
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str3));
-                }
-            } else if (itemViewType == 2) {
-                ManageChatTextCell manageChatTextCell = (ManageChatTextCell) viewHolder.itemView;
-                manageChatTextCell.setColors("windowBackgroundWhiteBlueIcon", "windowBackgroundWhiteBlueButton");
-                if (PrivacyUsersActivity.this.blockedUsersActivity) {
-                    manageChatTextCell.setText(LocaleController.getString("BlockUser", NUM), null, NUM, false);
-                } else {
-                    manageChatTextCell.setText(LocaleController.getString("PrivacyAddAnException", NUM), null, NUM, false);
-                }
-            } else if (itemViewType == 3) {
-                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                if (i != PrivacyUsersActivity.this.usersHeaderRow) {
-                    return;
-                }
-                if (PrivacyUsersActivity.this.blockedUsersActivity) {
-                    headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", PrivacyUsersActivity.this.getMessagesController().totalBlockedCount));
-                    return;
-                }
-                headerCell.setText(LocaleController.getString("PrivacyExceptions", NUM));
-            }
-        }
-
-        public int getItemViewType(int i) {
-            if (i == PrivacyUsersActivity.this.usersHeaderRow) {
-                return 3;
-            }
-            if (i == PrivacyUsersActivity.this.blockUserRow) {
-                return 2;
-            }
-            return (i == PrivacyUsersActivity.this.blockUserDetailRow || i == PrivacyUsersActivity.this.usersDetailRow) ? 1 : 0;
-        }
+    public PrivacyUsersActivity() {
     }
 
     public PrivacyUsersActivity(ArrayList<Integer> arrayList, boolean z, boolean z2) {
@@ -221,9 +76,10 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
-        if (this.blockedUsersActivity) {
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoad);
+        if (!this.blockedUsersActivity) {
+            return true;
         }
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.blockedUsersDidLoad);
         return true;
     }
 
@@ -252,7 +108,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", NUM));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     PrivacyUsersActivity.this.finishFragment();
@@ -276,25 +132,33 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setVerticalScrollBarEnabled(false);
-        recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
-        recyclerListView.setAdapter(listAdapter);
-        RecyclerListView recyclerListView2 = this.listView;
+        recyclerListView2.setAdapter(listAdapter);
+        RecyclerListView recyclerListView3 = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        recyclerListView2.setVerticalScrollbarPosition(i);
+        recyclerListView3.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new -$$Lambda$PrivacyUsersActivity$D3bLTU7NAbbHWcoiH45oxyckkb4(this));
-        this.listView.setOnItemLongClickListener(new -$$Lambda$PrivacyUsersActivity$r_SA004H7_gb5NSQvdo4AkX5yCs(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+            public final void onItemClick(View view, int i) {
+                PrivacyUsersActivity.this.lambda$createView$1$PrivacyUsersActivity(view, i);
+            }
+        });
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
+            public final boolean onItemClick(View view, int i) {
+                return PrivacyUsersActivity.this.lambda$createView$2$PrivacyUsersActivity(view, i);
+            }
+        });
         if (this.blockedUsersActivity) {
-            this.listView.setOnScrollListener(new OnScrollListener() {
+            this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                     if (!PrivacyUsersActivity.this.getMessagesController().blockedEndReached) {
-                        i = Math.abs(PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() - PrivacyUsersActivity.this.layoutManager.findFirstVisibleItemPosition()) + 1;
+                        int abs = Math.abs(PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() - PrivacyUsersActivity.this.layoutManager.findFirstVisibleItemPosition()) + 1;
                         int itemCount = recyclerView.getAdapter().getItemCount();
-                        if (i > 0 && PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() >= itemCount - 10) {
+                        if (abs > 0 && PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() >= itemCount - 10) {
                             PrivacyUsersActivity.this.getMessagesController().getBlockedUsers(false);
                         }
                     }
@@ -311,34 +175,36 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public /* synthetic */ void lambda$createView$1$PrivacyUsersActivity(View view, int i) {
-        Bundle bundle;
         if (i == this.blockUserRow) {
             if (this.blockedUsersActivity) {
                 presentFragment(new DialogOrContactPickerActivity());
                 return;
             }
-            bundle = new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putBoolean(this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
             bundle.putBoolean("isGroup", this.isGroup);
             GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
-            groupCreateActivity.setDelegate(new -$$Lambda$PrivacyUsersActivity$SVOOA5DnLR2m99VL4tIuB7GhsBs(this));
+            groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new GroupCreateActivity.GroupCreateActivityDelegate() {
+                public final void didSelectUsers(ArrayList arrayList) {
+                    PrivacyUsersActivity.this.lambda$null$0$PrivacyUsersActivity(arrayList);
+                }
+            });
             presentFragment(groupCreateActivity);
         } else if (i >= this.usersStartRow && i < this.usersEndRow) {
-            String str = "user_id";
             if (this.blockedUsersActivity) {
-                bundle = new Bundle();
-                bundle.putInt(str, getMessagesController().blockedUsers.keyAt(i - this.usersStartRow));
-                presentFragment(new ProfileActivity(bundle));
+                Bundle bundle2 = new Bundle();
+                bundle2.putInt("user_id", getMessagesController().blockedUsers.keyAt(i - this.usersStartRow));
+                presentFragment(new ProfileActivity(bundle2));
                 return;
             }
-            bundle = new Bundle();
-            Integer num = (Integer) this.uidArray.get(i - this.usersStartRow);
+            Bundle bundle3 = new Bundle();
+            Integer num = this.uidArray.get(i - this.usersStartRow);
             if (num.intValue() > 0) {
-                bundle.putInt(str, num.intValue());
+                bundle3.putInt("user_id", num.intValue());
             } else {
-                bundle.putInt("chat_id", -num.intValue());
+                bundle3.putInt("chat_id", -num.intValue());
             }
-            presentFragment(new ProfileActivity(bundle));
+            presentFragment(new ProfileActivity(bundle3));
         }
     }
 
@@ -364,9 +230,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         if (this.blockedUsersActivity) {
             showUnblockAlert(getMessagesController().blockedUsers.keyAt(i - this.usersStartRow));
-        } else {
-            showUnblockAlert(((Integer) this.uidArray.get(i - i2)).intValue());
+            return true;
         }
+        showUnblockAlert(this.uidArray.get(i - i2).intValue());
         return true;
     }
 
@@ -374,10 +240,21 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         this.delegate = privacyActivityDelegate;
     }
 
-    private void showUnblockAlert(int i) {
+    /* access modifiers changed from: private */
+    public void showUnblockAlert(int i) {
         if (getParentActivity() != null) {
-            Builder builder = new Builder(getParentActivity());
-            builder.setItems(this.blockedUsersActivity ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new -$$Lambda$PrivacyUsersActivity$8Pgo4HS6PGjX-d7DerbhGOGCfXc(this, i));
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            builder.setItems(this.blockedUsersActivity ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new DialogInterface.OnClickListener(i) {
+                private final /* synthetic */ int f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    PrivacyUsersActivity.this.lambda$showUnblockAlert$3$PrivacyUsersActivity(this.f$1, dialogInterface, i);
+                }
+            });
             showDialog(builder.create());
         }
     }
@@ -402,30 +279,31 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     private void updateRows() {
+        int i;
         this.rowCount = 0;
         if (!this.blockedUsersActivity || getMessagesController().totalBlockedCount >= 0) {
-            int i = this.rowCount;
-            this.rowCount = i + 1;
-            this.blockUserRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.blockUserDetailRow = i;
+            int i2 = this.rowCount;
+            this.rowCount = i2 + 1;
+            this.blockUserRow = i2;
+            int i3 = this.rowCount;
+            this.rowCount = i3 + 1;
+            this.blockUserDetailRow = i3;
             if (this.blockedUsersActivity) {
                 i = getMessagesController().blockedUsers.size();
             } else {
                 i = this.uidArray.size();
             }
             if (i != 0) {
-                int i2 = this.rowCount;
-                this.rowCount = i2 + 1;
-                this.usersHeaderRow = i2;
-                i2 = this.rowCount;
-                this.usersStartRow = i2;
-                this.rowCount = i2 + i;
-                i = this.rowCount;
-                this.usersEndRow = i;
-                this.rowCount = i + 1;
-                this.usersDetailRow = i;
+                int i4 = this.rowCount;
+                this.rowCount = i4 + 1;
+                this.usersHeaderRow = i4;
+                int i5 = this.rowCount;
+                this.usersStartRow = i5;
+                this.rowCount = i5 + i;
+                int i6 = this.rowCount;
+                this.usersEndRow = i6;
+                this.rowCount = i6 + 1;
+                this.usersDetailRow = i6;
             } else {
                 this.usersHeaderRow = -1;
                 this.usersStartRow = -1;
@@ -441,9 +319,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.updateInterfaces) {
-            i = ((Integer) objArr[0]).intValue();
-            if ((i & 2) != 0 || (i & 1) != 0) {
-                updateVisibleRows(i);
+            int intValue = objArr[0].intValue();
+            if ((intValue & 2) != 0 || (intValue & 1) != 0) {
+                updateVisibleRows(intValue);
             }
         } else if (i == NotificationCenter.blockedUsersDidLoad) {
             this.emptyView.showTextView();
@@ -472,62 +350,210 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    public void didSelectContact(User user, String str, ContactsActivity contactsActivity) {
+    public void didSelectContact(TLRPC.User user, String str, ContactsActivity contactsActivity) {
         if (user != null) {
             getMessagesController().blockUser(user.id);
         }
     }
 
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public int getItemCount() {
+            return PrivacyUsersActivity.this.rowCount;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            int itemViewType = viewHolder.getItemViewType();
+            return itemViewType == 0 || itemViewType == 2;
+        }
+
+        public /* synthetic */ boolean lambda$onCreateViewHolder$0$PrivacyUsersActivity$ListAdapter(ManageChatUserCell manageChatUserCell, boolean z) {
+            if (!z) {
+                return true;
+            }
+            PrivacyUsersActivity.this.showUnblockAlert(((Integer) manageChatUserCell.getTag()).intValue());
+            return true;
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v6, resolved type: org.telegram.ui.Cells.TextInfoPrivacyCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v8, resolved type: org.telegram.ui.Cells.ManageChatTextCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v9, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX WARNING: type inference failed for: r8v2, types: [android.view.View] */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r8, int r9) {
+            /*
+                r7 = this;
+                r8 = 1
+                java.lang.String r0 = "windowBackgroundWhite"
+                if (r9 == 0) goto L_0x003d
+                if (r9 == r8) goto L_0x0035
+                r8 = 2
+                if (r9 == r8) goto L_0x0026
+                org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
+                android.content.Context r2 = r7.mContext
+                r3 = 0
+                r4 = 21
+                r5 = 11
+                r6 = 0
+                r1 = r8
+                r1.<init>(r2, r3, r4, r5, r6)
+                int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r8.setBackgroundColor(r9)
+                r9 = 43
+                r8.setHeight(r9)
+                goto L_0x0056
+            L_0x0026:
+                org.telegram.ui.Cells.ManageChatTextCell r8 = new org.telegram.ui.Cells.ManageChatTextCell
+                android.content.Context r9 = r7.mContext
+                r8.<init>(r9)
+                int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r8.setBackgroundColor(r9)
+                goto L_0x0056
+            L_0x0035:
+                org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+                android.content.Context r9 = r7.mContext
+                r8.<init>(r9)
+                goto L_0x0056
+            L_0x003d:
+                org.telegram.ui.Cells.ManageChatUserCell r9 = new org.telegram.ui.Cells.ManageChatUserCell
+                android.content.Context r1 = r7.mContext
+                r2 = 7
+                r3 = 6
+                r9.<init>(r1, r2, r3, r8)
+                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r9.setBackgroundColor(r8)
+                org.telegram.ui.-$$Lambda$PrivacyUsersActivity$ListAdapter$ah_jQyMOHlRewlEcZgEQccTwPTg r8 = new org.telegram.ui.-$$Lambda$PrivacyUsersActivity$ListAdapter$ah_jQyMOHlRewlEcZgEQccTwPTg
+                r8.<init>()
+                r9.setDelegate(r8)
+                r8 = r9
+            L_0x0056:
+                org.telegram.ui.Components.RecyclerListView$Holder r9 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r9.<init>(r8)
+                return r9
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PrivacyUsersActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            int i2;
+            String str;
+            String str2;
+            int itemViewType = viewHolder.getItemViewType();
+            boolean z = false;
+            if (itemViewType == 0) {
+                ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
+                if (PrivacyUsersActivity.this.blockedUsersActivity) {
+                    i2 = PrivacyUsersActivity.this.getMessagesController().blockedUsers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
+                } else {
+                    i2 = ((Integer) PrivacyUsersActivity.this.uidArray.get(i - PrivacyUsersActivity.this.usersStartRow)).intValue();
+                }
+                manageChatUserCell.setTag(Integer.valueOf(i2));
+                if (i2 > 0) {
+                    TLRPC.User user = PrivacyUsersActivity.this.getMessagesController().getUser(Integer.valueOf(i2));
+                    if (user != null) {
+                        if (user.bot) {
+                            str2 = LocaleController.getString("Bot", NUM).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", NUM).substring(1);
+                        } else {
+                            String str3 = user.phone;
+                            if (str3 == null || str3.length() == 0) {
+                                str2 = LocaleController.getString("NumberUnknown", NUM);
+                            } else {
+                                str2 = PhoneFormat.getInstance().format("+" + user.phone);
+                            }
+                        }
+                        if (i != PrivacyUsersActivity.this.usersEndRow - 1) {
+                            z = true;
+                        }
+                        manageChatUserCell.setData(user, (CharSequence) null, str2, z);
+                        return;
+                    }
+                    return;
+                }
+                TLRPC.Chat chat = PrivacyUsersActivity.this.getMessagesController().getChat(Integer.valueOf(-i2));
+                if (chat != null) {
+                    int i3 = chat.participants_count;
+                    if (i3 != 0) {
+                        str = LocaleController.formatPluralString("Members", i3);
+                    } else if (chat.has_geo) {
+                        str = LocaleController.getString("MegaLocation", NUM);
+                    } else if (TextUtils.isEmpty(chat.username)) {
+                        str = LocaleController.getString("MegaPrivate", NUM);
+                    } else {
+                        str = LocaleController.getString("MegaPublic", NUM);
+                    }
+                    if (i != PrivacyUsersActivity.this.usersEndRow - 1) {
+                        z = true;
+                    }
+                    manageChatUserCell.setData(chat, (CharSequence) null, str, z);
+                }
+            } else if (itemViewType == 1) {
+                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                if (i == PrivacyUsersActivity.this.blockUserDetailRow) {
+                    if (PrivacyUsersActivity.this.blockedUsersActivity) {
+                        textInfoPrivacyCell.setText(LocaleController.getString("BlockedUsersInfo", NUM));
+                    } else {
+                        textInfoPrivacyCell.setText((CharSequence) null);
+                    }
+                    if (PrivacyUsersActivity.this.usersStartRow == -1) {
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    } else {
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    }
+                } else if (i == PrivacyUsersActivity.this.usersDetailRow) {
+                    textInfoPrivacyCell.setText("");
+                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                }
+            } else if (itemViewType == 2) {
+                ManageChatTextCell manageChatTextCell = (ManageChatTextCell) viewHolder.itemView;
+                manageChatTextCell.setColors("windowBackgroundWhiteBlueIcon", "windowBackgroundWhiteBlueButton");
+                if (PrivacyUsersActivity.this.blockedUsersActivity) {
+                    manageChatTextCell.setText(LocaleController.getString("BlockUser", NUM), (String) null, NUM, false);
+                } else {
+                    manageChatTextCell.setText(LocaleController.getString("PrivacyAddAnException", NUM), (String) null, NUM, false);
+                }
+            } else if (itemViewType == 3) {
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                if (i != PrivacyUsersActivity.this.usersHeaderRow) {
+                    return;
+                }
+                if (PrivacyUsersActivity.this.blockedUsersActivity) {
+                    headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", PrivacyUsersActivity.this.getMessagesController().totalBlockedCount));
+                } else {
+                    headerCell.setText(LocaleController.getString("PrivacyExceptions", NUM));
+                }
+            }
+        }
+
+        public int getItemViewType(int i) {
+            if (i == PrivacyUsersActivity.this.usersHeaderRow) {
+                return 3;
+            }
+            if (i == PrivacyUsersActivity.this.blockUserRow) {
+                return 2;
+            }
+            return (i == PrivacyUsersActivity.this.blockUserDetailRow || i == PrivacyUsersActivity.this.usersDetailRow) ? 1 : 0;
+        }
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw = new -$$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[27];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[1] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, HeaderCell.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[8] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        themeDescriptionArr[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
-        View view = this.listView;
-        View view2 = view;
-        themeDescriptionArr[10] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw;
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_savedDrawable}, null, "avatar_text");
-        -$$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2 = -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw;
-        themeDescriptionArr[15] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundRed");
-        themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundOrange");
-        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundViolet");
-        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundGreen");
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundCyan");
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundBlue");
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_mxkjs07yntflrhkacbitvef2edw2, "avatar_backgroundPink");
-        view = this.listView;
-        Class[] clsArr = new Class[]{HeaderCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        themeDescriptionArr[22] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
-        view = this.listView;
-        view2 = view;
-        themeDescriptionArr[23] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.listView;
-        int i = ThemeDescription.FLAG_CHECKTAG;
-        clsArr = new Class[]{ManageChatTextCell.class};
-        strArr = new String[1];
-        strArr[0] = "imageView";
-        themeDescriptionArr[24] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayIcon");
-        view = this.listView;
-        view2 = view;
-        themeDescriptionArr[25] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueButton");
-        view = this.listView;
-        view2 = view;
-        themeDescriptionArr[26] = new ThemeDescription(view2, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
-        return themeDescriptionArr;
+        $$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                PrivacyUsersActivity.this.lambda$getThemeDescriptions$4$PrivacyUsersActivity();
+            }
+        };
+        $$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw r8 = r10;
+        $$Lambda$PrivacyUsersActivity$MXkjS07yNtFLRhkACbitVef2EDw r7 = r10;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueButton"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{ManageChatTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueIcon")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$4$PrivacyUsersActivity() {

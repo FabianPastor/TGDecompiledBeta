@@ -40,27 +40,27 @@ public class Scroller {
     private float mVelocity;
 
     static {
-        float f = 0.0f;
+        float f;
+        float f2;
+        float f3 = 0.0f;
         for (int i = 0; i <= 100; i++) {
-            float f2;
-            float f3;
             float f4 = ((float) i) / 100.0f;
             float f5 = 1.0f;
             while (true) {
-                float f6 = ((f5 - f) / 2.0f) + f;
+                float f6 = ((f5 - f3) / 2.0f) + f3;
                 float f7 = 1.0f - f6;
-                f2 = (3.0f * f6) * f7;
-                f3 = (f6 * f6) * f6;
-                f7 = (((f7 * START_TENSION) + (END_TENSION * f6)) * f2) + f3;
-                if (((double) Math.abs(f7 - f4)) < 1.0E-5d) {
+                f = 3.0f * f6 * f7;
+                f2 = f6 * f6 * f6;
+                float f8 = (((f7 * START_TENSION) + (END_TENSION * f6)) * f) + f2;
+                if (((double) Math.abs(f8 - f4)) < 1.0E-5d) {
                     break;
-                } else if (f7 > f4) {
+                } else if (f8 > f4) {
                     f5 = f6;
                 } else {
-                    f = f6;
+                    f3 = f6;
                 }
             }
-            SPLINE[i] = f2 + f3;
+            SPLINE[i] = f + f2;
         }
         SPLINE[100] = 1.0f;
         sViscousFluidNormalize = 1.0f;
@@ -68,7 +68,7 @@ public class Scroller {
     }
 
     public Scroller(Context context) {
-        this(context, null);
+        this(context, (Interpolator) null);
     }
 
     public Scroller(Context context, Interpolator interpolator) {
@@ -88,7 +88,7 @@ public class Scroller {
     }
 
     private float computeDeceleration(float f) {
-        return (this.mPpi * 386.0878f) * f;
+        return this.mPpi * 386.0878f * f;
     }
 
     public final boolean isFinished() {
@@ -132,6 +132,7 @@ public class Scroller {
     }
 
     public boolean computeScrollOffset() {
+        float f;
         if (this.mFinished) {
             return false;
         }
@@ -140,30 +141,29 @@ public class Scroller {
         if (currentAnimationTimeMillis < i) {
             int i2 = this.mMode;
             if (i2 == 0) {
-                float f = ((float) currentAnimationTimeMillis) * this.mDurationReciprocal;
+                float f2 = ((float) currentAnimationTimeMillis) * this.mDurationReciprocal;
                 Interpolator interpolator = this.mInterpolator;
                 if (interpolator == null) {
-                    f = viscousFluid(f);
+                    f = viscousFluid(f2);
                 } else {
-                    f = interpolator.getInterpolation(f);
+                    f = interpolator.getInterpolation(f2);
                 }
                 this.mCurrX = this.mStartX + Math.round(this.mDeltaX * f);
                 this.mCurrY = this.mStartY + Math.round(f * this.mDeltaY);
             } else if (i2 == 1) {
-                float f2 = ((float) currentAnimationTimeMillis) / ((float) i);
-                i2 = (int) (f2 * 100.0f);
-                float f3 = ((float) i2) / 100.0f;
-                int i3 = i2 + 1;
+                float f3 = ((float) currentAnimationTimeMillis) / ((float) i);
+                int i3 = (int) (f3 * 100.0f);
                 float f4 = ((float) i3) / 100.0f;
+                int i4 = i3 + 1;
                 float[] fArr = SPLINE;
-                float f5 = fArr[i2];
-                f5 += ((f2 - f3) / (f4 - f3)) * (fArr[i3] - f5);
-                i = this.mStartX;
-                this.mCurrX = i + Math.round(((float) (this.mFinalX - i)) * f5);
+                float f5 = fArr[i3];
+                float f6 = f5 + (((f3 - f4) / ((((float) i4) / 100.0f) - f4)) * (fArr[i4] - f5));
+                int i5 = this.mStartX;
+                this.mCurrX = i5 + Math.round(((float) (this.mFinalX - i5)) * f6);
                 this.mCurrX = Math.min(this.mCurrX, this.mMaxX);
                 this.mCurrX = Math.max(this.mCurrX, this.mMinX);
-                i = this.mStartY;
-                this.mCurrY = i + Math.round(f5 * ((float) (this.mFinalY - i)));
+                int i6 = this.mStartY;
+                this.mCurrY = i6 + Math.round(f6 * ((float) (this.mFinalY - i6)));
                 this.mCurrY = Math.min(this.mCurrY, this.mMaxY);
                 this.mCurrY = Math.max(this.mCurrY, this.mMinY);
                 if (this.mCurrX == this.mFinalX && this.mCurrY == this.mFinalY) {
@@ -196,175 +196,171 @@ public class Scroller {
         this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x00a3  */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x00a3  */
     /* JADX WARNING: Removed duplicated region for block: B:17:0x00aa  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void fling(int r17, int r18, int r19, int r20, int r21, int r22, int r23, int r24) {
         /*
-        r16 = this;
-        r0 = r16;
-        r1 = r17;
-        r2 = r18;
-        r3 = r0.mFlywheel;
-        if (r3 == 0) goto L_0x0053;
-    L_0x000a:
-        r3 = r0.mFinished;
-        if (r3 != 0) goto L_0x0053;
-    L_0x000e:
-        r3 = r16.getCurrVelocity();
-        r4 = r0.mFinalX;
-        r5 = r0.mStartX;
-        r4 = r4 - r5;
-        r4 = (float) r4;
-        r5 = r0.mFinalY;
-        r6 = r0.mStartY;
-        r5 = r5 - r6;
-        r5 = (float) r5;
-        r6 = r4 * r4;
-        r7 = r5 * r5;
-        r6 = r6 + r7;
-        r6 = (double) r6;
-        r6 = java.lang.Math.sqrt(r6);
-        r6 = (float) r6;
-        r4 = r4 / r6;
-        r5 = r5 / r6;
-        r4 = r4 * r3;
-        r5 = r5 * r3;
-        r3 = r19;
-        r6 = (float) r3;
-        r7 = java.lang.Math.signum(r6);
-        r8 = java.lang.Math.signum(r4);
-        r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1));
-        if (r7 != 0) goto L_0x0055;
-    L_0x003e:
-        r7 = r20;
-        r8 = (float) r7;
-        r9 = java.lang.Math.signum(r8);
-        r10 = java.lang.Math.signum(r5);
-        r9 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1));
-        if (r9 != 0) goto L_0x0057;
-    L_0x004d:
-        r6 = r6 + r4;
-        r3 = (int) r6;
-        r8 = r8 + r5;
-        r4 = (int) r8;
-        r7 = r4;
-        goto L_0x0057;
-    L_0x0053:
-        r3 = r19;
-    L_0x0055:
-        r7 = r20;
-    L_0x0057:
-        r4 = 1;
-        r0.mMode = r4;
-        r4 = 0;
-        r0.mFinished = r4;
-        r4 = r3 * r3;
-        r5 = r7 * r7;
-        r4 = r4 + r5;
-        r4 = (double) r4;
-        r4 = java.lang.Math.sqrt(r4);
-        r4 = (float) r4;
-        r0.mVelocity = r4;
-        r5 = NUM; // 0x44480000 float:800.0 double:5.65986426E-315;
-        r6 = START_TENSION;
-        r6 = r6 * r4;
-        r6 = r6 / r5;
-        r8 = (double) r6;
-        r8 = java.lang.Math.log(r8);
-        r10 = NUM; // 0x408fNUM float:0.0 double:1000.0;
-        r6 = DECELERATION_RATE;
-        r12 = (double) r6;
-        r14 = NUM; // 0x3ffNUM float:0.0 double:1.0;
-        java.lang.Double.isNaN(r12);
-        r12 = r12 - r14;
-        r12 = r8 / r12;
-        r12 = java.lang.Math.exp(r12);
-        r12 = r12 * r10;
-        r6 = (int) r12;
-        r0.mDuration = r6;
-        r10 = android.view.animation.AnimationUtils.currentAnimationTimeMillis();
-        r0.mStartTime = r10;
-        r0.mStartX = r1;
-        r0.mStartY = r2;
-        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r10 = 0;
-        r11 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-        if (r11 != 0) goto L_0x00a3;
-    L_0x00a0:
-        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x00a5;
-    L_0x00a3:
-        r3 = (float) r3;
-        r3 = r3 / r4;
-    L_0x00a5:
-        r10 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-        if (r10 != 0) goto L_0x00aa;
-    L_0x00a9:
-        goto L_0x00ac;
-    L_0x00aa:
-        r6 = (float) r7;
-        r6 = r6 / r4;
-    L_0x00ac:
-        r4 = (double) r5;
-        r7 = DECELERATION_RATE;
-        r10 = (double) r7;
-        r12 = (double) r7;
-        java.lang.Double.isNaN(r12);
-        r12 = r12 - r14;
-        java.lang.Double.isNaN(r10);
-        r10 = r10 / r12;
-        r10 = r10 * r8;
-        r7 = java.lang.Math.exp(r10);
-        java.lang.Double.isNaN(r4);
-        r4 = r4 * r7;
-        r4 = (int) r4;
-        r5 = r21;
-        r0.mMinX = r5;
-        r5 = r22;
-        r0.mMaxX = r5;
-        r5 = r23;
-        r0.mMinY = r5;
-        r5 = r24;
-        r0.mMaxY = r5;
-        r4 = (float) r4;
-        r3 = r3 * r4;
-        r3 = java.lang.Math.round(r3);
-        r1 = r1 + r3;
-        r0.mFinalX = r1;
-        r1 = r0.mFinalX;
-        r3 = r0.mMaxX;
-        r1 = java.lang.Math.min(r1, r3);
-        r0.mFinalX = r1;
-        r1 = r0.mFinalX;
-        r3 = r0.mMinX;
-        r1 = java.lang.Math.max(r1, r3);
-        r0.mFinalX = r1;
-        r4 = r4 * r6;
-        r1 = java.lang.Math.round(r4);
-        r1 = r1 + r2;
-        r0.mFinalY = r1;
-        r1 = r0.mFinalY;
-        r2 = r0.mMaxY;
-        r1 = java.lang.Math.min(r1, r2);
-        r0.mFinalY = r1;
-        r1 = r0.mFinalY;
-        r2 = r0.mMinY;
-        r1 = java.lang.Math.max(r1, r2);
-        r0.mFinalY = r1;
-        return;
+            r16 = this;
+            r0 = r16
+            r1 = r17
+            r2 = r18
+            boolean r3 = r0.mFlywheel
+            if (r3 == 0) goto L_0x0053
+            boolean r3 = r0.mFinished
+            if (r3 != 0) goto L_0x0053
+            float r3 = r16.getCurrVelocity()
+            int r4 = r0.mFinalX
+            int r5 = r0.mStartX
+            int r4 = r4 - r5
+            float r4 = (float) r4
+            int r5 = r0.mFinalY
+            int r6 = r0.mStartY
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            float r6 = r4 * r4
+            float r7 = r5 * r5
+            float r6 = r6 + r7
+            double r6 = (double) r6
+            double r6 = java.lang.Math.sqrt(r6)
+            float r6 = (float) r6
+            float r4 = r4 / r6
+            float r5 = r5 / r6
+            float r4 = r4 * r3
+            float r5 = r5 * r3
+            r3 = r19
+            float r6 = (float) r3
+            float r7 = java.lang.Math.signum(r6)
+            float r8 = java.lang.Math.signum(r4)
+            int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r7 != 0) goto L_0x0055
+            r7 = r20
+            float r8 = (float) r7
+            float r9 = java.lang.Math.signum(r8)
+            float r10 = java.lang.Math.signum(r5)
+            int r9 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1))
+            if (r9 != 0) goto L_0x0057
+            float r6 = r6 + r4
+            int r3 = (int) r6
+            float r8 = r8 + r5
+            int r4 = (int) r8
+            r7 = r4
+            goto L_0x0057
+        L_0x0053:
+            r3 = r19
+        L_0x0055:
+            r7 = r20
+        L_0x0057:
+            r4 = 1
+            r0.mMode = r4
+            r4 = 0
+            r0.mFinished = r4
+            int r4 = r3 * r3
+            int r5 = r7 * r7
+            int r4 = r4 + r5
+            double r4 = (double) r4
+            double r4 = java.lang.Math.sqrt(r4)
+            float r4 = (float) r4
+            r0.mVelocity = r4
+            r5 = 1145569280(0x44480000, float:800.0)
+            float r6 = START_TENSION
+            float r6 = r6 * r4
+            float r6 = r6 / r5
+            double r8 = (double) r6
+            double r8 = java.lang.Math.log(r8)
+            r10 = 4652007308841189376(0x408fNUM, double:1000.0)
+            float r6 = DECELERATION_RATE
+            double r12 = (double) r6
+            r14 = 4607182418800017408(0x3ffNUM, double:1.0)
+            java.lang.Double.isNaN(r12)
+            double r12 = r12 - r14
+            double r12 = r8 / r12
+            double r12 = java.lang.Math.exp(r12)
+            double r12 = r12 * r10
+            int r6 = (int) r12
+            r0.mDuration = r6
+            long r10 = android.view.animation.AnimationUtils.currentAnimationTimeMillis()
+            r0.mStartTime = r10
+            r0.mStartX = r1
+            r0.mStartY = r2
+            r6 = 1065353216(0x3var_, float:1.0)
+            r10 = 0
+            int r11 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
+            if (r11 != 0) goto L_0x00a3
+            r3 = 1065353216(0x3var_, float:1.0)
+            goto L_0x00a5
+        L_0x00a3:
+            float r3 = (float) r3
+            float r3 = r3 / r4
+        L_0x00a5:
+            int r10 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
+            if (r10 != 0) goto L_0x00aa
+            goto L_0x00ac
+        L_0x00aa:
+            float r6 = (float) r7
+            float r6 = r6 / r4
+        L_0x00ac:
+            double r4 = (double) r5
+            float r7 = DECELERATION_RATE
+            double r10 = (double) r7
+            double r12 = (double) r7
+            java.lang.Double.isNaN(r12)
+            double r12 = r12 - r14
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r12
+            double r10 = r10 * r8
+            double r7 = java.lang.Math.exp(r10)
+            java.lang.Double.isNaN(r4)
+            double r4 = r4 * r7
+            int r4 = (int) r4
+            r5 = r21
+            r0.mMinX = r5
+            r5 = r22
+            r0.mMaxX = r5
+            r5 = r23
+            r0.mMinY = r5
+            r5 = r24
+            r0.mMaxY = r5
+            float r4 = (float) r4
+            float r3 = r3 * r4
+            int r3 = java.lang.Math.round(r3)
+            int r1 = r1 + r3
+            r0.mFinalX = r1
+            int r1 = r0.mFinalX
+            int r3 = r0.mMaxX
+            int r1 = java.lang.Math.min(r1, r3)
+            r0.mFinalX = r1
+            int r1 = r0.mFinalX
+            int r3 = r0.mMinX
+            int r1 = java.lang.Math.max(r1, r3)
+            r0.mFinalX = r1
+            float r4 = r4 * r6
+            int r1 = java.lang.Math.round(r4)
+            int r1 = r1 + r2
+            r0.mFinalY = r1
+            int r1 = r0.mFinalY
+            int r2 = r0.mMaxY
+            int r1 = java.lang.Math.min(r1, r2)
+            r0.mFinalY = r1
+            int r1 = r0.mFinalY
+            int r2 = r0.mMinY
+            int r1 = java.lang.Math.max(r1, r2)
+            r0.mFinalY = r1
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Scroller.fling(int, int, int, int, int, int, int, int):void");
     }
 
     static float viscousFluid(float f) {
-        f *= sViscousFluidScale;
-        if (f < 1.0f) {
-            f -= 1.0f - ((float) Math.exp((double) (-f)));
+        float f2;
+        float f3 = f * sViscousFluidScale;
+        if (f3 < 1.0f) {
+            f2 = f3 - (1.0f - ((float) Math.exp((double) (-f3))));
         } else {
-            f = ((1.0f - ((float) Math.exp((double) (1.0f - f)))) * 0.63212055f) + 0.36787945f;
+            f2 = ((1.0f - ((float) Math.exp((double) (1.0f - f3)))) * 0.63212055f) + 0.36787945f;
         }
-        return f * sViscousFluidNormalize;
+        return f2 * sViscousFluidNormalize;
     }
 
     public void abortAnimation() {

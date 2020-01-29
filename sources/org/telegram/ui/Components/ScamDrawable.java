@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -30,7 +29,7 @@ public class ScamDrawable extends Drawable {
     public ScamDrawable(int i) {
         this.textPaint.setTextSize((float) AndroidUtilities.dp((float) i));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.paint.setStyle(Style.STROKE);
+        this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.text = LocaleController.getString("ScamMessage", NUM);
         this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(this.text));

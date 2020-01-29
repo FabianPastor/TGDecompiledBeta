@@ -1,9 +1,8 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Path;
-import android.graphics.Path.Direction;
 import android.graphics.RectF;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.text.StaticLayout;
 import org.telegram.messenger.AndroidUtilities;
 
@@ -18,21 +17,22 @@ public class LinkPath extends Path {
     private RectF rect;
     private boolean useRoundRect;
 
+    public LinkPath() {
+    }
+
     public LinkPath(boolean z) {
         this.useRoundRect = z;
     }
 
     public void setCurrentLayout(StaticLayout staticLayout, int i, float f) {
+        int lineCount;
         this.currentLayout = staticLayout;
         this.currentLine = staticLayout.getLineForOffset(i);
         this.lastTop = -1.0f;
         this.heightOffset = f;
-        if (VERSION.SDK_INT >= 28) {
-            i = staticLayout.getLineCount();
-            if (i > 0) {
-                i--;
-                this.lineHeight = staticLayout.getLineBottom(i) - staticLayout.getLineTop(i);
-            }
+        if (Build.VERSION.SDK_INT >= 28 && (lineCount = staticLayout.getLineCount()) > 0) {
+            int i2 = lineCount - 1;
+            this.lineHeight = staticLayout.getLineBottom(i2) - staticLayout.getLineTop(i2);
         }
     }
 
@@ -52,55 +52,55 @@ public class LinkPath extends Path {
         this.baselineShift = i;
     }
 
-    public void addRect(float f, float f2, float f3, float f4, Direction direction) {
+    public void addRect(float f, float f2, float f3, float f4, Path.Direction direction) {
         float f5 = this.heightOffset;
-        f2 += f5;
-        f4 += f5;
-        f5 = this.lastTop;
-        if (f5 == -1.0f) {
-            this.lastTop = f2;
-        } else if (f5 != f2) {
-            this.lastTop = f2;
+        float f6 = f2 + f5;
+        float f7 = f4 + f5;
+        float f8 = this.lastTop;
+        if (f8 == -1.0f) {
+            this.lastTop = f6;
+        } else if (f8 != f6) {
+            this.lastTop = f6;
             this.currentLine++;
         }
-        f5 = this.currentLayout.getLineRight(this.currentLine);
+        float lineRight = this.currentLayout.getLineRight(this.currentLine);
         float lineLeft = this.currentLayout.getLineLeft(this.currentLine);
-        if (f >= f5) {
+        if (f >= lineRight) {
             return;
         }
         if (f > lineLeft || f3 > lineLeft) {
-            float f6 = f3 > f5 ? f5 : f3;
-            float f7 = f < lineLeft ? lineLeft : f;
-            f5 = 0.0f;
-            if (VERSION.SDK_INT < 28) {
-                if (f4 != ((float) this.currentLayout.getHeight())) {
-                    f5 = this.currentLayout.getSpacingAdd();
+            float f9 = f3 > lineRight ? lineRight : f3;
+            float var_ = f < lineLeft ? lineLeft : f;
+            float var_ = 0.0f;
+            if (Build.VERSION.SDK_INT < 28) {
+                if (f7 != ((float) this.currentLayout.getHeight())) {
+                    var_ = this.currentLayout.getSpacingAdd();
                 }
-                f4 -= f5;
-            } else if (f4 - f2 > ((float) this.lineHeight)) {
-                f = this.heightOffset;
-                if (f4 != ((float) this.currentLayout.getHeight())) {
-                    f5 = ((float) this.currentLayout.getLineBottom(this.currentLine)) - this.currentLayout.getSpacingAdd();
+                f7 -= var_;
+            } else if (f7 - f6 > ((float) this.lineHeight)) {
+                float var_ = this.heightOffset;
+                if (f7 != ((float) this.currentLayout.getHeight())) {
+                    var_ = ((float) this.currentLayout.getLineBottom(this.currentLine)) - this.currentLayout.getSpacingAdd();
                 }
-                f4 = f + f5;
+                f7 = var_ + var_;
             }
             int i = this.baselineShift;
             if (i < 0) {
-                f4 += (float) i;
+                f7 += (float) i;
             } else if (i > 0) {
-                f2 += (float) i;
+                f6 += (float) i;
             }
-            float f8 = f2;
-            float f9 = f4;
+            float var_ = f6;
+            float var_ = f7;
             if (this.useRoundRect) {
                 if (this.rect == null) {
                     this.rect = new RectF();
                 }
-                this.rect.set(f7 - ((float) AndroidUtilities.dp(4.0f)), f8, f6 + ((float) AndroidUtilities.dp(4.0f)), f9);
+                this.rect.set(var_ - ((float) AndroidUtilities.dp(4.0f)), var_, f9 + ((float) AndroidUtilities.dp(4.0f)), var_);
                 super.addRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), direction);
                 return;
             }
-            super.addRect(f7, f8, f6, f9, direction);
+            super.addRect(var_, var_, f9, var_, direction);
         }
     }
 

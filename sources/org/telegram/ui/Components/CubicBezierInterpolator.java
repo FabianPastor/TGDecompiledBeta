@@ -24,8 +24,8 @@ public class CubicBezierInterpolator implements Interpolator {
         if (f < 0.0f || f > 1.0f) {
             throw new IllegalArgumentException("startX value must be in the range [0, 1]");
         }
-        f = pointF2.x;
-        if (f < 0.0f || f > 1.0f) {
+        float f2 = pointF2.x;
+        if (f2 < 0.0f || f2 > 1.0f) {
             throw new IllegalArgumentException("endX value must be in the range [0, 1]");
         }
         this.start = pointF;
@@ -44,19 +44,19 @@ public class CubicBezierInterpolator implements Interpolator {
         return getBezierCoordinateY(getXForTime(f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public float getBezierCoordinateY(float f) {
         PointF pointF = this.c;
         PointF pointF2 = this.start;
         pointF.y = pointF2.y * 3.0f;
         PointF pointF3 = this.b;
         pointF3.y = ((this.end.y - pointF2.y) * 3.0f) - pointF.y;
-        pointF2 = this.a;
-        pointF2.y = (1.0f - pointF.y) - pointF3.y;
-        return f * (pointF.y + ((pointF3.y + (pointF2.y * f)) * f));
+        PointF pointF4 = this.a;
+        pointF4.y = (1.0f - pointF.y) - pointF3.y;
+        return f * (pointF.y + ((pointF3.y + (pointF4.y * f)) * f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public float getXForTime(float f) {
         float f2 = f;
         for (int i = 1; i < 14; i++) {
@@ -70,7 +70,7 @@ public class CubicBezierInterpolator implements Interpolator {
     }
 
     private float getXDerivate(float f) {
-        return this.c.x + (f * ((this.b.x * 2.0f) + ((this.a.x * 3.0f) * f)));
+        return this.c.x + (f * ((this.b.x * 2.0f) + (this.a.x * 3.0f * f)));
     }
 
     private float getBezierCoordinateX(float f) {
@@ -79,8 +79,8 @@ public class CubicBezierInterpolator implements Interpolator {
         pointF.x = pointF2.x * 3.0f;
         PointF pointF3 = this.b;
         pointF3.x = ((this.end.x - pointF2.x) * 3.0f) - pointF.x;
-        pointF2 = this.a;
-        pointF2.x = (1.0f - pointF.x) - pointF3.x;
-        return f * (pointF.x + ((pointF3.x + (pointF2.x * f)) * f));
+        PointF pointF4 = this.a;
+        pointF4.x = (1.0f - pointF.x) - pointF3.x;
+        return f * (pointF.x + ((pointF3.x + (pointF4.x * f)) * f));
     }
 }

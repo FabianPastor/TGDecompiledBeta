@@ -25,19 +25,15 @@ public class RangeInputStream extends PositionInputStream {
     public int read(byte[] bArr, int i, int i2) throws IOException {
         long position = getPosition() + ((long) i2);
         long j = this.endPosition;
-        if (position > j) {
-            i2 = (int) (j - getPosition());
-            if (i2 == 0) {
-                return -1;
-            }
+        if (position <= j || (i2 = (int) (j - getPosition())) != 0) {
+            return super.read(bArr, i, i2);
         }
-        return super.read(bArr, i, i2);
+        return -1;
     }
 
     public long skip(long j) throws IOException {
-        long position = getPosition() + j;
         long j2 = this.endPosition;
-        if (position > j2) {
+        if (getPosition() + j > j2) {
             j = (long) ((int) (j2 - getPosition()));
         }
         return super.skip(j);

@@ -122,7 +122,7 @@ public abstract class AudioInfo {
             randomAccessFile.readFully(bArr, 0, 8);
             randomAccessFile.close();
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            if (bArr[4] == (byte) 102 && bArr[5] == (byte) 116 && bArr[6] == (byte) 121 && bArr[7] == (byte) 112) {
+            if (bArr[4] == 102 && bArr[5] == 116 && bArr[6] == 121 && bArr[7] == 112) {
                 return new M4AInfo(bufferedInputStream);
             }
             if (file.getAbsolutePath().endsWith("mp3")) {

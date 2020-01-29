@@ -3,18 +3,15 @@ package org.telegram.ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.text.Layout.Alignment;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
-import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -23,13 +20,11 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_photoSize;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress2;
 
-public class AudioPlayerCell extends View implements FileDownloadProgressListener {
+public class AudioPlayerCell extends View implements DownloadController.FileDownloadProgressListener {
     private int TAG;
     private boolean buttonPressed;
     private int buttonState;
@@ -56,61 +51,60 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         setFocusable(true);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     @SuppressLint({"DrawAllocation"})
     public void onMeasure(int i, int i2) {
-        String musicTitle;
         this.descriptionLayout = null;
         this.titleLayout = null;
-        int size = (MeasureSpec.getSize(i) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
+        int size = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
         try {
-            musicTitle = this.currentMessageObject.getMusicTitle();
-            this.titleLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace(10, ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(musicTitle)), size), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, size + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String musicTitle = this.currentMessageObject.getMusicTitle();
+            this.titleLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace(10, ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(musicTitle)), size), TextUtils.TruncateAt.END), Theme.chat_contextResult_titleTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
         try {
-            musicTitle = this.currentMessageObject.getMusicAuthor();
-            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(musicTitle.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(musicTitle)), size), TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String musicAuthor = this.currentMessageObject.getMusicAuthor();
+            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(musicAuthor.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(musicAuthor)), size), TextUtils.TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e2) {
-            FileLog.e(e2);
+            FileLog.e((Throwable) e2);
         }
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(56.0f));
-        size = LocaleController.isRTL ? (MeasureSpec.getSize(i) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
+        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(56.0f));
+        int size2 = LocaleController.isRTL ? (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
         RadialProgress2 radialProgress2 = this.radialProgress;
-        int dp = AndroidUtilities.dp(4.0f) + size;
+        int dp = AndroidUtilities.dp(4.0f) + size2;
         this.buttonX = dp;
         int dp2 = AndroidUtilities.dp(6.0f);
         this.buttonY = dp2;
-        radialProgress2.setProgressRect(dp, dp2, size + AndroidUtilities.dp(48.0f), AndroidUtilities.dp(50.0f));
+        radialProgress2.setProgressRect(dp, dp2, size2 + AndroidUtilities.dp(48.0f), AndroidUtilities.dp(50.0f));
     }
 
     public void setMessageObject(MessageObject messageObject) {
         this.currentMessageObject = messageObject;
-        Document document = messageObject.getDocument();
-        PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
-        if (closestPhotoSizeWithSize instanceof TL_photoSize) {
+        TLRPC.Document document = messageObject.getDocument();
+        TLRPC.PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
+        if (closestPhotoSizeWithSize instanceof TLRPC.TL_photoSize) {
             this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
         } else {
             String artworkUrl = messageObject.getArtworkUrl(true);
-            if (TextUtils.isEmpty(artworkUrl)) {
-                this.radialProgress.setImageOverlay(null, null, null);
-            } else {
+            if (!TextUtils.isEmpty(artworkUrl)) {
                 this.radialProgress.setImageOverlay(artworkUrl);
+            } else {
+                this.radialProgress.setImageOverlay((TLRPC.PhotoSize) null, (TLRPC.Document) null, (Object) null);
             }
         }
         requestLayout();
         updateButtonState(false, false);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.radialProgress.onAttachedToWindow();
@@ -120,93 +114,82 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         return this.currentMessageObject;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0048  */
     /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0048  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
         /*
-        r8 = this;
-        r0 = r9.getX();
-        r0 = (int) r0;
-        r1 = r9.getY();
-        r1 = (int) r1;
-        r2 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r3 = r8.miniButtonState;
-        r4 = 1;
-        r5 = 0;
-        if (r3 < 0) goto L_0x0032;
-    L_0x0016:
-        r3 = NUM; // 0x41d80000 float:27.0 double:5.457818764E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r6 = r8.buttonX;
-        r7 = r6 + r3;
-        if (r0 < r7) goto L_0x0032;
-    L_0x0022:
-        r6 = r6 + r3;
-        r6 = r6 + r2;
-        if (r0 > r6) goto L_0x0032;
-    L_0x0026:
-        r0 = r8.buttonY;
-        r6 = r0 + r3;
-        if (r1 < r6) goto L_0x0032;
-    L_0x002c:
-        r0 = r0 + r3;
-        r0 = r0 + r2;
-        if (r1 > r0) goto L_0x0032;
-    L_0x0030:
-        r0 = 1;
-        goto L_0x0033;
-    L_0x0032:
-        r0 = 0;
-    L_0x0033:
-        r1 = r9.getAction();
-        if (r1 != 0) goto L_0x0048;
-    L_0x0039:
-        if (r0 == 0) goto L_0x0080;
-    L_0x003b:
-        r8.miniButtonPressed = r4;
-        r9 = r8.radialProgress;
-        r0 = r8.miniButtonPressed;
-        r9.setPressed(r0, r4);
-        r8.invalidate();
-        goto L_0x0081;
-    L_0x0048:
-        r1 = r8.miniButtonPressed;
-        if (r1 == 0) goto L_0x0080;
-    L_0x004c:
-        r1 = r9.getAction();
-        if (r1 != r4) goto L_0x005e;
-    L_0x0052:
-        r8.miniButtonPressed = r5;
-        r8.playSoundEffect(r5);
-        r8.didPressedMiniButton(r4);
-        r8.invalidate();
-        goto L_0x0079;
-    L_0x005e:
-        r1 = r9.getAction();
-        r2 = 3;
-        if (r1 != r2) goto L_0x006b;
-    L_0x0065:
-        r8.miniButtonPressed = r5;
-        r8.invalidate();
-        goto L_0x0079;
-    L_0x006b:
-        r9 = r9.getAction();
-        r1 = 2;
-        if (r9 != r1) goto L_0x0079;
-    L_0x0072:
-        if (r0 != 0) goto L_0x0079;
-    L_0x0074:
-        r8.miniButtonPressed = r5;
-        r8.invalidate();
-    L_0x0079:
-        r9 = r8.radialProgress;
-        r0 = r8.miniButtonPressed;
-        r9.setPressed(r0, r4);
-    L_0x0080:
-        r4 = 0;
-    L_0x0081:
-        return r4;
+            r8 = this;
+            float r0 = r9.getX()
+            int r0 = (int) r0
+            float r1 = r9.getY()
+            int r1 = (int) r1
+            r2 = 1108344832(0x42100000, float:36.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r3 = r8.miniButtonState
+            r4 = 1
+            r5 = 0
+            if (r3 < 0) goto L_0x0032
+            r3 = 1104674816(0x41d80000, float:27.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r6 = r8.buttonX
+            int r7 = r6 + r3
+            if (r0 < r7) goto L_0x0032
+            int r6 = r6 + r3
+            int r6 = r6 + r2
+            if (r0 > r6) goto L_0x0032
+            int r0 = r8.buttonY
+            int r6 = r0 + r3
+            if (r1 < r6) goto L_0x0032
+            int r0 = r0 + r3
+            int r0 = r0 + r2
+            if (r1 > r0) goto L_0x0032
+            r0 = 1
+            goto L_0x0033
+        L_0x0032:
+            r0 = 0
+        L_0x0033:
+            int r1 = r9.getAction()
+            if (r1 != 0) goto L_0x0048
+            if (r0 == 0) goto L_0x0080
+            r8.miniButtonPressed = r4
+            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
+            boolean r0 = r8.miniButtonPressed
+            r9.setPressed(r0, r4)
+            r8.invalidate()
+            goto L_0x0081
+        L_0x0048:
+            boolean r1 = r8.miniButtonPressed
+            if (r1 == 0) goto L_0x0080
+            int r1 = r9.getAction()
+            if (r1 != r4) goto L_0x005e
+            r8.miniButtonPressed = r5
+            r8.playSoundEffect(r5)
+            r8.didPressedMiniButton(r4)
+            r8.invalidate()
+            goto L_0x0079
+        L_0x005e:
+            int r1 = r9.getAction()
+            r2 = 3
+            if (r1 != r2) goto L_0x006b
+            r8.miniButtonPressed = r5
+            r8.invalidate()
+            goto L_0x0079
+        L_0x006b:
+            int r9 = r9.getAction()
+            r1 = 2
+            if (r9 != r1) goto L_0x0079
+            if (r0 != 0) goto L_0x0079
+            r8.miniButtonPressed = r5
+            r8.invalidate()
+        L_0x0079:
+            org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
+            boolean r0 = r8.miniButtonPressed
+            r9.setPressed(r0, r4)
+        L_0x0080:
+            r4 = 0
+        L_0x0081:
+            return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AudioPlayerCell.checkAudioMotionEvent(android.view.MotionEvent):boolean");
     }
@@ -216,12 +199,12 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             return super.onTouchEvent(motionEvent);
         }
         boolean checkAudioMotionEvent = checkAudioMotionEvent(motionEvent);
-        if (motionEvent.getAction() == 3) {
-            this.miniButtonPressed = false;
-            this.buttonPressed = false;
-            checkAudioMotionEvent = false;
+        if (motionEvent.getAction() != 3) {
+            return checkAudioMotionEvent;
         }
-        return checkAudioMotionEvent;
+        this.miniButtonPressed = false;
+        this.buttonPressed = false;
+        return false;
     }
 
     private void didPressedMiniButton(boolean z) {
@@ -279,7 +262,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         float f = 8.0f;
         if (this.titleLayout != null) {
@@ -346,8 +329,8 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             }
             if (this.hasMiniProgress != 0) {
                 this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader"));
-                exists = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!exists || (exists && MediaController.getInstance().isMessagePaused())) {
+                boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
@@ -357,26 +340,26 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
                     DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                     this.miniButtonState = -1;
                     this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+                    return;
+                }
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                    this.miniButtonState = 0;
+                    this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+                    return;
+                }
+                this.miniButtonState = 1;
+                this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
+                Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (fileProgress != null) {
+                    this.radialProgress.setProgress(fileProgress.floatValue(), z2);
                 } else {
-                    DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
-                    if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                        this.miniButtonState = 1;
-                        this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                        Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
-                        if (fileProgress != null) {
-                            this.radialProgress.setProgress(fileProgress.floatValue(), z2);
-                        } else {
-                            this.radialProgress.setProgress(0.0f, z2);
-                        }
-                    } else {
-                        this.miniButtonState = 0;
-                        this.radialProgress.setMiniIcon(getMiniIconForCurrentState(), z, z2);
-                    }
+                    this.radialProgress.setProgress(0.0f, z2);
                 }
             } else if (exists) {
                 DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-                if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
+                boolean isPlayingMessage2 = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!isPlayingMessage2 || (isPlayingMessage2 && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;
@@ -386,7 +369,10 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
                 invalidate();
             } else {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
-                if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                    this.buttonState = 2;
+                    this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
+                } else {
                     this.buttonState = 4;
                     Float fileProgress2 = ImageLoader.getInstance().getFileProgress(fileName);
                     if (fileProgress2 != null) {
@@ -394,9 +380,6 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
                     } else {
                         this.radialProgress.setProgress(0.0f, z2);
                     }
-                    this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
-                } else {
-                    this.buttonState = 2;
                     this.radialProgress.setIcon(getIconForCurrentState(), z, z2);
                 }
                 invalidate();
@@ -434,10 +417,6 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             accessibilityNodeInfo.setText(LocaleController.formatString("AccDescrMusicInfo", NUM, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
             return;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.titleLayout.getText());
-        stringBuilder.append(", ");
-        stringBuilder.append(this.descriptionLayout.getText());
-        accessibilityNodeInfo.setText(stringBuilder.toString());
+        accessibilityNodeInfo.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
     }
 }

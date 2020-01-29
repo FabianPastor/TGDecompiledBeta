@@ -12,30 +12,25 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
-import android.graphics.Shader.TileMode;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,39 +44,23 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.FileLocation;
-import org.telegram.tgnet.TLRPC.InputPeer;
-import org.telegram.tgnet.TLRPC.MessageUserVote;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
-import org.telegram.tgnet.TLRPC.TL_inputPeerChat;
-import org.telegram.tgnet.TLRPC.TL_inputPeerUser;
-import org.telegram.tgnet.TLRPC.TL_messageMediaPoll;
-import org.telegram.tgnet.TLRPC.TL_messageUserVoteInputOption;
-import org.telegram.tgnet.TLRPC.TL_messages_getPollVotes;
-import org.telegram.tgnet.TLRPC.TL_messages_votesList;
-import org.telegram.tgnet.TLRPC.TL_poll;
-import org.telegram.tgnet.TLRPC.TL_pollAnswer;
-import org.telegram.tgnet.TLRPC.TL_pollAnswerVoters;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.AnimationProperties.FloatProperty;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
+import org.telegram.ui.Components.AnimationProperties;
+import org.telegram.ui.Components.PollVotesAlert;
+import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ProfileActivity;
 
 public class PollVotesAlert extends BottomSheet {
-    public static final Property<UserCell, Float> USER_CELL_PROPERTY = new FloatProperty<UserCell>("placeholderAlpha(") {
+    public static final Property<UserCell, Float> USER_CELL_PROPERTY = new AnimationProperties.FloatProperty<UserCell>("placeholderAlpha(") {
         public void setValue(UserCell userCell, float f) {
             userCell.setPlaceholderAlpha(f);
         }
@@ -90,41 +69,85 @@ public class PollVotesAlert extends BottomSheet {
             return Float.valueOf(userCell.getPlaceholderAlpha());
         }
     };
-    private ActionBar actionBar;
-    private AnimatorSet actionBarAnimation;
-    private View actionBarShadow;
-    private ChatActivity chatActivity;
-    private float gradientWidth;
-    private Adapter listAdapter;
-    private RecyclerListView listView;
-    private HashSet<VotesList> loadingMore = new HashSet();
-    private boolean loadingResults = true;
+    /* access modifiers changed from: private */
+    public ActionBar actionBar;
+    /* access modifiers changed from: private */
+    public AnimatorSet actionBarAnimation;
+    /* access modifiers changed from: private */
+    public View actionBarShadow;
+    /* access modifiers changed from: private */
+    public ChatActivity chatActivity;
+    /* access modifiers changed from: private */
+    public float gradientWidth;
+    /* access modifiers changed from: private */
+    public Adapter listAdapter;
+    /* access modifiers changed from: private */
+    public RecyclerListView listView;
+    private HashSet<VotesList> loadingMore = new HashSet<>();
+    /* access modifiers changed from: private */
+    public boolean loadingResults = true;
     private MessageObject messageObject;
-    private InputPeer peer;
-    private LinearGradient placeholderGradient;
-    private Matrix placeholderMatrix;
-    private Paint placeholderPaint = new Paint(1);
-    private TL_poll poll;
-    private ArrayList<Integer> queries = new ArrayList();
-    private RectF rect = new RectF();
-    private int scrollOffsetY;
-    private Drawable shadowDrawable;
-    private TextView titleTextView;
+    private TLRPC.InputPeer peer;
+    /* access modifiers changed from: private */
+    public LinearGradient placeholderGradient;
+    /* access modifiers changed from: private */
+    public Matrix placeholderMatrix;
+    /* access modifiers changed from: private */
+    public Paint placeholderPaint = new Paint(1);
+    /* access modifiers changed from: private */
+    public TLRPC.TL_poll poll;
+    /* access modifiers changed from: private */
+    public ArrayList<Integer> queries = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public RectF rect = new RectF();
+    /* access modifiers changed from: private */
+    public int scrollOffsetY;
+    /* access modifiers changed from: private */
+    public Drawable shadowDrawable;
+    /* access modifiers changed from: private */
+    public TextView titleTextView;
     private int topBeforeSwitch;
-    private float totalTranslation;
-    private ArrayList<VotesList> voters = new ArrayList();
-    private HashMap<VotesList, Button> votesPercents = new HashMap();
+    /* access modifiers changed from: private */
+    public float totalTranslation;
+    /* access modifiers changed from: private */
+    public ArrayList<VotesList> voters = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public HashMap<VotesList, Button> votesPercents = new HashMap<>();
 
-    private class Button {
-        private float decimal;
-        private int percent;
-        private int votesCount;
+    /* access modifiers changed from: protected */
+    public boolean canDismissWithSwipe() {
+        return false;
+    }
 
-        private Button() {
+    private static class VotesList {
+        public boolean collapsed;
+        public int collapsedCount = 10;
+        public int count;
+        public String next_offset;
+        public byte[] option;
+        public ArrayList<TLRPC.User> users;
+        public ArrayList<TLRPC.MessageUserVote> votes;
+
+        public VotesList(TLRPC.TL_messages_votesList tL_messages_votesList, byte[] bArr) {
+            this.count = tL_messages_votesList.count;
+            this.votes = tL_messages_votesList.votes;
+            this.users = tL_messages_votesList.users;
+            this.next_offset = tL_messages_votesList.next_offset;
+            this.option = bArr;
         }
 
-        /* synthetic */ Button(PollVotesAlert pollVotesAlert, AnonymousClass1 anonymousClass1) {
-            this();
+        public int getCount() {
+            if (this.collapsed) {
+                return Math.min(this.collapsedCount, this.votes.size());
+            }
+            return this.votes.size();
+        }
+
+        public int getCollapsed() {
+            if (this.votes.size() <= 15) {
+                return 0;
+            }
+            return this.collapsed ? 1 : 2;
         }
     }
 
@@ -134,26 +157,26 @@ public class PollVotesAlert extends BottomSheet {
         private TextView textView = new TextView(getContext());
         final /* synthetic */ PollVotesAlert this$0;
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onCollapseClick() {
         }
 
+        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public SectionCell(PollVotesAlert pollVotesAlert, Context context) {
+            super(context);
             final PollVotesAlert pollVotesAlert2 = pollVotesAlert;
             this.this$0 = pollVotesAlert2;
-            super(context);
             setBackgroundColor(Theme.getColor("graySection"));
             this.textView.setTextSize(1, 14.0f);
             this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            String str = "key_graySectionText";
-            this.textView.setTextColor(Theme.getColor(str));
+            this.textView.setTextColor(Theme.getColor("key_graySectionText"));
             this.textView.setSingleLine(true);
-            this.textView.setEllipsize(TruncateAt.END);
+            this.textView.setEllipsize(TextUtils.TruncateAt.END);
             int i = 5;
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             this.middleTextView = new TextView(getContext());
             this.middleTextView.setTextSize(1, 14.0f);
-            this.middleTextView.setTextColor(Theme.getColor(str));
+            this.middleTextView.setTextColor(Theme.getColor("key_graySectionText"));
             this.middleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             this.righTextView = new TextView(getContext()) {
                 public boolean post(Runnable runnable) {
@@ -165,59 +188,50 @@ public class PollVotesAlert extends BottomSheet {
                 }
             };
             this.righTextView.setTextSize(1, 14.0f);
-            this.righTextView.setTextColor(Theme.getColor(str));
+            this.righTextView.setTextColor(Theme.getColor("key_graySectionText"));
             this.righTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-            this.righTextView.setOnClickListener(new -$$Lambda$PollVotesAlert$SectionCell$qoRvyHB-RWAzZbBE11wKsHpuV5U(this));
-            TextView textView = this.textView;
-            int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-            int i3 = 0;
-            float f = (float) (LocaleController.isRTL ? 0 : 16);
-            if (LocaleController.isRTL) {
-                i3 = 16;
-            }
-            addView(textView, LayoutHelper.createFrame(-2, -1.0f, i2, f, 0.0f, (float) i3, 0.0f));
+            this.righTextView.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    PollVotesAlert.SectionCell.this.lambda$new$0$PollVotesAlert$SectionCell(view);
+                }
+            });
+            addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 16), 0.0f, (float) (LocaleController.isRTL ? 16 : 0), 0.0f));
             addView(this.middleTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 0.0f, 0.0f, 0.0f));
-            textView = this.righTextView;
-            if (LocaleController.isRTL) {
-                i = 3;
-            }
-            addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+            addView(this.righTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         }
 
         public /* synthetic */ void lambda$new$0$PollVotesAlert$SectionCell(View view) {
             onCollapseClick();
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
             int i3 = i;
-            int makeMeasureSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM);
+            int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM);
             measureChildWithMargins(this.middleTextView, i3, 0, makeMeasureSpec, 0);
             measureChildWithMargins(this.righTextView, i3, 0, makeMeasureSpec, 0);
-            measureChildWithMargins(this.textView, i3, (this.middleTextView.getMeasuredWidth() + this.righTextView.getMeasuredWidth()) + AndroidUtilities.dp(32.0f), makeMeasureSpec, 0);
-            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(32.0f));
+            measureChildWithMargins(this.textView, i3, this.middleTextView.getMeasuredWidth() + this.righTextView.getMeasuredWidth() + AndroidUtilities.dp(32.0f), makeMeasureSpec, 0);
+            setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(32.0f));
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             super.onLayout(z, i, i2, i3, i4);
-            int left;
-            TextView textView;
             if (LocaleController.isRTL) {
-                left = this.textView.getLeft() - this.middleTextView.getMeasuredWidth();
-                textView = this.middleTextView;
-                textView.layout(left, textView.getTop(), this.middleTextView.getMeasuredWidth() + left, this.middleTextView.getBottom());
+                int left = this.textView.getLeft() - this.middleTextView.getMeasuredWidth();
+                TextView textView2 = this.middleTextView;
+                textView2.layout(left, textView2.getTop(), this.middleTextView.getMeasuredWidth() + left, this.middleTextView.getBottom());
                 return;
             }
-            left = this.textView.getRight();
-            textView = this.middleTextView;
-            textView.layout(left, textView.getTop(), this.middleTextView.getMeasuredWidth() + left, this.middleTextView.getBottom());
+            int right = this.textView.getRight();
+            TextView textView3 = this.middleTextView;
+            textView3.layout(right, textView3.getTop(), this.middleTextView.getMeasuredWidth() + right, this.middleTextView.getBottom());
         }
 
         public void setText(String str, int i, int i2, int i3) {
             SpannableStringBuilder spannableStringBuilder;
-            TextView textView = this.textView;
-            textView.setText(Emoji.replaceEmoji(str, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+            TextView textView2 = this.textView;
+            textView2.setText(Emoji.replaceEmoji(str, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
             String format = String.format("%d", new Object[]{Integer.valueOf(i)});
             if (LocaleController.isRTL) {
                 spannableStringBuilder = new SpannableStringBuilder(String.format("%s%% – ", new Object[]{Integer.valueOf(i)}));
@@ -241,13 +255,15 @@ public class PollVotesAlert extends BottomSheet {
     }
 
     public class UserCell extends FrameLayout {
-        private ArrayList<Animator> animators;
+        /* access modifiers changed from: private */
+        public ArrayList<Animator> animators;
         private AvatarDrawable avatarDrawable;
         private BackupImageView avatarImageView;
         private int currentAccount = UserConfig.selectedAccount;
-        private User currentUser;
+        /* access modifiers changed from: private */
+        public TLRPC.User currentUser;
         private boolean drawPlaceholder;
-        private FileLocation lastAvatar;
+        private TLRPC.FileLocation lastAvatar;
         private String lastName;
         private int lastStatus;
         private SimpleTextView nameTextView;
@@ -272,25 +288,21 @@ public class PollVotesAlert extends BottomSheet {
             this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.nameTextView.setTextSize(16);
             this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            SimpleTextView simpleTextView = this.nameTextView;
-            if (!LocaleController.isRTL) {
-                i = 3;
-            }
-            addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 28.0f : 65.0f, 14.0f, LocaleController.isRTL ? 65.0f : 28.0f, 0.0f));
+            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 28.0f : 65.0f, 14.0f, LocaleController.isRTL ? 65.0f : 28.0f, 0.0f));
         }
 
-        public void setData(User user, int i, boolean z) {
+        public void setData(TLRPC.User user, int i, boolean z) {
             this.currentUser = user;
             this.needDivider = z;
             this.drawPlaceholder = user == null;
             this.placeholderNum = i;
             if (user == null) {
                 this.nameTextView.setText("");
-                this.avatarImageView.setImageDrawable(null);
+                this.avatarImageView.setImageDrawable((Drawable) null);
             } else {
                 update(0);
             }
-            ArrayList arrayList = this.animators;
+            ArrayList<Animator> arrayList = this.animators;
             if (arrayList != null) {
                 arrayList.add(ObjectAnimator.ofFloat(this.avatarImageView, View.ALPHA, new float[]{0.0f, 1.0f}));
                 this.animators.add(ObjectAnimator.ofFloat(this.nameTextView, View.ALPHA, new float[]{0.0f, 1.0f}));
@@ -311,204 +323,170 @@ public class PollVotesAlert extends BottomSheet {
             return this.placeholderAlpha;
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + this.needDivider, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + (this.needDivider ? 1 : 0), NUM));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x0049  */
-        /* JADX WARNING: Removed duplicated region for block: B:32:0x0046  */
-        /* JADX WARNING: Removed duplicated region for block: B:36:0x004e  */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x005c  */
-        /* JADX WARNING: Removed duplicated region for block: B:47:0x0068  */
-        /* JADX WARNING: Removed duplicated region for block: B:49:0x006b A:{RETURN} */
-        /* JADX WARNING: Removed duplicated region for block: B:8:0x0010  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x007e  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0079  */
-        /* JADX WARNING: Removed duplicated region for block: B:59:0x008d  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x0084  */
-        /* JADX WARNING: Removed duplicated region for block: B:63:0x00ae  */
-        /* JADX WARNING: Removed duplicated region for block: B:62:0x009e  */
-        /* JADX WARNING: Missing block: B:22:0x0033, code skipped:
-            if (r3.local_id != r0.local_id) goto L_0x0035;
-     */
+        /* JADX WARNING: Code restructure failed: missing block: B:2:0x0005, code lost:
+            r0 = r0.photo;
+         */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
         public void update(int r11) {
             /*
-            r10 = this;
-            r0 = r10.currentUser;
-            r1 = 0;
-            if (r0 == 0) goto L_0x000c;
-        L_0x0005:
-            r0 = r0.photo;
-            if (r0 == 0) goto L_0x000c;
-        L_0x0009:
-            r0 = r0.photo_small;
-            goto L_0x000d;
-        L_0x000c:
-            r0 = r1;
-        L_0x000d:
-            r2 = 0;
-            if (r11 == 0) goto L_0x006c;
-        L_0x0010:
-            r3 = r11 & 2;
-            r4 = 1;
-            if (r3 == 0) goto L_0x0037;
-        L_0x0015:
-            r3 = r10.lastAvatar;
-            if (r3 == 0) goto L_0x001b;
-        L_0x0019:
-            if (r0 == 0) goto L_0x0035;
-        L_0x001b:
-            r3 = r10.lastAvatar;
-            if (r3 != 0) goto L_0x0021;
-        L_0x001f:
-            if (r0 != 0) goto L_0x0035;
-        L_0x0021:
-            r3 = r10.lastAvatar;
-            if (r3 == 0) goto L_0x0037;
-        L_0x0025:
-            if (r0 == 0) goto L_0x0037;
-        L_0x0027:
-            r5 = r3.volume_id;
-            r7 = r0.volume_id;
-            r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
-            if (r9 != 0) goto L_0x0035;
-        L_0x002f:
-            r3 = r3.local_id;
-            r5 = r0.local_id;
-            if (r3 == r5) goto L_0x0037;
-        L_0x0035:
-            r3 = 1;
-            goto L_0x0038;
-        L_0x0037:
-            r3 = 0;
-        L_0x0038:
-            r5 = r10.currentUser;
-            if (r5 == 0) goto L_0x004f;
-        L_0x003c:
-            if (r3 != 0) goto L_0x004f;
-        L_0x003e:
-            r6 = r11 & 4;
-            if (r6 == 0) goto L_0x004f;
-        L_0x0042:
-            r5 = r5.status;
-            if (r5 == 0) goto L_0x0049;
-        L_0x0046:
-            r5 = r5.expires;
-            goto L_0x004a;
-        L_0x0049:
-            r5 = 0;
-        L_0x004a:
-            r6 = r10.lastStatus;
-            if (r5 == r6) goto L_0x004f;
-        L_0x004e:
-            r3 = 1;
-        L_0x004f:
-            if (r3 != 0) goto L_0x0069;
-        L_0x0051:
-            r5 = r10.lastName;
-            if (r5 == 0) goto L_0x0069;
-        L_0x0055:
-            r11 = r11 & r4;
-            if (r11 == 0) goto L_0x0069;
-        L_0x0058:
-            r11 = r10.currentUser;
-            if (r11 == 0) goto L_0x0060;
-        L_0x005c:
-            r1 = org.telegram.messenger.UserObject.getUserName(r11);
-        L_0x0060:
-            r11 = r10.lastName;
-            r11 = r1.equals(r11);
-            if (r11 != 0) goto L_0x0069;
-        L_0x0068:
-            r3 = 1;
-        L_0x0069:
-            if (r3 != 0) goto L_0x006c;
-        L_0x006b:
-            return;
-        L_0x006c:
-            r11 = r10.avatarDrawable;
-            r3 = r10.currentUser;
-            r11.setInfo(r3);
-            r11 = r10.currentUser;
-            r11 = r11.status;
-            if (r11 == 0) goto L_0x007e;
-        L_0x0079:
-            r11 = r11.expires;
-            r10.lastStatus = r11;
-            goto L_0x0080;
-        L_0x007e:
-            r10.lastStatus = r2;
-        L_0x0080:
-            r11 = r10.currentUser;
-            if (r11 == 0) goto L_0x008d;
-        L_0x0084:
-            if (r1 != 0) goto L_0x008a;
-        L_0x0086:
-            r1 = org.telegram.messenger.UserObject.getUserName(r11);
-        L_0x008a:
-            r10.lastName = r1;
-            goto L_0x0091;
-        L_0x008d:
-            r11 = "";
-            r10.lastName = r11;
-        L_0x0091:
-            r11 = r10.nameTextView;
-            r1 = r10.lastName;
-            r11.setText(r1);
-            r10.lastAvatar = r0;
-            r11 = r10.currentUser;
-            if (r11 == 0) goto L_0x00ae;
-        L_0x009e:
-            r0 = r10.avatarImageView;
-            r11 = org.telegram.messenger.ImageLocation.getForUser(r11, r2);
-            r1 = r10.avatarDrawable;
-            r2 = r10.currentUser;
-            r3 = "50_50";
-            r0.setImage(r11, r3, r1, r2);
-            goto L_0x00b5;
-        L_0x00ae:
-            r11 = r10.avatarImageView;
-            r0 = r10.avatarDrawable;
-            r11.setImageDrawable(r0);
-        L_0x00b5:
-            return;
+                r10 = this;
+                org.telegram.tgnet.TLRPC$User r0 = r10.currentUser
+                r1 = 0
+                if (r0 == 0) goto L_0x000c
+                org.telegram.tgnet.TLRPC$UserProfilePhoto r0 = r0.photo
+                if (r0 == 0) goto L_0x000c
+                org.telegram.tgnet.TLRPC$FileLocation r0 = r0.photo_small
+                goto L_0x000d
+            L_0x000c:
+                r0 = r1
+            L_0x000d:
+                r2 = 0
+                if (r11 == 0) goto L_0x006c
+                r3 = r11 & 2
+                r4 = 1
+                if (r3 == 0) goto L_0x0037
+                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
+                if (r3 == 0) goto L_0x001b
+                if (r0 == 0) goto L_0x0035
+            L_0x001b:
+                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
+                if (r3 != 0) goto L_0x0021
+                if (r0 != 0) goto L_0x0035
+            L_0x0021:
+                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
+                if (r3 == 0) goto L_0x0037
+                if (r0 == 0) goto L_0x0037
+                long r5 = r3.volume_id
+                long r7 = r0.volume_id
+                int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r9 != 0) goto L_0x0035
+                int r3 = r3.local_id
+                int r5 = r0.local_id
+                if (r3 == r5) goto L_0x0037
+            L_0x0035:
+                r3 = 1
+                goto L_0x0038
+            L_0x0037:
+                r3 = 0
+            L_0x0038:
+                org.telegram.tgnet.TLRPC$User r5 = r10.currentUser
+                if (r5 == 0) goto L_0x004f
+                if (r3 != 0) goto L_0x004f
+                r6 = r11 & 4
+                if (r6 == 0) goto L_0x004f
+                org.telegram.tgnet.TLRPC$UserStatus r5 = r5.status
+                if (r5 == 0) goto L_0x0049
+                int r5 = r5.expires
+                goto L_0x004a
+            L_0x0049:
+                r5 = 0
+            L_0x004a:
+                int r6 = r10.lastStatus
+                if (r5 == r6) goto L_0x004f
+                r3 = 1
+            L_0x004f:
+                if (r3 != 0) goto L_0x0069
+                java.lang.String r5 = r10.lastName
+                if (r5 == 0) goto L_0x0069
+                r11 = r11 & r4
+                if (r11 == 0) goto L_0x0069
+                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
+                if (r11 == 0) goto L_0x0060
+                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r11)
+            L_0x0060:
+                java.lang.String r11 = r10.lastName
+                boolean r11 = r1.equals(r11)
+                if (r11 != 0) goto L_0x0069
+                r3 = 1
+            L_0x0069:
+                if (r3 != 0) goto L_0x006c
+                return
+            L_0x006c:
+                org.telegram.ui.Components.AvatarDrawable r11 = r10.avatarDrawable
+                org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
+                r11.setInfo((org.telegram.tgnet.TLRPC.User) r3)
+                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
+                org.telegram.tgnet.TLRPC$UserStatus r11 = r11.status
+                if (r11 == 0) goto L_0x007e
+                int r11 = r11.expires
+                r10.lastStatus = r11
+                goto L_0x0080
+            L_0x007e:
+                r10.lastStatus = r2
+            L_0x0080:
+                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
+                if (r11 == 0) goto L_0x008d
+                if (r1 != 0) goto L_0x008a
+                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r11)
+            L_0x008a:
+                r10.lastName = r1
+                goto L_0x0091
+            L_0x008d:
+                java.lang.String r11 = ""
+                r10.lastName = r11
+            L_0x0091:
+                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.nameTextView
+                java.lang.String r1 = r10.lastName
+                r11.setText(r1)
+                r10.lastAvatar = r0
+                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
+                if (r11 == 0) goto L_0x00ae
+                org.telegram.ui.Components.BackupImageView r0 = r10.avatarImageView
+                org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForUser(r11, r2)
+                org.telegram.ui.Components.AvatarDrawable r1 = r10.avatarDrawable
+                org.telegram.tgnet.TLRPC$User r2 = r10.currentUser
+                java.lang.String r3 = "50_50"
+                r0.setImage((org.telegram.messenger.ImageLocation) r11, (java.lang.String) r3, (android.graphics.drawable.Drawable) r1, (java.lang.Object) r2)
+                goto L_0x00b5
+            L_0x00ae:
+                org.telegram.ui.Components.BackupImageView r11 = r10.avatarImageView
+                org.telegram.ui.Components.AvatarDrawable r0 = r10.avatarDrawable
+                r11.setImageDrawable(r0)
+            L_0x00b5:
+                return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PollVotesAlert$UserCell.update(int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PollVotesAlert.UserCell.update(int):void");
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
+            int i;
+            int i2;
+            int i3;
+            int i4;
             if (this.drawPlaceholder || this.placeholderAlpha != 0.0f) {
-                int dp;
-                int dp2;
-                int dp3;
                 PollVotesAlert.this.placeholderPaint.setAlpha((int) (this.placeholderAlpha * 255.0f));
+                int left = this.avatarImageView.getLeft() + (this.avatarImageView.getMeasuredWidth() / 2);
                 int top = this.avatarImageView.getTop() + (this.avatarImageView.getMeasuredHeight() / 2);
-                canvas.drawCircle((float) (this.avatarImageView.getLeft() + (this.avatarImageView.getMeasuredWidth() / 2)), (float) top, (float) (this.avatarImageView.getMeasuredWidth() / 2), PollVotesAlert.this.placeholderPaint);
+                canvas.drawCircle((float) left, (float) top, (float) (this.avatarImageView.getMeasuredWidth() / 2), PollVotesAlert.this.placeholderPaint);
                 if (this.placeholderNum % 2 == 0) {
-                    dp = AndroidUtilities.dp(65.0f);
-                    dp2 = AndroidUtilities.dp(48.0f);
+                    i2 = AndroidUtilities.dp(65.0f);
+                    i = AndroidUtilities.dp(48.0f);
                 } else {
-                    dp = AndroidUtilities.dp(65.0f);
-                    dp2 = AndroidUtilities.dp(60.0f);
+                    i2 = AndroidUtilities.dp(65.0f);
+                    i = AndroidUtilities.dp(60.0f);
                 }
                 if (LocaleController.isRTL) {
-                    dp = (getMeasuredWidth() - dp) - dp2;
+                    i2 = (getMeasuredWidth() - i2) - i;
                 }
-                PollVotesAlert.this.rect.set((float) dp, (float) (top - AndroidUtilities.dp(4.0f)), (float) (dp + dp2), (float) (AndroidUtilities.dp(4.0f) + top));
+                PollVotesAlert.this.rect.set((float) i2, (float) (top - AndroidUtilities.dp(4.0f)), (float) (i2 + i), (float) (AndroidUtilities.dp(4.0f) + top));
                 canvas.drawRoundRect(PollVotesAlert.this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), PollVotesAlert.this.placeholderPaint);
                 if (this.placeholderNum % 2 == 0) {
-                    dp = AndroidUtilities.dp(119.0f);
-                    dp3 = AndroidUtilities.dp(60.0f);
+                    i4 = AndroidUtilities.dp(119.0f);
+                    i3 = AndroidUtilities.dp(60.0f);
                 } else {
-                    dp = AndroidUtilities.dp(131.0f);
-                    dp3 = AndroidUtilities.dp(80.0f);
+                    i4 = AndroidUtilities.dp(131.0f);
+                    i3 = AndroidUtilities.dp(80.0f);
                 }
                 if (LocaleController.isRTL) {
-                    dp = (getMeasuredWidth() - dp) - dp3;
+                    i4 = (getMeasuredWidth() - i4) - i3;
                 }
-                PollVotesAlert.this.rect.set((float) dp, (float) (top - AndroidUtilities.dp(4.0f)), (float) (dp + dp3), (float) (top + AndroidUtilities.dp(4.0f)));
+                PollVotesAlert.this.rect.set((float) i4, (float) (top - AndroidUtilities.dp(4.0f)), (float) (i4 + i3), (float) (top + AndroidUtilities.dp(4.0f)));
                 canvas.drawRoundRect(PollVotesAlert.this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), PollVotesAlert.this.placeholderPaint);
             }
             if (this.needDivider) {
@@ -517,282 +495,114 @@ public class PollVotesAlert extends BottomSheet {
         }
     }
 
-    private static class VotesList {
-        public boolean collapsed;
-        public int collapsedCount = 10;
-        public int count;
-        public String next_offset;
-        public byte[] option;
-        public ArrayList<User> users;
-        public ArrayList<MessageUserVote> votes;
-
-        public VotesList(TL_messages_votesList tL_messages_votesList, byte[] bArr) {
-            this.count = tL_messages_votesList.count;
-            this.votes = tL_messages_votesList.votes;
-            this.users = tL_messages_votesList.users;
-            this.next_offset = tL_messages_votesList.next_offset;
-            this.option = bArr;
-        }
-
-        public int getCount() {
-            if (this.collapsed) {
-                return Math.min(this.collapsedCount, this.votes.size());
-            }
-            return this.votes.size();
-        }
-
-        public int getCollapsed() {
-            if (this.votes.size() <= 15) {
-                return 0;
-            }
-            return this.collapsed ? 1 : 2;
+    public static void showForPoll(ChatActivity chatActivity2, MessageObject messageObject2) {
+        if (chatActivity2 != null && chatActivity2.getParentActivity() != null) {
+            chatActivity2.showDialog(new PollVotesAlert(chatActivity2, messageObject2));
         }
     }
 
-    public class Adapter extends SectionsAdapter {
-        private int currentAccount = UserConfig.selectedAccount;
-        private Context mContext;
+    private class Button {
+        /* access modifiers changed from: private */
+        public float decimal;
+        /* access modifiers changed from: private */
+        public int percent;
+        /* access modifiers changed from: private */
+        public int votesCount;
 
-        public Object getItem(int i, int i2) {
-            return null;
-        }
-
-        public String getLetter(int i) {
-            return null;
-        }
-
-        public int getPositionForScrollProgress(float f) {
-            return 0;
-        }
-
-        public Adapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean isEnabled(int i, int i2) {
-            return (i == 0 || i2 == 0 || (PollVotesAlert.this.queries != null && !PollVotesAlert.this.queries.isEmpty())) ? false : true;
-        }
-
-        public int getSectionCount() {
-            return PollVotesAlert.this.voters.size() + 1;
-        }
-
-        public int getCountForSection(int i) {
-            int i2 = 1;
-            if (i == 0) {
-                return 1;
-            }
-            VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
-            int count = votesList.getCount() + 1;
-            if (TextUtils.isEmpty(votesList.next_offset) && !votesList.collapsed) {
-                i2 = 0;
-            }
-            return count + i2;
-        }
-
-        private SectionCell createSectionCell() {
-            return new SectionCell(this.mContext) {
-                /* Access modifiers changed, original: protected */
-                public void onCollapseClick() {
-                    VotesList votesList = (VotesList) getTag(NUM);
-                    if (votesList.votes.size() > 15) {
-                        votesList.collapsed ^= 1;
-                        if (votesList.collapsed) {
-                            votesList.collapsedCount = 10;
-                        }
-                        PollVotesAlert.this.listAdapter.notifyDataSetChanged();
-                    }
-                }
-            };
-        }
-
-        public View getSectionHeaderView(int i, View view) {
-            if (view == null) {
-                view = createSectionCell();
-            }
-            SectionCell sectionCell = (SectionCell) view;
-            if (i == 0) {
-                sectionCell.setAlpha(0.0f);
-            } else {
-                i--;
-                view.setAlpha(1.0f);
-                VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i);
-                int i2 = 0;
-                MessageUserVote messageUserVote = (MessageUserVote) votesList.votes.get(0);
-                int size = PollVotesAlert.this.poll.answers.size();
-                while (i2 < size) {
-                    TL_pollAnswer tL_pollAnswer = (TL_pollAnswer) PollVotesAlert.this.poll.answers.get(i2);
-                    if (Arrays.equals(tL_pollAnswer.option, votesList.option)) {
-                        Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
-                        sectionCell.setText(tL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                        sectionCell.setTag(NUM, votesList);
-                        break;
-                    }
-                    i2++;
-                }
-            }
-            return view;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View userCell;
-            if (i == 0) {
-                userCell = new UserCell(this.mContext);
-            } else if (i == 1) {
-                if (PollVotesAlert.this.titleTextView.getParent() != null) {
-                    ((ViewGroup) PollVotesAlert.this.titleTextView.getParent()).removeView(PollVotesAlert.this.titleTextView);
-                }
-                userCell = PollVotesAlert.this.titleTextView;
-            } else if (i != 2) {
-                userCell = new TextCell(this.mContext, 23, true);
-                userCell.setOffsetFromImage(65);
-                userCell.setColors("switchTrackChecked", "windowBackgroundWhiteBlueText4");
-            } else {
-                userCell = createSectionCell();
-            }
-            return new Holder(userCell);
-        }
-
-        public void onBindViewHolder(int i, int i2, ViewHolder viewHolder) {
-            i2 = viewHolder.getItemViewType();
-            int i3 = 0;
-            VotesList votesList;
-            if (i2 == 2) {
-                SectionCell sectionCell = (SectionCell) viewHolder.itemView;
-                votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
-                MessageUserVote messageUserVote = (MessageUserVote) votesList.votes.get(0);
-                int size = PollVotesAlert.this.poll.answers.size();
-                while (i3 < size) {
-                    TL_pollAnswer tL_pollAnswer = (TL_pollAnswer) PollVotesAlert.this.poll.answers.get(i3);
-                    if (Arrays.equals(tL_pollAnswer.option, votesList.option)) {
-                        Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
-                        sectionCell.setText(tL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                        sectionCell.setTag(NUM, votesList);
-                        return;
-                    }
-                    i3++;
-                }
-            } else if (i2 == 3) {
-                votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
-                ((TextCell) viewHolder.itemView).setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList.count - votesList.getCount()), NUM, false);
-            }
-        }
-
-        public void onViewAttachedToWindow(ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() == 0) {
-                int adapterPosition = viewHolder.getAdapterPosition();
-                adapterPosition = getPositionInSectionForPosition(adapterPosition) - 1;
-                UserCell userCell = (UserCell) viewHolder.itemView;
-                VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(getSectionForPosition(adapterPosition) - 1);
-                MessageUserVote messageUserVote = (MessageUserVote) votesList.votes.get(adapterPosition);
-                User user = messageUserVote.user_id != 0 ? PollVotesAlert.this.chatActivity.getMessagesController().getUser(Integer.valueOf(messageUserVote.user_id)) : null;
-                boolean z = true;
-                if (adapterPosition == votesList.getCount() - 1 && TextUtils.isEmpty(votesList.next_offset) && !votesList.collapsed) {
-                    z = false;
-                }
-                userCell.setData(user, adapterPosition, z);
-            }
-        }
-
-        public int getItemViewType(int i, int i2) {
-            if (i == 0) {
-                return 1;
-            }
-            if (i2 == 0) {
-                return 2;
-            }
-            return i2 + -1 < ((VotesList) PollVotesAlert.this.voters.get(i + -1)).getCount() ? 0 : 3;
+        private Button() {
         }
     }
 
-    /* Access modifiers changed, original: protected */
-    public boolean canDismissWithSwipe() {
-        return false;
-    }
-
-    public static void showForPoll(ChatActivity chatActivity, MessageObject messageObject) {
-        if (chatActivity != null && chatActivity.getParentActivity() != null) {
-            chatActivity.showDialog(new PollVotesAlert(chatActivity, messageObject));
-        }
-    }
-
-    public PollVotesAlert(ChatActivity chatActivity, MessageObject messageObject) {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public PollVotesAlert(ChatActivity chatActivity2, MessageObject messageObject2) {
+        super(chatActivity2.getParentActivity(), true);
         int i;
-        ChatActivity chatActivity2 = chatActivity;
-        int i2 = 1;
-        super(chatActivity.getParentActivity(), true);
-        this.messageObject = messageObject;
-        this.chatActivity = chatActivity2;
-        TL_messageMediaPoll tL_messageMediaPoll = (TL_messageMediaPoll) this.messageObject.messageOwner.media;
+        int i2;
+        ChatActivity chatActivity3 = chatActivity2;
+        int i3 = 1;
+        this.messageObject = messageObject2;
+        this.chatActivity = chatActivity3;
+        TLRPC.TL_messageMediaPoll tL_messageMediaPoll = (TLRPC.TL_messageMediaPoll) this.messageObject.messageOwner.media;
         this.poll = tL_messageMediaPoll.poll;
-        Activity parentActivity = chatActivity.getParentActivity();
-        Chat currentChat = chatActivity.getCurrentChat();
-        User currentUser = chatActivity.getCurrentUser();
+        Activity parentActivity = chatActivity2.getParentActivity();
+        TLRPC.Chat currentChat = chatActivity2.getCurrentChat();
+        TLRPC.User currentUser = chatActivity2.getCurrentUser();
         if (ChatObject.isChannel(currentChat)) {
-            this.peer = new TL_inputPeerChannel();
-            InputPeer inputPeer = this.peer;
+            this.peer = new TLRPC.TL_inputPeerChannel();
+            TLRPC.InputPeer inputPeer = this.peer;
             inputPeer.channel_id = currentChat.id;
             inputPeer.access_hash = currentChat.access_hash;
         } else if (currentChat != null) {
-            this.peer = new TL_inputPeerChat();
+            this.peer = new TLRPC.TL_inputPeerChat();
             this.peer.chat_id = currentChat.id;
         } else {
-            this.peer = new TL_inputPeerUser();
-            InputPeer inputPeer2 = this.peer;
+            this.peer = new TLRPC.TL_inputPeerUser();
+            TLRPC.InputPeer inputPeer2 = this.peer;
             inputPeer2.user_id = currentUser.id;
             inputPeer2.access_hash = currentUser.access_hash;
         }
         ArrayList arrayList = new ArrayList();
         int size = tL_messageMediaPoll.results.results.size();
         Integer[] numArr = new Integer[size];
-        int i3 = 0;
-        while (i3 < size) {
-            int i4;
-            int i5;
-            TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i3);
+        int i4 = 0;
+        while (i4 < size) {
+            TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters = tL_messageMediaPoll.results.results.get(i4);
             if (tL_pollAnswerVoters.voters == 0) {
-                i4 = i3;
-                i5 = size;
+                i2 = i4;
+                i = size;
             } else {
-                TL_messages_votesList tL_messages_votesList = new TL_messages_votesList();
-                int i6 = tL_pollAnswerVoters.voters;
-                i = 15;
-                if (i6 > 15) {
-                    i6 = 10;
+                TLRPC.TL_messages_votesList tL_messages_votesList = new TLRPC.TL_messages_votesList();
+                int i5 = tL_pollAnswerVoters.voters;
+                int i6 = 15;
+                i5 = i5 > 15 ? 10 : i5;
+                for (int i7 = 0; i7 < i5; i7++) {
+                    tL_messages_votesList.votes.add(new TLRPC.TL_messageUserVoteInputOption());
                 }
-                for (int i7 = 0; i7 < i6; i7++) {
-                    tL_messages_votesList.votes.add(new TL_messageUserVoteInputOption());
-                }
-                tL_messages_votesList.next_offset = i6 < tL_pollAnswerVoters.voters ? "empty" : null;
+                tL_messages_votesList.next_offset = i5 < tL_pollAnswerVoters.voters ? "empty" : null;
                 tL_messages_votesList.count = tL_pollAnswerVoters.voters;
                 this.voters.add(new VotesList(tL_messages_votesList, tL_pollAnswerVoters.option));
-                TL_messages_getPollVotes tL_messages_getPollVotes = new TL_messages_getPollVotes();
+                TLRPC.TL_messages_getPollVotes tL_messages_getPollVotes = new TLRPC.TL_messages_getPollVotes();
                 tL_messages_getPollVotes.peer = this.peer;
                 tL_messages_getPollVotes.id = this.messageObject.getId();
-                if (tL_pollAnswerVoters.voters > 15) {
-                    i = 10;
-                }
-                tL_messages_getPollVotes.limit = i;
-                tL_messages_getPollVotes.flags |= i2;
+                tL_messages_getPollVotes.limit = tL_pollAnswerVoters.voters > 15 ? 10 : i6;
+                tL_messages_getPollVotes.flags |= i3;
                 tL_messages_getPollVotes.option = tL_pollAnswerVoters.option;
-                -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu = r0;
-                i5 = size;
-                ConnectionsManager connectionsManager = chatActivity.getConnectionsManager();
-                i4 = i3;
-                -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu2 = new -$$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU(this, numArr, i3, chatActivity, arrayList, tL_pollAnswerVoters);
-                numArr[i4] = Integer.valueOf(connectionsManager.sendRequest(tL_messages_getPollVotes, -__lambda_pollvotesalert_lpnnrqfn8ikhhs43t4zdefqstlu));
-                this.queries.add(numArr[i4]);
+                $$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU r9 = r0;
+                i = size;
+                ConnectionsManager connectionsManager = chatActivity2.getConnectionsManager();
+                i2 = i4;
+                $$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU r0 = new RequestDelegate(numArr, i4, chatActivity2, arrayList, tL_pollAnswerVoters) {
+                    private final /* synthetic */ Integer[] f$1;
+                    private final /* synthetic */ int f$2;
+                    private final /* synthetic */ ChatActivity f$3;
+                    private final /* synthetic */ ArrayList f$4;
+                    private final /* synthetic */ TLRPC.TL_pollAnswerVoters f$5;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                        this.f$3 = r4;
+                        this.f$4 = r5;
+                        this.f$5 = r6;
+                    }
+
+                    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                        PollVotesAlert.this.lambda$new$1$PollVotesAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tL_error);
+                    }
+                };
+                numArr[i2] = Integer.valueOf(connectionsManager.sendRequest(tL_messages_getPollVotes, r9));
+                this.queries.add(numArr[i2]);
             }
-            i3 = i4 + 1;
-            size = i5;
-            i2 = 1;
+            i4 = i2 + 1;
+            size = i;
+            i3 = 1;
         }
         updateButtons();
         Collections.sort(this.voters, new Comparator<VotesList>() {
             private int getIndex(VotesList votesList) {
                 int size = PollVotesAlert.this.poll.answers.size();
                 for (int i = 0; i < size; i++) {
-                    if (Arrays.equals(((TL_pollAnswer) PollVotesAlert.this.poll.answers.get(i)).option, votesList.option)) {
+                    if (Arrays.equals(PollVotesAlert.this.poll.answers.get(i).option, votesList.option)) {
                         return i;
                     }
                 }
@@ -810,56 +620,56 @@ public class PollVotesAlert extends BottomSheet {
         });
         updatePlaceholder();
         this.shadowDrawable = parentActivity.getResources().getDrawable(NUM).mutate();
-        String str = "dialogBackground";
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.containerView = new FrameLayout(parentActivity) {
             private boolean fullHeight;
             private boolean ignoreLayout = false;
             private RectF rect = new RectF();
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
-                int size = MeasureSpec.getSize(i2);
+                int i3;
+                int size = View.MeasureSpec.getSize(i2);
                 boolean z = true;
-                if (VERSION.SDK_INT >= 21 && !PollVotesAlert.this.isFullscreen) {
+                if (Build.VERSION.SDK_INT >= 21 && !PollVotesAlert.this.isFullscreen) {
                     this.ignoreLayout = true;
                     setPadding(PollVotesAlert.this.backgroundPaddingLeft, AndroidUtilities.statusBarHeight, PollVotesAlert.this.backgroundPaddingLeft, 0);
                     this.ignoreLayout = false;
                 }
                 int paddingTop = size - getPaddingTop();
-                ((LayoutParams) PollVotesAlert.this.listView.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
-                ((LayoutParams) PollVotesAlert.this.actionBarShadow.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
-                int access$1000 = (PollVotesAlert.this.backgroundPaddingTop + AndroidUtilities.dp(15.0f)) + AndroidUtilities.statusBarHeight;
+                ((FrameLayout.LayoutParams) PollVotesAlert.this.listView.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
+                ((FrameLayout.LayoutParams) PollVotesAlert.this.actionBarShadow.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
+                int access$1000 = PollVotesAlert.this.backgroundPaddingTop + AndroidUtilities.dp(15.0f) + AndroidUtilities.statusBarHeight;
                 int sectionCount = PollVotesAlert.this.listAdapter.getSectionCount();
-                int i3 = access$1000;
-                for (access$1000 = 0; access$1000 < sectionCount; access$1000++) {
-                    if (access$1000 == 0) {
-                        PollVotesAlert.this.titleTextView.measure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i - (PollVotesAlert.this.backgroundPaddingLeft * 2)), NUM), i2);
-                        i3 += PollVotesAlert.this.titleTextView.getMeasuredHeight();
+                int i4 = access$1000;
+                for (int i5 = 0; i5 < sectionCount; i5++) {
+                    if (i5 == 0) {
+                        PollVotesAlert.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i - (PollVotesAlert.this.backgroundPaddingLeft * 2)), NUM), i2);
+                        i4 += PollVotesAlert.this.titleTextView.getMeasuredHeight();
                     } else {
-                        i3 += AndroidUtilities.dp(32.0f) + (AndroidUtilities.dp(50.0f) * (PollVotesAlert.this.listAdapter.getCountForSection(access$1000) - 1));
+                        i4 += AndroidUtilities.dp(32.0f) + (AndroidUtilities.dp(50.0f) * (PollVotesAlert.this.listAdapter.getCountForSection(i5) - 1));
                     }
                 }
-                if (i3 < paddingTop) {
-                    paddingTop -= i3;
+                if (i4 < paddingTop) {
+                    i3 = paddingTop - i4;
                 } else {
-                    paddingTop -= (paddingTop / 5) * 3;
+                    i3 = paddingTop - ((paddingTop / 5) * 3);
                 }
-                paddingTop += AndroidUtilities.dp(8.0f);
-                if (PollVotesAlert.this.listView.getPaddingTop() != paddingTop) {
+                int dp = i3 + AndroidUtilities.dp(8.0f);
+                if (PollVotesAlert.this.listView.getPaddingTop() != dp) {
                     this.ignoreLayout = true;
-                    PollVotesAlert.this.listView.setPinnedSectionOffsetY(-paddingTop);
-                    PollVotesAlert.this.listView.setPadding(0, paddingTop, 0, 0);
+                    PollVotesAlert.this.listView.setPinnedSectionOffsetY(-dp);
+                    PollVotesAlert.this.listView.setPadding(0, dp, 0, 0);
                     this.ignoreLayout = false;
                 }
-                if (i3 < size) {
+                if (i4 < size) {
                     z = false;
                 }
                 this.fullHeight = z;
-                super.onMeasure(i, MeasureSpec.makeMeasureSpec(size, NUM));
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(size, NUM));
             }
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
                 PollVotesAlert.this.updateLayout(false);
@@ -883,67 +693,66 @@ public class PollVotesAlert extends BottomSheet {
                 }
             }
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
-                float dp;
-                int dp2 = AndroidUtilities.dp(13.0f);
-                int access$1500 = (PollVotesAlert.this.scrollOffsetY - PollVotesAlert.this.backgroundPaddingTop) - dp2;
+                float f;
+                int dp = AndroidUtilities.dp(13.0f);
+                int access$1500 = (PollVotesAlert.this.scrollOffsetY - PollVotesAlert.this.backgroundPaddingTop) - dp;
                 if (PollVotesAlert.this.currentSheetAnimationType == 1) {
                     access$1500 = (int) (((float) access$1500) + PollVotesAlert.this.listView.getTranslationY());
                 }
-                int dp3 = AndroidUtilities.dp(20.0f) + access$1500;
-                int measuredHeight = (getMeasuredHeight() + AndroidUtilities.dp(15.0f)) + PollVotesAlert.this.backgroundPaddingTop;
+                int dp2 = AndroidUtilities.dp(20.0f) + access$1500;
+                int measuredHeight = getMeasuredHeight() + AndroidUtilities.dp(15.0f) + PollVotesAlert.this.backgroundPaddingTop;
                 if (PollVotesAlert.this.backgroundPaddingTop + access$1500 < ActionBar.getCurrentActionBarHeight()) {
-                    dp = (float) (dp2 + AndroidUtilities.dp(4.0f));
-                    float min = Math.min(1.0f, ((float) ((ActionBar.getCurrentActionBarHeight() - access$1500) - PollVotesAlert.this.backgroundPaddingTop)) / dp);
-                    dp2 = (int) ((((float) ActionBar.getCurrentActionBarHeight()) - dp) * min);
-                    access$1500 -= dp2;
-                    dp3 -= dp2;
-                    measuredHeight += dp2;
-                    dp = 1.0f - min;
+                    float dp3 = (float) (dp + AndroidUtilities.dp(4.0f));
+                    float min = Math.min(1.0f, ((float) ((ActionBar.getCurrentActionBarHeight() - access$1500) - PollVotesAlert.this.backgroundPaddingTop)) / dp3);
+                    int currentActionBarHeight = (int) ((((float) ActionBar.getCurrentActionBarHeight()) - dp3) * min);
+                    access$1500 -= currentActionBarHeight;
+                    dp2 -= currentActionBarHeight;
+                    measuredHeight += currentActionBarHeight;
+                    f = 1.0f - min;
                 } else {
-                    dp = 1.0f;
+                    f = 1.0f;
                 }
-                if (VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) {
                     int i = AndroidUtilities.statusBarHeight;
                     access$1500 += i;
-                    dp3 += i;
+                    dp2 += i;
                 }
                 PollVotesAlert.this.shadowDrawable.setBounds(0, access$1500, getMeasuredWidth(), measuredHeight);
                 PollVotesAlert.this.shadowDrawable.draw(canvas);
-                String str = "dialogBackground";
-                if (dp != 1.0f) {
-                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(str));
-                    this.rect.set((float) PollVotesAlert.this.backgroundPaddingLeft, (float) (PollVotesAlert.this.backgroundPaddingTop + access$1500), (float) (getMeasuredWidth() - PollVotesAlert.this.backgroundPaddingLeft), (float) ((PollVotesAlert.this.backgroundPaddingTop + access$1500) + AndroidUtilities.dp(24.0f)));
-                    canvas.drawRoundRect(this.rect, ((float) AndroidUtilities.dp(12.0f)) * dp, ((float) AndroidUtilities.dp(12.0f)) * dp, Theme.dialogs_onlineCirclePaint);
+                if (f != 1.0f) {
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("dialogBackground"));
+                    this.rect.set((float) PollVotesAlert.this.backgroundPaddingLeft, (float) (PollVotesAlert.this.backgroundPaddingTop + access$1500), (float) (getMeasuredWidth() - PollVotesAlert.this.backgroundPaddingLeft), (float) (PollVotesAlert.this.backgroundPaddingTop + access$1500 + AndroidUtilities.dp(24.0f)));
+                    canvas.drawRoundRect(this.rect, ((float) AndroidUtilities.dp(12.0f)) * f, ((float) AndroidUtilities.dp(12.0f)) * f, Theme.dialogs_onlineCirclePaint);
                 }
-                if (dp != 0.0f) {
-                    access$1500 = AndroidUtilities.dp(36.0f);
-                    this.rect.set((float) ((getMeasuredWidth() - access$1500) / 2), (float) dp3, (float) ((getMeasuredWidth() + access$1500) / 2), (float) (dp3 + AndroidUtilities.dp(4.0f)));
-                    access$1500 = Theme.getColor("key_sheet_scrollUp");
-                    dp3 = Color.alpha(access$1500);
-                    Theme.dialogs_onlineCirclePaint.setColor(access$1500);
-                    Theme.dialogs_onlineCirclePaint.setAlpha((int) ((((float) dp3) * 1.0f) * dp));
+                if (f != 0.0f) {
+                    int dp4 = AndroidUtilities.dp(36.0f);
+                    this.rect.set((float) ((getMeasuredWidth() - dp4) / 2), (float) dp2, (float) ((getMeasuredWidth() + dp4) / 2), (float) (dp2 + AndroidUtilities.dp(4.0f)));
+                    int color = Theme.getColor("key_sheet_scrollUp");
+                    int alpha = Color.alpha(color);
+                    Theme.dialogs_onlineCirclePaint.setColor(color);
+                    Theme.dialogs_onlineCirclePaint.setAlpha((int) (((float) alpha) * 1.0f * f));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), Theme.dialogs_onlineCirclePaint);
                 }
-                dp2 = Theme.getColor(str);
-                Theme.dialogs_onlineCirclePaint.setColor(Color.argb((int) (PollVotesAlert.this.actionBar.getAlpha() * 255.0f), (int) (((float) Color.red(dp2)) * 0.8f), (int) (((float) Color.green(dp2)) * 0.8f), (int) (((float) Color.blue(dp2)) * 0.8f)));
+                int color2 = Theme.getColor("dialogBackground");
+                Theme.dialogs_onlineCirclePaint.setColor(Color.argb((int) (PollVotesAlert.this.actionBar.getAlpha() * 255.0f), (int) (((float) Color.red(color2)) * 0.8f), (int) (((float) Color.green(color2)) * 0.8f), (int) (((float) Color.blue(color2)) * 0.8f)));
                 canvas.drawRect((float) PollVotesAlert.this.backgroundPaddingLeft, 0.0f, (float) (getMeasuredWidth() - PollVotesAlert.this.backgroundPaddingLeft), (float) AndroidUtilities.statusBarHeight, Theme.dialogs_onlineCirclePaint);
             }
         };
         this.containerView.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
-        i = this.backgroundPaddingLeft;
-        viewGroup.setPadding(i, 0, i, 0);
+        int i8 = this.backgroundPaddingLeft;
+        viewGroup.setPadding(i8, 0, i8, 0);
         this.listView = new RecyclerListView(parentActivity) {
             long lastUpdateTime;
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
-                return f2 >= ((float) (PollVotesAlert.this.scrollOffsetY + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
+                return f2 >= ((float) (PollVotesAlert.this.scrollOffsetY + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
             }
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 if (PollVotesAlert.this.loadingResults) {
                     long elapsedRealtime = SystemClock.elapsedRealtime();
@@ -953,10 +762,10 @@ public class PollVotesAlert extends BottomSheet {
                     }
                     this.lastUpdateTime = elapsedRealtime;
                     PollVotesAlert pollVotesAlert = PollVotesAlert.this;
-                    pollVotesAlert.totalTranslation = pollVotesAlert.totalTranslation + ((((float) abs) * PollVotesAlert.this.gradientWidth) / 1800.0f);
+                    float unused = pollVotesAlert.totalTranslation = pollVotesAlert.totalTranslation + ((((float) abs) * PollVotesAlert.this.gradientWidth) / 1800.0f);
                     while (PollVotesAlert.this.totalTranslation >= PollVotesAlert.this.gradientWidth * 2.0f) {
-                        pollVotesAlert = PollVotesAlert.this;
-                        pollVotesAlert.totalTranslation = pollVotesAlert.totalTranslation - (PollVotesAlert.this.gradientWidth * 2.0f);
+                        PollVotesAlert pollVotesAlert2 = PollVotesAlert.this;
+                        float unused2 = pollVotesAlert2.totalTranslation = pollVotesAlert2.totalTranslation - (PollVotesAlert.this.gradientWidth * 2.0f);
                     }
                     PollVotesAlert.this.placeholderMatrix.setTranslate(PollVotesAlert.this.totalTranslation, 0.0f);
                     PollVotesAlert.this.placeholderGradient.setLocalMatrix(PollVotesAlert.this.placeholderMatrix);
@@ -977,8 +786,18 @@ public class PollVotesAlert extends BottomSheet {
         this.listAdapter = adapter;
         recyclerListView.setAdapter(adapter);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-        this.listView.setOnItemClickListener(new -$$Lambda$PollVotesAlert$xtwTVH3ZM7FGeLNsGo5ocCvVGLY(this, chatActivity2));
-        this.listView.setOnScrollListener(new OnScrollListener() {
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(chatActivity3) {
+            private final /* synthetic */ ChatActivity f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void onItemClick(View view, int i) {
+                PollVotesAlert.this.lambda$new$4$PollVotesAlert(this.f$1, view, i);
+            }
+        });
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (PollVotesAlert.this.listView.getChildCount() > 0) {
                     PollVotesAlert.this.updateLayout(true);
@@ -989,7 +808,7 @@ public class PollVotesAlert extends BottomSheet {
                 if (i == 0) {
                     if (((PollVotesAlert.this.scrollOffsetY - PollVotesAlert.this.backgroundPaddingTop) - AndroidUtilities.dp(13.0f)) + PollVotesAlert.this.backgroundPaddingTop < ActionBar.getCurrentActionBarHeight() && PollVotesAlert.this.listView.canScrollVertically(1)) {
                         PollVotesAlert.this.listView.getChildAt(0);
-                        Holder holder = (Holder) PollVotesAlert.this.listView.findViewHolderForAdapterPosition(0);
+                        RecyclerListView.Holder holder = (RecyclerListView.Holder) PollVotesAlert.this.listView.findViewHolderForAdapterPosition(0);
                         if (holder != null && holder.itemView.getTop() > AndroidUtilities.dp(7.0f)) {
                             PollVotesAlert.this.listView.smoothScrollBy(0, holder.itemView.getTop() - AndroidUtilities.dp(7.0f));
                         }
@@ -1001,8 +820,7 @@ public class PollVotesAlert extends BottomSheet {
         this.titleTextView.setTextSize(1, 18.0f);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(14.0f), AndroidUtilities.dp(21.0f));
-        String str2 = "dialogTextBlack";
-        this.titleTextView.setTextColor(Theme.getColor(str2));
+        this.titleTextView.setTextColor(Theme.getColor("dialogTextBlack"));
         this.titleTextView.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
         TextView textView = this.titleTextView;
         textView.setText(Emoji.replaceEmoji(this.poll.question, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(18.0f), false));
@@ -1012,11 +830,11 @@ public class PollVotesAlert extends BottomSheet {
                 PollVotesAlert.this.containerView.invalidate();
             }
         };
-        this.actionBar.setBackgroundColor(Theme.getColor(str));
+        this.actionBar.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.actionBar.setBackButtonImage(NUM);
-        this.actionBar.setItemsColor(Theme.getColor(str2), false);
+        this.actionBar.setItemsColor(Theme.getColor("dialogTextBlack"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("dialogButtonSelector"), false);
-        this.actionBar.setTitleColor(Theme.getColor(str2));
+        this.actionBar.setTitleColor(Theme.getColor("dialogTextBlack"));
         this.actionBar.setSubtitleColor(Theme.getColor("player_actionBarSubtitle"));
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setAlpha(0.0f);
@@ -1027,7 +845,7 @@ public class PollVotesAlert extends BottomSheet {
             this.actionBar.setSubtitle(LocaleController.formatPluralString("Vote", tL_messageMediaPoll.results.total_voters));
         }
         this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     PollVotesAlert.this.dismiss();
@@ -1040,37 +858,61 @@ public class PollVotesAlert extends BottomSheet {
         this.containerView.addView(this.actionBarShadow, LayoutHelper.createFrame(-1, 1.0f));
     }
 
-    public /* synthetic */ void lambda$new$1$PollVotesAlert(Integer[] numArr, int i, ChatActivity chatActivity, ArrayList arrayList, TL_pollAnswerVoters tL_pollAnswerVoters, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$PollVotesAlert$yPn91rkNoAqao_B1yJm5Z5cWO1g(this, numArr, i, tLObject, chatActivity, arrayList, tL_pollAnswerVoters));
+    public /* synthetic */ void lambda$new$1$PollVotesAlert(Integer[] numArr, int i, ChatActivity chatActivity2, ArrayList arrayList, TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(numArr, i, tLObject, chatActivity2, arrayList, tL_pollAnswerVoters) {
+            private final /* synthetic */ Integer[] f$1;
+            private final /* synthetic */ int f$2;
+            private final /* synthetic */ TLObject f$3;
+            private final /* synthetic */ ChatActivity f$4;
+            private final /* synthetic */ ArrayList f$5;
+            private final /* synthetic */ TLRPC.TL_pollAnswerVoters f$6;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r6;
+                this.f$6 = r7;
+            }
+
+            public final void run() {
+                PollVotesAlert.this.lambda$null$0$PollVotesAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$0$PollVotesAlert(Integer[] numArr, int i, TLObject tLObject, ChatActivity chatActivity, ArrayList arrayList, TL_pollAnswerVoters tL_pollAnswerVoters) {
+    public /* synthetic */ void lambda$null$0$PollVotesAlert(Integer[] numArr, int i, TLObject tLObject, ChatActivity chatActivity2, ArrayList arrayList, TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters) {
+        RecyclerView.ViewHolder findContainingViewHolder;
         this.queries.remove(numArr[i]);
         if (tLObject != null) {
-            TL_messages_votesList tL_messages_votesList = (TL_messages_votesList) tLObject;
-            chatActivity.getMessagesController().putUsers(tL_messages_votesList.users, false);
+            TLRPC.TL_messages_votesList tL_messages_votesList = (TLRPC.TL_messages_votesList) tLObject;
+            chatActivity2.getMessagesController().putUsers(tL_messages_votesList.users, false);
             if (!tL_messages_votesList.votes.isEmpty()) {
                 arrayList.add(new VotesList(tL_messages_votesList, tL_pollAnswerVoters.option));
             }
             if (this.queries.isEmpty()) {
                 int size = arrayList.size();
-                Object obj = null;
-                for (i = 0; i < size; i++) {
-                    VotesList votesList = (VotesList) arrayList.get(i);
+                boolean z = false;
+                for (int i2 = 0; i2 < size; i2++) {
+                    VotesList votesList = (VotesList) arrayList.get(i2);
                     int size2 = this.voters.size();
-                    int i2 = 0;
-                    while (i2 < size2) {
-                        VotesList votesList2 = (VotesList) this.voters.get(i2);
+                    int i3 = 0;
+                    while (true) {
+                        if (i3 >= size2) {
+                            break;
+                        }
+                        VotesList votesList2 = this.voters.get(i3);
                         if (Arrays.equals(votesList.option, votesList2.option)) {
                             votesList2.next_offset = votesList.next_offset;
                             if (!(votesList2.count == votesList.count && votesList2.votes.size() == votesList.votes.size())) {
-                                obj = 1;
+                                z = true;
                             }
                             votesList2.count = votesList.count;
                             votesList2.users = votesList.users;
                             votesList2.votes = votesList.votes;
                         } else {
-                            i2++;
+                            i3++;
                         }
                     }
                 }
@@ -1079,20 +921,17 @@ public class PollVotesAlert extends BottomSheet {
                 if (recyclerListView == null) {
                     return;
                 }
-                if (this.currentSheetAnimationType == 0 && this.startAnimationRunnable == null && obj == null) {
-                    size = recyclerListView.getChildCount();
+                if (this.currentSheetAnimationType == 0 && this.startAnimationRunnable == null && !z) {
+                    int childCount = recyclerListView.getChildCount();
                     ArrayList arrayList2 = new ArrayList();
-                    for (int i3 = 0; i3 < size; i3++) {
-                        View childAt = this.listView.getChildAt(i3);
-                        if (childAt instanceof UserCell) {
-                            ViewHolder findContainingViewHolder = this.listView.findContainingViewHolder(childAt);
-                            if (findContainingViewHolder != null) {
-                                UserCell userCell = (UserCell) childAt;
-                                userCell.animators = arrayList2;
-                                userCell.setEnabled(true);
-                                this.listAdapter.onViewAttachedToWindow(findContainingViewHolder);
-                                userCell.animators = null;
-                            }
+                    for (int i4 = 0; i4 < childCount; i4++) {
+                        View childAt = this.listView.getChildAt(i4);
+                        if ((childAt instanceof UserCell) && (findContainingViewHolder = this.listView.findContainingViewHolder(childAt)) != null) {
+                            UserCell userCell = (UserCell) childAt;
+                            ArrayList unused = userCell.animators = arrayList2;
+                            userCell.setEnabled(true);
+                            this.listAdapter.onViewAttachedToWindow(findContainingViewHolder);
+                            ArrayList unused2 = userCell.animators = null;
                         }
                     }
                     if (!arrayList2.isEmpty()) {
@@ -1104,7 +943,7 @@ public class PollVotesAlert extends BottomSheet {
                     this.loadingResults = false;
                     return;
                 }
-                if (obj != null) {
+                if (z) {
                     updateButtons();
                 }
                 this.listAdapter.notifyDataSetChanged();
@@ -1115,20 +954,20 @@ public class PollVotesAlert extends BottomSheet {
         dismiss();
     }
 
-    public /* synthetic */ void lambda$new$4$PollVotesAlert(ChatActivity chatActivity, View view, int i) {
-        if (!(chatActivity == null || chatActivity.getParentActivity() == null)) {
-            ArrayList arrayList = this.queries;
+    public /* synthetic */ void lambda$new$4$PollVotesAlert(ChatActivity chatActivity2, View view, int i) {
+        if (chatActivity2 != null && chatActivity2.getParentActivity() != null) {
+            ArrayList<Integer> arrayList = this.queries;
             if (arrayList == null || arrayList.isEmpty()) {
                 boolean z = false;
                 if (view instanceof TextCell) {
                     int sectionForPosition = this.listAdapter.getSectionForPosition(i) - 1;
-                    i = this.listAdapter.getPositionInSectionForPosition(i) - 1;
-                    if (i > 0 && sectionForPosition >= 0) {
-                        VotesList votesList = (VotesList) this.voters.get(sectionForPosition);
-                        if (i == votesList.getCount() && !this.loadingMore.contains(votesList)) {
+                    int positionInSectionForPosition = this.listAdapter.getPositionInSectionForPosition(i) - 1;
+                    if (positionInSectionForPosition > 0 && sectionForPosition >= 0) {
+                        VotesList votesList = this.voters.get(sectionForPosition);
+                        if (positionInSectionForPosition == votesList.getCount() && !this.loadingMore.contains(votesList)) {
                             if (!votesList.collapsed || votesList.collapsedCount >= votesList.votes.size()) {
                                 this.loadingMore.add(votesList);
-                                TL_messages_getPollVotes tL_messages_getPollVotes = new TL_messages_getPollVotes();
+                                TLRPC.TL_messages_getPollVotes tL_messages_getPollVotes = new TLRPC.TL_messages_getPollVotes();
                                 tL_messages_getPollVotes.peer = this.peer;
                                 tL_messages_getPollVotes.id = this.messageObject.getId();
                                 tL_messages_getPollVotes.limit = 50;
@@ -1136,19 +975,31 @@ public class PollVotesAlert extends BottomSheet {
                                 tL_messages_getPollVotes.option = votesList.option;
                                 tL_messages_getPollVotes.flags |= 2;
                                 tL_messages_getPollVotes.offset = votesList.next_offset;
-                                this.chatActivity.getConnectionsManager().sendRequest(tL_messages_getPollVotes, new -$$Lambda$PollVotesAlert$MLgzZkUd_TJaMZiZkzIe8uAHttU(this, votesList, chatActivity));
-                            } else {
-                                votesList.collapsedCount = Math.min(votesList.collapsedCount + 50, votesList.votes.size());
-                                if (votesList.collapsedCount == votesList.votes.size()) {
-                                    votesList.collapsed = false;
-                                }
-                                this.listAdapter.notifyDataSetChanged();
+                                this.chatActivity.getConnectionsManager().sendRequest(tL_messages_getPollVotes, new RequestDelegate(votesList, chatActivity2) {
+                                    private final /* synthetic */ PollVotesAlert.VotesList f$1;
+                                    private final /* synthetic */ ChatActivity f$2;
+
+                                    {
+                                        this.f$1 = r2;
+                                        this.f$2 = r3;
+                                    }
+
+                                    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                                        PollVotesAlert.this.lambda$null$3$PollVotesAlert(this.f$1, this.f$2, tLObject, tL_error);
+                                    }
+                                });
+                                return;
                             }
+                            votesList.collapsedCount = Math.min(votesList.collapsedCount + 50, votesList.votes.size());
+                            if (votesList.collapsedCount == votesList.votes.size()) {
+                                votesList.collapsed = false;
+                            }
+                            this.listAdapter.notifyDataSetChanged();
                         }
                     }
                 } else if (view instanceof UserCell) {
                     UserCell userCell = (UserCell) view;
-                    User currentUser = chatActivity.getCurrentUser();
+                    TLRPC.User currentUser = chatActivity2.getCurrentUser();
                     Bundle bundle = new Bundle();
                     bundle.putInt("user_id", userCell.currentUser.id);
                     dismiss();
@@ -1157,22 +1008,36 @@ public class PollVotesAlert extends BottomSheet {
                         z = true;
                     }
                     profileActivity.setPlayProfileAnimation(z);
-                    chatActivity.presentFragment(profileActivity);
+                    chatActivity2.presentFragment(profileActivity);
                 }
             }
         }
     }
 
-    public /* synthetic */ void lambda$null$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$PollVotesAlert$5oPmIpGzdH0uSEtkOoKX6wVw78w(this, votesList, tLObject, chatActivity));
+    public /* synthetic */ void lambda$null$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity2, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(votesList, tLObject, chatActivity2) {
+            private final /* synthetic */ PollVotesAlert.VotesList f$1;
+            private final /* synthetic */ TLObject f$2;
+            private final /* synthetic */ ChatActivity f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                PollVotesAlert.this.lambda$null$2$PollVotesAlert(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$2$PollVotesAlert(VotesList votesList, TLObject tLObject, ChatActivity chatActivity) {
+    public /* synthetic */ void lambda$null$2$PollVotesAlert(VotesList votesList, TLObject tLObject, ChatActivity chatActivity2) {
         if (isShowing()) {
             this.loadingMore.remove(votesList);
             if (tLObject != null) {
-                TL_messages_votesList tL_messages_votesList = (TL_messages_votesList) tLObject;
-                chatActivity.getMessagesController().putUsers(tL_messages_votesList.users, false);
+                TLRPC.TL_messages_votesList tL_messages_votesList = (TLRPC.TL_messages_votesList) tLObject;
+                chatActivity2.getMessagesController().putUsers(tL_messages_votesList.users, false);
                 votesList.votes.addAll(tL_messages_votesList.votes);
                 votesList.next_offset = tL_messages_votesList.next_offset;
                 this.listAdapter.notifyDataSetChanged();
@@ -1181,49 +1046,53 @@ public class PollVotesAlert extends BottomSheet {
     }
 
     private int getCurrentTop() {
-        if (this.listView.getChildCount() != 0) {
-            int i = 0;
-            View childAt = this.listView.getChildAt(0);
-            Holder holder = (Holder) this.listView.findContainingViewHolder(childAt);
-            if (holder != null) {
-                int paddingTop = this.listView.getPaddingTop();
-                if (holder.getAdapterPosition() == 0 && childAt.getTop() >= 0) {
-                    i = childAt.getTop();
-                }
-                return paddingTop - i;
-            }
+        if (this.listView.getChildCount() == 0) {
+            return -1000;
         }
-        return -1000;
+        int i = 0;
+        View childAt = this.listView.getChildAt(0);
+        RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
+        if (holder == null) {
+            return -1000;
+        }
+        int paddingTop = this.listView.getPaddingTop();
+        if (holder.getAdapterPosition() == 0 && childAt.getTop() >= 0) {
+            i = childAt.getTop();
+        }
+        return paddingTop - i;
     }
 
     private void updateButtons() {
         this.votesPercents.clear();
-        TL_messageMediaPoll tL_messageMediaPoll = (TL_messageMediaPoll) this.messageObject.messageOwner.media;
+        TLRPC.TL_messageMediaPoll tL_messageMediaPoll = (TLRPC.TL_messageMediaPoll) this.messageObject.messageOwner.media;
         ArrayList arrayList = new ArrayList();
         int size = this.voters.size();
-        Object obj = null;
+        boolean z = false;
         int i = 100;
         int i2 = 0;
         int i3 = 0;
         for (int i4 = 0; i4 < size; i4++) {
-            VotesList votesList = (VotesList) this.voters.get(i4);
-            Button button = new Button(this, null);
+            VotesList votesList = this.voters.get(i4);
+            Button button = new Button();
             arrayList.add(button);
             this.votesPercents.put(votesList, button);
             if (!tL_messageMediaPoll.results.results.isEmpty()) {
                 int size2 = tL_messageMediaPoll.results.results.size();
                 int i5 = 0;
-                while (i5 < size2) {
-                    TL_pollAnswerVoters tL_pollAnswerVoters = (TL_pollAnswerVoters) tL_messageMediaPoll.results.results.get(i5);
+                while (true) {
+                    if (i5 >= size2) {
+                        break;
+                    }
+                    TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters = tL_messageMediaPoll.results.results.get(i5);
                     if (Arrays.equals(votesList.option, tL_pollAnswerVoters.option)) {
-                        button.votesCount = tL_pollAnswerVoters.voters;
-                        button.decimal = (((float) tL_pollAnswerVoters.voters) / ((float) tL_messageMediaPoll.results.total_voters)) * 100.0f;
-                        button.percent = (int) button.decimal;
-                        button.decimal = button.decimal - ((float) button.percent);
+                        int unused = button.votesCount = tL_pollAnswerVoters.voters;
+                        float unused2 = button.decimal = (((float) tL_pollAnswerVoters.voters) / ((float) tL_messageMediaPoll.results.total_voters)) * 100.0f;
+                        int unused3 = button.percent = (int) button.decimal;
+                        float unused4 = button.decimal = button.decimal - ((float) button.percent);
                         if (i2 == 0) {
                             i2 = button.percent;
                         } else if (!(button.percent == 0 || i2 == button.percent)) {
-                            obj = 1;
+                            z = true;
                         }
                         i -= button.percent;
                         i3 = Math.max(button.percent, i3);
@@ -1233,12 +1102,12 @@ public class PollVotesAlert extends BottomSheet {
                 }
             }
         }
-        if (obj != null && i != 0) {
-            Collections.sort(arrayList, -$$Lambda$PollVotesAlert$fCGvRabJVpryl8mZxJiM3wcqaoY.INSTANCE);
+        if (z && i != 0) {
+            Collections.sort(arrayList, $$Lambda$PollVotesAlert$fCGvRabJVpryl8mZxJiM3wcqaoY.INSTANCE);
             int min = Math.min(i, arrayList.size());
-            for (size = 0; size < min; size++) {
-                Button button2 = (Button) arrayList.get(size);
-                button2.percent = button2.percent + 1;
+            for (int i6 = 0; i6 < min; i6++) {
+                Button button2 = (Button) arrayList.get(i6);
+                int unused5 = button2.percent = button2.percent + 1;
             }
         }
     }
@@ -1253,13 +1122,14 @@ public class PollVotesAlert extends BottomSheet {
     public void dismissInternal() {
         int size = this.queries.size();
         for (int i = 0; i < size; i++) {
-            this.chatActivity.getConnectionsManager().cancelRequest(((Integer) this.queries.get(i)).intValue(), true);
+            this.chatActivity.getConnectionsManager().cancelRequest(this.queries.get(i).intValue(), true);
         }
         super.dismissInternal();
     }
 
+    /* access modifiers changed from: private */
     @SuppressLint({"NewApi"})
-    private void updateLayout(boolean z) {
+    public void updateLayout(boolean z) {
         if (this.listView.getChildCount() <= 0) {
             RecyclerListView recyclerListView = this.listView;
             int paddingTop = recyclerListView.getPaddingTop();
@@ -1269,15 +1139,15 @@ public class PollVotesAlert extends BottomSheet {
             return;
         }
         View childAt = this.listView.getChildAt(0);
-        Holder holder = (Holder) this.listView.findContainingViewHolder(childAt);
+        RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
         int top = childAt.getTop();
         int dp = AndroidUtilities.dp(7.0f);
         if (top < AndroidUtilities.dp(7.0f) || holder == null || holder.getAdapterPosition() != 0) {
             top = dp;
         }
-        Object obj = top <= AndroidUtilities.dp(12.0f) ? 1 : null;
-        if ((obj != null && this.actionBar.getTag() == null) || (obj == null && this.actionBar.getTag() != null)) {
-            this.actionBar.setTag(obj != null ? Integer.valueOf(1) : null);
+        boolean z2 = top <= AndroidUtilities.dp(12.0f);
+        if ((z2 && this.actionBar.getTag() == null) || (!z2 && this.actionBar.getTag() != null)) {
+            this.actionBar.setTag(z2 ? 1 : null);
             AnimatorSet animatorSet = this.actionBarAnimation;
             if (animatorSet != null) {
                 animatorSet.cancel();
@@ -1285,91 +1155,226 @@ public class PollVotesAlert extends BottomSheet {
             }
             this.actionBarAnimation = new AnimatorSet();
             this.actionBarAnimation.setDuration(180);
-            animatorSet = this.actionBarAnimation;
+            AnimatorSet animatorSet2 = this.actionBarAnimation;
             Animator[] animatorArr = new Animator[2];
-            ActionBar actionBar = this.actionBar;
+            ActionBar actionBar2 = this.actionBar;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
             float f = 1.0f;
-            fArr[0] = obj != null ? 1.0f : 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(actionBar, property, fArr);
+            fArr[0] = z2 ? 1.0f : 0.0f;
+            animatorArr[0] = ObjectAnimator.ofFloat(actionBar2, property, fArr);
             View view = this.actionBarShadow;
-            property = View.ALPHA;
-            fArr = new float[1];
-            if (obj == null) {
+            Property property2 = View.ALPHA;
+            float[] fArr2 = new float[1];
+            if (!z2) {
                 f = 0.0f;
             }
-            fArr[0] = f;
-            animatorArr[1] = ObjectAnimator.ofFloat(view, property, fArr);
-            animatorSet.playTogether(animatorArr);
+            fArr2[0] = f;
+            animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
+            animatorSet2.playTogether(animatorArr);
             this.actionBarAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                 }
 
                 public void onAnimationCancel(Animator animator) {
-                    PollVotesAlert.this.actionBarAnimation = null;
+                    AnimatorSet unused = PollVotesAlert.this.actionBarAnimation = null;
                 }
             });
             this.actionBarAnimation.start();
         }
-        LayoutParams layoutParams = (LayoutParams) this.listView.getLayoutParams();
-        top += layoutParams.topMargin - AndroidUtilities.dp(11.0f);
-        if (this.scrollOffsetY != top) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
+        int dp2 = top + (layoutParams.topMargin - AndroidUtilities.dp(11.0f));
+        if (this.scrollOffsetY != dp2) {
             RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = top;
-            recyclerListView2.setTopGlowOffset(top - layoutParams.topMargin);
+            this.scrollOffsetY = dp2;
+            recyclerListView2.setTopGlowOffset(dp2 - layoutParams.topMargin);
             this.containerView.invalidate();
         }
     }
 
-    private void updatePlaceholder() {
+    /* access modifiers changed from: private */
+    public void updatePlaceholder() {
         if (this.placeholderPaint != null) {
             int color = Theme.getColor("dialogBackground");
             int color2 = Theme.getColor("dialogBackgroundGray");
-            color = AndroidUtilities.getAverageColor(color2, color);
+            int averageColor = AndroidUtilities.getAverageColor(color2, color);
             this.placeholderPaint.setColor(color2);
             float dp = (float) AndroidUtilities.dp(500.0f);
             this.gradientWidth = dp;
-            this.placeholderGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, color, color2}, new float[]{0.0f, 0.18f, 0.36f}, TileMode.REPEAT);
+            this.placeholderGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
             this.placeholderPaint.setShader(this.placeholderGradient);
             this.placeholderMatrix = new Matrix();
             this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
         }
     }
 
+    public class Adapter extends RecyclerListView.SectionsAdapter {
+        private int currentAccount = UserConfig.selectedAccount;
+        private Context mContext;
+
+        public Object getItem(int i, int i2) {
+            return null;
+        }
+
+        public String getLetter(int i) {
+            return null;
+        }
+
+        public int getPositionForScrollProgress(float f) {
+            return 0;
+        }
+
+        public Adapter(Context context) {
+            this.mContext = context;
+        }
+
+        public boolean isEnabled(int i, int i2) {
+            if (i == 0 || i2 == 0) {
+                return false;
+            }
+            return PollVotesAlert.this.queries == null || PollVotesAlert.this.queries.isEmpty();
+        }
+
+        public int getSectionCount() {
+            return PollVotesAlert.this.voters.size() + 1;
+        }
+
+        public int getCountForSection(int i) {
+            int i2 = 1;
+            if (i == 0) {
+                return 1;
+            }
+            VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
+            int count = votesList.getCount() + 1;
+            if (TextUtils.isEmpty(votesList.next_offset) && !votesList.collapsed) {
+                i2 = 0;
+            }
+            return count + i2;
+        }
+
+        private SectionCell createSectionCell() {
+            return new SectionCell(this.mContext) {
+                /* access modifiers changed from: protected */
+                public void onCollapseClick() {
+                    VotesList votesList = (VotesList) getTag(NUM);
+                    if (votesList.votes.size() > 15) {
+                        votesList.collapsed = !votesList.collapsed;
+                        if (votesList.collapsed) {
+                            votesList.collapsedCount = 10;
+                        }
+                        PollVotesAlert.this.listAdapter.notifyDataSetChanged();
+                    }
+                }
+            };
+        }
+
+        public View getSectionHeaderView(int i, View view) {
+            if (view == null) {
+                view = createSectionCell();
+            }
+            SectionCell sectionCell = (SectionCell) view;
+            if (i != 0) {
+                view.setAlpha(1.0f);
+                VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
+                int i2 = 0;
+                TLRPC.MessageUserVote messageUserVote = votesList.votes.get(0);
+                int size = PollVotesAlert.this.poll.answers.size();
+                while (true) {
+                    if (i2 >= size) {
+                        break;
+                    }
+                    TLRPC.TL_pollAnswer tL_pollAnswer = PollVotesAlert.this.poll.answers.get(i2);
+                    if (Arrays.equals(tL_pollAnswer.option, votesList.option)) {
+                        Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
+                        sectionCell.setText(tL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
+                        sectionCell.setTag(NUM, votesList);
+                        break;
+                    }
+                    i2++;
+                }
+            } else {
+                sectionCell.setAlpha(0.0f);
+            }
+            return view;
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            TextCell textCell;
+            if (i == 0) {
+                textCell = new UserCell(this.mContext);
+            } else if (i == 1) {
+                if (PollVotesAlert.this.titleTextView.getParent() != null) {
+                    ((ViewGroup) PollVotesAlert.this.titleTextView.getParent()).removeView(PollVotesAlert.this.titleTextView);
+                }
+                textCell = PollVotesAlert.this.titleTextView;
+            } else if (i != 2) {
+                TextCell textCell2 = new TextCell(this.mContext, 23, true);
+                textCell2.setOffsetFromImage(65);
+                textCell2.setColors("switchTrackChecked", "windowBackgroundWhiteBlueText4");
+                textCell = textCell2;
+            } else {
+                textCell = createSectionCell();
+            }
+            return new RecyclerListView.Holder(textCell);
+        }
+
+        public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
+            int itemViewType = viewHolder.getItemViewType();
+            if (itemViewType == 2) {
+                SectionCell sectionCell = (SectionCell) viewHolder.itemView;
+                VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(i - 1);
+                TLRPC.MessageUserVote messageUserVote = votesList.votes.get(0);
+                int size = PollVotesAlert.this.poll.answers.size();
+                for (int i3 = 0; i3 < size; i3++) {
+                    TLRPC.TL_pollAnswer tL_pollAnswer = PollVotesAlert.this.poll.answers.get(i3);
+                    if (Arrays.equals(tL_pollAnswer.option, votesList.option)) {
+                        Button button = (Button) PollVotesAlert.this.votesPercents.get(votesList);
+                        sectionCell.setText(tL_pollAnswer.text, button.percent, button.votesCount, votesList.getCollapsed());
+                        sectionCell.setTag(NUM, votesList);
+                        return;
+                    }
+                }
+            } else if (itemViewType == 3) {
+                VotesList votesList2 = (VotesList) PollVotesAlert.this.voters.get(i - 1);
+                ((TextCell) viewHolder.itemView).setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList2.count - votesList2.getCount()), NUM, false);
+            }
+        }
+
+        public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() == 0) {
+                int adapterPosition = viewHolder.getAdapterPosition();
+                int sectionForPosition = getSectionForPosition(adapterPosition);
+                int positionInSectionForPosition = getPositionInSectionForPosition(adapterPosition) - 1;
+                UserCell userCell = (UserCell) viewHolder.itemView;
+                VotesList votesList = (VotesList) PollVotesAlert.this.voters.get(sectionForPosition - 1);
+                TLRPC.MessageUserVote messageUserVote = votesList.votes.get(positionInSectionForPosition);
+                TLRPC.User user = messageUserVote.user_id != 0 ? PollVotesAlert.this.chatActivity.getMessagesController().getUser(Integer.valueOf(messageUserVote.user_id)) : null;
+                boolean z = true;
+                if (positionInSectionForPosition == votesList.getCount() - 1 && TextUtils.isEmpty(votesList.next_offset) && !votesList.collapsed) {
+                    z = false;
+                }
+                userCell.setData(user, positionInSectionForPosition, z);
+            }
+        }
+
+        public int getItemViewType(int i, int i2) {
+            if (i == 0) {
+                return 1;
+            }
+            if (i2 == 0) {
+                return 2;
+            }
+            return i2 + -1 < ((VotesList) PollVotesAlert.this.voters.get(i + -1)).getCount() ? 0 : 3;
+        }
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng -__lambda_pollvotesalert_dumvuriwrtwbbdejkbeaihpp5ng = new -$$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[20];
-        themeDescriptionArr[0] = new ThemeDescription(this.containerView, 0, null, null, null, null, "key_sheet_scrollUp");
-        themeDescriptionArr[1] = new ThemeDescription(this.containerView, 0, null, null, new Drawable[]{this.shadowDrawable}, null, "dialogBackground");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "dialogBackground");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "dialogScrollGlow");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "dialogTextBlack");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "dialogTextBlack");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBTITLECOLOR, null, null, null, null, "player_actionBarSubtitle");
-        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "dialogTextBlack");
-        themeDescriptionArr[8] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "dialogTextBlack");
-        themeDescriptionArr[9] = new ThemeDescription(this.actionBarShadow, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "dialogShadowLine");
-        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_pollvotesalert_dumvuriwrtwbbdejkbeaihpp5ng;
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, null, null, themeDescriptionDelegate, "dialogBackground");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, null, null, themeDescriptionDelegate, "dialogBackgroundGray");
-        View view = this.listView;
-        int i = ThemeDescription.FLAG_SECTIONS;
-        Class[] clsArr = new Class[]{SectionCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        themeDescriptionArr[12] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "key_graySectionText");
-        View view2 = this.listView;
-        View view3 = view2;
-        themeDescriptionArr[13] = new ThemeDescription(view3, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"middleTextView"}, null, null, null, "key_graySectionText");
-        view2 = this.listView;
-        view3 = view2;
-        themeDescriptionArr[14] = new ThemeDescription(view3, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"righTextView"}, null, null, null, "key_graySectionText");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, null, null, null, "graySection");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "dialogTextBlack");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueText4");
-        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, "switchTrackChecked");
-        return themeDescriptionArr;
+        $$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                PollVotesAlert.this.updatePlaceholder();
+            }
+        };
+        $$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng r8 = r10;
+        return new ThemeDescription[]{new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_sheet_scrollUp"), new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogScrollGlow"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBTITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"), new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"), new ThemeDescription(this.actionBarShadow, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"), new ThemeDescription((View) this.listView, 0, new Class[]{View.class}, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "dialogBackground"), new ThemeDescription((View) this.listView, 0, new Class[]{View.class}, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "dialogBackgroundGray"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"middleTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"righTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked")};
     }
 }

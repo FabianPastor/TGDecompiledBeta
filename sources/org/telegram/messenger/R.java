@@ -4783,90 +4783,15 @@ public final class R {
         public static final int Widget_Compat_NotificationActionText = NUM;
         public static final int Widget_Support_CoordinatorLayout = NUM;
         public static final int scrollbarShapeStyle = NUM;
-        /* added by JADX */
-        /* renamed from: ActionBar.Transparent.TMessages.Item */
-        public static final int f0ActionBar.Transparent.TMessages.Item = NUM;
-        /* added by JADX */
-        /* renamed from: ActionBar.Transparent.TMessages.Start */
-        public static final int f1ActionBar.Transparent.TMessages.Start = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.ButtonStyle */
-        public static final int f2HockeyApp.ButtonStyle = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.EditTextStyle */
-        public static final int f3HockeyApp.EditTextStyle = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.SingleLineInputStyle */
-        public static final int f4HockeyApp.SingleLineInputStyle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification */
-        public static final int f5TextAppearance.Compat.Notification = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Info */
-        public static final int f6TextAppearance.Compat.Notification.Info = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Line2 */
-        public static final int f7TextAppearance.Compat.Notification.Line2 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Time */
-        public static final int f8TextAppearance.Compat.Notification.Time = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Title */
-        public static final int f9TextAppearance.Compat.Notification.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages */
-        public static final int var_Theme.TMessages = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.BorderLessButton */
-        public static final int var_Theme.TMessages.BorderLessButton = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.CalendarView */
-        public static final int var_Theme.TMessages.CalendarView = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.DatePicker */
-        public static final int var_Theme.TMessages.DatePicker = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.DayOfWeek */
-        public static final int var_Theme.TMessages.DayOfWeek = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Dialog.Alert */
-        public static final int var_Theme.TMessages.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.ListView */
-        public static final int var_Theme.TMessages.ListView = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.PopupNotification */
-        public static final int var_Theme.TMessages.PopupNotification = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Start */
-        public static final int var_Theme.TMessages.Start = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.TimePicker */
-        public static final int var_Theme.TMessages.TimePicker = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Transparent */
-        public static final int var_Theme.TMessages.Transparent = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.TransparentWithAlerts */
-        public static final int var_Theme.TMessages.TransparentWithAlerts = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Compat.NotificationActionContainer */
-        public static final int var_Widget.Compat.NotificationActionContainer = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Compat.NotificationActionText */
-        public static final int var_Widget.Compat.NotificationActionText = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Support.CoordinatorLayout */
-        public static final int var_Widget.Support.CoordinatorLayout = NUM;
     }
 
     public static final class styleable {
-        public static final int[] ColorStateListItem = new int[]{16843173, 16843551, NUM};
+        public static final int[] ColorStateListItem = {16843173, 16843551, NUM};
         public static final int ColorStateListItem_alpha = 2;
         public static final int ColorStateListItem_android_alpha = 1;
         public static final int ColorStateListItem_android_color = 0;
-        public static final int[] CoordinatorLayout = new int[]{NUM, NUM};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] CoordinatorLayout = {NUM, NUM};
+        public static final int[] CoordinatorLayout_Layout = {16842931, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -4876,12 +4801,12 @@ public final class R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{NUM, NUM, NUM};
+        public static final int[] CustomWalletTheme = {NUM, NUM, NUM};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] FontFamily = {NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] FontFamilyFont = {16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontVariationSettings = 4;
@@ -4898,8 +4823,8 @@ public final class R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
-        public static final int[] GradientColor = new int[]{16843165, 16843166, 16843169, 16843170, 16843171, 16843172, 16843265, 16843275, 16844048, 16844049, 16844050, 16844051};
-        public static final int[] GradientColorItem = new int[]{16843173, 16844052};
+        public static final int[] GradientColor = {16843165, 16843166, 16843169, 16843170, 16843171, 16843172, 16843265, 16843275, 16844048, 16844049, 16844050, 16844051};
+        public static final int[] GradientColorItem = {16843173, 16844052};
         public static final int GradientColorItem_android_color = 0;
         public static final int GradientColorItem_android_offset = 1;
         public static final int GradientColor_android_centerColor = 7;
@@ -4914,11 +4839,11 @@ public final class R {
         public static final int GradientColor_android_startY = 9;
         public static final int GradientColor_android_tileMode = 6;
         public static final int GradientColor_android_type = 2;
-        public static final int[] LoadingImageView = new int[]{NUM, NUM, NUM};
+        public static final int[] LoadingImageView = {NUM, NUM, NUM};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] MapAttrs = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -4943,16 +4868,16 @@ public final class R {
         public static final int MapAttrs_uiZoomGestures = 21;
         public static final int MapAttrs_useViewLifecycle = 22;
         public static final int MapAttrs_zOrderOnTop = 23;
-        public static final int[] SignInButton = new int[]{NUM, NUM, NUM};
+        public static final int[] SignInButton = {NUM, NUM, NUM};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{NUM, NUM, NUM, NUM};
+        public static final int[] WalletFragmentOptions = {NUM, NUM, NUM, NUM};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] WalletFragmentStyle = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

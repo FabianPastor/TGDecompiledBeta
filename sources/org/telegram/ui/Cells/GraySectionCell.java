@@ -1,8 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -19,25 +18,20 @@ public class GraySectionCell extends FrameLayout {
         setBackgroundColor(Theme.getColor("graySection"));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        String str = "key_graySectionText";
-        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTextColor(Theme.getColor("key_graySectionText"));
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         this.righTextView = new TextView(getContext());
         this.righTextView.setTextSize(1, 14.0f);
-        this.righTextView.setTextColor(Theme.getColor(str));
+        this.righTextView.setTextColor(Theme.getColor("key_graySectionText"));
         this.righTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
-        TextView textView = this.righTextView;
-        if (LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+        addView(this.righTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
     public void setText(String str) {
@@ -45,7 +39,7 @@ public class GraySectionCell extends FrameLayout {
         this.righTextView.setVisibility(8);
     }
 
-    public void setText(String str, String str2, OnClickListener onClickListener) {
+    public void setText(String str, String str2, View.OnClickListener onClickListener) {
         this.textView.setText(str);
         this.righTextView.setText(str2);
         this.righTextView.setOnClickListener(onClickListener);

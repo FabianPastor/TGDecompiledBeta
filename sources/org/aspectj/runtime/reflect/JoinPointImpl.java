@@ -1,21 +1,21 @@
 package org.aspectj.runtime.reflect;
 
-import org.aspectj.lang.JoinPoint.StaticPart;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.SourceLocation;
 
 class JoinPointImpl implements ProceedingJoinPoint {
-    StaticPart staticPart;
+    JoinPoint.StaticPart staticPart;
     Object target;
 
-    static class StaticPartImpl implements StaticPart {
+    static class StaticPartImpl implements JoinPoint.StaticPart {
         String kind;
         Signature signature;
 
-        public StaticPartImpl(int i, String str, Signature signature, SourceLocation sourceLocation) {
+        public StaticPartImpl(int i, String str, Signature signature2, SourceLocation sourceLocation) {
             this.kind = str;
-            this.signature = signature;
+            this.signature = signature2;
         }
 
         public String getKind() {
@@ -26,7 +26,7 @@ class JoinPointImpl implements ProceedingJoinPoint {
             return this.signature;
         }
 
-        /* Access modifiers changed, original: 0000 */
+        /* access modifiers changed from: package-private */
         public String toString(StringMaker stringMaker) {
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append(stringMaker.makeKindName(getKind()));
@@ -41,8 +41,8 @@ class JoinPointImpl implements ProceedingJoinPoint {
         }
     }
 
-    public JoinPointImpl(StaticPart staticPart, Object obj, Object obj2, Object[] objArr) {
-        this.staticPart = staticPart;
+    public JoinPointImpl(JoinPoint.StaticPart staticPart2, Object obj, Object obj2, Object[] objArr) {
+        this.staticPart = staticPart2;
         this.target = obj2;
     }
 

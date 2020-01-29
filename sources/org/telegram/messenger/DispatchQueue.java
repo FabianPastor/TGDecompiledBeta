@@ -34,7 +34,7 @@ public class DispatchQueue extends Thread {
             this.syncLatch.await();
             this.handler.removeCallbacks(runnable);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -45,7 +45,7 @@ public class DispatchQueue extends Thread {
                 this.handler.removeCallbacks(removeCallbacks);
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -57,7 +57,7 @@ public class DispatchQueue extends Thread {
         try {
             this.syncLatch.await();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
         if (j <= 0) {
             this.handler.post(runnable);
@@ -69,9 +69,9 @@ public class DispatchQueue extends Thread {
     public void cleanupQueue() {
         try {
             this.syncLatch.await();
-            this.handler.removeCallbacksAndMessages(null);
+            this.handler.removeCallbacksAndMessages((Object) null);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 

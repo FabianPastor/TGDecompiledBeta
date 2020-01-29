@@ -1,8 +1,7 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory.Options;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -49,7 +48,7 @@ public class Utilities {
 
     public static native long getDirSize(String str, int i, boolean z);
 
-    public static native boolean loadWebpImage(Bitmap bitmap, ByteBuffer byteBuffer, int i, Options options, boolean z);
+    public static native boolean loadWebpImage(Bitmap bitmap, ByteBuffer byteBuffer, int i, BitmapFactory.Options options, boolean z);
 
     public static native int needInvert(Object obj, int i, int i2, int i3, int i4);
 
@@ -71,24 +70,24 @@ public class Utilities {
             fileInputStream.close();
             random.setSeed(bArr);
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
     public static Bitmap blurWallpaper(Bitmap bitmap) {
+        Bitmap bitmap2;
         if (bitmap == null) {
             return null;
         }
-        Bitmap createBitmap;
         if (bitmap.getHeight() > bitmap.getWidth()) {
-            createBitmap = Bitmap.createBitmap(Math.round((((float) bitmap.getWidth()) * 450.0f) / ((float) bitmap.getHeight())), 450, Config.ARGB_8888);
+            bitmap2 = Bitmap.createBitmap(Math.round((((float) bitmap.getWidth()) * 450.0f) / ((float) bitmap.getHeight())), 450, Bitmap.Config.ARGB_8888);
         } else {
-            createBitmap = Bitmap.createBitmap(450, Math.round((((float) bitmap.getHeight()) * 450.0f) / ((float) bitmap.getWidth())), Config.ARGB_8888);
+            bitmap2 = Bitmap.createBitmap(450, Math.round((((float) bitmap.getHeight()) * 450.0f) / ((float) bitmap.getWidth())), Bitmap.Config.ARGB_8888);
         }
         Paint paint = new Paint(2);
-        new Canvas(createBitmap).drawBitmap(bitmap, null, new Rect(0, 0, createBitmap.getWidth(), createBitmap.getHeight()), paint);
-        stackBlurBitmap(createBitmap, 12);
-        return createBitmap;
+        new Canvas(bitmap2).drawBitmap(bitmap, (Rect) null, new Rect(0, 0, bitmap2.getWidth(), bitmap2.getHeight()), paint);
+        stackBlurBitmap(bitmap2, 12);
+        return bitmap2;
     }
 
     public static void aesIgeEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, boolean z, boolean z2, int i, int i2) {
@@ -112,7 +111,7 @@ public class Utilities {
     public static Integer parseInt(CharSequence charSequence) {
         int i = 0;
         if (charSequence == null) {
-            return Integer.valueOf(0);
+            return 0;
         }
         try {
             Matcher matcher = pattern.matcher(charSequence);
@@ -127,7 +126,7 @@ public class Utilities {
     public static Long parseLong(String str) {
         long j = 0;
         if (str == null) {
-            return Long.valueOf(0);
+            return 0L;
         }
         try {
             Matcher matcher = pattern.matcher(str);
@@ -141,7 +140,10 @@ public class Utilities {
 
     public static String parseIntToString(String str) {
         Matcher matcher = pattern.matcher(str);
-        return matcher.find() ? matcher.group(0) : null;
+        if (matcher.find()) {
+            return matcher.group(0);
+        }
+        return null;
     }
 
     public static String bytesToHex(byte[] bArr) {
@@ -150,11 +152,11 @@ public class Utilities {
         }
         char[] cArr = new char[(bArr.length * 2)];
         for (int i = 0; i < bArr.length; i++) {
-            int i2 = bArr[i] & 255;
-            int i3 = i * 2;
+            byte b = bArr[i] & 255;
+            int i2 = i * 2;
             char[] cArr2 = hexArray;
-            cArr[i3] = cArr2[i2 >>> 4];
-            cArr[i3 + 1] = cArr2[i2 & 15];
+            cArr[i2] = cArr2[b >>> 4];
+            cArr[i2 + 1] = cArr2[b & 15];
         }
         return new String(cArr);
     }
@@ -172,42 +174,40 @@ public class Utilities {
     }
 
     public static boolean isGoodPrime(byte[] bArr, int i) {
-        boolean z = false;
-        if (i >= 2 && i <= 7 && bArr.length == 256 && bArr[0] < (byte) 0) {
-            BigInteger bigInteger = new BigInteger(1, bArr);
-            if (i == 2) {
-                if (bigInteger.mod(BigInteger.valueOf(8)).intValue() != 7) {
-                    return false;
-                }
-            } else if (i == 3) {
-                if (bigInteger.mod(BigInteger.valueOf(3)).intValue() != 2) {
-                    return false;
-                }
-            } else if (i == 5) {
-                i = bigInteger.mod(BigInteger.valueOf(5)).intValue();
-                if (!(i == 1 || i == 4)) {
-                    return false;
-                }
-            } else if (i == 6) {
-                i = bigInteger.mod(BigInteger.valueOf(24)).intValue();
-                if (!(i == 19 || i == 23)) {
-                    return false;
-                }
-            } else if (i == 7) {
-                i = bigInteger.mod(BigInteger.valueOf(7)).intValue();
-                if (!(i == 3 || i == 5 || i == 6)) {
-                    return false;
-                }
-            }
-            if (bytesToHex(bArr).equals("CLASSNAMECAEB9C6B1CLASSNAMEE6CLASSNAMEvar_var_var_D40238E3E21CLASSNAMED037563D930var_A0AA7CLASSNAMED22530F4DBFA336F6E0ACLASSNAMEAED44CCE7CLASSNAMEFD51var_ACLASSNAMECD4FE6B6B13ABDCLASSNAMEvar_FAF8CLASSNAMEvar_FE96BB2A941D5BCD1D4AC8CCLASSNAMEFA9B378E3C4F3A9060BEE67CF9A4A4A695811051907E162753B56B0F6B410DBA74D8A84B2A14B3144E0Evar_FD17ED950D5965B4B9DD46582DB1178D169C6BCLASSNAMEB0D6FF9CA3928FEF5B9AE4E418FCLASSNAMEE83EBEA0var_FA9FF5EED70050DED2849var_Bvar_D956850CE929851F0D8115var_B105EE2E4E15D04B2454BF6F4FADvar_B10403119CD8E3B92FCC5B")) {
-                return true;
-            }
-            BigInteger divide = bigInteger.subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(2));
-            if (bigInteger.isProbablePrime(30) && divide.isProbablePrime(30)) {
-                z = true;
-            }
+        int intValue;
+        if (i < 2 || i > 7 || bArr.length != 256 || bArr[0] >= 0) {
+            return false;
         }
-        return z;
+        BigInteger bigInteger = new BigInteger(1, bArr);
+        if (i == 2) {
+            if (bigInteger.mod(BigInteger.valueOf(8)).intValue() != 7) {
+                return false;
+            }
+        } else if (i == 3) {
+            if (bigInteger.mod(BigInteger.valueOf(3)).intValue() != 2) {
+                return false;
+            }
+        } else if (i == 5) {
+            int intValue2 = bigInteger.mod(BigInteger.valueOf(5)).intValue();
+            if (!(intValue2 == 1 || intValue2 == 4)) {
+                return false;
+            }
+        } else if (i == 6) {
+            int intValue3 = bigInteger.mod(BigInteger.valueOf(24)).intValue();
+            if (!(intValue3 == 19 || intValue3 == 23)) {
+                return false;
+            }
+        } else if (!(i != 7 || (intValue = bigInteger.mod(BigInteger.valueOf(7)).intValue()) == 3 || intValue == 5 || intValue == 6)) {
+            return false;
+        }
+        if (bytesToHex(bArr).equals("CLASSNAMECAEB9C6B1CLASSNAMEE6CLASSNAMEvar_var_var_D40238E3E21CLASSNAMED037563D930var_A0AA7CLASSNAMED22530F4DBFA336F6E0ACLASSNAMEAED44CCE7CLASSNAMEFD51var_ACLASSNAMECD4FE6B6B13ABDCLASSNAMEvar_FAF8CLASSNAMEvar_FE96BB2A941D5BCD1D4AC8CCLASSNAMEFA9B378E3C4F3A9060BEE67CF9A4A4A695811051907E162753B56B0F6B410DBA74D8A84B2A14B3144E0Evar_FD17ED950D5965B4B9DD46582DB1178D169C6BCLASSNAMEB0D6FF9CA3928FEF5B9AE4E418FCLASSNAMEE83EBEA0var_FA9FF5EED70050DED2849var_Bvar_D956850CE929851F0D8115var_B105EE2E4E15D04B2454BF6F4FADvar_B10403119CD8E3B92FCC5B")) {
+            return true;
+        }
+        BigInteger divide = bigInteger.subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(2));
+        if (!bigInteger.isProbablePrime(30) || !divide.isProbablePrime(30)) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isGoodGaAndGb(BigInteger bigInteger, BigInteger bigInteger2) {
@@ -233,29 +233,33 @@ public class Utilities {
             instance.update(bArr, i, i2);
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[20];
         }
     }
 
+    /* JADX INFO: finally extract failed */
     public static byte[] computeSHA1(ByteBuffer byteBuffer, int i, int i2) {
         int position = byteBuffer.position();
         int limit = byteBuffer.limit();
-        byte[] e;
         try {
             MessageDigest instance = MessageDigest.getInstance("SHA-1");
             byteBuffer.position(i);
             byteBuffer.limit(i2);
             instance.update(byteBuffer);
-            e = instance.digest();
-            return e;
-        } catch (Exception e2) {
-            e = e2;
-            FileLog.e((Throwable) e);
-            return new byte[20];
-        } finally {
+            byte[] digest = instance.digest();
             byteBuffer.limit(limit);
             byteBuffer.position(position);
+            return digest;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            byteBuffer.limit(limit);
+            byteBuffer.position(position);
+            return new byte[20];
+        } catch (Throwable th) {
+            byteBuffer.limit(limit);
+            byteBuffer.position(position);
+            throw th;
         }
     }
 
@@ -277,7 +281,7 @@ public class Utilities {
             instance.update(bArr, i, i2);
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[32];
         }
     }
@@ -290,7 +294,7 @@ public class Utilities {
             }
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[32];
         }
     }
@@ -301,7 +305,7 @@ public class Utilities {
             instance.update(bArr, 0, bArr.length);
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[64];
         }
     }
@@ -313,7 +317,7 @@ public class Utilities {
             instance.update(bArr2, 0, bArr2.length);
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[64];
         }
     }
@@ -332,11 +336,12 @@ public class Utilities {
             instance.update(bArr3, 0, bArr3.length);
             return instance.digest();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new byte[64];
         }
     }
 
+    /* JADX INFO: finally extract failed */
     public static byte[] computeSHA256(byte[] bArr, int i, int i2, ByteBuffer byteBuffer, int i3, int i4) {
         int position = byteBuffer.position();
         int limit = byteBuffer.limit();
@@ -346,24 +351,28 @@ public class Utilities {
             byteBuffer.position(i3);
             byteBuffer.limit(i4);
             instance.update(byteBuffer);
-            bArr = instance.digest();
-            return bArr;
-        } catch (Exception e) {
-            bArr = e;
-            FileLog.e((Throwable) bArr);
-            return new byte[32];
-        } finally {
+            byte[] digest = instance.digest();
             byteBuffer.limit(limit);
             byteBuffer.position(position);
+            return digest;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            byteBuffer.limit(limit);
+            byteBuffer.position(position);
+            return new byte[32];
+        } catch (Throwable th) {
+            byteBuffer.limit(limit);
+            byteBuffer.position(position);
+            throw th;
         }
     }
 
     public static long bytesToLong(byte[] bArr) {
-        return (((((((((long) bArr[7]) << 56) + ((((long) bArr[6]) & 255) << 48)) + ((((long) bArr[5]) & 255) << 40)) + ((((long) bArr[4]) & 255) << 32)) + ((((long) bArr[3]) & 255) << 24)) + ((((long) bArr[2]) & 255) << 16)) + ((((long) bArr[1]) & 255) << 8)) + (((long) bArr[0]) & 255);
+        return (((long) bArr[7]) << 56) + ((((long) bArr[6]) & 255) << 48) + ((((long) bArr[5]) & 255) << 40) + ((((long) bArr[4]) & 255) << 32) + ((((long) bArr[3]) & 255) << 24) + ((((long) bArr[2]) & 255) << 16) + ((((long) bArr[1]) & 255) << 8) + (((long) bArr[0]) & 255);
     }
 
     public static int bytesToInt(byte[] bArr) {
-        return ((((bArr[3] & 255) << 24) + ((bArr[2] & 255) << 16)) + ((bArr[1] & 255) << 8)) + (bArr[0] & 255);
+        return ((bArr[3] & 255) << 24) + ((bArr[2] & 255) << 16) + ((bArr[1] & 255) << 8) + (bArr[0] & 255);
     }
 
     public static String MD5(String str) {
@@ -372,13 +381,13 @@ public class Utilities {
         }
         try {
             byte[] digest = MessageDigest.getInstance("MD5").digest(AndroidUtilities.getStringBytes(str));
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (byte b : digest) {
-                stringBuilder.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
+                sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
             }
-            return stringBuilder.toString();
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return null;
         }
     }

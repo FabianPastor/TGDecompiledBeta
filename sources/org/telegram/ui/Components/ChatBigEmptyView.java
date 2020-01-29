@@ -1,7 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,23 +15,23 @@ public class ChatBigEmptyView extends LinearLayout {
     public static final int EMPTY_VIEW_TYPE_GROUP = 1;
     public static final int EMPTY_VIEW_TYPE_SAVED = 2;
     public static final int EMPTY_VIEW_TYPE_SECRET = 0;
-    private ArrayList<ImageView> imageViews = new ArrayList();
+    private ArrayList<ImageView> imageViews = new ArrayList<>();
     private TextView statusTextView;
-    private ArrayList<TextView> textViews = new ArrayList();
+    private ArrayList<TextView> textViews = new ArrayList<>();
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public ChatBigEmptyView(Context context, int i) {
+        super(context);
         Context context2 = context;
         int i2 = i;
-        super(context);
         setBackgroundResource(NUM);
         getBackground().setColorFilter(Theme.colorFilter);
         setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
         setOrientation(1);
-        String str = "chat_serviceText";
         if (i2 == 0) {
             this.statusTextView = new TextView(context2);
             this.statusTextView.setTextSize(1, 15.0f);
-            this.statusTextView.setTextColor(Theme.getColor(str));
+            this.statusTextView.setTextColor(Theme.getColor("chat_serviceText"));
             this.statusTextView.setGravity(1);
             this.statusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.statusTextView);
@@ -39,7 +39,7 @@ public class ChatBigEmptyView extends LinearLayout {
         } else if (i2 == 1) {
             this.statusTextView = new TextView(context2);
             this.statusTextView.setTextSize(1, 15.0f);
-            this.statusTextView.setTextColor(Theme.getColor(str));
+            this.statusTextView.setTextColor(Theme.getColor("chat_serviceText"));
             this.statusTextView.setGravity(1);
             this.statusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.statusTextView);
@@ -62,17 +62,16 @@ public class ChatBigEmptyView extends LinearLayout {
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setGravity(1);
         }
-        textView.setTextColor(Theme.getColor(str));
+        textView.setTextColor(Theme.getColor("chat_serviceText"));
         this.textViews.add(textView);
         textView.setMaxWidth(AndroidUtilities.dp(260.0f));
-        int i3 = i2 != 2 ? LocaleController.isRTL ? 5 : 3 : 1;
-        addView(textView, LayoutHelper.createLinear(-2, -2, i3 | 48, 0, 8, 0, i2 != 2 ? 0 : 8));
-        for (int i4 = 0; i4 < 4; i4++) {
+        addView(textView, LayoutHelper.createLinear(-2, -2, (i2 != 2 ? LocaleController.isRTL ? 5 : 3 : 1) | 48, 0, 8, 0, i2 != 2 ? 0 : 8));
+        for (int i3 = 0; i3 < 4; i3++) {
             LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
             ImageView imageView2 = new ImageView(context2);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
             if (i2 == 0) {
                 imageView2.setImageResource(NUM);
             } else if (i2 == 2) {
@@ -83,14 +82,14 @@ public class ChatBigEmptyView extends LinearLayout {
             this.imageViews.add(imageView2);
             TextView textView2 = new TextView(context2);
             textView2.setTextSize(1, 15.0f);
-            textView2.setTextColor(Theme.getColor(str));
+            textView2.setTextColor(Theme.getColor("chat_serviceText"));
             this.textViews.add(textView2);
             textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             textView2.setMaxWidth(AndroidUtilities.dp(260.0f));
-            if (i4 != 0) {
-                if (i4 != 1) {
-                    if (i4 != 2) {
-                        if (i4 == 3) {
+            if (i3 != 0) {
+                if (i3 != 1) {
+                    if (i3 != 2) {
+                        if (i3 == 3) {
                             if (i2 == 0) {
                                 textView2.setText(LocaleController.getString("EncryptedDescription4", NUM));
                             } else if (i2 == 2) {
@@ -144,10 +143,10 @@ public class ChatBigEmptyView extends LinearLayout {
 
     public void setTextColor(int i) {
         for (int i2 = 0; i2 < this.textViews.size(); i2++) {
-            ((TextView) this.textViews.get(i2)).setTextColor(i);
+            this.textViews.get(i2).setTextColor(i);
         }
         for (int i3 = 0; i3 < this.imageViews.size(); i3++) {
-            ((ImageView) this.imageViews.get(i3)).setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), Mode.MULTIPLY));
+            this.imageViews.get(i3).setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), PorterDuff.Mode.MULTIPLY));
         }
     }
 

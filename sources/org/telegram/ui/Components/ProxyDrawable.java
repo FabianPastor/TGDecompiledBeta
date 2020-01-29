@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -34,9 +32,9 @@ public class ProxyDrawable extends Drawable {
     public ProxyDrawable(Context context) {
         this.emptyDrawable = context.getResources().getDrawable(NUM);
         this.fullDrawable = context.getResources().getDrawable(NUM);
-        this.outerPaint.setStyle(Style.STROKE);
+        this.outerPaint.setStyle(Paint.Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.outerPaint.setStrokeCap(Cap.ROUND);
+        this.outerPaint.setStrokeCap(Paint.Cap.ROUND);
         this.lastUpdateTime = SystemClock.elapsedRealtime();
     }
 
@@ -51,23 +49,23 @@ public class ProxyDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        float f;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         long j = elapsedRealtime - this.lastUpdateTime;
         this.lastUpdateTime = elapsedRealtime;
         if (!this.isEnabled) {
             this.emptyDrawable.setBounds(getBounds());
             this.emptyDrawable.draw(canvas);
-        } else if (!(this.connected && this.connectedAnimationProgress == 1.0f)) {
+        } else if (!this.connected || this.connectedAnimationProgress != 1.0f) {
             this.emptyDrawable.setBounds(getBounds());
             this.emptyDrawable.draw(canvas);
             this.outerPaint.setColor(Theme.getColor("contextProgressOuter2"));
             this.outerPaint.setAlpha((int) ((1.0f - this.connectedAnimationProgress) * 255.0f));
             this.radOffset = (int) (((float) this.radOffset) + (((float) (360 * j)) / 1000.0f));
             int width = getBounds().width();
-            width = (width / 2) - AndroidUtilities.dp(3.0f);
-            int height = (getBounds().height() / 2) - AndroidUtilities.dp(3.0f);
-            this.cicleRect.set((float) width, (float) height, (float) (width + AndroidUtilities.dp(6.0f)), (float) (height + AndroidUtilities.dp(6.0f)));
+            int height = getBounds().height();
+            int dp = (width / 2) - AndroidUtilities.dp(3.0f);
+            int dp2 = (height / 2) - AndroidUtilities.dp(3.0f);
+            this.cicleRect.set((float) dp, (float) dp2, (float) (dp + AndroidUtilities.dp(6.0f)), (float) (dp2 + AndroidUtilities.dp(6.0f)));
             canvas.drawArc(this.cicleRect, (float) (this.radOffset - 90), 90.0f, false, this.outerPaint);
             invalidateSelf();
         }
@@ -77,7 +75,7 @@ public class ProxyDrawable extends Drawable {
             this.fullDrawable.draw(canvas);
         }
         if (this.connected) {
-            f = this.connectedAnimationProgress;
+            float f = this.connectedAnimationProgress;
             if (f != 1.0f) {
                 this.connectedAnimationProgress = f + (((float) j) / 300.0f);
                 if (this.connectedAnimationProgress > 1.0f) {
@@ -88,9 +86,9 @@ public class ProxyDrawable extends Drawable {
             }
         }
         if (!this.connected) {
-            f = this.connectedAnimationProgress;
-            if (f != 0.0f) {
-                this.connectedAnimationProgress = f - (((float) j) / 300.0f);
+            float f2 = this.connectedAnimationProgress;
+            if (f2 != 0.0f) {
+                this.connectedAnimationProgress = f2 - (((float) j) / 300.0f);
                 if (this.connectedAnimationProgress < 0.0f) {
                     this.connectedAnimationProgress = 0.0f;
                 }

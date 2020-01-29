@@ -26,12 +26,12 @@ public class BetterRatingView extends View {
         super(context);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         setMeasuredDimension((this.numStars * AndroidUtilities.dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.dp(16.0f)), AndroidUtilities.dp(32.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int i = 0;
         while (i < this.numStars) {
@@ -42,21 +42,22 @@ public class BetterRatingView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
+        int i;
         float dp = (float) AndroidUtilities.dp(-8.0f);
-        for (int i = 0; i < this.numStars; i++) {
-            if (motionEvent.getX() > dp && motionEvent.getX() < ((float) AndroidUtilities.dp(48.0f)) + dp) {
-                int i2 = i + 1;
-                if (this.selectedRating != i2) {
-                    this.selectedRating = i2;
-                    OnRatingChangeListener onRatingChangeListener = this.listener;
-                    if (onRatingChangeListener != null) {
-                        onRatingChangeListener.onRatingChanged(this.selectedRating);
-                    }
-                    invalidate();
-                    return true;
+        int i2 = 0;
+        while (i2 < this.numStars) {
+            if (motionEvent.getX() <= dp || motionEvent.getX() >= ((float) AndroidUtilities.dp(48.0f)) + dp || this.selectedRating == (i = i2 + 1)) {
+                dp += (float) AndroidUtilities.dp(48.0f);
+                i2++;
+            } else {
+                this.selectedRating = i;
+                OnRatingChangeListener onRatingChangeListener = this.listener;
+                if (onRatingChangeListener != null) {
+                    onRatingChangeListener.onRatingChanged(this.selectedRating);
                 }
+                invalidate();
+                return true;
             }
-            dp += (float) AndroidUtilities.dp(48.0f);
         }
         return true;
     }

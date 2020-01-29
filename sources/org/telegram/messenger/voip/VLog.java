@@ -19,7 +19,7 @@ class VLog {
     }
 
     public static void e(Throwable th) {
-        e(null, th);
+        e((String) null, th);
     }
 
     public static void e(String str, Throwable th) {

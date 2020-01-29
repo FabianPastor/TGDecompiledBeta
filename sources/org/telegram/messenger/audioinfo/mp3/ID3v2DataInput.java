@@ -50,10 +50,10 @@ public class ID3v2DataInput {
     }
 
     public int readInt() throws IOException {
-        return ((((readByte() & 255) << 24) | ((readByte() & 255) << 16)) | ((readByte() & 255) << 8)) | (readByte() & 255);
+        return ((readByte() & 255) << 24) | ((readByte() & 255) << 16) | ((readByte() & 255) << 8) | (readByte() & 255);
     }
 
     public int readSyncsafeInt() throws IOException {
-        return ((((readByte() & 127) << 21) | ((readByte() & 127) << 14)) | ((readByte() & 127) << 7)) | (readByte() & 127);
+        return ((readByte() & Byte.MAX_VALUE) << 21) | ((readByte() & Byte.MAX_VALUE) << 14) | ((readByte() & Byte.MAX_VALUE) << 7) | (readByte() & Byte.MAX_VALUE);
     }
 }

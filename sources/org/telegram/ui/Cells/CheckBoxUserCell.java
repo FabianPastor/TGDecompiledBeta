@@ -2,15 +2,16 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -20,7 +21,7 @@ import org.telegram.ui.Components.LayoutHelper;
 public class CheckBoxUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private CheckBoxSquare checkBox;
-    private User currentUser;
+    private TLRPC.User currentUser;
     private BackupImageView imageView;
     private boolean needDivider;
     private TextView textView;
@@ -33,56 +34,39 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView = this.textView;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        int i3 = 94;
-        float f = (float) (LocaleController.isRTL ? 21 : 94);
-        if (!LocaleController.isRTL) {
-            i3 = 21;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2, f, 0.0f, (float) i3, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 21 : 94), 0.0f, (float) (!LocaleController.isRTL ? 21 : 94), 0.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.imageView = new BackupImageView(context);
         this.imageView.setRoundRadius(AndroidUtilities.dp(36.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 7.0f, 48.0f, 0.0f));
         this.checkBox = new CheckBoxSquare(context, z);
-        CheckBoxSquare checkBoxSquare = this.checkBox;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        i2 = i | 48;
-        int i4 = 0;
-        float f2 = (float) (LocaleController.isRTL ? 0 : 21);
-        if (LocaleController.isRTL) {
-            i4 = 21;
-        }
-        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, i2, f2, 16.0f, (float) i4, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 0 : 21), 16.0f, (float) (LocaleController.isRTL ? 21 : 0), 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setTextColor(int i) {
         this.textView.setTextColor(i);
     }
 
-    public User getCurrentUser() {
+    public TLRPC.User getCurrentUser() {
         return this.currentUser;
     }
 
-    public void setUser(User user, boolean z, boolean z2) {
+    public void setUser(TLRPC.User user, boolean z, boolean z2) {
         this.currentUser = user;
         this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
         this.checkBox.setChecked(z, false);
         this.avatarDrawable.setInfo(user);
-        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
+        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
         this.needDivider = z2;
-        setWillNotDraw(z2 ^ 1);
+        setWillNotDraw(!z2);
     }
 
     public void setChecked(boolean z, boolean z2) {
@@ -101,7 +85,7 @@ public class CheckBoxUserCell extends FrameLayout {
         return this.checkBox;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

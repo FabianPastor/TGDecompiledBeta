@@ -5,24 +5,22 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.LayoutParams;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DownloadController;
-import org.telegram.messenger.DownloadController.Preset;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -35,335 +33,69 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class DataSettingsActivity extends BaseFragment {
     private AnimatorSet animatorSet;
-    private int autoplayGifsRow;
-    private int autoplayHeaderRow;
-    private int autoplaySectionRow;
-    private int autoplayVideoRow;
-    private int callsSection2Row;
-    private int callsSectionRow;
-    private int dataUsageRow;
-    private int enableAllStreamInfoRow;
-    private int enableAllStreamRow;
-    private int enableCacheStreamRow;
-    private int enableMkvRow;
-    private int enableStreamRow;
+    /* access modifiers changed from: private */
+    public int autoplayGifsRow;
+    /* access modifiers changed from: private */
+    public int autoplayHeaderRow;
+    /* access modifiers changed from: private */
+    public int autoplaySectionRow;
+    /* access modifiers changed from: private */
+    public int autoplayVideoRow;
+    /* access modifiers changed from: private */
+    public int callsSection2Row;
+    /* access modifiers changed from: private */
+    public int callsSectionRow;
+    /* access modifiers changed from: private */
+    public int dataUsageRow;
+    /* access modifiers changed from: private */
+    public int enableAllStreamInfoRow;
+    /* access modifiers changed from: private */
+    public int enableAllStreamRow;
+    /* access modifiers changed from: private */
+    public int enableCacheStreamRow;
+    /* access modifiers changed from: private */
+    public int enableMkvRow;
+    /* access modifiers changed from: private */
+    public int enableStreamRow;
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private int mediaDownloadSection2Row;
-    private int mediaDownloadSectionRow;
-    private int mobileRow;
-    private int proxyRow;
-    private int proxySection2Row;
-    private int proxySectionRow;
-    private int quickRepliesRow;
-    private int resetDownloadRow;
-    private int roamingRow;
-    private int rowCount;
-    private int storageUsageRow;
-    private int streamSectionRow;
-    private int usageSection2Row;
-    private int usageSectionRow;
-    private int useLessDataForCallsRow;
-    private int wifiRow;
-
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public int getItemCount() {
-            return DataSettingsActivity.this.rowCount;
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            ViewHolder viewHolder2 = viewHolder;
-            int i2 = i;
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType != 0) {
-                boolean z = false;
-                if (itemViewType == 1) {
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder2.itemView;
-                    textSettingsCell.setCanDisable(false);
-                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                    if (i2 == DataSettingsActivity.this.storageUsageRow) {
-                        textSettingsCell.setText(LocaleController.getString("StorageUsage", NUM), true);
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.useLessDataForCallsRow) {
-                        String str = null;
-                        i2 = MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
-                        if (i2 == 0) {
-                            str = LocaleController.getString("UseLessDataNever", NUM);
-                        } else if (i2 == 1) {
-                            str = LocaleController.getString("UseLessDataOnMobile", NUM);
-                        } else if (i2 == 2) {
-                            str = LocaleController.getString("UseLessDataAlways", NUM);
-                        } else if (i2 == 3) {
-                            str = LocaleController.getString("UseLessDataOnRoaming", NUM);
-                        }
-                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", NUM), str, true);
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.dataUsageRow) {
-                        textSettingsCell.setText(LocaleController.getString("NetworkUsage", NUM), false);
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.proxyRow) {
-                        textSettingsCell.setText(LocaleController.getString("ProxySettings", NUM), false);
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.resetDownloadRow) {
-                        textSettingsCell.setCanDisable(true);
-                        textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
-                        textSettingsCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", NUM), false);
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.quickRepliesRow) {
-                        textSettingsCell.setText(LocaleController.getString("VoipQuickReplies", NUM), false);
-                        return;
-                    } else {
-                        return;
-                    }
-                } else if (itemViewType == 2) {
-                    HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
-                    if (i2 == DataSettingsActivity.this.mediaDownloadSectionRow) {
-                        headerCell.setText(LocaleController.getString("AutomaticMediaDownload", NUM));
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.usageSectionRow) {
-                        headerCell.setText(LocaleController.getString("DataUsage", NUM));
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.callsSectionRow) {
-                        headerCell.setText(LocaleController.getString("Calls", NUM));
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.proxySectionRow) {
-                        headerCell.setText(LocaleController.getString("Proxy", NUM));
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.streamSectionRow) {
-                        headerCell.setText(LocaleController.getString("Streaming", NUM));
-                        return;
-                    } else if (i2 == DataSettingsActivity.this.autoplayHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoplayMedia", NUM));
-                        return;
-                    } else {
-                        return;
-                    }
-                } else if (itemViewType == 3) {
-                    TextCheckCell textCheckCell = (TextCheckCell) viewHolder2.itemView;
-                    if (i2 == DataSettingsActivity.this.enableStreamRow) {
-                        String string = LocaleController.getString("EnableStreaming", NUM);
-                        boolean z2 = SharedConfig.streamMedia;
-                        if (DataSettingsActivity.this.enableAllStreamRow != -1) {
-                            z = true;
-                        }
-                        textCheckCell.setTextAndCheck(string, z2, z);
-                        return;
-                    } else if (i2 != DataSettingsActivity.this.enableCacheStreamRow) {
-                        if (i2 == DataSettingsActivity.this.enableMkvRow) {
-                            textCheckCell.setTextAndCheck("(beta only) Show MKV as Video", SharedConfig.streamMkv, true);
-                            return;
-                        } else if (i2 == DataSettingsActivity.this.enableAllStreamRow) {
-                            textCheckCell.setTextAndCheck("(beta only) Stream All Videos", SharedConfig.streamAllVideo, false);
-                            return;
-                        } else if (i2 == DataSettingsActivity.this.autoplayGifsRow) {
-                            textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", NUM), SharedConfig.autoplayGifs, true);
-                            return;
-                        } else if (i2 == DataSettingsActivity.this.autoplayVideoRow) {
-                            textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", NUM), SharedConfig.autoplayVideo, false);
-                            return;
-                        } else {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
-                } else if (itemViewType == 4) {
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
-                    if (i2 == DataSettingsActivity.this.enableAllStreamInfoRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("EnableAllStreamingInfo", NUM));
-                        return;
-                    }
-                    return;
-                } else if (itemViewType == 5) {
-                    String string2;
-                    boolean z3;
-                    Preset currentMobilePreset;
-                    NotificationsCheckCell notificationsCheckCell;
-                    String str2;
-                    NotificationsCheckCell notificationsCheckCell2 = (NotificationsCheckCell) viewHolder2.itemView;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    if (i2 == DataSettingsActivity.this.mobileRow) {
-                        string2 = LocaleController.getString("WhenUsingMobileData", NUM);
-                        z3 = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).mobilePreset.enabled;
-                        currentMobilePreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentMobilePreset();
-                    } else if (i2 == DataSettingsActivity.this.wifiRow) {
-                        string2 = LocaleController.getString("WhenConnectedOnWiFi", NUM);
-                        z3 = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).wifiPreset.enabled;
-                        currentMobilePreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentWiFiPreset();
-                    } else {
-                        string2 = LocaleController.getString("WhenRoaming", NUM);
-                        z3 = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).roamingPreset.enabled;
-                        currentMobilePreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentRoamingPreset();
-                    }
-                    String str3 = string2;
-                    int i3 = 0;
-                    Object obj = null;
-                    int i4 = 0;
-                    Object obj2 = null;
-                    Object obj3 = null;
-                    while (true) {
-                        int[] iArr = currentMobilePreset.mask;
-                        if (i3 >= iArr.length) {
-                            break;
-                        }
-                        if (obj == null && (iArr[i3] & 1) != 0) {
-                            i4++;
-                            obj = 1;
-                        }
-                        if (obj2 == null && (currentMobilePreset.mask[i3] & 4) != 0) {
-                            i4++;
-                            obj2 = 1;
-                        }
-                        if (obj3 == null && (currentMobilePreset.mask[i3] & 8) != 0) {
-                            i4++;
-                            obj3 = 1;
-                        }
-                        i3++;
-                    }
-                    if (!currentMobilePreset.enabled || i4 == 0) {
-                        notificationsCheckCell = notificationsCheckCell2;
-                        str2 = str3;
-                        stringBuilder.append(LocaleController.getString("NoMediaAutoDownload", NUM));
-                    } else {
-                        if (obj != null) {
-                            stringBuilder.append(LocaleController.getString("AutoDownloadPhotosOn", NUM));
-                        }
-                        string2 = ", ";
-                        String str4 = " (%1$s)";
-                        if (obj2 != null) {
-                            if (stringBuilder.length() > 0) {
-                                stringBuilder.append(string2);
-                            }
-                            stringBuilder.append(LocaleController.getString("AutoDownloadVideosOn", NUM));
-                            Object[] objArr = new Object[1];
-                            notificationsCheckCell = notificationsCheckCell2;
-                            str2 = str3;
-                            objArr[0] = AndroidUtilities.formatFileSize((long) currentMobilePreset.sizes[DownloadController.typeToIndex(4)], true);
-                            stringBuilder.append(String.format(str4, objArr));
-                        } else {
-                            notificationsCheckCell = notificationsCheckCell2;
-                            str2 = str3;
-                        }
-                        if (obj3 != null) {
-                            if (stringBuilder.length() > 0) {
-                                stringBuilder.append(string2);
-                            }
-                            stringBuilder.append(LocaleController.getString("AutoDownloadFilesOn", NUM));
-                            stringBuilder.append(String.format(str4, new Object[]{AndroidUtilities.formatFileSize((long) currentMobilePreset.sizes[DownloadController.typeToIndex(8)], true)}));
-                        }
-                    }
-                    boolean z4 = !(obj == null && obj2 == null && obj3 == null) && z3;
-                    notificationsCheckCell.setTextAndValueAndCheck(str2, stringBuilder, z4, 0, true, true);
-                    return;
-                } else {
-                    return;
-                }
-            }
-            String str5 = "windowBackgroundGrayShadow";
-            if (i2 == DataSettingsActivity.this.proxySection2Row) {
-                viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str5));
-            } else {
-                viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str5));
-            }
-        }
-
-        public void onViewAttachedToWindow(ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() == 3) {
-                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
-                int adapterPosition = viewHolder.getAdapterPosition();
-                if (adapterPosition == DataSettingsActivity.this.enableCacheStreamRow) {
-                    textCheckCell.setChecked(SharedConfig.saveStreamMedia);
-                } else if (adapterPosition == DataSettingsActivity.this.enableStreamRow) {
-                    textCheckCell.setChecked(SharedConfig.streamMedia);
-                } else if (adapterPosition == DataSettingsActivity.this.enableAllStreamRow) {
-                    textCheckCell.setChecked(SharedConfig.streamAllVideo);
-                } else if (adapterPosition == DataSettingsActivity.this.enableMkvRow) {
-                    textCheckCell.setChecked(SharedConfig.streamMkv);
-                } else if (adapterPosition == DataSettingsActivity.this.autoplayGifsRow) {
-                    textCheckCell.setChecked(SharedConfig.autoplayGifs);
-                } else if (adapterPosition == DataSettingsActivity.this.autoplayVideoRow) {
-                    textCheckCell.setChecked(SharedConfig.autoplayVideo);
-                }
-            }
-        }
-
-        public boolean isRowEnabled(int i) {
-            boolean z = false;
-            if (i == DataSettingsActivity.this.resetDownloadRow) {
-                DownloadController instance = DownloadController.getInstance(DataSettingsActivity.this.currentAccount);
-                if (!(instance.lowPreset.equals(instance.getCurrentRoamingPreset()) && instance.lowPreset.isEnabled() == instance.roamingPreset.enabled && instance.mediumPreset.equals(instance.getCurrentMobilePreset()) && instance.mediumPreset.isEnabled() == instance.mobilePreset.enabled && instance.highPreset.equals(instance.getCurrentWiFiPreset()) && instance.highPreset.isEnabled() == instance.wifiPreset.enabled)) {
-                    z = true;
-                }
-                return z;
-            }
-            if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow) {
-                z = true;
-            }
-            return z;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return isRowEnabled(viewHolder.getAdapterPosition());
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View textSettingsCell;
-            if (i != 0) {
-                String str = "windowBackgroundWhite";
-                if (i == 1) {
-                    textSettingsCell = new TextSettingsCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                } else if (i == 2) {
-                    textSettingsCell = new HeaderCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                } else if (i == 3) {
-                    textSettingsCell = new TextCheckCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                } else if (i == 4) {
-                    textSettingsCell = new TextInfoPrivacyCell(this.mContext);
-                    textSettingsCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i != 5) {
-                    textSettingsCell = null;
-                } else {
-                    textSettingsCell = new NotificationsCheckCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor(str));
-                }
-            } else {
-                textSettingsCell = new ShadowSectionCell(this.mContext);
-            }
-            textSettingsCell.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(textSettingsCell);
-        }
-
-        public int getItemViewType(int i) {
-            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow) {
-                return 0;
-            }
-            if (i == DataSettingsActivity.this.mediaDownloadSectionRow || i == DataSettingsActivity.this.streamSectionRow || i == DataSettingsActivity.this.callsSectionRow || i == DataSettingsActivity.this.usageSectionRow || i == DataSettingsActivity.this.proxySectionRow || i == DataSettingsActivity.this.autoplayHeaderRow) {
-                return 2;
-            }
-            if (i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.autoplayVideoRow) {
-                return 3;
-            }
-            if (i == DataSettingsActivity.this.enableAllStreamInfoRow) {
-                return 4;
-            }
-            return (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.roamingRow) ? 5 : 1;
-        }
-    }
+    /* access modifiers changed from: private */
+    public int mediaDownloadSection2Row;
+    /* access modifiers changed from: private */
+    public int mediaDownloadSectionRow;
+    /* access modifiers changed from: private */
+    public int mobileRow;
+    /* access modifiers changed from: private */
+    public int proxyRow;
+    /* access modifiers changed from: private */
+    public int proxySection2Row;
+    /* access modifiers changed from: private */
+    public int proxySectionRow;
+    /* access modifiers changed from: private */
+    public int quickRepliesRow;
+    /* access modifiers changed from: private */
+    public int resetDownloadRow;
+    /* access modifiers changed from: private */
+    public int roamingRow;
+    /* access modifiers changed from: private */
+    public int rowCount;
+    /* access modifiers changed from: private */
+    public int storageUsageRow;
+    /* access modifiers changed from: private */
+    public int streamSectionRow;
+    /* access modifiers changed from: private */
+    public int usageSection2Row;
+    /* access modifiers changed from: private */
+    public int usageSectionRow;
+    /* access modifiers changed from: private */
+    public int useLessDataForCallsRow;
+    /* access modifiers changed from: private */
+    public int wifiRow;
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -372,87 +104,87 @@ public class DataSettingsActivity extends BaseFragment {
         int i = this.rowCount;
         this.rowCount = i + 1;
         this.usageSectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.storageUsageRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.dataUsageRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.usageSection2Row = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mediaDownloadSectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mobileRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.wifiRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.roamingRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.resetDownloadRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mediaDownloadSection2Row = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.autoplayHeaderRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.autoplayGifsRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.autoplayVideoRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.autoplaySectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.streamSectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.enableStreamRow = i;
+        int i2 = this.rowCount;
+        this.rowCount = i2 + 1;
+        this.storageUsageRow = i2;
+        int i3 = this.rowCount;
+        this.rowCount = i3 + 1;
+        this.dataUsageRow = i3;
+        int i4 = this.rowCount;
+        this.rowCount = i4 + 1;
+        this.usageSection2Row = i4;
+        int i5 = this.rowCount;
+        this.rowCount = i5 + 1;
+        this.mediaDownloadSectionRow = i5;
+        int i6 = this.rowCount;
+        this.rowCount = i6 + 1;
+        this.mobileRow = i6;
+        int i7 = this.rowCount;
+        this.rowCount = i7 + 1;
+        this.wifiRow = i7;
+        int i8 = this.rowCount;
+        this.rowCount = i8 + 1;
+        this.roamingRow = i8;
+        int i9 = this.rowCount;
+        this.rowCount = i9 + 1;
+        this.resetDownloadRow = i9;
+        int i10 = this.rowCount;
+        this.rowCount = i10 + 1;
+        this.mediaDownloadSection2Row = i10;
+        int i11 = this.rowCount;
+        this.rowCount = i11 + 1;
+        this.autoplayHeaderRow = i11;
+        int i12 = this.rowCount;
+        this.rowCount = i12 + 1;
+        this.autoplayGifsRow = i12;
+        int i13 = this.rowCount;
+        this.rowCount = i13 + 1;
+        this.autoplayVideoRow = i13;
+        int i14 = this.rowCount;
+        this.rowCount = i14 + 1;
+        this.autoplaySectionRow = i14;
+        int i15 = this.rowCount;
+        this.rowCount = i15 + 1;
+        this.streamSectionRow = i15;
+        int i16 = this.rowCount;
+        this.rowCount = i16 + 1;
+        this.enableStreamRow = i16;
         if (BuildVars.DEBUG_VERSION) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.enableMkvRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.enableAllStreamRow = i;
+            int i17 = this.rowCount;
+            this.rowCount = i17 + 1;
+            this.enableMkvRow = i17;
+            int i18 = this.rowCount;
+            this.rowCount = i18 + 1;
+            this.enableAllStreamRow = i18;
         } else {
             this.enableAllStreamRow = -1;
             this.enableMkvRow = -1;
         }
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.enableAllStreamInfoRow = i;
+        int i19 = this.rowCount;
+        this.rowCount = i19 + 1;
+        this.enableAllStreamInfoRow = i19;
         this.enableCacheStreamRow = -1;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.callsSectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.useLessDataForCallsRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.quickRepliesRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.callsSection2Row = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.proxySectionRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.proxyRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.proxySection2Row = i;
+        int i20 = this.rowCount;
+        this.rowCount = i20 + 1;
+        this.callsSectionRow = i20;
+        int i21 = this.rowCount;
+        this.rowCount = i21 + 1;
+        this.useLessDataForCallsRow = i21;
+        int i22 = this.rowCount;
+        this.rowCount = i22 + 1;
+        this.quickRepliesRow = i22;
+        int i23 = this.rowCount;
+        this.rowCount = i23 + 1;
+        this.callsSection2Row = i23;
+        int i24 = this.rowCount;
+        this.rowCount = i24 + 1;
+        this.proxySectionRow = i24;
+        int i25 = this.rowCount;
+        this.rowCount = i25 + 1;
+        this.proxyRow = i25;
+        int i26 = this.rowCount;
+        this.rowCount = i26 + 1;
+        this.proxySection2Row = i26;
         return true;
     }
 
@@ -463,7 +195,7 @@ public class DataSettingsActivity extends BaseFragment {
             this.actionBar.setOccupyStatusBar(false);
         }
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     DataSettingsActivity.this.finishFragment();
@@ -473,84 +205,92 @@ public class DataSettingsActivity extends BaseFragment {
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new -$$Lambda$DataSettingsActivity$ltmANPI19HrezwGNNfIa2VQKaYc(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
+            public final void onItemClick(View view, int i, float f, float f2) {
+                DataSettingsActivity.this.lambda$createView$2$DataSettingsActivity(view, i, f, f2);
+            }
+        });
         return this.fragmentView;
     }
 
     public /* synthetic */ void lambda$createView$2$DataSettingsActivity(View view, int i, float f, float f2) {
-        int i2 = 2;
-        int i3 = 0;
+        String str;
+        String str2;
+        DownloadController.Preset preset;
+        DownloadController.Preset preset2;
+        int i2;
+        int i3 = 2;
+        int i4 = 0;
         if (i == this.mobileRow || i == this.roamingRow || i == this.wifiRow) {
             if ((!LocaleController.isRTL || f > ((float) AndroidUtilities.dp(76.0f))) && (LocaleController.isRTL || f < ((float) (view.getMeasuredWidth() - AndroidUtilities.dp(76.0f))))) {
                 if (i == this.mobileRow) {
-                    i2 = 0;
+                    i3 = 0;
                 } else if (i == this.wifiRow) {
-                    i2 = 1;
-                }
-                presentFragment(new DataAutoDownloadActivity(i2));
-            } else {
-                Preset preset;
-                Preset preset2;
-                String str;
-                String str2;
-                boolean isRowEnabled = this.listAdapter.isRowEnabled(this.resetDownloadRow);
-                NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
-                boolean isChecked = notificationsCheckCell.isChecked();
-                if (i == this.mobileRow) {
-                    preset = DownloadController.getInstance(this.currentAccount).mobilePreset;
-                    preset2 = DownloadController.getInstance(this.currentAccount).mediumPreset;
-                    str = "mobilePreset";
-                    str2 = "currentMobilePreset";
-                } else if (i == this.wifiRow) {
-                    preset = DownloadController.getInstance(this.currentAccount).wifiPreset;
-                    preset2 = DownloadController.getInstance(this.currentAccount).highPreset;
-                    str = "wifiPreset";
-                    str2 = "currentWifiPreset";
                     i3 = 1;
-                } else {
-                    Preset preset3 = DownloadController.getInstance(this.currentAccount).roamingPreset;
-                    preset2 = DownloadController.getInstance(this.currentAccount).lowPreset;
-                    str = "roamingPreset";
-                    str2 = "currentRoamingPreset";
-                    preset = preset3;
-                    i3 = 2;
                 }
-                if (isChecked || !preset.enabled) {
-                    preset.enabled ^= 1;
-                } else {
-                    preset.set(preset2);
-                }
-                Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
-                edit.putString(str, preset.toString());
-                edit.putInt(str2, 3);
-                edit.commit();
-                notificationsCheckCell.setChecked(isChecked ^ 1);
-                ViewHolder findContainingViewHolder = this.listView.findContainingViewHolder(view);
-                if (findContainingViewHolder != null) {
-                    this.listAdapter.onBindViewHolder(findContainingViewHolder, i);
-                }
-                DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
-                DownloadController.getInstance(this.currentAccount).savePresetToServer(i3);
-                if (isRowEnabled != this.listAdapter.isRowEnabled(this.resetDownloadRow)) {
-                    this.listAdapter.notifyItemChanged(this.resetDownloadRow);
-                }
+                presentFragment(new DataAutoDownloadActivity(i3));
+                return;
+            }
+            boolean isRowEnabled = this.listAdapter.isRowEnabled(this.resetDownloadRow);
+            NotificationsCheckCell notificationsCheckCell = (NotificationsCheckCell) view;
+            boolean isChecked = notificationsCheckCell.isChecked();
+            if (i == this.mobileRow) {
+                preset2 = DownloadController.getInstance(this.currentAccount).mobilePreset;
+                preset = DownloadController.getInstance(this.currentAccount).mediumPreset;
+                str2 = "mobilePreset";
+                str = "currentMobilePreset";
+            } else if (i == this.wifiRow) {
+                preset2 = DownloadController.getInstance(this.currentAccount).wifiPreset;
+                preset = DownloadController.getInstance(this.currentAccount).highPreset;
+                str2 = "wifiPreset";
+                str = "currentWifiPreset";
+                i4 = 1;
+            } else {
+                DownloadController.Preset preset3 = DownloadController.getInstance(this.currentAccount).roamingPreset;
+                preset = DownloadController.getInstance(this.currentAccount).lowPreset;
+                str2 = "roamingPreset";
+                str = "currentRoamingPreset";
+                preset2 = preset3;
+                i4 = 2;
+            }
+            if (isChecked || !preset2.enabled) {
+                preset2.enabled = !preset2.enabled;
+            } else {
+                preset2.set(preset);
+            }
+            SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
+            edit.putString(str2, preset2.toString());
+            edit.putInt(str, 3);
+            edit.commit();
+            notificationsCheckCell.setChecked(!isChecked);
+            RecyclerView.ViewHolder findContainingViewHolder = this.listView.findContainingViewHolder(view);
+            if (findContainingViewHolder != null) {
+                this.listAdapter.onBindViewHolder(findContainingViewHolder, i);
+            }
+            DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
+            DownloadController.getInstance(this.currentAccount).savePresetToServer(i4);
+            if (isRowEnabled != this.listAdapter.isRowEnabled(this.resetDownloadRow)) {
+                this.listAdapter.notifyItemChanged(this.resetDownloadRow);
             }
         } else if (i == this.resetDownloadRow) {
             if (getParentActivity() != null && view.isEnabled()) {
-                Builder builder = new Builder(getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new -$$Lambda$DataSettingsActivity$z7kMV53_j7S-p3GIoSYZ6qy2-tA(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        DataSettingsActivity.this.lambda$null$0$DataSettingsActivity(dialogInterface, i);
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 showDialog(create);
                 TextView textView = (TextView) create.getButton(-1);
@@ -561,25 +301,48 @@ public class DataSettingsActivity extends BaseFragment {
         } else if (i == this.storageUsageRow) {
             presentFragment(new CacheControlActivity());
         } else if (i == this.useLessDataForCallsRow) {
-            Dialog createSingleChoiceDialog;
             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-            int i4 = globalMainSettings.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
-            if (i4 != 0) {
-                if (i4 == 1) {
-                    i4 = 2;
-                } else if (i4 == 2) {
-                    i4 = 3;
-                } else if (i4 == 3) {
-                    i4 = 1;
+            int i5 = globalMainSettings.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
+            if (i5 != 0) {
+                if (i5 == 1) {
+                    i2 = 2;
+                } else if (i5 == 2) {
+                    i2 = 3;
+                } else if (i5 == 3) {
+                    i2 = 1;
                 }
-                createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i4, new -$$Lambda$DataSettingsActivity$ClwlcXUhT2KAlvJObQobk4HWNyw(this, globalMainSettings, i));
+                Dialog createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
+                    private final /* synthetic */ SharedPreferences f$1;
+                    private final /* synthetic */ int f$2;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                    }
+
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        DataSettingsActivity.this.lambda$null$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
+                    }
+                });
                 setVisibleDialog(createSingleChoiceDialog);
                 createSingleChoiceDialog.show();
             }
-            i4 = 0;
-            createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i4, new -$$Lambda$DataSettingsActivity$ClwlcXUhT2KAlvJObQobk4HWNyw(this, globalMainSettings, i));
-            setVisibleDialog(createSingleChoiceDialog);
-            createSingleChoiceDialog.show();
+            i2 = 0;
+            Dialog createSingleChoiceDialog2 = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
+                private final /* synthetic */ SharedPreferences f$1;
+                private final /* synthetic */ int f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    DataSettingsActivity.this.lambda$null$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
+                }
+            });
+            setVisibleDialog(createSingleChoiceDialog2);
+            createSingleChoiceDialog2.show();
         } else if (i == this.dataUsageRow) {
             presentFragment(new DataUsageActivity());
         } else if (i == this.proxyRow) {
@@ -612,38 +375,38 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$null$0$DataSettingsActivity(DialogInterface dialogInterface, int i) {
-        Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
+        String str;
+        DownloadController.Preset preset;
+        DownloadController.Preset preset2;
+        SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
         for (int i2 = 0; i2 < 3; i2++) {
-            Preset preset;
-            Preset preset2;
-            String str;
             if (i2 == 0) {
-                preset = DownloadController.getInstance(this.currentAccount).mobilePreset;
-                preset2 = DownloadController.getInstance(this.currentAccount).mediumPreset;
+                preset2 = DownloadController.getInstance(this.currentAccount).mobilePreset;
+                preset = DownloadController.getInstance(this.currentAccount).mediumPreset;
                 str = "mobilePreset";
             } else if (i2 == 1) {
-                preset = DownloadController.getInstance(this.currentAccount).wifiPreset;
-                preset2 = DownloadController.getInstance(this.currentAccount).highPreset;
+                preset2 = DownloadController.getInstance(this.currentAccount).wifiPreset;
+                preset = DownloadController.getInstance(this.currentAccount).highPreset;
                 str = "wifiPreset";
             } else {
-                preset = DownloadController.getInstance(this.currentAccount).roamingPreset;
-                preset2 = DownloadController.getInstance(this.currentAccount).lowPreset;
+                preset2 = DownloadController.getInstance(this.currentAccount).roamingPreset;
+                preset = DownloadController.getInstance(this.currentAccount).lowPreset;
                 str = "roamingPreset";
             }
-            preset.set(preset2);
-            preset.enabled = preset2.isEnabled();
+            preset2.set(preset);
+            preset2.enabled = preset.isEnabled();
             DownloadController.getInstance(this.currentAccount).currentMobilePreset = 3;
             edit.putInt("currentMobilePreset", 3);
             DownloadController.getInstance(this.currentAccount).currentWifiPreset = 3;
             edit.putInt("currentWifiPreset", 3);
             DownloadController.getInstance(this.currentAccount).currentRoamingPreset = 3;
             edit.putInt("currentRoamingPreset", 3);
-            edit.putString(str, preset.toString());
+            edit.putString(str, preset2.toString());
         }
         edit.commit();
         DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
-        for (i = 0; i < 3; i++) {
-            DownloadController.getInstance(this.currentAccount).savePresetToServer(i);
+        for (int i3 = 0; i3 < 3; i3++) {
+            DownloadController.getInstance(this.currentAccount).savePresetToServer(i3);
         }
         this.listAdapter.notifyItemRangeChanged(this.mobileRow, 4);
     }
@@ -658,62 +421,282 @@ public class DataSettingsActivity extends BaseFragment {
         if (i3 != -1) {
             sharedPreferences.edit().putInt("VoipDataSaving", i3).commit();
         }
-        ListAdapter listAdapter = this.listAdapter;
-        if (listAdapter != null) {
-            listAdapter.notifyItemChanged(i);
+        ListAdapter listAdapter2 = this.listAdapter;
+        if (listAdapter2 != null) {
+            listAdapter2.notifyItemChanged(i);
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDialogDismiss(Dialog dialog) {
         DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
     }
 
     public void onResume() {
         super.onResume();
-        ListAdapter listAdapter = this.listAdapter;
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter2 = this.listAdapter;
+        if (listAdapter2 != null) {
+            listAdapter2.notifyDataSetChanged();
+        }
+    }
+
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public int getItemCount() {
+            return DataSettingsActivity.this.rowCount;
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            String string;
+            boolean z;
+            DownloadController.Preset currentRoamingPreset;
+            String str;
+            NotificationsCheckCell notificationsCheckCell;
+            RecyclerView.ViewHolder viewHolder2 = viewHolder;
+            int i2 = i;
+            int itemViewType = viewHolder.getItemViewType();
+            if (itemViewType != 0) {
+                boolean z2 = false;
+                if (itemViewType == 1) {
+                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder2.itemView;
+                    textSettingsCell.setCanDisable(false);
+                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                    if (i2 == DataSettingsActivity.this.storageUsageRow) {
+                        textSettingsCell.setText(LocaleController.getString("StorageUsage", NUM), true);
+                    } else if (i2 == DataSettingsActivity.this.useLessDataForCallsRow) {
+                        String str2 = null;
+                        int i3 = MessagesController.getGlobalMainSettings().getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault());
+                        if (i3 == 0) {
+                            str2 = LocaleController.getString("UseLessDataNever", NUM);
+                        } else if (i3 == 1) {
+                            str2 = LocaleController.getString("UseLessDataOnMobile", NUM);
+                        } else if (i3 == 2) {
+                            str2 = LocaleController.getString("UseLessDataAlways", NUM);
+                        } else if (i3 == 3) {
+                            str2 = LocaleController.getString("UseLessDataOnRoaming", NUM);
+                        }
+                        textSettingsCell.setTextAndValue(LocaleController.getString("VoipUseLessData", NUM), str2, true);
+                    } else if (i2 == DataSettingsActivity.this.dataUsageRow) {
+                        textSettingsCell.setText(LocaleController.getString("NetworkUsage", NUM), false);
+                    } else if (i2 == DataSettingsActivity.this.proxyRow) {
+                        textSettingsCell.setText(LocaleController.getString("ProxySettings", NUM), false);
+                    } else if (i2 == DataSettingsActivity.this.resetDownloadRow) {
+                        textSettingsCell.setCanDisable(true);
+                        textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
+                        textSettingsCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", NUM), false);
+                    } else if (i2 == DataSettingsActivity.this.quickRepliesRow) {
+                        textSettingsCell.setText(LocaleController.getString("VoipQuickReplies", NUM), false);
+                    }
+                } else if (itemViewType == 2) {
+                    HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
+                    if (i2 == DataSettingsActivity.this.mediaDownloadSectionRow) {
+                        headerCell.setText(LocaleController.getString("AutomaticMediaDownload", NUM));
+                    } else if (i2 == DataSettingsActivity.this.usageSectionRow) {
+                        headerCell.setText(LocaleController.getString("DataUsage", NUM));
+                    } else if (i2 == DataSettingsActivity.this.callsSectionRow) {
+                        headerCell.setText(LocaleController.getString("Calls", NUM));
+                    } else if (i2 == DataSettingsActivity.this.proxySectionRow) {
+                        headerCell.setText(LocaleController.getString("Proxy", NUM));
+                    } else if (i2 == DataSettingsActivity.this.streamSectionRow) {
+                        headerCell.setText(LocaleController.getString("Streaming", NUM));
+                    } else if (i2 == DataSettingsActivity.this.autoplayHeaderRow) {
+                        headerCell.setText(LocaleController.getString("AutoplayMedia", NUM));
+                    }
+                } else if (itemViewType == 3) {
+                    TextCheckCell textCheckCell = (TextCheckCell) viewHolder2.itemView;
+                    if (i2 == DataSettingsActivity.this.enableStreamRow) {
+                        String string2 = LocaleController.getString("EnableStreaming", NUM);
+                        boolean z3 = SharedConfig.streamMedia;
+                        if (DataSettingsActivity.this.enableAllStreamRow != -1) {
+                            z2 = true;
+                        }
+                        textCheckCell.setTextAndCheck(string2, z3, z2);
+                    } else if (i2 != DataSettingsActivity.this.enableCacheStreamRow) {
+                        if (i2 == DataSettingsActivity.this.enableMkvRow) {
+                            textCheckCell.setTextAndCheck("(beta only) Show MKV as Video", SharedConfig.streamMkv, true);
+                        } else if (i2 == DataSettingsActivity.this.enableAllStreamRow) {
+                            textCheckCell.setTextAndCheck("(beta only) Stream All Videos", SharedConfig.streamAllVideo, false);
+                        } else if (i2 == DataSettingsActivity.this.autoplayGifsRow) {
+                            textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", NUM), SharedConfig.autoplayGifs, true);
+                        } else if (i2 == DataSettingsActivity.this.autoplayVideoRow) {
+                            textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", NUM), SharedConfig.autoplayVideo, false);
+                        }
+                    }
+                } else if (itemViewType == 4) {
+                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
+                    if (i2 == DataSettingsActivity.this.enableAllStreamInfoRow) {
+                        textInfoPrivacyCell.setText(LocaleController.getString("EnableAllStreamingInfo", NUM));
+                    }
+                } else if (itemViewType == 5) {
+                    NotificationsCheckCell notificationsCheckCell2 = (NotificationsCheckCell) viewHolder2.itemView;
+                    StringBuilder sb = new StringBuilder();
+                    if (i2 == DataSettingsActivity.this.mobileRow) {
+                        string = LocaleController.getString("WhenUsingMobileData", NUM);
+                        z = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).mobilePreset.enabled;
+                        currentRoamingPreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentMobilePreset();
+                    } else if (i2 == DataSettingsActivity.this.wifiRow) {
+                        string = LocaleController.getString("WhenConnectedOnWiFi", NUM);
+                        z = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).wifiPreset.enabled;
+                        currentRoamingPreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentWiFiPreset();
+                    } else {
+                        string = LocaleController.getString("WhenRoaming", NUM);
+                        z = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).roamingPreset.enabled;
+                        currentRoamingPreset = DownloadController.getInstance(DataSettingsActivity.this.currentAccount).getCurrentRoamingPreset();
+                    }
+                    String str3 = string;
+                    int i4 = 0;
+                    boolean z4 = false;
+                    int i5 = 0;
+                    boolean z5 = false;
+                    boolean z6 = false;
+                    while (true) {
+                        int[] iArr = currentRoamingPreset.mask;
+                        if (i4 >= iArr.length) {
+                            break;
+                        }
+                        if (!z4 && (iArr[i4] & 1) != 0) {
+                            i5++;
+                            z4 = true;
+                        }
+                        if (!z5 && (currentRoamingPreset.mask[i4] & 4) != 0) {
+                            i5++;
+                            z5 = true;
+                        }
+                        if (!z6 && (currentRoamingPreset.mask[i4] & 8) != 0) {
+                            i5++;
+                            z6 = true;
+                        }
+                        i4++;
+                    }
+                    if (!currentRoamingPreset.enabled || i5 == 0) {
+                        notificationsCheckCell = notificationsCheckCell2;
+                        str = str3;
+                        sb.append(LocaleController.getString("NoMediaAutoDownload", NUM));
+                    } else {
+                        if (z4) {
+                            sb.append(LocaleController.getString("AutoDownloadPhotosOn", NUM));
+                        }
+                        if (z5) {
+                            if (sb.length() > 0) {
+                                sb.append(", ");
+                            }
+                            sb.append(LocaleController.getString("AutoDownloadVideosOn", NUM));
+                            notificationsCheckCell = notificationsCheckCell2;
+                            str = str3;
+                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) currentRoamingPreset.sizes[DownloadController.typeToIndex(4)], true)}));
+                        } else {
+                            notificationsCheckCell = notificationsCheckCell2;
+                            str = str3;
+                        }
+                        if (z6) {
+                            if (sb.length() > 0) {
+                                sb.append(", ");
+                            }
+                            sb.append(LocaleController.getString("AutoDownloadFilesOn", NUM));
+                            sb.append(String.format(" (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) currentRoamingPreset.sizes[DownloadController.typeToIndex(8)], true)}));
+                        }
+                    }
+                    notificationsCheckCell.setTextAndValueAndCheck(str, sb, (z4 || z5 || z6) && z, 0, true, true);
+                }
+            } else if (i2 == DataSettingsActivity.this.proxySection2Row) {
+                viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            } else {
+                viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            }
+        }
+
+        public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() == 3) {
+                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                int adapterPosition = viewHolder.getAdapterPosition();
+                if (adapterPosition == DataSettingsActivity.this.enableCacheStreamRow) {
+                    textCheckCell.setChecked(SharedConfig.saveStreamMedia);
+                } else if (adapterPosition == DataSettingsActivity.this.enableStreamRow) {
+                    textCheckCell.setChecked(SharedConfig.streamMedia);
+                } else if (adapterPosition == DataSettingsActivity.this.enableAllStreamRow) {
+                    textCheckCell.setChecked(SharedConfig.streamAllVideo);
+                } else if (adapterPosition == DataSettingsActivity.this.enableMkvRow) {
+                    textCheckCell.setChecked(SharedConfig.streamMkv);
+                } else if (adapterPosition == DataSettingsActivity.this.autoplayGifsRow) {
+                    textCheckCell.setChecked(SharedConfig.autoplayGifs);
+                } else if (adapterPosition == DataSettingsActivity.this.autoplayVideoRow) {
+                    textCheckCell.setChecked(SharedConfig.autoplayVideo);
+                }
+            }
+        }
+
+        public boolean isRowEnabled(int i) {
+            if (i == DataSettingsActivity.this.resetDownloadRow) {
+                DownloadController instance = DownloadController.getInstance(DataSettingsActivity.this.currentAccount);
+                if (!instance.lowPreset.equals(instance.getCurrentRoamingPreset()) || instance.lowPreset.isEnabled() != instance.roamingPreset.enabled || !instance.mediumPreset.equals(instance.getCurrentMobilePreset()) || instance.mediumPreset.isEnabled() != instance.mobilePreset.enabled || !instance.highPreset.equals(instance.getCurrentWiFiPreset()) || instance.highPreset.isEnabled() != instance.wifiPreset.enabled) {
+                    return true;
+                }
+                return false;
+            } else if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return isRowEnabled(viewHolder.getAdapterPosition());
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            NotificationsCheckCell notificationsCheckCell;
+            if (i == 0) {
+                notificationsCheckCell = new ShadowSectionCell(this.mContext);
+            } else if (i == 1) {
+                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
+                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                notificationsCheckCell = textSettingsCell;
+            } else if (i == 2) {
+                HeaderCell headerCell = new HeaderCell(this.mContext);
+                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                notificationsCheckCell = headerCell;
+            } else if (i == 3) {
+                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
+                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                notificationsCheckCell = textCheckCell;
+            } else if (i == 4) {
+                TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                notificationsCheckCell = textInfoPrivacyCell;
+            } else if (i != 5) {
+                notificationsCheckCell = null;
+            } else {
+                NotificationsCheckCell notificationsCheckCell2 = new NotificationsCheckCell(this.mContext);
+                notificationsCheckCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                notificationsCheckCell = notificationsCheckCell2;
+            }
+            notificationsCheckCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(notificationsCheckCell);
+        }
+
+        public int getItemViewType(int i) {
+            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow) {
+                return 0;
+            }
+            if (i == DataSettingsActivity.this.mediaDownloadSectionRow || i == DataSettingsActivity.this.streamSectionRow || i == DataSettingsActivity.this.callsSectionRow || i == DataSettingsActivity.this.usageSectionRow || i == DataSettingsActivity.this.proxySectionRow || i == DataSettingsActivity.this.autoplayHeaderRow) {
+                return 2;
+            }
+            if (i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.autoplayGifsRow || i == DataSettingsActivity.this.autoplayVideoRow) {
+                return 3;
+            }
+            if (i == DataSettingsActivity.this.enableAllStreamInfoRow) {
+                return 4;
+            }
+            return (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.roamingRow) ? 5 : 1;
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, NotificationsCheckCell.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        View view = this.listView;
-        Class[] clsArr = new Class[]{NotificationsCheckCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        themeDescriptionArr[7] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.listView;
-        clsArr = new Class[]{NotificationsCheckCell.class};
-        strArr = new String[1];
-        strArr[0] = "valueTextView";
-        themeDescriptionArr[8] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteGrayText2");
-        view = this.listView;
-        clsArr = new Class[]{NotificationsCheckCell.class};
-        strArr = new String[1];
-        strArr[0] = "checkBox";
-        themeDescriptionArr[9] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteValueText");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
-        themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        themeDescriptionArr[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, NotificationsCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"), new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4")};
     }
 }

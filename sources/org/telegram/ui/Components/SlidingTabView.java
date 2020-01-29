@@ -5,10 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -49,13 +47,13 @@ public class SlidingTabView extends LinearLayout {
         textView.setTextSize(1, 14.0f);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        textView.setOnClickListener(new OnClickListener() {
+        textView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 SlidingTabView.this.didSelectTab(i);
             }
         });
         addView(textView);
-        LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView.getLayoutParams();
         layoutParams.height = -1;
         layoutParams.width = 0;
         layoutParams.weight = 50.0f;
@@ -71,7 +69,8 @@ public class SlidingTabView extends LinearLayout {
         return this.selectedTab;
     }
 
-    private void didSelectTab(int i) {
+    /* access modifiers changed from: private */
+    public void didSelectTab(int i) {
         if (this.selectedTab != i) {
             this.selectedTab = i;
             animateToTab(i);
@@ -90,7 +89,7 @@ public class SlidingTabView extends LinearLayout {
         invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         this.tabWidth = ((float) (i3 - i)) / ((float) this.tabCount);
@@ -99,18 +98,18 @@ public class SlidingTabView extends LinearLayout {
         this.animateTabXTo = f;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.tabX != this.animateTabXTo) {
             long currentTimeMillis = System.currentTimeMillis() - this.startAnimationTime;
             this.startAnimationTime = System.currentTimeMillis();
             this.totalAnimationDiff += currentTimeMillis;
-            currentTimeMillis = this.totalAnimationDiff;
-            if (currentTimeMillis > 200) {
+            long j = this.totalAnimationDiff;
+            if (j > 200) {
                 this.totalAnimationDiff = 200;
                 this.tabX = this.animateTabXTo;
             } else {
-                this.tabX = this.startAnimationX + (this.interpolator.getInterpolation(((float) currentTimeMillis) / 200.0f) * (this.animateTabXTo - this.startAnimationX));
+                this.tabX = this.startAnimationX + (this.interpolator.getInterpolation(((float) j) / 200.0f) * (this.animateTabXTo - this.startAnimationX));
                 invalidate();
             }
         }

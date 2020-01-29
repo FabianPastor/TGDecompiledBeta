@@ -11,7 +11,7 @@ public final class InstanceFactory<T> implements Factory<T>, Lazy<T> {
     }
 
     static {
-        InstanceFactory instanceFactory = new InstanceFactory(null);
+        new InstanceFactory((Object) null);
     }
 
     private InstanceFactory(T t) {

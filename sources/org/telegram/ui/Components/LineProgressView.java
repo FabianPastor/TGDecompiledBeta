@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
@@ -25,7 +24,7 @@ public class LineProgressView extends View {
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
             progressPaint = new Paint(1);
-            progressPaint.setStrokeCap(Cap.ROUND);
+            progressPaint.setStrokeCap(Paint.Cap.ROUND);
             progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }
     }
@@ -38,9 +37,9 @@ public class LineProgressView extends View {
         if (f != 1.0f) {
             float f2 = this.currentProgress;
             if (f != f2) {
-                f = this.animationProgressStart;
-                float f3 = f2 - f;
-                if (f3 > 0.0f) {
+                float f3 = this.animationProgressStart;
+                float f4 = f2 - f3;
+                if (f4 > 0.0f) {
                     this.currentProgressTime += j;
                     long j2 = this.currentProgressTime;
                     if (j2 >= 300) {
@@ -48,17 +47,17 @@ public class LineProgressView extends View {
                         this.animationProgressStart = f2;
                         this.currentProgressTime = 0;
                     } else {
-                        this.animatedProgressValue = f + (f3 * decelerateInterpolator.getInterpolation(((float) j2) / 300.0f));
+                        this.animatedProgressValue = f3 + (f4 * decelerateInterpolator.getInterpolation(((float) j2) / 300.0f));
                     }
                 }
                 invalidate();
             }
         }
-        f = this.animatedProgressValue;
-        if (f >= 1.0f && f == 1.0f) {
-            f = this.animatedAlphaValue;
-            if (f != 0.0f) {
-                this.animatedAlphaValue = f - (((float) j) / 200.0f);
+        float f5 = this.animatedProgressValue;
+        if (f5 >= 1.0f && f5 == 1.0f) {
+            float f6 = this.animatedAlphaValue;
+            if (f6 != 0.0f) {
+                this.animatedAlphaValue = f6 - (((float) j) / 200.0f);
                 if (this.animatedAlphaValue <= 0.0f) {
                     this.animatedAlphaValue = 0.0f;
                 }
@@ -76,11 +75,11 @@ public class LineProgressView extends View {
     }
 
     public void setProgress(float f, boolean z) {
-        if (z) {
-            this.animationProgressStart = this.animatedProgressValue;
-        } else {
+        if (!z) {
             this.animatedProgressValue = f;
             this.animationProgressStart = f;
+        } else {
+            this.animationProgressStart = this.animatedProgressValue;
         }
         if (f != 1.0f) {
             this.animatedAlphaValue = 1.0f;

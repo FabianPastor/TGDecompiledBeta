@@ -8,8 +8,8 @@ public final class DoubleCheck<T> implements Provider<T>, Lazy<T> {
     private volatile Object instance = UNINITIALIZED;
     private volatile Provider<T> provider;
 
-    private DoubleCheck(Provider<T> provider) {
-        this.provider = provider;
+    private DoubleCheck(Provider<T> provider2) {
+        this.provider = provider2;
     }
 
     public T get() {
@@ -29,16 +29,10 @@ public final class DoubleCheck<T> implements Provider<T>, Lazy<T> {
     }
 
     public static Object reentrantCheck(Object obj, Object obj2) {
-        if ((obj != UNINITIALIZED ? 1 : null) == null || obj == obj2) {
+        if (!(obj != UNINITIALIZED) || obj == obj2) {
             return obj2;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Scoped provider was invoked recursively returning different results: ");
-        stringBuilder.append(obj);
-        stringBuilder.append(" & ");
-        stringBuilder.append(obj2);
-        stringBuilder.append(". This is likely due to a circular dependency.");
-        throw new IllegalStateException(stringBuilder.toString());
+        throw new IllegalStateException("Scoped provider was invoked recursively returning different results: " + obj + " & " + obj2 + ". This is likely due to a circular dependency.");
     }
 
     public static <P extends Provider<T>, T> Provider<T> provider(P p) {

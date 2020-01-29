@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.View;
 import java.util.ArrayList;
@@ -13,17 +13,40 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 
 public class FireworksOverlay extends View {
-    private static int[] colors = new int[]{-13845272, -6421296, -79102, -187561, -14185218, -10897300};
+    private static int[] colors = {-13845272, -6421296, -79102, -187561, -14185218, -10897300};
     private static final int fallParticlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 20 : 30);
-    private static Paint[] paint = new Paint[colors.length];
+    /* access modifiers changed from: private */
+    public static Paint[] paint = new Paint[colors.length];
     private static final int particlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 50 : 60);
     private int fallingDownCount;
     private long lastUpdateTime;
-    private ArrayList<Particle> particles = new ArrayList(particlesCount + fallParticlesCount);
-    private RectF rect = new RectF();
-    private float speedCoef = 1.0f;
+    private ArrayList<Particle> particles = new ArrayList<>(particlesCount + fallParticlesCount);
+    /* access modifiers changed from: private */
+    public RectF rect = new RectF();
+    /* access modifiers changed from: private */
+    public float speedCoef = 1.0f;
     private boolean started;
     private boolean startedFall;
+
+    static /* synthetic */ int access$308(FireworksOverlay fireworksOverlay) {
+        int i = fireworksOverlay.fallingDownCount;
+        fireworksOverlay.fallingDownCount = i + 1;
+        return i;
+    }
+
+    static {
+        int i = 0;
+        while (true) {
+            Paint[] paintArr = paint;
+            if (i < paintArr.length) {
+                paintArr[i] = new Paint(1);
+                paint[i].setColor(colors[i]);
+                i++;
+            } else {
+                return;
+            }
+        }
+    }
 
     private class Particle {
         byte colorType;
@@ -41,8 +64,9 @@ public class FireworksOverlay extends View {
         private Particle() {
         }
 
-        private void draw(Canvas canvas) {
-            if (this.type == (byte) 0) {
+        /* access modifiers changed from: private */
+        public void draw(Canvas canvas) {
+            if (this.type == 0) {
                 canvas.drawCircle(this.x, this.y, (float) AndroidUtilities.dp((float) this.typeSize), FireworksOverlay.paint[this.colorType]);
                 return;
             }
@@ -53,26 +77,27 @@ public class FireworksOverlay extends View {
             canvas.restore();
         }
 
-        private boolean update(int i) {
+        /* access modifiers changed from: private */
+        public boolean update(int i) {
             float f = ((float) i) / 16.0f;
             float f2 = this.x;
             float f3 = this.moveX;
             this.x = f2 + (f3 * f);
             this.y += this.moveY * f;
-            if (this.xFinished != (byte) 0) {
-                f2 = ((float) AndroidUtilities.dp(1.0f)) * 0.5f;
-                if (this.xFinished == (byte) 1) {
-                    this.moveX += (f2 * f) * 0.05f;
-                    if (this.moveX >= f2) {
-                        this.xFinished = (byte) 2;
+            if (this.xFinished != 0) {
+                float dp = ((float) AndroidUtilities.dp(1.0f)) * 0.5f;
+                if (this.xFinished == 1) {
+                    this.moveX += dp * f * 0.05f;
+                    if (this.moveX >= dp) {
+                        this.xFinished = 2;
                     }
                 } else {
-                    this.moveX -= (f2 * f) * 0.05f;
-                    if (this.moveX <= (-f2)) {
-                        this.xFinished = (byte) 1;
+                    this.moveX -= (dp * f) * 0.05f;
+                    if (this.moveX <= (-dp)) {
+                        this.xFinished = 1;
                     }
                 }
-            } else if (this.side == (byte) 0) {
+            } else if (this.side == 0) {
                 if (f3 > 0.0f) {
                     this.moveX = f3 - (0.05f * f);
                     if (this.moveX <= 0.0f) {
@@ -87,21 +112,21 @@ public class FireworksOverlay extends View {
                     this.xFinished = this.finishedStart;
                 }
             }
-            f2 = ((float) (-AndroidUtilities.dp(1.0f))) / 2.0f;
-            Object obj = this.moveY < f2 ? 1 : null;
-            float f4 = this.moveY;
-            if (f4 > f2) {
-                this.moveY = f4 + (((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f) * FireworksOverlay.this.speedCoef);
+            float f4 = ((float) (-AndroidUtilities.dp(1.0f))) / 2.0f;
+            boolean z = this.moveY < f4;
+            float f5 = this.moveY;
+            if (f5 > f4) {
+                this.moveY = f5 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f * FireworksOverlay.this.speedCoef);
             } else {
-                this.moveY = f4 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f);
+                this.moveY = f5 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f);
             }
-            if (obj != null && this.moveY > f2) {
-                FireworksOverlay.this.fallingDownCount = FireworksOverlay.this.fallingDownCount + 1;
+            if (z && this.moveY > f4) {
+                FireworksOverlay.access$308(FireworksOverlay.this);
             }
-            if (this.type == (byte) 1) {
+            if (this.type == 1) {
                 this.rotation = (short) ((int) (((float) this.rotation) + (f * 10.0f)));
                 short s = this.rotation;
-                if (s > (short) 360) {
+                if (s > 360) {
                     this.rotation = (short) (s - 360);
                 }
             }
@@ -109,20 +134,6 @@ public class FireworksOverlay extends View {
                 return true;
             }
             return false;
-        }
-    }
-
-    static {
-        int i = 0;
-        while (true) {
-            Paint[] paintArr = paint;
-            if (i < paintArr.length) {
-                paintArr[i] = new Paint(1);
-                paint[i].setColor(colors[i]);
-                i++;
-            } else {
-                return;
-            }
         }
     }
 
@@ -137,24 +148,24 @@ public class FireworksOverlay extends View {
         particle.side = (byte) Utilities.random.nextInt(2);
         int i = 1;
         particle.finishedStart = (byte) (Utilities.random.nextInt(2) + 1);
-        if (particle.type == (byte) 0) {
+        if (particle.type == 0) {
             particle.typeSize = (byte) ((int) ((Utilities.random.nextFloat() * 2.0f) + 4.0f));
         } else {
             particle.typeSize = (byte) ((int) ((Utilities.random.nextFloat() * 4.0f) + 4.0f));
         }
         if (z) {
-            particle.y = ((-Utilities.random.nextFloat()) * ((float) getMeasuredHeight())) * 1.2f;
+            particle.y = (-Utilities.random.nextFloat()) * ((float) getMeasuredHeight()) * 1.2f;
             particle.x = (float) (AndroidUtilities.dp(5.0f) + Utilities.random.nextInt(getMeasuredWidth() - AndroidUtilities.dp(10.0f)));
             particle.xFinished = particle.finishedStart;
         } else {
             int dp = AndroidUtilities.dp((float) (Utilities.random.nextInt(10) + 4));
             int measuredHeight = getMeasuredHeight() / 4;
-            if (particle.side == (byte) 0) {
+            if (particle.side == 0) {
                 particle.x = (float) (-dp);
             } else {
                 particle.x = (float) (getMeasuredWidth() + dp);
             }
-            if (particle.side != (byte) 0) {
+            if (particle.side != 0) {
                 i = -1;
             }
             particle.moveX = ((float) i) * (((float) AndroidUtilities.dp(1.2f)) + (Utilities.random.nextFloat() * ((float) AndroidUtilities.dp(4.0f))));
@@ -166,8 +177,8 @@ public class FireworksOverlay extends View {
 
     public void start() {
         this.particles.clear();
-        if (VERSION.SDK_INT >= 18) {
-            setLayerType(2, null);
+        if (Build.VERSION.SDK_INT >= 18) {
+            setLayerType(2, (Paint) null);
         }
         this.started = true;
         this.startedFall = false;
@@ -188,7 +199,7 @@ public class FireworksOverlay extends View {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         int i = (int) (elapsedRealtime - this.lastUpdateTime);
@@ -199,7 +210,7 @@ public class FireworksOverlay extends View {
         int size = this.particles.size();
         int i2 = 0;
         while (i2 < size) {
-            Particle particle = (Particle) this.particles.get(i2);
+            Particle particle = this.particles.get(i2);
             particle.draw(canvas);
             if (particle.update(i)) {
                 this.particles.remove(i2);
@@ -215,20 +226,23 @@ public class FireworksOverlay extends View {
                 this.speedCoef = 0.2f;
             }
         }
-        if (this.particles.isEmpty()) {
-            this.started = false;
-            if (VERSION.SDK_INT >= 18) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$FireworksOverlay$oOSeFZ55fw5HfKPOkZstVG73qlM(this));
-                return;
-            }
+        if (!this.particles.isEmpty()) {
+            invalidate();
             return;
         }
-        invalidate();
+        this.started = false;
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    FireworksOverlay.this.lambda$onDraw$0$FireworksOverlay();
+                }
+            });
+        }
     }
 
     public /* synthetic */ void lambda$onDraw$0$FireworksOverlay() {
         if (!this.started) {
-            setLayerType(0, null);
+            setLayerType(0, (Paint) null);
         }
     }
 }

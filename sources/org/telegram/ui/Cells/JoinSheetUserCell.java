@@ -1,15 +1,16 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -33,28 +34,25 @@ public class JoinSheetUserCell extends FrameLayout {
         this.nameTextView.setGravity(49);
         this.nameTextView.setLines(1);
         this.nameTextView.setSingleLine(true);
-        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 65.0f, 6.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
     }
 
-    public void setUser(User user) {
+    public void setUser(TLRPC.User user) {
         this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
         this.avatarDrawable.setInfo(user);
-        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
+        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
     }
 
     public void setCount(int i) {
         this.nameTextView.setText("");
-        AvatarDrawable avatarDrawable = this.avatarDrawable;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("+");
-        stringBuilder.append(LocaleController.formatShortNumber(i, this.result));
-        avatarDrawable.setInfo(0, null, null, stringBuilder.toString());
-        this.imageView.setImage(null, "50_50", this.avatarDrawable, null);
+        AvatarDrawable avatarDrawable2 = this.avatarDrawable;
+        avatarDrawable2.setInfo(0, (String) null, (String) null, "+" + LocaleController.formatShortNumber(i, this.result));
+        this.imageView.setImage((ImageLocation) null, "50_50", (Drawable) this.avatarDrawable, (Object) null);
     }
 }

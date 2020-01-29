@@ -3,10 +3,10 @@ package org.aspectj.runtime.reflect;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.reflect.SourceLocation;
+import org.aspectj.runtime.reflect.JoinPointImpl;
 
 public final class Factory {
     private static Object[] NO_ARGS = new Object[0];
@@ -44,11 +44,12 @@ public final class Factory {
             return Class.forName(str);
         } catch (ClassNotFoundException unused) {
             Class cls2 = class$java$lang$ClassNotFoundException;
-            if (cls2 == null) {
-                cls2 = class$("java.lang.ClassNotFoundException");
-                class$java$lang$ClassNotFoundException = cls2;
+            if (cls2 != null) {
+                return cls2;
             }
-            return cls2;
+            Class class$ = class$("java.lang.ClassNotFoundException");
+            class$java$lang$ClassNotFoundException = class$;
+            return class$;
         }
     }
 
@@ -66,44 +67,43 @@ public final class Factory {
         this.lookupClassLoader = cls.getClassLoader();
     }
 
-    public StaticPart makeSJP(String str, Signature signature, int i) {
+    public JoinPoint.StaticPart makeSJP(String str, Signature signature, int i) {
         int i2 = this.count;
         this.count = i2 + 1;
-        return new StaticPartImpl(i2, str, signature, makeSourceLoc(i, -1));
+        return new JoinPointImpl.StaticPartImpl(i2, str, signature, makeSourceLoc(i, -1));
     }
 
-    public static JoinPoint makeJP(StaticPart staticPart, Object obj, Object obj2) {
+    public static JoinPoint makeJP(JoinPoint.StaticPart staticPart, Object obj, Object obj2) {
         return new JoinPointImpl(staticPart, obj, obj2, NO_ARGS);
     }
 
-    public static JoinPoint makeJP(StaticPart staticPart, Object obj, Object obj2, Object obj3) {
+    public static JoinPoint makeJP(JoinPoint.StaticPart staticPart, Object obj, Object obj2, Object obj3) {
         return new JoinPointImpl(staticPart, obj, obj2, new Object[]{obj3});
     }
 
     public MethodSignature makeMethodSig(String str, String str2, String str3, String str4, String str5, String str6, String str7) {
         String str8 = str;
         int parseInt = Integer.parseInt(str, 16);
-        str8 = str3;
+        String str9 = str3;
         Class makeClass = makeClass(str3, this.lookupClassLoader);
-        str8 = ":";
-        String str9 = str4;
-        StringTokenizer stringTokenizer = new StringTokenizer(str4, str8);
+        String str10 = str4;
+        StringTokenizer stringTokenizer = new StringTokenizer(str4, ":");
         int countTokens = stringTokenizer.countTokens();
         Class[] clsArr = new Class[countTokens];
         for (int i = 0; i < countTokens; i++) {
             clsArr[i] = makeClass(stringTokenizer.nextToken(), this.lookupClassLoader);
         }
-        stringTokenizer = new StringTokenizer(str5, str8);
-        countTokens = stringTokenizer.countTokens();
-        String[] strArr = new String[countTokens];
-        for (int i2 = 0; i2 < countTokens; i2++) {
-            strArr[i2] = stringTokenizer.nextToken();
+        StringTokenizer stringTokenizer2 = new StringTokenizer(str5, ":");
+        int countTokens2 = stringTokenizer2.countTokens();
+        String[] strArr = new String[countTokens2];
+        for (int i2 = 0; i2 < countTokens2; i2++) {
+            strArr[i2] = stringTokenizer2.nextToken();
         }
-        stringTokenizer = new StringTokenizer(str6, str8);
-        int countTokens2 = stringTokenizer.countTokens();
-        Class[] clsArr2 = new Class[countTokens2];
-        for (int i3 = 0; i3 < countTokens2; i3++) {
-            clsArr2[i3] = makeClass(stringTokenizer.nextToken(), this.lookupClassLoader);
+        StringTokenizer stringTokenizer3 = new StringTokenizer(str6, ":");
+        int countTokens3 = stringTokenizer3.countTokens();
+        Class[] clsArr2 = new Class[countTokens3];
+        for (int i3 = 0; i3 < countTokens3; i3++) {
+            clsArr2[i3] = makeClass(stringTokenizer3.nextToken(), this.lookupClassLoader);
         }
         return new MethodSignatureImpl(parseInt, str2, makeClass, clsArr, strArr, clsArr2, makeClass(str7, this.lookupClassLoader));
     }

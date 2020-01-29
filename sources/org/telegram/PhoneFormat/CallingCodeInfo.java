@@ -5,76 +5,75 @@ import java.util.Iterator;
 
 public class CallingCodeInfo {
     public String callingCode = "";
-    public ArrayList<String> countries = new ArrayList();
-    public ArrayList<String> intlPrefixes = new ArrayList();
-    public ArrayList<RuleSet> ruleSets = new ArrayList();
-    public ArrayList<String> trunkPrefixes = new ArrayList();
+    public ArrayList<String> countries = new ArrayList<>();
+    public ArrayList<String> intlPrefixes = new ArrayList<>();
+    public ArrayList<RuleSet> ruleSets = new ArrayList<>();
+    public ArrayList<String> trunkPrefixes = new ArrayList<>();
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String matchingAccessCode(String str) {
-        Iterator it = this.intlPrefixes.iterator();
+        Iterator<String> it = this.intlPrefixes.iterator();
         while (it.hasNext()) {
-            String str2 = (String) it.next();
-            if (str.startsWith(str2)) {
-                return str2;
+            String next = it.next();
+            if (str.startsWith(next)) {
+                return next;
             }
         }
         return null;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String matchingTrunkCode(String str) {
-        Iterator it = this.trunkPrefixes.iterator();
+        Iterator<String> it = this.trunkPrefixes.iterator();
         while (it.hasNext()) {
-            String str2 = (String) it.next();
-            if (str.startsWith(str2)) {
-                return str2;
+            String next = it.next();
+            if (str.startsWith(next)) {
+                return next;
             }
         }
         return null;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String format(String str) {
         String str2;
-        String substring;
-        String format;
-        String str3 = null;
+        String str3;
+        String str4 = null;
         if (str.startsWith(this.callingCode)) {
-            str2 = this.callingCode;
-            substring = str.substring(str2.length());
+            str3 = this.callingCode;
+            str2 = str.substring(str3.length());
         } else {
-            str2 = matchingTrunkCode(str);
-            if (str2 != null) {
-                substring = str.substring(str2.length());
-                str3 = str2;
-                str2 = null;
+            String matchingTrunkCode = matchingTrunkCode(str);
+            if (matchingTrunkCode != null) {
+                str2 = str.substring(matchingTrunkCode.length());
+                str4 = matchingTrunkCode;
+                str3 = null;
             } else {
-                substring = str;
-                str2 = null;
+                str2 = str;
+                str3 = null;
             }
         }
-        Iterator it = this.ruleSets.iterator();
+        Iterator<RuleSet> it = this.ruleSets.iterator();
         while (it.hasNext()) {
-            format = ((RuleSet) it.next()).format(substring, str2, str3, true);
+            String format = it.next().format(str2, str3, str4, true);
             if (format != null) {
                 return format;
             }
         }
-        it = this.ruleSets.iterator();
-        while (it.hasNext()) {
-            format = ((RuleSet) it.next()).format(substring, str2, str3, false);
-            if (format != null) {
-                return format;
+        Iterator<RuleSet> it2 = this.ruleSets.iterator();
+        while (it2.hasNext()) {
+            String format2 = it2.next().format(str2, str3, str4, false);
+            if (format2 != null) {
+                return format2;
             }
         }
-        if (!(str2 == null || substring.length() == 0)) {
-            str = String.format("%s %s", new Object[]{str2, substring});
+        if (str3 == null || str2.length() == 0) {
+            return str;
         }
-        return str;
+        return String.format("%s %s", new Object[]{str3, str2});
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean isValidPhoneNumber(String str) {
         String str2;
         String str3 = null;
@@ -82,24 +81,24 @@ public class CallingCodeInfo {
             str2 = this.callingCode;
             str = str.substring(str2.length());
         } else {
-            str2 = matchingTrunkCode(str);
-            if (str2 != null) {
-                str = str.substring(str2.length());
-                str3 = str2;
+            String matchingTrunkCode = matchingTrunkCode(str);
+            if (matchingTrunkCode != null) {
+                str = str.substring(matchingTrunkCode.length());
+                str3 = matchingTrunkCode;
                 str2 = null;
             } else {
                 str2 = null;
             }
         }
-        Iterator it = this.ruleSets.iterator();
+        Iterator<RuleSet> it = this.ruleSets.iterator();
         while (it.hasNext()) {
-            if (((RuleSet) it.next()).isValid(str, str2, str3, true)) {
+            if (it.next().isValid(str, str2, str3, true)) {
                 return true;
             }
         }
-        it = this.ruleSets.iterator();
-        while (it.hasNext()) {
-            if (((RuleSet) it.next()).isValid(str, str2, str3, false)) {
+        Iterator<RuleSet> it2 = this.ruleSets.iterator();
+        while (it2.hasNext()) {
+            if (it2.next().isValid(str, str2, str3, false)) {
                 return true;
             }
         }

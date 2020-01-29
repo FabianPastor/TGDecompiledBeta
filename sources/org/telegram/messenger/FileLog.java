@@ -42,27 +42,17 @@ public class FileLog {
         if (!this.initied) {
             this.dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
             try {
-                File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+                File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir((String) null);
                 if (externalFilesDir != null) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(externalFilesDir.getAbsolutePath());
-                    stringBuilder.append("/logs");
-                    File file = new File(stringBuilder.toString());
+                    File file = new File(externalFilesDir.getAbsolutePath() + "/logs");
                     file.mkdirs();
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(this.dateFormat.format(System.currentTimeMillis()));
-                    stringBuilder.append(".txt");
-                    this.currentFile = new File(file, stringBuilder.toString());
+                    this.currentFile = new File(file, this.dateFormat.format(System.currentTimeMillis()) + ".txt");
                     try {
                         this.logQueue = new DispatchQueue("logQueue");
                         this.currentFile.createNewFile();
                         this.streamWriter = new OutputStreamWriter(new FileOutputStream(this.currentFile));
                         OutputStreamWriter outputStreamWriter = this.streamWriter;
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("-----start log ");
-                        stringBuilder2.append(this.dateFormat.format(System.currentTimeMillis()));
-                        stringBuilder2.append("-----\n");
-                        outputStreamWriter.write(stringBuilder2.toString());
+                        outputStreamWriter.write("-----start log " + this.dateFormat.format(System.currentTimeMillis()) + "-----\n");
                         this.streamWriter.flush();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -80,56 +70,42 @@ public class FileLog {
     }
 
     public static String getNetworkLogPath() {
-        String str = "";
         if (!BuildVars.LOGS_ENABLED) {
-            return str;
+            return "";
         }
         try {
-            File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+            File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir((String) null);
             if (externalFilesDir == null) {
-                return str;
+                return "";
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(externalFilesDir.getAbsolutePath());
-            stringBuilder.append("/logs");
-            File file = new File(stringBuilder.toString());
+            File file = new File(externalFilesDir.getAbsolutePath() + "/logs");
             file.mkdirs();
             FileLog instance = getInstance();
-            StringBuilder stringBuilder2 = new StringBuilder();
-            stringBuilder2.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder2.append("_net.txt");
-            instance.networkFile = new File(file, stringBuilder2.toString());
+            instance.networkFile = new File(file, getInstance().dateFormat.format(System.currentTimeMillis()) + "_net.txt");
             return getInstance().networkFile.getAbsolutePath();
         } catch (Throwable th) {
             th.printStackTrace();
-            return str;
+            return "";
         }
     }
 
     public static String getTonlibLogPath() {
-        String str = "";
         if (!BuildVars.LOGS_ENABLED) {
-            return str;
+            return "";
         }
         try {
-            File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+            File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir((String) null);
             if (externalFilesDir == null) {
-                return str;
+                return "";
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(externalFilesDir.getAbsolutePath());
-            stringBuilder.append("/logs");
-            File file = new File(stringBuilder.toString());
+            File file = new File(externalFilesDir.getAbsolutePath() + "/logs");
             file.mkdirs();
             FileLog instance = getInstance();
-            StringBuilder stringBuilder2 = new StringBuilder();
-            stringBuilder2.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder2.append("_tonlib.txt");
-            instance.tonlibFile = new File(file, stringBuilder2.toString());
+            instance.tonlibFile = new File(file, getInstance().dateFormat.format(System.currentTimeMillis()) + "_tonlib.txt");
             return getInstance().tonlibFile.getAbsolutePath();
         } catch (Throwable th) {
             th.printStackTrace();
-            return str;
+            return "";
         }
     }
 
@@ -138,7 +114,19 @@ public class FileLog {
             ensureInitied();
             Log.e("tmessages", str, th);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new -$$Lambda$FileLog$U3_7mjWjDO5tBtPnAliQ7P97K6k(str, th));
+                getInstance().logQueue.postRunnable(new Runnable(str, th) {
+                    private final /* synthetic */ String f$0;
+                    private final /* synthetic */ Throwable f$1;
+
+                    {
+                        this.f$0 = r1;
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        FileLog.lambda$e$0(this.f$0, this.f$1);
+                    }
+                });
             }
         }
     }
@@ -146,12 +134,7 @@ public class FileLog {
     static /* synthetic */ void lambda$e$0(String str, Throwable th) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder.append(" E/tmessages: ");
-            stringBuilder.append(str);
-            stringBuilder.append("\n");
-            outputStreamWriter.write(stringBuilder.toString());
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + str + "\n");
             getInstance().streamWriter.write(th.toString());
             getInstance().streamWriter.flush();
         } catch (Exception e) {
@@ -164,7 +147,17 @@ public class FileLog {
             ensureInitied();
             Log.e("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new -$$Lambda$FileLog$i7yDAXBrl68gcx0blG9TP5Nmrmw(str));
+                getInstance().logQueue.postRunnable(new Runnable(str) {
+                    private final /* synthetic */ String f$0;
+
+                    {
+                        this.f$0 = r1;
+                    }
+
+                    public final void run() {
+                        FileLog.lambda$e$1(this.f$0);
+                    }
+                });
             }
         }
     }
@@ -172,12 +165,7 @@ public class FileLog {
     static /* synthetic */ void lambda$e$1(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder.append(" E/tmessages: ");
-            stringBuilder.append(str);
-            stringBuilder.append("\n");
-            outputStreamWriter.write(stringBuilder.toString());
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + str + "\n");
             getInstance().streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,7 +177,17 @@ public class FileLog {
             ensureInitied();
             th.printStackTrace();
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new -$$Lambda$FileLog$nIyr75ATOMaf7ha7_MTqnmuRzrQ(th));
+                getInstance().logQueue.postRunnable(new Runnable(th) {
+                    private final /* synthetic */ Throwable f$0;
+
+                    {
+                        this.f$0 = r1;
+                    }
+
+                    public final void run() {
+                        FileLog.lambda$e$2(this.f$0);
+                    }
+                });
             } else {
                 th.printStackTrace();
             }
@@ -197,25 +195,13 @@ public class FileLog {
     }
 
     static /* synthetic */ void lambda$e$2(Throwable th) {
-        String str = "\n";
-        String str2 = " E/tmessages: ";
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder.append(str2);
-            stringBuilder.append(th);
-            stringBuilder.append(str);
-            outputStreamWriter.write(stringBuilder.toString());
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + th + "\n");
             StackTraceElement[] stackTrace = th.getStackTrace();
-            for (Object append : stackTrace) {
+            for (int i = 0; i < stackTrace.length; i++) {
                 OutputStreamWriter outputStreamWriter2 = getInstance().streamWriter;
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-                stringBuilder2.append(str2);
-                stringBuilder2.append(append);
-                stringBuilder2.append(str);
-                outputStreamWriter2.write(stringBuilder2.toString());
+                outputStreamWriter2.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stackTrace[i] + "\n");
             }
             getInstance().streamWriter.flush();
         } catch (Exception e) {
@@ -228,7 +214,17 @@ public class FileLog {
             ensureInitied();
             Log.d("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new -$$Lambda$FileLog$eWlFO8runhKiadqnBdmm0EveMAs(str));
+                getInstance().logQueue.postRunnable(new Runnable(str) {
+                    private final /* synthetic */ String f$0;
+
+                    {
+                        this.f$0 = r1;
+                    }
+
+                    public final void run() {
+                        FileLog.lambda$d$3(this.f$0);
+                    }
+                });
             }
         }
     }
@@ -236,12 +232,7 @@ public class FileLog {
     static /* synthetic */ void lambda$d$3(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder.append(" D/tmessages: ");
-            stringBuilder.append(str);
-            stringBuilder.append("\n");
-            outputStreamWriter.write(stringBuilder.toString());
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + str + "\n");
             getInstance().streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,7 +244,17 @@ public class FileLog {
             ensureInitied();
             Log.w("tmessages", str);
             if (getInstance().streamWriter != null) {
-                getInstance().logQueue.postRunnable(new -$$Lambda$FileLog$CtxtnEkTmpoT5uv6cLRigOvvNc8(str));
+                getInstance().logQueue.postRunnable(new Runnable(str) {
+                    private final /* synthetic */ String f$0;
+
+                    {
+                        this.f$0 = r1;
+                    }
+
+                    public final void run() {
+                        FileLog.lambda$w$4(this.f$0);
+                    }
+                });
             }
         }
     }
@@ -261,12 +262,7 @@ public class FileLog {
     static /* synthetic */ void lambda$w$4(String str) {
         try {
             OutputStreamWriter outputStreamWriter = getInstance().streamWriter;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getInstance().dateFormat.format(System.currentTimeMillis()));
-            stringBuilder.append(" W/tmessages: ");
-            stringBuilder.append(str);
-            stringBuilder.append("\n");
-            outputStreamWriter.write(stringBuilder.toString());
+            outputStreamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + str + "\n");
             getInstance().streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,12 +271,9 @@ public class FileLog {
 
     public static void cleanupLogs() {
         ensureInitied();
-        File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+        File externalFilesDir = ApplicationLoader.applicationContext.getExternalFilesDir((String) null);
         if (externalFilesDir != null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(externalFilesDir.getAbsolutePath());
-            stringBuilder.append("/logs");
-            File[] listFiles = new File(stringBuilder.toString()).listFiles();
+            File[] listFiles = new File(externalFilesDir.getAbsolutePath() + "/logs").listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
                     if ((getInstance().currentFile == null || !file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) && ((getInstance().networkFile == null || !file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) && (getInstance().tonlibFile == null || !file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())))) {

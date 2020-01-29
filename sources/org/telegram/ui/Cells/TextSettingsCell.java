@@ -4,14 +4,13 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -30,15 +29,16 @@ public class TextSettingsCell extends FrameLayout {
         this(context, 21);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public TextSettingsCell(Context context, int i) {
-        Context context2 = context;
         super(context);
+        Context context2 = context;
         this.textView = new TextView(context2);
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i2 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -49,34 +49,30 @@ public class TextSettingsCell extends FrameLayout {
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        this.valueTextView.setEllipsize(TruncateAt.END);
+        this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, f, 0.0f, f, 0.0f));
         this.valueImageView = new ImageView(context2);
-        this.valueImageView.setScaleType(ScaleType.CENTER);
+        this.valueImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
-        this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
-        ImageView imageView = this.valueImageView;
-        if (LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(imageView, LayoutHelper.createFrame(-2, -2.0f, i2 | 16, f, 0.0f, f, 0.0f));
+        this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        addView(this.valueImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : i2) | 16, f, 0.0f, f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + this.needDivider);
-        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
-        i2 = i / 2;
+        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0));
+        int measuredWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        int i3 = measuredWidth / 2;
         if (this.valueImageView.getVisibility() == 0) {
-            this.valueImageView.measure(MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+            this.valueImageView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
         }
         if (this.valueTextView.getVisibility() == 0) {
-            this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-            i = (i - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f);
+            this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+            measuredWidth = (measuredWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f);
         }
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, NUM), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
     public TextView getTextView() {
@@ -104,7 +100,7 @@ public class TextSettingsCell extends FrameLayout {
         this.valueTextView.setVisibility(4);
         this.valueImageView.setVisibility(4);
         this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndValue(String str, String str2, boolean z) {
@@ -117,7 +113,7 @@ public class TextSettingsCell extends FrameLayout {
             this.valueTextView.setVisibility(4);
         }
         this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
         requestLayout();
     }
 
@@ -131,32 +127,31 @@ public class TextSettingsCell extends FrameLayout {
             this.valueImageView.setVisibility(4);
         }
         this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
     }
 
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         setEnabled(z);
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView = this.textView;
+            TextView textView2 = this.textView;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            String str = "alpha";
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
             if (this.valueTextView.getVisibility() == 0) {
-                textView = this.valueTextView;
-                fArr = new float[1];
-                fArr[0] = z ? 1.0f : 0.5f;
-                arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+                TextView textView3 = this.valueTextView;
+                float[] fArr2 = new float[1];
+                fArr2[0] = z ? 1.0f : 0.5f;
+                arrayList.add(ObjectAnimator.ofFloat(textView3, "alpha", fArr2));
             }
             if (this.valueImageView.getVisibility() == 0) {
                 ImageView imageView = this.valueImageView;
-                float[] fArr2 = new float[1];
+                float[] fArr3 = new float[1];
                 if (!z) {
                     f = 0.5f;
                 }
-                fArr2[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(imageView, str, fArr2));
+                fArr3[0] = f;
+                arrayList.add(ObjectAnimator.ofFloat(imageView, "alpha", fArr3));
                 return;
             }
             return;
@@ -176,14 +171,10 @@ public class TextSettingsCell extends FrameLayout {
 
     public void setEnabled(boolean z) {
         super.setEnabled(z);
-        TextView textView = this.textView;
         float f = 0.5f;
-        float f2 = (z || !this.canDisable) ? 1.0f : 0.5f;
-        textView.setAlpha(f2);
+        this.textView.setAlpha((z || !this.canDisable) ? 1.0f : 0.5f);
         if (this.valueTextView.getVisibility() == 0) {
-            textView = this.valueTextView;
-            f2 = (z || !this.canDisable) ? 1.0f : 0.5f;
-            textView.setAlpha(f2);
+            this.valueTextView.setAlpha((z || !this.canDisable) ? 1.0f : 0.5f);
         }
         if (this.valueImageView.getVisibility() == 0) {
             ImageView imageView = this.valueImageView;
@@ -194,7 +185,7 @@ public class TextSettingsCell extends FrameLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

@@ -10,9 +10,9 @@ public class SparseLongArray implements Cloneable {
     }
 
     public SparseLongArray(int i) {
-        i = ArrayUtils.idealLongArraySize(i);
-        this.mKeys = new int[i];
-        this.mValues = new long[i];
+        int idealLongArraySize = ArrayUtils.idealLongArraySize(i);
+        this.mKeys = new int[idealLongArraySize];
+        this.mValues = new long[idealLongArraySize];
         this.mSize = 0;
     }
 
@@ -36,17 +36,17 @@ public class SparseLongArray implements Cloneable {
     }
 
     public long get(int i, long j) {
-        i = binarySearch(this.mKeys, 0, this.mSize, (long) i);
-        if (i < 0) {
+        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
+        if (binarySearch < 0) {
             return j;
         }
-        return this.mValues[i];
+        return this.mValues[binarySearch];
     }
 
     public void delete(int i) {
-        i = binarySearch(this.mKeys, 0, this.mSize, (long) i);
-        if (i >= 0) {
-            removeAt(i);
+        int binarySearch = binarySearch(this.mKeys, 0, this.mSize, (long) i);
+        if (binarySearch >= 0) {
+            removeAt(binarySearch);
         }
     }
 
@@ -65,21 +65,21 @@ public class SparseLongArray implements Cloneable {
             this.mValues[binarySearch] = j;
             return;
         }
-        binarySearch ^= -1;
-        int i2 = this.mSize;
-        if (i2 >= this.mKeys.length) {
-            growKeyAndValueArrays(i2 + 1);
+        int i2 = binarySearch ^ -1;
+        int i3 = this.mSize;
+        if (i3 >= this.mKeys.length) {
+            growKeyAndValueArrays(i3 + 1);
         }
-        i2 = this.mSize;
-        if (i2 - binarySearch != 0) {
+        int i4 = this.mSize;
+        if (i4 - i2 != 0) {
             int[] iArr = this.mKeys;
-            int i3 = binarySearch + 1;
-            System.arraycopy(iArr, binarySearch, iArr, i3, i2 - binarySearch);
+            int i5 = i2 + 1;
+            System.arraycopy(iArr, i2, iArr, i5, i4 - i2);
             long[] jArr = this.mValues;
-            System.arraycopy(jArr, binarySearch, jArr, i3, this.mSize - binarySearch);
+            System.arraycopy(jArr, i2, jArr, i5, this.mSize - i2);
         }
-        this.mKeys[binarySearch] = i;
-        this.mValues[binarySearch] = j;
+        this.mKeys[i2] = i;
+        this.mValues[i2] = j;
         this.mSize++;
     }
 
@@ -115,22 +115,22 @@ public class SparseLongArray implements Cloneable {
     public void append(int i, long j) {
         int i2 = this.mSize;
         if (i2 == 0 || i > this.mKeys[i2 - 1]) {
-            i2 = this.mSize;
-            if (i2 >= this.mKeys.length) {
-                growKeyAndValueArrays(i2 + 1);
+            int i3 = this.mSize;
+            if (i3 >= this.mKeys.length) {
+                growKeyAndValueArrays(i3 + 1);
             }
-            this.mKeys[i2] = i;
-            this.mValues[i2] = j;
-            this.mSize = i2 + 1;
+            this.mKeys[i3] = i;
+            this.mValues[i3] = j;
+            this.mSize = i3 + 1;
             return;
         }
         put(i, j);
     }
 
     private void growKeyAndValueArrays(int i) {
-        i = ArrayUtils.idealLongArraySize(i);
-        int[] iArr = new int[i];
-        long[] jArr = new long[i];
+        int idealLongArraySize = ArrayUtils.idealLongArraySize(i);
+        int[] iArr = new int[idealLongArraySize];
+        long[] jArr = new long[idealLongArraySize];
         int[] iArr2 = this.mKeys;
         System.arraycopy(iArr2, 0, iArr, 0, iArr2.length);
         long[] jArr2 = this.mValues;
@@ -140,20 +140,20 @@ public class SparseLongArray implements Cloneable {
     }
 
     private static int binarySearch(int[] iArr, int i, int i2, long j) {
-        i2 += i;
-        int i3 = i - 1;
-        i = i2;
-        while (i - i3 > 1) {
-            int i4 = (i + i3) / 2;
-            if (((long) iArr[i4]) < j) {
-                i3 = i4;
+        int i3 = i2 + i;
+        int i4 = i - 1;
+        int i5 = i3;
+        while (i5 - i4 > 1) {
+            int i6 = (i5 + i4) / 2;
+            if (((long) iArr[i6]) < j) {
+                i4 = i6;
             } else {
-                i = i4;
+                i5 = i6;
             }
         }
-        if (i == i2) {
-            return i2 ^ -1;
+        if (i5 == i3) {
+            return i3 ^ -1;
         }
-        return ((long) iArr[i]) == j ? i : i ^ -1;
+        return ((long) iArr[i5]) == j ? i5 : i5 ^ -1;
     }
 }

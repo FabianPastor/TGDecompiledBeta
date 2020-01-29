@@ -3,8 +3,7 @@ package org.telegram.ui.Components;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import java.util.Iterator;
@@ -13,10 +12,10 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 @SuppressLint({"NewApi"})
-public class ForegroundDetector implements ActivityLifecycleCallbacks {
+public class ForegroundDetector implements Application.ActivityLifecycleCallbacks {
     private static ForegroundDetector Instance;
     private long enterBackgroundTime = 0;
-    private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList();
+    private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
     private int refs;
     private boolean wasInBackground = true;
 
@@ -76,19 +75,19 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("switch to foreground");
             }
-            Iterator it = this.listeners.iterator();
+            Iterator<Listener> it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {
-                    ((Listener) it.next()).onBecameForeground();
+                    it.next().onBecameForeground();
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
             }
         }
     }
 
     public boolean isWasInBackground(boolean z) {
-        if (z && VERSION.SDK_INT >= 21 && SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
+        if (z && Build.VERSION.SDK_INT >= 21 && SystemClock.elapsedRealtime() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -107,12 +106,12 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("switch to background");
             }
-            Iterator it = this.listeners.iterator();
+            Iterator<Listener> it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {
-                    ((Listener) it.next()).onBecameBackground();
+                    it.next().onBecameBackground();
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
             }
         }

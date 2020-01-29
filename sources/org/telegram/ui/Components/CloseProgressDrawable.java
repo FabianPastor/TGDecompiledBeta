@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
@@ -28,7 +27,7 @@ public class CloseProgressDrawable extends Drawable {
     public CloseProgressDrawable() {
         this.paint.setColor(-9079435);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.paint.setStrokeCap(Cap.ROUND);
+        this.paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     public void draw(Canvas canvas) {

@@ -32,6 +32,7 @@ public class VideoSeekBarView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
+        SeekBarDelegate seekBarDelegate;
         if (motionEvent == null) {
             return false;
         }
@@ -39,12 +40,11 @@ public class VideoSeekBarView extends View {
         float y = motionEvent.getY();
         float measuredWidth = (float) ((int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress));
         float f = 0.0f;
-        float f2;
         if (motionEvent.getAction() == 0) {
             int measuredHeight = getMeasuredHeight();
             int i = this.thumbWidth;
-            f2 = (float) ((measuredHeight - i) / 2);
-            if (measuredWidth - f2 <= x && x <= (((float) i) + measuredWidth) + f2 && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
+            float f2 = (float) ((measuredHeight - i) / 2);
+            if (measuredWidth - f2 <= x && x <= ((float) i) + measuredWidth + f2 && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
                 this.pressed = true;
                 this.thumbDX = (int) (x - measuredWidth);
                 getParent().requestDisallowInterceptTouchEvent(true);
@@ -53,20 +53,17 @@ public class VideoSeekBarView extends View {
             }
         } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             if (this.pressed) {
-                if (motionEvent.getAction() == 1) {
-                    SeekBarDelegate seekBarDelegate = this.delegate;
-                    if (seekBarDelegate != null) {
-                        seekBarDelegate.onSeekBarDrag(measuredWidth / ((float) (getMeasuredWidth() - this.thumbWidth)));
-                    }
+                if (motionEvent.getAction() == 1 && (seekBarDelegate = this.delegate) != null) {
+                    seekBarDelegate.onSeekBarDrag(measuredWidth / ((float) (getMeasuredWidth() - this.thumbWidth)));
                 }
                 this.pressed = false;
                 invalidate();
                 return true;
             }
         } else if (motionEvent.getAction() == 2 && this.pressed) {
-            f2 = (float) ((int) (x - ((float) this.thumbDX)));
-            if (f2 >= 0.0f) {
-                f = f2 > ((float) (getMeasuredWidth() - this.thumbWidth)) ? (float) (getMeasuredWidth() - this.thumbWidth) : f2;
+            float f3 = (float) ((int) (x - ((float) this.thumbDX)));
+            if (f3 >= 0.0f) {
+                f = f3 > ((float) (getMeasuredWidth() - this.thumbWidth)) ? (float) (getMeasuredWidth() - this.thumbWidth) : f3;
             }
             this.progress = f / ((float) (getMeasuredWidth() - this.thumbWidth));
             invalidate();
@@ -89,14 +86,12 @@ public class VideoSeekBarView extends View {
         return this.progress;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int measuredHeight = (getMeasuredHeight() - this.thumbHeight) / 2;
         int measuredWidth = getMeasuredWidth();
         int i = this.thumbWidth;
-        measuredWidth = (int) (((float) (measuredWidth - i)) * this.progress);
         canvas.drawRect((float) (i / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.paint);
-        i = this.thumbWidth;
-        canvas.drawCircle((float) (measuredWidth + (i / 2)), (float) (measuredHeight + (this.thumbHeight / 2)), (float) (i / 2), this.paint2);
+        int i2 = this.thumbWidth;
+        canvas.drawCircle((float) (((int) (((float) (measuredWidth - i)) * this.progress)) + (i2 / 2)), (float) (((getMeasuredHeight() - this.thumbHeight) / 2) + (this.thumbHeight / 2)), (float) (i2 / 2), this.paint2);
     }
 }

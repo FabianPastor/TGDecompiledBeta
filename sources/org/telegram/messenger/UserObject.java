@@ -2,45 +2,38 @@ package org.telegram.messenger;
 
 import android.text.TextUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.tgnet.TLRPC.TL_userContact_old2;
-import org.telegram.tgnet.TLRPC.TL_userDeleted_old2;
-import org.telegram.tgnet.TLRPC.TL_userEmpty;
-import org.telegram.tgnet.TLRPC.TL_userSelf_old3;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 
 public class UserObject {
-    public static boolean isDeleted(User user) {
-        return user == null || (user instanceof TL_userDeleted_old2) || (user instanceof TL_userEmpty) || user.deleted;
+    public static boolean isDeleted(TLRPC.User user) {
+        return user == null || (user instanceof TLRPC.TL_userDeleted_old2) || (user instanceof TLRPC.TL_userEmpty) || user.deleted;
     }
 
-    public static boolean isContact(User user) {
-        return user != null && ((user instanceof TL_userContact_old2) || user.contact || user.mutual_contact);
+    public static boolean isContact(TLRPC.User user) {
+        return user != null && ((user instanceof TLRPC.TL_userContact_old2) || user.contact || user.mutual_contact);
     }
 
-    public static boolean isUserSelf(User user) {
-        return user != null && ((user instanceof TL_userSelf_old3) || user.self);
+    public static boolean isUserSelf(TLRPC.User user) {
+        return user != null && ((user instanceof TLRPC.TL_userSelf_old3) || user.self);
     }
 
-    public static String getUserName(User user) {
+    public static String getUserName(TLRPC.User user) {
         if (user == null || isDeleted(user)) {
             return LocaleController.getString("HiddenName", NUM);
         }
         String formatName = ContactsController.formatName(user.first_name, user.last_name);
-        if (formatName.length() == 0 && !TextUtils.isEmpty(user.phone)) {
-            PhoneFormat instance = PhoneFormat.getInstance();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append(user.phone);
-            formatName = instance.format(stringBuilder.toString());
+        if (formatName.length() != 0 || TextUtils.isEmpty(user.phone)) {
+            return formatName;
         }
-        return formatName;
+        PhoneFormat instance = PhoneFormat.getInstance();
+        return instance.format("+" + user.phone);
     }
 
-    public static String getFirstName(User user) {
+    public static String getFirstName(TLRPC.User user) {
         return getFirstName(user, true);
     }
 
-    public static String getFirstName(User user, boolean z) {
+    public static String getFirstName(TLRPC.User user, boolean z) {
         if (user == null || isDeleted(user)) {
             return "DELETED";
         }
@@ -50,9 +43,6 @@ public class UserObject {
         } else if (!z && str.length() <= 2) {
             return ContactsController.formatName(user.first_name, user.last_name);
         }
-        if (TextUtils.isEmpty(str)) {
-            str = LocaleController.getString("HiddenName", NUM);
-        }
-        return str;
+        return !TextUtils.isEmpty(str) ? str : LocaleController.getString("HiddenName", NUM);
     }
 }

@@ -18,36 +18,28 @@ public final class Size {
     }
 
     public boolean equals(Object obj) {
-        boolean z = false;
         if (obj == null) {
             return false;
         }
         if (this == obj) {
             return true;
         }
-        if (obj instanceof Size) {
-            Size size = (Size) obj;
-            if (this.mWidth == size.mWidth && this.mHeight == size.mHeight) {
-                z = true;
-            }
+        if (!(obj instanceof Size)) {
+            return false;
         }
-        return z;
+        Size size = (Size) obj;
+        if (this.mWidth == size.mWidth && this.mHeight == size.mHeight) {
+            return true;
+        }
+        return false;
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.mWidth);
-        stringBuilder.append("x");
-        stringBuilder.append(this.mHeight);
-        return stringBuilder.toString();
+        return this.mWidth + "x" + this.mHeight;
     }
 
     private static NumberFormatException invalidSize(String str) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid Size: \"");
-        stringBuilder.append(str);
-        stringBuilder.append("\"");
-        throw new NumberFormatException(stringBuilder.toString());
+        throw new NumberFormatException("Invalid Size: \"" + str + "\"");
     }
 
     public static Size parseSize(String str) throws NumberFormatException {
@@ -61,8 +53,9 @@ public final class Size {
             } catch (NumberFormatException unused) {
                 throw invalidSize(str);
             }
+        } else {
+            throw invalidSize(str);
         }
-        throw invalidSize(str);
     }
 
     public int hashCode() {

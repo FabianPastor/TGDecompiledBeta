@@ -2,33 +2,29 @@ package org.telegram.ui;
 
 import android.animation.ValueAnimator;
 import android.content.ClipboardManager;
-import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.os.Build.VERSION;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.Transition;
-import android.transition.Transition.TransitionListener;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.widget.EditText;
+import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -43,15 +39,13 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.RadioCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -70,16 +64,21 @@ public class ProxySettingsActivity extends BaseFragment {
     private static final int TYPE_MTPROTO = 1;
     private static final int TYPE_SOCKS5 = 0;
     private static final int done_button = 1;
-    private boolean addingNewProxy;
+    /* access modifiers changed from: private */
+    public boolean addingNewProxy;
     private TextInfoPrivacyCell[] bottomCells;
-    private OnPrimaryClipChangedListener clipChangedListener;
+    private ClipboardManager.OnPrimaryClipChangedListener clipChangedListener;
     private ClipboardManager clipboardManager;
-    private ProxyInfo currentProxyInfo;
-    private int currentType;
+    /* access modifiers changed from: private */
+    public SharedConfig.ProxyInfo currentProxyInfo;
+    /* access modifiers changed from: private */
+    public int currentType;
     private ActionBarMenuItem doneItem;
     private HeaderCell headerCell;
-    private boolean ignoreOnTextChange;
-    private EditTextBoldCursor[] inputFields;
+    /* access modifiers changed from: private */
+    public boolean ignoreOnTextChange;
+    /* access modifiers changed from: private */
+    public EditTextBoldCursor[] inputFields;
     private LinearLayout inputFieldsContainer;
     private LinearLayout linearLayout2;
     private TextSettingsCell pasteCell;
@@ -109,23 +108,19 @@ public class ProxySettingsActivity extends BaseFragment {
             this.textView.setLines(1);
             this.textView.setMaxLines(1);
             this.textView.setSingleLine(true);
-            this.textView.setEllipsize(TruncateAt.END);
+            this.textView.setEllipsize(TextUtils.TruncateAt.END);
             int i = 5;
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
             this.checkImage = new ImageView(context);
-            this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
+            this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
             this.checkImage.setImageResource(NUM);
-            ImageView imageView = this.checkImage;
-            if (LocaleController.isRTL) {
-                i = 3;
-            }
-            addView(imageView, LayoutHelper.createFrame(19, 14.0f, i | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+            addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
         }
 
         public void setValue(String str, boolean z, boolean z2) {
@@ -138,7 +133,7 @@ public class ProxySettingsActivity extends BaseFragment {
             this.checkImage.setVisibility(z ? 0 : 4);
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
             if (this.needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
@@ -155,12 +150,16 @@ public class ProxySettingsActivity extends BaseFragment {
         this.shareDoneProgress = 1.0f;
         this.shareDoneProgressAnimValues = new float[2];
         this.shareDoneEnabled = true;
-        this.clipChangedListener = new -$$Lambda$ProxySettingsActivity$86x431i8X6AC1Da2KQzhzyF_ZiQ(this);
-        this.currentProxyInfo = new ProxyInfo("", 1080, "", "", "");
+        this.clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+            public final void onPrimaryClipChanged() {
+                ProxySettingsActivity.this.updatePasteCell();
+            }
+        };
+        this.currentProxyInfo = new SharedConfig.ProxyInfo("", 1080, "", "", "");
         this.addingNewProxy = true;
     }
 
-    public ProxySettingsActivity(ProxyInfo proxyInfo) {
+    public ProxySettingsActivity(SharedConfig.ProxyInfo proxyInfo) {
         this.sectionCell = new ShadowSectionCell[3];
         this.bottomCells = new TextInfoPrivacyCell[2];
         this.typeCell = new RadioCell[2];
@@ -169,7 +168,11 @@ public class ProxySettingsActivity extends BaseFragment {
         this.shareDoneProgress = 1.0f;
         this.shareDoneProgressAnimValues = new float[2];
         this.shareDoneEnabled = true;
-        this.clipChangedListener = new -$$Lambda$ProxySettingsActivity$86x431i8X6AC1Da2KQzhzyF_ZiQ(this);
+        this.clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+            public final void onPrimaryClipChanged() {
+                ProxySettingsActivity.this.updatePasteCell();
+            }
+        };
         this.currentProxyInfo = proxyInfo;
     }
 
@@ -186,7 +189,6 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        String str;
         Context context2 = context;
         this.actionBar.setTitle(LocaleController.getString("ProxyDetails", NUM));
         this.actionBar.setBackButtonImage(NUM);
@@ -194,34 +196,32 @@ public class ProxySettingsActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
+                boolean z;
                 if (i == -1) {
                     ProxySettingsActivity.this.finishFragment();
                 } else if (i == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
-                    boolean z;
                     ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
                     ProxySettingsActivity.this.currentProxyInfo.port = Utilities.parseInt(ProxySettingsActivity.this.inputFields[1].getText().toString()).intValue();
-                    String str = "";
                     if (ProxySettingsActivity.this.currentType == 0) {
-                        ProxySettingsActivity.this.currentProxyInfo.secret = str;
+                        ProxySettingsActivity.this.currentProxyInfo.secret = "";
                         ProxySettingsActivity.this.currentProxyInfo.username = ProxySettingsActivity.this.inputFields[2].getText().toString();
                         ProxySettingsActivity.this.currentProxyInfo.password = ProxySettingsActivity.this.inputFields[3].getText().toString();
                     } else {
                         ProxySettingsActivity.this.currentProxyInfo.secret = ProxySettingsActivity.this.inputFields[4].getText().toString();
-                        ProxySettingsActivity.this.currentProxyInfo.username = str;
-                        ProxySettingsActivity.this.currentProxyInfo.password = str;
+                        ProxySettingsActivity.this.currentProxyInfo.username = "";
+                        ProxySettingsActivity.this.currentProxyInfo.password = "";
                     }
                     SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                    Editor edit = globalMainSettings.edit();
-                    String str2 = "proxy_enabled";
+                    SharedPreferences.Editor edit = globalMainSettings.edit();
                     if (ProxySettingsActivity.this.addingNewProxy) {
                         SharedConfig.addProxy(ProxySettingsActivity.this.currentProxyInfo);
                         SharedConfig.currentProxy = ProxySettingsActivity.this.currentProxyInfo;
-                        edit.putBoolean(str2, true);
+                        edit.putBoolean("proxy_enabled", true);
                         z = true;
                     } else {
-                        boolean z2 = globalMainSettings.getBoolean(str2, false);
+                        boolean z2 = globalMainSettings.getBoolean("proxy_enabled", false);
                         SharedConfig.saveProxyList();
                         z = z2;
                     }
@@ -243,16 +243,19 @@ public class ProxySettingsActivity extends BaseFragment {
         this.doneItem.setContentDescription(LocaleController.getString("Done", NUM));
         this.fragmentView = new FrameLayout(context2);
         View view = this.fragmentView;
-        FrameLayout frameLayout = (FrameLayout) view;
         view.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         this.scrollView = new ScrollView(context2);
         this.scrollView.setFillViewport(true);
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("actionBarDefault"));
-        frameLayout.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
+        ((FrameLayout) view).addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
         this.linearLayout2 = new LinearLayout(context2);
         this.linearLayout2.setOrientation(1);
-        this.scrollView.addView(this.linearLayout2, new LayoutParams(-1, -2));
-        -$$Lambda$ProxySettingsActivity$m9BkTAI6IqJctow06HtssG_kLaQ -__lambda_proxysettingsactivity_m9bktai6iqjctow06htssg_klaq = new -$$Lambda$ProxySettingsActivity$m9BkTAI6IqJctow06HtssG_kLaQ(this);
+        this.scrollView.addView(this.linearLayout2, new FrameLayout.LayoutParams(-1, -2));
+        $$Lambda$ProxySettingsActivity$m9BkTAI6IqJctow06HtssG_kLaQ r2 = new View.OnClickListener() {
+            public final void onClick(View view) {
+                ProxySettingsActivity.this.lambda$createView$0$ProxySettingsActivity(view);
+            }
+        };
         int i = 0;
         while (i < 2) {
             this.typeCell[i] = new RadioCell(context2);
@@ -264,7 +267,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 this.typeCell[i].setText(LocaleController.getString("UseProxyTelegram", NUM), i == this.currentType, false);
             }
             this.linearLayout2.addView(this.typeCell[i], LayoutHelper.createLinear(-1, 50));
-            this.typeCell[i].setOnClickListener(-__lambda_proxysettingsactivity_m9bktai6iqjctow06htssg_klaq);
+            this.typeCell[i].setOnClickListener(r2);
             i++;
         }
         this.sectionCell[0] = new ShadowSectionCell(context2);
@@ -272,35 +275,33 @@ public class ProxySettingsActivity extends BaseFragment {
         this.inputFieldsContainer = new LinearLayout(context2);
         this.inputFieldsContainer.setOrientation(1);
         this.inputFieldsContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        if (VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             this.inputFieldsContainer.setElevation((float) AndroidUtilities.dp(1.0f));
-            this.inputFieldsContainer.setOutlineProvider(null);
+            this.inputFieldsContainer.setOutlineProvider((ViewOutlineProvider) null);
         }
         this.linearLayout2.addView(this.inputFieldsContainer, LayoutHelper.createLinear(-1, -2));
-        int i2 = 5;
         this.inputFields = new EditTextBoldCursor[5];
-        i = 0;
-        while (i < i2) {
-            FrameLayout frameLayout2 = new FrameLayout(context2);
-            this.inputFieldsContainer.addView(frameLayout2, LayoutHelper.createLinear(-1, 64));
-            this.inputFields[i] = new EditTextBoldCursor(context2);
-            this.inputFields[i].setTag(Integer.valueOf(i));
-            this.inputFields[i].setTextSize(1, 16.0f);
-            this.inputFields[i].setHintColor(Theme.getColor("windowBackgroundWhiteHintText"));
-            str = "windowBackgroundWhiteBlackText";
-            this.inputFields[i].setTextColor(Theme.getColor(str));
-            this.inputFields[i].setBackground(null);
-            this.inputFields[i].setCursorColor(Theme.getColor(str));
-            this.inputFields[i].setCursorSize(AndroidUtilities.dp(20.0f));
-            this.inputFields[i].setCursorWidth(1.5f);
-            this.inputFields[i].setSingleLine(true);
-            this.inputFields[i].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            this.inputFields[i].setHeaderHintColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
-            this.inputFields[i].setTransformHintToHeader(true);
-            this.inputFields[i].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
-            if (i == 0) {
-                this.inputFields[i].setInputType(524305);
-                this.inputFields[i].addTextChangedListener(new TextWatcher() {
+        int i2 = 0;
+        for (int i3 = 5; i2 < i3; i3 = 5) {
+            FrameLayout frameLayout = new FrameLayout(context2);
+            this.inputFieldsContainer.addView(frameLayout, LayoutHelper.createLinear(-1, 64));
+            this.inputFields[i2] = new EditTextBoldCursor(context2);
+            this.inputFields[i2].setTag(Integer.valueOf(i2));
+            this.inputFields[i2].setTextSize(1, 16.0f);
+            this.inputFields[i2].setHintColor(Theme.getColor("windowBackgroundWhiteHintText"));
+            this.inputFields[i2].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.inputFields[i2].setBackground((Drawable) null);
+            this.inputFields[i2].setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.inputFields[i2].setCursorSize(AndroidUtilities.dp(20.0f));
+            this.inputFields[i2].setCursorWidth(1.5f);
+            this.inputFields[i2].setSingleLine(true);
+            this.inputFields[i2].setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            this.inputFields[i2].setHeaderHintColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
+            this.inputFields[i2].setTransformHintToHeader(true);
+            this.inputFields[i2].setLineColors(Theme.getColor("windowBackgroundWhiteInputField"), Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Theme.getColor("windowBackgroundWhiteRedText3"));
+            if (i2 == 0) {
+                this.inputFields[i2].setInputType(524305);
+                this.inputFields[i2].addTextChangedListener(new TextWatcher() {
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
@@ -311,9 +312,9 @@ public class ProxySettingsActivity extends BaseFragment {
                         ProxySettingsActivity.this.checkShareDone(true);
                     }
                 });
-            } else if (i == 1) {
-                this.inputFields[i].setInputType(2);
-                this.inputFields[i].addTextChangedListener(new TextWatcher() {
+            } else if (i2 == 1) {
+                this.inputFields[i2].setInputType(2);
+                this.inputFields[i2].addTextChangedListener(new TextWatcher() {
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
@@ -322,129 +323,126 @@ public class ProxySettingsActivity extends BaseFragment {
 
                     public void afterTextChanged(Editable editable) {
                         if (!ProxySettingsActivity.this.ignoreOnTextChange) {
-                            EditText editText = ProxySettingsActivity.this.inputFields[1];
-                            int selectionStart = editText.getSelectionStart();
-                            String obj = editText.getText().toString();
-                            StringBuilder stringBuilder = new StringBuilder(obj.length());
+                            EditTextBoldCursor editTextBoldCursor = ProxySettingsActivity.this.inputFields[1];
+                            int selectionStart = editTextBoldCursor.getSelectionStart();
+                            String obj = editTextBoldCursor.getText().toString();
+                            StringBuilder sb = new StringBuilder(obj.length());
                             int i = 0;
                             while (i < obj.length()) {
                                 int i2 = i + 1;
                                 String substring = obj.substring(i, i2);
                                 if ("NUM".contains(substring)) {
-                                    stringBuilder.append(substring);
+                                    sb.append(substring);
                                 }
                                 i = i2;
                             }
-                            ProxySettingsActivity.this.ignoreOnTextChange = true;
-                            i = Utilities.parseInt(stringBuilder.toString()).intValue();
-                            if (i < 0 || i > 65535 || !obj.equals(stringBuilder.toString())) {
-                                if (i < 0) {
-                                    editText.setText("0");
-                                } else if (i > 65535) {
-                                    editText.setText("65535");
+                            boolean unused = ProxySettingsActivity.this.ignoreOnTextChange = true;
+                            int intValue = Utilities.parseInt(sb.toString()).intValue();
+                            if (intValue < 0 || intValue > 65535 || !obj.equals(sb.toString())) {
+                                if (intValue < 0) {
+                                    editTextBoldCursor.setText("0");
+                                } else if (intValue > 65535) {
+                                    editTextBoldCursor.setText("65535");
                                 } else {
-                                    editText.setText(stringBuilder.toString());
+                                    editTextBoldCursor.setText(sb.toString());
                                 }
                             } else if (selectionStart >= 0) {
-                                if (selectionStart > editText.length()) {
-                                    selectionStart = editText.length();
+                                if (selectionStart > editTextBoldCursor.length()) {
+                                    selectionStart = editTextBoldCursor.length();
                                 }
-                                editText.setSelection(selectionStart);
+                                editTextBoldCursor.setSelection(selectionStart);
                             }
-                            ProxySettingsActivity.this.ignoreOnTextChange = false;
+                            boolean unused2 = ProxySettingsActivity.this.ignoreOnTextChange = false;
                             ProxySettingsActivity.this.checkShareDone(true);
                         }
                     }
                 });
-            } else if (i == 3) {
-                this.inputFields[i].setInputType(129);
-                this.inputFields[i].setTypeface(Typeface.DEFAULT);
-                this.inputFields[i].setTransformationMethod(PasswordTransformationMethod.getInstance());
+            } else if (i2 == 3) {
+                this.inputFields[i2].setInputType(129);
+                this.inputFields[i2].setTypeface(Typeface.DEFAULT);
+                this.inputFields[i2].setTransformationMethod(PasswordTransformationMethod.getInstance());
             } else {
-                this.inputFields[i].setInputType(524289);
+                this.inputFields[i2].setInputType(524289);
             }
-            this.inputFields[i].setImeOptions(NUM);
-            if (i == 0) {
-                this.inputFields[i].setHintText(LocaleController.getString("UseProxyAddress", NUM));
-                this.inputFields[i].setText(this.currentProxyInfo.address);
-            } else if (i == 1) {
-                this.inputFields[i].setHintText(LocaleController.getString("UseProxyPort", NUM));
-                EditText editText = this.inputFields[i];
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("");
-                stringBuilder.append(this.currentProxyInfo.port);
-                editText.setText(stringBuilder.toString());
-            } else if (i == 2) {
-                this.inputFields[i].setHintText(LocaleController.getString("UseProxyUsername", NUM));
-                this.inputFields[i].setText(this.currentProxyInfo.username);
-            } else if (i == 3) {
-                this.inputFields[i].setHintText(LocaleController.getString("UseProxyPassword", NUM));
-                this.inputFields[i].setText(this.currentProxyInfo.password);
-            } else if (i == 4) {
-                this.inputFields[i].setHintText(LocaleController.getString("UseProxySecret", NUM));
-                this.inputFields[i].setText(this.currentProxyInfo.secret);
+            this.inputFields[i2].setImeOptions(NUM);
+            if (i2 == 0) {
+                this.inputFields[i2].setHintText(LocaleController.getString("UseProxyAddress", NUM));
+                this.inputFields[i2].setText(this.currentProxyInfo.address);
+            } else if (i2 == 1) {
+                this.inputFields[i2].setHintText(LocaleController.getString("UseProxyPort", NUM));
+                EditTextBoldCursor editTextBoldCursor = this.inputFields[i2];
+                editTextBoldCursor.setText("" + this.currentProxyInfo.port);
+            } else if (i2 == 2) {
+                this.inputFields[i2].setHintText(LocaleController.getString("UseProxyUsername", NUM));
+                this.inputFields[i2].setText(this.currentProxyInfo.username);
+            } else if (i2 == 3) {
+                this.inputFields[i2].setHintText(LocaleController.getString("UseProxyPassword", NUM));
+                this.inputFields[i2].setText(this.currentProxyInfo.password);
+            } else if (i2 == 4) {
+                this.inputFields[i2].setHintText(LocaleController.getString("UseProxySecret", NUM));
+                this.inputFields[i2].setText(this.currentProxyInfo.secret);
             }
             EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
-            editTextBoldCursorArr[i].setSelection(editTextBoldCursorArr[i].length());
-            this.inputFields[i].setPadding(0, 0, 0, 0);
-            frameLayout2.addView(this.inputFields[i], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, i == 0 ? 12.0f : 0.0f, 17.0f, 0.0f));
-            this.inputFields[i].setOnEditorActionListener(new -$$Lambda$ProxySettingsActivity$6uZhE0rYQm5lNBN7Lia6YJLxnRo(this));
-            i++;
-            i2 = 5;
-        }
-        i2 = 0;
-        while (true) {
-            String str2 = "windowBackgroundGrayShadow";
-            if (i2 < 2) {
-                this.bottomCells[i2] = new TextInfoPrivacyCell(context2);
-                this.bottomCells[i2].setBackground(Theme.getThemedDrawable(context2, NUM, str2));
-                if (i2 == 0) {
-                    this.bottomCells[i2].setText(LocaleController.getString("UseProxyInfo", NUM));
-                } else if (i2 == 1) {
-                    TextInfoPrivacyCell textInfoPrivacyCell = this.bottomCells[i2];
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(LocaleController.getString("UseProxyTelegramInfo", NUM));
-                    stringBuilder2.append("\n\n");
-                    stringBuilder2.append(LocaleController.getString("UseProxyTelegramInfo2", NUM));
-                    textInfoPrivacyCell.setText(stringBuilder2.toString());
-                    this.bottomCells[i2].setVisibility(8);
+            editTextBoldCursorArr[i2].setSelection(editTextBoldCursorArr[i2].length());
+            this.inputFields[i2].setPadding(0, 0, 0, 0);
+            frameLayout.addView(this.inputFields[i2], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, i2 == 0 ? 12.0f : 0.0f, 17.0f, 0.0f));
+            this.inputFields[i2].setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    return ProxySettingsActivity.this.lambda$createView$1$ProxySettingsActivity(textView, i, keyEvent);
                 }
-                this.linearLayout2.addView(this.bottomCells[i2], LayoutHelper.createLinear(-1, -2));
-                i2++;
-            } else {
-                this.pasteCell = new TextSettingsCell(this.fragmentView.getContext());
-                this.pasteCell.setBackground(Theme.getSelectorDrawable(true));
-                this.pasteCell.setText(LocaleController.getString("PasteFromClipboard", NUM), false);
-                str = "windowBackgroundWhiteBlueText4";
-                this.pasteCell.setTextColor(Theme.getColor(str));
-                this.pasteCell.setOnClickListener(new -$$Lambda$ProxySettingsActivity$Nr3GM_Jcu9XvWiwmJb6NLw7o790(this));
-                this.linearLayout2.addView(this.pasteCell, 0, LayoutHelper.createLinear(-1, -2));
-                this.pasteCell.setVisibility(8);
-                this.sectionCell[2] = new ShadowSectionCell(this.fragmentView.getContext());
-                this.sectionCell[2].setBackground(Theme.getThemedDrawable(this.fragmentView.getContext(), NUM, str2));
-                this.linearLayout2.addView(this.sectionCell[2], 1, LayoutHelper.createLinear(-1, -2));
-                this.sectionCell[2].setVisibility(8);
-                this.shareCell = new TextSettingsCell(context2);
-                this.shareCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-                this.shareCell.setText(LocaleController.getString("ShareFile", NUM), false);
-                this.shareCell.setTextColor(Theme.getColor(str));
-                this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
-                this.shareCell.setOnClickListener(new -$$Lambda$ProxySettingsActivity$zpuMZOLUK7xH8EuguyzDt8Cp8vA(this));
-                this.sectionCell[1] = new ShadowSectionCell(context2);
-                this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str2));
-                this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
-                this.clipboardManager = (ClipboardManager) context2.getSystemService("clipboard");
-                this.shareDoneEnabled = true;
-                this.shareDoneProgress = 1.0f;
-                checkShareDone(false);
-                this.currentType = -1;
-                setProxyType(TextUtils.isEmpty(this.currentProxyInfo.secret) ^ 1, false);
-                this.pasteType = -1;
-                this.pasteString = null;
-                updatePasteCell();
-                return this.fragmentView;
-            }
+            });
+            i2++;
         }
+        for (int i4 = 0; i4 < 2; i4++) {
+            this.bottomCells[i4] = new TextInfoPrivacyCell(context2);
+            this.bottomCells[i4].setBackground(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
+            if (i4 == 0) {
+                this.bottomCells[i4].setText(LocaleController.getString("UseProxyInfo", NUM));
+            } else if (i4 == 1) {
+                TextInfoPrivacyCell textInfoPrivacyCell = this.bottomCells[i4];
+                textInfoPrivacyCell.setText(LocaleController.getString("UseProxyTelegramInfo", NUM) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", NUM));
+                this.bottomCells[i4].setVisibility(8);
+            }
+            this.linearLayout2.addView(this.bottomCells[i4], LayoutHelper.createLinear(-1, -2));
+        }
+        this.pasteCell = new TextSettingsCell(this.fragmentView.getContext());
+        this.pasteCell.setBackground(Theme.getSelectorDrawable(true));
+        this.pasteCell.setText(LocaleController.getString("PasteFromClipboard", NUM), false);
+        this.pasteCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
+        this.pasteCell.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                ProxySettingsActivity.this.lambda$createView$3$ProxySettingsActivity(view);
+            }
+        });
+        this.linearLayout2.addView(this.pasteCell, 0, LayoutHelper.createLinear(-1, -2));
+        this.pasteCell.setVisibility(8);
+        this.sectionCell[2] = new ShadowSectionCell(this.fragmentView.getContext());
+        this.sectionCell[2].setBackground(Theme.getThemedDrawable(this.fragmentView.getContext(), NUM, "windowBackgroundGrayShadow"));
+        this.linearLayout2.addView(this.sectionCell[2], 1, LayoutHelper.createLinear(-1, -2));
+        this.sectionCell[2].setVisibility(8);
+        this.shareCell = new TextSettingsCell(context2);
+        this.shareCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        this.shareCell.setText(LocaleController.getString("ShareFile", NUM), false);
+        this.shareCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
+        this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
+        this.shareCell.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                ProxySettingsActivity.this.lambda$createView$4$ProxySettingsActivity(view);
+            }
+        });
+        this.sectionCell[1] = new ShadowSectionCell(context2);
+        this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
+        this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
+        this.clipboardManager = (ClipboardManager) context2.getSystemService("clipboard");
+        this.shareDoneEnabled = true;
+        this.shareDoneProgress = 1.0f;
+        checkShareDone(false);
+        this.currentType = -1;
+        setProxyType(TextUtils.isEmpty(this.currentProxyInfo.secret) ^ true ? 1 : 0, false);
+        this.pasteType = -1;
+        this.pasteString = null;
+        updatePasteCell();
+        return this.fragmentView;
     }
 
     public /* synthetic */ void lambda$createView$0$ProxySettingsActivity(View view) {
@@ -469,8 +467,7 @@ public class ProxySettingsActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$createView$3$ProxySettingsActivity(View view) {
         if (this.pasteType != -1) {
-            int i = 0;
-            while (i < this.pasteFields.length) {
+            for (int i = 0; i < this.pasteFields.length; i++) {
                 if (!((this.pasteType == 0 && i == 4) || (this.pasteType == 1 && (i == 2 || i == 3)))) {
                     String[] strArr = this.pasteFields;
                     if (strArr[i] != null) {
@@ -480,80 +477,77 @@ public class ProxySettingsActivity extends BaseFragment {
                             this.inputFields[i].setText(this.pasteFields[i]);
                         }
                     } else {
-                        this.inputFields[i].setText(null);
+                        this.inputFields[i].setText((CharSequence) null);
                     }
                 }
-                i++;
             }
             EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
             editTextBoldCursorArr[0].setSelection(editTextBoldCursorArr[0].length());
-            setProxyType(this.pasteType, true, new -$$Lambda$ProxySettingsActivity$B-mSU76b11W2URJ91CVALYazdWg(this));
+            setProxyType(this.pasteType, true, new Runnable() {
+                public final void run() {
+                    ProxySettingsActivity.this.lambda$null$2$ProxySettingsActivity();
+                }
+            });
         }
     }
 
     public /* synthetic */ void lambda$null$2$ProxySettingsActivity() {
         AndroidUtilities.hideKeyboard(this.inputFieldsContainer.findFocus());
-        int i = 0;
-        while (i < this.pasteFields.length) {
+        for (int i = 0; i < this.pasteFields.length; i++) {
             if ((this.pasteType != 0 || i == 4) && (this.pasteType != 1 || i == 2 || i == 3)) {
-                this.inputFields[i].setText(null);
+                this.inputFields[i].setText((CharSequence) null);
             }
-            i++;
         }
     }
 
     public /* synthetic */ void lambda$createView$4$ProxySettingsActivity(View view) {
-        StringBuilder stringBuilder = new StringBuilder();
+        String str;
+        StringBuilder sb = new StringBuilder();
         String obj = this.inputFields[0].getText().toString();
         String obj2 = this.inputFields[3].getText().toString();
         String obj3 = this.inputFields[2].getText().toString();
         String obj4 = this.inputFields[1].getText().toString();
         String obj5 = this.inputFields[4].getText().toString();
         try {
-            String str = "UTF-8";
             if (!TextUtils.isEmpty(obj)) {
-                stringBuilder.append("server=");
-                stringBuilder.append(URLEncoder.encode(obj, str));
+                sb.append("server=");
+                sb.append(URLEncoder.encode(obj, "UTF-8"));
             }
-            String str2 = "&";
             if (!TextUtils.isEmpty(obj4)) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(str2);
+                if (sb.length() != 0) {
+                    sb.append("&");
                 }
-                stringBuilder.append("port=");
-                stringBuilder.append(URLEncoder.encode(obj4, str));
+                sb.append("port=");
+                sb.append(URLEncoder.encode(obj4, "UTF-8"));
             }
             if (this.currentType == 1) {
-                obj = "https://t.me/proxy?";
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(str2);
+                str = "https://t.me/proxy?";
+                if (sb.length() != 0) {
+                    sb.append("&");
                 }
-                stringBuilder.append("secret=");
-                stringBuilder.append(URLEncoder.encode(obj5, str));
+                sb.append("secret=");
+                sb.append(URLEncoder.encode(obj5, "UTF-8"));
             } else {
-                obj = "https://t.me/socks?";
+                str = "https://t.me/socks?";
                 if (!TextUtils.isEmpty(obj3)) {
-                    if (stringBuilder.length() != 0) {
-                        stringBuilder.append(str2);
+                    if (sb.length() != 0) {
+                        sb.append("&");
                     }
-                    stringBuilder.append("user=");
-                    stringBuilder.append(URLEncoder.encode(obj3, str));
+                    sb.append("user=");
+                    sb.append(URLEncoder.encode(obj3, "UTF-8"));
                 }
                 if (!TextUtils.isEmpty(obj2)) {
-                    if (stringBuilder.length() != 0) {
-                        stringBuilder.append(str2);
+                    if (sb.length() != 0) {
+                        sb.append("&");
                     }
-                    stringBuilder.append("pass=");
-                    stringBuilder.append(URLEncoder.encode(obj2, str));
+                    sb.append("pass=");
+                    sb.append(URLEncoder.encode(obj2, "UTF-8"));
                 }
             }
-            if (stringBuilder.length() != 0) {
+            if (sb.length() != 0) {
                 Intent intent = new Intent("android.intent.action.SEND");
                 intent.setType("text/plain");
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(obj);
-                stringBuilder2.append(stringBuilder.toString());
-                intent.putExtra("android.intent.extra.TEXT", stringBuilder2.toString());
+                intent.putExtra("android.intent.extra.TEXT", str + sb.toString());
                 Intent createChooser = Intent.createChooser(intent, LocaleController.getString("ShareLink", NUM));
                 createChooser.setFlags(NUM);
                 getParentActivity().startActivity(createChooser);
@@ -562,241 +556,216 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Can't fix incorrect switch cases order */
+    /* JADX WARNING: Removed duplicated region for block: B:10:0x002c A[RETURN] */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x002d  */
-    /* JADX WARNING: Removed duplicated region for block: B:10:0x002c A:{RETURN} */
-    private void updatePasteCell() {
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void updatePasteCell() {
         /*
-        r11 = this;
-        r0 = r11.clipboardManager;
-        r0 = r0.getPrimaryClip();
-        r1 = 0;
-        r2 = 0;
-        if (r0 == 0) goto L_0x0023;
-    L_0x000a:
-        r3 = r0.getItemCount();
-        if (r3 <= 0) goto L_0x0023;
-    L_0x0010:
-        r0 = r0.getItemAt(r2);	 Catch:{ Exception -> 0x0023 }
-        r3 = r11.fragmentView;	 Catch:{ Exception -> 0x0023 }
-        r3 = r3.getContext();	 Catch:{ Exception -> 0x0023 }
-        r0 = r0.coerceToText(r3);	 Catch:{ Exception -> 0x0023 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0023 }
-        goto L_0x0024;
-    L_0x0023:
-        r0 = r1;
-    L_0x0024:
-        r3 = r11.pasteString;
-        r3 = android.text.TextUtils.equals(r0, r3);
-        if (r3 == 0) goto L_0x002d;
-    L_0x002c:
-        return;
-    L_0x002d:
-        r3 = -1;
-        r11.pasteType = r3;
-        r11.pasteString = r0;
-        r4 = r11.inputFields;
-        r4 = r4.length;
-        r4 = new java.lang.String[r4];
-        r11.pasteFields = r4;
-        r4 = 2;
-        if (r0 == 0) goto L_0x012b;
-    L_0x003c:
-        r5 = new java.lang.String[r4];
-        r6 = "t.me/socks?";
-        r5[r2] = r6;
-        r6 = 1;
-        r7 = "tg://socks?";
-        r5[r6] = r7;
-        r7 = 0;
-    L_0x0048:
-        r8 = r5.length;
-        r9 = "&";
-        if (r7 >= r8) goto L_0x006a;
-    L_0x004d:
-        r8 = r5[r7];
-        r8 = r0.indexOf(r8);
-        if (r8 < 0) goto L_0x0067;
-    L_0x0055:
-        r11.pasteType = r2;
-        r1 = r5[r7];
-        r1 = r1.length();
-        r8 = r8 + r1;
-        r1 = r0.substring(r8);
-        r1 = r1.split(r9);
-        goto L_0x006a;
-    L_0x0067:
-        r7 = r7 + 1;
-        goto L_0x0048;
-    L_0x006a:
-        if (r1 != 0) goto L_0x0097;
-    L_0x006c:
-        r5 = new java.lang.String[r4];
-        r7 = "t.me/proxy?";
-        r5[r2] = r7;
-        r7 = "tg://proxy?";
-        r5[r6] = r7;
-        r7 = 0;
-    L_0x0077:
-        r8 = r5.length;
-        if (r7 >= r8) goto L_0x0097;
-    L_0x007a:
-        r8 = r5[r7];
-        r8 = r0.indexOf(r8);
-        if (r8 < 0) goto L_0x0094;
-    L_0x0082:
-        r11.pasteType = r6;
-        r1 = r5[r7];
-        r1 = r1.length();
-        r8 = r8 + r1;
-        r0 = r0.substring(r8);
-        r1 = r0.split(r9);
-        goto L_0x0097;
-    L_0x0094:
-        r7 = r7 + 1;
-        goto L_0x0077;
-    L_0x0097:
-        if (r1 == 0) goto L_0x012b;
-    L_0x0099:
-        r0 = 0;
-    L_0x009a:
-        r5 = r1.length;
-        if (r0 >= r5) goto L_0x012b;
-    L_0x009d:
-        r5 = r1[r0];
-        r7 = "=";
-        r5 = r5.split(r7);
-        r7 = r5.length;
-        if (r7 == r4) goto L_0x00aa;
-    L_0x00a8:
-        goto L_0x0127;
-    L_0x00aa:
-        r7 = r5[r2];
-        r7 = r7.toLowerCase();
-        r8 = r7.hashCode();
-        r9 = 4;
-        r10 = 3;
-        switch(r8) {
-            case -906277200: goto L_0x00e3;
-            case -905826493: goto L_0x00d9;
-            case 3433489: goto L_0x00cf;
-            case 3446913: goto L_0x00c5;
-            case 3599307: goto L_0x00ba;
-            default: goto L_0x00b9;
-        };
-    L_0x00b9:
-        goto L_0x00ed;
-    L_0x00ba:
-        r8 = "user";
-        r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ed;
-    L_0x00c3:
-        r7 = 2;
-        goto L_0x00ee;
-    L_0x00c5:
-        r8 = "port";
-        r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ed;
-    L_0x00cd:
-        r7 = 1;
-        goto L_0x00ee;
-    L_0x00cf:
-        r8 = "pass";
-        r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ed;
-    L_0x00d7:
-        r7 = 3;
-        goto L_0x00ee;
-    L_0x00d9:
-        r8 = "server";
-        r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ed;
-    L_0x00e1:
-        r7 = 0;
-        goto L_0x00ee;
-    L_0x00e3:
-        r8 = "secret";
-        r7 = r7.equals(r8);
-        if (r7 == 0) goto L_0x00ed;
-    L_0x00eb:
-        r7 = 4;
-        goto L_0x00ee;
-    L_0x00ed:
-        r7 = -1;
-    L_0x00ee:
-        if (r7 == 0) goto L_0x0121;
-    L_0x00f0:
-        if (r7 == r6) goto L_0x011a;
-    L_0x00f2:
-        if (r7 == r4) goto L_0x010f;
-    L_0x00f4:
-        if (r7 == r10) goto L_0x0104;
-    L_0x00f6:
-        if (r7 == r9) goto L_0x00f9;
-    L_0x00f8:
-        goto L_0x0127;
-    L_0x00f9:
-        r7 = r11.pasteType;
-        if (r7 != r6) goto L_0x0127;
-    L_0x00fd:
-        r7 = r11.pasteFields;
-        r5 = r5[r6];
-        r7[r9] = r5;
-        goto L_0x0127;
-    L_0x0104:
-        r7 = r11.pasteType;
-        if (r7 != 0) goto L_0x0127;
-    L_0x0108:
-        r7 = r11.pasteFields;
-        r5 = r5[r6];
-        r7[r10] = r5;
-        goto L_0x0127;
-    L_0x010f:
-        r7 = r11.pasteType;
-        if (r7 != 0) goto L_0x0127;
-    L_0x0113:
-        r7 = r11.pasteFields;
-        r5 = r5[r6];
-        r7[r4] = r5;
-        goto L_0x0127;
-    L_0x011a:
-        r7 = r11.pasteFields;
-        r5 = r5[r6];
-        r7[r6] = r5;
-        goto L_0x0127;
-    L_0x0121:
-        r7 = r11.pasteFields;
-        r5 = r5[r6];
-        r7[r2] = r5;
-    L_0x0127:
-        r0 = r0 + 1;
-        goto L_0x009a;
-    L_0x012b:
-        r0 = r11.pasteType;
-        if (r0 == r3) goto L_0x0144;
-    L_0x012f:
-        r0 = r11.pasteCell;
-        r0 = r0.getVisibility();
-        if (r0 == 0) goto L_0x015a;
-    L_0x0137:
-        r0 = r11.pasteCell;
-        r0.setVisibility(r2);
-        r0 = r11.sectionCell;
-        r0 = r0[r4];
-        r0.setVisibility(r2);
-        goto L_0x015a;
-    L_0x0144:
-        r0 = r11.pasteCell;
-        r0 = r0.getVisibility();
-        r1 = 8;
-        if (r0 == r1) goto L_0x015a;
-    L_0x014e:
-        r0 = r11.pasteCell;
-        r0.setVisibility(r1);
-        r0 = r11.sectionCell;
-        r0 = r0[r4];
-        r0.setVisibility(r1);
-    L_0x015a:
-        return;
+            r11 = this;
+            android.content.ClipboardManager r0 = r11.clipboardManager
+            android.content.ClipData r0 = r0.getPrimaryClip()
+            r1 = 0
+            r2 = 0
+            if (r0 == 0) goto L_0x0023
+            int r3 = r0.getItemCount()
+            if (r3 <= 0) goto L_0x0023
+            android.content.ClipData$Item r0 = r0.getItemAt(r2)     // Catch:{ Exception -> 0x0023 }
+            android.view.View r3 = r11.fragmentView     // Catch:{ Exception -> 0x0023 }
+            android.content.Context r3 = r3.getContext()     // Catch:{ Exception -> 0x0023 }
+            java.lang.CharSequence r0 = r0.coerceToText(r3)     // Catch:{ Exception -> 0x0023 }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0023 }
+            goto L_0x0024
+        L_0x0023:
+            r0 = r1
+        L_0x0024:
+            java.lang.String r3 = r11.pasteString
+            boolean r3 = android.text.TextUtils.equals(r0, r3)
+            if (r3 == 0) goto L_0x002d
+            return
+        L_0x002d:
+            r3 = -1
+            r11.pasteType = r3
+            r11.pasteString = r0
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r11.inputFields
+            int r4 = r4.length
+            java.lang.String[] r4 = new java.lang.String[r4]
+            r11.pasteFields = r4
+            r4 = 2
+            if (r0 == 0) goto L_0x012b
+            java.lang.String[] r5 = new java.lang.String[r4]
+            java.lang.String r6 = "t.me/socks?"
+            r5[r2] = r6
+            r6 = 1
+            java.lang.String r7 = "tg://socks?"
+            r5[r6] = r7
+            r7 = 0
+        L_0x0048:
+            int r8 = r5.length
+            java.lang.String r9 = "&"
+            if (r7 >= r8) goto L_0x006a
+            r8 = r5[r7]
+            int r8 = r0.indexOf(r8)
+            if (r8 < 0) goto L_0x0067
+            r11.pasteType = r2
+            r1 = r5[r7]
+            int r1 = r1.length()
+            int r8 = r8 + r1
+            java.lang.String r1 = r0.substring(r8)
+            java.lang.String[] r1 = r1.split(r9)
+            goto L_0x006a
+        L_0x0067:
+            int r7 = r7 + 1
+            goto L_0x0048
+        L_0x006a:
+            if (r1 != 0) goto L_0x0097
+            java.lang.String[] r5 = new java.lang.String[r4]
+            java.lang.String r7 = "t.me/proxy?"
+            r5[r2] = r7
+            java.lang.String r7 = "tg://proxy?"
+            r5[r6] = r7
+            r7 = 0
+        L_0x0077:
+            int r8 = r5.length
+            if (r7 >= r8) goto L_0x0097
+            r8 = r5[r7]
+            int r8 = r0.indexOf(r8)
+            if (r8 < 0) goto L_0x0094
+            r11.pasteType = r6
+            r1 = r5[r7]
+            int r1 = r1.length()
+            int r8 = r8 + r1
+            java.lang.String r0 = r0.substring(r8)
+            java.lang.String[] r1 = r0.split(r9)
+            goto L_0x0097
+        L_0x0094:
+            int r7 = r7 + 1
+            goto L_0x0077
+        L_0x0097:
+            if (r1 == 0) goto L_0x012b
+            r0 = 0
+        L_0x009a:
+            int r5 = r1.length
+            if (r0 >= r5) goto L_0x012b
+            r5 = r1[r0]
+            java.lang.String r7 = "="
+            java.lang.String[] r5 = r5.split(r7)
+            int r7 = r5.length
+            if (r7 == r4) goto L_0x00aa
+            goto L_0x0127
+        L_0x00aa:
+            r7 = r5[r2]
+            java.lang.String r7 = r7.toLowerCase()
+            int r8 = r7.hashCode()
+            r9 = 4
+            r10 = 3
+            switch(r8) {
+                case -906277200: goto L_0x00e3;
+                case -905826493: goto L_0x00d9;
+                case 3433489: goto L_0x00cf;
+                case 3446913: goto L_0x00c5;
+                case 3599307: goto L_0x00ba;
+                default: goto L_0x00b9;
+            }
+        L_0x00b9:
+            goto L_0x00ed
+        L_0x00ba:
+            java.lang.String r8 = "user"
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x00ed
+            r7 = 2
+            goto L_0x00ee
+        L_0x00c5:
+            java.lang.String r8 = "port"
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x00ed
+            r7 = 1
+            goto L_0x00ee
+        L_0x00cf:
+            java.lang.String r8 = "pass"
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x00ed
+            r7 = 3
+            goto L_0x00ee
+        L_0x00d9:
+            java.lang.String r8 = "server"
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x00ed
+            r7 = 0
+            goto L_0x00ee
+        L_0x00e3:
+            java.lang.String r8 = "secret"
+            boolean r7 = r7.equals(r8)
+            if (r7 == 0) goto L_0x00ed
+            r7 = 4
+            goto L_0x00ee
+        L_0x00ed:
+            r7 = -1
+        L_0x00ee:
+            if (r7 == 0) goto L_0x0121
+            if (r7 == r6) goto L_0x011a
+            if (r7 == r4) goto L_0x010f
+            if (r7 == r10) goto L_0x0104
+            if (r7 == r9) goto L_0x00f9
+            goto L_0x0127
+        L_0x00f9:
+            int r7 = r11.pasteType
+            if (r7 != r6) goto L_0x0127
+            java.lang.String[] r7 = r11.pasteFields
+            r5 = r5[r6]
+            r7[r9] = r5
+            goto L_0x0127
+        L_0x0104:
+            int r7 = r11.pasteType
+            if (r7 != 0) goto L_0x0127
+            java.lang.String[] r7 = r11.pasteFields
+            r5 = r5[r6]
+            r7[r10] = r5
+            goto L_0x0127
+        L_0x010f:
+            int r7 = r11.pasteType
+            if (r7 != 0) goto L_0x0127
+            java.lang.String[] r7 = r11.pasteFields
+            r5 = r5[r6]
+            r7[r4] = r5
+            goto L_0x0127
+        L_0x011a:
+            java.lang.String[] r7 = r11.pasteFields
+            r5 = r5[r6]
+            r7[r6] = r5
+            goto L_0x0127
+        L_0x0121:
+            java.lang.String[] r7 = r11.pasteFields
+            r5 = r5[r6]
+            r7[r2] = r5
+        L_0x0127:
+            int r0 = r0 + 1
+            goto L_0x009a
+        L_0x012b:
+            int r0 = r11.pasteType
+            if (r0 == r3) goto L_0x0144
+            org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
+            int r0 = r0.getVisibility()
+            if (r0 == 0) goto L_0x015a
+            org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
+            r0.setVisibility(r2)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
+            r0 = r0[r4]
+            r0.setVisibility(r2)
+            goto L_0x015a
+        L_0x0144:
+            org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
+            int r0 = r0.getVisibility()
+            r1 = 8
+            if (r0 == r1) goto L_0x015a
+            org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
+            r0.setVisibility(r1)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
+            r0 = r0[r4]
+            r0.setVisibility(r1)
+        L_0x015a:
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProxySettingsActivity.updatePasteCell():void");
     }
@@ -809,7 +778,11 @@ public class ProxySettingsActivity extends BaseFragment {
             } else if (z2) {
                 this.shareDoneAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.shareDoneAnimator.setDuration(200);
-                this.shareDoneAnimator.addUpdateListener(new -$$Lambda$ProxySettingsActivity$53rzfdw6zTqW2BSy-byLXDlX17M(this));
+                this.shareDoneAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        ProxySettingsActivity.this.lambda$setShareDoneEnabled$5$ProxySettingsActivity(valueAnimator);
+                    }
+                });
             }
             float f = 0.0f;
             float f2 = 1.0f;
@@ -845,7 +818,8 @@ public class ProxySettingsActivity extends BaseFragment {
         this.doneItem.setAlpha((this.shareDoneProgress / 2.0f) + 0.5f);
     }
 
-    private void checkShareDone(boolean z) {
+    /* access modifiers changed from: private */
+    public void checkShareDone(boolean z) {
         if (this.shareCell != null && this.doneItem != null) {
             EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
             boolean z2 = false;
@@ -859,20 +833,20 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     private void setProxyType(int i, boolean z) {
-        setProxyType(i, z, null);
+        setProxyType(i, z, (Runnable) null);
     }
 
     private void setProxyType(int i, boolean z, final Runnable runnable) {
         if (this.currentType != i) {
             this.currentType = i;
-            if (VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= 23) {
                 TransitionManager.endTransitions(this.linearLayout2);
             }
             boolean z2 = true;
-            if (z && VERSION.SDK_INT >= 21) {
+            if (z && Build.VERSION.SDK_INT >= 21) {
                 TransitionSet duration = new TransitionSet().addTransition(new Fade(2)).addTransition(new ChangeBounds()).addTransition(new Fade(1)).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
                 if (runnable != null) {
-                    duration.addListener(new TransitionListener() {
+                    duration.addListener(new Transition.TransitionListener() {
                         public void onTransitionCancel(Transition transition) {
                         }
 
@@ -915,7 +889,7 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z && !z2 && this.addingNewProxy) {
             this.inputFields[0].requestFocus();
@@ -924,101 +898,94 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu = new -$$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU(this);
+        $$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                ProxySettingsActivity.this.lambda$getThemeDescriptions$6$ProxySettingsActivity();
+            }
+        };
         ArrayList arrayList = new ArrayList();
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, "actionBarDefaultSearch"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, "actionBarDefaultSearchPlaceholder"));
-        arrayList.add(new ThemeDescription(this.inputFieldsContainer, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider"));
-        arrayList.add(new ThemeDescription(this.shareCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.shareCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "listSelectorSDK21"));
-        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu;
-        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText4"));
-        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText2"));
-        arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "listSelectorSDK21"));
-        View view = this.pasteCell;
-        Class[] clsArr = new Class[]{TextSettingsCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        arrayList.add(new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearchPlaceholder"));
+        arrayList.add(new ThemeDescription(this.inputFieldsContainer, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        arrayList.add(new ThemeDescription(this.shareCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.shareCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        $$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU r8 = r10;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription((View) this.pasteCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
         int i = 0;
         while (true) {
             RadioCell[] radioCellArr = this.typeCell;
             if (i >= radioCellArr.length) {
                 break;
             }
-            arrayList.add(new ThemeDescription(radioCellArr[i], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription(this.typeCell[i], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, "listSelectorSDK21"));
-            arrayList.add(new ThemeDescription(this.typeCell[i], 0, new Class[]{RadioCell.class}, new String[]{r9}, null, null, null, "windowBackgroundWhiteBlackText"));
-            View view2 = this.typeCell[i];
-            int i2 = ThemeDescription.FLAG_CHECKBOX;
-            clsArr = new Class[]{RadioCell.class};
-            strArr = new String[1];
-            strArr[0] = "radioButton";
-            arrayList.add(new ThemeDescription(view2, i2, clsArr, strArr, null, null, null, "radioBackground"));
-            arrayList.add(new ThemeDescription(this.typeCell[i], ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, "radioBackgroundChecked"));
+            arrayList.add(new ThemeDescription(radioCellArr[i], ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+            arrayList.add(new ThemeDescription(this.typeCell[i], ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+            arrayList.add(new ThemeDescription((View) this.typeCell[i], 0, new Class[]{RadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            arrayList.add(new ThemeDescription((View) this.typeCell[i], ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"));
+            arrayList.add(new ThemeDescription((View) this.typeCell[i], ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"));
             i++;
         }
         if (this.inputFields != null) {
-            int i3 = 0;
+            int i2 = 0;
             while (true) {
                 EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
-                if (i3 >= editTextBoldCursorArr.length) {
+                if (i2 >= editTextBoldCursorArr.length) {
                     break;
                 }
-                arrayList.add(new ThemeDescription(editTextBoldCursorArr[i3], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(this.inputFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"));
-                arrayList.add(new ThemeDescription(this.inputFields[i3], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "windowBackgroundWhiteBlueHeader"));
-                arrayList.add(new ThemeDescription(this.inputFields[i3], ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                -$$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu2 = -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu;
-                arrayList.add(new ThemeDescription(null, 0, null, null, null, -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu2, "windowBackgroundWhiteInputField"));
-                arrayList.add(new ThemeDescription(null, 0, null, null, null, -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu2, "windowBackgroundWhiteInputFieldActivated"));
-                arrayList.add(new ThemeDescription(null, 0, null, null, null, -__lambda_proxysettingsactivity_qs6ldcijo5mzfsawhnwlvj0xzhu2, "windowBackgroundWhiteRedText3"));
-                i3++;
+                arrayList.add(new ThemeDescription(editTextBoldCursorArr[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                $$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU r7 = r10;
+                arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteInputField"));
+                arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteInputFieldActivated"));
+                arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteRedText3"));
+                i2++;
             }
         } else {
-            arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-            arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
         }
-        arrayList.add(new ThemeDescription(this.headerCell, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.headerCell, 0, new Class[]{HeaderCell.class}, new String[]{r9}, null, null, null, "windowBackgroundWhiteBlueHeader"));
-        i = 0;
+        arrayList.add(new ThemeDescription(this.headerCell, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription((View) this.headerCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        int i3 = 0;
         while (true) {
             ShadowSectionCell[] shadowSectionCellArr = this.sectionCell;
-            if (i >= shadowSectionCellArr.length) {
+            if (i3 >= shadowSectionCellArr.length) {
                 break;
             }
-            if (shadowSectionCellArr[i] != null) {
-                arrayList.add(new ThemeDescription(shadowSectionCellArr[i], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow"));
+            if (shadowSectionCellArr[i3] != null) {
+                arrayList.add(new ThemeDescription(shadowSectionCellArr[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
             }
-            i++;
+            i3++;
         }
-        i = 0;
+        int i4 = 0;
         while (true) {
             TextInfoPrivacyCell[] textInfoPrivacyCellArr = this.bottomCells;
-            if (i >= textInfoPrivacyCellArr.length) {
+            if (i4 >= textInfoPrivacyCellArr.length) {
                 return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
             }
-            arrayList.add(new ThemeDescription(textInfoPrivacyCellArr[i], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow"));
-            arrayList.add(new ThemeDescription(this.bottomCells[i], 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{r9}, null, null, null, "windowBackgroundWhiteGrayText4"));
-            arrayList.add(new ThemeDescription(this.bottomCells[i], ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{r9}, null, null, null, "windowBackgroundWhiteLinkText"));
-            i++;
+            arrayList.add(new ThemeDescription(textInfoPrivacyCellArr[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+            arrayList.add(new ThemeDescription((View) this.bottomCells[i4], 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+            arrayList.add(new ThemeDescription((View) this.bottomCells[i4], ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
+            i4++;
         }
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$6$ProxySettingsActivity() {
-        if (this.shareCell != null) {
-            ValueAnimator valueAnimator = this.shareDoneAnimator;
-            if (valueAnimator == null || !valueAnimator.isRunning()) {
-                this.shareCell.setTextColor(Theme.getColor(this.shareDoneEnabled ? "windowBackgroundWhiteBlueText4" : "windowBackgroundWhiteGrayText2"));
-            }
+        ValueAnimator valueAnimator;
+        if (this.shareCell != null && ((valueAnimator = this.shareDoneAnimator) == null || !valueAnimator.isRunning())) {
+            this.shareCell.setTextColor(Theme.getColor(this.shareDoneEnabled ? "windowBackgroundWhiteBlueText4" : "windowBackgroundWhiteGrayText2"));
         }
         if (this.inputFields != null) {
             int i = 0;

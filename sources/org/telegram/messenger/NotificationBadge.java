@@ -17,19 +17,36 @@ import java.io.Closeable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationBadge {
     private static final List<Class<? extends Badger>> BADGERS = new LinkedList();
     private static Badger badger;
-    private static ComponentName componentName;
+    /* access modifiers changed from: private */
+    public static ComponentName componentName;
     private static boolean initied;
 
     public interface Badger {
         void executeBadge(int i);
 
         List<String> getSupportLaunchers();
+    }
+
+    static {
+        BADGERS.add(AdwHomeBadger.class);
+        BADGERS.add(ApexHomeBadger.class);
+        BADGERS.add(NewHtcHomeBadger.class);
+        BADGERS.add(NovaHomeBadger.class);
+        BADGERS.add(SonyHomeBadger.class);
+        BADGERS.add(XiaomiHomeBadger.class);
+        BADGERS.add(AsusHomeBadger.class);
+        BADGERS.add(HuaweiHomeBadger.class);
+        BADGERS.add(OPPOHomeBader.class);
+        BADGERS.add(SamsungHomeBadger.class);
+        BADGERS.add(ZukHomeBadger.class);
+        BADGERS.add(VivoHomeBadger.class);
     }
 
     public static class AdwHomeBadger implements Badger {
@@ -143,9 +160,9 @@ public class NotificationBadge {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     try {
-                        ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, bundle);
+                        ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", (String) null, bundle);
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        FileLog.e((Throwable) e);
                     }
                 }
             });
@@ -193,11 +210,7 @@ public class NotificationBadge {
 
         public void executeBadge(int i) {
             ContentValues contentValues = new ContentValues();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(NotificationBadge.componentName.getPackageName());
-            stringBuilder.append("/");
-            stringBuilder.append(NotificationBadge.componentName.getClassName());
-            contentValues.put("tag", stringBuilder.toString());
+            contentValues.put("tag", NotificationBadge.componentName.getPackageName() + "/" + NotificationBadge.componentName.getClassName());
             contentValues.put("count", Integer.valueOf(i));
             ApplicationLoader.applicationContext.getContentResolver().insert(Uri.parse("content://com.teslacoilsw.notifier/unread_count"), contentValues);
         }
@@ -232,14 +245,14 @@ public class NotificationBadge {
             try {
                 Bundle bundle = new Bundle();
                 bundle.putInt("app_badge_count", i);
-                ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.android.badge/badge"), "setAppBadgeCount", null, bundle);
+                ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.android.badge/badge"), "setAppBadgeCount", (String) null, bundle);
             } catch (Throwable unused) {
             }
         }
     }
 
     public static class SamsungHomeBadger implements Badger {
-        private static final String[] CONTENT_PROJECTION = new String[]{"_id", "class"};
+        private static final String[] CONTENT_PROJECTION = {"_id", "class"};
         private static final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
         private static DefaultBadger defaultBadger;
 
@@ -253,27 +266,25 @@ public class NotificationBadge {
             }
             Uri parse = Uri.parse("content://com.sec.badge/apps?notify=true");
             ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
+            Cursor cursor = null;
             try {
-                ContentResolver contentResolver2 = contentResolver;
-                Uri uri = parse;
-                Cursor query = contentResolver2.query(uri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
-                if (query != null) {
+                cursor = contentResolver.query(parse, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, (String) null);
+                if (cursor != null) {
                     String className = NotificationBadge.componentName.getClassName();
-                    Object obj = null;
-                    while (query.moveToNext()) {
-                        int i2 = query.getInt(0);
+                    boolean z = false;
+                    while (cursor.moveToNext()) {
+                        int i2 = cursor.getInt(0);
                         contentResolver.update(parse, getContentValues(NotificationBadge.componentName, i, false), "_id=?", new String[]{String.valueOf(i2)});
-                        if (className.equals(query.getString(query.getColumnIndex("class")))) {
-                            obj = 1;
+                        if (className.equals(cursor.getString(cursor.getColumnIndex("class")))) {
+                            z = true;
                         }
                     }
-                    if (obj == null) {
+                    if (!z) {
                         contentResolver.insert(parse, getContentValues(NotificationBadge.componentName, i, true));
                     }
                 }
-                NotificationBadge.close(query);
-            } catch (Throwable th) {
-                NotificationBadge.close(null);
+            } finally {
+                NotificationBadge.close(cursor);
             }
         }
 
@@ -352,25 +363,11 @@ public class NotificationBadge {
             contentValues.put("badge_count", Integer.valueOf(i));
             contentValues.put("package_name", str);
             contentValues.put("activity_name", str2);
-            mQueryHandler.startInsert(0, null, this.BADGE_CONTENT_URI, contentValues);
+            mQueryHandler.startInsert(0, (Object) null, this.BADGE_CONTENT_URI, contentValues);
         }
 
         private static boolean sonyBadgeContentProviderExists() {
             return ApplicationLoader.applicationContext.getPackageManager().resolveContentProvider("com.sonymobile.home.resourceprovider", 0) != null;
-        }
-    }
-
-    public static class VivoHomeBadger implements Badger {
-        public void executeBadge(int i) {
-            Intent intent = new Intent("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
-            intent.putExtra("packageName", ApplicationLoader.applicationContext.getPackageName());
-            intent.putExtra("className", NotificationBadge.componentName.getClassName());
-            intent.putExtra("notificationNum", i);
-            ApplicationLoader.applicationContext.sendBroadcast(intent);
-        }
-
-        public List<String> getSupportLaunchers() {
-            return Arrays.asList(new String[]{"com.vivo.launcher"});
         }
     }
 
@@ -380,29 +377,25 @@ public class NotificationBadge {
         public static final String INTENT_ACTION = "android.intent.action.APPLICATION_MESSAGE_UPDATE";
 
         public void executeBadge(int i) {
-            Object obj = "";
+            Object obj;
+            Object obj2 = "";
             try {
-                Object obj2;
                 Object newInstance = Class.forName("android.app.MiuiNotification").newInstance();
                 Field declaredField = newInstance.getClass().getDeclaredField("messageCount");
                 declaredField.setAccessible(true);
                 if (i == 0) {
-                    obj2 = obj;
+                    obj = obj2;
                 } else {
-                    obj2 = Integer.valueOf(i);
-                }
-                declaredField.set(newInstance, String.valueOf(obj2));
-            } catch (Throwable unused) {
-                final Intent intent = new Intent("android.intent.action.APPLICATION_MESSAGE_UPDATE");
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(NotificationBadge.componentName.getPackageName());
-                stringBuilder.append("/");
-                stringBuilder.append(NotificationBadge.componentName.getClassName());
-                intent.putExtra("android.intent.extra.update_application_component_name", stringBuilder.toString());
-                if (i != 0) {
                     obj = Integer.valueOf(i);
                 }
-                intent.putExtra("android.intent.extra.update_application_message_text", String.valueOf(obj));
+                declaredField.set(newInstance, String.valueOf(obj));
+            } catch (Throwable unused) {
+                final Intent intent = new Intent("android.intent.action.APPLICATION_MESSAGE_UPDATE");
+                intent.putExtra("android.intent.extra.update_application_component_name", NotificationBadge.componentName.getPackageName() + "/" + NotificationBadge.componentName.getClassName());
+                if (i != 0) {
+                    obj2 = Integer.valueOf(i);
+                }
+                intent.putExtra("android.intent.extra.update_application_message_text", String.valueOf(obj2));
                 if (NotificationBadge.canResolveBroadcast(intent)) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -419,7 +412,8 @@ public class NotificationBadge {
     }
 
     public static class ZukHomeBadger implements Badger {
-        private final Uri CONTENT_URI = Uri.parse("content://com.android.badge/badge");
+        /* access modifiers changed from: private */
+        public final Uri CONTENT_URI = Uri.parse("content://com.android.badge/badge");
 
         @TargetApi(11)
         public void executeBadge(int i) {
@@ -428,9 +422,9 @@ public class NotificationBadge {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     try {
-                        ApplicationLoader.applicationContext.getContentResolver().call(ZukHomeBadger.this.CONTENT_URI, "setAppBadgeCount", null, bundle);
+                        ApplicationLoader.applicationContext.getContentResolver().call(ZukHomeBadger.this.CONTENT_URI, "setAppBadgeCount", (String) null, bundle);
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        FileLog.e((Throwable) e);
                     }
                 }
             });
@@ -441,19 +435,18 @@ public class NotificationBadge {
         }
     }
 
-    static {
-        BADGERS.add(AdwHomeBadger.class);
-        BADGERS.add(ApexHomeBadger.class);
-        BADGERS.add(NewHtcHomeBadger.class);
-        BADGERS.add(NovaHomeBadger.class);
-        BADGERS.add(SonyHomeBadger.class);
-        BADGERS.add(XiaomiHomeBadger.class);
-        BADGERS.add(AsusHomeBadger.class);
-        BADGERS.add(HuaweiHomeBadger.class);
-        BADGERS.add(OPPOHomeBader.class);
-        BADGERS.add(SamsungHomeBadger.class);
-        BADGERS.add(ZukHomeBadger.class);
-        BADGERS.add(VivoHomeBadger.class);
+    public static class VivoHomeBadger implements Badger {
+        public void executeBadge(int i) {
+            Intent intent = new Intent("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
+            intent.putExtra("packageName", ApplicationLoader.applicationContext.getPackageName());
+            intent.putExtra("className", NotificationBadge.componentName.getClassName());
+            intent.putExtra("notificationNum", i);
+            ApplicationLoader.applicationContext.sendBroadcast(intent);
+        }
+
+        public List<String> getSupportLaunchers() {
+            return Arrays.asList(new String[]{"com.vivo.launcher"});
+        }
     }
 
     public static boolean applyCount(int i) {
@@ -473,27 +466,31 @@ public class NotificationBadge {
     }
 
     private static boolean initBadger() {
+        Badger badger2;
+        Badger badger3;
         Context context = ApplicationLoader.applicationContext;
         Intent launchIntentForPackage = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        int i = 0;
         if (launchIntentForPackage == null) {
             return false;
         }
         componentName = launchIntentForPackage.getComponent();
-        launchIntentForPackage = new Intent("android.intent.action.MAIN");
-        launchIntentForPackage.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveActivity = context.getPackageManager().resolveActivity(launchIntentForPackage, 65536);
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        ResolveInfo resolveActivity = context.getPackageManager().resolveActivity(intent, 65536);
         if (resolveActivity != null) {
             String str = resolveActivity.activityInfo.packageName;
-            for (Class newInstance : BADGERS) {
-                Badger badger;
-                try {
-                    badger = (Badger) newInstance.newInstance();
-                } catch (Exception unused) {
-                    badger = null;
+            Iterator<Class<? extends Badger>> it = BADGERS.iterator();
+            while (true) {
+                if (!it.hasNext()) {
+                    break;
                 }
-                if (badger != null && badger.getSupportLaunchers().contains(str)) {
-                    badger = badger;
+                try {
+                    badger3 = (Badger) it.next().newInstance();
+                } catch (Exception unused) {
+                    badger3 = null;
+                }
+                if (badger3 != null && badger3.getSupportLaunchers().contains(str)) {
+                    badger = badger3;
                     break;
                 }
             }
@@ -501,14 +498,17 @@ public class NotificationBadge {
                 return true;
             }
         }
-        List queryIntentActivities = context.getPackageManager().queryIntentActivities(launchIntentForPackage, 65536);
+        List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, 65536);
         if (queryIntentActivities != null) {
-            while (i < queryIntentActivities.size()) {
-                String str2 = ((ResolveInfo) queryIntentActivities.get(i)).activityInfo.packageName;
-                for (Class newInstance2 : BADGERS) {
-                    Badger badger2;
+            for (int i = 0; i < queryIntentActivities.size(); i++) {
+                String str2 = queryIntentActivities.get(i).activityInfo.packageName;
+                Iterator<Class<? extends Badger>> it2 = BADGERS.iterator();
+                while (true) {
+                    if (!it2.hasNext()) {
+                        break;
+                    }
                     try {
-                        badger2 = (Badger) newInstance2.newInstance();
+                        badger2 = (Badger) it2.next().newInstance();
                     } catch (Exception unused2) {
                         badger2 = null;
                     }
@@ -520,7 +520,6 @@ public class NotificationBadge {
                 if (badger != null) {
                     break;
                 }
-                i++;
             }
         }
         if (badger == null) {
@@ -539,8 +538,9 @@ public class NotificationBadge {
         return true;
     }
 
-    private static boolean canResolveBroadcast(Intent intent) {
-        List queryBroadcastReceivers = ApplicationLoader.applicationContext.getPackageManager().queryBroadcastReceivers(intent, 0);
+    /* access modifiers changed from: private */
+    public static boolean canResolveBroadcast(Intent intent) {
+        List<ResolveInfo> queryBroadcastReceivers = ApplicationLoader.applicationContext.getPackageManager().queryBroadcastReceivers(intent, 0);
         if (queryBroadcastReceivers == null || queryBroadcastReceivers.size() <= 0) {
             return false;
         }

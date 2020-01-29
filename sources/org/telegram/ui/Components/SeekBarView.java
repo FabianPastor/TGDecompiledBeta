@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.StateSet;
 import android.view.MotionEvent;
@@ -22,7 +22,7 @@ public class SeekBarView extends FrameLayout {
     private long lastUpdateTime;
     private Paint outerPaint1;
     private boolean pressed;
-    private int[] pressedState = new int[]{16842910, 16842919};
+    private int[] pressedState = {16842910, 16842919};
     private float progressToSet;
     private boolean reportChanges;
     private int selectorWidth;
@@ -42,13 +42,12 @@ public class SeekBarView extends FrameLayout {
         this.innerPaint1 = new Paint(1);
         this.innerPaint1.setColor(Theme.getColor("player_progressBackground"));
         this.outerPaint1 = new Paint(1);
-        String str = "player_progress";
-        this.outerPaint1.setColor(Theme.getColor(str));
+        this.outerPaint1.setColor(Theme.getColor("player_progress"));
         this.selectorWidth = AndroidUtilities.dp(32.0f);
         this.thumbSize = AndroidUtilities.dp(24.0f);
         this.currentRadius = (float) AndroidUtilities.dp(6.0f);
-        if (VERSION.SDK_INT >= 21) {
-            int color = Theme.getColor(str);
+        if (Build.VERSION.SDK_INT >= 21) {
+            int color = Theme.getColor("player_progress");
             this.hoverDrawable = Theme.createSelectorDrawable(Color.argb(40, Color.red(color), Color.green(color), Color.blue(color)), 1, AndroidUtilities.dp(16.0f));
             this.hoverDrawable.setCallback(this);
             this.hoverDrawable.setVisible(true, false);
@@ -92,32 +91,30 @@ public class SeekBarView extends FrameLayout {
         this.delegate = seekBarViewDelegate;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public boolean onTouch(MotionEvent motionEvent) {
-        int measuredHeight;
         Drawable drawable;
+        Drawable drawable2;
+        Drawable drawable3;
         if (motionEvent.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
-            measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
+            int measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
             if (motionEvent.getY() >= 0.0f && motionEvent.getY() <= ((float) getMeasuredHeight())) {
-                if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) ((this.thumbX + this.thumbSize) + measuredHeight))) {
+                if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) (this.thumbX + this.thumbSize + measuredHeight))) {
                     this.thumbX = ((int) motionEvent.getX()) - (this.thumbSize / 2);
-                    measuredHeight = this.thumbX;
-                    if (measuredHeight < 0) {
+                    int i = this.thumbX;
+                    if (i < 0) {
                         this.thumbX = 0;
-                    } else if (measuredHeight > getMeasuredWidth() - this.selectorWidth) {
+                    } else if (i > getMeasuredWidth() - this.selectorWidth) {
                         this.thumbX = getMeasuredWidth() - this.selectorWidth;
                     }
                 }
                 this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
                 this.pressed = true;
                 this.delegate.onSeekBarPressed(true);
-                if (VERSION.SDK_INT >= 21) {
-                    drawable = this.hoverDrawable;
-                    if (drawable != null) {
-                        drawable.setState(this.pressedState);
-                        this.hoverDrawable.setHotspot(motionEvent.getX(), motionEvent.getY());
-                    }
+                if (Build.VERSION.SDK_INT >= 21 && (drawable3 = this.hoverDrawable) != null) {
+                    drawable3.setState(this.pressedState);
+                    this.hoverDrawable.setHotspot(motionEvent.getX(), motionEvent.getY());
                 }
                 invalidate();
                 return true;
@@ -127,11 +124,8 @@ public class SeekBarView extends FrameLayout {
                 if (motionEvent.getAction() == 1) {
                     this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
                 }
-                if (VERSION.SDK_INT >= 21) {
-                    Drawable drawable2 = this.hoverDrawable;
-                    if (drawable2 != null) {
-                        drawable2.setState(StateSet.NOTHING);
-                    }
+                if (Build.VERSION.SDK_INT >= 21 && (drawable = this.hoverDrawable) != null) {
+                    drawable.setState(StateSet.NOTHING);
                 }
                 this.delegate.onSeekBarPressed(false);
                 this.pressed = false;
@@ -140,20 +134,17 @@ public class SeekBarView extends FrameLayout {
             }
         } else if (motionEvent.getAction() == 2 && this.pressed) {
             this.thumbX = (int) (motionEvent.getX() - ((float) this.thumbDX));
-            measuredHeight = this.thumbX;
-            if (measuredHeight < 0) {
+            int i2 = this.thumbX;
+            if (i2 < 0) {
                 this.thumbX = 0;
-            } else if (measuredHeight > getMeasuredWidth() - this.selectorWidth) {
+            } else if (i2 > getMeasuredWidth() - this.selectorWidth) {
                 this.thumbX = getMeasuredWidth() - this.selectorWidth;
             }
             if (this.reportChanges) {
                 this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
             }
-            if (VERSION.SDK_INT >= 21) {
-                drawable = this.hoverDrawable;
-                if (drawable != null) {
-                    drawable.setHotspot(motionEvent.getX(), motionEvent.getY());
-                }
+            if (Build.VERSION.SDK_INT >= 21 && (drawable2 = this.hoverDrawable) != null) {
+                drawable2.setHotspot(motionEvent.getX(), motionEvent.getY());
             }
             invalidate();
             return true;
@@ -174,10 +165,10 @@ public class SeekBarView extends FrameLayout {
         int ceil = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.selectorWidth)) * f));
         if (this.thumbX != ceil) {
             this.thumbX = ceil;
-            ceil = this.thumbX;
-            if (ceil < 0) {
+            int i = this.thumbX;
+            if (i < 0) {
                 this.thumbX = 0;
-            } else if (ceil > getMeasuredWidth() - this.selectorWidth) {
+            } else if (i > getMeasuredWidth() - this.selectorWidth) {
                 this.thumbX = getMeasuredWidth() - this.selectorWidth;
             }
             invalidate();
@@ -188,7 +179,7 @@ public class SeekBarView extends FrameLayout {
         this.bufferedProgress = f;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
         if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
@@ -197,7 +188,7 @@ public class SeekBarView extends FrameLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean verifyDrawable(Drawable drawable) {
         return super.verifyDrawable(drawable) || drawable == this.hoverDrawable;
     }
@@ -206,7 +197,7 @@ public class SeekBarView extends FrameLayout {
         return this.pressed;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
         canvas.drawRect((float) (this.selectorWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.selectorWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);

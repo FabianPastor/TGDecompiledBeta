@@ -1,6 +1,6 @@
 package org.telegram.messenger.video;
 
-import android.media.MediaCodec.BufferInfo;
+import android.media.MediaCodec;
 import android.media.MediaFormat;
 import com.googlecode.mp4parser.util.Matrix;
 import java.io.File;
@@ -10,7 +10,7 @@ public class Mp4Movie {
     private File cacheFile;
     private int height;
     private Matrix matrix = Matrix.ROTATE_0;
-    private ArrayList<Track> tracks = new ArrayList();
+    private ArrayList<Track> tracks = new ArrayList<>();
     private int width;
 
     public Matrix getMatrix() {
@@ -54,14 +54,14 @@ public class Mp4Movie {
         return this.cacheFile;
     }
 
-    public void addSample(int i, long j, BufferInfo bufferInfo) {
+    public void addSample(int i, long j, MediaCodec.BufferInfo bufferInfo) {
         if (i >= 0 && i < this.tracks.size()) {
-            ((Track) this.tracks.get(i)).addSample(j, bufferInfo);
+            this.tracks.get(i).addSample(j, bufferInfo);
         }
     }
 
     public int addTrack(MediaFormat mediaFormat, boolean z) {
-        ArrayList arrayList = this.tracks;
+        ArrayList<Track> arrayList = this.tracks;
         arrayList.add(new Track(arrayList.size(), mediaFormat, z));
         return this.tracks.size() - 1;
     }

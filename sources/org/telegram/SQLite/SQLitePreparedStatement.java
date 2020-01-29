@@ -10,24 +10,34 @@ public class SQLitePreparedStatement {
     private boolean isFinalized = false;
     private long sqliteStatementHandle;
 
+    /* access modifiers changed from: package-private */
     public native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void bindDouble(long j, int i, double d) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void bindInt(long j, int i, int i2) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void bindLong(long j, int i, long j2) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void bindNull(long j, int i) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void bindString(long j, int i, String str) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void finalize(long j) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native long prepare(long j, String str) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void reset(long j) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native int step(long j) throws SQLiteException;
 
     public long getStatementHandle() {
@@ -44,17 +54,17 @@ public class SQLitePreparedStatement {
             checkFinalized();
             reset(this.sqliteStatementHandle);
             int i = 1;
-            for (Object obj : objArr) {
-                if (obj == null) {
+            for (Integer num : objArr) {
+                if (num == null) {
                     bindNull(this.sqliteStatementHandle, i);
-                } else if (obj instanceof Integer) {
-                    bindInt(this.sqliteStatementHandle, i, ((Integer) obj).intValue());
-                } else if (obj instanceof Double) {
-                    bindDouble(this.sqliteStatementHandle, i, ((Double) obj).doubleValue());
-                } else if (obj instanceof String) {
-                    bindString(this.sqliteStatementHandle, i, (String) obj);
-                } else if (obj instanceof Long) {
-                    bindLong(this.sqliteStatementHandle, i, ((Long) obj).longValue());
+                } else if (num instanceof Integer) {
+                    bindInt(this.sqliteStatementHandle, i, num.intValue());
+                } else if (num instanceof Double) {
+                    bindDouble(this.sqliteStatementHandle, i, ((Double) num).doubleValue());
+                } else if (num instanceof String) {
+                    bindString(this.sqliteStatementHandle, i, (String) num);
+                } else if (num instanceof Long) {
+                    bindLong(this.sqliteStatementHandle, i, ((Long) num).longValue());
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -85,7 +95,7 @@ public class SQLitePreparedStatement {
         }
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public void checkFinalized() throws SQLiteException {
         if (this.isFinalized) {
             throw new SQLiteException("Prepared query finalized");

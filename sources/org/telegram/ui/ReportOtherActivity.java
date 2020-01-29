@@ -1,25 +1,21 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.InputPeer;
-import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_inputReportReasonOther;
-import org.telegram.tgnet.TLRPC.TL_messages_report;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -28,11 +24,18 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ReportOtherActivity extends BaseFragment {
     private static final int done_button = 1;
-    private long dialog_id = getArguments().getLong("dialog_id", 0);
+    /* access modifiers changed from: private */
+    public long dialog_id = getArguments().getLong("dialog_id", 0);
     private View doneButton;
-    private EditTextBoldCursor firstNameField;
+    /* access modifiers changed from: private */
+    public EditTextBoldCursor firstNameField;
     private View headerLabelView;
-    private int message_id = getArguments().getInt("message_id", 0);
+    /* access modifiers changed from: private */
+    public int message_id = getArguments().getInt("message_id", 0);
+
+    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+        return true;
+    }
 
     public ReportOtherActivity(Bundle bundle) {
         super(bundle);
@@ -42,50 +45,113 @@ public class ReportOtherActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", NUM));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TL_error tL_error) {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TLRPC.TL_error tL_error) {
             }
 
-            public void onItemClick(int i) {
-                if (i == -1) {
-                    ReportOtherActivity.this.finishFragment();
-                } else if (i == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
-                    TLObject tL_messages_report;
-                    InputPeer inputPeer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                    TL_inputReportReasonOther tL_inputReportReasonOther;
-                    if (ReportOtherActivity.this.message_id != 0) {
-                        tL_messages_report = new TL_messages_report();
-                        tL_messages_report.peer = inputPeer;
-                        tL_messages_report.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
-                        tL_inputReportReasonOther = new TL_inputReportReasonOther();
-                        tL_inputReportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                        tL_messages_report.reason = tL_inputReportReasonOther;
-                    } else {
-                        tL_messages_report = new TL_account_reportPeer();
-                        tL_messages_report.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                        tL_inputReportReasonOther = new TL_inputReportReasonOther();
-                        tL_inputReportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                        tL_messages_report.reason = tL_inputReportReasonOther;
-                    }
-                    ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(tL_messages_report, -$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkC-qS1TkzMcffkwA.INSTANCE);
-                    if (ReportOtherActivity.this.getParentActivity() != null) {
-                        Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", NUM), 0).show();
-                    }
-                    ReportOtherActivity.this.finishFragment();
-                }
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v11, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v12, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+            /* JADX WARNING: Multi-variable type inference failed */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public void onItemClick(int r4) {
+                /*
+                    r3 = this;
+                    r0 = -1
+                    if (r4 != r0) goto L_0x000a
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    r4.finishFragment()
+                    goto L_0x00ca
+                L_0x000a:
+                    r0 = 1
+                    if (r4 != r0) goto L_0x00ca
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    org.telegram.ui.Components.EditTextBoldCursor r4 = r4.firstNameField
+                    android.text.Editable r4 = r4.getText()
+                    int r4 = r4.length()
+                    if (r4 == 0) goto L_0x00ca
+                    int r4 = org.telegram.messenger.UserConfig.selectedAccount
+                    org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
+                    org.telegram.ui.ReportOtherActivity r0 = org.telegram.ui.ReportOtherActivity.this
+                    long r0 = r0.dialog_id
+                    int r1 = (int) r0
+                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer(r1)
+                    org.telegram.ui.ReportOtherActivity r0 = org.telegram.ui.ReportOtherActivity.this
+                    int r0 = r0.message_id
+                    if (r0 == 0) goto L_0x0064
+                    org.telegram.tgnet.TLRPC$TL_messages_report r0 = new org.telegram.tgnet.TLRPC$TL_messages_report
+                    r0.<init>()
+                    r0.peer = r4
+                    java.util.ArrayList<java.lang.Integer> r4 = r0.id
+                    org.telegram.ui.ReportOtherActivity r1 = org.telegram.ui.ReportOtherActivity.this
+                    int r1 = r1.message_id
+                    java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                    r4.add(r1)
+                    org.telegram.tgnet.TLRPC$TL_inputReportReasonOther r4 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonOther
+                    r4.<init>()
+                    org.telegram.ui.ReportOtherActivity r1 = org.telegram.ui.ReportOtherActivity.this
+                    org.telegram.ui.Components.EditTextBoldCursor r1 = r1.firstNameField
+                    android.text.Editable r1 = r1.getText()
+                    java.lang.String r1 = r1.toString()
+                    r4.text = r1
+                    r0.reason = r4
+                    goto L_0x0097
+                L_0x0064:
+                    org.telegram.tgnet.TLRPC$TL_account_reportPeer r0 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
+                    r0.<init>()
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    int r4 = r4.currentAccount
+                    org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
+                    org.telegram.ui.ReportOtherActivity r1 = org.telegram.ui.ReportOtherActivity.this
+                    long r1 = r1.dialog_id
+                    int r2 = (int) r1
+                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer(r2)
+                    r0.peer = r4
+                    org.telegram.tgnet.TLRPC$TL_inputReportReasonOther r4 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonOther
+                    r4.<init>()
+                    org.telegram.ui.ReportOtherActivity r1 = org.telegram.ui.ReportOtherActivity.this
+                    org.telegram.ui.Components.EditTextBoldCursor r1 = r1.firstNameField
+                    android.text.Editable r1 = r1.getText()
+                    java.lang.String r1 = r1.toString()
+                    r4.text = r1
+                    r0.reason = r4
+                L_0x0097:
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    int r4 = r4.currentAccount
+                    org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
+                    org.telegram.ui.-$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkC-qS1TkzMcffkwA r1 = org.telegram.ui.$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkCqS1TkzMcffkwA.INSTANCE
+                    r4.sendRequest(r0, r1)
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    android.app.Activity r4 = r4.getParentActivity()
+                    if (r4 == 0) goto L_0x00c5
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    android.app.Activity r4 = r4.getParentActivity()
+                    r0 = 2131626375(0x7f0e0987, float:1.8879984E38)
+                    java.lang.String r1 = "ReportChatSent"
+                    java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                    r1 = 0
+                    android.widget.Toast r4 = android.widget.Toast.makeText(r4, r0, r1)
+                    r4.show()
+                L_0x00c5:
+                    org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
+                    r4.finishFragment()
+                L_0x00ca:
+                    return
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ReportOtherActivity.AnonymousClass1.onItemClick(int):void");
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
-        this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
+        this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(-$$Lambda$ReportOtherActivity$VcwTn-4nik4XOSC4IbcsIN4IckE.INSTANCE);
+        this.fragmentView.setOnTouchListener($$Lambda$ReportOtherActivity$VcwTn4nik4XOSC4IbcsIN4IckE.INSTANCE);
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-        String str = "windowBackgroundWhiteBlackText";
-        this.firstNameField.setTextColor(Theme.getColor(str));
+        this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         int i = 3;
         this.firstNameField.setMaxLines(3);
@@ -98,26 +164,28 @@ public class ReportOtherActivity extends BaseFragment {
             i = 5;
         }
         editTextBoldCursor.setGravity(i);
-        this.firstNameField.setCursorColor(Theme.getColor(str));
+        this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new -$$Lambda$ReportOtherActivity$JRCa_EXPGvX6N9BVVFwqPlLZM80(this));
+        this.firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                return ReportOtherActivity.this.lambda$createView$1$ReportOtherActivity(textView, i, keyEvent);
+            }
+        });
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", NUM));
-        editTextBoldCursor = this.firstNameField;
-        editTextBoldCursor.setSelection(editTextBoldCursor.length());
+        EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
+        editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
         return this.fragmentView;
     }
 
     public /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
-        if (i == 6) {
-            View view = this.doneButton;
-            if (view != null) {
-                view.performClick();
-                return true;
-            }
+        View view;
+        if (i != 6 || (view = this.doneButton) == null) {
+            return false;
         }
-        return false;
+        view.performClick();
+        return true;
     }
 
     public void onResume() {
@@ -130,7 +198,11 @@ public class ReportOtherActivity extends BaseFragment {
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ReportOtherActivity$djrT4sV5rD_-jM1owBrq9EJKfOk(this), 100);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    ReportOtherActivity.this.lambda$onTransitionAnimationEnd$2$ReportOtherActivity();
+                }
+            }, 100);
         }
     }
 
@@ -143,6 +215,6 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated")};
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated")};
     }
 }

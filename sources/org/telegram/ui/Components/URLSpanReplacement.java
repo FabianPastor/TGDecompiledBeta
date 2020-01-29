@@ -5,24 +5,22 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
+import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanReplacement extends URLSpan {
-    private TextStyleRun style;
+    private TextStyleSpan.TextStyleRun style;
 
     public URLSpanReplacement(String str) {
-        this(str, null);
+        this(str, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanReplacement(String str, TextStyleRun textStyleRun) {
-        if (str != null) {
-            str = str.replace(8238, ' ');
-        }
-        super(str);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public URLSpanReplacement(String str, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str != null ? str.replace(8238, ' ') : str);
         this.style = textStyleRun;
     }
 
-    public TextStyleRun getTextStyleRun() {
+    public TextStyleSpan.TextStyleRun getTextStyleRun() {
         return this.style;
     }
 
@@ -33,7 +31,7 @@ public class URLSpanReplacement extends URLSpan {
     public void updateDrawState(TextPaint textPaint) {
         int color = textPaint.getColor();
         super.updateDrawState(textPaint);
-        TextStyleRun textStyleRun = this.style;
+        TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
             textPaint.setUnderlineText(textPaint.linkColor == color);

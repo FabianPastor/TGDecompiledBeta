@@ -7,11 +7,11 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 
 public class CheckableImageView extends ImageView implements Checkable {
-    private static final int[] CHECKED_STATE_SET = new int[]{16842912};
+    private static final int[] CHECKED_STATE_SET = {16842912};
     private boolean mChecked;
 
     public CheckableImageView(Context context) {
-        this(context, null);
+        this(context, (AttributeSet) null);
     }
 
     public CheckableImageView(Context context, AttributeSet attributeSet) {
@@ -31,7 +31,7 @@ public class CheckableImageView extends ImageView implements Checkable {
     }
 
     public void toggle() {
-        setChecked(this.mChecked ^ 1);
+        setChecked(!this.mChecked);
     }
 
     public boolean isChecked() {

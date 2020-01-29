@@ -1,7 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -20,15 +20,8 @@ public class RadioColorCell extends FrameLayout {
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
-        RadioButton radioButton = this.radioButton;
         int i = 5;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        int i3 = 0;
-        float f = (float) (LocaleController.isRTL ? 0 : 18);
-        if (LocaleController.isRTL) {
-            i3 = 18;
-        }
-        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i2, f, 14.0f, (float) i3, 0.0f));
+        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 18), 14.0f, (float) (LocaleController.isRTL ? 18 : 0), 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
         this.textView.setTextSize(1, 16.0f);
@@ -36,22 +29,12 @@ public class RadioColorCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView = this.textView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        i2 = i | 48;
-        int i4 = 21;
-        f = (float) (LocaleController.isRTL ? 21 : 51);
-        if (LocaleController.isRTL) {
-            i4 = 51;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i2, f, 13.0f, (float) i4, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 21 : 51), 13.0f, (float) (LocaleController.isRTL ? 51 : 21), 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f), NUM));
     }
 
     public void setCheckColor(int i, int i2) {

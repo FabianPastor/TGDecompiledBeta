@@ -1,7 +1,7 @@
 package org.telegram.ui.Adapters;
 
 import android.location.Location;
-import android.os.Build.VERSION;
+import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -10,38 +10,28 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.BotInlineMessage;
-import org.telegram.tgnet.TLRPC.BotInlineResult;
-import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaVenue;
-import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
-import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_inputGeoPoint;
-import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
-import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
-import org.telegram.tgnet.TLRPC.TL_messages_getInlineBotResults;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.messages_BotResults;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.RecyclerListView;
 
-public abstract class BaseLocationAdapter extends SelectionAdapter {
+public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdapter {
     private int currentAccount = UserConfig.selectedAccount;
     private int currentRequestNum;
     private BaseLocationAdapterDelegate delegate;
     private long dialogId;
-    protected ArrayList<String> iconUrls = new ArrayList();
+    protected ArrayList<String> iconUrls = new ArrayList<>();
     private String lastFoundQuery;
     private Location lastSearchLocation;
     private String lastSearchQuery;
-    protected ArrayList<TL_messageMediaVenue> places = new ArrayList();
+    protected ArrayList<TLRPC.TL_messageMediaVenue> places = new ArrayList<>();
     private boolean searchInProgress;
     private Runnable searchRunnable;
     protected boolean searching;
     private boolean searchingUser;
 
     public interface BaseLocationAdapterDelegate {
-        void didLoadSearchResult(ArrayList<TL_messageMediaVenue> arrayList);
+        void didLoadSearchResult(ArrayList<TLRPC.TL_messageMediaVenue> arrayList);
     }
 
     public void destroy() {
@@ -69,13 +59,37 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         }
         this.searchInProgress = true;
         DispatchQueue dispatchQueue = Utilities.searchQueue;
-        -$$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI -__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui = new -$$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI(this, str, location);
-        this.searchRunnable = -__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui;
-        dispatchQueue.postRunnable(-__lambda_baselocationadapter_t_85lsivxauuuwp3wnwn8qk1uui, 400);
+        $$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI r1 = new Runnable(str, location) {
+            private final /* synthetic */ String f$1;
+            private final /* synthetic */ Location f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                BaseLocationAdapter.this.lambda$searchDelayed$1$BaseLocationAdapter(this.f$1, this.f$2);
+            }
+        };
+        this.searchRunnable = r1;
+        dispatchQueue.postRunnable(r1, 400);
     }
 
     public /* synthetic */ void lambda$searchDelayed$1$BaseLocationAdapter(String str, Location location) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$7x00Ah4GCWHHyZQ38tHoBWV8Hyc(this, str, location));
+        AndroidUtilities.runOnUIThread(new Runnable(str, location) {
+            private final /* synthetic */ String f$1;
+            private final /* synthetic */ Location f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                BaseLocationAdapter.this.lambda$null$0$BaseLocationAdapter(this.f$1, this.f$2);
+            }
+        });
     }
 
     public /* synthetic */ void lambda$null$0$BaseLocationAdapter(String str, Location location) {
@@ -87,20 +101,34 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     private void searchBotUser() {
         if (!this.searchingUser) {
             this.searchingUser = true;
-            TL_contacts_resolveUsername tL_contacts_resolveUsername = new TL_contacts_resolveUsername();
+            TLRPC.TL_contacts_resolveUsername tL_contacts_resolveUsername = new TLRPC.TL_contacts_resolveUsername();
             tL_contacts_resolveUsername.username = MessagesController.getInstance(this.currentAccount).venueSearchBot;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_resolveUsername, new -$$Lambda$BaseLocationAdapter$EXf5flObCtbTzRIFqsolFWFtyyU(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_resolveUsername, new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    BaseLocationAdapter.this.lambda$searchBotUser$3$BaseLocationAdapter(tLObject, tL_error);
+                }
+            });
         }
     }
 
-    public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TLRPC.TL_error tL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$8XXcylBQyklzy9fKLPpuyJeZxWw(this, tLObject));
+            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
+                private final /* synthetic */ TLObject f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    BaseLocationAdapter.this.lambda$null$2$BaseLocationAdapter(this.f$1);
+                }
+            });
         }
     }
 
     public /* synthetic */ void lambda$null$2$BaseLocationAdapter(TLObject tLObject) {
-        TL_contacts_resolvedPeer tL_contacts_resolvedPeer = (TL_contacts_resolvedPeer) tLObject;
+        TLRPC.TL_contacts_resolvedPeer tL_contacts_resolvedPeer = (TLRPC.TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_resolvedPeer.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_resolvedPeer.chats, false);
         MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_resolvedPeer.users, tL_contacts_resolvedPeer.chats, true, true);
@@ -138,14 +166,13 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 boolean z3 = this.searching;
                 this.searching = true;
                 TLObject userOrChat = MessagesController.getInstance(this.currentAccount).getUserOrChat(MessagesController.getInstance(this.currentAccount).venueSearchBot);
-                if (userOrChat instanceof User) {
-                    User user = (User) userOrChat;
-                    TL_messages_getInlineBotResults tL_messages_getInlineBotResults = new TL_messages_getInlineBotResults();
-                    String str2 = "";
-                    tL_messages_getInlineBotResults.query = str == null ? str2 : str;
+                if (userOrChat instanceof TLRPC.User) {
+                    TLRPC.User user = (TLRPC.User) userOrChat;
+                    TLRPC.TL_messages_getInlineBotResults tL_messages_getInlineBotResults = new TLRPC.TL_messages_getInlineBotResults();
+                    tL_messages_getInlineBotResults.query = str == null ? "" : str;
                     tL_messages_getInlineBotResults.bot = MessagesController.getInstance(this.currentAccount).getInputUser(user);
-                    tL_messages_getInlineBotResults.offset = str2;
-                    tL_messages_getInlineBotResults.geo_point = new TL_inputGeoPoint();
+                    tL_messages_getInlineBotResults.offset = "";
+                    tL_messages_getInlineBotResults.geo_point = new TLRPC.TL_inputGeoPoint();
                     tL_messages_getInlineBotResults.geo_point.lat = AndroidUtilities.fixLocationCoord(location.getLatitude());
                     tL_messages_getInlineBotResults.geo_point._long = AndroidUtilities.fixLocationCoord(location.getLongitude());
                     tL_messages_getInlineBotResults.flags |= 1;
@@ -153,34 +180,55 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                     if (i != 0) {
                         tL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(i);
                     } else {
-                        tL_messages_getInlineBotResults.peer = new TL_inputPeerEmpty();
+                        tL_messages_getInlineBotResults.peer = new TLRPC.TL_inputPeerEmpty();
                     }
-                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getInlineBotResults, new -$$Lambda$BaseLocationAdapter$Q_AKnGvZK4rCf-iCn8zQfX2dHBA(this, str));
-                    if (!z2 || VERSION.SDK_INT < 19) {
+                    this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getInlineBotResults, new RequestDelegate(str) {
+                        private final /* synthetic */ String f$1;
+
+                        {
+                            this.f$1 = r2;
+                        }
+
+                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                            BaseLocationAdapter.this.lambda$searchPlacesWithQuery$5$BaseLocationAdapter(this.f$1, tLObject, tL_error);
+                        }
+                    });
+                    if (!z2 || Build.VERSION.SDK_INT < 19) {
                         notifyDataSetChanged();
                     } else if (!this.places.isEmpty() && !z3) {
                         int size = this.places.size() + 1;
-                        itemCount -= size;
-                        notifyItemInserted(itemCount);
-                        notifyItemRangeRemoved(itemCount, size);
+                        int i2 = itemCount - size;
+                        notifyItemInserted(i2);
+                        notifyItemRangeRemoved(i2, size);
                     } else if (!z3) {
                         notifyItemChanged(getItemCount() - 1);
                     }
-                } else {
-                    if (z) {
-                        searchBotUser();
-                    }
+                } else if (z) {
+                    searchBotUser();
                 }
             }
         }
     }
 
-    public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$BaseLocationAdapter$7gITzgpAhQdM5ZDr0Er_UR5wo2g(this, str, tL_error, tLObject));
+    public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(str, tL_error, tLObject) {
+            private final /* synthetic */ String f$1;
+            private final /* synthetic */ TLRPC.TL_error f$2;
+            private final /* synthetic */ TLObject f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                BaseLocationAdapter.this.lambda$null$4$BaseLocationAdapter(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$4$BaseLocationAdapter(String str, TL_error tL_error, TLObject tLObject) {
-        int i = 0;
+    public /* synthetic */ void lambda$null$4$BaseLocationAdapter(String str, TLRPC.TL_error tL_error, TLObject tLObject) {
         this.currentRequestNum = 0;
         this.searching = false;
         this.places.clear();
@@ -188,21 +236,17 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         this.searchInProgress = false;
         this.lastFoundQuery = str;
         if (tL_error == null) {
-            messages_BotResults messages_botresults = (messages_BotResults) tLObject;
+            TLRPC.messages_BotResults messages_botresults = (TLRPC.messages_BotResults) tLObject;
             int size = messages_botresults.results.size();
-            while (i < size) {
-                BotInlineResult botInlineResult = (BotInlineResult) messages_botresults.results.get(i);
+            for (int i = 0; i < size; i++) {
+                TLRPC.BotInlineResult botInlineResult = messages_botresults.results.get(i);
                 if ("venue".equals(botInlineResult.type)) {
-                    BotInlineMessage botInlineMessage = botInlineResult.send_message;
-                    if (botInlineMessage instanceof TL_botInlineMessageMediaVenue) {
-                        TL_botInlineMessageMediaVenue tL_botInlineMessageMediaVenue = (TL_botInlineMessageMediaVenue) botInlineMessage;
-                        ArrayList arrayList = this.iconUrls;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("https://ss3.4sqi.net/img/categories_v2/");
-                        stringBuilder.append(tL_botInlineMessageMediaVenue.venue_type);
-                        stringBuilder.append("_64.png");
-                        arrayList.add(stringBuilder.toString());
-                        TL_messageMediaVenue tL_messageMediaVenue = new TL_messageMediaVenue();
+                    TLRPC.BotInlineMessage botInlineMessage = botInlineResult.send_message;
+                    if (botInlineMessage instanceof TLRPC.TL_botInlineMessageMediaVenue) {
+                        TLRPC.TL_botInlineMessageMediaVenue tL_botInlineMessageMediaVenue = (TLRPC.TL_botInlineMessageMediaVenue) botInlineMessage;
+                        ArrayList<String> arrayList = this.iconUrls;
+                        arrayList.add("https://ss3.4sqi.net/img/categories_v2/" + tL_botInlineMessageMediaVenue.venue_type + "_64.png");
+                        TLRPC.TL_messageMediaVenue tL_messageMediaVenue = new TLRPC.TL_messageMediaVenue();
                         tL_messageMediaVenue.geo = tL_botInlineMessageMediaVenue.geo;
                         tL_messageMediaVenue.address = tL_botInlineMessageMediaVenue.address;
                         tL_messageMediaVenue.title = tL_botInlineMessageMediaVenue.title;
@@ -212,7 +256,6 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         this.places.add(tL_messageMediaVenue);
                     }
                 }
-                i++;
             }
         }
         BaseLocationAdapterDelegate baseLocationAdapterDelegate = this.delegate;

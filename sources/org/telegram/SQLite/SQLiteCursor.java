@@ -13,22 +13,31 @@ public class SQLiteCursor {
     private boolean inRow = false;
     private SQLitePreparedStatement preparedStatement;
 
+    /* access modifiers changed from: package-private */
     public native byte[] columnByteArrayValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native long columnByteBufferValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native int columnCount(long j);
 
+    /* access modifiers changed from: package-private */
     public native double columnDoubleValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native int columnIntValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native int columnIsNull(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native long columnLongValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native String columnStringValue(long j, int i);
 
+    /* access modifiers changed from: package-private */
     public native int columnType(long j, int i);
 
     public SQLiteCursor(SQLitePreparedStatement sQLitePreparedStatement) {
@@ -72,7 +81,10 @@ public class SQLiteCursor {
     public NativeByteBuffer byteBufferValue(int i) throws SQLiteException {
         checkRow();
         long columnByteBufferValue = columnByteBufferValue(this.preparedStatement.getStatementHandle(), i);
-        return columnByteBufferValue != 0 ? NativeByteBuffer.wrap(columnByteBufferValue) : null;
+        if (columnByteBufferValue != 0) {
+            return NativeByteBuffer.wrap(columnByteBufferValue);
+        }
+        return null;
     }
 
     public int getTypeOf(int i) throws SQLiteException {
@@ -101,7 +113,7 @@ public class SQLiteCursor {
                     }
                     i = i2;
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
             }
             if (step == -1) {
@@ -124,7 +136,7 @@ public class SQLiteCursor {
         this.preparedStatement.dispose();
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public void checkRow() throws SQLiteException {
         if (!this.inRow) {
             throw new SQLiteException("You must call next before");

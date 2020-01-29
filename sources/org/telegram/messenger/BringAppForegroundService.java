@@ -9,11 +9,11 @@ public class BringAppForegroundService extends IntentService {
         super("BringAppForegroundService");
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onHandleIntent(Intent intent) {
-        intent = new Intent(this, LaunchActivity.class);
-        intent.setFlags(NUM);
-        intent.setAction("android.intent.action.MAIN");
-        startActivity(intent);
+        Intent intent2 = new Intent(this, LaunchActivity.class);
+        intent2.setFlags(NUM);
+        intent2.setAction("android.intent.action.MAIN");
+        startActivity(intent2);
     }
 }

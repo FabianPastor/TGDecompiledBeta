@@ -3,7 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -31,17 +31,7 @@ public class TextColorThemeCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
-        TextView textView = this.textView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        int i2 = i | 48;
-        i = 21;
-        float f = (float) (LocaleController.isRTL ? 21 : 57);
-        if (LocaleController.isRTL) {
-            i = 57;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2, f, 0.0f, (float) i, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
     }
 
     public void setAlpha(float f) {
@@ -53,20 +43,19 @@ public class TextColorThemeCell extends FrameLayout {
         return this.alpha;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setTextAndColor(CharSequence charSequence, int i) {
         this.textView.setText(charSequence);
         this.currentColor = i;
-        boolean z = !this.needDivider && this.currentColor == 0;
-        setWillNotDraw(z);
+        setWillNotDraw(!this.needDivider && this.currentColor == 0);
         invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int i = this.currentColor;
         if (i != 0) {

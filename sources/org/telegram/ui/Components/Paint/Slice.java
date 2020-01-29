@@ -21,7 +21,7 @@ public class Slice {
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
         if (this.file != null) {
             storeData(byteBuffer);
@@ -29,9 +29,9 @@ public class Slice {
     }
 
     public void cleanResources() {
-        File file = this.file;
-        if (file != null) {
-            file.delete();
+        File file2 = this.file;
+        if (file2 != null) {
+            file2.delete();
             this.file = null;
         }
     }
@@ -50,7 +50,7 @@ public class Slice {
             deflater.end();
             fileOutputStream.close();
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -67,11 +67,11 @@ public class Slice {
                     inflater.setInput(bArr, 0, read);
                 }
                 while (true) {
-                    read = inflater.inflate(bArr2, 0, bArr2.length);
-                    if (read == 0) {
+                    int inflate = inflater.inflate(bArr2, 0, bArr2.length);
+                    if (inflate == 0) {
                         break;
                     }
-                    byteArrayOutputStream.write(bArr2, 0, read);
+                    byteArrayOutputStream.write(bArr2, 0, inflate);
                 }
                 if (inflater.finished()) {
                     inflater.end();
@@ -83,7 +83,7 @@ public class Slice {
                 boolean needsInput = inflater.needsInput();
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return null;
         }
     }

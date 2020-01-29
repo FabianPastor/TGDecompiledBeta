@@ -1,17 +1,17 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.MediaDataController.KeywordResult;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.UserProfilePhoto;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -35,46 +35,42 @@ public class MentionCell extends LinearLayout {
         this.nameTextView.setTextSize(1, 15.0f);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setGravity(3);
-        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createLinear(-2, -2, 16, 12, 0, 0, 0));
         this.usernameTextView = new TextView(context);
         this.usernameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.usernameTextView.setTextSize(1, 15.0f);
         this.usernameTextView.setSingleLine(true);
         this.usernameTextView.setGravity(3);
-        this.usernameTextView.setEllipsize(TruncateAt.END);
+        this.usernameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.usernameTextView, LayoutHelper.createLinear(-2, -2, 16, 12, 0, 8, 0));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
     }
 
-    public void setUser(User user) {
-        String str = "";
+    public void setUser(TLRPC.User user) {
         if (user == null) {
-            this.nameTextView.setText(str);
-            this.usernameTextView.setText(str);
-            this.imageView.setImageDrawable(null);
+            this.nameTextView.setText("");
+            this.usernameTextView.setText("");
+            this.imageView.setImageDrawable((Drawable) null);
             return;
         }
         this.avatarDrawable.setInfo(user);
-        UserProfilePhoto userProfilePhoto = user.photo;
+        TLRPC.UserProfilePhoto userProfilePhoto = user.photo;
         if (userProfilePhoto == null || userProfilePhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
+            this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
         }
         this.nameTextView.setText(UserObject.getUserName(user));
         if (user.username != null) {
             TextView textView = this.usernameTextView;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("@");
-            stringBuilder.append(user.username);
-            textView.setText(stringBuilder.toString());
+            textView.setText("@" + user.username);
         } else {
-            this.usernameTextView.setText(str);
+            this.usernameTextView.setText("");
         }
         this.imageView.setVisibility(0);
         this.usernameTextView.setVisibility(0);
@@ -91,26 +87,26 @@ public class MentionCell extends LinearLayout {
         this.nameTextView.invalidate();
     }
 
-    public void setEmojiSuggestion(KeywordResult keywordResult) {
+    public void setEmojiSuggestion(MediaDataController.KeywordResult keywordResult) {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
-        StringBuilder stringBuilder = new StringBuilder((keywordResult.emoji.length() + keywordResult.keyword.length()) + 4);
-        stringBuilder.append(keywordResult.emoji);
-        stringBuilder.append("   :");
-        stringBuilder.append(keywordResult.keyword);
+        StringBuilder sb = new StringBuilder(keywordResult.emoji.length() + keywordResult.keyword.length() + 4);
+        sb.append(keywordResult.emoji);
+        sb.append("   :");
+        sb.append(keywordResult.keyword);
         TextView textView = this.nameTextView;
-        textView.setText(Emoji.replaceEmoji(stringBuilder, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+        textView.setText(Emoji.replaceEmoji(sb, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
-    public void setBotCommand(String str, String str2, User user) {
+    public void setBotCommand(String str, String str2, TLRPC.User user) {
         if (user != null) {
             this.imageView.setVisibility(0);
             this.avatarDrawable.setInfo(user);
-            UserProfilePhoto userProfilePhoto = user.photo;
+            TLRPC.UserProfilePhoto userProfilePhoto = user.photo;
             if (userProfilePhoto == null || userProfilePhoto.photo_small == null) {
                 this.imageView.setImageDrawable(this.avatarDrawable);
             } else {
-                this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
+                this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
             }
         } else {
             this.imageView.setVisibility(4);
