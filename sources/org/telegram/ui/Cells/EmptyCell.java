@@ -1,7 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 
 public class EmptyCell extends FrameLayout {
@@ -23,8 +23,8 @@ public class EmptyCell extends FrameLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(this.cellHeight, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(this.cellHeight, NUM));
     }
 }

@@ -3,19 +3,22 @@ package developers.mobile.abt;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ExtensionRegistryLite;
 import com.google.protobuf.GeneratedMessageLite;
-import com.google.protobuf.GeneratedMessageLite.MethodToInvoke;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import java.io.IOException;
 
 /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
 public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
-    private static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE = new FirebaseAbt$ExperimentLite();
+    /* access modifiers changed from: private */
+    public static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE = new FirebaseAbt$ExperimentLite();
     private static volatile Parser<FirebaseAbt$ExperimentLite> PARSER;
     private String experimentId_ = "";
 
+    private FirebaseAbt$ExperimentLite() {
+    }
+
     /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
-    public static final class Builder extends com.google.protobuf.GeneratedMessageLite.Builder<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
+    public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
         /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
             this();
         }
@@ -25,11 +28,8 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
         }
     }
 
-    private FirebaseAbt$ExperimentLite() {
-    }
-
-    /* Access modifiers changed, original: protected|final */
-    public final Object dynamicMethod(MethodToInvoke methodToInvoke, Object obj, Object obj2) {
+    /* access modifiers changed from: protected */
+    public final Object dynamicMethod(GeneratedMessageLite.MethodToInvoke methodToInvoke, Object obj, Object obj2) {
         switch (FirebaseAbt$1.$SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke[methodToInvoke.ordinal()]) {
             case 1:
                 return new FirebaseAbt$ExperimentLite();
@@ -38,26 +38,26 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
             case 3:
                 return null;
             case 4:
-                return new Builder();
+                return new Builder((FirebaseAbt$1) null);
             case 5:
                 FirebaseAbt$ExperimentLite firebaseAbt$ExperimentLite = (FirebaseAbt$ExperimentLite) obj2;
-                this.experimentId_ = ((Visitor) obj).visitString(this.experimentId_.isEmpty() ^ 1, this.experimentId_, 1 ^ firebaseAbt$ExperimentLite.experimentId_.isEmpty(), firebaseAbt$ExperimentLite.experimentId_);
-                MergeFromVisitor mergeFromVisitor = MergeFromVisitor.INSTANCE;
+                this.experimentId_ = ((GeneratedMessageLite.Visitor) obj).visitString(!this.experimentId_.isEmpty(), this.experimentId_, true ^ firebaseAbt$ExperimentLite.experimentId_.isEmpty(), firebaseAbt$ExperimentLite.experimentId_);
+                GeneratedMessageLite.MergeFromVisitor mergeFromVisitor = GeneratedMessageLite.MergeFromVisitor.INSTANCE;
                 return this;
             case 6:
                 CodedInputStream codedInputStream = (CodedInputStream) obj;
                 ExtensionRegistryLite extensionRegistryLite = (ExtensionRegistryLite) obj2;
-                Object obj3 = null;
-                while (obj3 == null) {
+                boolean z = false;
+                while (!z) {
                     try {
                         int readTag = codedInputStream.readTag();
                         if (readTag != 0) {
                             if (readTag == 10) {
                                 this.experimentId_ = codedInputStream.readStringRequireUtf8();
-                            } else if (codedInputStream.skipField(readTag)) {
+                            } else if (!codedInputStream.skipField(readTag)) {
                             }
                         }
-                        obj3 = 1;
+                        z = true;
                     } catch (InvalidProtocolBufferException e) {
                         e.setUnfinishedMessage(this);
                         throw new RuntimeException(e);
@@ -74,7 +74,7 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
                 if (PARSER == null) {
                     synchronized (FirebaseAbt$ExperimentLite.class) {
                         if (PARSER == null) {
-                            PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+                            PARSER = new GeneratedMessageLite.DefaultInstanceBasedParser(DEFAULT_INSTANCE);
                         }
                     }
                 }

@@ -77,12 +77,12 @@ public class ArrayUtils {
     }
 
     public static <T> boolean contains(T[] tArr, T t) {
-        for (Object obj : tArr) {
-            if (obj == null) {
+        for (T t2 : tArr) {
+            if (t2 == null) {
                 if (t == null) {
                     return true;
                 }
-            } else if (t != null && obj.equals(t)) {
+            } else if (t != null && t2.equals(t)) {
                 return true;
             }
         }
@@ -99,11 +99,12 @@ public class ArrayUtils {
     }
 
     public static int indexOf(int[] iArr, int i) {
-        if (iArr != null) {
-            for (int i2 = 0; i2 < iArr.length; i2++) {
-                if (iArr[i2] == i) {
-                    return i2;
-                }
+        if (iArr == null) {
+            return -1;
+        }
+        for (int i2 = 0; i2 < iArr.length; i2++) {
+            if (iArr[i2] == i) {
+                return i2;
             }
         }
         return -1;
@@ -142,10 +143,10 @@ public class ArrayUtils {
                 } else if (length == 1) {
                     return null;
                 } else {
-                    Object[] objArr = (Object[]) Array.newInstance(cls, length - 1);
-                    System.arraycopy(tArr, 0, objArr, 0, i);
-                    System.arraycopy(tArr, i + 1, objArr, i, (length - i) - 1);
-                    return objArr;
+                    T[] tArr2 = (Object[]) Array.newInstance(cls, length - 1);
+                    System.arraycopy(tArr, 0, tArr2, 0, i);
+                    System.arraycopy(tArr, i + 1, tArr2, i, (length - i) - 1);
+                    return tArr2;
                 }
             }
         }
@@ -174,12 +175,12 @@ public class ArrayUtils {
         int length = iArr.length;
         for (int i2 = 0; i2 < length; i2++) {
             if (iArr[i2] == i) {
-                i = length - 1;
-                int[] iArr2 = new int[i];
+                int i3 = length - 1;
+                int[] iArr2 = new int[i3];
                 if (i2 > 0) {
                     System.arraycopy(iArr, 0, iArr2, 0, i2);
                 }
-                if (i2 < i) {
+                if (i2 < i3) {
                     System.arraycopy(iArr, i2 + 1, iArr2, i2, (length - i2) - 1);
                 }
                 return iArr2;

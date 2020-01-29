@@ -4,15 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.Components.PhotoFilterView.CurvesToolValue;
-import org.telegram.ui.Components.PhotoFilterView.CurvesValue;
+import org.telegram.ui.Components.PhotoFilterView;
 
 public class PhotoFilterCurvesControl extends View {
     private static final int CurvesSegmentBlacks = 1;
@@ -29,7 +27,7 @@ public class PhotoFilterCurvesControl extends View {
     private int activeSegment = 0;
     private Rect actualArea = new Rect();
     private boolean checkForMoving = true;
-    private CurvesToolValue curveValue;
+    private PhotoFilterView.CurvesToolValue curveValue;
     private PhotoFilterCurvesControlDelegate delegate;
     private boolean isMoving;
     private float lastX;
@@ -44,19 +42,19 @@ public class PhotoFilterCurvesControl extends View {
         void valueChanged();
     }
 
-    public PhotoFilterCurvesControl(Context context, CurvesToolValue curvesToolValue) {
+    public PhotoFilterCurvesControl(Context context, PhotoFilterView.CurvesToolValue curvesToolValue) {
         super(context);
         setWillNotDraw(false);
         this.curveValue = curvesToolValue;
         this.paint.setColor(-NUM);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        this.paint.setStyle(Style.STROKE);
+        this.paint.setStyle(Paint.Style.STROKE);
         this.paintDash.setColor(-NUM);
         this.paintDash.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.paintDash.setStyle(Style.STROKE);
+        this.paintDash.setStyle(Paint.Style.STROKE);
         this.paintCurve.setColor(-1);
         this.paintCurve.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.paintCurve.setStyle(Style.STROKE);
+        this.paintCurve.setStyle(Paint.Style.STROKE);
         this.textPaint.setColor(-4210753);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
     }
@@ -73,97 +71,81 @@ public class PhotoFilterCurvesControl extends View {
         rect.height = f4;
     }
 
-    /* JADX WARNING: Missing block: B:9:0x0014, code skipped:
-            if (r0 != 6) goto L_0x0078;
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0014, code lost:
+        if (r0 != 6) goto L_0x0078;
      */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
         /*
-        r7 = this;
-        r0 = r8.getActionMasked();
-        r1 = 0;
-        r2 = 3;
-        r3 = 1;
-        if (r0 == 0) goto L_0x002b;
-    L_0x0009:
-        if (r0 == r3) goto L_0x001f;
-    L_0x000b:
-        r4 = 2;
-        if (r0 == r4) goto L_0x0017;
-    L_0x000e:
-        if (r0 == r2) goto L_0x001f;
-    L_0x0010:
-        r4 = 5;
-        if (r0 == r4) goto L_0x002b;
-    L_0x0013:
-        r4 = 6;
-        if (r0 == r4) goto L_0x001f;
-    L_0x0016:
-        goto L_0x0078;
-    L_0x0017:
-        r0 = r7.isMoving;
-        if (r0 == 0) goto L_0x0078;
-    L_0x001b:
-        r7.handlePan(r4, r8);
-        goto L_0x0078;
-    L_0x001f:
-        r0 = r7.isMoving;
-        if (r0 == 0) goto L_0x0028;
-    L_0x0023:
-        r7.handlePan(r2, r8);
-        r7.isMoving = r1;
-    L_0x0028:
-        r7.checkForMoving = r3;
-        goto L_0x0078;
-    L_0x002b:
-        r0 = r8.getPointerCount();
-        if (r0 != r3) goto L_0x006d;
-    L_0x0031:
-        r0 = r7.checkForMoving;
-        if (r0 == 0) goto L_0x0078;
-    L_0x0035:
-        r0 = r7.isMoving;
-        if (r0 != 0) goto L_0x0078;
-    L_0x0039:
-        r0 = r8.getX();
-        r2 = r8.getY();
-        r7.lastX = r0;
-        r7.lastY = r2;
-        r4 = r7.actualArea;
-        r5 = r4.x;
-        r6 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r6 < 0) goto L_0x0063;
-    L_0x004d:
-        r6 = r4.width;
-        r5 = r5 + r6;
-        r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
-        if (r0 > 0) goto L_0x0063;
-    L_0x0054:
-        r0 = r4.y;
-        r5 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
-        if (r5 < 0) goto L_0x0063;
-    L_0x005a:
-        r4 = r4.height;
-        r0 = r0 + r4;
-        r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
-        if (r0 > 0) goto L_0x0063;
-    L_0x0061:
-        r7.isMoving = r3;
-    L_0x0063:
-        r7.checkForMoving = r1;
-        r0 = r7.isMoving;
-        if (r0 == 0) goto L_0x0078;
-    L_0x0069:
-        r7.handlePan(r3, r8);
-        goto L_0x0078;
-    L_0x006d:
-        r0 = r7.isMoving;
-        if (r0 == 0) goto L_0x0078;
-    L_0x0071:
-        r7.handlePan(r2, r8);
-        r7.checkForMoving = r3;
-        r7.isMoving = r1;
-    L_0x0078:
-        return r3;
+            r7 = this;
+            int r0 = r8.getActionMasked()
+            r1 = 0
+            r2 = 3
+            r3 = 1
+            if (r0 == 0) goto L_0x002b
+            if (r0 == r3) goto L_0x001f
+            r4 = 2
+            if (r0 == r4) goto L_0x0017
+            if (r0 == r2) goto L_0x001f
+            r4 = 5
+            if (r0 == r4) goto L_0x002b
+            r4 = 6
+            if (r0 == r4) goto L_0x001f
+            goto L_0x0078
+        L_0x0017:
+            boolean r0 = r7.isMoving
+            if (r0 == 0) goto L_0x0078
+            r7.handlePan(r4, r8)
+            goto L_0x0078
+        L_0x001f:
+            boolean r0 = r7.isMoving
+            if (r0 == 0) goto L_0x0028
+            r7.handlePan(r2, r8)
+            r7.isMoving = r1
+        L_0x0028:
+            r7.checkForMoving = r3
+            goto L_0x0078
+        L_0x002b:
+            int r0 = r8.getPointerCount()
+            if (r0 != r3) goto L_0x006d
+            boolean r0 = r7.checkForMoving
+            if (r0 == 0) goto L_0x0078
+            boolean r0 = r7.isMoving
+            if (r0 != 0) goto L_0x0078
+            float r0 = r8.getX()
+            float r2 = r8.getY()
+            r7.lastX = r0
+            r7.lastY = r2
+            org.telegram.ui.Components.Rect r4 = r7.actualArea
+            float r5 = r4.x
+            int r6 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
+            if (r6 < 0) goto L_0x0063
+            float r6 = r4.width
+            float r5 = r5 + r6
+            int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
+            if (r0 > 0) goto L_0x0063
+            float r0 = r4.y
+            int r5 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+            if (r5 < 0) goto L_0x0063
+            float r4 = r4.height
+            float r0 = r0 + r4
+            int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+            if (r0 > 0) goto L_0x0063
+            r7.isMoving = r3
+        L_0x0063:
+            r7.checkForMoving = r1
+            boolean r0 = r7.isMoving
+            if (r0 == 0) goto L_0x0078
+            r7.handlePan(r3, r8)
+            goto L_0x0078
+        L_0x006d:
+            boolean r0 = r7.isMoving
+            if (r0 == 0) goto L_0x0078
+            r7.handlePan(r2, r8)
+            r7.checkForMoving = r3
+            r7.isMoving = r1
+        L_0x0078:
+            return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterCurvesControl.onTouchEvent(android.view.MotionEvent):boolean");
     }
@@ -175,8 +157,8 @@ public class PhotoFilterCurvesControl extends View {
             selectSegmentWithPoint(x);
         } else if (i == 2) {
             float min = Math.min(2.0f, (this.lastY - y) / 8.0f);
-            CurvesValue curvesValue = null;
-            CurvesToolValue curvesToolValue = this.curveValue;
+            PhotoFilterView.CurvesValue curvesValue = null;
+            PhotoFilterView.CurvesToolValue curvesToolValue = this.curveValue;
             int i2 = curvesToolValue.activeType;
             if (i2 == 0) {
                 curvesValue = curvesToolValue.luminanceCurve;
@@ -224,79 +206,70 @@ public class PhotoFilterCurvesControl extends View {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     @SuppressLint({"DrawAllocation"})
     public void onDraw(Canvas canvas) {
-        float f;
-        float f2;
-        float f3 = this.actualArea.width / 5.0f;
-        int i = 0;
-        for (int i2 = 0; i2 < 4; i2++) {
+        String str;
+        float f = this.actualArea.width / 5.0f;
+        for (int i = 0; i < 4; i++) {
             Rect rect = this.actualArea;
-            float f4 = rect.x;
-            float f5 = ((float) i2) * f3;
-            f = (f4 + f3) + f5;
-            f2 = rect.y;
-            canvas.drawLine(f, f2, (f4 + f3) + f5, f2 + rect.height, this.paint);
+            float f2 = rect.x;
+            float f3 = ((float) i) * f;
+            float f4 = rect.y;
+            canvas.drawLine(f2 + f + f3, f4, f2 + f + f3, f4 + rect.height, this.paint);
         }
         Rect rect2 = this.actualArea;
-        float f6 = rect2.x;
-        f = rect2.y;
-        canvas.drawLine(f6, f + rect2.height, f6 + rect2.width, f, this.paintDash);
-        CurvesValue curvesValue = null;
-        int i3 = this.curveValue.activeType;
-        if (i3 == 0) {
+        float f5 = rect2.x;
+        float f6 = rect2.y;
+        canvas.drawLine(f5, f6 + rect2.height, f5 + rect2.width, f6, this.paintDash);
+        PhotoFilterView.CurvesValue curvesValue = null;
+        int i2 = this.curveValue.activeType;
+        if (i2 == 0) {
             this.paintCurve.setColor(-1);
             curvesValue = this.curveValue.luminanceCurve;
-        } else if (i3 == 1) {
+        } else if (i2 == 1) {
             this.paintCurve.setColor(-1229492);
             curvesValue = this.curveValue.redCurve;
-        } else if (i3 == 2) {
+        } else if (i2 == 2) {
             this.paintCurve.setColor(-15667555);
             curvesValue = this.curveValue.greenCurve;
-        } else if (i3 == 3) {
+        } else if (i2 == 3) {
             this.paintCurve.setColor(-13404165);
             curvesValue = this.curveValue.blueCurve;
         }
-        for (i3 = 0; i3 < 5; i3++) {
-            String format;
-            String str = "%.2f";
+        for (int i3 = 0; i3 < 5; i3++) {
             if (i3 == 0) {
-                format = String.format(Locale.US, str, new Object[]{Float.valueOf(curvesValue.blacksLevel / 100.0f)});
+                str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.blacksLevel / 100.0f)});
             } else if (i3 == 1) {
-                format = String.format(Locale.US, str, new Object[]{Float.valueOf(curvesValue.shadowsLevel / 100.0f)});
+                str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.shadowsLevel / 100.0f)});
             } else if (i3 == 2) {
-                format = String.format(Locale.US, str, new Object[]{Float.valueOf(curvesValue.midtonesLevel / 100.0f)});
+                str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.midtonesLevel / 100.0f)});
             } else if (i3 == 3) {
-                format = String.format(Locale.US, str, new Object[]{Float.valueOf(curvesValue.highlightsLevel / 100.0f)});
+                str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.highlightsLevel / 100.0f)});
             } else if (i3 != 4) {
-                format = "";
+                str = "";
             } else {
-                format = String.format(Locale.US, str, new Object[]{Float.valueOf(curvesValue.whitesLevel / 100.0f)});
+                str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.whitesLevel / 100.0f)});
             }
-            f2 = this.textPaint.measureText(format);
+            float measureText = this.textPaint.measureText(str);
             Rect rect3 = this.actualArea;
-            canvas.drawText(format, (rect3.x + ((f3 - f2) / 2.0f)) + (((float) i3) * f3), (rect3.y + rect3.height) - ((float) AndroidUtilities.dp(4.0f)), this.textPaint);
+            canvas.drawText(str, rect3.x + ((f - measureText) / 2.0f) + (((float) i3) * f), (rect3.y + rect3.height) - ((float) AndroidUtilities.dp(4.0f)), this.textPaint);
         }
         float[] interpolateCurve = curvesValue.interpolateCurve();
         invalidate();
         this.path.reset();
-        while (i < interpolateCurve.length / 2) {
-            Path path;
-            Rect rect4;
-            int i4;
-            if (i == 0) {
-                path = this.path;
-                rect4 = this.actualArea;
-                i4 = i * 2;
-                path.moveTo(rect4.x + (interpolateCurve[i4] * rect4.width), rect4.y + ((1.0f - interpolateCurve[i4 + 1]) * rect4.height));
+        for (int i4 = 0; i4 < interpolateCurve.length / 2; i4++) {
+            if (i4 == 0) {
+                Path path2 = this.path;
+                Rect rect4 = this.actualArea;
+                int i5 = i4 * 2;
+                path2.moveTo(rect4.x + (interpolateCurve[i5] * rect4.width), rect4.y + ((1.0f - interpolateCurve[i5 + 1]) * rect4.height));
             } else {
-                path = this.path;
-                rect4 = this.actualArea;
-                i4 = i * 2;
-                path.lineTo(rect4.x + (interpolateCurve[i4] * rect4.width), rect4.y + ((1.0f - interpolateCurve[i4 + 1]) * rect4.height));
+                Path path3 = this.path;
+                Rect rect5 = this.actualArea;
+                int i6 = i4 * 2;
+                path3.lineTo(rect5.x + (interpolateCurve[i6] * rect5.width), rect5.y + ((1.0f - interpolateCurve[i6 + 1]) * rect5.height));
             }
-            i++;
         }
         canvas.drawPath(this.path, this.paintCurve);
     }

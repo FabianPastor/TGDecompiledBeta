@@ -1,12 +1,11 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -22,12 +21,12 @@ public class PhotoAttachPermissionCell extends FrameLayout {
     public PhotoAttachPermissionCell(Context context) {
         super(context);
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionImage"), Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
         this.imageView2 = new ImageView(context);
-        this.imageView2.setScaleType(ScaleType.CENTER);
-        this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionMark"), Mode.MULTIPLY));
+        this.imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionMark"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView2, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("chat_attachPermissionText"));
@@ -56,8 +55,8 @@ public class PhotoAttachPermissionCell extends FrameLayout {
         this.imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44.0f, 17, 0.0f, 0.0f, 2.0f, 27.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(this.itemSize, NUM), MeasureSpec.makeMeasureSpec(this.itemSize + AndroidUtilities.dp(5.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(this.itemSize + AndroidUtilities.dp(5.0f), NUM));
     }
 }

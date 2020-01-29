@@ -6,13 +6,11 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.DecelerateInterpolator;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
@@ -20,18 +18,20 @@ import org.telegram.messenger.LocaleController;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
-    private ShutterButtonDelegate delegate;
+    /* access modifiers changed from: private */
+    public ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
     private Runnable longPressed = new Runnable() {
         public void run() {
             if (ShutterButton.this.delegate != null && !ShutterButton.this.delegate.shutterLongPressed()) {
-                ShutterButton.this.processRelease = false;
+                boolean unused = ShutterButton.this.processRelease = false;
             }
         }
     };
     private boolean pressed;
-    private boolean processRelease;
+    /* access modifiers changed from: private */
+    public boolean processRelease;
     private Paint redPaint;
     private float redProgress;
     private Drawable shadowDrawable = getResources().getDrawable(NUM);
@@ -56,10 +56,10 @@ public class ShutterButton extends View {
 
     public ShutterButton(Context context) {
         super(context);
-        this.whitePaint.setStyle(Style.FILL);
+        this.whitePaint.setStyle(Paint.Style.FILL);
         this.whitePaint.setColor(-1);
         this.redPaint = new Paint(1);
-        this.redPaint.setStyle(Style.FILL);
+        this.redPaint.setStyle(Paint.Style.FILL);
         this.redPaint.setColor(-3324089);
         this.state = State.DEFAULT;
     }
@@ -74,17 +74,10 @@ public class ShutterButton extends View {
 
     private void setHighlighted(boolean z) {
         AnimatorSet animatorSet = new AnimatorSet();
-        Animator[] animatorArr;
         if (z) {
-            animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.06f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.06f});
-            animatorSet.playTogether(animatorArr);
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.06f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.06f})});
         } else {
-            animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.0f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.0f});
-            animatorSet.playTogether(animatorArr);
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.0f})});
             animatorSet.setStartDelay(40);
         }
         animatorSet.setDuration(120);
@@ -102,7 +95,7 @@ public class ShutterButton extends View {
         return this.state;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int measuredWidth = getMeasuredWidth() / 2;
         int measuredHeight = getMeasuredHeight() / 2;
@@ -127,7 +120,7 @@ public class ShutterButton extends View {
                     this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
                     invalidate();
                 }
-                canvas.drawCircle(f, f2, (((float) AndroidUtilities.dp(26.0f)) * scaleX) * this.redProgress, this.redPaint);
+                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.0f)) * scaleX * this.redProgress, this.redPaint);
             } else if (this.redProgress != 0.0f) {
                 canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.0f)) * scaleX, this.redPaint);
             }
@@ -136,7 +129,7 @@ public class ShutterButton extends View {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         setMeasuredDimension(AndroidUtilities.dp(84.0f), AndroidUtilities.dp(84.0f));
     }
@@ -180,9 +173,9 @@ public class ShutterButton extends View {
         return true;
     }
 
-    public void setState(State state, boolean z) {
-        if (this.state != state) {
-            this.state = state;
+    public void setState(State state2, boolean z) {
+        if (this.state != state2) {
+            this.state = state2;
             if (z) {
                 this.lastUpdateTime = System.currentTimeMillis();
                 this.totalTime = 0;
@@ -203,9 +196,9 @@ public class ShutterButton extends View {
         accessibilityNodeInfo.setClassName("android.widget.Button");
         accessibilityNodeInfo.setClickable(true);
         accessibilityNodeInfo.setLongClickable(true);
-        if (VERSION.SDK_INT >= 21) {
-            accessibilityNodeInfo.addAction(new AccessibilityAction(AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
-            accessibilityNodeInfo.addAction(new AccessibilityAction(AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
+        if (Build.VERSION.SDK_INT >= 21) {
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
         }
     }
 }

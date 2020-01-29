@@ -10,7 +10,6 @@ import android.opengl.GLUtils;
 import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.TextureView;
-import android.view.TextureView.SurfaceTextureListener;
 import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -20,22 +19,30 @@ import javax.microedition.khronos.egl.EGLSurface;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
-import org.telegram.ui.Components.Paint.Painting.PaintingDelegate;
+import org.telegram.ui.Components.Paint.Painting;
 import org.telegram.ui.Components.Size;
 
 public class RenderView extends TextureView {
-    private Bitmap bitmap;
+    /* access modifiers changed from: private */
+    public Bitmap bitmap;
     private Brush brush;
     private int color;
     private RenderViewDelegate delegate;
     private Input input = new Input(this);
-    private CanvasInternal internal;
-    private int orientation;
-    private Painting painting;
-    private DispatchQueue queue;
-    private boolean shuttingDown;
-    private boolean transformedBitmap;
-    private UndoStore undoStore;
+    /* access modifiers changed from: private */
+    public CanvasInternal internal;
+    /* access modifiers changed from: private */
+    public int orientation;
+    /* access modifiers changed from: private */
+    public Painting painting;
+    /* access modifiers changed from: private */
+    public DispatchQueue queue;
+    /* access modifiers changed from: private */
+    public boolean shuttingDown;
+    /* access modifiers changed from: private */
+    public boolean transformedBitmap;
+    /* access modifiers changed from: private */
+    public UndoStore undoStore;
     private float weight;
 
     public interface RenderViewDelegate {
@@ -46,15 +53,199 @@ public class RenderView extends TextureView {
         boolean shouldDraw();
     }
 
+    public RenderView(Context context, Painting painting2, Bitmap bitmap2, int i) {
+        super(context);
+        this.bitmap = bitmap2;
+        this.orientation = i;
+        this.painting = painting2;
+        this.painting.setRenderView(this);
+        setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+            }
+
+            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
+                if (surfaceTexture != null && RenderView.this.internal == null) {
+                    RenderView renderView = RenderView.this;
+                    CanvasInternal unused = renderView.internal = new CanvasInternal(surfaceTexture);
+                    RenderView.this.internal.setBufferSize(i, i2);
+                    RenderView.this.updateTransform();
+                    RenderView.this.internal.requestRender();
+                    if (RenderView.this.painting.isPaused()) {
+                        RenderView.this.painting.onResume();
+                    }
+                }
+            }
+
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
+                if (RenderView.this.internal != null) {
+                    RenderView.this.internal.setBufferSize(i, i2);
+                    RenderView.this.updateTransform();
+                    RenderView.this.internal.requestRender();
+                    RenderView.this.internal.postRunnable(new Runnable() {
+                        public void run() {
+                            if (RenderView.this.internal != null) {
+                                RenderView.this.internal.requestRender();
+                            }
+                        }
+                    });
+                }
+            }
+
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+                if (RenderView.this.internal != null && !RenderView.this.shuttingDown) {
+                    RenderView.this.painting.onPause(new Runnable() {
+                        public void run() {
+                            RenderView.this.internal.shutdown();
+                            CanvasInternal unused = RenderView.this.internal = null;
+                        }
+                    });
+                }
+                return true;
+            }
+        });
+        this.painting.setDelegate(new Painting.PaintingDelegate() {
+            public void strokeCommited() {
+            }
+
+            public void contentChanged(RectF rectF) {
+                if (RenderView.this.internal != null) {
+                    RenderView.this.internal.scheduleRedraw();
+                }
+            }
+
+            public UndoStore requestUndoStore() {
+                return RenderView.this.undoStore;
+            }
+
+            public DispatchQueue requestDispatchQueue() {
+                return RenderView.this.queue;
+            }
+        });
+    }
+
+    /* access modifiers changed from: protected */
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, i2);
+    }
+
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if (motionEvent.getPointerCount() > 1) {
+            return false;
+        }
+        CanvasInternal canvasInternal = this.internal;
+        if (canvasInternal != null && canvasInternal.initialized && this.internal.ready) {
+            this.input.process(motionEvent);
+        }
+        return true;
+    }
+
+    public void setUndoStore(UndoStore undoStore2) {
+        this.undoStore = undoStore2;
+    }
+
+    public void setQueue(DispatchQueue dispatchQueue) {
+        this.queue = dispatchQueue;
+    }
+
+    public void setDelegate(RenderViewDelegate renderViewDelegate) {
+        this.delegate = renderViewDelegate;
+    }
+
+    public Painting getPainting() {
+        return this.painting;
+    }
+
+    private float brushWeightForSize(float f) {
+        float f2 = this.painting.getSize().width;
+        return (0.00390625f * f2) + (f2 * 0.043945312f * f);
+    }
+
+    public int getCurrentColor() {
+        return this.color;
+    }
+
+    public void setColor(int i) {
+        this.color = i;
+    }
+
+    public float getCurrentWeight() {
+        return this.weight;
+    }
+
+    public void setBrushSize(float f) {
+        this.weight = brushWeightForSize(f);
+    }
+
+    public Brush getCurrentBrush() {
+        return this.brush;
+    }
+
+    public void setBrush(Brush brush2) {
+        Painting painting2 = this.painting;
+        this.brush = brush2;
+        painting2.setBrush(brush2);
+    }
+
+    /* access modifiers changed from: private */
+    public void updateTransform() {
+        Matrix matrix = new Matrix();
+        float width = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : 1.0f;
+        if (width <= 0.0f) {
+            width = 1.0f;
+        }
+        Size size = getPainting().getSize();
+        matrix.preTranslate(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
+        matrix.preScale(width, -width);
+        matrix.preTranslate((-size.width) / 2.0f, (-size.height) / 2.0f);
+        this.input.setMatrix(matrix);
+        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
+    }
+
+    public boolean shouldDraw() {
+        RenderViewDelegate renderViewDelegate = this.delegate;
+        return renderViewDelegate == null || renderViewDelegate.shouldDraw();
+    }
+
+    public void onBeganDrawing() {
+        RenderViewDelegate renderViewDelegate = this.delegate;
+        if (renderViewDelegate != null) {
+            renderViewDelegate.onBeganDrawing();
+        }
+    }
+
+    public void onFinishedDrawing(boolean z) {
+        RenderViewDelegate renderViewDelegate = this.delegate;
+        if (renderViewDelegate != null) {
+            renderViewDelegate.onFinishedDrawing(z);
+        }
+    }
+
+    public void shutdown() {
+        this.shuttingDown = true;
+        if (this.internal != null) {
+            performInContext(new Runnable() {
+                public void run() {
+                    RenderView.this.painting.cleanResources(RenderView.this.transformedBitmap);
+                    RenderView.this.internal.shutdown();
+                    CanvasInternal unused = RenderView.this.internal = null;
+                }
+            });
+        }
+        setVisibility(8);
+    }
+
     private class CanvasInternal extends DispatchQueue {
         private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
         private final int EGL_OPENGL_ES2_BIT = 4;
-        private int bufferHeight;
-        private int bufferWidth;
-        private Runnable drawRunnable = new Runnable() {
+        /* access modifiers changed from: private */
+        public int bufferHeight;
+        /* access modifiers changed from: private */
+        public int bufferWidth;
+        /* access modifiers changed from: private */
+        public Runnable drawRunnable = new Runnable() {
             public void run() {
                 if (CanvasInternal.this.initialized && !RenderView.this.shuttingDown) {
-                    CanvasInternal.this.setCurrentContext();
+                    boolean unused = CanvasInternal.this.setCurrentContext();
                     GLES20.glBindFramebuffer(36160, 0);
                     GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
                     GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -65,27 +256,33 @@ public class RenderView extends TextureView {
                     if (!CanvasInternal.this.ready) {
                         RenderView.this.queue.postRunnable(new Runnable() {
                             public void run() {
-                                CanvasInternal.this.ready = true;
+                                boolean unused = CanvasInternal.this.ready = true;
                             }
                         }, 200);
                     }
                 }
             }
         };
-        private EGL10 egl10;
+        /* access modifiers changed from: private */
+        public EGL10 egl10;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
-        private EGLDisplay eglDisplay;
-        private EGLSurface eglSurface;
-        private boolean initialized;
+        /* access modifiers changed from: private */
+        public EGLDisplay eglDisplay;
+        /* access modifiers changed from: private */
+        public EGLSurface eglSurface;
+        /* access modifiers changed from: private */
+        public boolean initialized;
         private long lastRenderCallTime;
-        private boolean ready;
-        private Runnable scheduledRunnable;
+        /* access modifiers changed from: private */
+        public boolean ready;
+        /* access modifiers changed from: private */
+        public Runnable scheduledRunnable;
         private SurfaceTexture surfaceTexture;
 
-        public CanvasInternal(SurfaceTexture surfaceTexture) {
+        public CanvasInternal(SurfaceTexture surfaceTexture2) {
             super("CanvasInternal");
-            this.surfaceTexture = surfaceTexture;
+            this.surfaceTexture = surfaceTexture2;
         }
 
         public void run() {
@@ -99,94 +296,76 @@ public class RenderView extends TextureView {
             this.egl10 = (EGL10) EGLContext.getEGL();
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             EGLDisplay eGLDisplay = this.eglDisplay;
-            StringBuilder stringBuilder;
             if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("eglGetDisplay failed ");
-                    stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                    FileLog.e(stringBuilder.toString());
+                    FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
-            if (this.egl10.eglInitialize(eGLDisplay, new int[2])) {
-                int[] iArr = new int[1];
-                EGLConfig[] eGLConfigArr = new EGLConfig[1];
-                if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, eGLConfigArr, 1, iArr)) {
+            if (!this.egl10.eglInitialize(eGLDisplay, new int[2])) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            }
+            int[] iArr = new int[1];
+            EGLConfig[] eGLConfigArr = new EGLConfig[1];
+            if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, eGLConfigArr, 1, iArr)) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            } else if (iArr[0] > 0) {
+                this.eglConfig = eGLConfigArr[0];
+                this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                if (this.eglContext == null) {
                     if (BuildVars.LOGS_ENABLED) {
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("eglChooseConfig failed ");
-                        stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        FileLog.e(stringBuilder.toString());
-                    }
-                    finish();
-                    return false;
-                } else if (iArr[0] > 0) {
-                    this.eglConfig = eGLConfigArr[0];
-                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                    if (this.eglContext == null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("eglCreateContext failed ");
-                            stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            FileLog.e(stringBuilder.toString());
-                        }
-                        finish();
-                        return false;
-                    }
-                    SurfaceTexture surfaceTexture = this.surfaceTexture;
-                    if (surfaceTexture instanceof SurfaceTexture) {
-                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture, null);
-                        EGLSurface eGLSurface = this.eglSurface;
-                        if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("createWindowSurface failed ");
-                                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                FileLog.e(stringBuilder.toString());
-                            }
-                            finish();
-                            return false;
-                        } else if (this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
-                            GLES20.glEnable(3042);
-                            GLES20.glDisable(3024);
-                            GLES20.glDisable(2960);
-                            GLES20.glDisable(2929);
-                            RenderView.this.painting.setupShaders();
-                            checkBitmap();
-                            RenderView.this.painting.setBitmap(RenderView.this.bitmap);
-                            Utils.HasGLError();
-                            return true;
-                        } else {
-                            if (BuildVars.LOGS_ENABLED) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("eglMakeCurrent failed ");
-                                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                FileLog.e(stringBuilder.toString());
-                            }
-                            finish();
-                            return false;
-                        }
-                    }
-                    finish();
-                    return false;
-                } else {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("eglConfig not initialized");
+                        FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
                     finish();
                     return false;
                 }
+                SurfaceTexture surfaceTexture2 = this.surfaceTexture;
+                if (surfaceTexture2 instanceof SurfaceTexture) {
+                    this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                    EGLSurface eGLSurface = this.eglSurface;
+                    if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else {
+                        GLES20.glEnable(3042);
+                        GLES20.glDisable(3024);
+                        GLES20.glDisable(2960);
+                        GLES20.glDisable(2929);
+                        RenderView.this.painting.setupShaders();
+                        checkBitmap();
+                        RenderView.this.painting.setBitmap(RenderView.this.bitmap);
+                        Utils.HasGLError();
+                        return true;
+                    }
+                } else {
+                    finish();
+                    return false;
+                }
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglConfig not initialized");
+                }
+                finish();
+                return false;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("eglInitialize failed ");
-                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                FileLog.e(stringBuilder.toString());
-            }
-            finish();
-            return false;
         }
 
         private Bitmap createBitmap(Bitmap bitmap, float f) {
@@ -205,23 +384,25 @@ public class RenderView extends TextureView {
                 }
                 float f = size.width / width;
                 RenderView renderView = RenderView.this;
-                renderView.bitmap = createBitmap(renderView.bitmap, f);
-                RenderView.this.orientation = 0;
-                RenderView.this.transformedBitmap = true;
+                Bitmap unused = renderView.bitmap = createBitmap(renderView.bitmap, f);
+                int unused2 = RenderView.this.orientation = 0;
+                boolean unused3 = RenderView.this.transformedBitmap = true;
             }
         }
 
-        private boolean setCurrentContext() {
+        /* access modifiers changed from: private */
+        public boolean setCurrentContext() {
             if (!this.initialized) {
                 return false;
             }
-            if (!(this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377)))) {
-                EGL10 egl10 = this.egl10;
-                EGLDisplay eGLDisplay = this.eglDisplay;
-                EGLSurface eGLSurface = this.eglSurface;
-                if (!egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
-                    return false;
-                }
+            if (this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) {
+                return true;
+            }
+            EGL10 egl102 = this.egl10;
+            EGLDisplay eGLDisplay = this.eglDisplay;
+            EGLSurface eGLSurface = this.eglSurface;
+            if (!egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                return false;
             }
             return true;
         }
@@ -247,7 +428,7 @@ public class RenderView extends TextureView {
             }
             this.scheduledRunnable = new Runnable() {
                 public void run() {
-                    CanvasInternal.this.scheduledRunnable = null;
+                    Runnable unused = CanvasInternal.this.scheduledRunnable = null;
                     CanvasInternal.this.drawRunnable.run();
                 }
             };
@@ -256,10 +437,10 @@ public class RenderView extends TextureView {
 
         public void finish() {
             if (this.eglSurface != null) {
-                EGL10 egl10 = this.egl10;
+                EGL10 egl102 = this.egl10;
                 EGLDisplay eGLDisplay = this.eglDisplay;
                 EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
                 this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
                 this.eglSurface = null;
             }
@@ -302,195 +483,18 @@ public class RenderView extends TextureView {
                 });
                 countDownLatch.await();
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
             return bitmapArr[0];
         }
     }
 
-    public RenderView(Context context, Painting painting, Bitmap bitmap, int i) {
-        super(context);
-        this.bitmap = bitmap;
-        this.orientation = i;
-        this.painting = painting;
-        this.painting.setRenderView(this);
-        setSurfaceTextureListener(new SurfaceTextureListener() {
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-            }
-
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (surfaceTexture != null && RenderView.this.internal == null) {
-                    RenderView renderView = RenderView.this;
-                    renderView.internal = new CanvasInternal(surfaceTexture);
-                    RenderView.this.internal.setBufferSize(i, i2);
-                    RenderView.this.updateTransform();
-                    RenderView.this.internal.requestRender();
-                    if (RenderView.this.painting.isPaused()) {
-                        RenderView.this.painting.onResume();
-                    }
-                }
-            }
-
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (RenderView.this.internal != null) {
-                    RenderView.this.internal.setBufferSize(i, i2);
-                    RenderView.this.updateTransform();
-                    RenderView.this.internal.requestRender();
-                    RenderView.this.internal.postRunnable(new Runnable() {
-                        public void run() {
-                            if (RenderView.this.internal != null) {
-                                RenderView.this.internal.requestRender();
-                            }
-                        }
-                    });
-                }
-            }
-
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                if (!(RenderView.this.internal == null || RenderView.this.shuttingDown)) {
-                    RenderView.this.painting.onPause(new Runnable() {
-                        public void run() {
-                            RenderView.this.internal.shutdown();
-                            RenderView.this.internal = null;
-                        }
-                    });
-                }
-                return true;
-            }
-        });
-        this.painting.setDelegate(new PaintingDelegate() {
-            public void strokeCommited() {
-            }
-
-            public void contentChanged(RectF rectF) {
-                if (RenderView.this.internal != null) {
-                    RenderView.this.internal.scheduleRedraw();
-                }
-            }
-
-            public UndoStore requestUndoStore() {
-                return RenderView.this.undoStore;
-            }
-
-            public DispatchQueue requestDispatchQueue() {
-                return RenderView.this.queue;
-            }
-        });
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
-    }
-
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getPointerCount() > 1) {
-            return false;
-        }
-        CanvasInternal canvasInternal = this.internal;
-        if (canvasInternal != null && canvasInternal.initialized && this.internal.ready) {
-            this.input.process(motionEvent);
-        }
-        return true;
-    }
-
-    public void setUndoStore(UndoStore undoStore) {
-        this.undoStore = undoStore;
-    }
-
-    public void setQueue(DispatchQueue dispatchQueue) {
-        this.queue = dispatchQueue;
-    }
-
-    public void setDelegate(RenderViewDelegate renderViewDelegate) {
-        this.delegate = renderViewDelegate;
-    }
-
-    public Painting getPainting() {
-        return this.painting;
-    }
-
-    private float brushWeightForSize(float f) {
-        float f2 = this.painting.getSize().width;
-        return (0.00390625f * f2) + ((f2 * 0.043945312f) * f);
-    }
-
-    public int getCurrentColor() {
-        return this.color;
-    }
-
-    public void setColor(int i) {
-        this.color = i;
-    }
-
-    public float getCurrentWeight() {
-        return this.weight;
-    }
-
-    public void setBrushSize(float f) {
-        this.weight = brushWeightForSize(f);
-    }
-
-    public Brush getCurrentBrush() {
-        return this.brush;
-    }
-
-    public void setBrush(Brush brush) {
-        Painting painting = this.painting;
-        this.brush = brush;
-        painting.setBrush(brush);
-    }
-
-    private void updateTransform() {
-        Matrix matrix = new Matrix();
-        float width = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : 1.0f;
-        if (width <= 0.0f) {
-            width = 1.0f;
-        }
-        Size size = getPainting().getSize();
-        matrix.preTranslate(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
-        matrix.preScale(width, -width);
-        matrix.preTranslate((-size.width) / 2.0f, (-size.height) / 2.0f);
-        this.input.setMatrix(matrix);
-        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
-    }
-
-    public boolean shouldDraw() {
-        RenderViewDelegate renderViewDelegate = this.delegate;
-        return renderViewDelegate == null || renderViewDelegate.shouldDraw();
-    }
-
-    public void onBeganDrawing() {
-        RenderViewDelegate renderViewDelegate = this.delegate;
-        if (renderViewDelegate != null) {
-            renderViewDelegate.onBeganDrawing();
-        }
-    }
-
-    public void onFinishedDrawing(boolean z) {
-        RenderViewDelegate renderViewDelegate = this.delegate;
-        if (renderViewDelegate != null) {
-            renderViewDelegate.onFinishedDrawing(z);
-        }
-    }
-
-    public void shutdown() {
-        this.shuttingDown = true;
-        if (this.internal != null) {
-            performInContext(new Runnable() {
-                public void run() {
-                    RenderView.this.painting.cleanResources(RenderView.this.transformedBitmap);
-                    RenderView.this.internal.shutdown();
-                    RenderView.this.internal = null;
-                }
-            });
-        }
-        setVisibility(8);
-    }
-
     public Bitmap getResultBitmap() {
         CanvasInternal canvasInternal = this.internal;
-        return canvasInternal != null ? canvasInternal.getTexture() : null;
+        if (canvasInternal != null) {
+            return canvasInternal.getTexture();
+        }
+        return null;
     }
 
     public void performInContext(final Runnable runnable) {
@@ -499,7 +503,7 @@ public class RenderView extends TextureView {
             canvasInternal.postRunnable(new Runnable() {
                 public void run() {
                     if (RenderView.this.internal != null && RenderView.this.internal.initialized) {
-                        RenderView.this.internal.setCurrentContext();
+                        boolean unused = RenderView.this.internal.setCurrentContext();
                         runnable.run();
                     }
                 }

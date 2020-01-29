@@ -2,18 +2,18 @@ package org.telegram.ui.Components;
 
 import android.text.TextPaint;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
+import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanBotCommand extends URLSpanNoUnderline {
     public static boolean enabled = true;
     public int currentType;
-    private TextStyleRun style;
+    private TextStyleSpan.TextStyleRun style;
 
     public URLSpanBotCommand(String str, int i) {
-        this(str, i, null);
+        this(str, i, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanBotCommand(String str, int i, TextStyleRun textStyleRun) {
+    public URLSpanBotCommand(String str, int i, TextStyleSpan.TextStyleRun textStyleRun) {
         super(str);
         this.currentType = i;
         this.style = textStyleRun;
@@ -29,7 +29,7 @@ public class URLSpanBotCommand extends URLSpanNoUnderline {
         } else {
             textPaint.setColor(Theme.getColor(enabled ? "chat_messageLinkIn" : "chat_messageTextIn"));
         }
-        TextStyleRun textStyleRun = this.style;
+        TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
         } else {

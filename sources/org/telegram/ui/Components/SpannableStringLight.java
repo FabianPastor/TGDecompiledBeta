@@ -27,11 +27,11 @@ public class SpannableStringLight extends SpannableString {
 
     public void setSpansCount(int i) {
         int i2 = this.mSpanCountOverride;
-        i += i2;
-        this.mSpansOverride = new Object[i];
-        this.mSpanDataOverride = new int[(i * 3)];
+        int i3 = i + i2;
+        this.mSpansOverride = new Object[i3];
+        this.mSpanDataOverride = new int[(i3 * 3)];
         this.num = i2;
-        this.mSpanCountOverride = i;
+        this.mSpanCountOverride = i3;
         try {
             mSpansField.set(this, this.mSpansOverride);
             mSpanDataField.set(this, this.mSpanDataOverride);

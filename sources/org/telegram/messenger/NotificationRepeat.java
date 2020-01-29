@@ -8,7 +8,7 @@ public class NotificationRepeat extends IntentService {
         super("NotificationRepeat");
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onHandleIntent(Intent intent) {
         if (intent != null) {
             final int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);

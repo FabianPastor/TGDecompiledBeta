@@ -3,12 +3,10 @@ package org.telegram.ui.Components;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.view.View;
 import androidx.annotation.Keep;
@@ -34,14 +32,14 @@ public class RadioButton extends View {
         if (paint == null) {
             paint = new Paint(1);
             paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            paint.setStyle(Style.STROKE);
+            paint.setStyle(Paint.Style.STROKE);
             checkedPaint = new Paint(1);
             eraser = new Paint(1);
             eraser.setColor(0);
-            eraser.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+            eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         try {
-            this.bitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
+            this.bitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Bitmap.Config.ARGB_4444);
             this.bitmapCanvas = new Canvas(this.bitmap);
         } catch (Throwable th) {
             FileLog.e(th);
@@ -97,13 +95,13 @@ public class RadioButton extends View {
         this.checkAnimator.start();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
@@ -112,12 +110,12 @@ public class RadioButton extends View {
     public void setChecked(boolean z, boolean z2) {
         if (z != this.isChecked) {
             this.isChecked = z;
-            if (this.attachedToWindow && z2) {
-                animateToCheckedState(z);
-            } else {
+            if (!this.attachedToWindow || !z2) {
                 cancelCheckAnimator();
                 setProgress(z ? 1.0f : 0.0f);
+                return;
             }
+            animateToCheckedState(z);
         }
     }
 
@@ -125,51 +123,50 @@ public class RadioButton extends View {
         return this.isChecked;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        Bitmap bitmap = this.bitmap;
-        if (bitmap == null || bitmap.getWidth() != getMeasuredWidth()) {
-            bitmap = this.bitmap;
-            if (bitmap != null) {
-                bitmap.recycle();
+        float f;
+        Bitmap bitmap2 = this.bitmap;
+        if (bitmap2 == null || bitmap2.getWidth() != getMeasuredWidth()) {
+            Bitmap bitmap3 = this.bitmap;
+            if (bitmap3 != null) {
+                bitmap3.recycle();
                 this.bitmap = null;
             }
             try {
-                this.bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Config.ARGB_8888);
+                this.bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
                 this.bitmapCanvas = new Canvas(this.bitmap);
             } catch (Throwable th) {
                 FileLog.e(th);
             }
         }
-        float f = this.progress;
-        if (f <= 0.5f) {
+        float f2 = this.progress;
+        if (f2 <= 0.5f) {
             paint.setColor(this.color);
             checkedPaint.setColor(this.color);
             f = this.progress / 0.5f;
         } else {
-            f = 2.0f - (f / 0.5f);
+            f = 2.0f - (f2 / 0.5f);
             int red = Color.red(this.color);
-            float f2 = 1.0f - f;
-            int red2 = (int) (((float) (Color.red(this.checkedColor) - red)) * f2);
+            float f3 = 1.0f - f;
             int green = Color.green(this.color);
-            int green2 = (int) (((float) (Color.green(this.checkedColor) - green)) * f2);
             int blue = Color.blue(this.color);
-            red = Color.rgb(red + red2, green + green2, blue + ((int) (((float) (Color.blue(this.checkedColor) - blue)) * f2)));
-            paint.setColor(red);
-            checkedPaint.setColor(red);
+            int rgb = Color.rgb(red + ((int) (((float) (Color.red(this.checkedColor) - red)) * f3)), green + ((int) (((float) (Color.green(this.checkedColor) - green)) * f3)), blue + ((int) (((float) (Color.blue(this.checkedColor) - blue)) * f3)));
+            paint.setColor(rgb);
+            checkedPaint.setColor(rgb);
         }
-        Bitmap bitmap2 = this.bitmap;
-        if (bitmap2 != null) {
-            bitmap2.eraseColor(0);
-            float f3 = ((float) (this.size / 2)) - ((f + 1.0f) * AndroidUtilities.density);
-            this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f3, paint);
+        Bitmap bitmap4 = this.bitmap;
+        if (bitmap4 != null) {
+            bitmap4.eraseColor(0);
+            float f4 = ((float) (this.size / 2)) - ((f + 1.0f) * AndroidUtilities.density);
+            this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f4, paint);
             if (this.progress <= 0.5f) {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f3 - ((float) AndroidUtilities.dp(1.0f)), checkedPaint);
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (f3 - ((float) AndroidUtilities.dp(1.0f))) * (1.0f - f), eraser);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f4 - ((float) AndroidUtilities.dp(1.0f)), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (f4 - ((float) AndroidUtilities.dp(1.0f))) * (1.0f - f), eraser);
             } else {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((f3 - ((float) AndroidUtilities.dp(1.0f))) - ((float) (this.size / 4))) * f), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((f4 - ((float) AndroidUtilities.dp(1.0f))) - ((float) (this.size / 4))) * f), checkedPaint);
             }
-            canvas.drawBitmap(this.bitmap, 0.0f, 0.0f, null);
+            canvas.drawBitmap(this.bitmap, 0.0f, 0.0f, (Paint) null);
         }
     }
 }

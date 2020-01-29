@@ -10,17 +10,17 @@ public class TypefaceSpan extends MetricAffectingSpan {
     private int textSize;
     private Typeface typeface;
 
-    public TypefaceSpan(Typeface typeface) {
-        this.typeface = typeface;
+    public TypefaceSpan(Typeface typeface2) {
+        this.typeface = typeface2;
     }
 
-    public TypefaceSpan(Typeface typeface, int i) {
-        this.typeface = typeface;
+    public TypefaceSpan(Typeface typeface2, int i) {
+        this.typeface = typeface2;
         this.textSize = i;
     }
 
-    public TypefaceSpan(Typeface typeface, int i, int i2) {
-        this.typeface = typeface;
+    public TypefaceSpan(Typeface typeface2, int i, int i2) {
+        this.typeface = typeface2;
         if (i > 0) {
             this.textSize = i;
         }
@@ -48,9 +48,9 @@ public class TypefaceSpan extends MetricAffectingSpan {
     }
 
     public void updateMeasureState(TextPaint textPaint) {
-        Typeface typeface = this.typeface;
-        if (typeface != null) {
-            textPaint.setTypeface(typeface);
+        Typeface typeface2 = this.typeface;
+        if (typeface2 != null) {
+            textPaint.setTypeface(typeface2);
         }
         int i = this.textSize;
         if (i != 0) {
@@ -60,17 +60,17 @@ public class TypefaceSpan extends MetricAffectingSpan {
     }
 
     public void updateDrawState(TextPaint textPaint) {
-        Typeface typeface = this.typeface;
-        if (typeface != null) {
-            textPaint.setTypeface(typeface);
+        Typeface typeface2 = this.typeface;
+        if (typeface2 != null) {
+            textPaint.setTypeface(typeface2);
         }
         int i = this.textSize;
         if (i != 0) {
             textPaint.setTextSize((float) i);
         }
-        i = this.color;
-        if (i != 0) {
-            textPaint.setColor(i);
+        int i2 = this.color;
+        if (i2 != 0) {
+            textPaint.setColor(i2);
         }
         textPaint.setFlags(textPaint.getFlags() | 128);
     }

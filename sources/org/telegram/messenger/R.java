@@ -197,7 +197,6 @@ public final class R {
         public static final int animationpinleft = NUM;
         public static final int animationpinright = NUM;
         public static final int app_update = NUM;
-        public static final int arrow_more = NUM;
         public static final int attach_audio = NUM;
         public static final int attach_close = NUM;
         public static final int attach_contact = NUM;
@@ -578,7 +577,6 @@ public final class R {
         public static final int msg_callback = NUM;
         public static final int msg_cancel = NUM;
         public static final int msg_check = NUM;
-        public static final int msg_check_s = NUM;
         public static final int msg_clear = NUM;
         public static final int msg_clock = NUM;
         public static final int msg_contact = NUM;
@@ -593,9 +591,10 @@ public final class R {
         public static final int msg_go_down = NUM;
         public static final int msg_go_up = NUM;
         public static final int msg_halfcheck = NUM;
-        public static final int msg_halfcheck_s = NUM;
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
+        public static final int msg_in = NUM;
+        public static final int msg_in_shadow = NUM;
         public static final int msg_instant = NUM;
         public static final int msg_language = NUM;
         public static final int msg_leave = NUM;
@@ -610,6 +609,8 @@ public final class R {
         public static final int msg_message = NUM;
         public static final int msg_mute = NUM;
         public static final int msg_openin = NUM;
+        public static final int msg_out = NUM;
+        public static final int msg_out_shadow = NUM;
         public static final int msg_panel_clear = NUM;
         public static final int msg_panel_forward = NUM;
         public static final int msg_panel_reply = NUM;
@@ -734,12 +735,6 @@ public final class R {
         public static final int play_mini_video = NUM;
         public static final int player = NUM;
         public static final int plus = NUM;
-        public static final int poll_add_circle = NUM;
-        public static final int poll_add_plus = NUM;
-        public static final int poll_remove = NUM;
-        public static final int poll_reorder = NUM;
-        public static final int poll_right = NUM;
-        public static final int poll_wrong = NUM;
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
         public static final int popup_fixed_alert2 = NUM;
@@ -749,6 +744,7 @@ public final class R {
         public static final int preview_custom = NUM;
         public static final int preview_dots = NUM;
         public static final int preview_mic = NUM;
+        public static final int preview_msg_in = NUM;
         public static final int preview_open = NUM;
         public static final int preview_smile = NUM;
         public static final int profile_admin = NUM;
@@ -1424,7 +1420,6 @@ public final class R {
         public static final int ActionPinnedNoText = NUM;
         public static final int ActionPinnedPhoto = NUM;
         public static final int ActionPinnedPoll = NUM;
-        public static final int ActionPinnedQuiz = NUM;
         public static final int ActionPinnedRound = NUM;
         public static final int ActionPinnedSticker = NUM;
         public static final int ActionPinnedText = NUM;
@@ -1530,13 +1525,6 @@ public final class R {
         public static final int AndOther_zero = NUM;
         public static final int AnimatedStickers = NUM;
         public static final int AnonymousPoll = NUM;
-        public static final int AnonymousQuizPoll = NUM;
-        public static final int Answer_few = NUM;
-        public static final int Answer_many = NUM;
-        public static final int Answer_one = NUM;
-        public static final int Answer_other = NUM;
-        public static final int Answer_two = NUM;
-        public static final int Answer_zero = NUM;
         public static final int ApkRestricted = NUM;
         public static final int AppFolderInfo = NUM;
         public static final int AppName = NUM;
@@ -1793,7 +1781,6 @@ public final class R {
         public static final int BotStop = NUM;
         public static final int BotUnblock = NUM;
         public static final int Brown = NUM;
-        public static final int BubbleRadius = NUM;
         public static final int BuiltInThemes = NUM;
         public static final int BytesReceived = NUM;
         public static final int BytesSent = NUM;
@@ -1912,7 +1899,6 @@ public final class R {
         public static final int ChannelMessageNoText = NUM;
         public static final int ChannelMessagePhoto = NUM;
         public static final int ChannelMessagePoll2 = NUM;
-        public static final int ChannelMessageQuiz2 = NUM;
         public static final int ChannelMessageRound = NUM;
         public static final int ChannelMessageSticker = NUM;
         public static final int ChannelMessageStickerEmoji = NUM;
@@ -2470,7 +2456,6 @@ public final class R {
         public static final int EventLogRestrictedUntil = NUM;
         public static final int EventLogSelectedEvents = NUM;
         public static final int EventLogStopPoll = NUM;
-        public static final int EventLogStopQuiz = NUM;
         public static final int EventLogToggledInvitesHistoryOff = NUM;
         public static final int EventLogToggledInvitesHistoryOn = NUM;
         public static final int EventLogToggledInvitesOff = NUM;
@@ -2910,7 +2895,6 @@ public final class R {
         public static final int MessageScheduledReminderNotification = NUM;
         public static final int MessageScheduledUntilOnline = NUM;
         public static final int MessageScheduledVote = NUM;
-        public static final int MessageScheduledVoteResults = NUM;
         public static final int MessagesDataUsage = NUM;
         public static final int MessagesSettings = NUM;
         public static final int MetersAway2 = NUM;
@@ -2974,7 +2958,6 @@ public final class R {
         public static final int NewMessages_two = NUM;
         public static final int NewMessages_zero = NUM;
         public static final int NewPoll = NUM;
-        public static final int NewQuiz = NUM;
         public static final int NewSecretChat = NUM;
         public static final int NewTheme = NUM;
         public static final int NewThemePreviewLine1 = NUM;
@@ -3038,7 +3021,6 @@ public final class R {
         public static final int NoStickersFound = NUM;
         public static final int NoUsernameFound = NUM;
         public static final int NoVotes = NUM;
-        public static final int NoVotesQuiz = NUM;
         public static final int NobodyLikesSpam1 = NUM;
         public static final int NobodyLikesSpam2 = NUM;
         public static final int NobodyLikesSpam3 = NUM;
@@ -3067,8 +3049,6 @@ public final class R {
         public static final int NotificationActionPinnedPhotoChannel = NUM;
         public static final int NotificationActionPinnedPoll2 = NUM;
         public static final int NotificationActionPinnedPollChannel2 = NUM;
-        public static final int NotificationActionPinnedQuiz2 = NUM;
-        public static final int NotificationActionPinnedQuizChannel2 = NUM;
         public static final int NotificationActionPinnedRound = NUM;
         public static final int NotificationActionPinnedRoundChannel = NUM;
         public static final int NotificationActionPinnedSticker = NUM;
@@ -3122,7 +3102,6 @@ public final class R {
         public static final int NotificationMessageGroupNoText = NUM;
         public static final int NotificationMessageGroupPhoto = NUM;
         public static final int NotificationMessageGroupPoll2 = NUM;
-        public static final int NotificationMessageGroupQuiz2 = NUM;
         public static final int NotificationMessageGroupRound = NUM;
         public static final int NotificationMessageGroupSticker = NUM;
         public static final int NotificationMessageGroupStickerEmoji = NUM;
@@ -3135,7 +3114,6 @@ public final class R {
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
         public static final int NotificationMessagePoll2 = NUM;
-        public static final int NotificationMessageQuiz2 = NUM;
         public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSDPhoto = NUM;
         public static final int NotificationMessageSDVideo = NUM;
@@ -3587,18 +3565,7 @@ public final class R {
         public static final int Points_two = NUM;
         public static final int Points_zero = NUM;
         public static final int Poll = NUM;
-        public static final int PollAnonymous = NUM;
-        public static final int PollCantForwardSecretChat = NUM;
-        public static final int PollCollapse = NUM;
-        public static final int PollExpand = NUM;
-        public static final int PollMultiple = NUM;
         public static final int PollOptions = NUM;
-        public static final int PollQuiz = NUM;
-        public static final int PollResults = NUM;
-        public static final int PollSelectOption = NUM;
-        public static final int PollSubmitVotes = NUM;
-        public static final int PollTapToSelect = NUM;
-        public static final int PollViewResults = NUM;
         public static final int PopupDisabled = NUM;
         public static final int PopupEnabled = NUM;
         public static final int PopupNotification = NUM;
@@ -3655,8 +3622,6 @@ public final class R {
         public static final int ProxyDetails = NUM;
         public static final int ProxySettings = NUM;
         public static final int PublicChannelsTooMuch = NUM;
-        public static final int PublicPoll = NUM;
-        public static final int PublicPollCantForward = NUM;
         public static final int Purple = NUM;
         public static final int Question = NUM;
         public static final int QuestionHint = NUM;
@@ -3665,13 +3630,6 @@ public final class R {
         public static final int QuickReplyDefault2 = NUM;
         public static final int QuickReplyDefault3 = NUM;
         public static final int QuickReplyDefault4 = NUM;
-        public static final int QuizAnswers = NUM;
-        public static final int QuizInfo = NUM;
-        public static final int QuizPoll = NUM;
-        public static final int QuizWellDone = NUM;
-        public static final int QuizWellDoneInfo = NUM;
-        public static final int QuizWrongAnswer = NUM;
-        public static final int QuizWrongAnswerInfo = NUM;
         public static final int RaiseToSpeak = NUM;
         public static final int RateCallDistorted = NUM;
         public static final int RateCallDropped = NUM;
@@ -3799,7 +3757,6 @@ public final class R {
         public static final int ScheduleMessage = NUM;
         public static final int ScheduleWhenOnline = NUM;
         public static final int ScheduledMessages = NUM;
-        public static final int ScheduledOrNoSoundHint = NUM;
         public static final int ScreenCapture = NUM;
         public static final int ScreenCaptureAlert = NUM;
         public static final int ScreenCaptureInfo = NUM;
@@ -3971,12 +3928,6 @@ public final class R {
         public static final int ShowInChat = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
-        public static final int ShowVotes_few = NUM;
-        public static final int ShowVotes_many = NUM;
-        public static final int ShowVotes_one = NUM;
-        public static final int ShowVotes_other = NUM;
-        public static final int ShowVotes_two = NUM;
-        public static final int ShowVotes_zero = NUM;
         public static final int Shuffle = NUM;
         public static final int SignUp = NUM;
         public static final int SinglePhotosHelp = NUM;
@@ -4036,9 +3987,6 @@ public final class R {
         public static final int StopPoll = NUM;
         public static final int StopPollAlertText = NUM;
         public static final int StopPollAlertTitle = NUM;
-        public static final int StopQuiz = NUM;
-        public static final int StopQuizAlertText = NUM;
-        public static final int StopQuizAlertTitle = NUM;
         public static final int StopVerification = NUM;
         public static final int StorageUsage = NUM;
         public static final int Streaming = NUM;
@@ -4783,90 +4731,15 @@ public final class R {
         public static final int Widget_Compat_NotificationActionText = NUM;
         public static final int Widget_Support_CoordinatorLayout = NUM;
         public static final int scrollbarShapeStyle = NUM;
-        /* added by JADX */
-        /* renamed from: ActionBar.Transparent.TMessages.Item */
-        public static final int f0ActionBar.Transparent.TMessages.Item = NUM;
-        /* added by JADX */
-        /* renamed from: ActionBar.Transparent.TMessages.Start */
-        public static final int f1ActionBar.Transparent.TMessages.Start = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.ButtonStyle */
-        public static final int f2HockeyApp.ButtonStyle = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.EditTextStyle */
-        public static final int f3HockeyApp.EditTextStyle = NUM;
-        /* added by JADX */
-        /* renamed from: HockeyApp.SingleLineInputStyle */
-        public static final int f4HockeyApp.SingleLineInputStyle = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification */
-        public static final int f5TextAppearance.Compat.Notification = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Info */
-        public static final int f6TextAppearance.Compat.Notification.Info = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Line2 */
-        public static final int f7TextAppearance.Compat.Notification.Line2 = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Time */
-        public static final int f8TextAppearance.Compat.Notification.Time = NUM;
-        /* added by JADX */
-        /* renamed from: TextAppearance.Compat.Notification.Title */
-        public static final int f9TextAppearance.Compat.Notification.Title = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages */
-        public static final int var_Theme.TMessages = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.BorderLessButton */
-        public static final int var_Theme.TMessages.BorderLessButton = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.CalendarView */
-        public static final int var_Theme.TMessages.CalendarView = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.DatePicker */
-        public static final int var_Theme.TMessages.DatePicker = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.DayOfWeek */
-        public static final int var_Theme.TMessages.DayOfWeek = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Dialog.Alert */
-        public static final int var_Theme.TMessages.Dialog.Alert = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.ListView */
-        public static final int var_Theme.TMessages.ListView = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.PopupNotification */
-        public static final int var_Theme.TMessages.PopupNotification = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Start */
-        public static final int var_Theme.TMessages.Start = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.TimePicker */
-        public static final int var_Theme.TMessages.TimePicker = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.Transparent */
-        public static final int var_Theme.TMessages.Transparent = NUM;
-        /* added by JADX */
-        /* renamed from: Theme.TMessages.TransparentWithAlerts */
-        public static final int var_Theme.TMessages.TransparentWithAlerts = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Compat.NotificationActionContainer */
-        public static final int var_Widget.Compat.NotificationActionContainer = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Compat.NotificationActionText */
-        public static final int var_Widget.Compat.NotificationActionText = NUM;
-        /* added by JADX */
-        /* renamed from: Widget.Support.CoordinatorLayout */
-        public static final int var_Widget.Support.CoordinatorLayout = NUM;
     }
 
     public static final class styleable {
-        public static final int[] ColorStateListItem = new int[]{16843173, 16843551, NUM};
+        public static final int[] ColorStateListItem = {16843173, 16843551, NUM};
         public static final int ColorStateListItem_alpha = 2;
         public static final int ColorStateListItem_android_alpha = 1;
         public static final int ColorStateListItem_android_color = 0;
-        public static final int[] CoordinatorLayout = new int[]{NUM, NUM};
-        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] CoordinatorLayout = {NUM, NUM};
+        public static final int[] CoordinatorLayout_Layout = {16842931, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
         public static final int CoordinatorLayout_Layout_layout_anchor = 1;
         public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
@@ -4876,12 +4749,12 @@ public final class R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = new int[]{NUM, NUM, NUM};
+        public static final int[] CustomWalletTheme = {NUM, NUM, NUM};
         public static final int CustomWalletTheme_customThemeStyle = 0;
         public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
         public static final int CustomWalletTheme_windowTransitionStyle = 2;
-        public static final int[] FontFamily = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] FontFamily = {NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] FontFamilyFont = {16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
         public static final int FontFamilyFont_android_fontVariationSettings = 4;
@@ -4898,8 +4771,8 @@ public final class R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
-        public static final int[] GradientColor = new int[]{16843165, 16843166, 16843169, 16843170, 16843171, 16843172, 16843265, 16843275, 16844048, 16844049, 16844050, 16844051};
-        public static final int[] GradientColorItem = new int[]{16843173, 16844052};
+        public static final int[] GradientColor = {16843165, 16843166, 16843169, 16843170, 16843171, 16843172, 16843265, 16843275, 16844048, 16844049, 16844050, 16844051};
+        public static final int[] GradientColorItem = {16843173, 16844052};
         public static final int GradientColorItem_android_color = 0;
         public static final int GradientColorItem_android_offset = 1;
         public static final int GradientColor_android_centerColor = 7;
@@ -4914,11 +4787,11 @@ public final class R {
         public static final int GradientColor_android_startY = 9;
         public static final int GradientColor_android_tileMode = 6;
         public static final int GradientColor_android_type = 2;
-        public static final int[] LoadingImageView = new int[]{NUM, NUM, NUM};
+        public static final int[] LoadingImageView = {NUM, NUM, NUM};
         public static final int LoadingImageView_circleCrop = 0;
         public static final int LoadingImageView_imageAspectRatio = 1;
         public static final int LoadingImageView_imageAspectRatioAdjust = 2;
-        public static final int[] MapAttrs = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] MapAttrs = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int MapAttrs_ambientEnabled = 0;
         public static final int MapAttrs_cameraBearing = 1;
         public static final int MapAttrs_cameraMaxZoomPreference = 2;
@@ -4943,16 +4816,16 @@ public final class R {
         public static final int MapAttrs_uiZoomGestures = 21;
         public static final int MapAttrs_useViewLifecycle = 22;
         public static final int MapAttrs_zOrderOnTop = 23;
-        public static final int[] SignInButton = new int[]{NUM, NUM, NUM};
+        public static final int[] SignInButton = {NUM, NUM, NUM};
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{NUM, NUM, NUM, NUM};
+        public static final int[] WalletFragmentOptions = {NUM, NUM, NUM, NUM};
         public static final int WalletFragmentOptions_appTheme = 0;
         public static final int WalletFragmentOptions_environment = 1;
         public static final int WalletFragmentOptions_fragmentMode = 2;
         public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] WalletFragmentStyle = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int WalletFragmentStyle_buyButtonAppearance = 0;
         public static final int WalletFragmentStyle_buyButtonHeight = 1;
         public static final int WalletFragmentStyle_buyButtonText = 2;

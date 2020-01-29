@@ -1,7 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -13,7 +13,7 @@ public class LetterSectionCell extends FrameLayout {
 
     public LetterSectionCell(Context context) {
         super(context);
-        setLayoutParams(new LayoutParams(AndroidUtilities.dp(54.0f), AndroidUtilities.dp(64.0f)));
+        setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(54.0f), AndroidUtilities.dp(64.0f)));
         this.textView.setTextSize(1, 22.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
@@ -26,6 +26,6 @@ public class LetterSectionCell extends FrameLayout {
     }
 
     public void setCellHeight(int i) {
-        setLayoutParams(new LayoutParams(AndroidUtilities.dp(54.0f), i));
+        setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(54.0f), i));
     }
 }

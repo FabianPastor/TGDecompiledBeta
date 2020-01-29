@@ -8,7 +8,8 @@ import java.util.UUID;
 import org.telegram.messenger.AndroidUtilities;
 
 public class UndoStore {
-    private UndoStoreDelegate delegate;
+    /* access modifiers changed from: private */
+    public UndoStoreDelegate delegate;
     private List<UUID> operations = new ArrayList();
     private Map<UUID, Runnable> uuidToOperationMap = new HashMap();
 
@@ -17,7 +18,7 @@ public class UndoStore {
     }
 
     public boolean canUndo() {
-        return this.operations.isEmpty() ^ 1;
+        return !this.operations.isEmpty();
     }
 
     public void setDelegate(UndoStoreDelegate undoStoreDelegate) {
@@ -39,11 +40,10 @@ public class UndoStore {
     public void undo() {
         if (this.operations.size() != 0) {
             int size = this.operations.size() - 1;
-            UUID uuid = (UUID) this.operations.get(size);
-            Runnable runnable = (Runnable) this.uuidToOperationMap.get(uuid);
+            UUID uuid = this.operations.get(size);
             this.uuidToOperationMap.remove(uuid);
             this.operations.remove(size);
-            runnable.run();
+            this.uuidToOperationMap.get(uuid).run();
             notifyOfHistoryChanges();
         }
     }

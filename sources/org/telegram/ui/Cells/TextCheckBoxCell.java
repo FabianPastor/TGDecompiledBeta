@@ -2,8 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -32,18 +32,14 @@ public class TextCheckBoxCell extends FrameLayout {
         this.textView.setSingleLine(true);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
         this.checkBox = new CheckBoxSquare(context, z);
         this.checkBox.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);
         this.checkBox.setClickable(false);
-        CheckBoxSquare checkBoxSquare = this.checkBox;
-        if (LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, i | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     public void invalidate() {
@@ -51,16 +47,16 @@ public class TextCheckBoxCell extends FrameLayout {
         this.checkBox.invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setTextAndCheck(String str, boolean z, boolean z2) {
         this.textView.setText(str);
         this.checkBox.setChecked(z, false);
         this.needDivider = z2;
-        setWillNotDraw(z2 ^ 1);
+        setWillNotDraw(!z2);
     }
 
     public void setChecked(boolean z) {
@@ -71,7 +67,7 @@ public class TextCheckBoxCell extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

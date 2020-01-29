@@ -3,29 +3,25 @@ package org.telegram.ui.Components;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.graphics.Shader.TileMode;
+import android.graphics.Shader;
 import android.text.TextPaint;
 import android.util.Property;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.AnimationProperties.FloatProperty;
+import org.telegram.ui.Components.AnimationProperties;
 
 public class WallpaperCheckBoxView extends View {
     private static final float progressBounceDiff = 0.2f;
-    public final Property<WallpaperCheckBoxView, Float> PROGRESS_PROPERTY = new FloatProperty<WallpaperCheckBoxView>("progress") {
+    public final Property<WallpaperCheckBoxView, Float> PROGRESS_PROPERTY = new AnimationProperties.FloatProperty<WallpaperCheckBoxView>("progress") {
         public void setValue(WallpaperCheckBoxView wallpaperCheckBoxView, float f) {
-            WallpaperCheckBoxView.this.progress = f;
+            float unused = WallpaperCheckBoxView.this.progress = f;
             WallpaperCheckBoxView.this.invalidate();
         }
 
@@ -46,28 +42,29 @@ public class WallpaperCheckBoxView extends View {
     private Paint eraserPaint;
     private boolean isChecked;
     private int maxTextSize;
-    private float progress;
+    /* access modifiers changed from: private */
+    public float progress;
     private RectF rect = new RectF();
     private TextPaint textPaint;
 
     public WallpaperCheckBoxView(Context context, boolean z) {
         super(context);
         if (z) {
-            this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(18.0f), Config.ARGB_4444);
+            this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(18.0f), Bitmap.Config.ARGB_4444);
             this.drawCanvas = new Canvas(this.drawBitmap);
         }
         this.textPaint = new TextPaint(1);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.checkPaint = new Paint(1);
-        this.checkPaint.setStyle(Style.STROKE);
+        this.checkPaint.setStyle(Paint.Style.STROKE);
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.checkPaint.setColor(0);
-        this.checkPaint.setStrokeCap(Cap.ROUND);
-        this.checkPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+        this.checkPaint.setStrokeCap(Paint.Cap.ROUND);
+        this.checkPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         this.eraserPaint = new Paint(1);
         this.eraserPaint.setColor(0);
-        this.eraserPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+        this.eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         this.backgroundPaint = new Paint(1);
     }
 
@@ -93,70 +90,70 @@ public class WallpaperCheckBoxView extends View {
         return this.textPaint;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(this.maxTextSize + AndroidUtilities.dp(56.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(this.maxTextSize + AndroidUtilities.dp(56.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        float f;
+        float f2;
         Canvas canvas2 = canvas;
         this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
         canvas2.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_actionBackgroundPaint);
-        String str = "chat_serviceText";
-        this.textPaint.setColor(Theme.getColor(str));
+        this.textPaint.setColor(Theme.getColor("chat_serviceText"));
         int measuredWidth = ((getMeasuredWidth() - this.currentTextSize) - AndroidUtilities.dp(28.0f)) / 2;
         canvas2.drawText(this.currentText, (float) (AndroidUtilities.dp(28.0f) + measuredWidth), (float) AndroidUtilities.dp(21.0f), this.textPaint);
         canvas.save();
         canvas2.translate((float) measuredWidth, (float) AndroidUtilities.dp(7.0f));
-        float f;
-        RectF rectF;
         if (this.drawBitmap != null) {
-            float f2 = this.progress;
-            if (f2 <= 0.5f) {
-                f2 /= 0.5f;
+            float f3 = this.progress;
+            if (f3 <= 0.5f) {
+                f2 = f3 / 0.5f;
                 f = f2;
             } else {
-                f2 = 2.0f - (f2 / 0.5f);
+                f2 = 2.0f - (f3 / 0.5f);
                 f = 1.0f;
             }
             float dp = ((float) AndroidUtilities.dp(1.0f)) * f2;
             this.rect.set(dp, dp, ((float) AndroidUtilities.dp(18.0f)) - dp, ((float) AndroidUtilities.dp(18.0f)) - dp);
             this.drawBitmap.eraseColor(0);
-            this.backgroundPaint.setColor(Theme.getColor(str));
+            this.backgroundPaint.setColor(Theme.getColor("chat_serviceText"));
             Canvas canvas3 = this.drawCanvas;
-            RectF rectF2 = this.rect;
-            canvas3.drawRoundRect(rectF2, rectF2.width() / 2.0f, this.rect.height() / 2.0f, this.backgroundPaint);
+            RectF rectF = this.rect;
+            canvas3.drawRoundRect(rectF, rectF.width() / 2.0f, this.rect.height() / 2.0f, this.backgroundPaint);
             if (f != 1.0f) {
                 float min = Math.min((float) AndroidUtilities.dp(7.0f), (((float) AndroidUtilities.dp(7.0f)) * f) + dp);
                 this.rect.set(((float) AndroidUtilities.dp(2.0f)) + min, ((float) AndroidUtilities.dp(2.0f)) + min, ((float) AndroidUtilities.dp(16.0f)) - min, ((float) AndroidUtilities.dp(16.0f)) - min);
-                canvas3 = this.drawCanvas;
-                rectF = this.rect;
-                canvas3.drawRoundRect(rectF, rectF.width() / 2.0f, this.rect.height() / 2.0f, this.eraserPaint);
+                Canvas canvas4 = this.drawCanvas;
+                RectF rectF2 = this.rect;
+                canvas4.drawRoundRect(rectF2, rectF2.width() / 2.0f, this.rect.height() / 2.0f, this.eraserPaint);
             }
             if (this.progress > 0.5f) {
-                float f3 = 1.0f - f2;
-                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.3f), (float) AndroidUtilities.dp(13.0f), (float) ((int) (((float) AndroidUtilities.dp(7.3f)) - (((float) AndroidUtilities.dp(2.5f)) * f3))), (float) ((int) (((float) AndroidUtilities.dp(13.0f)) - (((float) AndroidUtilities.dp(2.5f)) * f3))), this.checkPaint);
-                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.3f), (float) AndroidUtilities.dp(13.0f), (float) ((int) (((float) AndroidUtilities.dp(7.3f)) + (((float) AndroidUtilities.dp(6.0f)) * f3))), (float) ((int) (((float) AndroidUtilities.dp(13.0f)) - (((float) AndroidUtilities.dp(6.0f)) * f3))), this.checkPaint);
+                float f4 = 1.0f - f2;
+                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.3f), (float) AndroidUtilities.dp(13.0f), (float) ((int) (((float) AndroidUtilities.dp(7.3f)) - (((float) AndroidUtilities.dp(2.5f)) * f4))), (float) ((int) (((float) AndroidUtilities.dp(13.0f)) - (((float) AndroidUtilities.dp(2.5f)) * f4))), this.checkPaint);
+                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.3f), (float) AndroidUtilities.dp(13.0f), (float) ((int) (((float) AndroidUtilities.dp(7.3f)) + (((float) AndroidUtilities.dp(6.0f)) * f4))), (float) ((int) (((float) AndroidUtilities.dp(13.0f)) - (((float) AndroidUtilities.dp(6.0f)) * f4))), this.checkPaint);
             }
-            canvas2.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
+            canvas2.drawBitmap(this.drawBitmap, 0.0f, 0.0f, (Paint) null);
         } else {
             this.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f));
-            if (this.backgroundGradientColor != 0) {
+            int i = this.backgroundGradientColor;
+            if (i != 0) {
                 if (this.colorGradient == null) {
-                    rectF = this.rect;
-                    float f4 = rectF.left;
-                    f = f4;
-                    this.colorGradient = new LinearGradient(f, rectF.bottom, f4, rectF.top, new int[]{this.backgroundColor, measuredWidth}, null, TileMode.CLAMP);
+                    RectF rectF3 = this.rect;
+                    float f5 = rectF3.left;
+                    float f6 = f5;
+                    this.colorGradient = new LinearGradient(f6, rectF3.bottom, f5, rectF3.top, new int[]{this.backgroundColor, i}, (float[]) null, Shader.TileMode.CLAMP);
                     this.backgroundPaint.setShader(this.colorGradient);
                 }
                 this.backgroundPaint.setColor(this.backgroundColor);
             } else {
                 this.backgroundPaint.setColor(this.backgroundColor);
-                this.backgroundPaint.setShader(null);
+                this.backgroundPaint.setShader((Shader) null);
             }
-            RectF rectF3 = this.rect;
-            canvas2.drawRoundRect(rectF3, rectF3.width() / 2.0f, this.rect.height() / 2.0f, this.backgroundPaint);
+            RectF rectF4 = this.rect;
+            canvas2.drawRoundRect(rectF4, rectF4.width() / 2.0f, this.rect.height() / 2.0f, this.backgroundPaint);
         }
         canvas.restore();
     }
@@ -176,7 +173,7 @@ public class WallpaperCheckBoxView extends View {
     }
 
     private void animateToCheckedState(boolean z) {
-        Property property = this.PROGRESS_PROPERTY;
+        Property<WallpaperCheckBoxView, Float> property = this.PROGRESS_PROPERTY;
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, property, fArr);
@@ -184,7 +181,7 @@ public class WallpaperCheckBoxView extends View {
         this.checkAnimator.start();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
     }
@@ -194,11 +191,11 @@ public class WallpaperCheckBoxView extends View {
             this.isChecked = z;
             if (z2) {
                 animateToCheckedState(z);
-            } else {
-                cancelCheckAnimator();
-                this.progress = z ? 1.0f : 0.0f;
-                invalidate();
+                return;
             }
+            cancelCheckAnimator();
+            this.progress = z ? 1.0f : 0.0f;
+            invalidate();
         }
     }
 

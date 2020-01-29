@@ -38,11 +38,11 @@ public class RoundVideoPlayingDrawable extends Drawable {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 50;
+        long j2 = 50;
         if (j <= 50) {
-            currentTimeMillis = j;
+            j2 = j;
         }
-        float f = (float) currentTimeMillis;
+        float f = (float) j2;
         this.progress1 += (f / 300.0f) * ((float) this.progress1Direction);
         float f2 = this.progress1;
         if (f2 > 1.0f) {
@@ -53,20 +53,20 @@ public class RoundVideoPlayingDrawable extends Drawable {
             this.progress1 = 0.0f;
         }
         this.progress2 += (f / 310.0f) * ((float) this.progress2Direction);
-        f2 = this.progress2;
-        if (f2 > 1.0f) {
+        float f3 = this.progress2;
+        if (f3 > 1.0f) {
             this.progress2Direction = -1;
             this.progress2 = 1.0f;
-        } else if (f2 < 0.0f) {
+        } else if (f3 < 0.0f) {
             this.progress2Direction = 1;
             this.progress2 = 0.0f;
         }
         this.progress3 += (f / 320.0f) * ((float) this.progress3Direction);
-        f = this.progress3;
-        if (f > 1.0f) {
+        float f4 = this.progress3;
+        if (f4 > 1.0f) {
             this.progress3Direction = -1;
             this.progress3 = 1.0f;
-        } else if (f < 0.0f) {
+        } else if (f4 < 0.0f) {
             this.progress3Direction = 1;
             this.progress3 = 0.0f;
         }

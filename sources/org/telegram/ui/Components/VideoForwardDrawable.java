@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
 
 public class VideoForwardDrawable extends Drawable {
-    private static final int[] playPath = new int[]{10, 7, 26, 16, 10, 25};
+    private static final int[] playPath = {10, 7, 26, 16, 10, 25};
     private boolean animating;
     private float animationProgress;
     private VideoForwardDrawableDelegate delegate;
@@ -35,13 +35,12 @@ public class VideoForwardDrawable extends Drawable {
         while (true) {
             int[] iArr = playPath;
             if (i < iArr.length / 2) {
-                int i2;
                 if (i == 0) {
-                    i2 = i * 2;
+                    int i2 = i * 2;
                     this.path1.moveTo((float) AndroidUtilities.dp((float) iArr[i2]), (float) AndroidUtilities.dp((float) playPath[i2 + 1]));
                 } else {
-                    i2 = i * 2;
-                    this.path1.lineTo((float) AndroidUtilities.dp((float) iArr[i2]), (float) AndroidUtilities.dp((float) playPath[i2 + 1]));
+                    int i3 = i * 2;
+                    this.path1.lineTo((float) AndroidUtilities.dp((float) iArr[i3]), (float) AndroidUtilities.dp((float) playPath[i3 + 1]));
                 }
                 i++;
             } else {
@@ -85,13 +84,14 @@ public class VideoForwardDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        int i;
         Rect bounds = getBounds();
         int width = bounds.left + ((bounds.width() - getIntrinsicWidth()) / 2);
         int height = bounds.top + ((bounds.height() - getIntrinsicHeight()) / 2);
         if (this.leftSide) {
-            width -= (bounds.width() / 4) - AndroidUtilities.dp(16.0f);
+            i = width - ((bounds.width() / 4) - AndroidUtilities.dp(16.0f));
         } else {
-            width += (bounds.width() / 4) + AndroidUtilities.dp(16.0f);
+            i = width + (bounds.width() / 4) + AndroidUtilities.dp(16.0f);
         }
         canvas.save();
         canvas.clipRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
@@ -101,13 +101,13 @@ public class VideoForwardDrawable extends Drawable {
         } else {
             this.paint.setAlpha((int) ((1.0f - ((f - 0.7f) / 0.3f)) * 80.0f));
         }
-        canvas.drawCircle((float) (((Math.max(bounds.width(), bounds.height()) / 4) * (this.leftSide ? -1 : 1)) + width), (float) (AndroidUtilities.dp(16.0f) + height), (float) (Math.max(bounds.width(), bounds.height()) / 2), this.paint);
+        canvas.drawCircle((float) (((Math.max(bounds.width(), bounds.height()) / 4) * (this.leftSide ? -1 : 1)) + i), (float) (AndroidUtilities.dp(16.0f) + height), (float) (Math.max(bounds.width(), bounds.height()) / 2), this.paint);
         canvas.restore();
         canvas.save();
         if (this.leftSide) {
-            canvas.rotate(180.0f, (float) width, (float) ((getIntrinsicHeight() / 2) + height));
+            canvas.rotate(180.0f, (float) i, (float) ((getIntrinsicHeight() / 2) + height));
         }
-        canvas.translate((float) width, (float) height);
+        canvas.translate((float) i, (float) height);
         float f2 = this.animationProgress;
         if (f2 <= 0.6f) {
             if (f2 < 0.4f) {
@@ -120,22 +120,22 @@ public class VideoForwardDrawable extends Drawable {
         canvas.translate((float) AndroidUtilities.dp(18.0f), 0.0f);
         float f3 = this.animationProgress;
         if (f3 >= 0.2f && f3 <= 0.8f) {
-            f3 -= 0.2f;
-            if (f3 < 0.4f) {
-                this.paint.setAlpha(Math.min(255, (int) ((f3 * 255.0f) / 0.2f)));
+            float f4 = f3 - 0.2f;
+            if (f4 < 0.4f) {
+                this.paint.setAlpha(Math.min(255, (int) ((f4 * 255.0f) / 0.2f)));
             } else {
-                this.paint.setAlpha((int) ((1.0f - ((f3 - 0.4f) / 0.2f)) * 255.0f));
+                this.paint.setAlpha((int) ((1.0f - ((f4 - 0.4f) / 0.2f)) * 255.0f));
             }
             canvas.drawPath(this.path1, this.paint);
         }
         canvas.translate((float) AndroidUtilities.dp(18.0f), 0.0f);
-        f2 = this.animationProgress;
-        if (f2 >= 0.4f && f2 <= 1.0f) {
-            f2 -= 0.4f;
-            if (f2 < 0.4f) {
-                this.paint.setAlpha(Math.min(255, (int) ((f2 * 255.0f) / 0.2f)));
+        float f5 = this.animationProgress;
+        if (f5 >= 0.4f && f5 <= 1.0f) {
+            float f6 = f5 - 0.4f;
+            if (f6 < 0.4f) {
+                this.paint.setAlpha(Math.min(255, (int) ((f6 * 255.0f) / 0.2f)));
             } else {
-                this.paint.setAlpha((int) ((1.0f - ((f2 - 0.4f) / 0.2f)) * 255.0f));
+                this.paint.setAlpha((int) ((1.0f - ((f6 - 0.4f) / 0.2f)) * 255.0f));
             }
             canvas.drawPath(this.path1, this.paint);
         }
@@ -147,21 +147,20 @@ public class VideoForwardDrawable extends Drawable {
                 j = 17;
             }
             this.lastAnimationTime = currentTimeMillis;
-            float f4 = this.animationProgress;
-            if (f4 < 1.0f) {
-                VideoForwardDrawableDelegate videoForwardDrawableDelegate;
-                this.animationProgress = f4 + (((float) j) / 800.0f);
+            float f7 = this.animationProgress;
+            if (f7 < 1.0f) {
+                this.animationProgress = f7 + (((float) j) / 800.0f);
                 if (this.animationProgress >= 1.0f) {
                     this.animationProgress = 0.0f;
                     this.animating = false;
-                    videoForwardDrawableDelegate = this.delegate;
+                    VideoForwardDrawableDelegate videoForwardDrawableDelegate = this.delegate;
                     if (videoForwardDrawableDelegate != null) {
                         videoForwardDrawableDelegate.onAnimationEnd();
                     }
                 }
-                videoForwardDrawableDelegate = this.delegate;
-                if (videoForwardDrawableDelegate != null) {
-                    videoForwardDrawableDelegate.invalidate();
+                VideoForwardDrawableDelegate videoForwardDrawableDelegate2 = this.delegate;
+                if (videoForwardDrawableDelegate2 != null) {
+                    videoForwardDrawableDelegate2.invalidate();
                 } else {
                     invalidateSelf();
                 }

@@ -3,17 +3,15 @@ package org.telegram.ui.Components;
 import android.graphics.ColorFilter;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme.MessageDrawable;
+import org.telegram.ui.ActionBar.Theme;
 
 public class MediaActionDrawable extends Drawable {
     private static final float CANCEL_TO_CHECK_STAGE1 = 0.5f;
@@ -37,12 +35,12 @@ public class MediaActionDrawable extends Drawable {
     public static final int ICON_PAUSE = 1;
     public static final int ICON_PLAY = 0;
     public static final int ICON_SECRETCHECK = 9;
-    private static final float[] pausePath1 = new float[]{16.0f, 17.0f, 32.0f, 17.0f, 32.0f, 22.0f, 16.0f, 22.0f, 16.0f, 19.5f};
-    private static final float[] pausePath2 = new float[]{16.0f, 31.0f, 32.0f, 31.0f, 32.0f, 26.0f, 16.0f, 26.0f, 16.0f, 28.5f};
+    private static final float[] pausePath1 = {16.0f, 17.0f, 32.0f, 17.0f, 32.0f, 22.0f, 16.0f, 22.0f, 16.0f, 19.5f};
+    private static final float[] pausePath2 = {16.0f, 31.0f, 32.0f, 31.0f, 32.0f, 26.0f, 16.0f, 26.0f, 16.0f, 28.5f};
     private static final int pauseRotation = 90;
-    private static final float[] playFinalPath = new float[]{18.0f, 15.0f, 34.0f, 24.0f, 18.0f, 33.0f};
-    private static final float[] playPath1 = new float[]{18.0f, 15.0f, 34.0f, 24.0f, 34.0f, 24.0f, 18.0f, 24.0f, 18.0f, 24.0f};
-    private static final float[] playPath2 = new float[]{18.0f, 33.0f, 34.0f, 24.0f, 34.0f, 24.0f, 18.0f, 24.0f, 18.0f, 24.0f};
+    private static final float[] playFinalPath = {18.0f, 15.0f, 34.0f, 24.0f, 18.0f, 33.0f};
+    private static final float[] playPath1 = {18.0f, 15.0f, 34.0f, 24.0f, 34.0f, 24.0f, 18.0f, 24.0f, 18.0f, 24.0f};
+    private static final float[] playPath2 = {18.0f, 33.0f, 34.0f, 24.0f, 34.0f, 24.0f, 18.0f, 24.0f, 18.0f, 24.0f};
     private static final int playRotation = 0;
     private float animatedDownloadProgress;
     private boolean animatingTransition;
@@ -59,7 +57,7 @@ public class MediaActionDrawable extends Drawable {
     private boolean isMini;
     private long lastAnimationTime;
     private int lastPercent = -1;
-    private MessageDrawable messageDrawable;
+    private Theme.MessageDrawable messageDrawable;
     private int nextIcon;
     private float overrideAlpha = 1.0f;
     private Paint paint = new Paint(1);
@@ -96,9 +94,9 @@ public class MediaActionDrawable extends Drawable {
 
     public MediaActionDrawable() {
         this.paint.setColor(-1);
-        this.paint.setStrokeCap(Cap.ROUND);
+        this.paint.setStrokeCap(Paint.Cap.ROUND);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-        this.paint.setStyle(Style.STROKE);
+        this.paint.setStyle(Paint.Style.STROKE);
         this.paint3.setColor(-1);
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -111,11 +109,11 @@ public class MediaActionDrawable extends Drawable {
         this.overrideAlpha = f;
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-        this.paint.setColorFilter(colorFilter);
-        this.paint2.setColorFilter(colorFilter);
-        this.paint3.setColorFilter(colorFilter);
-        this.textPaint.setColorFilter(colorFilter);
+    public void setColorFilter(ColorFilter colorFilter2) {
+        this.paint.setColorFilter(colorFilter2);
+        this.paint2.setColorFilter(colorFilter2);
+        this.paint3.setColorFilter(colorFilter2);
+        this.textPaint.setColorFilter(colorFilter2);
     }
 
     public void setColor(int i) {
@@ -124,7 +122,7 @@ public class MediaActionDrawable extends Drawable {
         this.paint2.setColor(i2);
         this.paint3.setColor(i2);
         this.textPaint.setColor(i2);
-        this.colorFilter = new PorterDuffColorFilter(i, Mode.MULTIPLY);
+        this.colorFilter = new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY);
     }
 
     public void setBackColor(int i) {
@@ -145,12 +143,10 @@ public class MediaActionDrawable extends Drawable {
     }
 
     public boolean setIcon(int i, boolean z) {
-        if (this.currentIcon == i) {
-            int i2 = this.nextIcon;
-            if (i2 != i) {
-                this.currentIcon = i2;
-                this.transitionProgress = 1.0f;
-            }
+        int i2;
+        if (this.currentIcon == i && (i2 = this.nextIcon) != i) {
+            this.currentIcon = i2;
+            this.transitionProgress = 1.0f;
         }
         if (z) {
             int i3 = this.currentIcon;
@@ -201,14 +197,14 @@ public class MediaActionDrawable extends Drawable {
     }
 
     public void setProgress(float f, boolean z) {
-        if (z) {
+        if (!z) {
+            this.animatedDownloadProgress = f;
+            this.downloadProgressAnimationStart = f;
+        } else {
             if (this.animatedDownloadProgress > f) {
                 this.animatedDownloadProgress = f;
             }
             this.downloadProgressAnimationStart = this.animatedDownloadProgress;
-        } else {
-            this.animatedDownloadProgress = f;
-            this.downloadProgressAnimationStart = f;
         }
         this.downloadProgress = f;
         this.downloadProgressTime = 0.0f;
@@ -220,11 +216,16 @@ public class MediaActionDrawable extends Drawable {
     }
 
     public float getTransitionProgress() {
-        return this.animatingTransition ? this.transitionProgress : 1.0f;
+        if (this.animatingTransition) {
+            return this.transitionProgress;
+        }
+        return 1.0f;
     }
 
-    public void setBackgroundDrawable(MessageDrawable messageDrawable) {
-        this.messageDrawable = messageDrawable;
+    public void setBackgroundDrawable(Drawable drawable) {
+        if (drawable instanceof Theme.MessageDrawable) {
+            this.messageDrawable = (Theme.MessageDrawable) drawable;
+        }
     }
 
     public void setHasOverlayImage(boolean z) {
@@ -247,2563 +248,2077 @@ public class MediaActionDrawable extends Drawable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x0899  */
-    /* JADX WARNING: Removed duplicated region for block: B:337:0x0892  */
-    /* JADX WARNING: Removed duplicated region for block: B:369:0x09f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x0942  */
-    /* JADX WARNING: Removed duplicated region for block: B:335:0x088b  */
-    /* JADX WARNING: Removed duplicated region for block: B:330:0x087d  */
-    /* JADX WARNING: Removed duplicated region for block: B:337:0x0892  */
-    /* JADX WARNING: Removed duplicated region for block: B:338:0x0899  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x089f A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x0942  */
-    /* JADX WARNING: Removed duplicated region for block: B:369:0x09f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
+    /*  JADX ERROR: JadxRuntimeException in pass: IfRegionVisitor
+        jadx.core.utils.exceptions.JadxRuntimeException: Don't wrap MOVE or CONST insns: 0x0bc3: MOVE  (r2v31 android.graphics.drawable.Drawable) = (r23v0 android.graphics.drawable.Drawable)
+        	at jadx.core.dex.instructions.args.InsnArg.wrapArg(InsnArg.java:164)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.assignInline(CodeShrinkVisitor.java:133)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.checkInline(CodeShrinkVisitor.java:118)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkBlock(CodeShrinkVisitor.java:65)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkMethod(CodeShrinkVisitor.java:43)
+        	at jadx.core.dex.visitors.regions.TernaryMod.makeTernaryInsn(TernaryMod.java:122)
+        	at jadx.core.dex.visitors.regions.TernaryMod.visitRegion(TernaryMod.java:34)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:73)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterative(DepthRegionTraversal.java:27)
+        	at jadx.core.dex.visitors.regions.IfRegionVisitor.visit(IfRegionVisitor.java:31)
+        */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x03ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x0412  */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x04ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:172:0x04f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x0503  */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0577  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x057d  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x05a3  */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x0601  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x060a  */
     /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x04fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x0507  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0511  */
-    /* JADX WARNING: Removed duplicated region for block: B:187:0x058b  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0598  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x04fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x0507  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0511  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0585  */
-    /* JADX WARNING: Removed duplicated region for block: B:187:0x058b  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0598  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x060f  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x030f  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0346  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0355  */
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x0377  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x03ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x009f  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00d7 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x030f  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0346  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0355  */
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x0377  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x0399  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x03ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x061d  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x0648  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x0643  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x065b  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0658  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x066d  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0680  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x0699  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x069c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x06b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0713  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0728  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x072b  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0740  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0743  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0757  */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x078d  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x07a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x07cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0819  */
-    /* JADX WARNING: Removed duplicated region for block: B:392:0x0b38  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0b5c  */
-    /* JADX WARNING: Removed duplicated region for block: B:403:0x0b78  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0bae  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x0bd1  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:431:0x0c9f  */
-    /* JADX WARNING: Removed duplicated region for block: B:434:0x0cab  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x0d0d  */
-    /* JADX WARNING: Removed duplicated region for block: B:455:0x0d27  */
-    /* JADX WARNING: Removed duplicated region for block: B:459:0x0d46  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x0d7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:476:0x0da2  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Missing block: B:107:0x037b, code skipped:
-            if (r1 != 3) goto L_0x037f;
-     */
-    /* JADX WARNING: Missing block: B:195:0x059c, code skipped:
-            if (r1 != 3) goto L_0x0609;
-     */
-    /* JADX WARNING: Missing block: B:207:0x05d8, code skipped:
-            if (r1 != 3) goto L_0x05fc;
-     */
-    /* JADX WARNING: Missing block: B:456:0x0d29, code skipped:
-            if (r1 != 13) goto L_0x0d78;
-     */
+    /* JADX WARNING: Removed duplicated region for block: B:219:0x0635  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x063a  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x064a  */
+    /* JADX WARNING: Removed duplicated region for block: B:228:0x064d  */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x065f  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0662  */
+    /* JADX WARNING: Removed duplicated region for block: B:243:0x0679  */
+    /* JADX WARNING: Removed duplicated region for block: B:244:0x0683  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x071a  */
+    /* JADX WARNING: Removed duplicated region for block: B:261:0x071d  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x0732  */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x0735  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0749  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x077f  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:281:0x0794  */
+    /* JADX WARNING: Removed duplicated region for block: B:282:0x0797  */
+    /* JADX WARNING: Removed duplicated region for block: B:288:0x07bf  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:296:0x080b  */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x0813 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:314:0x083c  */
+    /* JADX WARNING: Removed duplicated region for block: B:315:0x0845  */
+    /* JADX WARNING: Removed duplicated region for block: B:318:0x0854  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x0864  */
+    /* JADX WARNING: Removed duplicated region for block: B:326:0x086f  */
+    /* JADX WARNING: Removed duplicated region for block: B:331:0x087d  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x0884  */
+    /* JADX WARNING: Removed duplicated region for block: B:334:0x088b  */
+    /* JADX WARNING: Removed duplicated region for block: B:337:0x0891 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:349:0x0934  */
+    /* JADX WARNING: Removed duplicated region for block: B:365:0x09e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x0af8  */
+    /* JADX WARNING: Removed duplicated region for block: B:380:0x0b08  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0364 A[ADDED_TO_REGION] */
     public void draw(android.graphics.Canvas r33) {
         /*
-        r32 = this;
-        r0 = r32;
-        r7 = r33;
-        r8 = r32.getBounds();
-        r1 = r0.messageDrawable;
-        r9 = 0;
-        r10 = 0;
-        if (r1 == 0) goto L_0x003d;
-    L_0x000e:
-        r1 = r1.hasGradient();
-        if (r1 == 0) goto L_0x003d;
-    L_0x0014:
-        r1 = r0.hasOverlayImage;
-        if (r1 != 0) goto L_0x003d;
-    L_0x0018:
-        r1 = r0.messageDrawable;
-        r1 = r1.getGradientShader();
-        r2 = r0.messageDrawable;
-        r2 = r2.getMatrix();
-        r3 = r8.top;
-        r3 = (float) r3;
-        r2.postTranslate(r10, r3);
-        r1.setLocalMatrix(r2);
-        r2 = r0.paint;
-        r2.setShader(r1);
-        r2 = r0.paint2;
-        r2.setShader(r1);
-        r2 = r0.paint3;
-        r2.setShader(r1);
-        goto L_0x004c;
-    L_0x003d:
-        r1 = r0.paint;
-        r1.setShader(r9);
-        r1 = r0.paint2;
-        r1.setShader(r9);
-        r1 = r0.paint3;
-        r1.setShader(r9);
-    L_0x004c:
-        r11 = r8.centerX();
-        r12 = r8.centerY();
-        r1 = r0.nextIcon;
-        r13 = 3;
-        r14 = 4;
-        r6 = 14;
-        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        if (r1 != r14) goto L_0x0072;
-    L_0x005e:
-        r1 = r0.currentIcon;
-        if (r1 == r13) goto L_0x008a;
-    L_0x0062:
-        if (r1 == r6) goto L_0x008a;
-    L_0x0064:
-        r1 = r33.save();
-        r2 = r0.transitionProgress;
-        r2 = r5 - r2;
-        r3 = (float) r11;
-        r4 = (float) r12;
-        r7.scale(r2, r2, r3, r4);
-        goto L_0x0088;
-    L_0x0072:
-        r2 = 6;
-        if (r1 == r2) goto L_0x0079;
-    L_0x0075:
-        r2 = 10;
-        if (r1 != r2) goto L_0x008a;
-    L_0x0079:
-        r1 = r0.currentIcon;
-        if (r1 != r14) goto L_0x008a;
-    L_0x007d:
-        r1 = r33.save();
-        r2 = r0.transitionProgress;
-        r3 = (float) r11;
-        r4 = (float) r12;
-        r7.scale(r2, r2, r3, r4);
-    L_0x0088:
-        r4 = r1;
-        goto L_0x008b;
-    L_0x008a:
-        r4 = 0;
-    L_0x008b:
-        r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r0.currentIcon;
-        r16 = NUM; // 0x40600000 float:3.5 double:5.3360734E-315;
-        r17 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r18 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
-        r19 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        r20 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-        r2 = 2;
-        if (r1 == r2) goto L_0x00ad;
-    L_0x009f:
-        r1 = r0.nextIcon;
-        if (r1 != r2) goto L_0x00a4;
-    L_0x00a3:
-        goto L_0x00ad;
-    L_0x00a4:
-        r27 = r4;
-        r28 = r8;
-        r8 = 14;
-        r10 = 2;
-        goto L_0x036c;
-    L_0x00ad:
-        r1 = (float) r12;
-        r21 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r21);
-        r9 = (float) r9;
-        r15 = r0.scale;
-        r9 = r9 * r15;
-        r9 = r1 - r9;
-        r15 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r15 = org.telegram.messenger.AndroidUtilities.dp(r15);
-        r15 = (float) r15;
-        r14 = r0.scale;
-        r15 = r15 * r14;
-        r15 = r15 + r1;
-        r14 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        r14 = (float) r14;
-        r10 = r0.scale;
-        r14 = r14 * r10;
-        r14 = r14 + r1;
-        r10 = r0.currentIcon;
-        if (r10 == r13) goto L_0x00d9;
-    L_0x00d7:
-        if (r10 != r6) goto L_0x0100;
-    L_0x00d9:
-        r10 = r0.nextIcon;
-        if (r10 != r2) goto L_0x0100;
-    L_0x00dd:
-        r10 = r0.paint;
-        r3 = r0.transitionProgress;
-        r3 = r3 / r20;
-        r3 = java.lang.Math.min(r5, r3);
-        r3 = r3 * r19;
-        r3 = (int) r3;
-        r10.setAlpha(r3);
-        r3 = r0.transitionProgress;
-        r10 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r10 = (float) r10;
-        r5 = r0.scale;
-        r10 = r10 * r5;
-        r10 = r10 + r1;
-        r24 = r10;
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x013d;
-    L_0x0100:
-        r3 = r0.nextIcon;
-        if (r3 == r13) goto L_0x0125;
-    L_0x0104:
-        if (r3 == r6) goto L_0x0125;
-    L_0x0106:
-        if (r3 == r2) goto L_0x0125;
-    L_0x0108:
-        r3 = r0.paint;
-        r5 = r0.savedTransitionProgress;
-        r5 = r5 / r20;
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = java.lang.Math.min(r10, r5);
-        r5 = r5 * r19;
-        r6 = r0.transitionProgress;
-        r6 = r10 - r6;
-        r5 = r5 * r6;
-        r5 = (int) r5;
-        r3.setAlpha(r5);
-        r3 = r0.savedTransitionProgress;
-        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x012e;
-    L_0x0125:
-        r3 = r0.paint;
-        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        r3.setAlpha(r5);
-        r3 = r0.transitionProgress;
-    L_0x012e:
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r6 = (float) r6;
-        r5 = r0.scale;
-        r6 = r6 * r5;
-        r5 = r1 + r6;
-        r24 = r5;
-    L_0x013d:
-        r5 = r0.animatingTransition;
-        if (r5 == 0) goto L_0x030f;
-    L_0x0141:
-        r5 = r0.nextIcon;
-        if (r5 == r2) goto L_0x02bc;
-    L_0x0145:
-        r5 = (r3 > r20 ? 1 : (r3 == r20 ? 0 : -1));
-        if (r5 > 0) goto L_0x014b;
-    L_0x0149:
-        goto L_0x02bc;
-    L_0x014b:
-        r5 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r5 = (float) r5;
-        r6 = r0.scale;
-        r5 = r5 * r6;
-        r5 = r5 * r6;
-        r6 = r0.isMini;
-        if (r6 == 0) goto L_0x0161;
-    L_0x015c:
-        r15 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        goto L_0x0162;
-    L_0x0161:
-        r15 = 0;
-    L_0x0162:
-        r6 = (float) r15;
-        r5 = r5 + r6;
-        r3 = r3 - r20;
-        r6 = r3 / r20;
-        r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
-        r9 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1));
-        if (r9 <= 0) goto L_0x017b;
-    L_0x016f:
-        r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
-        r3 = r3 - r9;
-        r9 = NUM; // 0x3e99999a float:0.3 double:5.188942835E-315;
-        r3 = r3 / r9;
-        r9 = r3;
-        r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0181;
-    L_0x017b:
-        r9 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
-        r3 = r3 / r9;
-        r15 = r3;
-        r9 = 0;
-    L_0x0181:
-        r3 = r0.rect;
-        r10 = (float) r11;
-        r2 = r10 - r5;
-        r5 = r5 / r17;
-        r13 = r14 - r5;
-        r5 = r5 + r14;
-        r3.set(r2, r13, r10, r5);
-        r2 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r3 = r9 * r2;
-        r2 = r0.rect;
-        r5 = NUM; // 0x42d00000 float:104.0 double:5.5381189E-315;
-        r6 = r6 * r5;
-        r5 = r6 - r3;
-        r6 = 0;
-        r13 = r0.paint;
-        r26 = r1;
-        r1 = r33;
-        r27 = r4;
-        r4 = r5;
-        r23 = r8;
-        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r6;
-        r8 = 14;
-        r6 = r13;
-        r1.drawArc(r2, r3, r4, r5, r6);
-        r1 = r14 - r24;
-        r1 = r1 * r15;
-        r24 = r24 + r1;
-        r1 = 0;
-        r2 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x02b5;
-    L_0x01ba:
-        r1 = r0.nextIcon;
-        if (r1 != r8) goto L_0x01c0;
-    L_0x01be:
-        r13 = 0;
-        goto L_0x01c9;
-    L_0x01c0:
-        r1 = -NUM; // 0xffffffffCLASSNAME float:-45.0 double:NaN;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r9;
-        r1 = r1 * r5;
-        r13 = r1;
-    L_0x01c9:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r1 = (float) r1;
-        r1 = r1 * r9;
-        r2 = r0.scale;
-        r1 = r1 * r2;
-        r9 = r9 * r19;
-        r2 = (int) r9;
-        r3 = r0.nextIcon;
-        r4 = 3;
-        if (r3 == r4) goto L_0x01f2;
-    L_0x01dc:
-        if (r3 == r8) goto L_0x01f2;
-    L_0x01de:
-        r9 = 2;
-        if (r3 == r9) goto L_0x01f3;
-    L_0x01e1:
-        r3 = r0.transitionProgress;
-        r3 = r3 / r20;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3 = java.lang.Math.min(r4, r3);
-        r5 = r4 - r3;
-        r2 = (float) r2;
-        r2 = r2 * r5;
-        r2 = (int) r2;
-        goto L_0x01f3;
-    L_0x01f2:
-        r9 = 2;
-    L_0x01f3:
-        r15 = r2;
-        r2 = 0;
-        r3 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x0202;
-    L_0x01f9:
-        r33.save();
-        r2 = r26;
-        r7.rotate(r13, r10, r2);
-        goto L_0x0204;
-    L_0x0202:
-        r2 = r26;
-    L_0x0204:
-        if (r15 == 0) goto L_0x02aa;
-    L_0x0206:
-        r3 = r0.paint;
-        r3.setAlpha(r15);
-        r3 = r0.nextIcon;
-        if (r3 != r8) goto L_0x028a;
-    L_0x020f:
-        r1 = r0.paint3;
-        r1.setAlpha(r15);
-        r1 = r0.rect;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r2 = r11 - r2;
-        r2 = (float) r2;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r3 = r12 - r3;
-        r3 = (float) r3;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r4 = r4 + r11;
-        r4 = (float) r4;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r5 = r5 + r12;
-        r5 = (float) r5;
-        r1.set(r2, r3, r4, r5);
-        r1 = r0.rect;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r2 = (float) r2;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r3 = (float) r3;
-        r4 = r0.paint3;
-        r7.drawRoundRect(r1, r2, r3, r4);
-        r1 = r0.paint;
-        r2 = (float) r15;
-        r3 = NUM; // 0x3e19999a float:0.15 double:5.147497604E-315;
-        r2 = r2 * r3;
-        r2 = (int) r2;
-        r1.setAlpha(r2);
-        r1 = r0.isMini;
-        if (r1 == 0) goto L_0x0257;
-    L_0x0254:
-        r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        goto L_0x0259;
-    L_0x0257:
-        r1 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x0259:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r2 = r0.rect;
-        r6 = r23;
-        r3 = r6.left;
-        r3 = r3 + r1;
-        r3 = (float) r3;
-        r4 = r6.top;
-        r4 = r4 + r1;
-        r4 = (float) r4;
-        r5 = r6.right;
-        r5 = r5 - r1;
-        r5 = (float) r5;
-        r9 = r6.bottom;
-        r9 = r9 - r1;
-        r1 = (float) r9;
-        r2.set(r3, r4, r5, r1);
-        r2 = r0.rect;
-        r3 = 0;
-        r4 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
-        r5 = 0;
-        r9 = r0.paint;
-        r1 = r33;
-        r28 = r6;
-        r6 = r9;
-        r1.drawArc(r2, r3, r4, r5, r6);
-        r1 = r0.paint;
-        r1.setAlpha(r15);
-        goto L_0x02ac;
-    L_0x028a:
-        r28 = r23;
-        r9 = r10 - r1;
-        r15 = r2 - r1;
-        r23 = r10 + r1;
-        r25 = r2 + r1;
-        r6 = r0.paint;
-        r1 = r33;
-        r2 = r9;
-        r3 = r15;
-        r4 = r23;
-        r5 = r25;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r6 = r0.paint;
-        r2 = r23;
-        r4 = r9;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        goto L_0x02ac;
-    L_0x02aa:
-        r28 = r23;
-    L_0x02ac:
-        r1 = 0;
-        r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x02b7;
-    L_0x02b1:
-        r33.restore();
-        goto L_0x02b7;
-    L_0x02b5:
-        r28 = r23;
-    L_0x02b7:
-        r1 = r10;
-        r2 = r1;
-        r3 = r14;
-        r10 = 2;
-        goto L_0x0309;
-    L_0x02bc:
-        r27 = r4;
-        r28 = r8;
-        r8 = 14;
-        r10 = 2;
-        r1 = r0.nextIcon;
-        if (r1 != r10) goto L_0x02cc;
-    L_0x02c7:
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r1 - r3;
-        goto L_0x02d2;
-    L_0x02cc:
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r3 / r20;
-        r3 = r1 - r5;
-    L_0x02d2:
-        r24 = r24 - r9;
-        r24 = r24 * r5;
-        r24 = r9 + r24;
-        r14 = r14 - r15;
-        r14 = r14 * r5;
-        r14 = r14 + r15;
-        r1 = (float) r11;
-        r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r2 = (float) r2;
-        r2 = r2 * r3;
-        r4 = r0.scale;
-        r2 = r2 * r4;
-        r2 = r1 - r2;
-        r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = (float) r4;
-        r4 = r4 * r3;
-        r5 = r0.scale;
-        r4 = r4 * r5;
-        r1 = r1 + r4;
-        r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = (float) r4;
-        r4 = r4 * r3;
-        r3 = r0.scale;
-        r4 = r4 * r3;
-        r3 = r14 - r4;
-    L_0x0309:
-        r15 = r1;
-        r9 = r2;
-        r13 = r3;
-        r3 = r24;
-        goto L_0x0342;
-    L_0x030f:
-        r27 = r4;
-        r28 = r8;
-        r8 = 14;
-        r10 = 2;
-        r1 = (float) r11;
-        r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r2 = (float) r2;
-        r3 = r0.scale;
-        r2 = r2 * r3;
-        r2 = r1 - r2;
-        r3 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r3 = (float) r3;
-        r4 = r0.scale;
-        r3 = r3 * r4;
-        r1 = r1 + r3;
-        r3 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r3 = (float) r3;
-        r4 = r0.scale;
-        r3 = r3 * r4;
-        r3 = r15 - r3;
-        r13 = r3;
-        r3 = r9;
-        r14 = r15;
-        r15 = r1;
-        r9 = r2;
-    L_0x0342:
-        r1 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1));
-        if (r1 == 0) goto L_0x0350;
-    L_0x0346:
-        r4 = (float) r11;
-        r6 = r0.paint;
-        r1 = r33;
-        r2 = r4;
-        r5 = r14;
-        r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0350:
-        r6 = (float) r11;
-        r1 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1));
-        if (r1 == 0) goto L_0x036c;
-    L_0x0355:
-        r5 = r0.paint;
-        r1 = r33;
-        r2 = r9;
-        r3 = r13;
-        r4 = r6;
-        r9 = r5;
-        r5 = r14;
-        r23 = r6;
-        r6 = r9;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r6 = r0.paint;
-        r2 = r15;
-        r4 = r23;
-        r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x036c:
-        r1 = r0.currentIcon;
-        r9 = 1;
-        r2 = 3;
-        if (r1 == r2) goto L_0x03f2;
-    L_0x0372:
-        if (r1 == r8) goto L_0x03f2;
-    L_0x0374:
-        r3 = 4;
-        if (r1 != r3) goto L_0x037f;
-    L_0x0377:
-        r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x03f2;
-    L_0x037b:
-        if (r1 != r2) goto L_0x037f;
-    L_0x037d:
-        goto L_0x03f2;
-    L_0x037f:
-        r1 = r0.currentIcon;
-        r2 = 10;
-        if (r1 == r2) goto L_0x0394;
-    L_0x0385:
-        r2 = r0.nextIcon;
-        r3 = 10;
-        if (r2 == r3) goto L_0x0394;
-    L_0x038b:
-        r2 = 13;
-        if (r1 != r2) goto L_0x0390;
-    L_0x038f:
-        goto L_0x0394;
-    L_0x0390:
-        r13 = r28;
-        goto L_0x0612;
-    L_0x0394:
-        r1 = r0.nextIcon;
-        r2 = 4;
-        if (r1 == r2) goto L_0x03a0;
-    L_0x0399:
-        r2 = 6;
-        if (r1 != r2) goto L_0x039d;
-    L_0x039c:
-        goto L_0x03a0;
-    L_0x039d:
-        r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x03a9;
-    L_0x03a0:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-        r5 = r5 * r19;
-        r3 = (int) r5;
-    L_0x03a9:
-        if (r3 == 0) goto L_0x0390;
-    L_0x03ab:
-        r1 = r0.paint;
-        r2 = (float) r3;
-        r3 = r0.overrideAlpha;
-        r2 = r2 * r3;
-        r2 = (int) r2;
-        r1.setAlpha(r2);
-        r1 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
-        r3 = r0.animatedDownloadProgress;
-        r3 = r3 * r2;
-        r4 = java.lang.Math.max(r1, r3);
-        r1 = r0.isMini;
-        if (r1 == 0) goto L_0x03c7;
-    L_0x03c6:
-        goto L_0x03c9;
-    L_0x03c7:
-        r17 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x03c9:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r2 = r0.rect;
-        r13 = r28;
-        r3 = r13.left;
-        r3 = r3 + r1;
-        r3 = (float) r3;
-        r5 = r13.top;
-        r5 = r5 + r1;
-        r5 = (float) r5;
-        r6 = r13.right;
-        r6 = r6 - r1;
-        r6 = (float) r6;
-        r14 = r13.bottom;
-        r14 = r14 - r1;
-        r1 = (float) r14;
-        r2.set(r3, r5, r6, r1);
-        r2 = r0.rect;
-        r3 = r0.downloadRadOffset;
-        r5 = 0;
-        r6 = r0.paint;
-        r1 = r33;
-        r1.drawArc(r2, r3, r4, r5, r6);
-        goto L_0x0612;
-    L_0x03f2:
-        r13 = r28;
-        r1 = r0.nextIcon;
-        if (r1 != r10) goto L_0x0420;
-    L_0x03f8:
-        r1 = r0.transitionProgress;
-        r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 > 0) goto L_0x0414;
-    L_0x03fe:
-        r1 = r1 / r20;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r1 = (float) r1;
-        r1 = r1 * r5;
-        r2 = r0.scale;
-        r1 = r1 * r2;
-        r5 = r5 * r19;
-        r15 = (int) r5;
-        r3 = r15;
-        goto L_0x0416;
-    L_0x0414:
-        r1 = 0;
-        r3 = 0;
-    L_0x0416:
-        r5 = r3;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r4 = 0;
-    L_0x041a:
-        r6 = 0;
-        r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r15 = 0;
-        goto L_0x04f8;
-    L_0x0420:
-        if (r1 == 0) goto L_0x04c3;
-    L_0x0422:
-        if (r1 == r9) goto L_0x04c3;
-    L_0x0424:
-        r2 = 5;
-        if (r1 == r2) goto L_0x04c3;
-    L_0x0427:
-        r2 = 8;
-        if (r1 == r2) goto L_0x04c3;
-    L_0x042b:
-        r2 = 9;
-        if (r1 == r2) goto L_0x04c3;
-    L_0x042f:
-        r2 = 7;
-        if (r1 == r2) goto L_0x04c3;
-    L_0x0432:
-        r2 = 6;
-        if (r1 != r2) goto L_0x0437;
-    L_0x0435:
-        goto L_0x04c3;
-    L_0x0437:
-        r2 = 4;
-        if (r1 != r2) goto L_0x0473;
-    L_0x043a:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r2 = (float) r2;
-        r3 = r0.scale;
-        r2 = r2 * r3;
-        r3 = r5 * r19;
-        r3 = (int) r3;
-        r4 = r0.currentIcon;
-        if (r4 != r8) goto L_0x045a;
-    L_0x0450:
-        r1 = r13.left;
-        r1 = (float) r1;
-        r4 = r13.top;
-        r4 = (float) r4;
-        r6 = r4;
-        r4 = r1;
-        r1 = 0;
-        goto L_0x046b;
-    L_0x045a:
-        r4 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
-        r1 = r1 * r4;
-        r4 = r13.centerX();
-        r4 = (float) r4;
-        r5 = r13.centerY();
-        r5 = (float) r5;
-        r6 = r5;
-        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x046b:
-        r15 = r1;
-        r1 = r2;
-        r14 = r5;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r3;
-        goto L_0x04f8;
-    L_0x0473:
-        if (r1 == r8) goto L_0x0488;
-    L_0x0475:
-        r2 = 3;
-        if (r1 != r2) goto L_0x0479;
-    L_0x0478:
-        goto L_0x0488;
-    L_0x0479:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r1 = (float) r1;
-        r2 = r0.scale;
-        r1 = r1 * r2;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r4 = 0;
-        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x041a;
-    L_0x0488:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-        r2 = r0.currentIcon;
-        r3 = 4;
-        if (r2 != r3) goto L_0x0496;
-    L_0x0493:
-        r2 = r1;
-        r5 = 0;
-        goto L_0x049c;
-    L_0x0496:
-        r2 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
-        r5 = r5 * r2;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x049c:
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r3 = (float) r3;
-        r4 = r0.scale;
-        r3 = r3 * r4;
-        r1 = r1 * r19;
-        r1 = (int) r1;
-        r4 = r0.nextIcon;
-        if (r4 != r8) goto L_0x04b2;
-    L_0x04ac:
-        r4 = r13.left;
-        r4 = (float) r4;
-        r6 = r13.top;
-        goto L_0x04bb;
-    L_0x04b2:
-        r4 = r13.centerX();
-        r4 = (float) r4;
-        r6 = r13.centerY();
-    L_0x04bb:
-        r6 = (float) r6;
-        r14 = r2;
-        r15 = r5;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r1;
-        r1 = r3;
-        goto L_0x04f8;
-    L_0x04c3:
-        r1 = r0.nextIcon;
-        r2 = 6;
-        if (r1 != r2) goto L_0x04d3;
-    L_0x04c8:
-        r1 = r0.transitionProgress;
-        r1 = r1 / r20;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r1 = java.lang.Math.min(r2, r1);
-        goto L_0x04d7;
-    L_0x04d3:
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r1 = r0.transitionProgress;
-    L_0x04d7:
-        r5 = r2 - r1;
-        r3 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
-        r1 = r1 * r3;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r3 = (float) r3;
-        r3 = r3 * r5;
-        r4 = r0.scale;
-        r3 = r3 * r4;
-        r5 = r5 * r17;
-        r4 = java.lang.Math.min(r2, r5);
-        r4 = r4 * r19;
-        r4 = (int) r4;
-        r15 = r1;
-        r1 = r3;
-        r5 = r4;
-        r4 = 0;
-        r6 = 0;
-        r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x04f8:
-        r3 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x0502;
-    L_0x04fc:
-        r33.save();
-        r7.scale(r14, r14, r4, r6);
-    L_0x0502:
-        r2 = 0;
-        r3 = (r15 > r2 ? 1 : (r15 == r2 ? 0 : -1));
-        if (r3 == 0) goto L_0x050f;
-    L_0x0507:
-        r33.save();
-        r2 = (float) r11;
-        r3 = (float) r12;
-        r7.rotate(r15, r2, r3);
-    L_0x050f:
-        if (r5 == 0) goto L_0x0585;
-    L_0x0511:
-        r2 = r0.paint;
-        r3 = (float) r5;
-        r4 = r0.overrideAlpha;
-        r4 = r4 * r3;
-        r4 = (int) r4;
-        r2.setAlpha(r4);
-        r2 = r0.currentIcon;
-        if (r2 == r8) goto L_0x0549;
-    L_0x0520:
-        r2 = r0.nextIcon;
-        if (r2 != r8) goto L_0x0525;
-    L_0x0524:
-        goto L_0x0549;
-    L_0x0525:
-        r2 = (float) r11;
-        r16 = r2 - r1;
-        r3 = (float) r12;
-        r23 = r3 - r1;
-        r24 = r2 + r1;
-        r25 = r3 + r1;
-        r6 = r0.paint;
-        r1 = r33;
-        r2 = r16;
-        r3 = r23;
-        r4 = r24;
-        r9 = r5;
-        r5 = r25;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r6 = r0.paint;
-        r2 = r24;
-        r4 = r16;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        goto L_0x0586;
-    L_0x0549:
-        r9 = r5;
-        r1 = r0.paint3;
-        r2 = r0.overrideAlpha;
-        r3 = r3 * r2;
-        r2 = (int) r3;
-        r1.setAlpha(r2);
-        r1 = r0.rect;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r2 = r11 - r2;
-        r2 = (float) r2;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r3 = r12 - r3;
-        r3 = (float) r3;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r4 = r4 + r11;
-        r4 = (float) r4;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
-        r5 = r5 + r12;
-        r5 = (float) r5;
-        r1.set(r2, r3, r4, r5);
-        r1 = r0.rect;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r2 = (float) r2;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r3 = (float) r3;
-        r4 = r0.paint3;
-        r7.drawRoundRect(r1, r2, r3, r4);
-        goto L_0x0586;
-    L_0x0585:
-        r9 = r5;
-    L_0x0586:
-        r1 = 0;
-        r2 = (r15 > r1 ? 1 : (r15 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x058e;
-    L_0x058b:
-        r33.restore();
-    L_0x058e:
-        r1 = r0.currentIcon;
-        r2 = 3;
-        if (r1 == r2) goto L_0x059e;
-    L_0x0593:
-        if (r1 == r8) goto L_0x059e;
-    L_0x0595:
-        r3 = 4;
-        if (r1 != r3) goto L_0x0609;
-    L_0x0598:
-        r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x059e;
-    L_0x059c:
-        if (r1 != r2) goto L_0x0609;
-    L_0x059e:
-        if (r9 == 0) goto L_0x0609;
-    L_0x05a0:
-        r1 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r2 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
-        r3 = r0.animatedDownloadProgress;
-        r3 = r3 * r2;
-        r15 = java.lang.Math.max(r1, r3);
-        r1 = r0.isMini;
-        if (r1 == 0) goto L_0x05b1;
-    L_0x05b0:
-        goto L_0x05b3;
-    L_0x05b1:
-        r17 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x05b3:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r17);
-        r2 = r0.rect;
-        r3 = r13.left;
-        r3 = r3 + r1;
-        r3 = (float) r3;
-        r4 = r13.top;
-        r4 = r4 + r1;
-        r4 = (float) r4;
-        r5 = r13.right;
-        r5 = r5 - r1;
-        r5 = (float) r5;
-        r6 = r13.bottom;
-        r6 = r6 - r1;
-        r1 = (float) r6;
-        r2.set(r3, r4, r5, r1);
-        r1 = r0.currentIcon;
-        if (r1 == r8) goto L_0x05da;
-    L_0x05d0:
-        r2 = 4;
-        if (r1 != r2) goto L_0x05fc;
-    L_0x05d3:
-        r1 = r0.nextIcon;
-        if (r1 == r8) goto L_0x05da;
-    L_0x05d7:
-        r2 = 3;
-        if (r1 != r2) goto L_0x05fc;
-    L_0x05da:
-        r1 = r0.paint;
-        r2 = (float) r9;
-        r3 = NUM; // 0x3e19999a float:0.15 double:5.147497604E-315;
-        r2 = r2 * r3;
-        r3 = r0.overrideAlpha;
-        r2 = r2 * r3;
-        r2 = (int) r2;
-        r1.setAlpha(r2);
-        r2 = r0.rect;
-        r3 = 0;
-        r4 = NUM; // 0x43b40000 float:360.0 double:5.611943214E-315;
-        r5 = 0;
-        r6 = r0.paint;
-        r1 = r33;
-        r1.drawArc(r2, r3, r4, r5, r6);
-        r1 = r0.paint;
-        r1.setAlpha(r9);
-    L_0x05fc:
-        r2 = r0.rect;
-        r3 = r0.downloadRadOffset;
-        r5 = 0;
-        r6 = r0.paint;
-        r1 = r33;
-        r4 = r15;
-        r1.drawArc(r2, r3, r4, r5, r6);
-    L_0x0609:
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = (r14 > r1 ? 1 : (r14 == r1 ? 0 : -1));
-        if (r2 == 0) goto L_0x0612;
-    L_0x060f:
-        r33.restore();
-    L_0x0612:
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x061d;
-    L_0x0618:
-        r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x063e;
-    L_0x061d:
-        r2 = 4;
-        if (r1 != r2) goto L_0x0627;
-    L_0x0620:
-        r5 = r0.transitionProgress;
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = r1 - r5;
-        goto L_0x063c;
-    L_0x0627:
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = r0.transitionProgress;
-        r2 = r2 / r20;
-        r5 = java.lang.Math.min(r1, r2);
-        r2 = r0.transitionProgress;
-        r2 = r2 / r20;
-        r2 = r1 - r2;
-        r1 = 0;
-        r2 = java.lang.Math.max(r1, r2);
-    L_0x063c:
-        r14 = r2;
-        r9 = r5;
-    L_0x063e:
-        r1 = r0.nextIcon;
-        r2 = 5;
-        if (r1 != r2) goto L_0x0648;
-    L_0x0643:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_filePath;
-        r15 = r1;
-        r6 = 0;
-        goto L_0x0653;
-    L_0x0648:
-        r1 = r0.currentIcon;
-        r2 = 5;
-        if (r1 != r2) goto L_0x0651;
-    L_0x064d:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_filePath;
-        r6 = r1;
-        goto L_0x0652;
-    L_0x0651:
-        r6 = 0;
-    L_0x0652:
-        r15 = 0;
-    L_0x0653:
-        r1 = r0.nextIcon;
-        r2 = 7;
-        if (r1 != r2) goto L_0x065b;
-    L_0x0658:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon;
-        goto L_0x0666;
-    L_0x065b:
-        r1 = r0.currentIcon;
-        r2 = 7;
-        if (r1 != r2) goto L_0x0665;
-    L_0x0660:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon;
-        r2 = r1;
-        r1 = 0;
-        goto L_0x0667;
-    L_0x0665:
-        r1 = 0;
-    L_0x0666:
-        r2 = 0;
-    L_0x0667:
-        r3 = r0.nextIcon;
-        r4 = 8;
-        if (r3 != r4) goto L_0x0670;
-    L_0x066d:
-        r1 = org.telegram.ui.ActionBar.Theme.chat_gifIcon;
-        goto L_0x0678;
-    L_0x0670:
-        r3 = r0.currentIcon;
-        r4 = 8;
-        if (r3 != r4) goto L_0x0678;
-    L_0x0676:
-        r2 = org.telegram.ui.ActionBar.Theme.chat_gifIcon;
-    L_0x0678:
-        r5 = r1;
-        r4 = r2;
-        r1 = r0.currentIcon;
-        r2 = 9;
-        if (r1 == r2) goto L_0x0691;
-    L_0x0680:
-        r1 = r0.nextIcon;
-        r2 = 9;
-        if (r1 != r2) goto L_0x0687;
-    L_0x0686:
-        goto L_0x0691;
-    L_0x0687:
-        r10 = r4;
-        r29 = r6;
-        r26 = r14;
-        r16 = r15;
-        r14 = r5;
-        goto L_0x0716;
-    L_0x0691:
-        r1 = r0.paint;
-        r2 = r0.currentIcon;
-        r3 = r0.nextIcon;
-        if (r2 != r3) goto L_0x069c;
-    L_0x0699:
-        r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x06a1;
-    L_0x069c:
-        r2 = r0.transitionProgress;
-        r2 = r2 * r19;
-        r3 = (int) r2;
-    L_0x06a1:
-        r1.setAlpha(r3);
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r3 = r12 + r1;
-        r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r2 = r11 - r1;
-        r1 = r0.currentIcon;
-        r8 = r0.nextIcon;
-        if (r1 == r8) goto L_0x06c2;
-    L_0x06b8:
-        r33.save();
-        r1 = r0.transitionProgress;
-        r8 = (float) r11;
-        r10 = (float) r12;
-        r7.scale(r1, r1, r8, r10);
-    L_0x06c2:
-        r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r2 - r1;
-        r8 = (float) r1;
-        r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r3 - r1;
-        r10 = (float) r1;
-        r1 = (float) r2;
-        r16 = r15;
-        r15 = (float) r3;
-        r17 = r6;
-        r6 = r0.paint;
-        r23 = r1;
-        r1 = r33;
-        r24 = r2;
-        r2 = r8;
-        r8 = r3;
-        r3 = r10;
-        r10 = r4;
-        r4 = r23;
-        r26 = r14;
-        r14 = r5;
-        r5 = r15;
-        r29 = r17;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r2 = r24 + r1;
-        r4 = (float) r2;
-        r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r3 = r8 - r1;
-        r5 = (float) r3;
-        r6 = r0.paint;
-        r1 = r33;
-        r2 = r23;
-        r3 = r15;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0716;
-    L_0x0713:
-        r33.restore();
-    L_0x0716:
-        r1 = r0.currentIcon;
-        r2 = 12;
-        if (r1 == r2) goto L_0x0722;
-    L_0x071c:
-        r1 = r0.nextIcon;
-        r2 = 12;
-        if (r1 != r2) goto L_0x0790;
-    L_0x0722:
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x072b;
-    L_0x0728:
-        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0738;
-    L_0x072b:
-        r1 = 13;
-        if (r2 != r1) goto L_0x0732;
-    L_0x072f:
-        r5 = r0.transitionProgress;
-        goto L_0x0738;
-    L_0x0732:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-    L_0x0738:
-        r1 = r0.paint;
-        r2 = r0.currentIcon;
-        r3 = r0.nextIcon;
-        if (r2 != r3) goto L_0x0743;
-    L_0x0740:
-        r3 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0746;
-    L_0x0743:
-        r2 = r5 * r19;
-        r3 = (int) r2;
-    L_0x0746:
-        r1.setAlpha(r3);
-        org.telegram.messenger.AndroidUtilities.dp(r18);
-        r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x075f;
-    L_0x0757:
-        r33.save();
-        r1 = (float) r11;
-        r2 = (float) r12;
-        r7.scale(r5, r5, r1, r2);
-    L_0x075f:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r1 = (float) r1;
-        r2 = r0.scale;
-        r1 = r1 * r2;
-        r2 = (float) r11;
-        r8 = r2 - r1;
-        r3 = (float) r12;
-        r15 = r3 - r1;
-        r17 = r2 + r1;
-        r23 = r3 + r1;
-        r6 = r0.paint;
-        r1 = r33;
-        r2 = r8;
-        r3 = r15;
-        r4 = r17;
-        r5 = r23;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r6 = r0.paint;
-        r2 = r17;
-        r4 = r8;
-        r1.drawLine(r2, r3, r4, r5, r6);
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0790;
-    L_0x078d:
-        r33.restore();
-    L_0x0790:
-        r1 = r0.currentIcon;
-        r2 = 13;
-        if (r1 == r2) goto L_0x079c;
-    L_0x0796:
-        r1 = r0.nextIcon;
-        r2 = 13;
-        if (r1 != r2) goto L_0x081c;
-    L_0x079c:
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 != r2) goto L_0x07a5;
-    L_0x07a2:
-        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x07b2;
-    L_0x07a5:
-        r1 = 13;
-        if (r2 != r1) goto L_0x07ac;
-    L_0x07a9:
-        r5 = r0.transitionProgress;
-        goto L_0x07b2;
-    L_0x07ac:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r2 - r1;
-    L_0x07b2:
-        r1 = r0.textPaint;
-        r2 = r5 * r19;
-        r2 = (int) r2;
-        r1.setAlpha(r2);
-        r1 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r1 + r12;
-        r2 = r0.percentStringWidth;
-        r3 = 2;
-        r2 = r2 / r3;
-        r2 = r11 - r2;
-        r3 = r0.currentIcon;
-        r4 = r0.nextIcon;
-        if (r3 == r4) goto L_0x07d5;
-    L_0x07cd:
-        r33.save();
-        r3 = (float) r11;
-        r4 = (float) r12;
-        r7.scale(r5, r5, r3, r4);
-    L_0x07d5:
-        r3 = r0.animatedDownloadProgress;
-        r4 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r3 = r3 * r4;
-        r3 = (int) r3;
-        r4 = r0.percentString;
-        if (r4 == 0) goto L_0x07e4;
-    L_0x07e0:
-        r4 = r0.lastPercent;
-        if (r3 == r4) goto L_0x080a;
-    L_0x07e4:
-        r0.lastPercent = r3;
-        r3 = 1;
-        r4 = new java.lang.Object[r3];
-        r3 = r0.lastPercent;
-        r3 = java.lang.Integer.valueOf(r3);
-        r5 = 0;
-        r4[r5] = r3;
-        r3 = "%d%%";
-        r3 = java.lang.String.format(r3, r4);
-        r0.percentString = r3;
-        r3 = r0.textPaint;
-        r4 = r0.percentString;
-        r3 = r3.measureText(r4);
-        r3 = (double) r3;
-        r3 = java.lang.Math.ceil(r3);
-        r3 = (int) r3;
-        r0.percentStringWidth = r3;
-    L_0x080a:
-        r3 = r0.percentString;
-        r2 = (float) r2;
-        r1 = (float) r1;
-        r4 = r0.textPaint;
-        r7.drawText(r3, r2, r1, r4);
-        r1 = r0.currentIcon;
-        r2 = r0.nextIcon;
-        if (r1 == r2) goto L_0x081c;
-    L_0x0819:
-        r33.restore();
-    L_0x081c:
-        r1 = r0.currentIcon;
-        r2 = 1;
-        if (r1 == 0) goto L_0x0836;
-    L_0x0821:
-        if (r1 == r2) goto L_0x0836;
-    L_0x0823:
-        r1 = r0.nextIcon;
-        if (r1 == 0) goto L_0x0836;
-    L_0x0827:
-        if (r1 != r2) goto L_0x082a;
-    L_0x0829:
-        goto L_0x0836;
-    L_0x082a:
-        r23 = r10;
-        r30 = r11;
-        r24 = r12;
-        r17 = r14;
-        r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0b29;
-    L_0x0836:
-        r1 = r0.currentIcon;
-        if (r1 != 0) goto L_0x083e;
-    L_0x083a:
-        r1 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0846;
-    L_0x083e:
-        r1 = r0.currentIcon;
-        if (r1 != r2) goto L_0x0853;
-    L_0x0842:
-        r1 = r0.nextIcon;
-        if (r1 != 0) goto L_0x0853;
-    L_0x0846:
-        r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x0853;
-    L_0x084a:
-        r1 = r0.interpolator;
-        r2 = r0.transitionProgress;
-        r1 = r1.getInterpolation(r2);
-        goto L_0x0854;
-    L_0x0853:
-        r1 = 0;
-    L_0x0854:
-        r2 = r0.path1;
-        r2.reset();
-        r2 = r0.path2;
-        r2.reset();
-        r2 = r0.currentIcon;
-        if (r2 == 0) goto L_0x0872;
-    L_0x0862:
-        r3 = 1;
-        if (r2 == r3) goto L_0x086a;
-    L_0x0865:
-        r2 = 0;
-        r3 = 0;
-        r4 = 0;
-    L_0x0868:
-        r15 = 0;
-        goto L_0x0879;
-    L_0x086a:
-        r2 = pausePath1;
-        r3 = pausePath2;
-        r15 = 90;
-        r4 = 0;
-        goto L_0x0879;
-    L_0x0872:
-        r2 = playPath1;
-        r3 = playPath2;
-        r4 = playFinalPath;
-        goto L_0x0868;
-    L_0x0879:
-        r5 = r0.nextIcon;
-        if (r5 == 0) goto L_0x088b;
-    L_0x087d:
-        r6 = 1;
-        if (r5 == r6) goto L_0x0884;
-    L_0x0880:
-        r5 = 0;
-        r6 = 0;
-    L_0x0882:
-        r8 = 0;
-        goto L_0x0890;
-    L_0x0884:
-        r5 = pausePath1;
-        r6 = pausePath2;
-        r8 = 90;
-        goto L_0x0890;
-    L_0x088b:
-        r5 = playPath1;
-        r6 = playPath2;
-        goto L_0x0882;
-    L_0x0890:
-        if (r2 != 0) goto L_0x0899;
-    L_0x0892:
-        r2 = r5;
-        r3 = r6;
-        r17 = r14;
-        r5 = 0;
-        r6 = 0;
-        goto L_0x089b;
-    L_0x0899:
-        r17 = r14;
-    L_0x089b:
-        r14 = r0.animatingTransition;
-        if (r14 != 0) goto L_0x093c;
-    L_0x089f:
-        if (r4 == 0) goto L_0x093c;
-    L_0x08a1:
-        r2 = 0;
-    L_0x08a2:
-        r3 = r4.length;
-        r5 = 2;
-        r3 = r3 / r5;
-        if (r2 >= r3) goto L_0x092e;
-    L_0x08a7:
-        if (r2 != 0) goto L_0x08e8;
-    L_0x08a9:
-        r3 = r0.path1;
-        r5 = r2 * 2;
-        r6 = r4[r5];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r14 = r0.scale;
-        r6 = r6 * r14;
-        r14 = r5 + 1;
-        r22 = r4[r14];
-        r23 = r10;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r22);
-        r10 = (float) r10;
-        r22 = r9;
-        r9 = r0.scale;
-        r10 = r10 * r9;
-        r3.moveTo(r6, r10);
-        r3 = r0.path2;
-        r5 = r4[r5];
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r5 = (float) r5;
-        r6 = r0.scale;
-        r5 = r5 * r6;
-        r6 = r4[r14];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r9 = r0.scale;
-        r6 = r6 * r9;
-        r3.moveTo(r5, r6);
-        goto L_0x0926;
-    L_0x08e8:
-        r22 = r9;
-        r23 = r10;
-        r3 = r0.path1;
-        r5 = r2 * 2;
-        r6 = r4[r5];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r9 = r0.scale;
-        r6 = r6 * r9;
-        r9 = r5 + 1;
-        r10 = r4[r9];
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r10 = (float) r10;
-        r14 = r0.scale;
-        r10 = r10 * r14;
-        r3.lineTo(r6, r10);
-        r3 = r0.path2;
-        r5 = r4[r5];
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r5 = (float) r5;
-        r6 = r0.scale;
-        r5 = r5 * r6;
-        r6 = r4[r9];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r9 = r0.scale;
-        r6 = r6 * r9;
-        r3.lineTo(r5, r6);
-    L_0x0926:
-        r2 = r2 + 1;
-        r9 = r22;
-        r10 = r23;
-        goto L_0x08a2;
-    L_0x092e:
-        r22 = r9;
-        r23 = r10;
-        r28 = r8;
-        r30 = r11;
-        r24 = r12;
-    L_0x0938:
-        r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0ad0;
-    L_0x093c:
-        r22 = r9;
-        r23 = r10;
-        if (r5 != 0) goto L_0x09f4;
-    L_0x0942:
-        r4 = 0;
-    L_0x0943:
-        r5 = 5;
-        if (r4 >= r5) goto L_0x09c7;
-    L_0x0946:
-        if (r4 != 0) goto L_0x0985;
-    L_0x0948:
-        r5 = r0.path1;
-        r6 = r4 * 2;
-        r9 = r2[r6];
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r10 = r6 + 1;
-        r14 = r2[r10];
-        r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-        r14 = (float) r14;
-        r24 = r12;
-        r12 = r0.scale;
-        r14 = r14 * r12;
-        r5.moveTo(r9, r14);
-        r5 = r0.path2;
-        r6 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r9 = r0.scale;
-        r6 = r6 * r9;
-        r9 = r3[r10];
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r5.moveTo(r6, r9);
-        goto L_0x09c1;
-    L_0x0985:
-        r24 = r12;
-        r5 = r0.path1;
-        r6 = r4 * 2;
-        r9 = r2[r6];
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r10 = r6 + 1;
-        r12 = r2[r10];
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
-        r12 = (float) r12;
-        r14 = r0.scale;
-        r12 = r12 * r14;
-        r5.lineTo(r9, r12);
-        r5 = r0.path2;
-        r6 = r3[r6];
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r6 = (float) r6;
-        r9 = r0.scale;
-        r6 = r6 * r9;
-        r9 = r3[r10];
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r5.lineTo(r6, r9);
-    L_0x09c1:
-        r4 = r4 + 1;
-        r12 = r24;
-        goto L_0x0943;
-    L_0x09c7:
-        r24 = r12;
-        r2 = r0.nextIcon;
-        r3 = 4;
-        if (r2 != r3) goto L_0x09e2;
-    L_0x09ce:
-        r2 = r0.paint2;
-        r3 = r0.transitionProgress;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r4 - r3;
-        r5 = r5 * r19;
-        r3 = (int) r5;
-        r2.setAlpha(r3);
-    L_0x09dc:
-        r28 = r8;
-        r30 = r11;
-        goto L_0x0938;
-    L_0x09e2:
-        r3 = r0.paint2;
-        r4 = r0.currentIcon;
-        if (r4 != r2) goto L_0x09eb;
-    L_0x09e8:
-        r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x09f0;
-    L_0x09eb:
-        r2 = r0.transitionProgress;
-        r2 = r2 * r19;
-        r2 = (int) r2;
-    L_0x09f0:
-        r3.setAlpha(r2);
-        goto L_0x09dc;
-    L_0x09f4:
-        r24 = r12;
-        r4 = 0;
-    L_0x09f7:
-        r9 = 5;
-        if (r4 >= r9) goto L_0x0ac5;
-    L_0x09fa:
-        if (r4 != 0) goto L_0x0a5e;
-    L_0x09fc:
-        r9 = r0.path1;
-        r10 = r4 * 2;
-        r12 = r2[r10];
-        r14 = r5[r10];
-        r28 = r2[r10];
-        r14 = r14 - r28;
-        r14 = r14 * r1;
-        r12 = r12 + r14;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
-        r12 = (float) r12;
-        r14 = r0.scale;
-        r12 = r12 * r14;
-        r14 = r10 + 1;
-        r28 = r2[r14];
-        r30 = r5[r14];
-        r31 = r2[r14];
-        r30 = r30 - r31;
-        r30 = r30 * r1;
-        r28 = r28 + r30;
-        r30 = r11;
-        r11 = org.telegram.messenger.AndroidUtilities.dp(r28);
-        r11 = (float) r11;
-        r28 = r8;
-        r8 = r0.scale;
-        r11 = r11 * r8;
-        r9.moveTo(r12, r11);
-        r8 = r0.path2;
-        r9 = r3[r10];
-        r11 = r6[r10];
-        r10 = r3[r10];
-        r11 = r11 - r10;
-        r11 = r11 * r1;
-        r9 = r9 + r11;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r10 = r3[r14];
-        r11 = r6[r14];
-        r12 = r3[r14];
-        r11 = r11 - r12;
-        r11 = r11 * r1;
-        r10 = r10 + r11;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r10 = (float) r10;
-        r11 = r0.scale;
-        r10 = r10 * r11;
-        r8.moveTo(r9, r10);
-        goto L_0x0abd;
-    L_0x0a5e:
-        r28 = r8;
-        r30 = r11;
-        r8 = r0.path1;
-        r9 = r4 * 2;
-        r10 = r2[r9];
-        r11 = r5[r9];
-        r12 = r2[r9];
-        r11 = r11 - r12;
-        r11 = r11 * r1;
-        r10 = r10 + r11;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r10 = (float) r10;
-        r11 = r0.scale;
-        r10 = r10 * r11;
-        r11 = r9 + 1;
-        r12 = r2[r11];
-        r14 = r5[r11];
-        r31 = r2[r11];
-        r14 = r14 - r31;
-        r14 = r14 * r1;
-        r12 = r12 + r14;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
-        r12 = (float) r12;
-        r14 = r0.scale;
-        r12 = r12 * r14;
-        r8.lineTo(r10, r12);
-        r8 = r0.path2;
-        r10 = r3[r9];
-        r12 = r6[r9];
-        r9 = r3[r9];
-        r12 = r12 - r9;
-        r12 = r12 * r1;
-        r10 = r10 + r12;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r9 = (float) r9;
-        r10 = r0.scale;
-        r9 = r9 * r10;
-        r10 = r3[r11];
-        r12 = r6[r11];
-        r11 = r3[r11];
-        r12 = r12 - r11;
-        r12 = r12 * r1;
-        r10 = r10 + r12;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r10 = (float) r10;
-        r11 = r0.scale;
-        r10 = r10 * r11;
-        r8.lineTo(r9, r10);
-    L_0x0abd:
-        r4 = r4 + 1;
-        r8 = r28;
-        r11 = r30;
-        goto L_0x09f7;
-    L_0x0ac5:
-        r28 = r8;
-        r30 = r11;
-        r2 = r0.paint2;
-        r8 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        r2.setAlpha(r8);
-    L_0x0ad0:
-        r2 = r0.path1;
-        r2.close();
-        r2 = r0.path2;
-        r2.close();
-        r33.save();
-        r2 = r13.left;
-        r2 = (float) r2;
-        r3 = r13.top;
-        r3 = (float) r3;
-        r7.translate(r2, r3);
-        r2 = (float) r15;
-        r3 = r28 - r15;
-        r3 = (float) r3;
-        r3 = r3 * r1;
-        r2 = r2 + r3;
-        r1 = r13.left;
-        r11 = r30 - r1;
-        r1 = (float) r11;
-        r3 = r13.top;
-        r12 = r24 - r3;
-        r3 = (float) r12;
-        r7.rotate(r2, r1, r3);
-        r1 = r0.currentIcon;
-        if (r1 == 0) goto L_0x0b01;
-    L_0x0afe:
-        r2 = 1;
-        if (r1 != r2) goto L_0x0b06;
-    L_0x0b01:
-        r1 = r0.currentIcon;
-        r2 = 4;
-        if (r1 != r2) goto L_0x0b16;
-    L_0x0b06:
-        r1 = r13.left;
-        r11 = r30 - r1;
-        r1 = (float) r11;
-        r2 = r13.top;
-        r12 = r24 - r2;
-        r2 = (float) r12;
-        r9 = r22;
-        r7.scale(r9, r9, r1, r2);
-        goto L_0x0b18;
-    L_0x0b16:
-        r9 = r22;
-    L_0x0b18:
-        r1 = r0.path1;
-        r2 = r0.paint2;
-        r7.drawPath(r1, r2);
-        r1 = r0.path2;
-        r2 = r0.paint2;
-        r7.drawPath(r1, r2);
-        r33.restore();
-    L_0x0b29:
-        r1 = r0.currentIcon;
-        r2 = 6;
-        if (r1 == r2) goto L_0x0b33;
-    L_0x0b2e:
-        r1 = r0.nextIcon;
-        r2 = 6;
-        if (r1 != r2) goto L_0x0bcd;
-    L_0x0b33:
-        r1 = r0.currentIcon;
-        r2 = 6;
-        if (r1 == r2) goto L_0x0b5c;
-    L_0x0b38:
-        r1 = r0.transitionProgress;
-        r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0b58;
-    L_0x0b3e:
-        r1 = r1 - r20;
-        r1 = r1 / r20;
-        r2 = r1 / r20;
-        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = java.lang.Math.min(r3, r2);
-        r10 = r3 - r2;
-        r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0b55;
-    L_0x0b50:
-        r1 = r1 - r20;
-        r1 = r1 / r20;
-        goto L_0x0b56;
-    L_0x0b55:
-        r1 = 0;
-    L_0x0b56:
-        r11 = r1;
-        goto L_0x0b5f;
-    L_0x0b58:
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r11 = 0;
-        goto L_0x0b5f;
-    L_0x0b5c:
-        r10 = 0;
-        r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x0b5f:
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r18);
-        r12 = r24 + r1;
-        r1 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r13 = r30 - r1;
-        r1 = r0.paint;
-        r1.setAlpha(r8);
-        r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r2 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r2 >= 0) goto L_0x0ba9;
-    L_0x0b78:
-        r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r13 - r1;
-        r2 = (float) r1;
-        r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = r12 - r1;
-        r3 = (float) r1;
-        r1 = (float) r13;
-        r4 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = (float) r4;
-        r4 = r4 * r10;
-        r4 = r1 - r4;
-        r1 = (float) r12;
-        r5 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r5 = (float) r5;
-        r5 = r5 * r10;
-        r5 = r1 - r5;
-        r6 = r0.paint;
-        r1 = r33;
-        r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0ba9:
-        r1 = 0;
-        r2 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0bcd;
-    L_0x0bae:
-        r2 = (float) r13;
-        r3 = (float) r12;
-        r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = (float) r1;
-        r1 = r1 * r11;
-        r4 = r2 + r1;
-        r1 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = (float) r1;
-        r1 = r1 * r11;
-        r5 = r3 - r1;
-        r6 = r0.paint;
-        r1 = r33;
-        r1.drawLine(r2, r3, r4, r5, r6);
-    L_0x0bcd:
-        r1 = r17;
-        if (r23 == 0) goto L_0x0CLASSNAME;
-    L_0x0bd1:
-        r2 = r23;
-        if (r2 == r1) goto L_0x0CLASSNAME;
-    L_0x0bd5:
-        r3 = r2.getIntrinsicWidth();
-        r3 = (float) r3;
-        r3 = r3 * r26;
-        r3 = (int) r3;
-        r4 = r2.getIntrinsicHeight();
-        r4 = (float) r4;
-        r4 = r4 * r26;
-        r4 = (int) r4;
-        r5 = r0.colorFilter;
-        r2.setColorFilter(r5);
-        r5 = r0.currentIcon;
-        r6 = r0.nextIcon;
-        if (r5 != r6) goto L_0x0bf3;
-    L_0x0bf0:
-        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0bfc;
-    L_0x0bf3:
-        r5 = r0.transitionProgress;
-        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = r6 - r5;
-        r5 = r5 * r19;
-        r5 = (int) r5;
-    L_0x0bfc:
-        r2.setAlpha(r5);
-        r5 = 2;
-        r3 = r3 / r5;
-        r11 = r30 - r3;
-        r4 = r4 / r5;
-        r12 = r24 - r4;
-        r3 = r30 + r3;
-        r4 = r24 + r4;
-        r2.setBounds(r11, r12, r3, r4);
-        r2.draw(r7);
-    L_0x0CLASSNAME:
-        if (r1 == 0) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r2 = r1.getIntrinsicWidth();
-        r2 = (float) r2;
-        r2 = r2 * r9;
-        r2 = (int) r2;
-        r3 = r1.getIntrinsicHeight();
-        r3 = (float) r3;
-        r3 = r3 * r9;
-        r3 = (int) r3;
-        r4 = r0.colorFilter;
-        r1.setColorFilter(r4);
-        r4 = r0.currentIcon;
-        r5 = r0.nextIcon;
-        if (r4 != r5) goto L_0x0CLASSNAME;
-    L_0x0c2d:
-        r4 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r4 = r0.transitionProgress;
-        r4 = r4 * r19;
-        r4 = (int) r4;
-    L_0x0CLASSNAME:
-        r1.setAlpha(r4);
-        r4 = 2;
-        r2 = r2 / r4;
-        r11 = r30 - r2;
-        r3 = r3 / r4;
-        r12 = r24 - r3;
-        r2 = r30 + r2;
-        r3 = r24 + r3;
-        r1.setBounds(r11, r12, r2, r3);
-        r1.draw(r7);
-    L_0x0CLASSNAME:
-        r1 = r29;
-        r2 = r16;
-        if (r1 == 0) goto L_0x0ca9;
-    L_0x0c4f:
-        if (r1 == r2) goto L_0x0ca9;
-    L_0x0CLASSNAME:
-        r3 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r3 = (float) r3;
-        r3 = r3 * r26;
-        r3 = (int) r3;
-        r4 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = (float) r4;
-        r4 = r4 * r26;
-        r4 = (int) r4;
-        r5 = r0.paint2;
-        r6 = android.graphics.Paint.Style.FILL_AND_STROKE;
-        r5.setStyle(r6);
-        r5 = r0.paint2;
-        r6 = r0.currentIcon;
-        r10 = r0.nextIcon;
-        if (r6 != r10) goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r6 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0CLASSNAME;
-    L_0x0CLASSNAME:
-        r6 = r0.transitionProgress;
-        r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r6 = r10 - r6;
-        r6 = r6 * r19;
-        r6 = (int) r6;
-    L_0x0CLASSNAME:
-        r5.setAlpha(r6);
-        r33.save();
-        r5 = 2;
-        r3 = r3 / r5;
-        r11 = r30 - r3;
-        r3 = (float) r11;
-        r4 = r4 / r5;
-        r12 = r24 - r4;
-        r4 = (float) r12;
-        r7.translate(r3, r4);
-        r3 = 0;
-        r4 = r1[r3];
-        r3 = r0.paint2;
-        r7.drawPath(r4, r3);
-        r3 = 1;
-        r4 = r1[r3];
-        if (r4 == 0) goto L_0x0ca6;
-    L_0x0c9f:
-        r1 = r1[r3];
-        r3 = r0.backPaint;
-        r7.drawPath(r1, r3);
-    L_0x0ca6:
-        r33.restore();
-    L_0x0ca9:
-        if (r2 == 0) goto L_0x0cff;
-    L_0x0cab:
-        r1 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-        r1 = (float) r1;
-        r1 = r1 * r9;
-        r1 = (int) r1;
-        r3 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r3 = (float) r3;
-        r3 = r3 * r9;
-        r3 = (int) r3;
-        r4 = r0.paint2;
-        r5 = android.graphics.Paint.Style.FILL_AND_STROKE;
-        r4.setStyle(r5);
-        r4 = r0.paint2;
-        r5 = r0.currentIcon;
-        r6 = r0.nextIcon;
-        if (r5 != r6) goto L_0x0cd1;
-    L_0x0cce:
-        r5 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        goto L_0x0cd6;
-    L_0x0cd1:
-        r5 = r0.transitionProgress;
-        r5 = r5 * r19;
-        r5 = (int) r5;
-    L_0x0cd6:
-        r4.setAlpha(r5);
-        r33.save();
-        r4 = 2;
-        r1 = r1 / r4;
-        r11 = r30 - r1;
-        r1 = (float) r11;
-        r3 = r3 / r4;
-        r12 = r24 - r3;
-        r3 = (float) r12;
-        r7.translate(r1, r3);
-        r1 = 0;
-        r3 = r2[r1];
-        r1 = r0.paint2;
-        r7.drawPath(r3, r1);
-        r1 = 1;
-        r3 = r2[r1];
-        if (r3 == 0) goto L_0x0cfc;
-    L_0x0cf5:
-        r2 = r2[r1];
-        r1 = r0.backPaint;
-        r7.drawPath(r2, r1);
-    L_0x0cfc:
-        r33.restore();
-    L_0x0cff:
-        r1 = java.lang.System.currentTimeMillis();
-        r3 = r0.lastAnimationTime;
-        r3 = r1 - r3;
-        r5 = 17;
-        r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0d0f;
-    L_0x0d0d:
-        r3 = 17;
-    L_0x0d0f:
-        r0.lastAnimationTime = r1;
-        r1 = r0.currentIcon;
-        r2 = 3;
-        if (r1 == r2) goto L_0x0d2b;
-    L_0x0d16:
-        r2 = 14;
-        if (r1 == r2) goto L_0x0d2b;
-    L_0x0d1a:
-        r5 = 4;
-        if (r1 != r5) goto L_0x0d21;
-    L_0x0d1d:
-        r1 = r0.nextIcon;
-        if (r1 == r2) goto L_0x0d2b;
-    L_0x0d21:
-        r1 = r0.currentIcon;
-        r2 = 10;
-        if (r1 == r2) goto L_0x0d2b;
-    L_0x0d27:
-        r2 = 13;
-        if (r1 != r2) goto L_0x0d78;
-    L_0x0d2b:
-        r1 = r0.downloadRadOffset;
-        r5 = 360; // 0x168 float:5.04E-43 double:1.78E-321;
-        r5 = r5 * r3;
-        r2 = (float) r5;
-        r5 = NUM; // 0x451CLASSNAME float:2500.0 double:5.72858887E-315;
-        r2 = r2 / r5;
-        r1 = r1 + r2;
-        r0.downloadRadOffset = r1;
-        r1 = r0.downloadRadOffset;
-        r1 = r0.getCircleValue(r1);
-        r0.downloadRadOffset = r1;
-        r1 = r0.nextIcon;
-        r2 = 2;
-        if (r1 == r2) goto L_0x0d75;
-    L_0x0d46:
-        r1 = r0.downloadProgress;
-        r2 = r0.downloadProgressAnimationStart;
-        r5 = r1 - r2;
-        r6 = 0;
-        r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1));
-        if (r8 <= 0) goto L_0x0d75;
-    L_0x0d51:
-        r6 = r0.downloadProgressTime;
-        r8 = (float) r3;
-        r6 = r6 + r8;
-        r0.downloadProgressTime = r6;
-        r6 = r0.downloadProgressTime;
-        r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
-        r8 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r8 < 0) goto L_0x0d67;
-    L_0x0d5f:
-        r0.animatedDownloadProgress = r1;
-        r0.downloadProgressAnimationStart = r1;
-        r1 = 0;
-        r0.downloadProgressTime = r1;
-        goto L_0x0d75;
-    L_0x0d67:
-        r1 = r0.interpolator;
-        r8 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
-        r6 = r6 / r8;
-        r1 = r1.getInterpolation(r6);
-        r5 = r5 * r1;
-        r2 = r2 + r5;
-        r0.animatedDownloadProgress = r2;
-    L_0x0d75:
-        r32.invalidateSelf();
-    L_0x0d78:
-        r1 = r0.animatingTransition;
-        if (r1 == 0) goto L_0x0d9d;
-    L_0x0d7c:
-        r1 = r0.transitionProgress;
-        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0d9d;
-    L_0x0d84:
-        r3 = (float) r3;
-        r4 = r0.transitionAnimationTime;
-        r3 = r3 / r4;
-        r1 = r1 + r3;
-        r0.transitionProgress = r1;
-        r1 = r0.transitionProgress;
-        r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
-        if (r1 < 0) goto L_0x0d9a;
-    L_0x0d91:
-        r1 = r0.nextIcon;
-        r0.currentIcon = r1;
-        r0.transitionProgress = r2;
-        r1 = 0;
-        r0.animatingTransition = r1;
-    L_0x0d9a:
-        r32.invalidateSelf();
-    L_0x0d9d:
-        r1 = r27;
-        r2 = 1;
-        if (r1 < r2) goto L_0x0da5;
-    L_0x0da2:
-        r7.restoreToCount(r1);
-    L_0x0da5:
-        return;
+            r32 = this;
+            r0 = r32
+            r7 = r33
+            android.graphics.Rect r8 = r32.getBounds()
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = r0.messageDrawable
+            r9 = 0
+            r10 = 0
+            if (r1 == 0) goto L_0x003d
+            boolean r1 = r1.hasGradient()
+            if (r1 == 0) goto L_0x003d
+            boolean r1 = r0.hasOverlayImage
+            if (r1 != 0) goto L_0x003d
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = r0.messageDrawable
+            android.graphics.LinearGradient r1 = r1.getGradientShader()
+            org.telegram.ui.ActionBar.Theme$MessageDrawable r2 = r0.messageDrawable
+            android.graphics.Matrix r2 = r2.getMatrix()
+            int r3 = r8.top
+            float r3 = (float) r3
+            r2.postTranslate(r10, r3)
+            r1.setLocalMatrix(r2)
+            android.graphics.Paint r2 = r0.paint
+            r2.setShader(r1)
+            android.graphics.Paint r2 = r0.paint2
+            r2.setShader(r1)
+            android.graphics.Paint r2 = r0.paint3
+            r2.setShader(r1)
+            goto L_0x004c
+        L_0x003d:
+            android.graphics.Paint r1 = r0.paint
+            r1.setShader(r9)
+            android.graphics.Paint r1 = r0.paint2
+            r1.setShader(r9)
+            android.graphics.Paint r1 = r0.paint3
+            r1.setShader(r9)
+        L_0x004c:
+            int r11 = r8.centerX()
+            int r12 = r8.centerY()
+            int r1 = r0.nextIcon
+            r13 = 3
+            r14 = 4
+            r6 = 14
+            r5 = 1065353216(0x3var_, float:1.0)
+            if (r1 != r14) goto L_0x0072
+            int r1 = r0.currentIcon
+            if (r1 == r13) goto L_0x008a
+            if (r1 == r6) goto L_0x008a
+            int r1 = r33.save()
+            float r2 = r0.transitionProgress
+            float r2 = r5 - r2
+            float r3 = (float) r11
+            float r4 = (float) r12
+            r7.scale(r2, r2, r3, r4)
+            goto L_0x0088
+        L_0x0072:
+            r2 = 6
+            if (r1 == r2) goto L_0x0079
+            r2 = 10
+            if (r1 != r2) goto L_0x008a
+        L_0x0079:
+            int r1 = r0.currentIcon
+            if (r1 != r14) goto L_0x008a
+            int r1 = r33.save()
+            float r2 = r0.transitionProgress
+            float r3 = (float) r11
+            float r4 = (float) r12
+            r7.scale(r2, r2, r3, r4)
+        L_0x0088:
+            r4 = r1
+            goto L_0x008b
+        L_0x008a:
+            r4 = 0
+        L_0x008b:
+            r1 = 1077936128(0x40400000, float:3.0)
+            org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r0.currentIcon
+            r16 = 1080033280(0x40600000, float:3.5)
+            r17 = 1073741824(0x40000000, float:2.0)
+            r18 = 1088421888(0x40e00000, float:7.0)
+            r19 = 1132396544(0x437var_, float:255.0)
+            r20 = 1056964608(0x3var_, float:0.5)
+            r2 = 2
+            if (r1 == r2) goto L_0x00ad
+            int r1 = r0.nextIcon
+            if (r1 != r2) goto L_0x00a4
+            goto L_0x00ad
+        L_0x00a4:
+            r27 = r4
+            r28 = r8
+            r8 = 14
+            r10 = 2
+            goto L_0x035e
+        L_0x00ad:
+            float r1 = (float) r12
+            r21 = 1091567616(0x41100000, float:9.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r9 = (float) r9
+            float r15 = r0.scale
+            float r9 = r9 * r15
+            float r9 = r1 - r9
+            r15 = 1091567616(0x41100000, float:9.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            float r15 = (float) r15
+            float r14 = r0.scale
+            float r15 = r15 * r14
+            float r15 = r15 + r1
+            r14 = 1094713344(0x41400000, float:12.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r14 = (float) r14
+            float r10 = r0.scale
+            float r14 = r14 * r10
+            float r14 = r14 + r1
+            int r10 = r0.currentIcon
+            if (r10 == r13) goto L_0x00d9
+            if (r10 != r6) goto L_0x0100
+        L_0x00d9:
+            int r10 = r0.nextIcon
+            if (r10 != r2) goto L_0x0100
+            android.graphics.Paint r10 = r0.paint
+            float r3 = r0.transitionProgress
+            float r3 = r3 / r20
+            float r3 = java.lang.Math.min(r5, r3)
+            float r3 = r3 * r19
+            int r3 = (int) r3
+            r10.setAlpha(r3)
+            float r3 = r0.transitionProgress
+            r10 = 1094713344(0x41400000, float:12.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            float r5 = r0.scale
+            float r10 = r10 * r5
+            float r10 = r10 + r1
+            r24 = r10
+            r10 = 1065353216(0x3var_, float:1.0)
+            goto L_0x013d
+        L_0x0100:
+            int r3 = r0.nextIcon
+            if (r3 == r13) goto L_0x0125
+            if (r3 == r6) goto L_0x0125
+            if (r3 == r2) goto L_0x0125
+            android.graphics.Paint r3 = r0.paint
+            float r5 = r0.savedTransitionProgress
+            float r5 = r5 / r20
+            r10 = 1065353216(0x3var_, float:1.0)
+            float r5 = java.lang.Math.min(r10, r5)
+            float r5 = r5 * r19
+            float r6 = r0.transitionProgress
+            float r6 = r10 - r6
+            float r5 = r5 * r6
+            int r5 = (int) r5
+            r3.setAlpha(r5)
+            float r3 = r0.savedTransitionProgress
+            r5 = 255(0xff, float:3.57E-43)
+            goto L_0x012e
+        L_0x0125:
+            android.graphics.Paint r3 = r0.paint
+            r5 = 255(0xff, float:3.57E-43)
+            r3.setAlpha(r5)
+            float r3 = r0.transitionProgress
+        L_0x012e:
+            r10 = 1065353216(0x3var_, float:1.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r6 = (float) r6
+            float r5 = r0.scale
+            float r6 = r6 * r5
+            float r5 = r1 + r6
+            r24 = r5
+        L_0x013d:
+            boolean r5 = r0.animatingTransition
+            if (r5 == 0) goto L_0x0301
+            int r5 = r0.nextIcon
+            if (r5 == r2) goto L_0x02ae
+            int r5 = (r3 > r20 ? 1 : (r3 == r20 ? 0 : -1))
+            if (r5 > 0) goto L_0x014b
+            goto L_0x02ae
+        L_0x014b:
+            r5 = 1095761920(0x41500000, float:13.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r6 = r0.scale
+            float r5 = r5 * r6
+            float r3 = r3 - r20
+            float r6 = r3 / r20
+            r9 = 1045220557(0x3e4ccccd, float:0.2)
+            int r9 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
+            if (r9 <= 0) goto L_0x016d
+            r9 = 1045220557(0x3e4ccccd, float:0.2)
+            float r3 = r3 - r9
+            r9 = 1050253722(0x3e99999a, float:0.3)
+            float r3 = r3 / r9
+            r9 = r3
+            r15 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0173
+        L_0x016d:
+            r9 = 1045220557(0x3e4ccccd, float:0.2)
+            float r3 = r3 / r9
+            r15 = r3
+            r9 = 0
+        L_0x0173:
+            android.graphics.RectF r3 = r0.rect
+            float r10 = (float) r11
+            float r2 = r10 - r5
+            float r5 = r5 / r17
+            float r13 = r14 - r5
+            float r5 = r5 + r14
+            r3.set(r2, r13, r10, r5)
+            r2 = 1120403456(0x42CLASSNAME, float:100.0)
+            float r3 = r9 * r2
+            android.graphics.RectF r2 = r0.rect
+            r5 = 1120927744(0x42d00000, float:104.0)
+            float r6 = r6 * r5
+            float r5 = r6 - r3
+            r6 = 0
+            android.graphics.Paint r13 = r0.paint
+            r26 = r1
+            r1 = r33
+            r27 = r4
+            r4 = r5
+            r23 = r8
+            r8 = 1065353216(0x3var_, float:1.0)
+            r5 = r6
+            r8 = 14
+            r6 = r13
+            r1.drawArc(r2, r3, r4, r5, r6)
+            float r1 = r14 - r24
+            float r1 = r1 * r15
+            float r24 = r24 + r1
+            r1 = 0
+            int r2 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+            if (r2 <= 0) goto L_0x02a7
+            int r1 = r0.nextIcon
+            if (r1 != r8) goto L_0x01b2
+            r13 = 0
+            goto L_0x01bb
+        L_0x01b2:
+            r1 = -1036779520(0xffffffffCLASSNAME, float:-45.0)
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r9
+            float r1 = r1 * r5
+            r13 = r1
+        L_0x01bb:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r1 = (float) r1
+            float r1 = r1 * r9
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            float r9 = r9 * r19
+            int r2 = (int) r9
+            int r3 = r0.nextIcon
+            r4 = 3
+            if (r3 == r4) goto L_0x01e4
+            if (r3 == r8) goto L_0x01e4
+            r9 = 2
+            if (r3 == r9) goto L_0x01e5
+            float r3 = r0.transitionProgress
+            float r3 = r3 / r20
+            r4 = 1065353216(0x3var_, float:1.0)
+            float r3 = java.lang.Math.min(r4, r3)
+            float r5 = r4 - r3
+            float r2 = (float) r2
+            float r2 = r2 * r5
+            int r2 = (int) r2
+            goto L_0x01e5
+        L_0x01e4:
+            r9 = 2
+        L_0x01e5:
+            r15 = r2
+            r2 = 0
+            int r3 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x01f4
+            r33.save()
+            r2 = r26
+            r7.rotate(r13, r10, r2)
+            goto L_0x01f6
+        L_0x01f4:
+            r2 = r26
+        L_0x01f6:
+            if (r15 == 0) goto L_0x029c
+            android.graphics.Paint r3 = r0.paint
+            r3.setAlpha(r15)
+            int r3 = r0.nextIcon
+            if (r3 != r8) goto L_0x027c
+            android.graphics.Paint r1 = r0.paint3
+            r1.setAlpha(r15)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r2 = r11 - r2
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r3 = r12 - r3
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r4 = r4 + r11
+            float r4 = (float) r4
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r5 = r5 + r12
+            float r5 = (float) r5
+            r1.set(r2, r3, r4, r5)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r3 = (float) r3
+            android.graphics.Paint r4 = r0.paint3
+            r7.drawRoundRect(r1, r2, r3, r4)
+            android.graphics.Paint r1 = r0.paint
+            float r2 = (float) r15
+            r3 = 1041865114(0x3e19999a, float:0.15)
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x0249
+            r1 = 1073741824(0x40000000, float:2.0)
+            goto L_0x024b
+        L_0x0249:
+            r1 = 1082130432(0x40800000, float:4.0)
+        L_0x024b:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            android.graphics.RectF r2 = r0.rect
+            r6 = r23
+            int r3 = r6.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r4 = r6.top
+            int r4 = r4 + r1
+            float r4 = (float) r4
+            int r5 = r6.right
+            int r5 = r5 - r1
+            float r5 = (float) r5
+            int r9 = r6.bottom
+            int r9 = r9 - r1
+            float r1 = (float) r9
+            r2.set(r3, r4, r5, r1)
+            android.graphics.RectF r2 = r0.rect
+            r3 = 0
+            r4 = 1135869952(0x43b40000, float:360.0)
+            r5 = 0
+            android.graphics.Paint r9 = r0.paint
+            r1 = r33
+            r28 = r6
+            r6 = r9
+            r1.drawArc(r2, r3, r4, r5, r6)
+            android.graphics.Paint r1 = r0.paint
+            r1.setAlpha(r15)
+            goto L_0x029e
+        L_0x027c:
+            r28 = r23
+            float r9 = r10 - r1
+            float r15 = r2 - r1
+            float r23 = r10 + r1
+            float r25 = r2 + r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r2 = r9
+            r3 = r15
+            r4 = r23
+            r5 = r25
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r23
+            r4 = r9
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x029e
+        L_0x029c:
+            r28 = r23
+        L_0x029e:
+            r1 = 0
+            int r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x02a9
+            r33.restore()
+            goto L_0x02a9
+        L_0x02a7:
+            r28 = r23
+        L_0x02a9:
+            r1 = r10
+            r2 = r1
+            r3 = r14
+            r10 = 2
+            goto L_0x02fb
+        L_0x02ae:
+            r27 = r4
+            r28 = r8
+            r8 = 14
+            r10 = 2
+            int r1 = r0.nextIcon
+            if (r1 != r10) goto L_0x02be
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r5 = r1 - r3
+            goto L_0x02c4
+        L_0x02be:
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r5 = r3 / r20
+            float r3 = r1 - r5
+        L_0x02c4:
+            float r24 = r24 - r9
+            float r24 = r24 * r5
+            float r24 = r9 + r24
+            float r14 = r14 - r15
+            float r14 = r14 * r5
+            float r14 = r14 + r15
+            float r1 = (float) r11
+            r2 = 1090519040(0x41000000, float:8.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            float r2 = r2 * r3
+            float r4 = r0.scale
+            float r2 = r2 * r4
+            float r2 = r1 - r2
+            r4 = 1090519040(0x41000000, float:8.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r4 = r4 * r3
+            float r5 = r0.scale
+            float r4 = r4 * r5
+            float r1 = r1 + r4
+            r4 = 1090519040(0x41000000, float:8.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r4 = r4 * r3
+            float r3 = r0.scale
+            float r4 = r4 * r3
+            float r3 = r14 - r4
+        L_0x02fb:
+            r15 = r1
+            r9 = r2
+            r13 = r3
+            r3 = r24
+            goto L_0x0334
+        L_0x0301:
+            r27 = r4
+            r28 = r8
+            r8 = 14
+            r10 = 2
+            float r1 = (float) r11
+            r2 = 1090519040(0x41000000, float:8.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            float r3 = r0.scale
+            float r2 = r2 * r3
+            float r2 = r1 - r2
+            r3 = 1090519040(0x41000000, float:8.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r1 = r1 + r3
+            r3 = 1090519040(0x41000000, float:8.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r3 = r15 - r3
+            r13 = r3
+            r3 = r9
+            r14 = r15
+            r15 = r1
+            r9 = r2
+        L_0x0334:
+            int r1 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1))
+            if (r1 == 0) goto L_0x0342
+            float r4 = (float) r11
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r2 = r4
+            r5 = r14
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0342:
+            float r6 = (float) r11
+            int r1 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
+            if (r1 == 0) goto L_0x035e
+            android.graphics.Paint r5 = r0.paint
+            r1 = r33
+            r2 = r9
+            r3 = r13
+            r4 = r6
+            r9 = r5
+            r5 = r14
+            r23 = r6
+            r6 = r9
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r15
+            r4 = r23
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x035e:
+            int r1 = r0.currentIcon
+            r9 = 1
+            r2 = 3
+            if (r1 == r2) goto L_0x03e4
+            if (r1 == r8) goto L_0x03e4
+            r3 = 4
+            if (r1 != r3) goto L_0x0371
+            int r1 = r0.nextIcon
+            if (r1 == r8) goto L_0x03e4
+            if (r1 != r2) goto L_0x0371
+            goto L_0x03e4
+        L_0x0371:
+            int r1 = r0.currentIcon
+            r2 = 10
+            if (r1 == r2) goto L_0x0386
+            int r2 = r0.nextIcon
+            r3 = 10
+            if (r2 == r3) goto L_0x0386
+            r2 = 13
+            if (r1 != r2) goto L_0x0382
+            goto L_0x0386
+        L_0x0382:
+            r13 = r28
+            goto L_0x0604
+        L_0x0386:
+            int r1 = r0.nextIcon
+            r2 = 4
+            if (r1 == r2) goto L_0x0392
+            r2 = 6
+            if (r1 != r2) goto L_0x038f
+            goto L_0x0392
+        L_0x038f:
+            r3 = 255(0xff, float:3.57E-43)
+            goto L_0x039b
+        L_0x0392:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+            float r5 = r5 * r19
+            int r3 = (int) r5
+        L_0x039b:
+            if (r3 == 0) goto L_0x0382
+            android.graphics.Paint r1 = r0.paint
+            float r2 = (float) r3
+            float r3 = r0.overrideAlpha
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            r1 = 1082130432(0x40800000, float:4.0)
+            r2 = 1135869952(0x43b40000, float:360.0)
+            float r3 = r0.animatedDownloadProgress
+            float r3 = r3 * r2
+            float r4 = java.lang.Math.max(r1, r3)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x03b9
+            goto L_0x03bb
+        L_0x03b9:
+            r17 = 1082130432(0x40800000, float:4.0)
+        L_0x03bb:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            android.graphics.RectF r2 = r0.rect
+            r13 = r28
+            int r3 = r13.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r5 = r13.top
+            int r5 = r5 + r1
+            float r5 = (float) r5
+            int r6 = r13.right
+            int r6 = r6 - r1
+            float r6 = (float) r6
+            int r14 = r13.bottom
+            int r14 = r14 - r1
+            float r1 = (float) r14
+            r2.set(r3, r5, r6, r1)
+            android.graphics.RectF r2 = r0.rect
+            float r3 = r0.downloadRadOffset
+            r5 = 0
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r1.drawArc(r2, r3, r4, r5, r6)
+            goto L_0x0604
+        L_0x03e4:
+            r13 = r28
+            int r1 = r0.nextIcon
+            if (r1 != r10) goto L_0x0412
+            float r1 = r0.transitionProgress
+            int r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1))
+            if (r2 > 0) goto L_0x0406
+            float r1 = r1 / r20
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r1 = (float) r1
+            float r1 = r1 * r5
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            float r5 = r5 * r19
+            int r15 = (int) r5
+            r3 = r15
+            goto L_0x0408
+        L_0x0406:
+            r1 = 0
+            r3 = 0
+        L_0x0408:
+            r5 = r3
+            r2 = 1065353216(0x3var_, float:1.0)
+            r4 = 0
+        L_0x040c:
+            r6 = 0
+            r14 = 1065353216(0x3var_, float:1.0)
+            r15 = 0
+            goto L_0x04ea
+        L_0x0412:
+            if (r1 == 0) goto L_0x04b5
+            if (r1 == r9) goto L_0x04b5
+            r2 = 5
+            if (r1 == r2) goto L_0x04b5
+            r2 = 8
+            if (r1 == r2) goto L_0x04b5
+            r2 = 9
+            if (r1 == r2) goto L_0x04b5
+            r2 = 7
+            if (r1 == r2) goto L_0x04b5
+            r2 = 6
+            if (r1 != r2) goto L_0x0429
+            goto L_0x04b5
+        L_0x0429:
+            r2 = 4
+            if (r1 != r2) goto L_0x0465
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r2 = (float) r2
+            float r3 = r0.scale
+            float r2 = r2 * r3
+            float r3 = r5 * r19
+            int r3 = (int) r3
+            int r4 = r0.currentIcon
+            if (r4 != r8) goto L_0x044c
+            int r1 = r13.left
+            float r1 = (float) r1
+            int r4 = r13.top
+            float r4 = (float) r4
+            r6 = r4
+            r4 = r1
+            r1 = 0
+            goto L_0x045d
+        L_0x044c:
+            r4 = 1110704128(0x42340000, float:45.0)
+            float r1 = r1 * r4
+            int r4 = r13.centerX()
+            float r4 = (float) r4
+            int r5 = r13.centerY()
+            float r5 = (float) r5
+            r6 = r5
+            r5 = 1065353216(0x3var_, float:1.0)
+        L_0x045d:
+            r15 = r1
+            r1 = r2
+            r14 = r5
+            r2 = 1065353216(0x3var_, float:1.0)
+            r5 = r3
+            goto L_0x04ea
+        L_0x0465:
+            if (r1 == r8) goto L_0x047a
+            r2 = 3
+            if (r1 != r2) goto L_0x046b
+            goto L_0x047a
+        L_0x046b:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r1 = (float) r1
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            r2 = 1065353216(0x3var_, float:1.0)
+            r4 = 0
+            r5 = 255(0xff, float:3.57E-43)
+            goto L_0x040c
+        L_0x047a:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+            int r2 = r0.currentIcon
+            r3 = 4
+            if (r2 != r3) goto L_0x0488
+            r2 = r1
+            r5 = 0
+            goto L_0x048e
+        L_0x0488:
+            r2 = 1110704128(0x42340000, float:45.0)
+            float r5 = r5 * r2
+            r2 = 1065353216(0x3var_, float:1.0)
+        L_0x048e:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r3 = (float) r3
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r1 = r1 * r19
+            int r1 = (int) r1
+            int r4 = r0.nextIcon
+            if (r4 != r8) goto L_0x04a4
+            int r4 = r13.left
+            float r4 = (float) r4
+            int r6 = r13.top
+            goto L_0x04ad
+        L_0x04a4:
+            int r4 = r13.centerX()
+            float r4 = (float) r4
+            int r6 = r13.centerY()
+        L_0x04ad:
+            float r6 = (float) r6
+            r14 = r2
+            r15 = r5
+            r2 = 1065353216(0x3var_, float:1.0)
+            r5 = r1
+            r1 = r3
+            goto L_0x04ea
+        L_0x04b5:
+            int r1 = r0.nextIcon
+            r2 = 6
+            if (r1 != r2) goto L_0x04c5
+            float r1 = r0.transitionProgress
+            float r1 = r1 / r20
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r1 = java.lang.Math.min(r2, r1)
+            goto L_0x04c9
+        L_0x04c5:
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r1 = r0.transitionProgress
+        L_0x04c9:
+            float r5 = r2 - r1
+            r3 = 1110704128(0x42340000, float:45.0)
+            float r1 = r1 * r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r3 = (float) r3
+            float r3 = r3 * r5
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r5 = r5 * r17
+            float r4 = java.lang.Math.min(r2, r5)
+            float r4 = r4 * r19
+            int r4 = (int) r4
+            r15 = r1
+            r1 = r3
+            r5 = r4
+            r4 = 0
+            r6 = 0
+            r14 = 1065353216(0x3var_, float:1.0)
+        L_0x04ea:
+            int r3 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x04f4
+            r33.save()
+            r7.scale(r14, r14, r4, r6)
+        L_0x04f4:
+            r2 = 0
+            int r3 = (r15 > r2 ? 1 : (r15 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x0501
+            r33.save()
+            float r2 = (float) r11
+            float r3 = (float) r12
+            r7.rotate(r15, r2, r3)
+        L_0x0501:
+            if (r5 == 0) goto L_0x0577
+            android.graphics.Paint r2 = r0.paint
+            float r3 = (float) r5
+            float r4 = r0.overrideAlpha
+            float r4 = r4 * r3
+            int r4 = (int) r4
+            r2.setAlpha(r4)
+            int r2 = r0.currentIcon
+            if (r2 == r8) goto L_0x053b
+            int r2 = r0.nextIcon
+            if (r2 != r8) goto L_0x0517
+            goto L_0x053b
+        L_0x0517:
+            float r2 = (float) r11
+            float r16 = r2 - r1
+            float r3 = (float) r12
+            float r23 = r3 - r1
+            float r24 = r2 + r1
+            float r25 = r3 + r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r2 = r16
+            r3 = r23
+            r4 = r24
+            r9 = r5
+            r5 = r25
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r24
+            r4 = r16
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x0578
+        L_0x053b:
+            r9 = r5
+            android.graphics.Paint r1 = r0.paint3
+            float r2 = r0.overrideAlpha
+            float r3 = r3 * r2
+            int r2 = (int) r3
+            r1.setAlpha(r2)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r2 = r11 - r2
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r3 = r12 - r3
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r4 = r4 + r11
+            float r4 = (float) r4
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r5 = r5 + r12
+            float r5 = (float) r5
+            r1.set(r2, r3, r4, r5)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r3 = (float) r3
+            android.graphics.Paint r4 = r0.paint3
+            r7.drawRoundRect(r1, r2, r3, r4)
+            goto L_0x0578
+        L_0x0577:
+            r9 = r5
+        L_0x0578:
+            r1 = 0
+            int r2 = (r15 > r1 ? 1 : (r15 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x0580
+            r33.restore()
+        L_0x0580:
+            int r1 = r0.currentIcon
+            r2 = 3
+            if (r1 == r2) goto L_0x0590
+            if (r1 == r8) goto L_0x0590
+            r3 = 4
+            if (r1 != r3) goto L_0x05fb
+            int r1 = r0.nextIcon
+            if (r1 == r8) goto L_0x0590
+            if (r1 != r2) goto L_0x05fb
+        L_0x0590:
+            if (r9 == 0) goto L_0x05fb
+            r1 = 1082130432(0x40800000, float:4.0)
+            r2 = 1135869952(0x43b40000, float:360.0)
+            float r3 = r0.animatedDownloadProgress
+            float r3 = r3 * r2
+            float r15 = java.lang.Math.max(r1, r3)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x05a3
+            goto L_0x05a5
+        L_0x05a3:
+            r17 = 1082130432(0x40800000, float:4.0)
+        L_0x05a5:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            android.graphics.RectF r2 = r0.rect
+            int r3 = r13.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r4 = r13.top
+            int r4 = r4 + r1
+            float r4 = (float) r4
+            int r5 = r13.right
+            int r5 = r5 - r1
+            float r5 = (float) r5
+            int r6 = r13.bottom
+            int r6 = r6 - r1
+            float r1 = (float) r6
+            r2.set(r3, r4, r5, r1)
+            int r1 = r0.currentIcon
+            if (r1 == r8) goto L_0x05cc
+            r2 = 4
+            if (r1 != r2) goto L_0x05ee
+            int r1 = r0.nextIcon
+            if (r1 == r8) goto L_0x05cc
+            r2 = 3
+            if (r1 != r2) goto L_0x05ee
+        L_0x05cc:
+            android.graphics.Paint r1 = r0.paint
+            float r2 = (float) r9
+            r3 = 1041865114(0x3e19999a, float:0.15)
+            float r2 = r2 * r3
+            float r3 = r0.overrideAlpha
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            android.graphics.RectF r2 = r0.rect
+            r3 = 0
+            r4 = 1135869952(0x43b40000, float:360.0)
+            r5 = 0
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r1.drawArc(r2, r3, r4, r5, r6)
+            android.graphics.Paint r1 = r0.paint
+            r1.setAlpha(r9)
+        L_0x05ee:
+            android.graphics.RectF r2 = r0.rect
+            float r3 = r0.downloadRadOffset
+            r5 = 0
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r4 = r15
+            r1.drawArc(r2, r3, r4, r5, r6)
+        L_0x05fb:
+            r1 = 1065353216(0x3var_, float:1.0)
+            int r2 = (r14 > r1 ? 1 : (r14 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x0604
+            r33.restore()
+        L_0x0604:
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 != r2) goto L_0x060f
+            r9 = 1065353216(0x3var_, float:1.0)
+            r14 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0630
+        L_0x060f:
+            r2 = 4
+            if (r1 != r2) goto L_0x0619
+            float r5 = r0.transitionProgress
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r2 = r1 - r5
+            goto L_0x062e
+        L_0x0619:
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r2 = r0.transitionProgress
+            float r2 = r2 / r20
+            float r5 = java.lang.Math.min(r1, r2)
+            float r2 = r0.transitionProgress
+            float r2 = r2 / r20
+            float r2 = r1 - r2
+            r1 = 0
+            float r2 = java.lang.Math.max(r1, r2)
+        L_0x062e:
+            r14 = r2
+            r9 = r5
+        L_0x0630:
+            int r1 = r0.nextIcon
+            r2 = 5
+            if (r1 != r2) goto L_0x063a
+            android.graphics.Path[] r1 = org.telegram.ui.ActionBar.Theme.chat_filePath
+            r15 = r1
+            r6 = 0
+            goto L_0x0645
+        L_0x063a:
+            int r1 = r0.currentIcon
+            r2 = 5
+            if (r1 != r2) goto L_0x0643
+            android.graphics.Path[] r1 = org.telegram.ui.ActionBar.Theme.chat_filePath
+            r6 = r1
+            goto L_0x0644
+        L_0x0643:
+            r6 = 0
+        L_0x0644:
+            r15 = 0
+        L_0x0645:
+            int r1 = r0.nextIcon
+            r2 = 7
+            if (r1 != r2) goto L_0x064d
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
+            goto L_0x0658
+        L_0x064d:
+            int r1 = r0.currentIcon
+            r2 = 7
+            if (r1 != r2) goto L_0x0657
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
+            r2 = r1
+            r1 = 0
+            goto L_0x0659
+        L_0x0657:
+            r1 = 0
+        L_0x0658:
+            r2 = 0
+        L_0x0659:
+            int r3 = r0.nextIcon
+            r4 = 8
+            if (r3 != r4) goto L_0x0662
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
+            goto L_0x066a
+        L_0x0662:
+            int r3 = r0.currentIcon
+            r4 = 8
+            if (r3 != r4) goto L_0x066a
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
+        L_0x066a:
+            r5 = r1
+            r4 = r2
+            int r1 = r0.currentIcon
+            r2 = 9
+            if (r1 == r2) goto L_0x0683
+            int r1 = r0.nextIcon
+            r2 = 9
+            if (r1 != r2) goto L_0x0679
+            goto L_0x0683
+        L_0x0679:
+            r10 = r4
+            r29 = r6
+            r26 = r14
+            r16 = r15
+            r14 = r5
+            goto L_0x0708
+        L_0x0683:
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.currentIcon
+            int r3 = r0.nextIcon
+            if (r2 != r3) goto L_0x068e
+            r3 = 255(0xff, float:3.57E-43)
+            goto L_0x0693
+        L_0x068e:
+            float r2 = r0.transitionProgress
+            float r2 = r2 * r19
+            int r3 = (int) r2
+        L_0x0693:
+            r1.setAlpha(r3)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r3 = r12 + r1
+            r1 = 1077936128(0x40400000, float:3.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r2 = r11 - r1
+            int r1 = r0.currentIcon
+            int r8 = r0.nextIcon
+            if (r1 == r8) goto L_0x06b4
+            r33.save()
+            float r1 = r0.transitionProgress
+            float r8 = (float) r11
+            float r10 = (float) r12
+            r7.scale(r1, r1, r8, r10)
+        L_0x06b4:
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r2 - r1
+            float r8 = (float) r1
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r3 - r1
+            float r10 = (float) r1
+            float r1 = (float) r2
+            r16 = r15
+            float r15 = (float) r3
+            r17 = r6
+            android.graphics.Paint r6 = r0.paint
+            r23 = r1
+            r1 = r33
+            r24 = r2
+            r2 = r8
+            r8 = r3
+            r3 = r10
+            r10 = r4
+            r4 = r23
+            r26 = r14
+            r14 = r5
+            r5 = r15
+            r29 = r17
+            r1.drawLine(r2, r3, r4, r5, r6)
+            r1 = 1094713344(0x41400000, float:12.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r2 = r24 + r1
+            float r4 = (float) r2
+            r1 = 1094713344(0x41400000, float:12.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r3 = r8 - r1
+            float r5 = (float) r3
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r2 = r23
+            r3 = r15
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 == r2) goto L_0x0708
+            r33.restore()
+        L_0x0708:
+            int r1 = r0.currentIcon
+            r2 = 12
+            if (r1 == r2) goto L_0x0714
+            int r1 = r0.nextIcon
+            r2 = 12
+            if (r1 != r2) goto L_0x0782
+        L_0x0714:
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 != r2) goto L_0x071d
+            r5 = 1065353216(0x3var_, float:1.0)
+            goto L_0x072a
+        L_0x071d:
+            r1 = 13
+            if (r2 != r1) goto L_0x0724
+            float r5 = r0.transitionProgress
+            goto L_0x072a
+        L_0x0724:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+        L_0x072a:
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.currentIcon
+            int r3 = r0.nextIcon
+            if (r2 != r3) goto L_0x0735
+            r3 = 255(0xff, float:3.57E-43)
+            goto L_0x0738
+        L_0x0735:
+            float r2 = r5 * r19
+            int r3 = (int) r2
+        L_0x0738:
+            r1.setAlpha(r3)
+            org.telegram.messenger.AndroidUtilities.dp(r18)
+            r1 = 1077936128(0x40400000, float:3.0)
+            org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 == r2) goto L_0x0751
+            r33.save()
+            float r1 = (float) r11
+            float r2 = (float) r12
+            r7.scale(r5, r5, r1, r2)
+        L_0x0751:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            float r1 = (float) r1
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            float r2 = (float) r11
+            float r8 = r2 - r1
+            float r3 = (float) r12
+            float r15 = r3 - r1
+            float r17 = r2 + r1
+            float r23 = r3 + r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r2 = r8
+            r3 = r15
+            r4 = r17
+            r5 = r23
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r17
+            r4 = r8
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 == r2) goto L_0x0782
+            r33.restore()
+        L_0x0782:
+            int r1 = r0.currentIcon
+            r2 = 13
+            if (r1 == r2) goto L_0x078e
+            int r1 = r0.nextIcon
+            r2 = 13
+            if (r1 != r2) goto L_0x080e
+        L_0x078e:
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 != r2) goto L_0x0797
+            r5 = 1065353216(0x3var_, float:1.0)
+            goto L_0x07a4
+        L_0x0797:
+            r1 = 13
+            if (r2 != r1) goto L_0x079e
+            float r5 = r0.transitionProgress
+            goto L_0x07a4
+        L_0x079e:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r5 = r2 - r1
+        L_0x07a4:
+            android.text.TextPaint r1 = r0.textPaint
+            float r2 = r5 * r19
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            r1 = 1084227584(0x40a00000, float:5.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r1 + r12
+            int r2 = r0.percentStringWidth
+            r3 = 2
+            int r2 = r2 / r3
+            int r2 = r11 - r2
+            int r3 = r0.currentIcon
+            int r4 = r0.nextIcon
+            if (r3 == r4) goto L_0x07c7
+            r33.save()
+            float r3 = (float) r11
+            float r4 = (float) r12
+            r7.scale(r5, r5, r3, r4)
+        L_0x07c7:
+            float r3 = r0.animatedDownloadProgress
+            r4 = 1120403456(0x42CLASSNAME, float:100.0)
+            float r3 = r3 * r4
+            int r3 = (int) r3
+            java.lang.String r4 = r0.percentString
+            if (r4 == 0) goto L_0x07d6
+            int r4 = r0.lastPercent
+            if (r3 == r4) goto L_0x07fc
+        L_0x07d6:
+            r0.lastPercent = r3
+            r3 = 1
+            java.lang.Object[] r4 = new java.lang.Object[r3]
+            int r3 = r0.lastPercent
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+            r5 = 0
+            r4[r5] = r3
+            java.lang.String r3 = "%d%%"
+            java.lang.String r3 = java.lang.String.format(r3, r4)
+            r0.percentString = r3
+            android.text.TextPaint r3 = r0.textPaint
+            java.lang.String r4 = r0.percentString
+            float r3 = r3.measureText(r4)
+            double r3 = (double) r3
+            double r3 = java.lang.Math.ceil(r3)
+            int r3 = (int) r3
+            r0.percentStringWidth = r3
+        L_0x07fc:
+            java.lang.String r3 = r0.percentString
+            float r2 = (float) r2
+            float r1 = (float) r1
+            android.text.TextPaint r4 = r0.textPaint
+            r7.drawText(r3, r2, r1, r4)
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 == r2) goto L_0x080e
+            r33.restore()
+        L_0x080e:
+            int r1 = r0.currentIcon
+            r2 = 1
+            if (r1 == 0) goto L_0x0828
+            if (r1 == r2) goto L_0x0828
+            int r1 = r0.nextIcon
+            if (r1 == 0) goto L_0x0828
+            if (r1 != r2) goto L_0x081c
+            goto L_0x0828
+        L_0x081c:
+            r23 = r10
+            r30 = r11
+            r24 = r12
+            r17 = r14
+            r8 = 255(0xff, float:3.57E-43)
+            goto L_0x0b1b
+        L_0x0828:
+            int r1 = r0.currentIcon
+            if (r1 != 0) goto L_0x0830
+            int r1 = r0.nextIcon
+            if (r1 == r2) goto L_0x0838
+        L_0x0830:
+            int r1 = r0.currentIcon
+            if (r1 != r2) goto L_0x0845
+            int r1 = r0.nextIcon
+            if (r1 != 0) goto L_0x0845
+        L_0x0838:
+            boolean r1 = r0.animatingTransition
+            if (r1 == 0) goto L_0x0845
+            android.view.animation.DecelerateInterpolator r1 = r0.interpolator
+            float r2 = r0.transitionProgress
+            float r1 = r1.getInterpolation(r2)
+            goto L_0x0846
+        L_0x0845:
+            r1 = 0
+        L_0x0846:
+            android.graphics.Path r2 = r0.path1
+            r2.reset()
+            android.graphics.Path r2 = r0.path2
+            r2.reset()
+            int r2 = r0.currentIcon
+            if (r2 == 0) goto L_0x0864
+            r3 = 1
+            if (r2 == r3) goto L_0x085c
+            r2 = 0
+            r3 = 0
+            r4 = 0
+        L_0x085a:
+            r15 = 0
+            goto L_0x086b
+        L_0x085c:
+            float[] r2 = pausePath1
+            float[] r3 = pausePath2
+            r15 = 90
+            r4 = 0
+            goto L_0x086b
+        L_0x0864:
+            float[] r2 = playPath1
+            float[] r3 = playPath2
+            float[] r4 = playFinalPath
+            goto L_0x085a
+        L_0x086b:
+            int r5 = r0.nextIcon
+            if (r5 == 0) goto L_0x087d
+            r6 = 1
+            if (r5 == r6) goto L_0x0876
+            r5 = 0
+            r6 = 0
+        L_0x0874:
+            r8 = 0
+            goto L_0x0882
+        L_0x0876:
+            float[] r5 = pausePath1
+            float[] r6 = pausePath2
+            r8 = 90
+            goto L_0x0882
+        L_0x087d:
+            float[] r5 = playPath1
+            float[] r6 = playPath2
+            goto L_0x0874
+        L_0x0882:
+            if (r2 != 0) goto L_0x088b
+            r2 = r5
+            r3 = r6
+            r17 = r14
+            r5 = 0
+            r6 = 0
+            goto L_0x088d
+        L_0x088b:
+            r17 = r14
+        L_0x088d:
+            boolean r14 = r0.animatingTransition
+            if (r14 != 0) goto L_0x092e
+            if (r4 == 0) goto L_0x092e
+            r2 = 0
+        L_0x0894:
+            int r3 = r4.length
+            r5 = 2
+            int r3 = r3 / r5
+            if (r2 >= r3) goto L_0x0920
+            if (r2 != 0) goto L_0x08da
+            android.graphics.Path r3 = r0.path1
+            int r5 = r2 * 2
+            r6 = r4[r5]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r14 = r0.scale
+            float r6 = r6 * r14
+            int r14 = r5 + 1
+            r22 = r4[r14]
+            r23 = r10
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r10 = (float) r10
+            r22 = r9
+            float r9 = r0.scale
+            float r10 = r10 * r9
+            r3.moveTo(r6, r10)
+            android.graphics.Path r3 = r0.path2
+            r5 = r4[r5]
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r6 = r0.scale
+            float r5 = r5 * r6
+            r6 = r4[r14]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r9 = r0.scale
+            float r6 = r6 * r9
+            r3.moveTo(r5, r6)
+            goto L_0x0918
+        L_0x08da:
+            r22 = r9
+            r23 = r10
+            android.graphics.Path r3 = r0.path1
+            int r5 = r2 * 2
+            r6 = r4[r5]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r9 = r0.scale
+            float r6 = r6 * r9
+            int r9 = r5 + 1
+            r10 = r4[r9]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            float r14 = r0.scale
+            float r10 = r10 * r14
+            r3.lineTo(r6, r10)
+            android.graphics.Path r3 = r0.path2
+            r5 = r4[r5]
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r6 = r0.scale
+            float r5 = r5 * r6
+            r6 = r4[r9]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r9 = r0.scale
+            float r6 = r6 * r9
+            r3.lineTo(r5, r6)
+        L_0x0918:
+            int r2 = r2 + 1
+            r9 = r22
+            r10 = r23
+            goto L_0x0894
+        L_0x0920:
+            r22 = r9
+            r23 = r10
+            r28 = r8
+            r30 = r11
+            r24 = r12
+        L_0x092a:
+            r8 = 255(0xff, float:3.57E-43)
+            goto L_0x0ac2
+        L_0x092e:
+            r22 = r9
+            r23 = r10
+            if (r5 != 0) goto L_0x09e6
+            r4 = 0
+        L_0x0935:
+            r5 = 5
+            if (r4 >= r5) goto L_0x09b9
+            if (r4 != 0) goto L_0x0977
+            android.graphics.Path r5 = r0.path1
+            int r6 = r4 * 2
+            r9 = r2[r6]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            int r10 = r6 + 1
+            r14 = r2[r10]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r14 = (float) r14
+            r24 = r12
+            float r12 = r0.scale
+            float r14 = r14 * r12
+            r5.moveTo(r9, r14)
+            android.graphics.Path r5 = r0.path2
+            r6 = r3[r6]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r9 = r0.scale
+            float r6 = r6 * r9
+            r9 = r3[r10]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            r5.moveTo(r6, r9)
+            goto L_0x09b3
+        L_0x0977:
+            r24 = r12
+            android.graphics.Path r5 = r0.path1
+            int r6 = r4 * 2
+            r9 = r2[r6]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            int r10 = r6 + 1
+            r12 = r2[r10]
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            float r14 = r0.scale
+            float r12 = r12 * r14
+            r5.lineTo(r9, r12)
+            android.graphics.Path r5 = r0.path2
+            r6 = r3[r6]
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r9 = r0.scale
+            float r6 = r6 * r9
+            r9 = r3[r10]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            r5.lineTo(r6, r9)
+        L_0x09b3:
+            int r4 = r4 + 1
+            r12 = r24
+            goto L_0x0935
+        L_0x09b9:
+            r24 = r12
+            int r2 = r0.nextIcon
+            r3 = 4
+            if (r2 != r3) goto L_0x09d4
+            android.graphics.Paint r2 = r0.paint2
+            float r3 = r0.transitionProgress
+            r4 = 1065353216(0x3var_, float:1.0)
+            float r5 = r4 - r3
+            float r5 = r5 * r19
+            int r3 = (int) r5
+            r2.setAlpha(r3)
+        L_0x09ce:
+            r28 = r8
+            r30 = r11
+            goto L_0x092a
+        L_0x09d4:
+            android.graphics.Paint r3 = r0.paint2
+            int r4 = r0.currentIcon
+            if (r4 != r2) goto L_0x09dd
+            r2 = 255(0xff, float:3.57E-43)
+            goto L_0x09e2
+        L_0x09dd:
+            float r2 = r0.transitionProgress
+            float r2 = r2 * r19
+            int r2 = (int) r2
+        L_0x09e2:
+            r3.setAlpha(r2)
+            goto L_0x09ce
+        L_0x09e6:
+            r24 = r12
+            r4 = 0
+        L_0x09e9:
+            r9 = 5
+            if (r4 >= r9) goto L_0x0ab7
+            if (r4 != 0) goto L_0x0a50
+            android.graphics.Path r9 = r0.path1
+            int r10 = r4 * 2
+            r12 = r2[r10]
+            r14 = r5[r10]
+            r28 = r2[r10]
+            float r14 = r14 - r28
+            float r14 = r14 * r1
+            float r12 = r12 + r14
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            float r14 = r0.scale
+            float r12 = r12 * r14
+            int r14 = r10 + 1
+            r28 = r2[r14]
+            r30 = r5[r14]
+            r31 = r2[r14]
+            float r30 = r30 - r31
+            float r30 = r30 * r1
+            float r28 = r28 + r30
+            r30 = r11
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r28)
+            float r11 = (float) r11
+            r28 = r8
+            float r8 = r0.scale
+            float r11 = r11 * r8
+            r9.moveTo(r12, r11)
+            android.graphics.Path r8 = r0.path2
+            r9 = r3[r10]
+            r11 = r6[r10]
+            r10 = r3[r10]
+            float r11 = r11 - r10
+            float r11 = r11 * r1
+            float r9 = r9 + r11
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            r10 = r3[r14]
+            r11 = r6[r14]
+            r12 = r3[r14]
+            float r11 = r11 - r12
+            float r11 = r11 * r1
+            float r10 = r10 + r11
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            float r11 = r0.scale
+            float r10 = r10 * r11
+            r8.moveTo(r9, r10)
+            goto L_0x0aaf
+        L_0x0a50:
+            r28 = r8
+            r30 = r11
+            android.graphics.Path r8 = r0.path1
+            int r9 = r4 * 2
+            r10 = r2[r9]
+            r11 = r5[r9]
+            r12 = r2[r9]
+            float r11 = r11 - r12
+            float r11 = r11 * r1
+            float r10 = r10 + r11
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            float r11 = r0.scale
+            float r10 = r10 * r11
+            int r11 = r9 + 1
+            r12 = r2[r11]
+            r14 = r5[r11]
+            r31 = r2[r11]
+            float r14 = r14 - r31
+            float r14 = r14 * r1
+            float r12 = r12 + r14
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r12 = (float) r12
+            float r14 = r0.scale
+            float r12 = r12 * r14
+            r8.lineTo(r10, r12)
+            android.graphics.Path r8 = r0.path2
+            r10 = r3[r9]
+            r12 = r6[r9]
+            r9 = r3[r9]
+            float r12 = r12 - r9
+            float r12 = r12 * r1
+            float r10 = r10 + r12
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r9 = (float) r9
+            float r10 = r0.scale
+            float r9 = r9 * r10
+            r10 = r3[r11]
+            r12 = r6[r11]
+            r11 = r3[r11]
+            float r12 = r12 - r11
+            float r12 = r12 * r1
+            float r10 = r10 + r12
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r10 = (float) r10
+            float r11 = r0.scale
+            float r10 = r10 * r11
+            r8.lineTo(r9, r10)
+        L_0x0aaf:
+            int r4 = r4 + 1
+            r8 = r28
+            r11 = r30
+            goto L_0x09e9
+        L_0x0ab7:
+            r28 = r8
+            r30 = r11
+            android.graphics.Paint r2 = r0.paint2
+            r8 = 255(0xff, float:3.57E-43)
+            r2.setAlpha(r8)
+        L_0x0ac2:
+            android.graphics.Path r2 = r0.path1
+            r2.close()
+            android.graphics.Path r2 = r0.path2
+            r2.close()
+            r33.save()
+            int r2 = r13.left
+            float r2 = (float) r2
+            int r3 = r13.top
+            float r3 = (float) r3
+            r7.translate(r2, r3)
+            float r2 = (float) r15
+            int r3 = r28 - r15
+            float r3 = (float) r3
+            float r3 = r3 * r1
+            float r2 = r2 + r3
+            int r1 = r13.left
+            int r11 = r30 - r1
+            float r1 = (float) r11
+            int r3 = r13.top
+            int r12 = r24 - r3
+            float r3 = (float) r12
+            r7.rotate(r2, r1, r3)
+            int r1 = r0.currentIcon
+            if (r1 == 0) goto L_0x0af3
+            r2 = 1
+            if (r1 != r2) goto L_0x0af8
+        L_0x0af3:
+            int r1 = r0.currentIcon
+            r2 = 4
+            if (r1 != r2) goto L_0x0b08
+        L_0x0af8:
+            int r1 = r13.left
+            int r11 = r30 - r1
+            float r1 = (float) r11
+            int r2 = r13.top
+            int r12 = r24 - r2
+            float r2 = (float) r12
+            r9 = r22
+            r7.scale(r9, r9, r1, r2)
+            goto L_0x0b0a
+        L_0x0b08:
+            r9 = r22
+        L_0x0b0a:
+            android.graphics.Path r1 = r0.path1
+            android.graphics.Paint r2 = r0.paint2
+            r7.drawPath(r1, r2)
+            android.graphics.Path r1 = r0.path2
+            android.graphics.Paint r2 = r0.paint2
+            r7.drawPath(r1, r2)
+            r33.restore()
+        L_0x0b1b:
+            int r1 = r0.currentIcon
+            r2 = 6
+            if (r1 == r2) goto L_0x0b25
+            int r1 = r0.nextIcon
+            r2 = 6
+            if (r1 != r2) goto L_0x0bbf
+        L_0x0b25:
+            int r1 = r0.currentIcon
+            r2 = 6
+            if (r1 == r2) goto L_0x0b4e
+            float r1 = r0.transitionProgress
+            int r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0b4a
+            float r1 = r1 - r20
+            float r1 = r1 / r20
+            float r2 = r1 / r20
+            r3 = 1065353216(0x3var_, float:1.0)
+            float r2 = java.lang.Math.min(r3, r2)
+            float r10 = r3 - r2
+            int r2 = (r1 > r20 ? 1 : (r1 == r20 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0b47
+            float r1 = r1 - r20
+            float r1 = r1 / r20
+            goto L_0x0b48
+        L_0x0b47:
+            r1 = 0
+        L_0x0b48:
+            r11 = r1
+            goto L_0x0b51
+        L_0x0b4a:
+            r10 = 1065353216(0x3var_, float:1.0)
+            r11 = 0
+            goto L_0x0b51
+        L_0x0b4e:
+            r10 = 0
+            r11 = 1065353216(0x3var_, float:1.0)
+        L_0x0b51:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r12 = r24 + r1
+            r1 = 1077936128(0x40400000, float:3.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r13 = r30 - r1
+            android.graphics.Paint r1 = r0.paint
+            r1.setAlpha(r8)
+            r1 = 1065353216(0x3var_, float:1.0)
+            int r2 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
+            if (r2 >= 0) goto L_0x0b9b
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r13 - r1
+            float r2 = (float) r1
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r12 - r1
+            float r3 = (float) r1
+            float r1 = (float) r13
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r4 = r4 * r10
+            float r4 = r1 - r4
+            float r1 = (float) r12
+            r5 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r5 = r5 * r10
+            float r5 = r1 - r5
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0b9b:
+            r1 = 0
+            int r2 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0bbf
+            float r2 = (float) r13
+            float r3 = (float) r12
+            r1 = 1094713344(0x41400000, float:12.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r1 = r1 * r11
+            float r4 = r2 + r1
+            r1 = 1094713344(0x41400000, float:12.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r1 = r1 * r11
+            float r5 = r3 - r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r33
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0bbf:
+            r1 = r17
+            if (r23 == 0) goto L_0x0CLASSNAME
+            r2 = r23
+            if (r2 == r1) goto L_0x0CLASSNAME
+            int r3 = r2.getIntrinsicWidth()
+            float r3 = (float) r3
+            float r3 = r3 * r26
+            int r3 = (int) r3
+            int r4 = r2.getIntrinsicHeight()
+            float r4 = (float) r4
+            float r4 = r4 * r26
+            int r4 = (int) r4
+            android.graphics.ColorFilter r5 = r0.colorFilter
+            r2.setColorFilter(r5)
+            int r5 = r0.currentIcon
+            int r6 = r0.nextIcon
+            if (r5 != r6) goto L_0x0be5
+            r5 = 255(0xff, float:3.57E-43)
+            goto L_0x0bee
+        L_0x0be5:
+            float r5 = r0.transitionProgress
+            r6 = 1065353216(0x3var_, float:1.0)
+            float r5 = r6 - r5
+            float r5 = r5 * r19
+            int r5 = (int) r5
+        L_0x0bee:
+            r2.setAlpha(r5)
+            r5 = 2
+            int r3 = r3 / r5
+            int r11 = r30 - r3
+            int r4 = r4 / r5
+            int r12 = r24 - r4
+            int r3 = r30 + r3
+            int r4 = r24 + r4
+            r2.setBounds(r11, r12, r3, r4)
+            r2.draw(r7)
+        L_0x0CLASSNAME:
+            if (r1 == 0) goto L_0x0c3b
+            int r2 = r1.getIntrinsicWidth()
+            float r2 = (float) r2
+            float r2 = r2 * r9
+            int r2 = (int) r2
+            int r3 = r1.getIntrinsicHeight()
+            float r3 = (float) r3
+            float r3 = r3 * r9
+            int r3 = (int) r3
+            android.graphics.ColorFilter r4 = r0.colorFilter
+            r1.setColorFilter(r4)
+            int r4 = r0.currentIcon
+            int r5 = r0.nextIcon
+            if (r4 != r5) goto L_0x0CLASSNAME
+            r4 = 255(0xff, float:3.57E-43)
+            goto L_0x0CLASSNAME
+        L_0x0CLASSNAME:
+            float r4 = r0.transitionProgress
+            float r4 = r4 * r19
+            int r4 = (int) r4
+        L_0x0CLASSNAME:
+            r1.setAlpha(r4)
+            r4 = 2
+            int r2 = r2 / r4
+            int r11 = r30 - r2
+            int r3 = r3 / r4
+            int r12 = r24 - r3
+            int r2 = r30 + r2
+            int r3 = r24 + r3
+            r1.setBounds(r11, r12, r2, r3)
+            r1.draw(r7)
+        L_0x0c3b:
+            r1 = r29
+            r2 = r16
+            if (r1 == 0) goto L_0x0c9b
+            if (r1 == r2) goto L_0x0c9b
+            r3 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r3 = r3 * r26
+            int r3 = (int) r3
+            r4 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r4 = (float) r4
+            float r4 = r4 * r26
+            int r4 = (int) r4
+            android.graphics.Paint r5 = r0.paint2
+            android.graphics.Paint$Style r6 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r5.setStyle(r6)
+            android.graphics.Paint r5 = r0.paint2
+            int r6 = r0.currentIcon
+            int r10 = r0.nextIcon
+            if (r6 != r10) goto L_0x0CLASSNAME
+            r6 = 255(0xff, float:3.57E-43)
+            goto L_0x0CLASSNAME
+        L_0x0CLASSNAME:
+            float r6 = r0.transitionProgress
+            r10 = 1065353216(0x3var_, float:1.0)
+            float r6 = r10 - r6
+            float r6 = r6 * r19
+            int r6 = (int) r6
+        L_0x0CLASSNAME:
+            r5.setAlpha(r6)
+            r33.save()
+            r5 = 2
+            int r3 = r3 / r5
+            int r11 = r30 - r3
+            float r3 = (float) r11
+            int r4 = r4 / r5
+            int r12 = r24 - r4
+            float r4 = (float) r12
+            r7.translate(r3, r4)
+            r3 = 0
+            r4 = r1[r3]
+            android.graphics.Paint r3 = r0.paint2
+            r7.drawPath(r4, r3)
+            r3 = 1
+            r4 = r1[r3]
+            if (r4 == 0) goto L_0x0CLASSNAME
+            r1 = r1[r3]
+            android.graphics.Paint r3 = r0.backPaint
+            r7.drawPath(r1, r3)
+        L_0x0CLASSNAME:
+            r33.restore()
+        L_0x0c9b:
+            if (r2 == 0) goto L_0x0cf1
+            r1 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r1 = r1 * r9
+            int r1 = (int) r1
+            r3 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r3 = r3 * r9
+            int r3 = (int) r3
+            android.graphics.Paint r4 = r0.paint2
+            android.graphics.Paint$Style r5 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r4.setStyle(r5)
+            android.graphics.Paint r4 = r0.paint2
+            int r5 = r0.currentIcon
+            int r6 = r0.nextIcon
+            if (r5 != r6) goto L_0x0cc3
+            r5 = 255(0xff, float:3.57E-43)
+            goto L_0x0cc8
+        L_0x0cc3:
+            float r5 = r0.transitionProgress
+            float r5 = r5 * r19
+            int r5 = (int) r5
+        L_0x0cc8:
+            r4.setAlpha(r5)
+            r33.save()
+            r4 = 2
+            int r1 = r1 / r4
+            int r11 = r30 - r1
+            float r1 = (float) r11
+            int r3 = r3 / r4
+            int r12 = r24 - r3
+            float r3 = (float) r12
+            r7.translate(r1, r3)
+            r1 = 0
+            r3 = r2[r1]
+            android.graphics.Paint r1 = r0.paint2
+            r7.drawPath(r3, r1)
+            r1 = 1
+            r3 = r2[r1]
+            if (r3 == 0) goto L_0x0cee
+            r2 = r2[r1]
+            android.graphics.Paint r1 = r0.backPaint
+            r7.drawPath(r2, r1)
+        L_0x0cee:
+            r33.restore()
+        L_0x0cf1:
+            long r1 = java.lang.System.currentTimeMillis()
+            long r3 = r0.lastAnimationTime
+            long r3 = r1 - r3
+            r5 = 17
+            int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0d01
+            r3 = 17
+        L_0x0d01:
+            r0.lastAnimationTime = r1
+            int r1 = r0.currentIcon
+            r2 = 3
+            if (r1 == r2) goto L_0x0d1d
+            r2 = 14
+            if (r1 == r2) goto L_0x0d1d
+            r5 = 4
+            if (r1 != r5) goto L_0x0d13
+            int r1 = r0.nextIcon
+            if (r1 == r2) goto L_0x0d1d
+        L_0x0d13:
+            int r1 = r0.currentIcon
+            r2 = 10
+            if (r1 == r2) goto L_0x0d1d
+            r2 = 13
+            if (r1 != r2) goto L_0x0d6a
+        L_0x0d1d:
+            float r1 = r0.downloadRadOffset
+            r5 = 360(0x168, double:1.78E-321)
+            long r5 = r5 * r3
+            float r2 = (float) r5
+            r5 = 1159479296(0x451CLASSNAME, float:2500.0)
+            float r2 = r2 / r5
+            float r1 = r1 + r2
+            r0.downloadRadOffset = r1
+            float r1 = r0.downloadRadOffset
+            float r1 = r0.getCircleValue(r1)
+            r0.downloadRadOffset = r1
+            int r1 = r0.nextIcon
+            r2 = 2
+            if (r1 == r2) goto L_0x0d67
+            float r1 = r0.downloadProgress
+            float r2 = r0.downloadProgressAnimationStart
+            float r5 = r1 - r2
+            r6 = 0
+            int r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0d67
+            float r6 = r0.downloadProgressTime
+            float r8 = (float) r3
+            float r6 = r6 + r8
+            r0.downloadProgressTime = r6
+            float r6 = r0.downloadProgressTime
+            r8 = 1128792064(0x43480000, float:200.0)
+            int r8 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r8 < 0) goto L_0x0d59
+            r0.animatedDownloadProgress = r1
+            r0.downloadProgressAnimationStart = r1
+            r1 = 0
+            r0.downloadProgressTime = r1
+            goto L_0x0d67
+        L_0x0d59:
+            android.view.animation.DecelerateInterpolator r1 = r0.interpolator
+            r8 = 1128792064(0x43480000, float:200.0)
+            float r6 = r6 / r8
+            float r1 = r1.getInterpolation(r6)
+            float r5 = r5 * r1
+            float r2 = r2 + r5
+            r0.animatedDownloadProgress = r2
+        L_0x0d67:
+            r32.invalidateSelf()
+        L_0x0d6a:
+            boolean r1 = r0.animatingTransition
+            if (r1 == 0) goto L_0x0d8f
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0d8f
+            float r3 = (float) r3
+            float r4 = r0.transitionAnimationTime
+            float r3 = r3 / r4
+            float r1 = r1 + r3
+            r0.transitionProgress = r1
+            float r1 = r0.transitionProgress
+            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r1 < 0) goto L_0x0d8c
+            int r1 = r0.nextIcon
+            r0.currentIcon = r1
+            r0.transitionProgress = r2
+            r1 = 0
+            r0.animatingTransition = r1
+        L_0x0d8c:
+            r32.invalidateSelf()
+        L_0x0d8f:
+            r1 = r27
+            r2 = 1
+            if (r1 < r2) goto L_0x0d97
+            r7.restoreToCount(r1)
+        L_0x0d97:
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");
     }

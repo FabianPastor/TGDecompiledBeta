@@ -3,9 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Join;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -28,11 +25,11 @@ public class AnimatedArrowDrawable extends Drawable {
     }
 
     public AnimatedArrowDrawable(int i, boolean z) {
-        this.paint.setStyle(Style.STROKE);
+        this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setColor(i);
-        this.paint.setStrokeCap(Cap.ROUND);
-        this.paint.setStrokeJoin(Join.ROUND);
+        this.paint.setStrokeCap(Paint.Cap.ROUND);
+        this.paint.setStrokeJoin(Paint.Join.ROUND);
         this.isSmall = z;
         updatePath();
     }

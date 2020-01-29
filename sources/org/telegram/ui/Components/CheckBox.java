@@ -5,11 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
@@ -28,18 +26,21 @@ public class CheckBox extends View {
     private static final float progressBounceDiff = 0.2f;
     private boolean attachedToWindow;
     private Canvas bitmapCanvas;
-    private ObjectAnimator checkAnimator;
+    /* access modifiers changed from: private */
+    public ObjectAnimator checkAnimator;
     private Bitmap checkBitmap;
     private Canvas checkCanvas;
     private Drawable checkDrawable;
     private int checkOffset;
-    private String checkedText;
+    /* access modifiers changed from: private */
+    public String checkedText;
     private int color;
     private boolean drawBackground;
     private Bitmap drawBitmap;
     private boolean hasBorder;
     private boolean isCheckAnimation = true;
-    private boolean isChecked;
+    /* access modifiers changed from: private */
+    public boolean isChecked;
     private float progress;
     private int size = 22;
     private TextPaint textPaint;
@@ -50,14 +51,14 @@ public class CheckBox extends View {
             paint = new Paint(1);
             eraser = new Paint(1);
             eraser.setColor(0);
-            eraser.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+            eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
             eraser2 = new Paint(1);
             eraser2.setColor(0);
-            eraser2.setStyle(Style.STROKE);
-            eraser2.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+            eraser2.setStyle(Paint.Style.STROKE);
+            eraser2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
             backgroundPaint = new Paint(1);
             backgroundPaint.setColor(-1);
-            backgroundPaint.setStyle(Style.STROKE);
+            backgroundPaint.setStyle(Paint.Style.STROKE);
         }
         eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
         backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -71,9 +72,9 @@ public class CheckBox extends View {
         super.setVisibility(i);
         if (i == 0 && this.drawBitmap == null) {
             try {
-                this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
+                this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Bitmap.Config.ARGB_4444);
                 this.bitmapCanvas = new Canvas(this.drawBitmap);
-                this.checkBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
+                this.checkBitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Bitmap.Config.ARGB_4444);
                 this.checkCanvas = new Canvas(this.checkBitmap);
             } catch (Throwable unused) {
             }
@@ -117,7 +118,7 @@ public class CheckBox extends View {
 
     public void setColor(int i, int i2) {
         this.color = i;
-        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i2, Mode.MULTIPLY));
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
         this.textPaint.setColor(i2);
         invalidate();
     }
@@ -128,7 +129,7 @@ public class CheckBox extends View {
     }
 
     public void setCheckColor(int i) {
-        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         this.textPaint.setColor(i);
         invalidate();
     }
@@ -149,10 +150,10 @@ public class CheckBox extends View {
         this.checkAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (animator.equals(CheckBox.this.checkAnimator)) {
-                    CheckBox.this.checkAnimator = null;
+                    ObjectAnimator unused = CheckBox.this.checkAnimator = null;
                 }
                 if (!CheckBox.this.isChecked) {
-                    CheckBox.this.checkedText = null;
+                    String unused2 = CheckBox.this.checkedText = null;
                 }
             }
         });
@@ -160,19 +161,19 @@ public class CheckBox extends View {
         this.checkAnimator.start();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
     }
@@ -183,10 +184,7 @@ public class CheckBox extends View {
 
     public void setNum(int i) {
         if (i >= 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("");
-            stringBuilder.append(i + 1);
-            this.checkedText = stringBuilder.toString();
+            this.checkedText = "" + (i + 1);
         } else if (this.checkAnimator == null) {
             this.checkedText = null;
         }
@@ -195,20 +193,17 @@ public class CheckBox extends View {
 
     public void setChecked(int i, boolean z, boolean z2) {
         if (i >= 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("");
-            stringBuilder.append(i + 1);
-            this.checkedText = stringBuilder.toString();
+            this.checkedText = "" + (i + 1);
             invalidate();
         }
         if (z != this.isChecked) {
             this.isChecked = z;
-            if (this.attachedToWindow && z2) {
-                animateToCheckedState(z);
-            } else {
+            if (!this.attachedToWindow || !z2) {
                 cancelCheckAnimator();
                 setProgress(z ? 1.0f : 0.0f);
+                return;
             }
+            animateToCheckedState(z);
         }
     }
 
@@ -216,244 +211,232 @@ public class CheckBox extends View {
         return this.isChecked;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:31:0x0089  */
     /* JADX WARNING: Removed duplicated region for block: B:34:0x00cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0140  */
     /* JADX WARNING: Removed duplicated region for block: B:37:0x0112  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0140  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r12) {
         /*
-        r11 = this;
-        r0 = r11.getVisibility();
-        if (r0 != 0) goto L_0x01a6;
-    L_0x0006:
-        r0 = r11.drawBitmap;
-        if (r0 == 0) goto L_0x01a6;
-    L_0x000a:
-        r0 = r11.checkBitmap;
-        if (r0 != 0) goto L_0x0010;
-    L_0x000e:
-        goto L_0x01a6;
-    L_0x0010:
-        r0 = r11.drawBackground;
-        r1 = 0;
-        if (r0 != 0) goto L_0x001b;
-    L_0x0015:
-        r0 = r11.progress;
-        r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1));
-        if (r0 == 0) goto L_0x01a6;
-    L_0x001b:
-        r0 = eraser2;
-        r2 = r11.size;
-        r2 = r2 + 6;
-        r2 = (float) r2;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r2 = (float) r2;
-        r0.setStrokeWidth(r2);
-        r0 = r11.drawBitmap;
-        r2 = 0;
-        r0.eraseColor(r2);
-        r0 = r11.getMeasuredWidth();
-        r0 = r0 / 2;
-        r0 = (float) r0;
-        r3 = r11.progress;
-        r4 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
-        r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r6 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
-        if (r6 < 0) goto L_0x0044;
-    L_0x0041:
-        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        goto L_0x0045;
-    L_0x0044:
-        r3 = r3 / r4;
-    L_0x0045:
-        r6 = r11.progress;
-        r7 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1));
-        if (r7 >= 0) goto L_0x004d;
-    L_0x004b:
-        r4 = 0;
-        goto L_0x0050;
-    L_0x004d:
-        r6 = r6 - r4;
-        r4 = r6 / r4;
-    L_0x0050:
-        r6 = r11.isCheckAnimation;
-        if (r6 == 0) goto L_0x0057;
-    L_0x0054:
-        r6 = r11.progress;
-        goto L_0x005b;
-    L_0x0057:
-        r6 = r11.progress;
-        r6 = r5 - r6;
-    L_0x005b:
-        r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r8 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
-        r9 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r9 >= 0) goto L_0x006e;
-    L_0x0064:
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r9 = (float) r9;
-        r9 = r9 * r6;
-        r9 = r9 / r8;
-    L_0x006c:
-        r0 = r0 - r9;
-        goto L_0x0085;
-    L_0x006e:
-        r9 = NUM; // 0x3ecccccd float:0.4 double:5.205520926E-315;
-        r9 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));
-        if (r9 >= 0) goto L_0x0085;
-    L_0x0075:
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r9 = (float) r9;
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r10 = (float) r10;
-        r6 = r6 - r8;
-        r10 = r10 * r6;
-        r10 = r10 / r8;
-        r9 = r9 - r10;
-        goto L_0x006c;
-    L_0x0085:
-        r6 = r11.drawBackground;
-        if (r6 == 0) goto L_0x00c4;
-    L_0x0089:
-        r6 = paint;
-        r8 = NUM; // 0x44000000 float:512.0 double:5.63655132E-315;
-        r6.setColor(r8);
-        r6 = r11.getMeasuredWidth();
-        r6 = r6 / 2;
-        r6 = (float) r6;
-        r8 = r11.getMeasuredHeight();
-        r8 = r8 / 2;
-        r8 = (float) r8;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r9 = (float) r9;
-        r9 = r0 - r9;
-        r10 = paint;
-        r12.drawCircle(r6, r8, r9, r10);
-        r6 = r11.getMeasuredWidth();
-        r6 = r6 / 2;
-        r6 = (float) r6;
-        r8 = r11.getMeasuredHeight();
-        r8 = r8 / 2;
-        r8 = (float) r8;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r5);
-        r9 = (float) r9;
-        r9 = r0 - r9;
-        r10 = backgroundPaint;
-        r12.drawCircle(r6, r8, r9, r10);
-    L_0x00c4:
-        r6 = paint;
-        r8 = r11.color;
-        r6.setColor(r8);
-        r6 = r11.hasBorder;
-        if (r6 == 0) goto L_0x00d5;
-    L_0x00cf:
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r6 = (float) r6;
-        r0 = r0 - r6;
-    L_0x00d5:
-        r6 = r11.bitmapCanvas;
-        r7 = r11.getMeasuredWidth();
-        r7 = r7 / 2;
-        r7 = (float) r7;
-        r8 = r11.getMeasuredHeight();
-        r8 = r8 / 2;
-        r8 = (float) r8;
-        r9 = paint;
-        r6.drawCircle(r7, r8, r0, r9);
-        r6 = r11.bitmapCanvas;
-        r7 = r11.getMeasuredWidth();
-        r7 = r7 / 2;
-        r7 = (float) r7;
-        r8 = r11.getMeasuredHeight();
-        r8 = r8 / 2;
-        r8 = (float) r8;
-        r3 = r5 - r3;
-        r0 = r0 * r3;
-        r3 = eraser;
-        r6.drawCircle(r7, r8, r0, r3);
-        r0 = r11.drawBitmap;
-        r3 = 0;
-        r12.drawBitmap(r0, r1, r1, r3);
-        r0 = r11.checkBitmap;
-        r0.eraseColor(r2);
-        r0 = r11.checkedText;
-        if (r0 == 0) goto L_0x0140;
-    L_0x0112:
-        r2 = r11.textPaint;
-        r0 = r2.measureText(r0);
-        r6 = (double) r0;
-        r6 = java.lang.Math.ceil(r6);
-        r0 = (int) r6;
-        r2 = r11.checkCanvas;
-        r6 = r11.checkedText;
-        r7 = r11.getMeasuredWidth();
-        r7 = r7 - r0;
-        r7 = r7 / 2;
-        r0 = (float) r7;
-        r7 = r11.size;
-        r8 = 40;
-        if (r7 != r8) goto L_0x0133;
-    L_0x0130:
-        r7 = NUM; // 0x41e00000 float:28.0 double:5.46040909E-315;
-        goto L_0x0135;
-    L_0x0133:
-        r7 = NUM; // 0x41a80000 float:21.0 double:5.442276803E-315;
-    L_0x0135:
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r7 = (float) r7;
-        r8 = r11.textPaint;
-        r2.drawText(r6, r0, r7, r8);
-        goto L_0x016d;
-    L_0x0140:
-        r0 = r11.checkDrawable;
-        r0 = r0.getIntrinsicWidth();
-        r2 = r11.checkDrawable;
-        r2 = r2.getIntrinsicHeight();
-        r6 = r11.getMeasuredWidth();
-        r6 = r6 - r0;
-        r6 = r6 / 2;
-        r7 = r11.getMeasuredHeight();
-        r7 = r7 - r2;
-        r7 = r7 / 2;
-        r8 = r11.checkDrawable;
-        r9 = r11.checkOffset;
-        r10 = r7 + r9;
-        r0 = r0 + r6;
-        r7 = r7 + r2;
-        r7 = r7 + r9;
-        r8.setBounds(r6, r10, r0, r7);
-        r0 = r11.checkDrawable;
-        r2 = r11.checkCanvas;
-        r0.draw(r2);
-    L_0x016d:
-        r0 = r11.checkCanvas;
-        r2 = r11.getMeasuredWidth();
-        r2 = r2 / 2;
-        r6 = NUM; // 0x40200000 float:2.5 double:5.315350785E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r2 = r2 - r6;
-        r2 = (float) r2;
-        r6 = r11.getMeasuredHeight();
-        r6 = r6 / 2;
-        r7 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r6 = r6 + r7;
-        r6 = (float) r6;
-        r7 = r11.getMeasuredWidth();
-        r8 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
-        r7 = r7 + r8;
-        r7 = r7 / 2;
-        r7 = (float) r7;
-        r5 = r5 - r4;
-        r7 = r7 * r5;
-        r4 = eraser2;
-        r0.drawCircle(r2, r6, r7, r4);
-        r0 = r11.checkBitmap;
-        r12.drawBitmap(r0, r1, r1, r3);
-    L_0x01a6:
-        return;
+            r11 = this;
+            int r0 = r11.getVisibility()
+            if (r0 != 0) goto L_0x01a6
+            android.graphics.Bitmap r0 = r11.drawBitmap
+            if (r0 == 0) goto L_0x01a6
+            android.graphics.Bitmap r0 = r11.checkBitmap
+            if (r0 != 0) goto L_0x0010
+            goto L_0x01a6
+        L_0x0010:
+            boolean r0 = r11.drawBackground
+            r1 = 0
+            if (r0 != 0) goto L_0x001b
+            float r0 = r11.progress
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 == 0) goto L_0x01a6
+        L_0x001b:
+            android.graphics.Paint r0 = eraser2
+            int r2 = r11.size
+            int r2 = r2 + 6
+            float r2 = (float) r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            r0.setStrokeWidth(r2)
+            android.graphics.Bitmap r0 = r11.drawBitmap
+            r2 = 0
+            r0.eraseColor(r2)
+            int r0 = r11.getMeasuredWidth()
+            int r0 = r0 / 2
+            float r0 = (float) r0
+            float r3 = r11.progress
+            r4 = 1056964608(0x3var_, float:0.5)
+            r5 = 1065353216(0x3var_, float:1.0)
+            int r6 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r6 < 0) goto L_0x0044
+            r3 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0045
+        L_0x0044:
+            float r3 = r3 / r4
+        L_0x0045:
+            float r6 = r11.progress
+            int r7 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
+            if (r7 >= 0) goto L_0x004d
+            r4 = 0
+            goto L_0x0050
+        L_0x004d:
+            float r6 = r6 - r4
+            float r4 = r6 / r4
+        L_0x0050:
+            boolean r6 = r11.isCheckAnimation
+            if (r6 == 0) goto L_0x0057
+            float r6 = r11.progress
+            goto L_0x005b
+        L_0x0057:
+            float r6 = r11.progress
+            float r6 = r5 - r6
+        L_0x005b:
+            r7 = 1073741824(0x40000000, float:2.0)
+            r8 = 1045220557(0x3e4ccccd, float:0.2)
+            int r9 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r9 >= 0) goto L_0x006e
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r9 = (float) r9
+            float r9 = r9 * r6
+            float r9 = r9 / r8
+        L_0x006c:
+            float r0 = r0 - r9
+            goto L_0x0085
+        L_0x006e:
+            r9 = 1053609165(0x3ecccccd, float:0.4)
+            int r9 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
+            if (r9 >= 0) goto L_0x0085
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r9 = (float) r9
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r10 = (float) r10
+            float r6 = r6 - r8
+            float r10 = r10 * r6
+            float r10 = r10 / r8
+            float r9 = r9 - r10
+            goto L_0x006c
+        L_0x0085:
+            boolean r6 = r11.drawBackground
+            if (r6 == 0) goto L_0x00c4
+            android.graphics.Paint r6 = paint
+            r8 = 1140850688(0x44000000, float:512.0)
+            r6.setColor(r8)
+            int r6 = r11.getMeasuredWidth()
+            int r6 = r6 / 2
+            float r6 = (float) r6
+            int r8 = r11.getMeasuredHeight()
+            int r8 = r8 / 2
+            float r8 = (float) r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r9 = (float) r9
+            float r9 = r0 - r9
+            android.graphics.Paint r10 = paint
+            r12.drawCircle(r6, r8, r9, r10)
+            int r6 = r11.getMeasuredWidth()
+            int r6 = r6 / 2
+            float r6 = (float) r6
+            int r8 = r11.getMeasuredHeight()
+            int r8 = r8 / 2
+            float r8 = (float) r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r9 = (float) r9
+            float r9 = r0 - r9
+            android.graphics.Paint r10 = backgroundPaint
+            r12.drawCircle(r6, r8, r9, r10)
+        L_0x00c4:
+            android.graphics.Paint r6 = paint
+            int r8 = r11.color
+            r6.setColor(r8)
+            boolean r6 = r11.hasBorder
+            if (r6 == 0) goto L_0x00d5
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r6 = (float) r6
+            float r0 = r0 - r6
+        L_0x00d5:
+            android.graphics.Canvas r6 = r11.bitmapCanvas
+            int r7 = r11.getMeasuredWidth()
+            int r7 = r7 / 2
+            float r7 = (float) r7
+            int r8 = r11.getMeasuredHeight()
+            int r8 = r8 / 2
+            float r8 = (float) r8
+            android.graphics.Paint r9 = paint
+            r6.drawCircle(r7, r8, r0, r9)
+            android.graphics.Canvas r6 = r11.bitmapCanvas
+            int r7 = r11.getMeasuredWidth()
+            int r7 = r7 / 2
+            float r7 = (float) r7
+            int r8 = r11.getMeasuredHeight()
+            int r8 = r8 / 2
+            float r8 = (float) r8
+            float r3 = r5 - r3
+            float r0 = r0 * r3
+            android.graphics.Paint r3 = eraser
+            r6.drawCircle(r7, r8, r0, r3)
+            android.graphics.Bitmap r0 = r11.drawBitmap
+            r3 = 0
+            r12.drawBitmap(r0, r1, r1, r3)
+            android.graphics.Bitmap r0 = r11.checkBitmap
+            r0.eraseColor(r2)
+            java.lang.String r0 = r11.checkedText
+            if (r0 == 0) goto L_0x0140
+            android.text.TextPaint r2 = r11.textPaint
+            float r0 = r2.measureText(r0)
+            double r6 = (double) r0
+            double r6 = java.lang.Math.ceil(r6)
+            int r0 = (int) r6
+            android.graphics.Canvas r2 = r11.checkCanvas
+            java.lang.String r6 = r11.checkedText
+            int r7 = r11.getMeasuredWidth()
+            int r7 = r7 - r0
+            int r7 = r7 / 2
+            float r0 = (float) r7
+            int r7 = r11.size
+            r8 = 40
+            if (r7 != r8) goto L_0x0133
+            r7 = 1105199104(0x41e00000, float:28.0)
+            goto L_0x0135
+        L_0x0133:
+            r7 = 1101529088(0x41a80000, float:21.0)
+        L_0x0135:
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r7 = (float) r7
+            android.text.TextPaint r8 = r11.textPaint
+            r2.drawText(r6, r0, r7, r8)
+            goto L_0x016d
+        L_0x0140:
+            android.graphics.drawable.Drawable r0 = r11.checkDrawable
+            int r0 = r0.getIntrinsicWidth()
+            android.graphics.drawable.Drawable r2 = r11.checkDrawable
+            int r2 = r2.getIntrinsicHeight()
+            int r6 = r11.getMeasuredWidth()
+            int r6 = r6 - r0
+            int r6 = r6 / 2
+            int r7 = r11.getMeasuredHeight()
+            int r7 = r7 - r2
+            int r7 = r7 / 2
+            android.graphics.drawable.Drawable r8 = r11.checkDrawable
+            int r9 = r11.checkOffset
+            int r10 = r7 + r9
+            int r0 = r0 + r6
+            int r7 = r7 + r2
+            int r7 = r7 + r9
+            r8.setBounds(r6, r10, r0, r7)
+            android.graphics.drawable.Drawable r0 = r11.checkDrawable
+            android.graphics.Canvas r2 = r11.checkCanvas
+            r0.draw(r2)
+        L_0x016d:
+            android.graphics.Canvas r0 = r11.checkCanvas
+            int r2 = r11.getMeasuredWidth()
+            int r2 = r2 / 2
+            r6 = 1075838976(0x40200000, float:2.5)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r2 = r2 - r6
+            float r2 = (float) r2
+            int r6 = r11.getMeasuredHeight()
+            int r6 = r6 / 2
+            r7 = 1082130432(0x40800000, float:4.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r6 = r6 + r7
+            float r6 = (float) r6
+            int r7 = r11.getMeasuredWidth()
+            r8 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r7 = r7 + r8
+            int r7 = r7 / 2
+            float r7 = (float) r7
+            float r5 = r5 - r4
+            float r7 = r7 * r5
+            android.graphics.Paint r4 = eraser2
+            r0.drawCircle(r2, r6, r7, r4)
+            android.graphics.Bitmap r0 = r11.checkBitmap
+            r12.drawBitmap(r0, r1, r1, r3)
+        L_0x01a6:
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.CheckBox.onDraw(android.graphics.Canvas):void");
     }

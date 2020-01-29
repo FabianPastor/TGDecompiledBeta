@@ -9,12 +9,16 @@ public class SQLiteDatabase {
     private boolean isOpen = true;
     private final long sqliteHandle;
 
+    /* access modifiers changed from: package-private */
     public native void beginTransaction(long j);
 
+    /* access modifiers changed from: package-private */
     public native void closedb(long j) throws SQLiteException;
 
+    /* access modifiers changed from: package-private */
     public native void commitTransaction(long j);
 
+    /* access modifiers changed from: package-private */
     public native long opendb(String str, String str2) throws SQLiteException;
 
     public long getSQLiteHandle() {
@@ -54,22 +58,15 @@ public class SQLiteDatabase {
 
     public void explainQuery(String str, Object... objArr) throws SQLiteException {
         checkOpened();
-        StringBuilder stringBuilder = new StringBuilder();
-        String str2 = "EXPLAIN QUERY PLAN ";
-        stringBuilder.append(str2);
-        stringBuilder.append(str);
-        SQLiteCursor query = new SQLitePreparedStatement(this, stringBuilder.toString(), true).query(objArr);
+        SQLiteCursor query = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + str, true).query(objArr);
         while (query.next()) {
             int columnCount = query.getColumnCount();
-            StringBuilder stringBuilder2 = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < columnCount; i++) {
-                stringBuilder2.append(query.stringValue(i));
-                stringBuilder2.append(", ");
+                sb.append(query.stringValue(i));
+                sb.append(", ");
             }
-            StringBuilder stringBuilder3 = new StringBuilder();
-            stringBuilder3.append(str2);
-            stringBuilder3.append(stringBuilder2.toString());
-            FileLog.d(stringBuilder3.toString());
+            FileLog.d("EXPLAIN QUERY PLAN " + sb.toString());
         }
         query.dispose();
     }
@@ -93,7 +90,7 @@ public class SQLiteDatabase {
         }
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public void checkOpened() throws SQLiteException {
         if (!this.isOpen) {
             throw new SQLiteException("Database closed");
@@ -106,11 +103,12 @@ public class SQLiteDatabase {
     }
 
     public void beginTransaction() throws SQLiteException {
-        if (this.inTransaction) {
-            throw new SQLiteException("database already in transaction");
+        if (!this.inTransaction) {
+            this.inTransaction = true;
+            beginTransaction(this.sqliteHandle);
+            return;
         }
-        this.inTransaction = true;
-        beginTransaction(this.sqliteHandle);
+        throw new SQLiteException("database already in transaction");
     }
 
     public void commitTransaction() {

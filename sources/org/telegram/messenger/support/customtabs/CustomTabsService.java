@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
 import androidx.collection.ArrayMap;
 import java.lang.annotation.Retention;
@@ -13,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import org.telegram.messenger.support.customtabs.ICustomTabsService.Stub;
+import org.telegram.messenger.support.customtabs.ICustomTabsService;
 
 public abstract class CustomTabsService extends Service {
     public static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
@@ -22,7 +21,7 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_MESSAGING_ERROR = -3;
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
-    private Stub mBinder = new Stub() {
+    private ICustomTabsService.Stub mBinder = new ICustomTabsService.Stub() {
         public boolean warmup(long j) {
             return CustomTabsService.this.warmup(j);
         }
@@ -30,14 +29,14 @@ public abstract class CustomTabsService extends Service {
         public boolean newSession(ICustomTabsCallback iCustomTabsCallback) {
             final CustomTabsSessionToken customTabsSessionToken = new CustomTabsSessionToken(iCustomTabsCallback);
             try {
-                AnonymousClass1 anonymousClass1 = new DeathRecipient() {
+                AnonymousClass1 r2 = new IBinder.DeathRecipient() {
                     public void binderDied() {
                         CustomTabsService.this.cleanUpSession(customTabsSessionToken);
                     }
                 };
                 synchronized (CustomTabsService.this.mDeathRecipientMap) {
-                    iCustomTabsCallback.asBinder().linkToDeath(anonymousClass1, 0);
-                    CustomTabsService.this.mDeathRecipientMap.put(iCustomTabsCallback.asBinder(), anonymousClass1);
+                    iCustomTabsCallback.asBinder().linkToDeath(r2, 0);
+                    CustomTabsService.this.mDeathRecipientMap.put(iCustomTabsCallback.asBinder(), r2);
                 }
                 return CustomTabsService.this.newSession(customTabsSessionToken);
             } catch (RemoteException unused) {
@@ -65,36 +64,44 @@ public abstract class CustomTabsService extends Service {
             return CustomTabsService.this.postMessage(new CustomTabsSessionToken(iCustomTabsCallback), str, bundle);
         }
     };
-    private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
+    /* access modifiers changed from: private */
+    public final Map<IBinder, IBinder.DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface Result {
     }
 
+    /* access modifiers changed from: protected */
     public abstract Bundle extraCommand(String str, Bundle bundle);
 
+    /* access modifiers changed from: protected */
     public abstract boolean mayLaunchUrl(CustomTabsSessionToken customTabsSessionToken, Uri uri, Bundle bundle, List<Bundle> list);
 
+    /* access modifiers changed from: protected */
     public abstract boolean newSession(CustomTabsSessionToken customTabsSessionToken);
 
+    /* access modifiers changed from: protected */
     public abstract int postMessage(CustomTabsSessionToken customTabsSessionToken, String str, Bundle bundle);
 
+    /* access modifiers changed from: protected */
     public abstract boolean requestPostMessageChannel(CustomTabsSessionToken customTabsSessionToken, Uri uri);
 
+    /* access modifiers changed from: protected */
     public abstract boolean updateVisuals(CustomTabsSessionToken customTabsSessionToken, Bundle bundle);
 
+    /* access modifiers changed from: protected */
     public abstract boolean warmup(long j);
 
     public IBinder onBind(Intent intent) {
         return this.mBinder;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean cleanUpSession(CustomTabsSessionToken customTabsSessionToken) {
         try {
             synchronized (this.mDeathRecipientMap) {
                 IBinder callbackBinder = customTabsSessionToken.getCallbackBinder();
-                callbackBinder.unlinkToDeath((DeathRecipient) this.mDeathRecipientMap.get(callbackBinder), 0);
+                callbackBinder.unlinkToDeath(this.mDeathRecipientMap.get(callbackBinder), 0);
                 this.mDeathRecipientMap.remove(callbackBinder);
             }
             return true;

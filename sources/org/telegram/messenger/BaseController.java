@@ -11,83 +11,88 @@ public class BaseController {
         this.currentAccount = i;
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final AccountInstance getAccountInstance() {
         return this.parentAccountInstance;
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final MessagesController getMessagesController() {
         return this.parentAccountInstance.getMessagesController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final ContactsController getContactsController() {
         return this.parentAccountInstance.getContactsController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final MediaDataController getMediaDataController() {
         return this.parentAccountInstance.getMediaDataController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final ConnectionsManager getConnectionsManager() {
         return this.parentAccountInstance.getConnectionsManager();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final LocationController getLocationController() {
         return this.parentAccountInstance.getLocationController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final NotificationsController getNotificationsController() {
         return this.parentAccountInstance.getNotificationsController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final NotificationCenter getNotificationCenter() {
         return this.parentAccountInstance.getNotificationCenter();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final UserConfig getUserConfig() {
         return this.parentAccountInstance.getUserConfig();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final MessagesStorage getMessagesStorage() {
         return this.parentAccountInstance.getMessagesStorage();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final DownloadController getDownloadController() {
         return this.parentAccountInstance.getDownloadController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final SendMessagesHelper getSendMessagesHelper() {
         return this.parentAccountInstance.getSendMessagesHelper();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final SecretChatHelper getSecretChatHelper() {
         return this.parentAccountInstance.getSecretChatHelper();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final StatsController getStatsController() {
         return this.parentAccountInstance.getStatsController();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final FileLoader getFileLoader() {
         return this.parentAccountInstance.getFileLoader();
     }
 
-    /* Access modifiers changed, original: protected|final */
+    /* access modifiers changed from: protected */
     public final FileRefController getFileRefController() {
         return this.parentAccountInstance.getFileRefController();
+    }
+
+    /* access modifiers changed from: protected */
+    public final TonController getTonController() {
+        return this.parentAccountInstance.getTonController();
     }
 }

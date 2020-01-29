@@ -33,10 +33,7 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
                 return nextChild;
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("atom type mismatch, not found: ");
-        stringBuilder.append(str);
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("atom type mismatch, not found: " + str);
     }
 
     public boolean readBoolean() throws IOException {
@@ -72,21 +69,13 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     public BigDecimal readShortFixedPoint() throws IOException {
         byte readByte = this.data.readByte();
         int readUnsignedByte = this.data.readUnsignedByte();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.valueOf(readByte));
-        stringBuilder.append("");
-        stringBuilder.append(String.valueOf(readUnsignedByte));
-        return new BigDecimal(stringBuilder.toString());
+        return new BigDecimal(String.valueOf(readByte) + "" + String.valueOf(readUnsignedByte));
     }
 
     public BigDecimal readIntegerFixedPoint() throws IOException {
         short readShort = this.data.readShort();
         int readUnsignedShort = this.data.readUnsignedShort();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.valueOf(readShort));
-        stringBuilder.append("");
-        stringBuilder.append(String.valueOf(readUnsignedShort));
-        return new BigDecimal(stringBuilder.toString());
+        return new BigDecimal(String.valueOf(readShort) + "" + String.valueOf(readUnsignedShort));
     }
 
     public String readString(int i, String str) throws IOException {

@@ -4,10 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Drawable.Callback;
-import android.graphics.drawable.Drawable.ConstantState;
 
-public class CombinedDrawable extends Drawable implements Callback {
+public class CombinedDrawable extends Drawable implements Drawable.Callback {
     private int backHeight;
     private int backWidth;
     private Drawable background;
@@ -20,7 +18,7 @@ public class CombinedDrawable extends Drawable implements Callback {
     private int offsetY;
     private int top;
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean onStateChange(int[] iArr) {
         return true;
     }
@@ -91,7 +89,7 @@ public class CombinedDrawable extends Drawable implements Callback {
         this.icon.jumpToCurrentState();
     }
 
-    public ConstantState getConstantState() {
+    public Drawable.ConstantState getConstantState() {
         return this.icon.getConstantState();
     }
 
@@ -99,32 +97,27 @@ public class CombinedDrawable extends Drawable implements Callback {
         this.background.setBounds(getBounds());
         this.background.draw(canvas);
         if (this.icon != null) {
-            int i;
-            Drawable drawable;
-            int centerX;
             if (this.fullSize) {
                 Rect bounds = getBounds();
-                i = this.left;
+                int i = this.left;
                 if (i != 0) {
-                    drawable = this.icon;
-                    int i2 = bounds.left + i;
-                    int i3 = bounds.top;
-                    int i4 = this.top;
-                    drawable.setBounds(i2, i3 + i4, bounds.right - i, bounds.bottom - i4);
+                    int i2 = bounds.top;
+                    int i3 = this.top;
+                    this.icon.setBounds(bounds.left + i, i2 + i3, bounds.right - i, bounds.bottom - i3);
                 } else {
                     this.icon.setBounds(bounds);
                 }
             } else if (this.iconWidth != 0) {
-                centerX = ((getBounds().centerX() - (this.iconWidth / 2)) + this.left) + this.offsetX;
-                i = getBounds().centerY();
-                int i5 = this.iconHeight;
-                i = ((i - (i5 / 2)) + this.top) + this.offsetY;
-                this.icon.setBounds(centerX, i, this.iconWidth + centerX, i5 + i);
+                int centerX = (getBounds().centerX() - (this.iconWidth / 2)) + this.left + this.offsetX;
+                int centerY = getBounds().centerY();
+                int i4 = this.iconHeight;
+                int i5 = (centerY - (i4 / 2)) + this.top + this.offsetY;
+                this.icon.setBounds(centerX, i5, this.iconWidth + centerX, i4 + i5);
             } else {
-                centerX = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
-                i = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
-                drawable = this.icon;
-                drawable.setBounds(centerX, i, drawable.getIntrinsicWidth() + centerX, this.icon.getIntrinsicHeight() + i);
+                int centerX2 = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
+                int centerY2 = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
+                Drawable drawable = this.icon;
+                drawable.setBounds(centerX2, centerY2, drawable.getIntrinsicWidth() + centerX2, this.icon.getIntrinsicHeight() + centerY2);
             }
             this.icon.draw(canvas);
         }

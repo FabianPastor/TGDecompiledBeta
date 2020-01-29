@@ -7,8 +7,8 @@ public class CameraInfo {
     protected Camera camera;
     protected int cameraId;
     protected final int frontCamera;
-    protected ArrayList<Size> pictureSizes = new ArrayList();
-    protected ArrayList<Size> previewSizes = new ArrayList();
+    protected ArrayList<Size> pictureSizes = new ArrayList<>();
+    protected ArrayList<Size> previewSizes = new ArrayList<>();
 
     public CameraInfo(int i, int i2) {
         this.cameraId = i;

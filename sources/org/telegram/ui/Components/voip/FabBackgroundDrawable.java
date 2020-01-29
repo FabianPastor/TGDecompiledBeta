@@ -1,7 +1,6 @@
 package org.telegram.ui.Components.voip;
 
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -37,25 +36,25 @@ public class FabBackgroundDrawable extends Drawable {
         if (bitmap != null) {
             canvas.drawBitmap(bitmap, (float) (getBounds().centerX() - (this.shadowBitmap.getWidth() / 2)), (float) (getBounds().centerY() - (this.shadowBitmap.getHeight() / 2)), this.shadowPaint);
         }
-        min /= 2;
-        float f = (float) min;
-        canvas.drawCircle(f, f, (float) (min - AndroidUtilities.dp(4.0f)), this.bgPaint);
+        int i = min / 2;
+        float f = (float) i;
+        canvas.drawCircle(f, f, (float) (i - AndroidUtilities.dp(4.0f)), this.bgPaint);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onBoundsChange(Rect rect) {
         int min = Math.min(rect.width(), rect.height());
         if (min <= 0) {
             this.shadowBitmap = null;
             return;
         }
-        this.shadowBitmap = Bitmap.createBitmap(min, min, Config.ALPHA_8);
+        this.shadowBitmap = Bitmap.createBitmap(min, min, Bitmap.Config.ALPHA_8);
         Canvas canvas = new Canvas(this.shadowBitmap);
         Paint paint = new Paint(1);
         paint.setShadowLayer((float) AndroidUtilities.dp(3.33333f), 0.0f, (float) AndroidUtilities.dp(0.666f), -1);
-        min /= 2;
-        float f = (float) min;
-        canvas.drawCircle(f, f, (float) (min - AndroidUtilities.dp(4.0f)), paint);
+        int i = min / 2;
+        float f = (float) i;
+        canvas.drawCircle(f, f, (float) (i - AndroidUtilities.dp(4.0f)), paint);
     }
 
     public void setColor(int i) {

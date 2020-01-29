@@ -3,47 +3,46 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
-import android.text.TextUtils.TruncateAt;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.text.method.KeyListener;
 import android.text.method.PasswordTransformationMethod;
 import android.view.ActionMode;
-import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnPreDrawListener;
+import android.view.ViewTreeObserver;
+import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -55,156 +54,47 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class PasscodeActivity extends BaseFragment implements NotificationCenterDelegate {
+public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private static final int done_button = 1;
     private static final int password_item = 3;
     private static final int pin_item = 2;
-    private int autoLockDetailRow;
-    private int autoLockRow;
+    /* access modifiers changed from: private */
+    public int autoLockDetailRow;
+    /* access modifiers changed from: private */
+    public int autoLockRow;
     private int badPasscodeTries;
-    private int captureDetailRow;
-    private int captureRow;
-    private int changePasscodeRow;
-    private int currentPasswordType = 0;
+    /* access modifiers changed from: private */
+    public int captureDetailRow;
+    /* access modifiers changed from: private */
+    public int captureRow;
+    /* access modifiers changed from: private */
+    public int changePasscodeRow;
+    /* access modifiers changed from: private */
+    public int currentPasswordType = 0;
     private TextView dropDown;
     private ActionBarMenuItem dropDownContainer;
     private Drawable dropDownDrawable;
-    private int fingerprintRow;
+    /* access modifiers changed from: private */
+    public int fingerprintRow;
     private String firstPassword;
     private long lastPasscodeTry;
     private ListAdapter listAdapter;
-    private RecyclerListView listView;
-    private int passcodeDetailRow;
-    private int passcodeRow;
-    private int passcodeSetStep = 0;
-    private EditTextBoldCursor passwordEditText;
-    private int rowCount;
+    /* access modifiers changed from: private */
+    public RecyclerListView listView;
+    /* access modifiers changed from: private */
+    public int passcodeDetailRow;
+    /* access modifiers changed from: private */
+    public int passcodeRow;
+    /* access modifiers changed from: private */
+    public int passcodeSetStep = 0;
+    /* access modifiers changed from: private */
+    public EditTextBoldCursor passwordEditText;
+    /* access modifiers changed from: private */
+    public int rowCount;
     private TextView titleTextView;
-    private int type;
-
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == PasscodeActivity.this.passcodeRow || adapterPosition == PasscodeActivity.this.fingerprintRow || adapterPosition == PasscodeActivity.this.autoLockRow || adapterPosition == PasscodeActivity.this.captureRow || (SharedConfig.passcodeHash.length() != 0 && adapterPosition == PasscodeActivity.this.changePasscodeRow);
-        }
-
-        public int getItemCount() {
-            return PasscodeActivity.this.rowCount;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View textCheckCell;
-            String str = "windowBackgroundWhite";
-            if (i == 0) {
-                textCheckCell = new TextCheckCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor(str));
-            } else if (i != 1) {
-                textCheckCell = new TextInfoPrivacyCell(this.mContext);
-            } else {
-                textCheckCell = new TextSettingsCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor(str));
-            }
-            return new Holder(textCheckCell);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            boolean z = false;
-            String string;
-            String str;
-            if (itemViewType == 0) {
-                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
-                if (i == PasscodeActivity.this.passcodeRow) {
-                    string = LocaleController.getString("Passcode", NUM);
-                    if (SharedConfig.passcodeHash.length() > 0) {
-                        z = true;
-                    }
-                    textCheckCell.setTextAndCheck(string, z, true);
-                } else if (i == PasscodeActivity.this.fingerprintRow) {
-                    textCheckCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", NUM), SharedConfig.useFingerprint, true);
-                } else if (i == PasscodeActivity.this.captureRow) {
-                    textCheckCell.setTextAndCheck(LocaleController.getString("ScreenCapture", NUM), SharedConfig.allowScreenCapture, false);
-                }
-            } else if (itemViewType == 1) {
-                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                str = "windowBackgroundWhiteBlackText";
-                if (i == PasscodeActivity.this.changePasscodeRow) {
-                    textSettingsCell.setText(LocaleController.getString("ChangePasscode", NUM), false);
-                    if (SharedConfig.passcodeHash.length() == 0) {
-                        string = "windowBackgroundWhiteGrayText7";
-                        textSettingsCell.setTag(string);
-                        textSettingsCell.setTextColor(Theme.getColor(string));
-                        return;
-                    }
-                    textSettingsCell.setTag(str);
-                    textSettingsCell.setTextColor(Theme.getColor(str));
-                } else if (i == PasscodeActivity.this.autoLockRow) {
-                    i = SharedConfig.autoLockIn;
-                    if (i == 0) {
-                        string = LocaleController.formatString("AutoLockDisabled", NUM, new Object[0]);
-                    } else {
-                        String str2 = "AutoLockInTime";
-                        Object[] objArr;
-                        if (i < 3600) {
-                            objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Minutes", i / 60);
-                            string = LocaleController.formatString(str2, NUM, objArr);
-                        } else if (i < 86400) {
-                            objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) i) / 60.0f) / 60.0f)));
-                            string = LocaleController.formatString(str2, NUM, objArr);
-                        } else {
-                            objArr = new Object[1];
-                            objArr[0] = LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) i) / 60.0f) / 60.0f) / 24.0f)));
-                            string = LocaleController.formatString(str2, NUM, objArr);
-                        }
-                    }
-                    textSettingsCell.setTextAndValue(LocaleController.getString("AutoLock", NUM), string, true);
-                    textSettingsCell.setTag(str);
-                    textSettingsCell.setTextColor(Theme.getColor(str));
-                }
-            } else if (itemViewType == 2) {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                str = "windowBackgroundGrayShadow";
-                if (i == PasscodeActivity.this.passcodeDetailRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("ChangePasscodeInfo", NUM));
-                    if (PasscodeActivity.this.autoLockDetailRow != -1) {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
-                    } else {
-                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
-                    }
-                } else if (i == PasscodeActivity.this.autoLockDetailRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("AutoLockInfo", NUM));
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
-                } else if (i == PasscodeActivity.this.captureDetailRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("ScreenCaptureInfo", NUM));
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
-                }
-            }
-        }
-
-        public int getItemViewType(int i) {
-            if (i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.captureRow) {
-                return 0;
-            }
-            if (i == PasscodeActivity.this.changePasscodeRow || i == PasscodeActivity.this.autoLockRow) {
-                return 1;
-            }
-            if (i == PasscodeActivity.this.passcodeDetailRow || i == PasscodeActivity.this.autoLockDetailRow || i == PasscodeActivity.this.captureDetailRow) {
-                return 2;
-            }
-            return 0;
-        }
-    }
+    /* access modifiers changed from: private */
+    public int type;
 
     public PasscodeActivity(int i) {
         this.type = i;
@@ -213,9 +103,10 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         updateRows();
-        if (this.type == 0) {
-            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
+        if (this.type != 0) {
+            return true;
         }
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
         return true;
     }
 
@@ -232,7 +123,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.actionBar.setBackButtonImage(NUM);
         }
         this.actionBar.setAllowOverlayTitle(false);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     PasscodeActivity.this.finishFragment();
@@ -243,18 +134,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         PasscodeActivity.this.processDone();
                     }
                 } else if (i == 2) {
-                    PasscodeActivity.this.currentPasswordType = 0;
+                    int unused = PasscodeActivity.this.currentPasswordType = 0;
                     PasscodeActivity.this.updateDropDownTextView();
                 } else if (i == 3) {
-                    PasscodeActivity.this.currentPasswordType = 1;
+                    int unused2 = PasscodeActivity.this.currentPasswordType = 1;
                     PasscodeActivity.this.updateDropDownTextView();
                 }
             }
         });
         this.fragmentView = new FrameLayout(context2);
         FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        String str = "Passcode";
-        String str2;
         if (this.type != 0) {
             ActionBarMenu createMenu = this.actionBar.createMenu();
             createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
@@ -272,8 +161,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             frameLayout.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 38.0f, 0.0f, 0.0f));
             this.passwordEditText = new EditTextBoldCursor(context2);
             this.passwordEditText.setTextSize(1, 20.0f);
-            String str3 = "windowBackgroundWhiteBlackText";
-            this.passwordEditText.setTextColor(Theme.getColor(str3));
+            this.passwordEditText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.passwordEditText.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
             this.passwordEditText.setMaxLines(1);
             this.passwordEditText.setLines(1);
@@ -288,11 +176,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.passwordEditText.setTypeface(Typeface.DEFAULT);
-            this.passwordEditText.setCursorColor(Theme.getColor(str3));
+            this.passwordEditText.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.passwordEditText.setCursorWidth(1.5f);
             frameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
-            this.passwordEditText.setOnEditorActionListener(new -$$Lambda$PasscodeActivity$Dw5wi6axlaDg9f9aOPWpPJRaBU0(this));
+            this.passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    return PasscodeActivity.this.lambda$createView$0$PasscodeActivity(textView, i, keyEvent);
+                }
+            });
             this.passwordEditText.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 }
@@ -316,7 +208,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             });
-            this.passwordEditText.setCustomSelectionActionModeCallback(new Callback() {
+            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -339,31 +231,33 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 this.dropDownContainer.addSubItem(2, LocaleController.getString("PasscodePIN", NUM));
                 this.dropDownContainer.addSubItem(3, LocaleController.getString("PasscodePassword", NUM));
                 this.actionBar.addView(this.dropDownContainer, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
-                this.dropDownContainer.setOnClickListener(new -$$Lambda$PasscodeActivity$nthmgeFTBNbMbbgybaEUi4bvQ7I(this));
+                this.dropDownContainer.setOnClickListener(new View.OnClickListener() {
+                    public final void onClick(View view) {
+                        PasscodeActivity.this.lambda$createView$1$PasscodeActivity(view);
+                    }
+                });
                 this.dropDown = new TextView(context2);
                 this.dropDown.setGravity(3);
                 this.dropDown.setSingleLine(true);
                 this.dropDown.setLines(1);
                 this.dropDown.setMaxLines(1);
-                this.dropDown.setEllipsize(TruncateAt.END);
-                str2 = "actionBarDefaultTitle";
-                this.dropDown.setTextColor(Theme.getColor(str2));
+                this.dropDown.setEllipsize(TextUtils.TruncateAt.END);
+                this.dropDown.setTextColor(Theme.getColor("actionBarDefaultTitle"));
                 this.dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.dropDownDrawable = context.getResources().getDrawable(NUM).mutate();
-                this.dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
-                this.dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, this.dropDownDrawable, null);
+                this.dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultTitle"), PorterDuff.Mode.MULTIPLY));
+                this.dropDown.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, this.dropDownDrawable, (Drawable) null);
                 this.dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                 this.dropDown.setPadding(0, 0, AndroidUtilities.dp(10.0f), 0);
                 this.dropDownContainer.addView(this.dropDown, LayoutHelper.createFrame(-2, -2.0f, 16, 16.0f, 0.0f, 0.0f, 1.0f));
             } else {
-                this.actionBar.setTitle(LocaleController.getString(str, NUM));
+                this.actionBar.setTitle(LocaleController.getString("Passcode", NUM));
             }
             updateDropDownTextView();
         } else {
-            this.actionBar.setTitle(LocaleController.getString(str, NUM));
-            str2 = "windowBackgroundGray";
-            frameLayout.setTag(str2);
-            frameLayout.setBackgroundColor(Theme.getColor(str2));
+            this.actionBar.setTitle(LocaleController.getString("Passcode", NUM));
+            frameLayout.setTag("windowBackgroundGray");
+            frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
             this.listView = new RecyclerListView(context2);
             this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
@@ -371,14 +265,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
             });
             this.listView.setVerticalScrollBarEnabled(false);
-            this.listView.setItemAnimator(null);
-            this.listView.setLayoutAnimation(null);
+            this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
+            this.listView.setLayoutAnimation((LayoutAnimationController) null);
             frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
             RecyclerListView recyclerListView = this.listView;
-            ListAdapter listAdapter = new ListAdapter(context2);
-            this.listAdapter = listAdapter;
-            recyclerListView.setAdapter(listAdapter);
-            this.listView.setOnItemClickListener(new -$$Lambda$PasscodeActivity$mrP17AePE_jxJGc4Lp8zfeRkzb0(this));
+            ListAdapter listAdapter2 = new ListAdapter(context2);
+            this.listAdapter = listAdapter2;
+            recyclerListView.setAdapter(listAdapter2);
+            this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+                public final void onItemClick(View view, int i) {
+                    PasscodeActivity.this.lambda$createView$4$PasscodeActivity(view, i);
+                }
+            });
         }
         return this.fragmentView;
     }
@@ -412,25 +310,30 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     SharedConfig.appLocked = false;
                     SharedConfig.saveConfig();
                     getMediaDataController().buildShortcuts();
-                    i = this.listView.getChildCount();
-                    for (int i2 = 0; i2 < i; i2++) {
+                    int childCount = this.listView.getChildCount();
+                    int i2 = 0;
+                    while (true) {
+                        if (i2 >= childCount) {
+                            break;
+                        }
                         View childAt = this.listView.getChildAt(i2);
                         if (childAt instanceof TextSettingsCell) {
                             ((TextSettingsCell) childAt).setTextColor(Theme.getColor("windowBackgroundWhiteGrayText7"));
                             break;
                         }
+                        i2++;
                     }
                     if (SharedConfig.passcodeHash.length() == 0) {
                         z = false;
                     }
                     textCheckCell.setChecked(z);
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
-                } else {
-                    presentFragment(new PasscodeActivity(1));
+                    return;
                 }
+                presentFragment(new PasscodeActivity(1));
             } else if (i == this.autoLockRow) {
                 if (getParentActivity() != null) {
-                    Builder builder = new Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("AutoLock", NUM));
                     NumberPicker numberPicker = new NumberPicker(getParentActivity());
                     numberPicker.setMinValue(0);
@@ -447,17 +350,29 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (i3 == 18000) {
                         numberPicker.setValue(4);
                     }
-                    numberPicker.setFormatter(-$$Lambda$PasscodeActivity$e1eIIUXJcHN6dWhbpJbTrxba_60.INSTANCE);
+                    numberPicker.setFormatter($$Lambda$PasscodeActivity$e1eIIUXJcHN6dWhbpJbTrxba_60.INSTANCE);
                     builder.setView(numberPicker);
-                    builder.setNegativeButton(LocaleController.getString("Done", NUM), new -$$Lambda$PasscodeActivity$gpdG6ADQUdojRTN0OUtZLDO-4yI(this, numberPicker, i));
+                    builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker, i) {
+                        private final /* synthetic */ NumberPicker f$1;
+                        private final /* synthetic */ int f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void onClick(DialogInterface dialogInterface, int i) {
+                            PasscodeActivity.this.lambda$null$3$PasscodeActivity(this.f$1, this.f$2, dialogInterface, i);
+                        }
+                    });
                     showDialog(builder.create());
                 }
             } else if (i == this.fingerprintRow) {
-                SharedConfig.useFingerprint ^= 1;
+                SharedConfig.useFingerprint = !SharedConfig.useFingerprint;
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
                 ((TextCheckCell) view).setChecked(SharedConfig.useFingerprint);
             } else if (i == this.captureRow) {
-                SharedConfig.allowScreenCapture ^= 1;
+                SharedConfig.allowScreenCapture = !SharedConfig.allowScreenCapture;
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
                 ((TextCheckCell) view).setChecked(SharedConfig.allowScreenCapture);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
@@ -472,21 +387,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         if (i == 0) {
             return LocaleController.getString("AutoLockDisabled", NUM);
         }
-        String str = "Minutes";
-        String str2 = "AutoLockInTime";
         if (i == 1) {
-            return LocaleController.formatString(str2, NUM, LocaleController.formatPluralString(str, 1));
+            return LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Minutes", 1));
         } else if (i == 2) {
-            return LocaleController.formatString(str2, NUM, LocaleController.formatPluralString(str, 5));
+            return LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Minutes", 5));
+        } else if (i == 3) {
+            return LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Hours", 1));
+        } else if (i != 4) {
+            return "";
         } else {
-            String str3 = "Hours";
-            if (i == 3) {
-                return LocaleController.formatString(str2, NUM, LocaleController.formatPluralString(str3, 1));
-            } else if (i != 4) {
-                return "";
-            } else {
-                return LocaleController.formatString(str2, NUM, LocaleController.formatPluralString(str3, 5));
-            }
+            return LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Hours", 5));
         }
     }
 
@@ -509,12 +419,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
     public void onResume() {
         super.onResume();
-        ListAdapter listAdapter = this.listAdapter;
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter2 = this.listAdapter;
+        if (listAdapter2 != null) {
+            listAdapter2.notifyDataSetChanged();
         }
         if (this.type != 0) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$PasscodeActivity$uOu47HjuX9AWXmApKYN2F1Z-SDQ(this), 200);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    PasscodeActivity.this.lambda$onResume$5$PasscodeActivity();
+                }
+            }, 200);
         }
         fixLayoutInternal();
     }
@@ -530,9 +444,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.didSetPasscode && this.type == 0) {
             updateRows();
-            ListAdapter listAdapter = this.listAdapter;
-            if (listAdapter != null) {
-                listAdapter.notifyDataSetChanged();
+            ListAdapter listAdapter2 = this.listAdapter;
+            if (listAdapter2 != null) {
+                listAdapter2.notifyDataSetChanged();
             }
         }
     }
@@ -542,34 +456,34 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         int i = this.rowCount;
         this.rowCount = i + 1;
         this.passcodeRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.changePasscodeRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.passcodeDetailRow = i;
+        int i2 = this.rowCount;
+        this.rowCount = i2 + 1;
+        this.changePasscodeRow = i2;
+        int i3 = this.rowCount;
+        this.rowCount = i3 + 1;
+        this.passcodeDetailRow = i3;
         if (SharedConfig.passcodeHash.length() > 0) {
             try {
-                if (VERSION.SDK_INT >= 23 && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected()) {
-                    i = this.rowCount;
-                    this.rowCount = i + 1;
-                    this.fingerprintRow = i;
+                if (Build.VERSION.SDK_INT >= 23 && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected()) {
+                    int i4 = this.rowCount;
+                    this.rowCount = i4 + 1;
+                    this.fingerprintRow = i4;
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
             }
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.autoLockRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.autoLockDetailRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.captureRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.captureDetailRow = i;
+            int i5 = this.rowCount;
+            this.rowCount = i5 + 1;
+            this.autoLockRow = i5;
+            int i6 = this.rowCount;
+            this.rowCount = i6 + 1;
+            this.autoLockDetailRow = i6;
+            int i7 = this.rowCount;
+            this.rowCount = i7 + 1;
+            this.captureRow = i7;
+            int i8 = this.rowCount;
+            this.rowCount = i8 + 1;
+            this.captureDetailRow = i8;
             return;
         }
         this.captureRow = -1;
@@ -583,7 +497,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         super.onConfigurationChanged(configuration);
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
-            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
                     PasscodeActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
                     PasscodeActivity.this.fixLayoutInternal();
@@ -599,7 +513,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    private void updateDropDownTextView() {
+    /* access modifiers changed from: private */
+    public void updateDropDownTextView() {
         TextView textView = this.dropDown;
         if (textView != null) {
             int i = this.currentPasswordType;
@@ -610,18 +525,19 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
         }
         if ((this.type == 1 && this.currentPasswordType == 0) || (this.type == 2 && SharedConfig.passcodeType == 0)) {
-            this.passwordEditText.setFilters(new InputFilter[]{new LengthFilter(4)});
+            this.passwordEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
             this.passwordEditText.setInputType(3);
             this.passwordEditText.setKeyListener(DigitsKeyListener.getInstance("NUM"));
         } else if ((this.type == 1 && this.currentPasswordType == 1) || (this.type == 2 && SharedConfig.passcodeType == 1)) {
             this.passwordEditText.setFilters(new InputFilter[0]);
-            this.passwordEditText.setKeyListener(null);
+            this.passwordEditText.setKeyListener((KeyListener) null);
             this.passwordEditText.setInputType(129);
         }
         this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
     }
 
-    private void processNext() {
+    /* access modifiers changed from: private */
+    public void processNext() {
         if (this.passwordEditText.getText().length() == 0 || (this.currentPasswordType == 0 && this.passwordEditText.getText().length() != 4)) {
             onPasscodeError();
             return;
@@ -638,63 +554,63 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         this.passcodeSetStep = 1;
     }
 
-    private void processDone() {
+    /* access modifiers changed from: private */
+    public void processDone() {
         if (this.passwordEditText.getText().length() == 0) {
             onPasscodeError();
             return;
         }
         int i = this.type;
-        String str = "";
         if (i == 1) {
-            if (this.firstPassword.equals(this.passwordEditText.getText().toString())) {
-                try {
-                    SharedConfig.passcodeSalt = new byte[16];
-                    Utilities.random.nextBytes(SharedConfig.passcodeSalt);
-                    byte[] bytes = this.firstPassword.getBytes("UTF-8");
-                    byte[] bArr = new byte[(bytes.length + 32)];
-                    System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, 0, 16);
-                    System.arraycopy(bytes, 0, bArr, 16, bytes.length);
-                    System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, bytes.length + 16, 16);
-                    SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, bArr.length));
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-                SharedConfig.allowScreenCapture = true;
-                SharedConfig.passcodeType = this.currentPasswordType;
-                SharedConfig.saveConfig();
-                getMediaDataController().buildShortcuts();
-                finishFragment();
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
-                this.passwordEditText.clearFocus();
-                AndroidUtilities.hideKeyboard(this.passwordEditText);
-            } else {
+            if (!this.firstPassword.equals(this.passwordEditText.getText().toString())) {
                 try {
                     Toast.makeText(getParentActivity(), LocaleController.getString("PasscodeDoNotMatch", NUM), 0).show();
-                } catch (Exception e2) {
-                    FileLog.e(e2);
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
                 AndroidUtilities.shakeView(this.titleTextView, 2.0f, 0);
-                this.passwordEditText.setText(str);
+                this.passwordEditText.setText("");
+                return;
             }
+            try {
+                SharedConfig.passcodeSalt = new byte[16];
+                Utilities.random.nextBytes(SharedConfig.passcodeSalt);
+                byte[] bytes = this.firstPassword.getBytes("UTF-8");
+                byte[] bArr = new byte[(bytes.length + 32)];
+                System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, 0, 16);
+                System.arraycopy(bytes, 0, bArr, 16, bytes.length);
+                System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, bytes.length + 16, 16);
+                SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, bArr.length));
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
+            }
+            SharedConfig.allowScreenCapture = true;
+            SharedConfig.passcodeType = this.currentPasswordType;
+            SharedConfig.saveConfig();
+            getMediaDataController().buildShortcuts();
+            finishFragment();
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
+            this.passwordEditText.clearFocus();
+            AndroidUtilities.hideKeyboard(this.passwordEditText);
         } else if (i == 2) {
             long j = SharedConfig.passcodeRetryInMs;
             if (j > 0) {
                 double d = (double) j;
                 Double.isNaN(d);
-                i = Math.max(1, (int) Math.ceil(d / 1000.0d));
-                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", NUM, LocaleController.formatPluralString("Seconds", i)), 0).show();
-                this.passwordEditText.setText(str);
+                int max = Math.max(1, (int) Math.ceil(d / 1000.0d));
+                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", NUM, LocaleController.formatPluralString("Seconds", max)), 0).show();
+                this.passwordEditText.setText("");
                 onPasscodeError();
-            } else if (SharedConfig.checkPasscode(this.passwordEditText.getText().toString())) {
+            } else if (!SharedConfig.checkPasscode(this.passwordEditText.getText().toString())) {
+                SharedConfig.increaseBadPasscodeTries();
+                this.passwordEditText.setText("");
+                onPasscodeError();
+            } else {
                 SharedConfig.badPasscodeTries = 0;
                 SharedConfig.saveConfig();
                 this.passwordEditText.clearFocus();
                 AndroidUtilities.hideKeyboard(this.passwordEditText);
                 presentFragment(new PasscodeActivity(0), true);
-            } else {
-                SharedConfig.increaseBadPasscodeTries();
-                this.passwordEditText.setText(str);
-                onPasscodeError();
             }
         }
     }
@@ -709,11 +625,12 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    private void fixLayoutInternal() {
+    /* access modifiers changed from: private */
+    public void fixLayoutInternal() {
         if (this.dropDownContainer != null) {
             if (!AndroidUtilities.isTablet()) {
-                LayoutParams layoutParams = (LayoutParams) this.dropDownContainer.getLayoutParams();
-                layoutParams.topMargin = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.dropDownContainer.getLayoutParams();
+                layoutParams.topMargin = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
                 this.dropDownContainer.setLayoutParams(layoutParams);
             }
             if (AndroidUtilities.isTablet() || ApplicationLoader.applicationContext.getResources().getConfiguration().orientation != 2) {
@@ -724,43 +641,115 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            int adapterPosition = viewHolder.getAdapterPosition();
+            return adapterPosition == PasscodeActivity.this.passcodeRow || adapterPosition == PasscodeActivity.this.fingerprintRow || adapterPosition == PasscodeActivity.this.autoLockRow || adapterPosition == PasscodeActivity.this.captureRow || (SharedConfig.passcodeHash.length() != 0 && adapterPosition == PasscodeActivity.this.changePasscodeRow);
+        }
+
+        public int getItemCount() {
+            return PasscodeActivity.this.rowCount;
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            TextInfoPrivacyCell textInfoPrivacyCell;
+            if (i == 0) {
+                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
+                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                textInfoPrivacyCell = textCheckCell;
+            } else if (i != 1) {
+                textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
+            } else {
+                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
+                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                textInfoPrivacyCell = textSettingsCell;
+            }
+            return new RecyclerListView.Holder(textInfoPrivacyCell);
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            String str;
+            int itemViewType = viewHolder.getItemViewType();
+            boolean z = false;
+            if (itemViewType == 0) {
+                TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                if (i == PasscodeActivity.this.passcodeRow) {
+                    String string = LocaleController.getString("Passcode", NUM);
+                    if (SharedConfig.passcodeHash.length() > 0) {
+                        z = true;
+                    }
+                    textCheckCell.setTextAndCheck(string, z, true);
+                } else if (i == PasscodeActivity.this.fingerprintRow) {
+                    textCheckCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", NUM), SharedConfig.useFingerprint, true);
+                } else if (i == PasscodeActivity.this.captureRow) {
+                    textCheckCell.setTextAndCheck(LocaleController.getString("ScreenCapture", NUM), SharedConfig.allowScreenCapture, false);
+                }
+            } else if (itemViewType == 1) {
+                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                if (i == PasscodeActivity.this.changePasscodeRow) {
+                    textSettingsCell.setText(LocaleController.getString("ChangePasscode", NUM), false);
+                    if (SharedConfig.passcodeHash.length() == 0) {
+                        textSettingsCell.setTag("windowBackgroundWhiteGrayText7");
+                        textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText7"));
+                        return;
+                    }
+                    textSettingsCell.setTag("windowBackgroundWhiteBlackText");
+                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                } else if (i == PasscodeActivity.this.autoLockRow) {
+                    int i2 = SharedConfig.autoLockIn;
+                    if (i2 == 0) {
+                        str = LocaleController.formatString("AutoLockDisabled", NUM, new Object[0]);
+                    } else if (i2 < 3600) {
+                        str = LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Minutes", i2 / 60));
+                    } else if (i2 < 86400) {
+                        str = LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) i2) / 60.0f) / 60.0f))));
+                    } else {
+                        str = LocaleController.formatString("AutoLockInTime", NUM, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) i2) / 60.0f) / 60.0f) / 24.0f))));
+                    }
+                    textSettingsCell.setTextAndValue(LocaleController.getString("AutoLock", NUM), str, true);
+                    textSettingsCell.setTag("windowBackgroundWhiteBlackText");
+                    textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                }
+            } else if (itemViewType == 2) {
+                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                if (i == PasscodeActivity.this.passcodeDetailRow) {
+                    textInfoPrivacyCell.setText(LocaleController.getString("ChangePasscodeInfo", NUM));
+                    if (PasscodeActivity.this.autoLockDetailRow != -1) {
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    } else {
+                        textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    }
+                } else if (i == PasscodeActivity.this.autoLockDetailRow) {
+                    textInfoPrivacyCell.setText(LocaleController.getString("AutoLockInfo", NUM));
+                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                } else if (i == PasscodeActivity.this.captureDetailRow) {
+                    textInfoPrivacyCell.setText(LocaleController.getString("ScreenCaptureInfo", NUM));
+                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                }
+            }
+        }
+
+        public int getItemViewType(int i) {
+            if (i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.captureRow) {
+                return 0;
+            }
+            if (i == PasscodeActivity.this.changePasscodeRow || i == PasscodeActivity.this.autoLockRow) {
+                return 1;
+            }
+            if (i == PasscodeActivity.this.passcodeDetailRow || i == PasscodeActivity.this.autoLockDetailRow || i == PasscodeActivity.this.captureDetailRow) {
+                return 2;
+            }
+            return 0;
+        }
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[27];
-        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, TextSettingsCell.class}, null, null, null, "windowBackgroundWhite");
-        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhite");
-        r1[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        r1[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        r1[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        r1[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        r1[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
-        r1[9] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
-        r1[10] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
-        r1[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r1[13] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6");
-        r1[14] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        r1[15] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        r1[16] = new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        r1[17] = new ThemeDescription(this.dropDown, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "actionBarDefaultTitle");
-        r1[18] = new ThemeDescription(this.dropDown, 0, null, null, new Drawable[]{this.dropDownDrawable}, null, "actionBarDefaultTitle");
-        View view = this.listView;
-        Class[] clsArr = new Class[]{TextCheckCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "textView";
-        r1[19] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlackText");
-        view = this.listView;
-        clsArr = new Class[]{TextCheckCell.class};
-        strArr = new String[1];
-        strArr[0] = "checkBox";
-        r1[20] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "switchTrack");
-        r1[21] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        r1[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r1[23] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText7");
-        r1[24] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteValueText");
-        r1[25] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r1[26] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        return r1;
+        return new ThemeDescription[]{new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, TextSettingsCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuBackground"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItem"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSubmenuItemIcon"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"), new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.dropDown, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.dropDown, 0, (Class[]) null, (Paint) null, new Drawable[]{this.dropDownDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText7"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4")};
     }
 }

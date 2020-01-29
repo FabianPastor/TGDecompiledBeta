@@ -29,11 +29,11 @@ public class SendingFileDrawable extends StatusDrawable {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 50;
+        long j2 = 50;
         if (j <= 50) {
-            currentTimeMillis = j;
+            j2 = j;
         }
-        this.progress += ((float) currentTimeMillis) / 500.0f;
+        this.progress += ((float) j2) / 500.0f;
         while (true) {
             float f = this.progress;
             if (f > 1.0f) {

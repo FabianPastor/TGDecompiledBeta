@@ -2,13 +2,12 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -31,7 +30,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 10.0f, 21.0f, 0.0f));
@@ -45,22 +44,18 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setPadding(0, 0, 0, 0);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 35.0f, 21.0f, 0.0f));
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         this.imageView.setVisibility(8);
-        ImageView imageView = this.imageView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(imageView, LayoutHelper.createFrame(52, 52.0f, i | 48, 8.0f, 6.0f, 8.0f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(52, 52.0f, (!LocaleController.isRTL ? 3 : i) | 48, 8.0f, 6.0f, 8.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        if (this.multiline) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        if (!this.multiline) {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         }
     }
 
@@ -92,7 +87,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setText(charSequence);
         this.needDivider = z;
         this.imageView.setVisibility(8);
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndValueAndIcon(String str, CharSequence charSequence, int i, boolean z) {
@@ -103,7 +98,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, 0);
         this.valueTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, this.multiline ? AndroidUtilities.dp(12.0f) : 0);
         this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
     }
 
     public void setValue(CharSequence charSequence) {
@@ -111,11 +106,11 @@ public class TextDetailSettingsCell extends FrameLayout {
     }
 
     public void setTextWithEmojiAnd21Value(String str, CharSequence charSequence, boolean z) {
-        TextView textView = this.textView;
-        textView.setText(Emoji.replaceEmoji(str, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+        TextView textView2 = this.textView;
+        textView2.setText(Emoji.replaceEmoji(str, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         this.valueTextView.setText(charSequence);
         this.needDivider = z;
-        setWillNotDraw(z ^ 1);
+        setWillNotDraw(!z);
     }
 
     public void invalidate() {
@@ -123,11 +118,11 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        float f;
+        int i;
         if (this.needDivider && Theme.dividerPaint != null) {
-            float f;
-            int dp;
             float f2 = 71.0f;
             if (LocaleController.isRTL) {
                 f = 0.0f;
@@ -140,11 +135,11 @@ public class TextDetailSettingsCell extends FrameLayout {
                 if (this.imageView.getVisibility() != 0) {
                     f2 = 20.0f;
                 }
-                dp = AndroidUtilities.dp(f2);
+                i = AndroidUtilities.dp(f2);
             } else {
-                dp = 0;
+                i = 0;
             }
-            canvas.drawLine(f, measuredHeight, (float) (measuredWidth - dp), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(f, measuredHeight, (float) (measuredWidth - i), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

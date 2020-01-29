@@ -12,37 +12,27 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
@@ -54,48 +44,42 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_account_changePhone;
-import org.telegram.tgnet.TLRPC.TL_account_sendChangePhoneCode;
-import org.telegram.tgnet.TLRPC.TL_auth_cancelCode;
-import org.telegram.tgnet.TLRPC.TL_auth_codeTypeCall;
-import org.telegram.tgnet.TLRPC.TL_auth_codeTypeFlashCall;
-import org.telegram.tgnet.TLRPC.TL_auth_codeTypeSms;
-import org.telegram.tgnet.TLRPC.TL_auth_resendCode;
-import org.telegram.tgnet.TLRPC.TL_auth_sentCode;
-import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeApp;
-import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeCall;
-import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeFlashCall;
-import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeSms;
-import org.telegram.tgnet.TLRPC.TL_codeSettings;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.auth_CodeType;
-import org.telegram.tgnet.TLRPC.auth_SentCodeType;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ChangePhoneActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.CountrySelectActivity;
 
 public class ChangePhoneActivity extends BaseFragment {
     private static final int done_button = 1;
-    private boolean checkPermissions = true;
-    private int currentViewNum = 0;
+    /* access modifiers changed from: private */
+    public boolean checkPermissions = true;
+    /* access modifiers changed from: private */
+    public int currentViewNum = 0;
     private View doneButton;
-    private Dialog permissionsDialog;
-    private ArrayList<String> permissionsItems = new ArrayList();
+    /* access modifiers changed from: private */
+    public Dialog permissionsDialog;
+    /* access modifiers changed from: private */
+    public ArrayList<String> permissionsItems = new ArrayList<>();
     private AlertDialog progressDialog;
-    private int scrollHeight;
-    private SlideView[] views = new SlideView[5];
+    /* access modifiers changed from: private */
+    public int scrollHeight;
+    /* access modifiers changed from: private */
+    public SlideView[] views = new SlideView[5];
 
     private class ProgressView extends View {
         private Paint paint = new Paint();
@@ -113,1489 +97,11 @@ public class ChangePhoneActivity extends BaseFragment {
             invalidate();
         }
 
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
             float measuredWidth = (float) ((int) (((float) getMeasuredWidth()) * this.progress));
             canvas.drawRect(0.0f, 0.0f, measuredWidth, (float) getMeasuredHeight(), this.paint2);
             canvas.drawRect(measuredWidth, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-        }
-    }
-
-    public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
-        private ImageView blackImageView;
-        private ImageView blueImageView;
-        private EditTextBoldCursor[] codeField;
-        private LinearLayout codeFieldContainer;
-        private int codeTime = 15000;
-        private Timer codeTimer;
-        private TextView confirmTextView;
-        private Bundle currentParams;
-        private int currentType;
-        private String emailPhone;
-        private boolean ignoreOnTextChange;
-        private double lastCodeTime;
-        private double lastCurrentTime;
-        private String lastError = "";
-        private int length;
-        private boolean nextPressed;
-        private int nextType;
-        private int openTime;
-        private String pattern = "*";
-        private String phone;
-        private String phoneHash;
-        private TextView problemText;
-        private ProgressView progressView;
-        private String requestPhone;
-        final /* synthetic */ ChangePhoneActivity this$0;
-        private int time = 60000;
-        private TextView timeText;
-        private Timer timeTimer;
-        private int timeout;
-        private final Object timerSync = new Object();
-        private TextView titleTextView;
-        private boolean waitingForEvent;
-
-        static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TL_error tL_error) {
-        }
-
-        public boolean needBackButton() {
-            return true;
-        }
-
-        public LoginActivitySmsView(ChangePhoneActivity changePhoneActivity, Context context, int i) {
-            final ChangePhoneActivity changePhoneActivity2 = changePhoneActivity;
-            Context context2 = context;
-            this.this$0 = changePhoneActivity2;
-            super(context2);
-            this.currentType = i;
-            setOrientation(1);
-            this.confirmTextView = new TextView(context2);
-            String str = "windowBackgroundWhiteGrayText6";
-            this.confirmTextView.setTextColor(Theme.getColor(str));
-            this.confirmTextView.setTextSize(1, 14.0f);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            this.titleTextView = new TextView(context2);
-            String str2 = "windowBackgroundWhiteBlackText";
-            this.titleTextView.setTextColor(Theme.getColor(str2));
-            this.titleTextView.setTextSize(1, 18.0f);
-            this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            int i2 = 3;
-            this.titleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.titleTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            this.titleTextView.setGravity(49);
-            FrameLayout frameLayout;
-            if (this.currentType == 3) {
-                this.confirmTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-                frameLayout = new FrameLayout(context2);
-                addView(frameLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
-                ImageView imageView = new ImageView(context2);
-                imageView.setImageResource(NUM);
-                boolean z = LocaleController.isRTL;
-                if (z) {
-                    frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 19, 2.0f, 2.0f, 0.0f, 0.0f));
-                    frameLayout.addView(this.confirmTextView, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, 82.0f, 0.0f, 0.0f, 0.0f));
-                } else {
-                    frameLayout.addView(this.confirmTextView, LayoutHelper.createFrame(-1, -2.0f, z ? 5 : 3, 0.0f, 0.0f, 82.0f, 0.0f));
-                    frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 21, 0.0f, 2.0f, 0.0f, 2.0f));
-                }
-            } else {
-                this.confirmTextView.setGravity(49);
-                frameLayout = new FrameLayout(context2);
-                addView(frameLayout, LayoutHelper.createLinear(-2, -2, 49));
-                String str3 = "chats_actionBackground";
-                if (this.currentType == 1) {
-                    this.blackImageView = new ImageView(context2);
-                    this.blackImageView.setImageResource(NUM);
-                    this.blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str2), Mode.MULTIPLY));
-                    frameLayout.addView(this.blackImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                    this.blueImageView = new ImageView(context2);
-                    this.blueImageView.setImageResource(NUM);
-                    this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), Mode.MULTIPLY));
-                    frameLayout.addView(this.blueImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                    this.titleTextView.setText(LocaleController.getString("SentAppCodeTitle", NUM));
-                } else {
-                    this.blueImageView = new ImageView(context2);
-                    this.blueImageView.setImageResource(NUM);
-                    this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), Mode.MULTIPLY));
-                    frameLayout.addView(this.blueImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                    this.titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", NUM));
-                }
-                addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 18, 0, 0));
-                addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 17, 0, 0));
-            }
-            this.codeFieldContainer = new LinearLayout(context2);
-            this.codeFieldContainer.setOrientation(0);
-            addView(this.codeFieldContainer, LayoutHelper.createLinear(-2, 36, 1));
-            if (this.currentType == 3) {
-                this.codeFieldContainer.setVisibility(8);
-            }
-            this.timeText = new TextView(context2) {
-                /* Access modifiers changed, original: protected */
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), Integer.MIN_VALUE));
-                }
-            };
-            this.timeText.setTextColor(Theme.getColor(str));
-            this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            if (this.currentType == 3) {
-                this.timeText.setTextSize(1, 14.0f);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
-                this.progressView = new ProgressView(context2);
-                TextView textView = this.timeText;
-                if (LocaleController.isRTL) {
-                    i2 = 5;
-                }
-                textView.setGravity(i2);
-                addView(this.progressView, LayoutHelper.createLinear(-1, 3, 0.0f, 12.0f, 0.0f, 0.0f));
-            } else {
-                this.timeText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(10.0f));
-                this.timeText.setTextSize(1, 15.0f);
-                this.timeText.setGravity(49);
-                addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49));
-            }
-            this.problemText = new TextView(context2) {
-                /* Access modifiers changed, original: protected */
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), Integer.MIN_VALUE));
-                }
-            };
-            this.problemText.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
-            this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(10.0f));
-            this.problemText.setTextSize(1, 15.0f);
-            this.problemText.setGravity(49);
-            if (this.currentType == 1) {
-                this.problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", NUM));
-            } else {
-                this.problemText.setText(LocaleController.getString("DidNotGetTheCode", NUM));
-            }
-            addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49));
-            this.problemText.setOnClickListener(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$rfmfbNz40o5r3LlbaUeCqZ1rJcg(this));
-        }
-
-        public /* synthetic */ void lambda$new$0$ChangePhoneActivity$LoginActivitySmsView(View view) {
-            if (!this.nextPressed) {
-                Object obj = ((this.nextType == 4 && this.currentType == 2) || this.nextType == 0) ? 1 : null;
-                if (obj == null) {
-                    resendCode();
-                } else {
-                    try {
-                        PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                        String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
-                        Intent intent = new Intent("android.intent.action.SEND");
-                        intent.setType("message/rfCLASSNAME");
-                        intent.putExtra("android.intent.extra.EMAIL", new String[]{"sms@stel.com"});
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Android registration/login issue ");
-                        stringBuilder.append(format);
-                        stringBuilder.append(" ");
-                        stringBuilder.append(this.emailPhone);
-                        intent.putExtra("android.intent.extra.SUBJECT", stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("Phone: ");
-                        stringBuilder.append(this.requestPhone);
-                        stringBuilder.append("\nApp version: ");
-                        stringBuilder.append(format);
-                        stringBuilder.append("\nOS version: SDK ");
-                        stringBuilder.append(VERSION.SDK_INT);
-                        stringBuilder.append("\nDevice Name: ");
-                        stringBuilder.append(Build.MANUFACTURER);
-                        stringBuilder.append(Build.MODEL);
-                        stringBuilder.append("\nLocale: ");
-                        stringBuilder.append(Locale.getDefault());
-                        stringBuilder.append("\nError: ");
-                        stringBuilder.append(this.lastError);
-                        intent.putExtra("android.intent.extra.TEXT", stringBuilder.toString());
-                        getContext().startActivity(Intent.createChooser(intent, "Send email..."));
-                    } catch (Exception unused) {
-                        AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("NoMailInstalled", NUM));
-                    }
-                }
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int i, int i2) {
-            super.onMeasure(i, i2);
-            if (this.currentType != 3) {
-                ImageView imageView = this.blueImageView;
-                if (imageView != null) {
-                    i = ((imageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getMeasuredHeight()) + AndroidUtilities.dp(35.0f);
-                    i2 = AndroidUtilities.dp(80.0f);
-                    int dp = AndroidUtilities.dp(291.0f);
-                    if (this.this$0.scrollHeight - i < i2) {
-                        setMeasuredDimension(getMeasuredWidth(), i + i2);
-                    } else if (this.this$0.scrollHeight > dp) {
-                        setMeasuredDimension(getMeasuredWidth(), dp);
-                    } else {
-                        setMeasuredDimension(getMeasuredWidth(), this.this$0.scrollHeight);
-                    }
-                }
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-            super.onLayout(z, i, i2, i3, i4);
-            if (this.currentType != 3 && this.blueImageView != null) {
-                int bottom = this.confirmTextView.getBottom();
-                i = getMeasuredHeight() - bottom;
-                TextView textView;
-                if (this.problemText.getVisibility() == 0) {
-                    i2 = this.problemText.getMeasuredHeight();
-                    i = (i + bottom) - i2;
-                    textView = this.problemText;
-                    textView.layout(textView.getLeft(), i, this.problemText.getRight(), i2 + i);
-                } else if (this.timeText.getVisibility() == 0) {
-                    i2 = this.timeText.getMeasuredHeight();
-                    i = (i + bottom) - i2;
-                    textView = this.timeText;
-                    textView.layout(textView.getLeft(), i, this.timeText.getRight(), i2 + i);
-                } else {
-                    i += bottom;
-                }
-                i -= bottom;
-                i2 = this.codeFieldContainer.getMeasuredHeight();
-                i = ((i - i2) / 2) + bottom;
-                LinearLayout linearLayout = this.codeFieldContainer;
-                linearLayout.layout(linearLayout.getLeft(), i, this.codeFieldContainer.getRight(), i2 + i);
-            }
-        }
-
-        private void resendCode() {
-            Bundle bundle = new Bundle();
-            bundle.putString("phone", this.phone);
-            bundle.putString("ephone", this.emailPhone);
-            bundle.putString("phoneFormated", this.requestPhone);
-            this.nextPressed = true;
-            this.this$0.needShowProgress();
-            TL_auth_resendCode tL_auth_resendCode = new TL_auth_resendCode();
-            tL_auth_resendCode.phone_number = this.requestPhone;
-            tL_auth_resendCode.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$-H4QL5uxdX-D5mADb1ZG_DA45HE(this, bundle, tL_auth_resendCode), 2);
-        }
-
-        public /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle bundle, TL_auth_resendCode tL_auth_resendCode, TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$AkUnsjyTk3ocbOPZTE23QCsKSVg(this, tL_error, bundle, tLObject, tL_auth_resendCode));
-        }
-
-        public /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TL_error tL_error, Bundle bundle, TLObject tLObject, TL_auth_resendCode tL_auth_resendCode) {
-            this.nextPressed = false;
-            if (tL_error == null) {
-                this.this$0.fillNextCodeParams(bundle, (TL_auth_sentCode) tLObject);
-            } else {
-                AlertDialog alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_auth_resendCode, new Object[0]);
-                if (alertDialog != null && tL_error.text.contains("PHONE_CODE_EXPIRED")) {
-                    alertDialog.setPositiveButtonListener(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$AyKSTIEnTcnTDJMrvar__Qgw3yQk(this));
-                }
-            }
-            this.this$0.needHideProgress();
-        }
-
-        public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
-            onBackPressed(true);
-            this.this$0.finishFragment();
-        }
-
-        public String getHeaderName() {
-            if (this.currentType == 1) {
-                return this.phone;
-            }
-            return LocaleController.getString("YourCode", NUM);
-        }
-
-        public void onCancelPressed() {
-            this.nextPressed = false;
-        }
-
-        public void setParams(Bundle bundle, boolean z) {
-            Bundle bundle2 = bundle;
-            if (bundle2 != null) {
-                int i;
-                this.waitingForEvent = true;
-                int i2 = this.currentType;
-                if (i2 == 2) {
-                    AndroidUtilities.setWaitingForSms(true);
-                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
-                } else if (i2 == 3) {
-                    AndroidUtilities.setWaitingForCall(true);
-                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
-                }
-                this.currentParams = bundle2;
-                this.phone = bundle2.getString("phone");
-                this.emailPhone = bundle2.getString("ephone");
-                this.requestPhone = bundle2.getString("phoneFormated");
-                this.phoneHash = bundle2.getString("phoneHash");
-                i2 = bundle2.getInt("timeout");
-                this.time = i2;
-                this.timeout = i2;
-                this.openTime = (int) (System.currentTimeMillis() / 1000);
-                this.nextType = bundle2.getInt("nextType");
-                this.pattern = bundle2.getString("pattern");
-                this.length = bundle2.getInt("length");
-                if (this.length == 0) {
-                    this.length = 5;
-                }
-                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                CharSequence charSequence = "";
-                int i3 = 8;
-                if (editTextBoldCursorArr != null && editTextBoldCursorArr.length == this.length) {
-                    i = 0;
-                    while (true) {
-                        EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
-                        if (i >= editTextBoldCursorArr2.length) {
-                            break;
-                        }
-                        editTextBoldCursorArr2[i].setText(charSequence);
-                        i++;
-                    }
-                } else {
-                    this.codeField = new EditTextBoldCursor[this.length];
-                    i = 0;
-                    while (i < this.length) {
-                        this.codeField[i] = new EditTextBoldCursor(getContext());
-                        String str = "windowBackgroundWhiteBlackText";
-                        this.codeField[i].setTextColor(Theme.getColor(str));
-                        this.codeField[i].setCursorColor(Theme.getColor(str));
-                        this.codeField[i].setCursorSize(AndroidUtilities.dp(20.0f));
-                        this.codeField[i].setCursorWidth(1.5f);
-                        Drawable mutate = getResources().getDrawable(NUM).mutate();
-                        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Mode.MULTIPLY));
-                        this.codeField[i].setBackgroundDrawable(mutate);
-                        this.codeField[i].setImeOptions(NUM);
-                        this.codeField[i].setTextSize(1, 20.0f);
-                        this.codeField[i].setMaxLines(1);
-                        this.codeField[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        this.codeField[i].setPadding(0, 0, 0, 0);
-                        this.codeField[i].setGravity(49);
-                        if (this.currentType == 3) {
-                            this.codeField[i].setEnabled(false);
-                            this.codeField[i].setInputType(0);
-                            this.codeField[i].setVisibility(8);
-                        } else {
-                            this.codeField[i].setInputType(3);
-                        }
-                        this.codeFieldContainer.addView(this.codeField[i], LayoutHelper.createLinear(34, 36, 1, 0, 0, i != this.length - 1 ? 7 : 0, 0));
-                        this.codeField[i].addTextChangedListener(new TextWatcher() {
-                            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                            }
-
-                            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                            }
-
-                            public void afterTextChanged(Editable editable) {
-                                if (!LoginActivitySmsView.this.ignoreOnTextChange) {
-                                    int length = editable.length();
-                                    if (length >= 1) {
-                                        if (length > 1) {
-                                            String obj = editable.toString();
-                                            LoginActivitySmsView.this.ignoreOnTextChange = true;
-                                            for (int i = 0; i < Math.min(LoginActivitySmsView.this.length - i, length); i++) {
-                                                if (i == 0) {
-                                                    editable.replace(0, length, obj.substring(i, i + 1));
-                                                } else {
-                                                    LoginActivitySmsView.this.codeField[i + i].setText(obj.substring(i, i + 1));
-                                                }
-                                            }
-                                            LoginActivitySmsView.this.ignoreOnTextChange = false;
-                                        }
-                                        if (i != LoginActivitySmsView.this.length - 1) {
-                                            LoginActivitySmsView.this.codeField[i + 1].setSelection(LoginActivitySmsView.this.codeField[i + 1].length());
-                                            LoginActivitySmsView.this.codeField[i + 1].requestFocus();
-                                        }
-                                        if ((i == LoginActivitySmsView.this.length - 1 || (i == LoginActivitySmsView.this.length - 2 && length >= 2)) && LoginActivitySmsView.this.getCode().length() == LoginActivitySmsView.this.length) {
-                                            LoginActivitySmsView.this.onNextPressed();
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        this.codeField[i].setOnKeyListener(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$UkKWW40jg7mpE6ErNm6_eukinew(this, i));
-                        this.codeField[i].setOnEditorActionListener(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$tUraGeWZvqlYJBrGcWDDzAfODJQ(this));
-                        i++;
-                    }
-                }
-                ProgressView progressView = this.progressView;
-                if (progressView != null) {
-                    progressView.setVisibility(this.nextType != 0 ? 0 : 8);
-                }
-                if (this.phone != null) {
-                    String format = PhoneFormat.getInstance().format(this.phone);
-                    int i4 = this.currentType;
-                    if (i4 == 1) {
-                        charSequence = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", NUM));
-                    } else if (i4 == 2) {
-                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", NUM, LocaleController.addNbsp(format)));
-                    } else if (i4 == 3) {
-                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", NUM, LocaleController.addNbsp(format)));
-                    } else if (i4 == 4) {
-                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", NUM, LocaleController.addNbsp(format)));
-                    }
-                    this.confirmTextView.setText(charSequence);
-                    if (this.currentType != 3) {
-                        AndroidUtilities.showKeyboard(this.codeField[0]);
-                        this.codeField[0].requestFocus();
-                    } else {
-                        AndroidUtilities.hideKeyboard(this.codeField[0]);
-                    }
-                    destroyTimer();
-                    destroyCodeTimer();
-                    this.lastCurrentTime = (double) System.currentTimeMillis();
-                    i = this.currentType;
-                    if (i == 1) {
-                        this.problemText.setVisibility(0);
-                        this.timeText.setVisibility(8);
-                    } else {
-                        TextView textView;
-                        String str2 = "SmsText";
-                        String str3 = "CallText";
-                        if (i == 3) {
-                            i = this.nextType;
-                            if (i == 4 || i == 2) {
-                                this.problemText.setVisibility(8);
-                                this.timeText.setVisibility(0);
-                                i = this.nextType;
-                                if (i == 4) {
-                                    this.timeText.setText(LocaleController.formatString(str3, NUM, Integer.valueOf(1), Integer.valueOf(0)));
-                                } else if (i == 2) {
-                                    this.timeText.setText(LocaleController.formatString(str2, NUM, Integer.valueOf(1), Integer.valueOf(0)));
-                                }
-                                createTimer();
-                            }
-                        }
-                        if (this.currentType == 2) {
-                            i = this.nextType;
-                            if (i == 4 || i == 3) {
-                                this.timeText.setText(LocaleController.formatString(str3, NUM, Integer.valueOf(2), Integer.valueOf(0)));
-                                this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
-                                textView = this.timeText;
-                                if (this.time >= 1000) {
-                                    i3 = 0;
-                                }
-                                textView.setVisibility(i3);
-                                createTimer();
-                            }
-                        }
-                        if (this.currentType == 4 && this.nextType == 2) {
-                            this.timeText.setText(LocaleController.formatString(str2, NUM, Integer.valueOf(2), Integer.valueOf(0)));
-                            this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
-                            textView = this.timeText;
-                            if (this.time >= 1000) {
-                                i3 = 0;
-                            }
-                            textView.setVisibility(i3);
-                            createTimer();
-                        } else {
-                            this.timeText.setVisibility(8);
-                            this.problemText.setVisibility(8);
-                            createCodeTimer();
-                        }
-                    }
-                }
-            }
-        }
-
-        public /* synthetic */ boolean lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(int i, View view, int i2, KeyEvent keyEvent) {
-            if (i2 != 67 || this.codeField[i].length() != 0 || i <= 0) {
-                return false;
-            }
-            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-            i--;
-            editTextBoldCursorArr[i].setSelection(editTextBoldCursorArr[i].length());
-            this.codeField[i].requestFocus();
-            this.codeField[i].dispatchKeyEvent(keyEvent);
-            return true;
-        }
-
-        public /* synthetic */ boolean lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 5) {
-                return false;
-            }
-            onNextPressed();
-            return true;
-        }
-
-        private void createCodeTimer() {
-            if (this.codeTimer == null) {
-                this.codeTime = 15000;
-                this.codeTimer = new Timer();
-                this.lastCodeTime = (double) System.currentTimeMillis();
-                this.codeTimer.schedule(new TimerTask() {
-                    public void run() {
-                        AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8(this));
-                    }
-
-                    public /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$4() {
-                        double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$2400 = LoginActivitySmsView.this.lastCodeTime;
-                        Double.isNaN(currentTimeMillis);
-                        access$2400 = currentTimeMillis - access$2400;
-                        LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
-                        LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$2500 = (double) loginActivitySmsView.codeTime;
-                        Double.isNaN(access$2500);
-                        loginActivitySmsView.codeTime = (int) (access$2500 - access$2400);
-                        if (LoginActivitySmsView.this.codeTime <= 1000) {
-                            LoginActivitySmsView.this.problemText.setVisibility(0);
-                            LoginActivitySmsView.this.timeText.setVisibility(8);
-                            LoginActivitySmsView.this.destroyCodeTimer();
-                        }
-                    }
-                }, 0, 1000);
-            }
-        }
-
-        private void destroyCodeTimer() {
-            try {
-                synchronized (this.timerSync) {
-                    if (this.codeTimer != null) {
-                        this.codeTimer.cancel();
-                        this.codeTimer = null;
-                    }
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
-
-        private void createTimer() {
-            if (this.timeTimer == null) {
-                this.timeTimer = new Timer();
-                this.timeTimer.schedule(new TimerTask() {
-                    public void run() {
-                        if (LoginActivitySmsView.this.timeTimer != null) {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM(this));
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5() {
-                        double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$3000 = LoginActivitySmsView.this.lastCurrentTime;
-                        Double.isNaN(currentTimeMillis);
-                        access$3000 = currentTimeMillis - access$3000;
-                        LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$3100 = (double) loginActivitySmsView.time;
-                        Double.isNaN(access$3100);
-                        loginActivitySmsView.time = (int) (access$3100 - access$3000);
-                        LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
-                        if (LoginActivitySmsView.this.time >= 1000) {
-                            int access$31002 = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
-                            if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
-                            } else if (LoginActivitySmsView.this.nextType == 2) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(r0), Integer.valueOf(access$31002)));
-                            }
-                            if (LoginActivitySmsView.this.progressView != null) {
-                                LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
-                                return;
-                            }
-                            return;
-                        }
-                        if (LoginActivitySmsView.this.progressView != null) {
-                            LoginActivitySmsView.this.progressView.setProgress(1.0f);
-                        }
-                        LoginActivitySmsView.this.destroyTimer();
-                        if (LoginActivitySmsView.this.currentType == 3) {
-                            AndroidUtilities.setWaitingForCall(false);
-                            NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
-                            LoginActivitySmsView.this.waitingForEvent = false;
-                            LoginActivitySmsView.this.destroyCodeTimer();
-                            LoginActivitySmsView.this.resendCode();
-                        } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
-                        } else {
-                            if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
-                                if (LoginActivitySmsView.this.nextType == 4) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
-                                } else {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
-                                }
-                                LoginActivitySmsView.this.createCodeTimer();
-                                TL_auth_resendCode tL_auth_resendCode = new TL_auth_resendCode();
-                                tL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
-                                tL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                                ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE(this), 2);
-                            } else if (LoginActivitySmsView.this.nextType == 3) {
-                                AndroidUtilities.setWaitingForSms(false);
-                                NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
-                                LoginActivitySmsView.this.waitingForEvent = false;
-                                LoginActivitySmsView.this.destroyCodeTimer();
-                                LoginActivitySmsView.this.resendCode();
-                            }
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(TLObject tLObject, TL_error tL_error) {
-                        if (tL_error != null && tL_error.text != null) {
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs(this, tL_error));
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5(TL_error tL_error) {
-                        LoginActivitySmsView.this.lastError = tL_error.text;
-                    }
-                }, 0, 1000);
-            }
-        }
-
-        private void destroyTimer() {
-            try {
-                synchronized (this.timerSync) {
-                    if (this.timeTimer != null) {
-                        this.timeTimer.cancel();
-                        this.timeTimer = null;
-                    }
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
-
-        private String getCode() {
-            if (this.codeField == null) {
-                return "";
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            while (true) {
-                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                if (i >= editTextBoldCursorArr.length) {
-                    return stringBuilder.toString();
-                }
-                stringBuilder.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
-                i++;
-            }
-        }
-
-        public void onNextPressed() {
-            if (!this.nextPressed) {
-                String code = getCode();
-                if (TextUtils.isEmpty(code)) {
-                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
-                    return;
-                }
-                this.nextPressed = true;
-                int i = this.currentType;
-                if (i == 2) {
-                    AndroidUtilities.setWaitingForSms(false);
-                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                } else if (i == 3) {
-                    AndroidUtilities.setWaitingForCall(false);
-                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                }
-                this.waitingForEvent = false;
-                TL_account_changePhone tL_account_changePhone = new TL_account_changePhone();
-                tL_account_changePhone.phone_number = this.requestPhone;
-                tL_account_changePhone.phone_code = code;
-                tL_account_changePhone.phone_code_hash = this.phoneHash;
-                destroyTimer();
-                this.this$0.needShowProgress();
-                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_changePhone, new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$_a_ihjluIJ2vz2DCIrqa5SJZHuo(this, tL_account_changePhone), 2);
-            }
-        }
-
-        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TL_account_changePhone tL_account_changePhone, TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$nnb2Q4_79T9z1PWAXzjTLfJ8r2Q(this, tL_error, tLObject, tL_account_changePhone));
-        }
-
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x009f  */
-        /* JADX WARNING: Removed duplicated region for block: B:20:0x0092  */
-        /* JADX WARNING: Removed duplicated region for block: B:25:0x00b3  */
-        /* JADX WARNING: Removed duplicated region for block: B:38:0x00f8 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:36:0x00ee A:{LOOP_END, LOOP:0: B:34:0x00e9->B:36:0x00ee} */
-        /* JADX WARNING: Removed duplicated region for block: B:20:0x0092  */
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x009f  */
-        /* JADX WARNING: Removed duplicated region for block: B:25:0x00b3  */
-        /* JADX WARNING: Removed duplicated region for block: B:28:0x00ca  */
-        /* JADX WARNING: Removed duplicated region for block: B:36:0x00ee A:{LOOP_END, LOOP:0: B:34:0x00e9->B:36:0x00ee} */
-        /* JADX WARNING: Removed duplicated region for block: B:38:0x00f8 A:{SYNTHETIC} */
-        /* JADX WARNING: Missing block: B:7:0x0077, code skipped:
-            if (r8 != 2) goto L_0x0079;
-     */
-        /* JADX WARNING: Missing block: B:12:0x0081, code skipped:
-            if (r8 != 3) goto L_0x0083;
-     */
-        /* JADX WARNING: Missing block: B:16:0x0089, code skipped:
-            if (r6.nextType == 2) goto L_0x008b;
-     */
-        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC.TL_error r7, org.telegram.tgnet.TLObject r8, org.telegram.tgnet.TLRPC.TL_account_changePhone r9) {
-            /*
-            r6 = this;
-            r0 = r6.this$0;
-            r0.needHideProgress();
-            r0 = 0;
-            r6.nextPressed = r0;
-            r1 = 0;
-            r2 = 1;
-            if (r7 != 0) goto L_0x0068;
-        L_0x000c:
-            r8 = (org.telegram.tgnet.TLRPC.User) r8;
-            r6.destroyTimer();
-            r6.destroyCodeTimer();
-            r7 = r6.this$0;
-            r7 = r7.currentAccount;
-            r7 = org.telegram.messenger.UserConfig.getInstance(r7);
-            r7.setCurrentUser(r8);
-            r7 = r6.this$0;
-            r7 = r7.currentAccount;
-            r7 = org.telegram.messenger.UserConfig.getInstance(r7);
-            r7.saveConfig(r2);
-            r7 = new java.util.ArrayList;
-            r7.<init>();
-            r7.add(r8);
-            r9 = r6.this$0;
-            r9 = r9.currentAccount;
-            r9 = org.telegram.messenger.MessagesStorage.getInstance(r9);
-            r9.putUsersAndChats(r7, r1, r2, r2);
-            r7 = r6.this$0;
-            r7 = r7.currentAccount;
-            r7 = org.telegram.messenger.MessagesController.getInstance(r7);
-            r7.putUser(r8, r0);
-            r7 = r6.this$0;
-            r7.finishFragment();
-            r7 = r6.this$0;
-            r7 = r7.currentAccount;
-            r7 = org.telegram.messenger.NotificationCenter.getInstance(r7);
-            r8 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged;
-            r9 = new java.lang.Object[r0];
-            r7.postNotificationName(r8, r9);
-            goto L_0x00fd;
-        L_0x0068:
-            r8 = r7.text;
-            r6.lastError = r8;
-            r8 = r6.currentType;
-            r3 = 4;
-            r4 = 2;
-            r5 = 3;
-            if (r8 != r5) goto L_0x0079;
-        L_0x0073:
-            r8 = r6.nextType;
-            if (r8 == r3) goto L_0x008b;
-        L_0x0077:
-            if (r8 == r4) goto L_0x008b;
-        L_0x0079:
-            r8 = r6.currentType;
-            if (r8 != r4) goto L_0x0083;
-        L_0x007d:
-            r8 = r6.nextType;
-            if (r8 == r3) goto L_0x008b;
-        L_0x0081:
-            if (r8 == r5) goto L_0x008b;
-        L_0x0083:
-            r8 = r6.currentType;
-            if (r8 != r3) goto L_0x008e;
-        L_0x0087:
-            r8 = r6.nextType;
-            if (r8 != r4) goto L_0x008e;
-        L_0x008b:
-            r6.createTimer();
-        L_0x008e:
-            r8 = r6.currentType;
-            if (r8 != r4) goto L_0x009f;
-        L_0x0092:
-            org.telegram.messenger.AndroidUtilities.setWaitingForSms(r2);
-            r8 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
-            r3 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode;
-            r8.addObserver(r6, r3);
-            goto L_0x00ad;
-        L_0x009f:
-            if (r8 != r5) goto L_0x00ad;
-        L_0x00a1:
-            org.telegram.messenger.AndroidUtilities.setWaitingForCall(r2);
-            r8 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
-            r3 = org.telegram.messenger.NotificationCenter.didReceiveCall;
-            r8.addObserver(r6, r3);
-        L_0x00ad:
-            r6.waitingForEvent = r2;
-            r8 = r6.currentType;
-            if (r8 == r5) goto L_0x00c0;
-        L_0x00b3:
-            r8 = r6.this$0;
-            r8 = r8.currentAccount;
-            r3 = r6.this$0;
-            r4 = new java.lang.Object[r0];
-            org.telegram.ui.Components.AlertsCreator.processError(r8, r7, r3, r9, r4);
-        L_0x00c0:
-            r8 = r7.text;
-            r9 = "PHONE_CODE_EMPTY";
-            r8 = r8.contains(r9);
-            if (r8 != 0) goto L_0x00e8;
-        L_0x00ca:
-            r8 = r7.text;
-            r9 = "PHONE_CODE_INVALID";
-            r8 = r8.contains(r9);
-            if (r8 == 0) goto L_0x00d5;
-        L_0x00d4:
-            goto L_0x00e8;
-        L_0x00d5:
-            r7 = r7.text;
-            r8 = "PHONE_CODE_EXPIRED";
-            r7 = r7.contains(r8);
-            if (r7 == 0) goto L_0x00fd;
-        L_0x00df:
-            r6.onBackPressed(r2);
-            r7 = r6.this$0;
-            r7.setPage(r0, r2, r1, r2);
-            goto L_0x00fd;
-        L_0x00e8:
-            r7 = 0;
-        L_0x00e9:
-            r8 = r6.codeField;
-            r9 = r8.length;
-            if (r7 >= r9) goto L_0x00f8;
-        L_0x00ee:
-            r8 = r8[r7];
-            r9 = "";
-            r8.setText(r9);
-            r7 = r7 + 1;
-            goto L_0x00e9;
-        L_0x00f8:
-            r7 = r8[r0];
-            r7.requestFocus();
-        L_0x00fd:
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView.lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_account_changePhone):void");
-        }
-
-        public boolean onBackPressed(boolean z) {
-            if (z) {
-                TL_auth_cancelCode tL_auth_cancelCode = new TL_auth_cancelCode();
-                tL_auth_cancelCode.phone_number = this.requestPhone;
-                tL_auth_cancelCode.phone_code_hash = this.phoneHash;
-                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_cancelCode, -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOc-KDCO9lesbolp8AlwqF1nh4.INSTANCE, 10);
-                destroyTimer();
-                destroyCodeTimer();
-                this.currentParams = null;
-                int i = this.currentType;
-                if (i == 2) {
-                    AndroidUtilities.setWaitingForSms(false);
-                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                } else if (i == 3) {
-                    AndroidUtilities.setWaitingForCall(false);
-                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                }
-                this.waitingForEvent = false;
-                return true;
-            }
-            Builder builder = new Builder(this.this$0.getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setMessage(LocaleController.getString("StopVerification", NUM));
-            builder.setPositiveButton(LocaleController.getString("Continue", NUM), null);
-            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$fJOIHWxgi1VrcISwAFf7EZ5s1yI(this));
-            this.this$0.showDialog(builder.create());
-            return false;
-        }
-
-        public /* synthetic */ void lambda$onBackPressed$8$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
-            onBackPressed(true);
-            this.this$0.setPage(0, true, null, true);
-        }
-
-        public void onDestroyActivity() {
-            super.onDestroyActivity();
-            int i = this.currentType;
-            if (i == 2) {
-                AndroidUtilities.setWaitingForSms(false);
-                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-            } else if (i == 3) {
-                AndroidUtilities.setWaitingForCall(false);
-                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-            }
-            this.waitingForEvent = false;
-            destroyTimer();
-            destroyCodeTimer();
-        }
-
-        public void onShow() {
-            super.onShow();
-            if (this.currentType != 3) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$LoginActivitySmsView$ApE0zrzEPG0IwyfHRvw92p7wln0(this), 100);
-            }
-        }
-
-        public /* synthetic */ void lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView() {
-            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-            if (editTextBoldCursorArr != null) {
-                int length = editTextBoldCursorArr.length - 1;
-                while (length >= 0) {
-                    if (length == 0 || this.codeField[length].length() != 0) {
-                        this.codeField[length].requestFocus();
-                        EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
-                        editTextBoldCursorArr2[length].setSelection(editTextBoldCursorArr2[length].length());
-                        AndroidUtilities.showKeyboard(this.codeField[length]);
-                        return;
-                    }
-                    length--;
-                }
-            }
-        }
-
-        public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (this.waitingForEvent) {
-                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                if (editTextBoldCursorArr != null) {
-                    String str = "";
-                    if (i == NotificationCenter.didReceiveSmsCode) {
-                        EditText editText = editTextBoldCursorArr[0];
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(str);
-                        stringBuilder.append(objArr[0]);
-                        editText.setText(stringBuilder.toString());
-                        onNextPressed();
-                    } else if (i == NotificationCenter.didReceiveCall) {
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append(str);
-                        stringBuilder2.append(objArr[0]);
-                        String stringBuilder3 = stringBuilder2.toString();
-                        if (AndroidUtilities.checkPhonePattern(this.pattern, stringBuilder3)) {
-                            this.ignoreOnTextChange = true;
-                            this.codeField[0].setText(stringBuilder3);
-                            this.ignoreOnTextChange = false;
-                            onNextPressed();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public class PhoneView extends SlideView implements OnItemSelectedListener {
-        private EditTextBoldCursor codeField;
-        private HashMap<String, String> codesMap = new HashMap();
-        private ArrayList<String> countriesArray = new ArrayList();
-        private HashMap<String, String> countriesMap = new HashMap();
-        private TextView countryButton;
-        private int countryState = 0;
-        private boolean ignoreOnPhoneChange = false;
-        private boolean ignoreOnTextChange = false;
-        private boolean ignoreSelection = false;
-        private boolean nextPressed = false;
-        private HintEditText phoneField;
-        private HashMap<String, String> phoneFormatMap = new HashMap();
-        private TextView textView;
-        private TextView textView2;
-        final /* synthetic */ ChangePhoneActivity this$0;
-        private View view;
-
-        public void onNothingSelected(AdapterView<?> adapterView) {
-        }
-
-        public PhoneView(ChangePhoneActivity changePhoneActivity, Context context) {
-            final ChangePhoneActivity changePhoneActivity2 = changePhoneActivity;
-            Context context2 = context;
-            this.this$0 = changePhoneActivity2;
-            super(context2);
-            setOrientation(1);
-            this.countryButton = new TextView(context2);
-            this.countryButton.setTextSize(1, 18.0f);
-            this.countryButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
-            String str = "windowBackgroundWhiteBlackText";
-            this.countryButton.setTextColor(Theme.getColor(str));
-            this.countryButton.setMaxLines(1);
-            this.countryButton.setSingleLine(true);
-            this.countryButton.setEllipsize(TruncateAt.END);
-            this.countryButton.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            this.countryButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 7));
-            addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 0.0f, 0.0f, 14.0f));
-            this.countryButton.setOnClickListener(new -$$Lambda$ChangePhoneActivity$PhoneView$hHa0N5BwdjvTPGkcx_aGuYpU4o4(this));
-            this.view = new View(context2);
-            this.view.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
-            this.view.setBackgroundColor(Theme.getColor("windowBackgroundWhiteGrayLine"));
-            addView(this.view, LayoutHelper.createLinear(-1, 1, 4.0f, -17.5f, 4.0f, 0.0f));
-            LinearLayout linearLayout = new LinearLayout(context2);
-            linearLayout.setOrientation(0);
-            addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
-            this.textView = new TextView(context2);
-            this.textView.setText("+");
-            this.textView.setTextColor(Theme.getColor(str));
-            this.textView.setTextSize(1, 18.0f);
-            linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
-            this.codeField = new EditTextBoldCursor(context2);
-            this.codeField.setInputType(3);
-            this.codeField.setTextColor(Theme.getColor(str));
-            this.codeField.setCursorColor(Theme.getColor(str));
-            this.codeField.setCursorSize(AndroidUtilities.dp(20.0f));
-            this.codeField.setCursorWidth(1.5f);
-            this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
-            this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
-            this.codeField.setTextSize(1, 18.0f);
-            this.codeField.setMaxLines(1);
-            this.codeField.setGravity(19);
-            this.codeField.setImeOptions(NUM);
-            this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
-            linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
-            this.codeField.addTextChangedListener(new TextWatcher() {
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void afterTextChanged(Editable editable) {
-                    if (!PhoneView.this.ignoreOnTextChange) {
-                        PhoneView.this.ignoreOnTextChange = true;
-                        String stripExceptNumbers = PhoneFormat.stripExceptNumbers(PhoneView.this.codeField.getText().toString());
-                        PhoneView.this.codeField.setText(stripExceptNumbers);
-                        String str = null;
-                        if (stripExceptNumbers.length() == 0) {
-                            PhoneView.this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
-                            PhoneView.this.phoneField.setHintText(null);
-                            PhoneView.this.countryState = 1;
-                        } else {
-                            Object substring;
-                            CharSequence charSequence;
-                            Object obj;
-                            int i = 4;
-                            if (stripExceptNumbers.length() > 4) {
-                                PhoneView.this.ignoreOnTextChange = true;
-                                while (i >= 1) {
-                                    substring = stripExceptNumbers.substring(0, i);
-                                    if (((String) PhoneView.this.codesMap.get(substring)) != null) {
-                                        StringBuilder stringBuilder = new StringBuilder();
-                                        stringBuilder.append(stripExceptNumbers.substring(i));
-                                        stringBuilder.append(PhoneView.this.phoneField.getText().toString());
-                                        stripExceptNumbers = stringBuilder.toString();
-                                        PhoneView.this.codeField.setText(substring);
-                                        charSequence = stripExceptNumbers;
-                                        obj = 1;
-                                        break;
-                                    }
-                                    i--;
-                                }
-                                substring = stripExceptNumbers;
-                                charSequence = null;
-                                obj = null;
-                                if (obj == null) {
-                                    PhoneView.this.ignoreOnTextChange = true;
-                                    StringBuilder stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(substring.substring(1));
-                                    stringBuilder2.append(PhoneView.this.phoneField.getText().toString());
-                                    charSequence = stringBuilder2.toString();
-                                    EditTextBoldCursor access$400 = PhoneView.this.codeField;
-                                    substring = substring.substring(0, 1);
-                                    access$400.setText(substring);
-                                }
-                            } else {
-                                substring = stripExceptNumbers;
-                                charSequence = null;
-                                obj = null;
-                            }
-                            String str2 = (String) PhoneView.this.codesMap.get(substring);
-                            String str3 = "WrongCountry";
-                            if (str2 != null) {
-                                int indexOf = PhoneView.this.countriesArray.indexOf(str2);
-                                if (indexOf != -1) {
-                                    PhoneView.this.ignoreSelection = true;
-                                    PhoneView.this.countryButton.setText((CharSequence) PhoneView.this.countriesArray.get(indexOf));
-                                    String str4 = (String) PhoneView.this.phoneFormatMap.get(substring);
-                                    HintEditText access$600 = PhoneView.this.phoneField;
-                                    if (str4 != null) {
-                                        str = str4.replace('X', 8211);
-                                    }
-                                    access$600.setHintText(str);
-                                    PhoneView.this.countryState = 0;
-                                } else {
-                                    PhoneView.this.countryButton.setText(LocaleController.getString(str3, NUM));
-                                    PhoneView.this.phoneField.setHintText(null);
-                                    PhoneView.this.countryState = 2;
-                                }
-                            } else {
-                                PhoneView.this.countryButton.setText(LocaleController.getString(str3, NUM));
-                                PhoneView.this.phoneField.setHintText(null);
-                                PhoneView.this.countryState = 2;
-                            }
-                            if (obj == null) {
-                                PhoneView.this.codeField.setSelection(PhoneView.this.codeField.getText().length());
-                            }
-                            if (charSequence != null) {
-                                PhoneView.this.phoneField.requestFocus();
-                                PhoneView.this.phoneField.setText(charSequence);
-                                PhoneView.this.phoneField.setSelection(PhoneView.this.phoneField.length());
-                            }
-                        }
-                        PhoneView.this.ignoreOnTextChange = false;
-                    }
-                }
-            });
-            this.codeField.setOnEditorActionListener(new -$$Lambda$ChangePhoneActivity$PhoneView$ygpxiaZ49URLLE6EQa6mU8BoI-E(this));
-            this.phoneField = new HintEditText(context2);
-            this.phoneField.setInputType(3);
-            this.phoneField.setTextColor(Theme.getColor(str));
-            this.phoneField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-            this.phoneField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
-            this.phoneField.setPadding(0, 0, 0, 0);
-            this.phoneField.setCursorColor(Theme.getColor(str));
-            this.phoneField.setCursorSize(AndroidUtilities.dp(20.0f));
-            this.phoneField.setCursorWidth(1.5f);
-            this.phoneField.setTextSize(1, 18.0f);
-            this.phoneField.setMaxLines(1);
-            this.phoneField.setGravity(19);
-            this.phoneField.setImeOptions(NUM);
-            linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
-            this.phoneField.addTextChangedListener(new TextWatcher() {
-                private int actionPosition;
-                private int characterAction = -1;
-
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    if (i2 == 0 && i3 == 1) {
-                        this.characterAction = 1;
-                    } else if (i2 != 1 || i3 != 0) {
-                        this.characterAction = -1;
-                    } else if (charSequence.charAt(i) != ' ' || i <= 0) {
-                        this.characterAction = 2;
-                    } else {
-                        this.characterAction = 3;
-                        this.actionPosition = i - 1;
-                    }
-                }
-
-                public void afterTextChanged(Editable editable) {
-                    if (!PhoneView.this.ignoreOnPhoneChange) {
-                        StringBuilder stringBuilder;
-                        int i;
-                        int selectionStart = PhoneView.this.phoneField.getSelectionStart();
-                        String obj = PhoneView.this.phoneField.getText().toString();
-                        if (this.characterAction == 3) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append(obj.substring(0, this.actionPosition));
-                            stringBuilder.append(obj.substring(this.actionPosition + 1));
-                            obj = stringBuilder.toString();
-                            selectionStart--;
-                        }
-                        stringBuilder = new StringBuilder(obj.length());
-                        int i2 = 0;
-                        while (i2 < obj.length()) {
-                            i = i2 + 1;
-                            String substring = obj.substring(i2, i);
-                            if ("NUM".contains(substring)) {
-                                stringBuilder.append(substring);
-                            }
-                            i2 = i;
-                        }
-                        PhoneView.this.ignoreOnPhoneChange = true;
-                        obj = PhoneView.this.phoneField.getHintText();
-                        if (obj != null) {
-                            i2 = selectionStart;
-                            selectionStart = 0;
-                            while (selectionStart < stringBuilder.length()) {
-                                if (selectionStart < obj.length()) {
-                                    if (obj.charAt(selectionStart) == ' ') {
-                                        stringBuilder.insert(selectionStart, ' ');
-                                        selectionStart++;
-                                        if (i2 == selectionStart) {
-                                            i = this.characterAction;
-                                            if (!(i == 2 || i == 3)) {
-                                                i2++;
-                                            }
-                                        }
-                                    }
-                                    selectionStart++;
-                                } else {
-                                    stringBuilder.insert(selectionStart, ' ');
-                                    if (i2 == selectionStart + 1) {
-                                        selectionStart = this.characterAction;
-                                        if (!(selectionStart == 2 || selectionStart == 3)) {
-                                            selectionStart = i2 + 1;
-                                        }
-                                    }
-                                    selectionStart = i2;
-                                }
-                            }
-                            selectionStart = i2;
-                        }
-                        PhoneView.this.phoneField.setText(stringBuilder);
-                        if (selectionStart >= 0) {
-                            HintEditText access$600 = PhoneView.this.phoneField;
-                            if (selectionStart > PhoneView.this.phoneField.length()) {
-                                selectionStart = PhoneView.this.phoneField.length();
-                            }
-                            access$600.setSelection(selectionStart);
-                        }
-                        PhoneView.this.phoneField.onTextChange();
-                        PhoneView.this.ignoreOnPhoneChange = false;
-                    }
-                }
-            });
-            this.phoneField.setOnEditorActionListener(new -$$Lambda$ChangePhoneActivity$PhoneView$mrGs3y2Wdb-mBuTVpvmbjtLfvnM(this));
-            this.phoneField.setOnKeyListener(new -$$Lambda$ChangePhoneActivity$PhoneView$Giefqm7S2Vkx_CoymYR4pbzjY_Y(this));
-            this.textView2 = new TextView(context2);
-            this.textView2.setText(LocaleController.getString("ChangePhoneHelp", NUM));
-            this.textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
-            this.textView2.setTextSize(1, 14.0f);
-            this.textView2.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            addView(this.textView2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
-            HashMap hashMap = new HashMap();
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
-                while (true) {
-                    String readLine = bufferedReader.readLine();
-                    if (readLine == null) {
-                        break;
-                    }
-                    String[] split = readLine.split(";");
-                    this.countriesArray.add(0, split[2]);
-                    this.countriesMap.put(split[2], split[0]);
-                    this.codesMap.put(split[0], split[2]);
-                    if (split.length > 3) {
-                        this.phoneFormatMap.put(split[0], split[3]);
-                    }
-                    hashMap.put(split[1], split[2]);
-                }
-                bufferedReader.close();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-            Collections.sort(this.countriesArray, -$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE);
-            Object obj = null;
-            try {
-                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                if (telephonyManager != null) {
-                    obj = telephonyManager.getSimCountryIso().toUpperCase();
-                }
-            } catch (Exception e2) {
-                FileLog.e(e2);
-            }
-            if (obj != null) {
-                String str2 = (String) hashMap.get(obj);
-                if (!(str2 == null || this.countriesArray.indexOf(str2) == -1)) {
-                    this.codeField.setText((CharSequence) this.countriesMap.get(str2));
-                    this.countryState = 0;
-                }
-            }
-            if (this.codeField.length() == 0) {
-                this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
-                this.phoneField.setHintText(null);
-                this.countryState = 1;
-            }
-            if (this.codeField.length() != 0) {
-                AndroidUtilities.showKeyboard(this.phoneField);
-                this.phoneField.requestFocus();
-                HintEditText hintEditText = this.phoneField;
-                hintEditText.setSelection(hintEditText.length());
-                return;
-            }
-            AndroidUtilities.showKeyboard(this.codeField);
-            this.codeField.requestFocus();
-        }
-
-        public /* synthetic */ void lambda$new$2$ChangePhoneActivity$PhoneView(View view) {
-            CountrySelectActivity countrySelectActivity = new CountrySelectActivity(true);
-            countrySelectActivity.setCountrySelectActivityDelegate(new -$$Lambda$ChangePhoneActivity$PhoneView$A8p4yJz3eobVqDqSKiIVtCzw3Sk(this));
-            this.this$0.presentFragment(countrySelectActivity);
-        }
-
-        public /* synthetic */ void lambda$null$1$ChangePhoneActivity$PhoneView(String str, String str2) {
-            selectCountry(str);
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$PhoneView$wvhGenZJjp0tqD9lb-2k5ayod7A(this), 300);
-            this.phoneField.requestFocus();
-            HintEditText hintEditText = this.phoneField;
-            hintEditText.setSelection(hintEditText.length());
-        }
-
-        public /* synthetic */ void lambda$null$0$ChangePhoneActivity$PhoneView() {
-            AndroidUtilities.showKeyboard(this.phoneField);
-        }
-
-        public /* synthetic */ boolean lambda$new$3$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 5) {
-                return false;
-            }
-            this.phoneField.requestFocus();
-            HintEditText hintEditText = this.phoneField;
-            hintEditText.setSelection(hintEditText.length());
-            return true;
-        }
-
-        public /* synthetic */ boolean lambda$new$4$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
-            if (i != 5) {
-                return false;
-            }
-            onNextPressed();
-            return true;
-        }
-
-        public /* synthetic */ boolean lambda$new$5$ChangePhoneActivity$PhoneView(View view, int i, KeyEvent keyEvent) {
-            if (i != 67 || this.phoneField.length() != 0) {
-                return false;
-            }
-            this.codeField.requestFocus();
-            EditTextBoldCursor editTextBoldCursor = this.codeField;
-            editTextBoldCursor.setSelection(editTextBoldCursor.length());
-            this.codeField.dispatchKeyEvent(keyEvent);
-            return true;
-        }
-
-        public void selectCountry(String str) {
-            if (this.countriesArray.indexOf(str) != -1) {
-                this.ignoreOnTextChange = true;
-                String str2 = (String) this.countriesMap.get(str);
-                this.codeField.setText(str2);
-                this.countryButton.setText(str);
-                str = (String) this.phoneFormatMap.get(str2);
-                this.phoneField.setHintText(str != null ? str.replace('X', 8211) : null);
-                this.countryState = 0;
-                this.ignoreOnTextChange = false;
-            }
-        }
-
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
-            if (this.ignoreSelection) {
-                this.ignoreSelection = false;
-                return;
-            }
-            this.ignoreOnTextChange = true;
-            this.codeField.setText((CharSequence) this.countriesMap.get((String) this.countriesArray.get(i)));
-            this.ignoreOnTextChange = false;
-        }
-
-        public void onCancelPressed() {
-            this.nextPressed = false;
-        }
-
-        public void onNextPressed() {
-            String str = "ephone";
-            if (!(this.this$0.getParentActivity() == null || this.nextPressed)) {
-                Object obj;
-                String str2;
-                String str3 = "phone";
-                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str3);
-                Object obj2 = (telephonyManager.getSimState() == 1 || telephonyManager.getPhoneType() == 0) ? null : 1;
-                if (VERSION.SDK_INT < 23 || obj2 == null) {
-                    obj = 1;
-                } else {
-                    String str4 = "android.permission.READ_PHONE_STATE";
-                    obj = this.this$0.getParentActivity().checkSelfPermission(str4) == 0 ? 1 : null;
-                    if (this.this$0.checkPermissions) {
-                        this.this$0.permissionsItems.clear();
-                        if (obj == null) {
-                            this.this$0.permissionsItems.add(str4);
-                        }
-                        if (!this.this$0.permissionsItems.isEmpty()) {
-                            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                            str2 = "firstlogin";
-                            if (globalMainSettings.getBoolean(str2, true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str4)) {
-                                globalMainSettings.edit().putBoolean(str2, false).commit();
-                                Builder builder = new Builder(this.this$0.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", NUM));
-                                builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-                                builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
-                                ChangePhoneActivity changePhoneActivity = this.this$0;
-                                changePhoneActivity.permissionsDialog = changePhoneActivity.showDialog(builder.create());
-                            } else {
-                                this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
-                            }
-                            return;
-                        }
-                    }
-                }
-                if (this.countryState == 1) {
-                    AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("ChooseCountry", NUM));
-                } else if (this.codeField.length() == 0) {
-                    AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("InvalidPhoneNumber", NUM));
-                } else {
-                    TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode = new TL_account_sendChangePhoneCode();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("");
-                    stringBuilder.append(this.codeField.getText());
-                    stringBuilder.append(this.phoneField.getText());
-                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers(stringBuilder.toString());
-                    tL_account_sendChangePhoneCode.phone_number = stripExceptNumbers;
-                    tL_account_sendChangePhoneCode.settings = new TL_codeSettings();
-                    TL_codeSettings tL_codeSettings = tL_account_sendChangePhoneCode.settings;
-                    boolean z = (obj2 == null || obj == null) ? false : true;
-                    tL_codeSettings.allow_flashcall = z;
-                    tL_account_sendChangePhoneCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
-                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                    String str5 = "sms_hash";
-                    if (tL_account_sendChangePhoneCode.settings.allow_app_hash) {
-                        sharedPreferences.edit().putString(str5, BuildVars.SMS_HASH).commit();
-                    } else {
-                        sharedPreferences.edit().remove(str5).commit();
-                    }
-                    if (tL_account_sendChangePhoneCode.settings.allow_flashcall) {
-                        try {
-                            str2 = telephonyManager.getLine1Number();
-                            if (TextUtils.isEmpty(str2)) {
-                                tL_account_sendChangePhoneCode.settings.current_number = false;
-                            } else {
-                                tL_account_sendChangePhoneCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, str2);
-                                if (!tL_account_sendChangePhoneCode.settings.current_number) {
-                                    tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
-                                }
-                            }
-                        } catch (Exception e) {
-                            tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
-                            FileLog.e(e);
-                        }
-                    }
-                    Bundle bundle = new Bundle();
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    String str6 = "+";
-                    stringBuilder2.append(str6);
-                    stringBuilder2.append(this.codeField.getText());
-                    String str7 = " ";
-                    stringBuilder2.append(str7);
-                    stringBuilder2.append(this.phoneField.getText());
-                    bundle.putString(str3, stringBuilder2.toString());
-                    StringBuilder stringBuilder3;
-                    try {
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str6);
-                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
-                        stringBuilder3.append(str7);
-                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
-                        bundle.putString(str, stringBuilder3.toString());
-                    } catch (Exception e2) {
-                        FileLog.e(e2);
-                        stringBuilder3 = new StringBuilder();
-                        stringBuilder3.append(str6);
-                        stringBuilder3.append(stripExceptNumbers);
-                        bundle.putString(str, stringBuilder3.toString());
-                    }
-                    bundle.putString("phoneFormated", stripExceptNumbers);
-                    this.nextPressed = true;
-                    this.this$0.needShowProgress();
-                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_sendChangePhoneCode, new -$$Lambda$ChangePhoneActivity$PhoneView$osRwjZiwNNc4O0LSbhXJvCtt8fY(this, bundle, tL_account_sendChangePhoneCode), 2);
-                }
-            }
-        }
-
-        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle bundle, TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode, TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangePhoneActivity$PhoneView$_8ZmDMwVcKhBgNHbawOvyWif9Ck(this, tL_error, bundle, tLObject, tL_account_sendChangePhoneCode));
-        }
-
-        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TL_error tL_error, Bundle bundle, TLObject tLObject, TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode) {
-            this.nextPressed = false;
-            if (tL_error == null) {
-                this.this$0.fillNextCodeParams(bundle, (TL_auth_sentCode) tLObject);
-            } else {
-                AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_account_sendChangePhoneCode, bundle.getString("phone"));
-            }
-            this.this$0.needHideProgress();
-        }
-
-        public void onShow() {
-            super.onShow();
-            if (this.phoneField == null) {
-                return;
-            }
-            if (this.codeField.length() != 0) {
-                AndroidUtilities.showKeyboard(this.phoneField);
-                this.phoneField.requestFocus();
-                HintEditText hintEditText = this.phoneField;
-                hintEditText.setSelection(hintEditText.length());
-                return;
-            }
-            AndroidUtilities.showKeyboard(this.codeField);
-            this.codeField.requestFocus();
-        }
-
-        public String getHeaderName() {
-            return LocaleController.getString("ChangePhoneNewNumber", NUM);
         }
     }
 
@@ -1617,7 +123,7 @@ public class ChangePhoneActivity extends BaseFragment {
             try {
                 alertDialog.dismiss();
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
             this.progressDialog = null;
         }
@@ -1627,7 +133,7 @@ public class ChangePhoneActivity extends BaseFragment {
     public View createView(Context context) {
         this.actionBar.setTitle(LocaleController.getString("AppName", NUM));
         this.actionBar.setBackButtonImage(NUM);
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == 1) {
                     ChangePhoneActivity.this.views[ChangePhoneActivity.this.currentViewNum].onNextPressed();
@@ -1637,7 +143,7 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        AnonymousClass2 anonymousClass2 = new ScrollView(context) {
+        AnonymousClass2 r0 = new ScrollView(context) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 if (ChangePhoneActivity.this.currentViewNum == 1 || ChangePhoneActivity.this.currentViewNum == 2 || ChangePhoneActivity.this.currentViewNum == 4) {
                     rect.bottom += AndroidUtilities.dp(40.0f);
@@ -1645,16 +151,16 @@ public class ChangePhoneActivity extends BaseFragment {
                 return super.requestChildRectangleOnScreen(view, rect, z);
             }
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
-                ChangePhoneActivity.this.scrollHeight = MeasureSpec.getSize(i2) - AndroidUtilities.dp(30.0f);
+                int unused = ChangePhoneActivity.this.scrollHeight = View.MeasureSpec.getSize(i2) - AndroidUtilities.dp(30.0f);
                 super.onMeasure(i, i2);
             }
         };
-        anonymousClass2.setFillViewport(true);
-        this.fragmentView = anonymousClass2;
+        r0.setFillViewport(true);
+        this.fragmentView = r0;
         FrameLayout frameLayout = new FrameLayout(context);
-        anonymousClass2.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
+        r0.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
         this.views[0] = new PhoneView(this, context);
         this.views[1] = new LoginActivitySmsView(this, context, 1);
         this.views[2] = new LoginActivitySmsView(this, context, 2);
@@ -1682,16 +188,16 @@ public class ChangePhoneActivity extends BaseFragment {
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
         if (i == 6) {
             this.checkPermissions = false;
-            i = this.currentViewNum;
-            if (i == 0) {
-                this.views[i].onNextPressed();
+            int i2 = this.currentViewNum;
+            if (i2 == 0) {
+                this.views[i2].onNextPressed();
             }
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDialogDismiss(Dialog dialog) {
-        if (VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty()) {
+        if (Build.VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty()) {
             getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[0]), 6);
         }
     }
@@ -1712,7 +218,7 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         } else {
             if (this.views[i].onBackPressed(false)) {
-                setPage(0, true, null, true);
+                setPage(0, true, (Bundle) null, true);
             }
             return false;
         }
@@ -1738,7 +244,7 @@ public class ChangePhoneActivity extends BaseFragment {
             try {
                 alertDialog.dismiss();
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
             this.progressDialog = null;
         }
@@ -1754,56 +260,53 @@ public class ChangePhoneActivity extends BaseFragment {
             this.doneButton.setVisibility(0);
         }
         SlideView[] slideViewArr = this.views;
-        final Object obj = slideViewArr[this.currentViewNum];
-        final SlideView slideView = slideViewArr[i];
+        final SlideView slideView = slideViewArr[this.currentViewNum];
+        final SlideView slideView2 = slideViewArr[i];
         this.currentViewNum = i;
-        slideView.setParams(bundle, false);
-        this.actionBar.setTitle(slideView.getHeaderName());
-        slideView.onShow();
-        i = AndroidUtilities.displaySize.x;
+        slideView2.setParams(bundle, false);
+        this.actionBar.setTitle(slideView2.getHeaderName());
+        slideView2.onShow();
+        int i2 = AndroidUtilities.displaySize.x;
         if (z2) {
-            i = -i;
+            i2 = -i2;
         }
-        slideView.setX((float) i);
+        slideView2.setX((float) i2);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.setDuration(300);
         Animator[] animatorArr = new Animator[2];
         float[] fArr = new float[1];
         fArr[0] = (float) (z2 ? AndroidUtilities.displaySize.x : -AndroidUtilities.displaySize.x);
-        String str = "translationX";
-        animatorArr[0] = ObjectAnimator.ofFloat(obj, str, fArr);
-        animatorArr[1] = ObjectAnimator.ofFloat(slideView, str, new float[]{0.0f});
+        animatorArr[0] = ObjectAnimator.ofFloat(slideView, "translationX", fArr);
+        animatorArr[1] = ObjectAnimator.ofFloat(slideView2, "translationX", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
-                slideView.setVisibility(0);
+                slideView2.setVisibility(0);
             }
 
             public void onAnimationEnd(Animator animator) {
-                obj.setVisibility(8);
-                obj.setX(0.0f);
+                slideView.setVisibility(8);
+                slideView.setX(0.0f);
             }
         });
         animatorSet.start();
     }
 
-    private void fillNextCodeParams(Bundle bundle, TL_auth_sentCode tL_auth_sentCode) {
+    /* access modifiers changed from: private */
+    public void fillNextCodeParams(Bundle bundle, TLRPC.TL_auth_sentCode tL_auth_sentCode) {
         bundle.putString("phoneHash", tL_auth_sentCode.phone_code_hash);
-        auth_CodeType auth_codetype = tL_auth_sentCode.next_type;
-        String str = "nextType";
-        if (auth_codetype instanceof TL_auth_codeTypeCall) {
-            bundle.putInt(str, 4);
-        } else if (auth_codetype instanceof TL_auth_codeTypeFlashCall) {
-            bundle.putInt(str, 3);
-        } else if (auth_codetype instanceof TL_auth_codeTypeSms) {
-            bundle.putInt(str, 2);
+        TLRPC.auth_CodeType auth_codetype = tL_auth_sentCode.next_type;
+        if (auth_codetype instanceof TLRPC.TL_auth_codeTypeCall) {
+            bundle.putInt("nextType", 4);
+        } else if (auth_codetype instanceof TLRPC.TL_auth_codeTypeFlashCall) {
+            bundle.putInt("nextType", 3);
+        } else if (auth_codetype instanceof TLRPC.TL_auth_codeTypeSms) {
+            bundle.putInt("nextType", 2);
         }
-        String str2 = "length";
-        String str3 = "type";
-        if (tL_auth_sentCode.type instanceof TL_auth_sentCodeTypeApp) {
-            bundle.putInt(str3, 1);
-            bundle.putInt(str2, tL_auth_sentCode.type.length);
+        if (tL_auth_sentCode.type instanceof TLRPC.TL_auth_sentCodeTypeApp) {
+            bundle.putInt("type", 1);
+            bundle.putInt("length", tL_auth_sentCode.type.length);
             setPage(1, true, bundle, false);
             return;
         }
@@ -1811,111 +314,2589 @@ public class ChangePhoneActivity extends BaseFragment {
             tL_auth_sentCode.timeout = 60;
         }
         bundle.putInt("timeout", tL_auth_sentCode.timeout * 1000);
-        auth_SentCodeType auth_sentcodetype = tL_auth_sentCode.type;
-        if (auth_sentcodetype instanceof TL_auth_sentCodeTypeCall) {
-            bundle.putInt(str3, 4);
-            bundle.putInt(str2, tL_auth_sentCode.type.length);
+        TLRPC.auth_SentCodeType auth_sentcodetype = tL_auth_sentCode.type;
+        if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeCall) {
+            bundle.putInt("type", 4);
+            bundle.putInt("length", tL_auth_sentCode.type.length);
             setPage(4, true, bundle, false);
-        } else if (auth_sentcodetype instanceof TL_auth_sentCodeTypeFlashCall) {
-            bundle.putInt(str3, 3);
+        } else if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeFlashCall) {
+            bundle.putInt("type", 3);
             bundle.putString("pattern", tL_auth_sentCode.type.pattern);
             setPage(3, true, bundle, false);
-        } else if (auth_sentcodetype instanceof TL_auth_sentCodeTypeSms) {
-            bundle.putInt(str3, 2);
-            bundle.putInt(str2, tL_auth_sentCode.type.length);
+        } else if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeSms) {
+            bundle.putInt("type", 2);
+            bundle.putInt("length", tL_auth_sentCode.type.length);
             setPage(2, true, bundle, false);
         }
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        int i;
-        SlideView[] slideViewArr = this.views;
-        PhoneView phoneView = (PhoneView) slideViewArr[0];
-        LoginActivitySmsView loginActivitySmsView = (LoginActivitySmsView) slideViewArr[1];
-        LoginActivitySmsView loginActivitySmsView2 = (LoginActivitySmsView) slideViewArr[2];
-        LoginActivitySmsView loginActivitySmsView3 = (LoginActivitySmsView) slideViewArr[3];
-        LoginActivitySmsView loginActivitySmsView4 = (LoginActivitySmsView) slideViewArr[4];
-        ArrayList arrayList = new ArrayList();
-        ThemeDescription themeDescription = r9;
-        ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        arrayList.add(themeDescription);
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "listSelectorSDK21"));
-        arrayList.add(new ThemeDescription(phoneView.view, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhiteGrayLine"));
-        arrayList.add(new ThemeDescription(phoneView.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"));
-        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
-        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"));
-        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"));
-        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
-        arrayList.add(new ThemeDescription(phoneView.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        if (loginActivitySmsView.codeField != null) {
-            for (i = 0; i < loginActivitySmsView.codeField.length; i++) {
-                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
+    public class PhoneView extends SlideView implements AdapterView.OnItemSelectedListener {
+        /* access modifiers changed from: private */
+        public EditTextBoldCursor codeField;
+        /* access modifiers changed from: private */
+        public HashMap<String, String> codesMap = new HashMap<>();
+        /* access modifiers changed from: private */
+        public ArrayList<String> countriesArray = new ArrayList<>();
+        private HashMap<String, String> countriesMap = new HashMap<>();
+        /* access modifiers changed from: private */
+        public TextView countryButton;
+        /* access modifiers changed from: private */
+        public int countryState = 0;
+        /* access modifiers changed from: private */
+        public boolean ignoreOnPhoneChange = false;
+        /* access modifiers changed from: private */
+        public boolean ignoreOnTextChange = false;
+        /* access modifiers changed from: private */
+        public boolean ignoreSelection = false;
+        private boolean nextPressed = false;
+        /* access modifiers changed from: private */
+        public HintEditText phoneField;
+        /* access modifiers changed from: private */
+        public HashMap<String, String> phoneFormatMap = new HashMap<>();
+        /* access modifiers changed from: private */
+        public TextView textView;
+        /* access modifiers changed from: private */
+        public TextView textView2;
+        final /* synthetic */ ChangePhoneActivity this$0;
+        /* access modifiers changed from: private */
+        public View view;
+
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+
+        /* JADX WARNING: Illegal instructions before constructor call */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public PhoneView(org.telegram.ui.ChangePhoneActivity r22, android.content.Context r23) {
+            /*
+                r21 = this;
+                r1 = r21
+                r0 = r22
+                r2 = r23
+                r1.this$0 = r0
+                r1.<init>(r2)
+                r3 = 0
+                r1.countryState = r3
+                java.util.ArrayList r4 = new java.util.ArrayList
+                r4.<init>()
+                r1.countriesArray = r4
+                java.util.HashMap r4 = new java.util.HashMap
+                r4.<init>()
+                r1.countriesMap = r4
+                java.util.HashMap r4 = new java.util.HashMap
+                r4.<init>()
+                r1.codesMap = r4
+                java.util.HashMap r4 = new java.util.HashMap
+                r4.<init>()
+                r1.phoneFormatMap = r4
+                r1.ignoreSelection = r3
+                r1.ignoreOnTextChange = r3
+                r1.ignoreOnPhoneChange = r3
+                r1.nextPressed = r3
+                r4 = 1
+                r1.setOrientation(r4)
+                android.widget.TextView r5 = new android.widget.TextView
+                r5.<init>(r2)
+                r1.countryButton = r5
+                android.widget.TextView r5 = r1.countryButton
+                r6 = 1099956224(0x41900000, float:18.0)
+                r5.setTextSize(r4, r6)
+                android.widget.TextView r5 = r1.countryButton
+                r7 = 1082130432(0x40800000, float:4.0)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                r5.setPadding(r8, r9, r10, r7)
+                android.widget.TextView r5 = r1.countryButton
+                java.lang.String r7 = "windowBackgroundWhiteBlackText"
+                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r5.setTextColor(r8)
+                android.widget.TextView r5 = r1.countryButton
+                r5.setMaxLines(r4)
+                android.widget.TextView r5 = r1.countryButton
+                r5.setSingleLine(r4)
+                android.widget.TextView r5 = r1.countryButton
+                android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.END
+                r5.setEllipsize(r8)
+                android.widget.TextView r5 = r1.countryButton
+                boolean r8 = org.telegram.messenger.LocaleController.isRTL
+                r9 = 5
+                r10 = 3
+                if (r8 == 0) goto L_0x0082
+                r8 = 5
+                goto L_0x0083
+            L_0x0082:
+                r8 = 3
+            L_0x0083:
+                r8 = r8 | r4
+                r5.setGravity(r8)
+                android.widget.TextView r5 = r1.countryButton
+                java.lang.String r8 = "listSelectorSDK21"
+                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+                r11 = 7
+                android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8, r11)
+                r5.setBackground(r8)
+                android.widget.TextView r5 = r1.countryButton
+                r11 = -1
+                r12 = 36
+                r13 = 0
+                r14 = 0
+                r15 = 0
+                r16 = 1096810496(0x41600000, float:14.0)
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12, r13, r14, r15, r16)
+                r1.addView(r5, r8)
+                android.widget.TextView r5 = r1.countryButton
+                org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$hHa0N5BwdjvTPGkcx_aGuYpU4o4 r8 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$hHa0N5BwdjvTPGkcx_aGuYpU4o4
+                r8.<init>()
+                r5.setOnClickListener(r8)
+                android.view.View r5 = new android.view.View
+                r5.<init>(r2)
+                r1.view = r5
+                android.view.View r5 = r1.view
+                r8 = 1094713344(0x41400000, float:12.0)
+                int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                r5.setPadding(r11, r3, r8, r3)
+                android.view.View r5 = r1.view
+                java.lang.String r8 = "windowBackgroundWhiteGrayLine"
+                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+                r5.setBackgroundColor(r8)
+                android.view.View r5 = r1.view
+                r11 = -1
+                r12 = 1
+                r13 = 1082130432(0x40800000, float:4.0)
+                r14 = -1047789568(0xffffffffCLASSNAMECLASSNAME, float:-17.5)
+                r15 = 1082130432(0x40800000, float:4.0)
+                r16 = 0
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12, r13, r14, r15, r16)
+                r1.addView(r5, r8)
+                android.widget.LinearLayout r5 = new android.widget.LinearLayout
+                r5.<init>(r2)
+                r5.setOrientation(r3)
+                r12 = -2
+                r13 = 0
+                r14 = 1101004800(0x41a00000, float:20.0)
+                r15 = 0
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12, r13, r14, r15, r16)
+                r1.addView(r5, r8)
+                android.widget.TextView r8 = new android.widget.TextView
+                r8.<init>(r2)
+                r1.textView = r8
+                android.widget.TextView r8 = r1.textView
+                java.lang.String r11 = "+"
+                r8.setText(r11)
+                android.widget.TextView r8 = r1.textView
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r8.setTextColor(r11)
+                android.widget.TextView r8 = r1.textView
+                r8.setTextSize(r4, r6)
+                android.widget.TextView r8 = r1.textView
+                r11 = -2
+                android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r11)
+                r5.addView(r8, r11)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = new org.telegram.ui.Components.EditTextBoldCursor
+                r8.<init>(r2)
+                r1.codeField = r8
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r8.setInputType(r10)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r8.setTextColor(r11)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r8.setCursorColor(r11)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r11 = 1101004800(0x41a00000, float:20.0)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                r8.setCursorSize(r12)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r12 = 1069547520(0x3fCLASSNAME, float:1.5)
+                r8.setCursorWidth(r12)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r2, r3)
+                r8.setBackgroundDrawable(r13)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r13 = 1092616192(0x41200000, float:10.0)
+                int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+                r8.setPadding(r13, r3, r3, r3)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r8.setTextSize(r4, r6)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r8.setMaxLines(r4)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r13 = 19
+                r8.setGravity(r13)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r14 = 268435461(0x10000005, float:2.5243564E-29)
+                r8.setImeOptions(r14)
+                android.text.InputFilter[] r8 = new android.text.InputFilter[r4]
+                android.text.InputFilter$LengthFilter r15 = new android.text.InputFilter$LengthFilter
+                r15.<init>(r9)
+                r8[r3] = r15
+                org.telegram.ui.Components.EditTextBoldCursor r15 = r1.codeField
+                r15.setFilters(r8)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                r15 = 55
+                r16 = 36
+                r17 = -1055916032(0xffffffffCLASSNAME, float:-9.0)
+                r18 = 0
+                r19 = 1098907648(0x41800000, float:16.0)
+                r20 = 0
+                android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r16, r17, r18, r19, r20)
+                r5.addView(r8, r15)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                org.telegram.ui.ChangePhoneActivity$PhoneView$1 r15 = new org.telegram.ui.ChangePhoneActivity$PhoneView$1
+                r15.<init>(r0)
+                r8.addTextChangedListener(r15)
+                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
+                org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$ygpxiaZ49URLLE6EQa6mU8BoI-E r15 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$ygpxiaZ49URLLE6EQa6mU8BoI-E
+                r15.<init>()
+                r8.setOnEditorActionListener(r15)
+                org.telegram.ui.Components.HintEditText r8 = new org.telegram.ui.Components.HintEditText
+                r8.<init>(r2)
+                r1.phoneField = r8
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                r8.setInputType(r10)
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                int r15 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r8.setTextColor(r15)
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                java.lang.String r15 = "windowBackgroundWhiteHintText"
+                int r15 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                r8.setHintTextColor(r15)
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r2, r3)
+                r8.setBackgroundDrawable(r15)
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                r8.setPadding(r3, r3, r3, r3)
+                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
+                int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r8.setCursorColor(r7)
+                org.telegram.ui.Components.HintEditText r7 = r1.phoneField
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                r7.setCursorSize(r8)
+                org.telegram.ui.Components.HintEditText r7 = r1.phoneField
+                r7.setCursorWidth(r12)
+                org.telegram.ui.Components.HintEditText r7 = r1.phoneField
+                r7.setTextSize(r4, r6)
+                org.telegram.ui.Components.HintEditText r6 = r1.phoneField
+                r6.setMaxLines(r4)
+                org.telegram.ui.Components.HintEditText r6 = r1.phoneField
+                r6.setGravity(r13)
+                org.telegram.ui.Components.HintEditText r6 = r1.phoneField
+                r6.setImeOptions(r14)
+                org.telegram.ui.Components.HintEditText r6 = r1.phoneField
+                r7 = 1108344832(0x42100000, float:36.0)
+                r8 = -1
+                android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r7)
+                r5.addView(r6, r7)
+                org.telegram.ui.Components.HintEditText r5 = r1.phoneField
+                org.telegram.ui.ChangePhoneActivity$PhoneView$2 r6 = new org.telegram.ui.ChangePhoneActivity$PhoneView$2
+                r6.<init>(r0)
+                r5.addTextChangedListener(r6)
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$mrGs3y2Wdb-mBuTVpvmbjtLfvnM r5 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$mrGs3y2Wdb-mBuTVpvmbjtLfvnM
+                r5.<init>()
+                r0.setOnEditorActionListener(r5)
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$Giefqm7S2Vkx_CoymYR4pbzjY_Y r5 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$PhoneView$Giefqm7S2Vkx_CoymYR4pbzjY_Y
+                r5.<init>()
+                r0.setOnKeyListener(r5)
+                android.widget.TextView r0 = new android.widget.TextView
+                r0.<init>(r2)
+                r1.textView2 = r0
+                android.widget.TextView r0 = r1.textView2
+                r2 = 2131624489(0x7f0e0229, float:1.887616E38)
+                java.lang.String r5 = "ChangePhoneHelp"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
+                r0.setText(r2)
+                android.widget.TextView r0 = r1.textView2
+                java.lang.String r2 = "windowBackgroundWhiteGrayText6"
+                int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+                r0.setTextColor(r2)
+                android.widget.TextView r0 = r1.textView2
+                r2 = 1096810496(0x41600000, float:14.0)
+                r0.setTextSize(r4, r2)
+                android.widget.TextView r0 = r1.textView2
+                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                if (r2 == 0) goto L_0x0269
+                r2 = 5
+                goto L_0x026a
+            L_0x0269:
+                r2 = 3
+            L_0x026a:
+                r0.setGravity(r2)
+                android.widget.TextView r0 = r1.textView2
+                r2 = 1073741824(0x40000000, float:2.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                float r2 = (float) r2
+                r5 = 1065353216(0x3var_, float:1.0)
+                r0.setLineSpacing(r2, r5)
+                android.widget.TextView r0 = r1.textView2
+                r11 = -2
+                r12 = -2
+                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                if (r2 == 0) goto L_0x0285
+                r13 = 5
+                goto L_0x0286
+            L_0x0285:
+                r13 = 3
+            L_0x0286:
+                r14 = 0
+                r15 = 28
+                r16 = 0
+                r17 = 10
+                android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
+                r1.addView(r0, r2)
+                java.util.HashMap r2 = new java.util.HashMap
+                r2.<init>()
+                java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x02ef }
+                java.io.InputStreamReader r5 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x02ef }
+                android.content.res.Resources r6 = r21.getResources()     // Catch:{ Exception -> 0x02ef }
+                android.content.res.AssetManager r6 = r6.getAssets()     // Catch:{ Exception -> 0x02ef }
+                java.lang.String r7 = "countries.txt"
+                java.io.InputStream r6 = r6.open(r7)     // Catch:{ Exception -> 0x02ef }
+                r5.<init>(r6)     // Catch:{ Exception -> 0x02ef }
+                r0.<init>(r5)     // Catch:{ Exception -> 0x02ef }
+            L_0x02b1:
+                java.lang.String r5 = r0.readLine()     // Catch:{ Exception -> 0x02ef }
+                if (r5 == 0) goto L_0x02eb
+                java.lang.String r6 = ";"
+                java.lang.String[] r5 = r5.split(r6)     // Catch:{ Exception -> 0x02ef }
+                java.util.ArrayList<java.lang.String> r6 = r1.countriesArray     // Catch:{ Exception -> 0x02ef }
+                r7 = 2
+                r9 = r5[r7]     // Catch:{ Exception -> 0x02ef }
+                r6.add(r3, r9)     // Catch:{ Exception -> 0x02ef }
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.countriesMap     // Catch:{ Exception -> 0x02ef }
+                r9 = r5[r7]     // Catch:{ Exception -> 0x02ef }
+                r11 = r5[r3]     // Catch:{ Exception -> 0x02ef }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.codesMap     // Catch:{ Exception -> 0x02ef }
+                r9 = r5[r3]     // Catch:{ Exception -> 0x02ef }
+                r11 = r5[r7]     // Catch:{ Exception -> 0x02ef }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
+                int r6 = r5.length     // Catch:{ Exception -> 0x02ef }
+                if (r6 <= r10) goto L_0x02e3
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.phoneFormatMap     // Catch:{ Exception -> 0x02ef }
+                r9 = r5[r3]     // Catch:{ Exception -> 0x02ef }
+                r11 = r5[r10]     // Catch:{ Exception -> 0x02ef }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
+            L_0x02e3:
+                r6 = r5[r4]     // Catch:{ Exception -> 0x02ef }
+                r5 = r5[r7]     // Catch:{ Exception -> 0x02ef }
+                r2.put(r6, r5)     // Catch:{ Exception -> 0x02ef }
+                goto L_0x02b1
+            L_0x02eb:
+                r0.close()     // Catch:{ Exception -> 0x02ef }
+                goto L_0x02f3
+            L_0x02ef:
+                r0 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            L_0x02f3:
+                java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
+                org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r5 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
+                java.util.Collections.sort(r0, r5)
+                r5 = 0
+                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0311 }
+                java.lang.String r6 = "phone"
+                java.lang.Object r0 = r0.getSystemService(r6)     // Catch:{ Exception -> 0x0311 }
+                android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0311 }
+                if (r0 == 0) goto L_0x0315
+                java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0311 }
+                java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0311 }
+                r5 = r0
+                goto L_0x0315
+            L_0x0311:
+                r0 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            L_0x0315:
+                if (r5 == 0) goto L_0x0336
+                java.lang.Object r0 = r2.get(r5)
+                java.lang.String r0 = (java.lang.String) r0
+                if (r0 == 0) goto L_0x0336
+                java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
+                int r2 = r2.indexOf(r0)
+                if (r2 == r8) goto L_0x0336
+                org.telegram.ui.Components.EditTextBoldCursor r2 = r1.codeField
+                java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.countriesMap
+                java.lang.Object r0 = r5.get(r0)
+                java.lang.CharSequence r0 = (java.lang.CharSequence) r0
+                r2.setText(r0)
+                r1.countryState = r3
+            L_0x0336:
+                org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
+                int r0 = r0.length()
+                if (r0 != 0) goto L_0x0354
+                android.widget.TextView r0 = r1.countryButton
+                r2 = 2131624674(0x7f0e02e2, float:1.8876534E38)
+                java.lang.String r3 = "ChooseCountry"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+                r0.setText(r2)
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                r2 = 0
+                r0.setHintText(r2)
+                r1.countryState = r4
+            L_0x0354:
+                org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
+                int r0 = r0.length()
+                if (r0 == 0) goto L_0x0370
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                org.telegram.messenger.AndroidUtilities.showKeyboard(r0)
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                r0.requestFocus()
+                org.telegram.ui.Components.HintEditText r0 = r1.phoneField
+                int r2 = r0.length()
+                r0.setSelection(r2)
+                goto L_0x037a
+            L_0x0370:
+                org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
+                org.telegram.messenger.AndroidUtilities.showKeyboard(r0)
+                org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
+                r0.requestFocus()
+            L_0x037a:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.PhoneView.<init>(org.telegram.ui.ChangePhoneActivity, android.content.Context):void");
+        }
+
+        public /* synthetic */ void lambda$new$2$ChangePhoneActivity$PhoneView(View view2) {
+            CountrySelectActivity countrySelectActivity = new CountrySelectActivity(true);
+            countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
+                public final void didSelectCountry(String str, String str2) {
+                    ChangePhoneActivity.PhoneView.this.lambda$null$1$ChangePhoneActivity$PhoneView(str, str2);
+                }
+            });
+            this.this$0.presentFragment(countrySelectActivity);
+        }
+
+        public /* synthetic */ void lambda$null$1$ChangePhoneActivity$PhoneView(String str, String str2) {
+            selectCountry(str);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    ChangePhoneActivity.PhoneView.this.lambda$null$0$ChangePhoneActivity$PhoneView();
+                }
+            }, 300);
+            this.phoneField.requestFocus();
+            HintEditText hintEditText = this.phoneField;
+            hintEditText.setSelection(hintEditText.length());
+        }
+
+        public /* synthetic */ void lambda$null$0$ChangePhoneActivity$PhoneView() {
+            AndroidUtilities.showKeyboard(this.phoneField);
+        }
+
+        public /* synthetic */ boolean lambda$new$3$ChangePhoneActivity$PhoneView(TextView textView3, int i, KeyEvent keyEvent) {
+            if (i != 5) {
+                return false;
+            }
+            this.phoneField.requestFocus();
+            HintEditText hintEditText = this.phoneField;
+            hintEditText.setSelection(hintEditText.length());
+            return true;
+        }
+
+        public /* synthetic */ boolean lambda$new$4$ChangePhoneActivity$PhoneView(TextView textView3, int i, KeyEvent keyEvent) {
+            if (i != 5) {
+                return false;
+            }
+            onNextPressed();
+            return true;
+        }
+
+        public /* synthetic */ boolean lambda$new$5$ChangePhoneActivity$PhoneView(View view2, int i, KeyEvent keyEvent) {
+            if (i != 67 || this.phoneField.length() != 0) {
+                return false;
+            }
+            this.codeField.requestFocus();
+            EditTextBoldCursor editTextBoldCursor = this.codeField;
+            editTextBoldCursor.setSelection(editTextBoldCursor.length());
+            this.codeField.dispatchKeyEvent(keyEvent);
+            return true;
+        }
+
+        public void selectCountry(String str) {
+            if (this.countriesArray.indexOf(str) != -1) {
+                this.ignoreOnTextChange = true;
+                String str2 = this.countriesMap.get(str);
+                this.codeField.setText(str2);
+                this.countryButton.setText(str);
+                String str3 = this.phoneFormatMap.get(str2);
+                this.phoneField.setHintText(str3 != null ? str3.replace('X', 8211) : null);
+                this.countryState = 0;
+                this.ignoreOnTextChange = false;
             }
         }
-        arrayList.add(new ThemeDescription(loginActivitySmsView.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlueText4"));
-        View access$3300 = loginActivitySmsView.progressView;
-        Class[] clsArr = new Class[]{ProgressView.class};
-        String[] strArr = new String[1];
-        strArr[0] = "paint";
-        arrayList.add(new ThemeDescription(access$3300, 0, clsArr, strArr, null, null, null, "login_progressInner"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, "login_progressOuter"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        if (loginActivitySmsView2.codeField != null) {
-            for (i = 0; i < loginActivitySmsView2.codeField.length; i++) {
-                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
+
+        public void onItemSelected(AdapterView<?> adapterView, View view2, int i, long j) {
+            if (this.ignoreSelection) {
+                this.ignoreSelection = false;
+                return;
+            }
+            this.ignoreOnTextChange = true;
+            this.codeField.setText(this.countriesMap.get(this.countriesArray.get(i)));
+            this.ignoreOnTextChange = false;
+        }
+
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
+        public void onNextPressed() {
+            boolean z;
+            if (this.this$0.getParentActivity() != null && !this.nextPressed) {
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                boolean z2 = (telephonyManager.getSimState() == 1 || telephonyManager.getPhoneType() == 0) ? false : true;
+                if (Build.VERSION.SDK_INT < 23 || !z2) {
+                    z = true;
+                } else {
+                    z = this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
+                    if (this.this$0.checkPermissions) {
+                        this.this$0.permissionsItems.clear();
+                        if (!z) {
+                            this.this$0.permissionsItems.add("android.permission.READ_PHONE_STATE");
+                        }
+                        if (!this.this$0.permissionsItems.isEmpty()) {
+                            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                            if (globalMainSettings.getBoolean("firstlogin", true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE")) {
+                                globalMainSettings.edit().putBoolean("firstlogin", false).commit();
+                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
+                                builder.setTitle(LocaleController.getString("AppName", NUM));
+                                builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                                builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
+                                ChangePhoneActivity changePhoneActivity = this.this$0;
+                                Dialog unused = changePhoneActivity.permissionsDialog = changePhoneActivity.showDialog(builder.create());
+                                return;
+                            }
+                            this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
+                            return;
+                        }
+                    }
+                }
+                if (this.countryState == 1) {
+                    AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("ChooseCountry", NUM));
+                } else if (this.codeField.length() == 0) {
+                    AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("InvalidPhoneNumber", NUM));
+                } else {
+                    TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode = new TLRPC.TL_account_sendChangePhoneCode();
+                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
+                    tL_account_sendChangePhoneCode.phone_number = stripExceptNumbers;
+                    tL_account_sendChangePhoneCode.settings = new TLRPC.TL_codeSettings();
+                    tL_account_sendChangePhoneCode.settings.allow_flashcall = z2 && z;
+                    tL_account_sendChangePhoneCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    if (tL_account_sendChangePhoneCode.settings.allow_app_hash) {
+                        sharedPreferences.edit().putString("sms_hash", BuildVars.SMS_HASH).commit();
+                    } else {
+                        sharedPreferences.edit().remove("sms_hash").commit();
+                    }
+                    if (tL_account_sendChangePhoneCode.settings.allow_flashcall) {
+                        try {
+                            String line1Number = telephonyManager.getLine1Number();
+                            if (!TextUtils.isEmpty(line1Number)) {
+                                tL_account_sendChangePhoneCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, line1Number);
+                                if (!tL_account_sendChangePhoneCode.settings.current_number) {
+                                    tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
+                                }
+                            } else {
+                                tL_account_sendChangePhoneCode.settings.current_number = false;
+                            }
+                        } catch (Exception e) {
+                            tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
+                            FileLog.e((Throwable) e);
+                        }
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phone", "+" + this.codeField.getText() + " " + this.phoneField.getText());
+                    try {
+                        bundle.putString("ephone", "+" + PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
+                    } catch (Exception e2) {
+                        FileLog.e((Throwable) e2);
+                        bundle.putString("ephone", "+" + stripExceptNumbers);
+                    }
+                    bundle.putString("phoneFormated", stripExceptNumbers);
+                    this.nextPressed = true;
+                    this.this$0.needShowProgress();
+                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_sendChangePhoneCode, new RequestDelegate(bundle, tL_account_sendChangePhoneCode) {
+                        private final /* synthetic */ Bundle f$1;
+                        private final /* synthetic */ TLRPC.TL_account_sendChangePhoneCode f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                            ChangePhoneActivity.PhoneView.this.lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(this.f$1, this.f$2, tLObject, tL_error);
+                        }
+                    }, 2);
+                }
             }
         }
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlueText4"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressInner"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressOuter"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView2.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        if (loginActivitySmsView3.codeField != null) {
-            for (i = 0; i < loginActivitySmsView3.codeField.length; i++) {
-                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
-            }
+
+        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle bundle, TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode, TLObject tLObject, TLRPC.TL_error tL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(tL_error, bundle, tLObject, tL_account_sendChangePhoneCode) {
+                private final /* synthetic */ TLRPC.TL_error f$1;
+                private final /* synthetic */ Bundle f$2;
+                private final /* synthetic */ TLObject f$3;
+                private final /* synthetic */ TLRPC.TL_account_sendChangePhoneCode f$4;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                }
+
+                public final void run() {
+                    ChangePhoneActivity.PhoneView.this.lambda$null$6$ChangePhoneActivity$PhoneView(this.f$1, this.f$2, this.f$3, this.f$4);
+                }
+            });
         }
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlueText4"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressInner"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressOuter"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView3.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        if (loginActivitySmsView4.codeField != null) {
-            for (i = 0; i < loginActivitySmsView4.codeField.length; i++) {
-                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"));
+
+        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TLRPC.TL_error tL_error, Bundle bundle, TLObject tLObject, TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode) {
+            this.nextPressed = false;
+            if (tL_error == null) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC.TL_auth_sentCode) tLObject);
+            } else {
+                AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_account_sendChangePhoneCode, bundle.getString("phone"));
             }
+            this.this$0.needHideProgress();
         }
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlueText4"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressInner"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{r3}, null, null, null, "login_progressOuter"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+
+        public void onShow() {
+            super.onShow();
+            if (this.phoneField == null) {
+                return;
+            }
+            if (this.codeField.length() != 0) {
+                AndroidUtilities.showKeyboard(this.phoneField);
+                this.phoneField.requestFocus();
+                HintEditText hintEditText = this.phoneField;
+                hintEditText.setSelection(hintEditText.length());
+                return;
+            }
+            AndroidUtilities.showKeyboard(this.codeField);
+            this.codeField.requestFocus();
+        }
+
+        public String getHeaderName() {
+            return LocaleController.getString("ChangePhoneNewNumber", NUM);
+        }
     }
-}
+
+    public class LoginActivitySmsView extends SlideView implements NotificationCenter.NotificationCenterDelegate {
+        /* access modifiers changed from: private */
+        public ImageView blackImageView;
+        /* access modifiers changed from: private */
+        public ImageView blueImageView;
+        /* access modifiers changed from: private */
+        public EditTextBoldCursor[] codeField;
+        private LinearLayout codeFieldContainer;
+        /* access modifiers changed from: private */
+        public int codeTime = 15000;
+        private Timer codeTimer;
+        /* access modifiers changed from: private */
+        public TextView confirmTextView;
+        private Bundle currentParams;
+        /* access modifiers changed from: private */
+        public int currentType;
+        private String emailPhone;
+        /* access modifiers changed from: private */
+        public boolean ignoreOnTextChange;
+        /* access modifiers changed from: private */
+        public double lastCodeTime;
+        /* access modifiers changed from: private */
+        public double lastCurrentTime;
+        /* access modifiers changed from: private */
+        public String lastError = "";
+        /* access modifiers changed from: private */
+        public int length;
+        private boolean nextPressed;
+        /* access modifiers changed from: private */
+        public int nextType;
+        private int openTime;
+        private String pattern = "*";
+        private String phone;
+        /* access modifiers changed from: private */
+        public String phoneHash;
+        /* access modifiers changed from: private */
+        public TextView problemText;
+        /* access modifiers changed from: private */
+        public ProgressView progressView;
+        /* access modifiers changed from: private */
+        public String requestPhone;
+        final /* synthetic */ ChangePhoneActivity this$0;
+        /* access modifiers changed from: private */
+        public int time = 60000;
+        /* access modifiers changed from: private */
+        public TextView timeText;
+        /* access modifiers changed from: private */
+        public Timer timeTimer;
+        /* access modifiers changed from: private */
+        public int timeout;
+        private final Object timerSync = new Object();
+        /* access modifiers changed from: private */
+        public TextView titleTextView;
+        /* access modifiers changed from: private */
+        public boolean waitingForEvent;
+
+        static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TLRPC.TL_error tL_error) {
+        }
+
+        public boolean needBackButton() {
+            return true;
+        }
+
+        /* JADX WARNING: Illegal instructions before constructor call */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public LoginActivitySmsView(org.telegram.ui.ChangePhoneActivity r25, android.content.Context r26, int r27) {
+            /*
+                r24 = this;
+                r0 = r24
+                r1 = r25
+                r2 = r26
+                r0.this$0 = r1
+                r0.<init>(r2)
+                java.lang.Object r3 = new java.lang.Object
+                r3.<init>()
+                r0.timerSync = r3
+                r3 = 60000(0xea60, float:8.4078E-41)
+                r0.time = r3
+                r3 = 15000(0x3a98, float:2.102E-41)
+                r0.codeTime = r3
+                java.lang.String r3 = ""
+                r0.lastError = r3
+                java.lang.String r3 = "*"
+                r0.pattern = r3
+                r3 = r27
+                r0.currentType = r3
+                r3 = 1
+                r0.setOrientation(r3)
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r2)
+                r0.confirmTextView = r4
+                android.widget.TextView r4 = r0.confirmTextView
+                java.lang.String r5 = "windowBackgroundWhiteGrayText6"
+                int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+                r4.setTextColor(r6)
+                android.widget.TextView r4 = r0.confirmTextView
+                r6 = 1096810496(0x41600000, float:14.0)
+                r4.setTextSize(r3, r6)
+                android.widget.TextView r4 = r0.confirmTextView
+                r7 = 1073741824(0x40000000, float:2.0)
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                float r8 = (float) r8
+                r9 = 1065353216(0x3var_, float:1.0)
+                r4.setLineSpacing(r8, r9)
+                android.widget.TextView r4 = new android.widget.TextView
+                r4.<init>(r2)
+                r0.titleTextView = r4
+                android.widget.TextView r4 = r0.titleTextView
+                java.lang.String r8 = "windowBackgroundWhiteBlackText"
+                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+                r4.setTextColor(r10)
+                android.widget.TextView r4 = r0.titleTextView
+                r10 = 1099956224(0x41900000, float:18.0)
+                r4.setTextSize(r3, r10)
+                android.widget.TextView r4 = r0.titleTextView
+                java.lang.String r10 = "fonts/rmedium.ttf"
+                android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
+                r4.setTypeface(r10)
+                android.widget.TextView r4 = r0.titleTextView
+                boolean r10 = org.telegram.messenger.LocaleController.isRTL
+                r12 = 3
+                if (r10 == 0) goto L_0x0081
+                r10 = 5
+                goto L_0x0082
+            L_0x0081:
+                r10 = 3
+            L_0x0082:
+                r4.setGravity(r10)
+                android.widget.TextView r4 = r0.titleTextView
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                float r10 = (float) r10
+                r4.setLineSpacing(r10, r9)
+                android.widget.TextView r4 = r0.titleTextView
+                r10 = 49
+                r4.setGravity(r10)
+                int r4 = r0.currentType
+                r13 = -2
+                if (r4 != r12) goto L_0x0130
+                android.widget.TextView r4 = r0.confirmTextView
+                boolean r8 = org.telegram.messenger.LocaleController.isRTL
+                if (r8 == 0) goto L_0x00a3
+                r8 = 5
+                goto L_0x00a4
+            L_0x00a3:
+                r8 = 3
+            L_0x00a4:
+                r8 = r8 | 48
+                r4.setGravity(r8)
+                android.widget.FrameLayout r4 = new android.widget.FrameLayout
+                r4.<init>(r2)
+                boolean r8 = org.telegram.messenger.LocaleController.isRTL
+                if (r8 == 0) goto L_0x00b4
+                r8 = 5
+                goto L_0x00b5
+            L_0x00b4:
+                r8 = 3
+            L_0x00b5:
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
+                r0.addView(r4, r8)
+                android.widget.ImageView r8 = new android.widget.ImageView
+                r8.<init>(r2)
+                r14 = 2131165765(0x7var_, float:1.7945756E38)
+                r8.setImageResource(r14)
+                boolean r14 = org.telegram.messenger.LocaleController.isRTL
+                if (r14 == 0) goto L_0x00ff
+                r15 = 64
+                r16 = 1117257728(0x42980000, float:76.0)
+                r17 = 19
+                r18 = 1073741824(0x40000000, float:2.0)
+                r19 = 1073741824(0x40000000, float:2.0)
+                r20 = 0
+                r21 = 0
+                android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
+                r4.addView(r8, r14)
+                android.widget.TextView r8 = r0.confirmTextView
+                r14 = -1
+                r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                boolean r16 = org.telegram.messenger.LocaleController.isRTL
+                if (r16 == 0) goto L_0x00ec
+                r16 = 5
+                goto L_0x00ee
+            L_0x00ec:
+                r16 = 3
+            L_0x00ee:
+                r17 = 1118044160(0x42a40000, float:82.0)
+                r18 = 0
+                r19 = 0
+                r20 = 0
+                android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+                r4.addView(r8, r14)
+                goto L_0x021a
+            L_0x00ff:
+                android.widget.TextView r15 = r0.confirmTextView
+                r16 = -1
+                r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                if (r14 == 0) goto L_0x010a
+                r18 = 5
+                goto L_0x010c
+            L_0x010a:
+                r18 = 3
+            L_0x010c:
+                r19 = 0
+                r20 = 0
+                r21 = 1118044160(0x42a40000, float:82.0)
+                r22 = 0
+                android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+                r4.addView(r15, r14)
+                r16 = 64
+                r17 = 1117257728(0x42980000, float:76.0)
+                r18 = 21
+                r20 = 1073741824(0x40000000, float:2.0)
+                r21 = 0
+                r22 = 1073741824(0x40000000, float:2.0)
+                android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+                r4.addView(r8, r14)
+                goto L_0x021a
+            L_0x0130:
+                android.widget.TextView r4 = r0.confirmTextView
+                r4.setGravity(r10)
+                android.widget.FrameLayout r4 = new android.widget.FrameLayout
+                r4.<init>(r2)
+                android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r10)
+                r0.addView(r4, r14)
+                int r14 = r0.currentType
+                java.lang.String r15 = "chats_actionBackground"
+                if (r14 != r3) goto L_0x01b4
+                android.widget.ImageView r14 = new android.widget.ImageView
+                r14.<init>(r2)
+                r0.blackImageView = r14
+                android.widget.ImageView r14 = r0.blackImageView
+                r11 = 2131165883(0x7var_bb, float:1.7945996E38)
+                r14.setImageResource(r11)
+                android.widget.ImageView r11 = r0.blackImageView
+                android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
+                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+                android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
+                r14.<init>(r8, r10)
+                r11.setColorFilter(r14)
+                android.widget.ImageView r8 = r0.blackImageView
+                r17 = -2
+                r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r19 = 51
+                r20 = 0
+                r21 = 0
+                r22 = 0
+                r23 = 0
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+                r4.addView(r8, r10)
+                android.widget.ImageView r8 = new android.widget.ImageView
+                r8.<init>(r2)
+                r0.blueImageView = r8
+                android.widget.ImageView r8 = r0.blueImageView
+                r10 = 2131165881(0x7var_b9, float:1.7945992E38)
+                r8.setImageResource(r10)
+                android.widget.ImageView r8 = r0.blueImageView
+                android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+                r10.<init>(r11, r14)
+                r8.setColorFilter(r10)
+                android.widget.ImageView r8 = r0.blueImageView
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+                r4.addView(r8, r10)
+                android.widget.TextView r4 = r0.titleTextView
+                r8 = 2131626505(0x7f0e0a09, float:1.8880248E38)
+                java.lang.String r10 = "SentAppCodeTitle"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
+                r4.setText(r8)
+                goto L_0x01f8
+            L_0x01b4:
+                android.widget.ImageView r8 = new android.widget.ImageView
+                r8.<init>(r2)
+                r0.blueImageView = r8
+                android.widget.ImageView r8 = r0.blueImageView
+                r10 = 2131165882(0x7var_ba, float:1.7945994E38)
+                r8.setImageResource(r10)
+                android.widget.ImageView r8 = r0.blueImageView
+                android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+                r10.<init>(r11, r14)
+                r8.setColorFilter(r10)
+                android.widget.ImageView r8 = r0.blueImageView
+                r17 = -2
+                r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+                r19 = 51
+                r20 = 0
+                r21 = 0
+                r22 = 0
+                r23 = 0
+                android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+                r4.addView(r8, r10)
+                android.widget.TextView r4 = r0.titleTextView
+                r8 = 2131626509(0x7f0e0a0d, float:1.8880256E38)
+                java.lang.String r10 = "SentSmsCodeTitle"
+                java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
+                r4.setText(r8)
+            L_0x01f8:
+                android.widget.TextView r4 = r0.titleTextView
+                r17 = -2
+                r18 = -2
+                r19 = 49
+                r20 = 0
+                r21 = 18
+                r22 = 0
+                r23 = 0
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
+                r0.addView(r4, r8)
+                android.widget.TextView r4 = r0.confirmTextView
+                r21 = 17
+                android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
+                r0.addView(r4, r8)
+            L_0x021a:
+                android.widget.LinearLayout r4 = new android.widget.LinearLayout
+                r4.<init>(r2)
+                r0.codeFieldContainer = r4
+                android.widget.LinearLayout r4 = r0.codeFieldContainer
+                r8 = 0
+                r4.setOrientation(r8)
+                android.widget.LinearLayout r4 = r0.codeFieldContainer
+                r10 = 36
+                android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
+                r0.addView(r4, r10)
+                int r4 = r0.currentType
+                if (r4 != r12) goto L_0x023d
+                android.widget.LinearLayout r4 = r0.codeFieldContainer
+                r10 = 8
+                r4.setVisibility(r10)
+            L_0x023d:
+                org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1
+                r4.<init>(r2, r1)
+                r0.timeText = r4
+                android.widget.TextView r4 = r0.timeText
+                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+                r4.setTextColor(r5)
+                android.widget.TextView r4 = r0.timeText
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                float r5 = (float) r5
+                r4.setLineSpacing(r5, r9)
+                int r4 = r0.currentType
+                r5 = 1097859072(0x41700000, float:15.0)
+                r10 = 1092616192(0x41200000, float:10.0)
+                if (r4 != r12) goto L_0x029b
+                android.widget.TextView r4 = r0.timeText
+                r4.setTextSize(r3, r6)
+                android.widget.TextView r4 = r0.timeText
+                boolean r6 = org.telegram.messenger.LocaleController.isRTL
+                if (r6 == 0) goto L_0x026c
+                r6 = 5
+                goto L_0x026d
+            L_0x026c:
+                r6 = 3
+            L_0x026d:
+                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
+                r0.addView(r4, r6)
+                org.telegram.ui.ChangePhoneActivity$ProgressView r4 = new org.telegram.ui.ChangePhoneActivity$ProgressView
+                r4.<init>(r2)
+                r0.progressView = r4
+                android.widget.TextView r4 = r0.timeText
+                boolean r6 = org.telegram.messenger.LocaleController.isRTL
+                if (r6 == 0) goto L_0x0282
+                r12 = 5
+            L_0x0282:
+                r4.setGravity(r12)
+                org.telegram.ui.ChangePhoneActivity$ProgressView r4 = r0.progressView
+                r17 = -1
+                r18 = 3
+                r19 = 0
+                r20 = 1094713344(0x41400000, float:12.0)
+                r21 = 0
+                r22 = 0
+                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
+                r0.addView(r4, r6)
+                goto L_0x02bd
+            L_0x029b:
+                android.widget.TextView r4 = r0.timeText
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                r4.setPadding(r8, r6, r8, r11)
+                android.widget.TextView r4 = r0.timeText
+                r4.setTextSize(r3, r5)
+                android.widget.TextView r4 = r0.timeText
+                r6 = 49
+                r4.setGravity(r6)
+                android.widget.TextView r4 = r0.timeText
+                android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
+                r0.addView(r4, r11)
+            L_0x02bd:
+                org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2
+                r4.<init>(r2, r1)
+                r0.problemText = r4
+                android.widget.TextView r1 = r0.problemText
+                java.lang.String r2 = "windowBackgroundWhiteBlueText4"
+                int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+                r1.setTextColor(r2)
+                android.widget.TextView r1 = r0.problemText
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                float r2 = (float) r2
+                r1.setLineSpacing(r2, r9)
+                android.widget.TextView r1 = r0.problemText
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                r1.setPadding(r8, r2, r8, r4)
+                android.widget.TextView r1 = r0.problemText
+                r1.setTextSize(r3, r5)
+                android.widget.TextView r1 = r0.problemText
+                r2 = 49
+                r1.setGravity(r2)
+                int r1 = r0.currentType
+                if (r1 != r3) goto L_0x0306
+                android.widget.TextView r1 = r0.problemText
+                r2 = 2131624883(0x7f0e03b3, float:1.8876958E38)
+                java.lang.String r3 = "DidNotGetTheCodeSms"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+                r1.setText(r2)
+                goto L_0x0314
+            L_0x0306:
+                android.widget.TextView r1 = r0.problemText
+                r2 = 2131624882(0x7f0e03b2, float:1.8876956E38)
+                java.lang.String r3 = "DidNotGetTheCode"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+                r1.setText(r2)
+            L_0x0314:
+                android.widget.TextView r1 = r0.problemText
+                r2 = 49
+                android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
+                r0.addView(r1, r2)
+                android.widget.TextView r1 = r0.problemText
+                org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$rfmfbNz40o5r3LlbaUeCqZ1rJcg r2 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$rfmfbNz40o5r3LlbaUeCqZ1rJcg
+                r2.<init>()
+                r1.setOnClickListener(r2)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.<init>(org.telegram.ui.ChangePhoneActivity, android.content.Context, int):void");
+        }
+
+        public /* synthetic */ void lambda$new$0$ChangePhoneActivity$LoginActivitySmsView(View view) {
+            if (!this.nextPressed) {
+                if (!((this.nextType == 4 && this.currentType == 2) || this.nextType == 0)) {
+                    resendCode();
+                    return;
+                }
+                try {
+                    PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+                    String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
+                    Intent intent = new Intent("android.intent.action.SEND");
+                    intent.setType("message/rfCLASSNAME");
+                    intent.putExtra("android.intent.extra.EMAIL", new String[]{"sms@stel.com"});
+                    intent.putExtra("android.intent.extra.SUBJECT", "Android registration/login issue " + format + " " + this.emailPhone);
+                    intent.putExtra("android.intent.extra.TEXT", "Phone: " + this.requestPhone + "\nApp version: " + format + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + this.lastError);
+                    getContext().startActivity(Intent.createChooser(intent, "Send email..."));
+                } catch (Exception unused) {
+                    AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("NoMailInstalled", NUM));
+                }
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            ImageView imageView;
+            super.onMeasure(i, i2);
+            if (this.currentType != 3 && (imageView = this.blueImageView) != null) {
+                int measuredHeight = imageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight() + this.confirmTextView.getMeasuredHeight() + AndroidUtilities.dp(35.0f);
+                int dp = AndroidUtilities.dp(80.0f);
+                int dp2 = AndroidUtilities.dp(291.0f);
+                if (this.this$0.scrollHeight - measuredHeight < dp) {
+                    setMeasuredDimension(getMeasuredWidth(), measuredHeight + dp);
+                } else if (this.this$0.scrollHeight > dp2) {
+                    setMeasuredDimension(getMeasuredWidth(), dp2);
+                } else {
+                    setMeasuredDimension(getMeasuredWidth(), this.this$0.scrollHeight);
+                }
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            int i5;
+            super.onLayout(z, i, i2, i3, i4);
+            if (this.currentType != 3 && this.blueImageView != null) {
+                int bottom = this.confirmTextView.getBottom();
+                int measuredHeight = getMeasuredHeight() - bottom;
+                if (this.problemText.getVisibility() == 0) {
+                    int measuredHeight2 = this.problemText.getMeasuredHeight();
+                    i5 = (measuredHeight + bottom) - measuredHeight2;
+                    TextView textView = this.problemText;
+                    textView.layout(textView.getLeft(), i5, this.problemText.getRight(), measuredHeight2 + i5);
+                } else if (this.timeText.getVisibility() == 0) {
+                    int measuredHeight3 = this.timeText.getMeasuredHeight();
+                    i5 = (measuredHeight + bottom) - measuredHeight3;
+                    TextView textView2 = this.timeText;
+                    textView2.layout(textView2.getLeft(), i5, this.timeText.getRight(), measuredHeight3 + i5);
+                } else {
+                    i5 = measuredHeight + bottom;
+                }
+                int measuredHeight4 = this.codeFieldContainer.getMeasuredHeight();
+                int i6 = (((i5 - bottom) - measuredHeight4) / 2) + bottom;
+                LinearLayout linearLayout = this.codeFieldContainer;
+                linearLayout.layout(linearLayout.getLeft(), i6, this.codeFieldContainer.getRight(), measuredHeight4 + i6);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void resendCode() {
+            Bundle bundle = new Bundle();
+            bundle.putString("phone", this.phone);
+            bundle.putString("ephone", this.emailPhone);
+            bundle.putString("phoneFormated", this.requestPhone);
+            this.nextPressed = true;
+            this.this$0.needShowProgress();
+            TLRPC.TL_auth_resendCode tL_auth_resendCode = new TLRPC.TL_auth_resendCode();
+            tL_auth_resendCode.phone_number = this.requestPhone;
+            tL_auth_resendCode.phone_code_hash = this.phoneHash;
+            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new RequestDelegate(bundle, tL_auth_resendCode) {
+                private final /* synthetic */ Bundle f$1;
+                private final /* synthetic */ TLRPC.TL_auth_resendCode f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                    ChangePhoneActivity.LoginActivitySmsView.this.lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(this.f$1, this.f$2, tLObject, tL_error);
+                }
+            }, 2);
+        }
+
+        public /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle bundle, TLRPC.TL_auth_resendCode tL_auth_resendCode, TLObject tLObject, TLRPC.TL_error tL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(tL_error, bundle, tLObject, tL_auth_resendCode) {
+                private final /* synthetic */ TLRPC.TL_error f$1;
+                private final /* synthetic */ Bundle f$2;
+                private final /* synthetic */ TLObject f$3;
+                private final /* synthetic */ TLRPC.TL_auth_resendCode f$4;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                }
+
+                public final void run() {
+                    ChangePhoneActivity.LoginActivitySmsView.this.lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(this.f$1, this.f$2, this.f$3, this.f$4);
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_error tL_error, Bundle bundle, TLObject tLObject, TLRPC.TL_auth_resendCode tL_auth_resendCode) {
+            this.nextPressed = false;
+            if (tL_error == null) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC.TL_auth_sentCode) tLObject);
+            } else {
+                AlertDialog alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_auth_resendCode, new Object[0]);
+                if (alertDialog != null && tL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                    alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        public final void onClick(DialogInterface dialogInterface, int i) {
+                            ChangePhoneActivity.LoginActivitySmsView.this.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(dialogInterface, i);
+                        }
+                    });
+                }
+            }
+            this.this$0.needHideProgress();
+        }
+
+        public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
+            onBackPressed(true);
+            this.this$0.finishFragment();
+        }
+
+        public String getHeaderName() {
+            if (this.currentType == 1) {
+                return this.phone;
+            }
+            return LocaleController.getString("YourCode", NUM);
+        }
+
+        public void onCancelPressed() {
+            this.nextPressed = false;
+        }
+
+        public void setParams(Bundle bundle, boolean z) {
+            int i;
+            int i2;
+            Bundle bundle2 = bundle;
+            if (bundle2 != null) {
+                this.waitingForEvent = true;
+                int i3 = this.currentType;
+                if (i3 == 2) {
+                    AndroidUtilities.setWaitingForSms(true);
+                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
+                } else if (i3 == 3) {
+                    AndroidUtilities.setWaitingForCall(true);
+                    NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
+                }
+                this.currentParams = bundle2;
+                this.phone = bundle2.getString("phone");
+                this.emailPhone = bundle2.getString("ephone");
+                this.requestPhone = bundle2.getString("phoneFormated");
+                this.phoneHash = bundle2.getString("phoneHash");
+                int i4 = bundle2.getInt("timeout");
+                this.time = i4;
+                this.timeout = i4;
+                this.openTime = (int) (System.currentTimeMillis() / 1000);
+                this.nextType = bundle2.getInt("nextType");
+                this.pattern = bundle2.getString("pattern");
+                this.length = bundle2.getInt("length");
+                if (this.length == 0) {
+                    this.length = 5;
+                }
+                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                CharSequence charSequence = "";
+                int i5 = 8;
+                if (editTextBoldCursorArr != null && editTextBoldCursorArr.length == this.length) {
+                    int i6 = 0;
+                    while (true) {
+                        EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
+                        if (i6 >= editTextBoldCursorArr2.length) {
+                            break;
+                        }
+                        editTextBoldCursorArr2[i6].setText(charSequence);
+                        i6++;
+                    }
+                } else {
+                    this.codeField = new EditTextBoldCursor[this.length];
+                    final int i7 = 0;
+                    while (i7 < this.length) {
+                        this.codeField[i7] = new EditTextBoldCursor(getContext());
+                        this.codeField[i7].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                        this.codeField[i7].setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                        this.codeField[i7].setCursorSize(AndroidUtilities.dp(20.0f));
+                        this.codeField[i7].setCursorWidth(1.5f);
+                        Drawable mutate = getResources().getDrawable(NUM).mutate();
+                        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteInputFieldActivated"), PorterDuff.Mode.MULTIPLY));
+                        this.codeField[i7].setBackgroundDrawable(mutate);
+                        this.codeField[i7].setImeOptions(NUM);
+                        this.codeField[i7].setTextSize(1, 20.0f);
+                        this.codeField[i7].setMaxLines(1);
+                        this.codeField[i7].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        this.codeField[i7].setPadding(0, 0, 0, 0);
+                        this.codeField[i7].setGravity(49);
+                        if (this.currentType == 3) {
+                            this.codeField[i7].setEnabled(false);
+                            this.codeField[i7].setInputType(0);
+                            this.codeField[i7].setVisibility(8);
+                        } else {
+                            this.codeField[i7].setInputType(3);
+                        }
+                        this.codeFieldContainer.addView(this.codeField[i7], LayoutHelper.createLinear(34, 36, 1, 0, 0, i7 != this.length - 1 ? 7 : 0, 0));
+                        this.codeField[i7].addTextChangedListener(new TextWatcher() {
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                            }
+
+                            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                            }
+
+                            public void afterTextChanged(Editable editable) {
+                                int length;
+                                if (!LoginActivitySmsView.this.ignoreOnTextChange && (length = editable.length()) >= 1) {
+                                    if (length > 1) {
+                                        String obj = editable.toString();
+                                        boolean unused = LoginActivitySmsView.this.ignoreOnTextChange = true;
+                                        for (int i = 0; i < Math.min(LoginActivitySmsView.this.length - i7, length); i++) {
+                                            if (i == 0) {
+                                                editable.replace(0, length, obj.substring(i, i + 1));
+                                            } else {
+                                                LoginActivitySmsView.this.codeField[i7 + i].setText(obj.substring(i, i + 1));
+                                            }
+                                        }
+                                        boolean unused2 = LoginActivitySmsView.this.ignoreOnTextChange = false;
+                                    }
+                                    if (i7 != LoginActivitySmsView.this.length - 1) {
+                                        LoginActivitySmsView.this.codeField[i7 + 1].setSelection(LoginActivitySmsView.this.codeField[i7 + 1].length());
+                                        LoginActivitySmsView.this.codeField[i7 + 1].requestFocus();
+                                    }
+                                    if ((i7 == LoginActivitySmsView.this.length - 1 || (i7 == LoginActivitySmsView.this.length - 2 && length >= 2)) && LoginActivitySmsView.this.getCode().length() == LoginActivitySmsView.this.length) {
+                                        LoginActivitySmsView.this.onNextPressed();
+                                    }
+                                }
+                            }
+                        });
+                        this.codeField[i7].setOnKeyListener(new View.OnKeyListener(i7) {
+                            private final /* synthetic */ int f$1;
+
+                            {
+                                this.f$1 = r2;
+                            }
+
+                            public final boolean onKey(View view, int i, KeyEvent keyEvent) {
+                                return ChangePhoneActivity.LoginActivitySmsView.this.lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(this.f$1, view, i, keyEvent);
+                            }
+                        });
+                        this.codeField[i7].setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                            public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                                return ChangePhoneActivity.LoginActivitySmsView.this.lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(textView, i, keyEvent);
+                            }
+                        });
+                        i7++;
+                    }
+                }
+                ProgressView progressView2 = this.progressView;
+                if (progressView2 != null) {
+                    progressView2.setVisibility(this.nextType != 0 ? 0 : 8);
+                }
+                if (this.phone != null) {
+                    String format = PhoneFormat.getInstance().format(this.phone);
+                    int i8 = this.currentType;
+                    if (i8 == 1) {
+                        charSequence = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", NUM));
+                    } else if (i8 == 2) {
+                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", NUM, LocaleController.addNbsp(format)));
+                    } else if (i8 == 3) {
+                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", NUM, LocaleController.addNbsp(format)));
+                    } else if (i8 == 4) {
+                        charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", NUM, LocaleController.addNbsp(format)));
+                    }
+                    this.confirmTextView.setText(charSequence);
+                    if (this.currentType != 3) {
+                        AndroidUtilities.showKeyboard(this.codeField[0]);
+                        this.codeField[0].requestFocus();
+                    } else {
+                        AndroidUtilities.hideKeyboard(this.codeField[0]);
+                    }
+                    destroyTimer();
+                    destroyCodeTimer();
+                    this.lastCurrentTime = (double) System.currentTimeMillis();
+                    int i9 = this.currentType;
+                    if (i9 == 1) {
+                        this.problemText.setVisibility(0);
+                        this.timeText.setVisibility(8);
+                    } else if (i9 == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) {
+                        this.problemText.setVisibility(8);
+                        this.timeText.setVisibility(0);
+                        int i10 = this.nextType;
+                        if (i10 == 4) {
+                            this.timeText.setText(LocaleController.formatString("CallText", NUM, 1, 0));
+                        } else if (i10 == 2) {
+                            this.timeText.setText(LocaleController.formatString("SmsText", NUM, 1, 0));
+                        }
+                        createTimer();
+                    } else if (this.currentType == 2 && ((i = this.nextType) == 4 || i == 3)) {
+                        this.timeText.setText(LocaleController.formatString("CallText", NUM, 2, 0));
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
+                        TextView textView = this.timeText;
+                        if (this.time >= 1000) {
+                            i5 = 0;
+                        }
+                        textView.setVisibility(i5);
+                        createTimer();
+                    } else if (this.currentType == 4 && this.nextType == 2) {
+                        this.timeText.setText(LocaleController.formatString("SmsText", NUM, 2, 0));
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
+                        TextView textView2 = this.timeText;
+                        if (this.time >= 1000) {
+                            i5 = 0;
+                        }
+                        textView2.setVisibility(i5);
+                        createTimer();
+                    } else {
+                        this.timeText.setVisibility(8);
+                        this.problemText.setVisibility(8);
+                        createCodeTimer();
+                    }
+                }
+            }
+        }
+
+        public /* synthetic */ boolean lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(int i, View view, int i2, KeyEvent keyEvent) {
+            if (i2 != 67 || this.codeField[i].length() != 0 || i <= 0) {
+                return false;
+            }
+            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+            int i3 = i - 1;
+            editTextBoldCursorArr[i3].setSelection(editTextBoldCursorArr[i3].length());
+            this.codeField[i3].requestFocus();
+            this.codeField[i3].dispatchKeyEvent(keyEvent);
+            return true;
+        }
+
+        public /* synthetic */ boolean lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(TextView textView, int i, KeyEvent keyEvent) {
+            if (i != 5) {
+                return false;
+            }
+            onNextPressed();
+            return true;
+        }
+
+        /* access modifiers changed from: private */
+        public void createCodeTimer() {
+            if (this.codeTimer == null) {
+                this.codeTime = 15000;
+                this.codeTimer = new Timer();
+                this.lastCodeTime = (double) System.currentTimeMillis();
+                this.codeTimer.schedule(new TimerTask() {
+                    public void run() {
+                        AndroidUtilities.runOnUIThread(
+                        /*  JADX ERROR: Method code generation error
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
+                              (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8 : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8) = 
+                              (r1v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4 A[THIS])
+                             call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4):void type: CONSTRUCTOR)
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.4.run():void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8) = 
+                              (r1v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4 A[THIS])
+                             call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$4):void type: CONSTRUCTOR in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.4.run():void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	... 83 more
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8, state: NOT_LOADED
+                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	... 89 more
+                            */
+                        /*
+                            this = this;
+                            org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8 r0 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$4$xo4JwLP5hAjbxHZTrGyLddRD9-8
+                            r0.<init>(r1)
+                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+                            return
+                        */
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass4.run():void");
+                    }
+
+                    public /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$4() {
+                        double currentTimeMillis = (double) System.currentTimeMillis();
+                        double access$2400 = LoginActivitySmsView.this.lastCodeTime;
+                        Double.isNaN(currentTimeMillis);
+                        double d = currentTimeMillis - access$2400;
+                        double unused = LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
+                        LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
+                        double access$2500 = (double) loginActivitySmsView.codeTime;
+                        Double.isNaN(access$2500);
+                        int unused2 = loginActivitySmsView.codeTime = (int) (access$2500 - d);
+                        if (LoginActivitySmsView.this.codeTime <= 1000) {
+                            LoginActivitySmsView.this.problemText.setVisibility(0);
+                            LoginActivitySmsView.this.timeText.setVisibility(8);
+                            LoginActivitySmsView.this.destroyCodeTimer();
+                        }
+                    }
+                }, 0, 1000);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void destroyCodeTimer() {
+            try {
+                synchronized (this.timerSync) {
+                    if (this.codeTimer != null) {
+                        this.codeTimer.cancel();
+                        this.codeTimer = null;
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
+        }
+
+        private void createTimer() {
+            if (this.timeTimer == null) {
+                this.timeTimer = new Timer();
+                this.timeTimer.schedule(new TimerTask() {
+                    public void run() {
+                        if (LoginActivitySmsView.this.timeTimer != null) {
+                            AndroidUtilities.runOnUIThread(
+                            /*  JADX ERROR: Method code generation error
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000e: INVOKE  
+                                  (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM : 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM) = 
+                                  (r1v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                 call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
+                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM) = 
+                                  (r1v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                 call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                	... 90 more
+                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM, state: NOT_LOADED
+                                	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                	... 96 more
+                                */
+                            /*
+                                this = this;
+                                org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                java.util.Timer r0 = r0.timeTimer
+                                if (r0 != 0) goto L_0x0009
+                                return
+                            L_0x0009:
+                                org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM r0 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$i_O9VujuXt-NaS7E3HXykBsy-PM
+                                r0.<init>(r1)
+                                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+                                return
+                            */
+                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass5.run():void");
+                        }
+
+                        public /* synthetic */ void lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5() {
+                            double currentTimeMillis = (double) System.currentTimeMillis();
+                            double access$3000 = LoginActivitySmsView.this.lastCurrentTime;
+                            Double.isNaN(currentTimeMillis);
+                            LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
+                            double access$3100 = (double) loginActivitySmsView.time;
+                            Double.isNaN(access$3100);
+                            int unused = loginActivitySmsView.time = (int) (access$3100 - (currentTimeMillis - access$3000));
+                            double unused2 = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
+                            if (LoginActivitySmsView.this.time >= 1000) {
+                                int access$31002 = (LoginActivitySmsView.this.time / 1000) / 60;
+                                int access$31003 = (LoginActivitySmsView.this.time / 1000) - (access$31002 * 60);
+                                if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$31002), Integer.valueOf(access$31003)));
+                                } else if (LoginActivitySmsView.this.nextType == 2) {
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$31002), Integer.valueOf(access$31003)));
+                                }
+                                if (LoginActivitySmsView.this.progressView != null) {
+                                    LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
+                                    return;
+                                }
+                                return;
+                            }
+                            if (LoginActivitySmsView.this.progressView != null) {
+                                LoginActivitySmsView.this.progressView.setProgress(1.0f);
+                            }
+                            LoginActivitySmsView.this.destroyTimer();
+                            if (LoginActivitySmsView.this.currentType == 3) {
+                                AndroidUtilities.setWaitingForCall(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                                boolean unused3 = LoginActivitySmsView.this.waitingForEvent = false;
+                                LoginActivitySmsView.this.destroyCodeTimer();
+                                LoginActivitySmsView.this.resendCode();
+                            } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
+                            } else {
+                                if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
+                                    if (LoginActivitySmsView.this.nextType == 4) {
+                                        LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
+                                    } else {
+                                        LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
+                                    }
+                                    LoginActivitySmsView.this.createCodeTimer();
+                                    TLRPC.TL_auth_resendCode tL_auth_resendCode = new TLRPC.TL_auth_resendCode();
+                                    tL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
+                                    tL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
+                                    ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, 
+                                    /*  JADX ERROR: Method code generation error
+                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01a1: INVOKE  
+                                          (wrap: org.telegram.tgnet.ConnectionsManager : 0x0198: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
+                                          (wrap: int : 0x0194: INVOKE  (r1v7 int) = 
+                                          (wrap: org.telegram.ui.ChangePhoneActivity : 0x0192: IGET  (r1v6 org.telegram.ui.ChangePhoneActivity) = 
+                                          (wrap: org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView : 0x0190: IGET  (r1v5 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView) = 
+                                          (r9v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                         org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.this$1 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView)
+                                         org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this$0 org.telegram.ui.ChangePhoneActivity)
+                                         org.telegram.ui.ChangePhoneActivity.access$4200(org.telegram.ui.ChangePhoneActivity):int type: STATIC)
+                                         org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
+                                          (r0v16 'tL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
+                                          (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE : 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE) = 
+                                          (r9v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                         call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
+                                          (2 int)
+                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5():void, dex: classes.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:156)
+                                        	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE) = 
+                                          (r9v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                         call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5():void, dex: classes.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                        	... 99 more
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE, state: NOT_LOADED
+                                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                        	... 105 more
+                                        */
+                                    /*
+                                        this = this;
+                                        long r0 = java.lang.System.currentTimeMillis()
+                                        double r0 = (double) r0
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        double r2 = r2.lastCurrentTime
+                                        java.lang.Double.isNaN(r0)
+                                        double r2 = r0 - r2
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r4 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r5 = r4.time
+                                        double r5 = (double) r5
+                                        java.lang.Double.isNaN(r5)
+                                        double r5 = r5 - r2
+                                        int r2 = (int) r5
+                                        int unused = r4.time = r2
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        double unused = r2.lastCurrentTime = r0
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.time
+                                        r1 = 1065353216(0x3var_, float:1.0)
+                                        r2 = 3
+                                        r3 = 1000(0x3e8, float:1.401E-42)
+                                        r4 = 4
+                                        r5 = 0
+                                        r6 = 2
+                                        if (r0 < r3) goto L_0x00c5
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.time
+                                        int r0 = r0 / r3
+                                        int r0 = r0 / 60
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r7 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r7 = r7.time
+                                        int r7 = r7 / r3
+                                        int r3 = r0 * 60
+                                        int r7 = r7 - r3
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r3 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r3 = r3.nextType
+                                        r8 = 1
+                                        if (r3 == r4) goto L_0x0082
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r3 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r3 = r3.nextType
+                                        if (r3 != r2) goto L_0x0059
+                                        goto L_0x0082
+                                    L_0x0059:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r2 = r2.nextType
+                                        if (r2 != r6) goto L_0x00a2
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r2 = r2.timeText
+                                        r3 = 2131626605(0x7f0e0a6d, float:1.888045E38)
+                                        java.lang.Object[] r4 = new java.lang.Object[r6]
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                                        r4[r5] = r0
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
+                                        r4[r8] = r0
+                                        java.lang.String r0 = "SmsText"
+                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
+                                        r2.setText(r0)
+                                        goto L_0x00a2
+                                    L_0x0082:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r2 = r2.timeText
+                                        r3 = 2131624460(0x7f0e020c, float:1.88761E38)
+                                        java.lang.Object[] r4 = new java.lang.Object[r6]
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                                        r4[r5] = r0
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
+                                        r4[r8] = r0
+                                        java.lang.String r0 = "CallText"
+                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
+                                        r2.setText(r0)
+                                    L_0x00a2:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.ChangePhoneActivity$ProgressView r0 = r0.progressView
+                                        if (r0 == 0) goto L_0x01a4
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.ChangePhoneActivity$ProgressView r0 = r0.progressView
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r2 = r2.time
+                                        float r2 = (float) r2
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r3 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r3 = r3.timeout
+                                        float r3 = (float) r3
+                                        float r2 = r2 / r3
+                                        float r1 = r1 - r2
+                                        r0.setProgress(r1)
+                                        goto L_0x01a4
+                                    L_0x00c5:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.ChangePhoneActivity$ProgressView r0 = r0.progressView
+                                        if (r0 == 0) goto L_0x00d6
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.ChangePhoneActivity$ProgressView r0 = r0.progressView
+                                        r0.setProgress(r1)
+                                    L_0x00d6:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.destroyTimer()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 != r2) goto L_0x0102
+                                        org.telegram.messenger.AndroidUtilities.setWaitingForCall(r5)
+                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r1 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveCall
+                                        r0.removeObserver(r1, r2)
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        boolean unused = r0.waitingForEvent = r5
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.destroyCodeTimer()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.resendCode()
+                                        goto L_0x01a4
+                                    L_0x0102:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 == r6) goto L_0x0112
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 != r4) goto L_0x01a4
+                                    L_0x0112:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 == r4) goto L_0x0149
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r6) goto L_0x0123
+                                        goto L_0x0149
+                                    L_0x0123:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r2) goto L_0x01a4
+                                        org.telegram.messenger.AndroidUtilities.setWaitingForSms(r5)
+                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r1 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode
+                                        r0.removeObserver(r1, r2)
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        boolean unused = r0.waitingForEvent = r5
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.destroyCodeTimer()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.resendCode()
+                                        goto L_0x01a4
+                                    L_0x0149:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r4) goto L_0x0164
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r0 = r0.timeText
+                                        r1 = 2131624462(0x7f0e020e, float:1.8876104E38)
+                                        java.lang.String r2 = "Calling"
+                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+                                        r0.setText(r1)
+                                        goto L_0x0176
+                                    L_0x0164:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r0 = r0.timeText
+                                        r1 = 2131626501(0x7f0e0a05, float:1.888024E38)
+                                        java.lang.String r2 = "SendingSms"
+                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+                                        r0.setText(r1)
+                                    L_0x0176:
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        r0.createCodeTimer()
+                                        org.telegram.tgnet.TLRPC$TL_auth_resendCode r0 = new org.telegram.tgnet.TLRPC$TL_auth_resendCode
+                                        r0.<init>()
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r1 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        java.lang.String r1 = r1.requestPhone
+                                        r0.phone_number = r1
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r1 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        java.lang.String r1 = r1.phoneHash
+                                        r0.phone_code_hash = r1
+                                        org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r1 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.ChangePhoneActivity r1 = r1.this$0
+                                        int r1 = r1.currentAccount
+                                        org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+                                        org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE r2 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE
+                                        r2.<init>(r9)
+                                        r1.sendRequest(r0, r2, r6)
+                                    L_0x01a4:
+                                        return
+                                    */
+                                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass5.lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5():void");
+                                }
+
+                                public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC.TL_error tL_error) {
+                                    if (tL_error != null && tL_error.text != null) {
+                                        AndroidUtilities.runOnUIThread(
+                                        /*  JADX ERROR: Method code generation error
+                                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
+                                              (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs) = 
+                                              (r0v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                              (r2v0 'tL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                             call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
+                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs) = 
+                                              (r0v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
+                                              (r2v0 'tL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                             call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                            	... 90 more
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs, state: NOT_LOADED
+                                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                            	... 96 more
+                                            */
+                                        /*
+                                            this = this;
+                                            if (r2 == 0) goto L_0x000e
+                                            java.lang.String r1 = r2.text
+                                            if (r1 == 0) goto L_0x000e
+                                            org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs r1 = new org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs
+                                            r1.<init>(r0, r2)
+                                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+                                        L_0x000e:
+                                            return
+                                        */
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                                    }
+
+                                    public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5(TLRPC.TL_error tL_error) {
+                                        String unused = LoginActivitySmsView.this.lastError = tL_error.text;
+                                    }
+                                }, 0, 1000);
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public void destroyTimer() {
+                            try {
+                                synchronized (this.timerSync) {
+                                    if (this.timeTimer != null) {
+                                        this.timeTimer.cancel();
+                                        this.timeTimer = null;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                FileLog.e((Throwable) e);
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public String getCode() {
+                            if (this.codeField == null) {
+                                return "";
+                            }
+                            StringBuilder sb = new StringBuilder();
+                            int i = 0;
+                            while (true) {
+                                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                                if (i >= editTextBoldCursorArr.length) {
+                                    return sb.toString();
+                                }
+                                sb.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
+                                i++;
+                            }
+                        }
+
+                        public void onNextPressed() {
+                            if (!this.nextPressed) {
+                                String code = getCode();
+                                if (TextUtils.isEmpty(code)) {
+                                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
+                                    return;
+                                }
+                                this.nextPressed = true;
+                                int i = this.currentType;
+                                if (i == 2) {
+                                    AndroidUtilities.setWaitingForSms(false);
+                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                                } else if (i == 3) {
+                                    AndroidUtilities.setWaitingForCall(false);
+                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                                }
+                                this.waitingForEvent = false;
+                                TLRPC.TL_account_changePhone tL_account_changePhone = new TLRPC.TL_account_changePhone();
+                                tL_account_changePhone.phone_number = this.requestPhone;
+                                tL_account_changePhone.phone_code = code;
+                                tL_account_changePhone.phone_code_hash = this.phoneHash;
+                                destroyTimer();
+                                this.this$0.needShowProgress();
+                                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_changePhone, new RequestDelegate(tL_account_changePhone) {
+                                    private final /* synthetic */ TLRPC.TL_account_changePhone f$1;
+
+                                    {
+                                        this.f$1 = r2;
+                                    }
+
+                                    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+                                        ChangePhoneActivity.LoginActivitySmsView.this.lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(this.f$1, tLObject, tL_error);
+                                    }
+                                }, 2);
+                            }
+                        }
+
+                        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_account_changePhone tL_account_changePhone, TLObject tLObject, TLRPC.TL_error tL_error) {
+                            AndroidUtilities.runOnUIThread(new Runnable(tL_error, tLObject, tL_account_changePhone) {
+                                private final /* synthetic */ TLRPC.TL_error f$1;
+                                private final /* synthetic */ TLObject f$2;
+                                private final /* synthetic */ TLRPC.TL_account_changePhone f$3;
+
+                                {
+                                    this.f$1 = r2;
+                                    this.f$2 = r3;
+                                    this.f$3 = r4;
+                                }
+
+                                public final void run() {
+                                    ChangePhoneActivity.LoginActivitySmsView.this.lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(this.f$1, this.f$2, this.f$3);
+                                }
+                            });
+                        }
+
+                        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_account_changePhone tL_account_changePhone) {
+                            int i;
+                            int i2;
+                            this.this$0.needHideProgress();
+                            this.nextPressed = false;
+                            if (tL_error == null) {
+                                TLRPC.User user = (TLRPC.User) tLObject;
+                                destroyTimer();
+                                destroyCodeTimer();
+                                UserConfig.getInstance(this.this$0.currentAccount).setCurrentUser(user);
+                                UserConfig.getInstance(this.this$0.currentAccount).saveConfig(true);
+                                ArrayList arrayList = new ArrayList();
+                                arrayList.add(user);
+                                MessagesStorage.getInstance(this.this$0.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC.Chat>) null, true, true);
+                                MessagesController.getInstance(this.this$0.currentAccount).putUser(user, false);
+                                this.this$0.finishFragment();
+                                NotificationCenter.getInstance(this.this$0.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+                                return;
+                            }
+                            this.lastError = tL_error.text;
+                            if ((this.currentType == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((this.currentType == 2 && ((i = this.nextType) == 4 || i == 3)) || (this.currentType == 4 && this.nextType == 2))) {
+                                createTimer();
+                            }
+                            int i3 = this.currentType;
+                            if (i3 == 2) {
+                                AndroidUtilities.setWaitingForSms(true);
+                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
+                            } else if (i3 == 3) {
+                                AndroidUtilities.setWaitingForCall(true);
+                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
+                            }
+                            this.waitingForEvent = true;
+                            if (this.currentType != 3) {
+                                AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_account_changePhone, new Object[0]);
+                            }
+                            if (tL_error.text.contains("PHONE_CODE_EMPTY") || tL_error.text.contains("PHONE_CODE_INVALID")) {
+                                int i4 = 0;
+                                while (true) {
+                                    EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                                    if (i4 < editTextBoldCursorArr.length) {
+                                        editTextBoldCursorArr[i4].setText("");
+                                        i4++;
+                                    } else {
+                                        editTextBoldCursorArr[0].requestFocus();
+                                        return;
+                                    }
+                                }
+                            } else if (tL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                                onBackPressed(true);
+                                this.this$0.setPage(0, true, (Bundle) null, true);
+                            }
+                        }
+
+                        public boolean onBackPressed(boolean z) {
+                            if (!z) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
+                                builder.setTitle(LocaleController.getString("AppName", NUM));
+                                builder.setMessage(LocaleController.getString("StopVerification", NUM));
+                                builder.setPositiveButton(LocaleController.getString("Continue", NUM), (DialogInterface.OnClickListener) null);
+                                builder.setNegativeButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
+                                    public final void onClick(DialogInterface dialogInterface, int i) {
+                                        ChangePhoneActivity.LoginActivitySmsView.this.lambda$onBackPressed$8$ChangePhoneActivity$LoginActivitySmsView(dialogInterface, i);
+                                    }
+                                });
+                                this.this$0.showDialog(builder.create());
+                                return false;
+                            }
+                            TLRPC.TL_auth_cancelCode tL_auth_cancelCode = new TLRPC.TL_auth_cancelCode();
+                            tL_auth_cancelCode.phone_number = this.requestPhone;
+                            tL_auth_cancelCode.phone_code_hash = this.phoneHash;
+                            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_cancelCode, $$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOcKDCO9lesbolp8AlwqF1nh4.INSTANCE, 10);
+                            destroyTimer();
+                            destroyCodeTimer();
+                            this.currentParams = null;
+                            int i = this.currentType;
+                            if (i == 2) {
+                                AndroidUtilities.setWaitingForSms(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                            } else if (i == 3) {
+                                AndroidUtilities.setWaitingForCall(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                            }
+                            this.waitingForEvent = false;
+                            return true;
+                        }
+
+                        public /* synthetic */ void lambda$onBackPressed$8$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
+                            onBackPressed(true);
+                            this.this$0.setPage(0, true, (Bundle) null, true);
+                        }
+
+                        public void onDestroyActivity() {
+                            super.onDestroyActivity();
+                            int i = this.currentType;
+                            if (i == 2) {
+                                AndroidUtilities.setWaitingForSms(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                            } else if (i == 3) {
+                                AndroidUtilities.setWaitingForCall(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                            }
+                            this.waitingForEvent = false;
+                            destroyTimer();
+                            destroyCodeTimer();
+                        }
+
+                        public void onShow() {
+                            super.onShow();
+                            if (this.currentType != 3) {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public final void run() {
+                                        ChangePhoneActivity.LoginActivitySmsView.this.lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView();
+                                    }
+                                }, 100);
+                            }
+                        }
+
+                        public /* synthetic */ void lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView() {
+                            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                            if (editTextBoldCursorArr != null) {
+                                for (int length2 = editTextBoldCursorArr.length - 1; length2 >= 0; length2--) {
+                                    if (length2 == 0 || this.codeField[length2].length() != 0) {
+                                        this.codeField[length2].requestFocus();
+                                        EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
+                                        editTextBoldCursorArr2[length2].setSelection(editTextBoldCursorArr2[length2].length());
+                                        AndroidUtilities.showKeyboard(this.codeField[length2]);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+                        public void didReceivedNotification(int i, int i2, Object... objArr) {
+                            EditTextBoldCursor[] editTextBoldCursorArr;
+                            if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
+                                if (i == NotificationCenter.didReceiveSmsCode) {
+                                    editTextBoldCursorArr[0].setText("" + objArr[0]);
+                                    onNextPressed();
+                                } else if (i == NotificationCenter.didReceiveCall) {
+                                    String str = "" + objArr[0];
+                                    if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
+                                        this.ignoreOnTextChange = true;
+                                        this.codeField[0].setText(str);
+                                        this.ignoreOnTextChange = false;
+                                        onNextPressed();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    public ThemeDescription[] getThemeDescriptions() {
+                        SlideView[] slideViewArr = this.views;
+                        PhoneView phoneView = (PhoneView) slideViewArr[0];
+                        LoginActivitySmsView loginActivitySmsView = (LoginActivitySmsView) slideViewArr[1];
+                        LoginActivitySmsView loginActivitySmsView2 = (LoginActivitySmsView) slideViewArr[2];
+                        LoginActivitySmsView loginActivitySmsView3 = (LoginActivitySmsView) slideViewArr[3];
+                        LoginActivitySmsView loginActivitySmsView4 = (LoginActivitySmsView) slideViewArr[4];
+                        ArrayList arrayList = new ArrayList();
+                        ThemeDescription themeDescription = r9;
+                        ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite");
+                        arrayList.add(themeDescription);
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+                        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+                        arrayList.add(new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+                        arrayList.add(new ThemeDescription(phoneView.view, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayLine"));
+                        arrayList.add(new ThemeDescription(phoneView.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+                        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(phoneView.textView2, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView.codeField != null) {
+                            for (int i = 0; i < loginActivitySmsView.codeField.length; i++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
+                        }
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView2.codeField != null) {
+                            for (int i2 = 0; i2 < loginActivitySmsView2.codeField.length; i2++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
+                        }
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView3.codeField != null) {
+                            for (int i3 = 0; i3 < loginActivitySmsView3.codeField.length; i3++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
+                        }
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView4.codeField != null) {
+                            for (int i4 = 0; i4 < loginActivitySmsView4.codeField.length; i4++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
+                        }
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+                    }
+                }

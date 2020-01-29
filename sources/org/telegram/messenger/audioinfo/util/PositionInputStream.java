@@ -50,9 +50,9 @@ public class PositionInputStream extends FilterInputStream {
 
     public long skip(long j) throws IOException {
         long j2 = this.position;
-        j = super.skip(j);
-        this.position = j2 + j;
-        return j;
+        long skip = super.skip(j);
+        this.position = j2 + skip;
+        return skip;
     }
 
     public long getPosition() {

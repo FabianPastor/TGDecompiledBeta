@@ -1,6 +1,6 @@
 package org.telegram.ui.Components;
 
-import android.widget.FrameLayout.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -16,12 +16,12 @@ public class LayoutHelper {
         return (int) f;
     }
 
-    public static LayoutParams createScroll(int i, int i2, int i3) {
-        return new LayoutParams(getSize((float) i), getSize((float) i2), i3);
+    public static FrameLayout.LayoutParams createScroll(int i, int i2, int i3) {
+        return new FrameLayout.LayoutParams(getSize((float) i), getSize((float) i2), i3);
     }
 
-    public static LayoutParams createScroll(int i, int i2, int i3, float f, float f2, float f3, float f4) {
-        LayoutParams layoutParams = new LayoutParams(getSize((float) i), getSize((float) i2), i3);
+    public static FrameLayout.LayoutParams createScroll(int i, int i2, int i3, float f, float f2, float f3, float f4) {
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize((float) i), getSize((float) i2), i3);
         layoutParams.leftMargin = AndroidUtilities.dp(f);
         layoutParams.topMargin = AndroidUtilities.dp(f2);
         layoutParams.rightMargin = AndroidUtilities.dp(f3);
@@ -29,22 +29,22 @@ public class LayoutHelper {
         return layoutParams;
     }
 
-    public static LayoutParams createFrame(int i, float f, int i2, float f2, float f3, float f4, float f5) {
-        LayoutParams layoutParams = new LayoutParams(getSize((float) i), getSize(f), i2);
+    public static FrameLayout.LayoutParams createFrame(int i, float f, int i2, float f2, float f3, float f4, float f5) {
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize((float) i), getSize(f), i2);
         layoutParams.setMargins(AndroidUtilities.dp(f2), AndroidUtilities.dp(f3), AndroidUtilities.dp(f4), AndroidUtilities.dp(f5));
         return layoutParams;
     }
 
-    public static LayoutParams createFrame(int i, int i2, int i3) {
-        return new LayoutParams(getSize((float) i), getSize((float) i2), i3);
+    public static FrameLayout.LayoutParams createFrame(int i, int i2, int i3) {
+        return new FrameLayout.LayoutParams(getSize((float) i), getSize((float) i2), i3);
     }
 
-    public static LayoutParams createFrame(int i, float f) {
-        return new LayoutParams(getSize((float) i), getSize(f));
+    public static FrameLayout.LayoutParams createFrame(int i, float f) {
+        return new FrameLayout.LayoutParams(getSize((float) i), getSize(f));
     }
 
-    public static LayoutParams createFrame(float f, float f2, int i) {
-        return new LayoutParams(getSize(f), getSize(f2), i);
+    public static FrameLayout.LayoutParams createFrame(float f, float f2, int i) {
+        return new FrameLayout.LayoutParams(getSize(f), getSize(f2), i);
     }
 
     public static RelativeLayout.LayoutParams createRelative(float f, float f2, int i, int i2, int i3, int i4, int i5, int i6, int i7) {

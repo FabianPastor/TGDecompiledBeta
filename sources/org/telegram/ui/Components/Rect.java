@@ -6,6 +6,9 @@ public class Rect {
     public float x;
     public float y;
 
+    public Rect() {
+    }
+
     public Rect(float f, float f2, float f3, float f4) {
         this.x = f;
         this.y = f2;

@@ -3,11 +3,10 @@ package org.telegram.ui.Components.Paint.Views;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.widget.FrameLayout;
-import org.telegram.ui.Components.Paint.Views.RotationGestureDetector.OnRotationGestureListener;
+import org.telegram.ui.Components.Paint.Views.RotationGestureDetector;
 
-public class EntitiesContainerView extends FrameLayout implements OnScaleGestureListener, OnRotationGestureListener {
+public class EntitiesContainerView extends FrameLayout implements ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener {
     private EntitiesContainerViewDelegate delegate;
     private ScaleGestureDetector gestureDetector;
     private boolean hasTransformed;
@@ -23,7 +22,7 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
         boolean shouldReceiveTouches();
     }
 
-    public void onRotationEnd(RotationGestureDetector rotationGestureDetector) {
+    public void onRotationEnd(RotationGestureDetector rotationGestureDetector2) {
     }
 
     public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
@@ -58,6 +57,7 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
+        EntitiesContainerViewDelegate entitiesContainerViewDelegate;
         if (this.delegate.onSelectedEntityRequest() == null) {
             return false;
         }
@@ -66,11 +66,8 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
             if (actionMasked == 0) {
                 this.hasTransformed = false;
             } else if (actionMasked == 1 || actionMasked == 2) {
-                if (!this.hasTransformed) {
-                    EntitiesContainerViewDelegate entitiesContainerViewDelegate = this.delegate;
-                    if (entitiesContainerViewDelegate != null) {
-                        entitiesContainerViewDelegate.onEntityDeselect();
-                    }
+                if (!this.hasTransformed && (entitiesContainerViewDelegate = this.delegate) != null) {
+                    entitiesContainerViewDelegate.onEntityDeselect();
                 }
                 return false;
             }
@@ -93,14 +90,14 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
         return true;
     }
 
-    public void onRotationBegin(RotationGestureDetector rotationGestureDetector) {
-        this.previousAngle = rotationGestureDetector.getStartAngle();
+    public void onRotationBegin(RotationGestureDetector rotationGestureDetector2) {
+        this.previousAngle = rotationGestureDetector2.getStartAngle();
         this.hasTransformed = true;
     }
 
-    public void onRotation(RotationGestureDetector rotationGestureDetector) {
+    public void onRotation(RotationGestureDetector rotationGestureDetector2) {
         EntityView onSelectedEntityRequest = this.delegate.onSelectedEntityRequest();
-        float angle = rotationGestureDetector.getAngle();
+        float angle = rotationGestureDetector2.getAngle();
         onSelectedEntityRequest.rotate(onSelectedEntityRequest.getRotation() + (this.previousAngle - angle));
         this.previousAngle = angle;
     }

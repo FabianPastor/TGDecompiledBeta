@@ -36,28 +36,26 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         for (int i3 = 0; i3 < flowItemCount; i3++) {
             Size sizeForItem = sizeForItem(i3);
             int min = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((sizeForItem.width / sizeForItem.height) * ((float) dp)) / f))));
-            Object obj = (i < min || (min > 33 && i < min - 15)) ? 1 : null;
-            if (obj != null) {
+            if (i < min || (min > 33 && i < min + -15)) {
                 if (i != 0) {
                     int i4 = i / i2;
                     int i5 = i3 - i2;
                     int i6 = i;
-                    i = i5;
+                    int i7 = i5;
                     while (true) {
-                        int i7 = i5 + i2;
-                        if (i >= i7) {
+                        int i8 = i5 + i2;
+                        if (i7 >= i8) {
                             break;
                         }
-                        SparseIntArray sparseIntArray;
-                        if (i == i7 - 1) {
-                            sparseIntArray = this.itemSpans;
-                            sparseIntArray.put(i, sparseIntArray.get(i) + i6);
+                        if (i7 == i8 - 1) {
+                            SparseIntArray sparseIntArray = this.itemSpans;
+                            sparseIntArray.put(i7, sparseIntArray.get(i7) + i6);
                         } else {
-                            sparseIntArray = this.itemSpans;
-                            sparseIntArray.put(i, sparseIntArray.get(i) + i4);
+                            SparseIntArray sparseIntArray2 = this.itemSpans;
+                            sparseIntArray2.put(i7, sparseIntArray2.get(i7) + i4);
                         }
                         i6 -= i4;
-                        i++;
+                        i7++;
                     }
                     this.itemsToRow.put(i3 - 1, this.rowsCount);
                 }
@@ -92,14 +90,14 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         }
         float f = sizeForItem.width / sizeForItem.height;
         if (f > 4.0f || f < 0.2f) {
-            f = Math.max(sizeForItem.width, sizeForItem.height);
-            sizeForItem.width = f;
-            sizeForItem.height = f;
+            float max = Math.max(sizeForItem.width, sizeForItem.height);
+            sizeForItem.width = max;
+            sizeForItem.height = max;
         }
         return sizeForItem;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public Size getSizeForItem(int i) {
         return new Size(100.0f, 100.0f);
     }
@@ -133,7 +131,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         return i <= this.firstRowMax;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public int getFlowItemCount() {
         return getItemCount();
     }

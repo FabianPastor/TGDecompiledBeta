@@ -4,7 +4,7 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.TLRPC.MessageEntity;
+import org.telegram.tgnet.TLRPC;
 
 public class TextStyleSpan extends MetricAffectingSpan {
     public static final int FLAG_STYLE_BOLD = 1;
@@ -23,7 +23,10 @@ public class TextStyleSpan extends MetricAffectingSpan {
         public int end;
         public int flags;
         public int start;
-        public MessageEntity urlEntity;
+        public TLRPC.MessageEntity urlEntity;
+
+        public TextStyleRun() {
+        }
 
         public TextStyleRun(TextStyleRun textStyleRun) {
             this.flags = textStyleRun.flags;
@@ -33,12 +36,10 @@ public class TextStyleSpan extends MetricAffectingSpan {
         }
 
         public void merge(TextStyleRun textStyleRun) {
+            TLRPC.MessageEntity messageEntity;
             this.flags |= textStyleRun.flags;
-            if (this.urlEntity == null) {
-                MessageEntity messageEntity = textStyleRun.urlEntity;
-                if (messageEntity != null) {
-                    this.urlEntity = messageEntity;
-                }
+            if (this.urlEntity == null && (messageEntity = textStyleRun.urlEntity) != null) {
+                this.urlEntity = messageEntity;
             }
         }
 
@@ -72,11 +73,11 @@ public class TextStyleSpan extends MetricAffectingSpan {
             if ((i & 1) != 0 && (i & 2) != 0) {
                 return AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf");
             }
-            i = this.flags;
-            if ((i & 1) != 0) {
+            int i2 = this.flags;
+            if ((i2 & 1) != 0) {
                 return AndroidUtilities.getTypeface("fonts/rmedium.ttf");
             }
-            if ((i & 2) != 0) {
+            if ((i2 & 2) != 0) {
                 return AndroidUtilities.getTypeface("fonts/ritalic.ttf");
             }
             return null;
@@ -145,9 +146,9 @@ public class TextStyleSpan extends MetricAffectingSpan {
         if (i != 0) {
             textPaint.setTextSize((float) i);
         }
-        i = this.color;
-        if (i != 0) {
-            textPaint.setColor(i);
+        int i2 = this.color;
+        if (i2 != 0) {
+            textPaint.setColor(i2);
         }
         textPaint.setFlags(textPaint.getFlags() | 128);
         this.style.applyStyle(textPaint);

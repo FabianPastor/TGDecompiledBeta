@@ -24,7 +24,7 @@ public class RenderState {
         this.count = 0;
         if (this.buffer == null) {
             this.allocatedCount = 256;
-            this.buffer = ByteBuffer.allocateDirect((this.allocatedCount * 5) * 4);
+            this.buffer = ByteBuffer.allocateDirect(this.allocatedCount * 5 * 4);
             this.buffer.order(ByteOrder.nativeOrder());
             this.buffer.position(0);
         }
@@ -37,7 +37,7 @@ public class RenderState {
     public void setPosition(int i) {
         ByteBuffer byteBuffer = this.buffer;
         if (byteBuffer != null && i >= 0 && i < this.allocatedCount) {
-            byteBuffer.position((i * 5) * 4);
+            byteBuffer.position(i * 5 * 4);
         }
     }
 
@@ -54,7 +54,7 @@ public class RenderState {
             this.buffer = null;
         }
         this.allocatedCount = Math.max(this.allocatedCount * 2, 256);
-        this.buffer = ByteBuffer.allocateDirect((this.allocatedCount * 5) * 4);
+        this.buffer = ByteBuffer.allocateDirect(this.allocatedCount * 5 * 4);
         this.buffer.order(ByteOrder.nativeOrder());
         this.buffer.position(0);
     }
@@ -62,7 +62,7 @@ public class RenderState {
     public boolean addPoint(PointF pointF, float f, float f2, float f3, int i) {
         if ((i == -1 || i < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
             if (i != -1) {
-                this.buffer.position((i * 5) * 4);
+                this.buffer.position(i * 5 * 4);
             }
             this.buffer.putFloat(pointF.x);
             this.buffer.putFloat(pointF.y);

@@ -7,10 +7,42 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 public abstract class BaseCell extends ViewGroup {
-    private boolean checkingForLongPress = false;
-    private CheckForLongPress pendingCheckForLongPress = null;
+    /* access modifiers changed from: private */
+    public boolean checkingForLongPress = false;
+    /* access modifiers changed from: private */
+    public CheckForLongPress pendingCheckForLongPress = null;
     private CheckForTap pendingCheckForTap = null;
-    private int pressCount = 0;
+    /* access modifiers changed from: private */
+    public int pressCount = 0;
+
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onLongPress() {
+    }
+
+    static /* synthetic */ int access$104(BaseCell baseCell) {
+        int i = baseCell.pressCount + 1;
+        baseCell.pressCount = i;
+        return i;
+    }
+
+    private final class CheckForTap implements Runnable {
+        private CheckForTap() {
+        }
+
+        public void run() {
+            if (BaseCell.this.pendingCheckForLongPress == null) {
+                BaseCell baseCell = BaseCell.this;
+                CheckForLongPress unused = baseCell.pendingCheckForLongPress = new CheckForLongPress();
+            }
+            BaseCell.this.pendingCheckForLongPress.currentPressCount = BaseCell.access$104(BaseCell.this);
+            BaseCell baseCell2 = BaseCell.this;
+            baseCell2.postDelayed(baseCell2.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
+        }
+    }
 
     class CheckForLongPress implements Runnable {
         public int currentPressCount;
@@ -20,7 +52,7 @@ public abstract class BaseCell extends ViewGroup {
 
         public void run() {
             if (BaseCell.this.checkingForLongPress && BaseCell.this.getParent() != null && this.currentPressCount == BaseCell.this.pressCount) {
-                BaseCell.this.checkingForLongPress = false;
+                boolean unused = BaseCell.this.checkingForLongPress = false;
                 BaseCell.this.performHapticFeedback(0);
                 BaseCell.this.onLongPress();
                 MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
@@ -28,36 +60,6 @@ public abstract class BaseCell extends ViewGroup {
                 obtain.recycle();
             }
         }
-    }
-
-    private final class CheckForTap implements Runnable {
-        private CheckForTap() {
-        }
-
-        public void run() {
-            BaseCell baseCell;
-            if (BaseCell.this.pendingCheckForLongPress == null) {
-                baseCell = BaseCell.this;
-                baseCell.pendingCheckForLongPress = new CheckForLongPress();
-            }
-            BaseCell.this.pendingCheckForLongPress.currentPressCount = BaseCell.access$104(BaseCell.this);
-            baseCell = BaseCell.this;
-            baseCell.postDelayed(baseCell.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
-        }
-    }
-
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void onLongPress() {
-    }
-
-    static /* synthetic */ int access$104(BaseCell baseCell) {
-        int i = baseCell.pressCount + 1;
-        baseCell.pressCount = i;
-        return i;
     }
 
     public BaseCell(Context context) {
@@ -80,7 +82,7 @@ public abstract class BaseCell extends ViewGroup {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void startCheckLongPress() {
         if (!this.checkingForLongPress) {
             this.checkingForLongPress = true;
@@ -91,7 +93,7 @@ public abstract class BaseCell extends ViewGroup {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void cancelCheckLongPress() {
         this.checkingForLongPress = false;
         CheckForLongPress checkForLongPress = this.pendingCheckForLongPress;

@@ -6,27 +6,27 @@ import android.text.style.MetricAffectingSpan;
 public class TextPaintSpan extends MetricAffectingSpan {
     private TextPaint textPaint;
 
-    public TextPaintSpan(TextPaint textPaint) {
-        this.textPaint = textPaint;
+    public TextPaintSpan(TextPaint textPaint2) {
+        this.textPaint = textPaint2;
     }
 
-    public void updateMeasureState(TextPaint textPaint) {
-        textPaint.setColor(this.textPaint.getColor());
-        textPaint.setTypeface(this.textPaint.getTypeface());
-        textPaint.setFlags(this.textPaint.getFlags());
-        textPaint.setTextSize(this.textPaint.getTextSize());
-        TextPaint textPaint2 = this.textPaint;
-        textPaint.baselineShift = textPaint2.baselineShift;
-        textPaint.bgColor = textPaint2.bgColor;
+    public void updateMeasureState(TextPaint textPaint2) {
+        textPaint2.setColor(this.textPaint.getColor());
+        textPaint2.setTypeface(this.textPaint.getTypeface());
+        textPaint2.setFlags(this.textPaint.getFlags());
+        textPaint2.setTextSize(this.textPaint.getTextSize());
+        TextPaint textPaint3 = this.textPaint;
+        textPaint2.baselineShift = textPaint3.baselineShift;
+        textPaint2.bgColor = textPaint3.bgColor;
     }
 
-    public void updateDrawState(TextPaint textPaint) {
-        textPaint.setColor(this.textPaint.getColor());
-        textPaint.setTypeface(this.textPaint.getTypeface());
-        textPaint.setFlags(this.textPaint.getFlags());
-        textPaint.setTextSize(this.textPaint.getTextSize());
-        TextPaint textPaint2 = this.textPaint;
-        textPaint.baselineShift = textPaint2.baselineShift;
-        textPaint.bgColor = textPaint2.bgColor;
+    public void updateDrawState(TextPaint textPaint2) {
+        textPaint2.setColor(this.textPaint.getColor());
+        textPaint2.setTypeface(this.textPaint.getTypeface());
+        textPaint2.setFlags(this.textPaint.getFlags());
+        textPaint2.setTextSize(this.textPaint.getTextSize());
+        TextPaint textPaint3 = this.textPaint;
+        textPaint2.baselineShift = textPaint3.baselineShift;
+        textPaint2.bgColor = textPaint3.bgColor;
     }
 }

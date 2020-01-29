@@ -7,7 +7,7 @@ public class Path {
     private float baseWeight;
     private Brush brush;
     private int color;
-    private Vector<Point> points = new Vector();
+    private Vector<Point> points = new Vector<>();
     public double remainder;
 
     public Path(Point point) {
@@ -19,7 +19,7 @@ public class Path {
     }
 
     public int getLength() {
-        Vector vector = this.points;
+        Vector<Point> vector = this.points;
         if (vector == null) {
             return 0;
         }
@@ -44,9 +44,9 @@ public class Path {
         return this.brush;
     }
 
-    public void setup(int i, float f, Brush brush) {
+    public void setup(int i, float f, Brush brush2) {
         this.color = i;
         this.baseWeight = f;
-        this.brush = brush;
+        this.brush = brush2;
     }
 }

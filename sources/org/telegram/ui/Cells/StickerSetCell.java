@@ -2,18 +2,16 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.os.Build.VERSION;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
-import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -22,10 +20,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
-import org.telegram.tgnet.TLRPC.TL_photoSize;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -37,14 +32,15 @@ public class StickerSetCell extends FrameLayout {
     private ImageView optionsButton;
     private RadialProgressView progressView;
     private Rect rect = new Rect();
-    private TL_messages_stickerSet stickersSet;
+    private TLRPC.TL_messages_stickerSet stickersSet;
     private TextView textView;
     private TextView valueTextView;
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public StickerSetCell(Context context, int i) {
+        super(context);
         Context context2 = context;
         int i2 = i;
-        super(context);
         this.textView = new TextView(context2);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
@@ -52,7 +48,7 @@ public class StickerSetCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i3 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 9.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
@@ -72,46 +68,28 @@ public class StickerSetCell extends FrameLayout {
             this.progressView = new RadialProgressView(getContext());
             this.progressView.setProgressColor(Theme.getColor("dialogProgressCircle"));
             this.progressView.setSize(AndroidUtilities.dp(30.0f));
-            RadialProgressView radialProgressView = this.progressView;
-            if (!LocaleController.isRTL) {
-                i3 = 3;
-            }
-            addView(radialProgressView, LayoutHelper.createFrame(48, 48.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 12.0f, 5.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+            addView(this.progressView, LayoutHelper.createFrame(48, 48.0f, (!LocaleController.isRTL ? 3 : i3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 5.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         } else if (i2 != 0) {
             this.optionsButton = new ImageView(context2);
             int i4 = 0;
             this.optionsButton.setFocusable(false);
-            this.optionsButton.setScaleType(ScaleType.CENTER);
+            this.optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
-            ImageView imageView;
             if (i2 == 1) {
-                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
+                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
                 this.optionsButton.setImageResource(NUM);
-                imageView = this.optionsButton;
-                if (LocaleController.isRTL) {
-                    i3 = 3;
-                }
-                addView(imageView, LayoutHelper.createFrame(40, 40, i3 | 16));
+                addView(this.optionsButton, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? 3 : i3) | 16));
             } else if (i2 == 3) {
-                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
+                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
                 this.optionsButton.setImageResource(NUM);
-                imageView = this.optionsButton;
-                if (LocaleController.isRTL) {
-                    i3 = 3;
-                }
-                int i5 = i3 | 48;
-                float f = (float) (LocaleController.isRTL ? 10 : 0);
-                if (!LocaleController.isRTL) {
-                    i4 = 10;
-                }
-                addView(imageView, LayoutHelper.createFrame(40, 40.0f, i5, f, 9.0f, (float) i4, 0.0f));
+                addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 3 : i3) | 48, (float) (LocaleController.isRTL ? 10 : 0), 9.0f, (float) (!LocaleController.isRTL ? 10 : i4), 0.0f));
             }
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setText(String str, String str2, int i, boolean z) {
@@ -141,7 +119,8 @@ public class StickerSetCell extends FrameLayout {
         }
     }
 
-    public void setStickersSet(TL_messages_stickerSet tL_messages_stickerSet, boolean z) {
+    public void setStickersSet(TLRPC.TL_messages_stickerSet tL_messages_stickerSet, boolean z) {
+        ImageLocation imageLocation;
         this.needDivider = z;
         this.stickersSet = tL_messages_stickerSet;
         this.imageView.setVisibility(0);
@@ -160,66 +139,62 @@ public class StickerSetCell extends FrameLayout {
             this.valueTextView.setAlpha(1.0f);
             this.imageView.setAlpha(1.0f);
         }
-        ArrayList arrayList = tL_messages_stickerSet.documents;
-        String str = "Stickers";
+        ArrayList<TLRPC.Document> arrayList = tL_messages_stickerSet.documents;
         if (arrayList == null || arrayList.isEmpty()) {
-            this.valueTextView.setText(LocaleController.formatPluralString(str, 0));
+            this.valueTextView.setText(LocaleController.formatPluralString("Stickers", 0));
             return;
         }
-        ImageLocation forDocument;
-        this.valueTextView.setText(LocaleController.formatPluralString(str, arrayList.size()));
-        TLObject tLObject = (Document) arrayList.get(0);
-        PhotoSize photoSize = tL_messages_stickerSet.set.thumb;
-        if (!(photoSize instanceof TL_photoSize)) {
-            photoSize = tLObject;
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", arrayList.size()));
+        TLRPC.Document document = arrayList.get(0);
+        TLObject tLObject = tL_messages_stickerSet.set.thumb;
+        if (!(tLObject instanceof TLRPC.TL_photoSize)) {
+            tLObject = document;
         }
-        boolean z2 = photoSize instanceof Document;
+        boolean z2 = tLObject instanceof TLRPC.Document;
         if (z2) {
-            forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLObject.thumbs, 90), tLObject);
+            imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document);
         } else {
-            forDocument = ImageLocation.getForSticker(photoSize, tLObject);
+            imageLocation = ImageLocation.getForSticker((TLRPC.PhotoSize) tLObject, document);
         }
-        if (z2 && MessageObject.isAnimatedStickerDocument(tLObject, true)) {
-            this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", forDocument, null, 0, tL_messages_stickerSet);
-        } else if (forDocument == null || forDocument.imageType != 1) {
-            this.imageView.setImage(forDocument, "50_50", "webp", null, (Object) tL_messages_stickerSet);
+        if (z2 && MessageObject.isAnimatedStickerDocument(document, true)) {
+            this.imageView.setImage(ImageLocation.getForDocument(document), "50_50", imageLocation, (String) null, 0, tL_messages_stickerSet);
+        } else if (imageLocation == null || imageLocation.imageType != 1) {
+            this.imageView.setImage(imageLocation, "50_50", "webp", (Drawable) null, (Object) tL_messages_stickerSet);
         } else {
-            this.imageView.setImage(forDocument, "50_50", "tgs", null, (Object) tL_messages_stickerSet);
+            this.imageView.setImage(imageLocation, "50_50", "tgs", (Drawable) null, (Object) tL_messages_stickerSet);
         }
     }
 
     public void setChecked(boolean z) {
-        ImageView imageView = this.optionsButton;
-        if (imageView != null) {
-            imageView.setVisibility(z ? 0 : 4);
+        ImageView imageView2 = this.optionsButton;
+        if (imageView2 != null) {
+            imageView2.setVisibility(z ? 0 : 4);
         }
     }
 
-    public void setOnOptionsClick(OnClickListener onClickListener) {
-        ImageView imageView = this.optionsButton;
-        if (imageView != null) {
-            imageView.setOnClickListener(onClickListener);
+    public void setOnOptionsClick(View.OnClickListener onClickListener) {
+        ImageView imageView2 = this.optionsButton;
+        if (imageView2 != null) {
+            imageView2.setOnClickListener(onClickListener);
         }
     }
 
-    public TL_messages_stickerSet getStickersSet() {
+    public TLRPC.TL_messages_stickerSet getStickersSet() {
         return this.stickersSet;
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null) {
-            ImageView imageView = this.optionsButton;
-            if (imageView != null) {
-                imageView.getHitRect(this.rect);
-                if (this.rect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                    return true;
-                }
+        ImageView imageView2;
+        if (!(Build.VERSION.SDK_INT < 21 || getBackground() == null || (imageView2 = this.optionsButton) == null)) {
+            imageView2.getHitRect(this.rect);
+            if (this.rect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                return true;
             }
         }
         return super.onTouchEvent(motionEvent);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);

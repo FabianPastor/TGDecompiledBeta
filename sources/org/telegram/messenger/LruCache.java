@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 
 public class LruCache<T> {
     private final LinkedHashMap<String, T> map;
@@ -11,11 +11,11 @@ public class LruCache<T> {
     private int maxSize;
     private int size;
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void entryRemoved(boolean z, String str, T t, T t2) {
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public int sizeOf(String str, T t) {
         return 1;
     }
@@ -23,8 +23,8 @@ public class LruCache<T> {
     public LruCache(int i) {
         if (i > 0) {
             this.maxSize = i;
-            this.map = new LinkedHashMap(0, 0.75f, true);
-            this.mapFilters = new LinkedHashMap();
+            this.map = new LinkedHashMap<>(0, 0.75f, true);
+            this.mapFilters = new LinkedHashMap<>();
             return;
         }
         throw new IllegalArgumentException("maxSize <= 0");
@@ -33,9 +33,9 @@ public class LruCache<T> {
     public final T get(String str) {
         if (str != null) {
             synchronized (this) {
-                Object obj = this.map.get(str);
-                if (obj != null) {
-                    return obj;
+                T t = this.map.get(str);
+                if (t != null) {
+                    return t;
                 }
                 return null;
             }
@@ -44,8 +44,11 @@ public class LruCache<T> {
     }
 
     public ArrayList<String> getFilterKeys(String str) {
-        ArrayList arrayList = (ArrayList) this.mapFilters.get(str);
-        return arrayList != null ? new ArrayList(arrayList) : null;
+        ArrayList arrayList = this.mapFilters.get(str);
+        if (arrayList != null) {
+            return new ArrayList<>(arrayList);
+        }
+        return null;
     }
 
     public void moveToFront(String str) {
@@ -56,10 +59,10 @@ public class LruCache<T> {
     }
 
     public T put(String str, T t) {
+        T put;
         if (str == null || t == null) {
             throw new NullPointerException("key == null || value == null");
         }
-        Object put;
         synchronized (this) {
             this.size += safeSizeOf(str, t);
             put = this.map.put(str, t);
@@ -69,7 +72,7 @@ public class LruCache<T> {
         }
         String[] split = str.split("@");
         if (split.length > 1) {
-            ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
+            ArrayList arrayList = this.mapFilters.get(split[0]);
             if (arrayList == null) {
                 arrayList = new ArrayList();
                 this.mapFilters.put(split[0], arrayList);
@@ -86,37 +89,39 @@ public class LruCache<T> {
     }
 
     private void trimToSize(int i, String str) {
+        ArrayList arrayList;
         synchronized (this) {
-            Iterator it = this.map.entrySet().iterator();
-            while (it.hasNext() && this.size > i) {
-                if (this.map.isEmpty()) {
+            Iterator<Map.Entry<String, T>> it = this.map.entrySet().iterator();
+            while (true) {
+                if (!it.hasNext() || this.size <= i) {
                     break;
-                }
-                Entry entry = (Entry) it.next();
-                String str2 = (String) entry.getKey();
-                if (str == null || !str.equals(str2)) {
-                    Object value = entry.getValue();
-                    this.size -= safeSizeOf(str2, value);
-                    it.remove();
-                    String[] split = str2.split("@");
-                    if (split.length > 1) {
-                        ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
-                        if (arrayList != null) {
+                } else if (this.map.isEmpty()) {
+                    break;
+                } else {
+                    Map.Entry next = it.next();
+                    String str2 = (String) next.getKey();
+                    if (str == null || !str.equals(str2)) {
+                        Object value = next.getValue();
+                        this.size -= safeSizeOf(str2, value);
+                        it.remove();
+                        String[] split = str2.split("@");
+                        if (split.length > 1 && (arrayList = this.mapFilters.get(split[0])) != null) {
                             arrayList.remove(split[1]);
                             if (arrayList.isEmpty()) {
                                 this.mapFilters.remove(split[0]);
                             }
                         }
+                        entryRemoved(true, str2, value, (Object) null);
                     }
-                    entryRemoved(true, str2, value, null);
                 }
             }
         }
     }
 
     public final T remove(String str) {
+        T remove;
+        ArrayList arrayList;
         if (str != null) {
-            Object remove;
             synchronized (this) {
                 remove = this.map.remove(str);
                 if (remove != null) {
@@ -125,16 +130,13 @@ public class LruCache<T> {
             }
             if (remove != null) {
                 String[] split = str.split("@");
-                if (split.length > 1) {
-                    ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
-                    if (arrayList != null) {
-                        arrayList.remove(split[1]);
-                        if (arrayList.isEmpty()) {
-                            this.mapFilters.remove(split[0]);
-                        }
+                if (split.length > 1 && (arrayList = this.mapFilters.get(split[0])) != null) {
+                    arrayList.remove(split[1]);
+                    if (arrayList.isEmpty()) {
+                        this.mapFilters.remove(split[0]);
                     }
                 }
-                entryRemoved(false, str, remove, null);
+                entryRemoved(false, str, remove, (T) null);
             }
             return remove;
         }
@@ -150,16 +152,11 @@ public class LruCache<T> {
         if (sizeOf >= 0) {
             return sizeOf;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Negative size: ");
-        stringBuilder.append(str);
-        stringBuilder.append("=");
-        stringBuilder.append(t);
-        throw new IllegalStateException(stringBuilder.toString());
+        throw new IllegalStateException("Negative size: " + str + "=" + t);
     }
 
     public final void evictAll() {
-        trimToSize(-1, null);
+        trimToSize(-1, (String) null);
     }
 
     public final synchronized int size() {

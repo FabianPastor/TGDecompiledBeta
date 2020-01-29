@@ -6,7 +6,7 @@ import android.os.Bundle;
 import org.telegram.ui.LaunchActivity;
 
 public class OpenChatReceiver extends Activity {
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Intent intent = getIntent();

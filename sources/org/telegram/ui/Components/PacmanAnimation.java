@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.view.View;
@@ -25,7 +24,7 @@ public class PacmanAnimation {
     private float translationProgress;
 
     public PacmanAnimation(View view) {
-        this.edgePaint.setStyle(Style.STROKE);
+        this.edgePaint.setStyle(Paint.Style.STROKE);
         this.edgePaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.parentView = view;
     }
@@ -38,14 +37,14 @@ public class PacmanAnimation {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 17;
+        long j2 = 17;
         if (j <= 17) {
-            currentTimeMillis = j;
+            j2 = j;
         }
         if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
-        float f = (float) currentTimeMillis;
+        float f = (float) j2;
         this.progress += f / 400.0f;
         if (this.progress > 1.0f) {
             this.progress = 1.0f;
@@ -56,7 +55,7 @@ public class PacmanAnimation {
         }
         this.ghostProgress += f / 200.0f;
         if (this.ghostProgress >= 1.0f) {
-            this.ghostWalk ^= 1;
+            this.ghostWalk = !this.ghostWalk;
             this.ghostProgress = 0.0f;
         }
         this.parentView.invalidate();
@@ -130,30 +129,29 @@ public class PacmanAnimation {
         int dp2 = AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f);
         int dp3 = (AndroidUtilities.dp(62.0f) * 3) + dp;
         float measuredWidth = (((float) (this.parentView.getMeasuredWidth() + dp3)) * this.translationProgress) - ((float) dp3);
-        dp3 = dp / 2;
-        int i2 = i - dp3;
+        int i2 = dp / 2;
+        int i3 = i - i2;
         this.paint.setColor(Theme.getColor("windowBackgroundWhite"));
-        dp2 /= 2;
-        float f = measuredWidth + ((float) dp3);
-        canvas.drawRect(0.0f, (float) (i - dp2), f, (float) ((i + dp2) + 1), this.paint);
+        int i4 = dp2 / 2;
+        float f = measuredWidth + ((float) i2);
+        canvas.drawRect(0.0f, (float) (i - i4), f, (float) (i + i4 + 1), this.paint);
         this.paint.setColor(-69120);
         float f2 = measuredWidth + ((float) dp);
-        this.rect.set(measuredWidth, (float) i2, f2, (float) (i2 + dp));
+        this.rect.set(measuredWidth, (float) i3, f2, (float) (i3 + dp));
         float f3 = this.progress;
-        dp2 = (int) (f3 < 0.5f ? (1.0f - (f3 / 0.5f)) * 35.0f : ((f3 - 0.5f) * 35.0f) / 0.5f);
-        float f4 = (float) dp2;
-        float f5 = (float) (360 - (dp2 * 2));
+        int i5 = (int) (f3 < 0.5f ? (1.0f - (f3 / 0.5f)) * 35.0f : ((f3 - 0.5f) * 35.0f) / 0.5f);
+        float f4 = (float) i5;
+        float f5 = (float) (360 - (i5 * 2));
         Canvas canvas3 = canvas;
         float f6 = f4;
-        float f7 = f5;
         canvas3.drawArc(this.rect, f6, f5, true, this.edgePaint);
-        canvas3.drawArc(this.rect, f6, f7, true, this.paint);
+        canvas3.drawArc(this.rect, f6, f5, true, this.paint);
         this.paint.setColor(-16777216);
-        canvas2.drawCircle(f - ((float) AndroidUtilities.dp(8.0f)), (float) (i2 + (dp / 4)), (float) AndroidUtilities.dp(8.0f), this.paint);
+        canvas2.drawCircle(f - ((float) AndroidUtilities.dp(8.0f)), (float) (i3 + (dp / 4)), (float) AndroidUtilities.dp(8.0f), this.paint);
         canvas.save();
         canvas2.translate(f2 + ((float) AndroidUtilities.dp(20.0f)), (float) (i - AndroidUtilities.dp(25.0f)));
-        for (dp2 = 0; dp2 < 3; dp2++) {
-            drawGhost(canvas2, dp2);
+        for (int i6 = 0; i6 < 3; i6++) {
+            drawGhost(canvas2, i6);
             canvas2.translate((float) AndroidUtilities.dp(62.0f), 0.0f);
         }
         canvas.restore();

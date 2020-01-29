@@ -7,7 +7,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -39,24 +39,20 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
-        TextView textView = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
         float f = (float) i;
-        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, f, 0.0f, f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, f, 0.0f, f, 0.0f));
     }
 
     public void setLinkTextColorKey(String str) {
         this.linkTextColorKey = str;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         if (this.fixedSize != 0) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         }
     }
 
@@ -71,33 +67,31 @@ public class TextInfoPrivacyCell extends FrameLayout {
     public void setText(CharSequence charSequence) {
         if (!TextUtils.equals(charSequence, this.text)) {
             this.text = charSequence;
-            int i = 0;
             if (charSequence == null) {
                 this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
             } else {
                 this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
             }
-            CharSequence charSequence2 = null;
+            SpannableString spannableString = null;
             if (charSequence != null) {
                 int length = charSequence.length();
-                while (i < length - 1) {
+                for (int i = 0; i < length - 1; i++) {
                     if (charSequence.charAt(i) == 10) {
                         int i2 = i + 1;
                         if (charSequence.charAt(i2) == 10) {
-                            if (charSequence2 == null) {
-                                charSequence2 = new SpannableString(charSequence);
+                            if (spannableString == null) {
+                                spannableString = new SpannableString(charSequence);
                             }
-                            charSequence2.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
+                            spannableString.setSpan(new AbsoluteSizeSpan(10, true), i2, i + 2, 33);
                         }
                     }
-                    i++;
                 }
             }
-            TextView textView = this.textView;
-            if (charSequence2 != null) {
-                charSequence = charSequence2;
+            TextView textView2 = this.textView;
+            if (spannableString != null) {
+                charSequence = spannableString;
             }
-            textView.setText(charSequence);
+            textView2.setText(charSequence);
         }
     }
 
@@ -121,19 +115,19 @@ public class TextInfoPrivacyCell extends FrameLayout {
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView = this.textView;
+            TextView textView2 = this.textView;
             float[] fArr = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(textView, "alpha", fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
             return;
         }
-        TextView textView2 = this.textView;
+        TextView textView3 = this.textView;
         if (!z) {
             f = 0.5f;
         }
-        textView2.setAlpha(f);
+        textView3.setAlpha(f);
     }
 }

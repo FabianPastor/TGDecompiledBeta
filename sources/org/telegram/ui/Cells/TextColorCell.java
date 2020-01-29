@@ -5,7 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.Keep;
@@ -17,8 +17,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class TextColorCell extends FrameLayout {
     private static Paint colorPaint;
-    public static final int[] colors = new int[]{-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
-    public static final int[] colorsToSave = new int[]{-65536, -29183, -256, -16711936, -16711681, -16776961, -2984711, -65281, -1};
+    public static final int[] colors = {-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
+    public static final int[] colorsToSave = {-65536, -29183, -256, -16711936, -16711681, -16776961, -2984711, -65281, -1};
     private float alpha = 1.0f;
     private int currentColor;
     private boolean needDivider;
@@ -37,11 +37,7 @@ public class TextColorCell extends FrameLayout {
         this.textView.setSingleLine(true);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView = this.textView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     @Keep
@@ -54,17 +50,16 @@ public class TextColorCell extends FrameLayout {
         return this.alpha;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
     public void setTextAndColor(String str, int i, boolean z) {
         this.textView.setText(str);
         this.needDivider = z;
         this.currentColor = i;
-        boolean z2 = !this.needDivider && this.currentColor == 0;
-        setWillNotDraw(z2);
+        setWillNotDraw(!this.needDivider && this.currentColor == 0);
         invalidate();
     }
 
@@ -72,17 +67,16 @@ public class TextColorCell extends FrameLayout {
         super.setEnabled(z);
         float f = 1.0f;
         if (arrayList != null) {
-            TextView textView = this.textView;
+            TextView textView2 = this.textView;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            String str = "alpha";
-            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
             float[] fArr2 = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(this, str, fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(this, "alpha", fArr2));
             return;
         }
         this.textView.setAlpha(z ? 1.0f : 0.5f);
@@ -92,7 +86,7 @@ public class TextColorCell extends FrameLayout {
         setAlpha(f);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

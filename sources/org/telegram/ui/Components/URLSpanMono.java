@@ -6,20 +6,20 @@ import android.text.style.MetricAffectingSpan;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
+import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanMono extends MetricAffectingSpan {
     private int currentEnd;
     private CharSequence currentMessage;
     private int currentStart;
     private byte currentType;
-    private TextStyleRun style;
+    private TextStyleSpan.TextStyleRun style;
 
     public URLSpanMono(CharSequence charSequence, int i, int i2, byte b) {
-        this(charSequence, i, i2, b, null);
+        this(charSequence, i, i2, b, (TextStyleSpan.TextStyleRun) null);
     }
 
-    public URLSpanMono(CharSequence charSequence, int i, int i2, byte b, TextStyleRun textStyleRun) {
+    public URLSpanMono(CharSequence charSequence, int i, int i2, byte b, TextStyleSpan.TextStyleRun textStyleRun) {
         this.currentMessage = charSequence;
         this.currentStart = i;
         this.currentEnd = i2;
@@ -34,7 +34,7 @@ public class URLSpanMono extends MetricAffectingSpan {
     public void updateMeasureState(TextPaint textPaint) {
         textPaint.setTextSize((float) AndroidUtilities.dp((float) (SharedConfig.fontSize - 1)));
         textPaint.setFlags(textPaint.getFlags() | 128);
-        TextStyleRun textStyleRun = this.style;
+        TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
         } else {
@@ -45,14 +45,14 @@ public class URLSpanMono extends MetricAffectingSpan {
     public void updateDrawState(TextPaint textPaint) {
         textPaint.setTextSize((float) AndroidUtilities.dp((float) (SharedConfig.fontSize - 1)));
         byte b = this.currentType;
-        if (b == (byte) 2) {
+        if (b == 2) {
             textPaint.setColor(-1);
-        } else if (b == (byte) 1) {
+        } else if (b == 1) {
             textPaint.setColor(Theme.getColor("chat_messageTextOut"));
         } else {
             textPaint.setColor(Theme.getColor("chat_messageTextIn"));
         }
-        TextStyleRun textStyleRun = this.style;
+        TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
             return;

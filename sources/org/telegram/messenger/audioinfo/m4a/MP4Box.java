@@ -37,7 +37,7 @@ public class MP4Box<I extends PositionInputStream> {
         return this.input;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public MP4Atom getChild() {
         return this.child;
     }
@@ -53,7 +53,7 @@ public class MP4Box<I extends PositionInputStream> {
         this.data.readFully(bArr);
         String str = new String(bArr, "ISO8859_1");
         if (readInt == 1) {
-            RangeInputStream rangeInputStream2 = new RangeInputStream(this.input, 16, this.data.readLong() - 16);
+            rangeInputStream = new RangeInputStream(this.input, 16, this.data.readLong() - 16);
         } else {
             rangeInputStream = new RangeInputStream(this.input, 8, (long) (readInt - 8));
         }
@@ -67,11 +67,6 @@ public class MP4Box<I extends PositionInputStream> {
         if (nextChild.getType().matches(str)) {
             return nextChild;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("atom type mismatch, expected ");
-        stringBuilder.append(str);
-        stringBuilder.append(", got ");
-        stringBuilder.append(nextChild.getType());
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("atom type mismatch, expected " + str + ", got " + nextChild.getType());
     }
 }

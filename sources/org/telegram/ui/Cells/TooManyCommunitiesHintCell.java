@@ -3,7 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.text.TextPaint;
@@ -24,13 +24,11 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
     public TooManyCommunitiesHintCell(Context context) {
         super(context);
         this.imageView = new ImageView(context);
-        String str = "chats_nameMessage_threeLines";
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
         this.headerTextView = new TextView(context);
-        this.headerTextView.setTextColor(Theme.getColor(str));
+        this.headerTextView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.headerTextView.setTextSize(1, 20.0f);
-        str = "fonts/rmedium.ttf";
-        this.headerTextView.setTypeface(AndroidUtilities.getTypeface(str));
+        this.headerTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.headerTextView.setGravity(17);
         addView(this.headerTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 75.0f, 52.0f, 0.0f));
         this.messageTextView = new TextView(context);
@@ -41,23 +39,22 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
         final TextPaint textPaint = new TextPaint(1);
         textPaint.setColor(-1);
         textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
-        textPaint.setTypeface(AndroidUtilities.getTypeface(str));
+        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         final Paint paint = new Paint(1);
-        final String str2 = "500";
-        this.imageLayout = new FrameLayout(context) {
+        this.imageLayout = new FrameLayout(context, "500") {
             RectF rect = new RectF();
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 paint.setColor(Theme.getColor("windowBackgroundWhiteRedText"));
                 canvas.save();
-                canvas.translate((((float) getMeasuredWidth()) - textPaint.measureText(str2)) - ((float) AndroidUtilities.dp(8.0f)), AndroidUtilities.dpf2(7.0f));
-                this.rect.set(0.0f, 0.0f, textPaint.measureText(str2), textPaint.getTextSize());
+                canvas.translate((((float) getMeasuredWidth()) - textPaint.measureText("500")) - ((float) AndroidUtilities.dp(8.0f)), AndroidUtilities.dpf2(7.0f));
+                this.rect.set(0.0f, 0.0f, textPaint.measureText("500"), textPaint.getTextSize());
                 this.rect.inset((float) (-AndroidUtilities.dp(6.0f)), (float) (-AndroidUtilities.dp(3.0f)));
                 float textSize = (textPaint.getTextSize() / 2.0f) + ((float) AndroidUtilities.dp(3.0f));
                 canvas.drawRoundRect(this.rect, textSize, textSize, paint);
-                canvas.drawText(str2, 0.0f, textPaint.getTextSize() - AndroidUtilities.dpf2(2.0f), textPaint);
+                canvas.drawText("500", 0.0f, textPaint.getTextSize() - AndroidUtilities.dpf2(2.0f), textPaint);
                 canvas.restore();
             }
         };

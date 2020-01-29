@@ -1,13 +1,12 @@
 package org.telegram.ui.ActionBar;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.text.TextUtils.TruncateAt;
-import android.view.View.MeasureSpec;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -25,27 +24,23 @@ public class ActionBarMenuSubItem extends FrameLayout {
         setBackground(Theme.createSelectorDrawable(this.selectorColor, 2));
         setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(this.iconColor, Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.MULTIPLY));
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(-2, 40, (LocaleController.isRTL ? 5 : 3) | 16));
         this.textView = new TextView(context);
         this.textView.setLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity(1);
-        this.textView.setEllipsize(TruncateAt.END);
+        this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setTextColor(this.textColor);
         this.textView.setTextSize(1, 16.0f);
-        TextView textView = this.textView;
-        if (!LocaleController.isRTL) {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2, i | 16));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2, (!LocaleController.isRTL ? 3 : i) | 16));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     public void setTextAndIcon(CharSequence charSequence, int i) {
@@ -67,17 +62,17 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
     public void setTextColor(int i) {
         if (this.textColor != i) {
-            TextView textView = this.textView;
+            TextView textView2 = this.textView;
             this.textColor = i;
-            textView.setTextColor(i);
+            textView2.setTextColor(i);
         }
     }
 
     public void setIconColor(int i) {
         if (this.iconColor != i) {
-            ImageView imageView = this.imageView;
+            ImageView imageView2 = this.imageView;
             this.iconColor = i;
-            imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         }
     }
 

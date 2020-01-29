@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
@@ -14,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmuDetector {
-    private static final String[] ANDY_FILES = new String[]{"fstab.andy", "ueventd.andy.rc"};
-    private static final String[] DEVICE_IDS = new String[]{"NUM", "e21833235b6eevar_", "NUM"};
-    private static final String[] GENY_FILES = new String[]{"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
-    private static final String[] IMSI_IDS = new String[]{"NUM"};
+    private static final String[] ANDY_FILES = {"fstab.andy", "ueventd.andy.rc"};
+    private static final String[] DEVICE_IDS = {"NUM", "e21833235b6eevar_", "NUM"};
+    private static final String[] GENY_FILES = {"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
+    private static final String[] IMSI_IDS = {"NUM"};
     private static final String IP = "10.0.2.15";
     private static final int MIN_PROPERTIES_THRESHOLD = 5;
-    private static final String[] NOX_FILES = new String[]{"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
-    private static final String[] PHONE_NUMBERS = new String[]{"NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM"};
-    private static final String[] PIPES = new String[]{"/dev/socket/qemud", "/dev/qemu_pipe"};
-    private static final Property[] PROPERTIES = new Property[]{new Property("init.svc.qemud", null), new Property("init.svc.qemu-props", null), new Property("qemu.hw.mainkeys", null), new Property("qemu.sf.fake_camera", null), new Property("qemu.sf.lcd_density", null), new Property("ro.bootloader", "unknown"), new Property("ro.bootmode", "unknown"), new Property("ro.hardware", "goldfish"), new Property("ro.kernel.android.qemud", null), new Property("ro.kernel.qemu.gles", null), new Property("ro.kernel.qemu", "1"), new Property("ro.product.device", "generic"), new Property("ro.product.model", "sdk"), new Property("ro.product.name", "sdk"), new Property("ro.serialno", null)};
-    private static final String[] QEMU_DRIVERS = new String[]{"goldfish"};
-    private static final String[] X86_FILES = new String[]{"ueventd.android_x86.rc", "x86.prop", "ueventd.ttVM_x86.rc", "init.ttVM_x86.rc", "fstab.ttVM_x86", "fstab.vbox86", "init.vbox86.rc", "ueventd.vbox86.rc"};
+    private static final String[] NOX_FILES = {"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
+    private static final String[] PHONE_NUMBERS = {"NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM"};
+    private static final String[] PIPES = {"/dev/socket/qemud", "/dev/qemu_pipe"};
+    private static final Property[] PROPERTIES = {new Property("init.svc.qemud", (String) null), new Property("init.svc.qemu-props", (String) null), new Property("qemu.hw.mainkeys", (String) null), new Property("qemu.sf.fake_camera", (String) null), new Property("qemu.sf.lcd_density", (String) null), new Property("ro.bootloader", "unknown"), new Property("ro.bootmode", "unknown"), new Property("ro.hardware", "goldfish"), new Property("ro.kernel.android.qemud", (String) null), new Property("ro.kernel.qemu.gles", (String) null), new Property("ro.kernel.qemu", "1"), new Property("ro.product.device", "generic"), new Property("ro.product.model", "sdk"), new Property("ro.product.name", "sdk"), new Property("ro.serialno", (String) null)};
+    private static final String[] QEMU_DRIVERS = {"goldfish"};
+    private static final String[] X86_FILES = {"ueventd.android_x86.rc", "x86.prop", "ueventd.ttVM_x86.rc", "init.ttVM_x86.rc", "fstab.ttVM_x86", "fstab.vbox86", "init.vbox86.rc", "ueventd.vbox86.rc"};
     @SuppressLint({"StaticFieldLeak"})
     private static EmuDetector mEmulatorDetector;
     private boolean detectResult;
@@ -115,131 +116,20 @@ public class EmuDetector {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00c2 A:{RETURN} */
     private boolean checkBasic() {
-        /*
-        r6 = this;
-        r0 = android.os.Build.FINGERPRINT;
-        r1 = "generic";
-        r0 = r0.startsWith(r1);
-        r2 = 0;
-        r3 = "google_sdk";
-        r4 = 1;
-        if (r0 != 0) goto L_0x00bf;
-    L_0x000e:
-        r0 = android.os.Build.MODEL;
-        r0 = r0.contains(r3);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0016:
-        r0 = android.os.Build.MODEL;
-        r0 = r0.toLowerCase();
-        r5 = "droid4x";
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0024:
-        r0 = android.os.Build.MODEL;
-        r5 = "Emulator";
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x002e:
-        r0 = android.os.Build.MODEL;
-        r5 = "Android SDK built for x86";
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0038:
-        r0 = android.os.Build.MANUFACTURER;
-        r5 = "Genymotion";
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0042:
-        r0 = android.os.Build.HARDWARE;
-        r5 = "goldfish";
-        r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x004c:
-        r0 = android.os.Build.HARDWARE;
-        r5 = "vbox86";
-        r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0057:
-        r0 = android.os.Build.PRODUCT;
-        r5 = "sdk";
-        r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0061:
-        r0 = android.os.Build.PRODUCT;
-        r0 = r0.equals(r3);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0069:
-        r0 = android.os.Build.PRODUCT;
-        r5 = "sdk_x86";
-        r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0073:
-        r0 = android.os.Build.PRODUCT;
-        r5 = "vbox86p";
-        r0 = r0.equals(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x007e:
-        r0 = android.os.Build.BOARD;
-        r0 = r0.toLowerCase();
-        r5 = "nox";
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x008c:
-        r0 = android.os.Build.BOOTLOADER;
-        r0 = r0.toLowerCase();
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x0098:
-        r0 = android.os.Build.HARDWARE;
-        r0 = r0.toLowerCase();
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x00a4:
-        r0 = android.os.Build.PRODUCT;
-        r0 = r0.toLowerCase();
-        r0 = r0.contains(r5);
-        if (r0 != 0) goto L_0x00bf;
-    L_0x00b0:
-        r0 = android.os.Build.SERIAL;
-        r0 = r0.toLowerCase();
-        r0 = r0.contains(r5);
-        if (r0 == 0) goto L_0x00bd;
-    L_0x00bc:
-        goto L_0x00bf;
-    L_0x00bd:
-        r0 = 0;
-        goto L_0x00c0;
-    L_0x00bf:
-        r0 = 1;
-    L_0x00c0:
-        if (r0 == 0) goto L_0x00c3;
-    L_0x00c2:
-        return r4;
-    L_0x00c3:
-        r5 = android.os.Build.BRAND;
-        r5 = r5.startsWith(r1);
-        if (r5 == 0) goto L_0x00d4;
-    L_0x00cb:
-        r5 = android.os.Build.DEVICE;
-        r1 = r5.startsWith(r1);
-        if (r1 == 0) goto L_0x00d4;
-    L_0x00d3:
-        r2 = 1;
-    L_0x00d4:
-        r0 = r0 | r2;
-        if (r0 == 0) goto L_0x00d8;
-    L_0x00d7:
-        return r4;
-    L_0x00d8:
-        r1 = android.os.Build.PRODUCT;
-        r1 = r3.equals(r1);
-        r0 = r0 | r1;
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.EmuDetector.checkBasic():boolean");
+        boolean z = false;
+        boolean z2 = Build.FINGERPRINT.startsWith("generic") || Build.MODEL.contains("google_sdk") || Build.MODEL.toLowerCase().contains("droid4x") || Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.contains("Genymotion") || Build.HARDWARE.equals("goldfish") || Build.HARDWARE.equals("vbox86") || Build.PRODUCT.equals("sdk") || Build.PRODUCT.equals("google_sdk") || Build.PRODUCT.equals("sdk_x86") || Build.PRODUCT.equals("vbox86p") || Build.BOARD.toLowerCase().contains("nox") || Build.BOOTLOADER.toLowerCase().contains("nox") || Build.HARDWARE.toLowerCase().contains("nox") || Build.PRODUCT.toLowerCase().contains("nox") || Build.SERIAL.toLowerCase().contains("nox");
+        if (z2) {
+            return true;
+        }
+        if (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) {
+            z = true;
+        }
+        boolean z3 = z2 | z;
+        if (z3) {
+            return true;
+        }
+        return z3 | "google_sdk".equals(Build.PRODUCT);
     }
 
     private boolean checkAdvanced() {
@@ -309,7 +199,7 @@ public class EmuDetector {
                     e.printStackTrace();
                 }
                 String str = new String(bArr);
-                for (CharSequence contains : QEMU_DRIVERS) {
+                for (String contains : QEMU_DRIVERS) {
                     if (str.contains(contains)) {
                         return true;
                     }
@@ -351,8 +241,8 @@ public class EmuDetector {
         if (ContextCompat.checkSelfPermission(this.mContext, "android.permission.INTERNET") != 0) {
             return false;
         }
-        String[] strArr = new String[]{"/system/bin/netcfg"};
-        StringBuilder stringBuilder = new StringBuilder();
+        String[] strArr = {"/system/bin/netcfg"};
+        StringBuilder sb = new StringBuilder();
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(strArr);
             processBuilder.directory(new File("/system/bin/"));
@@ -360,16 +250,16 @@ public class EmuDetector {
             InputStream inputStream = processBuilder.start().getInputStream();
             byte[] bArr = new byte[1024];
             while (inputStream.read(bArr) != -1) {
-                stringBuilder.append(new String(bArr));
+                sb.append(new String(bArr));
             }
             inputStream.close();
         } catch (Exception unused) {
         }
-        String stringBuilder2 = stringBuilder.toString();
-        if (TextUtils.isEmpty(stringBuilder2)) {
+        String sb2 = sb.toString();
+        if (TextUtils.isEmpty(sb2)) {
             return false;
         }
-        for (String str : stringBuilder2.split("\n")) {
+        for (String str : sb2.split("\n")) {
             if ((str.contains("wlan0") || str.contains("tunl0") || str.contains("eth0")) && str.contains("10.0.2.15")) {
                 return true;
             }
@@ -379,7 +269,7 @@ public class EmuDetector {
 
     private String getProp(Context context, String str) {
         try {
-            Class loadClass = context.getClassLoader().loadClass("android.os.SystemProperties");
+            Class<?> loadClass = context.getClassLoader().loadClass("android.os.SystemProperties");
             return (String) loadClass.getMethod("get", new Class[]{String.class}).invoke(loadClass, new Object[]{str});
         } catch (Exception unused) {
             return null;

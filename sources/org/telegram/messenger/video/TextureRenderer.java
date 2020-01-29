@@ -27,7 +27,7 @@ public class TextureRenderer {
 
     public TextureRenderer(int i) {
         this.rotationAngle = i;
-        float[] fArr = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+        float[] fArr = {-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
         this.mTriangleVertices = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.mTriangleVertices.put(fArr).position(0);
         Matrix.setIdentityM(this.mSTMatrix, 0);
@@ -93,9 +93,9 @@ public class TextureRenderer {
                             GLES20.glTexParameteri(36197, 10243, 33071);
                             checkGlError("glTexParameter");
                             Matrix.setIdentityM(this.mMVPMatrix, 0);
-                            i = this.rotationAngle;
-                            if (i != 0) {
-                                Matrix.rotateM(this.mMVPMatrix, 0, (float) i, 0.0f, 0.0f, 1.0f);
+                            int i2 = this.rotationAngle;
+                            if (i2 != 0) {
+                                Matrix.rotateM(this.mMVPMatrix, 0, (float) i2, 0.0f, 0.0f, 1.0f);
                                 return;
                             }
                             return;
@@ -113,10 +113,7 @@ public class TextureRenderer {
 
     private int loadShader(int i, String str) {
         int glCreateShader = GLES20.glCreateShader(i);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("glCreateShader type=");
-        stringBuilder.append(i);
-        checkGlError(stringBuilder.toString());
+        checkGlError("glCreateShader type=" + i);
         GLES20.glShaderSource(glCreateShader, str);
         GLES20.glCompileShader(glCreateShader);
         int[] iArr = new int[1];
@@ -129,13 +126,9 @@ public class TextureRenderer {
     }
 
     private int createProgram(String str, String str2) {
-        int loadShader = loadShader(35633, str);
-        int i = 0;
-        if (loadShader == 0) {
-            return 0;
-        }
-        int loadShader2 = loadShader(35632, str2);
-        if (loadShader2 == 0) {
+        int loadShader;
+        int loadShader2 = loadShader(35633, str);
+        if (loadShader2 == 0 || (loadShader = loadShader(35632, str2)) == 0) {
             return 0;
         }
         int glCreateProgram = GLES20.glCreateProgram();
@@ -143,30 +136,24 @@ public class TextureRenderer {
         if (glCreateProgram == 0) {
             return 0;
         }
-        GLES20.glAttachShader(glCreateProgram, loadShader);
-        str = "glAttachShader";
-        checkGlError(str);
         GLES20.glAttachShader(glCreateProgram, loadShader2);
-        checkGlError(str);
+        checkGlError("glAttachShader");
+        GLES20.glAttachShader(glCreateProgram, loadShader);
+        checkGlError("glAttachShader");
         GLES20.glLinkProgram(glCreateProgram);
         int[] iArr = new int[1];
         GLES20.glGetProgramiv(glCreateProgram, 35714, iArr, 0);
-        if (iArr[0] != 1) {
-            GLES20.glDeleteProgram(glCreateProgram);
-        } else {
-            i = glCreateProgram;
+        if (iArr[0] == 1) {
+            return glCreateProgram;
         }
-        return i;
+        GLES20.glDeleteProgram(glCreateProgram);
+        return 0;
     }
 
     public void checkGlError(String str) {
         int glGetError = GLES20.glGetError();
         if (glGetError != 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(str);
-            stringBuilder.append(": glError ");
-            stringBuilder.append(glGetError);
-            throw new RuntimeException(stringBuilder.toString());
+            throw new RuntimeException(str + ": glError " + glGetError);
         }
     }
 }

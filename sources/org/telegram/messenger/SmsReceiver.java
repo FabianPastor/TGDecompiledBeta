@@ -10,32 +10,38 @@ import java.util.regex.Pattern;
 
 public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
+        String str;
         if (intent != null) {
             try {
-                CharSequence charSequence;
                 SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                String string = sharedPreferences.getString("sms_hash", null);
-                String str = "";
+                String string = sharedPreferences.getString("sms_hash", (String) null);
                 if (!"com.google.android.gms.auth.api.phone.SMS_RETRIEVED".equals(intent.getAction())) {
-                    charSequence = str;
+                    str = "";
                 } else if (AndroidUtilities.isWaitingForSms()) {
-                    charSequence = (String) intent.getExtras().get("com.google.android.gms.auth.api.phone.EXTRA_SMS_MESSAGE");
+                    str = (String) intent.getExtras().get("com.google.android.gms.auth.api.phone.EXTRA_SMS_MESSAGE");
                 } else {
                     return;
                 }
-                if (!TextUtils.isEmpty(charSequence)) {
-                    Matcher matcher = Pattern.compile("[0-9\\-]+").matcher(charSequence);
+                if (!TextUtils.isEmpty(str)) {
+                    Matcher matcher = Pattern.compile("[0-9\\-]+").matcher(str);
                     if (matcher.find()) {
-                        String replace = matcher.group(0).replace("-", str);
+                        String replace = matcher.group(0).replace("-", "");
                         if (replace.length() >= 3) {
                             if (!(sharedPreferences == null || string == null)) {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                stringBuilder.append(string);
-                                stringBuilder.append("|");
-                                stringBuilder.append(replace);
-                                sharedPreferences.edit().putString("sms_hash_code", stringBuilder.toString()).commit();
+                                SharedPreferences.Editor edit = sharedPreferences.edit();
+                                edit.putString("sms_hash_code", string + "|" + replace).commit();
                             }
-                            AndroidUtilities.runOnUIThread(new -$$Lambda$SmsReceiver$bf6x7dIcCjvctQwFi_AQlRoL3UE(replace));
+                            AndroidUtilities.runOnUIThread(new Runnable(replace) {
+                                private final /* synthetic */ String f$0;
+
+                                {
+                                    this.f$0 = r1;
+                                }
+
+                                public final void run() {
+                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, this.f$0);
+                                }
+                            });
                         }
                     }
                 }

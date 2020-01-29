@@ -3,21 +3,19 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.recyclerview.widget.RecyclerView.LayoutParams;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.LoadingCell;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.RecyclerListView;
 
-public class MessagesSearchAdapter extends SelectionAdapter {
+public class MessagesSearchAdapter extends RecyclerListView.SelectionAdapter {
     private int currentAccount = UserConfig.selectedAccount;
     private Context mContext;
-    private ArrayList<MessageObject> searchResultMessages = new ArrayList();
+    private ArrayList<MessageObject> searchResultMessages = new ArrayList<>();
 
     public long getItemId(int i) {
         return (long) i;
@@ -37,20 +35,28 @@ public class MessagesSearchAdapter extends SelectionAdapter {
     }
 
     public Object getItem(int i) {
-        return (i < 0 || i >= this.searchResultMessages.size()) ? null : this.searchResultMessages.get(i);
+        if (i < 0 || i >= this.searchResultMessages.size()) {
+            return null;
+        }
+        return this.searchResultMessages.get(i);
     }
 
-    public boolean isEnabled(ViewHolder viewHolder) {
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         return viewHolder.getItemViewType() == 0;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View loadingCell = i != 0 ? i != 1 ? null : new LoadingCell(this.mContext) : new DialogCell(this.mContext, false, true);
-        loadingCell.setLayoutParams(new LayoutParams(-1, -2));
-        return new Holder(loadingCell);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view;
+        if (i != 0) {
+            view = i != 1 ? null : new LoadingCell(this.mContext);
+        } else {
+            view = new DialogCell(this.mContext, false, true);
+        }
+        view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+        return new RecyclerListView.Holder(view);
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder.getItemViewType() == 0) {
             DialogCell dialogCell = (DialogCell) viewHolder.itemView;
             dialogCell.useSeparator = true;

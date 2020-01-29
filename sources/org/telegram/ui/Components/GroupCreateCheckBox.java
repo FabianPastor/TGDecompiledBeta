@@ -3,11 +3,9 @@ package org.telegram.ui.Components;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.view.View;
 import androidx.annotation.Keep;
@@ -20,15 +18,15 @@ public class GroupCreateCheckBox extends View {
     private static final float progressBounceDiff = 0.2f;
     private boolean attachedToWindow;
     private Paint backgroundInnerPaint;
-    private String backgroundKey;
+    private String backgroundKey = "checkboxCheck";
     private Paint backgroundPaint;
     private Canvas bitmapCanvas;
     private ObjectAnimator checkAnimator;
-    private String checkKey;
+    private String checkKey = "checkboxCheck";
     private Paint checkPaint;
     private float checkScale = 1.0f;
     private Bitmap drawBitmap;
-    private String innerKey;
+    private String innerKey = "checkbox";
     private int innerRadDiff;
     private boolean isCheckAnimation = true;
     private boolean isChecked;
@@ -36,27 +34,23 @@ public class GroupCreateCheckBox extends View {
 
     public GroupCreateCheckBox(Context context) {
         super(context);
-        String str = "checkboxCheck";
-        this.backgroundKey = str;
-        this.checkKey = str;
-        this.innerKey = "checkbox";
         if (eraser == null) {
             eraser = new Paint(1);
             eraser.setColor(0);
-            eraser.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+            eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
             eraser2 = new Paint(1);
             eraser2.setColor(0);
-            eraser2.setStyle(Style.STROKE);
-            eraser2.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+            eraser2.setStyle(Paint.Style.STROKE);
+            eraser2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         this.backgroundPaint = new Paint(1);
         this.backgroundInnerPaint = new Paint(1);
         this.checkPaint = new Paint(1);
-        this.checkPaint.setStyle(Style.STROKE);
+        this.checkPaint.setStyle(Paint.Style.STROKE);
         this.innerRadDiff = AndroidUtilities.dp(2.0f);
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
-        this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), Config.ARGB_4444);
+        this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), Bitmap.Config.ARGB_4444);
         this.bitmapCanvas = new Canvas(this.drawBitmap);
         updateColors();
     }
@@ -107,14 +101,14 @@ public class GroupCreateCheckBox extends View {
         this.checkAnimator.start();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateColors();
         this.attachedToWindow = true;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
@@ -123,12 +117,12 @@ public class GroupCreateCheckBox extends View {
     public void setChecked(boolean z, boolean z2) {
         if (z != this.isChecked) {
             this.isChecked = z;
-            if (this.attachedToWindow && z2) {
-                animateToCheckedState(z);
-            } else {
+            if (!this.attachedToWindow || !z2) {
                 cancelCheckAnimator();
                 setProgress(z ? 1.0f : 0.0f);
+                return;
             }
+            animateToCheckedState(z);
         }
     }
 
@@ -140,39 +134,45 @@ public class GroupCreateCheckBox extends View {
         this.innerRadDiff = i;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        float f;
         if (getVisibility() == 0 && this.progress != 0.0f) {
             int measuredWidth = getMeasuredWidth() / 2;
             int measuredHeight = getMeasuredHeight() / 2;
             eraser2.setStrokeWidth((float) AndroidUtilities.dp(30.0f));
             this.drawBitmap.eraseColor(0);
-            float f = this.progress;
-            f = f >= 0.5f ? 1.0f : f / 0.5f;
             float f2 = this.progress;
-            float f3 = f2 < 0.5f ? 0.0f : (f2 - 0.5f) / 0.5f;
-            f2 = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
-            f2 = f2 < 0.2f ? (((float) AndroidUtilities.dp(2.0f)) * f2) / 0.2f : f2 < 0.4f ? ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (f2 - 0.2f)) / 0.2f) : 0.0f;
-            if (f3 != 0.0f) {
-                canvas.drawCircle((float) measuredWidth, (float) measuredHeight, (((float) (measuredWidth - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * f3)) - f2, this.backgroundPaint);
+            float f3 = f2 >= 0.5f ? 1.0f : f2 / 0.5f;
+            float f4 = this.progress;
+            float f5 = f4 < 0.5f ? 0.0f : (f4 - 0.5f) / 0.5f;
+            float f6 = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
+            if (f6 < 0.2f) {
+                f = (((float) AndroidUtilities.dp(2.0f)) * f6) / 0.2f;
+            } else {
+                f = f6 < 0.4f ? ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (f6 - 0.2f)) / 0.2f) : 0.0f;
             }
-            float f4 = ((float) (measuredWidth - this.innerRadDiff)) - f2;
-            float f5 = (float) measuredWidth;
-            float f6 = (float) measuredHeight;
-            this.bitmapCanvas.drawCircle(f5, f6, f4, this.backgroundInnerPaint);
-            this.bitmapCanvas.drawCircle(f5, f6, f4 * (1.0f - f), eraser);
-            canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
-            f2 = (((float) AndroidUtilities.dp(10.0f)) * f3) * this.checkScale;
-            float dp = (((float) AndroidUtilities.dp(5.0f)) * f3) * this.checkScale;
-            int dp2 = measuredWidth - AndroidUtilities.dp(1.0f);
-            float sqrt = (float) Math.sqrt((double) ((dp * dp) / 2.0f));
-            dp = (float) dp2;
-            f5 = (float) (measuredHeight + AndroidUtilities.dp(4.0f));
-            float f7 = f5;
-            canvas.drawLine(dp, f7, dp - sqrt, f5 - sqrt, this.checkPaint);
-            sqrt = (float) Math.sqrt((double) ((f2 * f2) / 2.0f));
-            dp = (float) (dp2 - AndroidUtilities.dp(1.2f));
-            canvas.drawLine(dp, f7, dp + sqrt, f5 - sqrt, this.checkPaint);
+            if (f5 != 0.0f) {
+                canvas.drawCircle((float) measuredWidth, (float) measuredHeight, (((float) (measuredWidth - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * f5)) - f, this.backgroundPaint);
+            }
+            float f7 = ((float) (measuredWidth - this.innerRadDiff)) - f;
+            float f8 = (float) measuredWidth;
+            float f9 = (float) measuredHeight;
+            this.bitmapCanvas.drawCircle(f8, f9, f7, this.backgroundInnerPaint);
+            this.bitmapCanvas.drawCircle(f8, f9, f7 * (1.0f - f3), eraser);
+            canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, (Paint) null);
+            float dp = ((float) AndroidUtilities.dp(10.0f)) * f5 * this.checkScale;
+            float dp2 = ((float) AndroidUtilities.dp(5.0f)) * f5 * this.checkScale;
+            int dp3 = measuredWidth - AndroidUtilities.dp(1.0f);
+            int dp4 = measuredHeight + AndroidUtilities.dp(4.0f);
+            float sqrt = (float) Math.sqrt((double) ((dp2 * dp2) / 2.0f));
+            float var_ = (float) dp3;
+            float var_ = (float) dp4;
+            float var_ = var_;
+            canvas.drawLine(var_, var_, var_ - sqrt, var_ - sqrt, this.checkPaint);
+            float sqrt2 = (float) Math.sqrt((double) ((dp * dp) / 2.0f));
+            float dp5 = (float) (dp3 - AndroidUtilities.dp(1.2f));
+            canvas.drawLine(dp5, var_, dp5 + sqrt2, var_ - sqrt2, this.checkPaint);
         }
     }
 }

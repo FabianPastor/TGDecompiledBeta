@@ -29,24 +29,24 @@ class StringMaker {
         stringMaker.includeJoinPointTypeName = false;
         stringMaker.includeEnclosingPoint = false;
         stringMaker.cacheOffset = 0;
-        stringMaker = middleStringMaker;
-        stringMaker.shortTypeNames = true;
-        stringMaker.includeArgs = true;
-        stringMaker.includeThrows = false;
-        stringMaker.includeModifiers = false;
-        stringMaker.shortPrimaryTypeNames = false;
+        StringMaker stringMaker2 = middleStringMaker;
+        stringMaker2.shortTypeNames = true;
+        stringMaker2.includeArgs = true;
+        stringMaker2.includeThrows = false;
+        stringMaker2.includeModifiers = false;
+        stringMaker2.shortPrimaryTypeNames = false;
         shortStringMaker.cacheOffset = 1;
-        stringMaker = longStringMaker;
-        stringMaker.shortTypeNames = false;
-        stringMaker.includeArgs = true;
-        stringMaker.includeThrows = false;
-        stringMaker.includeModifiers = true;
-        stringMaker.shortPrimaryTypeNames = false;
-        stringMaker.shortKindName = false;
-        stringMaker.cacheOffset = 2;
+        StringMaker stringMaker3 = longStringMaker;
+        stringMaker3.shortTypeNames = false;
+        stringMaker3.includeArgs = true;
+        stringMaker3.includeThrows = false;
+        stringMaker3.includeModifiers = true;
+        stringMaker3.shortPrimaryTypeNames = false;
+        stringMaker3.shortKindName = false;
+        stringMaker3.cacheOffset = 2;
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String makeKindName(String str) {
         int lastIndexOf = str.lastIndexOf(45);
         if (lastIndexOf == -1) {
@@ -55,15 +55,14 @@ class StringMaker {
         return str.substring(lastIndexOf + 1);
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String makeModifiersString(int i) {
-        String str = "";
         if (!this.includeModifiers) {
-            return str;
+            return "";
         }
         String modifier = Modifier.toString(i);
         if (modifier.length() == 0) {
-            return str;
+            return "";
         }
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(modifier);
@@ -71,7 +70,7 @@ class StringMaker {
         return stringBuffer.toString();
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String stripPackageName(String str) {
         int lastIndexOf = str.lastIndexOf(46);
         if (lastIndexOf == -1) {
@@ -80,15 +79,15 @@ class StringMaker {
         return str.substring(lastIndexOf + 1);
     }
 
-    /* Access modifiers changed, original: 0000 */
+    /* access modifiers changed from: package-private */
     public String makeTypeName(Class cls, String str, boolean z) {
         if (cls == null) {
             return "ANONYMOUS";
         }
         if (cls.isArray()) {
-            cls = cls.getComponentType();
+            Class<?> componentType = cls.getComponentType();
             StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(makeTypeName(cls, cls.getName(), z));
+            stringBuffer.append(makeTypeName(componentType, componentType.getName(), z));
             stringBuffer.append("[]");
             return stringBuffer.toString();
         } else if (z) {

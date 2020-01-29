@@ -3,8 +3,6 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
@@ -22,11 +20,11 @@ public class ContextProgressView extends View {
 
     public ContextProgressView(Context context, int i) {
         super(context);
-        this.innerPaint.setStyle(Style.STROKE);
+        this.innerPaint.setStyle(Paint.Style.STROKE);
         this.innerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.outerPaint.setStyle(Style.STROKE);
+        this.outerPaint.setStyle(Paint.Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.outerPaint.setStrokeCap(Cap.ROUND);
+        this.outerPaint.setStrokeCap(Paint.Cap.ROUND);
         if (i == 0) {
             this.innerKey = "contextProgressInner1";
             this.outerKey = "contextProgressOuter1";
@@ -55,14 +53,14 @@ public class ContextProgressView extends View {
         invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (getVisibility() == 0) {
             long currentTimeMillis = System.currentTimeMillis();

@@ -4,11 +4,9 @@ import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 
 public class URLSpanNoUnderlineBold extends URLSpanNoUnderline {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public URLSpanNoUnderlineBold(String str) {
-        if (str != null) {
-            str = str.replace(8238, ' ');
-        }
-        super(str);
+        super(str != null ? str.replace(8238, ' ') : str);
     }
 
     public void updateDrawState(TextPaint textPaint) {

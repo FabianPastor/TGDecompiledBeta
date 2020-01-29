@@ -9,62 +9,62 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils.TruncateAt;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Property;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ColorSpanUnderline;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class FeaturedStickerSetInfoCell extends FrameLayout {
-    private TextView addButton;
+    /* access modifiers changed from: private */
+    public TextView addButton;
     private Drawable addDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
     private AnimatorSet animatorSet;
     private int currentAccount = UserConfig.selectedAccount;
-    private TextView delButton;
+    /* access modifiers changed from: private */
+    public TextView delButton;
     private boolean hasOnClick;
     private TextView infoTextView;
-    private boolean isInstalled;
+    /* access modifiers changed from: private */
+    public boolean isInstalled;
     private boolean isUnread;
     private TextView nameTextView;
     private Paint paint = new Paint(1);
-    private StickerSetCovered set;
+    private TLRPC.StickerSetCovered set;
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public FeaturedStickerSetInfoCell(Context context, int i) {
-        Context context2 = context;
         super(context);
+        Context context2 = context;
         this.nameTextView = new TextView(context2);
         this.nameTextView.setTextColor(Theme.getColor("chat_emojiPanelTrendingTitle"));
         this.nameTextView.setTextSize(1, 17.0f);
-        String str = "fonts/rmedium.ttf";
-        this.nameTextView.setTypeface(AndroidUtilities.getTypeface(str));
-        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setSingleLine(true);
         float f = (float) i;
         addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 8.0f, 40.0f, 0.0f));
         this.infoTextView = new TextView(context2);
         this.infoTextView.setTextColor(Theme.getColor("chat_emojiPanelTrendingDescription"));
         this.infoTextView.setTextSize(1, 13.0f);
-        this.infoTextView.setEllipsize(TruncateAt.END);
+        this.infoTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.infoTextView.setSingleLine(true);
         addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 30.0f, 100.0f, 0.0f));
         this.addButton = new TextView(context2);
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.addButton.setTextSize(1, 14.0f);
-        this.addButton.setTypeface(AndroidUtilities.getTypeface(str));
+        this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(this.addDrawable);
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setText(LocaleController.getString("Add", NUM));
@@ -73,18 +73,18 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.delButton.setGravity(17);
         this.delButton.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
         this.delButton.setTextSize(1, 14.0f);
-        this.delButton.setTypeface(AndroidUtilities.getTypeface(str));
+        this.delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.delButton.setText(LocaleController.getString("StickersRemove", NUM));
         addView(this.delButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f));
         setWillNotDraw(false);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
         int measuredWidth = this.addButton.getMeasuredWidth();
         int measuredWidth2 = this.delButton.getMeasuredWidth();
-        LayoutParams layoutParams = (LayoutParams) this.delButton.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.delButton.getLayoutParams();
         if (measuredWidth2 < measuredWidth) {
             layoutParams.rightMargin = AndroidUtilities.dp(14.0f) + ((measuredWidth - measuredWidth2) / 2);
         } else {
@@ -93,24 +93,24 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         measureChildWithMargins(this.nameTextView, i, measuredWidth, i2, 0);
     }
 
-    public void setAddOnClickListener(OnClickListener onClickListener) {
+    public void setAddOnClickListener(View.OnClickListener onClickListener) {
         this.hasOnClick = true;
         this.addButton.setOnClickListener(onClickListener);
         this.delButton.setOnClickListener(onClickListener);
     }
 
-    public void setStickerSet(StickerSetCovered stickerSetCovered, boolean z) {
+    public void setStickerSet(TLRPC.StickerSetCovered stickerSetCovered, boolean z) {
         setStickerSet(stickerSetCovered, z, false, 0, 0);
     }
 
-    public void setStickerSet(StickerSetCovered stickerSetCovered, boolean z, boolean z2) {
+    public void setStickerSet(TLRPC.StickerSetCovered stickerSetCovered, boolean z, boolean z2) {
         setStickerSet(stickerSetCovered, z, z2, 0, 0);
     }
 
-    public void setStickerSet(StickerSetCovered stickerSetCovered, boolean z, boolean z2, int i, int i2) {
-        AnimatorSet animatorSet = this.animatorSet;
-        if (animatorSet != null) {
-            animatorSet.cancel();
+    public void setStickerSet(TLRPC.StickerSetCovered stickerSetCovered, boolean z, boolean z2, int i, int i2) {
+        AnimatorSet animatorSet2 = this.animatorSet;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
             this.animatorSet = null;
         }
         if (i2 != 0) {
@@ -137,42 +137,42 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                 }
                 this.animatorSet = new AnimatorSet();
                 this.animatorSet.setDuration(250);
-                AnimatorSet animatorSet2 = this.animatorSet;
+                AnimatorSet animatorSet3 = this.animatorSet;
                 Animator[] animatorArr = new Animator[6];
                 TextView textView = this.delButton;
                 Property property = View.ALPHA;
                 float[] fArr = new float[1];
                 fArr[0] = this.isInstalled ? 1.0f : 0.0f;
                 animatorArr[0] = ObjectAnimator.ofFloat(textView, property, fArr);
-                textView = this.delButton;
-                property = View.SCALE_X;
-                fArr = new float[1];
-                fArr[0] = this.isInstalled ? 1.0f : 0.0f;
-                animatorArr[1] = ObjectAnimator.ofFloat(textView, property, fArr);
                 TextView textView2 = this.delButton;
-                Property property2 = View.SCALE_Y;
+                Property property2 = View.SCALE_X;
                 float[] fArr2 = new float[1];
                 fArr2[0] = this.isInstalled ? 1.0f : 0.0f;
-                animatorArr[2] = ObjectAnimator.ofFloat(textView2, property2, fArr2);
-                textView2 = this.addButton;
-                property2 = View.ALPHA;
-                fArr2 = new float[1];
-                fArr2[0] = this.isInstalled ? 0.0f : 1.0f;
-                animatorArr[3] = ObjectAnimator.ofFloat(textView2, property2, fArr2);
-                textView = this.addButton;
-                property = View.SCALE_X;
-                fArr = new float[1];
-                fArr[0] = this.isInstalled ? 0.0f : 1.0f;
-                animatorArr[4] = ObjectAnimator.ofFloat(textView, property, fArr);
-                textView = this.addButton;
-                property = View.SCALE_Y;
+                animatorArr[1] = ObjectAnimator.ofFloat(textView2, property2, fArr2);
+                TextView textView3 = this.delButton;
+                Property property3 = View.SCALE_Y;
                 float[] fArr3 = new float[1];
+                fArr3[0] = this.isInstalled ? 1.0f : 0.0f;
+                animatorArr[2] = ObjectAnimator.ofFloat(textView3, property3, fArr3);
+                TextView textView4 = this.addButton;
+                Property property4 = View.ALPHA;
+                float[] fArr4 = new float[1];
+                fArr4[0] = this.isInstalled ? 0.0f : 1.0f;
+                animatorArr[3] = ObjectAnimator.ofFloat(textView4, property4, fArr4);
+                TextView textView5 = this.addButton;
+                Property property5 = View.SCALE_X;
+                float[] fArr5 = new float[1];
+                fArr5[0] = this.isInstalled ? 0.0f : 1.0f;
+                animatorArr[4] = ObjectAnimator.ofFloat(textView5, property5, fArr5);
+                TextView textView6 = this.addButton;
+                Property property6 = View.SCALE_Y;
+                float[] fArr6 = new float[1];
                 if (!this.isInstalled) {
                     f = 1.0f;
                 }
-                fArr3[0] = f;
-                animatorArr[5] = ObjectAnimator.ofFloat(textView, property, fArr3);
-                animatorSet2.playTogether(animatorArr);
+                fArr6[0] = f;
+                animatorArr[5] = ObjectAnimator.ofFloat(textView6, property6, fArr6);
+                animatorSet3.playTogether(animatorArr);
                 this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (FeaturedStickerSetInfoCell.this.isInstalled) {
@@ -225,11 +225,11 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         return this.isInstalled;
     }
 
-    public StickerSetCovered getStickerSet() {
+    public TLRPC.StickerSetCovered getStickerSet() {
         return this.set;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.isUnread) {
             this.paint.setColor(Theme.getColor("featuredStickers_unread"));

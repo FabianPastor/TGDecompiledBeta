@@ -2,7 +2,7 @@ package org.telegram.tgnet;
 
 public class TLObject {
     private static final ThreadLocal<NativeByteBuffer> sizeCalculator = new ThreadLocal<NativeByteBuffer>() {
-        /* Access modifiers changed, original: protected */
+        /* access modifiers changed from: protected */
         public NativeByteBuffer initialValue() {
             return new NativeByteBuffer(true);
         }
@@ -24,9 +24,9 @@ public class TLObject {
     }
 
     public int getObjectSize() {
-        NativeByteBuffer nativeByteBuffer = (NativeByteBuffer) sizeCalculator.get();
+        NativeByteBuffer nativeByteBuffer = sizeCalculator.get();
         nativeByteBuffer.rewind();
-        serializeToStream((AbstractSerializedData) sizeCalculator.get());
+        serializeToStream(sizeCalculator.get());
         return nativeByteBuffer.length();
     }
 }

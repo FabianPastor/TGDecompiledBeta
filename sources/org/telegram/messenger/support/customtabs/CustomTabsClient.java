@@ -13,7 +13,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
+import org.telegram.messenger.support.customtabs.ICustomTabsCallback;
 
 public class CustomTabsClient {
     private final ICustomTabsService mService;
@@ -37,26 +37,24 @@ public class CustomTabsClient {
     }
 
     public static String getPackageName(Context context, List<String> list, boolean z) {
+        ResolveInfo resolveActivity;
         PackageManager packageManager = context.getPackageManager();
-        List arrayList = list == null ? new ArrayList() : list;
+        ArrayList arrayList = list == null ? new ArrayList() : list;
         Intent intent = new Intent("android.intent.action.VIEW", Uri.parse("http://"));
-        if (!z) {
-            ResolveInfo resolveActivity = packageManager.resolveActivity(intent, 0);
-            if (resolveActivity != null) {
-                String str = resolveActivity.activityInfo.packageName;
-                ArrayList arrayList2 = new ArrayList(arrayList.size() + 1);
-                arrayList2.add(str);
-                if (list != null) {
-                    arrayList2.addAll(list);
-                }
-                arrayList = arrayList2;
+        if (!z && (resolveActivity = packageManager.resolveActivity(intent, 0)) != null) {
+            String str = resolveActivity.activityInfo.packageName;
+            ArrayList arrayList2 = new ArrayList(arrayList.size() + 1);
+            arrayList2.add(str);
+            if (list != null) {
+                arrayList2.addAll(list);
             }
+            arrayList = arrayList2;
         }
         Intent intent2 = new Intent("android.support.customtabs.action.CustomTabsService");
-        for (String str2 : arrayList) {
-            intent2.setPackage(str2);
+        for (String next : arrayList) {
+            intent2.setPackage(next);
             if (packageManager.resolveService(intent2, 0) != null) {
-                return str2;
+                return next;
             }
         }
         return null;
@@ -66,15 +64,15 @@ public class CustomTabsClient {
         if (str == null) {
             return false;
         }
-        context = context.getApplicationContext();
+        final Context applicationContext = context.getApplicationContext();
         try {
-            return bindCustomTabsService(context, str, new CustomTabsServiceConnection() {
+            return bindCustomTabsService(applicationContext, str, new CustomTabsServiceConnection() {
                 public final void onServiceDisconnected(ComponentName componentName) {
                 }
 
                 public final void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
                     customTabsClient.warmup(0);
-                    context.unbindService(this);
+                    applicationContext.unbindService(this);
                 }
             });
         } catch (SecurityException unused) {
@@ -91,7 +89,7 @@ public class CustomTabsClient {
     }
 
     public CustomTabsSession newSession(final CustomTabsCallback customTabsCallback) {
-        AnonymousClass2 anonymousClass2 = new Stub() {
+        AnonymousClass2 r0 = new ICustomTabsCallback.Stub() {
             private Handler mHandler = new Handler(Looper.getMainLooper());
 
             public void onNavigationEvent(final int i, final Bundle bundle) {
@@ -134,14 +132,13 @@ public class CustomTabsClient {
                 }
             }
         };
-        CustomTabsSession customTabsSession = null;
         try {
-            if (!this.mService.newSession(anonymousClass2)) {
+            if (!this.mService.newSession(r0)) {
                 return null;
             }
-            customTabsSession = new CustomTabsSession(this.mService, anonymousClass2, this.mServiceComponentName);
-            return customTabsSession;
+            return new CustomTabsSession(this.mService, r0, this.mServiceComponentName);
         } catch (RemoteException unused) {
+            return null;
         }
     }
 

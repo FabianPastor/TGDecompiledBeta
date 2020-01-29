@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
@@ -22,7 +21,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
@@ -30,7 +29,8 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext = null;
     public static volatile Handler applicationHandler = null;
     private static volatile boolean applicationInited = false;
-    private static ConnectivityManager connectivityManager = null;
+    /* access modifiers changed from: private */
+    public static ConnectivityManager connectivityManager = null;
     public static volatile NetworkInfo currentNetworkInfo = null;
     public static volatile boolean externalInterfacePaused = true;
     public static boolean hasPlayServices = false;
@@ -41,19 +41,18 @@ public class ApplicationLoader extends Application {
     public static volatile boolean unableGetCurrentNetwork;
 
     public static File getFilesDirFixed() {
-        File filesDir;
         for (int i = 0; i < 10; i++) {
-            filesDir = applicationContext.getFilesDir();
+            File filesDir = applicationContext.getFilesDir();
             if (filesDir != null) {
                 return filesDir;
             }
         }
         try {
-            filesDir = new File(applicationContext.getApplicationInfo().dataDir, "files");
-            filesDir.mkdirs();
-            return filesDir;
+            File file = new File(applicationContext.getApplicationInfo().dataDir, "files");
+            file.mkdirs();
+            return file;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return new File("/data/data/org.telegram.messenger/files");
         }
     }
@@ -88,34 +87,27 @@ public class ApplicationLoader extends Application {
                 IntentFilter intentFilter = new IntentFilter("android.intent.action.SCREEN_ON");
                 intentFilter.addAction("android.intent.action.SCREEN_OFF");
                 applicationContext.registerReceiver(new ScreenReceiver(), intentFilter);
-            } catch (Exception e22) {
-                e22.printStackTrace();
+            } catch (Exception e3) {
+                e3.printStackTrace();
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("screen state = ");
-                    stringBuilder.append(isScreenOn);
-                    FileLog.d(stringBuilder.toString());
+                    FileLog.d("screen state = " + isScreenOn);
                 }
-            } catch (Exception e3) {
-                FileLog.e(e3);
+            } catch (Exception e4) {
+                FileLog.e((Throwable) e4);
             }
             SharedConfig.loadConfig();
             for (int i = 0; i < 3; i++) {
                 UserConfig.getInstance(i).loadConfig();
                 MessagesController.getInstance(i);
                 if (i == 0) {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("__FIREBASE_GENERATING_SINCE_");
-                    stringBuilder2.append(ConnectionsManager.getInstance(i).getCurrentTime());
-                    stringBuilder2.append("__");
-                    SharedConfig.pushStringStatus = stringBuilder2.toString();
+                    SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(i).getCurrentTime() + "__";
                 } else {
                     ConnectionsManager.getInstance(i);
                 }
-                User currentUser = UserConfig.getInstance(i).getCurrentUser();
+                TLRPC.User currentUser = UserConfig.getInstance(i).getCurrentUser();
                 if (currentUser != null) {
                     MessagesController.getInstance(i).putUser(currentUser, true);
                     SendMessagesHelper.getInstance(i).checkUnsentMessages();
@@ -145,30 +137,28 @@ public class ApplicationLoader extends Application {
         }
         NativeLoader.initNativeLibs(applicationContext);
         ConnectionsManager.native_setJava(false);
-        ForegroundDetector foregroundDetector = new ForegroundDetector(this);
+        new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(-$$Lambda$r7IJ1lCIETKiJtvvar_QqYn99iv8.INSTANCE);
+        AndroidUtilities.runOnUIThread($$Lambda$r7IJ1lCIETKiJtvvar_QqYn99iv8.INSTANCE);
     }
 
     public static void startPushService() {
         boolean z;
         SharedPreferences globalNotificationsSettings = MessagesController.getGlobalNotificationsSettings();
-        String str = "pushService";
-        if (globalNotificationsSettings.contains(str)) {
-            z = globalNotificationsSettings.getBoolean(str, true);
+        if (globalNotificationsSettings.contains("pushService")) {
+            z = globalNotificationsSettings.getBoolean("pushService", true);
         } else {
             z = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
         }
         if (z) {
             try {
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
-                return;
             } catch (Throwable unused) {
-                return;
             }
+        } else {
+            applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
+            ((AlarmManager) applicationContext.getSystemService("alarm")).cancel(PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0));
         }
-        applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
-        ((AlarmManager) applicationContext.getSystemService("alarm")).cancel(PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0));
     }
 
     public void onConfigurationChanged(Configuration configuration) {
@@ -182,7 +172,11 @@ public class ApplicationLoader extends Application {
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$ApplicationLoader$eNlk5BY6GTGmalHcs_FU-Fhu7vQ(this), 1000);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                ApplicationLoader.this.lambda$initPlayServices$3$ApplicationLoader();
+            }
+        }, 1000);
     }
 
     public /* synthetic */ void lambda$initPlayServices$3$ApplicationLoader() {
@@ -190,31 +184,28 @@ public class ApplicationLoader extends Application {
         hasPlayServices = checkPlayServices;
         if (checkPlayServices) {
             String str = SharedConfig.pushString;
-            if (TextUtils.isEmpty(str)) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("GCM Registration not found.");
+            if (!TextUtils.isEmpty(str)) {
+                if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
+                    FileLog.d("GCM regId = " + str);
                 }
-            } else if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("GCM regId = ");
-                stringBuilder.append(str);
-                FileLog.d(stringBuilder.toString());
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("GCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable(-$$Lambda$ApplicationLoader$Zs8m_Ncm6w1SB-p2_GI8M9mBWWQ.INSTANCE);
+            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$Zs8m_Ncm6w1SBp2_GI8M9mBWWQ.INSTANCE);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("No valid Google Play Services APK found.");
         }
         SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
-        GcmPushListenerService.sendRegistrationToServer(null);
+        GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
     static /* synthetic */ void lambda$null$2() {
         try {
-            Task instanceId = FirebaseInstanceId.getInstance().getInstanceId();
-            instanceId.addOnSuccessListener(-$$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
-            instanceId.addOnFailureListener(-$$Lambda$ApplicationLoader$394ZCZWLmaJTWPaI7WQrKYXFS88.INSTANCE);
+            Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
+            instanceId.addOnSuccessListener($$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
+            instanceId.addOnFailureListener($$Lambda$ApplicationLoader$394ZCZWLmaJTWPaI7WQrKYXFS88.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
@@ -227,23 +218,19 @@ public class ApplicationLoader extends Application {
         }
     }
 
-    static /* synthetic */ void lambda$null$1(Exception exception) {
+    static /* synthetic */ void lambda$null$1(Exception exc) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("Failed to get regid");
         }
         SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-        GcmPushListenerService.sendRegistrationToServer(null);
+        GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
     private boolean checkPlayServices() {
-        boolean z = true;
         try {
-            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) != 0) {
-                z = false;
-            }
-            return z;
+            return GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == 0;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return true;
         }
     }
@@ -254,53 +241,58 @@ public class ApplicationLoader extends Application {
             if (activeNetworkInfo != null) {
                 return activeNetworkInfo.isRoaming();
             }
+            return false;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
+            return false;
         }
-        return false;
     }
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
             NetworkInfo networkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            State state = networkInfo.getState();
-            if (networkInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
+            NetworkInfo.State state = networkInfo.getState();
+            if (networkInfo == null) {
+                return false;
+            }
+            if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING || state == NetworkInfo.State.SUSPENDED) {
                 return true;
             }
+            return false;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
+            return false;
         }
-        return false;
     }
 
     public static int getAutodownloadNetworkType() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
-            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(1);
-            if (networkInfo != null && networkInfo.getState() == State.CONNECTED) {
-                return connectivityManager.isActiveNetworkMetered() ? 0 : 1;
-            } else {
-                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (activeNetworkInfo != null && activeNetworkInfo.isRoaming()) {
-                    return 2;
-                }
+            ConnectivityManager connectivityManager2 = (ConnectivityManager) applicationContext.getSystemService("connectivity");
+            NetworkInfo networkInfo = connectivityManager2.getNetworkInfo(1);
+            if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                return connectivityManager2.isActiveNetworkMetered() ? 0 : 1;
+            }
+            NetworkInfo activeNetworkInfo = connectivityManager2.getActiveNetworkInfo();
+            if (activeNetworkInfo == null || !activeNetworkInfo.isRoaming()) {
                 return 0;
             }
+            return 2;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
         }
     }
 
     public static boolean isConnectedToWiFi() {
         try {
             NetworkInfo networkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            if (networkInfo != null && networkInfo.getState() == State.CONNECTED) {
-                return true;
+            if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED) {
+                return false;
             }
+            return true;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
+            return false;
         }
-        return false;
     }
 
     public static int getCurrentNetworkType() {
@@ -313,35 +305,34 @@ public class ApplicationLoader extends Application {
     public static boolean isConnectionSlow() {
         try {
             NetworkInfo activeNetworkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-            if (activeNetworkInfo.getType() == 0) {
-                int subtype = activeNetworkInfo.getSubtype();
-                if (subtype == 1 || subtype == 2 || subtype == 4 || subtype == 7 || subtype == 11) {
-                    return true;
-                }
+            if (activeNetworkInfo.getType() != 0) {
+                return false;
             }
+            int subtype = activeNetworkInfo.getSubtype();
+            return subtype == 1 || subtype == 2 || subtype == 4 || subtype == 7 || subtype == 11;
         } catch (Throwable unused) {
+            return false;
         }
-        return false;
     }
 
     public static boolean isNetworkOnline() {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            ConnectivityManager connectivityManager2 = (ConnectivityManager) applicationContext.getSystemService("connectivity");
+            NetworkInfo activeNetworkInfo = connectivityManager2.getActiveNetworkInfo();
             if (activeNetworkInfo != null && (activeNetworkInfo.isConnectedOrConnecting() || activeNetworkInfo.isAvailable())) {
                 return true;
             }
-            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(0);
+            NetworkInfo networkInfo = connectivityManager2.getNetworkInfo(0);
             if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
                 return true;
             }
-            NetworkInfo networkInfo2 = connectivityManager.getNetworkInfo(1);
+            NetworkInfo networkInfo2 = connectivityManager2.getNetworkInfo(1);
             if (networkInfo2 == null || !networkInfo2.isConnectedOrConnecting()) {
                 return false;
             }
             return true;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return true;
         }
     }

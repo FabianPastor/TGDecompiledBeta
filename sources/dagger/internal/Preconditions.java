@@ -17,10 +17,7 @@ public final class Preconditions {
 
     public static <T> void checkBuilderRequirement(T t, Class<T> cls) {
         if (t == null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(cls.getCanonicalName());
-            stringBuilder.append(" must be set");
-            throw new IllegalStateException(stringBuilder.toString());
+            throw new IllegalStateException(cls.getCanonicalName() + " must be set");
         }
     }
 }

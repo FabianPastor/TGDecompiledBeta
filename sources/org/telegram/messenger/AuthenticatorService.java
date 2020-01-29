@@ -44,9 +44,9 @@ public class AuthenticatorService extends Service {
             return null;
         }
 
-        public Authenticator(Context context) {
-            super(context);
-            this.context = context;
+        public Authenticator(Context context2) {
+            super(context2);
+            this.context = context2;
         }
 
         public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account) throws NetworkErrorException {
@@ -54,7 +54,7 @@ public class AuthenticatorService extends Service {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public Authenticator getAuthenticator() {
         if (authenticator == null) {
             authenticator = new Authenticator(this);
@@ -63,6 +63,9 @@ public class AuthenticatorService extends Service {
     }
 
     public IBinder onBind(Intent intent) {
-        return intent.getAction().equals("android.accounts.AccountAuthenticator") ? getAuthenticator().getIBinder() : null;
+        if (intent.getAction().equals("android.accounts.AccountAuthenticator")) {
+            return getAuthenticator().getIBinder();
+        }
+        return null;
     }
 }

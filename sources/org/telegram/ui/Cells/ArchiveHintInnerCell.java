@@ -1,7 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,10 +20,9 @@ public class ArchiveHintInnerCell extends FrameLayout {
     public ArchiveHintInnerCell(Context context, int i) {
         super(context);
         this.imageView = new ImageView(context);
-        String str = "chats_nameMessage_threeLines";
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
         this.headerTextView = new TextView(context);
-        this.headerTextView.setTextColor(Theme.getColor(str));
+        this.headerTextView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.headerTextView.setTextSize(1, 20.0f);
         this.headerTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.headerTextView.setGravity(17);
@@ -37,7 +36,7 @@ public class ArchiveHintInnerCell extends FrameLayout {
             addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
             this.imageView2 = new ImageView(context);
             this.imageView2.setImageResource(NUM);
-            this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), Mode.MULTIPLY));
+            this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), PorterDuff.Mode.MULTIPLY));
             addView(this.imageView2, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
             this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", NUM));
             this.messageTextView.setText(LocaleController.getString("ArchiveHintText1", NUM));

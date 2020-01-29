@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,56 +15,62 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.TL_document;
-import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
-public class UpdateAppAlertDialog extends AlertDialog implements NotificationCenterDelegate {
+public class UpdateAppAlertDialog extends AlertDialog implements NotificationCenter.NotificationCenterDelegate {
     private int accountNum;
-    private TL_help_appUpdate appUpdate;
+    private TLRPC.TL_help_appUpdate appUpdate;
     private String fileName;
     private Activity parentActivity;
-    private AnimatorSet progressAnimation;
-    private RadialProgress radialProgress;
-    private FrameLayout radialProgressView;
+    /* access modifiers changed from: private */
+    public AnimatorSet progressAnimation;
+    /* access modifiers changed from: private */
+    public RadialProgress radialProgress;
+    /* access modifiers changed from: private */
+    public FrameLayout radialProgressView;
 
-    public UpdateAppAlertDialog(Activity activity, TL_help_appUpdate tL_help_appUpdate, int i) {
+    public UpdateAppAlertDialog(Activity activity, TLRPC.TL_help_appUpdate tL_help_appUpdate, int i) {
         super(activity, 0);
         this.appUpdate = tL_help_appUpdate;
         this.accountNum = i;
-        Document document = tL_help_appUpdate.document;
-        if (document instanceof TL_document) {
+        TLRPC.Document document = tL_help_appUpdate.document;
+        if (document instanceof TLRPC.TL_document) {
             this.fileName = FileLoader.getAttachFileName(document);
         }
         this.parentActivity = activity;
         setTopImage(NUM, Theme.getColor("dialogTopBackground"));
         setTopHeight(175);
         setMessage(this.appUpdate.text);
-        Document document2 = this.appUpdate.document;
-        if (document2 instanceof TL_document) {
+        TLRPC.Document document2 = this.appUpdate.document;
+        if (document2 instanceof TLRPC.TL_document) {
             setSecondTitle(AndroidUtilities.formatFileSize((long) document2.size));
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", NUM));
-        setPositiveButton(LocaleController.getString("UpdateNow", NUM), new -$$Lambda$UpdateAppAlertDialog$voSGHXhYuACsnb2-x2STYrPYmkw(this));
-        setNeutralButton(LocaleController.getString("Later", NUM), new -$$Lambda$UpdateAppAlertDialog$egnS6_js0sES87wcIflPDbL7olc(this));
+        setPositiveButton(LocaleController.getString("UpdateNow", NUM), new DialogInterface.OnClickListener() {
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                UpdateAppAlertDialog.this.lambda$new$0$UpdateAppAlertDialog(dialogInterface, i);
+            }
+        });
+        setNeutralButton(LocaleController.getString("Later", NUM), new DialogInterface.OnClickListener() {
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                UpdateAppAlertDialog.this.lambda$new$1$UpdateAppAlertDialog(dialogInterface, i);
+            }
+        });
         this.radialProgressView = new FrameLayout(this.parentActivity) {
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
-                i3 -= i;
-                i4 -= i2;
                 int dp = AndroidUtilities.dp(24.0f);
-                i3 = (i3 - dp) / 2;
-                i4 = ((i4 - dp) / 2) + AndroidUtilities.dp(2.0f);
-                UpdateAppAlertDialog.this.radialProgress.setProgressRect(i3, i4, i3 + dp, dp + i4);
+                int i5 = ((i3 - i) - dp) / 2;
+                int dp2 = (((i4 - i2) - dp) / 2) + AndroidUtilities.dp(2.0f);
+                UpdateAppAlertDialog.this.radialProgress.setProgressRect(i5, dp2, i5 + dp, dp + dp2);
             }
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 UpdateAppAlertDialog.this.radialProgress.draw(canvas);
             }
@@ -75,15 +82,15 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgressView.setVisibility(4);
         this.radialProgress = new RadialProgress(this.radialProgressView);
         this.radialProgress.setStrokeWidth(AndroidUtilities.dp(2.0f));
-        this.radialProgress.setBackground(null, true, false);
+        this.radialProgress.setBackground((Drawable) null, true, false);
         this.radialProgress.setProgressColor(Theme.getColor("dialogButton"));
     }
 
     public /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
         if (BlockingUpdateView.checkApkInstallPermissions(getContext())) {
-            TL_help_appUpdate tL_help_appUpdate = this.appUpdate;
-            Document document = tL_help_appUpdate.document;
-            if (document instanceof TL_document) {
+            TLRPC.TL_help_appUpdate tL_help_appUpdate = this.appUpdate;
+            TLRPC.Document document = tL_help_appUpdate.document;
+            if (document instanceof TLRPC.TL_document) {
                 if (!BlockingUpdateView.openApkInstall(this.parentActivity, document)) {
                     FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
                     showProgress(true);
@@ -96,38 +103,36 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     }
 
     public /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
-        if (this.appUpdate.document instanceof TL_document) {
+        if (this.appUpdate.document instanceof TLRPC.TL_document) {
             FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);
         }
         dialogInterface.dismiss();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        String str;
-        String str2;
         if (i == NotificationCenter.fileDidLoad) {
-            str = (String) objArr[0];
-            str2 = this.fileName;
+            String str = objArr[0];
+            String str2 = this.fileName;
             if (str2 != null && str2.equals(str)) {
                 showProgress(false);
                 BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document);
             }
         } else if (i == NotificationCenter.fileDidFailToLoad) {
-            str = (String) objArr[0];
-            str2 = this.fileName;
-            if (str2 != null && str2.equals(str)) {
+            String str3 = objArr[0];
+            String str4 = this.fileName;
+            if (str4 != null && str4.equals(str3)) {
                 showProgress(false);
             }
         } else if (i == NotificationCenter.FileLoadProgressChanged) {
-            str = (String) objArr[0];
-            str2 = this.fileName;
-            if (str2 != null && str2.equals(str)) {
-                this.radialProgress.setProgress(Math.min(1.0f, ((float) ((Long) objArr[1]).longValue()) / ((float) ((Long) objArr[2]).longValue())), true);
+            String str5 = objArr[0];
+            String str6 = this.fileName;
+            if (str6 != null && str6.equals(str5)) {
+                this.radialProgress.setProgress(objArr[1].floatValue(), true);
             }
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
@@ -150,50 +155,30 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             animatorSet.cancel();
         }
         this.progressAnimation = new AnimatorSet();
-        final View findViewWithTag = this.buttonsLayout.findViewWithTag(Integer.valueOf(-1));
-        String str = "alpha";
-        String str2 = "scaleY";
-        String str3 = "scaleX";
-        AnimatorSet animatorSet2;
+        final View findViewWithTag = this.buttonsLayout.findViewWithTag(-1);
         if (z2) {
             this.radialProgressView.setVisibility(0);
             findViewWithTag.setEnabled(false);
-            animatorSet2 = this.progressAnimation;
-            r8 = new Animator[6];
-            r8[0] = ObjectAnimator.ofFloat(findViewWithTag, str3, new float[]{0.1f});
-            r8[1] = ObjectAnimator.ofFloat(findViewWithTag, str2, new float[]{0.1f});
-            r8[2] = ObjectAnimator.ofFloat(findViewWithTag, str, new float[]{0.0f});
-            r8[3] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{1.0f});
-            r8[4] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{1.0f});
-            r8[5] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{1.0f});
-            animatorSet2.playTogether(r8);
+            this.progressAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(findViewWithTag, "scaleX", new float[]{0.1f}), ObjectAnimator.ofFloat(findViewWithTag, "scaleY", new float[]{0.1f}), ObjectAnimator.ofFloat(findViewWithTag, "alpha", new float[]{0.0f}), ObjectAnimator.ofFloat(this.radialProgressView, "scaleX", new float[]{1.0f}), ObjectAnimator.ofFloat(this.radialProgressView, "scaleY", new float[]{1.0f}), ObjectAnimator.ofFloat(this.radialProgressView, "alpha", new float[]{1.0f})});
         } else {
             findViewWithTag.setVisibility(0);
             findViewWithTag.setEnabled(true);
-            animatorSet2 = this.progressAnimation;
-            Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(findViewWithTag, str3, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(findViewWithTag, str2, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(findViewWithTag, str, new float[]{1.0f});
-            animatorSet2.playTogether(animatorArr);
+            this.progressAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.radialProgressView, "scaleX", new float[]{0.1f}), ObjectAnimator.ofFloat(this.radialProgressView, "scaleY", new float[]{0.1f}), ObjectAnimator.ofFloat(this.radialProgressView, "alpha", new float[]{0.0f}), ObjectAnimator.ofFloat(findViewWithTag, "scaleX", new float[]{1.0f}), ObjectAnimator.ofFloat(findViewWithTag, "scaleY", new float[]{1.0f}), ObjectAnimator.ofFloat(findViewWithTag, "alpha", new float[]{1.0f})});
         }
         this.progressAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (UpdateAppAlertDialog.this.progressAnimation != null && UpdateAppAlertDialog.this.progressAnimation.equals(animator)) {
-                    if (z2) {
-                        findViewWithTag.setVisibility(4);
-                    } else {
+                    if (!z2) {
                         UpdateAppAlertDialog.this.radialProgressView.setVisibility(4);
+                    } else {
+                        findViewWithTag.setVisibility(4);
                     }
                 }
             }
 
             public void onAnimationCancel(Animator animator) {
                 if (UpdateAppAlertDialog.this.progressAnimation != null && UpdateAppAlertDialog.this.progressAnimation.equals(animator)) {
-                    UpdateAppAlertDialog.this.progressAnimation = null;
+                    AnimatorSet unused = UpdateAppAlertDialog.this.progressAnimation = null;
                 }
             }
         });

@@ -4,18 +4,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Shader.TileMode;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.WallpaperParallaxEffect;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     private Drawable backgroundDrawable;
@@ -36,13 +37,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         void onSizeChanged(int i, boolean z);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean isActionBarVisible() {
         return true;
     }
 
     public SizeNotifierFrameLayout(Context context) {
-        this(context, null);
+        this(context, (ActionBarLayout) null);
     }
 
     public SizeNotifierFrameLayout(Context context, ActionBarLayout actionBarLayout) {
@@ -60,7 +61,11 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (z) {
             if (this.parallaxEffect == null) {
                 this.parallaxEffect = new WallpaperParallaxEffect(getContext());
-                this.parallaxEffect.setCallback(new -$$Lambda$SizeNotifierFrameLayout$9xVW1u9E8sqKGYKEgYUca0gqvJA(this));
+                this.parallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
+                    public final void onOffsetsChanged(int i, int i2) {
+                        SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2);
+                    }
+                });
                 if (!(getMeasuredWidth() == 0 || getMeasuredHeight() == 0)) {
                     this.parallaxScale = this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
                 }
@@ -115,7 +120,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.paused = false;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         notifyHeightChanged();
@@ -124,13 +129,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public int getKeyboardHeight() {
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
-        Rect rect = this.rect;
-        if (rect.bottom == 0 && rect.top == 0) {
+        Rect rect2 = this.rect;
+        if (rect2.bottom == 0 && rect2.top == 0) {
             return 0;
         }
         int height = (rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView);
-        Rect rect2 = this.rect;
-        return Math.max(0, height - (rect2.bottom - rect2.top));
+        Rect rect3 = this.rect;
+        return Math.max(0, height - (rect3.bottom - rect3.top));
     }
 
     public void notifyHeightChanged() {
@@ -141,7 +146,17 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (this.delegate != null) {
             this.keyboardHeight = getKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
-            post(new -$$Lambda$SizeNotifierFrameLayout$k4g_DFX6SvnMtnN4qrfdhEQSo18(this, point.x > point.y));
+            post(new Runnable(point.x > point.y) {
+                private final /* synthetic */ boolean f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    SizeNotifierFrameLayout.this.lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(this.f$1);
+                }
+            });
         }
     }
 
@@ -160,7 +175,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         return getKeyboardHeight() + getMeasuredHeight();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.backgroundDrawable == null) {
             super.onDraw(canvas);
@@ -205,7 +220,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.restore();
                     }
                 } else if (drawable instanceof BitmapDrawable) {
-                    if (((BitmapDrawable) drawable).getTileModeX() == TileMode.REPEAT) {
+                    if (((BitmapDrawable) drawable).getTileModeX() == Shader.TileMode.REPEAT) {
                         canvas.save();
                         float f = 2.0f / AndroidUtilities.density;
                         canvas.scale(f, f);
@@ -213,19 +228,17 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         drawable.draw(canvas);
                         canvas.restore();
                     } else {
-                        int currentActionBarHeight = isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0;
-                        int i2 = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
-                        currentActionBarHeight += i2;
-                        i2 = getMeasuredHeight() - currentActionBarHeight;
+                        int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
+                        int measuredHeight = getMeasuredHeight() - currentActionBarHeight;
                         float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth());
-                        float intrinsicHeight = ((float) (this.keyboardHeight + i2)) / ((float) drawable.getIntrinsicHeight());
+                        float intrinsicHeight = ((float) (this.keyboardHeight + measuredHeight)) / ((float) drawable.getIntrinsicHeight());
                         if (measuredWidth < intrinsicHeight) {
                             measuredWidth = intrinsicHeight;
                         }
-                        int ceil = (int) Math.ceil((double) ((((float) drawable.getIntrinsicWidth()) * measuredWidth) * this.parallaxScale));
-                        int ceil2 = (int) Math.ceil((double) ((((float) drawable.getIntrinsicHeight()) * measuredWidth) * this.parallaxScale));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * measuredWidth * this.parallaxScale));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * measuredWidth * this.parallaxScale));
                         int measuredWidth2 = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
-                        i2 = ((((i2 - ceil2) + this.keyboardHeight) / 2) + currentActionBarHeight) + ((int) this.translationY);
+                        int i2 = (((measuredHeight - ceil2) + this.keyboardHeight) / 2) + currentActionBarHeight + ((int) this.translationY);
                         canvas.save();
                         canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
                         drawable.setBounds(measuredWidth2, i2, ceil + measuredWidth2, ceil2 + i2);

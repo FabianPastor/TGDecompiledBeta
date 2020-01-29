@@ -9,14 +9,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
@@ -24,8 +23,6 @@ import android.util.Property;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
@@ -33,35 +30,29 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC.User;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.AudioSelectActivity;
 import org.telegram.ui.Cells.SharedAudioCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -70,234 +61,73 @@ import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
-public class AudioSelectActivity extends BaseFragment implements NotificationCenterDelegate {
-    private AnimatorSet animatorSet;
-    private ArrayList<AudioEntry> audioEntries = new ArrayList();
+public class AudioSelectActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    /* access modifiers changed from: private */
+    public AnimatorSet animatorSet;
+    /* access modifiers changed from: private */
+    public ArrayList<MediaController.AudioEntry> audioEntries = new ArrayList<>();
     private ChatActivity chatActivity;
-    private EditTextEmoji commentTextView;
+    /* access modifiers changed from: private */
+    public EditTextEmoji commentTextView;
     private AudioSelectActivityDelegate delegate;
     private ImageView emptyImageView;
-    private TextView emptySubtitleTextView;
+    /* access modifiers changed from: private */
+    public TextView emptySubtitleTextView;
     private TextView emptyTitleTextView;
     private LinearLayout emptyView;
-    private FrameLayout frameLayout2;
+    /* access modifiers changed from: private */
+    public FrameLayout frameLayout2;
     private ActionBarMenuSubItem[] itemCells;
-    private ListAdapter listAdapter;
-    private RecyclerListView listView;
+    /* access modifiers changed from: private */
+    public ListAdapter listAdapter;
+    /* access modifiers changed from: private */
+    public RecyclerListView listView;
     private boolean loadingAudio;
-    private Paint paint = new Paint(1);
-    private MessageObject playingAudio;
+    /* access modifiers changed from: private */
+    public Paint paint = new Paint(1);
+    /* access modifiers changed from: private */
+    public MessageObject playingAudio;
     private EmptyTextProgressView progressView;
-    private RectF rect = new RectF();
-    private SearchAdapter searchAdapter;
+    /* access modifiers changed from: private */
+    public RectF rect = new RectF();
+    /* access modifiers changed from: private */
+    public SearchAdapter searchAdapter;
     private ActionBarMenuItem searchItem;
-    private boolean searchWas;
-    private boolean searching;
-    private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
+    /* access modifiers changed from: private */
+    public boolean searchWas;
+    /* access modifiers changed from: private */
+    public boolean searching;
+    /* access modifiers changed from: private */
+    public LongSparseArray<MediaController.AudioEntry> selectedAudios = new LongSparseArray<>();
     private View selectedCountView;
-    private ActionBarPopupWindowLayout sendPopupLayout;
-    private ActionBarPopupWindow sendPopupWindow;
+    private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
+    /* access modifiers changed from: private */
+    public ActionBarPopupWindow sendPopupWindow;
     private boolean sendPressed;
     private View shadow;
     private SizeNotifierFrameLayout sizeNotifierFrameLayout;
-    private TextPaint textPaint = new TextPaint(1);
+    /* access modifiers changed from: private */
+    public TextPaint textPaint = new TextPaint(1);
     private ImageView writeButton;
-    private FrameLayout writeButtonContainer;
+    /* access modifiers changed from: private */
+    public FrameLayout writeButtonContainer;
 
     public interface AudioSelectActivityDelegate {
         void didSelectAudio(ArrayList<MessageObject> arrayList, CharSequence charSequence, boolean z, int i);
     }
 
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return true;
-        }
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public int getItemCount() {
-            return AudioSelectActivity.this.audioEntries.size();
-        }
-
-        public Object getItem(int i) {
-            return AudioSelectActivity.this.audioEntries.get(i);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            AnonymousClass1 anonymousClass1 = new SharedAudioCell(this.mContext) {
-                public boolean needPlayMessage(MessageObject messageObject) {
-                    AudioSelectActivity.this.playingAudio = messageObject;
-                    ArrayList arrayList = new ArrayList();
-                    arrayList.add(messageObject);
-                    return MediaController.getInstance().setPlaylist(arrayList, messageObject);
-                }
-            };
-            anonymousClass1.setCheckForButtonPress(true);
-            return new Holder(anonymousClass1);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            AudioEntry audioEntry = (AudioEntry) AudioSelectActivity.this.audioEntries.get(i);
-            SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
-            sharedAudioCell.setTag(audioEntry);
-            boolean z = true;
-            sharedAudioCell.setMessageObject(audioEntry.messageObject, i != AudioSelectActivity.this.audioEntries.size() - 1);
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
-                z = false;
-            }
-            sharedAudioCell.setChecked(z, false);
-        }
+    static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+        return true;
     }
 
-    public class SearchAdapter extends SelectionAdapter {
-        private int lastReqId;
-        private Context mContext;
-        private int reqId = 0;
-        private ArrayList<AudioEntry> searchResult = new ArrayList();
-        private Runnable searchRunnable;
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return true;
-        }
-
-        public SearchAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public void search(String str) {
-            Runnable runnable = this.searchRunnable;
-            if (runnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(runnable);
-                this.searchRunnable = null;
-            }
-            if (TextUtils.isEmpty(str)) {
-                if (!this.searchResult.isEmpty()) {
-                    this.searchResult.clear();
-                }
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
-                }
-                notifyDataSetChanged();
-                return;
-            }
-            -$$Lambda$AudioSelectActivity$SearchAdapter$oB5vontvK6nB1LUEbL62PoV4_BY -__lambda_audioselectactivity_searchadapter_ob5vontvk6nb1luebl62pov4_by = new -$$Lambda$AudioSelectActivity$SearchAdapter$oB5vontvK6nB1LUEbL62PoV4_BY(this, str);
-            this.searchRunnable = -__lambda_audioselectactivity_searchadapter_ob5vontvk6nb1luebl62pov4_by;
-            AndroidUtilities.runOnUIThread(-__lambda_audioselectactivity_searchadapter_ob5vontvk6nb1luebl62pov4_by, 300);
-        }
-
-        public /* synthetic */ void lambda$search$1$AudioSelectActivity$SearchAdapter(String str) {
-            Utilities.searchQueue.postRunnable(new -$$Lambda$AudioSelectActivity$SearchAdapter$NkdztFGuT0my4DvvTdwmxCykdLk(this, str, new ArrayList(AudioSelectActivity.this.audioEntries)));
-        }
-
-        public /* synthetic */ void lambda$null$0$AudioSelectActivity$SearchAdapter(String str, ArrayList arrayList) {
-            String toLowerCase = str.trim().toLowerCase();
-            if (toLowerCase.length() == 0) {
-                updateSearchResults(new ArrayList(), str);
-                return;
-            }
-            String translitString = LocaleController.getInstance().getTranslitString(toLowerCase);
-            if (toLowerCase.equals(translitString) || translitString.length() == 0) {
-                translitString = null;
-            }
-            String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
-            strArr[0] = toLowerCase;
-            if (translitString != null) {
-                strArr[1] = translitString;
-            }
-            ArrayList arrayList2 = new ArrayList();
-            for (int i = 0; i < arrayList.size(); i++) {
-                AudioEntry audioEntry = (AudioEntry) arrayList.get(i);
-                for (CharSequence charSequence : strArr) {
-                    String str2 = audioEntry.author;
-                    boolean contains = str2 != null ? str2.toLowerCase().contains(charSequence) : false;
-                    if (!contains) {
-                        String str3 = audioEntry.title;
-                        if (str3 != null) {
-                            contains = str3.toLowerCase().contains(charSequence);
-                        }
-                    }
-                    if (contains) {
-                        arrayList2.add(audioEntry);
-                        break;
-                    }
-                }
-            }
-            updateSearchResults(arrayList2, str);
-        }
-
-        private void updateSearchResults(ArrayList<AudioEntry> arrayList, String str) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$AudioSelectActivity$SearchAdapter$luYzBSYmi69uB0Perlcwy7EOqTM(this, str, arrayList));
-        }
-
-        public /* synthetic */ void lambda$updateSearchResults$2$AudioSelectActivity$SearchAdapter(String str, ArrayList arrayList) {
-            if (AudioSelectActivity.this.searching) {
-                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.searchAdapter) {
-                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.searchAdapter);
-                    AudioSelectActivity.this.updateEmptyView();
-                }
-                AudioSelectActivity.this.emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundInfo", NUM, str)));
-            }
-            AudioSelectActivity.this.searchWas = true;
-            this.searchResult = arrayList;
-            notifyDataSetChanged();
-        }
-
-        public int getItemCount() {
-            return this.searchResult.size();
-        }
-
-        public AudioEntry getItem(int i) {
-            return (AudioEntry) this.searchResult.get(i);
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            AnonymousClass1 anonymousClass1 = new SharedAudioCell(this.mContext) {
-                public boolean needPlayMessage(MessageObject messageObject) {
-                    AudioSelectActivity.this.playingAudio = messageObject;
-                    ArrayList arrayList = new ArrayList();
-                    arrayList.add(messageObject);
-                    return MediaController.getInstance().setPlaylist(arrayList, messageObject);
-                }
-            };
-            anonymousClass1.setCheckForButtonPress(true);
-            return new Holder(anonymousClass1);
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            AudioEntry audioEntry = (AudioEntry) this.searchResult.get(i);
-            SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
-            sharedAudioCell.setTag(audioEntry);
-            boolean z = true;
-            sharedAudioCell.setMessageObject(audioEntry.messageObject, i != this.searchResult.size() - 1);
-            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
-                z = false;
-            }
-            sharedAudioCell.setChecked(z, false);
-        }
+    static /* synthetic */ boolean lambda$createView$3(View view, MotionEvent motionEvent) {
+        return true;
     }
 
-    public AudioSelectActivity(ChatActivity chatActivity) {
-        this.chatActivity = chatActivity;
+    public AudioSelectActivity(ChatActivity chatActivity2) {
+        this.chatActivity = chatActivity2;
     }
 
     public boolean onFragmentCreate() {
@@ -329,63 +159,59 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         Context context2 = context;
         this.searchWas = false;
         this.searching = false;
-        String str = "dialogBackground";
-        this.actionBar.setBackgroundColor(Theme.getColor(str));
-        String str2 = "dialogTextBlack";
-        this.actionBar.setTitleColor(Theme.getColor(str2));
-        this.actionBar.setItemsColor(Theme.getColor(str2), false);
+        this.actionBar.setBackgroundColor(Theme.getColor("dialogBackground"));
+        this.actionBar.setTitleColor(Theme.getColor("dialogTextBlack"));
+        this.actionBar.setItemsColor(Theme.getColor("dialogTextBlack"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("dialogButtonSelector"), false);
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("AttachMusic", NUM));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
                     AudioSelectActivity.this.finishFragment();
                 }
             }
         });
-        this.searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
-                AudioSelectActivity.this.searching = true;
+                boolean unused = AudioSelectActivity.this.searching = true;
             }
 
             public void onSearchCollapse() {
-                AudioSelectActivity.this.searchWas = false;
-                AudioSelectActivity.this.searching = false;
+                boolean unused = AudioSelectActivity.this.searchWas = false;
+                boolean unused2 = AudioSelectActivity.this.searching = false;
                 if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
                     AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
                 }
                 AudioSelectActivity.this.updateEmptyView();
-                AudioSelectActivity.this.searchAdapter.search(null);
+                AudioSelectActivity.this.searchAdapter.search((String) null);
             }
 
             public void onTextChanged(EditText editText) {
                 AudioSelectActivity.this.searchAdapter.search(editText.getText().toString());
             }
         });
-        String str3 = "Search";
-        this.searchItem.setSearchFieldHint(LocaleController.getString(str3, NUM));
-        this.searchItem.setContentDescription(LocaleController.getString(str3, NUM));
+        this.searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
-        searchField.setTextColor(Theme.getColor(str2));
-        searchField.setCursorColor(Theme.getColor(str2));
+        searchField.setTextColor(Theme.getColor("dialogTextBlack"));
+        searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
         searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
         this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2) {
             private boolean ignoreLayout;
             private int lastItemSize;
             private int lastNotifyWidth;
 
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
-                int size = MeasureSpec.getSize(i);
-                int size2 = MeasureSpec.getSize(i2);
+                int size = View.MeasureSpec.getSize(i);
+                int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                int i3 = 0;
                 if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
-                    if (!(AndroidUtilities.isInMultiwindow || AudioSelectActivity.this.commentTextView == null || AudioSelectActivity.this.frameLayout2.getParent() != this)) {
+                    if (!AndroidUtilities.isInMultiwindow && AudioSelectActivity.this.commentTextView != null && AudioSelectActivity.this.frameLayout2.getParent() == this) {
                         size2 -= AudioSelectActivity.this.commentTextView.getEmojiPadding();
-                        i2 = MeasureSpec.makeMeasureSpec(size2, NUM);
+                        i2 = View.MeasureSpec.makeMeasureSpec(size2, NUM);
                     }
                 } else if (AudioSelectActivity.this.commentTextView != null) {
                     this.ignoreLayout = true;
@@ -393,196 +219,175 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     this.ignoreLayout = false;
                 }
                 int childCount = getChildCount();
-                while (i3 < childCount) {
+                for (int i3 = 0; i3 < childCount; i3++) {
                     View childAt = getChildAt(i3);
                     if (!(childAt == null || childAt.getVisibility() == 8)) {
                         if (AudioSelectActivity.this.commentTextView == null || !AudioSelectActivity.this.commentTextView.isPopupView(childAt)) {
                             measureChildWithMargins(childAt, i, 0, i2, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
+                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
                         } else if (AndroidUtilities.isTablet()) {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (size2 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
+                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (size2 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                         } else {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec((size2 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
+                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((size2 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                         }
                     }
-                    i3++;
                 }
             }
 
-            /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
-            /* JADX WARNING: Removed duplicated region for block: B:43:0x00cd  */
+            /* access modifiers changed from: protected */
             /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
+            /* JADX WARNING: Removed duplicated region for block: B:43:0x00cd  */
             /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
             /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
             public void onLayout(boolean r9, int r10, int r11, int r12, int r13) {
                 /*
-                r8 = this;
-                r9 = r8.lastNotifyWidth;
-                r12 = r12 - r10;
-                if (r9 == r12) goto L_0x0024;
-            L_0x0005:
-                r8.lastNotifyWidth = r12;
-                r9 = org.telegram.ui.AudioSelectActivity.this;
-                r9 = r9.sendPopupWindow;
-                if (r9 == 0) goto L_0x0024;
-            L_0x000f:
-                r9 = org.telegram.ui.AudioSelectActivity.this;
-                r9 = r9.sendPopupWindow;
-                r9 = r9.isShowing();
-                if (r9 == 0) goto L_0x0024;
-            L_0x001b:
-                r9 = org.telegram.ui.AudioSelectActivity.this;
-                r9 = r9.sendPopupWindow;
-                r9.dismiss();
-            L_0x0024:
-                r9 = r8.getChildCount();
-                r10 = org.telegram.ui.AudioSelectActivity.this;
-                r10 = r10.commentTextView;
-                r0 = 0;
-                if (r10 == 0) goto L_0x005e;
-            L_0x0031:
-                r10 = org.telegram.ui.AudioSelectActivity.this;
-                r10 = r10.frameLayout2;
-                r10 = r10.getParent();
-                if (r10 != r8) goto L_0x005e;
-            L_0x003d:
-                r10 = r8.getKeyboardHeight();
-                r1 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-                r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
-                if (r10 > r1) goto L_0x005e;
-            L_0x0049:
-                r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
-                if (r10 != 0) goto L_0x005e;
-            L_0x004d:
-                r10 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r10 != 0) goto L_0x005e;
-            L_0x0053:
-                r10 = org.telegram.ui.AudioSelectActivity.this;
-                r10 = r10.commentTextView;
-                r10 = r10.getEmojiPadding();
-                goto L_0x005f;
-            L_0x005e:
-                r10 = 0;
-            L_0x005f:
-                r8.setBottomClip(r10);
-            L_0x0062:
-                if (r0 >= r9) goto L_0x0114;
-            L_0x0064:
-                r1 = r8.getChildAt(r0);
-                r2 = r1.getVisibility();
-                r3 = 8;
-                if (r2 != r3) goto L_0x0072;
-            L_0x0070:
-                goto L_0x0110;
-            L_0x0072:
-                r2 = r1.getLayoutParams();
-                r2 = (android.widget.FrameLayout.LayoutParams) r2;
-                r3 = r1.getMeasuredWidth();
-                r4 = r1.getMeasuredHeight();
-                r5 = r2.gravity;
-                r6 = -1;
-                if (r5 != r6) goto L_0x0087;
-            L_0x0085:
-                r5 = 51;
-            L_0x0087:
-                r6 = r5 & 7;
-                r5 = r5 & 112;
-                r6 = r6 & 7;
-                r7 = 1;
-                if (r6 == r7) goto L_0x00a5;
-            L_0x0090:
-                r7 = 5;
-                if (r6 == r7) goto L_0x009b;
-            L_0x0093:
-                r6 = r2.leftMargin;
-                r7 = r8.getPaddingLeft();
-                r6 = r6 + r7;
-                goto L_0x00af;
-            L_0x009b:
-                r6 = r12 - r3;
-                r7 = r2.rightMargin;
-                r6 = r6 - r7;
-                r7 = r8.getPaddingRight();
-                goto L_0x00ae;
-            L_0x00a5:
-                r6 = r12 - r3;
-                r6 = r6 / 2;
-                r7 = r2.leftMargin;
-                r6 = r6 + r7;
-                r7 = r2.rightMargin;
-            L_0x00ae:
-                r6 = r6 - r7;
-            L_0x00af:
-                r7 = 16;
-                if (r5 == r7) goto L_0x00cd;
-            L_0x00b3:
-                r7 = 48;
-                if (r5 == r7) goto L_0x00c5;
-            L_0x00b7:
-                r7 = 80;
-                if (r5 == r7) goto L_0x00be;
-            L_0x00bb:
-                r2 = r2.topMargin;
-                goto L_0x00da;
-            L_0x00be:
-                r5 = r13 - r10;
-                r5 = r5 - r11;
-                r5 = r5 - r4;
-                r2 = r2.bottomMargin;
-                goto L_0x00d8;
-            L_0x00c5:
-                r2 = r2.topMargin;
-                r5 = r8.getPaddingTop();
-                r2 = r2 + r5;
-                goto L_0x00da;
-            L_0x00cd:
-                r5 = r13 - r10;
-                r5 = r5 - r11;
-                r5 = r5 - r4;
-                r5 = r5 / 2;
-                r7 = r2.topMargin;
-                r5 = r5 + r7;
-                r2 = r2.bottomMargin;
-            L_0x00d8:
-                r2 = r5 - r2;
-            L_0x00da:
-                r5 = org.telegram.ui.AudioSelectActivity.this;
-                r5 = r5.commentTextView;
-                if (r5 == 0) goto L_0x010b;
-            L_0x00e2:
-                r5 = org.telegram.ui.AudioSelectActivity.this;
-                r5 = r5.commentTextView;
-                r5 = r5.isPopupView(r1);
-                if (r5 == 0) goto L_0x010b;
-            L_0x00ee:
-                r2 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r2 == 0) goto L_0x00fd;
-            L_0x00f4:
-                r2 = r8.getMeasuredHeight();
-                r5 = r1.getMeasuredHeight();
-                goto L_0x010a;
-            L_0x00fd:
-                r2 = r8.getMeasuredHeight();
-                r5 = r8.getKeyboardHeight();
-                r2 = r2 + r5;
-                r5 = r1.getMeasuredHeight();
-            L_0x010a:
-                r2 = r2 - r5;
-            L_0x010b:
-                r3 = r3 + r6;
-                r4 = r4 + r2;
-                r1.layout(r6, r2, r3, r4);
-            L_0x0110:
-                r0 = r0 + 1;
-                goto L_0x0062;
-            L_0x0114:
-                r8.notifyHeightChanged();
-                return;
+                    r8 = this;
+                    int r9 = r8.lastNotifyWidth
+                    int r12 = r12 - r10
+                    if (r9 == r12) goto L_0x0024
+                    r8.lastNotifyWidth = r12
+                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
+                    if (r9 == 0) goto L_0x0024
+                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
+                    boolean r9 = r9.isShowing()
+                    if (r9 == 0) goto L_0x0024
+                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
+                    r9.dismiss()
+                L_0x0024:
+                    int r9 = r8.getChildCount()
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r10 = r10.commentTextView
+                    r0 = 0
+                    if (r10 == 0) goto L_0x005e
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    android.widget.FrameLayout r10 = r10.frameLayout2
+                    android.view.ViewParent r10 = r10.getParent()
+                    if (r10 != r8) goto L_0x005e
+                    int r10 = r8.getKeyboardHeight()
+                    r1 = 1101004800(0x41a00000, float:20.0)
+                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                    if (r10 > r1) goto L_0x005e
+                    boolean r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                    if (r10 != 0) goto L_0x005e
+                    boolean r10 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r10 != 0) goto L_0x005e
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r10 = r10.commentTextView
+                    int r10 = r10.getEmojiPadding()
+                    goto L_0x005f
+                L_0x005e:
+                    r10 = 0
+                L_0x005f:
+                    r8.setBottomClip(r10)
+                L_0x0062:
+                    if (r0 >= r9) goto L_0x0114
+                    android.view.View r1 = r8.getChildAt(r0)
+                    int r2 = r1.getVisibility()
+                    r3 = 8
+                    if (r2 != r3) goto L_0x0072
+                    goto L_0x0110
+                L_0x0072:
+                    android.view.ViewGroup$LayoutParams r2 = r1.getLayoutParams()
+                    android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
+                    int r3 = r1.getMeasuredWidth()
+                    int r4 = r1.getMeasuredHeight()
+                    int r5 = r2.gravity
+                    r6 = -1
+                    if (r5 != r6) goto L_0x0087
+                    r5 = 51
+                L_0x0087:
+                    r6 = r5 & 7
+                    r5 = r5 & 112(0x70, float:1.57E-43)
+                    r6 = r6 & 7
+                    r7 = 1
+                    if (r6 == r7) goto L_0x00a5
+                    r7 = 5
+                    if (r6 == r7) goto L_0x009b
+                    int r6 = r2.leftMargin
+                    int r7 = r8.getPaddingLeft()
+                    int r6 = r6 + r7
+                    goto L_0x00af
+                L_0x009b:
+                    int r6 = r12 - r3
+                    int r7 = r2.rightMargin
+                    int r6 = r6 - r7
+                    int r7 = r8.getPaddingRight()
+                    goto L_0x00ae
+                L_0x00a5:
+                    int r6 = r12 - r3
+                    int r6 = r6 / 2
+                    int r7 = r2.leftMargin
+                    int r6 = r6 + r7
+                    int r7 = r2.rightMargin
+                L_0x00ae:
+                    int r6 = r6 - r7
+                L_0x00af:
+                    r7 = 16
+                    if (r5 == r7) goto L_0x00cd
+                    r7 = 48
+                    if (r5 == r7) goto L_0x00c5
+                    r7 = 80
+                    if (r5 == r7) goto L_0x00be
+                    int r2 = r2.topMargin
+                    goto L_0x00da
+                L_0x00be:
+                    int r5 = r13 - r10
+                    int r5 = r5 - r11
+                    int r5 = r5 - r4
+                    int r2 = r2.bottomMargin
+                    goto L_0x00d8
+                L_0x00c5:
+                    int r2 = r2.topMargin
+                    int r5 = r8.getPaddingTop()
+                    int r2 = r2 + r5
+                    goto L_0x00da
+                L_0x00cd:
+                    int r5 = r13 - r10
+                    int r5 = r5 - r11
+                    int r5 = r5 - r4
+                    int r5 = r5 / 2
+                    int r7 = r2.topMargin
+                    int r5 = r5 + r7
+                    int r2 = r2.bottomMargin
+                L_0x00d8:
+                    int r2 = r5 - r2
+                L_0x00da:
+                    org.telegram.ui.AudioSelectActivity r5 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
+                    if (r5 == 0) goto L_0x010b
+                    org.telegram.ui.AudioSelectActivity r5 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
+                    boolean r5 = r5.isPopupView(r1)
+                    if (r5 == 0) goto L_0x010b
+                    boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r2 == 0) goto L_0x00fd
+                    int r2 = r8.getMeasuredHeight()
+                    int r5 = r1.getMeasuredHeight()
+                    goto L_0x010a
+                L_0x00fd:
+                    int r2 = r8.getMeasuredHeight()
+                    int r5 = r8.getKeyboardHeight()
+                    int r2 = r2 + r5
+                    int r5 = r1.getMeasuredHeight()
+                L_0x010a:
+                    int r2 = r2 - r5
+                L_0x010b:
+                    int r3 = r3 + r6
+                    int r4 = r4 + r2
+                    r1.layout(r6, r2, r3, r4)
+                L_0x0110:
+                    int r0 = r0 + 1
+                    goto L_0x0062
+                L_0x0114:
+                    r8.notifyHeightChanged()
+                    return
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AudioSelectActivity$AnonymousClass3.onLayout(boolean, int, int, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AudioSelectActivity.AnonymousClass3.onLayout(boolean, int, int, int, int):void");
             }
 
             public void requestLayout() {
@@ -591,7 +396,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
             }
         };
-        this.sizeNotifierFrameLayout.setBackgroundColor(Theme.getColor(str));
+        this.sizeNotifierFrameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.fragmentView = this.sizeNotifierFrameLayout;
         this.progressView = new EmptyTextProgressView(context2);
         this.progressView.showProgress();
@@ -601,10 +406,10 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         this.sizeNotifierFrameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView.setOnTouchListener(-$$Lambda$AudioSelectActivity$TsXMP3OMn_MrWzh_GvC6AvDPzsY.INSTANCE);
+        this.emptyView.setOnTouchListener($$Lambda$AudioSelectActivity$TsXMP3OMn_MrWzh_GvC6AvDPzsY.INSTANCE);
         this.emptyImageView = new ImageView(context2);
         this.emptyImageView.setImageResource(NUM);
-        this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), Mode.MULTIPLY));
+        this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
         this.emptyTitleTextView = new TextView(context2);
         this.emptyTitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
@@ -623,15 +428,23 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
         RecyclerListView recyclerListView = this.listView;
-        ListAdapter listAdapter = new ListAdapter(context2);
-        this.listAdapter = listAdapter;
-        recyclerListView.setAdapter(listAdapter);
+        ListAdapter listAdapter2 = new ListAdapter(context2);
+        this.listAdapter = listAdapter2;
+        recyclerListView.setAdapter(listAdapter2);
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.searchAdapter = new SearchAdapter(context2);
-        this.listView.setOnItemClickListener(new -$$Lambda$AudioSelectActivity$udgf5SVc7GntWL9Gfvar_UulPGZU(this));
-        this.listView.setOnItemLongClickListener(new -$$Lambda$AudioSelectActivity$FMrqNgxsH6ltBQCOi57F5VhZEn0(this));
-        this.listView.setOnScrollListener(new OnScrollListener() {
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+            public final void onItemClick(View view, int i) {
+                AudioSelectActivity.this.lambda$createView$1$AudioSelectActivity(view, i);
+            }
+        });
+        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
+            public final boolean onItemClick(View view, int i) {
+                return AudioSelectActivity.this.lambda$createView$2$AudioSelectActivity(view, i);
+            }
+        });
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1 && AudioSelectActivity.this.searching && AudioSelectActivity.this.searchWas) {
                     AndroidUtilities.hideKeyboard(AudioSelectActivity.this.getParentActivity().getCurrentFocus());
@@ -643,22 +456,22 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.shadow.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         this.frameLayout2 = new FrameLayout(context2);
-        this.frameLayout2.setBackgroundColor(Theme.getColor(str));
+        this.frameLayout2.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.frameLayout2.setVisibility(4);
         this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-        this.frameLayout2.setOnTouchListener(-$$Lambda$AudioSelectActivity$70c_2QVPUHQ3blJpxsqysqHDZJ0.INSTANCE);
+        this.frameLayout2.setOnTouchListener($$Lambda$AudioSelectActivity$70c_2QVPUHQ3blJpxsqysqHDZJ0.INSTANCE);
         EditTextEmoji editTextEmoji = this.commentTextView;
         if (editTextEmoji != null) {
             editTextEmoji.onDestroy();
         }
-        this.commentTextView = new EditTextEmoji(context2, this.sizeNotifierFrameLayout, null, 1);
-        this.commentTextView.setFilters(new InputFilter[]{new LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength)});
+        this.commentTextView = new EditTextEmoji(context2, this.sizeNotifierFrameLayout, (BaseFragment) null, 1);
+        this.commentTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength)});
         this.commentTextView.setHint(LocaleController.getString("AddCaption", NUM));
         this.commentTextView.onResume();
-        searchField = this.commentTextView.getEditText();
-        searchField.setMaxLines(1);
-        searchField.setSingleLine(true);
+        EditTextBoldCursor editText = this.commentTextView.getEditText();
+        editText.setMaxLines(1);
+        editText.setSingleLine(true);
         this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 84.0f, 0.0f));
         this.writeButtonContainer = new FrameLayout(context2);
         this.writeButtonContainer.setVisibility(4);
@@ -668,19 +481,19 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
-        if (VERSION.SDK_INT < 21) {
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
+        if (Build.VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
-            Drawable combinedDrawable = new CombinedDrawable(mutate, createSimpleSelectorCircleDrawable, 0, 0);
+            mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(mutate, createSimpleSelectorCircleDrawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             createSimpleSelectorCircleDrawable = combinedDrawable;
         }
         this.writeButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable);
         this.writeButton.setImageResource(NUM);
-        this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), Mode.MULTIPLY));
-        this.writeButton.setScaleType(ScaleType.CENTER);
-        if (VERSION.SDK_INT >= 21) {
+        this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
+        this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
+        if (Build.VERSION.SDK_INT >= 21) {
             this.writeButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
@@ -688,13 +501,21 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
             });
         }
-        this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
-        this.writeButton.setOnClickListener(new -$$Lambda$AudioSelectActivity$yCkpzfYdMW7ExlFmoo7A5yK5n7o(this));
-        this.writeButton.setOnLongClickListener(new -$$Lambda$AudioSelectActivity$op1868hUHQ4ktj1ACa-ggMteGuo(this));
+        this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, Build.VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+        this.writeButton.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                AudioSelectActivity.this.lambda$createView$4$AudioSelectActivity(view);
+            }
+        });
+        this.writeButton.setOnLongClickListener(new View.OnLongClickListener() {
+            public final boolean onLongClick(View view) {
+                return AudioSelectActivity.this.lambda$createView$7$AudioSelectActivity(view);
+            }
+        });
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountView = new View(context2) {
-            /* Access modifiers changed, original: protected */
+            /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, AudioSelectActivity.this.selectedAudios.size()))});
                 int ceil = (int) Math.ceil((double) AudioSelectActivity.this.textPaint.measureText(format));
@@ -703,13 +524,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 int measuredHeight = getMeasuredHeight() / 2;
                 AudioSelectActivity.this.textPaint.setColor(Theme.getColor("dialogRoundCheckBoxCheck"));
                 AudioSelectActivity.this.paint.setColor(Theme.getColor("dialogBackground"));
-                max /= 2;
-                int i = measuredWidth - max;
-                max += measuredWidth;
-                AudioSelectActivity.this.rect.set((float) i, 0.0f, (float) max, (float) getMeasuredHeight());
+                int i = max / 2;
+                int i2 = measuredWidth - i;
+                int i3 = i + measuredWidth;
+                AudioSelectActivity.this.rect.set((float) i2, 0.0f, (float) i3, (float) getMeasuredHeight());
                 canvas.drawRoundRect(AudioSelectActivity.this.rect, (float) AndroidUtilities.dp(12.0f), (float) AndroidUtilities.dp(12.0f), AudioSelectActivity.this.paint);
                 AudioSelectActivity.this.paint.setColor(Theme.getColor("dialogRoundCheckBox"));
-                AudioSelectActivity.this.rect.set((float) (i + AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(2.0f), (float) (max - AndroidUtilities.dp(2.0f)), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)));
+                AudioSelectActivity.this.rect.set((float) (i2 + AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(2.0f), (float) (i3 - AndroidUtilities.dp(2.0f)), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)));
                 canvas.drawRoundRect(AudioSelectActivity.this.rect, (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(10.0f), AudioSelectActivity.this.paint);
                 canvas.drawText(format, (float) (measuredWidth - (ceil / 2)), (float) AndroidUtilities.dp(16.2f), AudioSelectActivity.this.textPaint);
             }
@@ -733,42 +554,52 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     public /* synthetic */ void lambda$createView$4$AudioSelectActivity(View view) {
-        ChatActivity chatActivity = this.chatActivity;
-        if (chatActivity == null || !chatActivity.isInScheduleMode()) {
+        ChatActivity chatActivity2 = this.chatActivity;
+        if (chatActivity2 == null || !chatActivity2.isInScheduleMode()) {
             sendSelectedAudios(true, 0);
         } else {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
+                public final void didSelectDate(boolean z, int i) {
+                    AudioSelectActivity.this.sendSelectedAudios(z, i);
+                }
+            });
         }
     }
 
     public /* synthetic */ boolean lambda$createView$7$AudioSelectActivity(View view) {
         View view2 = view;
-        ChatActivity chatActivity = this.chatActivity;
-        if (chatActivity == null) {
+        ChatActivity chatActivity2 = this.chatActivity;
+        if (chatActivity2 == null) {
             return false;
         }
-        chatActivity.getCurrentChat();
-        User currentUser = this.chatActivity.getCurrentUser();
+        chatActivity2.getCurrentChat();
+        TLRPC.User currentUser = this.chatActivity.getCurrentUser();
         if (this.chatActivity.getCurrentEncryptedChat() != null) {
             return false;
         }
         if (this.sendPopupLayout == null) {
-            this.sendPopupLayout = new ActionBarPopupWindowLayout(getParentActivity());
+            this.sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
             this.sendPopupLayout.setAnimationEnabled(false);
-            this.sendPopupLayout.setOnTouchListener(new OnTouchListener() {
+            this.sendPopupLayout.setOnTouchListener(new View.OnTouchListener() {
                 private Rect popupRect = new Rect();
 
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getActionMasked() == 0 && AudioSelectActivity.this.sendPopupWindow != null && AudioSelectActivity.this.sendPopupWindow.isShowing()) {
-                        view.getHitRect(this.popupRect);
-                        if (!this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                            AudioSelectActivity.this.sendPopupWindow.dismiss();
-                        }
+                    if (motionEvent.getActionMasked() != 0 || AudioSelectActivity.this.sendPopupWindow == null || !AudioSelectActivity.this.sendPopupWindow.isShowing()) {
+                        return false;
                     }
+                    view.getHitRect(this.popupRect);
+                    if (this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                        return false;
+                    }
+                    AudioSelectActivity.this.sendPopupWindow.dismiss();
                     return false;
                 }
             });
-            this.sendPopupLayout.setDispatchKeyEventListener(new -$$Lambda$AudioSelectActivity$oS8Sb2J5Tspbv-4MUmOh4HRW3hk(this));
+            this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
+                public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+                    AudioSelectActivity.this.lambda$null$5$AudioSelectActivity(keyEvent);
+                }
+            });
             this.sendPopupLayout.setShowedFromBotton(false);
             this.itemCells = new ActionBarMenuSubItem[2];
             for (int i = 0; i < 2; i++) {
@@ -785,7 +616,17 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     }
                     this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                     this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
-                    this.itemCells[i].setOnClickListener(new -$$Lambda$AudioSelectActivity$vLs-KPE_ctH6hQ4c9WSG4z1LicY(this, i));
+                    this.itemCells[i].setOnClickListener(new View.OnClickListener(i) {
+                        private final /* synthetic */ int f$1;
+
+                        {
+                            this.f$1 = r2;
+                        }
+
+                        public final void onClick(View view) {
+                            AudioSelectActivity.this.lambda$null$6$AudioSelectActivity(this.f$1, view);
+                        }
+                    });
                 }
             }
             this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
@@ -797,7 +638,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.sendPopupWindow.setSoftInputMode(0);
             this.sendPopupWindow.getContentView().setFocusableInTouchMode(true);
         }
-        this.sendPopupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+        this.sendPopupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
         this.sendPopupWindow.setFocusable(true);
         int[] iArr = new int[2];
         view2.getLocationInWindow(iArr);
@@ -808,11 +649,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     public /* synthetic */ void lambda$null$5$AudioSelectActivity(KeyEvent keyEvent) {
-        if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0) {
-            ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
-            if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
-                this.sendPopupWindow.dismiss();
-            }
+        ActionBarPopupWindow actionBarPopupWindow;
+        if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
+            this.sendPopupWindow.dismiss();
         }
     }
 
@@ -822,13 +661,18 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.sendPopupWindow.dismiss();
         }
         if (i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new -$$Lambda$AudioSelectActivity$hHkzuGuuIaYgsTAzjw1szVPzJSU(this));
+            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
+                public final void didSelectDate(boolean z, int i) {
+                    AudioSelectActivity.this.sendSelectedAudios(z, i);
+                }
+            });
         } else if (i == 1) {
             sendSelectedAudios(true, 0);
         }
     }
 
-    private void updateEmptyView() {
+    /* access modifiers changed from: private */
+    public void updateEmptyView() {
         if (this.loadingAudio) {
             this.listView.setEmptyView(this.progressView);
             this.emptyView.setVisibility(8);
@@ -853,28 +697,27 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.closeChats) {
             removeSelfFromStack();
-        } else if (i == NotificationCenter.messagePlayingDidReset || i == NotificationCenter.messagePlayingDidStart || i == NotificationCenter.messagePlayingPlayStateChanged) {
-            View childAt;
-            SharedAudioCell sharedAudioCell;
+        } else if (i != NotificationCenter.messagePlayingDidReset && i != NotificationCenter.messagePlayingDidStart && i != NotificationCenter.messagePlayingPlayStateChanged) {
+        } else {
             if (i == NotificationCenter.messagePlayingDidReset || i == NotificationCenter.messagePlayingPlayStateChanged) {
-                i = this.listView.getChildCount();
-                for (i2 = 0; i2 < i; i2++) {
-                    childAt = this.listView.getChildAt(i2);
+                int childCount = this.listView.getChildCount();
+                for (int i3 = 0; i3 < childCount; i3++) {
+                    View childAt = this.listView.getChildAt(i3);
                     if (childAt instanceof SharedAudioCell) {
-                        sharedAudioCell = (SharedAudioCell) childAt;
+                        SharedAudioCell sharedAudioCell = (SharedAudioCell) childAt;
                         if (sharedAudioCell.getMessage() != null) {
                             sharedAudioCell.updateButtonState(false, true);
                         }
                     }
                 }
-            } else if (i == NotificationCenter.messagePlayingDidStart && ((MessageObject) objArr[0]).eventId == 0) {
-                i = this.listView.getChildCount();
-                for (i2 = 0; i2 < i; i2++) {
-                    childAt = this.listView.getChildAt(i2);
-                    if (childAt instanceof SharedAudioCell) {
-                        sharedAudioCell = (SharedAudioCell) childAt;
-                        if (sharedAudioCell.getMessage() != null) {
-                            sharedAudioCell.updateButtonState(false, true);
+            } else if (i == NotificationCenter.messagePlayingDidStart && objArr[0].eventId == 0) {
+                int childCount2 = this.listView.getChildCount();
+                for (int i4 = 0; i4 < childCount2; i4++) {
+                    View childAt2 = this.listView.getChildAt(i4);
+                    if (childAt2 instanceof SharedAudioCell) {
+                        SharedAudioCell sharedAudioCell2 = (SharedAudioCell) childAt2;
+                        if (sharedAudioCell2.getMessage() != null) {
+                            sharedAudioCell2.updateButtonState(false, true);
                         }
                     }
                 }
@@ -893,7 +736,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     private void onItemClick(View view) {
         SharedAudioCell sharedAudioCell = (SharedAudioCell) view;
-        AudioEntry audioEntry = (AudioEntry) sharedAudioCell.getTag();
+        MediaController.AudioEntry audioEntry = (MediaController.AudioEntry) sharedAudioCell.getTag();
         boolean z = false;
         int i = 1;
         if (this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
@@ -917,11 +760,11 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         if (z == (this.frameLayout2.getTag() != null)) {
             return false;
         }
-        AnimatorSet animatorSet = this.animatorSet;
-        if (animatorSet != null) {
-            animatorSet.cancel();
+        AnimatorSet animatorSet2 = this.animatorSet;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
         }
-        this.frameLayout2.setTag(z ? Integer.valueOf(1) : null);
+        this.frameLayout2.setTag(z ? 1 : null);
         if (this.commentTextView.getEditText().isFocused()) {
             AndroidUtilities.hideKeyboard(this.commentTextView.getEditText());
         }
@@ -941,50 +784,50 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.2f;
             arrayList.add(ObjectAnimator.ofFloat(frameLayout, property, fArr));
-            frameLayout = this.writeButtonContainer;
-            property = View.SCALE_Y;
-            fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.2f;
-            arrayList.add(ObjectAnimator.ofFloat(frameLayout, property, fArr));
-            frameLayout = this.writeButtonContainer;
-            property = View.ALPHA;
-            fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.0f;
-            arrayList.add(ObjectAnimator.ofFloat(frameLayout, property, fArr));
+            FrameLayout frameLayout3 = this.writeButtonContainer;
+            Property property2 = View.SCALE_Y;
+            float[] fArr2 = new float[1];
+            fArr2[0] = z ? 1.0f : 0.2f;
+            arrayList.add(ObjectAnimator.ofFloat(frameLayout3, property2, fArr2));
+            FrameLayout frameLayout4 = this.writeButtonContainer;
+            Property property3 = View.ALPHA;
+            float[] fArr3 = new float[1];
+            fArr3[0] = z ? 1.0f : 0.0f;
+            arrayList.add(ObjectAnimator.ofFloat(frameLayout4, property3, fArr3));
             View view = this.selectedCountView;
-            property = View.SCALE_X;
-            fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.2f;
-            arrayList.add(ObjectAnimator.ofFloat(view, property, fArr));
-            view = this.selectedCountView;
-            property = View.SCALE_Y;
-            fArr = new float[1];
+            Property property4 = View.SCALE_X;
+            float[] fArr4 = new float[1];
+            fArr4[0] = z ? 1.0f : 0.2f;
+            arrayList.add(ObjectAnimator.ofFloat(view, property4, fArr4));
+            View view2 = this.selectedCountView;
+            Property property5 = View.SCALE_Y;
+            float[] fArr5 = new float[1];
             if (z) {
                 f2 = 1.0f;
             }
-            fArr[0] = f2;
-            arrayList.add(ObjectAnimator.ofFloat(view, property, fArr));
-            View view2 = this.selectedCountView;
-            Property property2 = View.ALPHA;
-            float[] fArr2 = new float[1];
+            fArr5[0] = f2;
+            arrayList.add(ObjectAnimator.ofFloat(view2, property5, fArr5));
+            View view3 = this.selectedCountView;
+            Property property6 = View.ALPHA;
+            float[] fArr6 = new float[1];
             if (!z) {
                 f3 = 0.0f;
             }
-            fArr2[0] = f3;
-            arrayList.add(ObjectAnimator.ofFloat(view2, property2, fArr2));
-            FrameLayout frameLayout2 = this.frameLayout2;
-            Property property3 = View.TRANSLATION_Y;
-            float[] fArr3 = new float[1];
-            fArr3[0] = z ? 0.0f : (float) AndroidUtilities.dp(48.0f);
-            arrayList.add(ObjectAnimator.ofFloat(frameLayout2, property3, fArr3));
-            view2 = this.shadow;
-            property3 = View.TRANSLATION_Y;
-            fArr3 = new float[1];
+            fArr6[0] = f3;
+            arrayList.add(ObjectAnimator.ofFloat(view3, property6, fArr6));
+            FrameLayout frameLayout5 = this.frameLayout2;
+            Property property7 = View.TRANSLATION_Y;
+            float[] fArr7 = new float[1];
+            fArr7[0] = z ? 0.0f : (float) AndroidUtilities.dp(48.0f);
+            arrayList.add(ObjectAnimator.ofFloat(frameLayout5, property7, fArr7));
+            View view4 = this.shadow;
+            Property property8 = View.TRANSLATION_Y;
+            float[] fArr8 = new float[1];
             if (!z) {
                 f = (float) AndroidUtilities.dp(48.0f);
             }
-            fArr3[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(view2, property3, fArr3));
+            fArr8[0] = f;
+            arrayList.add(ObjectAnimator.ofFloat(view4, property8, fArr8));
             this.animatorSet.playTogether(arrayList);
             this.animatorSet.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(180);
@@ -995,13 +838,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                             AudioSelectActivity.this.frameLayout2.setVisibility(4);
                             AudioSelectActivity.this.writeButtonContainer.setVisibility(4);
                         }
-                        AudioSelectActivity.this.animatorSet = null;
+                        AnimatorSet unused = AudioSelectActivity.this.animatorSet = null;
                     }
                 }
 
                 public void onAnimationCancel(Animator animator) {
                     if (animator.equals(AudioSelectActivity.this.animatorSet)) {
-                        AudioSelectActivity.this.animatorSet = null;
+                        AnimatorSet unused = AudioSelectActivity.this.animatorSet = null;
                     }
                 }
             });
@@ -1011,22 +854,22 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             this.writeButtonContainer.setScaleY(z ? 1.0f : 0.2f);
             this.writeButtonContainer.setAlpha(z ? 1.0f : 0.0f);
             this.selectedCountView.setScaleX(z ? 1.0f : 0.2f);
-            View view3 = this.selectedCountView;
+            View view5 = this.selectedCountView;
             if (z) {
                 f2 = 1.0f;
             }
-            view3.setScaleY(f2);
-            view3 = this.selectedCountView;
+            view5.setScaleY(f2);
+            View view6 = this.selectedCountView;
             if (!z) {
                 f3 = 0.0f;
             }
-            view3.setAlpha(f3);
+            view6.setAlpha(f3);
             this.frameLayout2.setTranslationY(z ? 0.0f : (float) AndroidUtilities.dp(48.0f));
-            view3 = this.shadow;
+            View view7 = this.shadow;
             if (!z) {
                 f = (float) AndroidUtilities.dp(48.0f);
             }
-            view3.setTranslationY(f);
+            view7.setTranslationY(f);
             if (!z) {
                 this.frameLayout2.setVisibility(4);
                 this.writeButtonContainer.setVisibility(4);
@@ -1054,7 +897,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
         this.selectedCountView.setPivotX((float) AndroidUtilities.dp(21.0f));
         this.selectedCountView.setPivotY((float) AndroidUtilities.dp(12.0f));
-        AnimatorSet animatorSet = new AnimatorSet();
+        AnimatorSet animatorSet2 = new AnimatorSet();
         Animator[] animatorArr = new Animator[2];
         View view = this.selectedCountView;
         Property property = View.SCALE_X;
@@ -1063,27 +906,28 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         fArr[0] = i == 1 ? 1.1f : 0.9f;
         fArr[1] = 1.0f;
         animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
-        view = this.selectedCountView;
-        property = View.SCALE_Y;
+        View view2 = this.selectedCountView;
+        Property property2 = View.SCALE_Y;
         float[] fArr2 = new float[2];
         if (i != 1) {
             f = 0.9f;
         }
         fArr2[0] = f;
         fArr2[1] = 1.0f;
-        animatorArr[1] = ObjectAnimator.ofFloat(view, property, fArr2);
-        animatorSet.playTogether(animatorArr);
-        animatorSet.setInterpolator(new OvershootInterpolator());
-        animatorSet.setDuration(180);
-        animatorSet.start();
+        animatorArr[1] = ObjectAnimator.ofFloat(view2, property2, fArr2);
+        animatorSet2.playTogether(animatorArr);
+        animatorSet2.setInterpolator(new OvershootInterpolator());
+        animatorSet2.setDuration(180);
+        animatorSet2.start();
     }
 
-    private void sendSelectedAudios(boolean z, int i) {
+    /* access modifiers changed from: private */
+    public void sendSelectedAudios(boolean z, int i) {
         if (this.selectedAudios.size() != 0 && this.delegate != null && !this.sendPressed) {
             this.sendPressed = true;
             ArrayList arrayList = new ArrayList();
             for (int i2 = 0; i2 < this.selectedAudios.size(); i2++) {
-                arrayList.add(((AudioEntry) this.selectedAudios.valueAt(i2)).messageObject);
+                arrayList.add(this.selectedAudios.valueAt(i2).messageObject);
             }
             this.delegate.didSelectAudio(arrayList, this.commentTextView.getText().toString(), z, i);
             finishFragment();
@@ -1096,211 +940,212 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     private void loadAudio() {
         this.loadingAudio = true;
-        Utilities.globalQueue.postRunnable(new -$$Lambda$AudioSelectActivity$0AW56Hl2qVFIVsXD4PDb-caMNoU(this));
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                AudioSelectActivity.this.lambda$loadAudio$9$AudioSelectActivity();
+            }
+        });
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x016a */
-    /* JADX WARNING: Missing block: B:19:0x0163, code skipped:
-            r0 = move-exception;
+    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0165, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:20:0x0164, code skipped:
-            r3 = r0;
+    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0166, code lost:
+        r3 = r0;
      */
-    /* JADX WARNING: Missing block: B:21:0x0165, code skipped:
-            if (r2 != null) goto L_0x0167;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0167, code lost:
+        if (r2 != null) goto L_0x0169;
      */
-    /* JADX WARNING: Missing block: B:23:?, code skipped:
-            r2.close();
+    /* JADX WARNING: Code restructure failed: missing block: B:23:?, code lost:
+        r2.close();
      */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x016c */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadAudio$9$AudioSelectActivity() {
         /*
-        r16 = this;
-        r1 = r16;
-        r0 = 6;
-        r4 = new java.lang.String[r0];
-        r0 = 0;
-        r2 = "_id";
-        r4[r0] = r2;
-        r8 = 1;
-        r2 = "artist";
-        r4[r8] = r2;
-        r9 = 2;
-        r2 = "title";
-        r4[r9] = r2;
-        r10 = 3;
-        r2 = "_data";
-        r4[r10] = r2;
-        r11 = 4;
-        r2 = "duration";
-        r4[r11] = r2;
-        r12 = 5;
-        r2 = "album";
-        r4[r12] = r2;
-        r13 = new java.util.ArrayList;
-        r13.<init>();
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x016b }
-        r2 = r2.getContentResolver();	 Catch:{ Exception -> 0x016b }
-        r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Exception -> 0x016b }
-        r5 = "is_music != 0";
-        r6 = 0;
-        r7 = "title";
-        r2 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x016b }
-        r3 = -NUM; // 0xfffffffvar_ca6CLASSNAME float:-1.2182823E-33 double:NaN;
-    L_0x003c:
-        r4 = r2.moveToNext();	 Catch:{ all -> 0x0161 }
-        if (r4 == 0) goto L_0x015b;
-    L_0x0042:
-        r4 = new org.telegram.messenger.MediaController$AudioEntry;	 Catch:{ all -> 0x0161 }
-        r4.<init>();	 Catch:{ all -> 0x0161 }
-        r5 = r2.getInt(r0);	 Catch:{ all -> 0x0161 }
-        r5 = (long) r5;	 Catch:{ all -> 0x0161 }
-        r4.id = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r8);	 Catch:{ all -> 0x0161 }
-        r4.author = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r9);	 Catch:{ all -> 0x0161 }
-        r4.title = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r10);	 Catch:{ all -> 0x0161 }
-        r4.path = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getLong(r11);	 Catch:{ all -> 0x0161 }
-        r14 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r5 = r5 / r14;
-        r6 = (int) r5;	 Catch:{ all -> 0x0161 }
-        r4.duration = r6;	 Catch:{ all -> 0x0161 }
-        r5 = r2.getString(r12);	 Catch:{ all -> 0x0161 }
-        r4.genre = r5;	 Catch:{ all -> 0x0161 }
-        r5 = new java.io.File;	 Catch:{ all -> 0x0161 }
-        r6 = r4.path;	 Catch:{ all -> 0x0161 }
-        r5.<init>(r6);	 Catch:{ all -> 0x0161 }
-        r6 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ all -> 0x0161 }
-        r6.<init>();	 Catch:{ all -> 0x0161 }
-        r6.out = r8;	 Catch:{ all -> 0x0161 }
-        r6.id = r3;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r6.to_id = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.to_id;	 Catch:{ all -> 0x0161 }
-        r8 = r1.currentAccount;	 Catch:{ all -> 0x0161 }
-        r8 = org.telegram.messenger.UserConfig.getInstance(r8);	 Catch:{ all -> 0x0161 }
-        r8 = r8.getClientUserId();	 Catch:{ all -> 0x0161 }
-        r6.from_id = r8;	 Catch:{ all -> 0x0161 }
-        r7.user_id = r8;	 Catch:{ all -> 0x0161 }
-        r7 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x0161 }
-        r7 = r7 / r14;
-        r8 = (int) r7;	 Catch:{ all -> 0x0161 }
-        r6.date = r8;	 Catch:{ all -> 0x0161 }
-        r7 = "";
-        r6.message = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r4.path;	 Catch:{ all -> 0x0161 }
-        r6.attachPath = r7;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r6.media = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r7.flags;	 Catch:{ all -> 0x0161 }
-        r8 = r8 | r10;
-        r7.flags = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = new org.telegram.tgnet.TLRPC$TL_document;	 Catch:{ all -> 0x0161 }
-        r8.<init>();	 Catch:{ all -> 0x0161 }
-        r7.document = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.flags;	 Catch:{ all -> 0x0161 }
-        r7 = r7 | 768;
-        r6.flags = r7;	 Catch:{ all -> 0x0161 }
-        r7 = org.telegram.messenger.FileLoader.getFileExtension(r5);	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = 0;
-        r8.id = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r8.access_hash = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = new byte[r0];	 Catch:{ all -> 0x0161 }
-        r8.file_reference = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = r6.date;	 Catch:{ all -> 0x0161 }
-        r8.date = r14;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r14 = new java.lang.StringBuilder;	 Catch:{ all -> 0x0161 }
-        r14.<init>();	 Catch:{ all -> 0x0161 }
-        r15 = "audio/";
-        r14.append(r15);	 Catch:{ all -> 0x0161 }
-        r15 = r7.length();	 Catch:{ all -> 0x0161 }
-        if (r15 <= 0) goto L_0x00fb;
-    L_0x00fa:
-        goto L_0x00fd;
-    L_0x00fb:
-        r7 = "mp3";
-    L_0x00fd:
-        r14.append(r7);	 Catch:{ all -> 0x0161 }
-        r7 = r14.toString();	 Catch:{ all -> 0x0161 }
-        r8.mime_type = r7;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r7 = r7.document;	 Catch:{ all -> 0x0161 }
-        r14 = r5.length();	 Catch:{ all -> 0x0161 }
-        r8 = (int) r14;	 Catch:{ all -> 0x0161 }
-        r7.size = r8;	 Catch:{ all -> 0x0161 }
-        r7 = r6.media;	 Catch:{ all -> 0x0161 }
-        r7 = r7.document;	 Catch:{ all -> 0x0161 }
-        r7.dc_id = r0;	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r8 = r4.duration;	 Catch:{ all -> 0x0161 }
-        r7.duration = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r4.title;	 Catch:{ all -> 0x0161 }
-        r7.title = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r4.author;	 Catch:{ all -> 0x0161 }
-        r7.performer = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r7.flags;	 Catch:{ all -> 0x0161 }
-        r8 = r8 | r10;
-        r7.flags = r8;	 Catch:{ all -> 0x0161 }
-        r8 = r6.media;	 Catch:{ all -> 0x0161 }
-        r8 = r8.document;	 Catch:{ all -> 0x0161 }
-        r8 = r8.attributes;	 Catch:{ all -> 0x0161 }
-        r8.add(r7);	 Catch:{ all -> 0x0161 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;	 Catch:{ all -> 0x0161 }
-        r7.<init>();	 Catch:{ all -> 0x0161 }
-        r5 = r5.getName();	 Catch:{ all -> 0x0161 }
-        r7.file_name = r5;	 Catch:{ all -> 0x0161 }
-        r5 = r6.media;	 Catch:{ all -> 0x0161 }
-        r5 = r5.document;	 Catch:{ all -> 0x0161 }
-        r5 = r5.attributes;	 Catch:{ all -> 0x0161 }
-        r5.add(r7);	 Catch:{ all -> 0x0161 }
-        r5 = new org.telegram.messenger.MessageObject;	 Catch:{ all -> 0x0161 }
-        r7 = r1.currentAccount;	 Catch:{ all -> 0x0161 }
-        r5.<init>(r7, r6, r0);	 Catch:{ all -> 0x0161 }
-        r4.messageObject = r5;	 Catch:{ all -> 0x0161 }
-        r13.add(r4);	 Catch:{ all -> 0x0161 }
-        r3 = r3 + -1;
-        r8 = 1;
-        goto L_0x003c;
-    L_0x015b:
-        if (r2 == 0) goto L_0x016f;
-    L_0x015d:
-        r2.close();	 Catch:{ Exception -> 0x016b }
-        goto L_0x016f;
-    L_0x0161:
-        r0 = move-exception;
-        throw r0;	 Catch:{ all -> 0x0163 }
-    L_0x0163:
-        r0 = move-exception;
-        r3 = r0;
-        if (r2 == 0) goto L_0x016a;
-    L_0x0167:
-        r2.close();	 Catch:{ all -> 0x016a }
-    L_0x016a:
-        throw r3;	 Catch:{ Exception -> 0x016b }
-    L_0x016b:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-    L_0x016f:
-        r0 = new org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c;
-        r0.<init>(r1, r13);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
-        return;
+            r16 = this;
+            r1 = r16
+            r0 = 6
+            java.lang.String[] r4 = new java.lang.String[r0]
+            r0 = 0
+            java.lang.String r2 = "_id"
+            r4[r0] = r2
+            r8 = 1
+            java.lang.String r2 = "artist"
+            r4[r8] = r2
+            r9 = 2
+            java.lang.String r2 = "title"
+            r4[r9] = r2
+            r10 = 3
+            java.lang.String r2 = "_data"
+            r4[r10] = r2
+            r11 = 4
+            java.lang.String r2 = "duration"
+            r4[r11] = r2
+            r12 = 5
+            java.lang.String r2 = "album"
+            r4[r12] = r2
+            java.util.ArrayList r13 = new java.util.ArrayList
+            r13.<init>()
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x016d }
+            android.content.ContentResolver r2 = r2.getContentResolver()     // Catch:{ Exception -> 0x016d }
+            android.net.Uri r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x016d }
+            java.lang.String r5 = "is_music != 0"
+            r6 = 0
+            java.lang.String r7 = "title"
+            android.database.Cursor r2 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x016d }
+            r3 = -2000000000(0xfffffffvar_ca6CLASSNAME, float:-1.2182823E-33)
+        L_0x003e:
+            boolean r4 = r2.moveToNext()     // Catch:{ all -> 0x0163 }
+            if (r4 == 0) goto L_0x015d
+            org.telegram.messenger.MediaController$AudioEntry r4 = new org.telegram.messenger.MediaController$AudioEntry     // Catch:{ all -> 0x0163 }
+            r4.<init>()     // Catch:{ all -> 0x0163 }
+            int r5 = r2.getInt(r0)     // Catch:{ all -> 0x0163 }
+            long r5 = (long) r5     // Catch:{ all -> 0x0163 }
+            r4.id = r5     // Catch:{ all -> 0x0163 }
+            java.lang.String r5 = r2.getString(r8)     // Catch:{ all -> 0x0163 }
+            r4.author = r5     // Catch:{ all -> 0x0163 }
+            java.lang.String r5 = r2.getString(r9)     // Catch:{ all -> 0x0163 }
+            r4.title = r5     // Catch:{ all -> 0x0163 }
+            java.lang.String r5 = r2.getString(r10)     // Catch:{ all -> 0x0163 }
+            r4.path = r5     // Catch:{ all -> 0x0163 }
+            long r5 = r2.getLong(r11)     // Catch:{ all -> 0x0163 }
+            r14 = 1000(0x3e8, double:4.94E-321)
+            long r5 = r5 / r14
+            int r6 = (int) r5     // Catch:{ all -> 0x0163 }
+            r4.duration = r6     // Catch:{ all -> 0x0163 }
+            java.lang.String r5 = r2.getString(r12)     // Catch:{ all -> 0x0163 }
+            r4.genre = r5     // Catch:{ all -> 0x0163 }
+            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0163 }
+            java.lang.String r6 = r4.path     // Catch:{ all -> 0x0163 }
+            r5.<init>(r6)     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_message r6 = new org.telegram.tgnet.TLRPC$TL_message     // Catch:{ all -> 0x0163 }
+            r6.<init>()     // Catch:{ all -> 0x0163 }
+            r6.out = r8     // Catch:{ all -> 0x0163 }
+            r6.id = r3     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_peerUser r7 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x0163 }
+            r7.<init>()     // Catch:{ all -> 0x0163 }
+            r6.to_id = r7     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Peer r7 = r6.to_id     // Catch:{ all -> 0x0163 }
+            int r8 = r1.currentAccount     // Catch:{ all -> 0x0163 }
+            org.telegram.messenger.UserConfig r8 = org.telegram.messenger.UserConfig.getInstance(r8)     // Catch:{ all -> 0x0163 }
+            int r8 = r8.getClientUserId()     // Catch:{ all -> 0x0163 }
+            r6.from_id = r8     // Catch:{ all -> 0x0163 }
+            r7.user_id = r8     // Catch:{ all -> 0x0163 }
+            long r7 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0163 }
+            long r7 = r7 / r14
+            int r8 = (int) r7     // Catch:{ all -> 0x0163 }
+            r6.date = r8     // Catch:{ all -> 0x0163 }
+            java.lang.String r7 = ""
+            r6.message = r7     // Catch:{ all -> 0x0163 }
+            java.lang.String r7 = r4.path     // Catch:{ all -> 0x0163 }
+            r6.attachPath = r7     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_messageMediaDocument r7 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ all -> 0x0163 }
+            r7.<init>()     // Catch:{ all -> 0x0163 }
+            r6.media = r7     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0163 }
+            int r8 = r7.flags     // Catch:{ all -> 0x0163 }
+            r8 = r8 | r10
+            r7.flags = r8     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_document r8 = new org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x0163 }
+            r8.<init>()     // Catch:{ all -> 0x0163 }
+            r7.document = r8     // Catch:{ all -> 0x0163 }
+            int r7 = r6.flags     // Catch:{ all -> 0x0163 }
+            r7 = r7 | 768(0x300, float:1.076E-42)
+            r6.flags = r7     // Catch:{ all -> 0x0163 }
+            java.lang.String r7 = org.telegram.messenger.FileLoader.getFileExtension(r5)     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            r14 = 0
+            r8.id = r14     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            r8.access_hash = r14     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            byte[] r14 = new byte[r0]     // Catch:{ all -> 0x0163 }
+            r8.file_reference = r14     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            int r14 = r6.date     // Catch:{ all -> 0x0163 }
+            r8.date = r14     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ all -> 0x0163 }
+            r14.<init>()     // Catch:{ all -> 0x0163 }
+            java.lang.String r15 = "audio/"
+            r14.append(r15)     // Catch:{ all -> 0x0163 }
+            int r15 = r7.length()     // Catch:{ all -> 0x0163 }
+            if (r15 <= 0) goto L_0x00fd
+            goto L_0x00ff
+        L_0x00fd:
+            java.lang.String r7 = "mp3"
+        L_0x00ff:
+            r14.append(r7)     // Catch:{ all -> 0x0163 }
+            java.lang.String r7 = r14.toString()     // Catch:{ all -> 0x0163 }
+            r8.mime_type = r7     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x0163 }
+            long r14 = r5.length()     // Catch:{ all -> 0x0163 }
+            int r8 = (int) r14     // Catch:{ all -> 0x0163 }
+            r7.size = r8     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x0163 }
+            r7.dc_id = r0     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio     // Catch:{ all -> 0x0163 }
+            r7.<init>()     // Catch:{ all -> 0x0163 }
+            int r8 = r4.duration     // Catch:{ all -> 0x0163 }
+            r7.duration = r8     // Catch:{ all -> 0x0163 }
+            java.lang.String r8 = r4.title     // Catch:{ all -> 0x0163 }
+            r7.title = r8     // Catch:{ all -> 0x0163 }
+            java.lang.String r8 = r4.author     // Catch:{ all -> 0x0163 }
+            r7.performer = r8     // Catch:{ all -> 0x0163 }
+            int r8 = r7.flags     // Catch:{ all -> 0x0163 }
+            r8 = r8 | r10
+            r7.flags = r8     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0163 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r8 = r8.attributes     // Catch:{ all -> 0x0163 }
+            r8.add(r7)     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$TL_documentAttributeFilename r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename     // Catch:{ all -> 0x0163 }
+            r7.<init>()     // Catch:{ all -> 0x0163 }
+            java.lang.String r5 = r5.getName()     // Catch:{ all -> 0x0163 }
+            r7.file_name = r5     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$MessageMedia r5 = r6.media     // Catch:{ all -> 0x0163 }
+            org.telegram.tgnet.TLRPC$Document r5 = r5.document     // Catch:{ all -> 0x0163 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r5 = r5.attributes     // Catch:{ all -> 0x0163 }
+            r5.add(r7)     // Catch:{ all -> 0x0163 }
+            org.telegram.messenger.MessageObject r5 = new org.telegram.messenger.MessageObject     // Catch:{ all -> 0x0163 }
+            int r7 = r1.currentAccount     // Catch:{ all -> 0x0163 }
+            r5.<init>(r7, r6, r0)     // Catch:{ all -> 0x0163 }
+            r4.messageObject = r5     // Catch:{ all -> 0x0163 }
+            r13.add(r4)     // Catch:{ all -> 0x0163 }
+            int r3 = r3 + -1
+            r8 = 1
+            goto L_0x003e
+        L_0x015d:
+            if (r2 == 0) goto L_0x0171
+            r2.close()     // Catch:{ Exception -> 0x016d }
+            goto L_0x0171
+        L_0x0163:
+            r0 = move-exception
+            throw r0     // Catch:{ all -> 0x0165 }
+        L_0x0165:
+            r0 = move-exception
+            r3 = r0
+            if (r2 == 0) goto L_0x016c
+            r2.close()     // Catch:{ all -> 0x016c }
+        L_0x016c:
+            throw r3     // Catch:{ Exception -> 0x016d }
+        L_0x016d:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0171:
+            org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c r0 = new org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c
+            r0.<init>(r13)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+            return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AudioSelectActivity.lambda$loadAudio$9$AudioSelectActivity():void");
     }
@@ -1315,23 +1160,253 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.listAdapter.notifyDataSetChanged();
     }
 
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+        private Context mContext;
+
+        public long getItemId(int i) {
+            return (long) i;
+        }
+
+        public int getItemViewType(int i) {
+            return 0;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return true;
+        }
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public int getItemCount() {
+            return AudioSelectActivity.this.audioEntries.size();
+        }
+
+        public Object getItem(int i) {
+            return AudioSelectActivity.this.audioEntries.get(i);
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            AnonymousClass1 r1 = new SharedAudioCell(this.mContext) {
+                public boolean needPlayMessage(MessageObject messageObject) {
+                    MessageObject unused = AudioSelectActivity.this.playingAudio = messageObject;
+                    ArrayList arrayList = new ArrayList();
+                    arrayList.add(messageObject);
+                    return MediaController.getInstance().setPlaylist(arrayList, messageObject);
+                }
+            };
+            r1.setCheckForButtonPress(true);
+            return new RecyclerListView.Holder(r1);
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            MediaController.AudioEntry audioEntry = (MediaController.AudioEntry) AudioSelectActivity.this.audioEntries.get(i);
+            SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
+            sharedAudioCell.setTag(audioEntry);
+            boolean z = true;
+            sharedAudioCell.setMessageObject(audioEntry.messageObject, i != AudioSelectActivity.this.audioEntries.size() - 1);
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
+                z = false;
+            }
+            sharedAudioCell.setChecked(z, false);
+        }
+    }
+
+    public class SearchAdapter extends RecyclerListView.SelectionAdapter {
+        private int lastReqId;
+        private Context mContext;
+        private int reqId = 0;
+        private ArrayList<MediaController.AudioEntry> searchResult = new ArrayList<>();
+        private Runnable searchRunnable;
+
+        public int getItemViewType(int i) {
+            return 0;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return true;
+        }
+
+        public SearchAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public void search(String str) {
+            Runnable runnable = this.searchRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.searchRunnable = null;
+            }
+            if (TextUtils.isEmpty(str)) {
+                if (!this.searchResult.isEmpty()) {
+                    this.searchResult.clear();
+                }
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.listAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.listAdapter);
+                }
+                notifyDataSetChanged();
+                return;
+            }
+            $$Lambda$AudioSelectActivity$SearchAdapter$oB5vontvK6nB1LUEbL62PoV4_BY r0 = new Runnable(str) {
+                private final /* synthetic */ String f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    AudioSelectActivity.SearchAdapter.this.lambda$search$1$AudioSelectActivity$SearchAdapter(this.f$1);
+                }
+            };
+            this.searchRunnable = r0;
+            AndroidUtilities.runOnUIThread(r0, 300);
+        }
+
+        public /* synthetic */ void lambda$search$1$AudioSelectActivity$SearchAdapter(String str) {
+            Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(AudioSelectActivity.this.audioEntries)) {
+                private final /* synthetic */ String f$1;
+                private final /* synthetic */ ArrayList f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    AudioSelectActivity.SearchAdapter.this.lambda$null$0$AudioSelectActivity$SearchAdapter(this.f$1, this.f$2);
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$null$0$AudioSelectActivity$SearchAdapter(String str, ArrayList arrayList) {
+            String str2;
+            String lowerCase = str.trim().toLowerCase();
+            if (lowerCase.length() == 0) {
+                updateSearchResults(new ArrayList(), str);
+                return;
+            }
+            String translitString = LocaleController.getInstance().getTranslitString(lowerCase);
+            if (lowerCase.equals(translitString) || translitString.length() == 0) {
+                translitString = null;
+            }
+            String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
+            strArr[0] = lowerCase;
+            if (translitString != null) {
+                strArr[1] = translitString;
+            }
+            ArrayList arrayList2 = new ArrayList();
+            for (int i = 0; i < arrayList.size(); i++) {
+                MediaController.AudioEntry audioEntry = (MediaController.AudioEntry) arrayList.get(i);
+                int i2 = 0;
+                while (true) {
+                    if (i2 >= strArr.length) {
+                        break;
+                    }
+                    String str3 = strArr[i2];
+                    String str4 = audioEntry.author;
+                    boolean contains = str4 != null ? str4.toLowerCase().contains(str3) : false;
+                    if (!contains && (str2 = audioEntry.title) != null) {
+                        contains = str2.toLowerCase().contains(str3);
+                    }
+                    if (contains) {
+                        arrayList2.add(audioEntry);
+                        break;
+                    }
+                    i2++;
+                }
+            }
+            updateSearchResults(arrayList2, str);
+        }
+
+        private void updateSearchResults(ArrayList<MediaController.AudioEntry> arrayList, String str) {
+            AndroidUtilities.runOnUIThread(new Runnable(str, arrayList) {
+                private final /* synthetic */ String f$1;
+                private final /* synthetic */ ArrayList f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    AudioSelectActivity.SearchAdapter.this.lambda$updateSearchResults$2$AudioSelectActivity$SearchAdapter(this.f$1, this.f$2);
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$updateSearchResults$2$AudioSelectActivity$SearchAdapter(String str, ArrayList arrayList) {
+            if (AudioSelectActivity.this.searching) {
+                if (AudioSelectActivity.this.listView.getAdapter() != AudioSelectActivity.this.searchAdapter) {
+                    AudioSelectActivity.this.listView.setAdapter(AudioSelectActivity.this.searchAdapter);
+                    AudioSelectActivity.this.updateEmptyView();
+                }
+                AudioSelectActivity.this.emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundInfo", NUM, str)));
+            }
+            boolean unused = AudioSelectActivity.this.searchWas = true;
+            this.searchResult = arrayList;
+            notifyDataSetChanged();
+        }
+
+        public int getItemCount() {
+            return this.searchResult.size();
+        }
+
+        public MediaController.AudioEntry getItem(int i) {
+            return this.searchResult.get(i);
+        }
+
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            AnonymousClass1 r1 = new SharedAudioCell(this.mContext) {
+                public boolean needPlayMessage(MessageObject messageObject) {
+                    MessageObject unused = AudioSelectActivity.this.playingAudio = messageObject;
+                    ArrayList arrayList = new ArrayList();
+                    arrayList.add(messageObject);
+                    return MediaController.getInstance().setPlaylist(arrayList, messageObject);
+                }
+            };
+            r1.setCheckForButtonPress(true);
+            return new RecyclerListView.Holder(r1);
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            MediaController.AudioEntry audioEntry = this.searchResult.get(i);
+            SharedAudioCell sharedAudioCell = (SharedAudioCell) viewHolder.itemView;
+            sharedAudioCell.setTag(audioEntry);
+            boolean z = true;
+            sharedAudioCell.setMessageObject(audioEntry.messageObject, i != this.searchResult.size() - 1);
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
+                z = false;
+            }
+            sharedAudioCell.setChecked(z, false);
+        }
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        r1 = new ThemeDescription[23];
-        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r1[14] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        r1[15] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
-        View view = this.listView;
-        int i = ThemeDescription.FLAG_CHECKBOX;
-        Class[] clsArr = new Class[]{SharedAudioCell.class};
-        String[] strArr = new String[1];
-        strArr[0] = "checkBox";
-        r1[16] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "checkbox");
-        r1[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck");
-        r1[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_titleTextPaint, null, null, "windowBackgroundWhiteBlackText");
-        r1[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, null, null, "windowBackgroundWhiteGrayText2");
-        r1[20] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "dialogFloatingIcon");
-        r1[21] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "dialogFloatingButton");
-        r1[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton");
-        return r1;
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
+        themeDescriptionArr[0] = new ThemeDescription(this.sizeNotifierFrameLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground");
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack");
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack");
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelHint");
+        themeDescriptionArr[7] = new ThemeDescription(this.searchItem.getSearchField(), ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack");
+        themeDescriptionArr[8] = new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyImage");
+        themeDescriptionArr[9] = new ThemeDescription(this.emptyTitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText");
+        themeDescriptionArr[10] = new ThemeDescription(this.emptySubtitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText");
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground");
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21");
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider");
+        themeDescriptionArr[14] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder");
+        themeDescriptionArr[15] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle");
+        themeDescriptionArr[16] = new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox");
+        themeDescriptionArr[17] = new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedAudioCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck");
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_titleTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText");
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedAudioCell.class}, Theme.chat_contextResult_descriptionTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2");
+        themeDescriptionArr[20] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogFloatingIcon");
+        themeDescriptionArr[21] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogFloatingButton");
+        themeDescriptionArr[22] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, Build.VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton");
+        return themeDescriptionArr;
     }
 }

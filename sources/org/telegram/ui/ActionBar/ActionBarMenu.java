@@ -4,10 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
@@ -23,7 +22,7 @@ public class ActionBarMenu extends LinearLayout {
         super(context);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void updateItemsBackgroundColor() {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -34,7 +33,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void updateItemsColor() {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -46,7 +45,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int i, Drawable drawable) {
-        return addItem(i, 0, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f), null);
+        return addItem(i, 0, (CharSequence) null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f), (CharSequence) null);
     }
 
     public ActionBarMenuItem addItem(int i, int i2) {
@@ -54,19 +53,19 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int i, CharSequence charSequence) {
-        return addItem(i, 0, charSequence, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, 0, charSequence);
+        return addItem(i, 0, charSequence, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, (Drawable) null, 0, charSequence);
     }
 
     public ActionBarMenuItem addItem(int i, int i2, int i3) {
-        return addItem(i, i2, null, i3, null, AndroidUtilities.dp(48.0f), null);
+        return addItem(i, i2, (CharSequence) null, i3, (Drawable) null, AndroidUtilities.dp(48.0f), (CharSequence) null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3) {
-        return addItem(i, i2, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, null);
+        return addItem(i, i2, (CharSequence) null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, (Drawable) null, i3, (CharSequence) null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3, CharSequence charSequence) {
-        return addItem(i, i2, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, charSequence);
+        return addItem(i, i2, (CharSequence) null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, (Drawable) null, i3, charSequence);
     }
 
     public ActionBarMenuItem addItem(int i, int i2, CharSequence charSequence, int i3, Drawable drawable, int i4, CharSequence charSequence2) {
@@ -77,10 +76,10 @@ public class ActionBarMenu extends LinearLayout {
             if (i4 == 0) {
                 i4 = -2;
             }
-            LayoutParams layoutParams = new LayoutParams(i4, -1);
-            i = AndroidUtilities.dp(14.0f);
-            layoutParams.rightMargin = i;
-            layoutParams.leftMargin = i;
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(i4, -1);
+            int dp = AndroidUtilities.dp(14.0f);
+            layoutParams.rightMargin = dp;
+            layoutParams.leftMargin = dp;
             addView(actionBarMenuItem, layoutParams);
         } else {
             if (drawable != null) {
@@ -88,9 +87,13 @@ public class ActionBarMenu extends LinearLayout {
             } else if (i2 != 0) {
                 actionBarMenuItem.iconView.setImageResource(i2);
             }
-            addView(actionBarMenuItem, new LayoutParams(i4, -1));
+            addView(actionBarMenuItem, new LinearLayout.LayoutParams(i4, -1));
         }
-        actionBarMenuItem.setOnClickListener(new -$$Lambda$ActionBarMenu$ppo9UED664gE-YCecAHKNZM7u90(this));
+        actionBarMenuItem.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                ActionBarMenu.this.lambda$addItem$0$ActionBarMenu(view);
+            }
+        });
         if (charSequence2 != null) {
             actionBarMenuItem.setContentDescription(charSequence2);
         }
@@ -120,7 +123,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void setPopupItemsColor(int i, boolean z) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {
@@ -131,7 +134,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void setPopupItemsSelectorColor(int i) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {
@@ -142,7 +145,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void redrawPopup(int i) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {
@@ -154,7 +157,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public void onItemClick(int i) {
-        ActionBarMenuOnItemClick actionBarMenuOnItemClick = this.parentActionBar.actionBarMenuOnItemClick;
+        ActionBar.ActionBarMenuOnItemClick actionBarMenuOnItemClick = this.parentActionBar.actionBarMenuOnItemClick;
         if (actionBarMenuOnItemClick != null) {
             actionBarMenuOnItemClick.onItemClick(i);
         }
@@ -190,7 +193,7 @@ public class ActionBarMenu extends LinearLayout {
             if (childAt instanceof ActionBarMenuItem) {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
                 if (actionBarMenuItem.isSearchField()) {
-                    ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = actionBarMenuItem.listener;
+                    ActionBarMenuItem.ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = actionBarMenuItem.listener;
                     if (actionBarMenuItemSearchListener == null || actionBarMenuItemSearchListener.canCollapseSearch()) {
                         this.parentActionBar.onSearchFieldVisibilityChanged(false);
                         actionBarMenuItem.toggleSearch(z);
@@ -270,7 +273,10 @@ public class ActionBarMenu extends LinearLayout {
 
     public ActionBarMenuItem getItem(int i) {
         View findViewWithTag = findViewWithTag(Integer.valueOf(i));
-        return findViewWithTag instanceof ActionBarMenuItem ? (ActionBarMenuItem) findViewWithTag : null;
+        if (findViewWithTag instanceof ActionBarMenuItem) {
+            return (ActionBarMenuItem) findViewWithTag;
+        }
+        return null;
     }
 
     public void setEnabled(boolean z) {

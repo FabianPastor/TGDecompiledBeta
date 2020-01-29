@@ -17,7 +17,7 @@ class MethodSignatureImpl extends CodeSignatureImpl implements MethodSignature {
         return this.returnType;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public String createToString(StringMaker stringMaker) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(stringMaker.makeModifiersString(getModifiers()));

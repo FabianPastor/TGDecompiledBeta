@@ -2,12 +2,11 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -30,15 +29,11 @@ public class ManageChatTextCell extends FrameLayout {
         this.valueTextView = new SimpleTextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(16);
-        SimpleTextView simpleTextView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 3;
-        }
-        simpleTextView.setGravity(i);
+        this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i);
         addView(this.valueTextView);
         this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }
 
@@ -50,32 +45,32 @@ public class ManageChatTextCell extends FrameLayout {
         return this.valueTextView;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        i = MeasureSpec.getSize(i);
-        i2 = AndroidUtilities.dp(48.0f);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp(24.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.imageView.measure(MeasureSpec.makeMeasureSpec(i, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE));
-        setMeasuredDimension(i, AndroidUtilities.dp(56.0f) + this.divider);
+        int size = View.MeasureSpec.getSize(i);
+        int dp = AndroidUtilities.dp(48.0f);
+        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(24.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(dp, Integer.MIN_VALUE));
+        setMeasuredDimension(size, AndroidUtilities.dp(56.0f) + (this.divider ? 1 : 0));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        i4 -= i2;
-        i3 -= i;
-        int textHeight = (i4 - this.valueTextView.getTextHeight()) / 2;
-        i = LocaleController.isRTL ? AndroidUtilities.dp(24.0f) : 0;
+        int i5 = i4 - i2;
+        int i6 = i3 - i;
+        int textHeight = (i5 - this.valueTextView.getTextHeight()) / 2;
+        int dp = LocaleController.isRTL ? AndroidUtilities.dp(24.0f) : 0;
         SimpleTextView simpleTextView = this.valueTextView;
-        simpleTextView.layout(i, textHeight, simpleTextView.getMeasuredWidth() + i, this.valueTextView.getMeasuredHeight() + textHeight);
-        i4 = (i4 - this.textView.getTextHeight()) / 2;
-        textHeight = !LocaleController.isRTL ? AndroidUtilities.dp(71.0f) : AndroidUtilities.dp(24.0f);
+        simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.valueTextView.getMeasuredHeight() + textHeight);
+        int textHeight2 = (i5 - this.textView.getTextHeight()) / 2;
+        int dp2 = !LocaleController.isRTL ? AndroidUtilities.dp(71.0f) : AndroidUtilities.dp(24.0f);
         SimpleTextView simpleTextView2 = this.textView;
-        simpleTextView2.layout(textHeight, i4, simpleTextView2.getMeasuredWidth() + textHeight, this.textView.getMeasuredHeight() + i4);
-        textHeight = AndroidUtilities.dp(9.0f);
-        i = !LocaleController.isRTL ? AndroidUtilities.dp(21.0f) : (i3 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(21.0f);
-        ImageView imageView = this.imageView;
-        imageView.layout(i, textHeight, imageView.getMeasuredWidth() + i, this.imageView.getMeasuredHeight() + textHeight);
+        simpleTextView2.layout(dp2, textHeight2, simpleTextView2.getMeasuredWidth() + dp2, this.textView.getMeasuredHeight() + textHeight2);
+        int dp3 = AndroidUtilities.dp(9.0f);
+        int dp4 = !LocaleController.isRTL ? AndroidUtilities.dp(21.0f) : (i6 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(21.0f);
+        ImageView imageView2 = this.imageView;
+        imageView2.layout(dp4, dp3, imageView2.getMeasuredWidth() + dp4, this.imageView.getMeasuredHeight() + dp3);
     }
 
     public void setTextColor(int i) {
@@ -85,7 +80,7 @@ public class ManageChatTextCell extends FrameLayout {
     public void setColors(String str, String str2) {
         this.textView.setTextColor(Theme.getColor(str2));
         this.textView.setTag(str2);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
         this.imageView.setTag(str);
     }
 
@@ -100,10 +95,10 @@ public class ManageChatTextCell extends FrameLayout {
         this.imageView.setPadding(0, AndroidUtilities.dp(5.0f), 0, 0);
         this.imageView.setImageResource(i);
         this.divider = z;
-        setWillNotDraw(this.divider ^ 1);
+        setWillNotDraw(!this.divider);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.divider) {
             canvas.drawLine((float) AndroidUtilities.dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);

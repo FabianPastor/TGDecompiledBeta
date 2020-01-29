@@ -2,8 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -34,21 +32,17 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         addView(this.addButton, LayoutHelper.createLinear(-2, 28, 51, 17, 10, 14, 8));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), i2);
-        if (this.isLast) {
-            View view = (View) getParent();
-            if (view != null) {
-                i2 = ((view.getMeasuredHeight() - view.getPaddingBottom()) - view.getPaddingTop()) - AndroidUtilities.dp(24.0f);
-                if (getMeasuredHeight() < i2) {
-                    setMeasuredDimension(getMeasuredWidth(), i2);
-                }
-            }
+        View view;
+        int measuredHeight;
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
+        if (this.isLast && (view = (View) getParent()) != null && getMeasuredHeight() < (measuredHeight = ((view.getMeasuredHeight() - view.getPaddingBottom()) - view.getPaddingTop()) - AndroidUtilities.dp(24.0f))) {
+            setMeasuredDimension(getMeasuredWidth(), measuredHeight);
         }
     }
 
-    public void setAddOnClickListener(OnClickListener onClickListener) {
+    public void setAddOnClickListener(View.OnClickListener onClickListener) {
         this.addButton.setOnClickListener(onClickListener);
     }
 

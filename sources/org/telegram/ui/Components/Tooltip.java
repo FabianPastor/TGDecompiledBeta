@@ -13,7 +13,11 @@ import org.telegram.ui.ActionBar.Theme;
 public class Tooltip extends TextView {
     private View anchor;
     private ViewPropertyAnimator animator;
-    Runnable dismissRunnable = new -$$Lambda$Tooltip$vOoSDdUyB3V3sLP7AXAFWIK3ppI(this);
+    Runnable dismissRunnable = new Runnable() {
+        public final void run() {
+            Tooltip.this.lambda$new$0$Tooltip();
+        }
+    };
     private boolean showing;
 
     public /* synthetic */ void lambda$new$0$Tooltip() {
@@ -36,7 +40,7 @@ public class Tooltip extends TextView {
         setVisibility(8);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         updateTooltipPosition();
@@ -69,14 +73,14 @@ public class Tooltip extends TextView {
             AndroidUtilities.runOnUIThread(this.dismissRunnable, 2000);
             ViewPropertyAnimator viewPropertyAnimator = this.animator;
             if (viewPropertyAnimator != null) {
-                viewPropertyAnimator.setListener(null);
+                viewPropertyAnimator.setListener((Animator.AnimatorListener) null);
                 this.animator.cancel();
                 this.animator = null;
             }
             if (getVisibility() != 0) {
                 setAlpha(0.0f);
                 setVisibility(0);
-                this.animator = animate().setDuration(300).alpha(1.0f).setListener(null);
+                this.animator = animate().setDuration(300).alpha(1.0f).setListener((Animator.AnimatorListener) null);
                 this.animator.start();
             }
         }
@@ -86,7 +90,7 @@ public class Tooltip extends TextView {
         if (this.showing) {
             ViewPropertyAnimator viewPropertyAnimator = this.animator;
             if (viewPropertyAnimator != null) {
-                viewPropertyAnimator.setListener(null);
+                viewPropertyAnimator.setListener((Animator.AnimatorListener) null);
                 this.animator.cancel();
                 this.animator = null;
             }

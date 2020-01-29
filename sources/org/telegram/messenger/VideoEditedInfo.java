@@ -1,18 +1,17 @@
 package org.telegram.messenger;
 
 import java.util.Locale;
-import org.telegram.tgnet.TLRPC.InputEncryptedFile;
-import org.telegram.tgnet.TLRPC.InputFile;
+import org.telegram.tgnet.TLRPC;
 
 public class VideoEditedInfo {
     public int bitrate;
     public boolean canceled;
-    public InputEncryptedFile encryptedFile;
+    public TLRPC.InputEncryptedFile encryptedFile;
     public float end;
     public long endTime;
     public long estimatedDuration;
     public long estimatedSize;
-    public InputFile file;
+    public TLRPC.InputFile file;
     public int framerate = 24;
     public byte[] iv;
     public byte[] key;
@@ -35,13 +34,11 @@ public class VideoEditedInfo {
     }
 
     public boolean parseString(String str) {
-        String str2 = "_";
         if (str.length() < 6) {
             return false;
         }
         try {
-            String[] split = str.split(str2);
-            int i = 11;
+            String[] split = str.split("_");
             if (split.length >= 11) {
                 this.startTime = Long.parseLong(split[1]);
                 this.endTime = Long.parseLong(split[2]);
@@ -53,60 +50,34 @@ public class VideoEditedInfo {
                 this.resultHeight = Integer.parseInt(split[8]);
                 this.originalDuration = Long.parseLong(split[9]);
                 this.framerate = Integer.parseInt(split[10]);
-                while (i < split.length) {
+                for (int i = 11; i < split.length; i++) {
                     if (this.originalPath == null) {
                         this.originalPath = split[i];
                     } else {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(this.originalPath);
-                        stringBuilder.append(str2);
-                        stringBuilder.append(split[i]);
-                        this.originalPath = stringBuilder.toString();
+                        this.originalPath += "_" + split[i];
                     }
-                    i++;
                 }
             }
             return true;
         } catch (Exception e) {
-            FileLog.e(e);
+            FileLog.e((Throwable) e);
             return false;
         }
     }
 
-    /* JADX WARNING: Missing block: B:8:0x001a, code skipped:
-            if (r0 != r5.estimatedDuration) goto L_0x001f;
-     */
     public boolean needConvert() {
-        /*
-        r5 = this;
-        r0 = r5.roundVideo;
-        if (r0 == 0) goto L_0x001f;
-    L_0x0004:
-        if (r0 == 0) goto L_0x001d;
-    L_0x0006:
-        r0 = r5.startTime;
-        r2 = 0;
-        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 > 0) goto L_0x001f;
-    L_0x000e:
-        r0 = r5.endTime;
-        r2 = -1;
-        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x001d;
-    L_0x0016:
-        r2 = r5.estimatedDuration;
-        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 == 0) goto L_0x001d;
-    L_0x001c:
-        goto L_0x001f;
-    L_0x001d:
-        r0 = 0;
-        goto L_0x0020;
-    L_0x001f:
-        r0 = 1;
-    L_0x0020:
-        return r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.VideoEditedInfo.needConvert():boolean");
+        boolean z = this.roundVideo;
+        if (z) {
+            if (z) {
+                if (this.startTime <= 0) {
+                    long j = this.endTime;
+                    if (j == -1 || j == this.estimatedDuration) {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
     }
 }

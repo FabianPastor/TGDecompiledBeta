@@ -18,20 +18,19 @@ public class PickerBottomLayout extends FrameLayout {
         this(context, true);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PickerBottomLayout(Context context, boolean z) {
-        Context context2 = context;
         super(context);
+        Context context2 = context;
         setBackgroundColor(Theme.getColor(z ? "dialogBackground" : "windowBackgroundWhite"));
         this.cancelButton = new TextView(context2);
         this.cancelButton.setTextSize(1, 14.0f);
-        String str = "picker_enabledButton";
-        this.cancelButton.setTextColor(Theme.getColor(str));
+        this.cancelButton.setTextColor(Theme.getColor("picker_enabledButton"));
         this.cancelButton.setGravity(17);
         this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
         this.cancelButton.setPadding(AndroidUtilities.dp(33.0f), 0, AndroidUtilities.dp(33.0f), 0);
         this.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        String str2 = "fonts/rmedium.ttf";
-        this.cancelButton.setTypeface(AndroidUtilities.getTypeface(str2));
+        this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         this.doneButton = new LinearLayout(context2);
         this.doneButton.setOrientation(0);
@@ -39,7 +38,7 @@ public class PickerBottomLayout extends FrameLayout {
         this.doneButton.setPadding(AndroidUtilities.dp(33.0f), 0, AndroidUtilities.dp(33.0f), 0);
         addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButtonBadgeTextView = new TextView(context2);
-        this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface(str2));
+        this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
         this.doneButtonBadgeTextView.setTextColor(Theme.getColor("picker_badgeText"));
         this.doneButtonBadgeTextView.setGravity(17);
@@ -49,33 +48,31 @@ public class PickerBottomLayout extends FrameLayout {
         this.doneButton.addView(this.doneButtonBadgeTextView, LayoutHelper.createLinear(-2, 23, 16, 0, 0, 10, 0));
         this.doneButtonTextView = new TextView(context2);
         this.doneButtonTextView.setTextSize(1, 14.0f);
-        this.doneButtonTextView.setTextColor(Theme.getColor(str));
+        this.doneButtonTextView.setTextColor(Theme.getColor("picker_enabledButton"));
         this.doneButtonTextView.setGravity(17);
         this.doneButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
         this.doneButtonTextView.setText(LocaleController.getString("Send", NUM).toUpperCase());
-        this.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface(str2));
+        this.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButton.addView(this.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
     }
 
     public void updateSelectedCount(int i, boolean z) {
-        String str = "picker_enabledButton";
         if (i == 0) {
             this.doneButtonBadgeTextView.setVisibility(8);
             if (z) {
-                String str2 = "picker_disabledButton";
-                this.doneButtonTextView.setTag(str2);
-                this.doneButtonTextView.setTextColor(Theme.getColor(str2));
+                this.doneButtonTextView.setTag("picker_disabledButton");
+                this.doneButtonTextView.setTextColor(Theme.getColor("picker_disabledButton"));
                 this.doneButton.setEnabled(false);
                 return;
             }
-            this.doneButtonTextView.setTag(str);
-            this.doneButtonTextView.setTextColor(Theme.getColor(str));
+            this.doneButtonTextView.setTag("picker_enabledButton");
+            this.doneButtonTextView.setTextColor(Theme.getColor("picker_enabledButton"));
             return;
         }
         this.doneButtonBadgeTextView.setVisibility(0);
         this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(i)}));
-        this.doneButtonTextView.setTag(str);
-        this.doneButtonTextView.setTextColor(Theme.getColor(str));
+        this.doneButtonTextView.setTag("picker_enabledButton");
+        this.doneButtonTextView.setTextColor(Theme.getColor("picker_enabledButton"));
         if (z) {
             this.doneButton.setEnabled(true);
         }

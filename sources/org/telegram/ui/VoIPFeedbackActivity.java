@@ -6,7 +6,7 @@ import android.view.View;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPFeedbackActivity extends Activity {
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         getWindow().addFlags(524288);
         super.onCreate(bundle);

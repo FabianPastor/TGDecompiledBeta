@@ -3,30 +3,25 @@ package org.telegram.ui.Components;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.TextureView;
-import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -44,108 +39,110 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController.SavedFilterState;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.PhotoEditRadioCell;
 import org.telegram.ui.Cells.PhotoEditToolCell;
-import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.PhotoFilterBlurControl;
+import org.telegram.ui.Components.PhotoFilterCurvesControl;
+import org.telegram.ui.Components.PhotoFilterView;
+import org.telegram.ui.Components.RecyclerListView;
 
 @SuppressLint({"NewApi"})
 public class PhotoFilterView extends FrameLayout {
     private static final int curveDataStep = 2;
     private static final int curveGranularity = 100;
-    private Bitmap bitmapToEdit;
-    private float blurAngle;
+    /* access modifiers changed from: private */
+    public Bitmap bitmapToEdit;
+    /* access modifiers changed from: private */
+    public float blurAngle;
     private PhotoFilterBlurControl blurControl;
-    private float blurExcludeBlurSize;
-    private Point blurExcludePoint;
-    private float blurExcludeSize;
+    /* access modifiers changed from: private */
+    public float blurExcludeBlurSize;
+    /* access modifiers changed from: private */
+    public Point blurExcludePoint;
+    /* access modifiers changed from: private */
+    public float blurExcludeSize;
     private ImageView blurItem;
     private FrameLayout blurLayout;
     private TextView blurLinearButton;
     private TextView blurOffButton;
     private TextView blurRadialButton;
-    private int blurType;
+    /* access modifiers changed from: private */
+    public int blurType;
     private TextView cancelTextView;
-    private int contrastTool = 2;
-    private float contrastValue;
+    /* access modifiers changed from: private */
+    public int contrastTool = 2;
+    /* access modifiers changed from: private */
+    public float contrastValue;
     private ImageView curveItem;
     private FrameLayout curveLayout;
     private RadioButton[] curveRadioButton = new RadioButton[4];
     private PhotoFilterCurvesControl curvesControl;
-    private CurvesToolValue curvesToolValue;
+    /* access modifiers changed from: private */
+    public CurvesToolValue curvesToolValue;
     private TextView doneTextView;
-    private EGLThread eglThread;
-    private int enhanceTool = 0;
-    private float enhanceValue;
-    private int exposureTool = 1;
-    private float exposureValue;
-    private int fadeTool = 5;
-    private float fadeValue;
-    private int grainTool = 9;
-    private float grainValue;
-    private int highlightsTool = 6;
-    private float highlightsValue;
-    private SavedFilterState lastState;
-    private int orientation;
+    /* access modifiers changed from: private */
+    public EGLThread eglThread;
+    /* access modifiers changed from: private */
+    public int enhanceTool = 0;
+    /* access modifiers changed from: private */
+    public float enhanceValue;
+    /* access modifiers changed from: private */
+    public int exposureTool = 1;
+    /* access modifiers changed from: private */
+    public float exposureValue;
+    /* access modifiers changed from: private */
+    public int fadeTool = 5;
+    /* access modifiers changed from: private */
+    public float fadeValue;
+    /* access modifiers changed from: private */
+    public int grainTool = 9;
+    /* access modifiers changed from: private */
+    public float grainValue;
+    /* access modifiers changed from: private */
+    public int highlightsTool = 6;
+    /* access modifiers changed from: private */
+    public float highlightsValue;
+    private MediaController.SavedFilterState lastState;
+    /* access modifiers changed from: private */
+    public int orientation;
     private RecyclerListView recyclerListView;
-    private int saturationTool = 3;
-    private float saturationValue;
+    /* access modifiers changed from: private */
+    public int saturationTool = 3;
+    /* access modifiers changed from: private */
+    public float saturationValue;
     private int selectedTool;
-    private int shadowsTool = 7;
-    private float shadowsValue;
-    private int sharpenTool = 10;
-    private float sharpenValue;
-    private boolean showOriginal;
+    /* access modifiers changed from: private */
+    public int shadowsTool = 7;
+    /* access modifiers changed from: private */
+    public float shadowsValue;
+    /* access modifiers changed from: private */
+    public int sharpenTool = 10;
+    /* access modifiers changed from: private */
+    public float sharpenValue;
+    /* access modifiers changed from: private */
+    public boolean showOriginal;
     private TextureView textureView;
-    private int tintHighlightsColor;
-    private int tintHighlightsTool = 12;
-    private int tintShadowsColor;
-    private int tintShadowsTool = 11;
+    /* access modifiers changed from: private */
+    public int tintHighlightsColor;
+    /* access modifiers changed from: private */
+    public int tintHighlightsTool = 12;
+    /* access modifiers changed from: private */
+    public int tintShadowsColor;
+    /* access modifiers changed from: private */
+    public int tintShadowsTool = 11;
     private FrameLayout toolsView;
     private ImageView tuneItem;
-    private int vignetteTool = 8;
-    private float vignetteValue;
-    private int warmthTool = 4;
-    private float warmthValue;
-
-    public static class CurvesToolValue {
-        public static final int CurvesTypeBlue = 3;
-        public static final int CurvesTypeGreen = 2;
-        public static final int CurvesTypeLuminance = 0;
-        public static final int CurvesTypeRed = 1;
-        public int activeType;
-        public CurvesValue blueCurve = new CurvesValue();
-        public ByteBuffer curveBuffer = ByteBuffer.allocateDirect(800);
-        public CurvesValue greenCurve = new CurvesValue();
-        public CurvesValue luminanceCurve = new CurvesValue();
-        public CurvesValue redCurve = new CurvesValue();
-
-        public CurvesToolValue() {
-            this.curveBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        }
-
-        public void fillBuffer() {
-            this.curveBuffer.position(0);
-            float[] dataPoints = this.luminanceCurve.getDataPoints();
-            float[] dataPoints2 = this.redCurve.getDataPoints();
-            float[] dataPoints3 = this.greenCurve.getDataPoints();
-            float[] dataPoints4 = this.blueCurve.getDataPoints();
-            for (int i = 0; i < 200; i++) {
-                this.curveBuffer.put((byte) ((int) (dataPoints2[i] * 255.0f)));
-                this.curveBuffer.put((byte) ((int) (dataPoints3[i] * 255.0f)));
-                this.curveBuffer.put((byte) ((int) (dataPoints4[i] * 255.0f)));
-                this.curveBuffer.put((byte) ((int) (dataPoints[i] * 255.0f)));
-            }
-            this.curveBuffer.position(0);
-        }
-
-        public boolean shouldBeSkipped() {
-            return this.luminanceCurve.isDefault() && this.redCurve.isDefault() && this.greenCurve.isDefault() && this.blueCurve.isDefault();
-        }
-    }
+    /* access modifiers changed from: private */
+    public int vignetteTool = 8;
+    /* access modifiers changed from: private */
+    public float vignetteValue;
+    /* access modifiers changed from: private */
+    public int warmthTool = 4;
+    /* access modifiers changed from: private */
+    public float warmthValue;
 
     public static class CurvesValue {
         public float blacksLevel = 0.0f;
@@ -185,88 +182,110 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public float[] interpolateCurve() {
-            int i;
-            r1 = new float[14];
             float f = this.blacksLevel;
-            int i2 = 1;
-            r1[1] = f / 100.0f;
-            r1[2] = 0.0f;
-            r1[3] = f / 100.0f;
-            r1[4] = 0.25f;
-            r1[5] = this.shadowsLevel / 100.0f;
-            f = 0.5f;
-            r1[6] = 0.5f;
-            r1[7] = this.midtonesLevel / 100.0f;
-            r1[8] = 0.75f;
-            r1[9] = this.highlightsLevel / 100.0f;
-            r1[10] = 1.0f;
-            float f2 = this.whitesLevel;
-            r1[11] = f2 / 100.0f;
-            r1[12] = 1.001f;
-            r1[13] = f2 / 100.0f;
+            int i = 1;
+            float f2 = 0.5f;
+            float f3 = this.whitesLevel;
+            float[] fArr = {-0.001f, f / 100.0f, 0.0f, f / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, 0.75f, this.highlightsLevel / 100.0f, 1.0f, f3 / 100.0f, 1.001f, f3 / 100.0f};
             ArrayList arrayList = new ArrayList(100);
             ArrayList arrayList2 = new ArrayList(100);
-            arrayList2.add(Float.valueOf(r1[0]));
-            arrayList2.add(Float.valueOf(r1[1]));
-            int i3 = 1;
-            while (i3 < (r1.length / 2) - 2) {
-                int i4 = (i3 - 1) * 2;
-                float f3 = r1[i4];
-                float f4 = r1[i4 + i2];
-                int i5 = i3 * 2;
-                float f5 = r1[i5];
-                float f6 = r1[i5 + 1];
-                int i6 = i3 + 1;
-                int i7 = i6 * 2;
-                float f7 = r1[i7];
-                float f8 = r1[i7 + 1];
-                i3 = (i3 + 2) * 2;
-                float f9 = r1[i3];
-                float var_ = r1[i3 + i2];
-                i = 1;
-                while (i < 100) {
-                    float var_ = ((float) i) * 0.01f;
+            arrayList2.add(Float.valueOf(fArr[0]));
+            arrayList2.add(Float.valueOf(fArr[1]));
+            int i2 = 1;
+            while (i2 < (fArr.length / 2) - 2) {
+                int i3 = (i2 - 1) * 2;
+                float f4 = fArr[i3];
+                float f5 = fArr[i3 + i];
+                int i4 = i2 * 2;
+                float f6 = fArr[i4];
+                float f7 = fArr[i4 + 1];
+                int i5 = i2 + 1;
+                int i6 = i5 * 2;
+                float f8 = fArr[i6];
+                float f9 = fArr[i6 + 1];
+                int i7 = (i2 + 2) * 2;
+                float var_ = fArr[i7];
+                float var_ = fArr[i7 + i];
+                int i8 = 1;
+                while (i8 < 100) {
+                    float var_ = ((float) i8) * 0.01f;
                     float var_ = var_ * var_;
                     float var_ = var_ * var_;
-                    float var_ = ((((f5 * 2.0f) + ((f7 - f3) * var_)) + (((((f3 * 2.0f) - (f5 * 5.0f)) + (f7 * 4.0f)) - f9) * var_)) + (((((f5 * 3.0f) - f3) - (f7 * 3.0f)) + f9) * var_)) * f;
-                    var_ = Math.max(0.0f, Math.min(1.0f, ((((f6 * 2.0f) + ((f8 - f4) * var_)) + (((((2.0f * f4) - (5.0f * f6)) + (4.0f * f8)) - var_) * var_)) + (((((f6 * 3.0f) - f4) - (3.0f * f8)) + var_) * var_)) * f));
-                    if (var_ > f3) {
+                    float var_ = ((f6 * 2.0f) + ((f8 - f4) * var_) + (((((f4 * 2.0f) - (f6 * 5.0f)) + (f8 * 4.0f)) - var_) * var_) + (((((f6 * 3.0f) - f4) - (f8 * 3.0f)) + var_) * var_)) * f2;
+                    float max = Math.max(0.0f, Math.min(1.0f, ((f7 * 2.0f) + ((f9 - f5) * var_) + (((((2.0f * f5) - (5.0f * f7)) + (4.0f * f9)) - var_) * var_) + (((((f7 * 3.0f) - f5) - (3.0f * f9)) + var_) * var_)) * f2));
+                    if (var_ > f4) {
                         arrayList2.add(Float.valueOf(var_));
-                        arrayList2.add(Float.valueOf(var_));
+                        arrayList2.add(Float.valueOf(max));
                     }
-                    if ((i - 1) % 2 == 0) {
-                        arrayList.add(Float.valueOf(var_));
+                    if ((i8 - 1) % 2 == 0) {
+                        arrayList.add(Float.valueOf(max));
                     }
-                    i++;
-                    f = 0.5f;
+                    i8++;
+                    f2 = 0.5f;
                 }
-                arrayList2.add(Float.valueOf(f7));
                 arrayList2.add(Float.valueOf(f8));
-                i3 = i6;
-                f = 0.5f;
-                i2 = 1;
+                arrayList2.add(Float.valueOf(f9));
+                i2 = i5;
+                f2 = 0.5f;
+                i = 1;
             }
-            arrayList2.add(Float.valueOf(r1[12]));
-            arrayList2.add(Float.valueOf(r1[13]));
+            arrayList2.add(Float.valueOf(fArr[12]));
+            arrayList2.add(Float.valueOf(fArr[13]));
             this.cachedDataPoints = new float[arrayList.size()];
-            int i8 = 0;
+            int i9 = 0;
             while (true) {
-                float[] fArr = this.cachedDataPoints;
-                if (i8 >= fArr.length) {
+                float[] fArr2 = this.cachedDataPoints;
+                if (i9 >= fArr2.length) {
                     break;
                 }
-                fArr[i8] = ((Float) arrayList.get(i8)).floatValue();
-                i8++;
+                fArr2[i9] = ((Float) arrayList.get(i9)).floatValue();
+                i9++;
             }
-            r1 = new float[arrayList2.size()];
-            for (i = 0; i < r1.length; i++) {
-                r1[i] = ((Float) arrayList2.get(i)).floatValue();
+            float[] fArr3 = new float[arrayList2.size()];
+            for (int i10 = 0; i10 < fArr3.length; i10++) {
+                fArr3[i10] = ((Float) arrayList2.get(i10)).floatValue();
             }
-            return r1;
+            return fArr3;
         }
 
         public boolean isDefault() {
             return ((double) Math.abs(this.blacksLevel - 0.0f)) < 1.0E-5d && ((double) Math.abs(this.shadowsLevel - 25.0f)) < 1.0E-5d && ((double) Math.abs(this.midtonesLevel - 50.0f)) < 1.0E-5d && ((double) Math.abs(this.highlightsLevel - 75.0f)) < 1.0E-5d && ((double) Math.abs(this.whitesLevel - 100.0f)) < 1.0E-5d;
+        }
+    }
+
+    public static class CurvesToolValue {
+        public static final int CurvesTypeBlue = 3;
+        public static final int CurvesTypeGreen = 2;
+        public static final int CurvesTypeLuminance = 0;
+        public static final int CurvesTypeRed = 1;
+        public int activeType;
+        public CurvesValue blueCurve = new CurvesValue();
+        public ByteBuffer curveBuffer = ByteBuffer.allocateDirect(800);
+        public CurvesValue greenCurve = new CurvesValue();
+        public CurvesValue luminanceCurve = new CurvesValue();
+        public CurvesValue redCurve = new CurvesValue();
+
+        public CurvesToolValue() {
+            this.curveBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        }
+
+        public void fillBuffer() {
+            this.curveBuffer.position(0);
+            float[] dataPoints = this.luminanceCurve.getDataPoints();
+            float[] dataPoints2 = this.redCurve.getDataPoints();
+            float[] dataPoints3 = this.greenCurve.getDataPoints();
+            float[] dataPoints4 = this.blueCurve.getDataPoints();
+            for (int i = 0; i < 200; i++) {
+                this.curveBuffer.put((byte) ((int) (dataPoints2[i] * 255.0f)));
+                this.curveBuffer.put((byte) ((int) (dataPoints3[i] * 255.0f)));
+                this.curveBuffer.put((byte) ((int) (dataPoints4[i] * 255.0f)));
+                this.curveBuffer.put((byte) ((int) (dataPoints[i] * 255.0f)));
+            }
+            this.curveBuffer.position(0);
+        }
+
+        public boolean shouldBeSkipped() {
+            return this.luminanceCurve.isDefault() && this.redCurve.isDefault() && this.greenCurve.isDefault() && this.blueCurve.isDefault();
         }
     }
 
@@ -292,51 +311,50 @@ public class PhotoFilterView extends FrameLayout {
         private int blurShaderProgram;
         private int blurSourceImageHandle;
         private int blurWidthHandle;
-        private boolean blured;
+        /* access modifiers changed from: private */
+        public boolean blured;
         private int contrastHandle;
         private Bitmap currentBitmap;
         private int[] curveTextures = new int[1];
         private int curvesImageHandle;
         private Runnable drawRunnable = new Runnable() {
             public void run() {
-                if (!EGLThread.this.initied) {
-                    return;
-                }
-                if ((EGLThread.this.eglContext.equals(EGLThread.this.egl10.eglGetCurrentContext()) && EGLThread.this.eglSurface.equals(EGLThread.this.egl10.eglGetCurrentSurface(12377))) || EGLThread.this.egl10.eglMakeCurrent(EGLThread.this.eglDisplay, EGLThread.this.eglSurface, EGLThread.this.eglSurface, EGLThread.this.eglContext)) {
-                    GLES20.glViewport(0, 0, EGLThread.this.renderBufferWidth, EGLThread.this.renderBufferHeight);
-                    EGLThread.this.drawEnhancePass();
-                    EGLThread.this.drawSharpenPass();
-                    EGLThread.this.drawCustomParamsPass();
-                    EGLThread eGLThread = EGLThread.this;
-                    eGLThread.blured = eGLThread.drawBlurPass();
-                    GLES20.glViewport(0, 0, EGLThread.this.surfaceWidth, EGLThread.this.surfaceHeight);
-                    GLES20.glBindFramebuffer(36160, 0);
-                    GLES20.glClear(0);
-                    GLES20.glUseProgram(EGLThread.this.simpleShaderProgram);
-                    GLES20.glActiveTexture(33984);
-                    GLES20.glBindTexture(3553, EGLThread.this.renderTexture[EGLThread.this.blured ^ 1]);
-                    GLES20.glUniform1i(EGLThread.this.simpleSourceImageHandle, 0);
-                    GLES20.glEnableVertexAttribArray(EGLThread.this.simpleInputTexCoordHandle);
-                    GLES20.glVertexAttribPointer(EGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, EGLThread.this.textureBuffer);
-                    GLES20.glEnableVertexAttribArray(EGLThread.this.simplePositionHandle);
-                    GLES20.glVertexAttribPointer(EGLThread.this.simplePositionHandle, 2, 5126, false, 8, EGLThread.this.vertexBuffer);
-                    GLES20.glDrawArrays(5, 0, 4);
-                    EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
-                    return;
-                }
-                if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("eglMakeCurrent failed ");
-                    stringBuilder.append(GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
-                    FileLog.e(stringBuilder.toString());
+                if (EGLThread.this.initied) {
+                    if ((EGLThread.this.eglContext.equals(EGLThread.this.egl10.eglGetCurrentContext()) && EGLThread.this.eglSurface.equals(EGLThread.this.egl10.eglGetCurrentSurface(12377))) || EGLThread.this.egl10.eglMakeCurrent(EGLThread.this.eglDisplay, EGLThread.this.eglSurface, EGLThread.this.eglSurface, EGLThread.this.eglContext)) {
+                        GLES20.glViewport(0, 0, EGLThread.this.renderBufferWidth, EGLThread.this.renderBufferHeight);
+                        EGLThread.this.drawEnhancePass();
+                        EGLThread.this.drawSharpenPass();
+                        EGLThread.this.drawCustomParamsPass();
+                        EGLThread eGLThread = EGLThread.this;
+                        boolean unused = eGLThread.blured = eGLThread.drawBlurPass();
+                        GLES20.glViewport(0, 0, EGLThread.this.surfaceWidth, EGLThread.this.surfaceHeight);
+                        GLES20.glBindFramebuffer(36160, 0);
+                        GLES20.glClear(0);
+                        GLES20.glUseProgram(EGLThread.this.simpleShaderProgram);
+                        GLES20.glActiveTexture(33984);
+                        GLES20.glBindTexture(3553, EGLThread.this.renderTexture[!EGLThread.this.blured]);
+                        GLES20.glUniform1i(EGLThread.this.simpleSourceImageHandle, 0);
+                        GLES20.glEnableVertexAttribArray(EGLThread.this.simpleInputTexCoordHandle);
+                        GLES20.glVertexAttribPointer(EGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, EGLThread.this.textureBuffer);
+                        GLES20.glEnableVertexAttribArray(EGLThread.this.simplePositionHandle);
+                        GLES20.glVertexAttribPointer(EGLThread.this.simplePositionHandle, 2, 5126, false, 8, EGLThread.this.vertexBuffer);
+                        GLES20.glDrawArrays(5, 0, 4);
+                        EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
+                    }
                 }
             }
         };
-        private EGL10 egl10;
+        /* access modifiers changed from: private */
+        public EGL10 egl10;
         private EGLConfig eglConfig;
-        private EGLContext eglContext;
-        private EGLDisplay eglDisplay;
-        private EGLSurface eglSurface;
+        /* access modifiers changed from: private */
+        public EGLContext eglContext;
+        /* access modifiers changed from: private */
+        public EGLDisplay eglDisplay;
+        /* access modifiers changed from: private */
+        public EGLSurface eglSurface;
         private int enhanceInputImageTexture2Handle;
         private int enhanceInputTexCoordHandle;
         private int enhanceIntensityHandle;
@@ -353,7 +371,8 @@ public class PhotoFilterView extends FrameLayout {
         private int highlightsTintColorHandle;
         private int highlightsTintIntensityHandle;
         private boolean hsvGenerated;
-        private boolean initied;
+        /* access modifiers changed from: private */
+        public boolean initied;
         private int inputTexCoordHandle;
         private long lastRenderCallTime;
         private int linearBlurAngleHandle;
@@ -377,10 +396,13 @@ public class PhotoFilterView extends FrameLayout {
         private int radialBlurShaderProgram;
         private int radialBlurSourceImage2Handle;
         private int radialBlurSourceImageHandle;
-        private int renderBufferHeight;
-        private int renderBufferWidth;
+        /* access modifiers changed from: private */
+        public int renderBufferHeight;
+        /* access modifiers changed from: private */
+        public int renderBufferWidth;
         private int[] renderFrameBuffer = new int[3];
-        private int[] renderTexture = new int[3];
+        /* access modifiers changed from: private */
+        public int[] renderTexture = new int[3];
         private int rgbToHsvInputTexCoordHandle;
         private int rgbToHsvPositionHandle;
         private int rgbToHsvShaderProgram;
@@ -396,42 +418,50 @@ public class PhotoFilterView extends FrameLayout {
         private int sharpenShaderProgram;
         private int sharpenSourceImageHandle;
         private int sharpenWidthHandle;
-        private int simpleInputTexCoordHandle;
-        private int simplePositionHandle;
-        private int simpleShaderProgram;
-        private int simpleSourceImageHandle;
+        /* access modifiers changed from: private */
+        public int simpleInputTexCoordHandle;
+        /* access modifiers changed from: private */
+        public int simplePositionHandle;
+        /* access modifiers changed from: private */
+        public int simpleShaderProgram;
+        /* access modifiers changed from: private */
+        public int simpleSourceImageHandle;
         private int skipToneHandle;
         private int sourceImageHandle;
-        private volatile int surfaceHeight;
+        /* access modifiers changed from: private */
+        public volatile int surfaceHeight;
         private SurfaceTexture surfaceTexture;
-        private volatile int surfaceWidth;
-        private FloatBuffer textureBuffer;
+        /* access modifiers changed from: private */
+        public volatile int surfaceWidth;
+        /* access modifiers changed from: private */
+        public FloatBuffer textureBuffer;
         private int toolsShaderProgram;
-        private FloatBuffer vertexBuffer;
+        /* access modifiers changed from: private */
+        public FloatBuffer vertexBuffer;
         private FloatBuffer vertexInvertBuffer;
         private int vignetteHandle;
         private int warmthHandle;
         private int widthHandle;
 
-        public EGLThread(SurfaceTexture surfaceTexture, Bitmap bitmap) {
+        public EGLThread(SurfaceTexture surfaceTexture2, Bitmap bitmap) {
             super("EGLThread");
-            this.surfaceTexture = surfaceTexture;
+            this.surfaceTexture = surfaceTexture2;
             this.currentBitmap = bitmap;
         }
 
         private int loadShader(int i, String str) {
-            i = GLES20.glCreateShader(i);
-            GLES20.glShaderSource(i, str);
-            GLES20.glCompileShader(i);
+            int glCreateShader = GLES20.glCreateShader(i);
+            GLES20.glShaderSource(glCreateShader, str);
+            GLES20.glCompileShader(glCreateShader);
             int[] iArr = new int[1];
-            GLES20.glGetShaderiv(i, 35713, iArr, 0);
+            GLES20.glGetShaderiv(glCreateShader, 35713, iArr, 0);
             if (iArr[0] != 0) {
-                return i;
+                return glCreateShader;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(GLES20.glGetShaderInfoLog(i));
+                FileLog.e(GLES20.glGetShaderInfoLog(glCreateShader));
             }
-            GLES20.glDeleteShader(i);
+            GLES20.glDeleteShader(glCreateShader);
             return 0;
         }
 
@@ -439,337 +469,312 @@ public class PhotoFilterView extends FrameLayout {
             this.egl10 = (EGL10) EGLContext.getEGL();
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             EGLDisplay eGLDisplay = this.eglDisplay;
-            StringBuilder stringBuilder;
             if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("eglGetDisplay failed ");
-                    stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                    FileLog.e(stringBuilder.toString());
+                    FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
-            if (this.egl10.eglInitialize(eGLDisplay, new int[2])) {
-                int[] iArr = new int[1];
-                EGLConfig[] eGLConfigArr = new EGLConfig[1];
-                if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, eGLConfigArr, 1, iArr)) {
+            if (!this.egl10.eglInitialize(eGLDisplay, new int[2])) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            }
+            int[] iArr = new int[1];
+            EGLConfig[] eGLConfigArr = new EGLConfig[1];
+            if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, eGLConfigArr, 1, iArr)) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                }
+                finish();
+                return false;
+            } else if (iArr[0] > 0) {
+                this.eglConfig = eGLConfigArr[0];
+                this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                if (this.eglContext == null) {
                     if (BuildVars.LOGS_ENABLED) {
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("eglChooseConfig failed ");
-                        stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                        FileLog.e(stringBuilder.toString());
-                    }
-                    finish();
-                    return false;
-                } else if (iArr[0] > 0) {
-                    this.eglConfig = eGLConfigArr[0];
-                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                    if (this.eglContext == null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            stringBuilder = new StringBuilder();
-                            stringBuilder.append("eglCreateContext failed ");
-                            stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            FileLog.e(stringBuilder.toString());
-                        }
-                        finish();
-                        return false;
-                    }
-                    SurfaceTexture surfaceTexture = this.surfaceTexture;
-                    if (surfaceTexture instanceof SurfaceTexture) {
-                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture, null);
-                        EGLSurface eGLSurface = this.eglSurface;
-                        if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("createWindowSurface failed ");
-                                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                FileLog.e(stringBuilder.toString());
-                            }
-                            finish();
-                            return false;
-                        } else if (this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
-                            this.gl = this.eglContext.getGL();
-                            float[] fArr = new float[]{-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
-                            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(fArr.length * 4);
-                            allocateDirect.order(ByteOrder.nativeOrder());
-                            this.vertexBuffer = allocateDirect.asFloatBuffer();
-                            this.vertexBuffer.put(fArr);
-                            this.vertexBuffer.position(0);
-                            fArr = new float[]{-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
-                            allocateDirect = ByteBuffer.allocateDirect(fArr.length * 4);
-                            allocateDirect.order(ByteOrder.nativeOrder());
-                            this.vertexInvertBuffer = allocateDirect.asFloatBuffer();
-                            this.vertexInvertBuffer.put(fArr);
-                            this.vertexInvertBuffer.position(0);
-                            float[] fArr2 = new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
-                            ByteBuffer allocateDirect2 = ByteBuffer.allocateDirect(fArr2.length * 4);
-                            allocateDirect2.order(ByteOrder.nativeOrder());
-                            this.textureBuffer = allocateDirect2.asFloatBuffer();
-                            this.textureBuffer.put(fArr2);
-                            this.textureBuffer.position(0);
-                            GLES20.glGenTextures(1, this.curveTextures, 0);
-                            GLES20.glGenTextures(2, this.enhanceTextures, 0);
-                            String str = "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}";
-                            int loadShader = loadShader(35633, str);
-                            int loadShader2 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform highp float width;uniform highp float height;uniform sampler2D curvesImage;uniform lowp float skipTone;uniform lowp float shadows;const mediump vec3 hsLuminanceWeighting = vec3(0.3, 0.3, 0.3);uniform lowp float highlights;uniform lowp float contrast;uniform lowp float fadeAmount;const mediump vec3 satLuminanceWeighting = vec3(0.2126, 0.7152, 0.0722);uniform lowp float saturation;uniform lowp float shadowsTintIntensity;uniform lowp float highlightsTintIntensity;uniform lowp vec3 shadowsTintColor;uniform lowp vec3 highlightsTintColor;uniform lowp float exposure;uniform lowp float warmth;uniform lowp float grain;const lowp float permTexUnit = 1.0 / 256.0;const lowp float permTexUnitHalf = 0.5 / 256.0;const lowp float grainsize = 2.3;uniform lowp float vignette;highp float getLuma(highp vec3 rgbP) {return (0.299 * rgbP.r) + (0.587 * rgbP.g) + (0.114 * rgbP.b);}lowp vec3 rgbToHsv(lowp vec3 c) {highp vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);highp vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);highp vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);highp float d = q.x - min(q.w, q.y);highp float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}lowp vec3 hsvToRgb(lowp vec3 c) {highp vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);highp vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}highp vec3 rgbToHsl(highp vec3 color) {highp vec3 hsl;highp float fmin = min(min(color.r, color.g), color.b);highp float fmax = max(max(color.r, color.g), color.b);highp float delta = fmax - fmin;hsl.z = (fmax + fmin) / 2.0;if (delta == 0.0) {hsl.x = 0.0;hsl.y = 0.0;} else {if (hsl.z < 0.5) {hsl.y = delta / (fmax + fmin);} else {hsl.y = delta / (2.0 - fmax - fmin);}highp float deltaR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;highp float deltaG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;highp float deltaB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;if (color.r == fmax) {hsl.x = deltaB - deltaG;} else if (color.g == fmax) {hsl.x = (1.0 / 3.0) + deltaR - deltaB;} else if (color.b == fmax) {hsl.x = (2.0 / 3.0) + deltaG - deltaR;}if (hsl.x < 0.0) {hsl.x += 1.0;} else if (hsl.x > 1.0) {hsl.x -= 1.0;}}return hsl;}highp float hueToRgb(highp float f1, highp float f2, highp float hue) {if (hue < 0.0) {hue += 1.0;} else if (hue > 1.0) {hue -= 1.0;}highp float res;if ((6.0 * hue) < 1.0) {res = f1 + (f2 - f1) * 6.0 * hue;} else if ((2.0 * hue) < 1.0) {res = f2;} else if ((3.0 * hue) < 2.0) {res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;} else {res = f1;} return res;}highp vec3 hslToRgb(highp vec3 hsl) {if (hsl.y == 0.0) {return vec3(hsl.z);} else {highp float f2;if (hsl.z < 0.5) {f2 = hsl.z * (1.0 + hsl.y);} else {f2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);}highp float f1 = 2.0 * hsl.z - f2;return vec3(hueToRgb(f1, f2, hsl.x + (1.0/3.0)), hueToRgb(f1, f2, hsl.x), hueToRgb(f1, f2, hsl.x - (1.0/3.0)));}}highp vec3 rgbToYuv(highp vec3 inP) {highp float luma = getLuma(inP);return vec3(luma, (1.0 / 1.772) * (inP.b - luma), (1.0 / 1.402) * (inP.r - luma));}lowp vec3 yuvToRgb(highp vec3 inP) {return vec3(1.402 * inP.b + inP.r, (inP.r - (0.299 * 1.402 / 0.587) * inP.b - (0.114 * 1.772 / 0.587) * inP.g), 1.772 * inP.g + inP.r);}lowp float easeInOutSigmoid(lowp float value, lowp float strength) {if (value > 0.5) {return 1.0 - pow(2.0 - 2.0 * value, 1.0 / (1.0 - strength)) * 0.5;} else {return pow(2.0 * value, 1.0 / (1.0 - strength)) * 0.5;}}lowp vec3 applyLuminanceCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.z / (1.0 / 200.0), 0.0, 199.0));pixel.y = mix(0.0, pixel.y, smoothstep(0.0, 0.1, pixel.z) * (1.0 - smoothstep(0.8, 1.0, pixel.z)));pixel.z = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).a;return pixel;}lowp vec3 applyRGBCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.r / (1.0 / 200.0), 0.0, 199.0));pixel.r = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).r;index = floor(clamp(pixel.g / (1.0 / 200.0), 0.0, 199.0));pixel.g = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).g, 0.0, 1.0);index = floor(clamp(pixel.b / (1.0 / 200.0), 0.0, 199.0));pixel.b = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).b, 0.0, 1.0);return pixel;}highp vec3 fadeAdjust(highp vec3 color, highp float fadeVal) {return (color * (1.0 - fadeVal)) + ((color + (vec3(-0.9772) * pow(vec3(color), vec3(3.0)) + vec3(1.708) * pow(vec3(color), vec3(2.0)) + vec3(-0.1603) * vec3(color) + vec3(0.2878) - color * vec3(0.9))) * fadeVal);}lowp vec3 tintRaiseShadowsCurve(lowp vec3 color) {return vec3(-0.003671) * pow(color, vec3(3.0)) + vec3(0.3842) * pow(color, vec3(2.0)) + vec3(0.3764) * color + vec3(0.2515);}lowp vec3 tintShadows(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, tintRaiseShadowsCurve(texel), tintColor), tintAmount), 0.0, 1.0);} lowp vec3 tintHighlights(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, vec3(1.0) - tintRaiseShadowsCurve(vec3(1.0) - texel), (vec3(1.0) - tintColor)), tintAmount), 0.0, 1.0);}highp vec4 rnm(in highp vec2 tc) {highp float noise = sin(dot(tc, vec2(12.9898, 78.233))) * 43758.5453;return vec4(fract(noise), fract(noise * 1.2154), fract(noise * 1.3453), fract(noise * 1.3647)) * 2.0 - 1.0;}highp float fade(in highp float t) {return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);}highp float pnoise3D(in highp vec3 p) {highp vec3 pi = permTexUnit * floor(p) + permTexUnitHalf;highp vec3 pf = fract(p);highp float perm = rnm(pi.xy).a;highp float n000 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf);highp float n001 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(0.0, permTexUnit)).a;highp float n010 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 0.0));highp float n011 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, 0.0)).a;highp float n100 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 0.0));highp float n101 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, permTexUnit)).a;highp float n110 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 0.0));highp float n111 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 1.0));highp vec4 n_x = mix(vec4(n000, n001, n010, n011), vec4(n100, n101, n110, n111), fade(pf.x));highp vec2 n_xy = mix(n_x.xy, n_x.zw, fade(pf.y));return mix(n_xy.x, n_xy.y, fade(pf.z));}lowp vec2 coordRot(in lowp vec2 tc, in lowp float angle) {return vec2(((tc.x * 2.0 - 1.0) * cos(angle) - (tc.y * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5, ((tc.y * 2.0 - 1.0) * cos(angle) + (tc.x * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5);}void main() {lowp vec4 source = texture2D(sourceImage, texCoord);lowp vec4 result = source;const lowp float toolEpsilon = 0.005;if (skipTone < toolEpsilon) {result = vec4(applyRGBCurve(hslToRgb(applyLuminanceCurve(rgbToHsl(result.rgb)))), result.a);}mediump float hsLuminance = dot(result.rgb, hsLuminanceWeighting);mediump float shadow = clamp((pow(hsLuminance, 1.0 / shadows) + (-0.76) * pow(hsLuminance, 2.0 / shadows)) - hsLuminance, 0.0, 1.0);mediump float highlight = clamp((1.0 - (pow(1.0 - hsLuminance, 1.0 / (2.0 - highlights)) + (-0.8) * pow(1.0 - hsLuminance, 2.0 / (2.0 - highlights)))) - hsLuminance, -1.0, 0.0);lowp vec3 hsresult = vec3(0.0, 0.0, 0.0) + ((hsLuminance + shadow + highlight) - 0.0) * ((result.rgb - vec3(0.0, 0.0, 0.0)) / (hsLuminance - 0.0));mediump float contrastedLuminance = ((hsLuminance - 0.5) * 1.5) + 0.5;mediump float whiteInterp = contrastedLuminance * contrastedLuminance * contrastedLuminance;mediump float whiteTarget = clamp(highlights, 1.0, 2.0) - 1.0;hsresult = mix(hsresult, vec3(1.0), whiteInterp * whiteTarget);mediump float invContrastedLuminance = 1.0 - contrastedLuminance;mediump float blackInterp = invContrastedLuminance * invContrastedLuminance * invContrastedLuminance;mediump float blackTarget = 1.0 - clamp(shadows, 0.0, 1.0);hsresult = mix(hsresult, vec3(0.0), blackInterp * blackTarget);result = vec4(hsresult.rgb, result.a);result = vec4(clamp(((result.rgb - vec3(0.5)) * contrast + vec3(0.5)), 0.0, 1.0), result.a);if (abs(fadeAmount) > toolEpsilon) {result.rgb = fadeAdjust(result.rgb, fadeAmount);}lowp float satLuminance = dot(result.rgb, satLuminanceWeighting);lowp vec3 greyScaleColor = vec3(satLuminance);result = vec4(clamp(mix(greyScaleColor, result.rgb, saturation), 0.0, 1.0), result.a);if (abs(shadowsTintIntensity) > toolEpsilon) {result.rgb = tintShadows(result.rgb, shadowsTintColor, shadowsTintIntensity * 2.0);}if (abs(highlightsTintIntensity) > toolEpsilon) {result.rgb = tintHighlights(result.rgb, highlightsTintColor, highlightsTintIntensity * 2.0);}if (abs(exposure) > toolEpsilon) {mediump float mag = exposure * 1.045;mediump float exppower = 1.0 + abs(mag);if (mag < 0.0) {exppower = 1.0 / exppower;}result.r = 1.0 - pow((1.0 - result.r), exppower);result.g = 1.0 - pow((1.0 - result.g), exppower);result.b = 1.0 - pow((1.0 - result.b), exppower);}if (abs(warmth) > toolEpsilon) {highp vec3 yuvVec;if (warmth > 0.0 ) {yuvVec = vec3(0.1765, -0.1255, 0.0902);} else {yuvVec = -vec3(0.0588, 0.1569, -0.1255);}highp vec3 yuvColor = rgbToYuv(result.rgb);highp float luma = yuvColor.r;highp float curveScale = sin(luma * 3.14159);yuvColor += 0.375 * warmth * curveScale * yuvVec;result.rgb = yuvToRgb(yuvColor);}if (abs(grain) > toolEpsilon) {highp vec3 rotOffset = vec3(1.425, 3.892, 5.835);highp vec2 rotCoordsR = coordRot(texCoord, rotOffset.x);highp vec3 noise = vec3(pnoise3D(vec3(rotCoordsR * vec2(width / grainsize, height / grainsize),0.0)));lowp vec3 lumcoeff = vec3(0.299,0.587,0.114);lowp float luminance = dot(result.rgb, lumcoeff);lowp float lum = smoothstep(0.2, 0.0, luminance);lum += luminance;noise = mix(noise,vec3(0.0),pow(lum,4.0));result.rgb = result.rgb + noise * grain;}if (abs(vignette) > toolEpsilon) {const lowp float midpoint = 0.7;const lowp float fuzziness = 0.62;lowp float radDist = length(texCoord - 0.5) / sqrt(0.5);lowp float mag = easeInOutSigmoid(radDist * midpoint, fuzziness) * vignette * 0.645;result.rgb = mix(pow(result.rgb, vec3(1.0 / (1.0 - mag))), vec3(0.0), mag * mag);}gl_FragColor = result;}");
-                            if (loadShader == 0 || loadShader2 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.toolsShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.toolsShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.toolsShaderProgram, loadShader2);
-                            String str2 = "position";
-                            GLES20.glBindAttribLocation(this.toolsShaderProgram, 0, str2);
-                            String str3 = "inputTexCoord";
-                            GLES20.glBindAttribLocation(this.toolsShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.toolsShaderProgram);
-                            int[] iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.toolsShaderProgram, 35714, iArr2, 0);
-                            String str4 = "sourceImage";
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.toolsShaderProgram);
-                                this.toolsShaderProgram = 0;
-                            } else {
-                                this.positionHandle = GLES20.glGetAttribLocation(this.toolsShaderProgram, str2);
-                                this.inputTexCoordHandle = GLES20.glGetAttribLocation(this.toolsShaderProgram, str3);
-                                this.sourceImageHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, str4);
-                                this.shadowsHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadows");
-                                this.highlightsHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlights");
-                                this.exposureHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "exposure");
-                                this.contrastHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "contrast");
-                                this.saturationHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "saturation");
-                                this.warmthHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "warmth");
-                                this.vignetteHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "vignette");
-                                this.grainHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "grain");
-                                this.widthHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "width");
-                                this.heightHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "height");
-                                this.curvesImageHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "curvesImage");
-                                this.skipToneHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "skipTone");
-                                this.fadeAmountHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "fadeAmount");
-                                this.shadowsTintIntensityHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadowsTintIntensity");
-                                this.highlightsTintIntensityHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlightsTintIntensity");
-                                this.shadowsTintColorHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadowsTintColor");
-                                this.highlightsTintColorHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlightsTintColor");
-                            }
-                            loadShader = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;uniform highp float inputWidth;uniform highp float inputHeight;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;void main() {gl_Position = position;texCoord = inputTexCoord;highp vec2 widthStep = vec2(1.0 / inputWidth, 0.0);highp vec2 heightStep = vec2(0.0, 1.0 / inputHeight);leftTexCoord = inputTexCoord - widthStep;rightTexCoord = inputTexCoord + widthStep;topTexCoord = inputTexCoord + heightStep;bottomTexCoord = inputTexCoord - heightStep;}");
-                            int loadShader3 = loadShader(35632, "precision highp float;varying vec2 texCoord;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;uniform sampler2D sourceImage;uniform float sharpen;void main() {vec4 result = texture2D(sourceImage, texCoord);vec3 leftTextureColor = texture2D(sourceImage, leftTexCoord).rgb;vec3 rightTextureColor = texture2D(sourceImage, rightTexCoord).rgb;vec3 topTextureColor = texture2D(sourceImage, topTexCoord).rgb;vec3 bottomTextureColor = texture2D(sourceImage, bottomTexCoord).rgb;result.rgb = result.rgb * (1.0 + 4.0 * sharpen) - (leftTextureColor + rightTextureColor + topTextureColor + bottomTextureColor) * sharpen;gl_FragColor = result;}");
-                            if (loadShader == 0 || loadShader3 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.sharpenShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.sharpenShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.sharpenShaderProgram, loadShader3);
-                            GLES20.glBindAttribLocation(this.sharpenShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.sharpenShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.sharpenShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.sharpenShaderProgram, 35714, iArr2, 0);
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.sharpenShaderProgram);
-                                this.sharpenShaderProgram = 0;
-                            } else {
-                                this.sharpenPositionHandle = GLES20.glGetAttribLocation(this.sharpenShaderProgram, str2);
-                                this.sharpenInputTexCoordHandle = GLES20.glGetAttribLocation(this.sharpenShaderProgram, str3);
-                                this.sharpenSourceImageHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, str4);
-                                this.sharpenWidthHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "inputWidth");
-                                this.sharpenHeightHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "inputHeight");
-                                this.sharpenHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "sharpen");
-                            }
-                            loadShader = loadShader(35633, "attribute vec4 position;attribute vec4 inputTexCoord;uniform highp float texelWidthOffset;uniform highp float texelHeightOffset;varying vec2 blurCoordinates[9];void main() {gl_Position = position;vec2 singleStepOffset = vec2(texelWidthOffset, texelHeightOffset);blurCoordinates[0] = inputTexCoord.xy;blurCoordinates[1] = inputTexCoord.xy + singleStepOffset * 1.458430;blurCoordinates[2] = inputTexCoord.xy - singleStepOffset * 1.458430;blurCoordinates[3] = inputTexCoord.xy + singleStepOffset * 3.403985;blurCoordinates[4] = inputTexCoord.xy - singleStepOffset * 3.403985;blurCoordinates[5] = inputTexCoord.xy + singleStepOffset * 5.351806;blurCoordinates[6] = inputTexCoord.xy - singleStepOffset * 5.351806;blurCoordinates[7] = inputTexCoord.xy + singleStepOffset * 7.302940;blurCoordinates[8] = inputTexCoord.xy - singleStepOffset * 7.302940;}");
-                            loadShader3 = loadShader(35632, "uniform sampler2D sourceImage;varying highp vec2 blurCoordinates[9];void main() {lowp vec4 sum = vec4(0.0);sum += texture2D(sourceImage, blurCoordinates[0]) * 0.133571;sum += texture2D(sourceImage, blurCoordinates[1]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[2]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[3]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[4]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[5]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[6]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[7]) * 0.012595;sum += texture2D(sourceImage, blurCoordinates[8]) * 0.012595;gl_FragColor = sum;}");
-                            if (loadShader == 0 || loadShader3 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.blurShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.blurShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.blurShaderProgram, loadShader3);
-                            GLES20.glBindAttribLocation(this.blurShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.blurShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.blurShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.blurShaderProgram, 35714, iArr2, 0);
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.blurShaderProgram);
-                                this.blurShaderProgram = 0;
-                            } else {
-                                this.blurPositionHandle = GLES20.glGetAttribLocation(this.blurShaderProgram, str2);
-                                this.blurInputTexCoordHandle = GLES20.glGetAttribLocation(this.blurShaderProgram, str3);
-                                this.blurSourceImageHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, str4);
-                                this.blurWidthHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, "texelWidthOffset");
-                                this.blurHeightHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, "texelHeightOffset");
-                            }
-                            loadShader = loadShader(35633, str);
-                            loadShader3 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float angle;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = abs((texCoordToUse.x - excludePoint.x) * aspectRatio * cos(angle) + (texCoordToUse.y - excludePoint.y) * sin(angle));gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}");
-                            if (loadShader == 0 || loadShader3 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.linearBlurShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader3);
-                            GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.linearBlurShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.linearBlurShaderProgram, 35714, iArr2, 0);
-                            String str5 = "excludePoint";
-                            String str6 = "excludeSize";
-                            String str7 = "inputImageTexture2";
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.linearBlurShaderProgram);
-                                this.linearBlurShaderProgram = 0;
-                            } else {
-                                this.linearBlurPositionHandle = GLES20.glGetAttribLocation(this.linearBlurShaderProgram, str2);
-                                this.linearBlurInputTexCoordHandle = GLES20.glGetAttribLocation(this.linearBlurShaderProgram, str3);
-                                this.linearBlurSourceImageHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, str4);
-                                this.linearBlurSourceImage2Handle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, str7);
-                                this.linearBlurExcludeSizeHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, str6);
-                                this.linearBlurExcludePointHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, str5);
-                                this.linearBlurExcludeBlurSizeHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "excludeBlurSize");
-                                this.linearBlurAngleHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "angle");
-                                this.linearBlurAspectRatioHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "aspectRatio");
-                            }
-                            loadShader = loadShader(35633, str);
-                            int loadShader4 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = distance(excludePoint, texCoordToUse);gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}");
-                            if (loadShader == 0 || loadShader4 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.radialBlurShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader4);
-                            GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.radialBlurShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.radialBlurShaderProgram, 35714, iArr2, 0);
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.radialBlurShaderProgram);
-                                this.radialBlurShaderProgram = 0;
-                            } else {
-                                this.radialBlurPositionHandle = GLES20.glGetAttribLocation(this.radialBlurShaderProgram, str2);
-                                this.radialBlurInputTexCoordHandle = GLES20.glGetAttribLocation(this.radialBlurShaderProgram, str3);
-                                this.radialBlurSourceImageHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, str4);
-                                this.radialBlurSourceImage2Handle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, str7);
-                                this.radialBlurExcludeSizeHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, str6);
-                                this.radialBlurExcludePointHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, str5);
-                                this.radialBlurExcludeBlurSizeHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "excludeBlurSize");
-                                this.radialBlurAspectRatioHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "aspectRatio");
-                            }
-                            loadShader = loadShader(35633, str);
-                            loadShader3 = loadShader(35632, "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;vec3 rgb_to_hsv(vec3 c) {vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);float d = q.x - min(q.w, q.y);float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}void main() {vec4 texel = texture2D(sourceImage, texCoord);gl_FragColor = vec4(rgb_to_hsv(texel.rgb), texel.a);}");
-                            if (loadShader == 0 || loadShader3 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.rgbToHsvShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader3);
-                            GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.rgbToHsvShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.rgbToHsvShaderProgram, 35714, iArr2, 0);
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.rgbToHsvShaderProgram);
-                                this.rgbToHsvShaderProgram = 0;
-                            } else {
-                                this.rgbToHsvPositionHandle = GLES20.glGetAttribLocation(this.rgbToHsvShaderProgram, str2);
-                                this.rgbToHsvInputTexCoordHandle = GLES20.glGetAttribLocation(this.rgbToHsvShaderProgram, str3);
-                                this.rgbToHsvSourceImageHandle = GLES20.glGetUniformLocation(this.rgbToHsvShaderProgram, str4);
-                            }
-                            loadShader = loadShader(35633, str);
-                            loadShader3 = loadShader(35632, "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform float intensity;float enhance(float value) {const vec2 offset = vec2(0.NUM, 0.03125);value = value + offset.x;vec2 coord = (clamp(texCoord, 0.125, 1.0 - 0.125001) - 0.125) * 4.0;vec2 frac = fract(coord);coord = floor(coord);float p00 = float(coord.y * 4.0 + coord.x) * 0.0625 + offset.y;float p01 = float(coord.y * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;float p10 = float((coord.y + 1.0) * 4.0 + coord.x) * 0.0625 + offset.y;float p11 = float((coord.y + 1.0) * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p00)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p01)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p10)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p11)).rgb;float c1 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c2 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c3 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c4 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c1_2 = mix(c1, c2, frac.x);float c3_4 = mix(c3, c4, frac.x);return mix(c1_2, c3_4, frac.y);}vec3 hsv_to_rgb(vec3 c) {vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}void main() {vec4 texel = texture2D(sourceImage, texCoord);vec4 hsv = texel;hsv.y = min(1.0, hsv.y * 1.2);hsv.z = min(1.0, enhance(hsv.z) * 1.1);gl_FragColor = vec4(hsv_to_rgb(mix(texel.xyz, hsv.xyz, intensity)), texel.w);}");
-                            if (loadShader == 0 || loadShader3 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.enhanceShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.enhanceShaderProgram, loadShader);
-                            GLES20.glAttachShader(this.enhanceShaderProgram, loadShader3);
-                            GLES20.glBindAttribLocation(this.enhanceShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.enhanceShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.enhanceShaderProgram);
-                            iArr2 = new int[1];
-                            GLES20.glGetProgramiv(this.enhanceShaderProgram, 35714, iArr2, 0);
-                            if (iArr2[0] == 0) {
-                                GLES20.glDeleteProgram(this.enhanceShaderProgram);
-                                this.enhanceShaderProgram = 0;
-                            } else {
-                                this.enhancePositionHandle = GLES20.glGetAttribLocation(this.enhanceShaderProgram, str2);
-                                this.enhanceInputTexCoordHandle = GLES20.glGetAttribLocation(this.enhanceShaderProgram, str3);
-                                this.enhanceSourceImageHandle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, str4);
-                                this.enhanceIntensityHandle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, "intensity");
-                                this.enhanceInputImageTexture2Handle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, str7);
-                            }
-                            int loadShader5 = loadShader(35633, str);
-                            int loadShader6 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;void main() {gl_FragColor = texture2D(sourceImage, texCoord);}");
-                            if (loadShader5 == 0 || loadShader6 == 0) {
-                                finish();
-                                return false;
-                            }
-                            this.simpleShaderProgram = GLES20.glCreateProgram();
-                            GLES20.glAttachShader(this.simpleShaderProgram, loadShader5);
-                            GLES20.glAttachShader(this.simpleShaderProgram, loadShader6);
-                            GLES20.glBindAttribLocation(this.simpleShaderProgram, 0, str2);
-                            GLES20.glBindAttribLocation(this.simpleShaderProgram, 1, str3);
-                            GLES20.glLinkProgram(this.simpleShaderProgram);
-                            int[] iArr3 = new int[1];
-                            GLES20.glGetProgramiv(this.simpleShaderProgram, 35714, iArr3, 0);
-                            if (iArr3[0] == 0) {
-                                GLES20.glDeleteProgram(this.simpleShaderProgram);
-                                this.simpleShaderProgram = 0;
-                            } else {
-                                this.simplePositionHandle = GLES20.glGetAttribLocation(this.simpleShaderProgram, str2);
-                                this.simpleInputTexCoordHandle = GLES20.glGetAttribLocation(this.simpleShaderProgram, str3);
-                                this.simpleSourceImageHandle = GLES20.glGetUniformLocation(this.simpleShaderProgram, str4);
-                            }
-                            Bitmap bitmap = this.currentBitmap;
-                            if (!(bitmap == null || bitmap.isRecycled())) {
-                                loadTexture(this.currentBitmap);
-                            }
-                            return true;
-                        } else {
-                            if (BuildVars.LOGS_ENABLED) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("eglMakeCurrent failed ");
-                                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                                FileLog.e(stringBuilder.toString());
-                            }
-                            finish();
-                            return false;
-                        }
-                    }
-                    finish();
-                    return false;
-                } else {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("eglConfig not initialized");
+                        FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
                     finish();
                     return false;
                 }
+                SurfaceTexture surfaceTexture2 = this.surfaceTexture;
+                if (surfaceTexture2 instanceof SurfaceTexture) {
+                    this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                    EGLSurface eGLSurface = this.eglSurface;
+                    if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        }
+                        finish();
+                        return false;
+                    } else {
+                        this.gl = this.eglContext.getGL();
+                        float[] fArr = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
+                        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(fArr.length * 4);
+                        allocateDirect.order(ByteOrder.nativeOrder());
+                        this.vertexBuffer = allocateDirect.asFloatBuffer();
+                        this.vertexBuffer.put(fArr);
+                        this.vertexBuffer.position(0);
+                        float[] fArr2 = {-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
+                        ByteBuffer allocateDirect2 = ByteBuffer.allocateDirect(fArr2.length * 4);
+                        allocateDirect2.order(ByteOrder.nativeOrder());
+                        this.vertexInvertBuffer = allocateDirect2.asFloatBuffer();
+                        this.vertexInvertBuffer.put(fArr2);
+                        this.vertexInvertBuffer.position(0);
+                        float[] fArr3 = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+                        ByteBuffer allocateDirect3 = ByteBuffer.allocateDirect(fArr3.length * 4);
+                        allocateDirect3.order(ByteOrder.nativeOrder());
+                        this.textureBuffer = allocateDirect3.asFloatBuffer();
+                        this.textureBuffer.put(fArr3);
+                        this.textureBuffer.position(0);
+                        GLES20.glGenTextures(1, this.curveTextures, 0);
+                        GLES20.glGenTextures(2, this.enhanceTextures, 0);
+                        int loadShader = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader2 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform highp float width;uniform highp float height;uniform sampler2D curvesImage;uniform lowp float skipTone;uniform lowp float shadows;const mediump vec3 hsLuminanceWeighting = vec3(0.3, 0.3, 0.3);uniform lowp float highlights;uniform lowp float contrast;uniform lowp float fadeAmount;const mediump vec3 satLuminanceWeighting = vec3(0.2126, 0.7152, 0.0722);uniform lowp float saturation;uniform lowp float shadowsTintIntensity;uniform lowp float highlightsTintIntensity;uniform lowp vec3 shadowsTintColor;uniform lowp vec3 highlightsTintColor;uniform lowp float exposure;uniform lowp float warmth;uniform lowp float grain;const lowp float permTexUnit = 1.0 / 256.0;const lowp float permTexUnitHalf = 0.5 / 256.0;const lowp float grainsize = 2.3;uniform lowp float vignette;highp float getLuma(highp vec3 rgbP) {return (0.299 * rgbP.r) + (0.587 * rgbP.g) + (0.114 * rgbP.b);}lowp vec3 rgbToHsv(lowp vec3 c) {highp vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);highp vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);highp vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);highp float d = q.x - min(q.w, q.y);highp float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}lowp vec3 hsvToRgb(lowp vec3 c) {highp vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);highp vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}highp vec3 rgbToHsl(highp vec3 color) {highp vec3 hsl;highp float fmin = min(min(color.r, color.g), color.b);highp float fmax = max(max(color.r, color.g), color.b);highp float delta = fmax - fmin;hsl.z = (fmax + fmin) / 2.0;if (delta == 0.0) {hsl.x = 0.0;hsl.y = 0.0;} else {if (hsl.z < 0.5) {hsl.y = delta / (fmax + fmin);} else {hsl.y = delta / (2.0 - fmax - fmin);}highp float deltaR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;highp float deltaG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;highp float deltaB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;if (color.r == fmax) {hsl.x = deltaB - deltaG;} else if (color.g == fmax) {hsl.x = (1.0 / 3.0) + deltaR - deltaB;} else if (color.b == fmax) {hsl.x = (2.0 / 3.0) + deltaG - deltaR;}if (hsl.x < 0.0) {hsl.x += 1.0;} else if (hsl.x > 1.0) {hsl.x -= 1.0;}}return hsl;}highp float hueToRgb(highp float f1, highp float f2, highp float hue) {if (hue < 0.0) {hue += 1.0;} else if (hue > 1.0) {hue -= 1.0;}highp float res;if ((6.0 * hue) < 1.0) {res = f1 + (f2 - f1) * 6.0 * hue;} else if ((2.0 * hue) < 1.0) {res = f2;} else if ((3.0 * hue) < 2.0) {res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;} else {res = f1;} return res;}highp vec3 hslToRgb(highp vec3 hsl) {if (hsl.y == 0.0) {return vec3(hsl.z);} else {highp float f2;if (hsl.z < 0.5) {f2 = hsl.z * (1.0 + hsl.y);} else {f2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);}highp float f1 = 2.0 * hsl.z - f2;return vec3(hueToRgb(f1, f2, hsl.x + (1.0/3.0)), hueToRgb(f1, f2, hsl.x), hueToRgb(f1, f2, hsl.x - (1.0/3.0)));}}highp vec3 rgbToYuv(highp vec3 inP) {highp float luma = getLuma(inP);return vec3(luma, (1.0 / 1.772) * (inP.b - luma), (1.0 / 1.402) * (inP.r - luma));}lowp vec3 yuvToRgb(highp vec3 inP) {return vec3(1.402 * inP.b + inP.r, (inP.r - (0.299 * 1.402 / 0.587) * inP.b - (0.114 * 1.772 / 0.587) * inP.g), 1.772 * inP.g + inP.r);}lowp float easeInOutSigmoid(lowp float value, lowp float strength) {if (value > 0.5) {return 1.0 - pow(2.0 - 2.0 * value, 1.0 / (1.0 - strength)) * 0.5;} else {return pow(2.0 * value, 1.0 / (1.0 - strength)) * 0.5;}}lowp vec3 applyLuminanceCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.z / (1.0 / 200.0), 0.0, 199.0));pixel.y = mix(0.0, pixel.y, smoothstep(0.0, 0.1, pixel.z) * (1.0 - smoothstep(0.8, 1.0, pixel.z)));pixel.z = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).a;return pixel;}lowp vec3 applyRGBCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.r / (1.0 / 200.0), 0.0, 199.0));pixel.r = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).r;index = floor(clamp(pixel.g / (1.0 / 200.0), 0.0, 199.0));pixel.g = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).g, 0.0, 1.0);index = floor(clamp(pixel.b / (1.0 / 200.0), 0.0, 199.0));pixel.b = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).b, 0.0, 1.0);return pixel;}highp vec3 fadeAdjust(highp vec3 color, highp float fadeVal) {return (color * (1.0 - fadeVal)) + ((color + (vec3(-0.9772) * pow(vec3(color), vec3(3.0)) + vec3(1.708) * pow(vec3(color), vec3(2.0)) + vec3(-0.1603) * vec3(color) + vec3(0.2878) - color * vec3(0.9))) * fadeVal);}lowp vec3 tintRaiseShadowsCurve(lowp vec3 color) {return vec3(-0.003671) * pow(color, vec3(3.0)) + vec3(0.3842) * pow(color, vec3(2.0)) + vec3(0.3764) * color + vec3(0.2515);}lowp vec3 tintShadows(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, tintRaiseShadowsCurve(texel), tintColor), tintAmount), 0.0, 1.0);} lowp vec3 tintHighlights(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, vec3(1.0) - tintRaiseShadowsCurve(vec3(1.0) - texel), (vec3(1.0) - tintColor)), tintAmount), 0.0, 1.0);}highp vec4 rnm(in highp vec2 tc) {highp float noise = sin(dot(tc, vec2(12.9898, 78.233))) * 43758.5453;return vec4(fract(noise), fract(noise * 1.2154), fract(noise * 1.3453), fract(noise * 1.3647)) * 2.0 - 1.0;}highp float fade(in highp float t) {return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);}highp float pnoise3D(in highp vec3 p) {highp vec3 pi = permTexUnit * floor(p) + permTexUnitHalf;highp vec3 pf = fract(p);highp float perm = rnm(pi.xy).a;highp float n000 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf);highp float n001 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(0.0, permTexUnit)).a;highp float n010 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 0.0));highp float n011 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, 0.0)).a;highp float n100 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 0.0));highp float n101 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, permTexUnit)).a;highp float n110 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 0.0));highp float n111 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 1.0));highp vec4 n_x = mix(vec4(n000, n001, n010, n011), vec4(n100, n101, n110, n111), fade(pf.x));highp vec2 n_xy = mix(n_x.xy, n_x.zw, fade(pf.y));return mix(n_xy.x, n_xy.y, fade(pf.z));}lowp vec2 coordRot(in lowp vec2 tc, in lowp float angle) {return vec2(((tc.x * 2.0 - 1.0) * cos(angle) - (tc.y * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5, ((tc.y * 2.0 - 1.0) * cos(angle) + (tc.x * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5);}void main() {lowp vec4 source = texture2D(sourceImage, texCoord);lowp vec4 result = source;const lowp float toolEpsilon = 0.005;if (skipTone < toolEpsilon) {result = vec4(applyRGBCurve(hslToRgb(applyLuminanceCurve(rgbToHsl(result.rgb)))), result.a);}mediump float hsLuminance = dot(result.rgb, hsLuminanceWeighting);mediump float shadow = clamp((pow(hsLuminance, 1.0 / shadows) + (-0.76) * pow(hsLuminance, 2.0 / shadows)) - hsLuminance, 0.0, 1.0);mediump float highlight = clamp((1.0 - (pow(1.0 - hsLuminance, 1.0 / (2.0 - highlights)) + (-0.8) * pow(1.0 - hsLuminance, 2.0 / (2.0 - highlights)))) - hsLuminance, -1.0, 0.0);lowp vec3 hsresult = vec3(0.0, 0.0, 0.0) + ((hsLuminance + shadow + highlight) - 0.0) * ((result.rgb - vec3(0.0, 0.0, 0.0)) / (hsLuminance - 0.0));mediump float contrastedLuminance = ((hsLuminance - 0.5) * 1.5) + 0.5;mediump float whiteInterp = contrastedLuminance * contrastedLuminance * contrastedLuminance;mediump float whiteTarget = clamp(highlights, 1.0, 2.0) - 1.0;hsresult = mix(hsresult, vec3(1.0), whiteInterp * whiteTarget);mediump float invContrastedLuminance = 1.0 - contrastedLuminance;mediump float blackInterp = invContrastedLuminance * invContrastedLuminance * invContrastedLuminance;mediump float blackTarget = 1.0 - clamp(shadows, 0.0, 1.0);hsresult = mix(hsresult, vec3(0.0), blackInterp * blackTarget);result = vec4(hsresult.rgb, result.a);result = vec4(clamp(((result.rgb - vec3(0.5)) * contrast + vec3(0.5)), 0.0, 1.0), result.a);if (abs(fadeAmount) > toolEpsilon) {result.rgb = fadeAdjust(result.rgb, fadeAmount);}lowp float satLuminance = dot(result.rgb, satLuminanceWeighting);lowp vec3 greyScaleColor = vec3(satLuminance);result = vec4(clamp(mix(greyScaleColor, result.rgb, saturation), 0.0, 1.0), result.a);if (abs(shadowsTintIntensity) > toolEpsilon) {result.rgb = tintShadows(result.rgb, shadowsTintColor, shadowsTintIntensity * 2.0);}if (abs(highlightsTintIntensity) > toolEpsilon) {result.rgb = tintHighlights(result.rgb, highlightsTintColor, highlightsTintIntensity * 2.0);}if (abs(exposure) > toolEpsilon) {mediump float mag = exposure * 1.045;mediump float exppower = 1.0 + abs(mag);if (mag < 0.0) {exppower = 1.0 / exppower;}result.r = 1.0 - pow((1.0 - result.r), exppower);result.g = 1.0 - pow((1.0 - result.g), exppower);result.b = 1.0 - pow((1.0 - result.b), exppower);}if (abs(warmth) > toolEpsilon) {highp vec3 yuvVec;if (warmth > 0.0 ) {yuvVec = vec3(0.1765, -0.1255, 0.0902);} else {yuvVec = -vec3(0.0588, 0.1569, -0.1255);}highp vec3 yuvColor = rgbToYuv(result.rgb);highp float luma = yuvColor.r;highp float curveScale = sin(luma * 3.14159);yuvColor += 0.375 * warmth * curveScale * yuvVec;result.rgb = yuvToRgb(yuvColor);}if (abs(grain) > toolEpsilon) {highp vec3 rotOffset = vec3(1.425, 3.892, 5.835);highp vec2 rotCoordsR = coordRot(texCoord, rotOffset.x);highp vec3 noise = vec3(pnoise3D(vec3(rotCoordsR * vec2(width / grainsize, height / grainsize),0.0)));lowp vec3 lumcoeff = vec3(0.299,0.587,0.114);lowp float luminance = dot(result.rgb, lumcoeff);lowp float lum = smoothstep(0.2, 0.0, luminance);lum += luminance;noise = mix(noise,vec3(0.0),pow(lum,4.0));result.rgb = result.rgb + noise * grain;}if (abs(vignette) > toolEpsilon) {const lowp float midpoint = 0.7;const lowp float fuzziness = 0.62;lowp float radDist = length(texCoord - 0.5) / sqrt(0.5);lowp float mag = easeInOutSigmoid(radDist * midpoint, fuzziness) * vignette * 0.645;result.rgb = mix(pow(result.rgb, vec3(1.0 / (1.0 - mag))), vec3(0.0), mag * mag);}gl_FragColor = result;}");
+                        if (loadShader == 0 || loadShader2 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.toolsShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.toolsShaderProgram, loadShader);
+                        GLES20.glAttachShader(this.toolsShaderProgram, loadShader2);
+                        GLES20.glBindAttribLocation(this.toolsShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.toolsShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.toolsShaderProgram);
+                        int[] iArr2 = new int[1];
+                        GLES20.glGetProgramiv(this.toolsShaderProgram, 35714, iArr2, 0);
+                        if (iArr2[0] == 0) {
+                            GLES20.glDeleteProgram(this.toolsShaderProgram);
+                            this.toolsShaderProgram = 0;
+                        } else {
+                            this.positionHandle = GLES20.glGetAttribLocation(this.toolsShaderProgram, "position");
+                            this.inputTexCoordHandle = GLES20.glGetAttribLocation(this.toolsShaderProgram, "inputTexCoord");
+                            this.sourceImageHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "sourceImage");
+                            this.shadowsHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadows");
+                            this.highlightsHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlights");
+                            this.exposureHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "exposure");
+                            this.contrastHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "contrast");
+                            this.saturationHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "saturation");
+                            this.warmthHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "warmth");
+                            this.vignetteHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "vignette");
+                            this.grainHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "grain");
+                            this.widthHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "width");
+                            this.heightHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "height");
+                            this.curvesImageHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "curvesImage");
+                            this.skipToneHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "skipTone");
+                            this.fadeAmountHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "fadeAmount");
+                            this.shadowsTintIntensityHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadowsTintIntensity");
+                            this.highlightsTintIntensityHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlightsTintIntensity");
+                            this.shadowsTintColorHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "shadowsTintColor");
+                            this.highlightsTintColorHandle = GLES20.glGetUniformLocation(this.toolsShaderProgram, "highlightsTintColor");
+                        }
+                        int loadShader3 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;uniform highp float inputWidth;uniform highp float inputHeight;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;void main() {gl_Position = position;texCoord = inputTexCoord;highp vec2 widthStep = vec2(1.0 / inputWidth, 0.0);highp vec2 heightStep = vec2(0.0, 1.0 / inputHeight);leftTexCoord = inputTexCoord - widthStep;rightTexCoord = inputTexCoord + widthStep;topTexCoord = inputTexCoord + heightStep;bottomTexCoord = inputTexCoord - heightStep;}");
+                        int loadShader4 = loadShader(35632, "precision highp float;varying vec2 texCoord;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;uniform sampler2D sourceImage;uniform float sharpen;void main() {vec4 result = texture2D(sourceImage, texCoord);vec3 leftTextureColor = texture2D(sourceImage, leftTexCoord).rgb;vec3 rightTextureColor = texture2D(sourceImage, rightTexCoord).rgb;vec3 topTextureColor = texture2D(sourceImage, topTexCoord).rgb;vec3 bottomTextureColor = texture2D(sourceImage, bottomTexCoord).rgb;result.rgb = result.rgb * (1.0 + 4.0 * sharpen) - (leftTextureColor + rightTextureColor + topTextureColor + bottomTextureColor) * sharpen;gl_FragColor = result;}");
+                        if (loadShader3 == 0 || loadShader4 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.sharpenShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.sharpenShaderProgram, loadShader3);
+                        GLES20.glAttachShader(this.sharpenShaderProgram, loadShader4);
+                        GLES20.glBindAttribLocation(this.sharpenShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.sharpenShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.sharpenShaderProgram);
+                        int[] iArr3 = new int[1];
+                        GLES20.glGetProgramiv(this.sharpenShaderProgram, 35714, iArr3, 0);
+                        if (iArr3[0] == 0) {
+                            GLES20.glDeleteProgram(this.sharpenShaderProgram);
+                            this.sharpenShaderProgram = 0;
+                        } else {
+                            this.sharpenPositionHandle = GLES20.glGetAttribLocation(this.sharpenShaderProgram, "position");
+                            this.sharpenInputTexCoordHandle = GLES20.glGetAttribLocation(this.sharpenShaderProgram, "inputTexCoord");
+                            this.sharpenSourceImageHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "sourceImage");
+                            this.sharpenWidthHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "inputWidth");
+                            this.sharpenHeightHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "inputHeight");
+                            this.sharpenHandle = GLES20.glGetUniformLocation(this.sharpenShaderProgram, "sharpen");
+                        }
+                        int loadShader5 = loadShader(35633, "attribute vec4 position;attribute vec4 inputTexCoord;uniform highp float texelWidthOffset;uniform highp float texelHeightOffset;varying vec2 blurCoordinates[9];void main() {gl_Position = position;vec2 singleStepOffset = vec2(texelWidthOffset, texelHeightOffset);blurCoordinates[0] = inputTexCoord.xy;blurCoordinates[1] = inputTexCoord.xy + singleStepOffset * 1.458430;blurCoordinates[2] = inputTexCoord.xy - singleStepOffset * 1.458430;blurCoordinates[3] = inputTexCoord.xy + singleStepOffset * 3.403985;blurCoordinates[4] = inputTexCoord.xy - singleStepOffset * 3.403985;blurCoordinates[5] = inputTexCoord.xy + singleStepOffset * 5.351806;blurCoordinates[6] = inputTexCoord.xy - singleStepOffset * 5.351806;blurCoordinates[7] = inputTexCoord.xy + singleStepOffset * 7.302940;blurCoordinates[8] = inputTexCoord.xy - singleStepOffset * 7.302940;}");
+                        int loadShader6 = loadShader(35632, "uniform sampler2D sourceImage;varying highp vec2 blurCoordinates[9];void main() {lowp vec4 sum = vec4(0.0);sum += texture2D(sourceImage, blurCoordinates[0]) * 0.133571;sum += texture2D(sourceImage, blurCoordinates[1]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[2]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[3]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[4]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[5]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[6]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[7]) * 0.012595;sum += texture2D(sourceImage, blurCoordinates[8]) * 0.012595;gl_FragColor = sum;}");
+                        if (loadShader5 == 0 || loadShader6 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.blurShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.blurShaderProgram, loadShader5);
+                        GLES20.glAttachShader(this.blurShaderProgram, loadShader6);
+                        GLES20.glBindAttribLocation(this.blurShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.blurShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.blurShaderProgram);
+                        int[] iArr4 = new int[1];
+                        GLES20.glGetProgramiv(this.blurShaderProgram, 35714, iArr4, 0);
+                        if (iArr4[0] == 0) {
+                            GLES20.glDeleteProgram(this.blurShaderProgram);
+                            this.blurShaderProgram = 0;
+                        } else {
+                            this.blurPositionHandle = GLES20.glGetAttribLocation(this.blurShaderProgram, "position");
+                            this.blurInputTexCoordHandle = GLES20.glGetAttribLocation(this.blurShaderProgram, "inputTexCoord");
+                            this.blurSourceImageHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, "sourceImage");
+                            this.blurWidthHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, "texelWidthOffset");
+                            this.blurHeightHandle = GLES20.glGetUniformLocation(this.blurShaderProgram, "texelHeightOffset");
+                        }
+                        int loadShader7 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader8 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float angle;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = abs((texCoordToUse.x - excludePoint.x) * aspectRatio * cos(angle) + (texCoordToUse.y - excludePoint.y) * sin(angle));gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}");
+                        if (loadShader7 == 0 || loadShader8 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.linearBlurShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader7);
+                        GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader8);
+                        GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.linearBlurShaderProgram);
+                        int[] iArr5 = new int[1];
+                        GLES20.glGetProgramiv(this.linearBlurShaderProgram, 35714, iArr5, 0);
+                        if (iArr5[0] == 0) {
+                            GLES20.glDeleteProgram(this.linearBlurShaderProgram);
+                            this.linearBlurShaderProgram = 0;
+                        } else {
+                            this.linearBlurPositionHandle = GLES20.glGetAttribLocation(this.linearBlurShaderProgram, "position");
+                            this.linearBlurInputTexCoordHandle = GLES20.glGetAttribLocation(this.linearBlurShaderProgram, "inputTexCoord");
+                            this.linearBlurSourceImageHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "sourceImage");
+                            this.linearBlurSourceImage2Handle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "inputImageTexture2");
+                            this.linearBlurExcludeSizeHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "excludeSize");
+                            this.linearBlurExcludePointHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "excludePoint");
+                            this.linearBlurExcludeBlurSizeHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "excludeBlurSize");
+                            this.linearBlurAngleHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "angle");
+                            this.linearBlurAspectRatioHandle = GLES20.glGetUniformLocation(this.linearBlurShaderProgram, "aspectRatio");
+                        }
+                        int loadShader9 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader10 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = distance(excludePoint, texCoordToUse);gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}");
+                        if (loadShader9 == 0 || loadShader10 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.radialBlurShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader9);
+                        GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader10);
+                        GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.radialBlurShaderProgram);
+                        int[] iArr6 = new int[1];
+                        GLES20.glGetProgramiv(this.radialBlurShaderProgram, 35714, iArr6, 0);
+                        if (iArr6[0] == 0) {
+                            GLES20.glDeleteProgram(this.radialBlurShaderProgram);
+                            this.radialBlurShaderProgram = 0;
+                        } else {
+                            this.radialBlurPositionHandle = GLES20.glGetAttribLocation(this.radialBlurShaderProgram, "position");
+                            this.radialBlurInputTexCoordHandle = GLES20.glGetAttribLocation(this.radialBlurShaderProgram, "inputTexCoord");
+                            this.radialBlurSourceImageHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "sourceImage");
+                            this.radialBlurSourceImage2Handle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "inputImageTexture2");
+                            this.radialBlurExcludeSizeHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "excludeSize");
+                            this.radialBlurExcludePointHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "excludePoint");
+                            this.radialBlurExcludeBlurSizeHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "excludeBlurSize");
+                            this.radialBlurAspectRatioHandle = GLES20.glGetUniformLocation(this.radialBlurShaderProgram, "aspectRatio");
+                        }
+                        int loadShader11 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader12 = loadShader(35632, "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;vec3 rgb_to_hsv(vec3 c) {vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);float d = q.x - min(q.w, q.y);float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}void main() {vec4 texel = texture2D(sourceImage, texCoord);gl_FragColor = vec4(rgb_to_hsv(texel.rgb), texel.a);}");
+                        if (loadShader11 == 0 || loadShader12 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.rgbToHsvShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader11);
+                        GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader12);
+                        GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.rgbToHsvShaderProgram);
+                        int[] iArr7 = new int[1];
+                        GLES20.glGetProgramiv(this.rgbToHsvShaderProgram, 35714, iArr7, 0);
+                        if (iArr7[0] == 0) {
+                            GLES20.glDeleteProgram(this.rgbToHsvShaderProgram);
+                            this.rgbToHsvShaderProgram = 0;
+                        } else {
+                            this.rgbToHsvPositionHandle = GLES20.glGetAttribLocation(this.rgbToHsvShaderProgram, "position");
+                            this.rgbToHsvInputTexCoordHandle = GLES20.glGetAttribLocation(this.rgbToHsvShaderProgram, "inputTexCoord");
+                            this.rgbToHsvSourceImageHandle = GLES20.glGetUniformLocation(this.rgbToHsvShaderProgram, "sourceImage");
+                        }
+                        int loadShader13 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader14 = loadShader(35632, "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform float intensity;float enhance(float value) {const vec2 offset = vec2(0.NUM, 0.03125);value = value + offset.x;vec2 coord = (clamp(texCoord, 0.125, 1.0 - 0.125001) - 0.125) * 4.0;vec2 frac = fract(coord);coord = floor(coord);float p00 = float(coord.y * 4.0 + coord.x) * 0.0625 + offset.y;float p01 = float(coord.y * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;float p10 = float((coord.y + 1.0) * 4.0 + coord.x) * 0.0625 + offset.y;float p11 = float((coord.y + 1.0) * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p00)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p01)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p10)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p11)).rgb;float c1 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c2 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c3 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c4 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c1_2 = mix(c1, c2, frac.x);float c3_4 = mix(c3, c4, frac.x);return mix(c1_2, c3_4, frac.y);}vec3 hsv_to_rgb(vec3 c) {vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}void main() {vec4 texel = texture2D(sourceImage, texCoord);vec4 hsv = texel;hsv.y = min(1.0, hsv.y * 1.2);hsv.z = min(1.0, enhance(hsv.z) * 1.1);gl_FragColor = vec4(hsv_to_rgb(mix(texel.xyz, hsv.xyz, intensity)), texel.w);}");
+                        if (loadShader13 == 0 || loadShader14 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.enhanceShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.enhanceShaderProgram, loadShader13);
+                        GLES20.glAttachShader(this.enhanceShaderProgram, loadShader14);
+                        GLES20.glBindAttribLocation(this.enhanceShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.enhanceShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.enhanceShaderProgram);
+                        int[] iArr8 = new int[1];
+                        GLES20.glGetProgramiv(this.enhanceShaderProgram, 35714, iArr8, 0);
+                        if (iArr8[0] == 0) {
+                            GLES20.glDeleteProgram(this.enhanceShaderProgram);
+                            this.enhanceShaderProgram = 0;
+                        } else {
+                            this.enhancePositionHandle = GLES20.glGetAttribLocation(this.enhanceShaderProgram, "position");
+                            this.enhanceInputTexCoordHandle = GLES20.glGetAttribLocation(this.enhanceShaderProgram, "inputTexCoord");
+                            this.enhanceSourceImageHandle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, "sourceImage");
+                            this.enhanceIntensityHandle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, "intensity");
+                            this.enhanceInputImageTexture2Handle = GLES20.glGetUniformLocation(this.enhanceShaderProgram, "inputImageTexture2");
+                        }
+                        int loadShader15 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
+                        int loadShader16 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;void main() {gl_FragColor = texture2D(sourceImage, texCoord);}");
+                        if (loadShader15 == 0 || loadShader16 == 0) {
+                            finish();
+                            return false;
+                        }
+                        this.simpleShaderProgram = GLES20.glCreateProgram();
+                        GLES20.glAttachShader(this.simpleShaderProgram, loadShader15);
+                        GLES20.glAttachShader(this.simpleShaderProgram, loadShader16);
+                        GLES20.glBindAttribLocation(this.simpleShaderProgram, 0, "position");
+                        GLES20.glBindAttribLocation(this.simpleShaderProgram, 1, "inputTexCoord");
+                        GLES20.glLinkProgram(this.simpleShaderProgram);
+                        int[] iArr9 = new int[1];
+                        GLES20.glGetProgramiv(this.simpleShaderProgram, 35714, iArr9, 0);
+                        if (iArr9[0] == 0) {
+                            GLES20.glDeleteProgram(this.simpleShaderProgram);
+                            this.simpleShaderProgram = 0;
+                        } else {
+                            this.simplePositionHandle = GLES20.glGetAttribLocation(this.simpleShaderProgram, "position");
+                            this.simpleInputTexCoordHandle = GLES20.glGetAttribLocation(this.simpleShaderProgram, "inputTexCoord");
+                            this.simpleSourceImageHandle = GLES20.glGetUniformLocation(this.simpleShaderProgram, "sourceImage");
+                        }
+                        Bitmap bitmap = this.currentBitmap;
+                        if (bitmap != null && !bitmap.isRecycled()) {
+                            loadTexture(this.currentBitmap);
+                        }
+                        return true;
+                    }
+                } else {
+                    finish();
+                    return false;
+                }
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("eglConfig not initialized");
+                }
+                finish();
+                return false;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("eglInitialize failed ");
-                stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                FileLog.e(stringBuilder.toString());
-            }
-            finish();
-            return false;
         }
 
         public void finish() {
             if (this.eglSurface != null) {
-                EGL10 egl10 = this.egl10;
+                EGL10 egl102 = this.egl10;
                 EGLDisplay eGLDisplay = this.eglDisplay;
                 EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
                 this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
                 this.eglSurface = null;
             }
@@ -785,7 +790,8 @@ public class PhotoFilterView extends FrameLayout {
             }
         }
 
-        private void drawEnhancePass() {
+        /* access modifiers changed from: private */
+        public void drawEnhancePass() {
             if (!this.hsvGenerated) {
                 GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[0]);
                 GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[0], 0);
@@ -799,7 +805,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glEnableVertexAttribArray(this.rgbToHsvPositionHandle);
                 GLES20.glVertexAttribPointer(this.rgbToHsvPositionHandle, 2, 5126, false, 8, this.vertexBuffer);
                 GLES20.glDrawArrays(5, 0, 4);
-                Buffer allocateDirect = ByteBuffer.allocateDirect((this.renderBufferWidth * this.renderBufferHeight) * 4);
+                ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.renderBufferWidth * this.renderBufferHeight * 4);
                 GLES20.glReadPixels(0, 0, this.renderBufferWidth, this.renderBufferHeight, 6408, 5121, allocateDirect);
                 GLES20.glBindTexture(3553, this.enhanceTextures[0]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
@@ -807,20 +813,19 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glTexParameteri(3553, 10242, 33071);
                 GLES20.glTexParameteri(3553, 10243, 33071);
                 GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, allocateDirect);
-                Buffer buffer = null;
+                ByteBuffer byteBuffer = null;
                 try {
-                    buffer = ByteBuffer.allocateDirect(16384);
-                    Utilities.calcCDT(allocateDirect, this.renderBufferWidth, this.renderBufferHeight, buffer);
+                    byteBuffer = ByteBuffer.allocateDirect(16384);
+                    Utilities.calcCDT(allocateDirect, this.renderBufferWidth, this.renderBufferHeight, byteBuffer);
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e((Throwable) e);
                 }
-                Buffer buffer2 = buffer;
                 GLES20.glBindTexture(3553, this.enhanceTextures[1]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
                 GLES20.glTexParameteri(3553, 10240, 9729);
                 GLES20.glTexParameteri(3553, 10242, 33071);
                 GLES20.glTexParameteri(3553, 10243, 33071);
-                GLES20.glTexImage2D(3553, 0, 6408, 256, 16, 0, 6408, 5121, buffer2);
+                GLES20.glTexImage2D(3553, 0, 6408, 256, 16, 0, 6408, 5121, byteBuffer);
                 this.hsvGenerated = true;
             }
             GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[1]);
@@ -845,7 +850,8 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glDrawArrays(5, 0, 4);
         }
 
-        private void drawSharpenPass() {
+        /* access modifiers changed from: private */
+        public void drawSharpenPass() {
             GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[0]);
             GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[0], 0);
             GLES20.glClear(0);
@@ -867,7 +873,8 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glDrawArrays(5, 0, 4);
         }
 
-        private void drawCustomParamsPass() {
+        /* access modifiers changed from: private */
+        public void drawCustomParamsPass() {
             GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[1]);
             GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[1], 0);
             GLES20.glClear(0);
@@ -932,7 +939,8 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glDrawArrays(5, 0, 4);
         }
 
-        private boolean drawBlurPass() {
+        /* access modifiers changed from: private */
+        public boolean drawBlurPass() {
             if (PhotoFilterView.this.showOriginal || PhotoFilterView.this.blurType == 0) {
                 return false;
             }
@@ -999,9 +1007,9 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         private Bitmap getRenderBufferBitmap() {
-            Buffer allocateDirect = ByteBuffer.allocateDirect((this.renderBufferWidth * this.renderBufferHeight) * 4);
+            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.renderBufferWidth * this.renderBufferHeight * 4);
             GLES20.glReadPixels(0, 0, this.renderBufferWidth, this.renderBufferHeight, 6408, 5121, allocateDirect);
-            Bitmap createBitmap = Bitmap.createBitmap(this.renderBufferWidth, this.renderBufferHeight, Config.ARGB_8888);
+            Bitmap createBitmap = Bitmap.createBitmap(this.renderBufferWidth, this.renderBufferHeight, Bitmap.Config.ARGB_8888);
             createBitmap.copyPixelsFromBuffer(allocateDirect);
             return createBitmap;
         }
@@ -1013,17 +1021,29 @@ public class PhotoFilterView extends FrameLayout {
             CountDownLatch countDownLatch = new CountDownLatch(1);
             Bitmap[] bitmapArr = new Bitmap[1];
             try {
-                postRunnable(new -$$Lambda$PhotoFilterView$EGLThread$mV7yxJKIkka2xtURA3o1r9_1nD8(this, bitmapArr, countDownLatch));
+                postRunnable(new Runnable(bitmapArr, countDownLatch) {
+                    private final /* synthetic */ Bitmap[] f$1;
+                    private final /* synthetic */ CountDownLatch f$2;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                    }
+
+                    public final void run() {
+                        PhotoFilterView.EGLThread.this.lambda$getTexture$0$PhotoFilterView$EGLThread(this.f$1, this.f$2);
+                    }
+                });
                 countDownLatch.await();
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e((Throwable) e);
             }
             return bitmapArr[0];
         }
 
         public /* synthetic */ void lambda$getTexture$0$PhotoFilterView$EGLThread(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
             GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[1]);
-            GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[1 ^ this.blured], 0);
+            GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[true ^ this.blured], 0);
             GLES20.glClear(0);
             bitmapArr[0] = getRenderBufferBitmap();
             countDownLatch.countDown();
@@ -1070,7 +1090,7 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);
             GLES20.glTexParameteri(3553, 10243, 33071);
-            GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, null);
+            GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, (Buffer) null);
             GLES20.glBindTexture(3553, this.renderTexture[1]);
             GLES20.glTexParameteri(3553, 10241, 9729);
             GLES20.glTexParameteri(3553, 10240, 9729);
@@ -1082,11 +1102,15 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);
             GLES20.glTexParameteri(3553, 10243, 33071);
-            GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, null);
+            GLES20.glTexImage2D(3553, 0, 6408, this.renderBufferWidth, this.renderBufferHeight, 0, 6408, 5121, (Buffer) null);
         }
 
         public void shutdown() {
-            postRunnable(new -$$Lambda$PhotoFilterView$EGLThread$UPEak5EYsUntGACDTA79Biksn-k(this));
+            postRunnable(new Runnable() {
+                public final void run() {
+                    PhotoFilterView.EGLThread.this.lambda$shutdown$1$PhotoFilterView$EGLThread();
+                }
+            });
         }
 
         public /* synthetic */ void lambda$shutdown$1$PhotoFilterView$EGLThread() {
@@ -1113,7 +1137,19 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public void requestRender(boolean z, boolean z2) {
-            postRunnable(new -$$Lambda$PhotoFilterView$EGLThread$MrJUzcEqH3ADgrrNUt03oFMBD-4(this, z, z2));
+            postRunnable(new Runnable(z, z2) {
+                private final /* synthetic */ boolean f$1;
+                private final /* synthetic */ boolean f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    PhotoFilterView.EGLThread.this.lambda$requestRender$2$PhotoFilterView$EGLThread(this.f$1, this.f$2);
+                }
+            });
         }
 
         public /* synthetic */ void lambda$requestRender$2$PhotoFilterView$EGLThread(boolean z, boolean z2) {
@@ -1128,126 +1164,11 @@ public class PhotoFilterView extends FrameLayout {
         }
     }
 
-    public class ToolsAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public int getItemCount() {
-            return 13;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return false;
-        }
-
-        public ToolsAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View photoEditToolCell;
-            if (i == 0) {
-                photoEditToolCell = new PhotoEditToolCell(this.mContext);
-                photoEditToolCell.setSeekBarDelegate(new -$$Lambda$PhotoFilterView$ToolsAdapter$y8L3fL76Xdh9BIlSQihYImp1GRU(this));
-            } else {
-                photoEditToolCell = new PhotoEditRadioCell(this.mContext);
-                photoEditToolCell.setOnClickListener(new -$$Lambda$PhotoFilterView$ToolsAdapter$l6jhbYVDCcFuEfXfCcHJenobMmo(this));
-            }
-            return new Holder(photoEditToolCell);
-        }
-
-        public /* synthetic */ void lambda$onCreateViewHolder$0$PhotoFilterView$ToolsAdapter(int i, int i2) {
-            if (i == PhotoFilterView.this.enhanceTool) {
-                PhotoFilterView.this.enhanceValue = (float) i2;
-            } else if (i == PhotoFilterView.this.highlightsTool) {
-                PhotoFilterView.this.highlightsValue = (float) i2;
-            } else if (i == PhotoFilterView.this.contrastTool) {
-                PhotoFilterView.this.contrastValue = (float) i2;
-            } else if (i == PhotoFilterView.this.exposureTool) {
-                PhotoFilterView.this.exposureValue = (float) i2;
-            } else if (i == PhotoFilterView.this.warmthTool) {
-                PhotoFilterView.this.warmthValue = (float) i2;
-            } else if (i == PhotoFilterView.this.saturationTool) {
-                PhotoFilterView.this.saturationValue = (float) i2;
-            } else if (i == PhotoFilterView.this.vignetteTool) {
-                PhotoFilterView.this.vignetteValue = (float) i2;
-            } else if (i == PhotoFilterView.this.shadowsTool) {
-                PhotoFilterView.this.shadowsValue = (float) i2;
-            } else if (i == PhotoFilterView.this.grainTool) {
-                PhotoFilterView.this.grainValue = (float) i2;
-            } else if (i == PhotoFilterView.this.sharpenTool) {
-                PhotoFilterView.this.sharpenValue = (float) i2;
-            } else if (i == PhotoFilterView.this.fadeTool) {
-                PhotoFilterView.this.fadeValue = (float) i2;
-            }
-            if (PhotoFilterView.this.eglThread != null) {
-                PhotoFilterView.this.eglThread.requestRender(true);
-            }
-        }
-
-        public /* synthetic */ void lambda$onCreateViewHolder$1$PhotoFilterView$ToolsAdapter(View view) {
-            PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) view;
-            if (((Integer) photoEditRadioCell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
-                PhotoFilterView.this.tintShadowsColor = photoEditRadioCell.getCurrentColor();
-            } else {
-                PhotoFilterView.this.tintHighlightsColor = photoEditRadioCell.getCurrentColor();
-            }
-            if (PhotoFilterView.this.eglThread != null) {
-                PhotoFilterView.this.eglThread.requestRender(false);
-            }
-        }
-
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0) {
-                PhotoEditToolCell photoEditToolCell = (PhotoEditToolCell) viewHolder.itemView;
-                photoEditToolCell.setTag(Integer.valueOf(i));
-                if (i == PhotoFilterView.this.enhanceTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Enhance", NUM), PhotoFilterView.this.enhanceValue, 0, 100);
-                } else if (i == PhotoFilterView.this.highlightsTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Highlights", NUM), PhotoFilterView.this.highlightsValue, -100, 100);
-                } else if (i == PhotoFilterView.this.contrastTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Contrast", NUM), PhotoFilterView.this.contrastValue, -100, 100);
-                } else if (i == PhotoFilterView.this.exposureTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Exposure", NUM), PhotoFilterView.this.exposureValue, -100, 100);
-                } else if (i == PhotoFilterView.this.warmthTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Warmth", NUM), PhotoFilterView.this.warmthValue, -100, 100);
-                } else if (i == PhotoFilterView.this.saturationTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Saturation", NUM), PhotoFilterView.this.saturationValue, -100, 100);
-                } else if (i == PhotoFilterView.this.vignetteTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Vignette", NUM), PhotoFilterView.this.vignetteValue, 0, 100);
-                } else if (i == PhotoFilterView.this.shadowsTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Shadows", NUM), PhotoFilterView.this.shadowsValue, -100, 100);
-                } else if (i == PhotoFilterView.this.grainTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Grain", NUM), PhotoFilterView.this.grainValue, 0, 100);
-                } else if (i == PhotoFilterView.this.sharpenTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Sharpen", NUM), PhotoFilterView.this.sharpenValue, 0, 100);
-                } else if (i == PhotoFilterView.this.fadeTool) {
-                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Fade", NUM), PhotoFilterView.this.fadeValue, 0, 100);
-                }
-            } else if (itemViewType == 1) {
-                PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) viewHolder.itemView;
-                photoEditRadioCell.setTag(Integer.valueOf(i));
-                if (i == PhotoFilterView.this.tintShadowsTool) {
-                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintShadows", NUM), 0, PhotoFilterView.this.tintShadowsColor);
-                } else if (i == PhotoFilterView.this.tintHighlightsTool) {
-                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", NUM), 0, PhotoFilterView.this.tintHighlightsColor);
-                }
-            }
-        }
-
-        public int getItemViewType(int i) {
-            return (i == PhotoFilterView.this.tintShadowsTool || i == PhotoFilterView.this.tintHighlightsTool) ? 1 : 0;
-        }
-    }
-
-    public PhotoFilterView(Context context, Bitmap bitmap, int i, SavedFilterState savedFilterState) {
-        Context context2 = context;
-        SavedFilterState savedFilterState2 = savedFilterState;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public PhotoFilterView(Context context, Bitmap bitmap, int i, MediaController.SavedFilterState savedFilterState) {
         super(context);
+        Context context2 = context;
+        MediaController.SavedFilterState savedFilterState2 = savedFilterState;
         if (savedFilterState2 != null) {
             this.enhanceValue = savedFilterState2.enhanceValue;
             this.exposureValue = savedFilterState2.exposureValue;
@@ -1281,14 +1202,14 @@ public class PhotoFilterView extends FrameLayout {
         this.textureView = new TextureView(context2);
         addView(this.textureView, LayoutHelper.createFrame(-1, -1, 51));
         this.textureView.setVisibility(4);
-        this.textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
+        this.textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
             }
 
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
                 if (PhotoFilterView.this.eglThread == null && surfaceTexture != null) {
                     PhotoFilterView photoFilterView = PhotoFilterView.this;
-                    photoFilterView.eglThread = new EGLThread(surfaceTexture, photoFilterView.bitmapToEdit);
+                    EGLThread unused = photoFilterView.eglThread = new EGLThread(surfaceTexture, photoFilterView.bitmapToEdit);
                     PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
                     PhotoFilterView.this.eglThread.requestRender(true, true);
                 }
@@ -1298,7 +1219,11 @@ public class PhotoFilterView extends FrameLayout {
                 if (PhotoFilterView.this.eglThread != null) {
                     PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
                     PhotoFilterView.this.eglThread.requestRender(false, true);
-                    PhotoFilterView.this.eglThread.postRunnable(new -$$Lambda$PhotoFilterView$1$ykukh_-An3a5DPXda05svw9B55U(this));
+                    PhotoFilterView.this.eglThread.postRunnable(new Runnable() {
+                        public final void run() {
+                            PhotoFilterView.AnonymousClass1.this.lambda$onSurfaceTextureSizeChanged$0$PhotoFilterView$1();
+                        }
+                    });
                 }
             }
 
@@ -1309,19 +1234,28 @@ public class PhotoFilterView extends FrameLayout {
             }
 
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.shutdown();
-                    PhotoFilterView.this.eglThread = null;
+                if (PhotoFilterView.this.eglThread == null) {
+                    return true;
                 }
+                PhotoFilterView.this.eglThread.shutdown();
+                EGLThread unused = PhotoFilterView.this.eglThread = null;
                 return true;
             }
         });
         this.blurControl = new PhotoFilterBlurControl(context2);
         this.blurControl.setVisibility(4);
         addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new -$$Lambda$PhotoFilterView$wsvuAfZFAJpyt9V1ZYZMPETINLA(this));
+        this.blurControl.setDelegate(new PhotoFilterBlurControl.PhotoFilterLinearBlurControlDelegate() {
+            public final void valueChanged(Point point, float f, float f2, float f3) {
+                PhotoFilterView.this.lambda$new$0$PhotoFilterView(point, f, f2, f3);
+            }
+        });
         this.curvesControl = new PhotoFilterCurvesControl(context2, this.curvesToolValue);
-        this.curvesControl.setDelegate(new -$$Lambda$PhotoFilterView$Q8Q0QxhBgkn0x_QyOvZIPgaDQJM(this));
+        this.curvesControl.setDelegate(new PhotoFilterCurvesControl.PhotoFilterCurvesControlDelegate() {
+            public final void valueChanged() {
+                PhotoFilterView.this.lambda$new$1$PhotoFilterView();
+            }
+        });
         this.curvesControl.setVisibility(4);
         addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
         this.toolsView = new FrameLayout(context2);
@@ -1350,24 +1284,36 @@ public class PhotoFilterView extends FrameLayout {
         LinearLayout linearLayout = new LinearLayout(context2);
         frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 1));
         this.tuneItem = new ImageView(context2);
-        this.tuneItem.setScaleType(ScaleType.CENTER);
+        this.tuneItem.setScaleType(ImageView.ScaleType.CENTER);
         this.tuneItem.setImageResource(NUM);
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
+        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new -$$Lambda$PhotoFilterView$4hvar_H88dpzJN2DxB_cny05r_QI(this));
+        this.tuneItem.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$2$PhotoFilterView(view);
+            }
+        });
         this.blurItem = new ImageView(context2);
-        this.blurItem.setScaleType(ScaleType.CENTER);
+        this.blurItem.setScaleType(ImageView.ScaleType.CENTER);
         this.blurItem.setImageResource(NUM);
         this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new -$$Lambda$PhotoFilterView$DKhAjcvz5psQCw7kBhsHKlWIYQM(this));
+        this.blurItem.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$3$PhotoFilterView(view);
+            }
+        });
         this.curveItem = new ImageView(context2);
-        this.curveItem.setScaleType(ScaleType.CENTER);
+        this.curveItem.setScaleType(ImageView.ScaleType.CENTER);
         this.curveItem.setImageResource(NUM);
         this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new -$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug(this));
+        this.curveItem.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$4$PhotoFilterView(view);
+            }
+        });
         this.recyclerListView = new RecyclerListView(context2);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         linearLayoutManager.setOrientation(1);
@@ -1392,44 +1338,34 @@ public class PhotoFilterView extends FrameLayout {
             TextView textView = new TextView(context2);
             textView.setTextSize(1, 12.0f);
             textView.setGravity(16);
-            String string;
-            StringBuilder stringBuilder;
             if (i2 == 0) {
-                string = LocaleController.getString("CurvesAll", NUM);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(string.substring(0, 1).toUpperCase());
-                stringBuilder.append(string.substring(1).toLowerCase());
-                textView.setText(stringBuilder.toString());
+                String string = LocaleController.getString("CurvesAll", NUM);
+                textView.setText(string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase());
                 textView.setTextColor(-1);
                 this.curveRadioButton[i2].setColor(-1, -1);
             } else if (i2 == 1) {
-                string = LocaleController.getString("CurvesRed", NUM);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(string.substring(0, 1).toUpperCase());
-                stringBuilder.append(string.substring(1).toLowerCase());
-                textView.setText(stringBuilder.toString());
+                String string2 = LocaleController.getString("CurvesRed", NUM);
+                textView.setText(string2.substring(0, 1).toUpperCase() + string2.substring(1).toLowerCase());
                 textView.setTextColor(-1684147);
                 this.curveRadioButton[i2].setColor(-1684147, -1684147);
             } else if (i2 == 2) {
-                string = LocaleController.getString("CurvesGreen", NUM);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(string.substring(0, 1).toUpperCase());
-                stringBuilder.append(string.substring(1).toLowerCase());
-                textView.setText(stringBuilder.toString());
+                String string3 = LocaleController.getString("CurvesGreen", NUM);
+                textView.setText(string3.substring(0, 1).toUpperCase() + string3.substring(1).toLowerCase());
                 textView.setTextColor(-10831009);
                 this.curveRadioButton[i2].setColor(-10831009, -10831009);
             } else if (i2 == 3) {
-                string = LocaleController.getString("CurvesBlue", NUM);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(string.substring(0, 1).toUpperCase());
-                stringBuilder.append(string.substring(1).toLowerCase());
-                textView.setText(stringBuilder.toString());
+                String string4 = LocaleController.getString("CurvesBlue", NUM);
+                textView.setText(string4.substring(0, 1).toUpperCase() + string4.substring(1).toLowerCase());
                 textView.setTextColor(-12734994);
                 this.curveRadioButton[i2].setColor(-12734994, -12734994);
             }
             frameLayout2.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
             linearLayout2.addView(frameLayout2, LayoutHelper.createLinear(-2, -2, i2 == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout2.setOnClickListener(new -$$Lambda$PhotoFilterView$L20A01o2AsZwohbyfeeuMPbGEQI(this));
+            frameLayout2.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    PhotoFilterView.this.lambda$new$5$PhotoFilterView(view);
+                }
+            });
             i2++;
         }
         this.blurLayout = new FrameLayout(context2);
@@ -1441,25 +1377,37 @@ public class PhotoFilterView extends FrameLayout {
         this.blurOffButton.setGravity(1);
         this.blurOffButton.setText(LocaleController.getString("BlurOff", NUM));
         this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new -$$Lambda$PhotoFilterView$EHBGA4T-Wcgx03trAGzstG0gXqg(this));
+        this.blurOffButton.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$6$PhotoFilterView(view);
+            }
+        });
         this.blurRadialButton = new TextView(context2);
         this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurRadialButton.setTextSize(1, 13.0f);
         this.blurRadialButton.setGravity(1);
         this.blurRadialButton.setText(LocaleController.getString("BlurRadial", NUM));
         this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new -$$Lambda$PhotoFilterView$SHP9jNXWESNEp5KZC_qRcZYRL1Y(this));
+        this.blurRadialButton.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$7$PhotoFilterView(view);
+            }
+        });
         this.blurLinearButton = new TextView(context2);
         this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
         this.blurLinearButton.setTextSize(1, 13.0f);
         this.blurLinearButton.setGravity(1);
         this.blurLinearButton.setText(LocaleController.getString("BlurLinear", NUM));
         this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
-        this.blurLinearButton.setOnClickListener(new -$$Lambda$PhotoFilterView$TdTpIDy0jwl-mIhu0bpchkPiKg8(this));
+        this.blurLinearButton.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                PhotoFilterView.this.lambda$new$8$PhotoFilterView(view);
+            }
+        });
         updateSelectedBlurType();
-        if (VERSION.SDK_INT >= 21) {
-            ((LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
-            ((LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
+        if (Build.VERSION.SDK_INT >= 21) {
+            ((FrameLayout.LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
+            ((FrameLayout.LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
         }
     }
 
@@ -1483,25 +1431,25 @@ public class PhotoFilterView extends FrameLayout {
 
     public /* synthetic */ void lambda$new$2$PhotoFilterView(View view) {
         this.selectedTool = 0;
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
-        this.blurItem.setColorFilter(null);
-        this.curveItem.setColorFilter(null);
+        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+        this.blurItem.setColorFilter((ColorFilter) null);
+        this.curveItem.setColorFilter((ColorFilter) null);
         switchMode();
     }
 
     public /* synthetic */ void lambda$new$3$PhotoFilterView(View view) {
         this.selectedTool = 1;
-        this.tuneItem.setColorFilter(null);
-        this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
-        this.curveItem.setColorFilter(null);
+        this.tuneItem.setColorFilter((ColorFilter) null);
+        this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+        this.curveItem.setColorFilter((ColorFilter) null);
         switchMode();
     }
 
     public /* synthetic */ void lambda$new$4$PhotoFilterView(View view) {
         this.selectedTool = 2;
-        this.tuneItem.setColorFilter(null);
-        this.blurItem.setColorFilter(null);
-        this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), Mode.MULTIPLY));
+        this.tuneItem.setColorFilter((ColorFilter) null);
+        this.blurItem.setColorFilter((ColorFilter) null);
+        this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         switchMode();
     }
 
@@ -1550,34 +1498,31 @@ public class PhotoFilterView extends FrameLayout {
 
     public void updateColors() {
         TextView textView = this.doneTextView;
-        String str = "dialogFloatingButton";
         if (textView != null) {
-            textView.setTextColor(Theme.getColor(str));
+            textView.setTextColor(Theme.getColor("dialogFloatingButton"));
         }
         ImageView imageView = this.tuneItem;
         if (!(imageView == null || imageView.getColorFilter() == null)) {
-            this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+            this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         }
-        imageView = this.blurItem;
-        if (!(imageView == null || imageView.getColorFilter() == null)) {
-            this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        ImageView imageView2 = this.blurItem;
+        if (!(imageView2 == null || imageView2.getColorFilter() == null)) {
+            this.blurItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         }
-        imageView = this.curveItem;
-        if (!(imageView == null || imageView.getColorFilter() == null)) {
-            this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        ImageView imageView3 = this.curveItem;
+        if (!(imageView3 == null || imageView3.getColorFilter() == null)) {
+            this.curveItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
         }
         updateSelectedBlurType();
     }
 
     private void updateSelectedBlurType() {
         int i = this.blurType;
-        String str = "dialogFloatingButton";
-        Drawable mutate;
         if (i == 0) {
-            mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurOffButton.setTextColor(Theme.getColor(str));
+            Drawable mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate, (Drawable) null, (Drawable) null);
+            this.blurOffButton.setTextColor(Theme.getColor("dialogFloatingButton"));
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurRadialButton.setTextColor(-1);
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
@@ -1585,10 +1530,10 @@ public class PhotoFilterView extends FrameLayout {
         } else if (i == 1) {
             this.blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurOffButton.setTextColor(-1);
-            mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurRadialButton.setTextColor(Theme.getColor(str));
+            Drawable mutate2 = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate2, (Drawable) null, (Drawable) null);
+            this.blurRadialButton.setTextColor(Theme.getColor("dialogFloatingButton"));
             this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurLinearButton.setTextColor(-1);
         } else if (i == 2) {
@@ -1596,15 +1541,15 @@ public class PhotoFilterView extends FrameLayout {
             this.blurOffButton.setTextColor(-1);
             this.blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, NUM, 0, 0);
             this.blurRadialButton.setTextColor(-1);
-            mutate = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
-            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
-            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
-            this.blurLinearButton.setTextColor(Theme.getColor(str));
+            Drawable mutate3 = this.blurOffButton.getContext().getResources().getDrawable(NUM).mutate();
+            mutate3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            this.blurLinearButton.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, mutate3, (Drawable) null, (Drawable) null);
+            this.blurLinearButton.setTextColor(Theme.getColor("dialogFloatingButton"));
         }
     }
 
-    public SavedFilterState getSavedFilterState() {
-        SavedFilterState savedFilterState = new SavedFilterState();
+    public MediaController.SavedFilterState getSavedFilterState() {
+        MediaController.SavedFilterState savedFilterState = new MediaController.SavedFilterState();
         savedFilterState.enhanceValue = this.enhanceValue;
         savedFilterState.exposureValue = this.exposureValue;
         savedFilterState.contrastValue = this.contrastValue;
@@ -1628,23 +1573,22 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     public boolean hasChanges() {
-        SavedFilterState savedFilterState = this.lastState;
-        boolean z = false;
+        MediaController.SavedFilterState savedFilterState = this.lastState;
         if (savedFilterState != null) {
-            if (!(this.enhanceValue == savedFilterState.enhanceValue && this.contrastValue == savedFilterState.contrastValue && this.highlightsValue == savedFilterState.highlightsValue && this.exposureValue == savedFilterState.exposureValue && this.warmthValue == savedFilterState.warmthValue && this.saturationValue == savedFilterState.saturationValue && this.vignetteValue == savedFilterState.vignetteValue && this.shadowsValue == savedFilterState.shadowsValue && this.grainValue == savedFilterState.grainValue && this.sharpenValue == savedFilterState.sharpenValue && this.fadeValue == savedFilterState.fadeValue && this.tintHighlightsColor == savedFilterState.tintHighlightsColor && this.tintShadowsColor == savedFilterState.tintShadowsColor && this.curvesToolValue.shouldBeSkipped())) {
-                z = true;
+            if (this.enhanceValue == savedFilterState.enhanceValue && this.contrastValue == savedFilterState.contrastValue && this.highlightsValue == savedFilterState.highlightsValue && this.exposureValue == savedFilterState.exposureValue && this.warmthValue == savedFilterState.warmthValue && this.saturationValue == savedFilterState.saturationValue && this.vignetteValue == savedFilterState.vignetteValue && this.shadowsValue == savedFilterState.shadowsValue && this.grainValue == savedFilterState.grainValue && this.sharpenValue == savedFilterState.sharpenValue && this.fadeValue == savedFilterState.fadeValue && this.tintHighlightsColor == savedFilterState.tintHighlightsColor && this.tintShadowsColor == savedFilterState.tintShadowsColor && this.curvesToolValue.shouldBeSkipped()) {
+                return false;
             }
-            return z;
+            return true;
+        } else if (this.enhanceValue == 0.0f && this.contrastValue == 0.0f && this.highlightsValue == 0.0f && this.exposureValue == 0.0f && this.warmthValue == 0.0f && this.saturationValue == 0.0f && this.vignetteValue == 0.0f && this.shadowsValue == 0.0f && this.grainValue == 0.0f && this.sharpenValue == 0.0f && this.fadeValue == 0.0f && this.tintHighlightsColor == 0 && this.tintShadowsColor == 0 && this.curvesToolValue.shouldBeSkipped()) {
+            return false;
+        } else {
+            return true;
         }
-        if (!(this.enhanceValue == 0.0f && this.contrastValue == 0.0f && this.highlightsValue == 0.0f && this.exposureValue == 0.0f && this.warmthValue == 0.0f && this.saturationValue == 0.0f && this.vignetteValue == 0.0f && this.shadowsValue == 0.0f && this.grainValue == 0.0f && this.sharpenValue == 0.0f && this.fadeValue == 0.0f && this.tintHighlightsColor == 0 && this.tintShadowsColor == 0 && this.curvesToolValue.shouldBeSkipped())) {
-            z = true;
-        }
-        return z;
     }
 
     public void onTouch(MotionEvent motionEvent) {
         if (motionEvent.getActionMasked() == 0 || motionEvent.getActionMasked() == 5) {
-            LayoutParams layoutParams = (LayoutParams) this.textureView.getLayoutParams();
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textureView.getLayoutParams();
             if (layoutParams != null && motionEvent.getX() >= ((float) layoutParams.leftMargin) && motionEvent.getY() >= ((float) layoutParams.topMargin) && motionEvent.getX() <= ((float) (layoutParams.leftMargin + layoutParams.width)) && motionEvent.getY() <= ((float) (layoutParams.topMargin + layoutParams.height))) {
                 setShowOriginal(true);
             }
@@ -1687,10 +1631,10 @@ public class PhotoFilterView extends FrameLayout {
             this.curveLayout.setVisibility(0);
             this.curvesControl.setVisibility(0);
             this.curvesToolValue.activeType = 0;
-            i = 0;
-            while (i < 4) {
-                this.curveRadioButton[i].setChecked(i == 0, false);
-                i++;
+            int i2 = 0;
+            while (i2 < 4) {
+                this.curveRadioButton[i2].setChecked(i2 == 0, false);
+                i2++;
             }
         }
     }
@@ -1710,115 +1654,133 @@ public class PhotoFilterView extends FrameLayout {
 
     public Bitmap getBitmap() {
         EGLThread eGLThread = this.eglThread;
-        return eGLThread != null ? eGLThread.getTexture() : null;
+        if (eGLThread != null) {
+            return eGLThread.getTexture();
+        }
+        return null;
     }
 
     private void fixLayout(int i, int i2) {
+        int i3;
+        float f;
+        float f2;
+        float f3;
         if (this.bitmapToEdit != null) {
-            float height;
-            int width;
-            i -= AndroidUtilities.dp(28.0f);
-            i2 -= AndroidUtilities.dp(214.0f) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-            int i3 = this.orientation;
-            if (i3 % 360 == 90 || i3 % 360 == 270) {
-                height = (float) this.bitmapToEdit.getHeight();
-                width = this.bitmapToEdit.getWidth();
+            int dp = i - AndroidUtilities.dp(28.0f);
+            int dp2 = i2 - (AndroidUtilities.dp(214.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+            int i4 = this.orientation;
+            if (i4 % 360 == 90 || i4 % 360 == 270) {
+                f = (float) this.bitmapToEdit.getHeight();
+                i3 = this.bitmapToEdit.getWidth();
             } else {
-                height = (float) this.bitmapToEdit.getWidth();
-                width = this.bitmapToEdit.getHeight();
+                f = (float) this.bitmapToEdit.getWidth();
+                i3 = this.bitmapToEdit.getHeight();
             }
-            float f = (float) width;
-            float f2 = (float) i;
-            float f3 = f2 / height;
-            float f4 = (float) i2;
-            float f5 = f4 / f;
-            if (f3 > f5) {
-                height = (float) ((int) Math.ceil((double) (height * f5)));
-                f = f4;
+            float f4 = (float) i3;
+            float f5 = (float) dp;
+            float f6 = f5 / f;
+            float f7 = (float) dp2;
+            float f8 = f7 / f4;
+            if (f6 > f8) {
+                f3 = (float) ((int) Math.ceil((double) (f * f8)));
+                f2 = f7;
             } else {
-                f = (float) ((int) Math.ceil((double) (f * f3)));
-                height = f2;
+                f2 = (float) ((int) Math.ceil((double) (f4 * f6)));
+                f3 = f5;
             }
-            int ceil = (int) Math.ceil((double) (((f2 - height) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))));
-            int ceil2 = (int) Math.ceil((double) ((((f4 - f) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))));
-            LayoutParams layoutParams = (LayoutParams) this.textureView.getLayoutParams();
+            int ceil = (int) Math.ceil((double) (((f5 - f3) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))));
+            int ceil2 = (int) Math.ceil((double) (((f7 - f2) / 2.0f) + ((float) AndroidUtilities.dp(14.0f)) + ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))));
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textureView.getLayoutParams();
             layoutParams.leftMargin = ceil;
             layoutParams.topMargin = ceil2;
-            layoutParams.width = (int) height;
-            layoutParams.height = (int) f;
-            this.curvesControl.setActualArea((float) ceil, (float) (ceil2 - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), (float) layoutParams.width, (float) layoutParams.height);
+            layoutParams.width = (int) f3;
+            layoutParams.height = (int) f2;
+            this.curvesControl.setActualArea((float) ceil, (float) (ceil2 - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), (float) layoutParams.width, (float) layoutParams.height);
             this.blurControl.setActualAreaSize((float) layoutParams.width, (float) layoutParams.height);
-            ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(38.0f) + i2;
-            ((LayoutParams) this.curvesControl.getLayoutParams()).height = i2 + AndroidUtilities.dp(28.0f);
+            ((FrameLayout.LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(38.0f) + dp2;
+            ((FrameLayout.LayoutParams) this.curvesControl.getLayoutParams()).height = dp2 + AndroidUtilities.dp(28.0f);
             if (AndroidUtilities.isTablet()) {
-                i2 = AndroidUtilities.dp(86.0f) * 10;
-                LayoutParams layoutParams2 = (LayoutParams) this.recyclerListView.getLayoutParams();
-                if (i2 < i) {
-                    layoutParams2.width = i2;
-                    layoutParams2.leftMargin = (i - i2) / 2;
-                } else {
-                    layoutParams2.width = -1;
-                    layoutParams2.leftMargin = 0;
+                int dp3 = AndroidUtilities.dp(86.0f) * 10;
+                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.recyclerListView.getLayoutParams();
+                if (dp3 < dp) {
+                    layoutParams2.width = dp3;
+                    layoutParams2.leftMargin = (dp - dp3) / 2;
+                    return;
                 }
+                layoutParams2.width = -1;
+                layoutParams2.leftMargin = 0;
             }
         }
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        fixLayout(MeasureSpec.getSize(i), MeasureSpec.getSize(i2));
+        fixLayout(View.MeasureSpec.getSize(i), View.MeasureSpec.getSize(i2));
         super.onMeasure(i, i2);
     }
 
-    private float getShadowsValue() {
+    /* access modifiers changed from: private */
+    public float getShadowsValue() {
         return ((this.shadowsValue * 0.55f) + 100.0f) / 100.0f;
     }
 
-    private float getHighlightsValue() {
+    /* access modifiers changed from: private */
+    public float getHighlightsValue() {
         return ((this.highlightsValue * 0.75f) + 100.0f) / 100.0f;
     }
 
-    private float getEnhanceValue() {
+    /* access modifiers changed from: private */
+    public float getEnhanceValue() {
         return this.enhanceValue / 100.0f;
     }
 
-    private float getExposureValue() {
+    /* access modifiers changed from: private */
+    public float getExposureValue() {
         return this.exposureValue / 100.0f;
     }
 
-    private float getContrastValue() {
+    /* access modifiers changed from: private */
+    public float getContrastValue() {
         return ((this.contrastValue / 100.0f) * 0.3f) + 1.0f;
     }
 
-    private float getWarmthValue() {
+    /* access modifiers changed from: private */
+    public float getWarmthValue() {
         return this.warmthValue / 100.0f;
     }
 
-    private float getVignetteValue() {
+    /* access modifiers changed from: private */
+    public float getVignetteValue() {
         return this.vignetteValue / 100.0f;
     }
 
-    private float getSharpenValue() {
+    /* access modifiers changed from: private */
+    public float getSharpenValue() {
         return ((this.sharpenValue / 100.0f) * 0.6f) + 0.11f;
     }
 
-    private float getGrainValue() {
+    /* access modifiers changed from: private */
+    public float getGrainValue() {
         return (this.grainValue / 100.0f) * 0.04f;
     }
 
-    private float getFadeValue() {
+    /* access modifiers changed from: private */
+    public float getFadeValue() {
         return this.fadeValue / 100.0f;
     }
 
-    private float getTintHighlightsIntensityValue() {
+    /* access modifiers changed from: private */
+    public float getTintHighlightsIntensityValue() {
         return this.tintHighlightsColor == 0 ? 0.0f : 0.5f;
     }
 
-    private float getTintShadowsIntensityValue() {
+    /* access modifiers changed from: private */
+    public float getTintShadowsIntensityValue() {
         return this.tintShadowsColor == 0 ? 0.0f : 0.5f;
     }
 
-    private float getSaturationValue() {
+    /* access modifiers changed from: private */
+    public float getSaturationValue() {
         float f = this.saturationValue / 100.0f;
         if (f > 0.0f) {
             f *= 1.05f;
@@ -1836,5 +1798,141 @@ public class PhotoFilterView extends FrameLayout {
 
     public TextView getCancelTextView() {
         return this.cancelTextView;
+    }
+
+    public class ToolsAdapter extends RecyclerListView.SelectionAdapter {
+        private Context mContext;
+
+        public int getItemCount() {
+            return 13;
+        }
+
+        public long getItemId(int i) {
+            return (long) i;
+        }
+
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return false;
+        }
+
+        public ToolsAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: org.telegram.ui.Cells.PhotoEditRadioCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.ui.Cells.PhotoEditToolCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v4, resolved type: org.telegram.ui.Cells.PhotoEditRadioCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v5, resolved type: org.telegram.ui.Cells.PhotoEditRadioCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r1, int r2) {
+            /*
+                r0 = this;
+                if (r2 != 0) goto L_0x0012
+                org.telegram.ui.Cells.PhotoEditToolCell r1 = new org.telegram.ui.Cells.PhotoEditToolCell
+                android.content.Context r2 = r0.mContext
+                r1.<init>(r2)
+                org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$y8L3fL76Xdh9BIlSQihYImp1GRU r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$y8L3fL76Xdh9BIlSQihYImp1GRU
+                r2.<init>()
+                r1.setSeekBarDelegate(r2)
+                goto L_0x0021
+            L_0x0012:
+                org.telegram.ui.Cells.PhotoEditRadioCell r1 = new org.telegram.ui.Cells.PhotoEditRadioCell
+                android.content.Context r2 = r0.mContext
+                r1.<init>(r2)
+                org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$l6jhbYVDCcFuEfXfCcHJenobMmo r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$ToolsAdapter$l6jhbYVDCcFuEfXfCcHJenobMmo
+                r2.<init>()
+                r1.setOnClickListener(r2)
+            L_0x0021:
+                org.telegram.ui.Components.RecyclerListView$Holder r2 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r2.<init>(r1)
+                return r2
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterView.ToolsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public /* synthetic */ void lambda$onCreateViewHolder$0$PhotoFilterView$ToolsAdapter(int i, int i2) {
+            if (i == PhotoFilterView.this.enhanceTool) {
+                float unused = PhotoFilterView.this.enhanceValue = (float) i2;
+            } else if (i == PhotoFilterView.this.highlightsTool) {
+                float unused2 = PhotoFilterView.this.highlightsValue = (float) i2;
+            } else if (i == PhotoFilterView.this.contrastTool) {
+                float unused3 = PhotoFilterView.this.contrastValue = (float) i2;
+            } else if (i == PhotoFilterView.this.exposureTool) {
+                float unused4 = PhotoFilterView.this.exposureValue = (float) i2;
+            } else if (i == PhotoFilterView.this.warmthTool) {
+                float unused5 = PhotoFilterView.this.warmthValue = (float) i2;
+            } else if (i == PhotoFilterView.this.saturationTool) {
+                float unused6 = PhotoFilterView.this.saturationValue = (float) i2;
+            } else if (i == PhotoFilterView.this.vignetteTool) {
+                float unused7 = PhotoFilterView.this.vignetteValue = (float) i2;
+            } else if (i == PhotoFilterView.this.shadowsTool) {
+                float unused8 = PhotoFilterView.this.shadowsValue = (float) i2;
+            } else if (i == PhotoFilterView.this.grainTool) {
+                float unused9 = PhotoFilterView.this.grainValue = (float) i2;
+            } else if (i == PhotoFilterView.this.sharpenTool) {
+                float unused10 = PhotoFilterView.this.sharpenValue = (float) i2;
+            } else if (i == PhotoFilterView.this.fadeTool) {
+                float unused11 = PhotoFilterView.this.fadeValue = (float) i2;
+            }
+            if (PhotoFilterView.this.eglThread != null) {
+                PhotoFilterView.this.eglThread.requestRender(true);
+            }
+        }
+
+        public /* synthetic */ void lambda$onCreateViewHolder$1$PhotoFilterView$ToolsAdapter(View view) {
+            PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) view;
+            if (((Integer) photoEditRadioCell.getTag()).intValue() == PhotoFilterView.this.tintShadowsTool) {
+                int unused = PhotoFilterView.this.tintShadowsColor = photoEditRadioCell.getCurrentColor();
+            } else {
+                int unused2 = PhotoFilterView.this.tintHighlightsColor = photoEditRadioCell.getCurrentColor();
+            }
+            if (PhotoFilterView.this.eglThread != null) {
+                PhotoFilterView.this.eglThread.requestRender(false);
+            }
+        }
+
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            int itemViewType = viewHolder.getItemViewType();
+            if (itemViewType == 0) {
+                PhotoEditToolCell photoEditToolCell = (PhotoEditToolCell) viewHolder.itemView;
+                photoEditToolCell.setTag(Integer.valueOf(i));
+                if (i == PhotoFilterView.this.enhanceTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Enhance", NUM), PhotoFilterView.this.enhanceValue, 0, 100);
+                } else if (i == PhotoFilterView.this.highlightsTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Highlights", NUM), PhotoFilterView.this.highlightsValue, -100, 100);
+                } else if (i == PhotoFilterView.this.contrastTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Contrast", NUM), PhotoFilterView.this.contrastValue, -100, 100);
+                } else if (i == PhotoFilterView.this.exposureTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Exposure", NUM), PhotoFilterView.this.exposureValue, -100, 100);
+                } else if (i == PhotoFilterView.this.warmthTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Warmth", NUM), PhotoFilterView.this.warmthValue, -100, 100);
+                } else if (i == PhotoFilterView.this.saturationTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Saturation", NUM), PhotoFilterView.this.saturationValue, -100, 100);
+                } else if (i == PhotoFilterView.this.vignetteTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Vignette", NUM), PhotoFilterView.this.vignetteValue, 0, 100);
+                } else if (i == PhotoFilterView.this.shadowsTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Shadows", NUM), PhotoFilterView.this.shadowsValue, -100, 100);
+                } else if (i == PhotoFilterView.this.grainTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Grain", NUM), PhotoFilterView.this.grainValue, 0, 100);
+                } else if (i == PhotoFilterView.this.sharpenTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Sharpen", NUM), PhotoFilterView.this.sharpenValue, 0, 100);
+                } else if (i == PhotoFilterView.this.fadeTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Fade", NUM), PhotoFilterView.this.fadeValue, 0, 100);
+                }
+            } else if (itemViewType == 1) {
+                PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) viewHolder.itemView;
+                photoEditRadioCell.setTag(Integer.valueOf(i));
+                if (i == PhotoFilterView.this.tintShadowsTool) {
+                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintShadows", NUM), 0, PhotoFilterView.this.tintShadowsColor);
+                } else if (i == PhotoFilterView.this.tintHighlightsTool) {
+                    photoEditRadioCell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", NUM), 0, PhotoFilterView.this.tintHighlightsColor);
+                }
+            }
+        }
+
+        public int getItemViewType(int i) {
+            return (i == PhotoFilterView.this.tintShadowsTool || i == PhotoFilterView.this.tintHighlightsTool) ? 1 : 0;
+        }
     }
 }

@@ -4,6 +4,9 @@ public class IntSize {
     public int height;
     public int width;
 
+    public IntSize() {
+    }
+
     public IntSize(IntSize intSize) {
         this.width = intSize.width;
         this.height = intSize.height;
@@ -20,7 +23,6 @@ public class IntSize {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
@@ -28,13 +30,10 @@ public class IntSize {
             return false;
         }
         IntSize intSize = (IntSize) obj;
-        if (this.width != intSize.width) {
-            return false;
+        if (this.width == intSize.width && this.height == intSize.height) {
+            return true;
         }
-        if (this.height != intSize.height) {
-            z = false;
-        }
-        return z;
+        return false;
     }
 
     public int hashCode() {
@@ -42,12 +41,6 @@ public class IntSize {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("IntSize(");
-        stringBuilder.append(this.width);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.height);
-        stringBuilder.append(")");
-        return stringBuilder.toString();
+        return "IntSize(" + this.width + ", " + this.height + ")";
     }
 }

@@ -41,20 +41,16 @@ public final class EncryptedFileDataSource extends BaseDataSource {
     }
 
     public long open(DataSpec dataSpec) throws EncryptedFileDataSourceException {
-        String str = "r";
         try {
             this.uri = dataSpec.uri;
-            File file = new File(dataSpec.uri.getPath());
-            String name = file.getName();
+            File file2 = new File(dataSpec.uri.getPath());
+            String name = file2.getName();
             File internalCacheDir = FileLoader.getInternalCacheDir();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(name);
-            stringBuilder.append(".key");
-            RandomAccessFile randomAccessFile = new RandomAccessFile(new File(internalCacheDir, stringBuilder.toString()), str);
+            RandomAccessFile randomAccessFile = new RandomAccessFile(new File(internalCacheDir, name + ".key"), "r");
             randomAccessFile.read(this.key);
             randomAccessFile.read(this.iv);
             randomAccessFile.close();
-            this.file = new RandomAccessFile(file, str);
+            this.file = new RandomAccessFile(file2, "r");
             this.file.seek(dataSpec.position);
             this.fileOffset = (int) dataSpec.position;
             this.bytesRemaining = dataSpec.length == -1 ? this.file.length() - dataSpec.position : dataSpec.length;
@@ -78,14 +74,14 @@ public final class EncryptedFileDataSource extends BaseDataSource {
             return -1;
         }
         try {
-            i2 = this.file.read(bArr, i, (int) Math.min(j, (long) i2));
-            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, i2, this.fileOffset);
-            this.fileOffset += i2;
-            if (i2 > 0) {
-                this.bytesRemaining -= (long) i2;
-                bytesTransferred(i2);
+            int read = this.file.read(bArr, i, (int) Math.min(j, (long) i2));
+            Utilities.aesCtrDecryptionByteArray(bArr, this.key, this.iv, i, read, this.fileOffset);
+            this.fileOffset += read;
+            if (read > 0) {
+                this.bytesRemaining -= (long) read;
+                bytesTransferred(read);
             }
-            return i2;
+            return read;
         } catch (IOException e) {
             throw new EncryptedFileDataSourceException(e);
         }
@@ -115,6 +111,7 @@ public final class EncryptedFileDataSource extends BaseDataSource {
                 this.opened = false;
                 transferEnded();
             }
+            throw th;
         }
     }
 }

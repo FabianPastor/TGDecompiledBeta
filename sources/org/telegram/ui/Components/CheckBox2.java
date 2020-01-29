@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
-import org.telegram.ui.Components.CheckBoxBase.ProgressDelegate;
+import org.telegram.ui.Components.CheckBoxBase;
 
 public class CheckBox2 extends View {
     private CheckBoxBase checkBoxBase;
@@ -13,7 +13,7 @@ public class CheckBox2 extends View {
         this.checkBoxBase = new CheckBoxBase(this, i);
     }
 
-    public void setProgressDelegate(ProgressDelegate progressDelegate) {
+    public void setProgressDelegate(CheckBoxBase.ProgressDelegate progressDelegate) {
         this.checkBoxBase.setProgressDelegate(progressDelegate);
     }
 
@@ -54,25 +54,25 @@ public class CheckBox2 extends View {
         return this.checkBoxBase.getProgress();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.checkBoxBase.onAttachedToWindow();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.checkBoxBase.onDetachedFromWindow();
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
         this.checkBoxBase.setBounds(0, 0, i3 - i, i4 - i2);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         this.checkBoxBase.draw(canvas);
     }

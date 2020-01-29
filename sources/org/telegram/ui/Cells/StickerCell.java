@@ -2,11 +2,10 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
@@ -15,10 +14,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.DocumentAttribute;
-import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -31,7 +27,7 @@ public class StickerCell extends FrameLayout {
     private Object parentObject;
     private float scale;
     private boolean scaled;
-    private Document sticker;
+    private TLRPC.Document sticker;
     private long time = 0;
 
     public StickerCell(Context context) {
@@ -43,14 +39,14 @@ public class StickerCell extends FrameLayout {
         setFocusable(true);
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(76.0f) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
     public void setPressed(boolean z) {
         if (this.imageView.getImageReceiver().getPressed() != z) {
-            this.imageView.getImageReceiver().setPressed(z);
+            this.imageView.getImageReceiver().setPressed(z ? 1 : 0);
             this.imageView.invalidate();
         }
         super.setPressed(z);
@@ -64,18 +60,18 @@ public class StickerCell extends FrameLayout {
         return this.clearsInputField;
     }
 
-    public void setSticker(Document document, Object obj, int i) {
-        Document document2 = document;
+    public void setSticker(TLRPC.Document document, Object obj, int i) {
+        TLRPC.Document document2 = document;
         int i2 = i;
         this.parentObject = obj;
         if (document2 != null) {
-            PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
+            TLRPC.PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
             if (!MessageObject.canAutoplayAnimatedSticker(document)) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, "webp", null, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), (String) null, "webp", (Drawable) null, this.parentObject);
             } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), null, 0, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), (String) null, 0, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", null, null, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", (String) null, (Drawable) null, this.parentObject);
             }
         }
         this.sticker = document2;
@@ -95,11 +91,11 @@ public class StickerCell extends FrameLayout {
         Drawable background = getBackground();
         if (background != null) {
             background.setAlpha(230);
-            background.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel"), Mode.MULTIPLY));
+            background.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel"), PorterDuff.Mode.MULTIPLY));
         }
     }
 
-    public Document getSticker() {
+    public TLRPC.Document getSticker() {
         return this.sticker;
     }
 
@@ -117,10 +113,10 @@ public class StickerCell extends FrameLayout {
         return this.imageView.getImageReceiver().getBitmap() != null;
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         boolean drawChild = super.drawChild(canvas, view, j);
-        if (view == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f))) {
+        if (view == this.imageView && ((this.scaled && this.scale != 0.8f) || (!this.scaled && this.scale != 1.0f))) {
             long currentTimeMillis = System.currentTimeMillis();
             long j2 = currentTimeMillis - this.lastUpdateTime;
             this.lastUpdateTime = currentTimeMillis;
@@ -154,21 +150,16 @@ public class StickerCell extends FrameLayout {
         if (this.sticker != null) {
             String str = null;
             for (int i = 0; i < this.sticker.attributes.size(); i++) {
-                DocumentAttribute documentAttribute = (DocumentAttribute) this.sticker.attributes.get(i);
-                if (documentAttribute instanceof TL_documentAttributeSticker) {
-                    str = documentAttribute.alt;
-                    str = (str == null || str.length() <= 0) ? null : documentAttribute.alt;
+                TLRPC.DocumentAttribute documentAttribute = this.sticker.attributes.get(i);
+                if (documentAttribute instanceof TLRPC.TL_documentAttributeSticker) {
+                    String str2 = documentAttribute.alt;
+                    str = (str2 == null || str2.length() <= 0) ? null : documentAttribute.alt;
                 }
             }
-            String str2 = "AttachSticker";
             if (str != null) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(str);
-                stringBuilder.append(" ");
-                stringBuilder.append(LocaleController.getString(str2, NUM));
-                accessibilityNodeInfo.setText(stringBuilder.toString());
+                accessibilityNodeInfo.setText(str + " " + LocaleController.getString("AttachSticker", NUM));
             } else {
-                accessibilityNodeInfo.setText(LocaleController.getString(str2, NUM));
+                accessibilityNodeInfo.setText(LocaleController.getString("AttachSticker", NUM));
             }
             accessibilityNodeInfo.setEnabled(true);
         }

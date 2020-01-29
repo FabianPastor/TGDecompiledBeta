@@ -1,9 +1,9 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.view.View.MeasureSpec;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,24 +23,23 @@ public class LocationPoweredCell extends FrameLayout {
         addView(linearLayout, LayoutHelper.createFrame(-2, -2, 17));
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 16.0f);
-        String str = "windowBackgroundWhiteGrayText3";
-        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.textView.setText("Powered by");
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(NUM);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText3"), PorterDuff.Mode.MULTIPLY));
         this.imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         linearLayout.addView(this.imageView, LayoutHelper.createLinear(35, -2));
         this.textView2 = new TextView(context);
         this.textView2.setTextSize(1, 16.0f);
-        this.textView2.setTextColor(Theme.getColor(str));
+        this.textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.textView2.setText("Foursquare");
         linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2));
     }
 
-    /* Access modifiers changed, original: protected */
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 }

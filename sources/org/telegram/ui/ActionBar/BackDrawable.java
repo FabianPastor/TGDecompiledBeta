@@ -88,55 +88,52 @@ public class BackDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int i;
         float f;
-        float f2;
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
                 this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
-                i = this.currentAnimationTime;
-                f = (float) i;
-                float f3 = this.animationTime;
-                if (f >= f3) {
+                int i = this.currentAnimationTime;
+                float f2 = this.animationTime;
+                if (((float) i) >= f2) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / f3) * this.finalRotation;
+                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / f2) * this.finalRotation;
                 } else {
-                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / f3);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / f2);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
         int i2 = 0;
-        i = this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0;
+        int red = this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0;
         int green = this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0;
         if (this.rotated) {
             i2 = (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation);
         }
-        this.paint.setColor(Color.rgb(Color.red(this.color) + i, Color.green(this.color) + green, Color.blue(this.color) + i2));
+        this.paint.setColor(Color.rgb(Color.red(this.color) + red, Color.green(this.color) + green, Color.blue(this.color) + i2));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        i = this.arrowRotation;
-        if (i != 0) {
-            canvas.rotate((float) i);
+        int i3 = this.arrowRotation;
+        if (i3 != 0) {
+            canvas.rotate((float) i3);
         }
-        float f4 = this.currentRotation;
-        if (this.alwaysClose) {
-            canvas.rotate((f4 * ((float) (this.reverseAngle ? -180 : 180))) + 135.0f);
-            f2 = 1.0f;
+        float f3 = this.currentRotation;
+        if (!this.alwaysClose) {
+            canvas.rotate(((float) (this.reverseAngle ? -225 : 135)) * f3);
+            f = f3;
         } else {
-            canvas.rotate(((float) (this.reverseAngle ? -225 : 135)) * f4);
-            f2 = f4;
+            canvas.rotate((f3 * ((float) (this.reverseAngle ? -180 : 180))) + 135.0f);
+            f = 1.0f;
         }
-        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * f2), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
-        float f5 = (float) (-AndroidUtilities.dp(0.5f));
-        float dp = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * f2);
+        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * f), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        float f4 = (float) (-AndroidUtilities.dp(0.5f));
+        float dp = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * f);
         Canvas canvas2 = canvas;
-        f = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * f2);
-        float dp2 = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * f2);
-        canvas2.drawLine(f, -f5, dp2, -dp, this.paint);
-        canvas2.drawLine(f, f5, dp2, dp, this.paint);
+        float dp2 = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * f);
+        float dp3 = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * f);
+        canvas2.drawLine(dp2, -f4, dp3, -dp, this.paint);
+        canvas2.drawLine(dp2, f4, dp3, dp, this.paint);
         canvas.restore();
     }
 

@@ -11,11 +11,11 @@ import org.telegram.ui.ActionBar.Theme;
 public class TypingDotsDrawable extends StatusDrawable {
     private int currentAccount = UserConfig.selectedAccount;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
-    private float[] elapsedTimes = new float[]{0.0f, 0.0f, 0.0f};
+    private float[] elapsedTimes = {0.0f, 0.0f, 0.0f};
     private boolean isChat = false;
     private long lastUpdateTime = 0;
     private float[] scales = new float[3];
-    private float[] startTimes = new float[]{0.0f, 150.0f, 300.0f};
+    private float[] startTimes = {0.0f, 150.0f, 300.0f};
     private boolean started = false;
 
     public int getOpacity() {
@@ -36,23 +36,23 @@ public class TypingDotsDrawable extends StatusDrawable {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        currentTimeMillis = 50;
+        long j2 = 50;
         if (j <= 50) {
-            currentTimeMillis = j;
+            j2 = j;
         }
         for (int i = 0; i < 3; i++) {
             float[] fArr = this.elapsedTimes;
-            fArr[i] = fArr[i] + ((float) currentTimeMillis);
+            fArr[i] = fArr[i] + ((float) j2);
             float f = fArr[i];
             float[] fArr2 = this.startTimes;
-            f -= fArr2[i];
-            if (f <= 0.0f) {
+            float f2 = f - fArr2[i];
+            if (f2 <= 0.0f) {
                 this.scales[i] = 1.33f;
-            } else if (f <= 320.0f) {
-                this.scales[i] = this.decelerateInterpolator.getInterpolation(f / 320.0f) + 1.33f;
-            } else if (f <= 640.0f) {
-                this.scales[i] = (1.0f - this.decelerateInterpolator.getInterpolation((f - 320.0f) / 320.0f)) + 1.33f;
-            } else if (f >= 800.0f) {
+            } else if (f2 <= 320.0f) {
+                this.scales[i] = this.decelerateInterpolator.getInterpolation(f2 / 320.0f) + 1.33f;
+            } else if (f2 <= 640.0f) {
+                this.scales[i] = (1.0f - this.decelerateInterpolator.getInterpolation((f2 - 320.0f) / 320.0f)) + 1.33f;
+            } else if (f2 >= 800.0f) {
                 fArr[i] = 0.0f;
                 fArr2[i] = 0.0f;
                 this.scales[i] = 1.33f;
@@ -82,32 +82,36 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        int dp;
         int i;
+        int i2;
         if (this.isChat) {
-            dp = AndroidUtilities.dp(8.5f);
+            i2 = AndroidUtilities.dp(8.5f);
             i = getBounds().top;
         } else {
-            dp = AndroidUtilities.dp(9.3f);
+            i2 = AndroidUtilities.dp(9.3f);
             i = getBounds().top;
         }
-        dp += i;
         Theme.chat_statusPaint.setAlpha(255);
-        float f = (float) dp;
+        float f = (float) (i2 + i);
         canvas.drawCircle((float) AndroidUtilities.dp(3.0f), f, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle((float) AndroidUtilities.dp(9.0f), f, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
         canvas.drawCircle((float) AndroidUtilities.dp(15.0f), f, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
         checkUpdate();
     }
 
-    private void checkUpdate() {
+    /* access modifiers changed from: private */
+    public void checkUpdate() {
         if (!this.started) {
             return;
         }
-        if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$TypingDotsDrawable$6mZKSEfaAngfDGlsoqdZ2efS_EU(this), 100);
-        } else {
+        if (!NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
             update();
+        } else {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    TypingDotsDrawable.this.checkUpdate();
+                }
+            }, 100);
         }
     }
 

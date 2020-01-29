@@ -1,7 +1,6 @@
 package org.telegram.messenger.video;
 
 import android.graphics.SurfaceTexture;
-import android.graphics.SurfaceTexture.OnFrameAvailableListener;
 import android.opengl.GLES20;
 import android.view.Surface;
 import java.nio.ByteBuffer;
@@ -12,7 +11,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-public class OutputSurface implements OnFrameAvailableListener {
+public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
     private static final int EGL_OPENGL_ES2_BIT = 4;
     private EGL10 mEGL;
@@ -36,7 +35,7 @@ public class OutputSurface implements OnFrameAvailableListener {
         this.mWidth = i;
         this.mHeight = i2;
         this.rotateRender = i3;
-        this.mPixelBuf = ByteBuffer.allocateDirect((this.mWidth * this.mHeight) * 4);
+        this.mPixelBuf = ByteBuffer.allocateDirect(this.mWidth * this.mHeight * 4);
         this.mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
         eglSetup(i, i2);
         makeCurrent();
@@ -61,7 +60,7 @@ public class OutputSurface implements OnFrameAvailableListener {
         EGLDisplay eGLDisplay = this.mEGLDisplay;
         if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
             throw new RuntimeException("unable to get EGL10 display");
-        } else if (this.mEGL.eglInitialize(eGLDisplay, null)) {
+        } else if (this.mEGL.eglInitialize(eGLDisplay, (int[]) null)) {
             EGLConfig[] eGLConfigArr = new EGLConfig[1];
             if (this.mEGL.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12339, 1, 12352, 4, 12344}, eGLConfigArr, eGLConfigArr.length, new int[1])) {
                 this.mEGLContext = this.mEGL.eglCreateContext(this.mEGLDisplay, eGLConfigArr[0], EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
@@ -87,10 +86,10 @@ public class OutputSurface implements OnFrameAvailableListener {
         EGL10 egl10 = this.mEGL;
         if (egl10 != null) {
             if (egl10.eglGetCurrentContext().equals(this.mEGLContext)) {
-                egl10 = this.mEGL;
+                EGL10 egl102 = this.mEGL;
                 EGLDisplay eGLDisplay = this.mEGLDisplay;
                 EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
             }
             this.mEGL.eglDestroySurface(this.mEGLDisplay, this.mEGLSurface);
             this.mEGL.eglDestroyContext(this.mEGLDisplay, this.mEGLContext);
@@ -147,11 +146,12 @@ public class OutputSurface implements OnFrameAvailableListener {
 
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         synchronized (this.mFrameSyncObject) {
-            if (this.mFrameAvailable) {
+            if (!this.mFrameAvailable) {
+                this.mFrameAvailable = true;
+                this.mFrameSyncObject.notifyAll();
+            } else {
                 throw new RuntimeException("mFrameAvailable already set, frame could be dropped");
             }
-            this.mFrameAvailable = true;
-            this.mFrameSyncObject.notifyAll();
         }
     }
 

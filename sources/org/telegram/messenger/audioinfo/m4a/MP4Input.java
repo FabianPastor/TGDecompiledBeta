@@ -6,7 +6,7 @@ import org.telegram.messenger.audioinfo.util.PositionInputStream;
 
 public final class MP4Input extends MP4Box<PositionInputStream> {
     public MP4Input(InputStream inputStream) {
-        super(new PositionInputStream(inputStream), null, "");
+        super(new PositionInputStream(inputStream), (MP4Box<?>) null, "");
     }
 
     public MP4Atom nextChildUpTo(String str) throws IOException {
@@ -18,10 +18,6 @@ public final class MP4Input extends MP4Box<PositionInputStream> {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("mp4[pos=");
-        stringBuilder.append(getPosition());
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "mp4[pos=" + getPosition() + "]";
     }
 }
