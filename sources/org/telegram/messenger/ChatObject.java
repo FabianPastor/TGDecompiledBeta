@@ -252,6 +252,23 @@ public class ChatObject {
         return canUserDoAction(chat, 3);
     }
 
+    public static boolean canAddBotsToChat(TLRPC.Chat chat) {
+        if (isChannel(chat)) {
+            if (chat == null || !chat.megagroup) {
+                return false;
+            }
+            TLRPC.TL_chatAdminRights tL_chatAdminRights = chat.admin_rights;
+            if ((tL_chatAdminRights == null || (!tL_chatAdminRights.post_messages && !tL_chatAdminRights.add_admins)) && !chat.creator) {
+                return false;
+            }
+            return true;
+        } else if (chat.migrated_to == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x0011, code lost:
         r2 = r2.admin_rights;
      */

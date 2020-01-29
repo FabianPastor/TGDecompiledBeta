@@ -80,6 +80,8 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean dimBehind = true;
     /* access modifiers changed from: private */
+    public boolean disableScroll;
+    /* access modifiers changed from: private */
     public Runnable dismissRunnable = new Runnable() {
         public final void run() {
             BottomSheet.this.dismiss();
@@ -106,8 +108,7 @@ public class BottomSheet extends Dialog {
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
     protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
-    /* access modifiers changed from: private */
-    public Runnable startAnimationRunnable;
+    protected Runnable startAnimationRunnable;
     /* access modifiers changed from: private */
     public int tag;
     /* access modifiers changed from: private */
@@ -188,10 +189,14 @@ public class BottomSheet extends Dialog {
         return false;
     }
 
-    static /* synthetic */ int access$710(BottomSheet bottomSheet) {
+    static /* synthetic */ int access$810(BottomSheet bottomSheet) {
         int i = bottomSheet.layoutCount;
         bottomSheet.layoutCount = i - 1;
         return i;
+    }
+
+    public void setDisableScroll(boolean z) {
+        this.disableScroll = z;
     }
 
     protected class ContainerView extends FrameLayout implements NestedScrollingParent {
@@ -324,7 +329,7 @@ public class BottomSheet extends Dialog {
                     float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
                     float y = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(motionEvent);
-                    if (this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
+                    if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
                         this.startedTrackingY = (int) motionEvent.getY();
                         this.maybeStartTracking = false;
                         this.startedTracking = true;
@@ -431,7 +436,7 @@ public class BottomSheet extends Dialog {
                 r13 = this;
                 r0 = r13
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                org.telegram.ui.ActionBar.BottomSheet.access$710(r1)
+                org.telegram.ui.ActionBar.BottomSheet.access$810(r1)
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 android.view.ViewGroup r2 = r1.containerView
                 r7 = 21
@@ -588,20 +593,18 @@ public class BottomSheet extends Dialog {
             L_0x011e:
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 int r1 = r1.layoutCount
-                if (r1 != 0) goto L_0x0146
+                if (r1 != 0) goto L_0x013b
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 java.lang.Runnable r1 = r1.startAnimationRunnable
-                if (r1 == 0) goto L_0x0146
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                java.lang.Runnable r1 = r1.startAnimationRunnable
+                if (r1 == 0) goto L_0x013b
                 org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1)
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 java.lang.Runnable r1 = r1.startAnimationRunnable
                 r1.run()
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 r2 = 0
-                java.lang.Runnable unused = r1.startAnimationRunnable = r2
-            L_0x0146:
+                r1.startAnimationRunnable = r2
+            L_0x013b:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BottomSheet.ContainerView.onLayout(boolean, int, int, int, int):void");
@@ -929,9 +932,11 @@ public class BottomSheet extends Dialog {
             viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
             AnonymousClass3 r0 = new Runnable() {
                 public void run() {
-                    if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
-                        Runnable unused = BottomSheet.this.startAnimationRunnable = null;
-                        BottomSheet.this.startOpenAnimation();
+                    BottomSheet bottomSheet = BottomSheet.this;
+                    if (bottomSheet.startAnimationRunnable == this && !bottomSheet.dismissed) {
+                        BottomSheet bottomSheet2 = BottomSheet.this;
+                        bottomSheet2.startAnimationRunnable = null;
+                        bottomSheet2.startOpenAnimation();
                     }
                 }
             };

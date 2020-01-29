@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Selection;
 import android.text.Spannable;
@@ -136,7 +137,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public boolean showEmoji;
     private TextView stickerEmojiTextView;
-    private BackupImageView stickerImageView;
+    /* access modifiers changed from: private */
+    public BackupImageView stickerImageView;
     /* access modifiers changed from: private */
     public FrameLayout stickerPreviewLayout;
     /* access modifiers changed from: private */
@@ -1044,7 +1046,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626318(0x7f0e094e, float:1.8879869E38)
+            r6 = 2131626356(0x7f0e0974, float:1.8879946E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d0
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1084,7 +1086,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
             boolean r6 = r6.masks
-            r7 = 2131624130(0x7f0e00c2, float:1.8875431E38)
+            r7 = 2131624131(0x7f0e00c3, float:1.8875433E38)
             java.lang.String r8 = "AddStickersCount"
             if (r6 == 0) goto L_0x012e
             java.lang.Object[] r4 = new java.lang.Object[r5]
@@ -1113,7 +1115,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.notifyDataSetChanged()
             goto L_0x016f
         L_0x0156:
-            r0 = 2131624706(0x7f0e0302, float:1.88766E38)
+            r0 = 2131624716(0x7f0e030c, float:1.887662E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1248,6 +1250,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 StickersAlert.this.stickerPreviewLayout.setVisibility(8);
+                StickersAlert.this.stickerImageView.setImageDrawable((Drawable) null);
             }
         });
         animatorSet.start();

@@ -930,7 +930,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165408(0x7var_e0, float:1.7945032E38)
+                r1 = 2131165409(0x7var_e1, float:1.7945034E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable

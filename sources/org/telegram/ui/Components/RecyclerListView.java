@@ -1561,6 +1561,14 @@ public class RecyclerListView extends RecyclerView {
         return true;
     }
 
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        View view;
+        if (this.sectionsAdapter == null || (view = this.pinnedHeader) == null || view.getAlpha() == 0.0f || !this.pinnedHeader.dispatchTouchEvent(motionEvent)) {
+            return super.dispatchTouchEvent(motionEvent);
+        }
+        return true;
+    }
+
     /* access modifiers changed from: private */
     public void checkIfEmpty() {
         if (!this.isHidden) {
@@ -1919,9 +1927,9 @@ public class RecyclerListView extends RecyclerView {
                 drawable.setBounds(0, this.pinnedHeader.getMeasuredHeight(), getWidth(), this.pinnedHeader.getMeasuredHeight() + this.pinnedHeaderShadowDrawable.getIntrinsicHeight());
                 this.pinnedHeaderShadowDrawable.setAlpha((int) (this.pinnedHeaderShadowAlpha * 255.0f));
                 this.pinnedHeaderShadowDrawable.draw(canvas);
-                long uptimeMillis = SystemClock.uptimeMillis();
-                long min = Math.min(20, uptimeMillis - this.lastAlphaAnimationTime);
-                this.lastAlphaAnimationTime = uptimeMillis;
+                long elapsedRealtime = SystemClock.elapsedRealtime();
+                long min = Math.min(20, elapsedRealtime - this.lastAlphaAnimationTime);
+                this.lastAlphaAnimationTime = elapsedRealtime;
                 float f2 = this.pinnedHeaderShadowAlpha;
                 float f3 = this.pinnedHeaderShadowTargetAlpha;
                 if (f2 < f3) {

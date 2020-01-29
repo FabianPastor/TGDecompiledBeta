@@ -294,7 +294,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 boolean r11 = android.text.TextUtils.isEmpty(r11)
                 if (r11 == 0) goto L_0x00ee
                 org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                r1 = 2131625827(0x7f0e0763, float:1.8878873E38)
+                r1 = 2131625845(0x7f0e0775, float:1.887891E38)
                 java.lang.String r3 = "NumberUnknown"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r11.setText(r1)

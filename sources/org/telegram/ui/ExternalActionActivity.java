@@ -88,7 +88,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         }
         super.onCreate(bundle);
         if (SharedConfig.passcodeHash.length() != 0 && SharedConfig.appLocked) {
-            SharedConfig.lastPauseTime = (int) (SystemClock.uptimeMillis() / 1000);
+            SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
         }
         AndroidUtilities.fillStatusBarHeight(this);
         Theme.createDialogsResources(this);
@@ -652,7 +652,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             this.lockRunnable = null;
         }
         if (SharedConfig.passcodeHash.length() != 0) {
-            SharedConfig.lastPauseTime = (int) (SystemClock.uptimeMillis() / 1000);
+            SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
             this.lockRunnable = new Runnable() {
                 public void run() {
                     if (ExternalActionActivity.this.lockRunnable == this) {

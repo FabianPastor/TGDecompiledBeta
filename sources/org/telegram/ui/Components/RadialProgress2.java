@@ -11,6 +11,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.MediaActionDrawable;
 
 public class RadialProgress2 {
@@ -94,9 +95,9 @@ public class RadialProgress2 {
         invalidateParent();
     }
 
-    public void setBackgroundDrawable(Drawable drawable) {
-        this.mediaActionDrawable.setBackgroundDrawable(drawable);
-        this.miniMediaActionDrawable.setBackgroundDrawable(drawable);
+    public void setBackgroundDrawable(Theme.MessageDrawable messageDrawable) {
+        this.mediaActionDrawable.setBackgroundDrawable(messageDrawable);
+        this.miniMediaActionDrawable.setBackgroundDrawable(messageDrawable);
     }
 
     public void setImageOverlay(TLRPC.PhotoSize photoSize, TLRPC.Document document, Object obj) {

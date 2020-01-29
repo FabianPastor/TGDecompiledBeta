@@ -141,6 +141,7 @@
     <string name="ActionPinnedNoText">un1 hat eine Nachricht angeheftet</string>
     <string name="ActionPinnedPhoto">un1 hat ein Bild angeheftet</string>
     <string name="ActionPinnedPoll">un1 hat eine Umfrage angeheftet</string>
+    <string name="ActionPinnedQuiz">un1 hat ein Quiz angeheftet</string>
     <string name="ActionPinnedRound">un1 hat eine Videonachricht angeheftet</string>
     <string name="ActionPinnedSticker">un1 hat einen Sticker angeheftet</string>
     <string name="ActionPinnedText">un1 hat \"%1$s\" angeheftet</string>
@@ -164,7 +165,7 @@
     <string name="AddAccount">Konto hinzufügen</string>
     <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Liste \"Entfernte Nutzer\" befindet und du ihn nicht entfernen darfst.</string>
     <string name="AddAdminErrorNotAMember">Du kannst diesen Nutzer nicht als Admin festlegen, da er kein Mitglied dieser Gruppe ist oder du keine Erlaubnis hast, ihn einzuladen.</string>
-    <string name="AddAnOption">Option hinzufügen</string>
+    <string name="AddAnOption">Option hinzufügen...</string>
     <string name="AddAnOptionInfo">Noch %1$s</string>
     <string name="AddAnOptionInfoMax">Mehr Optionen gibt es derzeit leider nicht.</string>
     <string name="AddAnotherAccount">Weiteres Konto hinzufügen</string>
@@ -246,6 +247,13 @@
     <string name="AndOther_zero">und %1$d andere</string>
     <string name="AnimatedStickers">Animierte Sticker</string>
     <string name="AnonymousPoll">Anonyme Umfrage</string>
+    <string name="AnonymousQuizPoll">Anonymes Quiz</string>
+    <string name="Answer_few">%1$d Antworten</string>
+    <string name="Answer_many">%1$d Antworten</string>
+    <string name="Answer_one">%1$d Antwort</string>
+    <string name="Answer_other">%1$d Antworten</string>
+    <string name="Answer_two">%1$d Antworten</string>
+    <string name="Answer_zero">%1$d Antworten</string>
     <string name="ApkRestricted">APK Installation ist in dieser App eingeschränkt. Du kannst es in den System-Einstellungen aktivieren.</string>
     <string name="AppFolderInfo">App-Ordner durchsuchen</string>
     <string name="AppName">Telegram</string>
@@ -502,6 +510,7 @@
     <string name="BotStop">Bot anhalten</string>
     <string name="BotUnblock">NEU STARTEN</string>
     <string name="Brown">Braun</string>
+    <string name="BubbleRadius">Nachrichtenecken</string>
     <string name="BuiltInThemes">Eingebaute Themen</string>
     <string name="BytesReceived">Bytes empfangen</string>
     <string name="BytesSent">Bytes gesendet</string>
@@ -620,6 +629,7 @@
     <string name="ChannelMessageNoText">%1$s hat eine Nachricht gesendet</string>
     <string name="ChannelMessagePhoto">%1$s hat ein Bild gesendet</string>
     <string name="ChannelMessagePoll2">%1$s hat eine Umfrage gesendet %2$s</string>
+    <string name="ChannelMessageQuiz2">%1$s hat das Quiz \"%2$s\" veröffentlicht</string>
     <string name="ChannelMessageRound">%1$s hat eine Videonachricht gesendet</string>
     <string name="ChannelMessageSticker">%1$s hat einen Sticker gesendet</string>
     <string name="ChannelMessageStickerEmoji">%1$s hat einen %2$s Sticker gesendet</string>
@@ -766,7 +776,7 @@
     <string name="ClearOtherSessionsHelp">Alle Sitzungen außer dieser werden beendet.</string>
     <string name="ClearOtherWebSessionsHelp">Melde dich auf Webseiten an, die eine Anmeldung mit Telegram unterstützen.</string>
     <string name="ClearRecentEmoji">Zuletzt benutzte Emoji leeren?</string>
-    <string name="ClearRecentHistory">Clear history</string>
+    <string name="ClearRecentHistory">Verlauf leeren</string>
     <string name="ClearSearch">Suchverlauf löschen?</string>
     <string name="ClearSearchAlert">Wirklich den Suchverlauf leeren?</string>
     <string name="ClearSearchAlertTitle">Suchverlauf leeren</string>
@@ -788,8 +798,8 @@
     <string name="ColorRed">Rot</string>
     <string name="ColorSepia">Sepia</string>
     <string name="ColorTheme">Farbthema</string>
-    <string name="ColorThemeChanged">Color theme changed.</string>
-    <string name="ColorThemeChangedInfo">You can change it back in *Chat Settings*.</string>
+    <string name="ColorThemeChanged">Farbthema geändert.</string>
+    <string name="ColorThemeChangedInfo">Du kannst es wieder in den *Chat-Einstellungen* ändern.</string>
     <string name="ColorThemes">Farbthemen</string>
     <string name="ColorViolet">Violett</string>
     <string name="ColorWhite">Weiß</string>
@@ -888,7 +898,7 @@
     <string name="DebugMenuReadAllDialogs">Alle Chats lesen</string>
     <string name="DebugMenuReloadContacts">Kontakte neu laden</string>
     <string name="DebugMenuResetContacts">Importierte Kontakte zurücksetzen</string>
-    <string name="DebugMenuResetDialogs">Dialoge zurücksetzen</string>
+    <string name="DebugMenuResetDialogs">Chats zurücksetzen</string>
     <string name="DebugSendLogs">Protokolldateien senden</string>
     <string name="December">Dezember</string>
     <string name="Decline">Ablehnen</string>
@@ -1169,6 +1179,7 @@
     <string name="EventLogRestrictedUntil">hat Berechtigungen für %1$s geändert\10\10Dauer: %2$s</string>
     <string name="EventLogSelectedEvents">Ausgewählte Aktionen</string>
     <string name="EventLogStopPoll">un1 hat Umfrage beendet:</string>
+    <string name="EventLogStopQuiz">un1 hat das Quiz beendet:</string>
     <string name="EventLogToggledInvitesHistoryOff">un1 hat den Chatverlauf für neue Mitglieder versteckt</string>
     <string name="EventLogToggledInvitesHistoryOn">un1 hat den Chatverlauf für neue Mitglieder sichtbar gemacht</string>
     <string name="EventLogToggledInvitesOff">un1 hat Gruppeneinladungen deaktiviert</string>
@@ -1605,6 +1616,7 @@
     <string name="MessageScheduledReminderNotification">�� Erinnerung</string>
     <string name="MessageScheduledUntilOnline">Geplant bis online</string>
     <string name="MessageScheduledVote">Das Abstimmen wird erst nach Veröffentlichung der Nachricht verfügbar sein.</string>
+    <string name="MessageScheduledVoteResults">Ergebnisse werden sichtbar, sobald die Nachricht veröffentlicht wird.</string>
     <string name="MessagesDataUsage">Nachrichten und sonstige Daten</string>
     <string name="MessagesSettings">Nachrichten</string>
     <string name="MetersAway2">%1$s m entfernt</string>
@@ -1668,6 +1680,7 @@
     <string name="NewMessages_two">%1$d neue Nachrichten</string>
     <string name="NewMessages_zero">%1$d neue Nachrichten</string>
     <string name="NewPoll">Neue Umfrage</string>
+    <string name="NewQuiz">New Quiz</string>
     <string name="NewSecretChat">Neuer Geheimer Chat</string>
     <string name="NewTheme">Neues Farbthema</string>
     <string name="NewThemePreviewLine1">Wie spät ist es gerade?</string>
@@ -1731,6 +1744,7 @@
     <string name="NoStickersFound">Keine Sticker gefunden</string>
     <string name="NoUsernameFound">Kein Konto mit diesem Benutzernamen</string>
     <string name="NoVotes">Keine Stimmen</string>
+    <string name="NoVotesQuiz">Noch keine Antworten</string>
     <string name="NobodyLikesSpam1">Du kannst im Moment nur Kontakten schreiben, die auch deine Nummer haben.</string>
     <string name="NobodyLikesSpam2">Derzeit kannst du nur gemeinsame Kontakte Gruppen hinzufügen.</string>
     <string name="NobodyLikesSpam3">Leider kannst du derzeit nichts in öffentlichen Gruppen veröffentlichen.</string>
@@ -1759,6 +1773,8 @@
     <string name="NotificationActionPinnedPhotoChannel">%1$s hat ein Bild angeheftet</string>
     <string name="NotificationActionPinnedPoll2">%1$s hat eine Umfrage %3$s in der Gruppe %2$s angeheftet</string>
     <string name="NotificationActionPinnedPollChannel2">%1$s hat eine Umfrage %2$s angeheftet</string>
+    <string name="NotificationActionPinnedQuiz2">%1$s hat das Quiz \"%3$s\" in der Gruppe \"%2$s\" angeheftet</string>
+    <string name="NotificationActionPinnedQuizChannel2">%1$s hat das Quiz \"%2$s\" angeheftet</string>
     <string name="NotificationActionPinnedRound">%1$s hat eine Videonachricht in der Gruppe %2$s angeheftet</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s hat eine Videonachricht angeheftet</string>
     <string name="NotificationActionPinnedSticker">%1$s hat einen Sticker in der Gruppe %2$s angeheftet</string>
@@ -1812,6 +1828,7 @@
     <string name="NotificationMessageGroupNoText">%1$s hat eine Nachricht an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupPhoto">%1$s hat ein Bild an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupPoll2">%1$s hat eine Umfrage %3$s an die Gruppe %2$s gesendet</string>
+    <string name="NotificationMessageGroupQuiz2">%1$s hat das Quiz \"%3$s\" an die Gruppe \"%2$s\" gesendet</string>
     <string name="NotificationMessageGroupRound">%1$s hat eine Videonachricht an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupSticker">%1$s hat einen Sticker an die Gruppe %2$s gesendet</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s hat einen %3$s Sticker an die Gruppe %2$s gesendet</string>
@@ -1824,6 +1841,7 @@
     <string name="NotificationMessageNoText">%1$s hat dir eine Nachricht gesendet</string>
     <string name="NotificationMessagePhoto">%1$s hat dir ein Bild gesendet</string>
     <string name="NotificationMessagePoll2">%1$s hat dir eine Umfrage gesendet %2$s</string>
+    <string name="NotificationMessageQuiz2">%1$s hat dir das Quiz \"%2$s\" gesendet</string>
     <string name="NotificationMessageRound">%1$s hat dir eine Videonachricht gesendet</string>
     <string name="NotificationMessageSDPhoto">%1$s hat dir ein selbstzerstörendes Bild gesendet</string>
     <string name="NotificationMessageSDVideo">%1$s hat dir ein selbstzerstörendes Video gesendet</string>
@@ -2275,7 +2293,18 @@
     <string name="Points_two">%1$d Punkte</string>
     <string name="Points_zero">%1$d Punkte</string>
     <string name="Poll">Umfrage</string>
+    <string name="PollAnonymous">Anonyme Stimmabgabe</string>
+    <string name="PollCantForwardSecretChat">Leider können Umfragen nicht an Geheime Chats weitergeleitet werden.</string>
+    <string name="PollCollapse">Zuklappen</string>
+    <string name="PollExpand">Aufklappen</string>
+    <string name="PollMultiple">Mehrfachauswahl</string>
     <string name="PollOptions">Umfrageoptionen</string>
+    <string name="PollQuiz">Quiz-Modus</string>
+    <string name="PollResults">Umfrageergebnis</string>
+    <string name="PollSelectOption">Erst eine Option wählen</string>
+    <string name="PollSubmitVotes">ABSTIMMEN</string>
+    <string name="PollTapToSelect">Wähle hier die richtige Antwort</string>
+    <string name="PollViewResults">ERGEBNIS ANZEIGEN</string>
     <string name="PopupDisabled">Deaktiviert</string>
     <string name="PopupEnabled">Aktiviert</string>
     <string name="PopupNotification">Popup Mitteilungen</string>
@@ -2332,6 +2361,8 @@
     <string name="ProxyDetails">Proxy-Details</string>
     <string name="ProxySettings">Proxy-Einstellungen</string>
     <string name="PublicChannelsTooMuch">Der ausgewählte Nutzer hat zu viele öffentliche Gruppen oder Kanäle. Bitte die Person, einfach einen Kanal oder eine Gruppe privat zu stellen.</string>
+    <string name="PublicPoll">Umfrage</string>
+    <string name="PublicPollCantForward">Leider können Umfragen mit sichtbaren Stimmen nicht an Kanäle weitergeleitet werden.</string>
     <string name="Purple">Violett</string>
     <string name="Question">Frage</string>
     <string name="QuestionHint">Stelle eine Frage</string>
@@ -2340,6 +2371,13 @@
     <string name="QuickReplyDefault2">Ich rufe dich gleich zurück.</string>
     <string name="QuickReplyDefault3">Ich rufe dich später an.</string>
     <string name="QuickReplyDefault4">Ich kann gerade nicht sprechen.</string>
+    <string name="QuizAnswers">Quiz answers</string>
+    <string name="QuizInfo">Umfragen im Quiz-Modus haben eine richtige Antwort. Nutzer können ihre Antworten nicht widerrufen.</string>
+    <string name="QuizPoll">Quiz</string>
+    <string name="QuizWellDone">Gut gemacht!</string>
+    <string name="QuizWellDoneInfo">Du hast die richtige Antwort gewählt.</string>
+    <string name="QuizWrongAnswer">Falsche Antwort!</string>
+    <string name="QuizWrongAnswerInfo">Du hast nicht die richtige Antwort gewählt.</string>
     <string name="RaiseToSpeak">Zum Sprechen ans Ohr</string>
     <string name="RateCallDistorted">Sprache klang verzerrt</string>
     <string name="RateCallDropped">Anruf unerwartet beendet</string>
@@ -2467,6 +2505,7 @@
     <string name="ScheduleMessage">Nachricht planen</string>
     <string name="ScheduleWhenOnline">Senden, wenn %1$s online kommt</string>
     <string name="ScheduledMessages">Später senden</string>
+    <string name="ScheduledOrNoSoundHint">Halte diese Knopf, um deine Nachricht zu planen oder ohne Ton zu senden.</string>
     <string name="ScreenCapture">App-Inhalte nach Sperrung anzeigen</string>
     <string name="ScreenCaptureAlert">Das wird die Inhalte der Chatliste oder Chats in der Liste der geöffneten Apps verstecken, du wirst jedoch keine Bildschirmfotos aufnehmen können. \10\10Du wirst die App nach der Änderung neu starten müssen.</string>
     <string name="ScreenCaptureInfo">Wenn du diese Funktion deaktivierst, wirst du keine Bildschirmfotos mehr in der App aufnehmen können und Chatinhalte werden in der Liste der geöffneten App ausgeblendet.</string>
@@ -2638,6 +2677,12 @@
     <string name="ShowInChat">Im Chat zeigen</string>
     <string name="ShowNotificationsFor">Zeige Benachrichtigungen von</string>
     <string name="ShowNotificationsForInfo">Ausschalten, wenn du nur vom aktiven Konto Benachrichtigungen empfangen möchtest.</string>
+    <string name="ShowVotes_few">Mehr anzeigen (%1$d)</string>
+    <string name="ShowVotes_many">Mehr anzeigen (%1$d)</string>
+    <string name="ShowVotes_one">Mehr anzeigen (%1$d)</string>
+    <string name="ShowVotes_other">Mehr anzeigen (%1$d)</string>
+    <string name="ShowVotes_two">Mehr anzeigen (%1$d)</string>
+    <string name="ShowVotes_zero">Mehr anzeigen (%1$d)</string>
     <string name="Shuffle">Zufallswiedergabe</string>
     <string name="SignUp">Registrieren</string>
     <string name="SinglePhotosHelp">Zeigt Medien als einzelne Nachrichten</string>
@@ -2697,6 +2742,9 @@
     <string name="StopPoll">Umfrage beenden</string>
     <string name="StopPollAlertText">Beendest du diese Umfrage, so kann niemand mehr abstimmen. Das lässt sich nicht rückgängig machen.</string>
     <string name="StopPollAlertTitle">Umfrage beenden?</string>
+    <string name="StopQuiz">Quiz beenden</string>
+    <string name="StopQuizAlertText">Wenn du dieses Quiz jetzt beendest, kann niemand mehr abstimmen. Das kann nicht rückgängig gemacht werden.</string>
+    <string name="StopQuizAlertTitle">Quiz beenden?</string>
     <string name="StopVerification">Möchtest du wirklich den Verifikationsvorgang stoppen? </string>
     <string name="StorageUsage">Speichernutzung</string>
     <string name="Streaming">Streaming</string>

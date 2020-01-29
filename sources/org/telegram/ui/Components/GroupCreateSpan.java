@@ -71,7 +71,7 @@ public class GroupCreateSpan extends View {
             r0.colors = r3
             r0.currentContact = r2
             android.content.res.Resources r3 = r21.getResources()
-            r4 = 2131165365(0x7var_b5, float:1.7944945E38)
+            r4 = 2131165366(0x7var_b6, float:1.7944947E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r0.deleteDrawable = r3
             android.text.TextPaint r3 = textPaint
@@ -141,7 +141,7 @@ public class GroupCreateSpan extends View {
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r3 = 1098907648(0x41800000, float:16.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r2.setRoundRadius(r3)
+            r2.setRoundRadius((int) r3)
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver
             r2.setParentView(r0)
             org.telegram.messenger.ImageReceiver r2 = r0.imageReceiver

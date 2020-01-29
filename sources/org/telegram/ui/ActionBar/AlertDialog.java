@@ -114,7 +114,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private boolean[] shadowVisibility = new boolean[2];
     private Runnable showRunnable = new Runnable() {
         public final void run() {
-            AlertDialog.this.show();
+            AlertDialog.this.lambda$new$0$AlertDialog();
         }
     };
     /* access modifiers changed from: private */
@@ -139,6 +139,19 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public RLottieImageView topImageView;
     /* access modifiers changed from: private */
     public int topResId;
+
+    public ThemeDescription[] getThemeDescriptions() {
+        return null;
+    }
+
+    public /* synthetic */ void lambda$new$0$AlertDialog() {
+        if (!isShowing()) {
+            try {
+                show();
+            } catch (Exception unused) {
+            }
+        }
+    }
 
     public static class AlertDialogCell extends FrameLayout {
         /* access modifiers changed from: private */
@@ -810,7 +823,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
                     alertDialogCell.setOnClickListener(new View.OnClickListener() {
                         public final void onClick(View view) {
-                            AlertDialog.this.lambda$onCreate$0$AlertDialog(view);
+                            AlertDialog.this.lambda$onCreate$1$AlertDialog(view);
                         }
                     });
                 }
@@ -929,7 +942,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 this.buttonsLayout.addView(r12, LayoutHelper.createFrame(-2, 36, 53));
                 r12.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$1$AlertDialog(view);
+                        AlertDialog.this.lambda$onCreate$2$AlertDialog(view);
                     }
                 });
             }
@@ -959,7 +972,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 this.buttonsLayout.addView(r13, LayoutHelper.createFrame(-2, 36, 53));
                 r13.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$2$AlertDialog(view);
+                        AlertDialog.this.lambda$onCreate$3$AlertDialog(view);
                     }
                 });
             }
@@ -989,7 +1002,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 this.buttonsLayout.addView(r14, LayoutHelper.createFrame(-2, 36, 51));
                 r14.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        AlertDialog.this.lambda$onCreate$3$AlertDialog(view);
+                        AlertDialog.this.lambda$onCreate$4$AlertDialog(view);
                     }
                 });
             }
@@ -1028,7 +1041,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         window.setAttributes(layoutParams);
     }
 
-    public /* synthetic */ void lambda$onCreate$0$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.onClickListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, ((Integer) view.getTag()).intValue());
@@ -1036,7 +1049,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         dismiss();
     }
 
-    public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.positiveButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -1);
@@ -1046,7 +1059,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
-    public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.negativeButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -2);
@@ -1056,7 +1069,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
-    public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
+    public /* synthetic */ void lambda$onCreate$4$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.neutralButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -2);
@@ -1083,12 +1096,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             builder.setPositiveButton(LocaleController.getString("WaitMore", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    AlertDialog.this.lambda$showCancelAlert$4$AlertDialog(dialogInterface, i);
+                    AlertDialog.this.lambda$showCancelAlert$5$AlertDialog(dialogInterface, i);
                 }
             });
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    AlertDialog.this.lambda$showCancelAlert$5$AlertDialog(dialogInterface);
+                    AlertDialog.this.lambda$showCancelAlert$6$AlertDialog(dialogInterface);
                 }
             });
             try {
@@ -1098,7 +1111,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
-    public /* synthetic */ void lambda$showCancelAlert$4$AlertDialog(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface, int i) {
         DialogInterface.OnCancelListener onCancelListener2 = this.onCancelListener;
         if (onCancelListener2 != null) {
             onCancelListener2.onCancel(this);
@@ -1106,7 +1119,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         dismiss();
     }
 
-    public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showCancelAlert$6$AlertDialog(DialogInterface dialogInterface) {
         this.cancelDialog = null;
     }
 
@@ -1340,6 +1353,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public void showDelayed(long j) {
+        AndroidUtilities.cancelRunOnUIThread(this.showRunnable);
         AndroidUtilities.runOnUIThread(this.showRunnable, j);
     }
 

@@ -41,8 +41,9 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         if (i == NotificationCenter.FileUploadProgressChanged) {
             String str2 = objArr[0];
             if (i2 == this.currentAccount && (str = this.path) != null && str.equals(str2)) {
-                Boolean bool = objArr[2];
-                this.currentProgress = (int) (objArr[1].floatValue() * 100.0f);
+                float min = Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue()));
+                Boolean bool = objArr[3];
+                this.currentProgress = (int) (min * 100.0f);
                 NotificationCompat.Builder builder2 = this.builder;
                 int i3 = this.currentProgress;
                 if (i3 != 0) {

@@ -1158,12 +1158,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             this.searchAdapterHelper = new SearchAdapterHelper(false);
             this.searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
+                public /* synthetic */ boolean canApplySearchResults(int i) {
+                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
+                }
+
                 public /* synthetic */ SparseArray<TLRPC.User> getExcludeUsers() {
                     return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
                 }
 
-                public final void onDataSetChanged() {
-                    GroupCreateActivity.GroupCreateAdapter.this.lambda$new$0$GroupCreateActivity$GroupCreateAdapter();
+                public final void onDataSetChanged(int i) {
+                    GroupCreateActivity.GroupCreateAdapter.this.lambda$new$0$GroupCreateActivity$GroupCreateAdapter(i);
                 }
 
                 public /* synthetic */ void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
@@ -1172,7 +1176,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             });
         }
 
-        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter() {
+        public /* synthetic */ void lambda$new$0$GroupCreateActivity$GroupCreateAdapter(int i) {
             if (this.searchRunnable == null && !this.searchAdapterHelper.isSearchInProgress()) {
                 GroupCreateActivity.this.emptyView.showTextView();
             }
@@ -1293,18 +1297,18 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.TextCell r11 = (org.telegram.ui.Cells.TextCell) r11
                 int r0 = r10.inviteViaLink
-                r2 = 2131165817(0x7var_, float:1.7945862E38)
+                r2 = 2131165821(0x7var_d, float:1.794587E38)
                 if (r0 != r12) goto L_0x0028
-                r12 = 2131624533(0x7f0e0255, float:1.8876248E38)
+                r12 = 2131624542(0x7f0e025e, float:1.8876267E38)
                 java.lang.String r0 = "ChannelInviteViaLink"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setTextAndIcon(r12, r2, r1)
+                r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
                 goto L_0x018f
             L_0x0028:
-                r12 = 2131625359(0x7f0e058f, float:1.8877924E38)
+                r12 = 2131625370(0x7f0e059a, float:1.8877946E38)
                 java.lang.String r0 = "InviteToGroupByLink"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
-                r11.setTextAndIcon(r12, r2, r1)
+                r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
                 goto L_0x018f
             L_0x0036:
                 android.view.View r11 = r11.itemView
@@ -1479,7 +1483,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.Cells.GroupCreateSectionCell r11 = (org.telegram.ui.Cells.GroupCreateSectionCell) r11
                 boolean r12 = r10.searching
                 if (r12 == 0) goto L_0x018f
-                r12 = 2131625254(0x7f0e0526, float:1.887771E38)
+                r12 = 2131625265(0x7f0e0531, float:1.8877733E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1537,7 +1541,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
-                this.searchAdapterHelper.queryServerSearch((String) null, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, false, false, 0, false, 0);
+                this.searchAdapterHelper.queryServerSearch((String) null, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, false, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
             }
@@ -1572,7 +1576,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public /* synthetic */ void lambda$null$2$GroupCreateActivity$GroupCreateAdapter(String str) {
-            this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, 0, false, 0);
+            this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs r1 = new Runnable(str) {
                 private final /* synthetic */ String f$1;

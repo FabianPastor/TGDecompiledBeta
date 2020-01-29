@@ -512,6 +512,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         void onPreAudioVideoRecord();
 
+        void onSendLongClick();
+
         void onStickersExpandedChange();
 
         void onStickersTab(boolean z);
@@ -1551,7 +1553,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     i2 = 2;
                 }
                 if (i != this.drawableColor) {
-                    this.lastAnimationTime = SystemClock.uptimeMillis();
+                    this.lastAnimationTime = SystemClock.elapsedRealtime();
                     int i3 = this.prevColorType;
                     if (i3 == 0 || i3 == i2) {
                         this.animationProgress = 1.0f;
@@ -1570,12 +1572,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.sendButtonInverseDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelVoicePressed"), PorterDuff.Mode.MULTIPLY));
                 }
                 if (this.animationProgress < 1.0f) {
-                    long uptimeMillis = SystemClock.uptimeMillis();
-                    this.animationProgress += ((float) (uptimeMillis - this.lastAnimationTime)) / this.animationDuration;
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    this.animationProgress += ((float) (elapsedRealtime - this.lastAnimationTime)) / this.animationDuration;
                     if (this.animationProgress > 1.0f) {
                         this.animationProgress = 1.0f;
                     }
-                    this.lastAnimationTime = uptimeMillis;
+                    this.lastAnimationTime = elapsedRealtime;
                     invalidate();
                 }
                 if (!z) {
@@ -2104,6 +2106,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.sendPopupWindow.setInputMethodMode(2);
                 this.sendPopupWindow.setSoftInputMode(0);
                 this.sendPopupWindow.getContentView().setFocusableInTouchMode(true);
+                SharedConfig.removeScheduledOrNoSuoundHint();
+                ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
+                if (chatActivityEnterViewDelegate != null) {
+                    chatActivityEnterViewDelegate.onSendLongClick();
+                }
             }
             this.sendPopupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.sendPopupWindow.setFocusable(true);
@@ -3693,6 +3700,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     LinearLayout linearLayout4 = this.attachLayout;
                     if (linearLayout4 != null) {
                         linearLayout4.setVisibility(8);
+                        if (this.delegate != null && getVisibility() == 0) {
+                            this.delegate.onAttachButtonHidden();
+                        }
                         updateFieldRight(0);
                     }
                     this.scheduleButtonHidden = false;
@@ -3769,6 +3779,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         });
                         this.runningAnimation2.start();
                         updateFieldRight(0);
+                        if (this.delegate != null && getVisibility() == 0) {
+                            this.delegate.onAttachButtonHidden();
+                        }
                     }
                     this.runningAnimationType = 5;
                     this.runningAnimation = new AnimatorSet();
@@ -4404,10 +4417,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             boolean r3 = r13.canWriteToChannel
             boolean r4 = r13.silent
             if (r4 == 0) goto L_0x0061
-            r4 = 2131165499(0x7var_b, float:1.7945217E38)
+            r4 = 2131165500(0x7var_c, float:1.7945219E38)
             goto L_0x0064
         L_0x0061:
-            r4 = 2131165500(0x7var_c, float:1.7945219E38)
+            r4 = 2131165501(0x7var_d, float:1.794522E38)
         L_0x0064:
             r1.setImageResource(r4)
             goto L_0x0069
@@ -4677,7 +4690,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r1 = 1
             if (r0 != r1) goto L_0x0048
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165497(0x7var_, float:1.7945213E38)
+            r1 = 2131165498(0x7var_a, float:1.7945215E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131624010(0x7f0e004a, float:1.8875188E38)
@@ -4687,7 +4700,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             goto L_0x0075
         L_0x0048:
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165490(0x7var_, float:1.7945199E38)
+            r1 = 2131165491(0x7var_, float:1.79452E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131623953(0x7f0e0011, float:1.8875072E38)
@@ -4697,7 +4710,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             goto L_0x0075
         L_0x005f:
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165489(0x7var_, float:1.7945197E38)
+            r1 = 2131165490(0x7var_, float:1.7945199E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131623952(0x7f0e0010, float:1.887507E38)
@@ -4905,12 +4918,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (messageObject2 == null) {
             messageObject2 = this.botButtonsMessageObject;
         }
-        didPressedBotButton(keyboardButton, messageObject, messageObject2);
+        boolean didPressedBotButton = didPressedBotButton(keyboardButton, messageObject, messageObject2);
         if (this.replyingMessageObject != null) {
             openKeyboardInternal();
             setButtons(this.botMessageObject, false);
         } else if (this.botButtonsMessageObject.messageOwner.reply_markup.single_use) {
-            openKeyboardInternal();
+            if (didPressedBotButton) {
+                openKeyboardInternal();
+            } else {
+                showPopup(0, 0);
+            }
             SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
             edit.putInt("answered_" + this.dialog_id, this.botButtonsMessageObject.getId()).commit();
         }
@@ -4920,19 +4937,32 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    public void didPressedBotButton(TLRPC.KeyboardButton keyboardButton, MessageObject messageObject, MessageObject messageObject2) {
-        if (keyboardButton != null && messageObject2 != null) {
-            if (keyboardButton instanceof TLRPC.TL_keyboardButton) {
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(keyboardButton.text, this.dialog_id, messageObject, (TLRPC.WebPage) null, false, (ArrayList<TLRPC.MessageEntity>) null, (TLRPC.ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-            } else if (keyboardButton instanceof TLRPC.TL_keyboardButtonUrl) {
-                this.parentFragment.showOpenUrlAlert(keyboardButton.url, true);
-            } else if (keyboardButton instanceof TLRPC.TL_keyboardButtonRequestPhone) {
-                this.parentFragment.shareMyContact(2, messageObject2);
-            } else if (keyboardButton instanceof TLRPC.TL_keyboardButtonRequestGeoLocation) {
+    public boolean didPressedBotButton(TLRPC.KeyboardButton keyboardButton, MessageObject messageObject, MessageObject messageObject2) {
+        TLRPC.KeyboardButton keyboardButton2 = keyboardButton;
+        MessageObject messageObject3 = messageObject2;
+        if (keyboardButton2 == null || messageObject3 == null) {
+            return false;
+        }
+        if (keyboardButton2 instanceof TLRPC.TL_keyboardButton) {
+            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(keyboardButton2.text, this.dialog_id, messageObject, (TLRPC.WebPage) null, false, (ArrayList<TLRPC.MessageEntity>) null, (TLRPC.ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+        } else if (keyboardButton2 instanceof TLRPC.TL_keyboardButtonUrl) {
+            this.parentFragment.showOpenUrlAlert(keyboardButton2.url, true);
+        } else if (keyboardButton2 instanceof TLRPC.TL_keyboardButtonRequestPhone) {
+            this.parentFragment.shareMyContact(2, messageObject3);
+        } else {
+            Boolean bool = null;
+            if (keyboardButton2 instanceof TLRPC.TL_keyboardButtonRequestPoll) {
+                ChatActivity chatActivity = this.parentFragment;
+                if ((keyboardButton2.flags & 1) != 0) {
+                    bool = Boolean.valueOf(keyboardButton2.quiz);
+                }
+                chatActivity.openPollCreate(bool);
+                return false;
+            } else if (keyboardButton2 instanceof TLRPC.TL_keyboardButtonRequestGeoLocation) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
                 builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
                 builder.setMessage(LocaleController.getString("ShareYouLocationInfo", NUM));
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(messageObject2, keyboardButton) {
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(messageObject3, keyboardButton2) {
                     private final /* synthetic */ MessageObject f$1;
                     private final /* synthetic */ TLRPC.KeyboardButton f$2;
 
@@ -4947,43 +4977,46 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 this.parentFragment.showDialog(builder.create());
-            } else if ((keyboardButton instanceof TLRPC.TL_keyboardButtonCallback) || (keyboardButton instanceof TLRPC.TL_keyboardButtonGame) || (keyboardButton instanceof TLRPC.TL_keyboardButtonBuy) || (keyboardButton instanceof TLRPC.TL_keyboardButtonUrlAuth)) {
-                SendMessagesHelper.getInstance(this.currentAccount).sendCallback(true, messageObject2, keyboardButton, this.parentFragment);
-            } else if ((keyboardButton instanceof TLRPC.TL_keyboardButtonSwitchInline) && !this.parentFragment.processSwitchButton((TLRPC.TL_keyboardButtonSwitchInline) keyboardButton)) {
-                if (keyboardButton.same_peer) {
-                    TLRPC.Message message = messageObject2.messageOwner;
+            } else if ((keyboardButton2 instanceof TLRPC.TL_keyboardButtonCallback) || (keyboardButton2 instanceof TLRPC.TL_keyboardButtonGame) || (keyboardButton2 instanceof TLRPC.TL_keyboardButtonBuy) || (keyboardButton2 instanceof TLRPC.TL_keyboardButtonUrlAuth)) {
+                SendMessagesHelper.getInstance(this.currentAccount).sendCallback(true, messageObject3, keyboardButton2, this.parentFragment);
+            } else if (!(keyboardButton2 instanceof TLRPC.TL_keyboardButtonSwitchInline) || this.parentFragment.processSwitchButton((TLRPC.TL_keyboardButtonSwitchInline) keyboardButton2)) {
+                return true;
+            } else {
+                if (keyboardButton2.same_peer) {
+                    TLRPC.Message message = messageObject3.messageOwner;
                     int i = message.from_id;
                     int i2 = message.via_bot_id;
                     if (i2 == 0) {
                         i2 = i;
                     }
                     TLRPC.User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(i2));
-                    if (user != null) {
-                        setFieldText("@" + user.username + " " + keyboardButton.query);
-                        return;
+                    if (user == null) {
+                        return true;
                     }
-                    return;
+                    setFieldText("@" + user.username + " " + keyboardButton2.query);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("onlySelect", true);
+                    bundle.putInt("dialogsType", 1);
+                    DialogsActivity dialogsActivity = new DialogsActivity(bundle);
+                    dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate(messageObject3, keyboardButton2) {
+                        private final /* synthetic */ MessageObject f$1;
+                        private final /* synthetic */ TLRPC.KeyboardButton f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+                            ChatActivityEnterView.this.lambda$didPressedBotButton$26$ChatActivityEnterView(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
+                        }
+                    });
+                    this.parentFragment.presentFragment(dialogsActivity);
                 }
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("onlySelect", true);
-                bundle.putInt("dialogsType", 1);
-                DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-                dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate(messageObject2, keyboardButton) {
-                    private final /* synthetic */ MessageObject f$1;
-                    private final /* synthetic */ TLRPC.KeyboardButton f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                        ChatActivityEnterView.this.lambda$didPressedBotButton$26$ChatActivityEnterView(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
-                    }
-                });
-                this.parentFragment.presentFragment(dialogsActivity);
             }
         }
+        return true;
     }
 
     public /* synthetic */ void lambda$didPressedBotButton$25$ChatActivityEnterView(MessageObject messageObject, TLRPC.KeyboardButton keyboardButton, DialogInterface dialogInterface, int i) {

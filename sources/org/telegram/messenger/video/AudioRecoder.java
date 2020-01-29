@@ -25,6 +25,7 @@ public class AudioRecoder {
     public long endTime = 0;
     private final MediaExtractor extractor;
     private boolean extractorDone = false;
+    public final MediaFormat format;
     private int pendingAudioDecoderOutputBufferIndex = -1;
     public long startTime = 0;
     private final int trackIndex;
@@ -36,9 +37,9 @@ public class AudioRecoder {
         this.decoder.configure(mediaFormat, (Surface) null, (MediaCrypto) null, 0);
         this.decoder.start();
         this.encoder = MediaCodec.createEncoderByType("audio/mp4a-latm");
-        MediaFormat createAudioFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", mediaFormat.getInteger("sample-rate"), mediaFormat.getInteger("channel-count"));
-        createAudioFormat.setInteger("bitrate", 65536);
-        this.encoder.configure(createAudioFormat, (Surface) null, (MediaCrypto) null, 1);
+        this.format = MediaFormat.createAudioFormat("audio/mp4a-latm", mediaFormat.getInteger("sample-rate"), mediaFormat.getInteger("channel-count"));
+        this.format.setInteger("bitrate", 65536);
+        this.encoder.configure(this.format, (Surface) null, (MediaCrypto) null, 1);
         this.encoder.start();
         this.decoderInputBuffers = this.decoder.getInputBuffers();
         this.decoderOutputBuffers = this.decoder.getOutputBuffers();

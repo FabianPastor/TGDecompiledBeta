@@ -60,10 +60,15 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         this.allowPhoneNumbers = z6;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
-            public void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
+            public /* synthetic */ boolean canApplySearchResults(int i) {
+                return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
 
-            public void onDataSetChanged() {
+            public /* synthetic */ void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
+                SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
+            }
+
+            public void onDataSetChanged(int i) {
                 SearchAdapter.this.notifyDataSetChanged();
             }
 
@@ -93,7 +98,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch((String) null, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, 0);
+                this.searchAdapterHelper.queryServerSearch((String) null, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, 0, 0);
             }
             notifyDataSetChanged();
             return;
@@ -129,7 +134,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
-            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, this.channelId, this.allowPhoneNumbers, -1);
+            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 0);
         }
         int i = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i).contacts), i) {

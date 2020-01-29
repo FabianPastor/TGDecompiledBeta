@@ -92,7 +92,7 @@ public class MaxFileSizeCell extends FrameLayout {
                 MaxFileSizeCell.this.didChangedSizeValue(i);
             }
         });
-        addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 10.0f, 40.0f, 10.0f, 0.0f));
+        addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 6.0f, 36.0f, 6.0f, 0.0f));
     }
 
     public void setText(String str) {

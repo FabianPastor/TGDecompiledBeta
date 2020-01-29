@@ -53,7 +53,7 @@ public class MenuDrawable extends Drawable {
             } else {
                 this.currentAnimationTime = (int) ((1.0f - f3) * 200.0f);
             }
-            this.lastFrameTime = SystemClock.uptimeMillis();
+            this.lastFrameTime = SystemClock.elapsedRealtime();
             this.finalRotation = f;
         } else {
             this.currentRotation = f;
@@ -70,10 +70,10 @@ public class MenuDrawable extends Drawable {
         float f5;
         float f6;
         if (this.currentRotation != this.finalRotation) {
-            long uptimeMillis = SystemClock.uptimeMillis();
+            long elapsedRealtime = SystemClock.elapsedRealtime();
             long j = this.lastFrameTime;
             if (j != 0) {
-                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (uptimeMillis - j));
+                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (elapsedRealtime - j));
                 int i = this.currentAnimationTime;
                 if (i >= 200) {
                     this.currentRotation = this.finalRotation;
@@ -83,7 +83,7 @@ public class MenuDrawable extends Drawable {
                     this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / 200.0f);
                 }
             }
-            this.lastFrameTime = uptimeMillis;
+            this.lastFrameTime = elapsedRealtime;
             invalidateSelf();
         }
         canvas.save();

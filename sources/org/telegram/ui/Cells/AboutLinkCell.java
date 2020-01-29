@@ -62,15 +62,14 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     public void setTextAndValue(String str, String str2, boolean z) {
-        String str3;
         if (TextUtils.isEmpty(str)) {
             return;
         }
-        if (str == null || (str3 = this.oldText) == null || !str.equals(str3)) {
+        if (str == null || !str.equals(this.oldText)) {
             this.oldText = str;
             this.stringBuilder = new SpannableStringBuilder(this.oldText);
             if (z) {
-                MessageObject.addLinks(false, this.stringBuilder, false);
+                MessageObject.addLinks(false, this.stringBuilder, false, false);
             }
             Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             if (TextUtils.isEmpty(str2)) {

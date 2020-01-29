@@ -141,6 +141,7 @@
     <string name="ActionPinnedNoText">un1 pinned a message</string>
     <string name="ActionPinnedPhoto">un1 pinned a photo</string>
     <string name="ActionPinnedPoll">un1 pinned a poll</string>
+    <string name="ActionPinnedQuiz">un1 pinned a quiz</string>
     <string name="ActionPinnedRound">un1 pinned a video message</string>
     <string name="ActionPinnedSticker">un1 pinned a sticker</string>
     <string name="ActionPinnedText">un1 pinned \"%1$s\"</string>
@@ -164,7 +165,7 @@
     <string name="AddAccount">Add Account</string>
     <string name="AddAdminErrorBlacklisted">Sorry, you can\'t add this user as an admin because they are in the Removed Users list and you can\'t unban them.</string>
     <string name="AddAdminErrorNotAMember">Sorry, you can\'t add this user as an admin because they are not a member of this group and you are not allowed to add them.</string>
-    <string name="AddAnOption">Add an option...</string>
+    <string name="AddAnOption">Add an Option...</string>
     <string name="AddAnOptionInfo">You can add %1$s.</string>
     <string name="AddAnOptionInfoMax">You have added the maximum number of options.</string>
     <string name="AddAnotherAccount">Add another account</string>
@@ -246,6 +247,13 @@
     <string name="AndOther_zero">and %1$d others</string>
     <string name="AnimatedStickers">Animated Stickers</string>
     <string name="AnonymousPoll">Anonymous Poll</string>
+    <string name="AnonymousQuizPoll">Anonymous Quiz</string>
+    <string name="Answer_few">%1$d answers</string>
+    <string name="Answer_many">%1$d answers</string>
+    <string name="Answer_one">%1$d answer</string>
+    <string name="Answer_other">%1$d answers</string>
+    <string name="Answer_two">%1$d answers</string>
+    <string name="Answer_zero">%1$d answers</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
     <string name="AppFolderInfo">Browse the app\'s folder</string>
     <string name="AppName">Telegram</string>
@@ -502,6 +510,7 @@
     <string name="BotStop">Stop bot</string>
     <string name="BotUnblock">RESTART</string>
     <string name="Brown">Brown</string>
+    <string name="BubbleRadius">Message corners</string>
     <string name="BuiltInThemes">Built-in themes</string>
     <string name="BytesReceived">Bytes received</string>
     <string name="BytesSent">Bytes sent</string>
@@ -620,6 +629,7 @@
     <string name="ChannelMessageNoText">%1$s posted a message</string>
     <string name="ChannelMessagePhoto">%1$s posted a photo</string>
     <string name="ChannelMessagePoll2">%1$s posted a poll %2$s</string>
+    <string name="ChannelMessageQuiz2">%1$s posted a quiz %2$s</string>
     <string name="ChannelMessageRound">%1$s posted a video message</string>
     <string name="ChannelMessageSticker">%1$s posted a sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s posted a %2$s sticker</string>
@@ -1177,6 +1187,7 @@
     <string name="EventLogRestrictedUntil">changed permissions for %1$s\10\10Duration: %2$s</string>
     <string name="EventLogSelectedEvents">Selected actions</string>
     <string name="EventLogStopPoll">un1 stopped the poll:</string>
+    <string name="EventLogStopQuiz">un1 stopped the quiz:</string>
     <string name="EventLogToggledInvitesHistoryOff">un1 made group history hidden for new members</string>
     <string name="EventLogToggledInvitesHistoryOn">un1 made group history visible for new members</string>
     <string name="EventLogToggledInvitesOff">un1 disabled group invites</string>
@@ -1616,6 +1627,7 @@
     <string name="MessageScheduledReminderNotification">�� Reminder</string>
     <string name="MessageScheduledUntilOnline">Scheduled until online</string>
     <string name="MessageScheduledVote">Voting will become available after the message is published.</string>
+    <string name="MessageScheduledVoteResults">Poll results will become available after the message is published.</string>
     <string name="MessagesDataUsage">Messages and other data</string>
     <string name="MessagesSettings">Messages</string>
     <string name="MetersAway2">%1$s m away</string>
@@ -1679,6 +1691,7 @@
     <string name="NewMessages_two">%1$d new messages</string>
     <string name="NewMessages_zero">%1$d new messages</string>
     <string name="NewPoll">New Poll</string>
+    <string name="NewQuiz">New Quiz</string>
     <string name="NewSecretChat">New Secret Chat</string>
     <string name="NewTheme">New color theme</string>
     <string name="NewThemePreviewLine1">Do you know what time it is?</string>
@@ -1742,6 +1755,7 @@
     <string name="NoStickersFound">No stickers found</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
     <string name="NoVotes">No votes</string>
+    <string name="NoVotesQuiz">Nobody answered</string>
     <string name="NobodyLikesSpam1">Sorry, you can only send messages to mutual contacts at the moment.</string>
     <string name="NobodyLikesSpam2">Sorry, you can only add mutual contacts to groups at the moment.</string>
     <string name="NobodyLikesSpam3">Sorry, you are currently restricted from posting to public groups.</string>
@@ -1770,6 +1784,8 @@
     <string name="NotificationActionPinnedPhotoChannel">%1$s pinned a photo</string>
     <string name="NotificationActionPinnedPoll2">%1$s pinned a poll %3$s in the group %2$s</string>
     <string name="NotificationActionPinnedPollChannel2">%1$s pinned a poll %2$s</string>
+    <string name="NotificationActionPinnedQuiz2">%1$s pinned a quiz %3$s in the group %2$s</string>
+    <string name="NotificationActionPinnedQuizChannel2">%1$s pinned a quiz %2$s</string>
     <string name="NotificationActionPinnedRound">%1$s pinned a video message in the group %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s pinned a video message</string>
     <string name="NotificationActionPinnedSticker">%1$s pinned a sticker in the group %2$s</string>
@@ -1823,6 +1839,7 @@
     <string name="NotificationMessageGroupNoText">%1$s sent a message to the group %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s sent a photo to the group %2$s</string>
     <string name="NotificationMessageGroupPoll2">%1$s sent a poll %3$s to the group %2$s</string>
+    <string name="NotificationMessageGroupQuiz2">%1$s sent a quiz %3$s to the group %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s sent a video message to the group %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s sent a sticker to the group %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s sent a %3$s sticker to the group %2$s</string>
@@ -1835,6 +1852,7 @@
     <string name="NotificationMessageNoText">%1$s sent you a message</string>
     <string name="NotificationMessagePhoto">%1$s sent you a photo</string>
     <string name="NotificationMessagePoll2">%1$s sent you a poll %2$s</string>
+    <string name="NotificationMessageQuiz2">%1$s sent you a quiz %2$s</string>
     <string name="NotificationMessageRound">%1$s sent you a video message</string>
     <string name="NotificationMessageSDPhoto">%1$s sent you a self-destructing photo</string>
     <string name="NotificationMessageSDVideo">%1$s sent you a self-destructing video</string>
@@ -2286,7 +2304,18 @@
     <string name="Points_two">%1$d</string>
     <string name="Points_zero">%1$d</string>
     <string name="Poll">Poll</string>
+    <string name="PollAnonymous">Anonymous Voting</string>
+    <string name="PollCantForwardSecretChat">Sorry, polls can’t be forwarded to secret chats.</string>
+    <string name="PollCollapse">Collapse</string>
+    <string name="PollExpand">Expand</string>
+    <string name="PollMultiple">Multiple Answers</string>
     <string name="PollOptions">Poll options</string>
+    <string name="PollQuiz">Quiz Mode</string>
+    <string name="PollResults">Poll Results</string>
+    <string name="PollSelectOption">Select an option first</string>
+    <string name="PollSubmitVotes">VOTE</string>
+    <string name="PollTapToSelect">Tap to choose the correct answer</string>
+    <string name="PollViewResults">VIEW RESULTS</string>
     <string name="PopupDisabled">Disabled</string>
     <string name="PopupEnabled">Enabled</string>
     <string name="PopupNotification">Popup Notifications</string>
@@ -2343,6 +2372,8 @@
     <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">Proxy Settings</string>
     <string name="PublicChannelsTooMuch">Sorry, the target user has too many public groups or channels already. Please ask them to make one of their existing groups or channels private first.</string>
+    <string name="PublicPoll">Poll</string>
+    <string name="PublicPollCantForward">Sorry, public polls can’t be forwarded to channels.</string>
     <string name="Purple">Purple</string>
     <string name="Question">Question</string>
     <string name="QuestionHint">Ask a question</string>
@@ -2351,6 +2382,13 @@
     <string name="QuickReplyDefault2">I\'ll call you right back.</string>
     <string name="QuickReplyDefault3">I\'ll call you later.</string>
     <string name="QuickReplyDefault4">Can\'t talk now. Call me later?</string>
+    <string name="QuizAnswers">Quiz answers</string>
+    <string name="QuizInfo">Polls in Quiz Mode have one correct answer. Users can\'t revoke their answers.</string>
+    <string name="QuizPoll">Quiz</string>
+    <string name="QuizWellDone">Well done!</string>
+    <string name="QuizWellDoneInfo">You chose the right answer.</string>
+    <string name="QuizWrongAnswer">Wrong answer!</string>
+    <string name="QuizWrongAnswerInfo">You missed the correct option.</string>
     <string name="RaiseToSpeak">Raise to Speak</string>
     <string name="RateCallDistorted">Speech was distorted</string>
     <string name="RateCallDropped">Call ended unexpectedly</string>
@@ -2478,6 +2516,7 @@
     <string name="ScheduleMessage">Schedule message</string>
     <string name="ScheduleWhenOnline">Send when %1$s comes online</string>
     <string name="ScheduledMessages">Scheduled Messages</string>
+    <string name="ScheduledOrNoSoundHint">Hold this button to schedule your message or send it without sound.</string>
     <string name="ScreenCapture">Show App Content in Task Switcher</string>
     <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>
     <string name="ScreenCaptureInfo">If disabled, you won\'t be able to take screenshots in the app but chat content will be hidden in the task switcher.</string>
@@ -2649,6 +2688,12 @@
     <string name="ShowInChat">Show in chat</string>
     <string name="ShowNotificationsFor">Show notifications for</string>
     <string name="ShowNotificationsForInfo">Turn this off if you want to receive notifications only from your active account.</string>
+    <string name="ShowVotes_few">Show More (%1$d)</string>
+    <string name="ShowVotes_many">Show More (%1$d)</string>
+    <string name="ShowVotes_one">Show More (%1$d)</string>
+    <string name="ShowVotes_other">Show More (%1$d)</string>
+    <string name="ShowVotes_two">Show More (%1$d)</string>
+    <string name="ShowVotes_zero">Show More (%1$d)</string>
     <string name="Shuffle">Shuffle</string>
     <string name="SignUp">Sign Up</string>
     <string name="SinglePhotosHelp">Show media as separate messages</string>
@@ -2708,6 +2753,9 @@
     <string name="StopPoll">Stop Poll</string>
     <string name="StopPollAlertText">If you stop this poll now, nobody will be able to vote in it anymore. This action cannot be undone.</string>
     <string name="StopPollAlertTitle">Stop poll?</string>
+    <string name="StopQuiz">Stop Quiz</string>
+    <string name="StopQuizAlertText">If you stop this quiz now, nobody will be able to vote in it anymore. This action cannot be undone.</string>
+    <string name="StopQuizAlertTitle">Stop quiz?</string>
     <string name="StopVerification">Do you want to stop the verification process?</string>
     <string name="StorageUsage">Storage Usage</string>
     <string name="Streaming">Streaming</string>

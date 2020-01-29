@@ -125,7 +125,7 @@ public class ShareDialogCell extends FrameLayout {
             if (r8 == 0) goto L_0x00f1
             boolean r8 = org.telegram.messenger.MessagesController.isSupportUser(r8)
             if (r8 != 0) goto L_0x00f1
-            long r0 = android.os.SystemClock.uptimeMillis()
+            long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
             r4 = 17

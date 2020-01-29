@@ -2,6 +2,7 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -14,9 +15,11 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TextCell extends FrameLayout {
+    private int imageLeft;
     private ImageView imageView;
     private int leftPadding;
     private boolean needDivider;
+    private int offsetFromImage;
     private SimpleTextView textView;
     private ImageView valueImageView;
     private SimpleTextView valueTextView;
@@ -27,6 +30,8 @@ public class TextCell extends FrameLayout {
 
     public TextCell(Context context, int i, boolean z) {
         super(context);
+        this.offsetFromImage = 71;
+        this.imageLeft = 21;
         this.leftPadding = i;
         this.textView = new SimpleTextView(context);
         this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
@@ -86,24 +91,16 @@ public class TextCell extends FrameLayout {
         SimpleTextView simpleTextView = this.valueTextView;
         simpleTextView.layout(dp, textHeight, simpleTextView.getMeasuredWidth() + dp, this.valueTextView.getMeasuredHeight() + textHeight);
         int textHeight2 = (i6 - this.textView.getTextHeight()) / 2;
-        float f = 71.0f;
         if (LocaleController.isRTL) {
-            int measuredWidth = getMeasuredWidth() - this.textView.getMeasuredWidth();
-            if (this.imageView.getVisibility() != 0) {
-                f = (float) this.leftPadding;
-            }
-            i5 = measuredWidth - AndroidUtilities.dp(f);
+            i5 = (getMeasuredWidth() - this.textView.getMeasuredWidth()) - AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
         } else {
-            if (this.imageView.getVisibility() != 0) {
-                f = (float) this.leftPadding;
-            }
-            i5 = AndroidUtilities.dp(f);
+            i5 = AndroidUtilities.dp((float) (this.imageView.getVisibility() == 0 ? this.offsetFromImage : this.leftPadding));
         }
         SimpleTextView simpleTextView2 = this.textView;
         simpleTextView2.layout(i5, textHeight2, simpleTextView2.getMeasuredWidth() + i5, this.textView.getMeasuredHeight() + textHeight2);
         if (this.imageView.getVisibility() == 0) {
             int dp2 = AndroidUtilities.dp(5.0f);
-            int dp3 = !LocaleController.isRTL ? AndroidUtilities.dp(21.0f) : (i7 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(21.0f);
+            int dp3 = !LocaleController.isRTL ? AndroidUtilities.dp((float) this.imageLeft) : (i7 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.imageLeft);
             ImageView imageView2 = this.imageView;
             imageView2.layout(dp3, dp2, imageView2.getMeasuredWidth() + dp3, this.imageView.getMeasuredHeight() + dp2);
         }
@@ -148,6 +145,25 @@ public class TextCell extends FrameLayout {
         this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         this.needDivider = z;
         setWillNotDraw(!this.needDivider);
+    }
+
+    public void setTextAndIcon(String str, Drawable drawable, boolean z) {
+        this.offsetFromImage = 68;
+        this.imageLeft = 18;
+        this.textView.setText(str);
+        this.valueTextView.setText((CharSequence) null);
+        this.imageView.setColorFilter((ColorFilter) null);
+        this.imageView.setImageDrawable(drawable);
+        this.imageView.setVisibility(0);
+        this.valueTextView.setVisibility(8);
+        this.valueImageView.setVisibility(8);
+        this.imageView.setPadding(0, AndroidUtilities.dp(6.0f), 0, 0);
+        this.needDivider = z;
+        setWillNotDraw(!this.needDivider);
+    }
+
+    public void setOffsetFromImage(int i) {
+        this.offsetFromImage = i;
     }
 
     public void setTextAndValue(String str, String str2, boolean z) {

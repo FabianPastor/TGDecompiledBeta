@@ -41,7 +41,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public AudioPlayerCell(Context context) {
@@ -396,8 +396,8 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         updateButtonState(false, true);
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.radialProgress.setProgress(f, true);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
         if (this.hasMiniProgress != 0) {
             if (this.miniButtonState != 1) {
                 updateButtonState(false, true);

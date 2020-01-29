@@ -501,7 +501,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625331(0x7f0e0573, float:1.8877867E38)
+                r8 = 2131625342(0x7f0e057e, float:1.887789E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -511,7 +511,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165406(0x7var_de, float:1.7945028E38)
+                r1 = 2131165407(0x7var_df, float:1.794503E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -534,18 +534,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009f
-                r8 = 2131626781(0x7f0e0b1d, float:1.8880808E38)
+                r8 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b4
             L_0x009f:
                 if (r8 != r0) goto L_0x00ab
-                r8 = 2131626780(0x7f0e0b1c, float:1.8880806E38)
+                r8 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b4
             L_0x00ab:
-                r8 = 2131626779(0x7f0e0b1b, float:1.8880804E38)
+                r8 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b4:

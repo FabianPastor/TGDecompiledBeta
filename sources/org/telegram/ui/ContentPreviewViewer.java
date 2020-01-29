@@ -558,7 +558,7 @@ public class ContentPreviewViewer {
             r1 = -1
             if (r0 == 0) goto L_0x00fd
             org.telegram.messenger.ImageReceiver r0 = r6.centerImage
-            r0.setRoundRadius(r2)
+            r0.setRoundRadius((int) r2)
         L_0x00fb:
             r8 = 0
             goto L_0x012e
@@ -566,7 +566,7 @@ public class ContentPreviewViewer {
             boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerCell
             if (r0 == 0) goto L_0x0107
             org.telegram.messenger.ImageReceiver r0 = r6.centerImage
-            r0.setRoundRadius(r2)
+            r0.setRoundRadius((int) r2)
             goto L_0x00fb
         L_0x0107:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.ContextLinkCell
@@ -576,7 +576,7 @@ public class ContentPreviewViewer {
             boolean r3 = r0.isSticker()
             if (r3 == 0) goto L_0x011a
             org.telegram.messenger.ImageReceiver r0 = r6.centerImage
-            r0.setRoundRadius(r2)
+            r0.setRoundRadius((int) r2)
             goto L_0x00fb
         L_0x011a:
             boolean r0 = r0.isGif()
@@ -584,7 +584,7 @@ public class ContentPreviewViewer {
             org.telegram.messenger.ImageReceiver r0 = r6.centerImage
             r3 = 1086324736(0x40CLASSNAME, float:6.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r0.setRoundRadius(r3)
+            r0.setRoundRadius((int) r3)
             r8 = 1
             goto L_0x012e
         L_0x012d:
@@ -790,7 +790,7 @@ public class ContentPreviewViewer {
             boolean r1 = r1.showingBitmap()
             if (r1 == 0) goto L_0x0095
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
-            r1.setRoundRadius(r0)
+            r1.setRoundRadius((int) r0)
         L_0x0054:
             r1 = 0
             goto L_0x0096
@@ -802,7 +802,7 @@ public class ContentPreviewViewer {
             boolean r1 = r1.showingBitmap()
             if (r1 == 0) goto L_0x0095
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
-            r1.setRoundRadius(r0)
+            r1.setRoundRadius((int) r0)
             goto L_0x0054
         L_0x0069:
             boolean r1 = r3 instanceof org.telegram.ui.Cells.ContextLinkCell
@@ -814,7 +814,7 @@ public class ContentPreviewViewer {
             boolean r5 = r1.isSticker()
             if (r5 == 0) goto L_0x0082
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
-            r1.setRoundRadius(r0)
+            r1.setRoundRadius((int) r0)
             goto L_0x0054
         L_0x0082:
             boolean r1 = r1.isGif()
@@ -822,7 +822,7 @@ public class ContentPreviewViewer {
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
             r5 = 1086324736(0x40CLASSNAME, float:6.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r1.setRoundRadius(r5)
+            r1.setRoundRadius((int) r5)
             r1 = 1
             goto L_0x0096
         L_0x0095:

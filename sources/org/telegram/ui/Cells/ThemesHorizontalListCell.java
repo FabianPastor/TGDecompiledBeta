@@ -664,6 +664,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.themeInfo = themeInfo2;
             this.isFirst = z2;
             this.isLast = z;
+            this.accentId = themeInfo2.currentAccentId;
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.button.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(this.isFirst ? 49.0f : 27.0f);
             this.button.setLayoutParams(layoutParams);
@@ -884,9 +885,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                         this.loadingDrawable.draw(canvas);
                     }
                     if (this.themeInfo.themeLoaded) {
-                        long uptimeMillis = SystemClock.uptimeMillis();
-                        long min2 = Math.min(17, uptimeMillis - this.lastDrawTime);
-                        this.lastDrawTime = uptimeMillis;
+                        long elapsedRealtime = SystemClock.elapsedRealtime();
+                        long min2 = Math.min(17, elapsedRealtime - this.lastDrawTime);
+                        this.lastDrawTime = elapsedRealtime;
                         this.placeholderAlpha -= ((float) min2) / 180.0f;
                         if (this.placeholderAlpha < 0.0f) {
                             this.placeholderAlpha = 0.0f;

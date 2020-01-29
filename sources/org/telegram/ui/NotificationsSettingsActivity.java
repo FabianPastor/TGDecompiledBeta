@@ -805,21 +805,21 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             goto L_0x044b
         L_0x0078:
             int r12 = r9.resetNotificationsRow
-            r3 = 2131624467(0x7f0e0213, float:1.8876115E38)
+            r3 = 2131624476(0x7f0e021c, float:1.8876133E38)
             java.lang.String r4 = "Cancel"
             if (r11 != r12) goto L_0x00d5
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r12 = r9.getParentActivity()
             r11.<init>((android.content.Context) r12)
-            r12 = 2131626373(0x7f0e0985, float:1.887998E38)
+            r12 = 2131626411(0x7f0e09ab, float:1.8880057E38)
             java.lang.String r0 = "ResetNotificationsAlertTitle"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
             r11.setTitle(r12)
-            r12 = 2131626372(0x7f0e0984, float:1.8879978E38)
+            r12 = 2131626410(0x7f0e09aa, float:1.8880055E38)
             java.lang.String r0 = "ResetNotificationsAlert"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
             r11.setMessage(r12)
-            r12 = 2131626353(0x7f0e0971, float:1.887994E38)
+            r12 = 2131626391(0x7f0e0997, float:1.8880017E38)
             java.lang.String r0 = "Reset"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$yCH91Gy9ARU8yn1KTl14GsaHDf4 r0 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$yCH91Gy9ARU8yn1KTl14GsaHDf4
@@ -1118,13 +1118,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             org.telegram.ui.ActionBar.AlertDialog$Builder r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r5 = r9.getParentActivity()
             r12.<init>((android.content.Context) r5)
-            r5 = 2131626327(0x7f0e0957, float:1.8879887E38)
+            r5 = 2131626365(0x7f0e097d, float:1.8879964E38)
             java.lang.String r6 = "RepeatNotifications"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r12.setTitle(r5)
             r5 = 7
             java.lang.CharSequence[] r5 = new java.lang.CharSequence[r5]
-            r6 = 2131626326(0x7f0e0956, float:1.8879885E38)
+            r6 = 2131626364(0x7f0e097c, float:1.8879962E38)
             java.lang.String r7 = "RepeatDisabled"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5[r1] = r6
@@ -1361,7 +1361,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r4 = 0
             r5 = 1
             if (r3 != r5) goto L_0x0072
-            r3 = 2131625796(0x7f0e0744, float:1.887881E38)
+            r3 = 2131625814(0x7f0e0756, float:1.8878847E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsSingleAlert"
@@ -1370,7 +1370,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r2.setMessage(r0)
             goto L_0x0086
         L_0x0072:
-            r3 = 2131625795(0x7f0e0743, float:1.8878808E38)
+            r3 = 2131625813(0x7f0e0755, float:1.8878845E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsAlert"
@@ -1378,17 +1378,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r2.setMessage(r0)
         L_0x0086:
-            r0 = 2131625794(0x7f0e0742, float:1.8878806E38)
+            r0 = 2131625812(0x7f0e0754, float:1.8878843E38)
             java.lang.String r3 = "NotificationsExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r2.setTitle(r0)
-            r0 = 2131626942(0x7f0e0bbe, float:1.8881134E38)
+            r0 = 2131626990(0x7f0e0bee, float:1.8881232E38)
             java.lang.String r3 = "ViewExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE
             r3.<init>(r7)
             r2.setNeutralButton(r0, r3)
-            r7 = 2131625828(0x7f0e0764, float:1.8878875E38)
+            r7 = 2131625846(0x7f0e0776, float:1.8878911E38)
             java.lang.String r0 = "OK"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r2.setNegativeButton(r7, r1)
@@ -1470,7 +1470,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             String string;
-            ArrayList access$4400;
+            ArrayList access$4200;
             int i2;
             String str;
             int i3 = 0;
@@ -1569,22 +1569,22 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     int currentTime = ConnectionsManager.getInstance(NotificationsSettingsActivity.this.currentAccount).getCurrentTime();
                     if (i == NotificationsSettingsActivity.this.privateRow) {
                         string = LocaleController.getString("NotificationsPrivateChats", NUM);
-                        access$4400 = NotificationsSettingsActivity.this.exceptionUsers;
+                        access$4200 = NotificationsSettingsActivity.this.exceptionUsers;
                         i2 = notificationsSettings2.getInt("EnableAll2", 0);
                     } else if (i == NotificationsSettingsActivity.this.groupRow) {
                         string = LocaleController.getString("NotificationsGroups", NUM);
-                        access$4400 = NotificationsSettingsActivity.this.exceptionChats;
+                        access$4200 = NotificationsSettingsActivity.this.exceptionChats;
                         i2 = notificationsSettings2.getInt("EnableGroup2", 0);
                     } else {
                         string = LocaleController.getString("NotificationsChannels", NUM);
-                        access$4400 = NotificationsSettingsActivity.this.exceptionChannels;
+                        access$4200 = NotificationsSettingsActivity.this.exceptionChannels;
                         i2 = notificationsSettings2.getInt("EnableChannel2", 0);
                     }
                     String str2 = string;
                     boolean z = i2 < currentTime;
                     int i4 = (!z && i2 - 31536000 < currentTime) ? 2 : 0;
                     StringBuilder sb = new StringBuilder();
-                    if (access$4400 == null || access$4400.isEmpty()) {
+                    if (access$4200 == null || access$4200.isEmpty()) {
                         sb.append(LocaleController.getString("TapToChange", NUM));
                     } else {
                         z = i2 < currentTime;
@@ -1598,7 +1598,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         if (sb.length() != 0) {
                             sb.append(", ");
                         }
-                        sb.append(LocaleController.formatPluralString("Exception", access$4400.size()));
+                        sb.append(LocaleController.formatPluralString("Exception", access$4200.size()));
                     }
                     notificationsCheckCell.setTextAndValueAndCheck(str2, sb, z, i4, i != NotificationsSettingsActivity.this.channelsRow);
                     return;

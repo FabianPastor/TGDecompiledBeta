@@ -112,7 +112,7 @@ public class BackupImageView extends View {
         invalidate();
     }
 
-    public int getRoundRadius() {
+    public int[] getRoundRadius() {
         return this.imageReceiver.getRoundRadius();
     }
 

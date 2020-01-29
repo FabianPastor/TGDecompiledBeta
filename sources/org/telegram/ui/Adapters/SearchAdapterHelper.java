@@ -11,6 +11,7 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
@@ -52,6 +53,10 @@ public class SearchAdapterHelper {
 
         /* renamed from: org.telegram.ui.Adapters.SearchAdapterHelper$SearchAdapterHelperDelegate$-CC  reason: invalid class name */
         public final /* synthetic */ class CC {
+            public static boolean $default$canApplySearchResults(SearchAdapterHelperDelegate searchAdapterHelperDelegate, int i) {
+                return true;
+            }
+
             public static SparseArray $default$getExcludeUsers(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {
                 return null;
             }
@@ -60,9 +65,11 @@ public class SearchAdapterHelper {
             }
         }
 
+        boolean canApplySearchResults(int i);
+
         SparseArray<TLRPC.User> getExcludeUsers();
 
-        void onDataSetChanged();
+        void onDataSetChanged(int i);
 
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
@@ -84,11 +91,12 @@ public class SearchAdapterHelper {
         return (this.reqId == 0 && this.channelReqId == 0) ? false : true;
     }
 
-    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, boolean z5, int i2) {
+    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, int i, boolean z6, int i2, int i3) {
         String str2;
         String str3 = str;
-        int i3 = i;
-        int i4 = i2;
+        int i4 = i;
+        int i5 = i2;
+        int i6 = i3;
         if (this.reqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
             this.reqId = 0;
@@ -107,22 +115,21 @@ public class SearchAdapterHelper {
             this.phoneSearchMap.clear();
             this.lastReqId = 0;
             this.channelLastReqId = 0;
-            this.delegate.onDataSetChanged();
+            this.delegate.onDataSetChanged(i6);
             return;
         }
         if (str.length() <= 0) {
-            boolean z6 = z4;
             this.groupSearch.clear();
             this.groupSearchMap.clear();
             this.channelLastReqId = 0;
-            this.delegate.onDataSetChanged();
-        } else if (i3 != 0) {
+            this.delegate.onDataSetChanged(i6);
+        } else if (i4 != 0) {
             TLRPC.TL_channels_getParticipants tL_channels_getParticipants = new TLRPC.TL_channels_getParticipants();
-            if (i4 == 1) {
+            if (i5 == 1) {
                 tL_channels_getParticipants.filter = new TLRPC.TL_channelParticipantsAdmins();
-            } else if (i4 == 3) {
+            } else if (i5 == 3) {
                 tL_channels_getParticipants.filter = new TLRPC.TL_channelParticipantsBanned();
-            } else if (i4 == 0) {
+            } else if (i5 == 0) {
                 tL_channels_getParticipants.filter = new TLRPC.TL_channelParticipantsKicked();
             } else {
                 tL_channels_getParticipants.filter = new TLRPC.TL_channelParticipantsSearch();
@@ -130,26 +137,30 @@ public class SearchAdapterHelper {
             tL_channels_getParticipants.filter.q = str3;
             tL_channels_getParticipants.limit = 50;
             tL_channels_getParticipants.offset = 0;
-            tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i3);
-            int i5 = this.channelLastReqId + 1;
-            this.channelLastReqId = i5;
-            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new RequestDelegate(i5, str3, z4) {
+            tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i4);
+            int i7 = this.channelLastReqId + 1;
+            this.channelLastReqId = i7;
+            ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
+            $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r15 = r0;
+            $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r0 = new RequestDelegate(i7, str, z4, i3) {
                 private final /* synthetic */ int f$1;
                 private final /* synthetic */ String f$2;
                 private final /* synthetic */ boolean f$3;
+                private final /* synthetic */ int f$4;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
                     this.f$3 = r4;
+                    this.f$4 = r5;
                 }
 
                 public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    SearchAdapterHelper.this.lambda$queryServerSearch$1$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
+                    SearchAdapterHelper.this.lambda$queryServerSearch$1$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
                 }
-            }, 2);
+            };
+            this.channelReqId = instance.sendRequest(tL_channels_getParticipants, r15, 2);
         } else {
-            boolean z7 = z4;
             this.lastFoundChannel = str.toLowerCase();
         }
         if (z) {
@@ -157,14 +168,18 @@ public class SearchAdapterHelper {
                 TLRPC.TL_contacts_search tL_contacts_search = new TLRPC.TL_contacts_search();
                 tL_contacts_search.q = str3;
                 tL_contacts_search.limit = 50;
-                int i6 = this.lastReqId + 1;
-                this.lastReqId = i6;
-                this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_search, new RequestDelegate(i6, z2, z3, z4, str) {
+                int i8 = this.lastReqId + 1;
+                this.lastReqId = i8;
+                $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r12 = r0;
+                ConnectionsManager instance2 = ConnectionsManager.getInstance(this.currentAccount);
+                $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r02 = new RequestDelegate(i8, i3, z2, z5, z3, z4, str) {
                     private final /* synthetic */ int f$1;
-                    private final /* synthetic */ boolean f$2;
+                    private final /* synthetic */ int f$2;
                     private final /* synthetic */ boolean f$3;
                     private final /* synthetic */ boolean f$4;
-                    private final /* synthetic */ String f$5;
+                    private final /* synthetic */ boolean f$5;
+                    private final /* synthetic */ boolean f$6;
+                    private final /* synthetic */ String f$7;
 
                     {
                         this.f$1 = r2;
@@ -172,52 +187,60 @@ public class SearchAdapterHelper {
                         this.f$3 = r4;
                         this.f$4 = r5;
                         this.f$5 = r6;
+                        this.f$6 = r7;
+                        this.f$7 = r8;
                     }
 
                     public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                        SearchAdapterHelper.this.lambda$queryServerSearch$3$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tL_error);
+                        SearchAdapterHelper.this.lambda$queryServerSearch$3$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tL_error);
                     }
-                }, 2);
+                };
+                this.reqId = instance2.sendRequest(tL_contacts_search, r12, 2);
             } else {
                 this.globalSearch.clear();
                 this.globalSearchMap.clear();
                 this.localServerSearch.clear();
                 this.lastReqId = 0;
-                this.delegate.onDataSetChanged();
+                this.delegate.onDataSetChanged(i6);
+                if (!z5 && z6 && str3.startsWith("+") && str.length() > 3) {
+                    this.phonesSearch.clear();
+                    this.phoneSearchMap.clear();
+                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
+                    ArrayList<TLRPC.TL_contact> arrayList = ContactsController.getInstance(this.currentAccount).contacts;
+                    int size = arrayList.size();
+                    boolean z7 = false;
+                    for (int i9 = 0; i9 < size; i9++) {
+                        TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(arrayList.get(i9).user_id));
+                        if (!(user == null || (str2 = user.phone) == null || !str2.startsWith(stripExceptNumbers))) {
+                            if (!z7) {
+                                z7 = user.phone.length() == stripExceptNumbers.length();
+                            }
+                            this.phonesSearch.add(user);
+                            this.phoneSearchMap.put(user.id, user);
+                        }
+                    }
+                    if (!z7) {
+                        this.phonesSearch.add("section");
+                        this.phonesSearch.add(stripExceptNumbers);
+                    }
+                    this.delegate.onDataSetChanged(i6);
+                    return;
+                }
+                return;
             }
         }
-        if (z5 && str3.startsWith("+") && str.length() > 3) {
-            this.phonesSearch.clear();
-            this.phoneSearchMap.clear();
-            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
-            ArrayList<TLRPC.TL_contact> arrayList = ContactsController.getInstance(this.currentAccount).contacts;
-            int size = arrayList.size();
-            boolean z8 = false;
-            for (int i7 = 0; i7 < size; i7++) {
-                TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(arrayList.get(i7).user_id));
-                if (!(user == null || (str2 = user.phone) == null || !str2.startsWith(stripExceptNumbers))) {
-                    if (!z8) {
-                        z8 = user.phone.length() == stripExceptNumbers.length();
-                    }
-                    this.phonesSearch.add(user);
-                    this.phoneSearchMap.put(user.id, user);
-                }
-            }
-            if (!z8) {
-                this.phonesSearch.add("section");
-                this.phonesSearch.add(stripExceptNumbers);
-            }
-            this.delegate.onDataSetChanged();
+        if (!z5) {
         }
     }
 
-    public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, tL_error, tLObject, str, z) {
+    public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, int i2, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(i, tL_error, tLObject, str, z, i2) {
             private final /* synthetic */ int f$1;
             private final /* synthetic */ TLRPC.TL_error f$2;
             private final /* synthetic */ TLObject f$3;
             private final /* synthetic */ String f$4;
             private final /* synthetic */ boolean f$5;
+            private final /* synthetic */ int f$6;
 
             {
                 this.f$1 = r2;
@@ -225,15 +248,16 @@ public class SearchAdapterHelper {
                 this.f$3 = r4;
                 this.f$4 = r5;
                 this.f$5 = r6;
+                this.f$6 = r7;
             }
 
             public final void run() {
-                SearchAdapterHelper.this.lambda$null$0$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                SearchAdapterHelper.this.lambda$null$0$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TLRPC.TL_error tL_error, TLObject tLObject, String str, boolean z) {
+    public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TLRPC.TL_error tL_error, TLObject tLObject, String str, boolean z, int i2) {
         if (i == this.channelLastReqId && tL_error == null) {
             TLRPC.TL_channels_channelParticipants tL_channels_channelParticipants = (TLRPC.TL_channels_channelParticipants) tLObject;
             this.lastFoundChannel = str.toLowerCase();
@@ -243,8 +267,8 @@ public class SearchAdapterHelper {
             this.groupSearch.addAll(tL_channels_channelParticipants.participants);
             int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             int size = tL_channels_channelParticipants.participants.size();
-            for (int i2 = 0; i2 < size; i2++) {
-                TLRPC.ChannelParticipant channelParticipant = tL_channels_channelParticipants.participants.get(i2);
+            for (int i3 = 0; i3 < size; i3++) {
+                TLRPC.ChannelParticipant channelParticipant = tL_channels_channelParticipants.participants.get(i3);
                 if (z || channelParticipant.user_id != clientUserId) {
                     this.groupSearchMap.put(channelParticipant.user_id, channelParticipant);
                 } else {
@@ -255,20 +279,22 @@ public class SearchAdapterHelper {
             if (arrayList != null) {
                 mergeResults(arrayList);
             }
-            this.delegate.onDataSetChanged();
+            this.delegate.onDataSetChanged(i2);
         }
         this.channelReqId = 0;
     }
 
-    public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, boolean z, boolean z2, boolean z3, String str, TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, tL_error, tLObject, z, z2, z3, str) {
+    public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TLRPC.TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(i, i2, tL_error, tLObject, z, z2, z3, z4, str) {
             private final /* synthetic */ int f$1;
-            private final /* synthetic */ TLRPC.TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
-            private final /* synthetic */ boolean f$4;
+            private final /* synthetic */ int f$2;
+            private final /* synthetic */ TLRPC.TL_error f$3;
+            private final /* synthetic */ TLObject f$4;
             private final /* synthetic */ boolean f$5;
             private final /* synthetic */ boolean f$6;
-            private final /* synthetic */ String f$7;
+            private final /* synthetic */ boolean f$7;
+            private final /* synthetic */ boolean f$8;
+            private final /* synthetic */ String f$9;
 
             {
                 this.f$1 = r2;
@@ -278,21 +304,24 @@ public class SearchAdapterHelper {
                 this.f$5 = r6;
                 this.f$6 = r7;
                 this.f$7 = r8;
+                this.f$8 = r9;
+                this.f$9 = r10;
             }
 
             public final void run() {
-                SearchAdapterHelper.this.lambda$null$2$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                SearchAdapterHelper.this.lambda$null$2$SearchAdapterHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, TLRPC.TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, String str) {
+    public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, int i2, TLRPC.TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
         TLRPC.User user;
         TLRPC.Chat chat;
         ArrayList<TLRPC.Peer> arrayList;
         TLRPC.User user2;
         TLRPC.Chat chat2;
-        if (i == this.lastReqId) {
+        int i3 = i2;
+        if (i == this.lastReqId && this.delegate.canApplySearchResults(i2)) {
             this.reqId = 0;
             if (tL_error == null) {
                 TLRPC.TL_contacts_found tL_contacts_found = (TLRPC.TL_contacts_found) tLObject;
@@ -304,35 +333,35 @@ public class SearchAdapterHelper {
                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_found.users, tL_contacts_found.chats, true, true);
                 SparseArray sparseArray = new SparseArray();
                 SparseArray sparseArray2 = new SparseArray();
-                for (int i2 = 0; i2 < tL_contacts_found.chats.size(); i2++) {
-                    TLRPC.Chat chat3 = tL_contacts_found.chats.get(i2);
+                for (int i4 = 0; i4 < tL_contacts_found.chats.size(); i4++) {
+                    TLRPC.Chat chat3 = tL_contacts_found.chats.get(i4);
                     sparseArray.put(chat3.id, chat3);
                 }
-                for (int i3 = 0; i3 < tL_contacts_found.users.size(); i3++) {
-                    TLRPC.User user3 = tL_contacts_found.users.get(i3);
+                for (int i5 = 0; i5 < tL_contacts_found.users.size(); i5++) {
+                    TLRPC.User user3 = tL_contacts_found.users.get(i5);
                     sparseArray2.put(user3.id, user3);
                 }
-                for (int i4 = 0; i4 < 2; i4++) {
-                    if (i4 != 0) {
+                for (int i6 = 0; i6 < 2; i6++) {
+                    if (i6 != 0) {
                         arrayList = tL_contacts_found.results;
                     } else if (!this.allResultsAreGlobal) {
                     } else {
                         arrayList = tL_contacts_found.my_results;
                     }
-                    for (int i5 = 0; i5 < arrayList.size(); i5++) {
-                        TLRPC.Peer peer = arrayList.get(i5);
-                        int i6 = peer.user_id;
-                        if (i6 != 0) {
-                            user2 = (TLRPC.User) sparseArray2.get(i6);
+                    for (int i7 = 0; i7 < arrayList.size(); i7++) {
+                        TLRPC.Peer peer = arrayList.get(i7);
+                        int i8 = peer.user_id;
+                        if (i8 != 0) {
+                            user2 = (TLRPC.User) sparseArray2.get(i8);
                             chat2 = null;
                         } else {
-                            int i7 = peer.chat_id;
-                            if (i7 != 0) {
-                                chat2 = (TLRPC.Chat) sparseArray.get(i7);
+                            int i9 = peer.chat_id;
+                            if (i9 != 0) {
+                                chat2 = (TLRPC.Chat) sparseArray.get(i9);
                             } else {
-                                int i8 = peer.channel_id;
-                                if (i8 != 0) {
-                                    chat2 = (TLRPC.Chat) sparseArray.get(i8);
+                                int i10 = peer.channel_id;
+                                if (i10 != 0) {
+                                    chat2 = (TLRPC.Chat) sparseArray.get(i10);
                                 } else {
                                     chat2 = null;
                                     user2 = null;
@@ -341,31 +370,31 @@ public class SearchAdapterHelper {
                             user2 = null;
                         }
                         if (chat2 != null) {
-                            if (z) {
+                            if (z && (!z2 || ChatObject.canAddBotsToChat(chat2))) {
                                 this.globalSearch.add(chat2);
                                 this.globalSearchMap.put(-chat2.id, chat2);
                             }
-                        } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
+                        } else if (user2 != null && !z2 && ((z3 || !user2.bot) && (z4 || !user2.self))) {
                             this.globalSearch.add(user2);
                             this.globalSearchMap.put(user2.id, user2);
                         }
                     }
                 }
                 if (!this.allResultsAreGlobal) {
-                    for (int i9 = 0; i9 < tL_contacts_found.my_results.size(); i9++) {
-                        TLRPC.Peer peer2 = tL_contacts_found.my_results.get(i9);
-                        int i10 = peer2.user_id;
-                        if (i10 != 0) {
-                            user = (TLRPC.User) sparseArray2.get(i10);
+                    for (int i11 = 0; i11 < tL_contacts_found.my_results.size(); i11++) {
+                        TLRPC.Peer peer2 = tL_contacts_found.my_results.get(i11);
+                        int i12 = peer2.user_id;
+                        if (i12 != 0) {
+                            user = (TLRPC.User) sparseArray2.get(i12);
                             chat = null;
                         } else {
-                            int i11 = peer2.chat_id;
-                            if (i11 != 0) {
-                                chat = (TLRPC.Chat) sparseArray.get(i11);
+                            int i13 = peer2.chat_id;
+                            if (i13 != 0) {
+                                chat = (TLRPC.Chat) sparseArray.get(i13);
                             } else {
-                                int i12 = peer2.channel_id;
-                                if (i12 != 0) {
-                                    chat = (TLRPC.Chat) sparseArray.get(i12);
+                                int i14 = peer2.channel_id;
+                                if (i14 != 0) {
+                                    chat = (TLRPC.Chat) sparseArray.get(i14);
                                 } else {
                                     chat = null;
                                     user = null;
@@ -374,11 +403,11 @@ public class SearchAdapterHelper {
                             user = null;
                         }
                         if (chat != null) {
-                            if (z) {
+                            if (z && (!z2 || ChatObject.canAddBotsToChat(chat))) {
                                 this.localServerSearch.add(chat);
                                 this.globalSearchMap.put(-chat.id, chat);
                             }
-                        } else if (user != null && ((z2 || !user.bot) && (z3 || !user.self))) {
+                        } else if (user != null && !z2 && ((z3 || !user.bot) && (z4 || !user.self))) {
                             this.localServerSearch.add(user);
                             this.globalSearchMap.put(user.id, user);
                         }
@@ -390,9 +419,15 @@ public class SearchAdapterHelper {
                     mergeResults(arrayList2);
                 }
                 mergeExcludeResults();
-                this.delegate.onDataSetChanged();
+                this.delegate.onDataSetChanged(i2);
             }
         }
+    }
+
+    public void clear() {
+        this.globalSearch.clear();
+        this.globalSearchMap.clear();
+        this.localServerSearch.clear();
     }
 
     public void unloadRecentHashtags() {
@@ -508,7 +543,7 @@ public class SearchAdapterHelper {
 
     public void addHashtagsFromMessage(CharSequence charSequence) {
         if (charSequence != null) {
-            Matcher matcher = Pattern.compile("(^|\\s)#[\\w@.]+").matcher(charSequence);
+            Matcher matcher = Pattern.compile("(^|\\s)#[^0-9][\\w@.]+").matcher(charSequence);
             boolean z = false;
             while (matcher.find()) {
                 int start = matcher.start();

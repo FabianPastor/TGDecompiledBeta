@@ -12,7 +12,7 @@ import org.telegram.tgnet.TLRPC;
 
 public class FileRefController extends BaseController {
     private static volatile FileRefController[] Instance = new FileRefController[3];
-    private long lastCleanupTime = SystemClock.uptimeMillis();
+    private long lastCleanupTime = SystemClock.elapsedRealtime();
     private HashMap<String, ArrayList<Requester>> locationRequester = new HashMap<>();
     private HashMap<TLRPC.TL_messages_sendMultiMedia, Object[]> multiMediaCache = new HashMap<>();
     private HashMap<String, ArrayList<Requester>> parentRequester = new HashMap<>();
@@ -1500,11 +1500,11 @@ public class FileRefController extends BaseController {
     }
 
     private void cleanupCache() {
-        if (Math.abs(SystemClock.uptimeMillis() - this.lastCleanupTime) >= 600000) {
-            this.lastCleanupTime = SystemClock.uptimeMillis();
+        if (Math.abs(SystemClock.elapsedRealtime() - this.lastCleanupTime) >= 600000) {
+            this.lastCleanupTime = SystemClock.elapsedRealtime();
             ArrayList arrayList = null;
             for (Map.Entry next : this.responseCache.entrySet()) {
-                if (Math.abs(SystemClock.uptimeMillis() - ((CachedResult) next.getValue()).firstQueryTime) >= 600000) {
+                if (Math.abs(SystemClock.elapsedRealtime() - ((CachedResult) next.getValue()).firstQueryTime) >= 600000) {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
@@ -1522,7 +1522,7 @@ public class FileRefController extends BaseController {
 
     private CachedResult getCachedResponse(String str) {
         CachedResult cachedResult = this.responseCache.get(str);
-        if (cachedResult == null || Math.abs(SystemClock.uptimeMillis() - cachedResult.firstQueryTime) < 600000) {
+        if (cachedResult == null || Math.abs(SystemClock.elapsedRealtime() - cachedResult.firstQueryTime) < 600000) {
             return cachedResult;
         }
         this.responseCache.remove(str);

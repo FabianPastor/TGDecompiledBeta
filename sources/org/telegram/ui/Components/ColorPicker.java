@@ -716,7 +716,7 @@ public class ColorPicker extends FrameLayout {
             float r0 = r6.pressedMoveProgress
             int r0 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
             if (r0 >= 0) goto L_0x01ca
-            long r0 = android.os.SystemClock.uptimeMillis()
+            long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
             r6.lastUpdateTime = r0
@@ -802,7 +802,7 @@ public class ColorPicker extends FrameLayout {
         L_0x000e:
             r11.colorPressed = r2
             r11.circlePressed = r2
-            long r0 = android.os.SystemClock.uptimeMillis()
+            long r0 = android.os.SystemClock.elapsedRealtime()
             r11.lastUpdateTime = r0
             r11.invalidate()
         L_0x001b:
@@ -835,7 +835,7 @@ public class ColorPicker extends FrameLayout {
         L_0x0055:
             r11.circlePressed = r3
             r11.pressedMoveProgress = r5
-            long r8 = android.os.SystemClock.uptimeMillis()
+            long r8 = android.os.SystemClock.elapsedRealtime()
             r11.lastUpdateTime = r8
             android.graphics.Bitmap r4 = r11.colorWheelBitmap
             int r4 = r4.getWidth()

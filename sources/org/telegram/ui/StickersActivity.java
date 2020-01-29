@@ -465,7 +465,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string2);
                         spannableStringBuilder.setSpan(new URLSpanNoUnderline("@stickers") {
                             public void onClick(View view) {
-                                MessagesController.getInstance(StickersActivity.this.currentAccount).openByUserName("stickers", StickersActivity.this, 1);
+                                MessagesController.getInstance(StickersActivity.this.currentAccount).openByUserName("stickers", StickersActivity.this, 3);
                             }
                         }, indexOf, indexOf + 9, 18);
                         ((TextInfoPrivacyCell) viewHolder.itemView).setText(spannableStringBuilder);

@@ -127,7 +127,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             String str5 = objArr[0];
             String str6 = this.fileName;
             if (str6 != null && str6.equals(str5)) {
-                this.radialProgress.setProgress(objArr[1].floatValue(), true);
+                this.radialProgress.setProgress(Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue())), true);
             }
         }
     }

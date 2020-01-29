@@ -392,7 +392,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 if (BuildVars.DEBUG_VERSION) {
                     FileLog.d("located distance = " + distanceTo);
                 }
-                if (SystemClock.uptimeMillis() - this.lastLoadedLocationTime >= 3000 && this.lastLoadedLocation.distanceTo(lastKnownLocation) > 20.0f) {
+                if (SystemClock.elapsedRealtime() - this.lastLoadedLocationTime >= 3000 && this.lastLoadedLocation.distanceTo(lastKnownLocation) > 20.0f) {
                     if (this.reqId != 0) {
                         getConnectionsManager().cancelRequest(this.reqId, true);
                         this.reqId = 0;
@@ -403,7 +403,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
             if (this.reqId == 0) {
                 this.lastLoadedLocation = lastKnownLocation;
-                this.lastLoadedLocationTime = SystemClock.uptimeMillis();
+                this.lastLoadedLocationTime = SystemClock.elapsedRealtime();
                 LocationController.fetchLocationAddress(this.currentGroupCreateLocation, this);
                 TLRPC.TL_contacts_getLocated tL_contacts_getLocated = new TLRPC.TL_contacts_getLocated();
                 tL_contacts_getLocated.geo_point = new TLRPC.TL_inputGeoPoint();
@@ -769,8 +769,8 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         manageChatUserCell.setData(user, (CharSequence) null, formatDistance, z);
                     }
                 } else if (i >= PeopleNearbyActivity.this.chatsStartRow && i < PeopleNearbyActivity.this.chatsEndRow) {
-                    int access$1100 = i - PeopleNearbyActivity.this.chatsStartRow;
-                    TLRPC.TL_peerLocated tL_peerLocated2 = (TLRPC.TL_peerLocated) PeopleNearbyActivity.this.chats.get(access$1100);
+                    int access$1000 = i - PeopleNearbyActivity.this.chatsStartRow;
+                    TLRPC.TL_peerLocated tL_peerLocated2 = (TLRPC.TL_peerLocated) PeopleNearbyActivity.this.chats.get(access$1000);
                     TLRPC.Peer peer = tL_peerLocated2.peer;
                     if (peer instanceof TLRPC.TL_peerChat) {
                         i2 = peer.chat_id;
@@ -784,7 +784,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         if (i3 != 0) {
                             formatDistance2 = String.format("%1$s, %2$s", new Object[]{formatDistance2, LocaleController.formatPluralString("Members", i3)});
                         }
-                        if (access$1100 != PeopleNearbyActivity.this.chats.size() - 1) {
+                        if (access$1000 != PeopleNearbyActivity.this.chats.size() - 1) {
                             z = true;
                         }
                         manageChatUserCell.setData(chat, (CharSequence) null, formatDistance2, z);

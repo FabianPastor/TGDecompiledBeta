@@ -29,7 +29,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
         try {
             int i = UserConfig.selectedAccount;
             ApplicationLoader.postInitApplication();
-            if (AndroidUtilities.needShowPasscode(false)) {
+            if (AndroidUtilities.needShowPasscode()) {
                 return;
             }
             if (!SharedConfig.isWaitingForPasscodeEnter) {

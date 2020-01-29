@@ -87,10 +87,6 @@ public class AccountInstance {
         return FileRefController.getInstance(this.currentAccount);
     }
 
-    public TonController getTonController() {
-        return TonController.getInstance(this.currentAccount);
-    }
-
     public SharedPreferences getNotificationsSettings() {
         return MessagesController.getNotificationsSettings(this.currentAccount);
     }

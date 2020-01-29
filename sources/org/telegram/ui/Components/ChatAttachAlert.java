@@ -776,7 +776,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.messenger.NotificationCenter.cameraInitied
             r0.addObserver(r6, r1)
             android.content.res.Resources r0 = r29.getResources()
-            r1 = 2131165506(0x7var_, float:1.7945231E38)
+            r1 = 2131165507(0x7var_, float:1.7945233E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r6.cameraDrawable = r0
@@ -832,7 +832,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131165426(0x7var_f2, float:1.7945069E38)
+            r1 = 2131165427(0x7var_f3, float:1.794507E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r14)
@@ -875,7 +875,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             r0.setLongClickEnabled(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131165433(0x7var_f9, float:1.7945083E38)
+            r1 = 2131165434(0x7var_fa, float:1.7945085E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "AccDescrMoreOptions"
@@ -884,12 +884,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutGrouping"
-            r2 = 2131626494(0x7f0e09fe, float:1.8880226E38)
+            r2 = 2131626533(0x7f0e0a25, float:1.8880305E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r9, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutCompression"
-            r2 = 2131626493(0x7f0e09fd, float:1.8880224E38)
+            r2 = 2131626532(0x7f0e0a24, float:1.8880303E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r10, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
@@ -1041,7 +1041,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r14)
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.dropDown
-            r1 = 2131624612(0x7f0e02a4, float:1.8876409E38)
+            r1 = 2131624622(0x7f0e02ae, float:1.8876429E38)
             java.lang.String r2 = "ChatGallery"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -1049,7 +1049,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r0.setTypeface(r1)
             android.content.res.Resources r0 = r29.getResources()
-            r1 = 2131165444(0x7var_, float:1.7945105E38)
+            r1 = 2131165445(0x7var_, float:1.7945107E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r6.dropDownDrawable = r0
@@ -1094,7 +1094,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r7)
             r6.progressView = r0
             org.telegram.ui.Components.EmptyTextProgressView r0 = r6.progressView
-            r1 = 2131625655(0x7f0e06b7, float:1.8878524E38)
+            r1 = 2131625668(0x7f0e06c4, float:1.887855E38)
             java.lang.String r2 = "NoPhotos"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -1122,7 +1122,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r7)
             r6.shadow = r0
             android.view.View r0 = r6.shadow
-            r1 = 2131165424(0x7var_f0, float:1.7945065E38)
+            r1 = 2131165425(0x7var_f1, float:1.7945067E38)
             r0.setBackgroundResource(r1)
             android.view.ViewGroup r0 = r6.containerView
             android.view.View r1 = r6.shadow
@@ -1219,7 +1219,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.Components.EditTextEmoji r1 = r6.commentTextView
             r1.setFilters(r0)
             org.telegram.ui.Components.EditTextEmoji r0 = r6.commentTextView
-            r1 = 2131624107(0x7f0e00ab, float:1.8875384E38)
+            r1 = 2131624108(0x7f0e00ac, float:1.8875386E38)
             java.lang.String r2 = "AddCaption"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setHint(r1)
@@ -1251,7 +1251,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             r0.setAlpha(r13)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
-            r2 = 2131626464(0x7f0e09e0, float:1.8880165E38)
+            r2 = 2131626503(0x7f0e0a07, float:1.8880244E38)
             java.lang.String r3 = "Send"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -1284,7 +1284,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r0 = android.os.Build.VERSION.SDK_INT
             if (r0 >= r4) goto L_0x05bc
             android.content.res.Resources r0 = r29.getResources()
-            r2 = 2131165390(0x7var_ce, float:1.7944996E38)
+            r2 = 2131165391(0x7var_cf, float:1.7944998E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -1304,7 +1304,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.drawable.Drawable r2 = r6.writeButtonDrawable
             r0.setBackgroundDrawable(r2)
             android.widget.ImageView r0 = r6.writeButton
-            r2 = 2131165269(0x7var_, float:1.794475E38)
+            r2 = 2131165270(0x7var_, float:1.7944752E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.writeButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -1395,7 +1395,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r7)
             r6.recordTime = r0
             android.widget.TextView r0 = r6.recordTime
-            r1 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r1 = 2131165901(0x7var_cd, float:1.7946032E38)
             r0.setBackgroundResource(r1)
             android.widget.TextView r0 = r6.recordTime
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1454,7 +1454,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r7)
             r6.counterTextView = r0
             android.widget.TextView r0 = r6.counterTextView
-            r1 = 2131165783(0x7var_, float:1.7945793E38)
+            r1 = 2131165782(0x7var_, float:1.794579E38)
             r0.setBackgroundResource(r1)
             android.widget.TextView r0 = r6.counterTextView
             r1 = 8
@@ -1473,7 +1473,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r0.setTypeface(r1)
             android.widget.TextView r0 = r6.counterTextView
-            r1 = 2131165781(0x7var_, float:1.7945789E38)
+            r1 = 2131165780(0x7var_, float:1.7945787E38)
             r0.setCompoundDrawablesWithIntrinsicBounds(r9, r9, r1, r9)
             android.widget.TextView r0 = r6.counterTextView
             r1 = 1082130432(0x40800000, float:4.0)
@@ -1602,7 +1602,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = -1
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.tooltipTextView
-            r1 = 2131626674(0x7f0e0ab2, float:1.888059E38)
+            r1 = 2131626722(0x7f0e0ae2, float:1.8880688E38)
             java.lang.String r2 = "TapForVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -2723,7 +2723,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             if (r6 == r2) goto L_0x003b
             goto L_0x0073
         L_0x003b:
-            r6 = 2131165382(0x7var_c6, float:1.794498E38)
+            r6 = 2131165383(0x7var_c7, float:1.7944982E38)
             r5.setImageResource(r6)
             r6 = 2131623954(0x7f0e0012, float:1.8875074E38)
             java.lang.String r0 = "AccDescrCameraFlashAuto"
@@ -2731,7 +2731,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x004e:
-            r6 = 2131165384(0x7var_c8, float:1.7944984E38)
+            r6 = 2131165385(0x7var_c9, float:1.7944986E38)
             r5.setImageResource(r6)
             r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r0 = "AccDescrCameraFlashOn"
@@ -2739,7 +2739,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x0061:
-            r6 = 2131165383(0x7var_c7, float:1.7944982E38)
+            r6 = 2131165384(0x7var_c8, float:1.7944984E38)
             r5.setImageResource(r6)
             r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r0 = "AccDescrCameraFlashOff"
@@ -4078,70 +4078,73 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public void init() {
         BaseFragment baseFragment2 = this.baseFragment;
-        if (baseFragment2 instanceof ChatActivity) {
-            this.galleryAlbumEntry = MediaController.allMediaAlbumEntry;
-            TLRPC.Chat currentChat = ((ChatActivity) baseFragment2).getCurrentChat();
-            if (currentChat != null) {
-                this.mediaEnabled = ChatObject.canSendMedia(currentChat);
-                this.pollsEnabled = ChatObject.canSendPolls(currentChat);
-                if (this.mediaEnabled) {
-                    this.progressView.setText(LocaleController.getString("NoPhotos", NUM));
-                } else if (ChatObject.isActionBannedByDefault(currentChat, 7)) {
-                    this.progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", NUM));
-                } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                    this.progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", NUM, new Object[0]));
-                } else {
-                    this.progressView.setText(LocaleController.formatString("AttachMediaRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
-                }
-                CameraView cameraView2 = this.cameraView;
-                float f = 1.0f;
-                if (cameraView2 != null) {
-                    cameraView2.setAlpha(this.mediaEnabled ? 1.0f : 0.2f);
-                    this.cameraView.setEnabled(this.mediaEnabled);
-                }
-                FrameLayout frameLayout = this.cameraIcon;
-                if (frameLayout != null) {
-                    if (!this.mediaEnabled) {
-                        f = 0.2f;
+        if (baseFragment2 != null) {
+            if (baseFragment2 instanceof ChatActivity) {
+                this.galleryAlbumEntry = MediaController.allMediaAlbumEntry;
+                TLRPC.Chat currentChat = ((ChatActivity) baseFragment2).getCurrentChat();
+                TLRPC.User currentUser = ((ChatActivity) this.baseFragment).getCurrentUser();
+                if (currentChat != null) {
+                    this.mediaEnabled = ChatObject.canSendMedia(currentChat);
+                    this.pollsEnabled = ChatObject.canSendPolls(currentChat);
+                    if (this.mediaEnabled) {
+                        this.progressView.setText(LocaleController.getString("NoPhotos", NUM));
+                    } else if (ChatObject.isActionBannedByDefault(currentChat, 7)) {
+                        this.progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", NUM));
+                    } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
+                        this.progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", NUM, new Object[0]));
+                    } else {
+                        this.progressView.setText(LocaleController.formatString("AttachMediaRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
                     }
-                    frameLayout.setAlpha(f);
-                    this.cameraIcon.setEnabled(this.mediaEnabled);
+                    CameraView cameraView2 = this.cameraView;
+                    float f = 1.0f;
+                    if (cameraView2 != null) {
+                        cameraView2.setAlpha(this.mediaEnabled ? 1.0f : 0.2f);
+                        this.cameraView.setEnabled(this.mediaEnabled);
+                    }
+                    FrameLayout frameLayout = this.cameraIcon;
+                    if (frameLayout != null) {
+                        if (!this.mediaEnabled) {
+                            f = 0.2f;
+                        }
+                        frameLayout.setAlpha(f);
+                        this.cameraIcon.setEnabled(this.mediaEnabled);
+                    }
+                } else {
+                    this.pollsEnabled = currentUser != null && currentUser.bot;
                 }
             } else {
-                this.pollsEnabled = false;
+                this.galleryAlbumEntry = MediaController.allPhotosAlbumEntry;
+                this.commentTextView.setVisibility(4);
             }
-        } else {
-            this.galleryAlbumEntry = MediaController.allPhotosAlbumEntry;
-            this.commentTextView.setVisibility(4);
-        }
-        if (Build.VERSION.SDK_INT >= 23) {
-            this.noGalleryPermissions = this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0;
-        }
-        if (this.galleryAlbumEntry != null) {
-            for (int i = 0; i < Math.min(100, this.galleryAlbumEntry.photos.size()); i++) {
-                this.galleryAlbumEntry.photos.get(i).reset();
+            if (Build.VERSION.SDK_INT >= 23) {
+                this.noGalleryPermissions = this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0;
             }
-        }
-        this.commentTextView.hidePopup(true);
-        this.enterCommentEventSent = false;
-        setFocusable(false);
-        this.selectedAlbumEntry = this.galleryAlbumEntry;
-        if (this.selectedAlbumEntry != null) {
-            this.loading = false;
-            EmptyTextProgressView emptyTextProgressView = this.progressView;
-            if (emptyTextProgressView != null) {
-                emptyTextProgressView.showTextView();
+            if (this.galleryAlbumEntry != null) {
+                for (int i = 0; i < Math.min(100, this.galleryAlbumEntry.photos.size()); i++) {
+                    this.galleryAlbumEntry.photos.get(i).reset();
+                }
             }
+            this.commentTextView.hidePopup(true);
+            this.enterCommentEventSent = false;
+            setFocusable(false);
+            this.selectedAlbumEntry = this.galleryAlbumEntry;
+            if (this.selectedAlbumEntry != null) {
+                this.loading = false;
+                EmptyTextProgressView emptyTextProgressView = this.progressView;
+                if (emptyTextProgressView != null) {
+                    emptyTextProgressView.showTextView();
+                }
+            }
+            this.dropDown.setText(LocaleController.getString("ChatGallery", NUM));
+            clearSelectedPhotos();
+            updatePhotosCounter(false);
+            this.buttonsAdapter.notifyDataSetChanged();
+            this.commentTextView.setText("");
+            this.cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
+            this.buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
+            this.layoutManager.scrollToPositionWithOffset(0, 1000000);
+            updateAlbumsDropDown();
         }
-        this.dropDown.setText(LocaleController.getString("ChatGallery", NUM));
-        clearSelectedPhotos();
-        updatePhotosCounter(false);
-        this.buttonsAdapter.notifyDataSetChanged();
-        this.commentTextView.setText("");
-        this.cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
-        this.buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
-        this.layoutManager.scrollToPositionWithOffset(0, 1000000);
-        updateAlbumsDropDown();
     }
 
     public HashMap<Object, Object> getSelectedPhotos() {

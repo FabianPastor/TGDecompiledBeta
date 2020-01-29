@@ -918,7 +918,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01ed }
             r0.add(r2)     // Catch:{ all -> 0x01ed }
-            r0 = 2131626170(0x7f0e08ba, float:1.8879569E38)
+            r0 = 2131626188(0x7f0e08cc, float:1.8879605E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -937,7 +937,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626168(0x7f0e08b8, float:1.8879565E38)
+            r3 = 2131626186(0x7f0e08ca, float:1.8879601E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
@@ -953,7 +953,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626178(0x7f0e08c2, float:1.8879585E38)
+            r3 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
@@ -962,14 +962,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626169(0x7f0e08b9, float:1.8879567E38)
+            r3 = 2131626187(0x7f0e08cb, float:1.8879603E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626177(0x7f0e08c1, float:1.8879583E38)
+            r3 = 2131626195(0x7f0e08d3, float:1.887962E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
         L_0x01d4:
@@ -3864,9 +3864,9 @@ public class ContactsController extends BaseController {
         reloadContactsStatuses();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x00ce A[Catch:{ Exception -> 0x0277 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x010b A[SYNTHETIC, Splitter:B:17:0x010b] */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x026c A[Catch:{ Exception -> 0x0277 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x00cb A[Catch:{ Exception -> 0x0274 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0108 A[SYNTHETIC, Splitter:B:17:0x0108] */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0269 A[Catch:{ Exception -> 0x0274 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void createOrUpdateConnectionServiceContact(int r23, java.lang.String r24, java.lang.String r25) {
         /*
@@ -3884,40 +3884,40 @@ public class ContactsController extends BaseController {
             java.lang.String r10 = ""
             java.lang.String r11 = "raw_contact_id"
             boolean r12 = r22.hasContactsPermission()
-            if (r12 != 0) goto L_0x0021
+            if (r12 != 0) goto L_0x0020
             return
-        L_0x0021:
-            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentResolver r12 = r12.getContentResolver()     // Catch:{ Exception -> 0x0277 }
-            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x0277 }
-            r15.<init>()     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r13 = android.provider.ContactsContract.Groups.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri$Builder r13 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r14 = r13.build()     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r13 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri$Builder r7 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r7 = r7.build()     // Catch:{ Exception -> 0x0277 }
+        L_0x0020:
+            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentResolver r12 = r12.getContentResolver()     // Catch:{ Exception -> 0x0274 }
+            java.util.ArrayList r15 = new java.util.ArrayList     // Catch:{ Exception -> 0x0274 }
+            r15.<init>()     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r13 = android.provider.ContactsContract.Groups.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri$Builder r13 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r14 = r13.build()     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r13 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri$Builder r13 = r13.buildUpon()     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri$Builder r7 = r13.appendQueryParameter(r8, r7)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r7 = r7.build()     // Catch:{ Exception -> 0x0274 }
             r8 = 1
-            java.lang.String[] r13 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r13 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0274 }
             java.lang.String r16 = "_id"
             r8 = 0
-            r13[r8] = r16     // Catch:{ Exception -> 0x0277 }
+            r13[r8] = r16     // Catch:{ Exception -> 0x0274 }
             java.lang.String r16 = "title=? AND account_type=? AND account_name=?"
             r8 = 3
             r19 = r9
-            java.lang.String[] r9 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r9 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0274 }
             r17 = 0
-            r9[r17] = r6     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r8 = r8.type     // Catch:{ Exception -> 0x0277 }
+            r9[r17] = r6     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r8 = r8.type     // Catch:{ Exception -> 0x0274 }
             r17 = 1
-            r9[r17] = r8     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r8 = r8.name     // Catch:{ Exception -> 0x0277 }
+            r9[r17] = r8     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r8 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r8 = r8.name     // Catch:{ Exception -> 0x0274 }
             r3 = 2
-            r9[r3] = r8     // Catch:{ Exception -> 0x0277 }
+            r9[r3] = r8     // Catch:{ Exception -> 0x0274 }
             r18 = 0
             r8 = r13
             r13 = r12
@@ -3925,206 +3925,206 @@ public class ContactsController extends BaseController {
             r21 = r15
             r15 = r8
             r17 = r9
-            android.database.Cursor r8 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x0277 }
+            android.database.Cursor r8 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r9 = "account_name"
             java.lang.String r15 = "account_type"
-            if (r8 == 0) goto L_0x008e
-            boolean r13 = r8.moveToFirst()     // Catch:{ Exception -> 0x0277 }
-            if (r13 == 0) goto L_0x008e
+            if (r8 == 0) goto L_0x008c
+            boolean r13 = r8.moveToFirst()     // Catch:{ Exception -> 0x0274 }
+            if (r13 == 0) goto L_0x008c
             r13 = 0
-            int r6 = r8.getInt(r13)     // Catch:{ Exception -> 0x0277 }
+            int r6 = r8.getInt(r13)     // Catch:{ Exception -> 0x0274 }
             r16 = r15
-            goto L_0x00cc
-        L_0x008e:
-            android.content.ContentValues r13 = new android.content.ContentValues     // Catch:{ Exception -> 0x0277 }
-            r13.<init>()     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r14 = r14.type     // Catch:{ Exception -> 0x0277 }
-            r13.put(r15, r14)     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r14 = r14.name     // Catch:{ Exception -> 0x0277 }
-            r13.put(r9, r14)     // Catch:{ Exception -> 0x0277 }
+            goto L_0x00c9
+        L_0x008c:
+            android.content.ContentValues r13 = new android.content.ContentValues     // Catch:{ Exception -> 0x0274 }
+            r13.<init>()     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r14 = r14.type     // Catch:{ Exception -> 0x0274 }
+            r13.put(r15, r14)     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r14 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r14 = r14.name     // Catch:{ Exception -> 0x0274 }
+            r13.put(r9, r14)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r14 = "group_visible"
             r16 = 0
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0277 }
-            r13.put(r14, r3)     // Catch:{ Exception -> 0x0277 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0274 }
+            r13.put(r14, r3)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r3 = "group_is_read_only"
             r16 = r15
             r14 = 1
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0277 }
-            r13.put(r3, r15)     // Catch:{ Exception -> 0x0277 }
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r14)     // Catch:{ Exception -> 0x0274 }
+            r13.put(r3, r15)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r3 = "title"
-            r13.put(r3, r6)     // Catch:{ Exception -> 0x0277 }
+            r13.put(r3, r6)     // Catch:{ Exception -> 0x0274 }
             r3 = r20
-            android.net.Uri r3 = r12.insert(r3, r13)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r3 = r3.getLastPathSegment()     // Catch:{ Exception -> 0x0277 }
-            int r6 = java.lang.Integer.parseInt(r3)     // Catch:{ Exception -> 0x0277 }
-        L_0x00cc:
-            if (r8 == 0) goto L_0x00d1
-            r8.close()     // Catch:{ Exception -> 0x0277 }
-        L_0x00d1:
-            android.net.Uri r14 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
+            android.net.Uri r3 = r12.insert(r3, r13)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r3 = r3.getLastPathSegment()     // Catch:{ Exception -> 0x0274 }
+            int r6 = java.lang.Integer.parseInt(r3)     // Catch:{ Exception -> 0x0274 }
+        L_0x00c9:
+            if (r8 == 0) goto L_0x00ce
+            r8.close()     // Catch:{ Exception -> 0x0274 }
+        L_0x00ce:
+            android.net.Uri r14 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
             r3 = 1
-            java.lang.String[] r15 = new java.lang.String[r3]     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r15 = new java.lang.String[r3]     // Catch:{ Exception -> 0x0274 }
             r3 = 0
-            r15[r3] = r11     // Catch:{ Exception -> 0x0277 }
+            r15[r3] = r11     // Catch:{ Exception -> 0x0274 }
             java.lang.String r8 = "mimetype=? AND data1=?"
             r13 = 2
-            java.lang.String[] r3 = new java.lang.String[r13]     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r3 = new java.lang.String[r13]     // Catch:{ Exception -> 0x0274 }
             r13 = 0
-            r3[r13] = r5     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r13.<init>()     // Catch:{ Exception -> 0x0277 }
-            r13.append(r6)     // Catch:{ Exception -> 0x0277 }
-            r13.append(r10)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0277 }
+            r3[r13] = r5     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r13.<init>()     // Catch:{ Exception -> 0x0274 }
+            r13.append(r6)     // Catch:{ Exception -> 0x0274 }
+            r13.append(r10)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0274 }
             r17 = 1
-            r3[r17] = r13     // Catch:{ Exception -> 0x0277 }
+            r3[r17] = r13     // Catch:{ Exception -> 0x0274 }
             r18 = 0
             r13 = r12
             r20 = r12
             r12 = r16
             r16 = r8
             r17 = r3
-            android.database.Cursor r3 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x0277 }
-            int r8 = r21.size()     // Catch:{ Exception -> 0x0277 }
+            android.database.Cursor r3 = r13.query(r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x0274 }
+            int r8 = r21.size()     // Catch:{ Exception -> 0x0274 }
             java.lang.String r13 = "data1"
-            if (r3 == 0) goto L_0x01c5
-            boolean r14 = r3.moveToFirst()     // Catch:{ Exception -> 0x0277 }
-            if (r14 == 0) goto L_0x01c5
+            if (r3 == 0) goto L_0x01c2
+            boolean r14 = r3.moveToFirst()     // Catch:{ Exception -> 0x0274 }
+            if (r14 == 0) goto L_0x01c2
             r14 = 0
-            int r5 = r3.getInt(r14)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r6 = android.content.ContentProviderOperation.newUpdate(r7)     // Catch:{ Exception -> 0x0277 }
+            int r5 = r3.getInt(r14)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r6 = android.content.ContentProviderOperation.newUpdate(r7)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r7 = "_id=?"
             r8 = 1
-            java.lang.String[] r9 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r8.<init>()     // Catch:{ Exception -> 0x0277 }
-            r8.append(r5)     // Catch:{ Exception -> 0x0277 }
-            r8.append(r10)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r9 = new java.lang.String[r8]     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r8.<init>()     // Catch:{ Exception -> 0x0274 }
+            r8.append(r5)     // Catch:{ Exception -> 0x0274 }
+            r8.append(r10)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x0274 }
             r11 = 0
-            r9[r11] = r8     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r6 = r6.withSelection(r7, r9)     // Catch:{ Exception -> 0x0277 }
+            r9[r11] = r8     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r6 = r6.withSelection(r7, r9)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r7 = "deleted"
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r6 = r6.withValue(r7, r8)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r6 = r6.build()     // Catch:{ Exception -> 0x0277 }
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r6 = r6.withValue(r7, r8)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r6 = r6.build()     // Catch:{ Exception -> 0x0274 }
             r14 = r21
-            r14.add(r6)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r6 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r6 = android.content.ContentProviderOperation.newUpdate(r6)     // Catch:{ Exception -> 0x0277 }
+            r14.add(r6)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r6 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r6 = android.content.ContentProviderOperation.newUpdate(r6)     // Catch:{ Exception -> 0x0274 }
             r7 = 2
-            java.lang.String[] r8 = new java.lang.String[r7]     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r7.<init>()     // Catch:{ Exception -> 0x0277 }
-            r7.append(r5)     // Catch:{ Exception -> 0x0277 }
-            r7.append(r10)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r8 = new java.lang.String[r7]     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r7.<init>()     // Catch:{ Exception -> 0x0274 }
+            r7.append(r5)     // Catch:{ Exception -> 0x0274 }
+            r7.append(r10)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x0274 }
             r9 = 0
-            r8[r9] = r7     // Catch:{ Exception -> 0x0277 }
+            r8[r9] = r7     // Catch:{ Exception -> 0x0274 }
             java.lang.String r7 = "vnd.android.cursor.item/phone_v2"
             r9 = 1
-            r8[r9] = r7     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r6 = r6.withSelection(r4, r8)     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r7.<init>()     // Catch:{ Exception -> 0x0277 }
+            r8[r9] = r7     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r6 = r6.withSelection(r4, r8)     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r7.<init>()     // Catch:{ Exception -> 0x0274 }
             java.lang.String r8 = "+99084"
-            r7.append(r8)     // Catch:{ Exception -> 0x0277 }
-            r7.append(r0)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r6.withValue(r13, r0)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r0)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newUpdate(r0)     // Catch:{ Exception -> 0x0277 }
+            r7.append(r8)     // Catch:{ Exception -> 0x0274 }
+            r7.append(r0)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r0 = r7.toString()     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r6.withValue(r13, r0)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r0)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newUpdate(r0)     // Catch:{ Exception -> 0x0274 }
             r6 = 2
-            java.lang.String[] r6 = new java.lang.String[r6]     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r7.<init>()     // Catch:{ Exception -> 0x0277 }
-            r7.append(r5)     // Catch:{ Exception -> 0x0277 }
-            r7.append(r10)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r5 = r7.toString()     // Catch:{ Exception -> 0x0277 }
+            java.lang.String[] r6 = new java.lang.String[r6]     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r7.<init>()     // Catch:{ Exception -> 0x0274 }
+            r7.append(r5)     // Catch:{ Exception -> 0x0274 }
+            r7.append(r10)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r5 = r7.toString()     // Catch:{ Exception -> 0x0274 }
             r7 = 0
-            r6[r7] = r5     // Catch:{ Exception -> 0x0277 }
+            r6[r7] = r5     // Catch:{ Exception -> 0x0274 }
             java.lang.String r5 = "vnd.android.cursor.item/name"
             r7 = 1
-            r6[r7] = r5     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r0.withSelection(r4, r6)     // Catch:{ Exception -> 0x0277 }
+            r6[r7] = r5     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withSelection(r4, r6)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r4 = "data2"
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r4, r2)     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r4, r2)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r2 = "data3"
             r4 = r25
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r2, r4)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r0)     // Catch:{ Exception -> 0x0277 }
-            goto L_0x026a
-        L_0x01c5:
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r2, r4)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r0)     // Catch:{ Exception -> 0x0274 }
+            goto L_0x0267
+        L_0x01c2:
             r4 = r25
             r14 = r21
-            android.content.ContentProviderOperation$Builder r7 = android.content.ContentProviderOperation.newInsert(r7)     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r10 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r10 = r10.type     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r12, r10)     // Catch:{ Exception -> 0x0277 }
-            android.accounts.Account r10 = r1.systemAccount     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r10 = r10.name     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r7 = android.content.ContentProviderOperation.newInsert(r7)     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r10 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r10 = r10.type     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r12, r10)     // Catch:{ Exception -> 0x0274 }
+            android.accounts.Account r10 = r1.systemAccount     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r10 = r10.name     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r9 = "raw_contact_is_read_only"
             r10 = 1
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0277 }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r9 = "aggregation_mode"
             r10 = 3
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r7 = r7.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r7)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r7 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = android.content.ContentProviderOperation.newInsert(r7)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r7 = r7.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0277 }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r9, r10)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r7 = r7.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r7)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r7 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = android.content.ContentProviderOperation.newInsert(r7)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r9 = "vnd.android.cursor.item/name"
             r10 = r19
-            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r10, r9)     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r7 = r7.withValue(r10, r9)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r9 = "data2"
-            android.content.ContentProviderOperation$Builder r2 = r7.withValue(r9, r2)     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r2 = r7.withValue(r9, r2)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r7 = "data3"
-            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r7, r4)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r2 = r2.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r2)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r2 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r2 = android.content.ContentProviderOperation.newInsert(r2)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r2 = r2.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r7, r4)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r2 = r2.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r2)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r2 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r2 = android.content.ContentProviderOperation.newInsert(r2)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r2 = r2.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0274 }
             java.lang.String r4 = "vnd.android.cursor.item/phone_v2"
-            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r10, r4)     // Catch:{ Exception -> 0x0277 }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0277 }
-            r4.<init>()     // Catch:{ Exception -> 0x0277 }
+            android.content.ContentProviderOperation$Builder r2 = r2.withValue(r10, r4)     // Catch:{ Exception -> 0x0274 }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0274 }
+            r4.<init>()     // Catch:{ Exception -> 0x0274 }
             java.lang.String r7 = "+99084"
-            r4.append(r7)     // Catch:{ Exception -> 0x0277 }
-            r4.append(r0)     // Catch:{ Exception -> 0x0277 }
-            java.lang.String r0 = r4.toString()     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r2.withValue(r13, r0)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r0)     // Catch:{ Exception -> 0x0277 }
-            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r10, r5)     // Catch:{ Exception -> 0x0277 }
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r2)     // Catch:{ Exception -> 0x0277 }
-            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0277 }
-            r14.add(r0)     // Catch:{ Exception -> 0x0277 }
-        L_0x026a:
-            if (r3 == 0) goto L_0x026f
-            r3.close()     // Catch:{ Exception -> 0x0277 }
-        L_0x026f:
+            r4.append(r7)     // Catch:{ Exception -> 0x0274 }
+            r4.append(r0)     // Catch:{ Exception -> 0x0274 }
+            java.lang.String r0 = r4.toString()     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r2.withValue(r13, r0)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r0)     // Catch:{ Exception -> 0x0274 }
+            android.net.Uri r0 = android.provider.ContactsContract.Data.CONTENT_URI     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = android.content.ContentProviderOperation.newInsert(r0)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValueBackReference(r11, r8)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r10, r5)     // Catch:{ Exception -> 0x0274 }
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation$Builder r0 = r0.withValue(r13, r2)     // Catch:{ Exception -> 0x0274 }
+            android.content.ContentProviderOperation r0 = r0.build()     // Catch:{ Exception -> 0x0274 }
+            r14.add(r0)     // Catch:{ Exception -> 0x0274 }
+        L_0x0267:
+            if (r3 == 0) goto L_0x026c
+            r3.close()     // Catch:{ Exception -> 0x0274 }
+        L_0x026c:
             java.lang.String r0 = "com.android.contacts"
             r2 = r20
-            r2.applyBatch(r0, r14)     // Catch:{ Exception -> 0x0277 }
-            goto L_0x027b
-        L_0x0277:
+            r2.applyBatch(r0, r14)     // Catch:{ Exception -> 0x0274 }
+            goto L_0x0278
+        L_0x0274:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x027b:
+        L_0x0278:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.createOrUpdateConnectionServiceContact(int, java.lang.String, java.lang.String):void");

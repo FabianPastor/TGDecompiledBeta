@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
@@ -25,6 +26,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MEDIA = 3;
     public static final int TYPE_THUMB = 1;
+    private static float[] radii = new float[8];
     private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(-2236963, PorterDuff.Mode.MULTIPLY);
     private static PorterDuffColorFilter selectedGroupColorFilter = new PorterDuffColorFilter(-4473925, PorterDuff.Mode.MULTIPLY);
     private boolean allowDecodeSingleFrame;
@@ -92,7 +94,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private View parentView;
     private TLRPC.Document qulityThumbDocument;
     private Paint roundPaint;
-    private int roundRadius;
+    private Path roundPath;
+    private int[] roundRadius;
     private RectF roundRect;
     private SetImageBackup setImageBackup;
     private Matrix shaderMatrix;
@@ -116,6 +119,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2);
 
         void onAnimationReady(ImageReceiver imageReceiver);
+    }
+
+    private boolean hasRoundRadius() {
+        return true;
     }
 
     public static class BitmapHolder {
@@ -256,9 +263,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.autoRepeat = 1;
         this.drawRegion = new RectF();
         this.isVisible = true;
+        this.roundRadius = new int[4];
         this.roundRect = new RectF();
         this.bitmapRect = new RectF();
         this.shaderMatrix = new Matrix();
+        this.roundPath = new Path();
         this.overrideAlpha = 1.0f;
         this.crossfadeAlpha = 1;
         this.parentView = view;
@@ -698,12 +707,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void updateDrawableRadius(Drawable drawable) {
-        int i = this.roundRadius;
-        if (i == 0 || !(drawable instanceof BitmapDrawable)) {
+        if (!hasRoundRadius() || !(drawable instanceof BitmapDrawable)) {
             setDrawableShader(drawable, (BitmapShader) null);
         } else if (!(drawable instanceof RLottieDrawable)) {
             if (drawable instanceof AnimatedFileDrawable) {
-                ((AnimatedFileDrawable) drawable).setRoundRadius(i);
+                ((AnimatedFileDrawable) drawable).setRoundRadius(this.roundRadius);
                 return;
             }
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -854,19 +862,20 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             float f4 = i10 == 0 ? 1.0f : ((float) i4) / f2;
             float f5 = this.imageH == 0 ? 1.0f : ((float) i3) / f3;
             if (bitmapShader2 == null) {
-                Canvas canvas3 = canvas2;
                 int i11 = i6;
+                Canvas canvas3 = canvas2;
+                int i12 = i11;
                 if (this.isAspectFit) {
                     float max = Math.max(f4, f5);
                     canvas.save();
-                    int i12 = (int) (((float) i4) / max);
-                    int i13 = (int) (((float) i3) / max);
+                    int i13 = (int) (((float) i4) / max);
+                    int i14 = (int) (((float) i3) / max);
                     RectF rectF = this.drawRegion;
-                    int i14 = this.imageX;
-                    int i15 = this.imageW;
-                    int i16 = this.imageY;
-                    int i17 = this.imageH;
-                    rectF.set(((float) i14) + (((float) (i15 - i12)) / 2.0f), ((float) i16) + (((float) (i17 - i13)) / 2.0f), ((float) i14) + (((float) (i15 + i12)) / 2.0f), ((float) i16) + (((float) (i17 + i13)) / 2.0f));
+                    int i15 = this.imageX;
+                    int i16 = this.imageW;
+                    int i17 = this.imageY;
+                    int i18 = this.imageH;
+                    rectF.set(((float) i15) + (((float) (i16 - i13)) / 2.0f), ((float) i17) + (((float) (i18 - i14)) / 2.0f), ((float) i15) + (((float) (i16 + i13)) / 2.0f), ((float) i17) + (((float) (i18 + i14)) / 2.0f));
                     RectF rectF2 = this.drawRegion;
                     bitmapDrawable.setBounds((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
                     if (z2) {
@@ -875,7 +884,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
+                            bitmapDrawable.setAlpha(i12);
                             bitmapDrawable.draw(canvas3);
                         } catch (Exception e) {
                             onBitmapException(bitmapDrawable);
@@ -885,11 +894,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     canvas.restore();
                 } else if (Math.abs(f4 - f5) > 1.0E-5f) {
                     canvas.save();
-                    int i18 = this.imageX;
-                    int i19 = this.imageY;
-                    canvas3.clipRect(i18, i19, this.imageW + i18, this.imageH + i19);
-                    int i20 = i7 % 360;
-                    if (i20 != 0) {
+                    int i19 = this.imageX;
+                    int i20 = this.imageY;
+                    canvas3.clipRect(i19, i20, this.imageW + i19, this.imageH + i20);
+                    int i21 = i7 % 360;
+                    if (i21 != 0) {
                         if (this.centerRotation) {
                             canvas3.rotate((float) i7, (float) (this.imageW / 2), (float) (this.imageH / 2));
                         } else {
@@ -897,25 +906,25 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                     float f6 = ((float) i4) / f5;
-                    int i21 = this.imageW;
-                    if (f6 > ((float) i21)) {
-                        int i22 = (int) f6;
+                    int i22 = this.imageW;
+                    if (f6 > ((float) i22)) {
+                        int i23 = (int) f6;
                         RectF rectF4 = this.drawRegion;
-                        int i23 = this.imageX;
-                        int i24 = this.imageY;
-                        rectF4.set(((float) i23) - (((float) (i22 - i21)) / 2.0f), (float) i24, ((float) i23) + (((float) (i22 + i21)) / 2.0f), (float) (i24 + this.imageH));
+                        int i24 = this.imageX;
+                        int i25 = this.imageY;
+                        rectF4.set(((float) i24) - (((float) (i23 - i22)) / 2.0f), (float) i25, ((float) i24) + (((float) (i23 + i22)) / 2.0f), (float) (i25 + this.imageH));
                     } else {
-                        int i25 = (int) (((float) i3) / f4);
+                        int i26 = (int) (((float) i3) / f4);
                         RectF rectF5 = this.drawRegion;
-                        int i26 = this.imageX;
-                        int i27 = this.imageY;
-                        int i28 = this.imageH;
-                        rectF5.set((float) i26, ((float) i27) - (((float) (i25 - i28)) / 2.0f), (float) (i26 + i21), ((float) i27) + (((float) (i25 + i28)) / 2.0f));
+                        int i27 = this.imageX;
+                        int i28 = this.imageY;
+                        int i29 = this.imageH;
+                        rectF5.set((float) i27, ((float) i28) - (((float) (i26 - i29)) / 2.0f), (float) (i27 + i22), ((float) i28) + (((float) (i26 + i29)) / 2.0f));
                     }
                     if (z2) {
                         ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect((float) this.imageX, (float) this.imageY, (float) this.imageW, (float) this.imageH);
                     }
-                    if (i20 == 90 || i20 == 270) {
+                    if (i21 == 90 || i21 == 270) {
                         float width = this.drawRegion.width() / 2.0f;
                         float height = this.drawRegion.height() / 2.0f;
                         float centerX = this.drawRegion.centerX();
@@ -927,7 +936,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
+                            bitmapDrawable.setAlpha(i12);
                             bitmapDrawable.draw(canvas3);
                         } catch (Exception e2) {
                             onBitmapException(bitmapDrawable);
@@ -937,8 +946,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     canvas.restore();
                 } else {
                     canvas.save();
-                    int i29 = i7 % 360;
-                    if (i29 != 0) {
+                    int i30 = i7 % 360;
+                    if (i30 != 0) {
                         if (this.centerRotation) {
                             canvas3.rotate((float) i7, (float) (this.imageW / 2), (float) (this.imageH / 2));
                         } else {
@@ -946,18 +955,18 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                     RectF rectF7 = this.drawRegion;
-                    int i30 = this.imageX;
-                    int i31 = this.imageY;
-                    rectF7.set((float) i30, (float) i31, (float) (i30 + this.imageW), (float) (i31 + this.imageH));
+                    int i31 = this.imageX;
+                    int i32 = this.imageY;
+                    rectF7.set((float) i31, (float) i32, (float) (i31 + this.imageW), (float) (i32 + this.imageH));
                     if (this.isRoundVideo) {
                         RectF rectF8 = this.drawRegion;
-                        int i32 = AndroidUtilities.roundMessageInset;
-                        rectF8.inset((float) (-i32), (float) (-i32));
+                        int i33 = AndroidUtilities.roundMessageInset;
+                        rectF8.inset((float) (-i33), (float) (-i33));
                     }
                     if (z2) {
                         ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect((float) this.imageX, (float) this.imageY, (float) this.imageW, (float) this.imageH);
                     }
-                    if (i29 == 90 || i29 == 270) {
+                    if (i30 == 90 || i30 == 270) {
                         float width2 = this.drawRegion.width() / 2.0f;
                         float height2 = this.drawRegion.height() / 2.0f;
                         float centerX2 = this.drawRegion.centerX();
@@ -969,7 +978,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
+                            bitmapDrawable.setAlpha(i12);
                             bitmapDrawable.draw(canvas3);
                         } catch (Exception e3) {
                             onBitmapException(bitmapDrawable);
@@ -980,14 +989,14 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 }
             } else if (this.isAspectFit) {
                 float max2 = Math.max(f4, f5);
-                int i33 = (int) (((float) i4) / max2);
-                int i34 = (int) (((float) i3) / max2);
+                int i34 = (int) (((float) i4) / max2);
+                int i35 = (int) (((float) i3) / max2);
                 RectF rectvar_ = this.drawRegion;
-                int i35 = this.imageX;
-                int i36 = this.imageW;
-                int i37 = this.imageY;
-                int i38 = this.imageH;
-                rectvar_.set((float) (((i36 - i33) / 2) + i35), (float) (((i38 - i34) / 2) + i37), (float) (i35 + ((i36 + i33) / 2)), (float) (i37 + ((i38 + i34) / 2)));
+                int i36 = this.imageX;
+                int i37 = this.imageW;
+                int i38 = this.imageY;
+                int i39 = this.imageH;
+                rectvar_.set((float) (((i37 - i34) / 2) + i36), (float) (((i39 - i35) / 2) + i38), (float) (i36 + ((i37 + i34) / 2)), (float) (i38 + ((i39 + i35) / 2)));
                 if (this.isVisible) {
                     this.roundPaint.setShader(bitmapShader2);
                     this.shaderMatrix.reset();
@@ -999,39 +1008,53 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     bitmapShader2.setLocalMatrix(this.shaderMatrix);
                     this.roundPaint.setAlpha(i6);
                     this.roundRect.set(this.drawRegion);
-                    RectF rectvar_ = this.roundRect;
-                    int i39 = this.roundRadius;
-                    canvas2.drawRoundRect(rectvar_, (float) i39, (float) i39, this.roundPaint);
+                    int i40 = 0;
+                    while (true) {
+                        int[] iArr = this.roundRadius;
+                        if (i40 < iArr.length) {
+                            float[] fArr = radii;
+                            int i41 = i40 * 2;
+                            fArr[i41] = (float) iArr[i40];
+                            fArr[i41 + 1] = (float) iArr[i40];
+                            i40++;
+                        } else {
+                            this.roundPath.reset();
+                            this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                            this.roundPath.close();
+                            canvas2.drawPath(this.roundPath, this.roundPaint);
+                            return;
+                        }
+                    }
                 }
             } else {
                 this.roundPaint.setShader(bitmapShader2);
                 float min = 1.0f / Math.min(f4, f5);
                 RectF rectvar_ = this.roundRect;
-                int i40 = this.imageX;
+                int i42 = this.imageX;
                 float f8 = this.sideClip;
-                int i41 = this.imageY;
-                rectvar_.set(((float) i40) + f8, ((float) i41) + f8, ((float) (i40 + this.imageW)) - f8, ((float) (i41 + this.imageH)) - f8);
+                int i43 = this.imageY;
+                rectvar_.set(((float) i42) + f8, ((float) i43) + f8, ((float) (i42 + this.imageW)) - f8, ((float) (i43 + this.imageH)) - f8);
                 this.shaderMatrix.reset();
                 if (Math.abs(f4 - f5) > 5.0E-4f) {
                     float f9 = ((float) i4) / f5;
                     if (f9 > f2) {
                         RectF rectvar_ = this.drawRegion;
-                        int i42 = this.imageX;
+                        int i44 = this.imageX;
                         float var_ = (float) ((int) f9);
-                        int i43 = this.imageY;
-                        rectvar_.set(((float) i42) - ((var_ - f2) / 2.0f), (float) i43, ((float) i42) + ((var_ + f2) / 2.0f), ((float) i43) + f3);
+                        int i45 = this.imageY;
+                        rectvar_.set(((float) i44) - ((var_ - f2) / 2.0f), (float) i45, ((float) i44) + ((var_ + f2) / 2.0f), ((float) i45) + f3);
                     } else {
                         RectF rectvar_ = this.drawRegion;
-                        int i44 = this.imageX;
-                        int i45 = this.imageY;
+                        int i46 = this.imageX;
+                        int i47 = this.imageY;
                         float var_ = (float) ((int) (((float) i3) / f4));
-                        rectvar_.set((float) i44, ((float) i45) - ((var_ - f3) / 2.0f), ((float) i44) + f2, ((float) i45) + ((var_ + f3) / 2.0f));
+                        rectvar_.set((float) i46, ((float) i47) - ((var_ - f3) / 2.0f), ((float) i46) + f2, ((float) i47) + ((var_ + f3) / 2.0f));
                     }
                 } else {
                     RectF rectvar_ = this.drawRegion;
-                    int i46 = this.imageX;
-                    int i47 = this.imageY;
-                    rectvar_.set((float) i46, (float) i47, ((float) i46) + f2, ((float) i47) + f3);
+                    int i48 = this.imageX;
+                    int i49 = this.imageY;
+                    rectvar_.set((float) i48, (float) i49, ((float) i48) + f2, ((float) i49) + f3);
                 }
                 if (this.isVisible) {
                     this.shaderMatrix.reset();
@@ -1057,18 +1080,33 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     bitmapShader.setLocalMatrix(this.shaderMatrix);
                     this.roundPaint.setAlpha(i);
-                    RectF rectvar_ = this.roundRect;
-                    int i48 = this.roundRadius;
-                    canvas.drawRoundRect(rectvar_, (float) i48, (float) i48, this.roundPaint);
+                    int i50 = 0;
+                    while (true) {
+                        int[] iArr2 = this.roundRadius;
+                        if (i50 < iArr2.length) {
+                            float[] fArr2 = radii;
+                            int i51 = i50 * 2;
+                            fArr2[i51] = (float) iArr2[i50];
+                            fArr2[i51 + 1] = (float) iArr2[i50];
+                            i50++;
+                        } else {
+                            this.roundPath.reset();
+                            this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                            this.roundPath.close();
+                            canvas.drawPath(this.roundPath, this.roundPaint);
+                            return;
+                        }
+                    }
                 }
             }
         } else {
+            int i52 = i6;
             Canvas canvas4 = canvas2;
-            int i49 = i6;
+            int i53 = i52;
             RectF rectvar_ = this.drawRegion;
-            int i50 = this.imageX;
-            int i51 = this.imageY;
-            rectvar_.set((float) i50, (float) i51, (float) (i50 + this.imageW), (float) (i51 + this.imageH));
+            int i54 = this.imageX;
+            int i55 = this.imageY;
+            rectvar_.set((float) i54, (float) i55, (float) (i54 + this.imageW), (float) (i55 + this.imageH));
             RectF rectvar_ = this.drawRegion;
             drawable2.setBounds((int) rectvar_.left, (int) rectvar_.top, (int) rectvar_.right, (int) rectvar_.bottom);
             if (this.isVisible) {
@@ -1797,8 +1835,31 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void setRoundRadius(int i) {
-        if (this.roundRadius != i) {
-            this.roundRadius = i;
+        setRoundRadius(new int[]{i, i, i, i});
+    }
+
+    public void setRoundRadius(int i, int i2, int i3, int i4) {
+        setRoundRadius(new int[]{i, i2, i3, i4});
+    }
+
+    public void setRoundRadius(int[] iArr) {
+        boolean z;
+        int i = 0;
+        while (true) {
+            int[] iArr2 = this.roundRadius;
+            if (i >= iArr2.length) {
+                z = false;
+                break;
+            } else if (iArr2[i] != iArr[i]) {
+                z = true;
+                break;
+            } else {
+                i++;
+            }
+        }
+        if (z) {
+            int[] iArr3 = this.roundRadius;
+            System.arraycopy(iArr, 0, iArr3, 0, iArr3.length);
             Drawable drawable = this.currentImageDrawable;
             if (drawable != null && this.imageShader == null) {
                 updateDrawableRadius(drawable);
@@ -1825,7 +1886,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.currentAccount = i;
     }
 
-    public int getRoundRadius() {
+    public int[] getRoundRadius() {
         return this.roundRadius;
     }
 

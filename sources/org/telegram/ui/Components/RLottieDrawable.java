@@ -731,8 +731,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         int i;
         Integer num;
         if (this.nativePtr != 0 && !this.destroyWhenDone) {
-            long uptimeMillis = SystemClock.uptimeMillis();
-            long abs = Math.abs(uptimeMillis - this.lastFrameTime);
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long abs = Math.abs(elapsedRealtime - this.lastFrameTime);
             if (AndroidUtilities.screenRefreshRate <= 60.0f) {
                 i = this.timeBetweenFrames - 6;
             } else {
@@ -755,9 +755,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     this.singleFrameDecoded = true;
                     this.nextRenderingBitmap = null;
                     if (AndroidUtilities.screenRefreshRate <= 60.0f) {
-                        this.lastFrameTime = uptimeMillis;
+                        this.lastFrameTime = elapsedRealtime;
                     } else {
-                        this.lastFrameTime = uptimeMillis - Math.min(16, abs - ((long) i));
+                        this.lastFrameTime = elapsedRealtime - Math.min(16, abs - ((long) i));
                     }
                     scheduleNextGetFrame();
                 }
@@ -768,9 +768,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 this.singleFrameDecoded = true;
                 this.nextRenderingBitmap = null;
                 if (AndroidUtilities.screenRefreshRate <= 60.0f) {
-                    this.lastFrameTime = uptimeMillis;
+                    this.lastFrameTime = elapsedRealtime;
                 } else {
-                    this.lastFrameTime = uptimeMillis - Math.min(16, abs - ((long) i));
+                    this.lastFrameTime = elapsedRealtime - Math.min(16, abs - ((long) i));
                 }
                 if (this.forceFrameRedraw) {
                     this.singleFrameDecoded = false;

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -71,9 +72,9 @@ public class FileLoader extends BaseController {
 
         void fileDidUploaded(String str, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
 
-        void fileLoadProgressChanged(String str, float f);
+        void fileLoadProgressChanged(String str, long j, long j2);
 
-        void fileUploadProgressChanged(String str, float f, boolean z);
+        void fileUploadProgressChanged(String str, long j, long j2, boolean z);
     }
 
     static /* synthetic */ int access$608(FileLoader fileLoader) {
@@ -374,30 +375,38 @@ public class FileLoader extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, final boolean z2) {
+    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, boolean z2) {
         int i3;
-        if (z) {
+        boolean z3 = z;
+        String str2 = str;
+        int i4 = i;
+        final boolean z4 = z2;
+        if (z3) {
             if (this.uploadOperationPathsEnc.containsKey(str)) {
                 return;
             }
         } else if (this.uploadOperationPaths.containsKey(str)) {
             return;
         }
-        if (i == 0 || this.uploadSizes.get(str) == null) {
-            i3 = i;
+        if (i4 == 0 || this.uploadSizes.get(str) == null) {
+            i3 = i4;
         } else {
             this.uploadSizes.remove(str);
             i3 = 0;
         }
+        FileLoaderDelegate fileLoaderDelegate = this.delegate;
+        if (fileLoaderDelegate != null) {
+            fileLoaderDelegate.fileUploadProgressChanged(str, 0, (long) i4, z);
+        }
         FileUploadOperation fileUploadOperation = new FileUploadOperation(this.currentAccount, str, z, i3, i2);
-        if (z) {
+        if (z3) {
             this.uploadOperationPathsEnc.put(str, fileUploadOperation);
         } else {
             this.uploadOperationPaths.put(str, fileUploadOperation);
         }
         fileUploadOperation.setDelegate(new FileUploadOperation.FileUploadOperationDelegate() {
             public void didFinishUploadingFile(FileUploadOperation fileUploadOperation, TLRPC.InputFile inputFile, TLRPC.InputEncryptedFile inputEncryptedFile, byte[] bArr, byte[] bArr2) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z2, inputFile, inputEncryptedFile, bArr, bArr2, fileUploadOperation) {
+                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z4, inputFile, inputEncryptedFile, bArr, bArr2, fileUploadOperation) {
                     private final /* synthetic */ boolean f$1;
                     private final /* synthetic */ String f$2;
                     private final /* synthetic */ boolean f$3;
@@ -452,7 +461,7 @@ public class FileLoader extends BaseController {
             }
 
             public void didFailedUploadingFile(FileUploadOperation fileUploadOperation) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z2) {
+                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z4) {
                     private final /* synthetic */ boolean f$1;
                     private final /* synthetic */ String f$2;
                     private final /* synthetic */ boolean f$3;
@@ -496,25 +505,25 @@ public class FileLoader extends BaseController {
                 }
             }
 
-            public void didChangedUploadProgress(FileUploadOperation fileUploadOperation, float f) {
+            public void didChangedUploadProgress(FileUploadOperation fileUploadOperation, long j, long j2) {
                 if (FileLoader.this.delegate != null) {
-                    FileLoader.this.delegate.fileUploadProgressChanged(str, f, z);
+                    FileLoader.this.delegate.fileUploadProgressChanged(str, j, j2, z);
                 }
             }
         });
-        if (z2) {
-            int i4 = this.currentUploadSmallOperationsCount;
-            if (i4 < 1) {
-                this.currentUploadSmallOperationsCount = i4 + 1;
+        if (z4) {
+            int i5 = this.currentUploadSmallOperationsCount;
+            if (i5 < 1) {
+                this.currentUploadSmallOperationsCount = i5 + 1;
                 fileUploadOperation.start();
                 return;
             }
             this.uploadSmallOperationQueue.add(fileUploadOperation);
             return;
         }
-        int i5 = this.currentUploadOperationsCount;
-        if (i5 < 1) {
-            this.currentUploadOperationsCount = i5 + 1;
+        int i6 = this.currentUploadOperationsCount;
+        if (i6 < 1) {
+            this.currentUploadOperationsCount = i6 + 1;
             fileUploadOperation.start();
             return;
         }
@@ -1734,5 +1743,53 @@ public class FileLoader extends BaseController {
         fileOutputStream.getFD().sync();
         fileOutputStream.close();
         return true;
+    }
+
+    public static long getTempFileSize(TLRPC.Document document, boolean z) {
+        long j = document.id;
+        long j2 = (long) document.dc_id;
+        if (j2 == 0 || j == 0) {
+            return 0;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(j2);
+        sb.append("_");
+        sb.append(j);
+        sb.append(z ? ".temp.enc" : ".temp");
+        String str = j2 + "_" + j + ".pt";
+        File file = new File(getDirectory(4), sb.toString());
+        long length = file.exists() ? file.length() : 0;
+        if (length == 0) {
+            return length;
+        }
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(new File(getDirectory(4), str), "r");
+            long length2 = randomAccessFile.length();
+            if (length2 % 8 != 4) {
+                return length;
+            }
+            int readInt = randomAccessFile.readInt();
+            if (((long) readInt) > (length2 - 4) / 2) {
+                return length;
+            }
+            long j3 = (long) document.size;
+            int i = 0;
+            while (i < readInt) {
+                try {
+                    j3 -= (long) (randomAccessFile.readInt() - randomAccessFile.readInt());
+                    i++;
+                } catch (Exception e) {
+                    e = e;
+                    length = j3;
+                    FileLog.e((Throwable) e);
+                    return length;
+                }
+            }
+            return j3;
+        } catch (Exception e2) {
+            e = e2;
+            FileLog.e((Throwable) e);
+            return length;
+        }
     }
 }

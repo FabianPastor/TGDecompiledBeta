@@ -39,7 +39,7 @@ public class NotificationCenter {
     public static final int dialogsUnreadCounterChanged;
     public static final int didApplyNewTheme;
     public static final int didCreatedNewDeleteTask;
-    public static final int didEndedCall;
+    public static final int didEndCall;
     public static final int didReceiveCall;
     public static final int didReceiveNewMessages;
     public static final int didReceiveSmsCode;
@@ -500,7 +500,7 @@ public class NotificationCenter {
         didStartedCall = i109;
         int i110 = totalEvents;
         totalEvents = i110 + 1;
-        didEndedCall = i110;
+        didEndCall = i110;
         int i111 = totalEvents;
         totalEvents = i111 + 1;
         closeInCallActivity = i111;

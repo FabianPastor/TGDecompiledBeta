@@ -363,7 +363,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             String str2 = objArr[0];
             while (i4 < this.thumbsFileNames.size()) {
                 if (this.thumbsFileNames.get(i4).equals(str2) && (radialProgress2 = this.radialProgresses.get(i4)) != null) {
-                    radialProgress2.setProgress(objArr[1].floatValue(), true);
+                    radialProgress2.setProgress(Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue())), true);
                 }
                 i4++;
             }

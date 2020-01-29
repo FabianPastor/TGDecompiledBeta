@@ -428,9 +428,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     i = 0;
                 }
                 if (this.animateFromPosition) {
-                    long uptimeMillis = SystemClock.uptimeMillis();
-                    long j = uptimeMillis - this.lastAnimationTime;
-                    this.lastAnimationTime = uptimeMillis;
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    long j = elapsedRealtime - this.lastAnimationTime;
+                    this.lastAnimationTime = elapsedRealtime;
                     this.positionAnimationProgress += ((float) j) / 150.0f;
                     if (this.positionAnimationProgress >= 1.0f) {
                         this.positionAnimationProgress = 1.0f;
@@ -474,7 +474,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 this.startAnimationPosition = (float) childAt.getLeft();
                 this.positionAnimationProgress = 0.0f;
                 this.animateFromPosition = true;
-                this.lastAnimationTime = SystemClock.uptimeMillis();
+                this.lastAnimationTime = SystemClock.elapsedRealtime();
             } else {
                 this.animateFromPosition = false;
             }

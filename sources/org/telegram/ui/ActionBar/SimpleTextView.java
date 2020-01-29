@@ -488,8 +488,8 @@ public class SimpleTextView extends View implements Drawable.Callback {
             return;
         }
         if (this.textDoesNotFit || this.scrollingOffset != 0.0f) {
-            long uptimeMillis = SystemClock.uptimeMillis();
-            long j = uptimeMillis - this.lastUpdateTime;
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long j = elapsedRealtime - this.lastUpdateTime;
             if (j > 17) {
                 j = 17;
             }
@@ -505,7 +505,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                     f = 50.0f - (((this.scrollingOffset - ((float) (dp - AndroidUtilities.dp(100.0f)))) / ((float) AndroidUtilities.dp(100.0f))) * 20.0f);
                 }
                 this.scrollingOffset += (((float) j) / 1000.0f) * ((float) AndroidUtilities.dp(f));
-                this.lastUpdateTime = uptimeMillis;
+                this.lastUpdateTime = elapsedRealtime;
                 if (this.scrollingOffset > ((float) dp)) {
                     this.scrollingOffset = 0.0f;
                     this.currentScrollDelay = 500;

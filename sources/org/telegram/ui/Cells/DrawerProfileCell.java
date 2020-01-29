@@ -112,38 +112,38 @@ public class DrawerProfileCell extends FrameLayout {
             java.lang.String r2 = "lastDayTheme"
             java.lang.String r2 = r8.getString(r2, r1)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
-            if (r3 != 0) goto L_0x0019
+            if (r3 != 0) goto L_0x0018
             r2 = r1
-        L_0x0019:
+        L_0x0018:
             java.lang.String r3 = "Dark Blue"
             java.lang.String r4 = "lastDarkTheme"
             java.lang.String r8 = r8.getString(r4, r3)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-            if (r4 != 0) goto L_0x0028
+            if (r4 != 0) goto L_0x0027
             r8 = r3
-        L_0x0028:
+        L_0x0027:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r5 = r2.equals(r8)
-            if (r5 == 0) goto L_0x003b
-            boolean r5 = r4.isDark()
             if (r5 == 0) goto L_0x003a
+            boolean r5 = r4.isDark()
+            if (r5 == 0) goto L_0x0039
             r2 = r1
-            goto L_0x003b
-        L_0x003a:
+            goto L_0x003a
+        L_0x0039:
             r8 = r3
-        L_0x003b:
+        L_0x003a:
             java.lang.String r1 = r4.getKey()
             boolean r1 = r2.equals(r1)
-            if (r1 == 0) goto L_0x004a
+            if (r1 == 0) goto L_0x0049
             org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-            goto L_0x004e
-        L_0x004a:
+            goto L_0x004d
+        L_0x0049:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
-        L_0x004e:
+        L_0x004d:
             int r1 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r1 == 0) goto L_0x006e
+            if (r1 == 0) goto L_0x006d
             android.content.Context r1 = r7.getContext()
-            r2 = 2131624353(0x7f0e01a1, float:1.8875883E38)
+            r2 = 2131624361(0x7f0e01a9, float:1.88759E38)
             java.lang.String r3 = "AutoNightModeOff"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.widget.Toast r1 = android.widget.Toast.makeText(r1, r2, r0)
@@ -151,7 +151,7 @@ public class DrawerProfileCell extends FrameLayout {
             org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r0
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
-        L_0x006e:
+        L_0x006d:
             r1 = 2
             int[] r2 = new int[r1]
             android.widget.ImageView r3 = r7.darkThemeView

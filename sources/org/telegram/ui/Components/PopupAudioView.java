@@ -38,7 +38,7 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
     private int timeX;
     private boolean wasLayout = false;
 
-    public void onProgressUpload(String str, float f, boolean z) {
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public /* synthetic */ void onSeekBarContinuousDrag(float f) {
@@ -49,7 +49,7 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
-        this.seekBar = new SeekBar(getContext());
+        this.seekBar = new SeekBar(this);
         this.seekBar.setDelegate(this);
         this.progressView = new ProgressView();
     }
@@ -100,12 +100,17 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
                 requestLayout();
                 return;
             }
+            int i = AndroidUtilities.displaySize.y;
+            if (getParent() instanceof View) {
+                i = ((View) getParent()).getMeasuredHeight();
+            }
+            Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
             BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
             Theme.chat_msgInMediaDrawable.draw(canvas);
             if (this.currentMessageObject != null) {
                 canvas.save();
-                int i = this.buttonState;
-                if (i == 0 || i == 1) {
+                int i2 = this.buttonState;
+                if (i2 == 0 || i2 == 1) {
                     canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                     this.seekBar.draw(canvas);
                 } else {
@@ -342,8 +347,8 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
         updateButtonState();
     }
 
-    public void onProgressDownload(String str, float f) {
-        this.progressView.setProgress(f);
+    public void onProgressDownload(String str, long j, long j2) {
+        this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)));
         if (this.buttonState != 3) {
             updateButtonState();
         }

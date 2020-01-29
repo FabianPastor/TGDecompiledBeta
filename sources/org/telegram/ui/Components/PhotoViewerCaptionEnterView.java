@@ -37,8 +37,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private int audioInterfaceState;
     /* access modifiers changed from: private */
     public int captionMaxLength = 1024;
+    private Drawable checkDrawable;
     /* access modifiers changed from: private */
     public PhotoViewerCaptionEnterViewDelegate delegate;
+    private Drawable drawable;
     private ImageView emojiButton;
     private int emojiPadding;
     private EmojiView emojiView;
@@ -203,7 +205,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         });
-        CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398), context.getResources().getDrawable(NUM).mutate(), 0, AndroidUtilities.dp(1.0f));
+        this.drawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
+        this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
+        CombinedDrawable combinedDrawable = new CombinedDrawable(this.drawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
         ImageView imageView = new ImageView(context2);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -271,6 +275,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void setForceFloatingEmoji(boolean z) {
         this.forceFloatingEmoji = z;
+    }
+
+    public void updateColors() {
+        Theme.setDrawableColor(this.drawable, Theme.getColor("dialogFloatingButton"));
+        Theme.setDrawableColor(this.checkDrawable, Theme.getColor("dialogFloatingIcon"));
     }
 
     private void onWindowSizeChanged() {

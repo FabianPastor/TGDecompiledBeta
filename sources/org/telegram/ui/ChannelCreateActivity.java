@@ -1027,6 +1027,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z && this.currentStep != 1) {
+            this.nameTextView.requestFocus();
             this.nameTextView.openKeyboard();
         }
     }

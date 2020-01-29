@@ -1,8 +1,6 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
-import android.os.Build;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -146,7 +144,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private void resetItems() {
         this.accountNumbers.clear();
-        boolean z = false;
         for (int i = 0; i < 3; i++) {
             if (UserConfig.getInstance(i).isClientActivated()) {
                 this.accountNumbers.add(Integer.valueOf(i));
@@ -155,38 +152,25 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrAJKuc.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
-            if (Build.VERSION.SDK_INT >= 18 && !TextUtils.isEmpty(UserConfig.getInstance(UserConfig.selectedAccount).walletConfig) && !TextUtils.isEmpty(UserConfig.getInstance(UserConfig.selectedAccount).walletBlockchainName)) {
-                z = true;
-            }
             if (Theme.getEventType() == 0) {
                 this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
-                if (!z) {
-                    this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
-                    this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
-                }
+                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
                 this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
                 this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
                 this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
                 this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                if (z) {
-                    this.items.add(new Item(12, LocaleController.getString("Wallet", NUM), NUM));
-                }
                 this.items.add((Object) null);
                 this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
                 this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
                 return;
             }
             this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
-            if (!z) {
-                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
-            }
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
             this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
             this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
             this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
-            if (z) {
-                this.items.add(new Item(12, LocaleController.getString("Wallet", NUM), NUM));
-            }
             this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
             this.items.add((Object) null);
             this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));

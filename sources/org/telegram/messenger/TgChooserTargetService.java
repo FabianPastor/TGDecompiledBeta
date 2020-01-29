@@ -28,32 +28,31 @@ public class TgChooserTargetService extends ChooserTargetService {
     public List<ChooserTarget> onGetChooserTargets(ComponentName componentName, IntentFilter intentFilter) {
         int i = UserConfig.selectedAccount;
         ArrayList arrayList = new ArrayList();
-        if (!UserConfig.getInstance(i).isClientActivated() || !MessagesController.getGlobalMainSettings().getBoolean("direct_share", true)) {
-            return arrayList;
-        }
-        ImageLoader.getInstance();
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        MessagesStorage.getInstance(i).getStorageQueue().postRunnable(new Runnable(i, arrayList, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ List f$2;
-            private final /* synthetic */ ComponentName f$3;
-            private final /* synthetic */ CountDownLatch f$4;
+        if (UserConfig.getInstance(i).isClientActivated() && MessagesController.getGlobalMainSettings().getBoolean("direct_share", true) && !AndroidUtilities.needShowPasscode() && !SharedConfig.isWaitingForPasscodeEnter) {
+            ImageLoader.getInstance();
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            MessagesStorage.getInstance(i).getStorageQueue().postRunnable(new Runnable(i, arrayList, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch) {
+                private final /* synthetic */ int f$1;
+                private final /* synthetic */ List f$2;
+                private final /* synthetic */ ComponentName f$3;
+                private final /* synthetic */ CountDownLatch f$4;
 
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-                this.f$4 = r5;
-            }
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                }
 
-            public final void run() {
-                TgChooserTargetService.this.lambda$onGetChooserTargets$0$TgChooserTargetService(this.f$1, this.f$2, this.f$3, this.f$4);
+                public final void run() {
+                    TgChooserTargetService.this.lambda$onGetChooserTargets$0$TgChooserTargetService(this.f$1, this.f$2, this.f$3, this.f$4);
+                }
+            });
+            try {
+                countDownLatch.await();
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
             }
-        });
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
         }
         return arrayList;
     }
@@ -183,7 +182,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             r13.putLong(r8, r14)
             boolean r7 = org.telegram.messenger.UserObject.isUserSelf(r12)
             if (r7 == 0) goto L_0x0134
-            r7 = 2131626407(0x7f0e09a7, float:1.888005E38)
+            r7 = 2131626445(0x7f0e09cd, float:1.8880126E38)
             java.lang.String r8 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r7)
             android.graphics.drawable.Icon r7 = r17.createSavedMessagesIcon()
@@ -251,7 +250,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             if (r9 == 0) goto L_0x01b5
             if (r10 != 0) goto L_0x01a5
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r8 = 2131165562(0x7var_a, float:1.7945345E38)
+            r8 = 2131165563(0x7var_b, float:1.7945347E38)
             android.graphics.drawable.Icon r7 = android.graphics.drawable.Icon.createWithResource(r7, r8)
             r10 = r7
         L_0x01a5:

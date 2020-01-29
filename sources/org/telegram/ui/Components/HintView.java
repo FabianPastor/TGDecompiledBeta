@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,11 +16,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.HintView;
 
 public class HintView extends FrameLayout {
+    public static final int TYPE_POLL_VOTE = 5;
     public static final int TYPE_SEARCH_AS_LIST = 3;
     /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
@@ -35,6 +38,9 @@ public class HintView extends FrameLayout {
     /* access modifiers changed from: private */
     public ChatMessageCell messageCell;
     private String overrideText;
+    /* access modifiers changed from: private */
+    public long showingDuration;
+    private int shownY;
     private TextView textView;
 
     public HintView(Context context, int i) {
@@ -47,13 +53,14 @@ public class HintView extends FrameLayout {
         Context context2 = context;
         int i2 = i;
         boolean z2 = z;
+        this.showingDuration = 2000;
         this.currentType = i2;
         this.isTopArrow = z2;
         this.textView = new CorrectlyMeasuringTextView(context2);
         this.textView.setTextColor(Theme.getColor("chat_gifSaveHintText"));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setMaxLines(2);
-        this.textView.setMaxWidth(AndroidUtilities.dp(250.0f));
+        this.textView.setMaxWidth(AndroidUtilities.dp(i2 == 4 ? 280.0f : 250.0f));
         if (this.currentType == 3) {
             this.textView.setGravity(19);
             this.textView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5.0f), Theme.getColor("chat_gifSaveHintBackground")));
@@ -63,7 +70,9 @@ public class HintView extends FrameLayout {
             this.textView.setGravity(51);
             this.textView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor("chat_gifSaveHintBackground")));
             int i3 = this.currentType;
-            if (i3 == 2) {
+            if (i3 == 5 || i3 == 4) {
+                this.textView.setPadding(AndroidUtilities.dp(9.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(7.0f));
+            } else if (i3 == 2) {
                 this.textView.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
             } else {
                 this.textView.setPadding(AndroidUtilities.dp(i3 == 0 ? 54.0f : 5.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(7.0f));
@@ -95,9 +104,16 @@ public class HintView extends FrameLayout {
     }
 
     public boolean showForMessageCell(ChatMessageCell chatMessageCell, boolean z) {
-        int i;
-        int i2;
-        if ((this.currentType == 0 && getTag() != null) || this.messageCell == chatMessageCell) {
+        return showForMessageCell(chatMessageCell, (Object) null, 0, 0, z);
+    }
+
+    public boolean showForMessageCell(ChatMessageCell chatMessageCell, Object obj, int i, int i2, boolean z) {
+        int i3;
+        int i4;
+        int i5;
+        ChatMessageCell chatMessageCell2 = chatMessageCell;
+        int i6 = i2;
+        if ((this.currentType == 5 && i6 == this.shownY && this.messageCell == chatMessageCell2) || ((i3 = this.currentType) != 5 && ((i3 == 0 && getTag() != null) || this.messageCell == chatMessageCell2))) {
             return false;
         }
         Runnable runnable = this.hideRunnable;
@@ -105,18 +121,42 @@ public class HintView extends FrameLayout {
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.hideRunnable = null;
         }
-        int top = chatMessageCell.getTop();
+        int[] iArr = new int[2];
+        chatMessageCell2.getLocationInWindow(iArr);
+        int i7 = iArr[1];
+        ((View) getParent()).getLocationInWindow(iArr);
+        int i8 = i7 - iArr[1];
         View view = (View) chatMessageCell.getParent();
-        if (this.currentType == 0) {
+        int i9 = this.currentType;
+        if (i9 == 0) {
             ImageReceiver photoImage = chatMessageCell.getPhotoImage();
-            i2 = top + photoImage.getImageY();
+            i4 = i8 + photoImage.getImageY();
             int imageHeight = photoImage.getImageHeight();
-            int i3 = i2 + imageHeight;
+            int i10 = i4 + imageHeight;
             int measuredHeight = view.getMeasuredHeight();
-            if (i2 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f) || i3 > measuredHeight + (imageHeight / 4)) {
+            if (i4 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f) || i10 > measuredHeight + (imageHeight / 4)) {
                 return false;
             }
-            i = chatMessageCell.getNoSoundIconCenterX();
+            i5 = chatMessageCell.getNoSoundIconCenterX();
+        } else if (i9 == 5) {
+            Integer num = (Integer) obj;
+            i4 = i8 + i6;
+            this.shownY = i6;
+            if (num.intValue() == -1) {
+                this.textView.setText(LocaleController.getString("PollSelectOption", NUM));
+            } else if (chatMessageCell.getMessageObject().isQuiz()) {
+                if (num.intValue() == 0) {
+                    this.textView.setText(LocaleController.getString("NoVotesQuiz", NUM));
+                } else {
+                    this.textView.setText(LocaleController.formatPluralString("Answer", num.intValue()));
+                }
+            } else if (num.intValue() == 0) {
+                this.textView.setText(LocaleController.getString("NoVotes", NUM));
+            } else {
+                this.textView.setText(LocaleController.formatPluralString("Vote", num.intValue()));
+            }
+            measure(View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
+            i5 = i;
         } else {
             MessageObject messageObject = chatMessageCell.getMessageObject();
             String str = this.overrideText;
@@ -126,31 +166,35 @@ public class HintView extends FrameLayout {
                 this.textView.setText(str);
             }
             measure(View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
-            i2 = top + AndroidUtilities.dp(22.0f);
+            i4 = i8 + AndroidUtilities.dp(22.0f);
             if (!messageObject.isOutOwner() && chatMessageCell.isDrawNameLayout()) {
-                i2 += AndroidUtilities.dp(20.0f);
+                i4 += AndroidUtilities.dp(20.0f);
             }
-            if (!this.isTopArrow && i2 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
+            if (!this.isTopArrow && i4 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
                 return false;
             }
-            i = chatMessageCell.getForwardNameCenterX();
+            i5 = chatMessageCell.getForwardNameCenterX();
         }
         int measuredWidth = view.getMeasuredWidth();
         if (this.isTopArrow) {
             setTranslationY((float) AndroidUtilities.dp(44.0f));
         } else {
-            setTranslationY((float) (i2 - getMeasuredHeight()));
+            setTranslationY((float) (i4 - getMeasuredHeight()));
         }
-        int left = chatMessageCell.getLeft() + i;
+        int left = chatMessageCell.getLeft() + i5;
         int dp = AndroidUtilities.dp(19.0f);
-        if (left > view.getMeasuredWidth() / 2) {
+        if (this.currentType == 5) {
+            int max = Math.max(0, (i5 - (getMeasuredWidth() / 2)) - AndroidUtilities.dp(19.1f));
+            setTranslationX((float) max);
+            dp += max;
+        } else if (left > view.getMeasuredWidth() / 2) {
             int measuredWidth2 = (measuredWidth - getMeasuredWidth()) - AndroidUtilities.dp(38.0f);
             setTranslationX((float) measuredWidth2);
             dp += measuredWidth2;
         } else {
             setTranslationX(0.0f);
         }
-        float left2 = (float) (((chatMessageCell.getLeft() + i) - dp) - (this.arrowImageView.getMeasuredWidth() / 2));
+        float left2 = (float) (((chatMessageCell.getLeft() + i5) - dp) - (this.arrowImageView.getMeasuredWidth() / 2));
         this.arrowImageView.setTranslationX(left2);
         if (left > view.getMeasuredWidth() / 2) {
             if (left2 < ((float) AndroidUtilities.dp(10.0f))) {
@@ -167,7 +211,7 @@ public class HintView extends FrameLayout {
             setTranslationX(getTranslationX() + dp3);
             this.arrowImageView.setTranslationX(left2 - dp3);
         }
-        this.messageCell = chatMessageCell;
+        this.messageCell = chatMessageCell2;
         AnimatorSet animatorSet2 = this.animatorSet;
         if (animatorSet2 != null) {
             animatorSet2.cancel();
@@ -177,7 +221,7 @@ public class HintView extends FrameLayout {
         setVisibility(0);
         if (z) {
             this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f})});
+            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = HintView.this.animatorSet = null;
@@ -200,229 +244,108 @@ public class HintView extends FrameLayout {
         return true;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0157  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x0168  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x019a  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean showForView(android.view.View r11, boolean r12) {
-        /*
-            r10 = this;
-            android.view.View r0 = r10.currentView
-            r1 = 0
-            if (r0 == r11) goto L_0x01a0
-            java.lang.Object r0 = r10.getTag()
-            if (r0 == 0) goto L_0x000d
-            goto L_0x01a0
-        L_0x000d:
-            java.lang.Runnable r0 = r10.hideRunnable
-            r2 = 0
-            if (r0 == 0) goto L_0x0017
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-            r10.hideRunnable = r2
-        L_0x0017:
-            r0 = -2147483648(0xfffffffvar_, float:-0.0)
-            r3 = 1000(0x3e8, float:1.401E-42)
-            int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r0)
-            int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r3, r0)
-            r10.measure(r4, r0)
-            r0 = 2
-            int[] r3 = new int[r0]
-            r11.getLocationInWindow(r3)
-            r4 = 1
-            r5 = r3[r4]
-            r6 = 1082130432(0x40800000, float:4.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r5 = r5 - r6
-            int r6 = r10.currentType
-            r7 = 3
-            if (r6 != r7) goto L_0x0050
-            boolean r6 = r11 instanceof org.telegram.ui.ActionBar.SimpleTextView
-            if (r6 == 0) goto L_0x004a
-            r6 = r3[r1]
-            r8 = r11
-            org.telegram.ui.ActionBar.SimpleTextView r8 = (org.telegram.ui.ActionBar.SimpleTextView) r8
-            int r8 = r8.getTextWidth()
-            int r8 = r8 / r0
-            goto L_0x0057
-        L_0x004a:
-            java.lang.IllegalArgumentException r11 = new java.lang.IllegalArgumentException
-            r11.<init>()
-            throw r11
-        L_0x0050:
-            r6 = r3[r1]
-            int r8 = r11.getMeasuredWidth()
-            int r8 = r8 / r0
-        L_0x0057:
-            int r6 = r6 + r8
-            android.view.ViewParent r8 = r10.getParent()
-            android.view.View r8 = (android.view.View) r8
-            r8.getLocationInWindow(r3)
-            r9 = r3[r1]
-            int r6 = r6 - r9
-            r3 = r3[r4]
-            int r5 = r5 - r3
-            int r3 = android.os.Build.VERSION.SDK_INT
-            r9 = 21
-            if (r3 < r9) goto L_0x0070
-            int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            int r5 = r5 - r3
-        L_0x0070:
-            int r3 = r8.getMeasuredWidth()
-            boolean r9 = r10.isTopArrow
-            if (r9 == 0) goto L_0x0083
-            r5 = 1110441984(0x42300000, float:44.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            r10.setTranslationY(r5)
-            goto L_0x0091
-        L_0x0083:
-            int r9 = r10.getMeasuredHeight()
-            int r5 = r5 - r9
-            int r9 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            int r5 = r5 - r9
-            float r5 = (float) r5
-            r10.setTranslationY(r5)
-        L_0x0091:
-            int r5 = r8.getMeasuredWidth()
-            int r5 = r5 / r0
-            if (r6 <= r5) goto L_0x00b5
-            int r5 = r10.currentType
-            if (r5 != r7) goto L_0x00a9
-            float r3 = (float) r3
-            int r5 = r10.getMeasuredWidth()
-            float r5 = (float) r5
-            r7 = 1069547520(0x3fCLASSNAME, float:1.5)
-            float r5 = r5 * r7
-            float r3 = r3 - r5
-            int r3 = (int) r3
-            goto L_0x00c9
-        L_0x00a9:
-            int r5 = r10.getMeasuredWidth()
-            int r3 = r3 - r5
-            r5 = 1105199104(0x41e00000, float:28.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x00c6
-        L_0x00b5:
-            int r3 = r10.currentType
-            if (r3 != r7) goto L_0x00c8
-            int r3 = r10.getMeasuredWidth()
-            int r3 = r3 / r0
-            int r3 = r6 - r3
-            android.widget.ImageView r5 = r10.arrowImageView
-            int r5 = r5.getMeasuredWidth()
-        L_0x00c6:
-            int r3 = r3 - r5
-            goto L_0x00c9
-        L_0x00c8:
-            r3 = 0
-        L_0x00c9:
-            float r5 = (float) r3
-            r10.setTranslationX(r5)
-            r5 = 1100480512(0x41980000, float:19.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r5 = r5 + r3
-            int r3 = r6 - r5
-            android.widget.ImageView r5 = r10.arrowImageView
-            int r5 = r5.getMeasuredWidth()
-            int r5 = r5 / r0
-            int r3 = r3 - r5
-            float r3 = (float) r3
-            android.widget.ImageView r5 = r10.arrowImageView
-            r5.setTranslationX(r3)
-            int r5 = r8.getMeasuredWidth()
-            int r5 = r5 / r0
-            r7 = 1092616192(0x41200000, float:10.0)
-            if (r6 <= r5) goto L_0x010c
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r5 = (float) r5
-            int r5 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0151
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r5 = (float) r5
-            float r5 = r3 - r5
-            float r6 = r10.getTranslationX()
-            float r6 = r6 + r5
-            r10.setTranslationX(r6)
-            android.widget.ImageView r6 = r10.arrowImageView
-            float r3 = r3 - r5
-            r6.setTranslationX(r3)
-            goto L_0x0151
-        L_0x010c:
-            int r5 = r10.getMeasuredWidth()
-            r6 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r5 = r5 - r8
-            float r5 = (float) r5
-            int r5 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0133
-            int r5 = r10.getMeasuredWidth()
-            float r5 = (float) r5
-            float r5 = r3 - r5
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            float r6 = (float) r6
-            float r5 = r5 + r6
-            r10.setTranslationX(r5)
-            android.widget.ImageView r6 = r10.arrowImageView
-            float r3 = r3 - r5
-            r6.setTranslationX(r3)
-            goto L_0x0151
-        L_0x0133:
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r5 = (float) r5
-            int r5 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0151
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r5 = (float) r5
-            float r5 = r3 - r5
-            float r6 = r10.getTranslationX()
-            float r6 = r6 + r5
-            r10.setTranslationX(r6)
-            android.widget.ImageView r6 = r10.arrowImageView
-            float r3 = r3 - r5
-            r6.setTranslationX(r3)
-        L_0x0151:
-            r10.currentView = r11
-            android.animation.AnimatorSet r11 = r10.animatorSet
-            if (r11 == 0) goto L_0x015c
-            r11.cancel()
-            r10.animatorSet = r2
-        L_0x015c:
-            java.lang.Integer r11 = java.lang.Integer.valueOf(r4)
-            r10.setTag(r11)
-            r10.setVisibility(r1)
-            if (r12 == 0) goto L_0x019a
-            android.animation.AnimatorSet r11 = new android.animation.AnimatorSet
-            r11.<init>()
-            r10.animatorSet = r11
-            android.animation.AnimatorSet r11 = r10.animatorSet
-            android.animation.Animator[] r12 = new android.animation.Animator[r4]
-            float[] r0 = new float[r0]
-            r0 = {0, NUM} // fill-array
-            java.lang.String r2 = "alpha"
-            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r10, r2, r0)
-            r12[r1] = r0
-            r11.playTogether(r12)
-            android.animation.AnimatorSet r11 = r10.animatorSet
-            org.telegram.ui.Components.HintView$2 r12 = new org.telegram.ui.Components.HintView$2
-            r12.<init>()
-            r11.addListener(r12)
-            android.animation.AnimatorSet r11 = r10.animatorSet
-            r0 = 300(0x12c, double:1.48E-321)
-            r11.setDuration(r0)
-            android.animation.AnimatorSet r11 = r10.animatorSet
-            r11.start()
-            goto L_0x019f
-        L_0x019a:
-            r11 = 1065353216(0x3var_, float:1.0)
-            r10.setAlpha(r11)
-        L_0x019f:
-            return r4
-        L_0x01a0:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.HintView.showForView(android.view.View, boolean):boolean");
+    public boolean showForView(View view, boolean z) {
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        int i5;
+        if (this.currentView == view || getTag() != null) {
+            return false;
+        }
+        Runnable runnable = this.hideRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            this.hideRunnable = null;
+        }
+        measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, Integer.MIN_VALUE));
+        int[] iArr = new int[2];
+        view.getLocationInWindow(iArr);
+        int dp = iArr[1] - AndroidUtilities.dp(4.0f);
+        if (this.currentType == 4) {
+            dp += AndroidUtilities.dp(4.0f);
+        }
+        if (this.currentType != 3) {
+            i2 = iArr[0];
+            i = view.getMeasuredWidth() / 2;
+        } else if (view instanceof SimpleTextView) {
+            i2 = iArr[0];
+            i = ((SimpleTextView) view).getTextWidth() / 2;
+        } else {
+            throw new IllegalArgumentException();
+        }
+        int i6 = i2 + i;
+        View view2 = (View) getParent();
+        view2.getLocationInWindow(iArr);
+        int i7 = i6 - iArr[0];
+        int i8 = dp - iArr[1];
+        int measuredWidth = view2.getMeasuredWidth();
+        if (this.isTopArrow) {
+            setTranslationY((float) AndroidUtilities.dp(44.0f));
+        } else {
+            setTranslationY((float) (i8 - getMeasuredHeight()));
+        }
+        if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            i4 = ((ViewGroup.MarginLayoutParams) getLayoutParams()).leftMargin;
+            i3 = ((ViewGroup.MarginLayoutParams) getLayoutParams()).rightMargin;
+        } else {
+            i4 = 0;
+            i3 = 0;
+        }
+        if (i7 > view2.getMeasuredWidth() / 2) {
+            i5 = this.currentType == 3 ? (int) (((float) measuredWidth) - (((float) getMeasuredWidth()) * 1.5f)) : (measuredWidth - getMeasuredWidth()) - (i3 + i4);
+        } else {
+            i5 = this.currentType == 3 ? (i7 - (getMeasuredWidth() / 2)) - this.arrowImageView.getMeasuredWidth() : 0;
+        }
+        setTranslationX((float) i5);
+        float measuredWidth2 = (float) ((i7 - (i4 + i5)) - (this.arrowImageView.getMeasuredWidth() / 2));
+        this.arrowImageView.setTranslationX(measuredWidth2);
+        if (i7 > view2.getMeasuredWidth() / 2) {
+            if (measuredWidth2 < ((float) AndroidUtilities.dp(10.0f))) {
+                float dp2 = measuredWidth2 - ((float) AndroidUtilities.dp(10.0f));
+                setTranslationX(getTranslationX() + dp2);
+                this.arrowImageView.setTranslationX(measuredWidth2 - dp2);
+            }
+        } else if (measuredWidth2 > ((float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)))) {
+            float measuredWidth3 = (measuredWidth2 - ((float) getMeasuredWidth())) + ((float) AndroidUtilities.dp(24.0f));
+            setTranslationX(measuredWidth3);
+            this.arrowImageView.setTranslationX(measuredWidth2 - measuredWidth3);
+        } else if (measuredWidth2 < ((float) AndroidUtilities.dp(10.0f))) {
+            float dp3 = measuredWidth2 - ((float) AndroidUtilities.dp(10.0f));
+            setTranslationX(getTranslationX() + dp3);
+            this.arrowImageView.setTranslationX(measuredWidth2 - dp3);
+        }
+        this.currentView = view;
+        AnimatorSet animatorSet2 = this.animatorSet;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
+            this.animatorSet = null;
+        }
+        setTag(1);
+        setVisibility(0);
+        if (z) {
+            this.animatorSet = new AnimatorSet();
+            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
+            this.animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AnimatorSet unused = HintView.this.animatorSet = null;
+                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new Runnable() {
+                        public final void run() {
+                            HintView.AnonymousClass2.this.lambda$onAnimationEnd$0$HintView$2();
+                        }
+                    }, HintView.this.showingDuration);
+                }
+
+                public /* synthetic */ void lambda$onAnimationEnd$0$HintView$2() {
+                    HintView.this.hide();
+                }
+            });
+            this.animatorSet.setDuration(300);
+            this.animatorSet.start();
+        } else {
+            setAlpha(1.0f);
+        }
+        return true;
     }
 
     public void hide() {
@@ -439,7 +362,7 @@ public class HintView extends FrameLayout {
                 this.animatorSet = null;
             }
             this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f})});
+            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     HintView.this.setVisibility(4);
@@ -459,5 +382,9 @@ public class HintView extends FrameLayout {
 
     public ChatMessageCell getMessageCell() {
         return this.messageCell;
+    }
+
+    public void setShowingDuration(long j) {
+        this.showingDuration = j;
     }
 }

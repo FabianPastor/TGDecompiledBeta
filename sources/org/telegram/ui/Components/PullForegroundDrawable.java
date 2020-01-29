@@ -367,8 +367,8 @@ public class PullForegroundDrawable {
                 Theme.dialogs_archiveAvatarDrawable.setProgress(0.0f);
                 if (!Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
-                    Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow1.**", Theme.getColor(this.avatarBackgroundColorKey));
-                    Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow2.**", Theme.getColor(this.avatarBackgroundColorKey));
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow1.**", Theme.getNonAnimatedColor(this.avatarBackgroundColorKey));
+                    Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow2.**", Theme.getNonAnimatedColor(this.avatarBackgroundColorKey));
                     Theme.dialogs_archiveAvatarDrawable.commitApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawableRecolored = true;
                 }
@@ -592,7 +592,7 @@ public class PullForegroundDrawable {
 
     private void setOutProgress(float f) {
         this.outProgress = f;
-        int blendARGB = ColorUtils.blendARGB(Theme.getColor(this.avatarBackgroundColorKey), Theme.getColor(this.backgroundActiveColorKey), 1.0f - this.outProgress);
+        int blendARGB = ColorUtils.blendARGB(Theme.getNonAnimatedColor(this.avatarBackgroundColorKey), Theme.getNonAnimatedColor(this.backgroundActiveColorKey), 1.0f - this.outProgress);
         this.paintBackgroundAccent.setColor(blendARGB);
         if (this.changeAvatarColor && isDraw()) {
             Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();

@@ -205,8 +205,13 @@ public class Track {
             SLConfigDescriptor sLConfigDescriptor = new SLConfigDescriptor();
             sLConfigDescriptor.setPredefined(2);
             eSDescriptor.setSlConfigDescriptor(sLConfigDescriptor);
+            String string2 = mediaFormat.containsKey("mime") ? mediaFormat.getString("mime") : "audio/mp4-latm";
             DecoderConfigDescriptor decoderConfigDescriptor = new DecoderConfigDescriptor();
-            decoderConfigDescriptor.setObjectTypeIndication(64);
+            if ("audio/mpeg".equals(string2)) {
+                decoderConfigDescriptor.setObjectTypeIndication(105);
+            } else {
+                decoderConfigDescriptor.setObjectTypeIndication(64);
+            }
             decoderConfigDescriptor.setStreamType(5);
             decoderConfigDescriptor.setBufferSizeDB(1536);
             if (mediaFormat.containsKey("max-bitrate")) {
