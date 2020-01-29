@@ -901,7 +901,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
             public /* synthetic */ void lambda$onItemClick$1$ThemeActivity$1(DialogInterface dialogInterface, int i) {
                 boolean access$500 = ThemeActivity.this.setFontSize(AndroidUtilities.isTablet() ? 18 : 16);
-                if (ThemeActivity.this.setBubbleRadius(6, true)) {
+                if (ThemeActivity.this.setBubbleRadius(10, true)) {
                     access$500 = true;
                 }
                 if (access$500) {
@@ -1194,7 +1194,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
             int i = AndroidUtilities.isTablet() ? 18 : 16;
             Theme.ThemeInfo currentTheme2 = Theme.getCurrentTheme();
-            if (SharedConfig.fontSize == i && SharedConfig.bubbleRadius == 6 && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+            if (SharedConfig.fontSize == i && SharedConfig.bubbleRadius == 10 && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
                 this.menuItem.hideSubItem(4);
             } else {
                 this.menuItem.showSubItem(4);

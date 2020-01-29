@@ -4154,57 +4154,74 @@ public class MessageObject {
     }
 
     public static void updatePollResults(TLRPC.TL_messageMediaPoll tL_messageMediaPoll, TLRPC.PollResults pollResults) {
-        boolean z;
-        ArrayList<TLRPC.TL_pollAnswerVoters> arrayList;
+        byte[] bArr;
+        ArrayList arrayList;
+        ArrayList<TLRPC.TL_pollAnswerVoters> arrayList2;
         if (tL_messageMediaPoll != null && pollResults != null) {
             if ((pollResults.flags & 2) != 0) {
-                byte[] bArr = null;
-                int i = 0;
-                if (pollResults.min && (arrayList = tL_messageMediaPoll.results.results) != null) {
-                    int size = arrayList.size();
-                    int i2 = 0;
-                    while (true) {
-                        if (i2 >= size) {
-                            break;
-                        }
-                        TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters = tL_messageMediaPoll.results.results.get(i2);
+                if (!pollResults.min || (arrayList2 = tL_messageMediaPoll.results.results) == null) {
+                    arrayList = null;
+                    bArr = null;
+                } else {
+                    int size = arrayList2.size();
+                    arrayList = null;
+                    bArr = null;
+                    for (int i = 0; i < size; i++) {
+                        TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters = tL_messageMediaPoll.results.results.get(i);
                         if (tL_pollAnswerVoters.chosen) {
-                            bArr = tL_pollAnswerVoters.option;
-                            z = tL_pollAnswerVoters.correct;
-                            break;
+                            if (arrayList == null) {
+                                arrayList = new ArrayList();
+                            }
+                            arrayList.add(tL_pollAnswerVoters.option);
                         }
-                        i2++;
+                        if (tL_pollAnswerVoters.correct) {
+                            bArr = tL_pollAnswerVoters.option;
+                        }
                     }
                 }
-                z = false;
-                TLRPC.PollResults pollResults2 = tL_messageMediaPoll.results;
-                pollResults2.results = pollResults.results;
-                if (bArr != null) {
-                    int size2 = pollResults2.results.size();
-                    while (true) {
-                        if (i >= size2) {
+                tL_messageMediaPoll.results.results = pollResults.results;
+                if (arrayList != null || bArr != null) {
+                    int size2 = tL_messageMediaPoll.results.results.size();
+                    for (int i2 = 0; i2 < size2; i2++) {
+                        TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters2 = tL_messageMediaPoll.results.results.get(i2);
+                        if (arrayList != null) {
+                            int size3 = arrayList.size();
+                            int i3 = 0;
+                            while (true) {
+                                if (i3 >= size3) {
+                                    break;
+                                } else if (Arrays.equals(tL_pollAnswerVoters2.option, (byte[]) arrayList.get(i3))) {
+                                    tL_pollAnswerVoters2.chosen = true;
+                                    arrayList.remove(i3);
+                                    break;
+                                } else {
+                                    i3++;
+                                }
+                            }
+                            if (arrayList.isEmpty()) {
+                                arrayList = null;
+                            }
+                        }
+                        if (bArr != null && Arrays.equals(tL_pollAnswerVoters2.option, bArr)) {
+                            tL_pollAnswerVoters2.correct = true;
+                            bArr = null;
+                        }
+                        if (arrayList == null && bArr == null) {
                             break;
                         }
-                        TLRPC.TL_pollAnswerVoters tL_pollAnswerVoters2 = tL_messageMediaPoll.results.results.get(i);
-                        if (Arrays.equals(tL_pollAnswerVoters2.option, bArr)) {
-                            tL_pollAnswerVoters2.chosen = true;
-                            tL_pollAnswerVoters2.correct = z;
-                            break;
-                        }
-                        i++;
                     }
                 }
                 tL_messageMediaPoll.results.flags |= 2;
             }
             if ((pollResults.flags & 4) != 0) {
-                TLRPC.PollResults pollResults3 = tL_messageMediaPoll.results;
-                pollResults3.total_voters = pollResults.total_voters;
-                pollResults3.flags |= 4;
+                TLRPC.PollResults pollResults2 = tL_messageMediaPoll.results;
+                pollResults2.total_voters = pollResults.total_voters;
+                pollResults2.flags |= 4;
             }
             if ((pollResults.flags & 8) != 0) {
-                TLRPC.PollResults pollResults4 = tL_messageMediaPoll.results;
-                pollResults4.recent_voters = pollResults.recent_voters;
-                pollResults4.flags |= 8;
+                TLRPC.PollResults pollResults3 = tL_messageMediaPoll.results;
+                pollResults3.recent_voters = pollResults.recent_voters;
+                pollResults3.flags |= 8;
             }
         }
     }
