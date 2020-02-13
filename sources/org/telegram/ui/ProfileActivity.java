@@ -4242,10 +4242,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     public void setAnimationProgress(float f) {
         int i;
         int i2;
+        int i3;
         float f2 = f;
         this.animationProgress = f2;
         this.listView.setAlpha(f2);
         this.listView.setTranslationX(((float) AndroidUtilities.dp(48.0f)) - (((float) AndroidUtilities.dp(48.0f)) * f2));
+        int i4 = 2;
         if (this.playProfileAnimation != 2 || (i = this.avatarColor) == 0) {
             i = AvatarDrawable.getProfileBackColorForId((this.user_id != 0 || (ChatObject.isChannel(this.chat_id, this.currentAccount) && !this.currentChat.megagroup)) ? 5 : this.chat_id);
         }
@@ -4270,44 +4272,53 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         int green4 = (int) (((float) (Color.green(color3) - green3)) * f2);
         int blue4 = (int) (((float) (Color.blue(color3) - blue3)) * f2);
         int alpha2 = (int) (((float) (Color.alpha(color3) - alpha)) * f2);
-        int i3 = 0;
-        for (int i4 = 2; i3 < i4; i4 = 2) {
-            SimpleTextView[] simpleTextViewArr = this.nameTextView;
-            if (simpleTextViewArr[i3] != null) {
-                simpleTextViewArr[i3].setTextColor(Color.argb(alpha + alpha2, red3 + red4, green3 + green4, blue3 + blue4));
+        int i5 = 0;
+        while (true) {
+            i2 = 1;
+            if (i5 >= i4) {
+                break;
             }
-            i3++;
+            if (!(this.nameTextView[i5] == null || (i5 == 1 && this.playProfileAnimation == i4))) {
+                this.nameTextView[i5].setTextColor(Color.argb(alpha + alpha2, red3 + red4, green3 + green4, blue3 + blue4));
+            }
+            i5++;
+            i4 = 2;
         }
         if (this.isOnline[0]) {
-            i2 = Theme.getColor("profile_status");
+            i3 = Theme.getColor("profile_status");
         } else {
-            i2 = AvatarDrawable.getProfileTextColorForId((this.user_id != 0 || (ChatObject.isChannel(this.chat_id, this.currentAccount) && !this.currentChat.megagroup)) ? 5 : this.chat_id);
+            i3 = AvatarDrawable.getProfileTextColorForId((this.user_id != 0 || (ChatObject.isChannel(this.chat_id, this.currentAccount) && !this.currentChat.megagroup)) ? 5 : this.chat_id);
         }
+        int i6 = 0;
         int color5 = Theme.getColor(this.isOnline[0] ? "chat_status" : "actionBarDefaultSubtitle");
         int red5 = Color.red(color5);
         int green5 = Color.green(color5);
         int blue5 = Color.blue(color5);
         int alpha3 = Color.alpha(color5);
-        int red6 = (int) (((float) (Color.red(i2) - red5)) * f2);
-        int green6 = (int) (((float) (Color.green(i2) - green5)) * f2);
-        int blue6 = (int) (((float) (Color.blue(i2) - blue5)) * f2);
-        int alpha4 = (int) (((float) (Color.alpha(i2) - alpha3)) * f2);
-        for (int i5 = 0; i5 < 2; i5++) {
-            if (!(this.onlineTextView[i5] == null || (i5 == 1 && this.playProfileAnimation == 2))) {
-                this.onlineTextView[i5].setTextColor(Color.argb(alpha3 + alpha4, red5 + red6, green5 + green6, blue5 + blue6));
+        int red6 = (int) (((float) (Color.red(i3) - red5)) * f2);
+        int green6 = (int) (((float) (Color.green(i3) - green5)) * f2);
+        int blue6 = (int) (((float) (Color.blue(i3) - blue5)) * f2);
+        int alpha4 = (int) (((float) (Color.alpha(i3) - alpha3)) * f2);
+        int i7 = 2;
+        while (i6 < i7) {
+            if (!(this.onlineTextView[i6] == null || (i6 == i2 && this.playProfileAnimation == i7))) {
+                this.onlineTextView[i6].setTextColor(Color.argb(alpha3 + alpha4, red5 + red6, green5 + green6, blue5 + blue6));
             }
+            i6++;
+            i7 = 2;
+            i2 = 1;
         }
         this.extraHeight = this.initialAnimationExtraHeight * f2;
-        int i6 = this.user_id;
-        if (i6 == 0) {
-            i6 = this.chat_id;
+        int i8 = this.user_id;
+        if (i8 == 0) {
+            i8 = this.chat_id;
         }
-        int profileColorForId = AvatarDrawable.getProfileColorForId(i6);
-        int i7 = this.user_id;
-        if (i7 == 0) {
-            i7 = this.chat_id;
+        int profileColorForId = AvatarDrawable.getProfileColorForId(i8);
+        int i9 = this.user_id;
+        if (i9 == 0) {
+            i9 = this.chat_id;
         }
-        int colorForId = AvatarDrawable.getColorForId(i7);
+        int colorForId = AvatarDrawable.getColorForId(i9);
         if (profileColorForId != colorForId) {
             this.avatarDrawable.setColor(Color.rgb(Color.red(colorForId) + ((int) (((float) (Color.red(profileColorForId) - Color.red(colorForId))) * f2)), Color.green(colorForId) + ((int) (((float) (Color.green(profileColorForId) - Color.green(colorForId))) * f2)), Color.blue(colorForId) + ((int) (((float) (Color.blue(profileColorForId) - Color.blue(colorForId))) * f2))));
             this.avatarImage.invalidate();

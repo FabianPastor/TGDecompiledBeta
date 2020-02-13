@@ -1106,7 +1106,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     PeopleNearbyActivity peopleNearbyActivity = PeopleNearbyActivity.this;
                     if (peopleNearbyActivity.showingMe = peopleNearbyActivity.getUserConfig().sharingMyLocationUntil > PeopleNearbyActivity.this.getConnectionsManager().getCurrentTime()) {
                         String string2 = LocaleController.getString("StopShowingMe", NUM);
-                        if (PeopleNearbyActivity.this.chatsStartRow != -1) {
+                        if (PeopleNearbyActivity.this.usersStartRow != -1) {
                             z = true;
                         }
                         manageChatTextCell.setText(string2, (String) null, NUM, z);

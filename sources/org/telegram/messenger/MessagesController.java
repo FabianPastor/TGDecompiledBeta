@@ -4590,7 +4590,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r7 != r1) goto L_0x024b
             return
         L_0x024b:
-            if (r4 == 0) goto L_0x0338
+            if (r4 == 0) goto L_0x0337
             if (r34 != 0) goto L_0x0255
             org.telegram.tgnet.TLRPC$InputPeer r1 = r11.getInputPeer(r4)
             r13 = r1
@@ -4688,23 +4688,21 @@ public class MessagesController extends BaseController implements NotificationCe
             org.telegram.messenger.-$$Lambda$MessagesController$X985wOXUqmlc4HM0aeQg2XDjVqk r3 = new org.telegram.messenger.-$$Lambda$MessagesController$X985wOXUqmlc4HM0aeQg2XDjVqk
             r3.<init>(r14)
             r2.sendRequest(r1, r3, r0)
-            goto L_0x0353
+            goto L_0x0352
         L_0x0304:
             org.telegram.tgnet.TLRPC$TL_messages_deleteHistory r8 = new org.telegram.tgnet.TLRPC$TL_messages_deleteHistory
             r8.<init>()
             r8.peer = r13
-            if (r7 != 0) goto L_0x030e
-            goto L_0x030f
-        L_0x030e:
+            if (r12 <= 0) goto L_0x030e
             r2 = r12
-        L_0x030f:
+        L_0x030e:
             r8.max_id = r2
-            if (r7 == 0) goto L_0x0315
+            if (r7 == 0) goto L_0x0314
             r10 = 1
-            goto L_0x0316
-        L_0x0315:
+            goto L_0x0315
+        L_0x0314:
             r10 = 0
-        L_0x0316:
+        L_0x0315:
             r8.just_clear = r10
             r8.revoke = r9
             org.telegram.tgnet.ConnectionsManager r10 = r27.getConnectionsManager()
@@ -4723,20 +4721,20 @@ public class MessagesController extends BaseController implements NotificationCe
             r1.<init>(r3, r5, r7, r8, r9, r10)
             r1 = 64
             r12.sendRequest(r14, r0, r1)
-            goto L_0x0353
-        L_0x0338:
+            goto L_0x0352
+        L_0x0337:
             r1 = 1
-            if (r7 != r1) goto L_0x034c
+            if (r7 != r1) goto L_0x034b
             org.telegram.messenger.SecretChatHelper r0 = r27.getSecretChatHelper()
             java.lang.Integer r1 = java.lang.Integer.valueOf(r8)
             org.telegram.tgnet.TLRPC$EncryptedChat r1 = r11.getEncryptedChat(r1)
             r2 = 0
             r0.sendClearHistoryMessage(r1, r2)
-            goto L_0x0353
-        L_0x034c:
+            goto L_0x0352
+        L_0x034b:
             org.telegram.messenger.SecretChatHelper r0 = r27.getSecretChatHelper()
             r0.declineSecretChat(r8)
-        L_0x0353:
+        L_0x0352:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.deleteDialog(long, boolean, int, int, boolean, org.telegram.tgnet.TLRPC$InputPeer, long):void");
