@@ -1306,7 +1306,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
                 goto L_0x018f
             L_0x0028:
-                r12 = 2131625388(0x7f0e05ac, float:1.8877983E38)
+                r12 = 2131625386(0x7f0e05aa, float:1.8877978E38)
                 java.lang.String r0 = "InviteToGroupByLink"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
@@ -1484,7 +1484,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.Cells.GroupCreateSectionCell r11 = (org.telegram.ui.Cells.GroupCreateSectionCell) r11
                 boolean r12 = r10.searching
                 if (r12 == 0) goto L_0x018f
-                r12 = 2131625282(0x7f0e0542, float:1.8877768E38)
+                r12 = 2131625281(0x7f0e0541, float:1.8877766E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)

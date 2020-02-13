@@ -886,12 +886,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutGrouping"
-            r2 = 2131626578(0x7f0e0a52, float:1.8880396E38)
+            r2 = 2131626571(0x7f0e0a4b, float:1.8880382E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r9, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutCompression"
-            r2 = 2131626577(0x7f0e0a51, float:1.8880394E38)
+            r2 = 2131626570(0x7f0e0a4a, float:1.888038E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r10, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
@@ -1096,7 +1096,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.<init>(r7)
             r6.progressView = r0
             org.telegram.ui.Components.EmptyTextProgressView r0 = r6.progressView
-            r1 = 2131625710(0x7f0e06ee, float:1.8878636E38)
+            r1 = 2131625704(0x7f0e06e8, float:1.8878623E38)
             java.lang.String r2 = "NoPhotos"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -1253,7 +1253,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             r0.setAlpha(r13)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
-            r2 = 2131626547(0x7f0e0a33, float:1.8880333E38)
+            r2 = 2131626540(0x7f0e0a2c, float:1.888032E38)
             java.lang.String r3 = "Send"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -1604,7 +1604,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = -1
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.tooltipTextView
-            r1 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+            r1 = 2131626763(0x7f0e0b0b, float:1.8880771E38)
             java.lang.String r2 = "TapForVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)

@@ -587,7 +587,7 @@ public class UserCell extends FrameLayout {
             int r2 = r12.statusOnlineColor
             r13.setTextColor(r2)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r2 = 2131625892(0x7f0e07a4, float:1.8879005E38)
+            r2 = 2131625886(0x7f0e079e, float:1.8878993E38)
             java.lang.String r5 = "Online"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r13.setText(r2)

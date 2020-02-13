@@ -2548,7 +2548,7 @@ public class MessageObject {
             goto L_0x0674
         L_0x06c7:
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
-            r2 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
+            r2 = 2131626990(0x7f0e0bee, float:1.8881232E38)
             java.lang.String r9 = "UserRestrictionsUntilForever"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r11.<init>(r2)

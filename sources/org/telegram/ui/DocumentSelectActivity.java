@@ -1465,7 +1465,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r6 = 2131625158(0x7f0e04c6, float:1.8877516E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165379(0x7var_c3, float:1.7944973E38)
-            r9 = 2131626500(0x7f0e0a04, float:1.8880238E38)
+            r9 = 2131626493(0x7f0e09fd, float:1.8880224E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1483,13 +1483,13 @@ public class DocumentSelectActivity extends BaseFragment {
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625370(0x7f0e059a, float:1.8877946E38)
+            r5 = 2131625368(0x7f0e0598, float:1.8877942E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
             r5 = 2131165381(0x7var_c5, float:1.7944978E38)
             r4.icon = r5
-            r5 = 2131625369(0x7f0e0599, float:1.8877944E38)
+            r5 = 2131625367(0x7f0e0597, float:1.887794E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1625,7 +1625,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r2.<init>()
             java.lang.String r3 = "/"
             r2.title = r3
-            r4 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+            r4 = 2131626762(0x7f0e0b0a, float:1.888077E38)
             java.lang.String r5 = "SystemRoot"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.subtitle = r4
@@ -1680,7 +1680,7 @@ public class DocumentSelectActivity extends BaseFragment {
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625636(0x7f0e06a4, float:1.8878486E38)
+            r2 = 2131625633(0x7f0e06a1, float:1.887848E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2

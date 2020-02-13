@@ -8251,7 +8251,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r8 = 0
                 android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
                 r11.addView(r10, r1)
-                r1 = 2131626298(0x7f0e093a, float:1.8879828E38)
+                r1 = 2131626291(0x7f0e0933, float:1.8879814E38)
                 java.lang.String r2 = "PreviewFeedback"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r10.setText(r1)
@@ -16540,7 +16540,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x004f:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x0098 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626629(0x7f0e0a85, float:1.88805E38)
+            r3 = 2131626622(0x7f0e0a7e, float:1.8880485E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x0098 }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x0098 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16555,12 +16555,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0098 }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x0098 }
             java.lang.String r1 = "OK"
-            r2 = 2131625888(0x7f0e07a0, float:1.8878997E38)
+            r2 = 2131625882(0x7f0e079a, float:1.8878984E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0098 }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x0098 }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626268(0x7f0e091c, float:1.8879767E38)
+            r2 = 2131626261(0x7f0e0915, float:1.8879753E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0098 }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x0098 }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x0098 }
@@ -17080,7 +17080,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             goto L_0x012e
         L_0x0109:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131625890(0x7f0e07a2, float:1.8879E38)
+            r1 = 2131625884(0x7f0e079c, float:1.8878989E38)
             java.lang.Object[] r2 = new java.lang.Object[r10]
             int r3 = r6.currentIndex
             int r3 = r3 + r9

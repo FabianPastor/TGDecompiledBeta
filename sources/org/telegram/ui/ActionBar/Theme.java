@@ -1099,11 +1099,11 @@ public class Theme {
         private Drawable[][] backgroundDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{2, 4}));
         private int[][] backgroundDrawableColor = {new int[]{-1, -1, -1, -1}, new int[]{-1, -1, -1, -1}};
         private Rect backupRect = new Rect();
-        private int[][] currentBackgroundDrawableRadius = ((int[][]) Array.newInstance(int.class, new int[]{2, 4}));
+        private int[][] currentBackgroundDrawableRadius = {new int[]{-1, -1, -1, -1}, new int[]{-1, -1, -1, -1}};
         private int currentBackgroundHeight;
         private int currentColor;
         private int currentGradientColor;
-        private int[] currentShadowDrawableRadius = new int[4];
+        private int[] currentShadowDrawableRadius = {-1, -1, -1, -1};
         private int currentType;
         private LinearGradient gradientShader;
         private boolean isBottomNear;
@@ -1339,10 +1339,10 @@ public class Theme {
             draw(canvas, (Paint) null);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:100:0x0487  */
-        /* JADX WARNING: Removed duplicated region for block: B:110:0x04dc  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0213  */
-        /* JADX WARNING: Removed duplicated region for block: B:62:0x0267  */
+        /* JADX WARNING: Removed duplicated region for block: B:102:0x0489  */
+        /* JADX WARNING: Removed duplicated region for block: B:112:0x04de  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x0215  */
+        /* JADX WARNING: Removed duplicated region for block: B:64:0x0269  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void draw(android.graphics.Canvas r20, android.graphics.Paint r21) {
             /*
@@ -1350,24 +1350,25 @@ public class Theme {
                 r0 = r19
                 r1 = r20
                 android.graphics.Rect r2 = r19.getBounds()
-                if (r21 != 0) goto L_0x0019
+                if (r21 != 0) goto L_0x001b
                 android.graphics.LinearGradient r3 = r0.gradientShader
-                if (r3 != 0) goto L_0x0019
+                if (r3 != 0) goto L_0x001b
                 android.graphics.drawable.Drawable r3 = r19.getBackgroundDrawable()
+                if (r3 == 0) goto L_0x001b
                 r3.setBounds(r2)
                 r3.draw(r1)
                 return
-            L_0x0019:
+            L_0x001b:
                 r3 = 1073741824(0x40000000, float:2.0)
                 int r4 = r0.dp(r3)
                 int r5 = r0.currentType
                 r6 = 1086324736(0x40CLASSNAME, float:6.0)
                 r7 = 2
-                if (r5 != r7) goto L_0x002f
+                if (r5 != r7) goto L_0x0031
                 int r5 = r0.dp(r6)
                 int r8 = r0.dp(r6)
-                goto L_0x0042
-            L_0x002f:
+                goto L_0x0044
+            L_0x0031:
                 int r5 = org.telegram.messenger.SharedConfig.bubbleRadius
                 float r5 = (float) r5
                 int r5 = r0.dp(r5)
@@ -1376,18 +1377,18 @@ public class Theme {
                 int r8 = java.lang.Math.min(r8, r9)
                 float r8 = (float) r8
                 int r8 = r0.dp(r8)
-            L_0x0042:
+            L_0x0044:
                 int r6 = r0.dp(r6)
-                if (r21 != 0) goto L_0x004b
+                if (r21 != 0) goto L_0x004d
                 android.graphics.Paint r9 = r0.paint
-                goto L_0x004d
-            L_0x004b:
-                r9 = r21
+                goto L_0x004f
             L_0x004d:
+                r9 = r21
+            L_0x004f:
                 r10 = 0
-                if (r21 != 0) goto L_0x0069
+                if (r21 != 0) goto L_0x006b
                 android.graphics.LinearGradient r11 = r0.gradientShader
-                if (r11 == 0) goto L_0x0069
+                if (r11 == 0) goto L_0x006b
                 android.graphics.Matrix r11 = r0.matrix
                 r11.reset()
                 android.graphics.Matrix r11 = r0.matrix
@@ -1398,7 +1399,7 @@ public class Theme {
                 android.graphics.LinearGradient r11 = r0.gradientShader
                 android.graphics.Matrix r12 = r0.matrix
                 r11.setLocalMatrix(r12)
-            L_0x0069:
+            L_0x006b:
                 int r11 = r2.top
                 r12 = 0
                 int r11 = java.lang.Math.max(r11, r12)
@@ -1409,18 +1410,18 @@ public class Theme {
                 r14 = 1119092736(0x42b40000, float:90.0)
                 r10 = 1
                 r3 = 1090519040(0x41000000, float:8.0)
-                if (r13 == 0) goto L_0x02ee
+                if (r13 == 0) goto L_0x02f0
                 int r13 = r0.currentType
-                if (r13 == r7) goto L_0x00b9
-                if (r21 != 0) goto L_0x00b9
+                if (r13 == r7) goto L_0x00bb
+                if (r21 != 0) goto L_0x00bb
                 int r13 = r0.topY
                 int r7 = r2.bottom
                 int r13 = r13 + r7
                 int r13 = r13 - r5
                 int r7 = r0.currentBackgroundHeight
-                if (r13 >= r7) goto L_0x0092
-                goto L_0x00b9
-            L_0x0092:
+                if (r13 >= r7) goto L_0x0094
+                goto L_0x00bb
+            L_0x0094:
                 android.graphics.Path r7 = r0.path
                 int r13 = r2.right
                 int r15 = r0.dp(r3)
@@ -1442,10 +1443,10 @@ public class Theme {
                 int r13 = r13 + r15
                 float r13 = (float) r13
                 r7.lineTo(r12, r13)
-                goto L_0x0110
-            L_0x00b9:
+                goto L_0x0112
+            L_0x00bb:
                 int r7 = r0.currentType
-                if (r7 != r10) goto L_0x00d0
+                if (r7 != r10) goto L_0x00d2
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r13 = r0.dp(r3)
@@ -1456,8 +1457,8 @@ public class Theme {
                 int r13 = r13 - r4
                 float r13 = (float) r13
                 r7.moveTo(r12, r13)
-                goto L_0x00e1
-            L_0x00d0:
+                goto L_0x00e3
+            L_0x00d2:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r13 = r0.dp(r15)
@@ -1467,7 +1468,7 @@ public class Theme {
                 int r13 = r13 - r4
                 float r13 = (float) r13
                 r7.moveTo(r12, r13)
-            L_0x00e1:
+            L_0x00e3:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1496,17 +1497,17 @@ public class Theme {
                 android.graphics.RectF r7 = r0.rect
                 r12 = 0
                 r3.arcTo(r7, r14, r14, r12)
-            L_0x0110:
+            L_0x0112:
                 int r3 = r0.currentType
                 r7 = 2
-                if (r3 == r7) goto L_0x016a
-                if (r21 != 0) goto L_0x016a
+                if (r3 == r7) goto L_0x016c
+                if (r21 != 0) goto L_0x016c
                 int r3 = r0.topY
                 int r7 = r5 * 2
                 int r7 = r7 + r3
-                if (r7 < 0) goto L_0x011f
-                goto L_0x016a
-            L_0x011f:
+                if (r7 < 0) goto L_0x0121
+                goto L_0x016c
+            L_0x0121:
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1518,7 +1519,7 @@ public class Theme {
                 float r3 = (float) r3
                 r7.lineTo(r12, r3)
                 int r3 = r0.currentType
-                if (r3 != r10) goto L_0x014d
+                if (r3 != r10) goto L_0x014f
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.right
                 int r7 = r7 - r4
@@ -1530,8 +1531,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r7, r12)
-                goto L_0x020e
-            L_0x014d:
+                goto L_0x0210
+            L_0x014f:
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.right
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1545,8 +1546,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r7, r12)
-                goto L_0x020e
-            L_0x016a:
+                goto L_0x0210
+            L_0x016c:
                 android.graphics.Path r3 = r0.path
                 int r7 = r2.left
                 int r7 = r7 + r4
@@ -1577,14 +1578,14 @@ public class Theme {
                 r13 = 0
                 r3.arcTo(r7, r12, r14, r13)
                 boolean r3 = r0.isTopNear
-                if (r3 == 0) goto L_0x01a1
+                if (r3 == 0) goto L_0x01a3
                 r3 = r8
-                goto L_0x01a2
-            L_0x01a1:
+                goto L_0x01a4
+            L_0x01a3:
                 r3 = r5
-            L_0x01a2:
+            L_0x01a4:
                 int r7 = r0.currentType
-                if (r7 != r10) goto L_0x01cd
+                if (r7 != r10) goto L_0x01cf
                 android.graphics.Path r7 = r0.path
                 int r12 = r2.right
                 int r12 = r12 - r4
@@ -1610,8 +1611,8 @@ public class Theme {
                 int r15 = r15 + r3
                 float r3 = (float) r15
                 r7.set(r13, r10, r12, r3)
-                goto L_0x0204
-            L_0x01cd:
+                goto L_0x0206
+            L_0x01cf:
                 android.graphics.Path r7 = r0.path
                 int r10 = r2.right
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1643,27 +1644,27 @@ public class Theme {
                 int r15 = r15 + r3
                 float r3 = (float) r15
                 r7.set(r10, r13, r12, r3)
-            L_0x0204:
+            L_0x0206:
                 android.graphics.Path r3 = r0.path
                 android.graphics.RectF r7 = r0.rect
                 r10 = 1132920832(0x43870000, float:270.0)
                 r12 = 0
                 r3.arcTo(r7, r10, r14, r12)
-            L_0x020e:
+            L_0x0210:
                 int r3 = r0.currentType
                 r7 = 1
-                if (r3 != r7) goto L_0x0267
+                if (r3 != r7) goto L_0x0269
                 r7 = 2
-                if (r3 == r7) goto L_0x0231
-                if (r21 != 0) goto L_0x0231
+                if (r3 == r7) goto L_0x0233
+                if (r21 != 0) goto L_0x0233
                 int r3 = r0.topY
                 int r6 = r2.bottom
                 int r6 = r6 + r3
                 int r6 = r6 - r5
                 int r7 = r0.currentBackgroundHeight
-                if (r6 >= r7) goto L_0x0223
-                goto L_0x0231
-            L_0x0223:
+                if (r6 >= r7) goto L_0x0225
+                goto L_0x0233
+            L_0x0225:
                 android.graphics.Path r5 = r0.path
                 int r2 = r2.right
                 int r2 = r2 - r4
@@ -1672,12 +1673,12 @@ public class Theme {
                 int r11 = r11 + r7
                 float r3 = (float) r11
                 r5.lineTo(r2, r3)
-                goto L_0x055f
-            L_0x0231:
+                goto L_0x0561
+            L_0x0233:
                 boolean r3 = r0.isBottomNear
-                if (r3 == 0) goto L_0x0236
+                if (r3 == 0) goto L_0x0238
                 r5 = r8
-            L_0x0236:
+            L_0x0238:
                 android.graphics.Path r3 = r0.path
                 int r6 = r2.right
                 int r6 = r6 - r4
@@ -1708,20 +1709,20 @@ public class Theme {
                 r4 = 0
                 r5 = 0
                 r2.arcTo(r3, r4, r14, r5)
-                goto L_0x055f
-            L_0x0267:
+                goto L_0x0561
+            L_0x0269:
                 r5 = 2
-                if (r3 == r5) goto L_0x0291
-                if (r21 != 0) goto L_0x0291
+                if (r3 == r5) goto L_0x0293
+                if (r21 != 0) goto L_0x0293
                 int r3 = r0.topY
                 int r5 = r2.bottom
                 int r3 = r3 + r5
                 int r5 = r6 * 2
                 int r3 = r3 - r5
                 int r5 = r0.currentBackgroundHeight
-                if (r3 >= r5) goto L_0x0279
-                goto L_0x0291
-            L_0x0279:
+                if (r3 >= r5) goto L_0x027b
+                goto L_0x0293
+            L_0x027b:
                 android.graphics.Path r3 = r0.path
                 int r2 = r2.right
                 r4 = 1090519040(0x41000000, float:8.0)
@@ -1734,8 +1735,8 @@ public class Theme {
                 int r11 = r11 + r4
                 float r4 = (float) r11
                 r3.lineTo(r2, r4)
-                goto L_0x055f
-            L_0x0291:
+                goto L_0x0561
+            L_0x0293:
                 android.graphics.Path r3 = r0.path
                 int r5 = r2.right
                 r7 = 1090519040(0x41000000, float:8.0)
@@ -1784,21 +1785,21 @@ public class Theme {
                 r5 = 1127481344(0x43340000, float:180.0)
                 r6 = 0
                 r2.arcTo(r3, r5, r4, r6)
-                goto L_0x055f
-            L_0x02ee:
+                goto L_0x0561
+            L_0x02f0:
                 int r3 = r0.currentType
                 r7 = -1028390912(0xffffffffc2b40000, float:-90.0)
                 r10 = 2
-                if (r3 == r10) goto L_0x032b
-                if (r21 != 0) goto L_0x032b
+                if (r3 == r10) goto L_0x032d
+                if (r21 != 0) goto L_0x032d
                 int r3 = r0.topY
                 int r10 = r2.bottom
                 int r3 = r3 + r10
                 int r3 = r3 - r5
                 int r10 = r0.currentBackgroundHeight
-                if (r3 >= r10) goto L_0x0302
-                goto L_0x032b
-            L_0x0302:
+                if (r3 >= r10) goto L_0x0304
+                goto L_0x032d
+            L_0x0304:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1821,11 +1822,11 @@ public class Theme {
                 int r12 = r12 + r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0384
-            L_0x032b:
+                goto L_0x0386
+            L_0x032d:
                 int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x0345
+                if (r3 != r10) goto L_0x0347
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1837,8 +1838,8 @@ public class Theme {
                 int r12 = r12 - r4
                 float r12 = (float) r12
                 r3.moveTo(r10, r12)
-                goto L_0x0356
-            L_0x0345:
+                goto L_0x0358
+            L_0x0347:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 int r12 = r0.dp(r15)
@@ -1848,7 +1849,7 @@ public class Theme {
                 int r12 = r12 - r4
                 float r12 = (float) r12
                 r3.moveTo(r10, r12)
-            L_0x0356:
+            L_0x0358:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.right
                 int r10 = r10 - r4
@@ -1877,17 +1878,17 @@ public class Theme {
                 android.graphics.RectF r10 = r0.rect
                 r12 = 0
                 r3.arcTo(r10, r14, r7, r12)
-            L_0x0384:
+            L_0x0386:
                 int r3 = r0.currentType
                 r10 = 2
-                if (r3 == r10) goto L_0x03df
-                if (r21 != 0) goto L_0x03df
+                if (r3 == r10) goto L_0x03e1
+                if (r21 != 0) goto L_0x03e1
                 int r3 = r0.topY
                 int r10 = r5 * 2
                 int r10 = r10 + r3
-                if (r10 < 0) goto L_0x0393
-                goto L_0x03df
-            L_0x0393:
+                if (r10 < 0) goto L_0x0395
+                goto L_0x03e1
+            L_0x0395:
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.right
                 int r12 = r12 - r4
@@ -1900,7 +1901,7 @@ public class Theme {
                 r10.lineTo(r12, r3)
                 int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x03c2
+                if (r3 != r10) goto L_0x03c4
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 int r10 = r10 + r4
@@ -1912,8 +1913,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0482
-            L_0x03c2:
+                goto L_0x0484
+            L_0x03c4:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.left
                 r12 = 1090519040(0x41000000, float:8.0)
@@ -1927,8 +1928,8 @@ public class Theme {
                 int r12 = r12 - r13
                 float r12 = (float) r12
                 r3.lineTo(r10, r12)
-                goto L_0x0482
-            L_0x03df:
+                goto L_0x0484
+            L_0x03e1:
                 android.graphics.Path r3 = r0.path
                 int r10 = r2.right
                 int r10 = r10 - r4
@@ -1959,15 +1960,15 @@ public class Theme {
                 r13 = 0
                 r3.arcTo(r10, r12, r7, r13)
                 boolean r3 = r0.isTopNear
-                if (r3 == 0) goto L_0x0413
+                if (r3 == 0) goto L_0x0415
                 r3 = r8
-                goto L_0x0414
-            L_0x0413:
+                goto L_0x0416
+            L_0x0415:
                 r3 = r5
-            L_0x0414:
+            L_0x0416:
                 int r10 = r0.currentType
                 r12 = 1
-                if (r10 != r12) goto L_0x0441
+                if (r10 != r12) goto L_0x0443
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.left
                 int r12 = r12 + r4
@@ -1993,8 +1994,8 @@ public class Theme {
                 int r14 = r14 + r3
                 float r3 = (float) r14
                 r10.set(r13, r15, r12, r3)
-                goto L_0x0478
-            L_0x0441:
+                goto L_0x047a
+            L_0x0443:
                 android.graphics.Path r10 = r0.path
                 int r12 = r2.left
                 r13 = 1090519040(0x41000000, float:8.0)
@@ -2026,27 +2027,27 @@ public class Theme {
                 int r15 = r15 + r3
                 float r3 = (float) r15
                 r10.set(r12, r14, r13, r3)
-            L_0x0478:
+            L_0x047a:
                 android.graphics.Path r3 = r0.path
                 android.graphics.RectF r10 = r0.rect
                 r12 = 1132920832(0x43870000, float:270.0)
                 r13 = 0
                 r3.arcTo(r10, r12, r7, r13)
-            L_0x0482:
+            L_0x0484:
                 int r3 = r0.currentType
                 r10 = 1
-                if (r3 != r10) goto L_0x04dc
+                if (r3 != r10) goto L_0x04de
                 r10 = 2
-                if (r3 == r10) goto L_0x04a5
-                if (r21 != 0) goto L_0x04a5
+                if (r3 == r10) goto L_0x04a7
+                if (r21 != 0) goto L_0x04a7
                 int r3 = r0.topY
                 int r6 = r2.bottom
                 int r6 = r6 + r3
                 int r6 = r6 - r5
                 int r10 = r0.currentBackgroundHeight
-                if (r6 >= r10) goto L_0x0497
-                goto L_0x04a5
-            L_0x0497:
+                if (r6 >= r10) goto L_0x0499
+                goto L_0x04a7
+            L_0x0499:
                 android.graphics.Path r5 = r0.path
                 int r2 = r2.left
                 int r2 = r2 + r4
@@ -2055,12 +2056,12 @@ public class Theme {
                 int r11 = r11 + r10
                 float r3 = (float) r11
                 r5.lineTo(r2, r3)
-                goto L_0x055f
-            L_0x04a5:
+                goto L_0x0561
+            L_0x04a7:
                 boolean r3 = r0.isBottomNear
-                if (r3 == 0) goto L_0x04aa
+                if (r3 == 0) goto L_0x04ac
                 r5 = r8
-            L_0x04aa:
+            L_0x04ac:
                 android.graphics.Path r3 = r0.path
                 int r6 = r2.left
                 int r6 = r6 + r4
@@ -2091,20 +2092,20 @@ public class Theme {
                 r4 = 1127481344(0x43340000, float:180.0)
                 r5 = 0
                 r2.arcTo(r3, r4, r7, r5)
-                goto L_0x055f
-            L_0x04dc:
+                goto L_0x0561
+            L_0x04de:
                 r5 = 2
-                if (r3 == r5) goto L_0x0505
-                if (r21 != 0) goto L_0x0505
+                if (r3 == r5) goto L_0x0507
+                if (r21 != 0) goto L_0x0507
                 int r3 = r0.topY
                 int r5 = r2.bottom
                 int r3 = r3 + r5
                 int r5 = r6 * 2
                 int r3 = r3 - r5
                 int r5 = r0.currentBackgroundHeight
-                if (r3 >= r5) goto L_0x04ee
-                goto L_0x0505
-            L_0x04ee:
+                if (r3 >= r5) goto L_0x04f0
+                goto L_0x0507
+            L_0x04f0:
                 android.graphics.Path r3 = r0.path
                 int r2 = r2.left
                 r4 = 1090519040(0x41000000, float:8.0)
@@ -2117,8 +2118,8 @@ public class Theme {
                 int r11 = r11 + r4
                 float r4 = (float) r11
                 r3.lineTo(r2, r4)
-                goto L_0x055f
-            L_0x0505:
+                goto L_0x0561
+            L_0x0507:
                 android.graphics.Path r3 = r0.path
                 int r5 = r2.left
                 r7 = 1090519040(0x41000000, float:8.0)
@@ -2167,15 +2168,15 @@ public class Theme {
                 r5 = 0
                 r6 = 0
                 r2.arcTo(r3, r5, r4, r6)
-            L_0x055f:
+            L_0x0561:
                 android.graphics.Path r2 = r0.path
                 r2.close()
                 android.graphics.Path r2 = r0.path
                 r1.drawPath(r2, r9)
                 android.graphics.LinearGradient r2 = r0.gradientShader
-                if (r2 == 0) goto L_0x0583
+                if (r2 == 0) goto L_0x0585
                 boolean r2 = r0.isSelected
-                if (r2 == 0) goto L_0x0583
+                if (r2 == 0) goto L_0x0585
                 android.graphics.Paint r2 = r0.selectedPaint
                 java.lang.String r3 = "chat_outBubbleGradientSelectedOverlay"
                 int r3 = r0.getColor(r3)
@@ -2183,7 +2184,7 @@ public class Theme {
                 android.graphics.Path r2 = r0.path
                 android.graphics.Paint r3 = r0.selectedPaint
                 r1.drawPath(r2, r3)
-            L_0x0583:
+            L_0x0585:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");

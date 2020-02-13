@@ -532,7 +532,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         str3 = "DebugMenuEnablePauseMusic";
                     }
                     charSequenceArr[11] = LocaleController.getString(str3, i4);
-                    if (!BuildVars.DEBUG_PRIVATE_VERSION || AndroidUtilities.isTablet()) {
+                    if (!BuildVars.DEBUG_VERSION || AndroidUtilities.isTablet()) {
                         str4 = null;
                     } else {
                         if (SharedConfig.smoothKeyboard) {
