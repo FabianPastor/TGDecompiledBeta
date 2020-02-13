@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -140,6 +141,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             /* access modifiers changed from: protected */
             public void extendActionMode(ActionMode actionMode, Menu menu) {
                 PhotoViewerCaptionEnterView.this.extendActionMode(actionMode, menu);
+            }
+
+            public boolean requestRectangleOnScreen(Rect rect) {
+                rect.bottom += AndroidUtilities.dp(1000.0f);
+                return super.requestRectangleOnScreen(rect);
             }
         };
         this.messageEditText.setWindowView(this.windowView);

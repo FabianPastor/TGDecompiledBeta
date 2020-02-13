@@ -83,7 +83,7 @@ public class ContextLinkCell extends View implements DownloadController.FileDown
         setFocusable(true);
     }
 
-    /* JADX WARNING: type inference failed for: r7v2, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r7v2, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r11v35, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r11v38, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r7v5 */

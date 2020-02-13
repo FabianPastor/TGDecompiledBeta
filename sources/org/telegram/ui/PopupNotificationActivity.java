@@ -155,7 +155,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.statusDrawables[2] = new SendingFileDrawable();
         this.statusDrawables[3] = new PlayingGameDrawable();
         this.statusDrawables[4] = new RoundStatusDrawable();
-        AnonymousClass1 r2 = new SizeNotifierFrameLayout(this) {
+        AnonymousClass1 r2 = new SizeNotifierFrameLayout(this, false) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 View.MeasureSpec.getMode(i);
@@ -623,7 +623,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (r0 != 0) goto L_0x0018
             float r14 = r14.getX()
             r13.moveStartX = r14
-            goto L_0x01c4
+            goto L_0x01c5
         L_0x0018:
             r0 = -1082130432(0xffffffffbvar_, float:-1.0)
             r2 = 2
@@ -657,7 +657,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r5 = 0
         L_0x0057:
             boolean r0 = r13.startedMoving
-            if (r0 == 0) goto L_0x01c4
+            if (r0 == 0) goto L_0x01c5
             android.view.ViewGroup r0 = r13.leftView
             if (r0 != 0) goto L_0x0062
             if (r5 <= 0) goto L_0x0062
@@ -675,19 +675,19 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r0.addMovement(r14)
         L_0x0071:
             r13.applyViewsLayoutParams(r1)
-            goto L_0x01c4
+            goto L_0x01c5
         L_0x0076:
             r4 = 3
             if (r14 == 0) goto L_0x0085
             int r5 = r14.getAction()
             if (r5 == r3) goto L_0x0085
             int r5 = r14.getAction()
-            if (r5 != r4) goto L_0x01c4
+            if (r5 != r4) goto L_0x01c5
         L_0x0085:
             r5 = 0
-            if (r14 == 0) goto L_0x01b4
+            if (r14 == 0) goto L_0x01b5
             boolean r6 = r13.startedMoving
-            if (r6 == 0) goto L_0x01b4
+            if (r6 == 0) goto L_0x01b5
             float r14 = r14.getX()
             float r6 = r13.moveStartX
             float r14 = r14 - r6
@@ -789,7 +789,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r14 = 0
         L_0x0133:
             int r7 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
-            if (r7 == 0) goto L_0x01b7
+            if (r7 == 0) goto L_0x01b8
             float r6 = (float) r6
             float r6 = r14 / r6
             float r6 = java.lang.Math.abs(r6)
@@ -807,30 +807,30 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9)
             r7.add(r8)
             android.view.ViewGroup r8 = r13.centerButtonsView
-            if (r8 == 0) goto L_0x0170
+            if (r8 == 0) goto L_0x0171
             float[] r9 = new float[r3]
             float r11 = r8.getTranslationX()
             float r11 = r11 + r14
             r9[r1] = r11
             android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9)
             r7.add(r8)
-        L_0x0170:
-            if (r2 == 0) goto L_0x0182
+        L_0x0171:
+            if (r2 == 0) goto L_0x0183
             float[] r8 = new float[r3]
             float r9 = r2.getTranslationX()
             float r9 = r9 + r14
             r8[r1] = r9
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r8)
             r7.add(r2)
-        L_0x0182:
-            if (r4 == 0) goto L_0x0194
+        L_0x0183:
+            if (r4 == 0) goto L_0x0195
             float[] r2 = new float[r3]
             float r8 = r4.getTranslationX()
             float r8 = r8 + r14
             r2[r1] = r8
             android.animation.ObjectAnimator r14 = android.animation.ObjectAnimator.ofFloat(r4, r10, r2)
             r7.add(r14)
-        L_0x0194:
+        L_0x0195:
             android.animation.AnimatorSet r14 = new android.animation.AnimatorSet
             r14.<init>()
             r14.playTogether(r7)
@@ -843,18 +843,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r13.animationInProgress = r3
             long r2 = java.lang.System.currentTimeMillis()
             r13.animationStartTime = r2
-            goto L_0x01b7
-        L_0x01b4:
+            goto L_0x01b8
+        L_0x01b5:
             r13.applyViewsLayoutParams(r1)
-        L_0x01b7:
+        L_0x01b8:
             android.view.VelocityTracker r14 = r13.velocityTracker
-            if (r14 == 0) goto L_0x01c0
+            if (r14 == 0) goto L_0x01c1
             r14.recycle()
             r13.velocityTracker = r5
-        L_0x01c0:
+        L_0x01c1:
             r13.startedMoving = r1
             r13.moveStartX = r0
-        L_0x01c4:
+        L_0x01c5:
             boolean r14 = r13.startedMoving
             return r14
         */
@@ -1202,7 +1202,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r11 = r16
             r4 = 8
             r13 = r6
-            r7.setImage(r8, r9, r10, r11, r12, r13)
+            r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (org.telegram.messenger.ImageLocation) r10, (java.lang.String) r11, (int) r12, (java.lang.Object) r13)
         L_0x0166:
             r7 = 1
             goto L_0x016b

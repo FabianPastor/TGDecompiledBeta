@@ -286,14 +286,14 @@ public class BiometricPromtHelper {
             goto L_0x003a
         L_0x0012:
             r0 = 2
-            r2 = 2131165381(0x7var_c5, float:1.7944978E38)
+            r2 = 2131165383(0x7var_c7, float:1.7944982E38)
             if (r7 != r0) goto L_0x0019
             goto L_0x002f
         L_0x0019:
             r3 = 1
             if (r6 != r0) goto L_0x0022
             if (r7 != r3) goto L_0x0022
-            r2 = 2131165380(0x7var_c4, float:1.7944975E38)
+            r2 = 2131165382(0x7var_c6, float:1.794498E38)
             goto L_0x002f
         L_0x0022:
             r4 = 4

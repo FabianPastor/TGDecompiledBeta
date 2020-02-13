@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import java.io.File;
@@ -36,6 +37,10 @@ public class PhotoCropActivity extends BaseFragment {
 
     public interface PhotoEditActivityDelegate {
         void didFinishEdit(Bitmap bitmap);
+    }
+
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return false;
     }
 
     private class PhotoCropView extends FrameLayout {
@@ -999,7 +1004,6 @@ public class PhotoCropActivity extends BaseFragment {
 
     public boolean onFragmentCreate() {
         int i;
-        this.swipeBackEnabled = false;
         if (this.imageToCrop == null) {
             String string = getArguments().getString("photoPath");
             Uri uri = (Uri) getArguments().getParcelable("photoUri");

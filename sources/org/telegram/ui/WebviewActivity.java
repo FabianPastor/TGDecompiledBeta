@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.CookieManager;
@@ -84,6 +85,10 @@ public class WebviewActivity extends BaseFragment {
         }
     };
     private WebView webView;
+
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return false;
+    }
 
     private class TelegramWebviewProxy {
         private TelegramWebviewProxy() {
@@ -178,7 +183,6 @@ public class WebviewActivity extends BaseFragment {
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public View createView(Context context) {
-        this.swipeBackEnabled = false;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {

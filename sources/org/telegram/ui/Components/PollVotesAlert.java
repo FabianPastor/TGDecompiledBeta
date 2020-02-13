@@ -958,7 +958,7 @@ public class PollVotesAlert extends BottomSheet {
         if (chatActivity2 != null && chatActivity2.getParentActivity() != null) {
             ArrayList<Integer> arrayList = this.queries;
             if (arrayList == null || arrayList.isEmpty()) {
-                boolean z = false;
+                int i2 = 0;
                 if (view instanceof TextCell) {
                     int sectionForPosition = this.listAdapter.getSectionForPosition(i) - 1;
                     int positionInSectionForPosition = this.listAdapter.getPositionInSectionForPosition(i) - 1;
@@ -1005,9 +1005,9 @@ public class PollVotesAlert extends BottomSheet {
                     dismiss();
                     ProfileActivity profileActivity = new ProfileActivity(bundle);
                     if (currentUser != null && currentUser.id == userCell.currentUser.id) {
-                        z = true;
+                        i2 = 1;
                     }
-                    profileActivity.setPlayProfileAnimation(z);
+                    profileActivity.setPlayProfileAnimation(i2);
                     chatActivity2.presentFragment(profileActivity);
                 }
             }

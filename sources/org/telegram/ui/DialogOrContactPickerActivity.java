@@ -60,6 +60,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public ActionBarMenuItem searchItem;
     /* access modifiers changed from: private */
+    public boolean swipeBackEnabled = true;
+    /* access modifiers changed from: private */
     public AnimatorSet tabsAnimation;
     /* access modifiers changed from: private */
     public boolean tabsAnimationInProgress;
@@ -174,6 +176,10 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         this.scrollSlidingTextTabStrip.setUseSameWidth(true);
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate() {
+            public /* synthetic */ void onSamePageSelected() {
+                ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate.CC.$default$onSamePageSelected(this);
+            }
+
             public void onPageSelected(int i, boolean z) {
                 if (DialogOrContactPickerActivity.this.viewPages[0].selectedType != i) {
                     DialogOrContactPickerActivity dialogOrContactPickerActivity = DialogOrContactPickerActivity.this;
@@ -640,6 +646,10 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         if (contactsActivity2 != null) {
             contactsActivity2.onPause();
         }
+    }
+
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return this.swipeBackEnabled;
     }
 
     public void onFragmentDestroy() {

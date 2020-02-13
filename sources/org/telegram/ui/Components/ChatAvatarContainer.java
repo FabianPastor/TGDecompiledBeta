@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,8 +22,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.MediaActivity;
-import org.telegram.ui.ProfileActivity;
+import org.telegram.ui.Components.SharedMediaLayout;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -37,6 +35,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private boolean occupyStatusBar = true;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
+    private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     private SimpleTextView subtitleTextView;
     private ImageView timeItem;
@@ -46,9 +45,20 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z) {
         super(context);
         this.parentFragment = chatActivity;
+        if (this.parentFragment != null) {
+            this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(chatActivity);
+        }
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
+        ChatActivity chatActivity2 = this.parentFragment;
+        if (chatActivity2 != null && !chatActivity2.isInScheduleMode()) {
+            this.avatarImageView.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChatAvatarContainer.this.lambda$new$0$ChatAvatarContainer(view);
+                }
+            });
+        }
         this.titleTextView = new SimpleTextView(context);
         this.titleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
         this.titleTextView.setTextSize(18);
@@ -73,16 +83,16 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             addView(this.timeItem);
             this.timeItem.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ChatAvatarContainer.this.lambda$new$0$ChatAvatarContainer(view);
+                    ChatAvatarContainer.this.lambda$new$1$ChatAvatarContainer(view);
                 }
             });
             this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
         }
-        ChatActivity chatActivity2 = this.parentFragment;
-        if (chatActivity2 != null && !chatActivity2.isInScheduleMode()) {
+        ChatActivity chatActivity3 = this.parentFragment;
+        if (chatActivity3 != null && !chatActivity3.isInScheduleMode()) {
             setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ChatAvatarContainer.this.lambda$new$1$ChatAvatarContainer(view);
+                    ChatAvatarContainer.this.lambda$new$2$ChatAvatarContainer(view);
                 }
             });
             TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
@@ -105,38 +115,125 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public /* synthetic */ void lambda$new$0$ChatAvatarContainer(View view) {
-        this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+        openProfile(true);
     }
 
     public /* synthetic */ void lambda$new$1$ChatAvatarContainer(View view) {
-        TLRPC.User currentUser = this.parentFragment.getCurrentUser();
-        TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
-        if (currentUser != null) {
-            Bundle bundle = new Bundle();
-            if (UserObject.isUserSelf(currentUser)) {
-                bundle.putLong("dialog_id", this.parentFragment.getDialogId());
-                MediaActivity mediaActivity = new MediaActivity(bundle, new int[]{-1, -1, -1, -1, -1});
-                mediaActivity.setChatInfo(this.parentFragment.getCurrentChatInfo());
-                this.parentFragment.presentFragment(mediaActivity);
-                return;
-            }
-            bundle.putInt("user_id", currentUser.id);
-            bundle.putBoolean("reportSpam", this.parentFragment.hasReportSpam());
-            if (this.timeItem != null) {
-                bundle.putLong("dialog_id", this.parentFragment.getDialogId());
-            }
-            ProfileActivity profileActivity = new ProfileActivity(bundle);
-            profileActivity.setUserInfo(this.parentFragment.getCurrentUserInfo());
-            profileActivity.setPlayProfileAnimation(true);
-            this.parentFragment.presentFragment(profileActivity);
-        } else if (currentChat != null) {
-            Bundle bundle2 = new Bundle();
-            bundle2.putInt("chat_id", currentChat.id);
-            ProfileActivity profileActivity2 = new ProfileActivity(bundle2);
-            profileActivity2.setChatInfo(this.parentFragment.getCurrentChatInfo());
-            profileActivity2.setPlayProfileAnimation(true);
-            this.parentFragment.presentFragment(profileActivity2);
-        }
+        this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+    }
+
+    public /* synthetic */ void lambda$new$2$ChatAvatarContainer(View view) {
+        openProfile(false);
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x001b, code lost:
+        if (r7.avatarImageView.getImageReceiver().hasNotThumb() != false) goto L_0x001e;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void openProfile(boolean r8) {
+        /*
+            r7 = this;
+            r0 = 0
+            if (r8 == 0) goto L_0x001e
+            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r1 != 0) goto L_0x001d
+            android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r2 = r1.x
+            int r1 = r1.y
+            if (r2 > r1) goto L_0x001d
+            org.telegram.ui.Components.BackupImageView r1 = r7.avatarImageView
+            org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
+            boolean r1 = r1.hasNotThumb()
+            if (r1 != 0) goto L_0x001e
+        L_0x001d:
+            r8 = 0
+        L_0x001e:
+            org.telegram.ui.ChatActivity r1 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
+            org.telegram.ui.ChatActivity r2 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$Chat r2 = r2.getCurrentChat()
+            r3 = 2
+            r4 = 1
+            if (r1 == 0) goto L_0x00a9
+            android.os.Bundle r2 = new android.os.Bundle
+            r2.<init>()
+            boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
+            java.lang.String r6 = "dialog_id"
+            if (r5 == 0) goto L_0x006c
+            org.telegram.ui.ChatActivity r8 = r7.parentFragment
+            long r3 = r8.getDialogId()
+            r2.putLong(r6, r3)
+            r8 = 5
+            int[] r8 = new int[r8]
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
+            int[] r1 = r1.getLastMediaCount()
+            int r3 = r8.length
+            java.lang.System.arraycopy(r1, r0, r8, r0, r3)
+            org.telegram.ui.MediaActivity r0 = new org.telegram.ui.MediaActivity
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r1 = r1.getSharedMediaData()
+            r3 = -1
+            r0.<init>(r2, r8, r1, r3)
+            org.telegram.ui.ChatActivity r8 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$ChatFull r8 = r8.getCurrentChatInfo()
+            r0.setChatInfo(r8)
+            org.telegram.ui.ChatActivity r8 = r7.parentFragment
+            r8.presentFragment(r0)
+            goto L_0x00d3
+        L_0x006c:
+            int r0 = r1.id
+            java.lang.String r1 = "user_id"
+            r2.putInt(r1, r0)
+            org.telegram.ui.ChatActivity r0 = r7.parentFragment
+            boolean r0 = r0.hasReportSpam()
+            java.lang.String r1 = "reportSpam"
+            r2.putBoolean(r1, r0)
+            android.widget.ImageView r0 = r7.timeItem
+            if (r0 == 0) goto L_0x008c
+            org.telegram.ui.ChatActivity r0 = r7.parentFragment
+            long r0 = r0.getDialogId()
+            r2.putLong(r6, r0)
+        L_0x008c:
+            org.telegram.ui.ProfileActivity r0 = new org.telegram.ui.ProfileActivity
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
+            r0.<init>(r2, r1)
+            org.telegram.ui.ChatActivity r1 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$UserFull r1 = r1.getCurrentUserInfo()
+            r0.setUserInfo(r1)
+            if (r8 == 0) goto L_0x009f
+            goto L_0x00a0
+        L_0x009f:
+            r3 = 1
+        L_0x00a0:
+            r0.setPlayProfileAnimation(r3)
+            org.telegram.ui.ChatActivity r8 = r7.parentFragment
+            r8.presentFragment(r0)
+            goto L_0x00d3
+        L_0x00a9:
+            if (r2 == 0) goto L_0x00d3
+            android.os.Bundle r0 = new android.os.Bundle
+            r0.<init>()
+            int r1 = r2.id
+            java.lang.String r2 = "chat_id"
+            r0.putInt(r2, r1)
+            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r2 = r7.sharedMediaPreloader
+            r1.<init>(r0, r2)
+            org.telegram.ui.ChatActivity r0 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r0.getCurrentChatInfo()
+            r1.setChatInfo(r0)
+            if (r8 == 0) goto L_0x00ca
+            goto L_0x00cb
+        L_0x00ca:
+            r3 = 1
+        L_0x00cb:
+            r1.setPlayProfileAnimation(r3)
+            org.telegram.ui.ChatActivity r8 = r7.parentFragment
+            r8.presentFragment(r1)
+        L_0x00d3:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAvatarContainer.openProfile(boolean):void");
     }
 
     public void setOccupyStatusBar(boolean z) {
@@ -242,6 +339,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public SimpleTextView getSubtitleTextView() {
         return this.subtitleTextView;
+    }
+
+    public void onDestroy() {
+        SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader2 = this.sharedMediaPreloader;
+        if (sharedMediaPreloader2 != null) {
+            sharedMediaPreloader2.onDestroy(this.parentFragment);
+        }
     }
 
     private void setTypingAnimation(boolean z) {

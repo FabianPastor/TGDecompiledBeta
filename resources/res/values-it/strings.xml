@@ -1316,7 +1316,6 @@
     <string name="General">Generali</string>
     <string name="GettingLinkInfo">Recupero le info del link...</string>
     <string name="GifCaption">Didascalia GIF</string>
-    <string name="GifsTab">GIF</string>
     <string name="GlobalAttachGifRestricted">Le GIF non sono permesse in questo gruppo.</string>
     <string name="GlobalAttachInlineRestricted">I bot inline non sono permessi in questo gruppo.</string>
     <string name="GlobalAttachMediaRestricted">I media non sono permessi in questo gruppo.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">%1$d ore</string>
     <string name="Hours_zero">%1$d ore</string>
     <string name="Hybrid">Ibrido</string>
-    <string name="ImagesTab">IMMAGINI</string>
     <string name="ImportContacts">Importa contatti</string>
     <string name="InAppNotifications">Notifiche in-app</string>
     <string name="InAppPreview">Anteprima in-app</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">Gruppo pubblico</string>
     <string name="MegaPublicInfo">I gruppi pubblici possono essere trovati nella ricerca, la cronologia è disponibile per tutti e chiunque può unirsi.</string>
     <string name="MegaUsernameHelp">Se imposti un link permanente, le altre persone potranno trovare il tuo gruppo e unirsi.\10\10Puoi usare a-z, 0-9 e underscore.\10La lunghezza minima è 5 caratteri.</string>
-    <string name="MembersCount">%1$d di %2$d</string>
     <string name="MembersCountZero">fino a %1$s</string>
     <string name="Members_few">%1$d membri</string>
     <string name="Members_many">%1$d membri</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">Avvia gruppo</string>
     <string name="NearbyVenue">O scegli un luogo</string>
     <string name="NetworkUsage">Utilizzo dati</string>
-    <string name="NetworkUsageMobile">CELLULARE</string>
-    <string name="NetworkUsageRoaming">ROAMING</string>
     <string name="NetworkUsageSince">Utilizzo rete da %1$s</string>
-    <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Non consentire mai</string>
     <string name="NeverShareWith">Non condividere con</string>
     <string name="NeverShareWithTitle">Non condividere</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">Attiva</string>
     <string name="PeopleNearbyGpsInfo">Aggiungi rapidamente persone vicine che stanno guardando questa sezione e scopri chat di gruppo locali.\10\10Per favore attiva i servizi di localizzazione per abilitare questa funzione.</string>
     <string name="PeopleNearbyHeader">Persone vicine</string>
-    <string name="PeopleNearbyInfo">Chiedi al tuo amico vicino di aprire questa pagina per scambiare i numeri di telefono.</string>
     <string name="PermissionContacts">Per farti connettere con i tuoi amici su tutti i tuoi dispositivi, i tuoi contatti verranno sincronizzati di continuo con i server cloud fortemente criptati di Telegram.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram deve accedere allo spostamento su altre app per riprodurre i video in modalità PiP.</string>
     <string name="PermissionNoAudio">Telegram deve accedere al microfono per poter inviare messaggi vocali.</string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">File audio</string>
     <string name="SharedContent">Contenuto condiviso</string>
     <string name="SharedContentTitle">Contenuto condiviso</string>
-    <string name="SharedFilesTab">FILE</string>
     <string name="SharedLinks">Link</string>
-    <string name="SharedLinksTab">LINK</string>
     <string name="SharedMedia">Media condivisi</string>
-    <string name="SharedMediaTab">MEDIA</string>
-    <string name="SharedMusicTab">AUDIO</string>
     <string name="SharedPhotosAndVideos">Foto e video</string>
     <string name="SharedPlace">Luogo</string>
-    <string name="SharedVoiceTab">MESSAGGI VOCALI</string>
     <string name="SharingLiveLocationTitle">Stai condividendo la tua posizione attuale in %1$s</string>
     <string name="SharingYouAndOtherName">Tu e %1$s</string>
     <string name="Sharpen">Nitidezza</string>

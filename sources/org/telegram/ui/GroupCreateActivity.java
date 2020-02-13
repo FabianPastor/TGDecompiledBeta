@@ -1067,7 +1067,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             } else if (this.selectedContacts.size() == 0) {
                 this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Members", this.maxCount)));
             } else {
-                this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", NUM, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));
+                String pluralString = LocaleController.getPluralString("MembersCountSelected", this.selectedContacts.size());
+                this.actionBar.setSubtitle(String.format(pluralString, new Object[]{Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)}));
             }
         }
         if (this.chatType == 2) {
@@ -1297,15 +1298,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.TextCell r11 = (org.telegram.ui.Cells.TextCell) r11
                 int r0 = r10.inviteViaLink
-                r2 = 2131165821(0x7var_d, float:1.794587E38)
+                r2 = 2131165833(0x7var_, float:1.7945894E38)
                 if (r0 != r12) goto L_0x0028
-                r12 = 2131624542(0x7f0e025e, float:1.8876267E38)
+                r12 = 2131624546(0x7f0e0262, float:1.8876275E38)
                 java.lang.String r0 = "ChannelInviteViaLink"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
                 goto L_0x018f
             L_0x0028:
-                r12 = 2131625370(0x7f0e059a, float:1.8877946E38)
+                r12 = 2131625388(0x7f0e05ac, float:1.8877983E38)
                 java.lang.String r0 = "InviteToGroupByLink"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setTextAndIcon((java.lang.String) r12, (int) r2, (boolean) r1)
@@ -1483,7 +1484,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.Cells.GroupCreateSectionCell r11 = (org.telegram.ui.Cells.GroupCreateSectionCell) r11
                 boolean r12 = r10.searching
                 if (r12 == 0) goto L_0x018f
-                r12 = 2131625265(0x7f0e0531, float:1.8877733E38)
+                r12 = 2131625282(0x7f0e0542, float:1.8877768E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)

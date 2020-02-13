@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
@@ -53,8 +54,6 @@ public class BaseFragment {
     protected boolean isPaused;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
-    /* access modifiers changed from: protected */
-    public boolean swipeBackEnabled;
     protected Dialog visibleDialog;
 
     public boolean canBeginSlide() {
@@ -75,6 +74,10 @@ public class BaseFragment {
 
     public ThemeDescription[] getThemeDescriptions() {
         return new ThemeDescription[0];
+    }
+
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return true;
     }
 
     public boolean needDelayOpenAnimation() {
@@ -112,6 +115,18 @@ public class BaseFragment {
     }
 
     /* access modifiers changed from: protected */
+    public void onPanTransitionEnd() {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPanTransitionStart() {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPanTranslationUpdate(int i) {
+    }
+
+    /* access modifiers changed from: protected */
     public void onRemoveFromParent() {
     }
 
@@ -134,7 +149,6 @@ public class BaseFragment {
 
     public BaseFragment() {
         this.currentAccount = UserConfig.selectedAccount;
-        this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
         this.isPaused = true;
         this.classGuid = ConnectionsManager.generateClassGuid();
@@ -142,7 +156,6 @@ public class BaseFragment {
 
     public BaseFragment(Bundle bundle) {
         this.currentAccount = UserConfig.selectedAccount;
-        this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
         this.isPaused = true;
         this.arguments = bundle;
@@ -253,7 +266,7 @@ public class BaseFragment {
             if (this.actionBar != null) {
                 ActionBarLayout actionBarLayout3 = this.parentLayout;
                 boolean z = (actionBarLayout3 == null || actionBarLayout3.getContext() == this.actionBar.getContext()) ? false : true;
-                if ((this.actionBar.getAddToContainer() || z) && (viewGroup = (ViewGroup) this.actionBar.getParent()) != null) {
+                if ((this.actionBar.shouldAddToContainer() || z) && (viewGroup = (ViewGroup) this.actionBar.getParent()) != null) {
                     try {
                         viewGroup.removeViewInLayout(this.actionBar);
                     } catch (Exception e2) {
@@ -493,6 +506,14 @@ public class BaseFragment {
         }
     }
 
+    public int getCurrentPanTranslationY() {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout != null) {
+            return actionBarLayout.getCurrentPanTranslationY();
+        }
+        return 0;
+    }
+
     public Dialog getVisibleDialog() {
         return this.visibleDialog;
     }
@@ -514,7 +535,6 @@ public class BaseFragment {
         return getAccountInstance().getContactsController();
     }
 
-    /* access modifiers changed from: protected */
     public MediaDataController getMediaDataController() {
         return getAccountInstance().getMediaDataController();
     }
@@ -538,12 +558,10 @@ public class BaseFragment {
         return getAccountInstance().getMessagesStorage();
     }
 
-    /* access modifiers changed from: protected */
     public SendMessagesHelper getSendMessagesHelper() {
         return getAccountInstance().getSendMessagesHelper();
     }
 
-    /* access modifiers changed from: protected */
     public FileLoader getFileLoader() {
         return getAccountInstance().getFileLoader();
     }

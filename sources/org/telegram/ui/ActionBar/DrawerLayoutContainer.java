@@ -26,9 +26,11 @@ import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SharedConfig;
 
 public class DrawerLayoutContainer extends FrameLayout {
     private static final int MIN_DRAWER_MARGIN = 64;
+    private AdjustPanLayoutHelper adjustPanLayoutHelper = new AdjustPanLayoutHelper(this);
     private boolean allowDrawContent = true;
     private boolean allowOpenDrawer;
     private Paint backgroundPaint = new Paint();
@@ -636,6 +638,12 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        this.adjustPanLayoutHelper.update();
+        super.dispatchDraw(canvas);
+    }
+
+    /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         int i;
         int measuredWidth;
@@ -690,10 +698,10 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         Object obj;
+        int systemWindowInsetBottom;
         if (Build.VERSION.SDK_INT >= 21 && (obj = this.lastInsets) != null) {
             WindowInsets windowInsets = (WindowInsets) obj;
-            int systemWindowInsetBottom = windowInsets.getSystemWindowInsetBottom();
-            if (systemWindowInsetBottom > 0) {
+            if (!SharedConfig.smoothKeyboard && (systemWindowInsetBottom = windowInsets.getSystemWindowInsetBottom()) > 0) {
                 this.backgroundPaint.setColor(this.behindKeyboardColor);
                 canvas.drawRect(0.0f, (float) (getMeasuredHeight() - systemWindowInsetBottom), (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
             }

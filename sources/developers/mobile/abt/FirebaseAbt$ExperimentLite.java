@@ -7,7 +7,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import java.io.IOException;
 
-/* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+/* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
 public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
     /* access modifiers changed from: private */
     public static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE = new FirebaseAbt$ExperimentLite();
@@ -17,7 +17,7 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
     private FirebaseAbt$ExperimentLite() {
     }
 
-    /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+    /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
     public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
         /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
             this();

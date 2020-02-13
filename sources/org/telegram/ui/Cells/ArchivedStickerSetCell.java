@@ -103,7 +103,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
             }
             ImageLocation imageLocation2 = imageLocation;
             if (z2 && MessageObject.isAnimatedStickerDocument(document, true)) {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "50_50", imageLocation2, (String) null, 0, stickerSetCovered);
+                this.imageView.setImage(ImageLocation.getForDocument(document), "50_50", imageLocation2, (String) null, 0, (Object) stickerSetCovered);
             } else if (imageLocation2 == null || imageLocation2.imageType != 1) {
                 this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) null, (Object) stickerSetCovered);
             } else {

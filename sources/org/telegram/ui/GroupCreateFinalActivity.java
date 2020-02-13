@@ -38,6 +38,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -245,7 +246,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         });
-        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
+        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
             private boolean ignoreLayout;
 
             /* access modifiers changed from: protected */
@@ -255,7 +256,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 setMeasuredDimension(size, size2);
                 int paddingTop = size2 - getPaddingTop();
                 measureChildWithMargins(GroupCreateFinalActivity.this.actionBar, i, 0, i2, 0);
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.ignoreLayout = true;
                     GroupCreateFinalActivity.this.editText.hideEmojiView();
                     this.ignoreLayout = false;
@@ -278,130 +279,135 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:25:0x0072  */
-            /* JADX WARNING: Removed duplicated region for block: B:32:0x008c  */
-            /* JADX WARNING: Removed duplicated region for block: B:40:0x00b3  */
-            /* JADX WARNING: Removed duplicated region for block: B:41:0x00bc  */
+            /* JADX WARNING: Removed duplicated region for block: B:29:0x0078  */
+            /* JADX WARNING: Removed duplicated region for block: B:36:0x0092  */
+            /* JADX WARNING: Removed duplicated region for block: B:44:0x00b9  */
+            /* JADX WARNING: Removed duplicated region for block: B:45:0x00c2  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
+            public void onLayout(boolean r11, int r12, int r13, int r14, int r15) {
                 /*
-                    r9 = this;
-                    int r10 = r9.getChildCount()
-                    int r0 = r9.getKeyboardHeight()
-                    r1 = 1101004800(0x41a00000, float:20.0)
-                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    r2 = 0
-                    if (r0 > r1) goto L_0x0026
-                    boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                    if (r0 != 0) goto L_0x0026
-                    boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r0 != 0) goto L_0x0026
-                    org.telegram.ui.GroupCreateFinalActivity r0 = org.telegram.ui.GroupCreateFinalActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r0 = r0.editText
-                    int r0 = r0.getEmojiPadding()
-                    goto L_0x0027
-                L_0x0026:
+                    r10 = this;
+                    int r11 = r10.getChildCount()
+                    boolean r0 = org.telegram.messenger.SharedConfig.smoothKeyboard
+                    r1 = 0
+                    if (r0 == 0) goto L_0x000b
                     r0 = 0
-                L_0x0027:
-                    r9.setBottomClip(r0)
-                L_0x002a:
-                    if (r2 >= r10) goto L_0x00d3
-                    android.view.View r1 = r9.getChildAt(r2)
-                    int r3 = r1.getVisibility()
-                    r4 = 8
-                    if (r3 != r4) goto L_0x003a
-                    goto L_0x00cf
-                L_0x003a:
-                    android.view.ViewGroup$LayoutParams r3 = r1.getLayoutParams()
-                    android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
-                    int r4 = r1.getMeasuredWidth()
-                    int r5 = r1.getMeasuredHeight()
-                    int r6 = r3.gravity
-                    r7 = -1
-                    if (r6 != r7) goto L_0x004f
-                    r6 = 51
-                L_0x004f:
-                    r7 = r6 & 7
-                    r6 = r6 & 112(0x70, float:1.57E-43)
-                    r7 = r7 & 7
-                    r8 = 1
-                    if (r7 == r8) goto L_0x0063
-                    r8 = 5
-                    if (r7 == r8) goto L_0x005e
-                    int r7 = r3.leftMargin
-                    goto L_0x006e
-                L_0x005e:
-                    int r7 = r13 - r4
-                    int r8 = r3.rightMargin
-                    goto L_0x006d
-                L_0x0063:
-                    int r7 = r13 - r11
-                    int r7 = r7 - r4
-                    int r7 = r7 / 2
-                    int r8 = r3.leftMargin
-                    int r7 = r7 + r8
-                    int r8 = r3.rightMargin
-                L_0x006d:
-                    int r7 = r7 - r8
-                L_0x006e:
-                    r8 = 16
-                    if (r6 == r8) goto L_0x008c
-                    r8 = 48
-                    if (r6 == r8) goto L_0x0084
-                    r8 = 80
-                    if (r6 == r8) goto L_0x007d
-                    int r3 = r3.topMargin
-                    goto L_0x0099
-                L_0x007d:
-                    int r6 = r14 - r0
-                    int r6 = r6 - r12
-                    int r6 = r6 - r5
-                    int r3 = r3.bottomMargin
-                    goto L_0x0097
-                L_0x0084:
-                    int r3 = r3.topMargin
-                    int r6 = r9.getPaddingTop()
-                    int r3 = r3 + r6
-                    goto L_0x0099
-                L_0x008c:
-                    int r6 = r14 - r0
-                    int r6 = r6 - r12
-                    int r6 = r6 - r5
-                    int r6 = r6 / 2
-                    int r8 = r3.topMargin
-                    int r6 = r6 + r8
-                    int r3 = r3.bottomMargin
-                L_0x0097:
-                    int r3 = r6 - r3
-                L_0x0099:
-                    org.telegram.ui.GroupCreateFinalActivity r6 = org.telegram.ui.GroupCreateFinalActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r6 = r6.editText
-                    if (r6 == 0) goto L_0x00ca
-                    org.telegram.ui.GroupCreateFinalActivity r6 = org.telegram.ui.GroupCreateFinalActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r6 = r6.editText
-                    boolean r6 = r6.isPopupView(r1)
-                    if (r6 == 0) goto L_0x00ca
-                    boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r3 == 0) goto L_0x00bc
-                    int r3 = r9.getMeasuredHeight()
-                    int r6 = r1.getMeasuredHeight()
-                    goto L_0x00c9
-                L_0x00bc:
-                    int r3 = r9.getMeasuredHeight()
-                    int r6 = r9.getKeyboardHeight()
-                    int r3 = r3 + r6
-                    int r6 = r1.getMeasuredHeight()
-                L_0x00c9:
-                    int r3 = r3 - r6
-                L_0x00ca:
+                    goto L_0x000f
+                L_0x000b:
+                    int r0 = r10.getKeyboardHeight()
+                L_0x000f:
+                    r2 = 1101004800(0x41a00000, float:20.0)
+                    int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                    if (r0 > r2) goto L_0x002c
+                    boolean r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                    if (r2 != 0) goto L_0x002c
+                    boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r2 != 0) goto L_0x002c
+                    org.telegram.ui.GroupCreateFinalActivity r2 = org.telegram.ui.GroupCreateFinalActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r2 = r2.editText
+                    int r2 = r2.getEmojiPadding()
+                    goto L_0x002d
+                L_0x002c:
+                    r2 = 0
+                L_0x002d:
+                    r10.setBottomClip(r2)
+                L_0x0030:
+                    if (r1 >= r11) goto L_0x00d5
+                    android.view.View r3 = r10.getChildAt(r1)
+                    int r4 = r3.getVisibility()
+                    r5 = 8
+                    if (r4 != r5) goto L_0x0040
+                    goto L_0x00d1
+                L_0x0040:
+                    android.view.ViewGroup$LayoutParams r4 = r3.getLayoutParams()
+                    android.widget.FrameLayout$LayoutParams r4 = (android.widget.FrameLayout.LayoutParams) r4
+                    int r5 = r3.getMeasuredWidth()
+                    int r6 = r3.getMeasuredHeight()
+                    int r7 = r4.gravity
+                    r8 = -1
+                    if (r7 != r8) goto L_0x0055
+                    r7 = 51
+                L_0x0055:
+                    r8 = r7 & 7
+                    r7 = r7 & 112(0x70, float:1.57E-43)
+                    r8 = r8 & 7
+                    r9 = 1
+                    if (r8 == r9) goto L_0x0069
+                    r9 = 5
+                    if (r8 == r9) goto L_0x0064
+                    int r8 = r4.leftMargin
+                    goto L_0x0074
+                L_0x0064:
+                    int r8 = r14 - r5
+                    int r9 = r4.rightMargin
+                    goto L_0x0073
+                L_0x0069:
+                    int r8 = r14 - r12
+                    int r8 = r8 - r5
+                    int r8 = r8 / 2
+                    int r9 = r4.leftMargin
+                    int r8 = r8 + r9
+                    int r9 = r4.rightMargin
+                L_0x0073:
+                    int r8 = r8 - r9
+                L_0x0074:
+                    r9 = 16
+                    if (r7 == r9) goto L_0x0092
+                    r9 = 48
+                    if (r7 == r9) goto L_0x008a
+                    r9 = 80
+                    if (r7 == r9) goto L_0x0083
+                    int r4 = r4.topMargin
+                    goto L_0x009f
+                L_0x0083:
+                    int r7 = r15 - r2
+                    int r7 = r7 - r13
+                    int r7 = r7 - r6
+                    int r4 = r4.bottomMargin
+                    goto L_0x009d
+                L_0x008a:
+                    int r4 = r4.topMargin
+                    int r7 = r10.getPaddingTop()
                     int r4 = r4 + r7
-                    int r5 = r5 + r3
-                    r1.layout(r7, r3, r4, r5)
-                L_0x00cf:
-                    int r2 = r2 + 1
-                    goto L_0x002a
-                L_0x00d3:
-                    r9.notifyHeightChanged()
+                    goto L_0x009f
+                L_0x0092:
+                    int r7 = r15 - r2
+                    int r7 = r7 - r13
+                    int r7 = r7 - r6
+                    int r7 = r7 / 2
+                    int r9 = r4.topMargin
+                    int r7 = r7 + r9
+                    int r4 = r4.bottomMargin
+                L_0x009d:
+                    int r4 = r7 - r4
+                L_0x009f:
+                    org.telegram.ui.GroupCreateFinalActivity r7 = org.telegram.ui.GroupCreateFinalActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r7 = r7.editText
+                    if (r7 == 0) goto L_0x00cc
+                    org.telegram.ui.GroupCreateFinalActivity r7 = org.telegram.ui.GroupCreateFinalActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r7 = r7.editText
+                    boolean r7 = r7.isPopupView(r3)
+                    if (r7 == 0) goto L_0x00cc
+                    boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r4 == 0) goto L_0x00c2
+                    int r4 = r10.getMeasuredHeight()
+                    int r7 = r3.getMeasuredHeight()
+                    goto L_0x00cb
+                L_0x00c2:
+                    int r4 = r10.getMeasuredHeight()
+                    int r4 = r4 + r0
+                    int r7 = r3.getMeasuredHeight()
+                L_0x00cb:
+                    int r4 = r4 - r7
+                L_0x00cc:
+                    int r5 = r5 + r8
+                    int r6 = r6 + r4
+                    r3.layout(r8, r4, r5, r6)
+                L_0x00d1:
+                    int r1 = r1 + 1
+                    goto L_0x0030
+                L_0x00d5:
+                    r10.notifyHeightChanged()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateFinalActivity.AnonymousClass2.onLayout(boolean, int, int, int, int):void");
@@ -930,7 +936,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165409(0x7var_e1, float:1.7945034E38)
+                r1 = 2131165411(0x7var_e3, float:1.7945038E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable

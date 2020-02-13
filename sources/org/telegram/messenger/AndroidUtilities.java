@@ -395,41 +395,63 @@ public class AndroidUtilities {
         return z ? documentMediaIcons[i] : documentIcons[i];
     }
 
-    public static int[] calcDrawableColor(Drawable drawable) {
-        int[] colorsList;
-        Bitmap createScaledBitmap;
-        Drawable drawable2 = drawable;
-        int[] iArr = new int[4];
-        int i = -16777216;
+    public static int calcBitmapColor(Bitmap bitmap) {
         try {
-            if (drawable2 instanceof BitmapDrawable) {
-                Bitmap bitmap = ((BitmapDrawable) drawable2).getBitmap();
-                if (!(bitmap == null || (createScaledBitmap = Bitmaps.createScaledBitmap(bitmap, 1, 1, true)) == null)) {
-                    i = createScaledBitmap.getPixel(0, 0);
-                    if (bitmap != createScaledBitmap) {
-                        createScaledBitmap.recycle();
-                    }
+            Bitmap createScaledBitmap = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
+            if (createScaledBitmap != null) {
+                int pixel = createScaledBitmap.getPixel(0, 0);
+                if (bitmap != createScaledBitmap) {
+                    createScaledBitmap.recycle();
                 }
-            } else if (drawable2 instanceof ColorDrawable) {
-                i = ((ColorDrawable) drawable2).getColor();
-            } else if ((drawable2 instanceof BackgroundGradientDrawable) && (colorsList = ((BackgroundGradientDrawable) drawable2).getColorsList()) != null) {
-                if (colorsList.length > 1) {
-                    i = getAverageColor(colorsList[0], colorsList[1]);
-                } else if (colorsList.length > 0) {
-                    i = colorsList[0];
-                }
+                return pixel;
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        double[] rgbToHsv = rgbToHsv((i >> 16) & 255, (i >> 8) & 255, i & 255);
-        rgbToHsv[1] = Math.min(1.0d, rgbToHsv[1] + 0.05d + ((1.0d - rgbToHsv[1]) * 0.1d));
-        int[] hsvToRgb = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.65d));
-        iArr[0] = Color.argb(102, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
-        iArr[1] = Color.argb(136, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
-        int[] hsvToRgb2 = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.72d));
-        iArr[2] = Color.argb(102, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
-        iArr[3] = Color.argb(136, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+        return 0;
+    }
+
+    public static int[] calcDrawableColor(Drawable drawable) {
+        int[] colorsList;
+        int i;
+        Drawable drawable2 = drawable;
+        int[] iArr = new int[4];
+        int i2 = -16777216;
+        try {
+            if (drawable2 instanceof BitmapDrawable) {
+                i = calcBitmapColor(((BitmapDrawable) drawable2).getBitmap());
+            } else if (drawable2 instanceof ColorDrawable) {
+                i = ((ColorDrawable) drawable2).getColor();
+            } else {
+                if ((drawable2 instanceof BackgroundGradientDrawable) && (colorsList = ((BackgroundGradientDrawable) drawable2).getColorsList()) != null) {
+                    if (colorsList.length > 1) {
+                        i = getAverageColor(colorsList[0], colorsList[1]);
+                    } else if (colorsList.length > 0) {
+                        i = colorsList[0];
+                    }
+                }
+                double[] rgbToHsv = rgbToHsv((i2 >> 16) & 255, (i2 >> 8) & 255, i2 & 255);
+                rgbToHsv[1] = Math.min(1.0d, rgbToHsv[1] + 0.05d + ((1.0d - rgbToHsv[1]) * 0.1d));
+                int[] hsvToRgb = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.65d));
+                iArr[0] = Color.argb(102, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
+                iArr[1] = Color.argb(136, hsvToRgb[0], hsvToRgb[1], hsvToRgb[2]);
+                int[] hsvToRgb2 = hsvToRgb(rgbToHsv[0], rgbToHsv[1], Math.max(0.0d, rgbToHsv[2] * 0.72d));
+                iArr[2] = Color.argb(102, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+                iArr[3] = Color.argb(136, hsvToRgb2[0], hsvToRgb2[1], hsvToRgb2[2]);
+                return iArr;
+            }
+            i2 = i;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        double[] rgbToHsv2 = rgbToHsv((i2 >> 16) & 255, (i2 >> 8) & 255, i2 & 255);
+        rgbToHsv2[1] = Math.min(1.0d, rgbToHsv2[1] + 0.05d + ((1.0d - rgbToHsv2[1]) * 0.1d));
+        int[] hsvToRgb3 = hsvToRgb(rgbToHsv2[0], rgbToHsv2[1], Math.max(0.0d, rgbToHsv2[2] * 0.65d));
+        iArr[0] = Color.argb(102, hsvToRgb3[0], hsvToRgb3[1], hsvToRgb3[2]);
+        iArr[1] = Color.argb(136, hsvToRgb3[0], hsvToRgb3[1], hsvToRgb3[2]);
+        int[] hsvToRgb22 = hsvToRgb(rgbToHsv2[0], rgbToHsv2[1], Math.max(0.0d, rgbToHsv2[2] * 0.72d));
+        iArr[2] = Color.argb(102, hsvToRgb22[0], hsvToRgb22[1], hsvToRgb22[2]);
+        iArr[3] = Color.argb(136, hsvToRgb22[0], hsvToRgb22[1], hsvToRgb22[2]);
         return iArr;
     }
 
@@ -518,7 +540,7 @@ public class AndroidUtilities {
     }
 
     public static void requestAdjustResize(Activity activity, int i) {
-        if (activity != null && !isTablet()) {
+        if (activity != null && !isTablet() && !SharedConfig.smoothKeyboard) {
             activity.getWindow().setSoftInputMode(16);
             adjustOwnerClassGuid = i;
         }
@@ -531,7 +553,7 @@ public class AndroidUtilities {
     }
 
     public static void removeAdjustResize(Activity activity, int i) {
-        if (activity != null && !isTablet() && adjustOwnerClassGuid == i) {
+        if (activity != null && !isTablet() && !SharedConfig.smoothKeyboard && adjustOwnerClassGuid == i) {
             activity.getWindow().setSoftInputMode(32);
         }
     }
@@ -1832,16 +1854,16 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x006f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0070, code lost:
         r10 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0070, code lost:
-        if (r0 != null) goto L_0x0072;
+    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0071, code lost:
+        if (r0 != null) goto L_0x0073;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:28:?, code lost:
         r0.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0075 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0076 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
         /*
@@ -1850,67 +1872,67 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0006
             return r1
         L_0x0006:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0076 }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0076 }
-            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0076 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0077 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0077 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0077 }
             r0 = 2
-            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0076 }
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "number"
             r8 = 0
-            r4[r8] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r8] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "date"
             r9 = 1
-            r4[r9] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r9] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r5 = "type IN (3,1,5)"
             r6 = 0
             java.lang.String r7 = "date DESC LIMIT 5"
-            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0076 }
-        L_0x0024:
-            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006d }
-            if (r2 == 0) goto L_0x0067
-            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006d }
-            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006d }
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006d }
-            if (r5 == 0) goto L_0x004a
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006d }
-            r5.<init>()     // Catch:{ all -> 0x006d }
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0077 }
+        L_0x0025:
+            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006e }
+            if (r2 == 0) goto L_0x0068
+            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006e }
+            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006e }
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006e }
+            if (r5 == 0) goto L_0x004b
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006e }
+            r5.<init>()     // Catch:{ all -> 0x006e }
             java.lang.String r6 = "number = "
-            r5.append(r6)     // Catch:{ all -> 0x006d }
-            r5.append(r2)     // Catch:{ all -> 0x006d }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006d }
-            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006d }
-        L_0x004a:
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006d }
+            r5.append(r6)     // Catch:{ all -> 0x006e }
+            r5.append(r2)     // Catch:{ all -> 0x006e }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006e }
+            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006e }
+        L_0x004b:
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006e }
             long r5 = r5 - r3
-            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006d }
+            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006e }
             r5 = 3600000(0x36ee80, double:1.7786363E-317)
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 < 0) goto L_0x005b
-            goto L_0x0024
-        L_0x005b:
-            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006d }
-            if (r3 == 0) goto L_0x0024
-            if (r0 == 0) goto L_0x0066
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-        L_0x0066:
-            return r2
+            if (r7 < 0) goto L_0x005c
+            goto L_0x0025
+        L_0x005c:
+            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006e }
+            if (r3 == 0) goto L_0x0025
+            if (r0 == 0) goto L_0x0067
+            r0.close()     // Catch:{ Exception -> 0x0077 }
         L_0x0067:
-            if (r0 == 0) goto L_0x007a
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-            goto L_0x007a
-        L_0x006d:
+            return r2
+        L_0x0068:
+            if (r0 == 0) goto L_0x007b
+            r0.close()     // Catch:{ Exception -> 0x0077 }
+            goto L_0x007b
+        L_0x006e:
             r10 = move-exception
-            throw r10     // Catch:{ all -> 0x006f }
-        L_0x006f:
+            throw r10     // Catch:{ all -> 0x0070 }
+        L_0x0070:
             r10 = move-exception
-            if (r0 == 0) goto L_0x0075
-            r0.close()     // Catch:{ all -> 0x0075 }
-        L_0x0075:
-            throw r10     // Catch:{ Exception -> 0x0076 }
+            if (r0 == 0) goto L_0x0076
+            r0.close()     // Catch:{ all -> 0x0076 }
         L_0x0076:
+            throw r10     // Catch:{ Exception -> 0x0077 }
+        L_0x0077:
             r10 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-        L_0x007a:
+        L_0x007b:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
@@ -2806,7 +2828,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x015c
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x015c
-            r7 = 2131625846(0x7f0e0776, float:1.8878911E38)
+            r7 = 2131625888(0x7f0e07a0, float:1.8878997E38)
             java.lang.String r8 = "OK"
             r9 = 2131624192(0x7f0e0100, float:1.8875557E38)
             java.lang.String r10 = "AppName"
@@ -2829,7 +2851,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625345(0x7f0e0581, float:1.8877895E38)
+            r1 = 2131625363(0x7f0e0593, float:1.8877932E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -2917,7 +2939,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625657(0x7f0e06b9, float:1.8878528E38)
+            r1 = 2131625699(0x7f0e06e3, float:1.8878613E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3032,13 +3054,13 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626180(0x7f0e08c4, float:1.8879589E38)
+            r0 = 2131626223(0x7f0e08ef, float:1.8879676E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624476(0x7f0e021c, float:1.8876133E38)
+            r9 = 2131624479(0x7f0e021f, float:1.8876139E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)

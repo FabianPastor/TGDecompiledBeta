@@ -1316,7 +1316,6 @@
     <string name="General">Allgemein</string>
     <string name="GettingLinkInfo">Lade Linkvorschau...</string>
     <string name="GifCaption">GIF Beschriftung</string>
-    <string name="GifsTab">GIFS</string>
     <string name="GlobalAttachGifRestricted">GIFs sind in dieser Gruppe nicht erlaubt.</string>
     <string name="GlobalAttachInlineRestricted">Inline-Bots sind in dieser Gruppe nicht erlaubt.</string>
     <string name="GlobalAttachMediaRestricted">Versand von Medien ist hier nicht erlaubt.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">%1$d Stunden</string>
     <string name="Hours_zero">%1$d Stunden</string>
     <string name="Hybrid">Hybrid</string>
-    <string name="ImagesTab">BILDER</string>
     <string name="ImportContacts">Kontakte importieren</string>
     <string name="InAppNotifications">In-App </string>
     <string name="InAppPreview">In-App-Vorschau</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">Öffentliche Gruppe</string>
     <string name="MegaPublicInfo">Öffentliche Gruppen kann jeder über die Suche finden, gesamter Chatverlauf ist für alle einsehbar und jeder kann der Gruppe beitreten.</string>
     <string name="MegaUsernameHelp">Mit einem dauerhaften Link können andere deine Gruppe finden und beitreten.\10\10Erlaubt sind a-z, 0-9 und Unterstriche.\10Die Mindestlänge beträgt 5 Zeichen.</string>
-    <string name="MembersCount">%1$d von %2$d ausgewählt</string>
     <string name="MembersCountZero">bis zu %1$s</string>
     <string name="Members_few">%1$d Mitglieder</string>
     <string name="Members_many">%1$d Mitglieder</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">Gruppe erstellen</string>
     <string name="NearbyVenue">Oder wähle einen Ort</string>
     <string name="NetworkUsage">Datenbenutzung</string>
-    <string name="NetworkUsageMobile">MOBIL</string>
-    <string name="NetworkUsageRoaming">ROAMING</string>
     <string name="NetworkUsageSince">Netzwerk-Nutzung seit %1$s</string>
-    <string name="NetworkUsageWiFi">WLAN</string>
     <string name="NeverAllow">Niemals erlauben</string>
     <string name="NeverShareWith">Niemals teilen mit</string>
     <string name="NeverShareWithTitle">Niemals teilen</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">Einschalten</string>
     <string name="PeopleNearbyGpsInfo">Füge schnell Leute aus der Nähe hinzu, \10die diesen Bereich ebenfalls ansehen,\10und entdecke lokale Gruppen-Chats.\10\10Bitte aktiviere die Standortdienste,\10um diese Funktion nutzen zu können.</string>
     <string name="PeopleNearbyHeader">Leute in der Nähe</string>
-    <string name="PeopleNearbyInfo">Bitte deinen Freund in der Nähe, diese Seite zu öffnen, um Nummern auszutauschen.</string>
     <string name="PermissionContacts">Damit du dich mit Freunden auf all deinen Geräten verbinden kannst, werden deine Kontakte durchgehend mit den stark verschlüsselten Cloud Servern von Telegram synchronisiert.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
     <string name="PermissionNoAudio">Telegram benötigt Zugriff auf dein Mikrofon, damit du Sprachnachrichten senden kannst. </string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">Audiodateien</string>
     <string name="SharedContent">Geteilte Inhalte</string>
     <string name="SharedContentTitle">Geteilte Inhalte</string>
-    <string name="SharedFilesTab">DATEIEN</string>
     <string name="SharedLinks">Links</string>
-    <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Geteilte Medien</string>
-    <string name="SharedMediaTab">MEDIEN</string>
-    <string name="SharedMusicTab">AUDIOS</string>
     <string name="SharedPhotosAndVideos">Bilder und Videos</string>
     <string name="SharedPlace">Ort</string>
-    <string name="SharedVoiceTab">SPRACHE</string>
     <string name="SharingLiveLocationTitle">Du teilst deinen Live-Standort mit %1$s</string>
     <string name="SharingYouAndOtherName">Du und %1$s</string>
     <string name="Sharpen">Schärfe</string>

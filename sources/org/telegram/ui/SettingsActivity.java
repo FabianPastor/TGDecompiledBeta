@@ -486,6 +486,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 int i2;
                 String str2;
                 int i3;
+                String str3;
+                int i4;
+                String str4;
+                String str5;
+                int i5;
                 if (i != SettingsActivity.this.versionRow) {
                     return false;
                 }
@@ -493,7 +498,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", NUM));
-                    CharSequence[] charSequenceArr = new CharSequence[11];
+                    CharSequence[] charSequenceArr = new CharSequence[13];
                     charSequenceArr[0] = LocaleController.getString("DebugMenuImportContacts", NUM);
                     charSequenceArr[1] = LocaleController.getString("DebugMenuReloadContacts", NUM);
                     charSequenceArr[2] = LocaleController.getString("DebugMenuResetContacts", NUM);
@@ -519,6 +524,27 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     charSequenceArr[8] = null;
                     charSequenceArr[9] = BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null;
                     charSequenceArr[10] = LocaleController.getString("DebugMenuReadAllDialogs", NUM);
+                    if (SharedConfig.pauseMusicOnRecord) {
+                        i4 = NUM;
+                        str3 = "DebugMenuDisablePauseMusic";
+                    } else {
+                        i4 = NUM;
+                        str3 = "DebugMenuEnablePauseMusic";
+                    }
+                    charSequenceArr[11] = LocaleController.getString(str3, i4);
+                    if (!BuildVars.DEBUG_PRIVATE_VERSION || AndroidUtilities.isTablet()) {
+                        str4 = null;
+                    } else {
+                        if (SharedConfig.smoothKeyboard) {
+                            i5 = NUM;
+                            str5 = "DebugMenuDisableSmoothKeyboard";
+                        } else {
+                            i5 = NUM;
+                            str5 = "DebugMenuEnableSmoothKeyboard";
+                        }
+                        str4 = LocaleController.getString(str5, i5);
+                    }
+                    charSequenceArr[12] = str4;
                     builder.setItems(charSequenceArr, new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             SettingsActivity.AnonymousClass7.this.lambda$onItemClick$0$SettingsActivity$7(dialogInterface, i);
@@ -565,6 +591,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     ((LaunchActivity) SettingsActivity.this.getParentActivity()).checkAppUpdate(true);
                 } else if (i == 10) {
                     MessagesStorage.getInstance(SettingsActivity.this.currentAccount).readAllDialogs(-1);
+                } else if (i == 11) {
+                    SharedConfig.togglePauseMusicOnRecord();
+                } else if (i == 12) {
+                    SharedConfig.toggleSmoothKeyboard();
+                    if (SharedConfig.smoothKeyboard && SettingsActivity.this.getParentActivity() != null) {
+                        SettingsActivity.this.getParentActivity().getWindow().setSoftInputMode(32);
+                    }
                 }
             }
         });

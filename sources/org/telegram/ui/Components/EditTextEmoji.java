@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
@@ -96,6 +97,11 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     FileLog.e((Throwable) e);
                     return false;
                 }
+            }
+
+            public boolean requestRectangleOnScreen(Rect rect) {
+                rect.bottom += AndroidUtilities.dp(1000.0f);
+                return super.requestRectangleOnScreen(rect);
             }
         };
         this.editText.setTextSize(1, 16.0f);

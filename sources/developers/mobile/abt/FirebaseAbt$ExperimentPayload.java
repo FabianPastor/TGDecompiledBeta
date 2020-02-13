@@ -8,7 +8,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import java.io.IOException;
 
-/* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+/* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
 public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
     /* access modifiers changed from: private */
     public static final FirebaseAbt$ExperimentPayload DEFAULT_INSTANCE = new FirebaseAbt$ExperimentPayload();
@@ -59,7 +59,7 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
         return (FirebaseAbt$ExperimentPayload) GeneratedMessageLite.parseFrom(DEFAULT_INSTANCE, bArr);
     }
 
-    /* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+    /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
     public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
         /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
             this();

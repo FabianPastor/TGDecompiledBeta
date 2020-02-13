@@ -1316,7 +1316,6 @@
     <string name="General">Algemeen</string>
     <string name="GettingLinkInfo">Link-preview ophalen...</string>
     <string name="GifCaption">GIF-Onderschrift</string>
-    <string name="GifsTab">GIF\'S</string>
     <string name="GlobalAttachGifRestricted">GIF\'s zijn niet toegestaan in deze groep</string>
     <string name="GlobalAttachInlineRestricted">Inline-bots zijn niet toegestaan in deze groep.</string>
     <string name="GlobalAttachMediaRestricted">Media sturen is niet toegestaan in deze groep.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">%1$d uur</string>
     <string name="Hours_zero">%1$d uur</string>
     <string name="Hybrid">Hybride</string>
-    <string name="ImagesTab">AFBEELDINGEN</string>
     <string name="ImportContacts">Importeer contacten</string>
     <string name="InAppNotifications">In-app meldingen</string>
     <string name="InAppPreview">In-App voorbeeld</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">Publieke groep</string>
     <string name="MegaPublicInfo">Publieke groepen zijn te vinden via de zoekfunctie, iedereen kan er lid van worden en de geschiedenis zien.</string>
     <string name="MegaUsernameHelp">Als je een permanente link instelt kunnen anderen je groep vinden en er lid van worden.\10\10Je kunt a-z, 0-9 en liggend streepje gebruiken.\10De minimale lengte is 5 karakters.</string>
-    <string name="MembersCount">%1$d van %2$d geselecteerd</string>
     <string name="MembersCountZero">tot aan %1$s</string>
     <string name="Members_few">%1$d leden</string>
     <string name="Members_many">%1$d leden</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">Groep starten</string>
     <string name="NearbyVenue">Of kies een plaats</string>
     <string name="NetworkUsage">Datagebruik</string>
-    <string name="NetworkUsageMobile">MOBIEL</string>
-    <string name="NetworkUsageRoaming">ROAMEN</string>
     <string name="NetworkUsageSince">Datagebruik sinds %1$s</string>
-    <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Nooit toestaan</string>
     <string name="NeverShareWith">Nooit delen met</string>
     <string name="NeverShareWithTitle">Nooit delen</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">Inschakelen</string>
     <string name="PeopleNearbyGpsInfo">Voeg snel mensen dichtbij toe die deze sectie open hebben en ontdek lokale groepschats.\10\10Sta locatietoegang toe om deze functie te gebruiken.</string>
     <string name="PeopleNearbyHeader">Mensen dichtbij</string>
-    <string name="PeopleNearbyInfo">Vraag je vriend die bij je is om deze pagina te openen en zo telefoonnummers uit te wisselen.</string>
     <string name="PermissionContacts">Om vanaf al je apparaten contact te kunnen leggen met je vrienden zullen je contacten continu worden gesynchroniseerd met onze zwaar versleutelde Cloud-servers.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in Picture-in-Picture-modus.</string>
     <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">Audiobestanden</string>
     <string name="SharedContent">Gedeelde inhoud</string>
     <string name="SharedContentTitle">Gedeelde content</string>
-    <string name="SharedFilesTab">BESTANDEN</string>
     <string name="SharedLinks">Links</string>
-    <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Gedeelde media</string>
-    <string name="SharedMediaTab">MEDIA</string>
-    <string name="SharedMusicTab">AUDIO</string>
     <string name="SharedPhotosAndVideos">Foto\'s en video\'s</string>
     <string name="SharedPlace">Plek</string>
-    <string name="SharedVoiceTab">SPRAAK</string>
     <string name="SharingLiveLocationTitle">Je deelt je live-locatie met %1$s</string>
     <string name="SharingYouAndOtherName">Jij en %1$s</string>
     <string name="Sharpen">Scherper</string>

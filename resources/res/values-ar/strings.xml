@@ -1316,7 +1316,6 @@
     <string name="General">عام</string>
     <string name="GettingLinkInfo">يتم جلب معلومات الرابط...</string>
     <string name="GifCaption">وصف الصورة المتحركة</string>
-    <string name="GifsTab">الصور المتحركة</string>
     <string name="GlobalAttachGifRestricted">لا يُسمحُ بإرسال الصور المتحركة في هذه المجموعة.</string>
     <string name="GlobalAttachInlineRestricted">لا يُسمحُ بإرسال محتوى استعلامي في هذه المجموعة.</string>
     <string name="GlobalAttachMediaRestricted">لا يُسمحُ بإرسال الوسائط في هذه المجموعة.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">ساعتان</string>
     <string name="Hours_zero">%1$d ساعة</string>
     <string name="Hybrid">مختلطة</string>
-    <string name="ImagesTab">الصور</string>
     <string name="ImportContacts">استيراد جهات الاتصال</string>
     <string name="InAppNotifications">إشعارات داخل التطبيق</string>
     <string name="InAppPreview">معاينة داخل التطبيق</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">مجموعة عامة</string>
     <string name="MegaPublicInfo">يمكن العثور على المجموعات العامة عبر البحث، سيكون محتوى المجموعة متاحًا للجميع، ويمكن لأي شخص الانضمام إليها.</string>
     <string name="MegaUsernameHelp">إذا قمت بتعيين رابط عام دائم للمجموعة فسيتمكن الآخرون من العثور عليها والانضمامِ إليها عبره.\10\10يمكنك استخدام الأحرف الإنجليزية والشَّرطاتِ السفلية.\10\10الحد الأدنى هو خمسُ خانات.</string>
-    <string name="MembersCount">تم اختيار %1$d من %2$d</string>
     <string name="MembersCountZero">حتى %1$s</string>
     <string name="Members_few">%1$d أعضاء</string>
     <string name="Members_many">%1$d عضوًا</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">إنشاء مجموعة</string>
     <string name="NearbyVenue">أو اختر مكانًا</string>
     <string name="NetworkUsage">استهلاك البيانات</string>
-    <string name="NetworkUsageMobile">الخلوية</string>
-    <string name="NetworkUsageRoaming">التجوال</string>
     <string name="NetworkUsageSince">إحصاءات الاستهلاك منذ %1$s</string>
-    <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">عدم السماح أبدًا</string>
     <string name="NeverShareWith">عدم المشاركة مع</string>
     <string name="NeverShareWithTitle">عدم المشاركة مع</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">تشغيل</string>
     <string name="PeopleNearbyGpsInfo">أضف الأشخاص القريبين الذين يستعرضون هذا القسم أيضًا واكتشف المجموعات المحلية بكل سهولة.\10\10قم بتشغيل خدمات الموقع لتفعيل هذه الميزة.</string>
     <string name="PeopleNearbyHeader">الأشخاص القريبون</string>
-    <string name="PeopleNearbyInfo">اطلب من أصدقائك فتح هذه الصفحة لتبادل أرقام الهواتف.</string>
     <string name="PermissionContacts">لكي تتمكن من التواصل مع أصدقائك عبر جميع أجهزتك، ستتم مزامنة جهات اتصالك باستمرار مع خوادم تيليجرام السحابية شديدة التشفير.</string>
     <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
     <string name="PermissionNoAudio">يحتاج تيليجرام إلى استخدام الميكروفون من أجل إرسال الرسائل الصوتية.</string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">الصوتيات</string>
     <string name="SharedContent">الوسائط المتبادلة</string>
     <string name="SharedContentTitle">الوسائط المتبادلة</string>
-    <string name="SharedFilesTab">ملفات</string>
     <string name="SharedLinks">الروابط</string>
-    <string name="SharedLinksTab">روابط</string>
     <string name="SharedMedia">الوسائط المتبادلة</string>
-    <string name="SharedMediaTab">وسائط</string>
-    <string name="SharedMusicTab">صوتيات</string>
     <string name="SharedPhotosAndVideos">الصور والمقاطع المرئية</string>
     <string name="SharedPlace">مكان</string>
-    <string name="SharedVoiceTab">تسجيلات</string>
     <string name="SharingLiveLocationTitle">تقوم بمشاركة موقعك الحي مع %1$s</string>
     <string name="SharingYouAndOtherName">أنت و%1$s</string>
     <string name="Sharpen">زيادة الحدة</string>

@@ -5,15 +5,14 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.AdjustPanFrameLayout;
 
-public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
-    /* access modifiers changed from: private */
-    public SizeNotifierFrameLayoutPhotoDelegate delegate;
-    /* access modifiers changed from: private */
-    public int keyboardHeight;
+public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
+    private SizeNotifierFrameLayoutPhotoDelegate delegate;
+    private int keyboardHeight;
     private Rect rect = new Rect();
+    private boolean useSmoothKeyboard;
     private WindowManager windowManager;
     private boolean withoutWindow;
 
@@ -21,8 +20,9 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
         void onSizeChanged(int i, boolean z);
     }
 
-    public SizeNotifierFrameLayoutPhoto(Context context) {
+    public SizeNotifierFrameLayoutPhoto(Context context, boolean z) {
         super(context);
+        this.useSmoothKeyboard = z;
     }
 
     public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate) {
@@ -40,37 +40,55 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     }
 
     public int getKeyboardHeight() {
+        int i;
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
-        int i = 0;
+        int i2 = 0;
         if (this.withoutWindow) {
             int height = rootView.getHeight();
             if (this.rect.top != 0) {
-                i = AndroidUtilities.statusBarHeight;
+                i2 = AndroidUtilities.statusBarHeight;
             }
-            int viewInset = (height - i) - AndroidUtilities.getViewInset(rootView);
+            int viewInset = (height - i2) - AndroidUtilities.getViewInset(rootView);
             Rect rect2 = this.rect;
             return viewInset - (rect2.bottom - rect2.top);
         }
-        int height2 = (AndroidUtilities.displaySize.y - this.rect.top) - (rootView.getHeight() - AndroidUtilities.getViewInset(rootView));
-        if (height2 <= Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.statusBarHeight)) {
+        int height2 = rootView.getHeight() - AndroidUtilities.getViewInset(rootView);
+        Rect rect3 = this.rect;
+        int i3 = rect3.top;
+        if (this.useSmoothKeyboard) {
+            i = Math.max(0, height2 - (rect3.bottom - i3));
+        } else {
+            i = (AndroidUtilities.displaySize.y - i3) - height2;
+        }
+        if (i <= Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.statusBarHeight)) {
             return 0;
         }
-        return height2;
+        return i;
     }
 
     public void notifyHeightChanged() {
         if (this.delegate != null) {
             this.keyboardHeight = getKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
-            final boolean z = point.x > point.y;
-            post(new Runnable() {
-                public void run() {
-                    if (SizeNotifierFrameLayoutPhoto.this.delegate != null) {
-                        SizeNotifierFrameLayoutPhoto.this.delegate.onSizeChanged(SizeNotifierFrameLayoutPhoto.this.keyboardHeight, z);
-                    }
+            post(new Runnable(point.x > point.y) {
+                private final /* synthetic */ boolean f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    SizeNotifierFrameLayoutPhoto.this.lambda$notifyHeightChanged$0$SizeNotifierFrameLayoutPhoto(this.f$1);
                 }
             });
+        }
+    }
+
+    public /* synthetic */ void lambda$notifyHeightChanged$0$SizeNotifierFrameLayoutPhoto(boolean z) {
+        SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate = this.delegate;
+        if (sizeNotifierFrameLayoutPhotoDelegate != null) {
+            sizeNotifierFrameLayoutPhotoDelegate.onSizeChanged(this.keyboardHeight, z);
         }
     }
 }

@@ -259,7 +259,7 @@ public class ActionBar extends FrameLayout {
         this.addToContainer = z;
     }
 
-    public boolean getAddToContainer() {
+    public boolean shouldAddToContainer() {
         return this.addToContainer;
     }
 

@@ -53,6 +53,8 @@ public class DataUsageActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public ScrollSlidingTextTabStrip scrollSlidingTextTabStrip;
     /* access modifiers changed from: private */
+    public boolean swipeBackEnabled = true;
+    /* access modifiers changed from: private */
     public AnimatorSet tabsAnimation;
     /* access modifiers changed from: private */
     public boolean tabsAnimationInProgress;
@@ -106,6 +108,10 @@ public class DataUsageActivity extends BaseFragment {
         this.scrollSlidingTextTabStrip.setUseSameWidth(true);
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate() {
+            public /* synthetic */ void onSamePageSelected() {
+                ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate.CC.$default$onSamePageSelected(this);
+            }
+
             public void onPageSelected(int i, boolean z) {
                 if (DataUsageActivity.this.viewPages[0].selectedType != i) {
                     DataUsageActivity dataUsageActivity = DataUsageActivity.this;
@@ -474,7 +480,7 @@ public class DataUsageActivity extends BaseFragment {
             r0.addView(r8, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i] = r8;
-            LinearLayoutManager access$2902 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
+            LinearLayoutManager access$2802 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -484,7 +490,7 @@ public class DataUsageActivity extends BaseFragment {
             this.viewPages[i].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
             this.viewPages[i].listView.setClipToPadding(false);
             this.viewPages[i].listView.setSectionsType(2);
-            this.viewPages[i].listView.setLayoutManager(access$2902);
+            this.viewPages[i].listView.setLayoutManager(access$2802);
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(recyclerListView) {
@@ -529,7 +535,7 @@ public class DataUsageActivity extends BaseFragment {
                 }
             });
             if (i == 0 && i2 != -1) {
-                access$2902.scrollToPositionWithOffset(i2, i3);
+                access$2802.scrollToPositionWithOffset(i2, i3);
             }
             if (i != 0) {
                 this.viewPages[i].setVisibility(8);
@@ -596,6 +602,10 @@ public class DataUsageActivity extends BaseFragment {
         }
     }
 
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return this.swipeBackEnabled;
+    }
+
     /* access modifiers changed from: private */
     public void setScrollY(float f) {
         this.actionBar.setTranslationY(f);
@@ -615,9 +625,9 @@ public class DataUsageActivity extends BaseFragment {
     private void updateTabs() {
         ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = this.scrollSlidingTextTabStrip;
         if (scrollSlidingTextTabStrip2 != null) {
-            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("NetworkUsageMobile", NUM));
-            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("NetworkUsageWiFi", NUM));
-            this.scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("NetworkUsageRoaming", NUM));
+            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("NetworkUsageMobileTab", NUM));
+            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("NetworkUsageWiFiTab", NUM));
+            this.scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("NetworkUsageRoamingTab", NUM));
             this.scrollSlidingTextTabStrip.setVisibility(0);
             this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
             int currentTabId = this.scrollSlidingTextTabStrip.getCurrentTabId();

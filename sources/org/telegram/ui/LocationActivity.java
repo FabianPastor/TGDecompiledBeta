@@ -222,6 +222,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return false;
+    }
+
     public class VenueLocation {
         public Marker marker;
         public int num;
@@ -421,7 +425,6 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        this.swipeBackEnabled = false;
         getNotificationCenter().addObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.locationPermissionGranted);
         MessageObject messageObject2 = this.messageObject;

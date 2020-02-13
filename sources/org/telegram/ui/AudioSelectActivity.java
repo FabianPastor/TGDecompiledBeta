@@ -41,6 +41,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -76,7 +77,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     public TextView emptySubtitleTextView;
     private TextView emptyTitleTextView;
-    private LinearLayout emptyView;
+    /* access modifiers changed from: private */
+    public LinearLayout emptyView;
     /* access modifiers changed from: private */
     public FrameLayout frameLayout2;
     private ActionBarMenuSubItem[] itemCells;
@@ -198,193 +200,209 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
         searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
-        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2) {
+        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
             private boolean ignoreLayout;
             private int lastItemSize;
             private int lastNotifyWidth;
 
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
+                int i3;
+                int i4;
                 int size = View.MeasureSpec.getSize(i);
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
-                    if (!AndroidUtilities.isInMultiwindow && AudioSelectActivity.this.commentTextView != null && AudioSelectActivity.this.frameLayout2.getParent() == this) {
-                        size2 -= AudioSelectActivity.this.commentTextView.getEmojiPadding();
-                        i2 = View.MeasureSpec.makeMeasureSpec(size2, NUM);
-                    }
-                } else if (AudioSelectActivity.this.commentTextView != null) {
+                int keyboardHeight = getKeyboardHeight();
+                if ((SharedConfig.smoothKeyboard ? 0 : keyboardHeight) > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow || AudioSelectActivity.this.commentTextView == null || AudioSelectActivity.this.frameLayout2.getParent() != this) {
+                    i4 = i2;
+                    i3 = size2;
+                } else {
+                    int emojiPadding = size2 - AudioSelectActivity.this.commentTextView.getEmojiPadding();
+                    i3 = emojiPadding;
+                    i4 = View.MeasureSpec.makeMeasureSpec(emojiPadding, NUM);
+                }
+                if (keyboardHeight > AndroidUtilities.dp(20.0f) && AudioSelectActivity.this.commentTextView != null) {
                     this.ignoreLayout = true;
                     AudioSelectActivity.this.commentTextView.hideEmojiView();
                     this.ignoreLayout = false;
                 }
+                if (SharedConfig.smoothKeyboard && AudioSelectActivity.this.commentTextView != null && AudioSelectActivity.this.commentTextView.isPopupShowing()) {
+                    AudioSelectActivity.this.fragmentView.setTranslationY((float) AudioSelectActivity.this.getCurrentPanTranslationY());
+                    AudioSelectActivity.this.listView.setTranslationY(0.0f);
+                    AudioSelectActivity.this.emptyView.setTranslationY(0.0f);
+                }
                 int childCount = getChildCount();
-                for (int i3 = 0; i3 < childCount; i3++) {
-                    View childAt = getChildAt(i3);
+                for (int i5 = 0; i5 < childCount; i5++) {
+                    View childAt = getChildAt(i5);
                     if (!(childAt == null || childAt.getVisibility() == 8)) {
                         if (AudioSelectActivity.this.commentTextView == null || !AudioSelectActivity.this.commentTextView.isPopupView(childAt)) {
-                            measureChildWithMargins(childAt, i, 0, i2, 0);
+                            measureChildWithMargins(childAt, i, 0, i4, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
                             childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
                         } else if (AndroidUtilities.isTablet()) {
-                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (size2 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
+                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (i3 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                         } else {
-                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((size2 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
+                            childAt.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((i3 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                         }
                     }
                 }
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
-            /* JADX WARNING: Removed duplicated region for block: B:43:0x00cd  */
-            /* JADX WARNING: Removed duplicated region for block: B:51:0x00f4  */
-            /* JADX WARNING: Removed duplicated region for block: B:52:0x00fd  */
+            /* JADX WARNING: Removed duplicated region for block: B:40:0x00b9  */
+            /* JADX WARNING: Removed duplicated region for block: B:47:0x00d3  */
+            /* JADX WARNING: Removed duplicated region for block: B:55:0x00fa  */
+            /* JADX WARNING: Removed duplicated region for block: B:56:0x0103  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void onLayout(boolean r9, int r10, int r11, int r12, int r13) {
+            public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
                 /*
-                    r8 = this;
-                    int r9 = r8.lastNotifyWidth
-                    int r12 = r12 - r10
-                    if (r9 == r12) goto L_0x0024
-                    r8.lastNotifyWidth = r12
-                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    if (r9 == 0) goto L_0x0024
-                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    boolean r9 = r9.isShowing()
-                    if (r9 == 0) goto L_0x0024
-                    org.telegram.ui.AudioSelectActivity r9 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    r9.dismiss()
+                    r9 = this;
+                    int r10 = r9.lastNotifyWidth
+                    int r13 = r13 - r11
+                    if (r10 == r13) goto L_0x0024
+                    r9.lastNotifyWidth = r13
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    if (r10 == 0) goto L_0x0024
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    boolean r10 = r10.isShowing()
+                    if (r10 == 0) goto L_0x0024
+                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    r10.dismiss()
                 L_0x0024:
-                    int r9 = r8.getChildCount()
-                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r10 = r10.commentTextView
+                    int r10 = r9.getChildCount()
+                    boolean r11 = org.telegram.messenger.SharedConfig.smoothKeyboard
                     r0 = 0
-                    if (r10 == 0) goto L_0x005e
-                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
-                    android.widget.FrameLayout r10 = r10.frameLayout2
-                    android.view.ViewParent r10 = r10.getParent()
-                    if (r10 != r8) goto L_0x005e
-                    int r10 = r8.getKeyboardHeight()
+                    if (r11 == 0) goto L_0x002f
+                    r11 = 0
+                    goto L_0x0033
+                L_0x002f:
+                    int r11 = r9.getKeyboardHeight()
+                L_0x0033:
+                    org.telegram.ui.AudioSelectActivity r1 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r1 = r1.commentTextView
+                    if (r1 == 0) goto L_0x0064
+                    org.telegram.ui.AudioSelectActivity r1 = org.telegram.ui.AudioSelectActivity.this
+                    android.widget.FrameLayout r1 = r1.frameLayout2
+                    android.view.ViewParent r1 = r1.getParent()
+                    if (r1 != r9) goto L_0x0064
                     r1 = 1101004800(0x41a00000, float:20.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    if (r10 > r1) goto L_0x005e
-                    boolean r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                    if (r10 != 0) goto L_0x005e
-                    boolean r10 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r10 != 0) goto L_0x005e
-                    org.telegram.ui.AudioSelectActivity r10 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r10 = r10.commentTextView
-                    int r10 = r10.getEmojiPadding()
-                    goto L_0x005f
-                L_0x005e:
-                    r10 = 0
-                L_0x005f:
-                    r8.setBottomClip(r10)
-                L_0x0062:
-                    if (r0 >= r9) goto L_0x0114
-                    android.view.View r1 = r8.getChildAt(r0)
-                    int r2 = r1.getVisibility()
-                    r3 = 8
-                    if (r2 != r3) goto L_0x0072
-                    goto L_0x0110
-                L_0x0072:
-                    android.view.ViewGroup$LayoutParams r2 = r1.getLayoutParams()
-                    android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-                    int r3 = r1.getMeasuredWidth()
-                    int r4 = r1.getMeasuredHeight()
-                    int r5 = r2.gravity
-                    r6 = -1
-                    if (r5 != r6) goto L_0x0087
-                    r5 = 51
-                L_0x0087:
-                    r6 = r5 & 7
-                    r5 = r5 & 112(0x70, float:1.57E-43)
-                    r6 = r6 & 7
-                    r7 = 1
-                    if (r6 == r7) goto L_0x00a5
-                    r7 = 5
-                    if (r6 == r7) goto L_0x009b
-                    int r6 = r2.leftMargin
-                    int r7 = r8.getPaddingLeft()
-                    int r6 = r6 + r7
-                    goto L_0x00af
-                L_0x009b:
-                    int r6 = r12 - r3
-                    int r7 = r2.rightMargin
-                    int r6 = r6 - r7
-                    int r7 = r8.getPaddingRight()
-                    goto L_0x00ae
-                L_0x00a5:
-                    int r6 = r12 - r3
-                    int r6 = r6 / 2
-                    int r7 = r2.leftMargin
-                    int r6 = r6 + r7
-                    int r7 = r2.rightMargin
-                L_0x00ae:
-                    int r6 = r6 - r7
-                L_0x00af:
-                    r7 = 16
-                    if (r5 == r7) goto L_0x00cd
-                    r7 = 48
-                    if (r5 == r7) goto L_0x00c5
-                    r7 = 80
-                    if (r5 == r7) goto L_0x00be
-                    int r2 = r2.topMargin
-                    goto L_0x00da
-                L_0x00be:
-                    int r5 = r13 - r10
-                    int r5 = r5 - r11
-                    int r5 = r5 - r4
-                    int r2 = r2.bottomMargin
-                    goto L_0x00d8
-                L_0x00c5:
-                    int r2 = r2.topMargin
-                    int r5 = r8.getPaddingTop()
-                    int r2 = r2 + r5
-                    goto L_0x00da
-                L_0x00cd:
-                    int r5 = r13 - r10
-                    int r5 = r5 - r11
-                    int r5 = r5 - r4
-                    int r5 = r5 / 2
-                    int r7 = r2.topMargin
-                    int r5 = r5 + r7
-                    int r2 = r2.bottomMargin
-                L_0x00d8:
-                    int r2 = r5 - r2
-                L_0x00da:
-                    org.telegram.ui.AudioSelectActivity r5 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
-                    if (r5 == 0) goto L_0x010b
-                    org.telegram.ui.AudioSelectActivity r5 = org.telegram.ui.AudioSelectActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
-                    boolean r5 = r5.isPopupView(r1)
-                    if (r5 == 0) goto L_0x010b
-                    boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r2 == 0) goto L_0x00fd
-                    int r2 = r8.getMeasuredHeight()
-                    int r5 = r1.getMeasuredHeight()
-                    goto L_0x010a
-                L_0x00fd:
-                    int r2 = r8.getMeasuredHeight()
-                    int r5 = r8.getKeyboardHeight()
-                    int r2 = r2 + r5
-                    int r5 = r1.getMeasuredHeight()
-                L_0x010a:
-                    int r2 = r2 - r5
-                L_0x010b:
+                    if (r11 > r1) goto L_0x0064
+                    boolean r1 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                    if (r1 != 0) goto L_0x0064
+                    boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r1 != 0) goto L_0x0064
+                    org.telegram.ui.AudioSelectActivity r1 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r1 = r1.commentTextView
+                    int r1 = r1.getEmojiPadding()
+                    goto L_0x0065
+                L_0x0064:
+                    r1 = 0
+                L_0x0065:
+                    r9.setBottomClip(r1)
+                L_0x0068:
+                    if (r0 >= r10) goto L_0x0116
+                    android.view.View r2 = r9.getChildAt(r0)
+                    int r3 = r2.getVisibility()
+                    r4 = 8
+                    if (r3 != r4) goto L_0x0078
+                    goto L_0x0112
+                L_0x0078:
+                    android.view.ViewGroup$LayoutParams r3 = r2.getLayoutParams()
+                    android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
+                    int r4 = r2.getMeasuredWidth()
+                    int r5 = r2.getMeasuredHeight()
+                    int r6 = r3.gravity
+                    r7 = -1
+                    if (r6 != r7) goto L_0x008d
+                    r6 = 51
+                L_0x008d:
+                    r7 = r6 & 7
+                    r6 = r6 & 112(0x70, float:1.57E-43)
+                    r7 = r7 & 7
+                    r8 = 1
+                    if (r7 == r8) goto L_0x00ab
+                    r8 = 5
+                    if (r7 == r8) goto L_0x00a1
+                    int r7 = r3.leftMargin
+                    int r8 = r9.getPaddingLeft()
+                    int r7 = r7 + r8
+                    goto L_0x00b5
+                L_0x00a1:
+                    int r7 = r13 - r4
+                    int r8 = r3.rightMargin
+                    int r7 = r7 - r8
+                    int r8 = r9.getPaddingRight()
+                    goto L_0x00b4
+                L_0x00ab:
+                    int r7 = r13 - r4
+                    int r7 = r7 / 2
+                    int r8 = r3.leftMargin
+                    int r7 = r7 + r8
+                    int r8 = r3.rightMargin
+                L_0x00b4:
+                    int r7 = r7 - r8
+                L_0x00b5:
+                    r8 = 16
+                    if (r6 == r8) goto L_0x00d3
+                    r8 = 48
+                    if (r6 == r8) goto L_0x00cb
+                    r8 = 80
+                    if (r6 == r8) goto L_0x00c4
+                    int r3 = r3.topMargin
+                    goto L_0x00e0
+                L_0x00c4:
+                    int r6 = r14 - r1
+                    int r6 = r6 - r12
+                    int r6 = r6 - r5
+                    int r3 = r3.bottomMargin
+                    goto L_0x00de
+                L_0x00cb:
+                    int r3 = r3.topMargin
+                    int r6 = r9.getPaddingTop()
                     int r3 = r3 + r6
-                    int r4 = r4 + r2
-                    r1.layout(r6, r2, r3, r4)
-                L_0x0110:
+                    goto L_0x00e0
+                L_0x00d3:
+                    int r6 = r14 - r1
+                    int r6 = r6 - r12
+                    int r6 = r6 - r5
+                    int r6 = r6 / 2
+                    int r8 = r3.topMargin
+                    int r6 = r6 + r8
+                    int r3 = r3.bottomMargin
+                L_0x00de:
+                    int r3 = r6 - r3
+                L_0x00e0:
+                    org.telegram.ui.AudioSelectActivity r6 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
+                    if (r6 == 0) goto L_0x010d
+                    org.telegram.ui.AudioSelectActivity r6 = org.telegram.ui.AudioSelectActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
+                    boolean r6 = r6.isPopupView(r2)
+                    if (r6 == 0) goto L_0x010d
+                    boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r3 == 0) goto L_0x0103
+                    int r3 = r9.getMeasuredHeight()
+                    int r6 = r2.getMeasuredHeight()
+                    goto L_0x010c
+                L_0x0103:
+                    int r3 = r9.getMeasuredHeight()
+                    int r3 = r3 + r11
+                    int r6 = r2.getMeasuredHeight()
+                L_0x010c:
+                    int r3 = r3 - r6
+                L_0x010d:
+                    int r4 = r4 + r7
+                    int r5 = r5 + r3
+                    r2.layout(r7, r3, r4, r5)
+                L_0x0112:
                     int r0 = r0 + 1
-                    goto L_0x0062
-                L_0x0114:
-                    r8.notifyHeightChanged()
+                    goto L_0x0068
+                L_0x0116:
+                    r9.notifyHeightChanged()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AudioSelectActivity.AnonymousClass3.onLayout(boolean, int, int, int, int):void");
@@ -446,7 +464,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         });
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                if (i == 1 && AudioSelectActivity.this.searching && AudioSelectActivity.this.searchWas) {
+                if (i == 1) {
                     AndroidUtilities.hideKeyboard(AudioSelectActivity.this.getParentActivity().getCurrentFocus());
                 }
             }
@@ -668,6 +686,21 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             });
         } else if (i == 1) {
             sendSelectedAudios(true, 0);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPanTranslationUpdate(int i) {
+        if (this.listView != null) {
+            if (this.commentTextView.isPopupShowing()) {
+                this.fragmentView.setTranslationY((float) i);
+                this.listView.setTranslationY(0.0f);
+                this.emptyView.setTranslationY(0.0f);
+                return;
+            }
+            float f = (float) i;
+            this.listView.setTranslationY(f);
+            this.emptyView.setTranslationY(f);
         }
     }
 

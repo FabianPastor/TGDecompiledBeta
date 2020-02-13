@@ -2,7 +2,7 @@ package developers.mobile.abt;
 
 import com.google.protobuf.GeneratedMessageLite;
 
-/* compiled from: com.google.firebase:firebase-abt@@19.0.0 */
+/* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
 /* synthetic */ class FirebaseAbt$1 {
     static final /* synthetic */ int[] $SwitchMap$com$google$protobuf$GeneratedMessageLite$MethodToInvoke = new int[GeneratedMessageLite.MethodToInvoke.values().length];
 

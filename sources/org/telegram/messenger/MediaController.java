@@ -3491,17 +3491,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         this.recordReplyingMessageObject = messageObject;
     }
 
-    private boolean shouldRequestRecordAudioFocus() {
-        try {
-            return !NotificationsController.audioManager.isBluetoothA2dpOn();
-        } catch (Throwable unused) {
-            return true;
-        }
-    }
-
     public void requestAudioFocus(boolean z) {
         if (z) {
-            if (!this.hasRecordAudioFocus && shouldRequestRecordAudioFocus() && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
+            if (!this.hasRecordAudioFocus && SharedConfig.pauseMusicOnRecord && NotificationsController.audioManager.requestAudioFocus(this.audioRecordFocusChangedListener, 3, 2) == 1) {
                 this.hasRecordAudioFocus = true;
             }
         } else if (this.hasRecordAudioFocus) {
@@ -3950,7 +3942,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625454(0x7f0e05ee, float:1.8878116E38)
+            r1 = 2131625478(0x7f0e0606, float:1.8878165E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }

@@ -2,11 +2,9 @@ package org.telegram.ui.Components;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -43,6 +41,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     private ImageLocation prevImageLocation;
     /* access modifiers changed from: private */
     public final SparseArray<RadialProgress2> radialProgresses = new SparseArray<>();
+    private boolean scrolledByUser;
     private ArrayList<String> thumbsFileNames = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<ImageLocation> thumbsLocations = new ArrayList<>();
@@ -156,6 +155,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             if (action == 0) {
                 this.isScrollingListView = true;
                 this.isSwipingViewPager = true;
+                this.scrolledByUser = true;
                 this.downPoint.set(motionEvent.getX(), motionEvent.getY());
             } else if (action == 2) {
                 float x = motionEvent.getX() - this.downPoint.x;
@@ -236,14 +236,22 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public BackupImageView getCurrentItemView() {
         ViewPagerAdapter viewPagerAdapter = this.adapter;
-        if (viewPagerAdapter != null) {
-            return ((Item) viewPagerAdapter.objects.get(getCurrentItem())).imageView;
+        if (viewPagerAdapter == null || viewPagerAdapter.objects.isEmpty()) {
+            return null;
         }
-        return null;
+        return ((Item) this.adapter.objects.get(getCurrentItem())).imageView;
     }
 
     public void resetCurrentItem() {
         setCurrentItem(this.adapter.getExtraCount(), false);
+    }
+
+    public int getRealCount() {
+        return this.adapter.getCount() - (this.adapter.getExtraCount() * 2);
+    }
+
+    public int getRealPosition() {
+        return this.adapter.getRealPosition(getCurrentItem());
     }
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -347,6 +355,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 }
                 loadNeighboringThumbs();
                 getAdapter().notifyDataSetChanged();
+                if (!this.scrolledByUser) {
+                    resetCurrentItem();
+                }
                 if (booleanValue) {
                     MessagesController.getInstance(this.currentAccount).loadDialogPhotos(intValue2, 80, 0, false, this.parentClassGuid);
                 }
@@ -419,9 +430,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     {
                         int realPosition = ViewPagerAdapter.this.getRealPosition(i);
                         if (realPosition == 0) {
-                            setImage((ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), (Object) null);
+                            setImage((ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
                         } else {
-                            setImage((ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), (String) null, (Drawable) null, (Bitmap) null, (String) null, ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), (Object) null);
+                            setImage((ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), (String) null, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
                             this.radialProgress = new RadialProgress2(this);
                             this.radialProgress.setOverrideAlpha(0.0f);
                             this.radialProgress.setIcon(10, false, false);

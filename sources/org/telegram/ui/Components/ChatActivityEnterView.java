@@ -1091,6 +1091,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.parentFragment.extendActionMode(menu);
                 }
             }
+
+            public boolean requestRectangleOnScreen(Rect rect) {
+                rect.bottom += AndroidUtilities.dp(1000.0f);
+                return super.requestRectangleOnScreen(rect);
+            }
         };
         this.messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
             public final void onSpansChanged() {
@@ -4417,10 +4422,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             boolean r3 = r13.canWriteToChannel
             boolean r4 = r13.silent
             if (r4 == 0) goto L_0x0061
-            r4 = 2131165500(0x7var_c, float:1.7945219E38)
+            r4 = 2131165503(0x7var_f, float:1.7945225E38)
             goto L_0x0064
         L_0x0061:
-            r4 = 2131165501(0x7var_d, float:1.794522E38)
+            r4 = 2131165504(0x7var_, float:1.7945227E38)
         L_0x0064:
             r1.setImageResource(r4)
             goto L_0x0069
@@ -4690,7 +4695,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r1 = 1
             if (r0 != r1) goto L_0x0048
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165498(0x7var_a, float:1.7945215E38)
+            r1 = 2131165501(0x7var_d, float:1.794522E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131624010(0x7f0e004a, float:1.8875188E38)
@@ -4700,7 +4705,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             goto L_0x0075
         L_0x0048:
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165491(0x7var_, float:1.79452E38)
+            r1 = 2131165494(0x7var_, float:1.7945207E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131623953(0x7f0e0011, float:1.8875072E38)
@@ -4710,7 +4715,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             goto L_0x0075
         L_0x005f:
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131165490(0x7var_, float:1.7945199E38)
+            r1 = 2131165493(0x7var_, float:1.7945205E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r4.botButton
             r1 = 2131623952(0x7f0e0010, float:1.887507E38)

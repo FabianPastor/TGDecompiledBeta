@@ -138,7 +138,7 @@ public class CountrySelectActivity extends BaseFragment {
         });
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                if (i == 1 && CountrySelectActivity.this.searching && CountrySelectActivity.this.searchWas) {
+                if (i == 1) {
                     AndroidUtilities.hideKeyboard(CountrySelectActivity.this.getParentActivity().getCurrentFocus());
                 }
             }

@@ -134,7 +134,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         });
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                if (i == 1 && LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
+                if (i == 1) {
                     AndroidUtilities.hideKeyboard(LanguageSelectActivity.this.getParentActivity().getCurrentFocus());
                 }
             }
@@ -414,13 +414,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0038
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165407(0x7var_df, float:1.794503E38)
+                r0 = 2131165409(0x7var_e1, float:1.7945034E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
             L_0x0038:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165408(0x7var_e0, float:1.7945032E38)
+                r0 = 2131165410(0x7var_e2, float:1.7945036E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
@@ -493,7 +493,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625400(0x7f0e05b8, float:1.8878007E38)
+                r4 = 2131625418(0x7f0e05ca, float:1.8878043E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

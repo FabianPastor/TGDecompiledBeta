@@ -139,6 +139,14 @@ public class ManageChatUserCell extends FrameLayout {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
+    public int getUserId() {
+        TLObject tLObject = this.currentObject;
+        if (tLObject instanceof TLRPC.User) {
+            return ((TLRPC.User) tLObject).id;
+        }
+        return 0;
+    }
+
     public void setStatusColors(int i, int i2) {
         this.statusColor = i;
         this.statusOnlineColor = i2;
@@ -146,6 +154,10 @@ public class ManageChatUserCell extends FrameLayout {
 
     public void setIsAdmin(boolean z) {
         this.isAdmin = z;
+    }
+
+    public boolean hasAvatarSet() {
+        return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
     public void update(int i) {

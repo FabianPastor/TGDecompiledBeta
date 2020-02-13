@@ -60,6 +60,7 @@ public class SharedConfig {
     public static int passportConfigHash = 0;
     private static String passportConfigJson = "";
     private static HashMap<String, String> passportConfigMap = null;
+    public static boolean pauseMusicOnRecord = true;
     public static boolean playOrderReversed = false;
     public static ArrayList<ProxyInfo> proxyList = new ArrayList<>();
     private static boolean proxyListLoaded = false;
@@ -78,6 +79,7 @@ public class SharedConfig {
     public static boolean searchMessagesAsListUsed = false;
     public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic = false;
+    public static boolean smoothKeyboard = false;
     public static boolean sortContactsByName = false;
     public static boolean sortFilesByName = false;
     public static boolean streamAllVideo = false;
@@ -223,6 +225,8 @@ public class SharedConfig {
                 useSystemEmoji = sharedPreferences2.getBoolean("useSystemEmoji", false);
                 streamMedia = sharedPreferences2.getBoolean("streamMedia", true);
                 saveStreamMedia = sharedPreferences2.getBoolean("saveStreamMedia", true);
+                smoothKeyboard = sharedPreferences2.getBoolean("smoothKeyboard", false);
+                pauseMusicOnRecord = sharedPreferences2.getBoolean("pauseMusicOnRecord", true);
                 streamAllVideo = sharedPreferences2.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
                 streamMkv = sharedPreferences2.getBoolean("streamMkv", false);
                 suggestStickers = sharedPreferences2.getInt("suggestStickers", 0);
@@ -610,6 +614,20 @@ public class SharedConfig {
         saveStreamMedia = !saveStreamMedia;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("saveStreamMedia", saveStreamMedia);
+        edit.commit();
+    }
+
+    public static void toggleSmoothKeyboard() {
+        smoothKeyboard = !smoothKeyboard;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("smoothKeyboard", smoothKeyboard);
+        edit.commit();
+    }
+
+    public static void togglePauseMusicOnRecord() {
+        pauseMusicOnRecord = !pauseMusicOnRecord;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("pauseMusicOnRecord", pauseMusicOnRecord);
         edit.commit();
     }
 

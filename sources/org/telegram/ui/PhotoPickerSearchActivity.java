@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -63,6 +64,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
     public ActionBarMenuItem searchItem;
     private int selectPhotoType;
     private boolean sendPressed;
+    /* access modifiers changed from: private */
+    public boolean swipeBackEnabled = true;
     /* access modifiers changed from: private */
     public AnimatorSet tabsAnimation;
     /* access modifiers changed from: private */
@@ -152,6 +155,10 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         this.scrollSlidingTextTabStrip.setColors("chat_attachActiveTab", "chat_attachActiveTab", "chat_attachUnactiveTab", "dialogButtonSelector");
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate() {
+            public /* synthetic */ void onSamePageSelected() {
+                ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate.CC.$default$onSamePageSelected(this);
+            }
+
             public void onPageSelected(int i, boolean z) {
                 if (PhotoPickerSearchActivity.this.viewPages[0].selectedType != i) {
                     PhotoPickerSearchActivity photoPickerSearchActivity = PhotoPickerSearchActivity.this;
@@ -187,7 +194,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
         });
         this.maximumVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
-        AnonymousClass4 r0 = new SizeNotifierFrameLayout(context) {
+        AnonymousClass4 r0 = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
             private boolean globalIgnoreLayout;
             /* access modifiers changed from: private */
             public boolean maybeStartTracking;
@@ -231,7 +238,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
                 measureChildWithMargins(PhotoPickerSearchActivity.this.actionBar, i, 0, i2, 0);
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.globalIgnoreLayout = true;
                     PhotoPickerSearchActivity.this.commentTextView.hideEmojiView();
                     this.globalIgnoreLayout = false;
@@ -265,135 +272,140 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:25:0x007d  */
-            /* JADX WARNING: Removed duplicated region for block: B:32:0x0097  */
-            /* JADX WARNING: Removed duplicated region for block: B:40:0x00be  */
-            /* JADX WARNING: Removed duplicated region for block: B:41:0x00c7  */
+            /* JADX WARNING: Removed duplicated region for block: B:29:0x0083  */
+            /* JADX WARNING: Removed duplicated region for block: B:36:0x009d  */
+            /* JADX WARNING: Removed duplicated region for block: B:44:0x00c4  */
+            /* JADX WARNING: Removed duplicated region for block: B:45:0x00cd  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
+            public void onLayout(boolean r11, int r12, int r13, int r14, int r15) {
                 /*
-                    r9 = this;
-                    int r10 = r9.getChildCount()
-                    int r0 = r9.getKeyboardHeight()
-                    r1 = 1101004800(0x41a00000, float:20.0)
-                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    r2 = 0
-                    if (r0 > r1) goto L_0x0026
-                    boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                    if (r0 != 0) goto L_0x0026
-                    boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r0 != 0) goto L_0x0026
-                    org.telegram.ui.PhotoPickerSearchActivity r0 = org.telegram.ui.PhotoPickerSearchActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r0 = r0.commentTextView
-                    int r0 = r0.getEmojiPadding()
-                    goto L_0x0027
-                L_0x0026:
+                    r10 = this;
+                    int r11 = r10.getChildCount()
+                    boolean r0 = org.telegram.messenger.SharedConfig.smoothKeyboard
+                    r1 = 0
+                    if (r0 == 0) goto L_0x000b
                     r0 = 0
-                L_0x0027:
-                    r9.setBottomClip(r0)
-                L_0x002a:
-                    if (r2 >= r10) goto L_0x00de
-                    android.view.View r1 = r9.getChildAt(r2)
-                    int r3 = r1.getVisibility()
-                    r4 = 8
-                    if (r3 != r4) goto L_0x003a
-                    goto L_0x00da
-                L_0x003a:
-                    android.view.ViewGroup$LayoutParams r3 = r1.getLayoutParams()
-                    android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
-                    int r4 = r1.getMeasuredWidth()
-                    int r5 = r1.getMeasuredHeight()
-                    int r6 = r3.gravity
-                    r7 = -1
-                    if (r6 != r7) goto L_0x004f
-                    r6 = 51
-                L_0x004f:
-                    r7 = r6 & 7
-                    r6 = r6 & 112(0x70, float:1.57E-43)
-                    r7 = r7 & 7
-                    r8 = 1
-                    if (r7 == r8) goto L_0x006e
-                    r8 = 5
-                    if (r7 == r8) goto L_0x0063
-                    int r7 = r3.leftMargin
-                    int r8 = r9.getPaddingLeft()
-                    int r7 = r7 + r8
-                    goto L_0x0079
-                L_0x0063:
-                    int r7 = r13 - r11
-                    int r7 = r7 - r4
-                    int r8 = r3.rightMargin
-                    int r7 = r7 - r8
-                    int r8 = r9.getPaddingRight()
-                    goto L_0x0078
-                L_0x006e:
-                    int r7 = r13 - r11
-                    int r7 = r7 - r4
-                    int r7 = r7 / 2
-                    int r8 = r3.leftMargin
-                    int r7 = r7 + r8
-                    int r8 = r3.rightMargin
-                L_0x0078:
-                    int r7 = r7 - r8
-                L_0x0079:
-                    r8 = 16
-                    if (r6 == r8) goto L_0x0097
-                    r8 = 48
-                    if (r6 == r8) goto L_0x008f
-                    r8 = 80
-                    if (r6 == r8) goto L_0x0088
-                    int r3 = r3.topMargin
-                    goto L_0x00a4
-                L_0x0088:
-                    int r6 = r14 - r0
-                    int r6 = r6 - r12
-                    int r6 = r6 - r5
-                    int r3 = r3.bottomMargin
-                    goto L_0x00a2
-                L_0x008f:
-                    int r3 = r3.topMargin
-                    int r6 = r9.getPaddingTop()
-                    int r3 = r3 + r6
-                    goto L_0x00a4
-                L_0x0097:
-                    int r6 = r14 - r0
-                    int r6 = r6 - r12
-                    int r6 = r6 - r5
-                    int r6 = r6 / 2
-                    int r8 = r3.topMargin
-                    int r6 = r6 + r8
-                    int r3 = r3.bottomMargin
-                L_0x00a2:
-                    int r3 = r6 - r3
-                L_0x00a4:
-                    org.telegram.ui.PhotoPickerSearchActivity r6 = org.telegram.ui.PhotoPickerSearchActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
-                    if (r6 == 0) goto L_0x00d5
-                    org.telegram.ui.PhotoPickerSearchActivity r6 = org.telegram.ui.PhotoPickerSearchActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
-                    boolean r6 = r6.isPopupView(r1)
-                    if (r6 == 0) goto L_0x00d5
-                    boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r3 == 0) goto L_0x00c7
-                    int r3 = r9.getMeasuredHeight()
-                    int r6 = r1.getMeasuredHeight()
-                    goto L_0x00d4
-                L_0x00c7:
-                    int r3 = r9.getMeasuredHeight()
-                    int r6 = r9.getKeyboardHeight()
-                    int r3 = r3 + r6
-                    int r6 = r1.getMeasuredHeight()
-                L_0x00d4:
-                    int r3 = r3 - r6
-                L_0x00d5:
+                    goto L_0x000f
+                L_0x000b:
+                    int r0 = r10.getKeyboardHeight()
+                L_0x000f:
+                    r2 = 1101004800(0x41a00000, float:20.0)
+                    int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                    if (r0 > r2) goto L_0x002c
+                    boolean r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                    if (r2 != 0) goto L_0x002c
+                    boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r2 != 0) goto L_0x002c
+                    org.telegram.ui.PhotoPickerSearchActivity r2 = org.telegram.ui.PhotoPickerSearchActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r2 = r2.commentTextView
+                    int r2 = r2.getEmojiPadding()
+                    goto L_0x002d
+                L_0x002c:
+                    r2 = 0
+                L_0x002d:
+                    r10.setBottomClip(r2)
+                L_0x0030:
+                    if (r1 >= r11) goto L_0x00e0
+                    android.view.View r3 = r10.getChildAt(r1)
+                    int r4 = r3.getVisibility()
+                    r5 = 8
+                    if (r4 != r5) goto L_0x0040
+                    goto L_0x00dc
+                L_0x0040:
+                    android.view.ViewGroup$LayoutParams r4 = r3.getLayoutParams()
+                    android.widget.FrameLayout$LayoutParams r4 = (android.widget.FrameLayout.LayoutParams) r4
+                    int r5 = r3.getMeasuredWidth()
+                    int r6 = r3.getMeasuredHeight()
+                    int r7 = r4.gravity
+                    r8 = -1
+                    if (r7 != r8) goto L_0x0055
+                    r7 = 51
+                L_0x0055:
+                    r8 = r7 & 7
+                    r7 = r7 & 112(0x70, float:1.57E-43)
+                    r8 = r8 & 7
+                    r9 = 1
+                    if (r8 == r9) goto L_0x0074
+                    r9 = 5
+                    if (r8 == r9) goto L_0x0069
+                    int r8 = r4.leftMargin
+                    int r9 = r10.getPaddingLeft()
+                    int r8 = r8 + r9
+                    goto L_0x007f
+                L_0x0069:
+                    int r8 = r14 - r12
+                    int r8 = r8 - r5
+                    int r9 = r4.rightMargin
+                    int r8 = r8 - r9
+                    int r9 = r10.getPaddingRight()
+                    goto L_0x007e
+                L_0x0074:
+                    int r8 = r14 - r12
+                    int r8 = r8 - r5
+                    int r8 = r8 / 2
+                    int r9 = r4.leftMargin
+                    int r8 = r8 + r9
+                    int r9 = r4.rightMargin
+                L_0x007e:
+                    int r8 = r8 - r9
+                L_0x007f:
+                    r9 = 16
+                    if (r7 == r9) goto L_0x009d
+                    r9 = 48
+                    if (r7 == r9) goto L_0x0095
+                    r9 = 80
+                    if (r7 == r9) goto L_0x008e
+                    int r4 = r4.topMargin
+                    goto L_0x00aa
+                L_0x008e:
+                    int r7 = r15 - r2
+                    int r7 = r7 - r13
+                    int r7 = r7 - r6
+                    int r4 = r4.bottomMargin
+                    goto L_0x00a8
+                L_0x0095:
+                    int r4 = r4.topMargin
+                    int r7 = r10.getPaddingTop()
                     int r4 = r4 + r7
-                    int r5 = r5 + r3
-                    r1.layout(r7, r3, r4, r5)
-                L_0x00da:
-                    int r2 = r2 + 1
-                    goto L_0x002a
-                L_0x00de:
-                    r9.notifyHeightChanged()
+                    goto L_0x00aa
+                L_0x009d:
+                    int r7 = r15 - r2
+                    int r7 = r7 - r13
+                    int r7 = r7 - r6
+                    int r7 = r7 / 2
+                    int r9 = r4.topMargin
+                    int r7 = r7 + r9
+                    int r4 = r4.bottomMargin
+                L_0x00a8:
+                    int r4 = r7 - r4
+                L_0x00aa:
+                    org.telegram.ui.PhotoPickerSearchActivity r7 = org.telegram.ui.PhotoPickerSearchActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r7 = r7.commentTextView
+                    if (r7 == 0) goto L_0x00d7
+                    org.telegram.ui.PhotoPickerSearchActivity r7 = org.telegram.ui.PhotoPickerSearchActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r7 = r7.commentTextView
+                    boolean r7 = r7.isPopupView(r3)
+                    if (r7 == 0) goto L_0x00d7
+                    boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r4 == 0) goto L_0x00cd
+                    int r4 = r10.getMeasuredHeight()
+                    int r7 = r3.getMeasuredHeight()
+                    goto L_0x00d6
+                L_0x00cd:
+                    int r4 = r10.getMeasuredHeight()
+                    int r4 = r4 + r0
+                    int r7 = r3.getMeasuredHeight()
+                L_0x00d6:
+                    int r4 = r4 - r7
+                L_0x00d7:
+                    int r5 = r5 + r8
+                    int r6 = r6 + r4
+                    r3.layout(r8, r4, r5, r6)
+                L_0x00dc:
+                    int r1 = r1 + 1
+                    goto L_0x0030
+                L_0x00e0:
+                    r10.notifyHeightChanged()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoPickerSearchActivity.AnonymousClass4.onLayout(boolean, int, int, int, int):void");
@@ -757,7 +769,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         ActionBarMenuItem actionBarMenuItem = this.searchItem;
         if (actionBarMenuItem != null) {
             actionBarMenuItem.openSearch(true);
-            getParentActivity().getWindow().setSoftInputMode(16);
+            getParentActivity().getWindow().setSoftInputMode(SharedConfig.smoothKeyboard ? 32 : 16);
         }
         PhotoPickerActivity photoPickerActivity = this.imagesSearch;
         if (photoPickerActivity != null) {
@@ -786,6 +798,10 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         if (photoPickerActivity2 != null) {
             photoPickerActivity2.onPause();
         }
+    }
+
+    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+        return this.swipeBackEnabled;
     }
 
     public void onFragmentDestroy() {
@@ -868,8 +884,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
     private void updateTabs() {
         ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = this.scrollSlidingTextTabStrip;
         if (scrollSlidingTextTabStrip2 != null) {
-            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("ImagesTab", NUM));
-            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab", NUM));
+            scrollSlidingTextTabStrip2.addTextTab(0, LocaleController.getString("ImagesTab2", NUM));
+            this.scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab2", NUM));
             this.scrollSlidingTextTabStrip.setVisibility(0);
             this.actionBar.setExtraHeight(AndroidUtilities.dp(44.0f));
             int currentTabId = this.scrollSlidingTextTabStrip.getCurrentTabId();

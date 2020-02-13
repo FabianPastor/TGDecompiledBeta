@@ -17,6 +17,7 @@ import org.telegram.messenger.ImageReceiver;
 
 public class ClippingImageView extends View {
     private static float[] radii = new float[8];
+    private float additionalTranslationY;
     private float animationProgress;
     private float[][] animationValues;
     private RectF bitmapRect;
@@ -52,6 +53,18 @@ public class ClippingImageView extends View {
 
     public void setAnimationValues(float[][] fArr) {
         this.animationValues = fArr;
+    }
+
+    public void setAdditionalTranslationY(float f) {
+        this.additionalTranslationY = f;
+    }
+
+    public void setTranslationY(float f) {
+        super.setTranslationY(f + this.additionalTranslationY);
+    }
+
+    public float getTranslationY() {
+        return super.getTranslationY() - this.additionalTranslationY;
     }
 
     @Keep

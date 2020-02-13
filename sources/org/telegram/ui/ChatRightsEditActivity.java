@@ -344,6 +344,13 @@ public class ChatRightsEditActivity extends BaseFragment {
         }
         recyclerListView2.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
+                if (i == 1) {
+                    AndroidUtilities.hideKeyboard(ChatRightsEditActivity.this.getParentActivity().getCurrentFocus());
+                }
+            }
+        });
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
             private final /* synthetic */ Context f$1;
 
@@ -1538,7 +1545,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165408(0x7var_e0, float:1.7945032E38)
+                r0 = 2131165410(0x7var_e2, float:1.7945036E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)

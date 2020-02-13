@@ -250,7 +250,9 @@ public class ThemeDescription {
                     break;
                 }
                 if (drawableArr[i4] != null) {
-                    if (drawableArr[i4] instanceof ScamDrawable) {
+                    if (drawableArr[i4] instanceof BackDrawable) {
+                        ((BackDrawable) drawableArr[i4]).setColor(i);
+                    } else if (drawableArr[i4] instanceof ScamDrawable) {
                         ((ScamDrawable) drawableArr[i4]).setColor(i);
                     } else if (drawableArr[i4] instanceof RLottieDrawable) {
                         if (this.lottieLayerName != null) {
@@ -721,6 +723,7 @@ public class ThemeDescription {
                                             ((RadialProgressView) drawable).setProgressColor(i);
                                         } else if (drawable instanceof Paint) {
                                             ((Paint) drawable).setColor(i);
+                                            view.invalidate();
                                         } else if (drawable instanceof SeekBarView) {
                                             if ((this.changeFlags & FLAG_PROGRESSBAR) != 0) {
                                                 ((SeekBarView) drawable).setOuterColor(i);

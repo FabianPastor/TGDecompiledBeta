@@ -298,7 +298,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.<init>(r4)
             r0.textPaint = r6
             android.content.res.Resources r6 = r22.getResources()
-            r7 = 2131165853(0x7var_d, float:1.7945935E38)
+            r7 = 2131165865(0x7var_a9, float:1.794596E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -371,7 +371,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.sendRequest(r3, r5)
         L_0x00d3:
             org.telegram.ui.Components.ShareAlert$1 r2 = new org.telegram.ui.Components.ShareAlert$1
-            r2.<init>(r1)
+            r2.<init>(r1, r7)
             r0.containerView = r2
             android.view.ViewGroup r3 = r0.containerView
             r3.setWillNotDraw(r7)
@@ -459,7 +459,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r5 = 2131625646(0x7f0e06ae, float:1.8878506E38)
+            r5 = 2131625688(0x7f0e06d8, float:1.8878591E38)
             java.lang.String r11 = "NoChats"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r3.setText(r5)
@@ -561,7 +561,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = 17
             r3.setGravity(r5)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r5 = 2131624771(0x7f0e0343, float:1.8876731E38)
+            r5 = 2131624782(0x7f0e034e, float:1.8876753E38)
             java.lang.String r10 = "CopyLink"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r5)
             java.lang.String r5 = r5.toUpperCase()
@@ -599,7 +599,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3.<init>(r1, r2, r5, r4)
             r0.commentTextView = r3
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131626581(0x7f0e0a55, float:1.8880402E38)
+            r3 = 2131626626(0x7f0e0a82, float:1.8880494E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setHint(r3)
@@ -633,7 +633,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setAlpha(r12)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r5 = 2131626503(0x7f0e0a07, float:1.8880244E38)
+            r5 = 2131626547(0x7f0e0a33, float:1.8880333E38)
             java.lang.String r6 = "Send"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setContentDescription(r5)
@@ -666,7 +666,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             int r8 = android.os.Build.VERSION.SDK_INT
             if (r8 >= r10) goto L_0x03d7
             android.content.res.Resources r8 = r22.getResources()
-            r9 = 2131165391(0x7var_cf, float:1.7944998E38)
+            r9 = 2131165393(0x7var_d1, float:1.7945002E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -684,7 +684,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r9 = r6
         L_0x03d8:
             r2.setBackgroundDrawable(r9)
-            r6 = 2131165270(0x7var_, float:1.7944752E38)
+            r6 = 2131165272(0x7var_, float:1.7944756E38)
             r2.setImageResource(r6)
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
             java.lang.String r8 = "dialogFloatingIcon"

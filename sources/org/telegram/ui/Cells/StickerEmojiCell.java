@@ -89,7 +89,7 @@ public class StickerEmojiCell extends FrameLayout {
             r10 = 0
             java.lang.Object r11 = r0.parentObject
             java.lang.String r7 = "80_80"
-            r5.setImage(r6, r7, r8, r9, r10, r11)
+            r5.setImage((org.telegram.messenger.ImageLocation) r6, (java.lang.String) r7, (org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (int) r10, (java.lang.Object) r11)
             goto L_0x0068
         L_0x0032:
             org.telegram.ui.Components.BackupImageView r12 = r0.imageView

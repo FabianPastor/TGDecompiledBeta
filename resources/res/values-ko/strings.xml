@@ -1316,7 +1316,6 @@
     <string name="General">일반</string>
     <string name="GettingLinkInfo">링크 정보 가져오는 중...</string>
     <string name="GifCaption">GIF 설명</string>
-    <string name="GifsTab">GIF</string>
     <string name="GlobalAttachGifRestricted">본 그룹에는 GIF가 허용되지 않습니다.</string>
     <string name="GlobalAttachInlineRestricted">그룹에서 인라인 봇을 금지합니다.</string>
     <string name="GlobalAttachMediaRestricted">이 그룹에서는 미디어를 보내실 수 없습니다.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">%1$d시간</string>
     <string name="Hours_zero">%1$d시간</string>
     <string name="Hybrid">혼합</string>
-    <string name="ImagesTab">이미지</string>
     <string name="ImportContacts">연락처 가져오기</string>
     <string name="InAppNotifications">앱 사용 중 알림</string>
     <string name="InAppPreview">앱 사용 중 미리보기</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">공개 그룹</string>
     <string name="MegaPublicInfo">공개 그룹은 검색으로 찾을 수 있고, 모두에게 대화 내용이 공개되며, 누구나 들어갈 수 있습니다.</string>
     <string name="MegaUsernameHelp">영구 링크를 설정하시면, 다른 사람들이 회원님의 그룹을 찾아 들어올 수 있습니다.\10\10a부터 z 사이 글자, 0부터 9 사이 숫자와 밑줄을 사용하실 수 있습니다.\10최소 길이는 다섯 자입니다.</string>
-    <string name="MembersCount">%2$d명 중 %1$d명 선택</string>
     <string name="MembersCountZero">최대 %1$s</string>
     <string name="Members_few">참가자 %1$d명</string>
     <string name="Members_many">참가자 %1$d명</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">그룹하기</string>
     <string name="NearbyVenue">아니면 장소 선택</string>
     <string name="NetworkUsage">데이터 사용량</string>
-    <string name="NetworkUsageMobile">모바일</string>
-    <string name="NetworkUsageRoaming">로밍</string>
     <string name="NetworkUsageSince">%1$s부터 사용된 네트워크</string>
-    <string name="NetworkUsageWiFi">와이파이</string>
     <string name="NeverAllow">항상 거부</string>
     <string name="NeverShareWith">절대 공유하지 않을 사람</string>
     <string name="NeverShareWithTitle">절대 공유하지 않음</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">켜기</string>
     <string name="PeopleNearbyGpsInfo">이 페이지를 보고 있는 주변 사람들을 손쉽게 추가하거나 지역 그룹 대화방을 발견해 보세요.\10\10이 기능을 사용하려면 위치 서비스를 켜셔야 합니다.</string>
     <string name="PeopleNearbyHeader">주변 사람</string>
-    <string name="PeopleNearbyInfo">친구에게 이 페이지를 열자고 하여 전화번호를 교환하세요.</string>
     <string name="PermissionContacts">회원님이 모든 기기에서 친구들과 연락하실 수 있도록, 텔레그램의 단단히 암호화된 클라우드 서비스로 연락처가 계속 동기화됩니다.</string>
     <string name="PermissionDrawAboveOtherApps">화면속화면 모드로 동영상을 재생하려면 텔레그램에게 다른 앱 위에 그릴 수 있는 권한을 부여하셔야 합니다.</string>
     <string name="PermissionNoAudio">음성 메시지를 보내려면 텔레그램에게 마이크 접근 권한을 부여하셔야 합니다.</string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">오디오 파일</string>
     <string name="SharedContent">공유하는 콘텐츠</string>
     <string name="SharedContentTitle">공유하는 콘텐츠</string>
-    <string name="SharedFilesTab">파일</string>
     <string name="SharedLinks">링크</string>
-    <string name="SharedLinksTab">링크</string>
     <string name="SharedMedia">공유한 미디어</string>
-    <string name="SharedMediaTab">미디어</string>
-    <string name="SharedMusicTab">오디오</string>
     <string name="SharedPhotosAndVideos">사진과 동영상</string>
     <string name="SharedPlace">장소</string>
-    <string name="SharedVoiceTab">음성</string>
     <string name="SharingLiveLocationTitle">실시간 위치를 %1$s와 공유하고 있습니다</string>
     <string name="SharingYouAndOtherName">회원님과 %1$s 님</string>
     <string name="Sharpen">선명</string>

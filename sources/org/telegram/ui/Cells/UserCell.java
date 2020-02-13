@@ -539,14 +539,14 @@ public class UserCell extends FrameLayout {
             goto L_0x012c
         L_0x011d:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r2 = 2131624441(0x7f0e01f9, float:1.8876062E38)
+            r2 = 2131624444(0x7f0e01fc, float:1.8876068E38)
             java.lang.String r5 = "BotStatusCantRead"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r13.setText(r2)
             goto L_0x0198
         L_0x012c:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r2 = 2131624442(0x7f0e01fa, float:1.8876064E38)
+            r2 = 2131624445(0x7f0e01fd, float:1.887607E38)
             java.lang.String r5 = "BotStatusRead"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r13.setText(r2)
@@ -587,7 +587,7 @@ public class UserCell extends FrameLayout {
             int r2 = r12.statusOnlineColor
             r13.setTextColor(r2)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r2 = 2131625850(0x7f0e077a, float:1.887892E38)
+            r2 = 2131625892(0x7f0e07a4, float:1.8879005E38)
             java.lang.String r5 = "Online"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r13.setText(r2)

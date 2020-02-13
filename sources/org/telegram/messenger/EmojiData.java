@@ -14912,4 +14912,8 @@ public class EmojiData {
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.EmojiData.<clinit>():void");
     }
+
+    public static boolean isHeartEmoji(String str) {
+        return "❤".equals(str) || "🧡".equals(str) || "💛".equals(str) || "💚".equals(str) || "💙".equals(str) || "💜".equals(str) || "🖤".equals(str) || "🤍".equals(str) || "🤎".equals(str);
+    }
 }

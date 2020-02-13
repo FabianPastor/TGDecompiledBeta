@@ -283,6 +283,23 @@ public class SharedPhotoVideoCell extends FrameLayout {
         }
     }
 
+    public void invalidate() {
+        for (int i = 0; i < 6; i++) {
+            this.photoVideoViews[i].invalidate();
+        }
+        super.invalidate();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
+
     public void setDelegate(SharedPhotoVideoCellDelegate sharedPhotoVideoCellDelegate) {
         this.delegate = sharedPhotoVideoCellDelegate;
     }

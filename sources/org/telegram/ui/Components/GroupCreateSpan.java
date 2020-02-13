@@ -71,7 +71,7 @@ public class GroupCreateSpan extends View {
             r0.colors = r3
             r0.currentContact = r2
             android.content.res.Resources r3 = r21.getResources()
-            r4 = 2131165366(0x7var_b6, float:1.7944947E38)
+            r4 = 2131165368(0x7var_b8, float:1.7944951E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r0.deleteDrawable = r3
             android.text.TextPaint r3 = textPaint

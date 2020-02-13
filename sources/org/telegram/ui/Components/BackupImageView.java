@@ -46,8 +46,17 @@ public class BackupImageView extends View {
         setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, i, obj);
     }
 
-    public void setImage(ImageLocation imageLocation, String str, Bitmap bitmap, int i, Object obj) {
-        setImage(imageLocation, str, (ImageLocation) null, (String) null, (Drawable) null, bitmap, (String) null, i, obj);
+    public void setImage(ImageLocation imageLocation, String str, Bitmap bitmap, int i, int i2, Object obj) {
+        BitmapDrawable bitmapDrawable;
+        BackupImageView backupImageView;
+        if (bitmap != null) {
+            backupImageView = this;
+            bitmapDrawable = new BitmapDrawable((Resources) null, bitmap);
+        } else {
+            backupImageView = this;
+            bitmapDrawable = null;
+        }
+        backupImageView.imageReceiver.setImage(imageLocation, str, (ImageLocation) null, (String) null, bitmapDrawable, i, (String) null, obj, i2);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {

@@ -11,15 +11,16 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
-import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AdjustPanFrameLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.WallpaperParallaxEffect;
 
-public class SizeNotifierFrameLayout extends FrameLayout {
+public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
     private Drawable backgroundDrawable;
+    private int backgroundTranslationY;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
     private int keyboardHeight;
@@ -32,6 +33,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private Rect rect;
     private float translationX;
     private float translationY;
+    private boolean useSmoothKeyboard;
 
     public interface SizeNotifierFrameLayoutDelegate {
         void onSizeChanged(int i, boolean z);
@@ -42,17 +44,18 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         return true;
     }
 
-    public SizeNotifierFrameLayout(Context context) {
-        this(context, (ActionBarLayout) null);
+    public SizeNotifierFrameLayout(Context context, boolean z) {
+        this(context, z, (ActionBarLayout) null);
     }
 
-    public SizeNotifierFrameLayout(Context context, ActionBarLayout actionBarLayout) {
+    public SizeNotifierFrameLayout(Context context, boolean z, ActionBarLayout actionBarLayout) {
         super(context);
         this.rect = new Rect();
         this.occupyStatusBar = true;
         this.parallaxScale = 1.0f;
         this.paused = true;
         setWillNotDraw(false);
+        this.useSmoothKeyboard = z;
         this.parentLayout = actionBarLayout;
     }
 
@@ -171,6 +174,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.bottomClip = i;
     }
 
+    public void setBackgroundTranslation(int i) {
+        this.backgroundTranslationY = i;
+    }
+
     public int getHeightWithKeyboard() {
         return getKeyboardHeight() + getMeasuredHeight();
     }
@@ -181,6 +188,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             super.onDraw(canvas);
             return;
         }
+        int i = this.useSmoothKeyboard ? 0 : this.keyboardHeight;
         Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
         if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
             if (Theme.isAnimatingColor()) {
@@ -190,11 +198,11 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
         ActionBarLayout actionBarLayout = this.parentLayout;
         float themeAnimationValue = actionBarLayout != null ? actionBarLayout.getThemeAnimationValue() : 1.0f;
-        int i = 0;
-        while (i < 2) {
-            Drawable drawable = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
+        int i2 = 0;
+        while (i2 < 2) {
+            Drawable drawable = i2 == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
             if (drawable != null) {
-                if (i != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
+                if (i2 != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
                     drawable.setAlpha(255);
                 } else {
                     drawable.setAlpha((int) (255.0f * themeAnimationValue));
@@ -214,7 +222,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.save();
                         canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.bottomClip);
                     }
-                    drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight() + this.keyboardHeight);
+                    drawable.setBounds(0, this.backgroundTranslationY, getMeasuredWidth(), this.backgroundTranslationY + getMeasuredHeight() + i);
                     drawable.draw(canvas);
                     if (this.bottomClip != 0) {
                         canvas.restore();
@@ -231,27 +239,27 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
                         int measuredHeight = getMeasuredHeight() - currentActionBarHeight;
                         float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth());
-                        float intrinsicHeight = ((float) (this.keyboardHeight + measuredHeight)) / ((float) drawable.getIntrinsicHeight());
+                        float intrinsicHeight = ((float) (measuredHeight + i)) / ((float) drawable.getIntrinsicHeight());
                         if (measuredWidth < intrinsicHeight) {
                             measuredWidth = intrinsicHeight;
                         }
                         int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * measuredWidth * this.parallaxScale));
                         int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * measuredWidth * this.parallaxScale));
                         int measuredWidth2 = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
-                        int i2 = (((measuredHeight - ceil2) + this.keyboardHeight) / 2) + currentActionBarHeight + ((int) this.translationY);
+                        int i3 = this.backgroundTranslationY + (((measuredHeight - ceil2) + i) / 2) + currentActionBarHeight + ((int) this.translationY);
                         canvas.save();
                         canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
-                        drawable.setBounds(measuredWidth2, i2, ceil + measuredWidth2, ceil2 + i2);
+                        drawable.setBounds(measuredWidth2, i3, ceil + measuredWidth2, ceil2 + i3);
                         drawable.draw(canvas);
                         canvas.restore();
                     }
                 }
-                if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                if (i2 == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
                     this.oldBackgroundDrawable = null;
                     invalidate();
                 }
             }
-            i++;
+            i2++;
         }
     }
 }

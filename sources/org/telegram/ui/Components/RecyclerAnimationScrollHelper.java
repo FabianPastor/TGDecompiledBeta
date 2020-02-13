@@ -16,13 +16,16 @@ public class RecyclerAnimationScrollHelper {
     public static final int SCROLL_DIRECTION_DOWN = 0;
     public static final int SCROLL_DIRECTION_UNSET = -1;
     public static final int SCROLL_DIRECTION_UP = 1;
-    AnimationCallback animationCallback;
-    ValueAnimator animator;
+    /* access modifiers changed from: private */
+    public AnimationCallback animationCallback;
+    /* access modifiers changed from: private */
+    public ValueAnimator animator;
     private LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public RecyclerListView recyclerView;
     private int scrollDirection;
-    ScrollListener scrollListener;
+    /* access modifiers changed from: private */
+    public ScrollListener scrollListener;
 
     public static class AnimationCallback {
         public void onEndAnimation() {
@@ -138,12 +141,11 @@ public class RecyclerAnimationScrollHelper {
                         animatableAdapter.onAnimationStart();
                     }
                     int height = i3 + (z3 ? -i9 : i10 - RecyclerAnimationScrollHelper.this.recyclerView.getHeight());
-                    ValueAnimator valueAnimator = RecyclerAnimationScrollHelper.this.animator;
-                    if (valueAnimator != null) {
-                        valueAnimator.removeAllListeners();
+                    if (RecyclerAnimationScrollHelper.this.animator != null) {
+                        RecyclerAnimationScrollHelper.this.animator.removeAllListeners();
                         RecyclerAnimationScrollHelper.this.animator.cancel();
                     }
-                    RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                    ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                     RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(arrayList, z3, height, arrayList) {
                         private final /* synthetic */ ArrayList f$1;
                         private final /* synthetic */ boolean f$2;
@@ -186,11 +188,10 @@ public class RecyclerAnimationScrollHelper {
                             if (animatableAdapter != null) {
                                 animatableAdapter.onAnimationEnd();
                             }
-                            AnimationCallback animationCallback = RecyclerAnimationScrollHelper.this.animationCallback;
-                            if (animationCallback != null) {
-                                animationCallback.onEndAnimation();
+                            if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
+                                RecyclerAnimationScrollHelper.this.animationCallback.onEndAnimation();
                             }
-                            RecyclerAnimationScrollHelper.this.animator = null;
+                            ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = null;
                         }
                     });
                     RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
@@ -219,9 +220,8 @@ public class RecyclerAnimationScrollHelper {
                             view2.setTranslationY(((float) (-i)) * (1.0f - floatValue));
                         }
                     }
-                    ScrollListener scrollListener = RecyclerAnimationScrollHelper.this.scrollListener;
-                    if (scrollListener != null) {
-                        scrollListener.onScroll();
+                    if (RecyclerAnimationScrollHelper.this.scrollListener != null) {
+                        RecyclerAnimationScrollHelper.this.scrollListener.onScroll();
                     }
                     RecyclerAnimationScrollHelper.this.recyclerView.invalidate();
                 }

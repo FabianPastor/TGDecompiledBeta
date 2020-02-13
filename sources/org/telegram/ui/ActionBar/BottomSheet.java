@@ -120,6 +120,7 @@ public class BottomSheet extends Dialog {
     public boolean useFastDismiss;
     /* access modifiers changed from: private */
     public boolean useHardwareLayer = true;
+    protected boolean useSmoothKeyboard;
 
     public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
         public boolean canDismiss() {
@@ -796,6 +797,7 @@ public class BottomSheet extends Dialog {
         }
         this.containerView.setVisibility(4);
         this.container.addView(this.containerView, 0, LayoutHelper.createFrame(-1, -2, 80));
+        int i2 = 16;
         if (this.title != null) {
             this.titleView = new TextView(getContext());
             this.titleView.setLines(1);
@@ -826,21 +828,21 @@ public class BottomSheet extends Dialog {
             }
             this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) i, 0.0f, 0.0f));
         } else if (this.items != null) {
-            int i2 = i;
-            int i3 = 0;
+            int i3 = i;
+            int i4 = 0;
             while (true) {
                 CharSequence[] charSequenceArr = this.items;
-                if (i3 >= charSequenceArr.length) {
+                if (i4 >= charSequenceArr.length) {
                     break;
                 }
-                if (charSequenceArr[i3] != null) {
+                if (charSequenceArr[i4] != null) {
                     BottomSheetCell bottomSheetCell = new BottomSheetCell(getContext(), 0);
-                    CharSequence charSequence = this.items[i3];
+                    CharSequence charSequence = this.items[i4];
                     int[] iArr = this.itemIcons;
-                    bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i3] : 0, this.bigTitle);
-                    this.containerView.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) i2, 0.0f, 0.0f));
-                    i2 += 48;
-                    bottomSheetCell.setTag(Integer.valueOf(i3));
+                    bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i4] : 0, this.bigTitle);
+                    this.containerView.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) i3, 0.0f, 0.0f));
+                    i3 += 48;
+                    bottomSheetCell.setTag(Integer.valueOf(i4));
                     bottomSheetCell.setOnClickListener(new View.OnClickListener() {
                         public final void onClick(View view) {
                             BottomSheet.this.lambda$onCreate$2$BottomSheet(view);
@@ -848,7 +850,7 @@ public class BottomSheet extends Dialog {
                     });
                     this.itemViews.add(bottomSheetCell);
                 }
-                i3++;
+                i4++;
             }
         }
         WindowManager.LayoutParams attributes = window.getAttributes();
@@ -857,7 +859,10 @@ public class BottomSheet extends Dialog {
         attributes.dimAmount = 0.0f;
         attributes.flags &= -3;
         if (this.focusable) {
-            attributes.softInputMode = 16;
+            if (this.useSmoothKeyboard) {
+                i2 = 32;
+            }
+            attributes.softInputMode = i2;
         } else {
             attributes.flags |= 131072;
         }
@@ -889,7 +894,7 @@ public class BottomSheet extends Dialog {
             Window window = getWindow();
             WindowManager.LayoutParams attributes = window.getAttributes();
             if (this.focusable) {
-                attributes.softInputMode = 16;
+                attributes.softInputMode = this.useSmoothKeyboard ? 32 : 16;
                 attributes.flags &= -131073;
             } else {
                 attributes.softInputMode = 48;
@@ -910,7 +915,7 @@ public class BottomSheet extends Dialog {
     public void show() {
         super.show();
         if (this.focusable) {
-            getWindow().setSoftInputMode(16);
+            getWindow().setSoftInputMode(this.useSmoothKeyboard ? 32 : 16);
         }
         int i = 0;
         this.dismissed = false;

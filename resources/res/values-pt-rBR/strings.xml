@@ -1316,7 +1316,6 @@
     <string name="General">Geral</string>
     <string name="GettingLinkInfo">Obtendo informações...</string>
     <string name="GifCaption">Legenda do GIF</string>
-    <string name="GifsTab">GIFS</string>
     <string name="GlobalAttachGifRestricted">GIFs não são permitidos neste grupo.</string>
     <string name="GlobalAttachInlineRestricted">Não é permitido enviar conteúdo inline neste grupo.</string>
     <string name="GlobalAttachMediaRestricted">Não é permitido enviar mídias neste grupo.</string>
@@ -1386,7 +1385,6 @@
     <string name="Hours_two">%1$d horas</string>
     <string name="Hours_zero">%1$d horas</string>
     <string name="Hybrid">Híbrido</string>
-    <string name="ImagesTab">IMAGENS</string>
     <string name="ImportContacts">Importar Contatos</string>
     <string name="InAppNotifications">Notificações no aplicativo</string>
     <string name="InAppPreview">Prévias no Aplicativo</string>
@@ -1588,7 +1586,6 @@
     <string name="MegaPublic">Grupo Público</string>
     <string name="MegaPublicInfo">Grupos públicos podem ser encontrados na busca, o histórico é disponível para todos e qualquer um pode entrar.</string>
     <string name="MegaUsernameHelp">Se você definir um link permanente, outras pessoas poderão encontrar e participar do seu grupo.\10\10Você pode usar a-z, 0-9 e underline.\10O tamanho mínimo é de 5 caracteres.</string>
-    <string name="MembersCount">%1$d de %2$d selecionados</string>
     <string name="MembersCountZero">até %1$s</string>
     <string name="Members_few">%1$d membros</string>
     <string name="Members_many">%1$d membros</string>
@@ -1660,10 +1657,7 @@
     <string name="NearbyStartGroup">Iniciar Grupo</string>
     <string name="NearbyVenue">Ou escolha um lugar</string>
     <string name="NetworkUsage">Uso de Dados</string>
-    <string name="NetworkUsageMobile">DADOS MÓVEIS</string>
-    <string name="NetworkUsageRoaming">ROAMING</string>
     <string name="NetworkUsageSince">Uso da rede desde %1$s</string>
-    <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Nunca Permitir</string>
     <string name="NeverShareWith">Nunca Mostrar Para</string>
     <string name="NeverShareWithTitle">Nunca Mostrar</string>
@@ -2225,7 +2219,6 @@
     <string name="PeopleNearbyGps">Ativar</string>
     <string name="PeopleNearbyGpsInfo">Adicione rapidamente pessoas próximas que estejam visualizando esta seção e descubra grupos locais.\10\10Por favor, ative os serviços de localização para ativar este recurso.</string>
     <string name="PeopleNearbyHeader">Pessoas próximas</string>
-    <string name="PeopleNearbyInfo">Peça ao seu amigo por perto para abrir esta página para trocar números de telefone.</string>
     <string name="PermissionContacts">Para que você se conecte aos seus amigos em todos os dispositivos, seus contatos serão sincronizados continuamente com os servidores fortemente criptografados do Telegram.</string>
     <string name="PermissionDrawAboveOtherApps">Para reproduzir vídeos no modo PiP, o Telegram precisa de acesso para aparecer sobre outros apps.</string>
     <string name="PermissionNoAudio">Telegram precisa acessar seu microfone para que você possa enviar mensagens de voz.</string>
@@ -2655,15 +2648,10 @@
     <string name="SharedAudioFiles">Arquivos de áudio</string>
     <string name="SharedContent">Conteúdo compartilhado</string>
     <string name="SharedContentTitle">Conteúdo Compartilhado</string>
-    <string name="SharedFilesTab">ARQUIVOS</string>
     <string name="SharedLinks">Links</string>
-    <string name="SharedLinksTab">LINKS</string>
     <string name="SharedMedia">Mídia Compartilhada</string>
-    <string name="SharedMediaTab">MÍDIA</string>
-    <string name="SharedMusicTab">ÁUDIO</string>
     <string name="SharedPhotosAndVideos">Fotos e vídeos</string>
     <string name="SharedPlace">Local</string>
-    <string name="SharedVoiceTab">VOZ</string>
     <string name="SharingLiveLocationTitle">Você está compartilhando sua Localização em %1$s</string>
     <string name="SharingYouAndOtherName">Você e %1$s</string>
     <string name="Sharpen">Nitidez</string>

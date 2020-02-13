@@ -36,6 +36,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -179,7 +180,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
         addItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         addItem.addSubItem(1, NUM, (CharSequence) LocaleController.getString("OpenInExternalApp", NUM));
-        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2) {
+        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
             private boolean ignoreLayout;
             private int lastNotifyWidth;
 
@@ -188,7 +189,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 int size = View.MeasureSpec.getSize(i);
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.ignoreLayout = true;
                     PhotoAlbumPickerActivity.this.commentTextView.hideEmojiView();
                     this.ignoreLayout = false;
@@ -214,148 +215,153 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:32:0x009f  */
-            /* JADX WARNING: Removed duplicated region for block: B:39:0x00b9  */
-            /* JADX WARNING: Removed duplicated region for block: B:47:0x00e0  */
-            /* JADX WARNING: Removed duplicated region for block: B:48:0x00e9  */
+            /* JADX WARNING: Removed duplicated region for block: B:36:0x00a5  */
+            /* JADX WARNING: Removed duplicated region for block: B:43:0x00bf  */
+            /* JADX WARNING: Removed duplicated region for block: B:51:0x00e6  */
+            /* JADX WARNING: Removed duplicated region for block: B:52:0x00ef  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void onLayout(boolean r9, int r10, int r11, int r12, int r13) {
+            public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
                 /*
-                    r8 = this;
-                    int r9 = r8.lastNotifyWidth
-                    int r12 = r12 - r10
-                    if (r9 == r12) goto L_0x0024
-                    r8.lastNotifyWidth = r12
-                    org.telegram.ui.PhotoAlbumPickerActivity r9 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    if (r9 == 0) goto L_0x0024
-                    org.telegram.ui.PhotoAlbumPickerActivity r9 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    boolean r9 = r9.isShowing()
-                    if (r9 == 0) goto L_0x0024
-                    org.telegram.ui.PhotoAlbumPickerActivity r9 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.ActionBar.ActionBarPopupWindow r9 = r9.sendPopupWindow
-                    r9.dismiss()
-                L_0x0024:
-                    int r9 = r8.getChildCount()
-                    int r10 = r8.getKeyboardHeight()
-                    r0 = 1101004800(0x41a00000, float:20.0)
-                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                    r1 = 0
-                    if (r10 > r0) goto L_0x004a
-                    boolean r10 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                    if (r10 != 0) goto L_0x004a
-                    boolean r10 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r10 != 0) goto L_0x004a
+                    r9 = this;
+                    int r10 = r9.lastNotifyWidth
+                    int r13 = r13 - r11
+                    if (r10 == r13) goto L_0x0024
+                    r9.lastNotifyWidth = r13
                     org.telegram.ui.PhotoAlbumPickerActivity r10 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r10 = r10.commentTextView
-                    int r10 = r10.getEmojiPadding()
-                    goto L_0x004b
-                L_0x004a:
-                    r10 = 0
-                L_0x004b:
-                    r8.setBottomClip(r10)
-                L_0x004e:
-                    if (r1 >= r9) goto L_0x0100
-                    android.view.View r0 = r8.getChildAt(r1)
-                    int r2 = r0.getVisibility()
-                    r3 = 8
-                    if (r2 != r3) goto L_0x005e
-                    goto L_0x00fc
-                L_0x005e:
-                    android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
-                    android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-                    int r3 = r0.getMeasuredWidth()
-                    int r4 = r0.getMeasuredHeight()
-                    int r5 = r2.gravity
-                    r6 = -1
-                    if (r5 != r6) goto L_0x0073
-                    r5 = 51
-                L_0x0073:
-                    r6 = r5 & 7
-                    r5 = r5 & 112(0x70, float:1.57E-43)
-                    r6 = r6 & 7
-                    r7 = 1
-                    if (r6 == r7) goto L_0x0091
-                    r7 = 5
-                    if (r6 == r7) goto L_0x0087
-                    int r6 = r2.leftMargin
-                    int r7 = r8.getPaddingLeft()
-                    int r6 = r6 + r7
-                    goto L_0x009b
-                L_0x0087:
-                    int r6 = r12 - r3
-                    int r7 = r2.rightMargin
-                    int r6 = r6 - r7
-                    int r7 = r8.getPaddingRight()
-                    goto L_0x009a
-                L_0x0091:
-                    int r6 = r12 - r3
-                    int r6 = r6 / 2
-                    int r7 = r2.leftMargin
-                    int r6 = r6 + r7
-                    int r7 = r2.rightMargin
-                L_0x009a:
-                    int r6 = r6 - r7
-                L_0x009b:
-                    r7 = 16
-                    if (r5 == r7) goto L_0x00b9
-                    r7 = 48
-                    if (r5 == r7) goto L_0x00b1
-                    r7 = 80
-                    if (r5 == r7) goto L_0x00aa
-                    int r2 = r2.topMargin
-                    goto L_0x00c6
-                L_0x00aa:
-                    int r5 = r13 - r10
-                    int r5 = r5 - r11
-                    int r5 = r5 - r4
-                    int r2 = r2.bottomMargin
-                    goto L_0x00c4
-                L_0x00b1:
-                    int r2 = r2.topMargin
-                    int r5 = r8.getPaddingTop()
-                    int r2 = r2 + r5
-                    goto L_0x00c6
-                L_0x00b9:
-                    int r5 = r13 - r10
-                    int r5 = r5 - r11
-                    int r5 = r5 - r4
-                    int r5 = r5 / 2
-                    int r7 = r2.topMargin
-                    int r5 = r5 + r7
-                    int r2 = r2.bottomMargin
-                L_0x00c4:
-                    int r2 = r5 - r2
-                L_0x00c6:
-                    org.telegram.ui.PhotoAlbumPickerActivity r5 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
-                    if (r5 == 0) goto L_0x00f7
-                    org.telegram.ui.PhotoAlbumPickerActivity r5 = org.telegram.ui.PhotoAlbumPickerActivity.this
-                    org.telegram.ui.Components.EditTextEmoji r5 = r5.commentTextView
-                    boolean r5 = r5.isPopupView(r0)
-                    if (r5 == 0) goto L_0x00f7
-                    boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r2 == 0) goto L_0x00e9
-                    int r2 = r8.getMeasuredHeight()
-                    int r5 = r0.getMeasuredHeight()
-                    goto L_0x00f6
-                L_0x00e9:
-                    int r2 = r8.getMeasuredHeight()
-                    int r5 = r8.getKeyboardHeight()
-                    int r2 = r2 + r5
-                    int r5 = r0.getMeasuredHeight()
-                L_0x00f6:
-                    int r2 = r2 - r5
-                L_0x00f7:
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    if (r10 == 0) goto L_0x0024
+                    org.telegram.ui.PhotoAlbumPickerActivity r10 = org.telegram.ui.PhotoAlbumPickerActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    boolean r10 = r10.isShowing()
+                    if (r10 == 0) goto L_0x0024
+                    org.telegram.ui.PhotoAlbumPickerActivity r10 = org.telegram.ui.PhotoAlbumPickerActivity.this
+                    org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r10.sendPopupWindow
+                    r10.dismiss()
+                L_0x0024:
+                    int r10 = r9.getChildCount()
+                    boolean r11 = org.telegram.messenger.SharedConfig.smoothKeyboard
+                    r0 = 0
+                    if (r11 == 0) goto L_0x002f
+                    r11 = 0
+                    goto L_0x0033
+                L_0x002f:
+                    int r11 = r9.getKeyboardHeight()
+                L_0x0033:
+                    r1 = 1101004800(0x41a00000, float:20.0)
+                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                    if (r11 > r1) goto L_0x0050
+                    boolean r1 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                    if (r1 != 0) goto L_0x0050
+                    boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r1 != 0) goto L_0x0050
+                    org.telegram.ui.PhotoAlbumPickerActivity r1 = org.telegram.ui.PhotoAlbumPickerActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r1 = r1.commentTextView
+                    int r1 = r1.getEmojiPadding()
+                    goto L_0x0051
+                L_0x0050:
+                    r1 = 0
+                L_0x0051:
+                    r9.setBottomClip(r1)
+                L_0x0054:
+                    if (r0 >= r10) goto L_0x0102
+                    android.view.View r2 = r9.getChildAt(r0)
+                    int r3 = r2.getVisibility()
+                    r4 = 8
+                    if (r3 != r4) goto L_0x0064
+                    goto L_0x00fe
+                L_0x0064:
+                    android.view.ViewGroup$LayoutParams r3 = r2.getLayoutParams()
+                    android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
+                    int r4 = r2.getMeasuredWidth()
+                    int r5 = r2.getMeasuredHeight()
+                    int r6 = r3.gravity
+                    r7 = -1
+                    if (r6 != r7) goto L_0x0079
+                    r6 = 51
+                L_0x0079:
+                    r7 = r6 & 7
+                    r6 = r6 & 112(0x70, float:1.57E-43)
+                    r7 = r7 & 7
+                    r8 = 1
+                    if (r7 == r8) goto L_0x0097
+                    r8 = 5
+                    if (r7 == r8) goto L_0x008d
+                    int r7 = r3.leftMargin
+                    int r8 = r9.getPaddingLeft()
+                    int r7 = r7 + r8
+                    goto L_0x00a1
+                L_0x008d:
+                    int r7 = r13 - r4
+                    int r8 = r3.rightMargin
+                    int r7 = r7 - r8
+                    int r8 = r9.getPaddingRight()
+                    goto L_0x00a0
+                L_0x0097:
+                    int r7 = r13 - r4
+                    int r7 = r7 / 2
+                    int r8 = r3.leftMargin
+                    int r7 = r7 + r8
+                    int r8 = r3.rightMargin
+                L_0x00a0:
+                    int r7 = r7 - r8
+                L_0x00a1:
+                    r8 = 16
+                    if (r6 == r8) goto L_0x00bf
+                    r8 = 48
+                    if (r6 == r8) goto L_0x00b7
+                    r8 = 80
+                    if (r6 == r8) goto L_0x00b0
+                    int r3 = r3.topMargin
+                    goto L_0x00cc
+                L_0x00b0:
+                    int r6 = r14 - r1
+                    int r6 = r6 - r12
+                    int r6 = r6 - r5
+                    int r3 = r3.bottomMargin
+                    goto L_0x00ca
+                L_0x00b7:
+                    int r3 = r3.topMargin
+                    int r6 = r9.getPaddingTop()
                     int r3 = r3 + r6
-                    int r4 = r4 + r2
-                    r0.layout(r6, r2, r3, r4)
-                L_0x00fc:
-                    int r1 = r1 + 1
-                    goto L_0x004e
-                L_0x0100:
-                    r8.notifyHeightChanged()
+                    goto L_0x00cc
+                L_0x00bf:
+                    int r6 = r14 - r1
+                    int r6 = r6 - r12
+                    int r6 = r6 - r5
+                    int r6 = r6 / 2
+                    int r8 = r3.topMargin
+                    int r6 = r6 + r8
+                    int r3 = r3.bottomMargin
+                L_0x00ca:
+                    int r3 = r6 - r3
+                L_0x00cc:
+                    org.telegram.ui.PhotoAlbumPickerActivity r6 = org.telegram.ui.PhotoAlbumPickerActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
+                    if (r6 == 0) goto L_0x00f9
+                    org.telegram.ui.PhotoAlbumPickerActivity r6 = org.telegram.ui.PhotoAlbumPickerActivity.this
+                    org.telegram.ui.Components.EditTextEmoji r6 = r6.commentTextView
+                    boolean r6 = r6.isPopupView(r2)
+                    if (r6 == 0) goto L_0x00f9
+                    boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+                    if (r3 == 0) goto L_0x00ef
+                    int r3 = r9.getMeasuredHeight()
+                    int r6 = r2.getMeasuredHeight()
+                    goto L_0x00f8
+                L_0x00ef:
+                    int r3 = r9.getMeasuredHeight()
+                    int r3 = r3 + r11
+                    int r6 = r2.getMeasuredHeight()
+                L_0x00f8:
+                    int r3 = r3 - r6
+                L_0x00f9:
+                    int r4 = r4 + r7
+                    int r5 = r5 + r3
+                    r2.layout(r7, r3, r4, r5)
+                L_0x00fe:
+                    int r0 = r0 + 1
+                    goto L_0x0054
+                L_0x0102:
+                    r9.notifyHeightChanged()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoAlbumPickerActivity.AnonymousClass2.onLayout(boolean, int, int, int, int):void");
