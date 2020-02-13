@@ -1220,6 +1220,7 @@ public class Theme {
             char c;
             int i;
             int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
+            boolean z = false;
             if (this.isTopNear && this.isBottomNear) {
                 c = 3;
             } else if (this.isTopNear) {
@@ -1240,9 +1241,12 @@ public class Theme {
                     setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
                     draw(canvas, paint2);
                     this.backgroundDrawable[c2][c] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), (String) null);
-                    this.backgroundDrawableColor[c2][c] = 0;
-                    setBounds(this.backupRect);
-                } catch (Throwable unused) {
+                    try {
+                        setBounds(this.backupRect);
+                    } catch (Throwable unused) {
+                    }
+                    z = true;
+                } catch (Throwable unused2) {
                 }
             }
             if (this.isSelected) {
@@ -1250,9 +1254,8 @@ public class Theme {
             } else {
                 i = getColor(this.isOut ? "chat_outBubble" : "chat_inBubble");
             }
-            Drawable[][] drawableArr = this.backgroundDrawable;
-            if (!(drawableArr[c2][c] == null || this.backgroundDrawableColor[c2][c] == i)) {
-                drawableArr[c2][c].setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+            if (this.backgroundDrawable[c2][c] != null && (this.backgroundDrawableColor[c2][c] != i || z)) {
+                this.backgroundDrawable[c2][c].setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
                 this.backgroundDrawableColor[c2][c] = i;
             }
             return this.backgroundDrawable[c2][c];
@@ -1261,6 +1264,7 @@ public class Theme {
         public Drawable getShadowDrawable() {
             char c;
             int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
+            boolean z = false;
             if (this.isTopNear && this.isBottomNear) {
                 c = 3;
             } else if (this.isTopNear) {
@@ -1293,14 +1297,13 @@ public class Theme {
                         draw(canvas, paint2);
                     }
                     this.shadowDrawable[c] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), (String) null);
-                    this.shadowDrawableColor[c] = 0;
+                    z = true;
                 } catch (Throwable unused) {
                 }
             }
             int color = getColor(this.isOut ? "chat_outBubbleShadow" : "chat_inBubbleShadow");
-            Drawable[] drawableArr = this.shadowDrawable;
-            if (!(drawableArr[c] == null || this.shadowDrawableColor[c] == color)) {
-                drawableArr[c].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            if (this.shadowDrawable[c] != null && (this.shadowDrawableColor[c] != color || z)) {
+                this.shadowDrawable[c].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 this.shadowDrawableColor[c] = color;
             }
             return this.shadowDrawable[c];
@@ -2194,6 +2197,9 @@ public class Theme {
             this.paint.setAlpha(i);
             if (this.isOut) {
                 this.selectedPaint.setAlpha((int) (((float) Color.alpha(getColor("chat_outBubbleGradientSelectedOverlay"))) * (((float) i) / 255.0f)));
+            }
+            if (this.gradientShader == null) {
+                getBackgroundDrawable().setAlpha(i);
             }
         }
     }

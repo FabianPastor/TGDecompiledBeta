@@ -700,6 +700,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$null$6$PeopleNearbyActivity(TLObject tLObject, int i) {
         boolean z;
+        int i2;
         this.reqId = 0;
         Runnable runnable = this.showProgressRunnable;
         if (runnable != null) {
@@ -722,16 +723,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             }
             int size = tL_updates.updates.size();
             boolean z2 = z;
-            boolean z3 = false;
-            for (int i2 = 0; i2 < size; i2++) {
-                TLRPC.Update update = tL_updates.updates.get(i2);
+            for (int i3 = 0; i3 < size; i3++) {
+                TLRPC.Update update = tL_updates.updates.get(i3);
                 if (update instanceof TLRPC.TL_updatePeerLocated) {
                     TLRPC.TL_updatePeerLocated tL_updatePeerLocated = (TLRPC.TL_updatePeerLocated) update;
                     int size2 = tL_updatePeerLocated.peers.size();
-                    boolean z4 = z2;
-                    boolean z5 = z3;
-                    for (int i3 = 0; i3 < size2; i3++) {
-                        TLRPC.PeerLocated peerLocated = tL_updatePeerLocated.peers.get(i3);
+                    boolean z3 = z2;
+                    for (int i4 = 0; i4 < size2; i4++) {
+                        TLRPC.PeerLocated peerLocated = tL_updatePeerLocated.peers.get(i4);
                         if (peerLocated instanceof TLRPC.TL_peerLocated) {
                             TLRPC.TL_peerLocated tL_peerLocated = (TLRPC.TL_peerLocated) peerLocated;
                             if (tL_peerLocated.peer instanceof TLRPC.TL_peerUser) {
@@ -739,25 +738,13 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                             } else {
                                 this.chats.add(tL_peerLocated);
                             }
-                        } else if (peerLocated instanceof TLRPC.TL_peerSelfLocated) {
-                            int i4 = userConfig.sharingMyLocationUntil;
-                            int i5 = ((TLRPC.TL_peerSelfLocated) peerLocated).expires;
-                            if (i4 != i5) {
-                                userConfig.sharingMyLocationUntil = i5;
-                                z5 = true;
-                                z4 = true;
-                            } else {
-                                z5 = true;
-                            }
+                        } else if ((peerLocated instanceof TLRPC.TL_peerSelfLocated) && userConfig.sharingMyLocationUntil != (i2 = ((TLRPC.TL_peerSelfLocated) peerLocated).expires)) {
+                            userConfig.sharingMyLocationUntil = i2;
+                            z3 = true;
                         }
                     }
-                    z3 = z5;
-                    z2 = z4;
+                    z2 = z3;
                 }
-            }
-            if (!z3 && userConfig.sharingMyLocationUntil != 0) {
-                userConfig.sharingMyLocationUntil = 0;
-                z2 = true;
             }
             if (z2) {
                 userConfig.saveConfig(false);

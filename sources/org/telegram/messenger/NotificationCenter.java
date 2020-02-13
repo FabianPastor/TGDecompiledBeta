@@ -53,9 +53,9 @@ public class NotificationCenter {
     public static final int didSetTwoStepPassword;
     public static final int didStartedCall;
     public static final int didUpdateConnectionState;
+    public static final int didUpdateMessagesViews;
     public static final int didUpdatePollResults;
     public static final int didUpdateReactions;
-    public static final int didUpdatedMessagesViews;
     public static final int emojiDidLoad;
     public static final int encryptedChatCreated;
     public static final int encryptedChatUpdated;
@@ -338,7 +338,7 @@ public class NotificationCenter {
         needShowPlayServicesAlert = i55;
         int i56 = totalEvents;
         totalEvents = i56 + 1;
-        didUpdatedMessagesViews = i56;
+        didUpdateMessagesViews = i56;
         int i57 = totalEvents;
         totalEvents = i57 + 1;
         needReloadRecentDialogsSearch = i57;

@@ -5261,7 +5261,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$null$94$MessagesController(SparseArray sparseArray) {
-        getNotificationCenter().postNotificationName(NotificationCenter.didUpdatedMessagesViews, sparseArray);
+        getNotificationCenter().postNotificationName(NotificationCenter.didUpdateMessagesViews, sparseArray);
     }
 
     public /* synthetic */ void lambda$updateTimerProc$97$MessagesController() {
@@ -20626,7 +20626,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0a82:
             if (r42 == 0) goto L_0x0a94
             org.telegram.messenger.NotificationCenter r0 = r32.getNotificationCenter()
-            int r2 = org.telegram.messenger.NotificationCenter.didUpdatedMessagesViews
+            int r2 = org.telegram.messenger.NotificationCenter.didUpdateMessagesViews
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r5 = 0

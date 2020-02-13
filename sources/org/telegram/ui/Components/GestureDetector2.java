@@ -9,7 +9,7 @@ import android.view.ViewConfiguration;
 
 public class GestureDetector2 {
     private static final int DOUBLE_TAP_MIN_TIME = 40;
-    private static final int DOUBLE_TAP_TIMEOUT = 150;
+    private static final int DOUBLE_TAP_TIMEOUT = 200;
     private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
     private static final int LONG_PRESS = 2;
     private static final int SHOW_PRESS = 1;
@@ -589,7 +589,7 @@ public class GestureDetector2 {
             goto L_0x0293
         L_0x028a:
             android.os.Handler r2 = r0.mHandler
-            r3 = 150(0x96, double:7.4E-322)
+            r3 = 200(0xc8, double:9.9E-322)
             r6 = 3
             r2.sendEmptyMessageDelayed(r6, r3)
         L_0x0292:
@@ -676,7 +676,7 @@ public class GestureDetector2 {
             return false;
         }
         long eventTime = motionEvent3.getEventTime() - motionEvent2.getEventTime();
-        if (eventTime > 150 || eventTime < 40) {
+        if (eventTime > 200 || eventTime < 40) {
             return false;
         }
         int x = ((int) motionEvent.getX()) - ((int) motionEvent3.getX());

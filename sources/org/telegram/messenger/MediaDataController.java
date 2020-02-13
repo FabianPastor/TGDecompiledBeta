@@ -3497,7 +3497,7 @@ public class MediaDataController extends BaseController {
             if (MessageObject.isVideoMessage(message)) {
                 return 0;
             }
-            if (MessageObject.isStickerMessage(message) || MessageObject.isAnimatedStickerMessage(message)) {
+            if (MessageObject.isStickerMessage(message) || MessageObject.isAnimatedStickerMessage(message) || MessageObject.isNewGifMessage(message)) {
                 return -1;
             }
             return MessageObject.isMusicMessage(message) ? 4 : 1;
@@ -3527,6 +3527,9 @@ public class MediaDataController extends BaseController {
                     return true;
                 }
             }
+        }
+        if (getMediaType(message) != -1) {
+            return true;
         }
         return false;
     }

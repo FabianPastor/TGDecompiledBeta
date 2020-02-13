@@ -1731,7 +1731,7 @@ public class AndroidUtilities {
                 roundMessageInset = dp(2.0f);
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
+                FileLog.e("density = " + density + " display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
