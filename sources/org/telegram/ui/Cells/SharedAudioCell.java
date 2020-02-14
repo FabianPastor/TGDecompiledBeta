@@ -103,7 +103,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this.needDivider = z;
         this.currentMessageObject = messageObject;
         TLRPC.Document document = messageObject.getDocument();
-        TLRPC.PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
+        TLRPC.PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 240) : null;
         if (closestPhotoSizeWithSize instanceof TLRPC.TL_photoSize) {
             this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
         } else {

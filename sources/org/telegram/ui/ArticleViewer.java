@@ -1935,10 +1935,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public void updateInterfaceForCurrentPage(org.telegram.tgnet.TLRPC.WebPage r13, boolean r14, int r15) {
         /*
             r12 = this;
-            if (r13 == 0) goto L_0x0269
+            if (r13 == 0) goto L_0x026b
             org.telegram.tgnet.TLRPC$Page r0 = r13.cached_page
             if (r0 != 0) goto L_0x0008
-            goto L_0x0269
+            goto L_0x026b
         L_0x0008:
             r0 = -1
             r1 = 2
@@ -2238,11 +2238,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x025d:
             if (r1 == r0) goto L_0x0266
             androidx.recyclerview.widget.LinearLayoutManager[] r15 = r12.layoutManager
-            r14 = r15[r14]
-            r14.scrollToPositionWithOffset(r1, r13)
+            r15 = r15[r14]
+            r15.scrollToPositionWithOffset(r1, r13)
         L_0x0266:
+            if (r14 != 0) goto L_0x026b
             r12.checkScrollAnimated()
-        L_0x0269:
+        L_0x026b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.updateInterfaceForCurrentPage(org.telegram.tgnet.TLRPC$WebPage, boolean, int):void");
@@ -11546,6 +11547,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     return onInterceptTouchEvent;
                 }
 
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (BlockTableCell.this.tableLayout.getMeasuredWidth() <= getMeasuredWidth() - AndroidUtilities.dp(36.0f)) {
+                        return false;
+                    }
+                    return super.onTouchEvent(motionEvent);
+                }
+
                 /* access modifiers changed from: protected */
                 public void onScrollChanged(int i, int i2, int i3, int i4) {
                     super.onScrollChanged(i, i2, i3, i4);
@@ -12530,6 +12538,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
                 public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                     ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    ArticleViewer.this.cancelCheckLongPress();
                     return super.onInterceptTouchEvent(motionEvent);
                 }
             };
@@ -16602,6 +16611,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public DrawingText textLayout;
 
+        private class TextContainerView extends View implements TextSelectionHelper.ArticleSelectableView {
+            public TextContainerView(Context context) {
+                super(context);
+            }
+
+            public void fillTextLayoutBlocks(ArrayList<TextSelectionHelper.TextLayoutBlock> arrayList) {
+                if (BlockPreformattedCell.this.textLayout != null) {
+                    arrayList.add(BlockPreformattedCell.this.textLayout);
+                }
+            }
+        }
+
         public BlockPreformattedCell(Context context, WebpageAdapter webpageAdapter) {
             super(context);
             this.parentAdapter = webpageAdapter;
@@ -16624,7 +16645,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             };
             this.scrollView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
             addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
-            this.textContainer = new View(context, ArticleViewer.this) {
+            this.textContainer = new TextContainerView(context, ArticleViewer.this) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     int i3;

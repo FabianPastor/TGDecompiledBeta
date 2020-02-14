@@ -46,11 +46,17 @@ public class GestureDetector2 {
     private int mTouchSlopSquare;
     private VelocityTracker mVelocityTracker;
 
-    public interface OnContextClickListener {
-        boolean onContextClick(MotionEvent motionEvent);
-    }
-
     public interface OnDoubleTapListener {
+
+        /* renamed from: org.telegram.ui.Components.GestureDetector2$OnDoubleTapListener$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static boolean $default$canDoubleTap(OnDoubleTapListener onDoubleTapListener, MotionEvent motionEvent) {
+                return true;
+            }
+        }
+
+        boolean canDoubleTap(MotionEvent motionEvent);
+
         boolean onDoubleTap(MotionEvent motionEvent);
 
         boolean onDoubleTapEvent(MotionEvent motionEvent);
@@ -58,56 +64,7 @@ public class GestureDetector2 {
         boolean onSingleTapConfirmed(MotionEvent motionEvent);
     }
 
-    public static class SimpleOnGestureListener implements OnGestureListener, OnDoubleTapListener, OnContextClickListener {
-        public /* synthetic */ int getDoubleTapTimeout(MotionEvent motionEvent) {
-            return OnGestureListener.CC.$default$getDoubleTapTimeout(this, motionEvent);
-        }
-
-        public boolean onContextClick(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public boolean onDoubleTap(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public boolean onDown(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-            return false;
-        }
-
-        public void onLongPress(MotionEvent motionEvent) {
-        }
-
-        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-            return false;
-        }
-
-        public void onShowPress(MotionEvent motionEvent) {
-        }
-
-        public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public boolean onSingleTapUp(MotionEvent motionEvent) {
-            return false;
-        }
-
-        public void onUp(MotionEvent motionEvent) {
-        }
-    }
-
     public interface OnGestureListener {
-        int getDoubleTapTimeout(MotionEvent motionEvent);
-
         boolean onDown(MotionEvent motionEvent);
 
         boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2);
@@ -121,13 +78,6 @@ public class GestureDetector2 {
         boolean onSingleTapUp(MotionEvent motionEvent);
 
         void onUp(MotionEvent motionEvent);
-
-        /* renamed from: org.telegram.ui.Components.GestureDetector2$OnGestureListener$-CC  reason: invalid class name */
-        public final /* synthetic */ class CC {
-            public static int $default$getDoubleTapTimeout(OnGestureListener _this, MotionEvent motionEvent) {
-                return GestureDetector2.DOUBLE_TAP_TIMEOUT;
-            }
-        }
     }
 
     private class GestureHandler extends Handler {
@@ -230,8 +180,8 @@ public class GestureDetector2 {
         return this.mIsLongpressEnabled;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x02a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x02bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x02ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x02c2  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r20) {
         /*
@@ -473,24 +423,24 @@ public class GestureDetector2 {
         L_0x0193:
             int r3 = android.os.Build.VERSION.SDK_INT
             r4 = 29
-            if (r3 < r4) goto L_0x02ef
+            if (r3 < r4) goto L_0x02f5
             if (r2 != r7) goto L_0x019e
             r16 = 1
             goto L_0x01a0
         L_0x019e:
             r16 = 0
         L_0x01a0:
-            if (r16 == 0) goto L_0x02ef
-            if (r8 == 0) goto L_0x02ef
+            if (r16 == 0) goto L_0x02f5
+            if (r8 == 0) goto L_0x02f5
             android.os.Handler r2 = r0.mHandler
             r2.removeMessages(r7)
             android.os.Handler r2 = r0.mHandler
             android.os.Message r3 = r2.obtainMessage(r7, r5, r5)
             r2.sendMessage(r3)
-            goto L_0x02ef
+            goto L_0x02f5
         L_0x01b4:
             r1 = 0
-            goto L_0x02ef
+            goto L_0x02f5
         L_0x01b7:
             r0.mStillDown = r5
             org.telegram.ui.Components.GestureDetector2$OnGestureListener r2 = r0.mListener
@@ -572,24 +522,27 @@ public class GestureDetector2 {
             r2.removeMessages(r3)
             android.os.Handler r2 = r0.mHandler
             r2.removeMessages(r7)
-            goto L_0x02ef
+            goto L_0x02f5
         L_0x0254:
+            r0.mDeferConfirmSingleTap = r5
             org.telegram.ui.Components.GestureDetector2$OnDoubleTapListener r2 = r0.mDoubleTapListener
-            if (r2 == 0) goto L_0x0297
+            if (r2 == 0) goto L_0x029f
+            boolean r2 = r2.canDoubleTap(r1)
+            if (r2 == 0) goto L_0x029c
             android.os.Handler r2 = r0.mHandler
             r3 = 3
             boolean r2 = r2.hasMessages(r3)
-            if (r2 == 0) goto L_0x0266
+            if (r2 == 0) goto L_0x026e
             android.os.Handler r4 = r0.mHandler
             r4.removeMessages(r3)
-        L_0x0266:
+        L_0x026e:
             android.view.MotionEvent r3 = r0.mCurrentDownEvent
-            if (r3 == 0) goto L_0x028a
+            if (r3 == 0) goto L_0x0292
             android.view.MotionEvent r4 = r0.mPreviousUpEvent
-            if (r4 == 0) goto L_0x028a
-            if (r2 == 0) goto L_0x028a
+            if (r4 == 0) goto L_0x0292
+            if (r2 == 0) goto L_0x0292
             boolean r2 = r0.isConsideredDoubleTap(r3, r4, r1)
-            if (r2 == 0) goto L_0x028a
+            if (r2 == 0) goto L_0x0292
             r2 = 1
             r0.mIsDoubleTapping = r2
             org.telegram.ui.Components.GestureDetector2$OnDoubleTapListener r2 = r0.mDoubleTapListener
@@ -599,25 +552,28 @@ public class GestureDetector2 {
             org.telegram.ui.Components.GestureDetector2$OnDoubleTapListener r3 = r0.mDoubleTapListener
             boolean r3 = r3.onDoubleTapEvent(r1)
             r2 = r2 | r3
-            goto L_0x0298
-        L_0x028a:
+            goto L_0x02a0
+        L_0x0292:
             android.os.Handler r2 = r0.mHandler
-            org.telegram.ui.Components.GestureDetector2$OnGestureListener r3 = r0.mListener
-            int r3 = r3.getDoubleTapTimeout(r1)
+            int r3 = DOUBLE_TAP_TIMEOUT
             long r3 = (long) r3
             r6 = 3
             r2.sendEmptyMessageDelayed(r6, r3)
-        L_0x0297:
+            goto L_0x029f
+        L_0x029c:
+            r2 = 1
+            r0.mDeferConfirmSingleTap = r2
+        L_0x029f:
             r2 = 0
-        L_0x0298:
+        L_0x02a0:
             r0.mLastFocusX = r11
             r0.mDownFocusX = r11
             r0.mLastFocusY = r12
             r0.mDownFocusY = r12
             android.view.MotionEvent r3 = r0.mCurrentDownEvent
-            if (r3 == 0) goto L_0x02a7
+            if (r3 == 0) goto L_0x02af
             r3.recycle()
-        L_0x02a7:
+        L_0x02af:
             android.view.MotionEvent r3 = android.view.MotionEvent.obtain(r20)
             r0.mCurrentDownEvent = r3
             r3 = 1
@@ -625,9 +581,8 @@ public class GestureDetector2 {
             r0.mAlwaysInBiggerTapRegion = r3
             r0.mStillDown = r3
             r0.mInLongPress = r5
-            r0.mDeferConfirmSingleTap = r5
             boolean r3 = r0.mIsLongpressEnabled
-            if (r3 == 0) goto L_0x02d6
+            if (r3 == 0) goto L_0x02dc
             android.os.Handler r3 = r0.mHandler
             r3.removeMessages(r7)
             android.os.Handler r3 = r0.mHandler
@@ -638,7 +593,7 @@ public class GestureDetector2 {
             long r7 = (long) r7
             long r5 = r5 + r7
             r3.sendMessageAtTime(r4, r5)
-        L_0x02d6:
+        L_0x02dc:
             android.os.Handler r3 = r0.mHandler
             android.view.MotionEvent r4 = r0.mCurrentDownEvent
             long r4 = r4.getDownTime()
@@ -651,7 +606,7 @@ public class GestureDetector2 {
             boolean r1 = r3.onDown(r1)
             r5 = r2 | r1
             r1 = r5
-        L_0x02ef:
+        L_0x02f5:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GestureDetector2.onTouchEvent(android.view.MotionEvent):boolean");
@@ -691,7 +646,7 @@ public class GestureDetector2 {
             return false;
         }
         long eventTime = motionEvent3.getEventTime() - motionEvent2.getEventTime();
-        if (eventTime > ((long) this.mListener.getDoubleTapTimeout(motionEvent)) || eventTime < 40) {
+        if (eventTime > ((long) DOUBLE_TAP_TIMEOUT) || eventTime < 40) {
             return false;
         }
         int x = ((int) motionEvent.getX()) - ((int) motionEvent3.getX());

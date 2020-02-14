@@ -683,24 +683,26 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     }
 
     public /* synthetic */ void lambda$sendRequest$7$PeopleNearbyActivity(int i, TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject, i) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ int f$2;
+        AndroidUtilities.runOnUIThread(new Runnable(i, tL_error, tLObject) {
+            private final /* synthetic */ int f$1;
+            private final /* synthetic */ TLRPC.TL_error f$2;
+            private final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
             }
 
             public final void run() {
-                PeopleNearbyActivity.this.lambda$null$6$PeopleNearbyActivity(this.f$1, this.f$2);
+                PeopleNearbyActivity.this.lambda$null$6$PeopleNearbyActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$6$PeopleNearbyActivity(TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$null$6$PeopleNearbyActivity(int i, TLRPC.TL_error tL_error, TLObject tLObject) {
         boolean z;
-        int i2;
+        boolean z2;
         this.reqId = 0;
         Runnable runnable = this.showProgressRunnable;
         if (runnable != null) {
@@ -708,29 +710,35 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             this.showProgressRunnable = null;
         }
         showLoadingProgress(false);
+        UserConfig userConfig = getUserConfig();
+        if (i != 1 || tL_error == null) {
+            z = false;
+        } else {
+            userConfig.sharingMyLocationUntil = 0;
+            updateRows();
+            z = true;
+        }
         if (!(tLObject == null || i == 2)) {
             TLRPC.TL_updates tL_updates = (TLRPC.TL_updates) tLObject;
             getMessagesController().putUsers(tL_updates.users, false);
             getMessagesController().putChats(tL_updates.chats, false);
             this.users.clear();
             this.chats.clear();
-            UserConfig userConfig = getUserConfig();
             if (userConfig.sharingMyLocationUntil != 0) {
                 userConfig.lastMyLocationShareTime = (int) (System.currentTimeMillis() / 1000);
                 z = true;
-            } else {
-                z = false;
             }
             int size = tL_updates.updates.size();
-            boolean z2 = z;
-            for (int i3 = 0; i3 < size; i3++) {
-                TLRPC.Update update = tL_updates.updates.get(i3);
+            boolean z3 = z;
+            boolean z4 = false;
+            for (int i2 = 0; i2 < size; i2++) {
+                TLRPC.Update update = tL_updates.updates.get(i2);
                 if (update instanceof TLRPC.TL_updatePeerLocated) {
                     TLRPC.TL_updatePeerLocated tL_updatePeerLocated = (TLRPC.TL_updatePeerLocated) update;
                     int size2 = tL_updatePeerLocated.peers.size();
-                    boolean z3 = z2;
-                    for (int i4 = 0; i4 < size2; i4++) {
-                        TLRPC.PeerLocated peerLocated = tL_updatePeerLocated.peers.get(i4);
+                    boolean z5 = z4;
+                    for (int i3 = 0; i3 < size2; i3++) {
+                        TLRPC.PeerLocated peerLocated = tL_updatePeerLocated.peers.get(i3);
                         if (peerLocated instanceof TLRPC.TL_peerLocated) {
                             TLRPC.TL_peerLocated tL_peerLocated = (TLRPC.TL_peerLocated) peerLocated;
                             if (tL_peerLocated.peer instanceof TLRPC.TL_peerUser) {
@@ -738,19 +746,30 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                             } else {
                                 this.chats.add(tL_peerLocated);
                             }
-                        } else if ((peerLocated instanceof TLRPC.TL_peerSelfLocated) && userConfig.sharingMyLocationUntil != (i2 = ((TLRPC.TL_peerSelfLocated) peerLocated).expires)) {
-                            userConfig.sharingMyLocationUntil = i2;
-                            z3 = true;
+                        } else if (peerLocated instanceof TLRPC.TL_peerSelfLocated) {
+                            int i4 = userConfig.sharingMyLocationUntil;
+                            int i5 = ((TLRPC.TL_peerSelfLocated) peerLocated).expires;
+                            if (i4 != i5) {
+                                userConfig.sharingMyLocationUntil = i5;
+                                z3 = true;
+                            }
+                            z5 = true;
                         }
                     }
-                    z2 = z3;
+                    z4 = z5;
                 }
             }
-            if (z2) {
-                userConfig.saveConfig(false);
+            if (z4 || userConfig.sharingMyLocationUntil == 0) {
+                z2 = z3;
+            } else {
+                userConfig.sharingMyLocationUntil = 0;
+                z2 = true;
             }
             checkForExpiredLocations(true);
             updateRows();
+        }
+        if (z) {
+            userConfig.saveConfig(false);
         }
         Runnable runnable2 = this.shortPollRunnable;
         if (runnable2 != null) {

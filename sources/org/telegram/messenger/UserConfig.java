@@ -552,6 +552,10 @@ public class UserConfig extends BaseController {
         saveConfig(false);
     }
 
+    public boolean isConfigLoaded() {
+        return this.configLoaded;
+    }
+
     public void savePassword(byte[] bArr, byte[] bArr2) {
         this.savedPasswordTime = SystemClock.elapsedRealtime();
         this.savedPasswordHash = bArr;

@@ -3045,70 +3045,136 @@ public class MediaDataController extends BaseController {
         return this.lastSearchQuery;
     }
 
-    public void loadMedia(long j, int i, int i2, int i3, int i4, int i5) {
-        boolean z;
-        int i6 = i3;
-        int i7 = (int) j;
-        if (i7 < 0) {
-            if (ChatObject.isChannel(-i7, this.currentAccount)) {
-                z = true;
-                if (i4 == 0 || i7 == 0) {
-                    int i8 = i;
-                    int i9 = i2;
-                    int i10 = i5;
-                    loadMediaDatabase(j, i, i2, i3, i5, z, i4);
-                }
-                TLRPC.TL_messages_search tL_messages_search = new TLRPC.TL_messages_search();
-                tL_messages_search.limit = i;
-                tL_messages_search.offset_id = i2;
-                if (i6 == 0) {
-                    tL_messages_search.filter = new TLRPC.TL_inputMessagesFilterPhotoVideo();
-                } else if (i6 == 1) {
-                    tL_messages_search.filter = new TLRPC.TL_inputMessagesFilterDocument();
-                } else if (i6 == 2) {
-                    tL_messages_search.filter = new TLRPC.TL_inputMessagesFilterRoundVoice();
-                } else if (i6 == 3) {
-                    tL_messages_search.filter = new TLRPC.TL_inputMessagesFilterUrl();
-                } else if (i6 == 4) {
-                    tL_messages_search.filter = new TLRPC.TL_inputMessagesFilterMusic();
-                }
-                tL_messages_search.q = "";
-                tL_messages_search.peer = getMessagesController().getInputPeer(i7);
-                if (tL_messages_search.peer != null) {
-                    int i11 = i5;
-                    getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tL_messages_search, new RequestDelegate(j, i, i2, i3, i11, z) {
-                        private final /* synthetic */ long f$1;
-                        private final /* synthetic */ int f$2;
-                        private final /* synthetic */ int f$3;
-                        private final /* synthetic */ int f$4;
-                        private final /* synthetic */ int f$5;
-                        private final /* synthetic */ boolean f$6;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r4;
-                            this.f$3 = r5;
-                            this.f$4 = r6;
-                            this.f$5 = r7;
-                            this.f$6 = r8;
-                        }
-
-                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                            MediaDataController.this.lambda$loadMedia$53$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tL_error);
-                        }
-                    }), i11);
-                    return;
-                }
-                return;
-            }
-        }
-        z = false;
-        if (i4 == 0) {
-        }
-        int i82 = i;
-        int i92 = i2;
-        int i102 = i5;
-        loadMediaDatabase(j, i, i2, i3, i5, z, i4);
+    /* JADX WARNING: Removed duplicated region for block: B:9:0x0023  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void loadMedia(long r16, int r18, int r19, int r20, int r21, int r22) {
+        /*
+            r15 = this;
+            r2 = r16
+            r4 = r18
+            r5 = r19
+            r6 = r20
+            r8 = r21
+            r9 = r22
+            int r0 = (int) r2
+            r1 = 1
+            if (r0 >= 0) goto L_0x001c
+            int r7 = -r0
+            r10 = r15
+            int r11 = r10.currentAccount
+            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r7, r11)
+            if (r7 == 0) goto L_0x001d
+            r11 = 1
+            goto L_0x001f
+        L_0x001c:
+            r10 = r15
+        L_0x001d:
+            r7 = 0
+            r11 = 0
+        L_0x001f:
+            boolean r7 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r7 == 0) goto L_0x005f
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder
+            r7.<init>()
+            java.lang.String r12 = "load media did "
+            r7.append(r12)
+            r7.append(r2)
+            java.lang.String r12 = " count = "
+            r7.append(r12)
+            r7.append(r4)
+            java.lang.String r12 = " max_id "
+            r7.append(r12)
+            r7.append(r5)
+            java.lang.String r12 = " type = "
+            r7.append(r12)
+            r7.append(r6)
+            java.lang.String r12 = " cache = "
+            r7.append(r12)
+            r7.append(r8)
+            java.lang.String r12 = " classGuid = "
+            r7.append(r12)
+            r7.append(r9)
+            java.lang.String r7 = r7.toString()
+            org.telegram.messenger.FileLog.d(r7)
+        L_0x005f:
+            if (r8 != 0) goto L_0x00d7
+            if (r0 != 0) goto L_0x0065
+            goto L_0x00d7
+        L_0x0065:
+            org.telegram.tgnet.TLRPC$TL_messages_search r12 = new org.telegram.tgnet.TLRPC$TL_messages_search
+            r12.<init>()
+            r12.limit = r4
+            r12.offset_id = r5
+            if (r6 != 0) goto L_0x0078
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterPhotoVideo r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterPhotoVideo
+            r1.<init>()
+            r12.filter = r1
+            goto L_0x00a2
+        L_0x0078:
+            if (r6 != r1) goto L_0x0082
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterDocument r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterDocument
+            r1.<init>()
+            r12.filter = r1
+            goto L_0x00a2
+        L_0x0082:
+            r1 = 2
+            if (r6 != r1) goto L_0x008d
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterRoundVoice r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterRoundVoice
+            r1.<init>()
+            r12.filter = r1
+            goto L_0x00a2
+        L_0x008d:
+            r1 = 3
+            if (r6 != r1) goto L_0x0098
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterUrl r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterUrl
+            r1.<init>()
+            r12.filter = r1
+            goto L_0x00a2
+        L_0x0098:
+            r1 = 4
+            if (r6 != r1) goto L_0x00a2
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterMusic r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterMusic
+            r1.<init>()
+            r12.filter = r1
+        L_0x00a2:
+            java.lang.String r1 = ""
+            r12.q = r1
+            org.telegram.messenger.MessagesController r1 = r15.getMessagesController()
+            org.telegram.tgnet.TLRPC$InputPeer r0 = r1.getInputPeer(r0)
+            r12.peer = r0
+            org.telegram.tgnet.TLRPC$InputPeer r0 = r12.peer
+            if (r0 != 0) goto L_0x00b5
+            return
+        L_0x00b5:
+            org.telegram.tgnet.ConnectionsManager r13 = r15.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MediaDataController$X3JVomcYEAx51var_ugfuB0sf1c r14 = new org.telegram.messenger.-$$Lambda$MediaDataController$X3JVomcYEAx51var_ugfuB0sf1c
+            r0 = r14
+            r1 = r15
+            r2 = r16
+            r4 = r18
+            r5 = r19
+            r6 = r20
+            r7 = r22
+            r8 = r11
+            r0.<init>(r2, r4, r5, r6, r7, r8)
+            int r0 = r13.sendRequest(r12, r14)
+            org.telegram.tgnet.ConnectionsManager r1 = r15.getConnectionsManager()
+            r1.bindRequestToGuid(r0, r9)
+            goto L_0x00e8
+        L_0x00d7:
+            r0 = r15
+            r1 = r16
+            r3 = r18
+            r4 = r19
+            r5 = r20
+            r6 = r22
+            r7 = r11
+            r8 = r21
+            r0.loadMediaDatabase(r1, r3, r4, r5, r6, r7, r8)
+        L_0x00e8:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadMedia(long, int, int, int, int, int):void");
     }
 
     public /* synthetic */ void lambda$loadMedia$53$MediaDataController(long j, int i, int i2, int i3, int i4, boolean z, TLObject tLObject, TLRPC.TL_error tL_error) {
@@ -3536,22 +3602,31 @@ public class MediaDataController extends BaseController {
 
     private void processLoadedMedia(TLRPC.messages_Messages messages_messages, long j, int i, int i2, int i3, int i4, int i5, boolean z, boolean z2) {
         TLRPC.messages_Messages messages_messages2 = messages_messages;
+        long j2 = j;
         int i6 = i4;
-        int i7 = (int) j;
-        if (i6 == 0 || !messages_messages2.messages.isEmpty() || i7 == 0) {
+        if (BuildVars.DEBUG_VERSION) {
+            FileLog.d("process load media did " + j2 + " count = " + i + " max_id " + i2 + " type = " + i3 + " cache = " + i6 + " classGuid = " + i5);
+        } else {
+            int i7 = i;
+            int i8 = i2;
+            int i9 = i3;
+            int i10 = i5;
+        }
+        int i11 = (int) j2;
+        if (i6 == 0 || !messages_messages2.messages.isEmpty() || i11 == 0) {
             if (i6 == 0) {
                 ImageLoader.saveMessagesThumbs(messages_messages2.messages);
                 getMessagesStorage().putUsersAndChats(messages_messages2.users, messages_messages2.chats, true, true);
                 putMediaDatabase(j, i3, messages_messages2.messages, i2, z2);
             }
             SparseArray sparseArray = new SparseArray();
-            for (int i8 = 0; i8 < messages_messages2.users.size(); i8++) {
-                TLRPC.User user = messages_messages2.users.get(i8);
+            for (int i12 = 0; i12 < messages_messages2.users.size(); i12++) {
+                TLRPC.User user = messages_messages2.users.get(i12);
                 sparseArray.put(user.id, user);
             }
             ArrayList arrayList = new ArrayList();
-            for (int i9 = 0; i9 < messages_messages2.messages.size(); i9++) {
-                arrayList.add(new MessageObject(this.currentAccount, messages_messages2.messages.get(i9), (SparseArray<TLRPC.User>) sparseArray, true));
+            for (int i13 = 0; i13 < messages_messages2.messages.size(); i13++) {
+                arrayList.add(new MessageObject(this.currentAccount, messages_messages2.messages.get(i13), (SparseArray<TLRPC.User>) sparseArray, true));
             }
             AndroidUtilities.runOnUIThread(new Runnable(messages_messages, i4, j, arrayList, i5, i3, z2) {
                 private final /* synthetic */ TLRPC.messages_Messages f$1;
