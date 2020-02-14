@@ -13812,6 +13812,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return false;
     }
 
+    public int getDoubleTapTimeout(MotionEvent motionEvent) {
+        if (this.checkImageView.getVisibility() != 0) {
+            boolean[] zArr = this.drawPressedDrawable;
+            if (!zArr[0] && !zArr[1]) {
+                float x = motionEvent.getX();
+                int measuredWidth = this.containerView.getMeasuredWidth() / 5;
+                if (x < ((float) measuredWidth) || x > ((float) (this.containerView.getMeasuredWidth() - measuredWidth))) {
+                    return 200;
+                }
+            }
+        }
+        return GestureDetector2.DOUBLE_TAP_TIMEOUT;
+    }
+
     private void hidePressedDrawables() {
         boolean[] zArr = this.drawPressedDrawable;
         zArr[1] = false;
@@ -13960,6 +13974,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             animateTo(1.0f, 0.0f, 0.0f, true);
         }
         this.doubleTap = true;
+        hidePressedDrawables();
         return true;
     }
 

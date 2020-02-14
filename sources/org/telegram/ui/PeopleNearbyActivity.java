@@ -372,7 +372,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     this.expanded = true;
                     updateRows();
                 }
-            } else {
+            } else if (view instanceof ManageChatUserCell) {
                 Bundle bundle2 = new Bundle();
                 bundle2.putInt("user_id", this.users.get(i - i3).peer.user_id);
                 if (((ManageChatUserCell) view).hasAvatarSet()) {

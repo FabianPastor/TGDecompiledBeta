@@ -14312,7 +14312,7 @@ public class Theme {
             boolean z = false;
             boolean z2 = themeInfo.firstAccentIsDefault && themeInfo.currentAccentId == DEFALT_THEME_ACCENT_ID;
             ThemeAccent accent = currentTheme.getAccent(false);
-            if (accent == null || previousTheme != null) {
+            if (accent == null || hasPreviousTheme) {
                 file = null;
             } else {
                 File pathToWallpaper = accent.getPathToWallpaper();

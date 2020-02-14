@@ -459,7 +459,6 @@ public class AdminLogFilterAlert extends BottomSheet {
             FrameLayout frameLayout;
             if (i == 0) {
                 frameLayout = new CheckBoxCell(this.context, 1, 21);
-                frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             } else if (i == 1) {
                 ShadowSectionCell shadowSectionCell = new ShadowSectionCell(this.context, 18);
                 frameLayout = new FrameLayout(this.context);

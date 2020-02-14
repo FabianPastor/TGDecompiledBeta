@@ -1023,6 +1023,9 @@ public class PollCreateActivity extends BaseFragment {
                 String str = PollCreateActivity.this.answers[access$2500];
                 PollCreateActivity.this.answers[access$2500] = PollCreateActivity.this.answers[access$25002];
                 PollCreateActivity.this.answers[access$25002] = str;
+                boolean z = PollCreateActivity.this.answersChecks[access$2500];
+                PollCreateActivity.this.answersChecks[access$2500] = PollCreateActivity.this.answersChecks[access$25002];
+                PollCreateActivity.this.answersChecks[access$25002] = z;
                 notifyItemMoved(i, i2);
             }
         }

@@ -1967,13 +1967,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public /* synthetic */ void lambda$createView$7$ProfileActivity(View view) {
+        RecyclerView.ViewHolder findContainingViewHolder;
         Integer num;
         if (!this.isInLandscapeMode && this.avatarImage.getImageReceiver().hasNotThumb()) {
             this.openingAvatar = true;
             this.allowPullingDown = true;
             View childAt = this.listView.getChildAt(0);
-            RecyclerView.ViewHolder findContainingViewHolder = this.listView.findContainingViewHolder(childAt);
-            if (!(findContainingViewHolder == null || (num = this.positionToOffset.get(Integer.valueOf(findContainingViewHolder.getAdapterPosition()))) == null)) {
+            if (!(childAt == null || (findContainingViewHolder = this.listView.findContainingViewHolder(childAt)) == null || (num = this.positionToOffset.get(Integer.valueOf(findContainingViewHolder.getAdapterPosition()))) == null)) {
                 this.listView.smoothScrollBy(0, -(num.intValue() + ((this.listView.getPaddingTop() - childAt.getTop()) - this.actionBar.getMeasuredHeight())), CubicBezierInterpolator.EASE_OUT_QUINT);
                 return;
             }
@@ -3794,20 +3794,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r8.updateProfileData()
         L_0x0020:
             r9 = r9 & 1024(0x400, float:1.435E-42)
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             org.telegram.ui.Components.RecyclerListView r9 = r8.listView
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             int r10 = r8.phoneRow
             androidx.recyclerview.widget.RecyclerView$ViewHolder r9 = r9.findViewHolderForPosition(r10)
             org.telegram.ui.Components.RecyclerListView$Holder r9 = (org.telegram.ui.Components.RecyclerListView.Holder) r9
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             org.telegram.ui.ProfileActivity$ListAdapter r10 = r8.listAdapter
             int r11 = r8.phoneRow
             r10.onBindViewHolder(r9, r11)
-            goto L_0x0263
+            goto L_0x0268
         L_0x003b:
             int r10 = r8.chat_id
-            if (r10 == 0) goto L_0x0263
+            if (r10 == 0) goto L_0x0268
             r10 = r9 & 8192(0x2000, float:1.14794E-41)
             if (r10 != 0) goto L_0x0053
             r11 = r9 & 8
@@ -3833,13 +3833,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r10 = r9 & 1
             if (r10 != 0) goto L_0x0071
             r10 = r9 & 4
-            if (r10 == 0) goto L_0x0263
+            if (r10 == 0) goto L_0x0268
         L_0x0071:
             org.telegram.ui.Components.RecyclerListView r10 = r8.listView
-            if (r10 == 0) goto L_0x0263
+            if (r10 == 0) goto L_0x0268
             int r10 = r10.getChildCount()
         L_0x0079:
-            if (r0 >= r10) goto L_0x0263
+            if (r0 >= r10) goto L_0x0268
             org.telegram.ui.Components.RecyclerListView r11 = r8.listView
             android.view.View r11 = r11.getChildAt(r0)
             boolean r1 = r11 instanceof org.telegram.ui.Cells.UserCell
@@ -3871,39 +3871,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.online_count = r10
             r8.updateOnlineCount()
             r8.updateProfileData()
-            goto L_0x0263
+            goto L_0x0268
         L_0x00bb:
             return
         L_0x00bc:
             int r10 = org.telegram.messenger.NotificationCenter.contactsDidLoad
             if (r9 != r10) goto L_0x00c5
             r8.createActionBarMenu()
-            goto L_0x0263
+            goto L_0x0268
         L_0x00c5:
             int r10 = org.telegram.messenger.NotificationCenter.encryptedChatCreated
             if (r9 != r10) goto L_0x00d7
             boolean r9 = r8.creatingChat
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             org.telegram.ui.-$$Lambda$ProfileActivity$1kAHYRs1Xitld36bWHa7gE_IAF4 r9 = new org.telegram.ui.-$$Lambda$ProfileActivity$1kAHYRs1Xitld36bWHa7gE_IAF4
             r9.<init>(r11)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r9)
-            goto L_0x0263
+            goto L_0x0268
         L_0x00d7:
             int r10 = org.telegram.messenger.NotificationCenter.encryptedChatUpdated
             if (r9 != r10) goto L_0x00f7
             r9 = r11[r0]
             org.telegram.tgnet.TLRPC$EncryptedChat r9 = (org.telegram.tgnet.TLRPC.EncryptedChat) r9
             org.telegram.tgnet.TLRPC$EncryptedChat r10 = r8.currentEncryptedChat
-            if (r10 == 0) goto L_0x0263
+            if (r10 == 0) goto L_0x0268
             int r11 = r9.id
             int r10 = r10.id
-            if (r11 != r10) goto L_0x0263
+            if (r11 != r10) goto L_0x0268
             r8.currentEncryptedChat = r9
             r8.updateRowsIds()
             org.telegram.ui.ProfileActivity$ListAdapter r9 = r8.listAdapter
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             r9.notifyDataSetChanged()
-            goto L_0x0263
+            goto L_0x0268
         L_0x00f7:
             int r10 = org.telegram.messenger.NotificationCenter.blockedUsersDidLoad
             if (r9 != r10) goto L_0x0121
@@ -3918,12 +3918,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x010e:
             r8.userBlocked = r0
             boolean r10 = r8.userBlocked
-            if (r9 == r10) goto L_0x0263
+            if (r9 == r10) goto L_0x0268
             r8.createActionBarMenu()
             r8.updateRowsIds()
             org.telegram.ui.ProfileActivity$ListAdapter r9 = r8.listAdapter
             r9.notifyDataSetChanged()
-            goto L_0x0263
+            goto L_0x0268
         L_0x0121:
             int r10 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
             r2 = 2
@@ -3932,7 +3932,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.tgnet.TLRPC$ChatFull r9 = (org.telegram.tgnet.TLRPC.ChatFull) r9
             int r10 = r9.id
             int r3 = r8.chat_id
-            if (r10 != r3) goto L_0x0263
+            if (r10 != r3) goto L_0x0268
             r10 = r11[r2]
             java.lang.Boolean r10 = (java.lang.Boolean) r10
             boolean r10 = r10.booleanValue()
@@ -3988,17 +3988,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x019b:
             org.telegram.tgnet.TLRPC$Chat r9 = r8.currentChat
             boolean r9 = r9.megagroup
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             if (r0 != 0) goto L_0x01a5
-            if (r10 != 0) goto L_0x0263
+            if (r10 != 0) goto L_0x0268
         L_0x01a5:
             r8.getChannelParticipants(r1)
-            goto L_0x0263
+            goto L_0x0268
         L_0x01aa:
             int r10 = org.telegram.messenger.NotificationCenter.closeChats
             if (r9 != r10) goto L_0x01b3
             r8.removeSelfFromStack()
-            goto L_0x0263
+            goto L_0x0268
         L_0x01b3:
             int r10 = org.telegram.messenger.NotificationCenter.botInfoDidLoad
             if (r9 != r10) goto L_0x01cf
@@ -4006,21 +4006,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.tgnet.TLRPC$BotInfo r9 = (org.telegram.tgnet.TLRPC.BotInfo) r9
             int r10 = r9.user_id
             int r11 = r8.user_id
-            if (r10 != r11) goto L_0x0263
+            if (r10 != r11) goto L_0x0268
             r8.botInfo = r9
             r8.updateRowsIds()
             org.telegram.ui.ProfileActivity$ListAdapter r9 = r8.listAdapter
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             r9.notifyDataSetChanged()
-            goto L_0x0263
+            goto L_0x0268
         L_0x01cf:
             int r10 = org.telegram.messenger.NotificationCenter.userInfoDidLoad
-            if (r9 != r10) goto L_0x020a
+            if (r9 != r10) goto L_0x020f
             r9 = r11[r0]
             java.lang.Integer r9 = (java.lang.Integer) r9
             int r9 = r9.intValue()
             int r10 = r8.user_id
-            if (r9 != r10) goto L_0x0263
+            if (r9 != r10) goto L_0x0268
             r9 = r11[r1]
             org.telegram.tgnet.TLRPC$UserFull r9 = (org.telegram.tgnet.TLRPC.UserFull) r9
             r8.userInfo = r9
@@ -4035,61 +4035,65 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x01f3:
             r8.updateRowsIds()
             org.telegram.ui.ProfileActivity$ListAdapter r9 = r8.listAdapter
-            if (r9 == 0) goto L_0x01fd
-            r9.notifyDataSetChanged()
-        L_0x01fd:
+            if (r9 == 0) goto L_0x0202
+            r9.notifyDataSetChanged()     // Catch:{ Exception -> 0x01fe }
+            goto L_0x0202
+        L_0x01fe:
+            r9 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
+        L_0x0202:
             org.telegram.ui.Components.SharedMediaLayout r9 = r8.sharedMediaLayout
             org.telegram.tgnet.TLRPC$UserFull r10 = r8.userInfo
             int r10 = r10.common_chats_count
             r9.setCommonGroupsCount(r10)
             r8.updateSelectedMediaTabText()
-            goto L_0x0263
-        L_0x020a:
+            goto L_0x0268
+        L_0x020f:
             int r10 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages
-            if (r9 != r10) goto L_0x0258
+            if (r9 != r10) goto L_0x025d
             r9 = r11[r2]
             java.lang.Boolean r9 = (java.lang.Boolean) r9
             boolean r9 = r9.booleanValue()
-            if (r9 == 0) goto L_0x0219
+            if (r9 == 0) goto L_0x021e
             return
-        L_0x0219:
+        L_0x021e:
             long r9 = r8.getDialogId()
             r2 = r11[r0]
             java.lang.Long r2 = (java.lang.Long) r2
             long r2 = r2.longValue()
             int r4 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x0263
+            if (r4 != 0) goto L_0x0268
             int r10 = (int) r9
             r9 = r11[r1]
             java.util.ArrayList r9 = (java.util.ArrayList) r9
-        L_0x022e:
+        L_0x0233:
             int r10 = r9.size()
-            if (r0 >= r10) goto L_0x0263
+            if (r0 >= r10) goto L_0x0268
             java.lang.Object r10 = r9.get(r0)
             org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
             org.telegram.tgnet.TLRPC$EncryptedChat r11 = r8.currentEncryptedChat
-            if (r11 == 0) goto L_0x0255
+            if (r11 == 0) goto L_0x025a
             org.telegram.tgnet.TLRPC$Message r10 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r10 = r10.action
             boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_messageEncryptedAction
-            if (r11 == 0) goto L_0x0255
+            if (r11 == 0) goto L_0x025a
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r10 = r10.encryptedAction
             boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL
-            if (r11 == 0) goto L_0x0255
+            if (r11 == 0) goto L_0x025a
             org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL r10 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL) r10
             org.telegram.ui.ProfileActivity$ListAdapter r10 = r8.listAdapter
-            if (r10 == 0) goto L_0x0255
+            if (r10 == 0) goto L_0x025a
             r10.notifyDataSetChanged()
-        L_0x0255:
+        L_0x025a:
             int r0 = r0 + 1
-            goto L_0x022e
-        L_0x0258:
+            goto L_0x0233
+        L_0x025d:
             int r10 = org.telegram.messenger.NotificationCenter.emojiDidLoad
-            if (r9 != r10) goto L_0x0263
+            if (r9 != r10) goto L_0x0268
             org.telegram.ui.Components.RecyclerListView r9 = r8.listView
-            if (r9 == 0) goto L_0x0263
+            if (r9 == 0) goto L_0x0268
             r9.invalidateViews()
-        L_0x0263:
+        L_0x0268:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -6004,140 +6008,143 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         int i;
         String str;
         int i2;
-        this.actionBar.createMenu();
-        this.otherItem.removeAllSubItems();
-        this.animatingItem = null;
-        this.editItemVisible = false;
-        this.callItemVisible = false;
-        if (this.user_id != 0) {
-            TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
-            if (UserConfig.getInstance(this.currentAccount).getClientUserId() == this.user_id) {
-                this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
-            } else if (user != null) {
-                TLRPC.UserFull userFull = this.userInfo;
-                if (userFull != null && userFull.phone_calls_available) {
-                    this.callItemVisible = true;
-                }
-                int i3 = NUM;
-                if (!this.isBot && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user_id)) != null) {
-                    if (!TextUtils.isEmpty(user.phone)) {
-                        this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null && this.otherItem != null) {
+            actionBar.createMenu();
+            this.otherItem.removeAllSubItems();
+            this.animatingItem = null;
+            this.editItemVisible = false;
+            this.callItemVisible = false;
+            if (this.user_id != 0) {
+                TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
+                if (UserConfig.getInstance(this.currentAccount).getClientUserId() == this.user_id) {
+                    this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
+                } else if (user != null) {
+                    TLRPC.UserFull userFull = this.userInfo;
+                    if (userFull != null && userFull.phone_calls_available) {
+                        this.callItemVisible = true;
                     }
-                    ActionBarMenuItem actionBarMenuItem = this.otherItem;
-                    boolean z = this.userBlocked;
-                    actionBarMenuItem.addSubItem(2, NUM, (CharSequence) !this.userBlocked ? LocaleController.getString("BlockContact", NUM) : LocaleController.getString("Unblock", NUM));
-                    this.otherItem.addSubItem(4, NUM, (CharSequence) LocaleController.getString("EditContact", NUM));
-                    this.otherItem.addSubItem(5, NUM, (CharSequence) LocaleController.getString("DeleteContact", NUM));
-                } else if (!MessagesController.isSupportUser(user)) {
-                    if (this.isBot) {
-                        if (!user.bot_nochats) {
-                            this.otherItem.addSubItem(9, NUM, (CharSequence) LocaleController.getString("BotInvite", NUM));
+                    int i3 = NUM;
+                    if (!this.isBot && ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user_id)) != null) {
+                        if (!TextUtils.isEmpty(user.phone)) {
+                            this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
                         }
-                        this.otherItem.addSubItem(10, NUM, (CharSequence) LocaleController.getString("BotShare", NUM));
-                    } else {
-                        this.otherItem.addSubItem(1, NUM, (CharSequence) LocaleController.getString("AddContact", NUM));
-                    }
-                    if (!TextUtils.isEmpty(user.phone)) {
-                        this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
-                    }
-                    if (this.isBot) {
-                        ActionBarMenuItem actionBarMenuItem2 = this.otherItem;
-                        if (this.userBlocked) {
-                            i3 = NUM;
-                        }
-                        if (!this.userBlocked) {
-                            i2 = NUM;
-                            str = "BotStop";
-                        } else {
-                            i2 = NUM;
-                            str = "BotRestart";
-                        }
-                        actionBarMenuItem2.addSubItem(2, i3, (CharSequence) LocaleController.getString(str, i2));
-                    } else {
-                        ActionBarMenuItem actionBarMenuItem3 = this.otherItem;
-                        boolean z2 = this.userBlocked;
-                        actionBarMenuItem3.addSubItem(2, NUM, (CharSequence) !this.userBlocked ? LocaleController.getString("BlockContact", NUM) : LocaleController.getString("Unblock", NUM));
-                    }
-                } else if (this.userBlocked) {
-                    this.otherItem.addSubItem(2, NUM, (CharSequence) LocaleController.getString("Unblock", NUM));
-                }
-            } else {
-                return;
-            }
-            if (!UserObject.isDeleted(user) && !this.isBot && this.currentEncryptedChat == null && this.user_id != getUserConfig().getClientUserId() && !this.userBlocked && (i = this.user_id) != 333000 && i != 777000 && i != 42777) {
-                this.otherItem.addSubItem(20, NUM, (CharSequence) LocaleController.getString("StartEncryptedChat", NUM));
-            }
-        } else {
-            int i4 = this.chat_id;
-            if (i4 != 0 && i4 > 0) {
-                TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
-                if (ChatObject.isChannel(chat)) {
-                    if (ChatObject.hasAdminRights(chat) || (chat.megagroup && ChatObject.canChangeChatInfo(chat))) {
-                        this.editItemVisible = true;
-                    }
-                    if (!chat.megagroup && (chatFull = this.chatInfo) != null && chatFull.can_view_stats) {
-                        this.otherItem.addSubItem(19, NUM, (CharSequence) LocaleController.getString("Statistics", NUM));
-                    }
-                    if (chat.megagroup) {
-                        this.otherItem.addSubItem(17, NUM, (CharSequence) LocaleController.getString("SearchMembers", NUM));
-                        if (!chat.creator && !chat.left && !chat.kicked) {
-                            this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("LeaveMegaMenu", NUM));
-                        }
-                    } else {
-                        if (!TextUtils.isEmpty(chat.username)) {
+                        ActionBarMenuItem actionBarMenuItem = this.otherItem;
+                        boolean z = this.userBlocked;
+                        actionBarMenuItem.addSubItem(2, NUM, (CharSequence) !this.userBlocked ? LocaleController.getString("BlockContact", NUM) : LocaleController.getString("Unblock", NUM));
+                        this.otherItem.addSubItem(4, NUM, (CharSequence) LocaleController.getString("EditContact", NUM));
+                        this.otherItem.addSubItem(5, NUM, (CharSequence) LocaleController.getString("DeleteContact", NUM));
+                    } else if (!MessagesController.isSupportUser(user)) {
+                        if (this.isBot) {
+                            if (!user.bot_nochats) {
+                                this.otherItem.addSubItem(9, NUM, (CharSequence) LocaleController.getString("BotInvite", NUM));
+                            }
                             this.otherItem.addSubItem(10, NUM, (CharSequence) LocaleController.getString("BotShare", NUM));
+                        } else {
+                            this.otherItem.addSubItem(1, NUM, (CharSequence) LocaleController.getString("AddContact", NUM));
                         }
-                        TLRPC.Chat chat2 = this.currentChat;
-                        if (!chat2.creator && !chat2.left && !chat2.kicked) {
-                            this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("LeaveChannelMenu", NUM));
+                        if (!TextUtils.isEmpty(user.phone)) {
+                            this.otherItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("ShareContact", NUM));
                         }
+                        if (this.isBot) {
+                            ActionBarMenuItem actionBarMenuItem2 = this.otherItem;
+                            if (this.userBlocked) {
+                                i3 = NUM;
+                            }
+                            if (!this.userBlocked) {
+                                i2 = NUM;
+                                str = "BotStop";
+                            } else {
+                                i2 = NUM;
+                                str = "BotRestart";
+                            }
+                            actionBarMenuItem2.addSubItem(2, i3, (CharSequence) LocaleController.getString(str, i2));
+                        } else {
+                            ActionBarMenuItem actionBarMenuItem3 = this.otherItem;
+                            boolean z2 = this.userBlocked;
+                            actionBarMenuItem3.addSubItem(2, NUM, (CharSequence) !this.userBlocked ? LocaleController.getString("BlockContact", NUM) : LocaleController.getString("Unblock", NUM));
+                        }
+                    } else if (this.userBlocked) {
+                        this.otherItem.addSubItem(2, NUM, (CharSequence) LocaleController.getString("Unblock", NUM));
                     }
                 } else {
-                    if (ChatObject.canChangeChatInfo(chat)) {
-                        this.editItemVisible = true;
+                    return;
+                }
+                if (!UserObject.isDeleted(user) && !this.isBot && this.currentEncryptedChat == null && this.user_id != getUserConfig().getClientUserId() && !this.userBlocked && (i = this.user_id) != 333000 && i != 777000 && i != 42777) {
+                    this.otherItem.addSubItem(20, NUM, (CharSequence) LocaleController.getString("StartEncryptedChat", NUM));
+                }
+            } else {
+                int i4 = this.chat_id;
+                if (i4 != 0 && i4 > 0) {
+                    TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
+                    if (ChatObject.isChannel(chat)) {
+                        if (ChatObject.hasAdminRights(chat) || (chat.megagroup && ChatObject.canChangeChatInfo(chat))) {
+                            this.editItemVisible = true;
+                        }
+                        if (!chat.megagroup && (chatFull = this.chatInfo) != null && chatFull.can_view_stats) {
+                            this.otherItem.addSubItem(19, NUM, (CharSequence) LocaleController.getString("Statistics", NUM));
+                        }
+                        if (chat.megagroup) {
+                            this.otherItem.addSubItem(17, NUM, (CharSequence) LocaleController.getString("SearchMembers", NUM));
+                            if (!chat.creator && !chat.left && !chat.kicked) {
+                                this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("LeaveMegaMenu", NUM));
+                            }
+                        } else {
+                            if (!TextUtils.isEmpty(chat.username)) {
+                                this.otherItem.addSubItem(10, NUM, (CharSequence) LocaleController.getString("BotShare", NUM));
+                            }
+                            TLRPC.Chat chat2 = this.currentChat;
+                            if (!chat2.creator && !chat2.left && !chat2.kicked) {
+                                this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("LeaveChannelMenu", NUM));
+                            }
+                        }
+                    } else {
+                        if (ChatObject.canChangeChatInfo(chat)) {
+                            this.editItemVisible = true;
+                        }
+                        if (!ChatObject.isKickedFromChat(chat) && !ChatObject.isLeftFromChat(chat)) {
+                            this.otherItem.addSubItem(17, NUM, (CharSequence) LocaleController.getString("SearchMembers", NUM));
+                        }
+                        this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("DeleteAndExit", NUM));
                     }
-                    if (!ChatObject.isKickedFromChat(chat) && !ChatObject.isLeftFromChat(chat)) {
-                        this.otherItem.addSubItem(17, NUM, (CharSequence) LocaleController.getString("SearchMembers", NUM));
-                    }
-                    this.otherItem.addSubItem(7, NUM, (CharSequence) LocaleController.getString("DeleteAndExit", NUM));
                 }
             }
-        }
-        this.otherItem.addSubItem(14, NUM, (CharSequence) LocaleController.getString("AddShortcut", NUM));
-        this.otherItem.addSubItem(21, NUM, (CharSequence) LocaleController.getString("SaveToGallery", NUM));
-        if (!this.isPulledDown) {
-            this.otherItem.hideSubItem(21);
-        }
-        this.otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
-        if (this.callItemVisible) {
-            if (this.callItem.getVisibility() != 0) {
-                this.callItem.setVisibility(0);
+            this.otherItem.addSubItem(14, NUM, (CharSequence) LocaleController.getString("AddShortcut", NUM));
+            this.otherItem.addSubItem(21, NUM, (CharSequence) LocaleController.getString("SaveToGallery", NUM));
+            if (!this.isPulledDown) {
+                this.otherItem.hideSubItem(21);
             }
-        } else if (this.callItem.getVisibility() != 8) {
-            this.callItem.setVisibility(8);
-        }
-        if (this.editItemVisible) {
-            if (this.editItem.getVisibility() != 0) {
-                this.editItem.setVisibility(0);
+            this.otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+            if (this.callItemVisible) {
+                if (this.callItem.getVisibility() != 0) {
+                    this.callItem.setVisibility(0);
+                }
+            } else if (this.callItem.getVisibility() != 8) {
+                this.callItem.setVisibility(8);
             }
-        } else if (this.editItem.getVisibility() != 8) {
-            this.editItem.setVisibility(8);
-        }
-        ActionBarMenuItem actionBarMenuItem4 = this.editItem;
-        if (actionBarMenuItem4 != null) {
-            actionBarMenuItem4.setContentDescription(LocaleController.getString("Edit", NUM));
-        }
-        ActionBarMenuItem actionBarMenuItem5 = this.callItem;
-        if (actionBarMenuItem5 != null) {
-            actionBarMenuItem5.setContentDescription(LocaleController.getString("Call", NUM));
-        }
-        PagerIndicatorView pagerIndicatorView = this.avatarsViewPagerIndicatorView;
-        if (pagerIndicatorView != null && pagerIndicatorView.isIndicatorFullyVisible()) {
             if (this.editItemVisible) {
+                if (this.editItem.getVisibility() != 0) {
+                    this.editItem.setVisibility(0);
+                }
+            } else if (this.editItem.getVisibility() != 8) {
                 this.editItem.setVisibility(8);
             }
-            if (this.callItemVisible) {
-                this.callItem.setVisibility(8);
+            ActionBarMenuItem actionBarMenuItem4 = this.editItem;
+            if (actionBarMenuItem4 != null) {
+                actionBarMenuItem4.setContentDescription(LocaleController.getString("Edit", NUM));
+            }
+            ActionBarMenuItem actionBarMenuItem5 = this.callItem;
+            if (actionBarMenuItem5 != null) {
+                actionBarMenuItem5.setContentDescription(LocaleController.getString("Call", NUM));
+            }
+            PagerIndicatorView pagerIndicatorView = this.avatarsViewPagerIndicatorView;
+            if (pagerIndicatorView != null && pagerIndicatorView.isIndicatorFullyVisible()) {
+                if (this.editItemVisible) {
+                    this.editItem.setVisibility(8);
+                }
+                if (this.callItemVisible) {
+                    this.callItem.setVisibility(8);
+                }
             }
         }
     }

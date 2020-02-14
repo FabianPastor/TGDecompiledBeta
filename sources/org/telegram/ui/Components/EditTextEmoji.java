@@ -21,6 +21,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -100,7 +101,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             }
 
             public boolean requestRectangleOnScreen(Rect rect) {
-                rect.bottom += AndroidUtilities.dp(1000.0f);
+                if (SharedConfig.smoothKeyboard) {
+                    rect.bottom += AndroidUtilities.dp(1000.0f);
+                }
                 return super.requestRectangleOnScreen(rect);
             }
         };

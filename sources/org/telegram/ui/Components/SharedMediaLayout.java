@@ -2312,7 +2312,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public boolean onTouchEvent(MotionEvent motionEvent) {
         float f;
         int i;
-        if (this.profileActivity.getParentLayout().checkTransitionAnimation() || checkTabsAnimationInProgress()) {
+        if (this.profileActivity.getParentLayout() == null || this.profileActivity.getParentLayout().checkTransitionAnimation() || checkTabsAnimationInProgress()) {
             return false;
         }
         boolean z = true;
