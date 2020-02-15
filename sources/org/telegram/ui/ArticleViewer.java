@@ -1388,7 +1388,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         CheckForLongPress() {
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:17:0x008b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:17:0x0082, code lost:
             r0 = r6.this$0;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1397,10 +1397,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r6 = this;
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 boolean r0 = r0.checkingForLongPress
-                if (r0 == 0) goto L_0x010d
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WindowView r0 = r0.windowView
-                if (r0 == 0) goto L_0x010d
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r1 = 0
                 boolean unused = r0.checkingForLongPress = r1
@@ -1421,51 +1421,56 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer.DrawingText unused = r0.pressedLinkOwnerLayout = r1
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 android.view.View r0 = r0.pressedLinkOwnerView
-                if (r0 == 0) goto L_0x010d
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 android.view.View r0 = r0.pressedLinkOwnerView
                 r0.invalidate()
-                goto L_0x010d
+                goto L_0x0117
             L_0x0052:
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 android.view.View r0 = r0.pressedLinkOwnerView
-                if (r0 == 0) goto L_0x00a5
+                if (r0 == 0) goto L_0x00af
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r2 = r0.textSelectionHelper
                 android.view.View r0 = r0.pressedLinkOwnerView
                 boolean r0 = r2.isSelectable(r0)
-                if (r0 == 0) goto L_0x00a5
+                if (r0 == 0) goto L_0x00af
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                android.view.View r0 = r0.pressedLinkOwnerView
+                java.lang.Object r0 = r0.getTag()
+                if (r0 == 0) goto L_0x0090
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                android.view.View r0 = r0.pressedLinkOwnerView
+                java.lang.Object r0 = r0.getTag()
+                java.lang.String r2 = "bottomSheet"
+                if (r0 != r2) goto L_0x0090
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r2 = r0.textSelectionHelperBottomSheet
+                if (r2 == 0) goto L_0x0090
+                android.view.View r0 = r0.pressedLinkOwnerView
+                r2.trySelect(r0)
+                goto L_0x009b
+            L_0x0090:
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r2 = r0.textSelectionHelper
+                android.view.View r0 = r0.pressedLinkOwnerView
+                r2.trySelect(r0)
+            L_0x009b:
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r0 = r0.textSelectionHelper
+                boolean r0 = r0.isSelectionMode()
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WindowView r0 = r0.windowView
                 r0.performHapticFeedback(r1)
-                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                android.view.View r0 = r0.pressedLinkOwnerView
-                java.lang.Object r0 = r0.getTag()
-                if (r0 == 0) goto L_0x0099
-                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                android.view.View r0 = r0.pressedLinkOwnerView
-                java.lang.Object r0 = r0.getTag()
-                java.lang.String r1 = "bottomSheet"
-                if (r0 != r1) goto L_0x0099
-                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r1 = r0.textSelectionHelperBottomSheet
-                if (r1 == 0) goto L_0x0099
-                android.view.View r0 = r0.pressedLinkOwnerView
-                r1.trySelect(r0)
-                goto L_0x010d
-            L_0x0099:
-                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r1 = r0.textSelectionHelper
-                android.view.View r0 = r0.pressedLinkOwnerView
-                r1.trySelect(r0)
-                goto L_0x010d
-            L_0x00a5:
+                goto L_0x0117
+            L_0x00af:
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.pressedLinkOwnerLayout
-                if (r0 == 0) goto L_0x010d
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 android.view.View r0 = r0.pressedLinkOwnerView
-                if (r0 == 0) goto L_0x010d
+                if (r0 == 0) goto L_0x0117
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WindowView r0 = r0.windowView
                 r0.performHapticFeedback(r1)
@@ -1482,9 +1487,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3 = 1113063424(0x42580000, float:54.0)
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
                 int r0 = r0 - r3
-                if (r0 >= 0) goto L_0x00de
+                if (r0 >= 0) goto L_0x00e8
                 r0 = 0
-            L_0x00de:
+            L_0x00e8:
                 org.telegram.ui.ArticleViewer r3 = org.telegram.ui.ArticleViewer.this
                 android.view.View r3 = r3.pressedLinkOwnerView
                 r3.invalidate()
@@ -1502,7 +1507,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.Components.RecyclerListView[] r0 = r0.listView
                 r0 = r0[r1]
                 r0.setLayoutFrozen(r1)
-            L_0x010d:
+            L_0x0117:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.CheckForLongPress.run():void");
@@ -16611,18 +16616,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public DrawingText textLayout;
 
-        private class TextContainerView extends View implements TextSelectionHelper.ArticleSelectableView {
-            public TextContainerView(Context context) {
-                super(context);
-            }
-
-            public void fillTextLayoutBlocks(ArrayList<TextSelectionHelper.TextLayoutBlock> arrayList) {
-                if (BlockPreformattedCell.this.textLayout != null) {
-                    arrayList.add(BlockPreformattedCell.this.textLayout);
-                }
-            }
-        }
-
         public BlockPreformattedCell(Context context, WebpageAdapter webpageAdapter) {
             super(context);
             this.parentAdapter = webpageAdapter;
@@ -16645,7 +16638,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             };
             this.scrollView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
             addView(this.scrollView, LayoutHelper.createFrame(-1, -2.0f));
-            this.textContainer = new TextContainerView(context, ArticleViewer.this) {
+            this.textContainer = new View(context, ArticleViewer.this) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     int i3;
@@ -16659,8 +16652,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             for (int i5 = 0; i5 < lineCount; i5++) {
                                 i4 = Math.max((int) Math.ceil((double) BlockPreformattedCell.this.textLayout.getLineWidth(i5)), i4);
                             }
-                            BlockPreformattedCell.this.textLayout.x = (int) getX();
-                            BlockPreformattedCell.this.textLayout.y = (int) getY();
                         } else {
                             i3 = 0;
                         }
@@ -16672,7 +16663,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
                 public boolean onTouchEvent(MotionEvent motionEvent) {
                     BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
-                    return ArticleViewer.this.checkLayoutForLinks(blockPreformattedCell.parentAdapter, motionEvent, this, BlockPreformattedCell.this.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
+                    ArticleViewer articleViewer = ArticleViewer.this;
+                    WebpageAdapter access$23000 = blockPreformattedCell.parentAdapter;
+                    BlockPreformattedCell blockPreformattedCell2 = BlockPreformattedCell.this;
+                    return articleViewer.checkLayoutForLinks(access$23000, motionEvent, blockPreformattedCell2, blockPreformattedCell2.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
                 }
 
                 /* access modifiers changed from: protected */
@@ -16683,6 +16677,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         ArticleViewer.this.drawTextSelection(canvas, blockPreformattedCell);
                         BlockPreformattedCell.this.textLayout.draw(canvas);
                         canvas.restore();
+                        BlockPreformattedCell.this.textLayout.x = (int) getX();
+                        BlockPreformattedCell.this.textLayout.y = (int) getY();
                     }
                 }
             };
@@ -16694,7 +16690,19 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             layoutParams.bottomMargin = dp2;
             layoutParams.topMargin = dp2;
             this.scrollView.addView(this.textContainer, layoutParams);
+            this.scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                public final void onScrollChange(View view, int i, int i2, int i3, int i4) {
+                    ArticleViewer.BlockPreformattedCell.this.lambda$new$0$ArticleViewer$BlockPreformattedCell(view, i, i2, i3, i4);
+                }
+            });
             setWillNotDraw(false);
+        }
+
+        public /* synthetic */ void lambda$new$0$ArticleViewer$BlockPreformattedCell(View view, int i, int i2, int i3, int i4) {
+            TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper = ArticleViewer.this.textSelectionHelper;
+            if (articleTextSelectionHelper != null && articleTextSelectionHelper.isSelectionMode()) {
+                ArticleViewer.this.textSelectionHelper.invalidate();
+            }
         }
 
         public void setBlock(TLRPC.TL_pageBlockPreformatted tL_pageBlockPreformatted) {
@@ -16722,6 +16730,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (drawingText != null) {
                 arrayList.add(drawingText);
             }
+        }
+
+        public void invalidate() {
+            this.textContainer.invalidate();
+            super.invalidate();
         }
     }
 

@@ -385,6 +385,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     notificationCenter.addObserver(this, NotificationCenter.messageReceivedByServer);
                     notificationCenter.addObserver(this, NotificationCenter.mediaDidLoad);
                     notificationCenter.addObserver(this, NotificationCenter.messagesDeleted);
+                    notificationCenter.addObserver(this, NotificationCenter.replaceMessagesObjects);
                     return;
                 }
             }
@@ -408,6 +409,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 notificationCenter.removeObserver(this, NotificationCenter.messageReceivedByServer);
                 notificationCenter.removeObserver(this, NotificationCenter.mediaDidLoad);
                 notificationCenter.removeObserver(this, NotificationCenter.messagesDeleted);
+                notificationCenter.removeObserver(this, NotificationCenter.replaceMessagesObjects);
             }
         }
 
@@ -436,7 +438,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 if (r4 == 0) goto L_0x001a
                 long r2 = r10.mergeDialogId
                 int r4 = (r11 > r2 ? 1 : (r11 == r2 ? 0 : -1))
-                if (r4 != 0) goto L_0x0302
+                if (r4 != 0) goto L_0x03a8
             L_0x001a:
                 r13 = r13[r0]
                 int[] r13 = (int[]) r13
@@ -507,7 +509,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 java.util.ArrayList<org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate> r11 = r10.delegates
                 int r11 = r11.size()
             L_0x008b:
-                if (r1 >= r11) goto L_0x0302
+                if (r1 >= r11) goto L_0x03a8
                 java.util.ArrayList<org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate> r12 = r10.delegates
                 java.lang.Object r12 = r12.get(r1)
                 org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate r12 = (org.telegram.ui.Components.SharedMediaLayout.SharedMediaPreloaderDelegate) r12
@@ -526,7 +528,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 if (r5 == 0) goto L_0x00b4
                 long r3 = r10.mergeDialogId
                 int r5 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1))
-                if (r5 != 0) goto L_0x0302
+                if (r5 != 0) goto L_0x03a8
             L_0x00b4:
                 r2 = r13[r2]
                 java.lang.Integer r2 = (java.lang.Integer) r2
@@ -579,7 +581,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 java.util.ArrayList<org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate> r11 = r10.delegates
                 int r11 = r11.size()
             L_0x010d:
-                if (r1 >= r11) goto L_0x0302
+                if (r1 >= r11) goto L_0x03a8
                 java.util.ArrayList<org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate> r12 = r10.delegates
                 java.lang.Object r12 = r12.get(r1)
                 org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloaderDelegate r12 = (org.telegram.ui.Components.SharedMediaLayout.SharedMediaPreloaderDelegate) r12
@@ -588,58 +590,58 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 goto L_0x010d
             L_0x011d:
                 int r12 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages
-                r3 = 2
+                r3 = -1
+                r4 = 2
                 if (r11 != r12) goto L_0x017a
-                r11 = r13[r3]
+                r11 = r13[r4]
                 java.lang.Boolean r11 = (java.lang.Boolean) r11
                 boolean r11 = r11.booleanValue()
-                if (r11 == 0) goto L_0x012d
+                if (r11 == 0) goto L_0x012e
                 return
-            L_0x012d:
+            L_0x012e:
                 long r11 = r10.dialogId
                 r2 = r13[r1]
                 java.lang.Long r2 = (java.lang.Long) r2
-                long r2 = r2.longValue()
-                int r4 = (r11 > r2 ? 1 : (r11 == r2 ? 0 : -1))
-                if (r4 != 0) goto L_0x0302
+                long r4 = r2.longValue()
+                int r2 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r2 != 0) goto L_0x03a8
                 long r11 = r10.dialogId
                 int r12 = (int) r11
-                if (r12 != 0) goto L_0x0142
+                if (r12 != 0) goto L_0x0143
                 r11 = 1
-                goto L_0x0143
-            L_0x0142:
-                r11 = 0
+                goto L_0x0144
             L_0x0143:
+                r11 = 0
+            L_0x0144:
                 r12 = r13[r0]
                 java.util.ArrayList r12 = (java.util.ArrayList) r12
                 r13 = 0
-            L_0x0148:
+            L_0x0149:
                 int r2 = r12.size()
                 if (r13 >= r2) goto L_0x0175
                 java.lang.Object r2 = r12.get(r13)
                 org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
-                org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
-                org.telegram.tgnet.TLRPC$MessageMedia r3 = r3.media
-                if (r3 == 0) goto L_0x0172
-                boolean r3 = r2.needDrawBluredPreview()
-                if (r3 == 0) goto L_0x0161
+                org.telegram.tgnet.TLRPC$Message r4 = r2.messageOwner
+                org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
+                if (r4 == 0) goto L_0x0172
+                boolean r4 = r2.needDrawBluredPreview()
+                if (r4 == 0) goto L_0x0162
                 goto L_0x0172
-            L_0x0161:
-                org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
-                int r3 = org.telegram.messenger.MediaDataController.getMediaType(r3)
-                r4 = -1
-                if (r3 != r4) goto L_0x016b
+            L_0x0162:
+                org.telegram.tgnet.TLRPC$Message r4 = r2.messageOwner
+                int r4 = org.telegram.messenger.MediaDataController.getMediaType(r4)
+                if (r4 != r3) goto L_0x016b
                 goto L_0x0172
             L_0x016b:
-                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r4 = r10.sharedMediaData
-                r3 = r4[r3]
-                r3.addMessage(r2, r1, r0, r11)
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r5 = r10.sharedMediaData
+                r4 = r5[r4]
+                r4.addMessage(r2, r1, r0, r11)
             L_0x0172:
                 int r13 = r13 + 1
-                goto L_0x0148
+                goto L_0x0149
             L_0x0175:
                 r10.loadMediaCounts()
-                goto L_0x0302
+                goto L_0x03a8
             L_0x017a:
                 int r12 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
                 if (r11 != r12) goto L_0x01a7
@@ -657,7 +659,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             L_0x0192:
                 org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r13 = r10.sharedMediaData
                 int r0 = r13.length
-                if (r1 >= r0) goto L_0x0302
+                if (r1 >= r0) goto L_0x03a8
                 r13 = r13[r1]
                 int r0 = r11.intValue()
                 int r2 = r12.intValue()
@@ -673,20 +675,20 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r2 = r13[r2]
                 java.lang.Integer r2 = (java.lang.Integer) r2
                 int r2 = r2.intValue()
-                org.telegram.ui.ActionBar.BaseFragment r4 = r10.parentFragment
-                int r4 = r4.getClassGuid()
-                if (r2 != r4) goto L_0x0302
+                org.telegram.ui.ActionBar.BaseFragment r3 = r10.parentFragment
+                int r3 = r3.getClassGuid()
+                if (r2 != r3) goto L_0x03a8
                 r2 = 4
                 r2 = r13[r2]
                 java.lang.Integer r2 = (java.lang.Integer) r2
                 int r2 = r2.intValue()
-                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r4 = r10.sharedMediaData
-                r4 = r4[r2]
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r3 = r10.sharedMediaData
+                r3 = r3[r2]
                 r5 = r13[r0]
                 java.lang.Integer r5 = (java.lang.Integer) r5
                 int r5 = r5.intValue()
-                r4.setTotalCount(r5)
-                r3 = r13[r3]
+                r3.setTotalCount(r5)
+                r3 = r13[r4]
                 java.util.ArrayList r3 = (java.util.ArrayList) r3
                 int r4 = (int) r11
                 if (r4 != 0) goto L_0x01e4
@@ -713,7 +715,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r11 = 0
             L_0x0203:
                 int r12 = r3.size()
-                if (r11 >= r12) goto L_0x0302
+                if (r11 >= r12) goto L_0x03a8
                 java.lang.Object r12 = r3.get(r11)
                 org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
                 org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r13 = r10.sharedMediaData
@@ -723,8 +725,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 goto L_0x0203
             L_0x0219:
                 int r12 = org.telegram.messenger.NotificationCenter.messagesDeleted
-                if (r11 != r12) goto L_0x0302
-                r11 = r13[r3]
+                if (r11 != r12) goto L_0x0304
+                r11 = r13[r4]
                 java.lang.Boolean r11 = (java.lang.Boolean) r11
                 boolean r11 = r11.booleanValue()
                 if (r11 == 0) goto L_0x0228
@@ -859,7 +861,99 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 goto L_0x02ef
             L_0x02ff:
                 r10.loadMediaCounts()
-            L_0x0302:
+                goto L_0x03a8
+            L_0x0304:
+                int r12 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects
+                if (r11 != r12) goto L_0x03a8
+                r11 = r13[r1]
+                java.lang.Long r11 = (java.lang.Long) r11
+                long r11 = r11.longValue()
+                long r4 = r10.dialogId
+                int r2 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r2 == 0) goto L_0x031d
+                long r4 = r10.mergeDialogId
+                int r2 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r2 == 0) goto L_0x031d
+                return
+            L_0x031d:
+                long r4 = r10.dialogId
+                int r2 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r2 != 0) goto L_0x0325
+                r11 = 0
+                goto L_0x0326
+            L_0x0325:
+                r11 = 1
+            L_0x0326:
+                r12 = r13[r0]
+                java.util.ArrayList r12 = (java.util.ArrayList) r12
+                int r13 = r12.size()
+                r2 = 0
+            L_0x032f:
+                if (r2 >= r13) goto L_0x03a8
+                java.lang.Object r4 = r12.get(r2)
+                org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
+                int r5 = r4.getId()
+                org.telegram.tgnet.TLRPC$Message r6 = r4.messageOwner
+                int r6 = org.telegram.messenger.MediaDataController.getMediaType(r6)
+                r7 = 0
+            L_0x0342:
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r8 = r10.sharedMediaData
+                int r9 = r8.length
+                if (r7 >= r9) goto L_0x03a5
+                r8 = r8[r7]
+                android.util.SparseArray<org.telegram.messenger.MessageObject>[] r8 = r8.messagesDict
+                r8 = r8[r11]
+                java.lang.Object r8 = r8.get(r5)
+                org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
+                if (r8 == 0) goto L_0x03a2
+                org.telegram.tgnet.TLRPC$Message r9 = r4.messageOwner
+                int r9 = org.telegram.messenger.MediaDataController.getMediaType(r9)
+                if (r6 == r3) goto L_0x0381
+                if (r9 == r6) goto L_0x0360
+                goto L_0x0381
+            L_0x0360:
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r6 = r10.sharedMediaData
+                r6 = r6[r7]
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r6.messages
+                int r6 = r6.indexOf(r8)
+                if (r6 < 0) goto L_0x03a5
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r8 = r10.sharedMediaData
+                r8 = r8[r7]
+                android.util.SparseArray<org.telegram.messenger.MessageObject>[] r8 = r8.messagesDict
+                r8 = r8[r11]
+                r8.put(r5, r4)
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r5 = r10.sharedMediaData
+                r5 = r5[r7]
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r5.messages
+                r5.set(r6, r4)
+                goto L_0x03a5
+            L_0x0381:
+                org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r4 = r10.sharedMediaData
+                r4 = r4[r7]
+                r4.deleteMessage(r5, r11)
+                if (r11 != 0) goto L_0x0396
+                int[] r4 = r10.mediaCount
+                r5 = r4[r7]
+                if (r5 <= 0) goto L_0x03a5
+                r5 = r4[r7]
+                int r5 = r5 - r0
+                r4[r7] = r5
+                goto L_0x03a5
+            L_0x0396:
+                int[] r4 = r10.mediaMergeCount
+                r5 = r4[r7]
+                if (r5 <= 0) goto L_0x03a5
+                r5 = r4[r7]
+                int r5 = r5 - r0
+                r4[r7] = r5
+                goto L_0x03a5
+            L_0x03a2:
+                int r7 = r7 + 1
+                goto L_0x0342
+            L_0x03a5:
+                int r2 = r2 + 1
+                goto L_0x032f
+            L_0x03a8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SharedMediaLayout.SharedMediaPreloader.didReceivedNotification(int, int, java.lang.Object[]):void");

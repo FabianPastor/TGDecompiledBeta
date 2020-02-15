@@ -14057,11 +14057,14 @@ public class Theme {
                 return getDefaultColor(str);
             }
         }
+        if (str.equals("windowBackgroundWhite") || str.equals("windowBackgroundGray")) {
+            return -16777216 | num2.intValue();
+        }
         return num2.intValue();
     }
 
     public static void setColor(String str, int i, boolean z) {
-        if (str.equals("chat_wallpaper") || str.equals("chat_wallpaper_gradient_to")) {
+        if (str.equals("chat_wallpaper") || str.equals("chat_wallpaper_gradient_to") || str.equals("windowBackgroundWhite") || str.equals("windowBackgroundGray")) {
             i |= -16777216;
         }
         if (z) {

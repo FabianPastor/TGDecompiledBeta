@@ -16100,7 +16100,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0120:
             org.telegram.messenger.MessageObject r8 = r0.currentMessageObject
             boolean r8 = r8.isSendError()
-            if (r8 != 0) goto L_0x07e5
+            if (r8 != 0) goto L_0x07f5
             boolean r8 = android.text.TextUtils.isEmpty(r4)
             if (r8 == 0) goto L_0x0140
             org.telegram.messenger.MessageObject r8 = r0.currentMessageObject
@@ -16109,7 +16109,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject r8 = r0.currentMessageObject
             boolean r8 = r8.isEditing()
             if (r8 != 0) goto L_0x0140
-            goto L_0x07e5
+            goto L_0x07f5
         L_0x0140:
             org.telegram.messenger.MessageObject r8 = r0.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
@@ -16125,9 +16125,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0153:
             int r9 = r0.documentAttachType
             r14 = 0
-            if (r9 == r10) goto L_0x060d
+            if (r9 == r10) goto L_0x061d
             if (r9 != r7) goto L_0x015c
-            goto L_0x060d
+            goto L_0x061d
         L_0x015c:
             org.telegram.messenger.MessageObject r7 = r0.currentMessageObject
             int r7 = r7.type
@@ -16206,7 +16206,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
             r16.invalidate()
-            goto L_0x07db
+            goto L_0x07eb
         L_0x01fc:
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
@@ -16226,7 +16226,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
             r16.invalidate()
-            goto L_0x07db
+            goto L_0x07eb
         L_0x0225:
             return
         L_0x0226:
@@ -16362,7 +16362,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0328:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.videoRadialProgress
             r4.setIcon(r11, r1, r3)
-            goto L_0x07db
+            goto L_0x07eb
         L_0x032f:
             boolean r6 = r0.wasSending
             if (r6 == 0) goto L_0x0348
@@ -16472,7 +16472,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getMiniIconForCurrentState()
             r4.setMiniIcon(r5, r1, r2)
-            goto L_0x07db
+            goto L_0x07eb
         L_0x0415:
             if (r5 != 0) goto L_0x0590
             int r5 = r0.documentAttachType
@@ -16702,7 +16702,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0.animatingDrawVideoImageButtonProgress = r14
         L_0x058b:
             r16.invalidate()
-            goto L_0x07db
+            goto L_0x07eb
         L_0x0590:
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
@@ -16733,70 +16733,79 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x05c8
             r4 = -1
             r0.buttonState = r4
-            goto L_0x05e3
+            goto L_0x05f3
         L_0x05c8:
             int r4 = r0.documentAttachType
-            if (r4 != r15) goto L_0x05d9
+            if (r4 != r15) goto L_0x05e9
             org.telegram.messenger.MessageObject r4 = r0.currentMessageObject
             float r4 = r4.gifState
             r6 = 1065353216(0x3var_, float:1.0)
             int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r4 != 0) goto L_0x05d9
-            r0.buttonState = r15
-            goto L_0x05e3
-        L_0x05d9:
-            int r4 = r0.documentAttachType
-            if (r4 != r11) goto L_0x05e0
-            r0.buttonState = r10
-            goto L_0x05e3
-        L_0x05e0:
+            if (r4 != 0) goto L_0x05e9
+            org.telegram.messenger.ImageReceiver r4 = r0.photoImage
+            boolean r4 = r4.isAnimationRunning()
+            if (r4 == 0) goto L_0x05e6
+            org.telegram.messenger.MessageObject r4 = r0.currentMessageObject
+            r4.gifState = r14
             r4 = -1
             r0.buttonState = r4
-        L_0x05e3:
+            goto L_0x05f3
+        L_0x05e6:
+            r0.buttonState = r15
+            goto L_0x05f3
+        L_0x05e9:
+            r4 = -1
+            int r5 = r0.documentAttachType
+            if (r5 != r11) goto L_0x05f1
+            r0.buttonState = r10
+            goto L_0x05f3
+        L_0x05f1:
+            r0.buttonState = r4
+        L_0x05f3:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.videoRadialProgress
             int r5 = r0.animatingDrawVideoImageButton
-            if (r5 == 0) goto L_0x05ea
-            goto L_0x05eb
-        L_0x05ea:
+            if (r5 == 0) goto L_0x05fa
+            goto L_0x05fb
+        L_0x05fa:
             r12 = 0
-        L_0x05eb:
+        L_0x05fb:
             r4.setIcon(r11, r1, r12)
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
-            if (r19 != 0) goto L_0x0608
+            if (r19 != 0) goto L_0x0618
             boolean r1 = r0.photoNotSet
-            if (r1 == 0) goto L_0x0608
+            if (r1 == 0) goto L_0x0618
             org.telegram.messenger.MessageObject r1 = r0.currentMessageObject
             org.telegram.messenger.MessageObject$GroupedMessages r4 = r0.currentMessagesGroup
             boolean r5 = r0.pinnedBottom
             boolean r6 = r0.pinnedTop
             r0.setMessageObject(r1, r4, r5, r6)
-        L_0x0608:
+        L_0x0618:
             r16.invalidate()
-            goto L_0x07db
-        L_0x060d:
+            goto L_0x07eb
+        L_0x061d:
             r6 = 1065353216(0x3var_, float:1.0)
             org.telegram.messenger.MessageObject r7 = r0.currentMessageObject
             boolean r7 = r7.isOut()
-            if (r7 == 0) goto L_0x0627
+            if (r7 == 0) goto L_0x0637
             org.telegram.messenger.MessageObject r7 = r0.currentMessageObject
             boolean r7 = r7.isSending()
-            if (r7 != 0) goto L_0x0631
+            if (r7 != 0) goto L_0x0641
             org.telegram.messenger.MessageObject r7 = r0.currentMessageObject
             boolean r7 = r7.isEditing()
-            if (r7 != 0) goto L_0x0631
-        L_0x0627:
+            if (r7 != 0) goto L_0x0641
+        L_0x0637:
             org.telegram.messenger.MessageObject r7 = r0.currentMessageObject
             boolean r7 = r7.isSendError()
-            if (r7 == 0) goto L_0x06a8
-            if (r8 == 0) goto L_0x06a8
-        L_0x0631:
+            if (r7 == 0) goto L_0x06b8
+            if (r8 == 0) goto L_0x06b8
+        L_0x0641:
             org.telegram.messenger.MessageObject r4 = r0.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
             java.lang.String r4 = r4.attachPath
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x0694
+            if (r4 != 0) goto L_0x06a4
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             org.telegram.messenger.MessageObject r5 = r0.currentMessageObject
@@ -16808,33 +16817,33 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
-            if (r8 != 0) goto L_0x068d
+            if (r8 != 0) goto L_0x069d
             org.telegram.messenger.ImageLoader r1 = org.telegram.messenger.ImageLoader.getInstance()
             org.telegram.messenger.MessageObject r4 = r0.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r4 = r4.messageOwner
             java.lang.String r4 = r4.attachPath
             long[] r1 = r1.getFileProgressSizes(r4)
-            if (r1 != 0) goto L_0x0680
+            if (r1 != 0) goto L_0x0690
             int r4 = r0.currentAccount
             org.telegram.messenger.SendMessagesHelper r4 = org.telegram.messenger.SendMessagesHelper.getInstance(r4)
             org.telegram.messenger.MessageObject r5 = r0.currentMessageObject
             int r5 = r5.getId()
             boolean r4 = r4.isSendingMessage(r5)
-            if (r4 == 0) goto L_0x0680
+            if (r4 == 0) goto L_0x0690
             r14 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0686
-        L_0x0680:
-            if (r1 == 0) goto L_0x0686
+            goto L_0x0696
+        L_0x0690:
+            if (r1 == 0) goto L_0x0696
             float r14 = org.telegram.messenger.DownloadController.getProgress(r1)
-        L_0x0686:
+        L_0x0696:
             org.telegram.ui.Components.RadialProgress2 r1 = r0.radialProgress
             r1.setProgress(r14, r3)
-            goto L_0x07d8
-        L_0x068d:
+            goto L_0x07e8
+        L_0x069d:
             org.telegram.ui.Components.RadialProgress2 r1 = r0.radialProgress
             r1.setProgress(r14, r3)
-            goto L_0x07d8
-        L_0x0694:
+            goto L_0x07e8
+        L_0x06a4:
             r4 = -1
             r0.buttonState = r4
             r16.getIconForCurrentState()
@@ -16843,48 +16852,48 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4.setIcon(r5, r1, r3)
             org.telegram.ui.Components.RadialProgress2 r1 = r0.radialProgress
             r1.setProgress(r14, r3)
-            goto L_0x07d8
-        L_0x06a8:
+            goto L_0x07e8
+        L_0x06b8:
             int r6 = r0.hasMiniProgress
-            if (r6 == 0) goto L_0x0752
+            if (r6 == 0) goto L_0x0762
             org.telegram.ui.Components.RadialProgress2 r5 = r0.radialProgress
             org.telegram.messenger.MessageObject r6 = r0.currentMessageObject
             boolean r6 = r6.isOutOwner()
-            if (r6 == 0) goto L_0x06b9
+            if (r6 == 0) goto L_0x06c9
             java.lang.String r6 = "chat_outLoader"
-            goto L_0x06bb
-        L_0x06b9:
+            goto L_0x06cb
+        L_0x06c9:
             java.lang.String r6 = "chat_inLoader"
-        L_0x06bb:
+        L_0x06cb:
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r5.setMiniProgressBackgroundColor(r6)
             org.telegram.messenger.MediaController r5 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r6 = r0.currentMessageObject
             boolean r5 = r5.isPlayingMessage(r6)
-            if (r5 == 0) goto L_0x06de
-            if (r5 == 0) goto L_0x06db
+            if (r5 == 0) goto L_0x06ee
+            if (r5 == 0) goto L_0x06eb
             org.telegram.messenger.MediaController r5 = org.telegram.messenger.MediaController.getInstance()
             boolean r5 = r5.isMessagePaused()
-            if (r5 == 0) goto L_0x06db
-            goto L_0x06de
-        L_0x06db:
+            if (r5 == 0) goto L_0x06eb
+            goto L_0x06ee
+        L_0x06eb:
             r0.buttonState = r12
-            goto L_0x06e0
-        L_0x06de:
+            goto L_0x06f0
+        L_0x06ee:
             r0.buttonState = r3
-        L_0x06e0:
+        L_0x06f0:
             org.telegram.ui.Components.RadialProgress2 r5 = r0.radialProgress
             int r6 = r16.getIconForCurrentState()
             r5.setIcon(r6, r1, r2)
             int r5 = r0.hasMiniProgress
-            if (r5 != r12) goto L_0x06fa
+            if (r5 != r12) goto L_0x070a
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             r4.removeLoadingFileObserver(r0)
             r4 = -1
             r0.miniButtonState = r4
-            goto L_0x0747
-        L_0x06fa:
+            goto L_0x0757
+        L_0x070a:
             int r5 = r0.currentAccount
             org.telegram.messenger.DownloadController r5 = org.telegram.messenger.DownloadController.getInstance(r5)
             org.telegram.messenger.MessageObject r6 = r0.currentMessageObject
@@ -16892,24 +16901,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r0.currentAccount
             org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
             boolean r5 = r5.isLoadingFile(r4)
-            if (r5 != 0) goto L_0x0719
+            if (r5 != 0) goto L_0x0729
             org.telegram.tgnet.TLRPC$Document r4 = r0.documentAttach
             r0.createLoadingProgressLayout(r4)
             r0.miniButtonState = r3
-            goto L_0x0747
-        L_0x0719:
+            goto L_0x0757
+        L_0x0729:
             r0.miniButtonState = r12
             org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.getInstance()
             long[] r4 = r5.getFileProgressSizes(r4)
-            if (r4 == 0) goto L_0x0736
+            if (r4 == 0) goto L_0x0746
             org.telegram.ui.Components.RadialProgress2 r5 = r0.radialProgress
             float r6 = org.telegram.messenger.DownloadController.getProgress(r4)
             r5.setProgress(r6, r2)
             r5 = r4[r3]
             r7 = r4[r12]
             r0.createLoadingProgressLayout(r5, r7)
-            goto L_0x0747
-        L_0x0736:
+            goto L_0x0757
+        L_0x0746:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             r4.setProgress(r14, r2)
             r4 = 0
@@ -16917,36 +16926,36 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = r6.getSize()
             long r6 = (long) r6
             r0.createLoadingProgressLayout(r4, r6)
-        L_0x0747:
+        L_0x0757:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getMiniIconForCurrentState()
             r4.setMiniIcon(r5, r1, r2)
-            goto L_0x07d8
-        L_0x0752:
-            if (r5 == 0) goto L_0x0785
+            goto L_0x07e8
+        L_0x0762:
+            if (r5 == 0) goto L_0x0795
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             r4.removeLoadingFileObserver(r0)
             org.telegram.messenger.MediaController r4 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r5 = r0.currentMessageObject
             boolean r4 = r4.isPlayingMessage(r5)
-            if (r4 == 0) goto L_0x0779
-            if (r4 == 0) goto L_0x0776
+            if (r4 == 0) goto L_0x0789
+            if (r4 == 0) goto L_0x0786
             org.telegram.messenger.MediaController r4 = org.telegram.messenger.MediaController.getInstance()
             boolean r4 = r4.isMessagePaused()
-            if (r4 == 0) goto L_0x0776
-            goto L_0x0779
-        L_0x0776:
+            if (r4 == 0) goto L_0x0786
+            goto L_0x0789
+        L_0x0786:
             r0.buttonState = r12
-            goto L_0x077b
-        L_0x0779:
+            goto L_0x078b
+        L_0x0789:
             r0.buttonState = r3
-        L_0x077b:
+        L_0x078b:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
-            goto L_0x07d8
-        L_0x0785:
+            goto L_0x07e8
+        L_0x0795:
             int r5 = r0.currentAccount
             org.telegram.messenger.DownloadController r5 = org.telegram.messenger.DownloadController.getInstance(r5)
             org.telegram.messenger.MessageObject r6 = r0.currentMessageObject
@@ -16954,43 +16963,43 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r0.currentAccount
             org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
             boolean r5 = r5.isLoadingFile(r4)
-            if (r5 != 0) goto L_0x07a8
+            if (r5 != 0) goto L_0x07b8
             r0.buttonState = r15
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
-            goto L_0x07d8
-        L_0x07a8:
+            goto L_0x07e8
+        L_0x07b8:
             r0.buttonState = r11
             org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.getInstance()
             long[] r4 = r5.getFileProgressSizes(r4)
-            if (r4 == 0) goto L_0x07c5
+            if (r4 == 0) goto L_0x07d5
             org.telegram.ui.Components.RadialProgress2 r5 = r0.radialProgress
             float r6 = org.telegram.messenger.DownloadController.getProgress(r4)
             r5.setProgress(r6, r2)
             r5 = r4[r3]
             r7 = r4[r12]
             r0.createLoadingProgressLayout(r5, r7)
-            goto L_0x07cf
-        L_0x07c5:
+            goto L_0x07df
+        L_0x07d5:
             org.telegram.tgnet.TLRPC$Document r4 = r0.documentAttach
             r0.createLoadingProgressLayout(r4)
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             r4.setProgress(r14, r2)
-        L_0x07cf:
+        L_0x07df:
             org.telegram.ui.Components.RadialProgress2 r4 = r0.radialProgress
             int r5 = r16.getIconForCurrentState()
             r4.setIcon(r5, r1, r2)
-        L_0x07d8:
+        L_0x07e8:
             r16.updatePlayingMessageProgress()
-        L_0x07db:
+        L_0x07eb:
             int r1 = r0.hasMiniProgress
-            if (r1 != 0) goto L_0x07e4
+            if (r1 != 0) goto L_0x07f4
             org.telegram.ui.Components.RadialProgress2 r1 = r0.radialProgress
             r1.setMiniIcon(r11, r3, r2)
-        L_0x07e4:
+        L_0x07f4:
             return
-        L_0x07e5:
+        L_0x07f5:
             org.telegram.ui.Components.RadialProgress2 r2 = r0.radialProgress
             r2.setIcon(r11, r1, r3)
             org.telegram.ui.Components.RadialProgress2 r2 = r0.radialProgress
