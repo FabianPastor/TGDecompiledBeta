@@ -11,7 +11,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.Layout;
-import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -20,11 +19,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 
 public class SimpleTextView extends View implements Drawable.Callback {
-    private static final int DIST_BETWEEN_SCROLLING_TEXT = 16;
-    private static final int PIXELS_PER_SECOND = 50;
-    private static final int PIXELS_PER_SECOND_SLOW = 30;
-    private static final int SCROLL_DELAY_MS = 500;
-    private static final int SCROLL_SLOWDOWN_PX = 100;
     private int currentScrollDelay;
     private int drawablePadding = AndroidUtilities.dp(4.0f);
     private Paint fadePaint;
@@ -43,7 +37,6 @@ public class SimpleTextView extends View implements Drawable.Callback {
     private int rightDrawableTopPadding;
     private boolean scrollNonFitText;
     private float scrollingOffset;
-    private SpannableStringBuilder spannableStringBuilder;
     private CharSequence text;
     private boolean textDoesNotFit;
     private int textHeight;
@@ -91,7 +84,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
     public void setScrollNonFitText(boolean z) {
         if (this.scrollNonFitText != z) {
             this.scrollNonFitText = z;
-            if (this.scrollNonFitText) {
+            if (z) {
                 this.fadePaint = new Paint();
                 this.fadePaint.setShader(new LinearGradient(0.0f, 0.0f, (float) AndroidUtilities.dp(6.0f), 0.0f, new int[]{-1, 0}, new float[]{0.0f, 1.0f}, Shader.TileMode.CLAMP));
                 this.fadePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
@@ -502,9 +495,10 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 } else if (this.scrollingOffset >= ((float) (dp - AndroidUtilities.dp(100.0f)))) {
                     f = 50.0f - (((this.scrollingOffset - ((float) (dp - AndroidUtilities.dp(100.0f)))) / ((float) AndroidUtilities.dp(100.0f))) * 20.0f);
                 }
-                this.scrollingOffset += (((float) j) / 1000.0f) * ((float) AndroidUtilities.dp(f));
+                float dp2 = this.scrollingOffset + ((((float) j) / 1000.0f) * ((float) AndroidUtilities.dp(f)));
+                this.scrollingOffset = dp2;
                 this.lastUpdateTime = elapsedRealtime;
-                if (this.scrollingOffset > ((float) dp)) {
+                if (dp2 > ((float) dp)) {
                     this.scrollingOffset = 0.0f;
                     this.currentScrollDelay = 500;
                 }

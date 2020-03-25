@@ -4,23 +4,13 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
-import android.text.TextDirectionHeuristic;
-import android.text.TextDirectionHeuristics;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import java.lang.reflect.Constructor;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 
 public class StaticLayoutEx {
-    private static final String TEXT_DIRS_CLASS = "android.text.TextDirectionHeuristics";
-    private static final String TEXT_DIR_CLASS = "android.text.TextDirectionHeuristic";
-    private static final String TEXT_DIR_FIRSTSTRONG_LTR = "FIRSTSTRONG_LTR";
     public static Layout.Alignment[] alignments = Layout.Alignment.values();
-    private static boolean initialized;
-    private static Constructor<StaticLayout> sConstructor;
-    private static Object[] sConstructorArgs;
-    private static Object sTextDirection;
 
     public static Layout.Alignment ALIGN_RIGHT() {
         Layout.Alignment[] alignmentArr = alignments;
@@ -30,42 +20,6 @@ public class StaticLayoutEx {
     public static Layout.Alignment ALIGN_LEFT() {
         Layout.Alignment[] alignmentArr = alignments;
         return alignmentArr.length >= 5 ? alignmentArr[3] : Layout.Alignment.ALIGN_NORMAL;
-    }
-
-    public static void init() {
-        Class cls;
-        if (!initialized) {
-            try {
-                if (Build.VERSION.SDK_INT >= 18) {
-                    cls = TextDirectionHeuristic.class;
-                    sTextDirection = TextDirectionHeuristics.FIRSTSTRONG_LTR;
-                } else {
-                    ClassLoader classLoader = StaticLayoutEx.class.getClassLoader();
-                    Class<?> loadClass = classLoader.loadClass("android.text.TextDirectionHeuristic");
-                    Class<?> loadClass2 = classLoader.loadClass("android.text.TextDirectionHeuristics");
-                    sTextDirection = loadClass2.getField("FIRSTSTRONG_LTR").get(loadClass2);
-                    cls = loadClass;
-                }
-                Class[] clsArr = {CharSequence.class, Integer.TYPE, Integer.TYPE, TextPaint.class, Integer.TYPE, Layout.Alignment.class, cls, Float.TYPE, Float.TYPE, Boolean.TYPE, TextUtils.TruncateAt.class, Integer.TYPE, Integer.TYPE};
-                sConstructor = StaticLayout.class.getDeclaredConstructor(clsArr);
-                sConstructor.setAccessible(true);
-                sConstructorArgs = new Object[clsArr.length];
-                initialized = true;
-            } catch (Throwable th) {
-                FileLog.e(th);
-            }
-        }
-    }
-
-    public static StaticLayout createStaticLayout2(CharSequence charSequence, TextPaint textPaint, int i, Layout.Alignment alignment, float f, float f2, boolean z, TextUtils.TruncateAt truncateAt, int i2, int i3) {
-        int i4 = i2;
-        if (Build.VERSION.SDK_INT >= 23) {
-            CharSequence charSequence2 = charSequence;
-            TextPaint textPaint2 = textPaint;
-            return StaticLayout.Builder.obtain(charSequence, 0, charSequence.length(), textPaint, i4).setAlignment(alignment).setLineSpacing(f2, f).setIncludePad(z).setEllipsize(TextUtils.TruncateAt.END).setEllipsizedWidth(i4).setMaxLines(i3).setBreakStrategy(1).setHyphenationFrequency(0).build();
-        }
-        CharSequence charSequence3 = charSequence;
-        return createStaticLayout(charSequence, 0, charSequence.length(), textPaint, i, alignment, f, f2, z, truncateAt, i2, i3, true);
     }
 
     public static StaticLayout createStaticLayout(CharSequence charSequence, TextPaint textPaint, int i, Layout.Alignment alignment, float f, float f2, boolean z, TextUtils.TruncateAt truncateAt, int i2, int i3) {

@@ -2344,7 +2344,6 @@
     <string name="PopupDisabled">Uitgeschakeld</string>
     <string name="PopupEnabled">Ingeschakeld</string>
     <string name="PopupNotification">Pop-up meldingen</string>
-    <string name="PreviewFeedback">Feedback over dit voorbeeld</string>
     <string name="PriorityInfo">Meldingen met hoge prioriteit werken ook als je telefoon op \"Niet storen\" staat.</string>
     <string name="PrivacyAddAnException">Voeg gebruikers of groepen toe.</string>
     <string name="PrivacyAdvanced">Geavanceerd</string>
@@ -3262,5 +3261,4 @@
     <string name="messages_two">%1$d berichten</string>
     <string name="messages_zero">%1$d berichten</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Kopen met Google</string>
 </resources>

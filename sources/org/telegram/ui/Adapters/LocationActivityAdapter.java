@@ -16,7 +16,9 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_channelLocation;
+import org.telegram.tgnet.TLRPC$TL_geoPoint;
+import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.LocationActivityAdapter;
 import org.telegram.ui.Cells.EmptyCell;
@@ -34,7 +36,7 @@ import org.telegram.ui.LocationActivity;
 
 public class LocationActivityAdapter extends BaseLocationAdapter implements LocationController.LocationFetchCallback {
     private String addressName;
-    private TLRPC.TL_channelLocation chatLocation;
+    private TLRPC$TL_channelLocation chatLocation;
     private int currentAccount = UserConfig.selectedAccount;
     private ArrayList<LocationActivity.LiveLocation> currentLiveLocations = new ArrayList<>();
     private MessageObject currentMessageObject;
@@ -53,6 +55,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     /* access modifiers changed from: protected */
     public void onDirectionClick() {
+        throw null;
     }
 
     public LocationActivityAdapter(Context context, int i, long j) {
@@ -123,8 +126,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         notifyDataSetChanged();
     }
 
-    public void setChatLocation(TLRPC.TL_channelLocation tL_channelLocation) {
-        this.chatLocation = tL_channelLocation;
+    public void setChatLocation(TLRPC$TL_channelLocation tLRPC$TL_channelLocation) {
+        this.chatLocation = tLRPC$TL_channelLocation;
     }
 
     private void updateCell() {
@@ -161,10 +164,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         } else {
             sendLocationCell2.setText(LocaleController.getString("SendLocation", NUM), LocaleController.getString("Loading", NUM));
         }
-    }
-
-    private String getAddressName() {
-        return this.addressName;
     }
 
     public void onLocationAddressAvailable(String str, String str2, Location location) {
@@ -331,9 +330,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     sendLocationCell2.setHasLocation(z);
                 } else if (itemViewType == 7) {
                     SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
-                    TLRPC.TL_channelLocation tL_channelLocation = this.chatLocation;
-                    if (tL_channelLocation != null) {
-                        sharingLiveLocationCell.setDialog(this.dialogId, tL_channelLocation);
+                    TLRPC$TL_channelLocation tLRPC$TL_channelLocation = this.chatLocation;
+                    if (tLRPC$TL_channelLocation != null) {
+                        sharingLiveLocationCell.setDialog(this.dialogId, tLRPC$TL_channelLocation);
                         return;
                     }
                     MessageObject messageObject = this.currentMessageObject;
@@ -383,21 +382,22 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         } else if (this.addressName == null) {
             return null;
         } else {
-            TLRPC.TL_messageMediaVenue tL_messageMediaVenue = new TLRPC.TL_messageMediaVenue();
-            tL_messageMediaVenue.address = this.addressName;
-            tL_messageMediaVenue.geo = new TLRPC.TL_geoPoint();
+            TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue = new TLRPC$TL_messageMediaVenue();
+            tLRPC$TL_messageMediaVenue.address = this.addressName;
+            TLRPC$TL_geoPoint tLRPC$TL_geoPoint = new TLRPC$TL_geoPoint();
+            tLRPC$TL_messageMediaVenue.geo = tLRPC$TL_geoPoint;
             Location location = this.customLocation;
             if (location != null) {
-                tL_messageMediaVenue.geo.lat = location.getLatitude();
-                tL_messageMediaVenue.geo._long = this.customLocation.getLongitude();
+                tLRPC$TL_geoPoint.lat = location.getLatitude();
+                tLRPC$TL_messageMediaVenue.geo._long = this.customLocation.getLongitude();
             } else {
                 Location location2 = this.gpsLocation;
                 if (location2 != null) {
-                    tL_messageMediaVenue.geo.lat = location2.getLatitude();
-                    tL_messageMediaVenue.geo._long = this.gpsLocation.getLongitude();
+                    tLRPC$TL_geoPoint.lat = location2.getLatitude();
+                    tLRPC$TL_messageMediaVenue.geo._long = this.gpsLocation.getLongitude();
                 }
             }
-            return tL_messageMediaVenue;
+            return tLRPC$TL_messageMediaVenue;
         }
     }
 

@@ -31,18 +31,18 @@ public class ID3v2TagHeader {
         ID3v2DataInput iD3v2DataInput = new ID3v2DataInput(positionInputStream);
         String str = new String(iD3v2DataInput.readFully(3), "ISO-8859-1");
         if ("ID3".equals(str)) {
-            this.version = iD3v2DataInput.readByte();
-            int i = this.version;
-            if (i == 2 || i == 3 || i == 4) {
+            byte readByte = iD3v2DataInput.readByte();
+            this.version = readByte;
+            if (readByte == 2 || readByte == 3 || readByte == 4) {
                 this.revision = iD3v2DataInput.readByte();
-                byte readByte = iD3v2DataInput.readByte();
+                byte readByte2 = iD3v2DataInput.readByte();
                 this.totalTagSize = iD3v2DataInput.readSyncsafeInt() + 10;
                 if (this.version == 2) {
-                    this.unsynchronization = (readByte & 128) != 0;
-                    this.compression = (readByte & 64) != 0 ? true : z;
+                    this.unsynchronization = (readByte2 & 128) != 0;
+                    this.compression = (readByte2 & 64) != 0 ? true : z;
                 } else {
-                    this.unsynchronization = (readByte & 128) != 0 ? true : z;
-                    if ((readByte & 64) != 0) {
+                    this.unsynchronization = (readByte2 & 128) != 0 ? true : z;
+                    if ((readByte2 & 64) != 0) {
                         if (this.version == 3) {
                             int readInt = iD3v2DataInput.readInt();
                             iD3v2DataInput.readByte();
@@ -53,7 +53,7 @@ public class ID3v2TagHeader {
                             iD3v2DataInput.skipFully((long) (iD3v2DataInput.readSyncsafeInt() - 4));
                         }
                     }
-                    if (this.version >= 4 && (readByte & 16) != 0) {
+                    if (this.version >= 4 && (readByte2 & 16) != 0) {
                         this.footerSize = 10;
                         this.totalTagSize += 10;
                     }

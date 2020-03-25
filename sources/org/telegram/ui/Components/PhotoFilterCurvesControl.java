@@ -13,24 +13,12 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.PhotoFilterView;
 
 public class PhotoFilterCurvesControl extends View {
-    private static final int CurvesSegmentBlacks = 1;
-    private static final int CurvesSegmentHighlights = 4;
-    private static final int CurvesSegmentMidtones = 3;
-    private static final int CurvesSegmentNone = 0;
-    private static final int CurvesSegmentShadows = 2;
-    private static final int CurvesSegmentWhites = 5;
-    private static final int GestureStateBegan = 1;
-    private static final int GestureStateCancelled = 4;
-    private static final int GestureStateChanged = 2;
-    private static final int GestureStateEnded = 3;
-    private static final int GestureStateFailed = 5;
     private int activeSegment = 0;
     private Rect actualArea = new Rect();
     private boolean checkForMoving = true;
     private PhotoFilterView.CurvesToolValue curveValue;
     private PhotoFilterCurvesControlDelegate delegate;
     private boolean isMoving;
-    private float lastX;
     private float lastY;
     private Paint paint = new Paint(1);
     private Paint paintCurve = new Paint(1);
@@ -72,7 +60,7 @@ public class PhotoFilterCurvesControl extends View {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0014, code lost:
-        if (r0 != 6) goto L_0x0078;
+        if (r0 != 6) goto L_0x0076;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
@@ -91,12 +79,12 @@ public class PhotoFilterCurvesControl extends View {
             if (r0 == r4) goto L_0x002b
             r4 = 6
             if (r0 == r4) goto L_0x001f
-            goto L_0x0078
+            goto L_0x0076
         L_0x0017:
             boolean r0 = r7.isMoving
-            if (r0 == 0) goto L_0x0078
+            if (r0 == 0) goto L_0x0076
             r7.handlePan(r4, r8)
-            goto L_0x0078
+            goto L_0x0076
         L_0x001f:
             boolean r0 = r7.isMoving
             if (r0 == 0) goto L_0x0028
@@ -104,47 +92,46 @@ public class PhotoFilterCurvesControl extends View {
             r7.isMoving = r1
         L_0x0028:
             r7.checkForMoving = r3
-            goto L_0x0078
+            goto L_0x0076
         L_0x002b:
             int r0 = r8.getPointerCount()
-            if (r0 != r3) goto L_0x006d
+            if (r0 != r3) goto L_0x006b
             boolean r0 = r7.checkForMoving
-            if (r0 == 0) goto L_0x0078
+            if (r0 == 0) goto L_0x0076
             boolean r0 = r7.isMoving
-            if (r0 != 0) goto L_0x0078
+            if (r0 != 0) goto L_0x0076
             float r0 = r8.getX()
             float r2 = r8.getY()
-            r7.lastX = r0
             r7.lastY = r2
             org.telegram.ui.Components.Rect r4 = r7.actualArea
             float r5 = r4.x
             int r6 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r6 < 0) goto L_0x0063
+            if (r6 < 0) goto L_0x0061
             float r6 = r4.width
             float r5 = r5 + r6
             int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r0 > 0) goto L_0x0063
+            if (r0 > 0) goto L_0x0061
             float r0 = r4.y
             int r5 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-            if (r5 < 0) goto L_0x0063
+            if (r5 < 0) goto L_0x0061
             float r4 = r4.height
             float r0 = r0 + r4
             int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-            if (r0 > 0) goto L_0x0063
+            if (r0 > 0) goto L_0x0061
             r7.isMoving = r3
-        L_0x0063:
+        L_0x0061:
             r7.checkForMoving = r1
             boolean r0 = r7.isMoving
-            if (r0 == 0) goto L_0x0078
+            if (r0 == 0) goto L_0x0076
             r7.handlePan(r3, r8)
-            goto L_0x0078
-        L_0x006d:
+            goto L_0x0076
+        L_0x006b:
             boolean r0 = r7.isMoving
-            if (r0 == 0) goto L_0x0078
+            if (r0 == 0) goto L_0x0076
             r7.handlePan(r2, r8)
             r7.checkForMoving = r3
             r7.isMoving = r1
-        L_0x0078:
+        L_0x0076:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterCurvesControl.onTouchEvent(android.view.MotionEvent):boolean");
@@ -186,7 +173,6 @@ public class PhotoFilterCurvesControl extends View {
             if (photoFilterCurvesControlDelegate != null) {
                 photoFilterCurvesControlDelegate.valueChanged();
             }
-            this.lastX = x;
             this.lastY = y;
         } else if (i == 3 || i == 4 || i == 5) {
             unselectSegments();

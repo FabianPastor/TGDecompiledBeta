@@ -7,7 +7,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 
 public class AdjustPanLayoutHelper {
-    private static final int FRAMES_WITHOUT_MOVE_LIMIT = 5;
     private int framesWithoutMovement;
     private int[] loc = new int[2];
     private View parentView;
@@ -28,7 +27,7 @@ public class AdjustPanLayoutHelper {
 
     public AdjustPanLayoutHelper(View view) {
         this.parentView = view;
-        this.parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public final void onGlobalLayout() {
                 AdjustPanLayoutHelper.this.onUpdate();
             }

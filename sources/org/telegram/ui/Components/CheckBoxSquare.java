@@ -13,7 +13,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class CheckBoxSquare extends View {
-    private static final float progressBounceDiff = 0.2f;
     private boolean attachedToWindow;
     private ObjectAnimator checkAnimator;
     private Bitmap drawBitmap;
@@ -43,6 +42,7 @@ public class CheckBoxSquare extends View {
         }
     }
 
+    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -57,8 +57,9 @@ public class CheckBoxSquare extends View {
     private void animateToCheckedState(boolean z) {
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
-        this.checkAnimator.setDuration(300);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.setDuration(300);
         this.checkAnimator.start();
     }
 

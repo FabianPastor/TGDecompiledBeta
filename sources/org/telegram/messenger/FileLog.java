@@ -50,8 +50,8 @@ public class FileLog {
                     try {
                         this.logQueue = new DispatchQueue("logQueue");
                         this.currentFile.createNewFile();
-                        this.streamWriter = new OutputStreamWriter(new FileOutputStream(this.currentFile));
-                        OutputStreamWriter outputStreamWriter = this.streamWriter;
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(this.currentFile));
+                        this.streamWriter = outputStreamWriter;
                         outputStreamWriter.write("-----start log " + this.dateFormat.format(System.currentTimeMillis()) + "-----\n");
                         this.streamWriter.flush();
                     } catch (Exception e) {

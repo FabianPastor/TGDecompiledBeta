@@ -34,6 +34,7 @@ public class NotificationCenter {
     public static final int configLoaded;
     public static final int contactsDidLoad;
     public static final int contactsImported;
+    public static final int dialogFiltersUpdated;
     public static final int dialogPhotosLoaded;
     public static final int dialogsNeedReload;
     public static final int dialogsUnreadCounterChanged;
@@ -41,7 +42,7 @@ public class NotificationCenter {
     public static final int didCreatedNewDeleteTask;
     public static final int didEndCall;
     public static final int didReceiveCall;
-    public static final int didReceiveNewMessages;
+    public static final int didReceiveNewMessages = 1;
     public static final int didReceiveSmsCode;
     public static final int didReceivedWebpages;
     public static final int didReceivedWebpagesInUpdates;
@@ -65,8 +66,9 @@ public class NotificationCenter {
     public static final int fileNewChunkAvailable;
     public static final int filePreparingFailed;
     public static final int filePreparingStarted;
+    public static final int filterSettingsUpdated;
     public static final int folderBecomeEmpty;
-    private static volatile NotificationCenter globalInstance = null;
+    private static volatile NotificationCenter globalInstance;
     public static final int goingToPreviewTheme;
     public static final int groupStickersDidLoad;
     public static final int hasNewContactsToImport;
@@ -96,9 +98,9 @@ public class NotificationCenter {
     public static final int messagesReadContent;
     public static final int messagesReadEncrypted;
     public static final int musicDidLoad;
+    public static final int needAddArchivedStickers;
     public static final int needCheckSystemBarColors;
     public static final int needDeleteDialog;
-    public static final int needReloadArchivedStickers;
     public static final int needReloadRecentDialogsSearch;
     public static final int needSetDayNightTheme;
     public static final int needShareTheme;
@@ -140,12 +142,13 @@ public class NotificationCenter {
     public static final int stickersDidLoad;
     public static final int stopAllHeavyOperations;
     public static final int stopEncodingService;
+    public static final int suggestedFiltersLoaded;
     public static final int suggestedLangpack;
     public static final int themeAccentListUpdated;
     public static final int themeListUpdated;
     public static final int themeUploadError;
     public static final int themeUploadedToServer;
-    private static int totalEvents = 1;
+    private static int totalEvents;
     public static final int updateInterfaces;
     public static final int updateMentionsCount;
     public static final int updateMessageMedia;
@@ -171,453 +174,460 @@ public class NotificationCenter {
     }
 
     static {
-        int i = totalEvents;
-        totalEvents = i + 1;
-        didReceiveNewMessages = i;
-        int i2 = totalEvents;
-        totalEvents = i2 + 1;
-        updateInterfaces = i2;
-        int i3 = totalEvents;
-        totalEvents = i3 + 1;
-        dialogsNeedReload = i3;
-        int i4 = totalEvents;
-        totalEvents = i4 + 1;
-        closeChats = i4;
-        int i5 = totalEvents;
-        totalEvents = i5 + 1;
-        messagesDeleted = i5;
-        int i6 = totalEvents;
-        totalEvents = i6 + 1;
-        historyCleared = i6;
-        int i7 = totalEvents;
-        totalEvents = i7 + 1;
-        messagesRead = i7;
-        int i8 = totalEvents;
-        totalEvents = i8 + 1;
-        messagesDidLoad = i8;
-        int i9 = totalEvents;
-        totalEvents = i9 + 1;
-        messageReceivedByAck = i9;
-        int i10 = totalEvents;
-        totalEvents = i10 + 1;
-        messageReceivedByServer = i10;
-        int i11 = totalEvents;
-        totalEvents = i11 + 1;
-        messageSendError = i11;
-        int i12 = totalEvents;
-        totalEvents = i12 + 1;
-        contactsDidLoad = i12;
-        int i13 = totalEvents;
-        totalEvents = i13 + 1;
-        contactsImported = i13;
-        int i14 = totalEvents;
-        totalEvents = i14 + 1;
-        hasNewContactsToImport = i14;
-        int i15 = totalEvents;
-        totalEvents = i15 + 1;
-        chatDidCreated = i15;
-        int i16 = totalEvents;
-        totalEvents = i16 + 1;
-        chatDidFailCreate = i16;
-        int i17 = totalEvents;
-        totalEvents = i17 + 1;
-        chatInfoDidLoad = i17;
-        int i18 = totalEvents;
-        totalEvents = i18 + 1;
-        chatInfoCantLoad = i18;
-        int i19 = totalEvents;
-        totalEvents = i19 + 1;
-        mediaDidLoad = i19;
-        int i20 = totalEvents;
-        totalEvents = i20 + 1;
-        mediaCountDidLoad = i20;
-        int i21 = totalEvents;
-        totalEvents = i21 + 1;
-        mediaCountsDidLoad = i21;
-        int i22 = totalEvents;
-        totalEvents = i22 + 1;
-        encryptedChatUpdated = i22;
-        int i23 = totalEvents;
-        totalEvents = i23 + 1;
-        messagesReadEncrypted = i23;
-        int i24 = totalEvents;
-        totalEvents = i24 + 1;
-        encryptedChatCreated = i24;
-        int i25 = totalEvents;
-        totalEvents = i25 + 1;
-        dialogPhotosLoaded = i25;
-        int i26 = totalEvents;
-        totalEvents = i26 + 1;
-        folderBecomeEmpty = i26;
-        int i27 = totalEvents;
-        totalEvents = i27 + 1;
-        removeAllMessagesFromDialog = i27;
-        int i28 = totalEvents;
-        totalEvents = i28 + 1;
-        notificationsSettingsUpdated = i28;
-        int i29 = totalEvents;
-        totalEvents = i29 + 1;
-        blockedUsersDidLoad = i29;
-        int i30 = totalEvents;
-        totalEvents = i30 + 1;
-        openedChatChanged = i30;
-        int i31 = totalEvents;
-        totalEvents = i31 + 1;
-        didCreatedNewDeleteTask = i31;
-        int i32 = totalEvents;
-        totalEvents = i32 + 1;
-        mainUserInfoChanged = i32;
-        int i33 = totalEvents;
-        totalEvents = i33 + 1;
-        privacyRulesUpdated = i33;
-        int i34 = totalEvents;
-        totalEvents = i34 + 1;
-        updateMessageMedia = i34;
-        int i35 = totalEvents;
-        totalEvents = i35 + 1;
-        replaceMessagesObjects = i35;
-        int i36 = totalEvents;
-        totalEvents = i36 + 1;
-        didSetPasscode = i36;
-        int i37 = totalEvents;
-        totalEvents = i37 + 1;
-        didSetTwoStepPassword = i37;
-        int i38 = totalEvents;
-        totalEvents = i38 + 1;
-        didRemoveTwoStepPassword = i38;
-        int i39 = totalEvents;
-        totalEvents = i39 + 1;
-        replyMessagesDidLoad = i39;
-        int i40 = totalEvents;
-        totalEvents = i40 + 1;
-        pinnedMessageDidLoad = i40;
-        int i41 = totalEvents;
-        totalEvents = i41 + 1;
-        newSessionReceived = i41;
-        int i42 = totalEvents;
-        totalEvents = i42 + 1;
-        didReceivedWebpages = i42;
-        int i43 = totalEvents;
-        totalEvents = i43 + 1;
-        didReceivedWebpagesInUpdates = i43;
-        int i44 = totalEvents;
-        totalEvents = i44 + 1;
-        stickersDidLoad = i44;
-        int i45 = totalEvents;
-        totalEvents = i45 + 1;
-        featuredStickersDidLoad = i45;
-        int i46 = totalEvents;
-        totalEvents = i46 + 1;
-        groupStickersDidLoad = i46;
-        int i47 = totalEvents;
-        totalEvents = i47 + 1;
-        messagesReadContent = i47;
-        int i48 = totalEvents;
-        totalEvents = i48 + 1;
-        botInfoDidLoad = i48;
-        int i49 = totalEvents;
-        totalEvents = i49 + 1;
-        userInfoDidLoad = i49;
-        int i50 = totalEvents;
-        totalEvents = i50 + 1;
-        botKeyboardDidLoad = i50;
-        int i51 = totalEvents;
-        totalEvents = i51 + 1;
-        chatSearchResultsAvailable = i51;
-        int i52 = totalEvents;
-        totalEvents = i52 + 1;
-        chatSearchResultsLoading = i52;
-        int i53 = totalEvents;
-        totalEvents = i53 + 1;
-        musicDidLoad = i53;
-        int i54 = totalEvents;
-        totalEvents = i54 + 1;
-        needShowAlert = i54;
-        int i55 = totalEvents;
-        totalEvents = i55 + 1;
-        needShowPlayServicesAlert = i55;
-        int i56 = totalEvents;
-        totalEvents = i56 + 1;
-        didUpdateMessagesViews = i56;
-        int i57 = totalEvents;
-        totalEvents = i57 + 1;
-        needReloadRecentDialogsSearch = i57;
-        int i58 = totalEvents;
-        totalEvents = i58 + 1;
-        peerSettingsDidLoad = i58;
-        int i59 = totalEvents;
-        totalEvents = i59 + 1;
-        wasUnableToFindCurrentLocation = i59;
-        int i60 = totalEvents;
-        totalEvents = i60 + 1;
-        reloadHints = i60;
-        int i61 = totalEvents;
-        totalEvents = i61 + 1;
-        reloadInlineHints = i61;
-        int i62 = totalEvents;
-        totalEvents = i62 + 1;
-        newDraftReceived = i62;
-        int i63 = totalEvents;
-        totalEvents = i63 + 1;
-        recentDocumentsDidLoad = i63;
-        int i64 = totalEvents;
-        totalEvents = i64 + 1;
-        needReloadArchivedStickers = i64;
-        int i65 = totalEvents;
-        totalEvents = i65 + 1;
-        archivedStickersCountDidLoad = i65;
-        int i66 = totalEvents;
-        totalEvents = i66 + 1;
-        paymentFinished = i66;
-        int i67 = totalEvents;
-        totalEvents = i67 + 1;
-        channelRightsUpdated = i67;
-        int i68 = totalEvents;
-        totalEvents = i68 + 1;
-        openArticle = i68;
-        int i69 = totalEvents;
-        totalEvents = i69 + 1;
-        updateMentionsCount = i69;
-        int i70 = totalEvents;
-        totalEvents = i70 + 1;
-        didUpdatePollResults = i70;
-        int i71 = totalEvents;
-        totalEvents = i71 + 1;
-        chatOnlineCountDidLoad = i71;
-        int i72 = totalEvents;
-        totalEvents = i72 + 1;
-        videoLoadingStateChanged = i72;
-        int i73 = totalEvents;
-        totalEvents = i73 + 1;
-        newPeopleNearbyAvailable = i73;
-        int i74 = totalEvents;
-        totalEvents = i74 + 1;
-        stopAllHeavyOperations = i74;
-        int i75 = totalEvents;
-        totalEvents = i75 + 1;
-        startAllHeavyOperations = i75;
-        int i76 = totalEvents;
-        totalEvents = i76 + 1;
-        sendingMessagesChanged = i76;
-        int i77 = totalEvents;
-        totalEvents = i77 + 1;
-        didUpdateReactions = i77;
-        int i78 = totalEvents;
-        totalEvents = i78 + 1;
-        scheduledMessagesUpdated = i78;
-        int i79 = totalEvents;
-        totalEvents = i79 + 1;
-        walletPendingTransactionsChanged = i79;
-        int i80 = totalEvents;
-        totalEvents = i80 + 1;
-        walletSyncProgressChanged = i80;
-        int i81 = totalEvents;
-        totalEvents = i81 + 1;
-        httpFileDidLoad = i81;
-        int i82 = totalEvents;
-        totalEvents = i82 + 1;
-        httpFileDidFailedLoad = i82;
-        int i83 = totalEvents;
-        totalEvents = i83 + 1;
-        didUpdateConnectionState = i83;
-        int i84 = totalEvents;
-        totalEvents = i84 + 1;
-        FileDidUpload = i84;
-        int i85 = totalEvents;
-        totalEvents = i85 + 1;
-        FileDidFailUpload = i85;
-        int i86 = totalEvents;
-        totalEvents = i86 + 1;
-        FileUploadProgressChanged = i86;
-        int i87 = totalEvents;
-        totalEvents = i87 + 1;
-        FileLoadProgressChanged = i87;
-        int i88 = totalEvents;
-        totalEvents = i88 + 1;
-        fileDidLoad = i88;
-        int i89 = totalEvents;
-        totalEvents = i89 + 1;
-        fileDidFailToLoad = i89;
-        int i90 = totalEvents;
-        totalEvents = i90 + 1;
-        filePreparingStarted = i90;
-        int i91 = totalEvents;
-        totalEvents = i91 + 1;
-        fileNewChunkAvailable = i91;
-        int i92 = totalEvents;
-        totalEvents = i92 + 1;
-        filePreparingFailed = i92;
-        int i93 = totalEvents;
-        totalEvents = i93 + 1;
-        dialogsUnreadCounterChanged = i93;
-        int i94 = totalEvents;
-        totalEvents = i94 + 1;
-        messagePlayingProgressDidChanged = i94;
-        int i95 = totalEvents;
-        totalEvents = i95 + 1;
-        messagePlayingDidReset = i95;
-        int i96 = totalEvents;
-        totalEvents = i96 + 1;
-        messagePlayingPlayStateChanged = i96;
-        int i97 = totalEvents;
-        totalEvents = i97 + 1;
-        messagePlayingDidStart = i97;
-        int i98 = totalEvents;
-        totalEvents = i98 + 1;
-        messagePlayingDidSeek = i98;
-        int i99 = totalEvents;
-        totalEvents = i99 + 1;
-        messagePlayingGoingToStop = i99;
-        int i100 = totalEvents;
-        totalEvents = i100 + 1;
-        recordProgressChanged = i100;
-        int i101 = totalEvents;
-        totalEvents = i101 + 1;
-        recordStarted = i101;
-        int i102 = totalEvents;
-        totalEvents = i102 + 1;
-        recordStartError = i102;
-        int i103 = totalEvents;
-        totalEvents = i103 + 1;
-        recordStopped = i103;
-        int i104 = totalEvents;
-        totalEvents = i104 + 1;
-        screenshotTook = i104;
-        int i105 = totalEvents;
-        totalEvents = i105 + 1;
-        albumsDidLoad = i105;
-        int i106 = totalEvents;
-        totalEvents = i106 + 1;
-        audioDidSent = i106;
-        int i107 = totalEvents;
-        totalEvents = i107 + 1;
-        audioRecordTooShort = i107;
-        int i108 = totalEvents;
-        totalEvents = i108 + 1;
-        audioRouteChanged = i108;
-        int i109 = totalEvents;
-        totalEvents = i109 + 1;
-        didStartedCall = i109;
-        int i110 = totalEvents;
-        totalEvents = i110 + 1;
-        didEndCall = i110;
-        int i111 = totalEvents;
-        totalEvents = i111 + 1;
-        closeInCallActivity = i111;
-        int i112 = totalEvents;
-        totalEvents = i112 + 1;
-        appDidLogout = i112;
-        int i113 = totalEvents;
-        totalEvents = i113 + 1;
-        configLoaded = i113;
-        int i114 = totalEvents;
-        totalEvents = i114 + 1;
-        needDeleteDialog = i114;
-        int i115 = totalEvents;
-        totalEvents = i115 + 1;
-        newEmojiSuggestionsAvailable = i115;
-        int i116 = totalEvents;
-        totalEvents = i116 + 1;
-        themeUploadedToServer = i116;
-        int i117 = totalEvents;
-        totalEvents = i117 + 1;
-        themeUploadError = i117;
-        int i118 = totalEvents;
-        totalEvents = i118 + 1;
-        pushMessagesUpdated = i118;
-        int i119 = totalEvents;
-        totalEvents = i119 + 1;
-        stopEncodingService = i119;
-        int i120 = totalEvents;
-        totalEvents = i120 + 1;
-        wallpapersDidLoad = i120;
-        int i121 = totalEvents;
-        totalEvents = i121 + 1;
-        wallpapersNeedReload = i121;
-        int i122 = totalEvents;
-        totalEvents = i122 + 1;
-        didReceiveSmsCode = i122;
-        int i123 = totalEvents;
-        totalEvents = i123 + 1;
-        didReceiveCall = i123;
-        int i124 = totalEvents;
-        totalEvents = i124 + 1;
-        emojiDidLoad = i124;
-        int i125 = totalEvents;
-        totalEvents = i125 + 1;
-        closeOtherAppActivities = i125;
-        int i126 = totalEvents;
-        totalEvents = i126 + 1;
-        cameraInitied = i126;
-        int i127 = totalEvents;
-        totalEvents = i127 + 1;
-        didReplacedPhotoInMemCache = i127;
-        int i128 = totalEvents;
-        totalEvents = i128 + 1;
-        didSetNewTheme = i128;
-        int i129 = totalEvents;
-        totalEvents = i129 + 1;
-        themeListUpdated = i129;
-        int i130 = totalEvents;
-        totalEvents = i130 + 1;
-        didApplyNewTheme = i130;
-        int i131 = totalEvents;
-        totalEvents = i131 + 1;
-        themeAccentListUpdated = i131;
-        int i132 = totalEvents;
-        totalEvents = i132 + 1;
-        needCheckSystemBarColors = i132;
-        int i133 = totalEvents;
-        totalEvents = i133 + 1;
-        needShareTheme = i133;
-        int i134 = totalEvents;
-        totalEvents = i134 + 1;
-        needSetDayNightTheme = i134;
-        int i135 = totalEvents;
-        totalEvents = i135 + 1;
-        goingToPreviewTheme = i135;
-        int i136 = totalEvents;
-        totalEvents = i136 + 1;
-        locationPermissionGranted = i136;
-        int i137 = totalEvents;
-        totalEvents = i137 + 1;
-        reloadInterface = i137;
-        int i138 = totalEvents;
-        totalEvents = i138 + 1;
-        suggestedLangpack = i138;
-        int i139 = totalEvents;
-        totalEvents = i139 + 1;
-        didSetNewWallpapper = i139;
-        int i140 = totalEvents;
-        totalEvents = i140 + 1;
-        proxySettingsChanged = i140;
-        int i141 = totalEvents;
-        totalEvents = i141 + 1;
-        proxyCheckDone = i141;
-        int i142 = totalEvents;
-        totalEvents = i142 + 1;
-        liveLocationsChanged = i142;
-        int i143 = totalEvents;
-        totalEvents = i143 + 1;
-        newLocationAvailable = i143;
-        int i144 = totalEvents;
-        totalEvents = i144 + 1;
-        liveLocationsCacheChanged = i144;
-        int i145 = totalEvents;
-        totalEvents = i145 + 1;
-        notificationsCountUpdated = i145;
-        int i146 = totalEvents;
-        totalEvents = i146 + 1;
-        playerDidStartPlaying = i146;
-        int i147 = totalEvents;
-        totalEvents = i147 + 1;
-        closeSearchByActiveAction = i147;
-        int i148 = totalEvents;
-        totalEvents = i148 + 1;
-        messagePlayingSpeedChanged = i148;
-        int i149 = totalEvents;
-        totalEvents = i149 + 1;
-        screenStateChanged = i149;
+        int i = 1 + 1;
+        totalEvents = i;
+        int i2 = i + 1;
+        totalEvents = i2;
+        updateInterfaces = i;
+        int i3 = i2 + 1;
+        totalEvents = i3;
+        dialogsNeedReload = i2;
+        int i4 = i3 + 1;
+        totalEvents = i4;
+        closeChats = i3;
+        int i5 = i4 + 1;
+        totalEvents = i5;
+        messagesDeleted = i4;
+        int i6 = i5 + 1;
+        totalEvents = i6;
+        historyCleared = i5;
+        int i7 = i6 + 1;
+        totalEvents = i7;
+        messagesRead = i6;
+        int i8 = i7 + 1;
+        totalEvents = i8;
+        messagesDidLoad = i7;
+        int i9 = i8 + 1;
+        totalEvents = i9;
+        messageReceivedByAck = i8;
+        int i10 = i9 + 1;
+        totalEvents = i10;
+        messageReceivedByServer = i9;
+        int i11 = i10 + 1;
+        totalEvents = i11;
+        messageSendError = i10;
+        int i12 = i11 + 1;
+        totalEvents = i12;
+        contactsDidLoad = i11;
+        int i13 = i12 + 1;
+        totalEvents = i13;
+        contactsImported = i12;
+        int i14 = i13 + 1;
+        totalEvents = i14;
+        hasNewContactsToImport = i13;
+        int i15 = i14 + 1;
+        totalEvents = i15;
+        chatDidCreated = i14;
+        int i16 = i15 + 1;
+        totalEvents = i16;
+        chatDidFailCreate = i15;
+        int i17 = i16 + 1;
+        totalEvents = i17;
+        chatInfoDidLoad = i16;
+        int i18 = i17 + 1;
+        totalEvents = i18;
+        chatInfoCantLoad = i17;
+        int i19 = i18 + 1;
+        totalEvents = i19;
+        mediaDidLoad = i18;
+        int i20 = i19 + 1;
+        totalEvents = i20;
+        mediaCountDidLoad = i19;
+        int i21 = i20 + 1;
+        totalEvents = i21;
+        mediaCountsDidLoad = i20;
+        int i22 = i21 + 1;
+        totalEvents = i22;
+        encryptedChatUpdated = i21;
+        int i23 = i22 + 1;
+        totalEvents = i23;
+        messagesReadEncrypted = i22;
+        int i24 = i23 + 1;
+        totalEvents = i24;
+        encryptedChatCreated = i23;
+        int i25 = i24 + 1;
+        totalEvents = i25;
+        dialogPhotosLoaded = i24;
+        int i26 = i25 + 1;
+        totalEvents = i26;
+        folderBecomeEmpty = i25;
+        int i27 = i26 + 1;
+        totalEvents = i27;
+        removeAllMessagesFromDialog = i26;
+        int i28 = i27 + 1;
+        totalEvents = i28;
+        notificationsSettingsUpdated = i27;
+        int i29 = i28 + 1;
+        totalEvents = i29;
+        blockedUsersDidLoad = i28;
+        int i30 = i29 + 1;
+        totalEvents = i30;
+        openedChatChanged = i29;
+        int i31 = i30 + 1;
+        totalEvents = i31;
+        didCreatedNewDeleteTask = i30;
+        int i32 = i31 + 1;
+        totalEvents = i32;
+        mainUserInfoChanged = i31;
+        int i33 = i32 + 1;
+        totalEvents = i33;
+        privacyRulesUpdated = i32;
+        int i34 = i33 + 1;
+        totalEvents = i34;
+        updateMessageMedia = i33;
+        int i35 = i34 + 1;
+        totalEvents = i35;
+        replaceMessagesObjects = i34;
+        int i36 = i35 + 1;
+        totalEvents = i36;
+        didSetPasscode = i35;
+        int i37 = i36 + 1;
+        totalEvents = i37;
+        didSetTwoStepPassword = i36;
+        int i38 = i37 + 1;
+        totalEvents = i38;
+        didRemoveTwoStepPassword = i37;
+        int i39 = i38 + 1;
+        totalEvents = i39;
+        replyMessagesDidLoad = i38;
+        int i40 = i39 + 1;
+        totalEvents = i40;
+        pinnedMessageDidLoad = i39;
+        int i41 = i40 + 1;
+        totalEvents = i41;
+        newSessionReceived = i40;
+        int i42 = i41 + 1;
+        totalEvents = i42;
+        didReceivedWebpages = i41;
+        int i43 = i42 + 1;
+        totalEvents = i43;
+        didReceivedWebpagesInUpdates = i42;
+        int i44 = i43 + 1;
+        totalEvents = i44;
+        stickersDidLoad = i43;
+        int i45 = i44 + 1;
+        totalEvents = i45;
+        featuredStickersDidLoad = i44;
+        int i46 = i45 + 1;
+        totalEvents = i46;
+        groupStickersDidLoad = i45;
+        int i47 = i46 + 1;
+        totalEvents = i47;
+        messagesReadContent = i46;
+        int i48 = i47 + 1;
+        totalEvents = i48;
+        botInfoDidLoad = i47;
+        int i49 = i48 + 1;
+        totalEvents = i49;
+        userInfoDidLoad = i48;
+        int i50 = i49 + 1;
+        totalEvents = i50;
+        botKeyboardDidLoad = i49;
+        int i51 = i50 + 1;
+        totalEvents = i51;
+        chatSearchResultsAvailable = i50;
+        int i52 = i51 + 1;
+        totalEvents = i52;
+        chatSearchResultsLoading = i51;
+        int i53 = i52 + 1;
+        totalEvents = i53;
+        musicDidLoad = i52;
+        int i54 = i53 + 1;
+        totalEvents = i54;
+        needShowAlert = i53;
+        int i55 = i54 + 1;
+        totalEvents = i55;
+        needShowPlayServicesAlert = i54;
+        int i56 = i55 + 1;
+        totalEvents = i56;
+        didUpdateMessagesViews = i55;
+        int i57 = i56 + 1;
+        totalEvents = i57;
+        needReloadRecentDialogsSearch = i56;
+        int i58 = i57 + 1;
+        totalEvents = i58;
+        peerSettingsDidLoad = i57;
+        int i59 = i58 + 1;
+        totalEvents = i59;
+        wasUnableToFindCurrentLocation = i58;
+        int i60 = i59 + 1;
+        totalEvents = i60;
+        reloadHints = i59;
+        int i61 = i60 + 1;
+        totalEvents = i61;
+        reloadInlineHints = i60;
+        int i62 = i61 + 1;
+        totalEvents = i62;
+        newDraftReceived = i61;
+        int i63 = i62 + 1;
+        totalEvents = i63;
+        recentDocumentsDidLoad = i62;
+        int i64 = i63 + 1;
+        totalEvents = i64;
+        needAddArchivedStickers = i63;
+        int i65 = i64 + 1;
+        totalEvents = i65;
+        archivedStickersCountDidLoad = i64;
+        int i66 = i65 + 1;
+        totalEvents = i66;
+        paymentFinished = i65;
+        int i67 = i66 + 1;
+        totalEvents = i67;
+        channelRightsUpdated = i66;
+        int i68 = i67 + 1;
+        totalEvents = i68;
+        openArticle = i67;
+        int i69 = i68 + 1;
+        totalEvents = i69;
+        updateMentionsCount = i68;
+        int i70 = i69 + 1;
+        totalEvents = i70;
+        didUpdatePollResults = i69;
+        int i71 = i70 + 1;
+        totalEvents = i71;
+        chatOnlineCountDidLoad = i70;
+        int i72 = i71 + 1;
+        totalEvents = i72;
+        videoLoadingStateChanged = i71;
+        int i73 = i72 + 1;
+        totalEvents = i73;
+        newPeopleNearbyAvailable = i72;
+        int i74 = i73 + 1;
+        totalEvents = i74;
+        stopAllHeavyOperations = i73;
+        int i75 = i74 + 1;
+        totalEvents = i75;
+        startAllHeavyOperations = i74;
+        int i76 = i75 + 1;
+        totalEvents = i76;
+        sendingMessagesChanged = i75;
+        int i77 = i76 + 1;
+        totalEvents = i77;
+        didUpdateReactions = i76;
+        int i78 = i77 + 1;
+        totalEvents = i78;
+        scheduledMessagesUpdated = i77;
+        int i79 = i78 + 1;
+        totalEvents = i79;
+        walletPendingTransactionsChanged = i78;
+        int i80 = i79 + 1;
+        totalEvents = i80;
+        walletSyncProgressChanged = i79;
+        int i81 = i80 + 1;
+        totalEvents = i81;
+        httpFileDidLoad = i80;
+        int i82 = i81 + 1;
+        totalEvents = i82;
+        httpFileDidFailedLoad = i81;
+        int i83 = i82 + 1;
+        totalEvents = i83;
+        didUpdateConnectionState = i82;
+        int i84 = i83 + 1;
+        totalEvents = i84;
+        FileDidUpload = i83;
+        int i85 = i84 + 1;
+        totalEvents = i85;
+        FileDidFailUpload = i84;
+        int i86 = i85 + 1;
+        totalEvents = i86;
+        FileUploadProgressChanged = i85;
+        int i87 = i86 + 1;
+        totalEvents = i87;
+        FileLoadProgressChanged = i86;
+        int i88 = i87 + 1;
+        totalEvents = i88;
+        fileDidLoad = i87;
+        int i89 = i88 + 1;
+        totalEvents = i89;
+        fileDidFailToLoad = i88;
+        int i90 = i89 + 1;
+        totalEvents = i90;
+        filePreparingStarted = i89;
+        int i91 = i90 + 1;
+        totalEvents = i91;
+        fileNewChunkAvailable = i90;
+        int i92 = i91 + 1;
+        totalEvents = i92;
+        filePreparingFailed = i91;
+        int i93 = i92 + 1;
+        totalEvents = i93;
+        dialogsUnreadCounterChanged = i92;
+        int i94 = i93 + 1;
+        totalEvents = i94;
+        messagePlayingProgressDidChanged = i93;
+        int i95 = i94 + 1;
+        totalEvents = i95;
+        messagePlayingDidReset = i94;
+        int i96 = i95 + 1;
+        totalEvents = i96;
+        messagePlayingPlayStateChanged = i95;
+        int i97 = i96 + 1;
+        totalEvents = i97;
+        messagePlayingDidStart = i96;
+        int i98 = i97 + 1;
+        totalEvents = i98;
+        messagePlayingDidSeek = i97;
+        int i99 = i98 + 1;
+        totalEvents = i99;
+        messagePlayingGoingToStop = i98;
+        int i100 = i99 + 1;
+        totalEvents = i100;
+        recordProgressChanged = i99;
+        int i101 = i100 + 1;
+        totalEvents = i101;
+        recordStarted = i100;
+        int i102 = i101 + 1;
+        totalEvents = i102;
+        recordStartError = i101;
+        int i103 = i102 + 1;
+        totalEvents = i103;
+        recordStopped = i102;
+        int i104 = i103 + 1;
+        totalEvents = i104;
+        screenshotTook = i103;
+        int i105 = i104 + 1;
+        totalEvents = i105;
+        albumsDidLoad = i104;
+        int i106 = i105 + 1;
+        totalEvents = i106;
+        audioDidSent = i105;
+        int i107 = i106 + 1;
+        totalEvents = i107;
+        audioRecordTooShort = i106;
+        int i108 = i107 + 1;
+        totalEvents = i108;
+        audioRouteChanged = i107;
+        int i109 = i108 + 1;
+        totalEvents = i109;
+        didStartedCall = i108;
+        int i110 = i109 + 1;
+        totalEvents = i110;
+        didEndCall = i109;
+        int i111 = i110 + 1;
+        totalEvents = i111;
+        closeInCallActivity = i110;
+        int i112 = i111 + 1;
+        totalEvents = i112;
+        appDidLogout = i111;
+        int i113 = i112 + 1;
+        totalEvents = i113;
+        configLoaded = i112;
+        int i114 = i113 + 1;
+        totalEvents = i114;
+        needDeleteDialog = i113;
+        int i115 = i114 + 1;
+        totalEvents = i115;
+        newEmojiSuggestionsAvailable = i114;
+        int i116 = i115 + 1;
+        totalEvents = i116;
+        themeUploadedToServer = i115;
+        int i117 = i116 + 1;
+        totalEvents = i117;
+        themeUploadError = i116;
+        int i118 = i117 + 1;
+        totalEvents = i118;
+        dialogFiltersUpdated = i117;
+        int i119 = i118 + 1;
+        totalEvents = i119;
+        filterSettingsUpdated = i118;
+        int i120 = i119 + 1;
+        totalEvents = i120;
+        suggestedFiltersLoaded = i119;
+        int i121 = i120 + 1;
+        totalEvents = i121;
+        pushMessagesUpdated = i120;
+        int i122 = i121 + 1;
+        totalEvents = i122;
+        stopEncodingService = i121;
+        int i123 = i122 + 1;
+        totalEvents = i123;
+        wallpapersDidLoad = i122;
+        int i124 = i123 + 1;
+        totalEvents = i124;
+        wallpapersNeedReload = i123;
+        int i125 = i124 + 1;
+        totalEvents = i125;
+        didReceiveSmsCode = i124;
+        int i126 = i125 + 1;
+        totalEvents = i126;
+        didReceiveCall = i125;
+        int i127 = i126 + 1;
+        totalEvents = i127;
+        emojiDidLoad = i126;
+        int i128 = i127 + 1;
+        totalEvents = i128;
+        closeOtherAppActivities = i127;
+        int i129 = i128 + 1;
+        totalEvents = i129;
+        cameraInitied = i128;
+        int i130 = i129 + 1;
+        totalEvents = i130;
+        didReplacedPhotoInMemCache = i129;
+        int i131 = i130 + 1;
+        totalEvents = i131;
+        didSetNewTheme = i130;
+        int i132 = i131 + 1;
+        totalEvents = i132;
+        themeListUpdated = i131;
+        int i133 = i132 + 1;
+        totalEvents = i133;
+        didApplyNewTheme = i132;
+        int i134 = i133 + 1;
+        totalEvents = i134;
+        themeAccentListUpdated = i133;
+        int i135 = i134 + 1;
+        totalEvents = i135;
+        needCheckSystemBarColors = i134;
+        int i136 = i135 + 1;
+        totalEvents = i136;
+        needShareTheme = i135;
+        int i137 = i136 + 1;
+        totalEvents = i137;
+        needSetDayNightTheme = i136;
+        int i138 = i137 + 1;
+        totalEvents = i138;
+        goingToPreviewTheme = i137;
+        int i139 = i138 + 1;
+        totalEvents = i139;
+        locationPermissionGranted = i138;
+        int i140 = i139 + 1;
+        totalEvents = i140;
+        reloadInterface = i139;
+        int i141 = i140 + 1;
+        totalEvents = i141;
+        suggestedLangpack = i140;
+        int i142 = i141 + 1;
+        totalEvents = i142;
+        didSetNewWallpapper = i141;
+        int i143 = i142 + 1;
+        totalEvents = i143;
+        proxySettingsChanged = i142;
+        int i144 = i143 + 1;
+        totalEvents = i144;
+        proxyCheckDone = i143;
+        int i145 = i144 + 1;
+        totalEvents = i145;
+        liveLocationsChanged = i144;
+        int i146 = i145 + 1;
+        totalEvents = i146;
+        newLocationAvailable = i145;
+        int i147 = i146 + 1;
+        totalEvents = i147;
+        liveLocationsCacheChanged = i146;
+        int i148 = i147 + 1;
+        totalEvents = i148;
+        notificationsCountUpdated = i147;
+        int i149 = i148 + 1;
+        totalEvents = i149;
+        playerDidStartPlaying = i148;
+        int i150 = i149 + 1;
+        totalEvents = i150;
+        closeSearchByActiveAction = i149;
+        int i151 = i150 + 1;
+        totalEvents = i151;
+        messagePlayingSpeedChanged = i150;
+        totalEvents = i151 + 1;
+        screenStateChanged = i151;
     }
 
     private class DelayedPost {
@@ -677,7 +687,7 @@ public class NotificationCenter {
             getGlobalInstance().postNotificationName(startAllHeavyOperations, 512);
         }
         this.animationInProgress = z;
-        if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
+        if (!z && !this.delayedPosts.isEmpty()) {
             for (int i = 0; i < this.delayedPosts.size(); i++) {
                 DelayedPost delayedPost = this.delayedPosts.get(i);
                 postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
@@ -694,28 +704,66 @@ public class NotificationCenter {
         return this.currentHeavyOperationFlags;
     }
 
-    public void postNotificationName(int i, Object... objArr) {
-        boolean z = i == startAllHeavyOperations || i == stopAllHeavyOperations;
-        if (!z && this.allowedNotifications != null) {
-            int i2 = 0;
-            while (true) {
-                int[] iArr = this.allowedNotifications;
-                if (i2 >= iArr.length) {
-                    break;
-                } else if (iArr[i2] == i) {
-                    z = true;
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-        }
-        if (i == startAllHeavyOperations) {
-            this.currentHeavyOperationFlags = (objArr[0].intValue() ^ -1) & this.currentHeavyOperationFlags;
-        } else if (i == stopAllHeavyOperations) {
-            this.currentHeavyOperationFlags = objArr[0].intValue() | this.currentHeavyOperationFlags;
-        }
-        postNotificationNameInternal(i, z, objArr);
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0027  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0037  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void postNotificationName(int r7, java.lang.Object... r8) {
+        /*
+            r6 = this;
+            int r0 = startAllHeavyOperations
+            r1 = 1
+            r2 = 0
+            if (r7 == r0) goto L_0x000d
+            int r0 = stopAllHeavyOperations
+            if (r7 != r0) goto L_0x000b
+            goto L_0x000d
+        L_0x000b:
+            r0 = 0
+            goto L_0x000e
+        L_0x000d:
+            r0 = 1
+        L_0x000e:
+            if (r0 != 0) goto L_0x0022
+            int[] r3 = r6.allowedNotifications
+            if (r3 == 0) goto L_0x0022
+            r3 = 0
+        L_0x0015:
+            int[] r4 = r6.allowedNotifications
+            int r5 = r4.length
+            if (r3 >= r5) goto L_0x0022
+            r4 = r4[r3]
+            if (r4 != r7) goto L_0x001f
+            goto L_0x0023
+        L_0x001f:
+            int r3 = r3 + 1
+            goto L_0x0015
+        L_0x0022:
+            r1 = r0
+        L_0x0023:
+            int r0 = startAllHeavyOperations
+            if (r7 != r0) goto L_0x0037
+            r0 = r8[r2]
+            java.lang.Integer r0 = (java.lang.Integer) r0
+            int r2 = r6.currentHeavyOperationFlags
+            int r0 = r0.intValue()
+            r0 = r0 ^ -1
+            r0 = r0 & r2
+            r6.currentHeavyOperationFlags = r0
+            goto L_0x0048
+        L_0x0037:
+            int r0 = stopAllHeavyOperations
+            if (r7 != r0) goto L_0x0048
+            r0 = r8[r2]
+            java.lang.Integer r0 = (java.lang.Integer) r0
+            int r2 = r6.currentHeavyOperationFlags
+            int r0 = r0.intValue()
+            r0 = r0 | r2
+            r6.currentHeavyOperationFlags = r0
+        L_0x0048:
+            r6.postNotificationNameInternal(r7, r1, r8)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationCenter.postNotificationName(int, java.lang.Object[]):void");
     }
 
     public void postNotificationNameInternal(int i, boolean z, Object... objArr) {
@@ -729,24 +777,25 @@ public class NotificationCenter {
                     ((NotificationCenterDelegate) arrayList.get(i2)).didReceivedNotification(i, this.currentAccount, objArr);
                 }
             }
-            this.broadcasting--;
-            if (this.broadcasting == 0) {
+            int i3 = this.broadcasting - 1;
+            this.broadcasting = i3;
+            if (i3 == 0) {
                 if (this.removeAfterBroadcast.size() != 0) {
-                    for (int i3 = 0; i3 < this.removeAfterBroadcast.size(); i3++) {
-                        int keyAt = this.removeAfterBroadcast.keyAt(i3);
+                    for (int i4 = 0; i4 < this.removeAfterBroadcast.size(); i4++) {
+                        int keyAt = this.removeAfterBroadcast.keyAt(i4);
                         ArrayList arrayList2 = this.removeAfterBroadcast.get(keyAt);
-                        for (int i4 = 0; i4 < arrayList2.size(); i4++) {
-                            removeObserver((NotificationCenterDelegate) arrayList2.get(i4), keyAt);
+                        for (int i5 = 0; i5 < arrayList2.size(); i5++) {
+                            removeObserver((NotificationCenterDelegate) arrayList2.get(i5), keyAt);
                         }
                     }
                     this.removeAfterBroadcast.clear();
                 }
                 if (this.addAfterBroadcast.size() != 0) {
-                    for (int i5 = 0; i5 < this.addAfterBroadcast.size(); i5++) {
-                        int keyAt2 = this.addAfterBroadcast.keyAt(i5);
+                    for (int i6 = 0; i6 < this.addAfterBroadcast.size(); i6++) {
+                        int keyAt2 = this.addAfterBroadcast.keyAt(i6);
                         ArrayList arrayList3 = this.addAfterBroadcast.get(keyAt2);
-                        for (int i6 = 0; i6 < arrayList3.size(); i6++) {
-                            addObserver((NotificationCenterDelegate) arrayList3.get(i6), keyAt2);
+                        for (int i7 = 0; i7 < arrayList3.size(); i7++) {
+                            addObserver((NotificationCenterDelegate) arrayList3.get(i7), keyAt2);
                         }
                     }
                     this.addAfterBroadcast.clear();

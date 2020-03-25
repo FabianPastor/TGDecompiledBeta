@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Assistent-godkender</string>
     <string name="google_assistant_verification_notification_title">Google-assistenten sender en besked</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Køb med Google</string>
 </resources>

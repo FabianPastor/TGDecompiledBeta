@@ -14,15 +14,18 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class GroupCreateSectionCell extends FrameLayout {
-    private Drawable drawable = getResources().getDrawable(NUM);
+    private Drawable drawable;
     private TextView textView;
 
     public GroupCreateSectionCell(Context context) {
         super(context);
         setBackgroundColor(Theme.getColor("graySection"));
-        this.drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("groupcreate_sectionShadow"), PorterDuff.Mode.MULTIPLY));
-        this.textView = new TextView(getContext());
-        this.textView.setTextSize(1, 14.0f);
+        Drawable drawable2 = getResources().getDrawable(NUM);
+        this.drawable = drawable2;
+        drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("groupcreate_sectionShadow"), PorterDuff.Mode.MULTIPLY));
+        TextView textView2 = new TextView(getContext());
+        this.textView = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor("groupcreate_sectionText"));
         int i = 5;

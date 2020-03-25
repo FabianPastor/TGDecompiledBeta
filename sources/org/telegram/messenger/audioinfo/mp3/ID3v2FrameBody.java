@@ -11,7 +11,7 @@ public class ID3v2FrameBody {
             return new Buffer(4096);
         }
     };
-    private final ID3v2DataInput data = new ID3v2DataInput(this.input);
+    private final ID3v2DataInput data;
     private final ID3v2FrameHeader frameHeader;
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
@@ -38,7 +38,9 @@ public class ID3v2FrameBody {
     }
 
     ID3v2FrameBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader, ID3v2FrameHeader iD3v2FrameHeader) throws IOException {
-        this.input = new RangeInputStream(inputStream, j, (long) i);
+        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
+        this.input = rangeInputStream;
+        this.data = new ID3v2DataInput(rangeInputStream);
         this.tagHeader = iD3v2TagHeader;
         this.frameHeader = iD3v2FrameHeader;
     }

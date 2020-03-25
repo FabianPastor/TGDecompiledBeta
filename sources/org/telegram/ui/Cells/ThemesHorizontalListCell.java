@@ -38,7 +38,9 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_theme;
+import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ThemesHorizontalListCell;
@@ -159,8 +161,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.inDrawable = context.getResources().getDrawable(NUM).mutate();
             this.outDrawable = context.getResources().getDrawable(NUM).mutate();
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-            this.button = new RadioButton(context);
-            this.button.setSize(AndroidUtilities.dp(20.0f));
+            RadioButton radioButton = new RadioButton(context);
+            this.button = radioButton;
+            radioButton.setSize(AndroidUtilities.dp(20.0f));
             addView(this.button, LayoutHelper.createFrame(22, 22.0f, 51, 27.0f, 75.0f, 0.0f, 0.0f));
         }
 
@@ -200,52 +203,52 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Code restructure failed: missing block: B:100:0x01cd, code lost:
-            if (r3 == 3) goto L_0x01d0;
+        /* JADX WARNING: Code restructure failed: missing block: B:100:0x01d1, code lost:
+            if (r14 == 3) goto L_0x01d4;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:102:0x01d0, code lost:
-            r1.themeInfo.previewBackgroundGradientColor = r2;
+        /* JADX WARNING: Code restructure failed: missing block: B:102:0x01d4, code lost:
+            r1.themeInfo.previewBackgroundGradientColor = r3;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:103:0x01d5, code lost:
-            r1.themeInfo.setPreviewBackgroundColor(r2);
+        /* JADX WARNING: Code restructure failed: missing block: B:103:0x01d9, code lost:
+            r1.themeInfo.setPreviewBackgroundColor(r3);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:104:0x01db, code lost:
-            r1.themeInfo.setPreviewOutColor(r2);
+        /* JADX WARNING: Code restructure failed: missing block: B:104:0x01df, code lost:
+            r1.themeInfo.setPreviewOutColor(r3);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:105:0x01e1, code lost:
-            r1.themeInfo.setPreviewInColor(r2);
+        /* JADX WARNING: Code restructure failed: missing block: B:105:0x01e5, code lost:
+            r1.themeInfo.setPreviewInColor(r3);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:121:0x020f, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:121:0x0213, code lost:
             r0 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:122:0x0210, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:122:0x0214, code lost:
             r2 = r0;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:124:?, code lost:
             r5.close();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:68:0x016e, code lost:
-            if (r14.equals("chat_wallpaper_gradient_to") == false) goto L_0x01e9;
+        /* JADX WARNING: Code restructure failed: missing block: B:68:0x0172, code lost:
+            if (r8.equals("chat_wallpaper_gradient_to") == false) goto L_0x01ed;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:77:?, code lost:
-            r2 = org.telegram.messenger.Utilities.parseInt(r2).intValue();
+            r3 = org.telegram.messenger.Utilities.parseInt(r3).intValue();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:94:0x01c4, code lost:
-            r3 = 65535;
+        /* JADX WARNING: Code restructure failed: missing block: B:94:0x01c8, code lost:
+            r14 = 65535;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:95:0x01c5, code lost:
-            if (r3 == 0) goto L_0x01e1;
+        /* JADX WARNING: Code restructure failed: missing block: B:95:0x01c9, code lost:
+            if (r14 == 0) goto L_0x01e5;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:97:0x01c8, code lost:
-            if (r3 == 1) goto L_0x01db;
+        /* JADX WARNING: Code restructure failed: missing block: B:97:0x01cc, code lost:
+            if (r14 == 1) goto L_0x01df;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:98:0x01ca, code lost:
-            if (r3 == 2) goto L_0x01d5;
+        /* JADX WARNING: Code restructure failed: missing block: B:98:0x01ce, code lost:
+            if (r14 == 2) goto L_0x01d9;
          */
         /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:125:0x0214 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:76:0x018a */
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:125:0x0214=Splitter:B:125:0x0214, B:116:0x0209=Splitter:B:116:0x0209} */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:125:0x0218 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:76:0x018e */
+        /* JADX WARNING: Unknown top exception splitter block from list: {B:125:0x0218=Splitter:B:125:0x0218, B:116:0x020d=Splitter:B:116:0x020d} */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean parseTheme() {
             /*
@@ -253,298 +256,302 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 r1 = r17
                 java.lang.String r0 = "chat_inBubble"
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
-                if (r2 == 0) goto L_0x0271
+                if (r2 == 0) goto L_0x0279
                 java.lang.String r2 = r2.pathToFile
                 if (r2 != 0) goto L_0x000e
-                goto L_0x0271
+                goto L_0x0279
             L_0x000e:
-                java.io.File r4 = new java.io.File
-                r4.<init>(r2)
-                r2 = 1
-                java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x0215 }
-                r5.<init>(r4)     // Catch:{ all -> 0x0215 }
-                r4 = 0
+                java.io.File r2 = new java.io.File
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo
+                java.lang.String r4 = r4.pathToFile
+                r2.<init>(r4)
+                r4 = 1
+                java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x0219 }
+                r5.<init>(r2)     // Catch:{ all -> 0x0219 }
+                r2 = 0
                 r6 = 0
-            L_0x001b:
-                byte[] r7 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x020d }
-                int r7 = r5.read(r7)     // Catch:{ all -> 0x020d }
+            L_0x001f:
+                byte[] r7 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x0211 }
+                int r7 = r5.read(r7)     // Catch:{ all -> 0x0211 }
                 r8 = -1
-                if (r7 == r8) goto L_0x0209
-                r11 = r4
+                if (r7 == r8) goto L_0x020d
+                r11 = r2
                 r9 = 0
                 r10 = 0
-            L_0x0029:
-                if (r9 >= r7) goto L_0x01f6
-                byte[] r12 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x020d }
-                byte r12 = r12[r9]     // Catch:{ all -> 0x020d }
+            L_0x002d:
+                if (r9 >= r7) goto L_0x01fa
+                byte[] r12 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x0211 }
+                byte r12 = r12[r9]     // Catch:{ all -> 0x0211 }
                 r13 = 10
-                if (r12 != r13) goto L_0x01ec
+                if (r12 != r13) goto L_0x01f0
                 int r12 = r9 - r10
-                int r12 = r12 + r2
-                java.lang.String r13 = new java.lang.String     // Catch:{ all -> 0x020d }
-                byte[] r14 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x020d }
+                int r12 = r12 + r4
+                java.lang.String r13 = new java.lang.String     // Catch:{ all -> 0x0211 }
+                byte[] r14 = org.telegram.ui.Cells.ThemesHorizontalListCell.bytes     // Catch:{ all -> 0x0211 }
                 int r15 = r12 + -1
                 java.lang.String r8 = "UTF-8"
-                r13.<init>(r14, r10, r15, r8)     // Catch:{ all -> 0x020d }
+                r13.<init>(r14, r10, r15, r8)     // Catch:{ all -> 0x0211 }
                 java.lang.String r8 = "WLS="
-                boolean r8 = r13.startsWith(r8)     // Catch:{ all -> 0x020d }
-                if (r8 == 0) goto L_0x0132
+                boolean r8 = r13.startsWith(r8)     // Catch:{ all -> 0x0211 }
+                if (r8 == 0) goto L_0x0136
                 r8 = 4
-                java.lang.String r8 = r13.substring(r8)     // Catch:{ all -> 0x020d }
-                android.net.Uri r13 = android.net.Uri.parse(r8)     // Catch:{ all -> 0x020d }
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = r1.themeInfo     // Catch:{ all -> 0x020d }
+                java.lang.String r8 = r13.substring(r8)     // Catch:{ all -> 0x0211 }
+                android.net.Uri r13 = android.net.Uri.parse(r8)     // Catch:{ all -> 0x0211 }
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = r1.themeInfo     // Catch:{ all -> 0x0211 }
                 java.lang.String r15 = "slug"
-                java.lang.String r15 = r13.getQueryParameter(r15)     // Catch:{ all -> 0x020d }
-                r14.slug = r15     // Catch:{ all -> 0x020d }
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                java.io.File r15 = new java.io.File     // Catch:{ all -> 0x020d }
-                java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x020d }
-                java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x020d }
-                r2.<init>()     // Catch:{ all -> 0x020d }
-                java.lang.String r8 = org.telegram.messenger.Utilities.MD5(r8)     // Catch:{ all -> 0x020d }
-                r2.append(r8)     // Catch:{ all -> 0x020d }
+                java.lang.String r15 = r13.getQueryParameter(r15)     // Catch:{ all -> 0x0211 }
+                r14.slug = r15     // Catch:{ all -> 0x0211 }
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                java.io.File r15 = new java.io.File     // Catch:{ all -> 0x0211 }
+                java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x0211 }
+                java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x0211 }
+                r4.<init>()     // Catch:{ all -> 0x0211 }
+                java.lang.String r8 = org.telegram.messenger.Utilities.MD5(r8)     // Catch:{ all -> 0x0211 }
+                r4.append(r8)     // Catch:{ all -> 0x0211 }
                 java.lang.String r8 = ".wp"
-                r2.append(r8)     // Catch:{ all -> 0x020d }
-                java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x020d }
-                r15.<init>(r3, r2)     // Catch:{ all -> 0x020d }
-                java.lang.String r2 = r15.getAbsolutePath()     // Catch:{ all -> 0x020d }
-                r14.pathToWallpaper = r2     // Catch:{ all -> 0x020d }
-                java.lang.String r2 = "mode"
-                java.lang.String r2 = r13.getQueryParameter(r2)     // Catch:{ all -> 0x020d }
-                if (r2 == 0) goto L_0x00b3
-                java.lang.String r2 = r2.toLowerCase()     // Catch:{ all -> 0x020d }
-                java.lang.String r3 = " "
-                java.lang.String[] r2 = r2.split(r3)     // Catch:{ all -> 0x020d }
-                if (r2 == 0) goto L_0x00b3
-                int r3 = r2.length     // Catch:{ all -> 0x020d }
-                if (r3 <= 0) goto L_0x00b3
-                r3 = 0
-            L_0x009e:
-                int r8 = r2.length     // Catch:{ all -> 0x020d }
-                if (r3 >= r8) goto L_0x00b3
+                r4.append(r8)     // Catch:{ all -> 0x0211 }
+                java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x0211 }
+                r15.<init>(r3, r4)     // Catch:{ all -> 0x0211 }
+                java.lang.String r3 = r15.getAbsolutePath()     // Catch:{ all -> 0x0211 }
+                r14.pathToWallpaper = r3     // Catch:{ all -> 0x0211 }
+                java.lang.String r3 = "mode"
+                java.lang.String r3 = r13.getQueryParameter(r3)     // Catch:{ all -> 0x0211 }
+                if (r3 == 0) goto L_0x00b7
+                java.lang.String r3 = r3.toLowerCase()     // Catch:{ all -> 0x0211 }
+                java.lang.String r4 = " "
+                java.lang.String[] r3 = r3.split(r4)     // Catch:{ all -> 0x0211 }
+                if (r3 == 0) goto L_0x00b7
+                int r4 = r3.length     // Catch:{ all -> 0x0211 }
+                if (r4 <= 0) goto L_0x00b7
+                r4 = 0
+            L_0x00a2:
+                int r8 = r3.length     // Catch:{ all -> 0x0211 }
+                if (r4 >= r8) goto L_0x00b7
                 java.lang.String r8 = "blur"
-                r14 = r2[r3]     // Catch:{ all -> 0x020d }
-                boolean r8 = r8.equals(r14)     // Catch:{ all -> 0x020d }
-                if (r8 == 0) goto L_0x00b0
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = r1.themeInfo     // Catch:{ all -> 0x020d }
+                r14 = r3[r4]     // Catch:{ all -> 0x0211 }
+                boolean r8 = r8.equals(r14)     // Catch:{ all -> 0x0211 }
+                if (r8 == 0) goto L_0x00b4
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = r1.themeInfo     // Catch:{ all -> 0x0211 }
                 r14 = 1
-                r8.isBlured = r14     // Catch:{ all -> 0x020d }
-            L_0x00b0:
-                int r3 = r3 + 1
-                goto L_0x009e
-            L_0x00b3:
-                java.lang.String r2 = "pattern"
-                java.lang.String r2 = r13.getQueryParameter(r2)     // Catch:{ all -> 0x020d }
-                boolean r2 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x020d }
-                if (r2 != 0) goto L_0x01e7
-                java.lang.String r2 = "bg_color"
-                java.lang.String r2 = r13.getQueryParameter(r2)     // Catch:{ Exception -> 0x00f4 }
-                boolean r3 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x00f4 }
-                if (r3 != 0) goto L_0x00f4
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ Exception -> 0x00f4 }
+                r8.isBlured = r14     // Catch:{ all -> 0x0211 }
+            L_0x00b4:
+                int r4 = r4 + 1
+                goto L_0x00a2
+            L_0x00b7:
+                java.lang.String r3 = "pattern"
+                java.lang.String r3 = r13.getQueryParameter(r3)     // Catch:{ all -> 0x0211 }
+                boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0211 }
+                if (r3 != 0) goto L_0x01eb
+                java.lang.String r3 = "bg_color"
+                java.lang.String r3 = r13.getQueryParameter(r3)     // Catch:{ Exception -> 0x00f8 }
+                boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x00f8 }
+                if (r4 != 0) goto L_0x00f8
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ Exception -> 0x00f8 }
                 r8 = 6
                 r14 = 0
-                java.lang.String r15 = r2.substring(r14, r8)     // Catch:{ Exception -> 0x00f4 }
+                java.lang.String r15 = r3.substring(r14, r8)     // Catch:{ Exception -> 0x00f8 }
                 r14 = 16
-                int r15 = java.lang.Integer.parseInt(r15, r14)     // Catch:{ Exception -> 0x00f4 }
+                int r15 = java.lang.Integer.parseInt(r15, r14)     // Catch:{ Exception -> 0x00f8 }
                 r16 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
                 r15 = r15 | r16
-                r3.patternBgColor = r15     // Catch:{ Exception -> 0x00f4 }
-                int r3 = r2.length()     // Catch:{ Exception -> 0x00f4 }
-                if (r3 <= r8) goto L_0x00f4
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ Exception -> 0x00f4 }
+                r4.patternBgColor = r15     // Catch:{ Exception -> 0x00f8 }
+                int r4 = r3.length()     // Catch:{ Exception -> 0x00f8 }
+                if (r4 <= r8) goto L_0x00f8
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ Exception -> 0x00f8 }
                 r8 = 7
-                java.lang.String r2 = r2.substring(r8)     // Catch:{ Exception -> 0x00f4 }
-                int r2 = java.lang.Integer.parseInt(r2, r14)     // Catch:{ Exception -> 0x00f4 }
-                r2 = r2 | r16
-                r3.patternBgGradientColor = r2     // Catch:{ Exception -> 0x00f4 }
-            L_0x00f4:
-                java.lang.String r2 = "rotation"
-                java.lang.String r2 = r13.getQueryParameter(r2)     // Catch:{ Exception -> 0x010c }
-                boolean r3 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x010c }
-                if (r3 != 0) goto L_0x010c
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ Exception -> 0x010c }
-                java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)     // Catch:{ Exception -> 0x010c }
-                int r2 = r2.intValue()     // Catch:{ Exception -> 0x010c }
-                r3.patternBgGradientRotation = r2     // Catch:{ Exception -> 0x010c }
-            L_0x010c:
-                java.lang.String r2 = "intensity"
-                java.lang.String r2 = r13.getQueryParameter(r2)     // Catch:{ all -> 0x020d }
-                boolean r3 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x020d }
-                if (r3 != 0) goto L_0x0124
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)     // Catch:{ all -> 0x020d }
-                int r2 = r2.intValue()     // Catch:{ all -> 0x020d }
-                r3.patternIntensity = r2     // Catch:{ all -> 0x020d }
-            L_0x0124:
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                int r2 = r2.patternIntensity     // Catch:{ all -> 0x020d }
-                if (r2 != 0) goto L_0x01e7
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                r3 = 50
-                r2.patternIntensity = r3     // Catch:{ all -> 0x020d }
-                goto L_0x01e7
-            L_0x0132:
-                java.lang.String r2 = "WPS"
-                boolean r2 = r13.startsWith(r2)     // Catch:{ all -> 0x020d }
-                if (r2 == 0) goto L_0x0142
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo     // Catch:{ all -> 0x020d }
+                java.lang.String r3 = r3.substring(r8)     // Catch:{ Exception -> 0x00f8 }
+                int r3 = java.lang.Integer.parseInt(r3, r14)     // Catch:{ Exception -> 0x00f8 }
+                r3 = r3 | r16
+                r4.patternBgGradientColor = r3     // Catch:{ Exception -> 0x00f8 }
+            L_0x00f8:
+                java.lang.String r3 = "rotation"
+                java.lang.String r3 = r13.getQueryParameter(r3)     // Catch:{ Exception -> 0x0110 }
+                boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0110 }
+                if (r4 != 0) goto L_0x0110
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ Exception -> 0x0110 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0110 }
+                int r3 = r3.intValue()     // Catch:{ Exception -> 0x0110 }
+                r4.patternBgGradientRotation = r3     // Catch:{ Exception -> 0x0110 }
+            L_0x0110:
+                java.lang.String r3 = "intensity"
+                java.lang.String r3 = r13.getQueryParameter(r3)     // Catch:{ all -> 0x0211 }
+                boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ all -> 0x0211 }
+                if (r4 != 0) goto L_0x0128
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0211 }
+                int r3 = r3.intValue()     // Catch:{ all -> 0x0211 }
+                r4.patternIntensity = r3     // Catch:{ all -> 0x0211 }
+            L_0x0128:
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                int r3 = r3.patternIntensity     // Catch:{ all -> 0x0211 }
+                if (r3 != 0) goto L_0x01eb
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                r4 = 50
+                r3.patternIntensity = r4     // Catch:{ all -> 0x0211 }
+                goto L_0x01eb
+            L_0x0136:
+                java.lang.String r3 = "WPS"
+                boolean r3 = r13.startsWith(r3)     // Catch:{ all -> 0x0211 }
+                if (r3 == 0) goto L_0x0146
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x0211 }
                 int r12 = r12 + r11
-                r2.previewWallpaperOffset = r12     // Catch:{ all -> 0x020d }
+                r3.previewWallpaperOffset = r12     // Catch:{ all -> 0x0211 }
                 r6 = 1
-                goto L_0x01f8
-            L_0x0142:
-                r2 = 61
-                int r2 = r13.indexOf(r2)     // Catch:{ all -> 0x020d }
-                r3 = -1
-                if (r2 == r3) goto L_0x01e7
-                r8 = 0
-                java.lang.String r14 = r13.substring(r8, r2)     // Catch:{ all -> 0x020d }
-                boolean r8 = r14.equals(r0)     // Catch:{ all -> 0x020d }
+                goto L_0x01fc
+            L_0x0146:
+                r3 = 61
+                int r3 = r13.indexOf(r3)     // Catch:{ all -> 0x0211 }
+                r14 = -1
+                if (r3 == r14) goto L_0x01eb
+                r4 = 0
+                java.lang.String r8 = r13.substring(r4, r3)     // Catch:{ all -> 0x0211 }
+                boolean r4 = r8.equals(r0)     // Catch:{ all -> 0x0211 }
                 java.lang.String r15 = "chat_wallpaper_gradient_to"
-                java.lang.String r3 = "chat_wallpaper"
+                java.lang.String r14 = "chat_wallpaper"
                 r16 = r6
                 java.lang.String r6 = "chat_outBubble"
-                if (r8 != 0) goto L_0x0170
-                boolean r8 = r14.equals(r6)     // Catch:{ all -> 0x020d }
-                if (r8 != 0) goto L_0x0170
-                boolean r8 = r14.equals(r3)     // Catch:{ all -> 0x020d }
-                if (r8 != 0) goto L_0x0170
-                boolean r8 = r14.equals(r15)     // Catch:{ all -> 0x020d }
-                if (r8 == 0) goto L_0x01e9
-            L_0x0170:
-                int r2 = r2 + 1
-                java.lang.String r2 = r13.substring(r2)     // Catch:{ all -> 0x020d }
-                int r8 = r2.length()     // Catch:{ all -> 0x020d }
-                if (r8 <= 0) goto L_0x0193
-                r8 = 0
-                char r13 = r2.charAt(r8)     // Catch:{ all -> 0x020d }
-                r8 = 35
-                if (r13 != r8) goto L_0x0193
-                int r2 = android.graphics.Color.parseColor(r2)     // Catch:{ Exception -> 0x018a }
-                goto L_0x019b
-            L_0x018a:
-                java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)     // Catch:{ all -> 0x020d }
-                int r2 = r2.intValue()     // Catch:{ all -> 0x020d }
-                goto L_0x019b
-            L_0x0193:
-                java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)     // Catch:{ all -> 0x020d }
-                int r2 = r2.intValue()     // Catch:{ all -> 0x020d }
-            L_0x019b:
-                int r8 = r14.hashCode()     // Catch:{ all -> 0x020d }
+                if (r4 != 0) goto L_0x0174
+                boolean r4 = r8.equals(r6)     // Catch:{ all -> 0x0211 }
+                if (r4 != 0) goto L_0x0174
+                boolean r4 = r8.equals(r14)     // Catch:{ all -> 0x0211 }
+                if (r4 != 0) goto L_0x0174
+                boolean r4 = r8.equals(r15)     // Catch:{ all -> 0x0211 }
+                if (r4 == 0) goto L_0x01ed
+            L_0x0174:
+                int r3 = r3 + 1
+                java.lang.String r3 = r13.substring(r3)     // Catch:{ all -> 0x0211 }
+                int r4 = r3.length()     // Catch:{ all -> 0x0211 }
+                if (r4 <= 0) goto L_0x0197
+                r4 = 0
+                char r13 = r3.charAt(r4)     // Catch:{ all -> 0x0211 }
+                r4 = 35
+                if (r13 != r4) goto L_0x0197
+                int r3 = android.graphics.Color.parseColor(r3)     // Catch:{ Exception -> 0x018e }
+                goto L_0x019f
+            L_0x018e:
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0211 }
+                int r3 = r3.intValue()     // Catch:{ all -> 0x0211 }
+                goto L_0x019f
+            L_0x0197:
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ all -> 0x0211 }
+                int r3 = r3.intValue()     // Catch:{ all -> 0x0211 }
+            L_0x019f:
+                int r4 = r8.hashCode()     // Catch:{ all -> 0x0211 }
                 r13 = 2
-                switch(r8) {
-                    case -1625862693: goto L_0x01bc;
-                    case -633951866: goto L_0x01b4;
-                    case 1269980952: goto L_0x01ac;
-                    case 2052611411: goto L_0x01a4;
-                    default: goto L_0x01a3;
-                }     // Catch:{ all -> 0x020d }
-            L_0x01a3:
-                goto L_0x01c4
-            L_0x01a4:
-                boolean r3 = r14.equals(r6)     // Catch:{ all -> 0x020d }
-                if (r3 == 0) goto L_0x01c4
-                r3 = 1
-                goto L_0x01c5
-            L_0x01ac:
-                boolean r3 = r14.equals(r0)     // Catch:{ all -> 0x020d }
-                if (r3 == 0) goto L_0x01c4
-                r3 = 0
-                goto L_0x01c5
-            L_0x01b4:
-                boolean r3 = r14.equals(r15)     // Catch:{ all -> 0x020d }
-                if (r3 == 0) goto L_0x01c4
-                r3 = 3
-                goto L_0x01c5
-            L_0x01bc:
-                boolean r3 = r14.equals(r3)     // Catch:{ all -> 0x020d }
-                if (r3 == 0) goto L_0x01c4
-                r3 = 2
-                goto L_0x01c5
-            L_0x01c4:
-                r3 = -1
-            L_0x01c5:
-                if (r3 == 0) goto L_0x01e1
-                r6 = 1
-                if (r3 == r6) goto L_0x01db
-                if (r3 == r13) goto L_0x01d5
-                r6 = 3
-                if (r3 == r6) goto L_0x01d0
-                goto L_0x01e9
-            L_0x01d0:
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                r3.previewBackgroundGradientColor = r2     // Catch:{ all -> 0x020d }
-                goto L_0x01e9
-            L_0x01d5:
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                r3.setPreviewBackgroundColor(r2)     // Catch:{ all -> 0x020d }
-                goto L_0x01e9
-            L_0x01db:
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                r3.setPreviewOutColor(r2)     // Catch:{ all -> 0x020d }
-                goto L_0x01e9
-            L_0x01e1:
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = r1.themeInfo     // Catch:{ all -> 0x020d }
-                r3.setPreviewInColor(r2)     // Catch:{ all -> 0x020d }
-                goto L_0x01e9
-            L_0x01e7:
+                switch(r4) {
+                    case -1625862693: goto L_0x01c0;
+                    case -633951866: goto L_0x01b8;
+                    case 1269980952: goto L_0x01b0;
+                    case 2052611411: goto L_0x01a8;
+                    default: goto L_0x01a7;
+                }     // Catch:{ all -> 0x0211 }
+            L_0x01a7:
+                goto L_0x01c8
+            L_0x01a8:
+                boolean r4 = r8.equals(r6)     // Catch:{ all -> 0x0211 }
+                if (r4 == 0) goto L_0x01c8
+                r14 = 1
+                goto L_0x01c9
+            L_0x01b0:
+                boolean r4 = r8.equals(r0)     // Catch:{ all -> 0x0211 }
+                if (r4 == 0) goto L_0x01c8
+                r14 = 0
+                goto L_0x01c9
+            L_0x01b8:
+                boolean r4 = r8.equals(r15)     // Catch:{ all -> 0x0211 }
+                if (r4 == 0) goto L_0x01c8
+                r14 = 3
+                goto L_0x01c9
+            L_0x01c0:
+                boolean r4 = r8.equals(r14)     // Catch:{ all -> 0x0211 }
+                if (r4 == 0) goto L_0x01c8
+                r14 = 2
+                goto L_0x01c9
+            L_0x01c8:
+                r14 = -1
+            L_0x01c9:
+                if (r14 == 0) goto L_0x01e5
+                r4 = 1
+                if (r14 == r4) goto L_0x01df
+                if (r14 == r13) goto L_0x01d9
+                r4 = 3
+                if (r14 == r4) goto L_0x01d4
+                goto L_0x01ed
+            L_0x01d4:
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                r4.previewBackgroundGradientColor = r3     // Catch:{ all -> 0x0211 }
+                goto L_0x01ed
+            L_0x01d9:
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                r4.setPreviewBackgroundColor(r3)     // Catch:{ all -> 0x0211 }
+                goto L_0x01ed
+            L_0x01df:
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                r4.setPreviewOutColor(r3)     // Catch:{ all -> 0x0211 }
+                goto L_0x01ed
+            L_0x01e5:
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = r1.themeInfo     // Catch:{ all -> 0x0211 }
+                r4.setPreviewInColor(r3)     // Catch:{ all -> 0x0211 }
+                goto L_0x01ed
+            L_0x01eb:
                 r16 = r6
-            L_0x01e9:
+            L_0x01ed:
                 int r10 = r10 + r12
                 int r11 = r11 + r12
-                goto L_0x01ee
-            L_0x01ec:
+                goto L_0x01f2
+            L_0x01f0:
                 r16 = r6
-            L_0x01ee:
+            L_0x01f2:
                 int r9 = r9 + 1
                 r6 = r16
-                r2 = 1
+                r4 = 1
                 r8 = -1
-                goto L_0x0029
-            L_0x01f6:
+                goto L_0x002d
+            L_0x01fa:
                 r16 = r6
-            L_0x01f8:
-                if (r6 != 0) goto L_0x0209
-                if (r4 != r11) goto L_0x01fd
-                goto L_0x0209
-            L_0x01fd:
-                java.nio.channels.FileChannel r2 = r5.getChannel()     // Catch:{ all -> 0x020d }
-                long r3 = (long) r11     // Catch:{ all -> 0x020d }
-                r2.position(r3)     // Catch:{ all -> 0x020d }
-                r4 = r11
-                r2 = 1
-                goto L_0x001b
-            L_0x0209:
-                r5.close()     // Catch:{ all -> 0x0215 }
-                goto L_0x0219
+            L_0x01fc:
+                if (r6 != 0) goto L_0x020d
+                if (r2 != r11) goto L_0x0201
+                goto L_0x020d
+            L_0x0201:
+                java.nio.channels.FileChannel r2 = r5.getChannel()     // Catch:{ all -> 0x0211 }
+                long r3 = (long) r11     // Catch:{ all -> 0x0211 }
+                r2.position(r3)     // Catch:{ all -> 0x0211 }
+                r2 = r11
+                r4 = 1
+                goto L_0x001f
             L_0x020d:
+                r5.close()     // Catch:{ all -> 0x0219 }
+                goto L_0x021d
+            L_0x0211:
                 r0 = move-exception
-                throw r0     // Catch:{ all -> 0x020f }
-            L_0x020f:
+                throw r0     // Catch:{ all -> 0x0213 }
+            L_0x0213:
                 r0 = move-exception
                 r2 = r0
-                r5.close()     // Catch:{ all -> 0x0214 }
-            L_0x0214:
-                throw r2     // Catch:{ all -> 0x0215 }
-            L_0x0215:
+                r5.close()     // Catch:{ all -> 0x0218 }
+            L_0x0218:
+                throw r2     // Catch:{ all -> 0x0219 }
+            L_0x0219:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0219:
+            L_0x021d:
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r1.themeInfo
                 java.lang.String r2 = r0.pathToWallpaper
-                if (r2 == 0) goto L_0x026b
+                if (r2 == 0) goto L_0x0273
                 boolean r0 = r0.badWallpaper
-                if (r0 != 0) goto L_0x026b
+                if (r0 != 0) goto L_0x0273
                 java.io.File r0 = new java.io.File
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
+                java.lang.String r2 = r2.pathToWallpaper
                 r0.<init>(r2)
                 boolean r0 = r0.exists()
-                if (r0 != 0) goto L_0x026b
+                if (r0 != 0) goto L_0x0273
                 org.telegram.ui.Cells.ThemesHorizontalListCell r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this
                 java.util.HashMap r0 = r0.loadingWallpapers
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
                 boolean r0 = r0.containsKey(r2)
-                if (r0 != 0) goto L_0x0269
+                if (r0 != 0) goto L_0x0271
                 org.telegram.ui.Cells.ThemesHorizontalListCell r0 = org.telegram.ui.Cells.ThemesHorizontalListCell.this
                 java.util.HashMap r0 = r0.loadingWallpapers
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.themeInfo
@@ -563,22 +570,22 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$aojGvqqAAssFRVGdS8VxlzJW2g8 r3 = new org.telegram.ui.Cells.-$$Lambda$ThemesHorizontalListCell$InnerThemeView$aojGvqqAAssFRVGdS8VxlzJW2g8
                 r3.<init>()
                 r2.sendRequest(r0, r3)
-            L_0x0269:
+            L_0x0271:
                 r2 = 0
                 return r2
-            L_0x026b:
+            L_0x0273:
                 org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = r1.themeInfo
                 r2 = 1
                 r0.previewParsed = r2
                 return r2
-            L_0x0271:
+            L_0x0279:
                 r2 = 0
                 return r2
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemesHorizontalListCell.InnerThemeView.parseTheme():boolean");
         }
 
-        public /* synthetic */ void lambda$parseTheme$1$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject, TLRPC.TL_error tL_error) {
+        public /* synthetic */ void lambda$parseTheme$1$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
                 private final /* synthetic */ TLObject f$1;
 
@@ -593,12 +600,12 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
 
         public /* synthetic */ void lambda$null$0$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject) {
-            if (tLObject instanceof TLRPC.TL_wallPaper) {
-                TLRPC.TL_wallPaper tL_wallPaper = (TLRPC.TL_wallPaper) tLObject;
-                String attachFileName = FileLoader.getAttachFileName(tL_wallPaper.document);
+            if (tLObject instanceof TLRPC$TL_wallPaper) {
+                TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) tLObject;
+                String attachFileName = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
                 if (!ThemesHorizontalListCell.this.loadingThemes.containsKey(attachFileName)) {
                     ThemesHorizontalListCell.this.loadingThemes.put(attachFileName, this.themeInfo);
-                    FileLoader.getInstance(this.themeInfo.account).loadFile(tL_wallPaper.document, tL_wallPaper, 1, 1);
+                    FileLoader.getInstance(this.themeInfo.account).loadFile(tLRPC$TL_wallPaper.document, tLRPC$TL_wallPaper, 1, 1);
                     return;
                 }
                 return;
@@ -624,7 +631,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.backgroundDrawable = null;
             Theme.ThemeInfo themeInfo2 = this.themeInfo;
             if (themeInfo2.previewBackgroundGradientColor != 0) {
-                GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{themeInfo2.getPreviewBackgroundColor(), this.themeInfo.previewBackgroundGradientColor});
+                GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{this.themeInfo.getPreviewBackgroundColor(), this.themeInfo.previewBackgroundGradientColor});
                 gradientDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
                 this.backgroundDrawable = gradientDrawable;
                 dArr = AndroidUtilities.rgbToHsv(Color.red(this.themeInfo.getPreviewBackgroundColor()), Color.green(this.themeInfo.getPreviewBackgroundColor()), Color.blue(this.themeInfo.getPreviewBackgroundColor()));
@@ -634,8 +641,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 if (scaledBitmap != null) {
                     this.backgroundDrawable = new BitmapDrawable(scaledBitmap);
                     Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-                    this.bitmapShader = new BitmapShader(scaledBitmap, tileMode, tileMode);
-                    this.bitmapPaint.setShader(this.bitmapShader);
+                    BitmapShader bitmapShader2 = new BitmapShader(scaledBitmap, tileMode, tileMode);
+                    this.bitmapShader = bitmapShader2;
+                    this.bitmapPaint.setShader(bitmapShader2);
                     int[] calcDrawableColor = AndroidUtilities.calcDrawableColor(this.backgroundDrawable);
                     dArr = AndroidUtilities.rgbToHsv(Color.red(calcDrawableColor[0]), Color.green(calcDrawableColor[0]), Color.blue(calcDrawableColor[0]));
                 }
@@ -651,8 +659,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM).mutate();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 Shader.TileMode tileMode2 = Shader.TileMode.REPEAT;
-                this.bitmapShader = new BitmapShader(bitmap, tileMode2, tileMode2);
-                this.bitmapPaint.setShader(this.bitmapShader);
+                BitmapShader bitmapShader3 = new BitmapShader(bitmap, tileMode2, tileMode2);
+                this.bitmapShader = bitmapShader3;
+                this.bitmapPaint.setShader(bitmapShader3);
                 this.backgroundDrawable = bitmapDrawable;
             }
             invalidate();
@@ -660,7 +669,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
         public void setTheme(Theme.ThemeInfo themeInfo2, boolean z, boolean z2) {
             Theme.ThemeInfo themeInfo3;
-            TLRPC.TL_theme tL_theme;
+            TLRPC$TL_theme tLRPC$TL_theme;
             this.themeInfo = themeInfo2;
             this.isFirst = z2;
             this.isLast = z;
@@ -674,30 +683,30 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 themeInfo4.setPreviewInColor(Theme.getDefaultColor("chat_inBubble"));
                 this.themeInfo.setPreviewOutColor(Theme.getDefaultColor("chat_outBubble"));
                 boolean exists = new File(this.themeInfo.pathToFile).exists();
-                if ((!(exists && parseTheme()) || !exists) && (tL_theme = themeInfo3.info) != null) {
-                    if (tL_theme.document != null) {
+                if ((!(exists && parseTheme()) || !exists) && (tLRPC$TL_theme = themeInfo3.info) != null) {
+                    if (tLRPC$TL_theme.document != null) {
                         (themeInfo3 = this.themeInfo).themeLoaded = false;
                         this.placeholderAlpha = 1.0f;
-                        this.loadingDrawable = getResources().getDrawable(NUM).mutate();
-                        Drawable drawable = this.loadingDrawable;
+                        Drawable mutate = getResources().getDrawable(NUM).mutate();
+                        this.loadingDrawable = mutate;
                         int color = Theme.getColor("windowBackgroundWhiteGrayText7");
                         this.loadingColor = color;
-                        Theme.setDrawableColor(drawable, color);
+                        Theme.setDrawableColor(mutate, color);
                         if (!exists) {
                             String attachFileName = FileLoader.getAttachFileName(this.themeInfo.info.document);
                             if (!ThemesHorizontalListCell.this.loadingThemes.containsKey(attachFileName)) {
                                 ThemesHorizontalListCell.this.loadingThemes.put(attachFileName, this.themeInfo);
                                 FileLoader instance = FileLoader.getInstance(this.themeInfo.account);
-                                TLRPC.TL_theme tL_theme2 = this.themeInfo.info;
-                                instance.loadFile(tL_theme2.document, tL_theme2, 1, 1);
+                                TLRPC$TL_theme tLRPC$TL_theme2 = this.themeInfo.info;
+                                instance.loadFile(tLRPC$TL_theme2.document, tLRPC$TL_theme2, 1, 1);
                             }
                         }
                     } else {
-                        this.loadingDrawable = getResources().getDrawable(NUM).mutate();
-                        Drawable drawable2 = this.loadingDrawable;
+                        Drawable mutate2 = getResources().getDrawable(NUM).mutate();
+                        this.loadingDrawable = mutate2;
                         int color2 = Theme.getColor("windowBackgroundWhiteGrayText7");
                         this.loadingColor = color2;
-                        Theme.setDrawableColor(drawable2, color2);
+                        Theme.setDrawableColor(mutate2, color2);
                     }
                 }
             }
@@ -706,12 +715,12 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
-            TLRPC.TL_theme tL_theme;
+            TLRPC$TL_theme tLRPC$TL_theme;
             super.onAttachedToWindow();
             this.button.setChecked(this.themeInfo == (ThemesHorizontalListCell.this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme()), false);
             Theme.ThemeInfo themeInfo2 = this.themeInfo;
-            if (themeInfo2 != null && (tL_theme = themeInfo2.info) != null && !themeInfo2.themeLoaded) {
-                if (!ThemesHorizontalListCell.this.loadingThemes.containsKey(FileLoader.getAttachFileName(tL_theme.document)) && !ThemesHorizontalListCell.this.loadingWallpapers.containsKey(this.themeInfo)) {
+            if (themeInfo2 != null && (tLRPC$TL_theme = themeInfo2.info) != null && !themeInfo2.themeLoaded) {
+                if (!ThemesHorizontalListCell.this.loadingThemes.containsKey(FileLoader.getAttachFileName(tLRPC$TL_theme.document)) && !ThemesHorizontalListCell.this.loadingWallpapers.containsKey(this.themeInfo)) {
                     this.themeInfo.themeLoaded = true;
                     this.placeholderAlpha = 0.0f;
                     parseTheme();
@@ -761,8 +770,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 objectAnimator.cancel();
             }
             if (z) {
-                this.accentAnimator = ObjectAnimator.ofFloat(this, "accentState", new float[]{0.0f, 1.0f});
-                this.accentAnimator.setDuration(200);
+                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "accentState", new float[]{0.0f, 1.0f});
+                this.accentAnimator = ofFloat;
+                ofFloat.setDuration(200);
                 this.accentAnimator.start();
                 return;
             }
@@ -801,8 +811,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             canvas.drawText(charSequence, (float) (((AndroidUtilities.dp(76.0f) - ceil) / 2) + dp), (float) AndroidUtilities.dp(131.0f), this.textPaint);
             Theme.ThemeInfo themeInfo2 = this.themeInfo;
-            TLRPC.TL_theme tL_theme = themeInfo2.info;
-            if (tL_theme != null && (tL_theme.document == null || !themeInfo2.themeLoaded)) {
+            TLRPC$TL_theme tLRPC$TL_theme = themeInfo2.info;
+            if (tLRPC$TL_theme != null && (tLRPC$TL_theme.document == null || !themeInfo2.themeLoaded)) {
                 z = false;
             }
             if (z) {
@@ -862,8 +872,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     this.optionsDrawable.draw(canvas);
                 }
             }
-            TLRPC.TL_theme tL_theme2 = this.themeInfo.info;
-            if (tL_theme2 == null || tL_theme2.document != null) {
+            TLRPC$TL_theme tLRPC$TL_theme2 = this.themeInfo.info;
+            if (tLRPC$TL_theme2 == null || tLRPC$TL_theme2.document != null) {
                 Theme.ThemeInfo themeInfo4 = this.themeInfo;
                 if ((themeInfo4.info != null && !themeInfo4.themeLoaded) || this.placeholderAlpha > 0.0f) {
                     this.button.setAlpha(1.0f - this.placeholderAlpha);
@@ -888,8 +898,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                         long elapsedRealtime = SystemClock.elapsedRealtime();
                         long min2 = Math.min(17, elapsedRealtime - this.lastDrawTime);
                         this.lastDrawTime = elapsedRealtime;
-                        this.placeholderAlpha -= ((float) min2) / 180.0f;
-                        if (this.placeholderAlpha < 0.0f) {
+                        float f4 = this.placeholderAlpha - (((float) min2) / 180.0f);
+                        this.placeholderAlpha = f4;
+                        if (f4 < 0.0f) {
                             this.placeholderAlpha = 0.0f;
                         }
                         invalidate();
@@ -938,7 +949,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
         setItemAnimator((RecyclerView.ItemAnimator) null);
         setLayoutAnimation((LayoutAnimationController) null);
-        this.horizontalLayoutManager = new LinearLayoutManager(context) {
+        this.horizontalLayoutManager = new LinearLayoutManager(this, context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -979,10 +990,10 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     }
 
     public void selectTheme(Theme.ThemeInfo themeInfo) {
-        TLRPC.TL_theme tL_theme = themeInfo.info;
-        if (tL_theme != null) {
+        TLRPC$TL_theme tLRPC$TL_theme = themeInfo.info;
+        if (tLRPC$TL_theme != null) {
             if (themeInfo.themeLoaded) {
-                if (tL_theme.document == null) {
+                if (tLRPC$TL_theme.document == null) {
                     presentFragment(new ThemeSetUrlActivity(themeInfo, (Theme.ThemeAccent) null, true));
                     return;
                 }
@@ -1044,113 +1055,112 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x0086 A[SYNTHETIC, Splitter:B:40:0x0086] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0084 A[SYNTHETIC, Splitter:B:40:0x0084] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.Bitmap getScaledBitmap(float r7, float r8, java.lang.String r9, java.lang.String r10, int r11) {
         /*
             r0 = 0
-            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x007f }
-            r1.<init>()     // Catch:{ all -> 0x007f }
+            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x007d }
+            r1.<init>()     // Catch:{ all -> 0x007d }
             r2 = 1
-            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x007f }
+            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x007d }
             if (r9 == 0) goto L_0x0010
-            android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x007f }
+            android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x007d }
             r3 = r0
             goto L_0x0020
         L_0x0010:
-            java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x007f }
-            r3.<init>(r10)     // Catch:{ all -> 0x007f }
-            java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x007d }
-            long r4 = (long) r11     // Catch:{ all -> 0x007d }
-            r10.position(r4)     // Catch:{ all -> 0x007d }
-            android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x007d }
+            java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x007d }
+            r3.<init>(r10)     // Catch:{ all -> 0x007d }
+            java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x007b }
+            long r4 = (long) r11     // Catch:{ all -> 0x007b }
+            r10.position(r4)     // Catch:{ all -> 0x007b }
+            android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x007b }
         L_0x0020:
-            int r10 = r1.outWidth     // Catch:{ all -> 0x007d }
-            if (r10 <= 0) goto L_0x0077
-            int r10 = r1.outHeight     // Catch:{ all -> 0x007d }
-            if (r10 <= 0) goto L_0x0077
+            int r10 = r1.outWidth     // Catch:{ all -> 0x007b }
+            if (r10 <= 0) goto L_0x0075
+            int r10 = r1.outHeight     // Catch:{ all -> 0x007b }
+            if (r10 <= 0) goto L_0x0075
             int r10 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
             if (r10 <= 0) goto L_0x0035
-            int r10 = r1.outWidth     // Catch:{ all -> 0x007d }
-            int r4 = r1.outHeight     // Catch:{ all -> 0x007d }
+            int r10 = r1.outWidth     // Catch:{ all -> 0x007b }
+            int r4 = r1.outHeight     // Catch:{ all -> 0x007b }
             if (r10 >= r4) goto L_0x0035
             r6 = r8
             r8 = r7
             r7 = r6
         L_0x0035:
-            int r10 = r1.outWidth     // Catch:{ all -> 0x007d }
-            float r10 = (float) r10     // Catch:{ all -> 0x007d }
+            int r10 = r1.outWidth     // Catch:{ all -> 0x007b }
+            float r10 = (float) r10     // Catch:{ all -> 0x007b }
             float r10 = r10 / r7
-            int r7 = r1.outHeight     // Catch:{ all -> 0x007d }
-            float r7 = (float) r7     // Catch:{ all -> 0x007d }
+            int r7 = r1.outHeight     // Catch:{ all -> 0x007b }
+            float r7 = (float) r7     // Catch:{ all -> 0x007b }
             float r7 = r7 / r8
-            float r7 = java.lang.Math.min(r10, r7)     // Catch:{ all -> 0x007d }
-            r1.inSampleSize = r2     // Catch:{ all -> 0x007d }
+            float r7 = java.lang.Math.min(r10, r7)     // Catch:{ all -> 0x007b }
+            r1.inSampleSize = r2     // Catch:{ all -> 0x007b }
             r8 = 1065353216(0x3var_, float:1.0)
             int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0056
+            if (r8 <= 0) goto L_0x0054
         L_0x0049:
-            int r8 = r1.inSampleSize     // Catch:{ all -> 0x007d }
+            int r8 = r1.inSampleSize     // Catch:{ all -> 0x007b }
             int r8 = r8 * 2
-            r1.inSampleSize = r8     // Catch:{ all -> 0x007d }
-            int r8 = r1.inSampleSize     // Catch:{ all -> 0x007d }
-            float r8 = (float) r8     // Catch:{ all -> 0x007d }
+            r1.inSampleSize = r8     // Catch:{ all -> 0x007b }
+            float r8 = (float) r8     // Catch:{ all -> 0x007b }
             int r8 = (r8 > r7 ? 1 : (r8 == r7 ? 0 : -1))
             if (r8 < 0) goto L_0x0049
-        L_0x0056:
+        L_0x0054:
             r7 = 0
-            r1.inJustDecodeBounds = r7     // Catch:{ all -> 0x007d }
-            if (r9 == 0) goto L_0x0060
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x007d }
-            goto L_0x006c
-        L_0x0060:
-            java.nio.channels.FileChannel r7 = r3.getChannel()     // Catch:{ all -> 0x007d }
-            long r8 = (long) r11     // Catch:{ all -> 0x007d }
-            r7.position(r8)     // Catch:{ all -> 0x007d }
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x007d }
-        L_0x006c:
-            if (r3 == 0) goto L_0x0076
-            r3.close()     // Catch:{ Exception -> 0x0072 }
-            goto L_0x0076
-        L_0x0072:
+            r1.inJustDecodeBounds = r7     // Catch:{ all -> 0x007b }
+            if (r9 == 0) goto L_0x005e
+            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x007b }
+            goto L_0x006a
+        L_0x005e:
+            java.nio.channels.FileChannel r7 = r3.getChannel()     // Catch:{ all -> 0x007b }
+            long r8 = (long) r11     // Catch:{ all -> 0x007b }
+            r7.position(r8)     // Catch:{ all -> 0x007b }
+            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x007b }
+        L_0x006a:
+            if (r3 == 0) goto L_0x0074
+            r3.close()     // Catch:{ Exception -> 0x0070 }
+            goto L_0x0074
+        L_0x0070:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x0076:
+        L_0x0074:
             return r7
-        L_0x0077:
-            if (r3 == 0) goto L_0x008e
-            r3.close()     // Catch:{ Exception -> 0x008a }
-            goto L_0x008e
+        L_0x0075:
+            if (r3 == 0) goto L_0x008c
+            r3.close()     // Catch:{ Exception -> 0x0088 }
+            goto L_0x008c
+        L_0x007b:
+            r7 = move-exception
+            goto L_0x007f
         L_0x007d:
             r7 = move-exception
-            goto L_0x0081
-        L_0x007f:
-            r7 = move-exception
             r3 = r0
-        L_0x0081:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x008f }
-            if (r3 == 0) goto L_0x008e
-            r3.close()     // Catch:{ Exception -> 0x008a }
-            goto L_0x008e
-        L_0x008a:
+        L_0x007f:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x008d }
+            if (r3 == 0) goto L_0x008c
+            r3.close()     // Catch:{ Exception -> 0x0088 }
+            goto L_0x008c
+        L_0x0088:
             r7 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x008e:
+        L_0x008c:
             return r0
-        L_0x008f:
+        L_0x008d:
             r7 = move-exception
-            if (r3 == 0) goto L_0x009a
-            r3.close()     // Catch:{ Exception -> 0x0096 }
-            goto L_0x009a
-        L_0x0096:
+            if (r3 == 0) goto L_0x0098
+            r3.close()     // Catch:{ Exception -> 0x0094 }
+            goto L_0x0098
+        L_0x0094:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x009a:
-            goto L_0x009c
-        L_0x009b:
+        L_0x0098:
+            goto L_0x009a
+        L_0x0099:
             throw r7
-        L_0x009c:
-            goto L_0x009b
+        L_0x009a:
+            goto L_0x0099
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemesHorizontalListCell.getScaledBitmap(float, float, java.lang.String, java.lang.String, int):android.graphics.Bitmap");
     }
@@ -1245,8 +1255,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             i = view.getMeasuredWidth();
         }
         if (i != 0) {
-            this.prevThemeInfo = this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme();
-            int indexOf = this.defaultThemes.indexOf(this.prevThemeInfo);
+            Theme.ThemeInfo currentNightTheme = this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme();
+            this.prevThemeInfo = currentNightTheme;
+            int indexOf = this.defaultThemes.indexOf(currentNightTheme);
             if (indexOf < 0 && (indexOf = this.darkThemes.indexOf(this.prevThemeInfo) + this.defaultThemes.size()) < 0) {
                 return;
             }

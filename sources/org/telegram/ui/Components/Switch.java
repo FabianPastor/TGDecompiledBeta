@@ -50,7 +50,7 @@ public class Switch extends View {
     private float overlayRad;
     private int overrideColorProgress;
     private Paint paint = new Paint(1);
-    private Paint paint2 = new Paint(1);
+    private Paint paint2;
     private int[] pressedState = {16842910, 16842919};
     private float progress;
     private RectF rectF = new RectF();
@@ -68,7 +68,9 @@ public class Switch extends View {
 
     public Switch(Context context) {
         super(context);
-        this.paint2.setStyle(Paint.Style.STROKE);
+        Paint paint3 = new Paint(1);
+        this.paint2 = paint3;
+        paint3.setStyle(Paint.Style.STROKE);
         this.paint2.setStrokeCap(Paint.Cap.ROUND);
         this.paint2.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
@@ -125,8 +127,9 @@ public class Switch extends View {
             this.drawRipple = z;
             int i = 1;
             if (this.rippleDrawable == null) {
-                this.ripplePaint = new Paint(1);
-                this.ripplePaint.setColor(-1);
+                Paint paint3 = new Paint(1);
+                this.ripplePaint = paint3;
+                paint3.setColor(-1);
                 if (Build.VERSION.SDK_INT >= 23) {
                     r0 = null;
                 } else {
@@ -147,9 +150,10 @@ public class Switch extends View {
                         }
                     };
                 }
-                this.rippleDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{0}), (Drawable) null, r0);
+                RippleDrawable rippleDrawable2 = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{0}), (Drawable) null, r0);
+                this.rippleDrawable = rippleDrawable2;
                 if (Build.VERSION.SDK_INT >= 23) {
-                    this.rippleDrawable.setRadius(AndroidUtilities.dp(18.0f));
+                    rippleDrawable2.setRadius(AndroidUtilities.dp(18.0f));
                 }
                 this.rippleDrawable.setCallback(this);
             }
@@ -203,8 +207,9 @@ public class Switch extends View {
     private void animateToCheckedState(boolean z) {
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
-        this.checkAnimator.setDuration(250);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.setDuration(250);
         this.checkAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ObjectAnimator unused = Switch.this.checkAnimator = null;
@@ -216,8 +221,9 @@ public class Switch extends View {
     private void animateIcon(boolean z) {
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.iconAnimator = ObjectAnimator.ofFloat(this, "iconProgress", fArr);
-        this.iconAnimator.setDuration(250);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "iconProgress", fArr);
+        this.iconAnimator = ofFloat;
+        ofFloat.setDuration(250);
         this.iconAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ObjectAnimator unused = Switch.this.iconAnimator = null;
@@ -277,12 +283,12 @@ public class Switch extends View {
 
     public void setIcon(int i) {
         if (i != 0) {
-            this.iconDrawable = getResources().getDrawable(i).mutate();
-            Drawable drawable = this.iconDrawable;
-            if (drawable != null) {
+            Drawable mutate = getResources().getDrawable(i).mutate();
+            this.iconDrawable = mutate;
+            if (mutate != null) {
                 int color = Theme.getColor(this.isChecked ? this.trackCheckedColorKey : this.trackColorKey);
                 this.lastIconColor = color;
-                drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                mutate.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 return;
             }
             return;
@@ -310,10 +316,12 @@ public class Switch extends View {
                     }
                     this.overlayMaskBitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
                     this.overlayMaskCanvas = new Canvas(this.overlayMaskBitmap);
-                    this.overlayEraserPaint = new Paint(1);
-                    this.overlayEraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                    this.overlayMaskPaint = new Paint(1);
-                    this.overlayMaskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+                    Paint paint3 = new Paint(1);
+                    this.overlayEraserPaint = paint3;
+                    paint3.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                    Paint paint4 = new Paint(1);
+                    this.overlayMaskPaint = paint4;
+                    paint4.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
                     this.bitmapsCreated = true;
                 } catch (Throwable unused) {
                     return;
@@ -350,7 +358,7 @@ public class Switch extends View {
         if (r1 == 0) goto L_0x01f1;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:68:0x01f3, code lost:
-        r4 = 1.0f;
+        r6 = 1.0f;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:71:0x01f9, code lost:
         if (r1 == 0) goto L_0x01f3;
@@ -644,10 +652,10 @@ public class Switch extends View {
             if (r6 != r4) goto L_0x01f6
             if (r1 != 0) goto L_0x01f3
         L_0x01f1:
-            r4 = 0
+            r6 = 0
             goto L_0x01fe
         L_0x01f3:
-            r4 = 1065353216(0x3var_, float:1.0)
+            r6 = 1065353216(0x3var_, float:1.0)
             goto L_0x01fe
         L_0x01f6:
             r4 = 2
@@ -655,43 +663,43 @@ public class Switch extends View {
             if (r1 != 0) goto L_0x01f1
             goto L_0x01f3
         L_0x01fc:
-            float r4 = r0.progress
+            float r6 = r0.progress
         L_0x01fe:
-            java.lang.String r6 = r0.thumbColorKey
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            java.lang.String r4 = r0.thumbColorKey
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             java.lang.String r8 = r0.thumbCheckedColorKey
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            int r11 = android.graphics.Color.red(r6)
+            int r11 = android.graphics.Color.red(r4)
             int r12 = android.graphics.Color.red(r8)
-            int r13 = android.graphics.Color.green(r6)
+            int r13 = android.graphics.Color.green(r4)
             int r14 = android.graphics.Color.green(r8)
-            int r15 = android.graphics.Color.blue(r6)
+            int r15 = android.graphics.Color.blue(r4)
             int r18 = android.graphics.Color.blue(r8)
-            int r6 = android.graphics.Color.alpha(r6)
+            int r4 = android.graphics.Color.alpha(r4)
             int r8 = android.graphics.Color.alpha(r8)
             float r7 = (float) r11
             int r12 = r12 - r11
             float r11 = (float) r12
-            float r11 = r11 * r4
+            float r11 = r11 * r6
             float r7 = r7 + r11
             int r7 = (int) r7
             float r11 = (float) r13
             int r14 = r14 - r13
             float r12 = (float) r14
-            float r12 = r12 * r4
+            float r12 = r12 * r6
             float r11 = r11 + r12
             int r11 = (int) r11
             float r12 = (float) r15
             int r13 = r18 - r15
             float r13 = (float) r13
-            float r13 = r13 * r4
+            float r13 = r13 * r6
             float r12 = r12 + r13
             int r12 = (int) r12
-            float r13 = (float) r6
-            int r8 = r8 - r6
-            float r6 = (float) r8
-            float r6 = r6 * r4
-            float r13 = r13 + r6
+            float r13 = (float) r4
+            int r8 = r8 - r4
+            float r4 = (float) r8
+            float r4 = r4 * r6
+            float r13 = r13 + r4
             int r4 = (int) r13
             android.graphics.Paint r6 = r0.paint
             r4 = r4 & 255(0xff, float:3.57E-43)

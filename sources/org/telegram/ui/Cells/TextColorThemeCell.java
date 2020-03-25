@@ -22,8 +22,9 @@ public class TextColorThemeCell extends FrameLayout {
         if (colorPaint == null) {
             colorPaint = new Paint(1);
         }
-        this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(-14606047);
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -51,7 +52,7 @@ public class TextColorThemeCell extends FrameLayout {
     public void setTextAndColor(CharSequence charSequence, int i) {
         this.textView.setText(charSequence);
         this.currentColor = i;
-        setWillNotDraw(!this.needDivider && this.currentColor == 0);
+        setWillNotDraw(!this.needDivider && i == 0);
         invalidate();
     }
 

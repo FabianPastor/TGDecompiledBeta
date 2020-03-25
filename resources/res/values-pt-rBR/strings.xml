@@ -2344,7 +2344,6 @@
     <string name="PopupDisabled">Desativado</string>
     <string name="PopupEnabled">Ativado</string>
     <string name="PopupNotification">Notificações Pop-up</string>
-    <string name="PreviewFeedback">Deixar um comentário sobre essa prévia</string>
     <string name="PriorityInfo">Nas prioridades mais altas as notificações irão funcionar mesmo que o seu celular esteja no modo Não Perturbe.</string>
     <string name="PrivacyAddAnException">Adicionar Usuários ou Grupos</string>
     <string name="PrivacyAdvanced">Avançado</string>
@@ -3262,5 +3261,4 @@
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">%1$d mensagens</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
 </resources>

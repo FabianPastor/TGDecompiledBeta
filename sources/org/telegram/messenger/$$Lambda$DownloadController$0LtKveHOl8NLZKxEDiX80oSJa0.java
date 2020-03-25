@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 /* renamed from: org.telegram.messenger.-$$Lambda$DownloadController$0LtKveHOl8NLZKx-EDiX80oSJa0  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,7 +12,7 @@ public final /* synthetic */ class $$Lambda$DownloadController$0LtKveHOl8NLZKxED
     private /* synthetic */ $$Lambda$DownloadController$0LtKveHOl8NLZKxEDiX80oSJa0() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        DownloadController.lambda$savePresetToServer$3(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        DownloadController.lambda$savePresetToServer$3(tLObject, tLRPC$TL_error);
     }
 }

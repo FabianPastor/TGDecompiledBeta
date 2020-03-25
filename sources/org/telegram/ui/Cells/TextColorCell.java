@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Property;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,8 +30,9 @@ public class TextColorCell extends FrameLayout {
         if (colorPaint == null) {
             colorPaint = new Paint(1);
         }
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -46,6 +48,7 @@ public class TextColorCell extends FrameLayout {
         invalidate();
     }
 
+    @Keep
     public float getAlpha() {
         return this.alpha;
     }
@@ -59,7 +62,7 @@ public class TextColorCell extends FrameLayout {
         this.textView.setText(str);
         this.needDivider = z;
         this.currentColor = i;
-        setWillNotDraw(!this.needDivider && this.currentColor == 0);
+        setWillNotDraw(!z && i == 0);
         invalidate();
     }
 
@@ -68,15 +71,17 @@ public class TextColorCell extends FrameLayout {
         float f = 1.0f;
         if (arrayList != null) {
             TextView textView2 = this.textView;
+            Property property = View.ALPHA;
             float[] fArr = new float[1];
             fArr[0] = z ? 1.0f : 0.5f;
-            arrayList.add(ObjectAnimator.ofFloat(textView2, "alpha", fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView2, property, fArr));
+            Property property2 = View.ALPHA;
             float[] fArr2 = new float[1];
             if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            arrayList.add(ObjectAnimator.ofFloat(this, "alpha", fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(this, property2, fArr2));
             return;
         }
         this.textView.setAlpha(z ? 1.0f : 0.5f);

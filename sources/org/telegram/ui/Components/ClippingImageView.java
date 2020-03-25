@@ -33,7 +33,7 @@ public class ClippingImageView extends View {
     private Matrix matrix;
     private boolean needRadius;
     private int orientation;
-    private Paint paint = new Paint(2);
+    private Paint paint;
     private int[] radius = new int[4];
     private Paint roundPaint;
     private Path roundPath = new Path();
@@ -42,7 +42,9 @@ public class ClippingImageView extends View {
 
     public ClippingImageView(Context context) {
         super(context);
-        this.paint.setFilterBitmap(true);
+        Paint paint2 = new Paint(2);
+        this.paint = paint2;
+        paint2.setFilterBitmap(true);
         this.matrix = new Matrix();
         this.drawRect = new RectF();
         this.bitmapRect = new RectF();
@@ -76,7 +78,7 @@ public class ClippingImageView extends View {
     public void setAnimationProgress(float f) {
         this.animationProgress = f;
         float[][] fArr = this.animationValues;
-        setScaleX(fArr[0][0] + ((fArr[1][0] - fArr[0][0]) * this.animationProgress));
+        setScaleX(fArr[0][0] + ((fArr[1][0] - fArr[0][0]) * f));
         float[][] fArr2 = this.animationValues;
         setScaleY(fArr2[0][1] + ((fArr2[1][1] - fArr2[0][1]) * this.animationProgress));
         float[][] fArr3 = this.animationValues;
@@ -114,11 +116,12 @@ public class ClippingImageView extends View {
         rectF.left = getTranslationX();
         rectF.top = getTranslationY();
         rectF.right = rectF.left + (((float) getMeasuredWidth()) * getScaleX());
-        rectF.bottom = rectF.top + (((float) getMeasuredHeight()) * getScaleY());
+        float measuredHeight = rectF.top + (((float) getMeasuredHeight()) * getScaleY());
+        rectF.bottom = measuredHeight;
         rectF.left += (float) this.clipLeft;
         rectF.top += (float) this.clipTop;
         rectF.right -= (float) this.clipRight;
-        rectF.bottom -= (float) this.clipBottom;
+        rectF.bottom = measuredHeight - ((float) this.clipBottom);
     }
 
     public int getClipBottom() {
@@ -255,8 +258,9 @@ public class ClippingImageView extends View {
             this.bitmapRect.set(0.0f, 0.0f, (float) bitmapHolder.getWidth(), (float) bitmapHolder.getHeight());
             Bitmap bitmap = this.bmp.bitmap;
             Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-            this.bitmapShader = new BitmapShader(bitmap, tileMode, tileMode);
-            this.roundPaint.setShader(this.bitmapShader);
+            BitmapShader bitmapShader2 = new BitmapShader(bitmap, tileMode, tileMode);
+            this.bitmapShader = bitmapShader2;
+            this.roundPaint.setShader(bitmapShader2);
         }
         invalidate();
     }

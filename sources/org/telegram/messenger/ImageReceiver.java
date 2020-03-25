@@ -15,8 +15,9 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import androidx.annotation.Keep;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
@@ -92,7 +93,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private float overrideAlpha;
     private int param;
     private View parentView;
-    private TLRPC.Document qulityThumbDocument;
+    private TLRPC$Document qulityThumbDocument;
     private Paint roundPaint;
     private Path roundPath;
     private int[] roundRadius;
@@ -116,7 +117,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
         }
 
-        void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2);
+        void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3);
 
         void onAnimationReady(ImageReceiver imageReceiver);
     }
@@ -133,7 +134,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         public BitmapHolder(Bitmap bitmap2, String str) {
             this.bitmap = bitmap2;
             this.key = str;
-            if (this.key != null) {
+            if (str != null) {
                 ImageLoader.getInstance().incrementUseCount(this.key);
             }
         }
@@ -182,7 +183,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private class SetImageBackup {
+    private static class SetImageBackup {
         public int cacheType;
         public String ext;
         public String imageFilter;
@@ -327,6 +328,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, ImageLocation imageLocation3, String str3, Drawable drawable, int i, String str4, Object obj, int i2) {
         boolean z;
+        boolean z2;
+        boolean z3;
+        boolean z4;
         String str5;
         String str6;
         SetImageBackup setImageBackup2;
@@ -347,7 +351,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (setImageBackup3 != null) {
                 setImageBackup3.clear();
             }
-            boolean z2 = true;
+            boolean z5 = true;
             if (imageLocation5 == null && imageLocation6 == null && imageLocation4 == null) {
                 for (int i3 = 0; i3 < 4; i3++) {
                     recycleBitmap((String) null, i3);
@@ -386,11 +390,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 }
                 ImageReceiverDelegate imageReceiverDelegate = this.delegate;
                 if (imageReceiverDelegate != null) {
-                    boolean z3 = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
+                    boolean z6 = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
                     if (!(this.currentImageDrawable == null && this.currentMediaDrawable == null)) {
-                        z2 = false;
+                        z5 = false;
                     }
-                    imageReceiverDelegate.didSetImage(this, z3, z2);
+                    imageReceiverDelegate.didSetImage(this, z6, z5, false);
                     return;
                 }
                 return;
@@ -401,12 +405,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
             this.currentKeyQuality = false;
             if (key == null && this.needsQualityThumb && ((obj2 instanceof MessageObject) || this.qulityThumbDocument != null)) {
-                TLRPC.Document document = this.qulityThumbDocument;
-                if (document == null) {
-                    document = ((MessageObject) obj2).getDocument();
+                TLRPC$Document tLRPC$Document = this.qulityThumbDocument;
+                if (tLRPC$Document == null) {
+                    tLRPC$Document = ((MessageObject) obj2).getDocument();
                 }
-                if (!(document == null || document.dc_id == 0 || document.id == 0)) {
-                    key = "q_" + document.dc_id + "_" + document.id;
+                if (!(tLRPC$Document == null || tLRPC$Document.dc_id == 0 || tLRPC$Document.id == 0)) {
+                    key = "q_" + tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
                     this.currentKeyQuality = true;
                 }
             }
@@ -423,7 +427,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if ((key2 == null && (str6 = this.currentImageKey) != null && str6.equals(key)) || ((str5 = this.currentMediaKey) != null && str5.equals(key2))) {
                 ImageReceiverDelegate imageReceiverDelegate2 = this.delegate;
                 if (imageReceiverDelegate2 != null) {
-                    imageReceiverDelegate2.didSetImage(this, (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true, this.currentImageDrawable == null && this.currentMediaDrawable == null);
+                    boolean z7 = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
+                    if (this.currentImageDrawable == null && this.currentMediaDrawable == null) {
+                        z4 = false;
+                        z3 = true;
+                    } else {
+                        z4 = false;
+                        z3 = false;
+                    }
+                    imageReceiverDelegate2.didSetImage(this, z7, z3, z4);
                 }
                 if (!this.canceledLoading && !this.forcePreview) {
                     return;
@@ -437,49 +449,44 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (!(key3 == null || str9 == null)) {
                 key3 = key3 + "@" + str9;
             }
-            if (this.crossfadeWithOldImage) {
-                if (this.currentImageDrawable != null) {
-                    recycleBitmap(key3, 1);
-                    recycleBitmap((String) null, 2);
-                    recycleBitmap(key2, 3);
-                    this.crossfadeShader = this.imageShader;
-                    this.crossfadeImage = this.currentImageDrawable;
-                    this.crossfadeKey = this.currentImageKey;
-                    this.crossfadingWithThumb = false;
-                    this.currentImageDrawable = null;
-                    this.currentImageKey = null;
-                } else if (this.currentThumbDrawable != null) {
-                    recycleBitmap(key, 0);
-                    recycleBitmap((String) null, 2);
-                    recycleBitmap(key2, 3);
-                    this.crossfadeShader = this.thumbShader;
-                    this.crossfadeImage = this.currentThumbDrawable;
-                    this.crossfadeKey = this.currentThumbKey;
-                    this.crossfadingWithThumb = false;
-                    this.currentThumbDrawable = null;
-                    this.currentThumbKey = null;
-                } else if (this.staticThumbDrawable != null) {
-                    recycleBitmap(key, 0);
-                    recycleBitmap(key3, 1);
-                    recycleBitmap((String) null, 2);
-                    recycleBitmap(key2, 3);
-                    this.crossfadeShader = this.thumbShader;
-                    this.crossfadeImage = this.staticThumbDrawable;
-                    this.crossfadingWithThumb = false;
-                    this.crossfadeKey = null;
-                    this.currentThumbDrawable = null;
-                    this.currentThumbKey = null;
-                } else {
-                    recycleBitmap(key, 0);
-                    z = true;
-                    recycleBitmap(key3, 1);
-                    recycleBitmap((String) null, 2);
-                    recycleBitmap(key2, 3);
-                    this.crossfadeShader = null;
-                }
-                z = true;
+            if (!this.crossfadeWithOldImage) {
+                recycleBitmap(key, 0);
+                recycleBitmap(key3, 1);
+                recycleBitmap((String) null, 2);
+                recycleBitmap(key2, 3);
+                this.crossfadeShader = null;
+            } else if (this.currentImageDrawable != null) {
+                recycleBitmap(key3, 1);
+                recycleBitmap((String) null, 2);
+                recycleBitmap(key2, 3);
+                this.crossfadeShader = this.imageShader;
+                this.crossfadeImage = this.currentImageDrawable;
+                this.crossfadeKey = this.currentImageKey;
+                this.crossfadingWithThumb = false;
+                this.currentImageDrawable = null;
+                this.currentImageKey = null;
+            } else if (this.currentThumbDrawable != null) {
+                recycleBitmap(key, 0);
+                recycleBitmap((String) null, 2);
+                recycleBitmap(key2, 3);
+                this.crossfadeShader = this.thumbShader;
+                this.crossfadeImage = this.currentThumbDrawable;
+                this.crossfadeKey = this.currentThumbKey;
+                this.crossfadingWithThumb = false;
+                this.currentThumbDrawable = null;
+                this.currentThumbKey = null;
+            } else if (this.staticThumbDrawable != null) {
+                recycleBitmap(key, 0);
+                recycleBitmap(key3, 1);
+                recycleBitmap((String) null, 2);
+                recycleBitmap(key2, 3);
+                this.crossfadeShader = this.thumbShader;
+                this.crossfadeImage = this.staticThumbDrawable;
+                this.crossfadingWithThumb = false;
+                this.crossfadeKey = null;
+                this.currentThumbDrawable = null;
+                this.currentThumbKey = null;
             } else {
-                z = true;
                 recycleBitmap(key, 0);
                 recycleBitmap(key3, 1);
                 recycleBitmap((String) null, 2);
@@ -499,14 +506,23 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             this.currentExt = str10;
             this.currentSize = i;
             this.currentCacheType = i2;
-            this.staticThumbDrawable = drawable2;
+            Drawable drawable3 = drawable;
+            this.staticThumbDrawable = drawable3;
             this.imageShader = null;
             this.thumbShader = null;
             this.mediaShader = null;
             this.currentAlpha = 1.0f;
             ImageReceiverDelegate imageReceiverDelegate3 = this.delegate;
             if (imageReceiverDelegate3 != null) {
-                imageReceiverDelegate3.didSetImage(this, (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true, this.currentImageDrawable == null && this.currentMediaDrawable == null);
+                boolean z8 = (this.currentImageDrawable == null && this.currentThumbDrawable == null && drawable3 == null && this.currentMediaDrawable == null) ? false : true;
+                if (this.currentImageDrawable == null && this.currentMediaDrawable == null) {
+                    z2 = false;
+                    z = true;
+                } else {
+                    z2 = false;
+                    z = false;
+                }
+                imageReceiverDelegate3.didSetImage(this, z8, z, z2);
             }
             ImageLoader.getInstance().loadImageForImageReceiver(this);
             View view2 = this.parentView;
@@ -519,10 +535,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     view2.invalidate(i6, i7, this.imageW + i6, this.imageH + i7);
                 }
             }
-            if (!(obj2 instanceof MessageObject) || !((MessageObject) obj2).isRoundVideo()) {
-                z = false;
-            }
-            this.isRoundVideo = z;
+            this.isRoundVideo = (obj2 instanceof MessageObject) && ((MessageObject) obj2).isRoundVideo();
         }
     }
 
@@ -674,7 +687,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
         ImageReceiverDelegate imageReceiverDelegate = this.delegate;
         if (imageReceiverDelegate != null) {
-            imageReceiverDelegate.didSetImage(this, (this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true, true);
+            imageReceiverDelegate.didSetImage(this, (this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true, true, false);
         }
         View view = this.parentView;
         if (view != null) {
@@ -775,8 +788,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public boolean onAttachedToWindow() {
         RLottieDrawable lottieAnimation;
-        this.currentOpenedLayerFlags = NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags();
-        this.currentOpenedLayerFlags &= this.currentLayerNum ^ -1;
+        int currentHeavyOperationFlags = NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags();
+        this.currentOpenedLayerFlags = currentHeavyOperationFlags;
+        this.currentOpenedLayerFlags = currentHeavyOperationFlags & (this.currentLayerNum ^ -1);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopAllHeavyOperations);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.startAllHeavyOperations);
@@ -1141,8 +1155,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 if (currentTimeMillis > 18) {
                     currentTimeMillis = 18;
                 }
-                this.currentAlpha += ((float) currentTimeMillis) / 150.0f;
-                if (this.currentAlpha > 1.0f) {
+                float f = this.currentAlpha + (((float) currentTimeMillis) / 150.0f);
+                this.currentAlpha = f;
+                if (f > 1.0f) {
                     this.currentAlpha = 1.0f;
                     if (this.crossfadeImage != null) {
                         recycleBitmap((String) null, 2);
@@ -1165,23 +1180,23 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x013b A[Catch:{ Exception -> 0x0156 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0095 A[Catch:{ Exception -> 0x0156 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0103 A[Catch:{ Exception -> 0x0156 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x013d A[Catch:{ Exception -> 0x0158 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0097 A[Catch:{ Exception -> 0x0158 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x0105 A[Catch:{ Exception -> 0x0158 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean draw(android.graphics.Canvas r14) {
         /*
             r13 = this;
             r7 = 0
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = r13.getAnimation()     // Catch:{ Exception -> 0x0156 }
-            org.telegram.ui.Components.RLottieDrawable r1 = r13.getLottieAnimation()     // Catch:{ Exception -> 0x0156 }
+            org.telegram.ui.Components.AnimatedFileDrawable r0 = r13.getAnimation()     // Catch:{ Exception -> 0x0158 }
+            org.telegram.ui.Components.RLottieDrawable r1 = r13.getLottieAnimation()     // Catch:{ Exception -> 0x0158 }
             r8 = 1
             if (r0 == 0) goto L_0x0012
-            boolean r2 = r0.hasBitmap()     // Catch:{ Exception -> 0x0156 }
+            boolean r2 = r0.hasBitmap()     // Catch:{ Exception -> 0x0158 }
             if (r2 == 0) goto L_0x001a
         L_0x0012:
             if (r1 == 0) goto L_0x001c
-            boolean r2 = r1.hasBitmap()     // Catch:{ Exception -> 0x0156 }
+            boolean r2 = r1.hasBitmap()     // Catch:{ Exception -> 0x0158 }
             if (r2 != 0) goto L_0x001c
         L_0x001a:
             r2 = 1
@@ -1190,218 +1205,220 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r2 = 0
         L_0x001d:
             if (r1 == 0) goto L_0x0024
-            android.view.View r3 = r13.parentView     // Catch:{ Exception -> 0x0156 }
-            r1.setCurrentParentView(r3)     // Catch:{ Exception -> 0x0156 }
+            android.view.View r3 = r13.parentView     // Catch:{ Exception -> 0x0158 }
+            r1.setCurrentParentView(r3)     // Catch:{ Exception -> 0x0158 }
         L_0x0024:
             if (r0 != 0) goto L_0x0028
             if (r1 == 0) goto L_0x0039
         L_0x0028:
             if (r2 != 0) goto L_0x0039
-            boolean r0 = r13.animationReadySent     // Catch:{ Exception -> 0x0156 }
+            boolean r0 = r13.animationReadySent     // Catch:{ Exception -> 0x0158 }
             if (r0 != 0) goto L_0x0039
-            r13.animationReadySent = r8     // Catch:{ Exception -> 0x0156 }
-            org.telegram.messenger.ImageReceiver$ImageReceiverDelegate r0 = r13.delegate     // Catch:{ Exception -> 0x0156 }
+            r13.animationReadySent = r8     // Catch:{ Exception -> 0x0158 }
+            org.telegram.messenger.ImageReceiver$ImageReceiverDelegate r0 = r13.delegate     // Catch:{ Exception -> 0x0158 }
             if (r0 == 0) goto L_0x0039
-            org.telegram.messenger.ImageReceiver$ImageReceiverDelegate r0 = r13.delegate     // Catch:{ Exception -> 0x0156 }
-            r0.onAnimationReady(r13)     // Catch:{ Exception -> 0x0156 }
+            org.telegram.messenger.ImageReceiver$ImageReceiverDelegate r0 = r13.delegate     // Catch:{ Exception -> 0x0158 }
+            r0.onAnimationReady(r13)     // Catch:{ Exception -> 0x0158 }
         L_0x0039:
-            boolean r0 = r13.forcePreview     // Catch:{ Exception -> 0x0156 }
+            boolean r0 = r13.forcePreview     // Catch:{ Exception -> 0x0158 }
             r1 = 0
-            if (r0 != 0) goto L_0x004e
-            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x004e
-            if (r2 != 0) goto L_0x004e
-            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r3 = r13.mediaShader     // Catch:{ Exception -> 0x0156 }
-            int r4 = r13.imageOrientation     // Catch:{ Exception -> 0x0156 }
+            if (r0 != 0) goto L_0x004f
+            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x004f
+            if (r2 != 0) goto L_0x004f
+            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r3 = r13.mediaShader     // Catch:{ Exception -> 0x0158 }
+            int r4 = r13.imageOrientation     // Catch:{ Exception -> 0x0158 }
         L_0x004a:
-            r9 = r2
+            r9 = r0
+            r0 = r2
             r10 = r3
             r11 = r4
-            goto L_0x0091
-        L_0x004e:
-            boolean r0 = r13.forcePreview     // Catch:{ Exception -> 0x0156 }
-            if (r0 != 0) goto L_0x0066
-            android.graphics.drawable.Drawable r0 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0066
-            if (r2 == 0) goto L_0x005c
-            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0066
-        L_0x005c:
-            android.graphics.drawable.Drawable r0 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.imageShader     // Catch:{ Exception -> 0x0156 }
-            int r3 = r13.imageOrientation     // Catch:{ Exception -> 0x0156 }
+            goto L_0x0093
+        L_0x004f:
+            boolean r0 = r13.forcePreview     // Catch:{ Exception -> 0x0158 }
+            if (r0 != 0) goto L_0x0068
+            android.graphics.drawable.Drawable r0 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x0068
+            if (r2 == 0) goto L_0x005d
+            android.graphics.drawable.Drawable r0 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x0068
+        L_0x005d:
+            android.graphics.drawable.Drawable r0 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.imageShader     // Catch:{ Exception -> 0x0158 }
+            int r3 = r13.imageOrientation     // Catch:{ Exception -> 0x0158 }
+            r9 = r0
             r10 = r2
             r11 = r3
-            r9 = 0
-            goto L_0x0091
-        L_0x0066:
-            android.graphics.drawable.Drawable r0 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0075
-            boolean r0 = r13.crossfadingWithThumb     // Catch:{ Exception -> 0x0156 }
-            if (r0 != 0) goto L_0x0075
-            android.graphics.drawable.Drawable r0 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r3 = r13.crossfadeShader     // Catch:{ Exception -> 0x0156 }
-            int r4 = r13.imageOrientation     // Catch:{ Exception -> 0x0156 }
+            r0 = 0
+            goto L_0x0093
+        L_0x0068:
+            android.graphics.drawable.Drawable r0 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x0077
+            boolean r0 = r13.crossfadingWithThumb     // Catch:{ Exception -> 0x0158 }
+            if (r0 != 0) goto L_0x0077
+            android.graphics.drawable.Drawable r0 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r3 = r13.crossfadeShader     // Catch:{ Exception -> 0x0158 }
+            int r4 = r13.imageOrientation     // Catch:{ Exception -> 0x0158 }
             goto L_0x004a
-        L_0x0075:
-            android.graphics.drawable.Drawable r0 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            boolean r0 = r0 instanceof android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0082
-            android.graphics.drawable.Drawable r0 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r3 = r13.thumbShader     // Catch:{ Exception -> 0x0156 }
-            int r4 = r13.thumbOrientation     // Catch:{ Exception -> 0x0156 }
+        L_0x0077:
+            android.graphics.drawable.Drawable r0 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            boolean r0 = r0 instanceof android.graphics.drawable.BitmapDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x0084
+            android.graphics.drawable.Drawable r0 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r3 = r13.thumbShader     // Catch:{ Exception -> 0x0158 }
+            int r4 = r13.thumbOrientation     // Catch:{ Exception -> 0x0158 }
             goto L_0x004a
-        L_0x0082:
-            android.graphics.drawable.Drawable r0 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x008d
-            android.graphics.drawable.Drawable r0 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r3 = r13.thumbShader     // Catch:{ Exception -> 0x0156 }
-            int r4 = r13.thumbOrientation     // Catch:{ Exception -> 0x0156 }
+        L_0x0084:
+            android.graphics.drawable.Drawable r0 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x008f
+            android.graphics.drawable.Drawable r0 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r3 = r13.thumbShader     // Catch:{ Exception -> 0x0158 }
+            int r4 = r13.thumbOrientation     // Catch:{ Exception -> 0x0158 }
             goto L_0x004a
-        L_0x008d:
-            r0 = r1
-            r10 = r0
-            r9 = r2
+        L_0x008f:
+            r9 = r1
+            r10 = r9
+            r0 = r2
             r11 = 0
-        L_0x0091:
+        L_0x0093:
             r12 = 1132396544(0x437var_, float:255.0)
-            if (r0 == 0) goto L_0x013b
-            byte r2 = r13.crossfadeAlpha     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x0121
-            boolean r2 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00ae
-            if (r9 == 0) goto L_0x00ae
-            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0156 }
+            if (r9 == 0) goto L_0x013d
+            byte r2 = r13.crossfadeAlpha     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x0123
+            boolean r2 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x00b0
+            if (r0 == 0) goto L_0x00b0
+            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0158 }
             float r1 = r1 * r12
-            int r4 = (int) r1     // Catch:{ Exception -> 0x0156 }
+            int r4 = (int) r1     // Catch:{ Exception -> 0x0158 }
             r1 = r13
             r2 = r14
-            r3 = r0
+            r3 = r9
             r5 = r10
             r6 = r11
-            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0156 }
-            goto L_0x012e
-        L_0x00ae:
-            boolean r2 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x010f
-            float r2 = r13.currentAlpha     // Catch:{ Exception -> 0x0156 }
+            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0158 }
+            goto L_0x0130
+        L_0x00b0:
+            boolean r2 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x0111
+            float r2 = r13.currentAlpha     // Catch:{ Exception -> 0x0158 }
             r3 = 1065353216(0x3var_, float:1.0)
             int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 == 0) goto L_0x010f
-            android.graphics.drawable.Drawable r2 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == r2) goto L_0x00e2
-            android.graphics.drawable.Drawable r2 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 != r2) goto L_0x00c3
-            goto L_0x00e2
-        L_0x00c3:
-            android.graphics.drawable.Drawable r2 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == r2) goto L_0x00d9
-            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            if (r0 != r2) goto L_0x00cc
-            goto L_0x00d9
-        L_0x00cc:
-            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 != r2) goto L_0x00ff
-            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00ff
-            android.graphics.drawable.Drawable r1 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.crossfadeShader     // Catch:{ Exception -> 0x0156 }
-            goto L_0x00ea
-        L_0x00d9:
-            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00ff
-            android.graphics.drawable.Drawable r1 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0156 }
-            goto L_0x00ea
-        L_0x00e2:
-            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00ed
-            android.graphics.drawable.Drawable r1 = r13.crossfadeImage     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.crossfadeShader     // Catch:{ Exception -> 0x0156 }
-        L_0x00ea:
+            if (r2 == 0) goto L_0x0111
+            android.graphics.drawable.Drawable r2 = r13.currentImageDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r9 == r2) goto L_0x00e4
+            android.graphics.drawable.Drawable r2 = r13.currentMediaDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r9 != r2) goto L_0x00c5
+            goto L_0x00e4
+        L_0x00c5:
+            android.graphics.drawable.Drawable r2 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r9 == r2) goto L_0x00db
+            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            if (r9 != r2) goto L_0x00ce
+            goto L_0x00db
+        L_0x00ce:
+            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r9 != r2) goto L_0x0101
+            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x0101
+            android.graphics.drawable.Drawable r1 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.crossfadeShader     // Catch:{ Exception -> 0x0158 }
+            goto L_0x00ec
+        L_0x00db:
+            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x0101
+            android.graphics.drawable.Drawable r1 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0158 }
+            goto L_0x00ec
+        L_0x00e4:
+            android.graphics.drawable.Drawable r2 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x00ef
+            android.graphics.drawable.Drawable r1 = r13.crossfadeImage     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.crossfadeShader     // Catch:{ Exception -> 0x0158 }
+        L_0x00ec:
             r3 = r1
             r5 = r2
-            goto L_0x0101
-        L_0x00ed:
-            android.graphics.drawable.Drawable r2 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00f6
-            android.graphics.drawable.Drawable r1 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0156 }
-            goto L_0x00ea
-        L_0x00f6:
-            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r2 == 0) goto L_0x00ff
-            android.graphics.drawable.Drawable r1 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0156 }
-            goto L_0x00ea
-        L_0x00ff:
+            goto L_0x0103
+        L_0x00ef:
+            android.graphics.drawable.Drawable r2 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x00f8
+            android.graphics.drawable.Drawable r1 = r13.currentThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0158 }
+            goto L_0x00ec
+        L_0x00f8:
+            android.graphics.drawable.Drawable r2 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r2 == 0) goto L_0x0101
+            android.graphics.drawable.Drawable r1 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            android.graphics.BitmapShader r2 = r13.thumbShader     // Catch:{ Exception -> 0x0158 }
+            goto L_0x00ec
+        L_0x0101:
             r3 = r1
             r5 = r3
-        L_0x0101:
-            if (r3 == 0) goto L_0x010f
-            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0156 }
+        L_0x0103:
+            if (r3 == 0) goto L_0x0111
+            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0158 }
             float r1 = r1 * r12
-            int r4 = (int) r1     // Catch:{ Exception -> 0x0156 }
-            int r6 = r13.thumbOrientation     // Catch:{ Exception -> 0x0156 }
+            int r4 = (int) r1     // Catch:{ Exception -> 0x0158 }
+            int r6 = r13.thumbOrientation     // Catch:{ Exception -> 0x0158 }
             r1 = r13
             r2 = r14
-            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0156 }
-        L_0x010f:
-            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0156 }
-            float r2 = r13.currentAlpha     // Catch:{ Exception -> 0x0156 }
+            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0158 }
+        L_0x0111:
+            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0158 }
+            float r2 = r13.currentAlpha     // Catch:{ Exception -> 0x0158 }
             float r1 = r1 * r2
             float r1 = r1 * r12
-            int r4 = (int) r1     // Catch:{ Exception -> 0x0156 }
+            int r4 = (int) r1     // Catch:{ Exception -> 0x0158 }
             r1 = r13
             r2 = r14
-            r3 = r0
+            r3 = r9
             r5 = r10
             r6 = r11
-            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0156 }
-            goto L_0x012e
-        L_0x0121:
-            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0156 }
+            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0158 }
+            goto L_0x0130
+        L_0x0123:
+            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0158 }
             float r1 = r1 * r12
-            int r4 = (int) r1     // Catch:{ Exception -> 0x0156 }
+            int r4 = (int) r1     // Catch:{ Exception -> 0x0158 }
             r1 = r13
             r2 = r14
-            r3 = r0
+            r3 = r9
             r5 = r10
             r6 = r11
-            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0156 }
-        L_0x012e:
-            if (r9 == 0) goto L_0x0136
-            boolean r0 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0136
+            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0158 }
+        L_0x0130:
+            if (r0 == 0) goto L_0x0138
+            boolean r0 = r13.crossfadeWithThumb     // Catch:{ Exception -> 0x0158 }
+            if (r0 == 0) goto L_0x0138
             r0 = 1
-            goto L_0x0137
-        L_0x0136:
+            goto L_0x0139
+        L_0x0138:
             r0 = 0
-        L_0x0137:
-            r13.checkAlphaAnimation(r0)     // Catch:{ Exception -> 0x0156 }
+        L_0x0139:
+            r13.checkAlphaAnimation(r0)     // Catch:{ Exception -> 0x0158 }
             return r8
-        L_0x013b:
-            android.graphics.drawable.Drawable r0 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            if (r0 == 0) goto L_0x0152
-            android.graphics.drawable.Drawable r3 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0156 }
-            float r0 = r13.overrideAlpha     // Catch:{ Exception -> 0x0156 }
-            float r0 = r0 * r12
-            int r4 = (int) r0     // Catch:{ Exception -> 0x0156 }
+        L_0x013d:
+            android.graphics.drawable.Drawable r1 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            if (r1 == 0) goto L_0x0154
+            android.graphics.drawable.Drawable r3 = r13.staticThumbDrawable     // Catch:{ Exception -> 0x0158 }
+            float r1 = r13.overrideAlpha     // Catch:{ Exception -> 0x0158 }
+            float r1 = r1 * r12
+            int r4 = (int) r1     // Catch:{ Exception -> 0x0158 }
             r5 = 0
-            int r6 = r13.thumbOrientation     // Catch:{ Exception -> 0x0156 }
+            int r6 = r13.thumbOrientation     // Catch:{ Exception -> 0x0158 }
             r1 = r13
             r2 = r14
-            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0156 }
-            r13.checkAlphaAnimation(r9)     // Catch:{ Exception -> 0x0156 }
+            r1.drawDrawable(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0158 }
+            r13.checkAlphaAnimation(r0)     // Catch:{ Exception -> 0x0158 }
             return r8
-        L_0x0152:
-            r13.checkAlphaAnimation(r9)     // Catch:{ Exception -> 0x0156 }
-            goto L_0x015a
-        L_0x0156:
+        L_0x0154:
+            r13.checkAlphaAnimation(r0)     // Catch:{ Exception -> 0x0158 }
+            goto L_0x015c
+        L_0x0158:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x015a:
+        L_0x015c:
             return r7
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.draw(android.graphics.Canvas):boolean");
@@ -1411,10 +1428,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.manualAlphaAnimator = z;
     }
 
+    @Keep
     public float getCurrentAlpha() {
         return this.currentAlpha;
     }
 
+    @Keep
     public void setCurrentAlpha(float f) {
         this.currentAlpha = f;
     }
@@ -1648,8 +1667,14 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return this.isVisible;
     }
 
+    @Keep
     public void setAlpha(float f) {
         this.overrideAlpha = f;
+    }
+
+    @Keep
+    public float getAlpha() {
+        return this.overrideAlpha;
     }
 
     public void setCrossfadeAlpha(byte b) {
@@ -1898,11 +1923,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.needsQualityThumb = z;
     }
 
-    public void setQualityThumbDocument(TLRPC.Document document) {
-        this.qulityThumbDocument = document;
+    public void setQualityThumbDocument(TLRPC$Document tLRPC$Document) {
+        this.qulityThumbDocument = tLRPC$Document;
     }
 
-    public TLRPC.Document getQulityThumbDocument() {
+    public TLRPC$Document getQulityThumbDocument() {
         return this.qulityThumbDocument;
     }
 
@@ -2047,7 +2072,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: protected */
     public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
         Drawable drawable2;
-        boolean z2 = false;
         if (drawable == null || str == null || this.currentGuid != i2) {
             return false;
         }
@@ -2127,6 +2151,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 }
             }
         }
+        ImageReceiverDelegate imageReceiverDelegate = this.delegate;
+        if (imageReceiverDelegate != null) {
+            imageReceiverDelegate.didSetImage(this, (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true, this.currentImageDrawable == null && this.currentMediaDrawable == null, z);
+        }
         if (drawable instanceof AnimatedFileDrawable) {
             AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
             animatedFileDrawable.setParentView(this.parentView);
@@ -2155,14 +2183,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 int i4 = this.imageY;
                 view.invalidate(i3, i4, this.imageW + i3, this.imageH + i4);
             }
-        }
-        ImageReceiverDelegate imageReceiverDelegate = this.delegate;
-        if (imageReceiverDelegate != null) {
-            boolean z3 = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
-            if (this.currentImageDrawable == null && this.currentMediaDrawable == null) {
-                z2 = true;
-            }
-            imageReceiverDelegate.didSetImage(this, z3, z2);
         }
         return true;
     }
@@ -2260,16 +2280,18 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         } else if (i == NotificationCenter.stopAllHeavyOperations) {
             Integer num = objArr[0];
             if (this.currentLayerNum < num.intValue()) {
-                this.currentOpenedLayerFlags = num.intValue() | this.currentOpenedLayerFlags;
-                if (this.currentOpenedLayerFlags != 0 && (lottieAnimation2 = getLottieAnimation()) != null) {
+                int intValue = num.intValue() | this.currentOpenedLayerFlags;
+                this.currentOpenedLayerFlags = intValue;
+                if (intValue != 0 && (lottieAnimation2 = getLottieAnimation()) != null) {
                     lottieAnimation2.stop();
                 }
             }
         } else if (i == NotificationCenter.startAllHeavyOperations) {
             Integer num2 = objArr[0];
             if (this.currentLayerNum < num2.intValue() && (i3 = this.currentOpenedLayerFlags) != 0) {
-                this.currentOpenedLayerFlags = (num2.intValue() ^ -1) & i3;
-                if (this.currentOpenedLayerFlags == 0 && (lottieAnimation = getLottieAnimation()) != null) {
+                int intValue2 = (num2.intValue() ^ -1) & i3;
+                this.currentOpenedLayerFlags = intValue2;
+                if (intValue2 == 0 && (lottieAnimation = getLottieAnimation()) != null) {
                     lottieAnimation.start();
                 }
             }

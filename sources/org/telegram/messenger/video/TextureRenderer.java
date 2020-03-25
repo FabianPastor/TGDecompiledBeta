@@ -27,9 +27,9 @@ public class TextureRenderer {
 
     public TextureRenderer(int i) {
         this.rotationAngle = i;
-        float[] fArr = {-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
-        this.mTriangleVertices = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        this.mTriangleVertices.put(fArr).position(0);
+        FloatBuffer asFloatBuffer = ByteBuffer.allocateDirect(80).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        this.mTriangleVertices = asFloatBuffer;
+        asFloatBuffer.put(new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f}).position(0);
         Matrix.setIdentityM(this.mSTMatrix, 0);
     }
 
@@ -67,10 +67,10 @@ public class TextureRenderer {
     }
 
     public void surfaceCreated() {
-        this.mProgram = createProgram("uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n", "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
-        int i = this.mProgram;
-        if (i != 0) {
-            this.maPositionHandle = GLES20.glGetAttribLocation(i, "aPosition");
+        int createProgram = createProgram("uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n", "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
+        this.mProgram = createProgram;
+        if (createProgram != 0) {
+            this.maPositionHandle = GLES20.glGetAttribLocation(createProgram, "aPosition");
             checkGlError("glGetAttribLocation aPosition");
             if (this.maPositionHandle != -1) {
                 this.maTextureHandle = GLES20.glGetAttribLocation(this.mProgram, "aTextureCoord");
@@ -84,8 +84,9 @@ public class TextureRenderer {
                         if (this.muSTMatrixHandle != -1) {
                             int[] iArr = new int[1];
                             GLES20.glGenTextures(1, iArr, 0);
-                            this.mTextureID = iArr[0];
-                            GLES20.glBindTexture(36197, this.mTextureID);
+                            int i = iArr[0];
+                            this.mTextureID = i;
+                            GLES20.glBindTexture(36197, i);
                             checkGlError("glBindTexture mTextureID");
                             GLES20.glTexParameteri(36197, 10241, 9729);
                             GLES20.glTexParameteri(36197, 10240, 9729);

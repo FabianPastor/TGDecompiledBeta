@@ -6,15 +6,16 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 
 public class FabBackgroundDrawable extends Drawable {
     private Paint bgPaint = new Paint(1);
     private Bitmap shadowBitmap;
-    private Paint shadowPaint = new Paint();
+    private Paint shadowPaint;
 
     public int getOpacity() {
-        return 0;
+        return -2;
     }
 
     public void setAlpha(int i) {
@@ -24,7 +25,9 @@ public class FabBackgroundDrawable extends Drawable {
     }
 
     public FabBackgroundDrawable() {
-        this.shadowPaint.setColor(NUM);
+        Paint paint = new Paint();
+        this.shadowPaint = paint;
+        paint.setColor(NUM);
     }
 
     public void draw(Canvas canvas) {
@@ -57,6 +60,7 @@ public class FabBackgroundDrawable extends Drawable {
         canvas.drawCircle(f, f, (float) (i - AndroidUtilities.dp(4.0f)), paint);
     }
 
+    @Keep
     public void setColor(int i) {
         this.bgPaint.setColor(i);
         invalidateSelf();

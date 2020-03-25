@@ -25,8 +25,9 @@ public class Input {
     }
 
     public void setMatrix(Matrix matrix) {
-        this.invertMatrix = new Matrix();
-        matrix.invert(this.invertMatrix);
+        Matrix matrix2 = new Matrix();
+        this.invertMatrix = matrix2;
+        matrix.invert(matrix2);
     }
 
     public void process(MotionEvent motionEvent) {
@@ -75,8 +76,9 @@ public class Input {
             Point[] pointArr = this.points;
             int i = this.pointsCount;
             pointArr[i] = point;
-            this.pointsCount = i + 1;
-            if (this.pointsCount == 3) {
+            int i2 = i + 1;
+            this.pointsCount = i2;
+            if (i2 == 3) {
                 smoothenAndPaintPoints(false);
             }
             this.lastLocation = point;
@@ -99,16 +101,16 @@ public class Input {
                 Point multiplySum = point2.multiplySum(point, 0.5d);
                 Point multiplySum2 = point3.multiplySum(point2, 0.5d);
                 int min = (int) Math.min(48.0d, Math.max(Math.floor((double) (multiplySum.getDistanceTo(multiplySum2) / ((float) 1))), 24.0d));
-                float f = 1.0f / ((float) min);
-                float f2 = 0.0f;
+                float f = 0.0f;
+                float f2 = 1.0f / ((float) min);
                 for (int i2 = 0; i2 < min; i2++) {
-                    Point smoothPoint = smoothPoint(multiplySum, multiplySum2, point2, f2);
+                    Point smoothPoint = smoothPoint(multiplySum, multiplySum2, point2, f);
                     if (this.isFirst) {
                         smoothPoint.edge = true;
                         this.isFirst = false;
                     }
                     vector.add(smoothPoint);
-                    f2 += f;
+                    f += f2;
                 }
                 if (z) {
                     multiplySum2.edge = true;

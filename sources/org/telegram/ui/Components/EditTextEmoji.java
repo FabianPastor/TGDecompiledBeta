@@ -22,7 +22,11 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$InputStickerSet;
+import org.telegram.tgnet.TLRPC$StickerSet;
+import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -31,8 +35,6 @@ import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 public class EditTextEmoji extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
-    public static final int STYLE_DIALOG = 1;
-    public static final int STYLE_FRAGMENT = 0;
     private int currentStyle;
     private EditTextEmojiDelegate delegate;
     /* access modifiers changed from: private */
@@ -69,6 +71,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     private boolean showKeyboardOnResume;
     private SizeNotifierFrameLayout sizeNotifierLayout;
     /* access modifiers changed from: private */
+    public boolean smoothKeyboard = SharedConfig.smoothKeyboard;
+    /* access modifiers changed from: private */
     public boolean waitingForKeyboardOpen;
 
     public interface EditTextEmojiDelegate {
@@ -81,8 +85,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         this.parentFragment = baseFragment;
         this.sizeNotifierLayout = sizeNotifierFrameLayout;
-        this.sizeNotifierLayout.setDelegate(this);
-        this.editText = new EditTextBoldCursor(context) {
+        sizeNotifierFrameLayout.setDelegate(this);
+        AnonymousClass2 r11 = new EditTextBoldCursor(context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (EditTextEmoji.this.isPopupShowing() && motionEvent.getAction() == 0) {
                     EditTextEmoji.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2);
@@ -101,13 +105,14 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             }
 
             public boolean requestRectangleOnScreen(Rect rect) {
-                if (SharedConfig.smoothKeyboard) {
+                if (EditTextEmoji.this.smoothKeyboard) {
                     rect.bottom += AndroidUtilities.dp(1000.0f);
                 }
                 return super.requestRectangleOnScreen(rect);
             }
         };
-        this.editText.setTextSize(1, 16.0f);
+        this.editText = r11;
+        r11.setTextSize(1, 16.0f);
         this.editText.setImeOptions(NUM);
         this.editText.setInputType(16385);
         EditTextBoldCursor editTextBoldCursor = this.editText;
@@ -131,8 +136,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             this.editText.setPadding(0, 0, 0, 0);
             addView(this.editText, LayoutHelper.createFrame(-1, -1.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
         }
-        this.emojiButton = new ImageView(context);
-        this.emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = new ImageView(context);
+        this.emojiButton = imageView;
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
         this.emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         if (i == 0) {
             this.emojiButton.setImageResource(NUM);
@@ -169,9 +175,13 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         }
     }
 
+    public void setAllowSmoothKeybord(boolean z) {
+        this.smoothKeyboard = z;
+    }
+
     public void setSizeNotifierLayout(SizeNotifierFrameLayout sizeNotifierFrameLayout) {
         this.sizeNotifierLayout = sizeNotifierFrameLayout;
-        this.sizeNotifierLayout.setDelegate(this);
+        sizeNotifierFrameLayout.setDelegate(this);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -398,8 +408,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            this.emojiView = new EmojiView(false, false, getContext(), false, (TLRPC.ChatFull) null);
-            this.emojiView.setVisibility(8);
+            EmojiView emojiView2 = new EmojiView(false, false, getContext(), false, (TLRPC$ChatFull) null);
+            this.emojiView = emojiView2;
+            emojiView2.setVisibility(8);
             if (AndroidUtilities.isTablet()) {
                 this.emojiView.setForseMultiwindowLayout(true);
             }
@@ -432,20 +443,20 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     EmojiView.EmojiViewDelegate.CC.$default$onSearchOpenClose(this, i);
                 }
 
-                public /* synthetic */ void onShowStickerSet(TLRPC.StickerSet stickerSet, TLRPC.InputStickerSet inputStickerSet) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onShowStickerSet(this, stickerSet, inputStickerSet);
+                public /* synthetic */ void onShowStickerSet(TLRPC$StickerSet tLRPC$StickerSet, TLRPC$InputStickerSet tLRPC$InputStickerSet) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onShowStickerSet(this, tLRPC$StickerSet, tLRPC$InputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, TLRPC.Document document, Object obj, boolean z, int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, document, obj, z, i);
+                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, obj, z, i);
                 }
 
-                public /* synthetic */ void onStickerSetAdd(TLRPC.StickerSetCovered stickerSetCovered) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSetAdd(this, stickerSetCovered);
+                public /* synthetic */ void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSetAdd(this, tLRPC$StickerSetCovered);
                 }
 
-                public /* synthetic */ void onStickerSetRemove(TLRPC.StickerSetCovered stickerSetCovered) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSetRemove(this, stickerSetCovered);
+                public /* synthetic */ void onStickerSetRemove(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSetRemove(this, tLRPC$StickerSetCovered);
                 }
 
                 public /* synthetic */ void onStickersGroupClick(int i) {
@@ -539,9 +550,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 layoutParams.width = AndroidUtilities.displaySize.x;
                 layoutParams.height = i2;
                 this.emojiView.setLayoutParams(layoutParams);
-                if (this.sizeNotifierLayout != null) {
+                SizeNotifierFrameLayout sizeNotifierFrameLayout = this.sizeNotifierLayout;
+                if (sizeNotifierFrameLayout != null) {
                     this.emojiPadding = layoutParams.height;
-                    this.sizeNotifierLayout.requestLayout();
+                    sizeNotifierFrameLayout.requestLayout();
                     onWindowSizeChanged();
                 }
             }
@@ -553,8 +565,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         this.lastSizeChangeValue1 = i;
         this.lastSizeChangeValue2 = z;
         boolean z3 = this.keyboardVisible;
-        this.keyboardVisible = i > 0;
-        if (this.keyboardVisible && isPopupShowing()) {
+        boolean z4 = i > 0;
+        this.keyboardVisible = z4;
+        if (z4 && isPopupShowing()) {
             showPopup(0);
         }
         if (this.emojiPadding != 0 && !(z2 = this.keyboardVisible) && z2 != z3 && !isPopupShowing()) {

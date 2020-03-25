@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Assistant အတည်ပြုစနစ်</string>
     <string name="google_assistant_verification_notification_title">Google Assistant က မက်ဆေ့ဂျ်ပို့နေသည်</string>
     <string name="status_bar_notification_info_overflow">၉၉၉+</string>
-    <string name="wallet_buy_button_place_holder">Google ဖြင့်ဝယ်ပါ</string>
 </resources>

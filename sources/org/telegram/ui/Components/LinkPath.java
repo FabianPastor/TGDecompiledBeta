@@ -44,10 +44,6 @@ public class LinkPath extends Path {
         this.useRoundRect = z;
     }
 
-    public boolean isUsingRoundRect() {
-        return this.useRoundRect;
-    }
-
     public void setBaselineShift(int i) {
         this.baselineShift = i;
     }

@@ -28,11 +28,12 @@ public class RadioCell extends FrameLayout {
 
     public RadioCell(Context context, boolean z, int i) {
         super(context);
-        this.textView = new TextView(context);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
         if (z) {
-            this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
+            textView2.setTextColor(Theme.getColor("dialogTextBlack"));
         } else {
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         }
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
@@ -43,8 +44,9 @@ public class RadioCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, 0.0f, f, 0.0f));
-        this.radioButton = new RadioButton(context);
-        this.radioButton.setSize(AndroidUtilities.dp(20.0f));
+        RadioButton radioButton2 = new RadioButton(context);
+        this.radioButton = radioButton2;
+        radioButton2.setSize(AndroidUtilities.dp(20.0f));
         if (z) {
             this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
         } else {

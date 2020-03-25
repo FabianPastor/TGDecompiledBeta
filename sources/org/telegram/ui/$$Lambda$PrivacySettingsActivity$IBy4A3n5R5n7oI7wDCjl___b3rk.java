@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 /* renamed from: org.telegram.ui.-$$Lambda$PrivacySettingsActivity$IBy4A3n5R5n7oI7wDCjl___b3rk  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,7 +12,7 @@ public final /* synthetic */ class $$Lambda$PrivacySettingsActivity$IBy4A3n5R5n7
     private /* synthetic */ $$Lambda$PrivacySettingsActivity$IBy4A3n5R5n7oI7wDCjl___b3rk() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        PrivacySettingsActivity.lambda$onFragmentDestroy$0(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        PrivacySettingsActivity.lambda$onFragmentDestroy$0(tLObject, tLRPC$TL_error);
     }
 }

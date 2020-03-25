@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
-import org.telegram.messenger.AndroidUtilities;
 
 public class TypefaceSpan extends MetricAffectingSpan {
     private int color;
@@ -14,11 +13,6 @@ public class TypefaceSpan extends MetricAffectingSpan {
         this.typeface = typeface2;
     }
 
-    public TypefaceSpan(Typeface typeface2, int i) {
-        this.typeface = typeface2;
-        this.textSize = i;
-    }
-
     public TypefaceSpan(Typeface typeface2, int i, int i2) {
         this.typeface = typeface2;
         if (i > 0) {
@@ -27,24 +21,8 @@ public class TypefaceSpan extends MetricAffectingSpan {
         this.color = i2;
     }
 
-    public Typeface getTypeface() {
-        return this.typeface;
-    }
-
     public void setColor(int i) {
         this.color = i;
-    }
-
-    public boolean isMono() {
-        return this.typeface == Typeface.MONOSPACE;
-    }
-
-    public boolean isBold() {
-        return this.typeface == AndroidUtilities.getTypeface("fonts/rmedium.ttf");
-    }
-
-    public boolean isItalic() {
-        return this.typeface == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
     }
 
     public void updateMeasureState(TextPaint textPaint) {

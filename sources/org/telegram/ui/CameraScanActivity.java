@@ -57,8 +57,6 @@ import org.telegram.ui.PhotoAlbumPickerActivity;
 
 @TargetApi(18)
 public class CameraScanActivity extends BaseFragment implements Camera.PreviewCallback {
-    public static final int TYPE_MRZ = 0;
-    public static final int TYPE_QR = 1;
     private HandlerThread backgroundHandlerThread = new HandlerThread("ScanCamera");
     /* access modifiers changed from: private */
     public CameraView cameraView;
@@ -178,7 +176,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             }
         });
         this.currentType = i;
-        if (this.currentType == 1) {
+        if (i == 1) {
             this.qrReader = new QRCodeReader();
             BarcodeDetector.Builder builder = new BarcodeDetector.Builder(ApplicationLoader.applicationContext);
             builder.setBarcodeFormats(256);
@@ -335,8 +333,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         };
         r0.setOnTouchListener($$Lambda$CameraScanActivity$coK9fFDxJKElfMa1PuRYWa0XVmg.INSTANCE);
         this.fragmentView = r0;
-        this.cameraView = new CameraView(context, false);
-        this.cameraView.setUseMaxPreview(true);
+        CameraView cameraView2 = new CameraView(context, false);
+        this.cameraView = cameraView2;
+        cameraView2.setUseMaxPreview(true);
         this.cameraView.setOptimizeForBarcode(true);
         this.cameraView.setDelegate(new CameraView.CameraViewDelegate() {
             public void onCameraCreated(Camera camera) {
@@ -358,17 +357,20 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             r0.setBackgroundColor(Theme.getColor("wallet_blackBackground"));
             r0.addView(this.actionBar);
         }
-        this.titleTextView = new TextView(context);
-        this.titleTextView.setGravity(1);
+        TextView textView = new TextView(context);
+        this.titleTextView = textView;
+        textView.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
         r0.addView(this.titleTextView);
-        this.descriptionText = new TextView(context);
-        this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
+        TextView textView2 = new TextView(context);
+        this.descriptionText = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
         r0.addView(this.descriptionText);
-        this.recognizedMrzView = new TextView(context);
-        this.recognizedMrzView.setTextColor(-1);
+        TextView textView3 = new TextView(context);
+        this.recognizedMrzView = textView3;
+        textView3.setTextColor(-1);
         this.recognizedMrzView.setGravity(81);
         this.recognizedMrzView.setAlpha(0.0f);
         if (this.currentType == 0) {
@@ -393,8 +395,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             }
             r0.addView(this.recognizedMrzView);
             if (this.needGalleryButton) {
-                this.galleryButton = new ImageView(context);
-                this.galleryButton.setScaleType(ImageView.ScaleType.CENTER);
+                ImageView imageView = new ImageView(context);
+                this.galleryButton = imageView;
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
                 this.galleryButton.setImageResource(NUM);
                 this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
                 r0.addView(this.galleryButton);
@@ -404,8 +407,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
                 });
             }
-            this.flashButton = new ImageView(context);
-            this.flashButton.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView2 = new ImageView(context);
+            this.flashButton = imageView2;
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
             this.flashButton.setImageResource(NUM);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
             r0.addView(this.flashButton);

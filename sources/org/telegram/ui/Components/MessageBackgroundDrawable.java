@@ -128,7 +128,7 @@ public class MessageBackgroundDrawable extends Drawable {
     /* JADX WARNING: Code restructure failed: missing block: B:16:0x0051, code lost:
         if (r6 >= 0.0f) goto L_0x0056;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00a6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r10) {
         /*
@@ -193,7 +193,7 @@ public class MessageBackgroundDrawable extends Drawable {
             r10.drawCircle(r4, r3, r5, r0)
         L_0x0069:
             boolean r10 = r9.animationInProgress
-            if (r10 == 0) goto L_0x00b9
+            if (r10 == 0) goto L_0x00b5
             long r3 = android.os.SystemClock.elapsedRealtime()
             long r5 = r9.lastAnimationTime
             long r5 = r3 - r5
@@ -207,41 +207,39 @@ public class MessageBackgroundDrawable extends Drawable {
             r0 = 1
             r3 = 1131413504(0x43700000, float:240.0)
             r4 = 0
-            if (r10 == 0) goto L_0x0097
+            if (r10 == 0) goto L_0x0095
             float r10 = r9.currentAnimationProgress
             float r2 = (float) r5
             float r2 = r2 / r3
             float r10 = r10 + r2
             r9.currentAnimationProgress = r10
-            float r10 = r9.currentAnimationProgress
             int r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
-            if (r10 < 0) goto L_0x00a7
+            if (r10 < 0) goto L_0x00a3
             r9.currentAnimationProgress = r1
-            goto L_0x00a8
-        L_0x0097:
+            goto L_0x00a4
+        L_0x0095:
             float r10 = r9.currentAnimationProgress
             float r1 = (float) r5
             float r1 = r1 / r3
             float r10 = r10 - r1
             r9.currentAnimationProgress = r10
-            float r10 = r9.currentAnimationProgress
             int r10 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
-            if (r10 > 0) goto L_0x00a7
+            if (r10 > 0) goto L_0x00a3
             r9.currentAnimationProgress = r2
-            goto L_0x00a8
-        L_0x00a7:
+            goto L_0x00a4
+        L_0x00a3:
             r0 = 0
-        L_0x00a8:
-            if (r0 == 0) goto L_0x00b6
+        L_0x00a4:
+            if (r0 == 0) goto L_0x00b2
             r10 = -1082130432(0xffffffffbvar_, float:-1.0)
             r9.touchX = r10
             r9.touchY = r10
             r9.touchOverrideX = r10
             r9.touchOverrideY = r10
             r9.animationInProgress = r4
-        L_0x00b6:
+        L_0x00b2:
             r9.invalidate()
-        L_0x00b9:
+        L_0x00b5:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MessageBackgroundDrawable.draw(android.graphics.Canvas):void");

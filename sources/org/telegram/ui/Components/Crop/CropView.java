@@ -25,9 +25,6 @@ import org.telegram.ui.Components.Crop.CropAreaView;
 import org.telegram.ui.Components.Crop.CropGestureDetector;
 
 public class CropView extends FrameLayout implements CropAreaView.AreaViewListener, CropGestureDetector.CropGestureListener {
-    private static final float EPSILON = 1.0E-5f;
-    private static final float MAX_SCALE = 30.0f;
-    private static final int RESULT_SIDE = 1280;
     /* access modifiers changed from: private */
     public boolean animating = false;
     /* access modifiers changed from: private */
@@ -48,7 +45,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     private float rotationStartScale;
     private CropState state;
     private Matrix tempMatrix = new Matrix();
-    private CropRectangle tempRect = new CropRectangle();
+    private CropRectangle tempRect = new CropRectangle(this);
 
     public interface CropViewListener {
         void onAspectLock(boolean z);
@@ -155,10 +152,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             return this.scale;
         }
 
-        private float getMinimumScale() {
-            return this.minimumScale;
-        }
-
         /* access modifiers changed from: private */
         public void rotate(float f, float f2, float f3) {
             this.rotation += f;
@@ -188,10 +181,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             this.rotation = 0.0f;
             this.orientation = f;
             updateMinimumScale();
-            this.scale = this.minimumScale;
-            Matrix matrix2 = this.matrix;
-            float f2 = this.scale;
-            matrix2.postScale(f2, f2);
+            float f2 = this.minimumScale;
+            this.scale = f2;
+            this.matrix.postScale(f2, f2);
         }
 
         private void updateMinimumScale() {
@@ -219,18 +211,22 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public CropView(Context context) {
         super(context);
-        this.backView = new View(context);
-        this.backView.setBackgroundColor(-16777216);
+        View view = new View(context);
+        this.backView = view;
+        view.setBackgroundColor(-16777216);
         this.backView.setVisibility(4);
         addView(this.backView);
-        this.imageView = new ImageView(context);
-        this.imageView.setDrawingCacheEnabled(true);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setDrawingCacheEnabled(true);
         this.imageView.setScaleType(ImageView.ScaleType.MATRIX);
         addView(this.imageView);
-        this.detector = new CropGestureDetector(context);
-        this.detector.setOnGestureListener(this);
-        this.areaView = new CropAreaView(context);
-        this.areaView.setListener(this);
+        CropGestureDetector cropGestureDetector = new CropGestureDetector(context);
+        this.detector = cropGestureDetector;
+        cropGestureDetector.setOnGestureListener(this);
+        CropAreaView cropAreaView = new CropAreaView(context);
+        this.areaView = cropAreaView;
+        cropAreaView.setListener(this);
         addView(this.areaView);
     }
 
@@ -271,7 +267,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 }
             });
         } else {
-            cropState.updateBitmap(this.bitmap, i);
+            cropState.updateBitmap(bitmap2, i);
         }
         this.imageView.setImageBitmap(this.bitmap);
     }
@@ -351,8 +347,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         if (Build.VERSION.SDK_INT >= 21) {
             i = AndroidUtilities.statusBarHeight;
         }
+        float f2 = (float) i;
         float access$1200 = this.state.getOrientedWidth() * ((rectF.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth());
-        float centerY = ((rectF.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + ((float) i)) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
+        float centerY = ((rectF.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + f2) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, fArr, access$1200, centerY) {
             private final /* synthetic */ float f$1;
@@ -460,7 +457,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     private class CropRectangle {
         float[] coords = new float[8];
 
-        CropRectangle() {
+        CropRectangle(CropView cropView) {
         }
 
         /* access modifiers changed from: package-private */
@@ -767,7 +764,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             strArr[0] = LocaleController.getString("CropOriginal", NUM);
             strArr[1] = LocaleController.getString("CropSquare", NUM);
             int i = 2;
-            for (Integer[] numArr2 : numArr) {
+            for (int i2 = 0; i2 < 6; i2++) {
+                Integer[] numArr2 = numArr[i2];
                 if (this.areaView.getAspectRatio() > 1.0f) {
                     strArr[i] = String.format("%d:%d", new Object[]{numArr2[0], numArr2[1]});
                 } else {
@@ -775,7 +773,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 }
                 i++;
             }
-            AlertDialog create = new AlertDialog.Builder(getContext()).setItems(strArr, new DialogInterface.OnClickListener(numArr) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setItems(strArr, new DialogInterface.OnClickListener(numArr) {
                 private final /* synthetic */ Integer[][] f$1;
 
                 {
@@ -785,7 +784,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     CropView.this.lambda$showAspectRatioDialog$2$CropView(this.f$1, dialogInterface, i);
                 }
-            }).create();
+            });
+            AlertDialog create = builder.create();
             create.setCanceledOnTouchOutside(true);
             create.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public final void onCancel(DialogInterface dialogInterface) {

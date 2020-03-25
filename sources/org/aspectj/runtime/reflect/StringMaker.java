@@ -3,16 +3,13 @@ package org.aspectj.runtime.reflect;
 import java.lang.reflect.Modifier;
 
 class StringMaker {
-    static StringMaker longStringMaker = new StringMaker();
-    static StringMaker middleStringMaker = new StringMaker();
-    static StringMaker shortStringMaker = new StringMaker();
+    static StringMaker longStringMaker;
+    static StringMaker middleStringMaker;
+    static StringMaker shortStringMaker;
     int cacheOffset;
     boolean includeArgs = true;
-    boolean includeEnclosingPoint;
-    boolean includeJoinPointTypeName;
     boolean includeModifiers = false;
     boolean includeThrows = false;
-    boolean shortKindName;
     boolean shortPrimaryTypeNames = false;
     boolean shortTypeNames = true;
 
@@ -20,29 +17,29 @@ class StringMaker {
     }
 
     static {
-        StringMaker stringMaker = shortStringMaker;
+        StringMaker stringMaker = new StringMaker();
+        shortStringMaker = stringMaker;
         stringMaker.shortTypeNames = true;
         stringMaker.includeArgs = false;
         stringMaker.includeThrows = false;
         stringMaker.includeModifiers = false;
         stringMaker.shortPrimaryTypeNames = true;
-        stringMaker.includeJoinPointTypeName = false;
-        stringMaker.includeEnclosingPoint = false;
         stringMaker.cacheOffset = 0;
-        StringMaker stringMaker2 = middleStringMaker;
+        StringMaker stringMaker2 = new StringMaker();
+        middleStringMaker = stringMaker2;
         stringMaker2.shortTypeNames = true;
         stringMaker2.includeArgs = true;
         stringMaker2.includeThrows = false;
         stringMaker2.includeModifiers = false;
         stringMaker2.shortPrimaryTypeNames = false;
         shortStringMaker.cacheOffset = 1;
-        StringMaker stringMaker3 = longStringMaker;
+        StringMaker stringMaker3 = new StringMaker();
+        longStringMaker = stringMaker3;
         stringMaker3.shortTypeNames = false;
         stringMaker3.includeArgs = true;
         stringMaker3.includeThrows = false;
         stringMaker3.includeModifiers = true;
         stringMaker3.shortPrimaryTypeNames = false;
-        stringMaker3.shortKindName = false;
         stringMaker3.cacheOffset = 2;
     }
 

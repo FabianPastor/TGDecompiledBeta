@@ -10,10 +10,6 @@ public class Texture {
     private Bitmap bitmap;
     private int texture;
 
-    private boolean isPOT(int i) {
-        return (i & (i + -1)) == 0;
-    }
-
     public Texture(Bitmap bitmap2) {
         this.bitmap = bitmap2;
     }
@@ -39,8 +35,9 @@ public class Texture {
         }
         int[] iArr = new int[1];
         GLES20.glGenTextures(1, iArr, 0);
-        this.texture = iArr[0];
-        GLES20.glBindTexture(3553, this.texture);
+        int i2 = iArr[0];
+        this.texture = i2;
+        GLES20.glBindTexture(3553, i2);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
         GLES20.glTexParameteri(3553, 10240, 9729);

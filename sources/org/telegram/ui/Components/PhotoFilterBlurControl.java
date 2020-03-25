@@ -11,15 +11,8 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class PhotoFilterBlurControl extends FrameLayout {
     private static final float BlurInsetProximity = ((float) AndroidUtilities.dp(20.0f));
-    private static final float BlurMinimumDifference = 0.02f;
-    private static final float BlurMinimumFalloff = 0.1f;
     private static final float BlurViewCenterInset = ((float) AndroidUtilities.dp(30.0f));
     private static final float BlurViewRadiusInset = ((float) AndroidUtilities.dp(30.0f));
-    private final int GestureStateBegan = 1;
-    private final int GestureStateCancelled = 4;
-    private final int GestureStateChanged = 2;
-    private final int GestureStateEnded = 3;
-    private final int GestureStateFailed = 5;
     private BlurViewActiveControl activeControl;
     private Size actualAreaSize = new Size();
     private float angle;
@@ -310,7 +303,8 @@ public class PhotoFilterBlurControl extends FrameLayout {
 
     private void handlePan(int i, MotionEvent motionEvent) {
         float f;
-        int i2 = i;
+        int i2;
+        int i3 = i;
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         Point actualCenterPoint = getActualCenterPoint();
@@ -321,9 +315,11 @@ public class PhotoFilterBlurControl extends FrameLayout {
         Size size2 = this.actualAreaSize;
         float f4 = size2.width;
         float f5 = size2.height;
-        if (f4 <= f5) {
-            f5 = f4;
+        if (f4 > f5) {
+            f4 = f5;
         }
+        float f6 = this.falloff * f4;
+        float f7 = this.size * f4;
         double d = (double) point.x;
         double degreesToRadians = (double) degreesToRadians(this.angle);
         Double.isNaN(degreesToRadians);
@@ -331,56 +327,37 @@ public class PhotoFilterBlurControl extends FrameLayout {
         Double.isNaN(d);
         double d2 = d * cos;
         double d3 = (double) point.y;
-        float f6 = this.falloff * f5;
-        float f7 = this.size * f5;
+        float f8 = sqrt;
         double degreesToRadians2 = (double) degreesToRadians(this.angle);
         Double.isNaN(degreesToRadians2);
         double sin = Math.sin(degreesToRadians2 + 1.5707963267948966d);
         Double.isNaN(d3);
         float abs = (float) Math.abs(d2 + (d3 * sin));
-        int i3 = 0;
-        float f8 = 0.0f;
-        if (i2 == 1) {
+        float f9 = 0.0f;
+        if (i3 == 1) {
             this.pointerStartX = motionEvent.getX();
             this.pointerStartY = motionEvent.getY();
-            if (Math.abs(f7 - f6) < BlurInsetProximity) {
-                i3 = 1;
-            }
-            if (i3 != 0) {
+            boolean z = Math.abs(f7 - f6) < BlurInsetProximity;
+            if (z) {
                 f = 0.0f;
             } else {
                 f = BlurViewRadiusInset;
             }
-            if (i3 == 0) {
-                f8 = BlurViewRadiusInset;
+            if (!z) {
+                f9 = BlurViewRadiusInset;
             }
             int i4 = this.type;
-            if (i4 != 0) {
-                float f9 = f6;
-                float var_ = f7;
-                if (i4 == 1) {
-                    if (sqrt < BlurViewCenterInset) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
-                        this.startCenterPoint = actualCenterPoint;
-                    } else if (sqrt > f9 - BlurViewRadiusInset && sqrt < f9 + f) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                        this.startDistance = sqrt;
-                        this.startRadius = f9;
-                    } else if (sqrt > var_ - f8 && sqrt < var_ + BlurViewRadiusInset) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
-                        this.startDistance = sqrt;
-                        this.startRadius = var_;
-                    }
-                }
-            } else if (sqrt < BlurViewCenterInset) {
-                this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
-                this.startCenterPoint = actualCenterPoint;
-            } else if (abs <= f6 - BlurViewRadiusInset || abs >= f6 + f) {
-                float var_ = f6;
-                if (abs <= f7 - f8 || abs >= f7 + BlurViewRadiusInset) {
-                    float var_ = f7;
+            if (i4 == 0) {
+                if (f8 < BlurViewCenterInset) {
+                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
+                    this.startCenterPoint = actualCenterPoint;
+                } else if (abs > f6 - BlurViewRadiusInset && abs < f + f6) {
+                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
+                    this.startDistance = abs;
+                    this.startRadius = f6;
+                } else if (abs <= f7 - f9 || abs >= BlurViewRadiusInset + f7) {
                     float var_ = BlurViewRadiusInset;
-                    if (abs <= var_ - var_ || abs >= var_ + var_) {
+                    if (abs <= f6 - var_ || abs >= f7 + var_) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlRotation;
                     }
                 } else {
@@ -388,13 +365,25 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     this.startDistance = abs;
                     this.startRadius = f7;
                 }
-            } else {
-                this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                this.startDistance = abs;
-                this.startRadius = f6;
+            } else if (i4 == 1) {
+                if (f8 < BlurViewCenterInset) {
+                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
+                    this.startCenterPoint = actualCenterPoint;
+                } else if (f8 <= f6 - BlurViewRadiusInset || f8 >= f + f6) {
+                    float var_ = f8;
+                    if (var_ > f7 - f9 && var_ < BlurViewRadiusInset + f7) {
+                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
+                        this.startDistance = var_;
+                        this.startRadius = f7;
+                    }
+                } else {
+                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
+                    this.startDistance = f8;
+                    this.startRadius = f6;
+                }
             }
             setSelected(true, true);
-        } else if (i2 == 2) {
+        } else if (i3 == 2) {
             int i5 = this.type;
             if (i5 == 0) {
                 int i6 = AnonymousClass1.$SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl[this.activeControl.ordinal()];
@@ -413,18 +402,20 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float var_ = size4.width;
                     this.centerPoint = new Point(var_ / var_, ((point2.y - rect.y) + ((var_ - size4.height) / 2.0f)) / var_);
                 } else if (i6 == 2) {
-                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (abs - this.startDistance)) / f5), this.size - 0.02f);
+                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (abs - this.startDistance)) / f4), this.size - 0.02f);
                 } else if (i6 == 3) {
-                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (abs - this.startDistance)) / f5);
+                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (abs - this.startDistance)) / f4);
                 } else if (i6 == 4) {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
-                    boolean z = x > actualCenterPoint.x;
-                    boolean z2 = y > actualCenterPoint.y;
-                    if (z || z2 ? !(!z || z2 ? !z || !z2 ? Math.abs(var_) <= Math.abs(var_) ? var_ >= 0.0f : var_ >= 0.0f : Math.abs(var_) <= Math.abs(var_) ? var_ >= 0.0f : var_ <= 0.0f : Math.abs(var_) <= Math.abs(var_) ? var_ <= 0.0f : var_ <= 0.0f) : !(Math.abs(var_) <= Math.abs(var_) ? var_ <= 0.0f : var_ >= 0.0f)) {
-                        i3 = 1;
+                    boolean z2 = x > actualCenterPoint.x;
+                    boolean z3 = y > actualCenterPoint.y;
+                    if (z2 || z3 ? !z2 || z3 ? !z2 || !z3 ? Math.abs(var_) <= Math.abs(var_) ? var_ >= 0.0f : var_ >= 0.0f : Math.abs(var_) <= Math.abs(var_) ? var_ >= 0.0f : var_ <= 0.0f : Math.abs(var_) <= Math.abs(var_) ? var_ <= 0.0f : var_ <= 0.0f : Math.abs(var_) <= Math.abs(var_) ? var_ <= 0.0f : var_ >= 0.0f) {
+                        i2 = 0;
+                    } else {
+                        i2 = 1;
                     }
-                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((i3 * 2) - 1))) / 3.1415927f) / 1.15f;
+                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((i2 * 2) - 1))) / 3.1415927f) / 1.15f;
                     this.pointerStartX = x;
                     this.pointerStartY = y;
                 }
@@ -445,9 +436,9 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float var_ = size6.width;
                     this.centerPoint = new Point(var_ / var_, ((point3.y - rect2.y) + ((var_ - size6.height) / 2.0f)) / var_);
                 } else if (i7 == 2) {
-                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (sqrt - this.startDistance)) / f5), this.size - 0.02f);
+                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (f8 - this.startDistance)) / f4), this.size - 0.02f);
                 } else if (i7 == 3) {
-                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (sqrt - this.startDistance)) / f5);
+                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (f8 - this.startDistance)) / f4);
                 }
             }
             invalidate();
@@ -455,7 +446,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
             if (photoFilterLinearBlurControlDelegate != null) {
                 photoFilterLinearBlurControlDelegate.valueChanged(this.centerPoint, this.falloff, this.size, degreesToRadians(this.angle) + 1.5707964f);
             }
-        } else if (i2 == 3 || i2 == 4 || i2 == 5) {
+        } else if (i3 == 3 || i3 == 4 || i3 == 5) {
             this.activeControl = BlurViewActiveControl.BlurViewActiveControlNone;
             setSelected(false, true);
         }
@@ -463,44 +454,42 @@ public class PhotoFilterBlurControl extends FrameLayout {
 
     /* renamed from: org.telegram.ui.Components.PhotoFilterBlurControl$1  reason: invalid class name */
     static /* synthetic */ class AnonymousClass1 {
-        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl = new int[BlurViewActiveControl.values().length];
+        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(10:0|1|2|3|4|5|6|7|8|10) */
         /* JADX WARNING: Can't wrap try/catch for region: R(8:0|1|2|3|4|5|6|(3:7|8|10)) */
         /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0014 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001f */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x002a */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
         static {
             /*
                 org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl[] r0 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.values()
                 int r0 = r0.length
                 int[] r0 = new int[r0]
                 $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl = r0
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x0014 }
-                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlCenter     // Catch:{ NoSuchFieldError -> 0x0014 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0014 }
+                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlCenter     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
                 r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0014 }
-            L_0x0014:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x001f }
-                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlInnerRadius     // Catch:{ NoSuchFieldError -> 0x001f }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001f }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlInnerRadius     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
                 r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001f }
-            L_0x001f:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x002a }
-                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlOuterRadius     // Catch:{ NoSuchFieldError -> 0x002a }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x002a }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x0028 }
+                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlOuterRadius     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
                 r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x002a }
-            L_0x002a:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x0035 }
-                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlRotation     // Catch:{ NoSuchFieldError -> 0x0035 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0035 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl     // Catch:{ NoSuchFieldError -> 0x0033 }
+                org.telegram.ui.Components.PhotoFilterBlurControl$BlurViewActiveControl r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlRotation     // Catch:{ NoSuchFieldError -> 0x0033 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
                 r2 = 4
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0035 }
-            L_0x0035:
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
+            L_0x0033:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterBlurControl.AnonymousClass1.<clinit>():void");
@@ -522,9 +511,11 @@ public class PhotoFilterBlurControl extends FrameLayout {
             return;
         }
         float distance = getDistance(motionEvent);
-        this.pointerScale += ((distance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f;
-        this.falloff = Math.max(0.1f, this.falloff * this.pointerScale);
-        this.size = Math.max(this.falloff + 0.02f, this.size * this.pointerScale);
+        float f = this.pointerScale + (((distance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f);
+        this.pointerScale = f;
+        float max = Math.max(0.1f, this.falloff * f);
+        this.falloff = max;
+        this.size = Math.max(max + 0.02f, this.size * this.pointerScale);
         this.pointerScale = 1.0f;
         this.startPointerDistance = distance;
         invalidate();
@@ -621,19 +612,19 @@ public class PhotoFilterBlurControl extends FrameLayout {
         Size size2 = this.actualAreaSize;
         float f = size2.width;
         float f2 = size2.height;
-        if (f <= f2) {
-            f2 = f;
+        if (f > f2) {
+            f = f2;
         }
-        return f2 * this.falloff;
+        return f * this.falloff;
     }
 
     private float getActualOuterRadius() {
         Size size2 = this.actualAreaSize;
         float f = size2.width;
         float f2 = size2.height;
-        if (f <= f2) {
-            f2 = f;
+        if (f > f2) {
+            f = f2;
         }
-        return f2 * this.size;
+        return f * this.size;
     }
 }

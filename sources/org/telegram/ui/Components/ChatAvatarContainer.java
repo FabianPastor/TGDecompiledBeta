@@ -17,7 +17,13 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$ChatParticipants;
+import org.telegram.tgnet.TLRPC$TL_channelFull;
+import org.telegram.tgnet.TLRPC$TL_chatFull;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -45,11 +51,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z) {
         super(context);
         this.parentFragment = chatActivity;
-        if (this.parentFragment != null) {
+        if (chatActivity != null) {
             this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(chatActivity);
         }
-        this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.avatarImageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
         ChatActivity chatActivity2 = this.parentFragment;
         if (chatActivity2 != null && !chatActivity2.isInScheduleMode()) {
@@ -59,27 +66,30 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
             });
         }
-        this.titleTextView = new SimpleTextView(context);
-        this.titleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.titleTextView = simpleTextView;
+        simpleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
         this.titleTextView.setTextSize(18);
         this.titleTextView.setGravity(3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setLeftDrawableTopPadding(-AndroidUtilities.dp(1.3f));
         addView(this.titleTextView);
-        this.subtitleTextView = new SimpleTextView(context);
-        this.subtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+        SimpleTextView simpleTextView2 = new SimpleTextView(context);
+        this.subtitleTextView = simpleTextView2;
+        simpleTextView2.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
         this.subtitleTextView.setTag("actionBarDefaultSubtitle");
         this.subtitleTextView.setTextSize(14);
         this.subtitleTextView.setGravity(3);
         addView(this.subtitleTextView);
         if (z) {
-            this.timeItem = new ImageView(context);
-            this.timeItem.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
+            ImageView imageView = new ImageView(context);
+            this.timeItem = imageView;
+            imageView.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
             this.timeItem.setScaleType(ImageView.ScaleType.CENTER);
-            ImageView imageView = this.timeItem;
+            ImageView imageView2 = this.timeItem;
             TimerDrawable timerDrawable2 = new TimerDrawable(context);
             this.timerDrawable = timerDrawable2;
-            imageView.setImageDrawable(timerDrawable2);
+            imageView2.setImageDrawable(timerDrawable2);
             addView(this.timeItem);
             this.timeItem.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
@@ -95,7 +105,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     ChatAvatarContainer.this.lambda$new$2$ChatAvatarContainer(view);
                 }
             });
-            TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
+            TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
             this.statusDrawables[0] = new TypingDotsDrawable();
             this.statusDrawables[1] = new RecordStatusDrawable();
             this.statusDrawables[2] = new SendingFileDrawable();
@@ -154,33 +164,32 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             org.telegram.tgnet.TLRPC$Chat r2 = r2.getCurrentChat()
             r3 = 2
             r4 = 1
-            if (r1 == 0) goto L_0x00a9
+            if (r1 == 0) goto L_0x00a7
             android.os.Bundle r2 = new android.os.Bundle
             r2.<init>()
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
             java.lang.String r6 = "dialog_id"
-            if (r5 == 0) goto L_0x006c
+            if (r5 == 0) goto L_0x006b
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             long r3 = r8.getDialogId()
             r2.putLong(r6, r3)
-            r8 = 5
-            int[] r8 = new int[r8]
-            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
-            int[] r1 = r1.getLastMediaCount()
-            int r3 = r8.length
-            java.lang.System.arraycopy(r1, r0, r8, r0, r3)
-            org.telegram.ui.MediaActivity r0 = new org.telegram.ui.MediaActivity
-            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
-            org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r1 = r1.getSharedMediaData()
+            r8 = 6
+            int[] r1 = new int[r8]
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r3 = r7.sharedMediaPreloader
+            int[] r3 = r3.getLastMediaCount()
+            java.lang.System.arraycopy(r3, r0, r1, r0, r8)
+            org.telegram.ui.MediaActivity r8 = new org.telegram.ui.MediaActivity
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r0 = r7.sharedMediaPreloader
+            org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r0 = r0.getSharedMediaData()
             r3 = -1
-            r0.<init>(r2, r8, r1, r3)
-            org.telegram.ui.ChatActivity r8 = r7.parentFragment
-            org.telegram.tgnet.TLRPC$ChatFull r8 = r8.getCurrentChatInfo()
-            r0.setChatInfo(r8)
-            org.telegram.ui.ChatActivity r8 = r7.parentFragment
-            r8.presentFragment(r0)
-            goto L_0x00d3
-        L_0x006c:
+            r8.<init>(r2, r1, r0, r3)
+            org.telegram.ui.ChatActivity r0 = r7.parentFragment
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r0.getCurrentChatInfo()
+            r8.setChatInfo(r0)
+            org.telegram.ui.ChatActivity r0 = r7.parentFragment
+            r0.presentFragment(r8)
+            goto L_0x00d1
+        L_0x006b:
             int r0 = r1.id
             java.lang.String r1 = "user_id"
             r2.putInt(r1, r0)
@@ -189,28 +198,28 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             java.lang.String r1 = "reportSpam"
             r2.putBoolean(r1, r0)
             android.widget.ImageView r0 = r7.timeItem
-            if (r0 == 0) goto L_0x008c
+            if (r0 == 0) goto L_0x008a
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             long r0 = r0.getDialogId()
             r2.putLong(r6, r0)
-        L_0x008c:
+        L_0x008a:
             org.telegram.ui.ProfileActivity r0 = new org.telegram.ui.ProfileActivity
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
             r0.<init>(r2, r1)
             org.telegram.ui.ChatActivity r1 = r7.parentFragment
             org.telegram.tgnet.TLRPC$UserFull r1 = r1.getCurrentUserInfo()
             r0.setUserInfo(r1)
-            if (r8 == 0) goto L_0x009f
-            goto L_0x00a0
-        L_0x009f:
+            if (r8 == 0) goto L_0x009d
+            goto L_0x009e
+        L_0x009d:
             r3 = 1
-        L_0x00a0:
+        L_0x009e:
             r0.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r0)
-            goto L_0x00d3
-        L_0x00a9:
-            if (r2 == 0) goto L_0x00d3
+            goto L_0x00d1
+        L_0x00a7:
+            if (r2 == 0) goto L_0x00d1
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             int r1 = r2.id
@@ -222,15 +231,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.getCurrentChatInfo()
             r1.setChatInfo(r0)
-            if (r8 == 0) goto L_0x00ca
-            goto L_0x00cb
-        L_0x00ca:
+            if (r8 == 0) goto L_0x00c8
+            goto L_0x00c9
+        L_0x00c8:
             r3 = 1
-        L_0x00cb:
+        L_0x00c9:
             r1.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r1)
-        L_0x00d3:
+        L_0x00d1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAvatarContainer.openProfile(boolean):void");
@@ -381,13 +390,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 
     public void updateSubtitle() {
         String str;
-        TLRPC.ChatParticipants chatParticipants;
+        TLRPC$ChatParticipants tLRPC$ChatParticipants;
         int i;
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null) {
-            TLRPC.User currentUser = chatActivity.getCurrentUser();
+            TLRPC$User currentUser = chatActivity.getCurrentUser();
             if (!UserObject.isUserSelf(currentUser) && !this.parentFragment.isInScheduleMode()) {
-                TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
+                TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
                 CharSequence charSequence = MessagesController.getInstance(this.currentAccount).printingStrings.get(this.parentFragment.getDialogId());
                 String str2 = "";
                 boolean z = true;
@@ -397,7 +406,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 if (charSequence == null || charSequence.length() == 0 || (ChatObject.isChannel(currentChat) && !currentChat.megagroup)) {
                     setTypingAnimation(false);
                     if (currentChat != null) {
-                        TLRPC.ChatFull currentChatInfo = this.parentFragment.getCurrentChatInfo();
+                        TLRPC$ChatFull currentChatInfo = this.parentFragment.getCurrentChatInfo();
                         if (ChatObject.isChannel(currentChat)) {
                             if (currentChatInfo == null || (i = currentChatInfo.participants_count) == 0) {
                                 if (currentChat.megagroup) {
@@ -434,8 +443,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             str = LocaleController.getString("YouLeft", NUM);
                         } else {
                             int i2 = currentChat.participants_count;
-                            if (!(currentChatInfo == null || (chatParticipants = currentChatInfo.participants) == null)) {
-                                i2 = chatParticipants.participants.size();
+                            if (!(currentChatInfo == null || (tLRPC$ChatParticipants = currentChatInfo.participants) == null)) {
+                                i2 = tLRPC$ChatParticipants.participants.size();
                             }
                             if (this.onlineCount <= 1 || i2 == 0) {
                                 str = LocaleController.formatPluralString("Members", i2);
@@ -445,7 +454,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                         }
                     } else {
                         if (currentUser != null) {
-                            TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentUser.id));
+                            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentUser.id));
                             if (user != null) {
                                 currentUser = user;
                             }
@@ -489,40 +498,43 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
     }
 
-    public void setChatAvatar(TLRPC.Chat chat) {
-        this.avatarDrawable.setInfo(chat);
+    public void setChatAvatar(TLRPC$Chat tLRPC$Chat) {
+        this.avatarDrawable.setInfo(tLRPC$Chat);
         BackupImageView backupImageView = this.avatarImageView;
         if (backupImageView != null) {
-            backupImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
         }
     }
 
-    public void setUserAvatar(TLRPC.User user) {
-        this.avatarDrawable.setInfo(user);
-        if (UserObject.isUserSelf(user)) {
-            this.avatarDrawable.setAvatarType(2);
+    public void setUserAvatar(TLRPC$User tLRPC$User) {
+        this.avatarDrawable.setInfo(tLRPC$User);
+        if (UserObject.isUserSelf(tLRPC$User)) {
+            this.avatarDrawable.setAvatarType(1);
+            this.avatarDrawable.setSmallSize(true);
             BackupImageView backupImageView = this.avatarImageView;
             if (backupImageView != null) {
-                backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) user);
+                backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) tLRPC$User);
                 return;
             }
             return;
         }
+        this.avatarDrawable.setSmallSize(false);
         BackupImageView backupImageView2 = this.avatarImageView;
         if (backupImageView2 != null) {
-            backupImageView2.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+            backupImageView2.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
         }
     }
 
     public void checkAndUpdateAvatar() {
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null) {
-            TLRPC.User currentUser = chatActivity.getCurrentUser();
-            TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
+            TLRPC$User currentUser = chatActivity.getCurrentUser();
+            TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
             if (currentUser != null) {
                 this.avatarDrawable.setInfo(currentUser);
                 if (UserObject.isUserSelf(currentUser)) {
-                    this.avatarDrawable.setAvatarType(2);
+                    this.avatarDrawable.setSmallSize(true);
+                    this.avatarDrawable.setAvatarType(1);
                     BackupImageView backupImageView = this.avatarImageView;
                     if (backupImageView != null) {
                         backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) currentUser);
@@ -530,6 +542,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     }
                     return;
                 }
+                this.avatarDrawable.setSmallSize(false);
                 BackupImageView backupImageView2 = this.avatarImageView;
                 if (backupImageView2 != null) {
                     backupImageView2.setImage(ImageLocation.getForUser(currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
@@ -545,22 +558,22 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public void updateOnlineCount() {
-        TLRPC.UserStatus userStatus;
+        TLRPC$UserStatus tLRPC$UserStatus;
         boolean z;
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null) {
             this.onlineCount = 0;
-            TLRPC.ChatFull currentChatInfo = chatActivity.getCurrentChatInfo();
+            TLRPC$ChatFull currentChatInfo = chatActivity.getCurrentChatInfo();
             if (currentChatInfo != null) {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                if ((currentChatInfo instanceof TLRPC.TL_chatFull) || (z && currentChatInfo.participants_count <= 200 && currentChatInfo.participants != null)) {
+                if ((currentChatInfo instanceof TLRPC$TL_chatFull) || (z && currentChatInfo.participants_count <= 200 && currentChatInfo.participants != null)) {
                     for (int i = 0; i < currentChatInfo.participants.participants.size(); i++) {
-                        TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentChatInfo.participants.participants.get(i).user_id));
-                        if (!(user == null || (userStatus = user.status) == null || ((userStatus.expires <= currentTime && user.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
+                        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(currentChatInfo.participants.participants.get(i).user_id));
+                        if (!(user == null || (tLRPC$UserStatus = user.status) == null || ((tLRPC$UserStatus.expires <= currentTime && user.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) || user.status.expires <= 10000))) {
                             this.onlineCount++;
                         }
                     }
-                } else if (((z = currentChatInfo instanceof TLRPC.TL_channelFull)) && currentChatInfo.participants_count > 200) {
+                } else if (((z = currentChatInfo instanceof TLRPC$TL_channelFull)) && currentChatInfo.participants_count > 200) {
                     this.onlineCount = currentChatInfo.online_count;
                 }
             }

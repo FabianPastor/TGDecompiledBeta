@@ -21,12 +21,13 @@ public class Tooltip extends TextView {
     private boolean showing;
 
     public /* synthetic */ void lambda$new$0$Tooltip() {
-        this.animator = animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
+        ViewPropertyAnimator duration = animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 Tooltip.this.setVisibility(8);
             }
         }).setDuration(300);
-        this.animator.start();
+        this.animator = duration;
+        duration.start();
     }
 
     public Tooltip(Context context, ViewGroup viewGroup, int i, int i2) {
@@ -51,16 +52,17 @@ public class Tooltip extends TextView {
             View view = (View) getParent();
             int i = 0;
             int i2 = 0;
+            int i3 = 0;
             for (View view2 = this.anchor; view2 != view; view2 = (View) view2.getParent()) {
-                i2 += view2.getTop();
-                i += view2.getLeft();
+                i3 += view2.getTop();
+                i2 += view2.getLeft();
             }
-            int width = (i + (this.anchor.getWidth() / 2)) - (getMeasuredWidth() / 2);
-            if (width < 0) {
-                width = 0;
+            int width = (i2 + (this.anchor.getWidth() / 2)) - (getMeasuredWidth() / 2);
+            if (width >= 0) {
+                i = width;
             }
-            setTranslationX((float) width);
-            setTranslationY((float) (i2 - getMeasuredHeight()));
+            setTranslationX((float) i);
+            setTranslationY((float) (i3 - getMeasuredHeight()));
         }
     }
 
@@ -80,8 +82,9 @@ public class Tooltip extends TextView {
             if (getVisibility() != 0) {
                 setAlpha(0.0f);
                 setVisibility(0);
-                this.animator = animate().setDuration(300).alpha(1.0f).setListener((Animator.AnimatorListener) null);
-                this.animator.start();
+                ViewPropertyAnimator listener = animate().setDuration(300).alpha(1.0f).setListener((Animator.AnimatorListener) null);
+                this.animator = listener;
+                listener.start();
             }
         }
     }

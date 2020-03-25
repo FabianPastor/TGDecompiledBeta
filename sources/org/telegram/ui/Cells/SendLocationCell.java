@@ -12,7 +12,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -39,8 +39,9 @@ public class SendLocationCell extends FrameLayout {
 
     public SendLocationCell(Context context, boolean z) {
         super(context);
-        this.imageView = new ImageView(context);
-        this.imageView.setTag(z ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setTag(z ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
         String str = "location_sendLiveLocationBackground";
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(z ? str : "location_sendLocationBackground"), Theme.getColor(!z ? "location_sendLocationBackground" : str));
         if (z) {
@@ -62,16 +63,18 @@ public class SendLocationCell extends FrameLayout {
         }
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, !LocaleController.isRTL ? 0.0f : 15.0f, 0.0f));
-        this.titleTextView = new SimpleTextView(context);
-        this.titleTextView.setTextSize(16);
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.titleTextView = simpleTextView;
+        simpleTextView.setTextSize(16);
         String str2 = "location_sendLiveLocationText";
         this.titleTextView.setTag(z ? str2 : "location_sendLocationText");
         this.titleTextView.setTextColor(Theme.getColor(!z ? "location_sendLocationText" : str2));
         this.titleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
-        this.accurateTextView = new SimpleTextView(context);
-        this.accurateTextView.setTextSize(14);
+        SimpleTextView simpleTextView2 = new SimpleTextView(context);
+        this.accurateTextView = simpleTextView2;
+        simpleTextView2.setTextSize(14);
         this.accurateTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.accurateTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.accurateTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
@@ -128,9 +131,9 @@ public class SendLocationCell extends FrameLayout {
         LocationController.SharingLocationInfo sharingLocationInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
         if (sharingLocationInfo != null) {
             String string = LocaleController.getString("StopLiveLocation", NUM);
-            TLRPC.Message message = sharingLocationInfo.messageObject.messageOwner;
-            int i = message.edit_date;
-            setText(string, LocaleController.formatLocationUpdateDate(i != 0 ? (long) i : (long) message.date));
+            TLRPC$Message tLRPC$Message = sharingLocationInfo.messageObject.messageOwner;
+            int i = tLRPC$Message.edit_date;
+            setText(string, LocaleController.formatLocationUpdateDate(i != 0 ? (long) i : (long) tLRPC$Message.date));
             return;
         }
         setText(LocaleController.getString("SendLiveLocation", NUM), LocaleController.getString("SendLiveLocationInfo", NUM));

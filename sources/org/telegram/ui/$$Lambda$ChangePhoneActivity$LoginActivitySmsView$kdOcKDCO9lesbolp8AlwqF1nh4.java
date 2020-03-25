@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ChangePhoneActivity;
 
 /* renamed from: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOc-KDCO9lesbolp8AlwqF1nh4  reason: invalid class name */
@@ -13,7 +13,7 @@ public final /* synthetic */ class $$Lambda$ChangePhoneActivity$LoginActivitySms
     private /* synthetic */ $$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOcKDCO9lesbolp8AlwqF1nh4() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        ChangePhoneActivity.LoginActivitySmsView.lambda$onBackPressed$9(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChangePhoneActivity.LoginActivitySmsView.lambda$onBackPressed$9(tLObject, tLRPC$TL_error);
     }
 }

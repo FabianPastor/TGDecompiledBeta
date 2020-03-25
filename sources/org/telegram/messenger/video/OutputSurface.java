@@ -35,8 +35,9 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         this.mWidth = i;
         this.mHeight = i2;
         this.rotateRender = i3;
-        this.mPixelBuf = ByteBuffer.allocateDirect(this.mWidth * this.mHeight * 4);
-        this.mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(i * i2 * 4);
+        this.mPixelBuf = allocateDirect;
+        allocateDirect.order(ByteOrder.LITTLE_ENDIAN);
         eglSetup(i, i2);
         makeCurrent();
         setup();
@@ -47,22 +48,25 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     }
 
     private void setup() {
-        this.mTextureRender = new TextureRenderer(this.rotateRender);
-        this.mTextureRender.surfaceCreated();
-        this.mSurfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
-        this.mSurfaceTexture.setOnFrameAvailableListener(this);
+        TextureRenderer textureRenderer = new TextureRenderer(this.rotateRender);
+        this.mTextureRender = textureRenderer;
+        textureRenderer.surfaceCreated();
+        SurfaceTexture surfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
+        this.mSurfaceTexture = surfaceTexture;
+        surfaceTexture.setOnFrameAvailableListener(this);
         this.mSurface = new Surface(this.mSurfaceTexture);
     }
 
     private void eglSetup(int i, int i2) {
-        this.mEGL = (EGL10) EGLContext.getEGL();
-        this.mEGLDisplay = this.mEGL.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-        EGLDisplay eGLDisplay = this.mEGLDisplay;
-        if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
+        EGL10 egl10 = (EGL10) EGLContext.getEGL();
+        this.mEGL = egl10;
+        EGLDisplay eglGetDisplay = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+        this.mEGLDisplay = eglGetDisplay;
+        if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
             throw new RuntimeException("unable to get EGL10 display");
-        } else if (this.mEGL.eglInitialize(eGLDisplay, (int[]) null)) {
+        } else if (this.mEGL.eglInitialize(eglGetDisplay, (int[]) null)) {
             EGLConfig[] eGLConfigArr = new EGLConfig[1];
-            if (this.mEGL.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12339, 1, 12352, 4, 12344}, eGLConfigArr, eGLConfigArr.length, new int[1])) {
+            if (this.mEGL.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12339, 1, 12352, 4, 12344}, eGLConfigArr, 1, new int[1])) {
                 this.mEGLContext = this.mEGL.eglCreateContext(this.mEGLDisplay, eGLConfigArr[0], EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                 checkEglError("eglCreateContext");
                 if (this.mEGLContext != null) {

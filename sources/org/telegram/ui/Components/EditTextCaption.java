@@ -38,7 +38,6 @@ public class EditTextCaption extends EditTextBoldCursor {
     private int hintColor;
     private int selectionEnd = -1;
     private int selectionStart = -1;
-    private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
@@ -57,9 +56,8 @@ public class EditTextCaption extends EditTextBoldCursor {
             String str3 = this.caption;
             if (str3 == null || !str3.equals(str)) {
                 this.caption = str;
-                String str4 = this.caption;
-                if (str4 != null) {
-                    this.caption = str4.replace(10, ' ');
+                if (str != null) {
+                    this.caption = str.replace(10, ' ');
                 }
                 requestLayout();
             }
@@ -108,7 +106,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
-        AnonymousClass1 r1 = new EditTextBoldCursor(getContext()) {
+        AnonymousClass1 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
@@ -288,7 +286,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 callback.onDestroyActionMode(actionMode);
             }
         };
-        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2() {
+        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2(this) {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 return r0.onCreateActionMode(actionMode, menu);
             }
@@ -348,8 +346,9 @@ public class EditTextCaption extends EditTextBoldCursor {
                 CharSequence ellipsize = TextUtils.ellipsize(this.caption, paint, (float) measuredWidth, TextUtils.TruncateAt.END);
                 this.xOffset = ceil;
                 try {
-                    this.captionLayout = new StaticLayout(ellipsize, getPaint(), measuredWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    if (this.captionLayout.getLineCount() > 0) {
+                    StaticLayout staticLayout = new StaticLayout(ellipsize, getPaint(), measuredWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.captionLayout = staticLayout;
+                    if (staticLayout.getLineCount() > 0) {
                         this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
                     }
                     this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);

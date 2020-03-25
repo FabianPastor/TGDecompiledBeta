@@ -20,7 +20,9 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
@@ -57,12 +59,14 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     public SharedAudioCell(Context context) {
         super(context);
         setFocusable(true);
-        this.radialProgress = new RadialProgress2(this);
-        this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
+        RadialProgress2 radialProgress2 = new RadialProgress2(this);
+        this.radialProgress = radialProgress2;
+        radialProgress2.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setWillNotDraw(false);
-        this.checkBox = new CheckBox2(context, 21);
-        this.checkBox.setVisibility(4);
+        CheckBox2 checkBox2 = new CheckBox2(context, 21);
+        this.checkBox = checkBox2;
+        checkBox2.setVisibility(4);
         this.checkBox.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
         this.checkBox.setDrawUnchecked(false);
         int i = 3;
@@ -102,16 +106,16 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     public void setMessageObject(MessageObject messageObject, boolean z) {
         this.needDivider = z;
         this.currentMessageObject = messageObject;
-        TLRPC.Document document = messageObject.getDocument();
-        TLRPC.PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 240) : null;
-        if (closestPhotoSizeWithSize instanceof TLRPC.TL_photoSize) {
+        TLRPC$Document document = messageObject.getDocument();
+        TLRPC$PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 240) : null;
+        if (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) {
             this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
         } else {
             String artworkUrl = messageObject.getArtworkUrl(true);
             if (!TextUtils.isEmpty(artworkUrl)) {
                 this.radialProgress.setImageOverlay(artworkUrl);
             } else {
-                this.radialProgress.setImageOverlay((TLRPC.PhotoSize) null, (TLRPC.Document) null, (Object) null);
+                this.radialProgress.setImageOverlay((TLRPC$PhotoSize) null, (TLRPC$Document) null, (Object) null);
             }
         }
         updateButtonState(false, false);
@@ -152,7 +156,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0068  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x0064  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
         /*
@@ -187,67 +191,65 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             r2 = 0
         L_0x0033:
             int r3 = r9.getAction()
-            if (r3 != 0) goto L_0x0068
-            if (r2 == 0) goto L_0x0049
+            if (r3 != 0) goto L_0x0064
+            if (r2 == 0) goto L_0x0047
             r8.miniButtonPressed = r4
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            boolean r0 = r8.miniButtonPressed
-            r9.setPressed(r0, r4)
+            r9.setPressed(r4, r4)
             r8.invalidate()
-        L_0x0047:
+        L_0x0045:
             r5 = 1
-            goto L_0x00af
-        L_0x0049:
+            goto L_0x00ab
+        L_0x0047:
             boolean r9 = r8.checkForButtonPress
-            if (r9 == 0) goto L_0x00af
+            if (r9 == 0) goto L_0x00ab
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
             android.graphics.RectF r9 = r9.getProgressRect()
             float r0 = (float) r0
             float r1 = (float) r1
             boolean r9 = r9.contains(r0, r1)
-            if (r9 == 0) goto L_0x00af
+            if (r9 == 0) goto L_0x00ab
             r8.buttonPressed = r4
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            boolean r0 = r8.buttonPressed
-            r9.setPressed(r0, r5)
+            r9.setPressed(r4, r5)
             r8.invalidate()
-            goto L_0x0047
-        L_0x0068:
+            goto L_0x0045
+        L_0x0064:
             int r0 = r9.getAction()
-            if (r0 != r4) goto L_0x008e
+            if (r0 != r4) goto L_0x008a
             boolean r9 = r8.miniButtonPressed
-            if (r9 == 0) goto L_0x007e
+            if (r9 == 0) goto L_0x007a
             r8.miniButtonPressed = r5
             r8.playSoundEffect(r5)
             r8.didPressedMiniButton(r4)
             r8.invalidate()
-            goto L_0x00af
-        L_0x007e:
+            goto L_0x00ab
+        L_0x007a:
             boolean r9 = r8.buttonPressed
-            if (r9 == 0) goto L_0x00af
+            if (r9 == 0) goto L_0x00ab
             r8.buttonPressed = r5
             r8.playSoundEffect(r5)
             r8.didPressedButton()
             r8.invalidate()
-            goto L_0x00af
-        L_0x008e:
+            goto L_0x00ab
+        L_0x008a:
             int r0 = r9.getAction()
             r1 = 3
-            if (r0 != r1) goto L_0x009d
+            if (r0 != r1) goto L_0x0099
             r8.miniButtonPressed = r5
             r8.buttonPressed = r5
             r8.invalidate()
-            goto L_0x00af
-        L_0x009d:
+            goto L_0x00ab
+        L_0x0099:
             int r9 = r9.getAction()
             r0 = 2
-            if (r9 != r0) goto L_0x00af
-            if (r2 != 0) goto L_0x00af
+            if (r9 != r0) goto L_0x00ab
+            if (r2 != 0) goto L_0x00ab
             boolean r9 = r8.miniButtonPressed
-            if (r9 == 0) goto L_0x00af
+            if (r9 == 0) goto L_0x00ab
             r8.miniButtonPressed = r5
             r8.invalidate()
-        L_0x00af:
+        L_0x00ab:
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
             boolean r0 = r8.miniButtonPressed
             r9.setPressed(r0, r4)
@@ -266,7 +268,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
         this.miniButtonPressed = false;
         this.buttonPressed = false;
-        this.radialProgress.setPressed(this.buttonPressed, false);
+        this.radialProgress.setPressed(false, false);
         this.radialProgress.setPressed(this.miniButtonPressed, true);
         return false;
     }

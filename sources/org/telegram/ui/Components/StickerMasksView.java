@@ -18,7 +18,8 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
@@ -33,12 +34,12 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
     private int lastNotifyWidth;
     private Listener listener;
     /* access modifiers changed from: private */
-    public ArrayList<TLRPC.Document>[] recentStickers = {new ArrayList<>(), new ArrayList<>()};
+    public ArrayList<TLRPC$Document>[] recentStickers = {new ArrayList<>(), new ArrayList<>()};
     /* access modifiers changed from: private */
     public int recentTabBum = -2;
     private ScrollSlidingTabStrip scrollSlidingTabStrip;
     /* access modifiers changed from: private */
-    public ArrayList<TLRPC.TL_messages_stickerSet>[] stickerSets = {new ArrayList<>(), new ArrayList<>()};
+    public ArrayList<TLRPC$TL_messages_stickerSet>[] stickerSets = {new ArrayList<>(), new ArrayList<>()};
     private TextView stickersEmptyView;
     /* access modifiers changed from: private */
     public StickersGridAdapter stickersGridAdapter;
@@ -51,7 +52,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
     public int stickersTabOffset;
 
     public interface Listener {
-        void onStickerSelected(Object obj, TLRPC.Document document);
+        void onStickerSelected(Object obj, TLRPC$Document tLRPC$Document);
 
         void onTypeChanged();
     }
@@ -62,15 +63,15 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
         setClickable(true);
         MediaDataController.getInstance(this.currentAccount).checkStickers(0);
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
-        this.stickersGridView = new RecyclerListView(context) {
+        AnonymousClass1 r0 = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return super.onInterceptTouchEvent(motionEvent) || ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), (ContentPreviewViewer.ContentPreviewViewerDelegate) null);
             }
         };
-        RecyclerListView recyclerListView = this.stickersGridView;
+        this.stickersGridView = r0;
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
         this.stickersLayoutManager = gridLayoutManager;
-        recyclerListView.setLayoutManager(gridLayoutManager);
+        r0.setLayoutManager(gridLayoutManager);
         this.stickersLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             public int getSpanSize(int i) {
                 if (i == StickerMasksView.this.stickersGridAdapter.totalItems) {
@@ -81,30 +82,33 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
         });
         this.stickersGridView.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
         this.stickersGridView.setClipToPadding(false);
-        RecyclerListView recyclerListView2 = this.stickersGridView;
+        RecyclerListView recyclerListView = this.stickersGridView;
         StickersGridAdapter stickersGridAdapter2 = new StickersGridAdapter(context);
         this.stickersGridAdapter = stickersGridAdapter2;
-        recyclerListView2.setAdapter(stickersGridAdapter2);
+        recyclerListView.setAdapter(stickersGridAdapter2);
         this.stickersGridView.setOnTouchListener(new View.OnTouchListener() {
             public final boolean onTouch(View view, MotionEvent motionEvent) {
                 return StickerMasksView.this.lambda$new$0$StickerMasksView(view, motionEvent);
             }
         });
-        this.stickersOnItemClickListener = new RecyclerListView.OnItemClickListener() {
+        $$Lambda$StickerMasksView$dIIbEIRSoGx8DynOnZBV9n5UHM r02 = new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 StickerMasksView.this.lambda$new$1$StickerMasksView(view, i);
             }
         };
-        this.stickersGridView.setOnItemClickListener(this.stickersOnItemClickListener);
+        this.stickersOnItemClickListener = r02;
+        this.stickersGridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) r02);
         this.stickersGridView.setGlowColor(-657673);
         addView(this.stickersGridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
-        this.stickersEmptyView = new TextView(context);
-        this.stickersEmptyView.setTextSize(1, 18.0f);
+        TextView textView = new TextView(context);
+        this.stickersEmptyView = textView;
+        textView.setTextSize(1, 18.0f);
         this.stickersEmptyView.setTextColor(-7829368);
         addView(this.stickersEmptyView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
         this.stickersGridView.setEmptyView(this.stickersEmptyView);
-        this.scrollSlidingTabStrip = new ScrollSlidingTabStrip(context);
-        this.scrollSlidingTabStrip.setBackgroundColor(-16777216);
+        ScrollSlidingTabStrip scrollSlidingTabStrip2 = new ScrollSlidingTabStrip(context);
+        this.scrollSlidingTabStrip = scrollSlidingTabStrip2;
+        scrollSlidingTabStrip2.setBackgroundColor(-16777216);
         this.scrollSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(1.0f));
         this.scrollSlidingTabStrip.setIndicatorColor(-10305560);
         this.scrollSlidingTabStrip.setUnderlineColor(-15066598);
@@ -132,7 +136,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
             ContentPreviewViewer.getInstance().reset();
             StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
             if (!stickerEmojiCell.isDisabled()) {
-                TLRPC.Document sticker = stickerEmojiCell.getSticker();
+                TLRPC$Document sticker = stickerEmojiCell.getSticker();
                 Object parentObject = stickerEmojiCell.getParentObject();
                 this.listener.onStickerSelected(parentObject, sticker);
                 MediaDataController.getInstance(this.currentAccount).addRecentSticker(1, parentObject, sticker, (int) (System.currentTimeMillis() / 1000), false);
@@ -195,7 +199,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
     }
 
     private void updateStickerTabs() {
-        ArrayList<TLRPC.Document> arrayList;
+        ArrayList<TLRPC$Document> arrayList;
         ScrollSlidingTabStrip scrollSlidingTabStrip2 = this.scrollSlidingTabStrip;
         if (scrollSlidingTabStrip2 != null) {
             this.recentTabBum = -2;
@@ -220,17 +224,17 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
                 this.scrollSlidingTabStrip.addIconTab(2, Theme.createEmojiIconSelectorDrawable(getContext(), NUM, Theme.getColor("chat_emojiPanelMasksIcon"), Theme.getColor("chat_emojiPanelMasksIconSelected")));
             }
             this.stickerSets[this.currentType].clear();
-            ArrayList<TLRPC.TL_messages_stickerSet> stickerSets2 = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
+            ArrayList<TLRPC$TL_messages_stickerSet> stickerSets2 = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (int i2 = 0; i2 < stickerSets2.size(); i2++) {
-                TLRPC.TL_messages_stickerSet tL_messages_stickerSet = stickerSets2.get(i2);
-                if (!tL_messages_stickerSet.set.archived && (arrayList = tL_messages_stickerSet.documents) != null && !arrayList.isEmpty()) {
-                    this.stickerSets[this.currentType].add(tL_messages_stickerSet);
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = stickerSets2.get(i2);
+                if (!tLRPC$TL_messages_stickerSet.set.archived && (arrayList = tLRPC$TL_messages_stickerSet.documents) != null && !arrayList.isEmpty()) {
+                    this.stickerSets[this.currentType].add(tLRPC$TL_messages_stickerSet);
                 }
             }
             for (int i3 = 0; i3 < this.stickerSets[this.currentType].size(); i3++) {
-                TLRPC.TL_messages_stickerSet tL_messages_stickerSet2 = this.stickerSets[this.currentType].get(i3);
-                TLRPC.Document document = tL_messages_stickerSet2.documents.get(0);
-                this.scrollSlidingTabStrip.addStickerTab(document, document, tL_messages_stickerSet2);
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = this.stickerSets[this.currentType].get(i3);
+                TLRPC$Document tLRPC$Document = tLRPC$TL_messages_stickerSet2.documents.get(0);
+                this.scrollSlidingTabStrip.addStickerTab(tLRPC$Document, tLRPC$Document, tLRPC$TL_messages_stickerSet2);
             }
             this.scrollSlidingTabStrip.updateTabStyles();
             if (currentPosition != 0) {
@@ -250,21 +254,6 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
                 i = this.stickersTabOffset;
             }
             scrollSlidingTabStrip2.onPageScrolled(tabForPosition, i + 1);
-        }
-    }
-
-    public void addRecentSticker(TLRPC.Document document) {
-        if (document != null) {
-            MediaDataController.getInstance(this.currentAccount).addRecentSticker(this.currentType, (Object) null, document, (int) (System.currentTimeMillis() / 1000), false);
-            boolean isEmpty = this.recentStickers[this.currentType].isEmpty();
-            this.recentStickers[this.currentType] = MediaDataController.getInstance(this.currentAccount).getRecentStickers(this.currentType);
-            StickersGridAdapter stickersGridAdapter2 = this.stickersGridAdapter;
-            if (stickersGridAdapter2 != null) {
-                stickersGridAdapter2.notifyDataSetChanged();
-            }
-            if (isEmpty) {
-                updateStickerTabs();
-            }
         }
     }
 
@@ -324,13 +313,6 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
         }
     }
 
-    public void onDestroy() {
-        if (this.stickersGridAdapter != null) {
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentDocumentsDidLoad);
-        }
-    }
-
     private void checkDocuments() {
         int size = this.recentStickers[this.currentType].size();
         this.recentStickers[this.currentType] = MediaDataController.getInstance(this.currentAccount).getRecentStickers(this.currentType);
@@ -356,11 +338,11 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
     }
 
     private class StickersGridAdapter extends RecyclerListView.SelectionAdapter {
-        private SparseArray<TLRPC.Document> cache = new SparseArray<>();
+        private SparseArray<TLRPC$Document> cache = new SparseArray<>();
         private Context context;
-        private HashMap<TLRPC.TL_messages_stickerSet, Integer> packStartRow = new HashMap<>();
-        private SparseArray<TLRPC.TL_messages_stickerSet> positionsToSets = new SparseArray<>();
-        private SparseArray<TLRPC.TL_messages_stickerSet> rowStartPack = new SparseArray<>();
+        private HashMap<TLRPC$TL_messages_stickerSet, Integer> packStartRow = new HashMap<>();
+        private SparseArray<TLRPC$TL_messages_stickerSet> positionsToSets = new SparseArray<>();
+        private SparseArray<TLRPC$TL_messages_stickerSet> rowStartPack = new SparseArray<>();
         /* access modifiers changed from: private */
         public int stickersPerRow;
         /* access modifiers changed from: private */
@@ -382,12 +364,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
             return 0;
         }
 
-        public Object getItem(int i) {
-            return this.cache.get(i);
-        }
-
-        public int getPositionForPack(TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
-            return this.packStartRow.get(tL_messages_stickerSet).intValue() * this.stickersPerRow;
+        public int getPositionForPack(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+            return this.packStartRow.get(tLRPC$TL_messages_stickerSet).intValue() * this.stickersPerRow;
         }
 
         public int getItemViewType(int i) {
@@ -402,17 +380,17 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
                 }
                 this.stickersPerRow = measuredWidth / AndroidUtilities.dp(72.0f);
             }
-            TLRPC.TL_messages_stickerSet tL_messages_stickerSet = this.rowStartPack.get(i / this.stickersPerRow);
-            if (tL_messages_stickerSet == null) {
+            TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.rowStartPack.get(i / this.stickersPerRow);
+            if (tLRPC$TL_messages_stickerSet == null) {
                 return StickerMasksView.this.recentTabBum;
             }
-            return StickerMasksView.this.stickerSets[StickerMasksView.this.currentType].indexOf(tL_messages_stickerSet) + StickerMasksView.this.stickersTabOffset;
+            return StickerMasksView.this.stickerSets[StickerMasksView.this.currentType].indexOf(tLRPC$TL_messages_stickerSet) + StickerMasksView.this.stickersTabOffset;
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
-                view = new StickerEmojiCell(this.context) {
+                view = new StickerEmojiCell(this, this.context) {
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                     }
@@ -427,29 +405,33 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0) {
-                ((StickerEmojiCell) viewHolder.itemView).setSticker(this.cache.get(i), this.positionsToSets.get(i), false);
-            } else if (itemViewType == 1) {
-                if (i == this.totalItems) {
-                    TLRPC.TL_messages_stickerSet tL_messages_stickerSet = this.rowStartPack.get((i - 1) / this.stickersPerRow);
-                    if (tL_messages_stickerSet == null) {
-                        ((EmptyCell) viewHolder.itemView).setHeight(1);
+            if (itemViewType != 0) {
+                int i2 = 1;
+                if (itemViewType == 1) {
+                    if (i == this.totalItems) {
+                        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.rowStartPack.get((i - 1) / this.stickersPerRow);
+                        if (tLRPC$TL_messages_stickerSet == null) {
+                            ((EmptyCell) viewHolder.itemView).setHeight(1);
+                            return;
+                        }
+                        int measuredHeight = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) tLRPC$TL_messages_stickerSet.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
+                        EmptyCell emptyCell = (EmptyCell) viewHolder.itemView;
+                        if (measuredHeight > 0) {
+                            i2 = measuredHeight;
+                        }
+                        emptyCell.setHeight(i2);
                         return;
                     }
-                    int measuredHeight = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) tL_messages_stickerSet.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
-                    EmptyCell emptyCell = (EmptyCell) viewHolder.itemView;
-                    if (measuredHeight <= 0) {
-                        measuredHeight = 1;
-                    }
-                    emptyCell.setHeight(measuredHeight);
+                    ((EmptyCell) viewHolder.itemView).setHeight(AndroidUtilities.dp(82.0f));
                     return;
                 }
-                ((EmptyCell) viewHolder.itemView).setHeight(AndroidUtilities.dp(82.0f));
+                return;
             }
+            ((StickerEmojiCell) viewHolder.itemView).setSticker(this.cache.get(i), this.positionsToSets.get(i), false);
         }
 
         public void notifyDataSetChanged() {
-            ArrayList<TLRPC.Document> arrayList;
+            ArrayList<TLRPC$Document> arrayList;
             int measuredWidth = StickerMasksView.this.getMeasuredWidth();
             if (measuredWidth == 0) {
                 measuredWidth = AndroidUtilities.displaySize.x;
@@ -463,24 +445,24 @@ public class StickerMasksView extends FrameLayout implements NotificationCenter.
             this.totalItems = 0;
             ArrayList arrayList2 = StickerMasksView.this.stickerSets[StickerMasksView.this.currentType];
             for (int i = -1; i < arrayList2.size(); i++) {
-                TLRPC.TL_messages_stickerSet tL_messages_stickerSet = null;
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = null;
                 int i2 = this.totalItems / this.stickersPerRow;
                 if (i == -1) {
                     arrayList = StickerMasksView.this.recentStickers[StickerMasksView.this.currentType];
                 } else {
-                    tL_messages_stickerSet = (TLRPC.TL_messages_stickerSet) arrayList2.get(i);
-                    arrayList = tL_messages_stickerSet.documents;
-                    this.packStartRow.put(tL_messages_stickerSet, Integer.valueOf(i2));
+                    tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) arrayList2.get(i);
+                    arrayList = tLRPC$TL_messages_stickerSet.documents;
+                    this.packStartRow.put(tLRPC$TL_messages_stickerSet, Integer.valueOf(i2));
                 }
                 if (!arrayList.isEmpty()) {
                     int ceil = (int) Math.ceil((double) (((float) arrayList.size()) / ((float) this.stickersPerRow)));
                     for (int i3 = 0; i3 < arrayList.size(); i3++) {
                         this.cache.put(this.totalItems + i3, arrayList.get(i3));
-                        this.positionsToSets.put(this.totalItems + i3, tL_messages_stickerSet);
+                        this.positionsToSets.put(this.totalItems + i3, tLRPC$TL_messages_stickerSet);
                     }
                     this.totalItems += this.stickersPerRow * ceil;
                     for (int i4 = 0; i4 < ceil; i4++) {
-                        this.rowStartPack.put(i2 + i4, tL_messages_stickerSet);
+                        this.rowStartPack.put(i2 + i4, tLRPC$TL_messages_stickerSet);
                     }
                 }
             }

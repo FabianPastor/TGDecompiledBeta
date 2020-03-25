@@ -50,7 +50,24 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_account_changePhone;
+import org.telegram.tgnet.TLRPC$TL_account_sendChangePhoneCode;
+import org.telegram.tgnet.TLRPC$TL_auth_cancelCode;
+import org.telegram.tgnet.TLRPC$TL_auth_codeTypeCall;
+import org.telegram.tgnet.TLRPC$TL_auth_codeTypeFlashCall;
+import org.telegram.tgnet.TLRPC$TL_auth_codeTypeSms;
+import org.telegram.tgnet.TLRPC$TL_auth_resendCode;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCode;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeApp;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeCall;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeFlashCall;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCodeTypeSms;
+import org.telegram.tgnet.TLRPC$TL_codeSettings;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$auth_CodeType;
+import org.telegram.tgnet.TLRPC$auth_SentCodeType;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -65,7 +82,6 @@ import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.CountrySelectActivity;
 
 public class ChangePhoneActivity extends BaseFragment {
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public boolean checkPermissions = true;
     /* access modifiers changed from: private */
@@ -86,7 +102,7 @@ public class ChangePhoneActivity extends BaseFragment {
         private Paint paint2 = new Paint();
         private float progress;
 
-        public ProgressView(Context context) {
+        public ProgressView(ChangePhoneActivity changePhoneActivity, Context context) {
             super(context);
             this.paint.setColor(Theme.getColor("login_progressInner"));
             this.paint2.setColor(Theme.getColor("login_progressOuter"));
@@ -232,8 +248,9 @@ public class ChangePhoneActivity extends BaseFragment {
 
     public void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new AlertDialog(getParentActivity(), 3);
-            this.progressDialog.setCanCacnel(false);
+            AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
+            this.progressDialog = alertDialog;
+            alertDialog.setCanCacnel(false);
             this.progressDialog.show();
         }
     }
@@ -280,7 +297,7 @@ public class ChangePhoneActivity extends BaseFragment {
         animatorArr[0] = ObjectAnimator.ofFloat(slideView, "translationX", fArr);
         animatorArr[1] = ObjectAnimator.ofFloat(slideView2, "translationX", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
+        animatorSet.addListener(new AnimatorListenerAdapter(this) {
             public void onAnimationStart(Animator animator) {
                 slideView2.setVisibility(0);
             }
@@ -294,38 +311,38 @@ public class ChangePhoneActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public void fillNextCodeParams(Bundle bundle, TLRPC.TL_auth_sentCode tL_auth_sentCode) {
-        bundle.putString("phoneHash", tL_auth_sentCode.phone_code_hash);
-        TLRPC.auth_CodeType auth_codetype = tL_auth_sentCode.next_type;
-        if (auth_codetype instanceof TLRPC.TL_auth_codeTypeCall) {
+    public void fillNextCodeParams(Bundle bundle, TLRPC$TL_auth_sentCode tLRPC$TL_auth_sentCode) {
+        bundle.putString("phoneHash", tLRPC$TL_auth_sentCode.phone_code_hash);
+        TLRPC$auth_CodeType tLRPC$auth_CodeType = tLRPC$TL_auth_sentCode.next_type;
+        if (tLRPC$auth_CodeType instanceof TLRPC$TL_auth_codeTypeCall) {
             bundle.putInt("nextType", 4);
-        } else if (auth_codetype instanceof TLRPC.TL_auth_codeTypeFlashCall) {
+        } else if (tLRPC$auth_CodeType instanceof TLRPC$TL_auth_codeTypeFlashCall) {
             bundle.putInt("nextType", 3);
-        } else if (auth_codetype instanceof TLRPC.TL_auth_codeTypeSms) {
+        } else if (tLRPC$auth_CodeType instanceof TLRPC$TL_auth_codeTypeSms) {
             bundle.putInt("nextType", 2);
         }
-        if (tL_auth_sentCode.type instanceof TLRPC.TL_auth_sentCodeTypeApp) {
+        if (tLRPC$TL_auth_sentCode.type instanceof TLRPC$TL_auth_sentCodeTypeApp) {
             bundle.putInt("type", 1);
-            bundle.putInt("length", tL_auth_sentCode.type.length);
+            bundle.putInt("length", tLRPC$TL_auth_sentCode.type.length);
             setPage(1, true, bundle, false);
             return;
         }
-        if (tL_auth_sentCode.timeout == 0) {
-            tL_auth_sentCode.timeout = 60;
+        if (tLRPC$TL_auth_sentCode.timeout == 0) {
+            tLRPC$TL_auth_sentCode.timeout = 60;
         }
-        bundle.putInt("timeout", tL_auth_sentCode.timeout * 1000);
-        TLRPC.auth_SentCodeType auth_sentcodetype = tL_auth_sentCode.type;
-        if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeCall) {
+        bundle.putInt("timeout", tLRPC$TL_auth_sentCode.timeout * 1000);
+        TLRPC$auth_SentCodeType tLRPC$auth_SentCodeType = tLRPC$TL_auth_sentCode.type;
+        if (tLRPC$auth_SentCodeType instanceof TLRPC$TL_auth_sentCodeTypeCall) {
             bundle.putInt("type", 4);
-            bundle.putInt("length", tL_auth_sentCode.type.length);
+            bundle.putInt("length", tLRPC$TL_auth_sentCode.type.length);
             setPage(4, true, bundle, false);
-        } else if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeFlashCall) {
+        } else if (tLRPC$auth_SentCodeType instanceof TLRPC$TL_auth_sentCodeTypeFlashCall) {
             bundle.putInt("type", 3);
-            bundle.putString("pattern", tL_auth_sentCode.type.pattern);
+            bundle.putString("pattern", tLRPC$TL_auth_sentCode.type.pattern);
             setPage(3, true, bundle, false);
-        } else if (auth_sentcodetype instanceof TLRPC.TL_auth_sentCodeTypeSms) {
+        } else if (tLRPC$auth_SentCodeType instanceof TLRPC$TL_auth_sentCodeTypeSms) {
             bundle.putInt("type", 2);
-            bundle.putInt("length", tL_auth_sentCode.type.length);
+            bundle.putInt("length", tLRPC$TL_auth_sentCode.type.length);
             setPage(2, true, bundle, false);
         }
     }
@@ -365,6 +382,9 @@ public class ChangePhoneActivity extends BaseFragment {
         }
 
         /* JADX WARNING: Illegal instructions before constructor call */
+        /* JADX WARNING: Removed duplicated region for block: B:40:0x0332  */
+        /* JADX WARNING: Removed duplicated region for block: B:43:0x034f  */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x0363  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public PhoneView(org.telegram.ui.ChangePhoneActivity r22, android.content.Context r23) {
             /*
@@ -397,7 +417,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r5 = new android.widget.TextView
                 r5.<init>(r2)
                 r1.countryButton = r5
-                android.widget.TextView r5 = r1.countryButton
                 r6 = 1099956224(0x41900000, float:18.0)
                 r5.setTextSize(r4, r6)
                 android.widget.TextView r5 = r1.countryButton
@@ -422,12 +441,12 @@ public class ChangePhoneActivity extends BaseFragment {
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
                 r9 = 5
                 r10 = 3
-                if (r8 == 0) goto L_0x0082
+                if (r8 == 0) goto L_0x0080
                 r8 = 5
-                goto L_0x0083
-            L_0x0082:
+                goto L_0x0081
+            L_0x0080:
                 r8 = 3
-            L_0x0083:
+            L_0x0081:
                 r8 = r8 | r4
                 r5.setGravity(r8)
                 android.widget.TextView r5 = r1.countryButton
@@ -452,7 +471,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.view.View r5 = new android.view.View
                 r5.<init>(r2)
                 r1.view = r5
-                android.view.View r5 = r1.view
                 r8 = 1094713344(0x41400000, float:12.0)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -482,7 +500,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r8 = new android.widget.TextView
                 r8.<init>(r2)
                 r1.textView = r8
-                android.widget.TextView r8 = r1.textView
                 java.lang.String r11 = "+"
                 r8.setText(r11)
                 android.widget.TextView r8 = r1.textView
@@ -497,7 +514,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 org.telegram.ui.Components.EditTextBoldCursor r8 = new org.telegram.ui.Components.EditTextBoldCursor
                 r8.<init>(r2)
                 r1.codeField = r8
-                org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
                 r8.setInputType(r10)
                 org.telegram.ui.Components.EditTextBoldCursor r8 = r1.codeField
                 int r11 = org.telegram.ui.ActionBar.Theme.getColor(r7)
@@ -555,7 +571,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 org.telegram.ui.Components.HintEditText r8 = new org.telegram.ui.Components.HintEditText
                 r8.<init>(r2)
                 r1.phoneField = r8
-                org.telegram.ui.Components.HintEditText r8 = r1.phoneField
                 r8.setInputType(r10)
                 org.telegram.ui.Components.HintEditText r8 = r1.phoneField
                 int r15 = org.telegram.ui.ActionBar.Theme.getColor(r7)
@@ -605,8 +620,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r0 = new android.widget.TextView
                 r0.<init>(r2)
                 r1.textView2 = r0
-                android.widget.TextView r0 = r1.textView2
-                r2 = 2131624502(0x7f0e0236, float:1.8876186E38)
+                r2 = 2131624506(0x7f0e023a, float:1.8876194E38)
                 java.lang.String r5 = "ChangePhoneHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                 r0.setText(r2)
@@ -619,12 +633,12 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.setTextSize(r4, r2)
                 android.widget.TextView r0 = r1.textView2
                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                if (r2 == 0) goto L_0x0269
+                if (r2 == 0) goto L_0x025d
                 r2 = 5
-                goto L_0x026a
-            L_0x0269:
+                goto L_0x025e
+            L_0x025d:
                 r2 = 3
-            L_0x026a:
+            L_0x025e:
                 r0.setGravity(r2)
                 android.widget.TextView r0 = r1.textView2
                 r2 = 1073741824(0x40000000, float:2.0)
@@ -636,12 +650,12 @@ public class ChangePhoneActivity extends BaseFragment {
                 r11 = -2
                 r12 = -2
                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                if (r2 == 0) goto L_0x0285
+                if (r2 == 0) goto L_0x0279
                 r13 = 5
-                goto L_0x0286
-            L_0x0285:
+                goto L_0x027a
+            L_0x0279:
                 r13 = 3
-            L_0x0286:
+            L_0x027a:
                 r14 = 0
                 r15 = 28
                 r16 = 0
@@ -650,96 +664,96 @@ public class ChangePhoneActivity extends BaseFragment {
                 r1.addView(r0, r2)
                 java.util.HashMap r2 = new java.util.HashMap
                 r2.<init>()
-                java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x02ef }
-                java.io.InputStreamReader r5 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x02ef }
-                android.content.res.Resources r6 = r21.getResources()     // Catch:{ Exception -> 0x02ef }
-                android.content.res.AssetManager r6 = r6.getAssets()     // Catch:{ Exception -> 0x02ef }
+                java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x02e3 }
+                java.io.InputStreamReader r5 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x02e3 }
+                android.content.res.Resources r6 = r21.getResources()     // Catch:{ Exception -> 0x02e3 }
+                android.content.res.AssetManager r6 = r6.getAssets()     // Catch:{ Exception -> 0x02e3 }
                 java.lang.String r7 = "countries.txt"
-                java.io.InputStream r6 = r6.open(r7)     // Catch:{ Exception -> 0x02ef }
-                r5.<init>(r6)     // Catch:{ Exception -> 0x02ef }
-                r0.<init>(r5)     // Catch:{ Exception -> 0x02ef }
-            L_0x02b1:
-                java.lang.String r5 = r0.readLine()     // Catch:{ Exception -> 0x02ef }
-                if (r5 == 0) goto L_0x02eb
+                java.io.InputStream r6 = r6.open(r7)     // Catch:{ Exception -> 0x02e3 }
+                r5.<init>(r6)     // Catch:{ Exception -> 0x02e3 }
+                r0.<init>(r5)     // Catch:{ Exception -> 0x02e3 }
+            L_0x02a5:
+                java.lang.String r5 = r0.readLine()     // Catch:{ Exception -> 0x02e3 }
+                if (r5 == 0) goto L_0x02df
                 java.lang.String r6 = ";"
-                java.lang.String[] r5 = r5.split(r6)     // Catch:{ Exception -> 0x02ef }
-                java.util.ArrayList<java.lang.String> r6 = r1.countriesArray     // Catch:{ Exception -> 0x02ef }
+                java.lang.String[] r5 = r5.split(r6)     // Catch:{ Exception -> 0x02e3 }
+                java.util.ArrayList<java.lang.String> r6 = r1.countriesArray     // Catch:{ Exception -> 0x02e3 }
                 r7 = 2
-                r9 = r5[r7]     // Catch:{ Exception -> 0x02ef }
-                r6.add(r3, r9)     // Catch:{ Exception -> 0x02ef }
-                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.countriesMap     // Catch:{ Exception -> 0x02ef }
-                r9 = r5[r7]     // Catch:{ Exception -> 0x02ef }
-                r11 = r5[r3]     // Catch:{ Exception -> 0x02ef }
-                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
-                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.codesMap     // Catch:{ Exception -> 0x02ef }
-                r9 = r5[r3]     // Catch:{ Exception -> 0x02ef }
-                r11 = r5[r7]     // Catch:{ Exception -> 0x02ef }
-                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
-                int r6 = r5.length     // Catch:{ Exception -> 0x02ef }
-                if (r6 <= r10) goto L_0x02e3
-                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.phoneFormatMap     // Catch:{ Exception -> 0x02ef }
-                r9 = r5[r3]     // Catch:{ Exception -> 0x02ef }
-                r11 = r5[r10]     // Catch:{ Exception -> 0x02ef }
-                r6.put(r9, r11)     // Catch:{ Exception -> 0x02ef }
+                r9 = r5[r7]     // Catch:{ Exception -> 0x02e3 }
+                r6.add(r3, r9)     // Catch:{ Exception -> 0x02e3 }
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.countriesMap     // Catch:{ Exception -> 0x02e3 }
+                r9 = r5[r7]     // Catch:{ Exception -> 0x02e3 }
+                r11 = r5[r3]     // Catch:{ Exception -> 0x02e3 }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02e3 }
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.codesMap     // Catch:{ Exception -> 0x02e3 }
+                r9 = r5[r3]     // Catch:{ Exception -> 0x02e3 }
+                r11 = r5[r7]     // Catch:{ Exception -> 0x02e3 }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02e3 }
+                int r6 = r5.length     // Catch:{ Exception -> 0x02e3 }
+                if (r6 <= r10) goto L_0x02d7
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.phoneFormatMap     // Catch:{ Exception -> 0x02e3 }
+                r9 = r5[r3]     // Catch:{ Exception -> 0x02e3 }
+                r11 = r5[r10]     // Catch:{ Exception -> 0x02e3 }
+                r6.put(r9, r11)     // Catch:{ Exception -> 0x02e3 }
+            L_0x02d7:
+                r6 = r5[r4]     // Catch:{ Exception -> 0x02e3 }
+                r5 = r5[r7]     // Catch:{ Exception -> 0x02e3 }
+                r2.put(r6, r5)     // Catch:{ Exception -> 0x02e3 }
+                goto L_0x02a5
+            L_0x02df:
+                r0.close()     // Catch:{ Exception -> 0x02e3 }
+                goto L_0x02e7
             L_0x02e3:
-                r6 = r5[r4]     // Catch:{ Exception -> 0x02ef }
-                r5 = r5[r7]     // Catch:{ Exception -> 0x02ef }
-                r2.put(r6, r5)     // Catch:{ Exception -> 0x02ef }
-                goto L_0x02b1
-            L_0x02eb:
-                r0.close()     // Catch:{ Exception -> 0x02ef }
-                goto L_0x02f3
-            L_0x02ef:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x02f3:
+            L_0x02e7:
                 java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
                 org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r5 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
                 java.util.Collections.sort(r0, r5)
                 r5 = 0
-                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0311 }
+                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0304 }
                 java.lang.String r6 = "phone"
-                java.lang.Object r0 = r0.getSystemService(r6)     // Catch:{ Exception -> 0x0311 }
-                android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0311 }
-                if (r0 == 0) goto L_0x0315
-                java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0311 }
-                java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0311 }
-                r5 = r0
-                goto L_0x0315
-            L_0x0311:
+                java.lang.Object r0 = r0.getSystemService(r6)     // Catch:{ Exception -> 0x0304 }
+                android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0304 }
+                if (r0 == 0) goto L_0x0308
+                java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0304 }
+                java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0304 }
+                goto L_0x0309
+            L_0x0304:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0315:
-                if (r5 == 0) goto L_0x0336
-                java.lang.Object r0 = r2.get(r5)
+            L_0x0308:
+                r0 = r5
+            L_0x0309:
+                if (r0 == 0) goto L_0x032a
+                java.lang.Object r0 = r2.get(r0)
                 java.lang.String r0 = (java.lang.String) r0
-                if (r0 == 0) goto L_0x0336
+                if (r0 == 0) goto L_0x032a
                 java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
                 int r2 = r2.indexOf(r0)
-                if (r2 == r8) goto L_0x0336
+                if (r2 == r8) goto L_0x032a
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r1.codeField
-                java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.countriesMap
-                java.lang.Object r0 = r5.get(r0)
+                java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.countriesMap
+                java.lang.Object r0 = r6.get(r0)
                 java.lang.CharSequence r0 = (java.lang.CharSequence) r0
                 r2.setText(r0)
                 r1.countryState = r3
-            L_0x0336:
+            L_0x032a:
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 int r0 = r0.length()
-                if (r0 != 0) goto L_0x0354
+                if (r0 != 0) goto L_0x0347
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624688(0x7f0e02f0, float:1.8876563E38)
+                r2 = 2131624695(0x7f0e02f7, float:1.8876577E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
-                r2 = 0
-                r0.setHintText(r2)
+                r0.setHintText(r5)
                 r1.countryState = r4
-            L_0x0354:
+            L_0x0347:
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 int r0 = r0.length()
-                if (r0 == 0) goto L_0x0370
+                if (r0 == 0) goto L_0x0363
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
                 org.telegram.messenger.AndroidUtilities.showKeyboard(r0)
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
@@ -747,13 +761,13 @@ public class ChangePhoneActivity extends BaseFragment {
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
                 int r2 = r0.length()
                 r0.setSelection(r2)
-                goto L_0x037a
-            L_0x0370:
+                goto L_0x036d
+            L_0x0363:
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 org.telegram.messenger.AndroidUtilities.showKeyboard(r0)
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 r0.requestFocus()
-            L_0x037a:
+            L_0x036d:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.PhoneView.<init>(org.telegram.ui.ChangePhoneActivity, android.content.Context):void");
@@ -877,31 +891,32 @@ public class ChangePhoneActivity extends BaseFragment {
                 } else if (this.codeField.length() == 0) {
                     AlertsCreator.showSimpleAlert(this.this$0, LocaleController.getString("InvalidPhoneNumber", NUM));
                 } else {
-                    TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode = new TLRPC.TL_account_sendChangePhoneCode();
+                    TLRPC$TL_account_sendChangePhoneCode tLRPC$TL_account_sendChangePhoneCode = new TLRPC$TL_account_sendChangePhoneCode();
                     String stripExceptNumbers = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
-                    tL_account_sendChangePhoneCode.phone_number = stripExceptNumbers;
-                    tL_account_sendChangePhoneCode.settings = new TLRPC.TL_codeSettings();
-                    tL_account_sendChangePhoneCode.settings.allow_flashcall = z2 && z;
-                    tL_account_sendChangePhoneCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
+                    tLRPC$TL_account_sendChangePhoneCode.phone_number = stripExceptNumbers;
+                    TLRPC$TL_codeSettings tLRPC$TL_codeSettings = new TLRPC$TL_codeSettings();
+                    tLRPC$TL_account_sendChangePhoneCode.settings = tLRPC$TL_codeSettings;
+                    tLRPC$TL_codeSettings.allow_flashcall = z2 && z;
+                    tLRPC$TL_account_sendChangePhoneCode.settings.allow_app_hash = ApplicationLoader.hasPlayServices;
                     SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                    if (tL_account_sendChangePhoneCode.settings.allow_app_hash) {
+                    if (tLRPC$TL_account_sendChangePhoneCode.settings.allow_app_hash) {
                         sharedPreferences.edit().putString("sms_hash", BuildVars.SMS_HASH).commit();
                     } else {
                         sharedPreferences.edit().remove("sms_hash").commit();
                     }
-                    if (tL_account_sendChangePhoneCode.settings.allow_flashcall) {
+                    if (tLRPC$TL_account_sendChangePhoneCode.settings.allow_flashcall) {
                         try {
                             String line1Number = telephonyManager.getLine1Number();
                             if (!TextUtils.isEmpty(line1Number)) {
-                                tL_account_sendChangePhoneCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, line1Number);
-                                if (!tL_account_sendChangePhoneCode.settings.current_number) {
-                                    tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
+                                tLRPC$TL_account_sendChangePhoneCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, line1Number);
+                                if (!tLRPC$TL_account_sendChangePhoneCode.settings.current_number) {
+                                    tLRPC$TL_account_sendChangePhoneCode.settings.allow_flashcall = false;
                                 }
                             } else {
-                                tL_account_sendChangePhoneCode.settings.current_number = false;
+                                tLRPC$TL_account_sendChangePhoneCode.settings.current_number = false;
                             }
                         } catch (Exception e) {
-                            tL_account_sendChangePhoneCode.settings.allow_flashcall = false;
+                            tLRPC$TL_account_sendChangePhoneCode.settings.allow_flashcall = false;
                             FileLog.e((Throwable) e);
                         }
                     }
@@ -916,29 +931,29 @@ public class ChangePhoneActivity extends BaseFragment {
                     bundle.putString("phoneFormated", stripExceptNumbers);
                     this.nextPressed = true;
                     this.this$0.needShowProgress();
-                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_sendChangePhoneCode, new RequestDelegate(bundle, tL_account_sendChangePhoneCode) {
+                    ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_sendChangePhoneCode, new RequestDelegate(bundle, tLRPC$TL_account_sendChangePhoneCode) {
                         private final /* synthetic */ Bundle f$1;
-                        private final /* synthetic */ TLRPC.TL_account_sendChangePhoneCode f$2;
+                        private final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$2;
 
                         {
                             this.f$1 = r2;
                             this.f$2 = r3;
                         }
 
-                        public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                            ChangePhoneActivity.PhoneView.this.lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(this.f$1, this.f$2, tLObject, tL_error);
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            ChangePhoneActivity.PhoneView.this.lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                         }
                     }, 2);
                 }
             }
         }
 
-        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle bundle, TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode, TLObject tLObject, TLRPC.TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(tL_error, bundle, tLObject, tL_account_sendChangePhoneCode) {
-                private final /* synthetic */ TLRPC.TL_error f$1;
+        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle bundle, TLRPC$TL_account_sendChangePhoneCode tLRPC$TL_account_sendChangePhoneCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, bundle, tLObject, tLRPC$TL_account_sendChangePhoneCode) {
+                private final /* synthetic */ TLRPC$TL_error f$1;
                 private final /* synthetic */ Bundle f$2;
                 private final /* synthetic */ TLObject f$3;
-                private final /* synthetic */ TLRPC.TL_account_sendChangePhoneCode f$4;
+                private final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$4;
 
                 {
                     this.f$1 = r2;
@@ -953,12 +968,12 @@ public class ChangePhoneActivity extends BaseFragment {
             });
         }
 
-        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TLRPC.TL_error tL_error, Bundle bundle, TLObject tLObject, TLRPC.TL_account_sendChangePhoneCode tL_account_sendChangePhoneCode) {
+        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_account_sendChangePhoneCode tLRPC$TL_account_sendChangePhoneCode) {
             this.nextPressed = false;
-            if (tL_error == null) {
-                this.this$0.fillNextCodeParams(bundle, (TLRPC.TL_auth_sentCode) tLObject);
+            if (tLRPC$TL_error == null) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject);
             } else {
-                AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_account_sendChangePhoneCode, bundle.getString("phone"));
+                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_sendChangePhoneCode, bundle.getString("phone"));
             }
             this.this$0.needHideProgress();
         }
@@ -1039,7 +1054,7 @@ public class ChangePhoneActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public boolean waitingForEvent;
 
-        static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TLRPC.TL_error tL_error) {
+        static /* synthetic */ void lambda$onBackPressed$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         }
 
         public boolean needBackButton() {
@@ -1074,7 +1089,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r2)
                 r0.confirmTextView = r4
-                android.widget.TextView r4 = r0.confirmTextView
                 java.lang.String r5 = "windowBackgroundWhiteGrayText6"
                 int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r6)
@@ -1090,7 +1104,6 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r2)
                 r0.titleTextView = r4
-                android.widget.TextView r4 = r0.titleTextView
                 java.lang.String r8 = "windowBackgroundWhiteBlackText"
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r8)
                 r4.setTextColor(r10)
@@ -1104,12 +1117,12 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x0081
+                if (r10 == 0) goto L_0x007d
                 r10 = 5
-                goto L_0x0082
-            L_0x0081:
+                goto L_0x007e
+            L_0x007d:
                 r10 = 3
-            L_0x0082:
+            L_0x007e:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -1120,34 +1133,34 @@ public class ChangePhoneActivity extends BaseFragment {
                 r4.setGravity(r10)
                 int r4 = r0.currentType
                 r13 = -2
-                if (r4 != r12) goto L_0x0130
+                if (r4 != r12) goto L_0x012c
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00a3
+                if (r8 == 0) goto L_0x009f
                 r8 = 5
-                goto L_0x00a4
-            L_0x00a3:
+                goto L_0x00a0
+            L_0x009f:
                 r8 = 3
-            L_0x00a4:
+            L_0x00a0:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00b4
+                if (r8 == 0) goto L_0x00b0
                 r8 = 5
-                goto L_0x00b5
-            L_0x00b4:
+                goto L_0x00b1
+            L_0x00b0:
                 r8 = 3
-            L_0x00b5:
+            L_0x00b1:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165776(0x7var_, float:1.7945779E38)
+                r14 = 2131165788(0x7var_c, float:1.7945803E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x00ff
+                if (r14 == 0) goto L_0x00fb
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -1161,29 +1174,29 @@ public class ChangePhoneActivity extends BaseFragment {
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x00ec
+                if (r16 == 0) goto L_0x00e8
                 r16 = 5
-                goto L_0x00ee
-            L_0x00ec:
+                goto L_0x00ea
+            L_0x00e8:
                 r16 = 3
-            L_0x00ee:
+            L_0x00ea:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x021a
-            L_0x00ff:
+                goto L_0x0210
+            L_0x00fb:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x010a
+                if (r14 == 0) goto L_0x0106
                 r18 = 5
-                goto L_0x010c
-            L_0x010a:
+                goto L_0x0108
+            L_0x0106:
                 r18 = 3
-            L_0x010c:
+            L_0x0108:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -1198,8 +1211,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x021a
-            L_0x0130:
+                goto L_0x0210
+            L_0x012c:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -1208,12 +1221,11 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.addView(r4, r14)
                 int r14 = r0.currentType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01b4
+                if (r14 != r3) goto L_0x01ac
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                android.widget.ImageView r14 = r0.blackImageView
-                r11 = 2131165899(0x7var_cb, float:1.7946028E38)
+                r11 = 2131165911(0x7var_d7, float:1.7946052E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -1234,8 +1246,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                android.widget.ImageView r8 = r0.blueImageView
-                r10 = 2131165897(0x7var_c9, float:1.7946024E38)
+                r10 = 2131165909(0x7var_d5, float:1.7946048E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1247,17 +1258,16 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626582(0x7f0e0a56, float:1.8880404E38)
+                r8 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x01f8
-            L_0x01b4:
+                goto L_0x01ee
+            L_0x01ac:
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                android.widget.ImageView r8 = r0.blueImageView
-                r10 = 2131165898(0x7var_ca, float:1.7946026E38)
+                r10 = 2131165910(0x7var_d6, float:1.794605E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1276,11 +1286,11 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626586(0x7f0e0a5a, float:1.8880412E38)
+                r8 = 2131626685(0x7f0e0abd, float:1.8880613E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x01f8:
+            L_0x01ee:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -1295,11 +1305,10 @@ public class ChangePhoneActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x021a:
+            L_0x0210:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
-                android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r8 = 0
                 r4.setOrientation(r8)
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
@@ -1307,15 +1316,14 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x023d
+                if (r4 != r12) goto L_0x0231
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x023d:
+            L_0x0231:
                 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1
-                r4.<init>(r2, r1)
+                r4.<init>(r0, r2, r1)
                 r0.timeText = r4
-                android.widget.TextView r4 = r0.timeText
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r5)
                 android.widget.TextView r4 = r0.timeText
@@ -1325,28 +1333,31 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x029b
+                if (r4 != r12) goto L_0x028f
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x026c
+                if (r6 == 0) goto L_0x025e
                 r6 = 5
-                goto L_0x026d
-            L_0x026c:
+                goto L_0x025f
+            L_0x025e:
                 r6 = 3
-            L_0x026d:
+            L_0x025f:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.ChangePhoneActivity$ProgressView r4 = new org.telegram.ui.ChangePhoneActivity$ProgressView
-                r4.<init>(r2)
+                r4.<init>(r1, r2)
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0282
-                r12 = 5
-            L_0x0282:
-                r4.setGravity(r12)
+                if (r6 == 0) goto L_0x0275
+                r11 = 5
+                goto L_0x0276
+            L_0x0275:
+                r11 = 3
+            L_0x0276:
+                r4.setGravity(r11)
                 org.telegram.ui.ChangePhoneActivity$ProgressView r4 = r0.progressView
                 r17 = -1
                 r18 = 3
@@ -1356,8 +1367,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02bd
-            L_0x029b:
+                goto L_0x02b1
+            L_0x028f:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -1370,14 +1381,13 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02bd:
+            L_0x02b1:
                 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2
-                r4.<init>(r2, r1)
+                r4.<init>(r0, r2, r1)
                 r0.problemText = r4
-                android.widget.TextView r1 = r0.problemText
-                java.lang.String r2 = "windowBackgroundWhiteBlueText4"
-                int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                r1.setTextColor(r2)
+                java.lang.String r1 = "windowBackgroundWhiteBlueText4"
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+                r4.setTextColor(r1)
                 android.widget.TextView r1 = r0.problemText
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 float r2 = (float) r2
@@ -1392,20 +1402,20 @@ public class ChangePhoneActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x0306
+                if (r1 != r3) goto L_0x02f8
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624909(0x7f0e03cd, float:1.8877011E38)
+                r2 = 2131624923(0x7f0e03db, float:1.887704E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0314
-            L_0x0306:
+                goto L_0x0306
+            L_0x02f8:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624908(0x7f0e03cc, float:1.887701E38)
+                r2 = 2131624922(0x7f0e03da, float:1.8877037E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0314:
+            L_0x0306:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -1493,30 +1503,30 @@ public class ChangePhoneActivity extends BaseFragment {
             bundle.putString("phoneFormated", this.requestPhone);
             this.nextPressed = true;
             this.this$0.needShowProgress();
-            TLRPC.TL_auth_resendCode tL_auth_resendCode = new TLRPC.TL_auth_resendCode();
-            tL_auth_resendCode.phone_number = this.requestPhone;
-            tL_auth_resendCode.phone_code_hash = this.phoneHash;
-            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_resendCode, new RequestDelegate(bundle, tL_auth_resendCode) {
+            TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
+            tLRPC$TL_auth_resendCode.phone_number = this.requestPhone;
+            tLRPC$TL_auth_resendCode.phone_code_hash = this.phoneHash;
+            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new RequestDelegate(bundle, tLRPC$TL_auth_resendCode) {
                 private final /* synthetic */ Bundle f$1;
-                private final /* synthetic */ TLRPC.TL_auth_resendCode f$2;
+                private final /* synthetic */ TLRPC$TL_auth_resendCode f$2;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
                 }
 
-                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    ChangePhoneActivity.LoginActivitySmsView.this.lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(this.f$1, this.f$2, tLObject, tL_error);
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    ChangePhoneActivity.LoginActivitySmsView.this.lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                 }
             }, 2);
         }
 
-        public /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle bundle, TLRPC.TL_auth_resendCode tL_auth_resendCode, TLObject tLObject, TLRPC.TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new Runnable(tL_error, bundle, tLObject, tL_auth_resendCode) {
-                private final /* synthetic */ TLRPC.TL_error f$1;
+        public /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle bundle, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, bundle, tLObject, tLRPC$TL_auth_resendCode) {
+                private final /* synthetic */ TLRPC$TL_error f$1;
                 private final /* synthetic */ Bundle f$2;
                 private final /* synthetic */ TLObject f$3;
-                private final /* synthetic */ TLRPC.TL_auth_resendCode f$4;
+                private final /* synthetic */ TLRPC$TL_auth_resendCode f$4;
 
                 {
                     this.f$1 = r2;
@@ -1531,13 +1541,13 @@ public class ChangePhoneActivity extends BaseFragment {
             });
         }
 
-        public /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_error tL_error, Bundle bundle, TLObject tLObject, TLRPC.TL_auth_resendCode tL_auth_resendCode) {
+        public /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
             this.nextPressed = false;
-            if (tL_error == null) {
-                this.this$0.fillNextCodeParams(bundle, (TLRPC.TL_auth_sentCode) tLObject);
+            if (tLRPC$TL_error == null) {
+                this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject);
             } else {
-                AlertDialog alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_auth_resendCode, new Object[0]);
-                if (alertDialog != null && tL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                AlertDialog alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_auth_resendCode, new Object[0]);
+                if (alertDialog != null && tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
                     alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             ChangePhoneActivity.LoginActivitySmsView.this.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(dialogInterface, i);
@@ -1588,50 +1598,51 @@ public class ChangePhoneActivity extends BaseFragment {
                 this.timeout = i4;
                 this.nextType = bundle2.getInt("nextType");
                 this.pattern = bundle2.getString("pattern");
-                this.length = bundle2.getInt("length");
-                if (this.length == 0) {
+                int i5 = bundle2.getInt("length");
+                this.length = i5;
+                if (i5 == 0) {
                     this.length = 5;
                 }
                 EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
                 CharSequence charSequence = "";
-                int i5 = 8;
+                int i6 = 8;
                 if (editTextBoldCursorArr != null && editTextBoldCursorArr.length == this.length) {
-                    int i6 = 0;
+                    int i7 = 0;
                     while (true) {
                         EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
-                        if (i6 >= editTextBoldCursorArr2.length) {
+                        if (i7 >= editTextBoldCursorArr2.length) {
                             break;
                         }
-                        editTextBoldCursorArr2[i6].setText(charSequence);
-                        i6++;
+                        editTextBoldCursorArr2[i7].setText(charSequence);
+                        i7++;
                     }
                 } else {
                     this.codeField = new EditTextBoldCursor[this.length];
-                    final int i7 = 0;
-                    while (i7 < this.length) {
-                        this.codeField[i7] = new EditTextBoldCursor(getContext());
-                        this.codeField[i7].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                        this.codeField[i7].setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                        this.codeField[i7].setCursorSize(AndroidUtilities.dp(20.0f));
-                        this.codeField[i7].setCursorWidth(1.5f);
+                    final int i8 = 0;
+                    while (i8 < this.length) {
+                        this.codeField[i8] = new EditTextBoldCursor(getContext());
+                        this.codeField[i8].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                        this.codeField[i8].setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                        this.codeField[i8].setCursorSize(AndroidUtilities.dp(20.0f));
+                        this.codeField[i8].setCursorWidth(1.5f);
                         Drawable mutate = getResources().getDrawable(NUM).mutate();
                         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteInputFieldActivated"), PorterDuff.Mode.MULTIPLY));
-                        this.codeField[i7].setBackgroundDrawable(mutate);
-                        this.codeField[i7].setImeOptions(NUM);
-                        this.codeField[i7].setTextSize(1, 20.0f);
-                        this.codeField[i7].setMaxLines(1);
-                        this.codeField[i7].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        this.codeField[i7].setPadding(0, 0, 0, 0);
-                        this.codeField[i7].setGravity(49);
+                        this.codeField[i8].setBackgroundDrawable(mutate);
+                        this.codeField[i8].setImeOptions(NUM);
+                        this.codeField[i8].setTextSize(1, 20.0f);
+                        this.codeField[i8].setMaxLines(1);
+                        this.codeField[i8].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        this.codeField[i8].setPadding(0, 0, 0, 0);
+                        this.codeField[i8].setGravity(49);
                         if (this.currentType == 3) {
-                            this.codeField[i7].setEnabled(false);
-                            this.codeField[i7].setInputType(0);
-                            this.codeField[i7].setVisibility(8);
+                            this.codeField[i8].setEnabled(false);
+                            this.codeField[i8].setInputType(0);
+                            this.codeField[i8].setVisibility(8);
                         } else {
-                            this.codeField[i7].setInputType(3);
+                            this.codeField[i8].setInputType(3);
                         }
-                        this.codeFieldContainer.addView(this.codeField[i7], LayoutHelper.createLinear(34, 36, 1, 0, 0, i7 != this.length - 1 ? 7 : 0, 0));
-                        this.codeField[i7].addTextChangedListener(new TextWatcher() {
+                        this.codeFieldContainer.addView(this.codeField[i8], LayoutHelper.createLinear(34, 36, 1, 0, 0, i8 != this.length - 1 ? 7 : 0, 0));
+                        this.codeField[i8].addTextChangedListener(new TextWatcher() {
                             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                             }
 
@@ -1644,26 +1655,26 @@ public class ChangePhoneActivity extends BaseFragment {
                                     if (length > 1) {
                                         String obj = editable.toString();
                                         boolean unused = LoginActivitySmsView.this.ignoreOnTextChange = true;
-                                        for (int i = 0; i < Math.min(LoginActivitySmsView.this.length - i7, length); i++) {
+                                        for (int i = 0; i < Math.min(LoginActivitySmsView.this.length - i8, length); i++) {
                                             if (i == 0) {
                                                 editable.replace(0, length, obj.substring(i, i + 1));
                                             } else {
-                                                LoginActivitySmsView.this.codeField[i7 + i].setText(obj.substring(i, i + 1));
+                                                LoginActivitySmsView.this.codeField[i8 + i].setText(obj.substring(i, i + 1));
                                             }
                                         }
                                         boolean unused2 = LoginActivitySmsView.this.ignoreOnTextChange = false;
                                     }
-                                    if (i7 != LoginActivitySmsView.this.length - 1) {
-                                        LoginActivitySmsView.this.codeField[i7 + 1].setSelection(LoginActivitySmsView.this.codeField[i7 + 1].length());
-                                        LoginActivitySmsView.this.codeField[i7 + 1].requestFocus();
+                                    if (i8 != LoginActivitySmsView.this.length - 1) {
+                                        LoginActivitySmsView.this.codeField[i8 + 1].setSelection(LoginActivitySmsView.this.codeField[i8 + 1].length());
+                                        LoginActivitySmsView.this.codeField[i8 + 1].requestFocus();
                                     }
-                                    if ((i7 == LoginActivitySmsView.this.length - 1 || (i7 == LoginActivitySmsView.this.length - 2 && length >= 2)) && LoginActivitySmsView.this.getCode().length() == LoginActivitySmsView.this.length) {
+                                    if ((i8 == LoginActivitySmsView.this.length - 1 || (i8 == LoginActivitySmsView.this.length - 2 && length >= 2)) && LoginActivitySmsView.this.getCode().length() == LoginActivitySmsView.this.length) {
                                         LoginActivitySmsView.this.onNextPressed();
                                     }
                                 }
                             }
                         });
-                        this.codeField[i7].setOnKeyListener(new View.OnKeyListener(i7) {
+                        this.codeField[i8].setOnKeyListener(new View.OnKeyListener(i8) {
                             private final /* synthetic */ int f$1;
 
                             {
@@ -1674,12 +1685,12 @@ public class ChangePhoneActivity extends BaseFragment {
                                 return ChangePhoneActivity.LoginActivitySmsView.this.lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(this.f$1, view, i, keyEvent);
                             }
                         });
-                        this.codeField[i7].setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        this.codeField[i8].setOnEditorActionListener(new TextView.OnEditorActionListener() {
                             public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                                 return ChangePhoneActivity.LoginActivitySmsView.this.lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(textView, i, keyEvent);
                             }
                         });
-                        i7++;
+                        i8++;
                     }
                 }
                 ProgressView progressView2 = this.progressView;
@@ -1688,14 +1699,14 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
                 if (this.phone != null) {
                     String format = PhoneFormat.getInstance().format(this.phone);
-                    int i8 = this.currentType;
-                    if (i8 == 1) {
+                    int i9 = this.currentType;
+                    if (i9 == 1) {
                         charSequence = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", NUM));
-                    } else if (i8 == 2) {
+                    } else if (i9 == 2) {
                         charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", NUM, LocaleController.addNbsp(format)));
-                    } else if (i8 == 3) {
+                    } else if (i9 == 3) {
                         charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", NUM, LocaleController.addNbsp(format)));
-                    } else if (i8 == 4) {
+                    } else if (i9 == 4) {
                         charSequence = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", NUM, LocaleController.addNbsp(format)));
                     }
                     this.confirmTextView.setText(charSequence);
@@ -1708,17 +1719,17 @@ public class ChangePhoneActivity extends BaseFragment {
                     destroyTimer();
                     destroyCodeTimer();
                     this.lastCurrentTime = (double) System.currentTimeMillis();
-                    int i9 = this.currentType;
-                    if (i9 == 1) {
+                    int i10 = this.currentType;
+                    if (i10 == 1) {
                         this.problemText.setVisibility(0);
                         this.timeText.setVisibility(8);
-                    } else if (i9 == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) {
+                    } else if (i10 == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) {
                         this.problemText.setVisibility(8);
                         this.timeText.setVisibility(0);
-                        int i10 = this.nextType;
-                        if (i10 == 4) {
+                        int i11 = this.nextType;
+                        if (i11 == 4) {
                             this.timeText.setText(LocaleController.formatString("CallText", NUM, 1, 0));
-                        } else if (i10 == 2) {
+                        } else if (i11 == 2) {
                             this.timeText.setText(LocaleController.formatString("SmsText", NUM, 1, 0));
                         }
                         createTimer();
@@ -1727,18 +1738,18 @@ public class ChangePhoneActivity extends BaseFragment {
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         TextView textView = this.timeText;
                         if (this.time >= 1000) {
-                            i5 = 0;
+                            i6 = 0;
                         }
-                        textView.setVisibility(i5);
+                        textView.setVisibility(i6);
                         createTimer();
                     } else if (this.currentType == 4 && this.nextType == 2) {
                         this.timeText.setText(LocaleController.formatString("SmsText", NUM, 2, 0));
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         TextView textView2 = this.timeText;
                         if (this.time >= 1000) {
-                            i5 = 0;
+                            i6 = 0;
                         }
-                        textView2.setVisibility(i5);
+                        textView2.setVisibility(i6);
                         createTimer();
                     } else {
                         this.timeText.setVisibility(8);
@@ -1932,8 +1943,9 @@ public class ChangePhoneActivity extends BaseFragment {
 
         private void createTimer() {
             if (this.timeTimer == null) {
-                this.timeTimer = new Timer();
-                this.timeTimer.schedule(new TimerTask() {
+                Timer timer = new Timer();
+                this.timeTimer = timer;
+                timer.schedule(new TimerTask() {
                     public void run() {
                         if (LoginActivitySmsView.this.timeTimer != null) {
                             AndroidUtilities.runOnUIThread(
@@ -2109,10 +2121,10 @@ public class ChangePhoneActivity extends BaseFragment {
                                         LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
                                     }
                                     LoginActivitySmsView.this.createCodeTimer();
-                                    TLRPC.TL_auth_resendCode tL_auth_resendCode = new TLRPC.TL_auth_resendCode();
-                                    tL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
-                                    tL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                                    ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tL_auth_resendCode, 
+                                    TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
+                                    tLRPC$TL_auth_resendCode.phone_number = LoginActivitySmsView.this.requestPhone;
+                                    tLRPC$TL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
+                                    ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, 
                                     /*  JADX ERROR: Method code generation error
                                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01a1: INVOKE  
                                           (wrap: org.telegram.tgnet.ConnectionsManager : 0x0198: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
@@ -2124,7 +2136,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                          org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this$0 org.telegram.ui.ChangePhoneActivity)
                                          org.telegram.ui.ChangePhoneActivity.access$4200(org.telegram.ui.ChangePhoneActivity):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
-                                          (r0v16 'tL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
+                                          (r0v16 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
                                           (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE : 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE) = 
                                           (r9v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
                                          call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$XIekQXCZJeXJed30OGaCRFuzVWE.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
@@ -2297,7 +2309,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131626690(0x7f0e0ac2, float:1.8880623E38)
+                                        r3 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2310,7 +2322,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0082:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624472(0x7f0e0218, float:1.8876125E38)
+                                        r3 = 2131624476(0x7f0e021c, float:1.8876133E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2397,7 +2409,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x0164
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624474(0x7f0e021a, float:1.8876129E38)
+                                        r1 = 2131624478(0x7f0e021e, float:1.8876137E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2405,7 +2417,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626578(0x7f0e0a52, float:1.8880396E38)
+                                        r1 = 2131626677(0x7f0e0ab5, float:1.8880597E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2433,14 +2445,14 @@ public class ChangePhoneActivity extends BaseFragment {
                                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass5.lambda$run$2$ChangePhoneActivity$LoginActivitySmsView$5():void");
                                 }
 
-                                public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC.TL_error tL_error) {
-                                    if (tL_error != null && tL_error.text != null) {
+                                public /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                    if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
                                         AndroidUtilities.runOnUIThread(
                                         /*  JADX ERROR: Method code generation error
                                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
                                               (wrap: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs) = 
                                               (r0v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
-                                              (r2v0 'tL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
                                              call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
                                              org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -2536,7 +2548,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs) = 
                                               (r0v0 'this' org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5 A[THIS])
-                                              (r2v0 'tL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
                                              call: org.telegram.ui.-$$Lambda$ChangePhoneActivity$LoginActivitySmsView$5$j2Pv0QsYK-Q4PZQcZtKSnHt9QRs.<init>(org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
@@ -2567,8 +2579,8 @@ public class ChangePhoneActivity extends BaseFragment {
                                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.AnonymousClass5.lambda$null$1$ChangePhoneActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
                                     }
 
-                                    public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5(TLRPC.TL_error tL_error) {
-                                        String unused = LoginActivitySmsView.this.lastError = tL_error.text;
+                                    public /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5(TLRPC$TL_error tLRPC$TL_error) {
+                                        String unused = LoginActivitySmsView.this.lastError = tLRPC$TL_error.text;
                                     }
                                 }, 0, 1000);
                             }
@@ -2622,31 +2634,31 @@ public class ChangePhoneActivity extends BaseFragment {
                                     NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                                 }
                                 this.waitingForEvent = false;
-                                TLRPC.TL_account_changePhone tL_account_changePhone = new TLRPC.TL_account_changePhone();
-                                tL_account_changePhone.phone_number = this.requestPhone;
-                                tL_account_changePhone.phone_code = code;
-                                tL_account_changePhone.phone_code_hash = this.phoneHash;
+                                TLRPC$TL_account_changePhone tLRPC$TL_account_changePhone = new TLRPC$TL_account_changePhone();
+                                tLRPC$TL_account_changePhone.phone_number = this.requestPhone;
+                                tLRPC$TL_account_changePhone.phone_code = code;
+                                tLRPC$TL_account_changePhone.phone_code_hash = this.phoneHash;
                                 destroyTimer();
                                 this.this$0.needShowProgress();
-                                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_account_changePhone, new RequestDelegate(tL_account_changePhone) {
-                                    private final /* synthetic */ TLRPC.TL_account_changePhone f$1;
+                                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_changePhone, new RequestDelegate(tLRPC$TL_account_changePhone) {
+                                    private final /* synthetic */ TLRPC$TL_account_changePhone f$1;
 
                                     {
                                         this.f$1 = r2;
                                     }
 
-                                    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                                        ChangePhoneActivity.LoginActivitySmsView.this.lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(this.f$1, tLObject, tL_error);
+                                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                        ChangePhoneActivity.LoginActivitySmsView.this.lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(this.f$1, tLObject, tLRPC$TL_error);
                                     }
                                 }, 2);
                             }
                         }
 
-                        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_account_changePhone tL_account_changePhone, TLObject tLObject, TLRPC.TL_error tL_error) {
-                            AndroidUtilities.runOnUIThread(new Runnable(tL_error, tLObject, tL_account_changePhone) {
-                                private final /* synthetic */ TLRPC.TL_error f$1;
+                        public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TLRPC$TL_account_changePhone tLRPC$TL_account_changePhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_account_changePhone) {
+                                private final /* synthetic */ TLRPC$TL_error f$1;
                                 private final /* synthetic */ TLObject f$2;
-                                private final /* synthetic */ TLRPC.TL_account_changePhone f$3;
+                                private final /* synthetic */ TLRPC$TL_account_changePhone f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -2660,26 +2672,26 @@ public class ChangePhoneActivity extends BaseFragment {
                             });
                         }
 
-                        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_account_changePhone tL_account_changePhone) {
+                        public /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_account_changePhone tLRPC$TL_account_changePhone) {
                             int i;
                             int i2;
                             this.this$0.needHideProgress();
                             this.nextPressed = false;
-                            if (tL_error == null) {
-                                TLRPC.User user = (TLRPC.User) tLObject;
+                            if (tLRPC$TL_error == null) {
+                                TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                                 destroyTimer();
                                 destroyCodeTimer();
-                                UserConfig.getInstance(this.this$0.currentAccount).setCurrentUser(user);
+                                UserConfig.getInstance(this.this$0.currentAccount).setCurrentUser(tLRPC$User);
                                 UserConfig.getInstance(this.this$0.currentAccount).saveConfig(true);
                                 ArrayList arrayList = new ArrayList();
-                                arrayList.add(user);
-                                MessagesStorage.getInstance(this.this$0.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC.Chat>) null, true, true);
-                                MessagesController.getInstance(this.this$0.currentAccount).putUser(user, false);
+                                arrayList.add(tLRPC$User);
+                                MessagesStorage.getInstance(this.this$0.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC$Chat>) null, true, true);
+                                MessagesController.getInstance(this.this$0.currentAccount).putUser(tLRPC$User, false);
                                 this.this$0.finishFragment();
                                 NotificationCenter.getInstance(this.this$0.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                                 return;
                             }
-                            this.lastError = tL_error.text;
+                            this.lastError = tLRPC$TL_error.text;
                             if ((this.currentType == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((this.currentType == 2 && ((i = this.nextType) == 4 || i == 3)) || (this.currentType == 4 && this.nextType == 2))) {
                                 createTimer();
                             }
@@ -2693,9 +2705,9 @@ public class ChangePhoneActivity extends BaseFragment {
                             }
                             this.waitingForEvent = true;
                             if (this.currentType != 3) {
-                                AlertsCreator.processError(this.this$0.currentAccount, tL_error, this.this$0, tL_account_changePhone, new Object[0]);
+                                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_changePhone, new Object[0]);
                             }
-                            if (tL_error.text.contains("PHONE_CODE_EMPTY") || tL_error.text.contains("PHONE_CODE_INVALID")) {
+                            if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
                                 int i4 = 0;
                                 while (true) {
                                     EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
@@ -2707,7 +2719,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         return;
                                     }
                                 }
-                            } else if (tL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
                                 onBackPressed(true);
                                 this.this$0.setPage(0, true, (Bundle) null, true);
                             }
@@ -2727,13 +2739,12 @@ public class ChangePhoneActivity extends BaseFragment {
                                 this.this$0.showDialog(builder.create());
                                 return false;
                             }
-                            TLRPC.TL_auth_cancelCode tL_auth_cancelCode = new TLRPC.TL_auth_cancelCode();
-                            tL_auth_cancelCode.phone_number = this.requestPhone;
-                            tL_auth_cancelCode.phone_code_hash = this.phoneHash;
-                            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_cancelCode, $$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOcKDCO9lesbolp8AlwqF1nh4.INSTANCE, 10);
+                            TLRPC$TL_auth_cancelCode tLRPC$TL_auth_cancelCode = new TLRPC$TL_auth_cancelCode();
+                            tLRPC$TL_auth_cancelCode.phone_number = this.requestPhone;
+                            tLRPC$TL_auth_cancelCode.phone_code_hash = this.phoneHash;
+                            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_cancelCode, $$Lambda$ChangePhoneActivity$LoginActivitySmsView$kdOcKDCO9lesbolp8AlwqF1nh4.INSTANCE, 10);
                             destroyTimer();
                             destroyCodeTimer();
-                            this.currentParams = null;
                             int i = this.currentType;
                             if (i == 2) {
                                 AndroidUtilities.setWaitingForSms(false);

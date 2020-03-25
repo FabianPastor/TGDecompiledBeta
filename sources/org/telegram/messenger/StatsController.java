@@ -90,7 +90,7 @@ public class StatsController extends BaseController {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x012c  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x012f  */
     /* JADX WARNING: Removed duplicated region for block: B:47:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private StatsController(int r15) {
@@ -102,243 +102,247 @@ public class StatsController extends BaseController {
             r2 = 8
             byte[] r3 = new byte[r2]
             r14.buffer = r3
-            r3 = 7
-            r4 = 3
-            int[] r5 = new int[]{r4, r3}
-            java.lang.Object r5 = java.lang.reflect.Array.newInstance(r1, r5)
-            long[][] r5 = (long[][]) r5
-            r14.sentBytes = r5
-            int[] r5 = new int[]{r4, r3}
-            java.lang.Object r1 = java.lang.reflect.Array.newInstance(r1, r5)
+            r3 = 2
+            int[] r4 = new int[r3]
+            r4 = {3, 7} // fill-array
+            java.lang.Object r4 = java.lang.reflect.Array.newInstance(r1, r4)
+            long[][] r4 = (long[][]) r4
+            r14.sentBytes = r4
+            int[] r4 = new int[r3]
+            r4 = {3, 7} // fill-array
+            java.lang.Object r1 = java.lang.reflect.Array.newInstance(r1, r4)
             long[][] r1 = (long[][]) r1
             r14.receivedBytes = r1
-            int[] r1 = new int[]{r4, r3}
+            int[] r1 = new int[r3]
+            r1 = {3, 7} // fill-array
             java.lang.Object r1 = java.lang.reflect.Array.newInstance(r0, r1)
             int[][] r1 = (int[][]) r1
             r14.sentItems = r1
-            int[] r1 = new int[]{r4, r3}
+            int[] r1 = new int[r3]
+            r1 = {3, 7} // fill-array
             java.lang.Object r0 = java.lang.reflect.Array.newInstance(r0, r1)
             int[][] r0 = (int[][]) r0
             r14.receivedItems = r0
-            long[] r0 = new long[r4]
-            r14.resetStatsDate = r0
-            int[] r0 = new int[r4]
-            r14.callsTotalTime = r0
-            org.telegram.messenger.StatsController$2 r0 = new org.telegram.messenger.StatsController$2
-            r0.<init>()
-            r14.saveRunnable = r0
-            java.io.File r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
-            if (r15 == 0) goto L_0x0076
-            java.io.File r0 = new java.io.File
+            r0 = 3
+            long[] r1 = new long[r0]
+            r14.resetStatsDate = r1
+            int[] r1 = new int[r0]
+            r14.callsTotalTime = r1
+            org.telegram.messenger.StatsController$2 r1 = new org.telegram.messenger.StatsController$2
+            r1.<init>()
+            r14.saveRunnable = r1
             java.io.File r1 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder
-            r5.<init>()
-            java.lang.String r6 = "account"
-            r5.append(r6)
-            r5.append(r15)
-            java.lang.String r6 = "/"
-            r5.append(r6)
-            java.lang.String r5 = r5.toString()
-            r0.<init>(r1, r5)
-            r0.mkdirs()
-        L_0x0076:
-            r5 = 0
-            r1 = 1
+            if (r15 == 0) goto L_0x007a
+            java.io.File r1 = new java.io.File
+            java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            java.lang.String r5 = "account"
+            r4.append(r5)
+            r4.append(r15)
+            java.lang.String r5 = "/"
+            r4.append(r5)
+            java.lang.String r4 = r4.toString()
+            r1.<init>(r3, r4)
+            r1.mkdirs()
+        L_0x007a:
+            r3 = 7
+            r4 = 0
+            r6 = 1
             r7 = 0
-            java.io.RandomAccessFile r8 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x0129 }
-            java.io.File r9 = new java.io.File     // Catch:{ Exception -> 0x0129 }
+            java.io.RandomAccessFile r8 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x012c }
+            java.io.File r9 = new java.io.File     // Catch:{ Exception -> 0x012c }
             java.lang.String r10 = "stats2.dat"
-            r9.<init>(r0, r10)     // Catch:{ Exception -> 0x0129 }
-            java.lang.String r0 = "rw"
-            r8.<init>(r9, r0)     // Catch:{ Exception -> 0x0129 }
-            r14.statsFile = r8     // Catch:{ Exception -> 0x0129 }
-            java.io.RandomAccessFile r0 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            long r8 = r0.length()     // Catch:{ Exception -> 0x0129 }
-            int r0 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0129
-            r0 = 0
+            r9.<init>(r1, r10)     // Catch:{ Exception -> 0x012c }
+            java.lang.String r1 = "rw"
+            r8.<init>(r9, r1)     // Catch:{ Exception -> 0x012c }
+            r14.statsFile = r8     // Catch:{ Exception -> 0x012c }
+            long r8 = r8.length()     // Catch:{ Exception -> 0x012c }
+            int r1 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
+            if (r1 <= 0) goto L_0x012c
+            r1 = 0
             r8 = 0
-        L_0x0096:
-            if (r0 >= r4) goto L_0x0122
-            r9 = 0
         L_0x0099:
+            if (r1 >= r0) goto L_0x0125
+            r9 = 0
+        L_0x009c:
             r10 = 4
-            if (r9 >= r3) goto L_0x00eb
-            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r11.readFully(r12, r7, r2)     // Catch:{ Exception -> 0x0129 }
-            long[][] r11 = r14.sentBytes     // Catch:{ Exception -> 0x0129 }
-            r11 = r11[r0]     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            long r12 = r14.bytesToLong(r12)     // Catch:{ Exception -> 0x0129 }
-            r11[r9] = r12     // Catch:{ Exception -> 0x0129 }
-            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r11.readFully(r12, r7, r2)     // Catch:{ Exception -> 0x0129 }
-            long[][] r11 = r14.receivedBytes     // Catch:{ Exception -> 0x0129 }
-            r11 = r11[r0]     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            long r12 = r14.bytesToLong(r12)     // Catch:{ Exception -> 0x0129 }
-            r11[r9] = r12     // Catch:{ Exception -> 0x0129 }
-            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r11.readFully(r12, r7, r10)     // Catch:{ Exception -> 0x0129 }
-            int[][] r11 = r14.sentItems     // Catch:{ Exception -> 0x0129 }
-            r11 = r11[r0]     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            int r12 = r14.bytesToInt(r12)     // Catch:{ Exception -> 0x0129 }
-            r11[r9] = r12     // Catch:{ Exception -> 0x0129 }
-            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r11.readFully(r12, r7, r10)     // Catch:{ Exception -> 0x0129 }
-            int[][] r10 = r14.receivedItems     // Catch:{ Exception -> 0x0129 }
-            r10 = r10[r0]     // Catch:{ Exception -> 0x0129 }
-            byte[] r11 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            int r11 = r14.bytesToInt(r11)     // Catch:{ Exception -> 0x0129 }
-            r10[r9] = r11     // Catch:{ Exception -> 0x0129 }
+            if (r9 >= r3) goto L_0x00ee
+            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r11.readFully(r12, r7, r2)     // Catch:{ Exception -> 0x012c }
+            long[][] r11 = r14.sentBytes     // Catch:{ Exception -> 0x012c }
+            r11 = r11[r1]     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            long r12 = r14.bytesToLong(r12)     // Catch:{ Exception -> 0x012c }
+            r11[r9] = r12     // Catch:{ Exception -> 0x012c }
+            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r11.readFully(r12, r7, r2)     // Catch:{ Exception -> 0x012c }
+            long[][] r11 = r14.receivedBytes     // Catch:{ Exception -> 0x012c }
+            r11 = r11[r1]     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            long r12 = r14.bytesToLong(r12)     // Catch:{ Exception -> 0x012c }
+            r11[r9] = r12     // Catch:{ Exception -> 0x012c }
+            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r11.readFully(r12, r7, r10)     // Catch:{ Exception -> 0x012c }
+            int[][] r11 = r14.sentItems     // Catch:{ Exception -> 0x012c }
+            r11 = r11[r1]     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            int r12 = r14.bytesToInt(r12)     // Catch:{ Exception -> 0x012c }
+            r11[r9] = r12     // Catch:{ Exception -> 0x012c }
+            java.io.RandomAccessFile r11 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r12 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r11.readFully(r12, r7, r10)     // Catch:{ Exception -> 0x012c }
+            int[][] r10 = r14.receivedItems     // Catch:{ Exception -> 0x012c }
+            r10 = r10[r1]     // Catch:{ Exception -> 0x012c }
+            byte[] r11 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            int r11 = r14.bytesToInt(r11)     // Catch:{ Exception -> 0x012c }
+            r10[r9] = r11     // Catch:{ Exception -> 0x012c }
             int r9 = r9 + 1
-            goto L_0x0099
-        L_0x00eb:
-            java.io.RandomAccessFile r9 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r11 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r9.readFully(r11, r7, r10)     // Catch:{ Exception -> 0x0129 }
-            int[] r9 = r14.callsTotalTime     // Catch:{ Exception -> 0x0129 }
-            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            int r10 = r14.bytesToInt(r10)     // Catch:{ Exception -> 0x0129 }
-            r9[r0] = r10     // Catch:{ Exception -> 0x0129 }
-            java.io.RandomAccessFile r9 = r14.statsFile     // Catch:{ Exception -> 0x0129 }
-            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            r9.readFully(r10, r7, r2)     // Catch:{ Exception -> 0x0129 }
-            long[] r9 = r14.resetStatsDate     // Catch:{ Exception -> 0x0129 }
-            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x0129 }
-            long r10 = r14.bytesToLong(r10)     // Catch:{ Exception -> 0x0129 }
-            r9[r0] = r10     // Catch:{ Exception -> 0x0129 }
-            long[] r9 = r14.resetStatsDate     // Catch:{ Exception -> 0x0129 }
-            r10 = r9[r0]     // Catch:{ Exception -> 0x0129 }
-            int r9 = (r10 > r5 ? 1 : (r10 == r5 ? 0 : -1))
-            if (r9 != 0) goto L_0x011e
-            long[] r8 = r14.resetStatsDate     // Catch:{ Exception -> 0x0129 }
-            long r9 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x0129 }
-            r8[r0] = r9     // Catch:{ Exception -> 0x0129 }
+            goto L_0x009c
+        L_0x00ee:
+            java.io.RandomAccessFile r9 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r11 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r9.readFully(r11, r7, r10)     // Catch:{ Exception -> 0x012c }
+            int[] r9 = r14.callsTotalTime     // Catch:{ Exception -> 0x012c }
+            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            int r10 = r14.bytesToInt(r10)     // Catch:{ Exception -> 0x012c }
+            r9[r1] = r10     // Catch:{ Exception -> 0x012c }
+            java.io.RandomAccessFile r9 = r14.statsFile     // Catch:{ Exception -> 0x012c }
+            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            r9.readFully(r10, r7, r2)     // Catch:{ Exception -> 0x012c }
+            long[] r9 = r14.resetStatsDate     // Catch:{ Exception -> 0x012c }
+            byte[] r10 = r14.buffer     // Catch:{ Exception -> 0x012c }
+            long r10 = r14.bytesToLong(r10)     // Catch:{ Exception -> 0x012c }
+            r9[r1] = r10     // Catch:{ Exception -> 0x012c }
+            long[] r9 = r14.resetStatsDate     // Catch:{ Exception -> 0x012c }
+            r10 = r9[r1]     // Catch:{ Exception -> 0x012c }
+            int r9 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
+            if (r9 != 0) goto L_0x0121
+            long[] r8 = r14.resetStatsDate     // Catch:{ Exception -> 0x012c }
+            long r9 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x012c }
+            r8[r1] = r9     // Catch:{ Exception -> 0x012c }
             r8 = 1
-        L_0x011e:
-            int r0 = r0 + 1
-            goto L_0x0096
-        L_0x0122:
-            if (r8 == 0) goto L_0x0127
-            r14.saveStats()     // Catch:{ Exception -> 0x0129 }
-        L_0x0127:
-            r0 = 0
-            goto L_0x012a
-        L_0x0129:
-            r0 = 1
+        L_0x0121:
+            int r1 = r1 + 1
+            goto L_0x0099
+        L_0x0125:
+            if (r8 == 0) goto L_0x012a
+            r14.saveStats()     // Catch:{ Exception -> 0x012c }
         L_0x012a:
-            if (r0 == 0) goto L_0x0227
-            java.lang.String r0 = "stats"
-            if (r15 != 0) goto L_0x0137
+            r1 = 0
+            goto L_0x012d
+        L_0x012c:
+            r1 = 1
+        L_0x012d:
+            if (r1 == 0) goto L_0x022a
+            java.lang.String r1 = "stats"
+            if (r15 != 0) goto L_0x013a
             android.content.Context r15 = org.telegram.messenger.ApplicationLoader.applicationContext
-            android.content.SharedPreferences r15 = r15.getSharedPreferences(r0, r7)
-            goto L_0x014c
-        L_0x0137:
+            android.content.SharedPreferences r15 = r15.getSharedPreferences(r1, r7)
+            goto L_0x014f
+        L_0x013a:
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
             java.lang.StringBuilder r8 = new java.lang.StringBuilder
             r8.<init>()
-            r8.append(r0)
+            r8.append(r1)
             r8.append(r15)
             java.lang.String r15 = r8.toString()
             android.content.SharedPreferences r15 = r2.getSharedPreferences(r15, r7)
-        L_0x014c:
-            r0 = 0
+        L_0x014f:
+            r1 = 0
             r2 = 0
-        L_0x014e:
-            if (r0 >= r4) goto L_0x0222
+        L_0x0151:
+            if (r1 >= r0) goto L_0x0225
             int[] r8 = r14.callsTotalTime
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
             java.lang.String r10 = "callsTotalTime"
             r9.append(r10)
-            r9.append(r0)
+            r9.append(r1)
             java.lang.String r9 = r9.toString()
             int r9 = r15.getInt(r9, r7)
-            r8[r0] = r9
+            r8[r1] = r9
             long[] r8 = r14.resetStatsDate
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
             java.lang.String r10 = "resetStatsDate"
             r9.append(r10)
-            r9.append(r0)
+            r9.append(r1)
             java.lang.String r9 = r9.toString()
-            long r9 = r15.getLong(r9, r5)
-            r8[r0] = r9
+            long r9 = r15.getLong(r9, r4)
+            r8[r1] = r9
             r8 = 0
-        L_0x0183:
-            if (r8 >= r3) goto L_0x020f
+        L_0x0186:
+            if (r8 >= r3) goto L_0x0212
             long[][] r9 = r14.sentBytes
-            r9 = r9[r0]
+            r9 = r9[r1]
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
             java.lang.String r11 = "sentBytes"
             r10.append(r11)
-            r10.append(r0)
+            r10.append(r1)
             java.lang.String r11 = "_"
             r10.append(r11)
             r10.append(r8)
             java.lang.String r10 = r10.toString()
-            long r12 = r15.getLong(r10, r5)
+            long r12 = r15.getLong(r10, r4)
             r9[r8] = r12
             long[][] r9 = r14.receivedBytes
-            r9 = r9[r0]
+            r9 = r9[r1]
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
             java.lang.String r12 = "receivedBytes"
             r10.append(r12)
-            r10.append(r0)
+            r10.append(r1)
             r10.append(r11)
             r10.append(r8)
             java.lang.String r10 = r10.toString()
-            long r12 = r15.getLong(r10, r5)
+            long r12 = r15.getLong(r10, r4)
             r9[r8] = r12
             int[][] r9 = r14.sentItems
-            r9 = r9[r0]
+            r9 = r9[r1]
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
             java.lang.String r12 = "sentItems"
             r10.append(r12)
-            r10.append(r0)
+            r10.append(r1)
             r10.append(r11)
             r10.append(r8)
             java.lang.String r10 = r10.toString()
             int r10 = r15.getInt(r10, r7)
             r9[r8] = r10
             int[][] r9 = r14.receivedItems
-            r9 = r9[r0]
+            r9 = r9[r1]
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
             r10.<init>()
             java.lang.String r12 = "receivedItems"
             r10.append(r12)
-            r10.append(r0)
+            r10.append(r1)
             r10.append(r11)
             r10.append(r8)
             java.lang.String r10 = r10.toString()
             int r10 = r15.getInt(r10, r7)
             r9[r8] = r10
             int r8 = r8 + 1
-            goto L_0x0183
-        L_0x020f:
+            goto L_0x0186
+        L_0x0212:
             long[] r8 = r14.resetStatsDate
-            r9 = r8[r0]
-            int r11 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1))
-            if (r11 != 0) goto L_0x021e
+            r9 = r8[r1]
+            int r11 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1))
+            if (r11 != 0) goto L_0x0221
             long r9 = java.lang.System.currentTimeMillis()
-            r8[r0] = r9
+            r8[r1] = r9
             r2 = 1
-        L_0x021e:
-            int r0 = r0 + 1
-            goto L_0x014e
-        L_0x0222:
-            if (r2 == 0) goto L_0x0227
+        L_0x0221:
+            int r1 = r1 + 1
+            goto L_0x0151
+        L_0x0225:
+            if (r2 == 0) goto L_0x022a
             r14.saveStats()
-        L_0x0227:
+        L_0x022a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.StatsController.<init>(int):void");

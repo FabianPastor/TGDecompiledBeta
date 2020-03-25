@@ -23,11 +23,13 @@ public class PhotoAttachCameraCell extends FrameLayout {
 
     public PhotoAttachCameraCell(Context context) {
         super(context);
-        this.backgroundView = new ImageView(context);
-        this.backgroundView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        ImageView imageView2 = new ImageView(context);
+        this.backgroundView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
         addView(this.backgroundView, LayoutHelper.createFrame(80, 80.0f));
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView3 = new ImageView(context);
+        this.imageView = imageView3;
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setImageResource(NUM);
         addView(this.imageView, LayoutHelper.createFrame(80, 80.0f));
         setFocusable(true);

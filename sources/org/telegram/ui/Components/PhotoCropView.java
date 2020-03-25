@@ -10,7 +10,7 @@ import org.telegram.ui.Components.Crop.CropView;
 
 public class PhotoCropView extends FrameLayout {
     /* access modifiers changed from: private */
-    public CropView cropView = new CropView(getContext());
+    public CropView cropView;
     /* access modifiers changed from: private */
     public PhotoCropViewDelegate delegate;
     private boolean showOnSetBitmap;
@@ -23,7 +23,9 @@ public class PhotoCropView extends FrameLayout {
 
     public PhotoCropView(Context context) {
         super(context);
-        this.cropView.setListener(new CropView.CropViewListener() {
+        CropView cropView2 = new CropView(getContext());
+        this.cropView = cropView2;
+        cropView2.setListener(new CropView.CropViewListener() {
             public void onChange(boolean z) {
                 if (PhotoCropView.this.delegate != null) {
                     PhotoCropView.this.delegate.onChange(z);
@@ -36,8 +38,9 @@ public class PhotoCropView extends FrameLayout {
         });
         this.cropView.setBottomPadding((float) AndroidUtilities.dp(64.0f));
         addView(this.cropView);
-        this.wheelView = new CropRotationWheel(getContext());
-        this.wheelView.setListener(new CropRotationWheel.RotationWheelListener() {
+        CropRotationWheel cropRotationWheel = new CropRotationWheel(getContext());
+        this.wheelView = cropRotationWheel;
+        cropRotationWheel.setListener(new CropRotationWheel.RotationWheelListener() {
             public void onStart() {
                 PhotoCropView.this.cropView.onRotationBegan();
             }

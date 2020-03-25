@@ -58,15 +58,14 @@ public class RenderView extends TextureView {
         this.bitmap = bitmap2;
         this.orientation = i;
         this.painting = painting2;
-        this.painting.setRenderView(this);
+        painting2.setRenderView(this);
         setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
             }
 
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
                 if (surfaceTexture != null && RenderView.this.internal == null) {
-                    RenderView renderView = RenderView.this;
-                    CanvasInternal unused = renderView.internal = new CanvasInternal(surfaceTexture);
+                    CanvasInternal unused = RenderView.this.internal = new CanvasInternal(surfaceTexture);
                     RenderView.this.internal.setBufferSize(i, i2);
                     RenderView.this.updateTransform();
                     RenderView.this.internal.requestRender();
@@ -104,9 +103,6 @@ public class RenderView extends TextureView {
             }
         });
         this.painting.setDelegate(new Painting.PaintingDelegate() {
-            public void strokeCommited() {
-            }
-
             public void contentChanged(RectF rectF) {
                 if (RenderView.this.internal != null) {
                     RenderView.this.internal.scheduleRedraw();
@@ -189,13 +185,14 @@ public class RenderView extends TextureView {
     /* access modifiers changed from: private */
     public void updateTransform() {
         Matrix matrix = new Matrix();
+        float f = 1.0f;
         float width = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : 1.0f;
-        if (width <= 0.0f) {
-            width = 1.0f;
+        if (width > 0.0f) {
+            f = width;
         }
         Size size = getPainting().getSize();
         matrix.preTranslate(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
-        matrix.preScale(width, -width);
+        matrix.preScale(f, -f);
         matrix.preTranslate((-size.width) / 2.0f, (-size.height) / 2.0f);
         this.input.setMatrix(matrix);
         this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
@@ -235,8 +232,6 @@ public class RenderView extends TextureView {
     }
 
     private class CanvasInternal extends DispatchQueue {
-        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private final int EGL_OPENGL_ES2_BIT = 4;
         /* access modifiers changed from: private */
         public int bufferHeight;
         /* access modifiers changed from: private */
@@ -273,7 +268,6 @@ public class RenderView extends TextureView {
         public EGLSurface eglSurface;
         /* access modifiers changed from: private */
         public boolean initialized;
-        private long lastRenderCallTime;
         /* access modifiers changed from: private */
         public boolean ready;
         /* access modifiers changed from: private */
@@ -293,17 +287,18 @@ public class RenderView extends TextureView {
         }
 
         private boolean initGL() {
-            this.egl10 = (EGL10) EGLContext.getEGL();
-            this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-            EGLDisplay eGLDisplay = this.eglDisplay;
-            if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
+            EGL10 egl102 = (EGL10) EGLContext.getEGL();
+            this.egl10 = egl102;
+            EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            this.eglDisplay = eglGetDisplay;
+            if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
-            if (!this.egl10.eglInitialize(eGLDisplay, new int[2])) {
+            if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
@@ -319,9 +314,11 @@ public class RenderView extends TextureView {
                 finish();
                 return false;
             } else if (iArr[0] > 0) {
-                this.eglConfig = eGLConfigArr[0];
-                this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                if (this.eglContext == null) {
+                EGLConfig eGLConfig = eGLConfigArr[0];
+                this.eglConfig = eGLConfig;
+                EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                this.eglContext = eglCreateContext;
+                if (eglCreateContext == null) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
@@ -330,15 +327,15 @@ public class RenderView extends TextureView {
                 }
                 SurfaceTexture surfaceTexture2 = this.surfaceTexture;
                 if (surfaceTexture2 instanceof SurfaceTexture) {
-                    this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
-                    EGLSurface eGLSurface = this.eglSurface;
-                    if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
+                    EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                    this.eglSurface = eglCreateWindowSurface;
+                    if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
-                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
@@ -426,13 +423,14 @@ public class RenderView extends TextureView {
                 cancelRunnable(runnable);
                 this.scheduledRunnable = null;
             }
-            this.scheduledRunnable = new Runnable() {
+            AnonymousClass3 r0 = new Runnable() {
                 public void run() {
                     Runnable unused = CanvasInternal.this.scheduledRunnable = null;
                     CanvasInternal.this.drawRunnable.run();
                 }
             };
-            postRunnable(this.scheduledRunnable, 1);
+            this.scheduledRunnable = r0;
+            postRunnable(r0, 1);
         }
 
         public void finish() {

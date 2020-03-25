@@ -44,21 +44,20 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         this.rowCount = 0;
-        int i = this.rowCount;
-        this.rowCount = i + 1;
-        this.reply1Row = i;
-        int i2 = this.rowCount;
-        this.rowCount = i2 + 1;
-        this.reply2Row = i2;
-        int i3 = this.rowCount;
-        this.rowCount = i3 + 1;
-        this.reply3Row = i3;
-        int i4 = this.rowCount;
+        int i = 0 + 1;
+        this.rowCount = i;
+        this.reply1Row = 0;
+        int i2 = i + 1;
+        this.rowCount = i2;
+        this.reply2Row = i;
+        int i3 = i2 + 1;
+        this.rowCount = i3;
+        this.reply3Row = i2;
+        int i4 = i3 + 1;
+        this.rowCount = i4;
+        this.reply4Row = i3;
         this.rowCount = i4 + 1;
-        this.reply4Row = i4;
-        int i5 = this.rowCount;
-        this.rowCount = i5 + 1;
-        this.explanationRow = i5;
+        this.explanationRow = i4;
         return true;
     }
 
@@ -77,10 +76,12 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             }
         });
         this.listAdapter = new ListAdapter(context);
-        this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.listView = new RecyclerListView(context);
-        this.listView.setVerticalScrollBarEnabled(false);
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        recyclerListView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
@@ -129,53 +130,121 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             return QuickRepliesSettingsActivity.this.rowCount;
         }
 
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            String str;
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType != 0) {
-                boolean z = true;
-                if (itemViewType == 1) {
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                } else if (itemViewType != 4) {
-                    switch (itemViewType) {
-                        case 9:
-                        case 10:
-                        case 11:
-                        case 12:
-                            EditTextSettingsCell editTextSettingsCell = (EditTextSettingsCell) viewHolder.itemView;
-                            String str2 = null;
-                            if (i == QuickRepliesSettingsActivity.this.reply1Row) {
-                                str2 = LocaleController.getString("QuickReplyDefault1", NUM);
-                                str = "quick_reply_msg1";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply2Row) {
-                                str2 = LocaleController.getString("QuickReplyDefault2", NUM);
-                                str = "quick_reply_msg2";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply3Row) {
-                                str2 = LocaleController.getString("QuickReplyDefault3", NUM);
-                                str = "quick_reply_msg3";
-                            } else if (i == QuickRepliesSettingsActivity.this.reply4Row) {
-                                str2 = LocaleController.getString("QuickReplyDefault4", NUM);
-                                str = "quick_reply_msg4";
-                            } else {
-                                str = null;
-                            }
-                            String string = QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getString(str, "");
-                            if (i == QuickRepliesSettingsActivity.this.reply4Row) {
-                                z = false;
-                            }
-                            editTextSettingsCell.setTextAndHint(string, str2, z);
-                            return;
-                        default:
-                            return;
-                    }
-                } else {
-                    ((TextCheckCell) viewHolder.itemView).setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", NUM), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
+        /* JADX WARNING: Removed duplicated region for block: B:23:0x0086  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r8, int r9) {
+            /*
+                r7 = this;
+                int r0 = r8.getItemViewType()
+                if (r0 == 0) goto L_0x00b1
+                r1 = 1
+                if (r0 == r1) goto L_0x00ac
+                r2 = 4
+                java.lang.String r3 = "mainconfig"
+                r4 = 0
+                if (r0 == r2) goto L_0x008b
+                switch(r0) {
+                    case 9: goto L_0x0014;
+                    case 10: goto L_0x0014;
+                    case 11: goto L_0x0014;
+                    case 12: goto L_0x0014;
+                    default: goto L_0x0012;
                 }
-            } else {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                textInfoPrivacyCell.setText(LocaleController.getString("VoipQuickRepliesExplain", NUM));
-            }
+            L_0x0012:
+                goto L_0x00d0
+            L_0x0014:
+                android.view.View r8 = r8.itemView
+                org.telegram.ui.Cells.EditTextSettingsCell r8 = (org.telegram.ui.Cells.EditTextSettingsCell) r8
+                org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                int r0 = r0.reply1Row
+                r2 = 0
+                if (r9 != r0) goto L_0x0030
+                r0 = 2131626448(0x7f0e09d0, float:1.8880132E38)
+                java.lang.String r2 = "QuickReplyDefault1"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
+                java.lang.String r0 = "quick_reply_msg1"
+            L_0x002c:
+                r6 = r2
+                r2 = r0
+                r0 = r6
+                goto L_0x006d
+            L_0x0030:
+                org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                int r0 = r0.reply2Row
+                if (r9 != r0) goto L_0x0044
+                r0 = 2131626449(0x7f0e09d1, float:1.8880135E38)
+                java.lang.String r2 = "QuickReplyDefault2"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
+                java.lang.String r0 = "quick_reply_msg2"
+                goto L_0x002c
+            L_0x0044:
+                org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                int r0 = r0.reply3Row
+                if (r9 != r0) goto L_0x0058
+                r0 = 2131626450(0x7f0e09d2, float:1.8880137E38)
+                java.lang.String r2 = "QuickReplyDefault3"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
+                java.lang.String r0 = "quick_reply_msg3"
+                goto L_0x002c
+            L_0x0058:
+                org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                int r0 = r0.reply4Row
+                if (r9 != r0) goto L_0x006c
+                r0 = 2131626451(0x7f0e09d3, float:1.8880139E38)
+                java.lang.String r2 = "QuickReplyDefault4"
+                java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
+                java.lang.String r0 = "quick_reply_msg4"
+                goto L_0x002c
+            L_0x006c:
+                r0 = r2
+            L_0x006d:
+                org.telegram.ui.QuickRepliesSettingsActivity r5 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                android.app.Activity r5 = r5.getParentActivity()
+                android.content.SharedPreferences r3 = r5.getSharedPreferences(r3, r4)
+                java.lang.String r5 = ""
+                java.lang.String r2 = r3.getString(r2, r5)
+                org.telegram.ui.QuickRepliesSettingsActivity r3 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                int r3 = r3.reply4Row
+                if (r9 == r3) goto L_0x0086
+                goto L_0x0087
+            L_0x0086:
+                r1 = 0
+            L_0x0087:
+                r8.setTextAndHint(r2, r0, r1)
+                goto L_0x00d0
+            L_0x008b:
+                android.view.View r8 = r8.itemView
+                org.telegram.ui.Cells.TextCheckCell r8 = (org.telegram.ui.Cells.TextCheckCell) r8
+                r9 = 2131624155(0x7f0e00db, float:1.8875482E38)
+                java.lang.String r0 = "AllowCustomQuickReply"
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
+                org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
+                android.app.Activity r0 = r0.getParentActivity()
+                android.content.SharedPreferences r0 = r0.getSharedPreferences(r3, r4)
+                java.lang.String r2 = "quick_reply_allow_custom"
+                boolean r0 = r0.getBoolean(r2, r1)
+                r8.setTextAndCheck(r9, r0, r4)
+                goto L_0x00d0
+            L_0x00ac:
+                android.view.View r8 = r8.itemView
+                org.telegram.ui.Cells.TextSettingsCell r8 = (org.telegram.ui.Cells.TextSettingsCell) r8
+                goto L_0x00d0
+            L_0x00b1:
+                android.view.View r8 = r8.itemView
+                org.telegram.ui.Cells.TextInfoPrivacyCell r8 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r8
+                android.content.Context r9 = r7.mContext
+                r0 = 2131165418(0x7var_ea, float:1.7945053E38)
+                java.lang.String r1 = "windowBackgroundGrayShadow"
+                android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r9, (int) r0, (java.lang.String) r1)
+                r8.setBackgroundDrawable(r9)
+                r9 = 2131627206(0x7f0e0cc6, float:1.888167E38)
+                java.lang.String r0 = "VoipQuickRepliesExplain"
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
+                r8.setText(r9)
+            L_0x00d0:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.QuickRepliesSettingsActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {

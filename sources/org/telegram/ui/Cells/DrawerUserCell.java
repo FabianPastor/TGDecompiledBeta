@@ -13,7 +13,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -22,7 +22,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class DrawerUserCell extends FrameLayout {
     private int accountNumber;
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private GroupCreateCheckBox checkBox;
     private BackupImageView imageView;
     private RectF rect = new RectF();
@@ -30,12 +30,16 @@ public class DrawerUserCell extends FrameLayout {
 
     public DrawerUserCell(Context context) {
         super(context);
-        this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
-        this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.dp(18.0f));
+        AvatarDrawable avatarDrawable2 = new AvatarDrawable();
+        this.avatarDrawable = avatarDrawable2;
+        avatarDrawable2.setTextSize(AndroidUtilities.dp(12.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 14.0f, 6.0f, 0.0f, 0.0f));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
@@ -44,8 +48,9 @@ public class DrawerUserCell extends FrameLayout {
         this.textView.setGravity(19);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 72.0f, 0.0f, 60.0f, 0.0f));
-        this.checkBox = new GroupCreateCheckBox(context);
-        this.checkBox.setChecked(true, false);
+        GroupCreateCheckBox groupCreateCheckBox = new GroupCreateCheckBox(context);
+        this.checkBox = groupCreateCheckBox;
+        groupCreateCheckBox.setChecked(true, false);
         this.checkBox.setCheckScale(0.9f);
         this.checkBox.setInnerRadDiff(AndroidUtilities.dp(1.5f));
         this.checkBox.setColorKeysOverrides("chats_unreadCounterText", "chats_unreadCounter", "chats_menuBackground");
@@ -66,7 +71,7 @@ public class DrawerUserCell extends FrameLayout {
 
     public void setAccount(int i) {
         this.accountNumber = i;
-        TLRPC.User currentUser = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        TLRPC$User currentUser = UserConfig.getInstance(i).getCurrentUser();
         if (currentUser != null) {
             this.avatarDrawable.setInfo(currentUser);
             this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));

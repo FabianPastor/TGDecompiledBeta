@@ -1,9 +1,8 @@
 package dagger.internal;
 
-import dagger.Lazy;
 import javax.inject.Provider;
 
-public final class DoubleCheck<T> implements Provider<T>, Lazy<T> {
+public final class DoubleCheck<T> implements Provider<T> {
     private static final Object UNINITIALIZED = new Object();
     private volatile Object instance = UNINITIALIZED;
     private volatile Provider<T> provider;

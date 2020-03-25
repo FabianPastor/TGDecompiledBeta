@@ -25,7 +25,11 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
+import org.telegram.tgnet.TLRPC$TL_poll;
+import org.telegram.tgnet.TLRPC$TL_pollAnswer;
+import org.telegram.tgnet.TLRPC$TL_pollResults;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -47,9 +51,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.PollCreateActivity;
 
 public class PollCreateActivity extends BaseFragment {
-    private static final int MAX_ANSWER_LENGTH = 100;
-    private static final int MAX_QUESTION_LENGTH = 255;
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public int addAnswerRow;
     /* access modifiers changed from: private */
@@ -108,7 +109,7 @@ public class PollCreateActivity extends BaseFragment {
     public int settingsSectionRow;
 
     public interface PollCreateActivityDelegate {
-        void sendPoll(TLRPC.TL_messageMediaPoll tL_messageMediaPoll, HashMap<String, String> hashMap, boolean z, int i);
+        void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap<String, String> hashMap, boolean z, int i);
     }
 
     static /* synthetic */ int access$2010(PollCreateActivity pollCreateActivity) {
@@ -168,8 +169,9 @@ public class PollCreateActivity extends BaseFragment {
         this.requestFieldFocusAtPosition = -1;
         this.parentFragment = chatActivity;
         if (bool != null) {
-            this.quizPoll = bool.booleanValue();
-            this.quizOnly = !this.quizPoll ? 2 : i;
+            boolean booleanValue = bool.booleanValue();
+            this.quizPoll = booleanValue;
+            this.quizOnly = !booleanValue ? 2 : i;
         }
     }
 
@@ -198,35 +200,37 @@ public class PollCreateActivity extends BaseFragment {
                     }
                 } else if (i == 1) {
                     if (!PollCreateActivity.this.quizPoll || PollCreateActivity.this.doneItem.getAlpha() == 1.0f) {
-                        TLRPC.TL_messageMediaPoll tL_messageMediaPoll = new TLRPC.TL_messageMediaPoll();
-                        tL_messageMediaPoll.poll = new TLRPC.TL_poll();
-                        tL_messageMediaPoll.poll.multiple_choice = PollCreateActivity.this.multipleChoise;
-                        tL_messageMediaPoll.poll.quiz = PollCreateActivity.this.quizPoll;
-                        tL_messageMediaPoll.poll.public_voters = !PollCreateActivity.this.anonymousPoll;
-                        TLRPC.TL_poll tL_poll = tL_messageMediaPoll.poll;
+                        TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll = new TLRPC$TL_messageMediaPoll();
+                        TLRPC$TL_poll tLRPC$TL_poll = new TLRPC$TL_poll();
+                        tLRPC$TL_messageMediaPoll.poll = tLRPC$TL_poll;
+                        tLRPC$TL_poll.multiple_choice = PollCreateActivity.this.multipleChoise;
+                        tLRPC$TL_messageMediaPoll.poll.quiz = PollCreateActivity.this.quizPoll;
+                        tLRPC$TL_messageMediaPoll.poll.public_voters = !PollCreateActivity.this.anonymousPoll;
+                        TLRPC$TL_poll tLRPC$TL_poll2 = tLRPC$TL_messageMediaPoll.poll;
                         PollCreateActivity pollCreateActivity = PollCreateActivity.this;
-                        tL_poll.question = pollCreateActivity.getFixedString(pollCreateActivity.questionString);
+                        tLRPC$TL_poll2.question = pollCreateActivity.getFixedString(pollCreateActivity.questionString);
                         SerializedData serializedData = new SerializedData(10);
                         for (int i2 = 0; i2 < PollCreateActivity.this.answers.length; i2++) {
                             PollCreateActivity pollCreateActivity2 = PollCreateActivity.this;
                             if (!TextUtils.isEmpty(pollCreateActivity2.getFixedString(pollCreateActivity2.answers[i2]))) {
-                                TLRPC.TL_pollAnswer tL_pollAnswer = new TLRPC.TL_pollAnswer();
+                                TLRPC$TL_pollAnswer tLRPC$TL_pollAnswer = new TLRPC$TL_pollAnswer();
                                 PollCreateActivity pollCreateActivity3 = PollCreateActivity.this;
-                                tL_pollAnswer.text = pollCreateActivity3.getFixedString(pollCreateActivity3.answers[i2]);
-                                tL_pollAnswer.option = new byte[1];
-                                tL_pollAnswer.option[0] = (byte) (tL_messageMediaPoll.poll.answers.size() + 48);
-                                tL_messageMediaPoll.poll.answers.add(tL_pollAnswer);
+                                tLRPC$TL_pollAnswer.text = pollCreateActivity3.getFixedString(pollCreateActivity3.answers[i2]);
+                                byte[] bArr = new byte[1];
+                                tLRPC$TL_pollAnswer.option = bArr;
+                                bArr[0] = (byte) (tLRPC$TL_messageMediaPoll.poll.answers.size() + 48);
+                                tLRPC$TL_messageMediaPoll.poll.answers.add(tLRPC$TL_pollAnswer);
                                 if ((PollCreateActivity.this.multipleChoise || PollCreateActivity.this.quizPoll) && PollCreateActivity.this.answersChecks[i2]) {
-                                    serializedData.writeByte(tL_pollAnswer.option[0]);
+                                    serializedData.writeByte(tLRPC$TL_pollAnswer.option[0]);
                                 }
                             }
                         }
                         HashMap hashMap = new HashMap();
                         hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
-                        tL_messageMediaPoll.results = new TLRPC.TL_pollResults();
+                        tLRPC$TL_messageMediaPoll.results = new TLRPC$TL_pollResults();
                         if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
-                            AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tL_messageMediaPoll, hashMap) {
-                                private final /* synthetic */ TLRPC.TL_messageMediaPoll f$1;
+                            AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
+                                private final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
                                 private final /* synthetic */ HashMap f$2;
 
                                 {
@@ -240,7 +244,7 @@ public class PollCreateActivity extends BaseFragment {
                             });
                             return;
                         }
-                        PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, hashMap, true, 0);
+                        PollCreateActivity.this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, true, 0);
                         PollCreateActivity.this.finishFragment();
                         return;
                     }
@@ -257,17 +261,18 @@ public class PollCreateActivity extends BaseFragment {
                 }
             }
 
-            public /* synthetic */ void lambda$onItemClick$0$PollCreateActivity$1(TLRPC.TL_messageMediaPoll tL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-                PollCreateActivity.this.delegate.sendPoll(tL_messageMediaPoll, hashMap, z, i);
+            public /* synthetic */ void lambda$onItemClick$0$PollCreateActivity$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+                PollCreateActivity.this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
                 PollCreateActivity.this.finishFragment();
             }
         });
         this.doneItem = this.actionBar.createMenu().addItem(1, (CharSequence) LocaleController.getString("Create", NUM).toUpperCase());
         this.listAdapter = new ListAdapter(context);
-        this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        this.listView = new RecyclerListView(context) {
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
+        AnonymousClass2 r3 = new RecyclerListView(this, context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {
@@ -289,22 +294,24 @@ public class PollCreateActivity extends BaseFragment {
                 super.requestLayout();
             }
         };
-        this.listView.setVerticalScrollBarEnabled(false);
+        this.listView = r3;
+        r3.setVerticalScrollBarEnabled(false);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 PollCreateActivity.this.lambda$createView$0$PollCreateActivity(view, i);
             }
         });
-        this.hintView = new HintView(context, 4);
-        this.hintView.setText(LocaleController.getString("PollTapToSelect", NUM));
+        HintView hintView2 = new HintView(context, 4);
+        this.hintView = hintView2;
+        hintView2.setText(LocaleController.getString("PollTapToSelect", NUM));
         this.hintView.setAlpha(0.0f);
         this.hintView.setVisibility(4);
-        frameLayout.addView(this.hintView, LayoutHelper.createFrame(-2, -2.0f, 51, 19.0f, 0.0f, 19.0f, 0.0f));
+        frameLayout2.addView(this.hintView, LayoutHelper.createFrame(-2, -2.0f, 51, 19.0f, 0.0f, 19.0f, 0.0f));
         checkDoneButton();
         return this.fragmentView;
     }
@@ -324,7 +331,7 @@ public class PollCreateActivity extends BaseFragment {
                 if (i == i2) {
                     z = !this.multipleChoise;
                     this.multipleChoise = z;
-                    if (this.multipleChoise && z2) {
+                    if (z && z2) {
                         this.quizPoll = false;
                         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.quizRow);
                         if (findViewHolderForAdapterPosition != null) {
@@ -336,7 +343,7 @@ public class PollCreateActivity extends BaseFragment {
                 } else if (this.quizOnly == 0) {
                     boolean z3 = !z2;
                     this.quizPoll = z3;
-                    if (this.quizPoll && this.multipleChoise) {
+                    if (z3 && this.multipleChoise) {
                         this.multipleChoise = false;
                         RecyclerView.ViewHolder findViewHolderForAdapterPosition2 = this.listView.findViewHolderForAdapterPosition(i2);
                         if (findViewHolderForAdapterPosition2 != null) {
@@ -536,64 +543,63 @@ public class PollCreateActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public void updateRows() {
         this.rowCount = 0;
-        int i = this.rowCount;
-        this.rowCount = i + 1;
-        this.questionHeaderRow = i;
-        int i2 = this.rowCount;
-        this.rowCount = i2 + 1;
-        this.questionRow = i2;
-        int i3 = this.rowCount;
-        this.rowCount = i3 + 1;
-        this.questionSectionRow = i3;
-        int i4 = this.rowCount;
-        this.rowCount = i4 + 1;
-        this.answerHeaderRow = i4;
+        int i = 0 + 1;
+        this.rowCount = i;
+        this.questionHeaderRow = 0;
+        int i2 = i + 1;
+        this.rowCount = i2;
+        this.questionRow = i;
+        int i3 = i2 + 1;
+        this.rowCount = i3;
+        this.questionSectionRow = i2;
+        int i4 = i3 + 1;
+        this.rowCount = i4;
+        this.answerHeaderRow = i3;
         int i5 = this.answersCount;
         if (i5 != 0) {
-            int i6 = this.rowCount;
-            this.answerStartRow = i6;
-            this.rowCount = i6 + i5;
+            this.answerStartRow = i4;
+            this.rowCount = i4 + i5;
         } else {
             this.answerStartRow = -1;
         }
         if (this.answersCount != this.answers.length) {
-            int i7 = this.rowCount;
-            this.rowCount = i7 + 1;
-            this.addAnswerRow = i7;
+            int i6 = this.rowCount;
+            this.rowCount = i6 + 1;
+            this.addAnswerRow = i6;
         } else {
             this.addAnswerRow = -1;
         }
-        int i8 = this.rowCount;
+        int i7 = this.rowCount;
+        int i8 = i7 + 1;
+        this.rowCount = i8;
+        this.answerSectionRow = i7;
         this.rowCount = i8 + 1;
-        this.answerSectionRow = i8;
-        int i9 = this.rowCount;
-        this.rowCount = i9 + 1;
-        this.settingsHeaderRow = i9;
-        TLRPC.Chat currentChat = this.parentFragment.getCurrentChat();
+        this.settingsHeaderRow = i8;
+        TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
         if (!ChatObject.isChannel(currentChat) || currentChat.megagroup) {
-            int i10 = this.rowCount;
-            this.rowCount = i10 + 1;
-            this.anonymousRow = i10;
+            int i9 = this.rowCount;
+            this.rowCount = i9 + 1;
+            this.anonymousRow = i9;
         } else {
             this.anonymousRow = -1;
         }
         if (this.quizOnly != 1) {
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.multipleRow = i11;
+            int i10 = this.rowCount;
+            this.rowCount = i10 + 1;
+            this.multipleRow = i10;
         } else {
             this.multipleRow = -1;
         }
         if (this.quizOnly == 0) {
-            int i12 = this.rowCount;
-            this.rowCount = i12 + 1;
-            this.quizRow = i12;
+            int i11 = this.rowCount;
+            this.rowCount = i11 + 1;
+            this.quizRow = i11;
         } else {
             this.quizRow = -1;
         }
-        int i13 = this.rowCount;
-        this.rowCount = i13 + 1;
-        this.settingsSectionRow = i13;
+        int i12 = this.rowCount;
+        this.rowCount = i12 + 1;
+        this.settingsSectionRow = i12;
     }
 
     public boolean onBackPressed() {
@@ -677,8 +683,9 @@ public class PollCreateActivity extends BaseFragment {
         boolean[] zArr = this.answersChecks;
         int i = this.answersCount;
         zArr[i] = false;
-        this.answersCount = i + 1;
-        if (this.answersCount == this.answers.length) {
+        int i2 = i + 1;
+        this.answersCount = i2;
+        if (i2 == this.answers.length) {
             this.listAdapter.notifyItemRemoved(this.addAnswerRow);
         }
         this.listAdapter.notifyItemInserted(this.addAnswerRow);
@@ -862,14 +869,14 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g
                 r0.<init>()
                 r7.setOnKeyListener(r0)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x0050:
                 org.telegram.ui.Cells.TextCheckCell r8 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x005f:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
@@ -880,36 +887,36 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.PollCreateActivity$ListAdapter$1 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$1
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x0077:
                 org.telegram.ui.Cells.TextCell r8 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x0086:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x008e:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00ab
+                goto L_0x00ad
             L_0x0096:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
-                r2 = 0
                 r3 = 21
                 r4 = 15
                 r5 = 1
+                java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
                 r0 = r8
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x00ab:
+            L_0x00ad:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r7 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

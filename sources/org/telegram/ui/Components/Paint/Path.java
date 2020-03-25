@@ -7,15 +7,19 @@ public class Path {
     private float baseWeight;
     private Brush brush;
     private int color;
-    private Vector<Point> points = new Vector<>();
+    private Vector<Point> points;
     public double remainder;
 
     public Path(Point point) {
-        this.points.add(point);
+        Vector<Point> vector = new Vector<>();
+        this.points = vector;
+        vector.add(point);
     }
 
     public Path(Point[] pointArr) {
-        this.points.addAll(Arrays.asList(pointArr));
+        Vector<Point> vector = new Vector<>();
+        this.points = vector;
+        vector.addAll(Arrays.asList(pointArr));
     }
 
     public int getLength() {

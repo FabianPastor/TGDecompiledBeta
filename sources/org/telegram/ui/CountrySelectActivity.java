@@ -86,7 +86,9 @@ public class CountrySelectActivity extends BaseFragment {
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
+        addItem.setIsSearchField(true);
+        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = CountrySelectActivity.this.searching = true;
             }
@@ -106,31 +108,36 @@ public class CountrySelectActivity extends BaseFragment {
                     boolean unused = CountrySelectActivity.this.searchWas = true;
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
+        });
+        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searching = false;
         this.searchWas = false;
-        this.listViewAdapter = new CountryAdapter(context);
-        this.searchListViewAdapter = new CountrySearchAdapter(context, this.listViewAdapter.getCountries());
-        this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.showTextView();
+        CountryAdapter countryAdapter = new CountryAdapter(context);
+        this.listViewAdapter = countryAdapter;
+        this.searchListViewAdapter = new CountrySearchAdapter(context, countryAdapter.getCountries());
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        FrameLayout frameLayout2 = frameLayout;
+        EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context);
+        this.emptyView = emptyTextProgressView;
+        emptyTextProgressView.showTextView();
         this.emptyView.setShowAtCenter(true);
         this.emptyView.setText(LocaleController.getString("NoResult", NUM));
-        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView = new RecyclerListView(context);
-        this.listView.setSectionsType(1);
+        frameLayout2.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        recyclerListView.setSectionsType(1);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setFastScrollEnabled();
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
-        RecyclerListView recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        recyclerListView.setVerticalScrollbarPosition(i);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        recyclerListView2.setVerticalScrollbarPosition(i);
+        frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 CountrySelectActivity.this.lambda$createView$0$CountrySelectActivity(view, i);
@@ -197,10 +204,11 @@ public class CountrySelectActivity extends BaseFragment {
                     }
                     String[] split = readLine.split(";");
                     Country country = new Country();
-                    country.name = split[2];
+                    String str = split[2];
+                    country.name = str;
                     country.code = split[0];
                     country.shortname = split[1];
-                    String upperCase = country.name.substring(0, 1).toUpperCase();
+                    String upperCase = str.substring(0, 1).toUpperCase();
                     ArrayList arrayList = this.countries.get(upperCase);
                     if (arrayList == null) {
                         arrayList = new ArrayList();
@@ -359,8 +367,9 @@ public class CountrySelectActivity extends BaseFragment {
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
+            Timer timer = new Timer();
+            this.searchTimer = timer;
+            timer.schedule(new TimerTask() {
                 public void run() {
                     try {
                         CountrySearchAdapter.this.searchTimer.cancel();

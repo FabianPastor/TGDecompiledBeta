@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import java.util.Comparator;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_contact;
 
 /* renamed from: org.telegram.messenger.-$$Lambda$ContactsController$TrjXA3zXxBZ5H4pd0ZldkUjIm4Y  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,6 +12,6 @@ public final /* synthetic */ class $$Lambda$ContactsController$TrjXA3zXxBZ5H4pd0
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$getContactsHash$25((TLRPC.TL_contact) obj, (TLRPC.TL_contact) obj2);
+        return ContactsController.lambda$getContactsHash$25((TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
     }
 }

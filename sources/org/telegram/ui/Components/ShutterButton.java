@@ -17,7 +17,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 
 public class ShutterButton extends View {
-    private static final int LONG_PRESS_TIME = 800;
     /* access modifiers changed from: private */
     public ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
@@ -37,7 +36,7 @@ public class ShutterButton extends View {
     private Drawable shadowDrawable = getResources().getDrawable(NUM);
     private State state;
     private long totalTime;
-    private Paint whitePaint = new Paint(1);
+    private Paint whitePaint;
 
     public interface ShutterButtonDelegate {
         boolean onTranslationChanged(float f, float f2);
@@ -56,10 +55,13 @@ public class ShutterButton extends View {
 
     public ShutterButton(Context context) {
         super(context);
-        this.whitePaint.setStyle(Paint.Style.FILL);
+        Paint paint = new Paint(1);
+        this.whitePaint = paint;
+        paint.setStyle(Paint.Style.FILL);
         this.whitePaint.setColor(-1);
-        this.redPaint = new Paint(1);
-        this.redPaint.setStyle(Paint.Style.FILL);
+        Paint paint2 = new Paint(1);
+        this.redPaint = paint2;
+        paint2.setStyle(Paint.Style.FILL);
         this.redPaint.setColor(-3324089);
         this.state = State.DEFAULT;
     }
@@ -113,8 +115,9 @@ public class ShutterButton extends View {
                     if (abs > 17) {
                         abs = 17;
                     }
-                    this.totalTime += abs;
-                    if (this.totalTime > 120) {
+                    long j = this.totalTime + abs;
+                    this.totalTime = j;
+                    if (j > 120) {
                         this.totalTime = 120;
                     }
                     this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
@@ -150,14 +153,13 @@ public class ShutterButton extends View {
                 this.delegate.shutterReleased();
             }
         } else if (action == 2) {
-            float f = 0.0f;
             if (x >= 0.0f && x <= ((float) getMeasuredWidth())) {
                 x = 0.0f;
             }
-            if (y < 0.0f || y > ((float) getMeasuredHeight())) {
-                f = y;
+            if (y >= 0.0f && y <= ((float) getMeasuredHeight())) {
+                y = 0.0f;
             }
-            if (this.delegate.onTranslationChanged(x, f)) {
+            if (this.delegate.onTranslationChanged(x, y)) {
                 AndroidUtilities.cancelRunOnUIThread(this.longPressed);
                 if (this.state == State.RECORDING) {
                     this.processRelease = false;
@@ -182,7 +184,7 @@ public class ShutterButton extends View {
                 if (this.state != State.RECORDING) {
                     this.redProgress = 0.0f;
                 }
-            } else if (this.state == State.RECORDING) {
+            } else if (state2 == State.RECORDING) {
                 this.redProgress = 1.0f;
             } else {
                 this.redProgress = 0.0f;

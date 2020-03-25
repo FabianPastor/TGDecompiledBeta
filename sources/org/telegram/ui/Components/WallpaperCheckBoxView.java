@@ -18,7 +18,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 
 public class WallpaperCheckBoxView extends View {
-    private static final float progressBounceDiff = 0.2f;
     public final Property<WallpaperCheckBoxView, Float> PROGRESS_PROPERTY = new AnimationProperties.FloatProperty<WallpaperCheckBoxView>("progress") {
         public void setValue(WallpaperCheckBoxView wallpaperCheckBoxView, float f) {
             float unused = WallpaperCheckBoxView.this.progress = f;
@@ -53,17 +52,20 @@ public class WallpaperCheckBoxView extends View {
             this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(18.0f), Bitmap.Config.ARGB_4444);
             this.drawCanvas = new Canvas(this.drawBitmap);
         }
-        this.textPaint = new TextPaint(1);
-        this.textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+        TextPaint textPaint2 = new TextPaint(1);
+        this.textPaint = textPaint2;
+        textPaint2.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.checkPaint = new Paint(1);
-        this.checkPaint.setStyle(Paint.Style.STROKE);
+        Paint paint = new Paint(1);
+        this.checkPaint = paint;
+        paint.setStyle(Paint.Style.STROKE);
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.checkPaint.setColor(0);
         this.checkPaint.setStrokeCap(Paint.Cap.ROUND);
         this.checkPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        this.eraserPaint = new Paint(1);
-        this.eraserPaint.setColor(0);
+        Paint paint2 = new Paint(1);
+        this.eraserPaint = paint2;
+        paint2.setColor(0);
         this.eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         this.backgroundPaint = new Paint(1);
     }
@@ -138,14 +140,14 @@ public class WallpaperCheckBoxView extends View {
             canvas2.drawBitmap(this.drawBitmap, 0.0f, 0.0f, (Paint) null);
         } else {
             this.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(18.0f));
-            int i = this.backgroundGradientColor;
-            if (i != 0) {
+            if (this.backgroundGradientColor != 0) {
                 if (this.colorGradient == null) {
                     RectF rectF3 = this.rect;
                     float f5 = rectF3.left;
                     float f6 = f5;
-                    this.colorGradient = new LinearGradient(f6, rectF3.bottom, f5, rectF3.top, new int[]{this.backgroundColor, i}, (float[]) null, Shader.TileMode.CLAMP);
-                    this.backgroundPaint.setShader(this.colorGradient);
+                    LinearGradient linearGradient = new LinearGradient(f6, rectF3.bottom, f5, rectF3.top, new int[]{this.backgroundColor, this.backgroundGradientColor}, (float[]) null, Shader.TileMode.CLAMP);
+                    this.colorGradient = linearGradient;
+                    this.backgroundPaint.setShader(linearGradient);
                 }
                 this.backgroundPaint.setColor(this.backgroundColor);
             } else {
@@ -176,8 +178,9 @@ public class WallpaperCheckBoxView extends View {
         Property<WallpaperCheckBoxView, Float> property = this.PROGRESS_PROPERTY;
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, property, fArr);
-        this.checkAnimator.setDuration(300);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, property, fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.setDuration(300);
         this.checkAnimator.start();
     }
 

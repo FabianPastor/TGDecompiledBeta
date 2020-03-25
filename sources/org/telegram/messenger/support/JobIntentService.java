@@ -92,10 +92,12 @@ public abstract class JobIntentService extends Service {
             super(context, componentName);
             this.mContext = context.getApplicationContext();
             PowerManager powerManager = (PowerManager) context.getSystemService("power");
-            this.mLaunchWakeLock = powerManager.newWakeLock(1, componentName.getClassName() + ":launch");
-            this.mLaunchWakeLock.setReferenceCounted(false);
-            this.mRunWakeLock = powerManager.newWakeLock(1, componentName.getClassName() + ":run");
-            this.mRunWakeLock.setReferenceCounted(false);
+            PowerManager.WakeLock newWakeLock = powerManager.newWakeLock(1, componentName.getClassName() + ":launch");
+            this.mLaunchWakeLock = newWakeLock;
+            newWakeLock.setReferenceCounted(false);
+            PowerManager.WakeLock newWakeLock2 = powerManager.newWakeLock(1, componentName.getClassName() + ":run");
+            this.mRunWakeLock = newWakeLock2;
+            newWakeLock2.setReferenceCounted(false);
         }
 
         /* access modifiers changed from: package-private */

@@ -14,26 +14,32 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
-    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
     private Object parentObject;
     private float scale;
     private boolean scaled;
-    private TLRPC.Document sticker;
-    private long time = 0;
+    private TLRPC$Document sticker;
+
+    static {
+        new AccelerateInterpolator(0.5f);
+    }
 
     public StickerCell(Context context) {
         super(context);
-        this.imageView = new BackupImageView(context);
-        this.imageView.setAspectFit(true);
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setAspectFit(true);
         this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(66, 66.0f, 1, 0.0f, 5.0f, 0.0f, 0.0f));
         setFocusable(true);
@@ -60,21 +66,21 @@ public class StickerCell extends FrameLayout {
         return this.clearsInputField;
     }
 
-    public void setSticker(TLRPC.Document document, Object obj, int i) {
-        TLRPC.Document document2 = document;
+    public void setSticker(TLRPC$Document tLRPC$Document, Object obj, int i) {
+        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
         int i2 = i;
         this.parentObject = obj;
-        if (document2 != null) {
-            TLRPC.PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
-            if (!MessageObject.canAutoplayAnimatedSticker(document)) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), (String) null, "webp", (Drawable) null, this.parentObject);
+        if (tLRPC$Document2 != null) {
+            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+            if (!MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
+                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) null, this.parentObject);
             } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, document2), (String) null, 0, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, 0, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(document), "80_80", (String) null, (Drawable) null, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) null, this.parentObject);
             }
         }
-        this.sticker = document2;
+        this.sticker = tLRPC$Document2;
         if (i2 == -1) {
             setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
@@ -95,7 +101,7 @@ public class StickerCell extends FrameLayout {
         }
     }
 
-    public TLRPC.Document getSticker() {
+    public TLRPC$Document getSticker() {
         return this.sticker;
     }
 
@@ -123,8 +129,9 @@ public class StickerCell extends FrameLayout {
             if (this.scaled) {
                 float f = this.scale;
                 if (f != 0.8f) {
-                    this.scale = f - (((float) j2) / 400.0f);
-                    if (this.scale < 0.8f) {
+                    float f2 = f - (((float) j2) / 400.0f);
+                    this.scale = f2;
+                    if (f2 < 0.8f) {
                         this.scale = 0.8f;
                     }
                     this.imageView.setScaleX(this.scale);
@@ -133,8 +140,9 @@ public class StickerCell extends FrameLayout {
                     invalidate();
                 }
             }
-            this.scale += ((float) j2) / 400.0f;
-            if (this.scale > 1.0f) {
+            float f3 = this.scale + (((float) j2) / 400.0f);
+            this.scale = f3;
+            if (f3 > 1.0f) {
                 this.scale = 1.0f;
             }
             this.imageView.setScaleX(this.scale);
@@ -150,10 +158,10 @@ public class StickerCell extends FrameLayout {
         if (this.sticker != null) {
             String str = null;
             for (int i = 0; i < this.sticker.attributes.size(); i++) {
-                TLRPC.DocumentAttribute documentAttribute = this.sticker.attributes.get(i);
-                if (documentAttribute instanceof TLRPC.TL_documentAttributeSticker) {
-                    String str2 = documentAttribute.alt;
-                    str = (str2 == null || str2.length() <= 0) ? null : documentAttribute.alt;
+                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
+                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                    String str2 = tLRPC$DocumentAttribute.alt;
+                    str = (str2 == null || str2.length() <= 0) ? null : tLRPC$DocumentAttribute.alt;
                 }
             }
             if (str != null) {

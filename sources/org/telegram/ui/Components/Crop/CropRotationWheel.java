@@ -17,8 +17,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class CropRotationWheel extends FrameLayout {
-    private static final int DELTA_ANGLE = 5;
-    private static final int MAX_ANGLE = 45;
     private ImageView aspectRatioButton;
     private Paint bluePaint;
     private TextView degreesLabel;
@@ -26,7 +24,7 @@ public class CropRotationWheel extends FrameLayout {
     protected float rotation;
     private RotationWheelListener rotationListener;
     private RectF tempRect = new RectF(0.0f, 0.0f, 0.0f, 0.0f);
-    private Paint whitePaint = new Paint();
+    private Paint whitePaint;
 
     public interface RotationWheelListener {
         void aspectRatioPressed();
@@ -42,17 +40,21 @@ public class CropRotationWheel extends FrameLayout {
 
     public CropRotationWheel(Context context) {
         super(context);
-        this.whitePaint.setStyle(Paint.Style.FILL);
+        Paint paint = new Paint();
+        this.whitePaint = paint;
+        paint.setStyle(Paint.Style.FILL);
         this.whitePaint.setColor(-1);
         this.whitePaint.setAlpha(255);
         this.whitePaint.setAntiAlias(true);
-        this.bluePaint = new Paint();
-        this.bluePaint.setStyle(Paint.Style.FILL);
+        Paint paint2 = new Paint();
+        this.bluePaint = paint2;
+        paint2.setStyle(Paint.Style.FILL);
         this.bluePaint.setColor(-11420173);
         this.bluePaint.setAlpha(255);
         this.bluePaint.setAntiAlias(true);
-        this.aspectRatioButton = new ImageView(context);
-        this.aspectRatioButton.setImageResource(NUM);
+        ImageView imageView = new ImageView(context);
+        this.aspectRatioButton = imageView;
+        imageView.setImageResource(NUM);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
         this.aspectRatioButton.setOnClickListener(new View.OnClickListener() {
@@ -62,19 +64,20 @@ public class CropRotationWheel extends FrameLayout {
         });
         this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(NUM);
-        imageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        ImageView imageView2 = new ImageView(context);
+        imageView2.setImageResource(NUM);
+        imageView2.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        imageView2.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 CropRotationWheel.this.lambda$new$1$CropRotationWheel(view);
             }
         });
-        imageView.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
-        addView(imageView, LayoutHelper.createFrame(70, 64, 21));
-        this.degreesLabel = new TextView(context);
-        this.degreesLabel.setTextColor(-1);
+        imageView2.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
+        addView(imageView2, LayoutHelper.createFrame(70, 64, 21));
+        TextView textView = new TextView(context);
+        this.degreesLabel = textView;
+        textView.setTextColor(-1);
         addView(this.degreesLabel, LayoutHelper.createFrame(-2, -2, 49));
         setWillNotDraw(false);
         setRotation(0.0f, false);
@@ -113,11 +116,10 @@ public class CropRotationWheel extends FrameLayout {
 
     public void setRotation(float f, boolean z) {
         this.rotation = f;
-        float f2 = this.rotation;
-        if (((double) Math.abs(f2)) < 0.099d) {
-            f2 = Math.abs(f2);
+        if (((double) Math.abs(f)) < 0.099d) {
+            f = Math.abs(f);
         }
-        this.degreesLabel.setText(String.format("%.1fº", new Object[]{Float.valueOf(f2)}));
+        this.degreesLabel.setText(String.format("%.1fº", new Object[]{Float.valueOf(f)}));
         invalidate();
     }
 

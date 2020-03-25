@@ -23,10 +23,11 @@ public class BrightnessControlCell extends FrameLayout {
 
     public BrightnessControlCell(Context context) {
         super(context);
-        this.leftImageView = new ImageView(context);
-        this.leftImageView.setImageResource(NUM);
+        ImageView imageView = new ImageView(context);
+        this.leftImageView = imageView;
+        imageView.setImageResource(NUM);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
-        this.seekBarView = new SeekBarView(context) {
+        AnonymousClass1 r0 = new SeekBarView(this, context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -34,7 +35,8 @@ public class BrightnessControlCell extends FrameLayout {
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.seekBarView.setReportChanges(true);
+        this.seekBarView = r0;
+        r0.setReportChanges(true);
         this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
             public void onSeekBarPressed(boolean z) {
             }
@@ -44,8 +46,9 @@ public class BrightnessControlCell extends FrameLayout {
             }
         });
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 54.0f, 5.0f, 54.0f, 0.0f));
-        this.rightImageView = new ImageView(context);
-        this.rightImageView.setImageResource(NUM);
+        ImageView imageView2 = new ImageView(context);
+        this.rightImageView = imageView2;
+        imageView2.setImageResource(NUM);
         addView(this.rightImageView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 12.0f, 17.0f, 0.0f));
     }
 

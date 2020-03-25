@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
-import android.view.WindowManager;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.AdjustPanFrameLayout;
 
@@ -13,7 +12,6 @@ public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
     private int keyboardHeight;
     private Rect rect = new Rect();
     private boolean useSmoothKeyboard;
-    private WindowManager windowManager;
     private boolean withoutWindow;
 
     public interface SizeNotifierFrameLayoutPhotoDelegate {

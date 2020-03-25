@@ -11,7 +11,7 @@ import java.io.IOException;
 /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
 public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<FirebaseAbt$ExperimentPayload, Builder> implements FirebaseAbt$ExperimentPayloadOrBuilder {
     /* access modifiers changed from: private */
-    public static final FirebaseAbt$ExperimentPayload DEFAULT_INSTANCE = new FirebaseAbt$ExperimentPayload();
+    public static final FirebaseAbt$ExperimentPayload DEFAULT_INSTANCE;
     private static volatile Parser<FirebaseAbt$ExperimentPayload> PARSER;
     private String activateEventToLog_ = "";
     private int bitField0_;
@@ -195,6 +195,8 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
     }
 
     static {
-        DEFAULT_INSTANCE.makeImmutable();
+        FirebaseAbt$ExperimentPayload firebaseAbt$ExperimentPayload = new FirebaseAbt$ExperimentPayload();
+        DEFAULT_INSTANCE = firebaseAbt$ExperimentPayload;
+        firebaseAbt$ExperimentPayload.makeImmutable();
     }
 }

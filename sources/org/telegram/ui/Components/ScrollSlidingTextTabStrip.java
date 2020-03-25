@@ -54,7 +54,6 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             }
         }
     };
-    private boolean animationRunning;
     /* access modifiers changed from: private */
     public float animationTime;
     private int currentPosition;
@@ -104,8 +103,14 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
-        this.tabsContainer = new LinearLayout(context);
-        this.tabsContainer.setOrientation(0);
+        AnonymousClass2 r1 = new LinearLayout(context) {
+            public void setAlpha(float f) {
+                super.setAlpha(f);
+                ScrollSlidingTextTabStrip.this.invalidate();
+            }
+        };
+        this.tabsContainer = r1;
+        r1.setOrientation(0);
         this.tabsContainer.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
         this.tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         addView(this.tabsContainer);
@@ -173,6 +178,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         return this.tabsContainer;
     }
 
+    @Keep
     public float getAnimationIdicatorProgress() {
         return this.animationIdicatorProgress;
     }
@@ -212,6 +218,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             this.prevLayoutWidth = 0;
         }
         TextView textView = new TextView(getContext());
+        textView.setWillNotDraw(false);
         textView.setGravity(17);
         textView.setText(charSequence);
         textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(this.selectorColorKey), 3));
@@ -289,7 +296,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         this.activeTextColorKey = str2;
         this.unactiveTextColorKey = str3;
         this.selectorColorKey = str4;
-        this.selectorDrawable.setColor(Theme.getColor(this.tabLineColorKey));
+        this.selectorDrawable.setColor(Theme.getColor(str));
     }
 
     public int getCurrentTabId() {
@@ -307,6 +314,10 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         }
     }
 
+    public void resetTab() {
+        this.selectedTabId = -1;
+    }
+
     public int getFirstTabId() {
         return this.positionToId.get(0, 0);
     }
@@ -316,6 +327,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         boolean drawChild = super.drawChild(canvas, view, j);
         if (view == this.tabsContainer) {
             int measuredHeight = getMeasuredHeight();
+            this.selectorDrawable.setAlpha((int) (this.tabsContainer.getAlpha() * 255.0f));
             this.selectorDrawable.setBounds(this.indicatorX, measuredHeight - AndroidUtilities.dpr(4.0f), this.indicatorX + this.indicatorWidth, measuredHeight);
             this.selectorDrawable.draw(canvas);
         }
@@ -441,32 +453,5 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             return ((int) Math.ceil((double) layout.getLineWidth(0))) + AndroidUtilities.dp(2.0f);
         }
         return textView.getMeasuredWidth();
-    }
-
-    public void onPageScrolled(int i, int i2) {
-        if (this.currentPosition != i) {
-            this.currentPosition = i;
-            if (i < this.tabsContainer.getChildCount()) {
-                int i3 = 0;
-                while (true) {
-                    boolean z = true;
-                    if (i3 >= this.tabsContainer.getChildCount()) {
-                        break;
-                    }
-                    View childAt = this.tabsContainer.getChildAt(i3);
-                    if (i3 != i) {
-                        z = false;
-                    }
-                    childAt.setSelected(z);
-                    i3++;
-                }
-                if (i2 != i || i <= 1) {
-                    scrollToChild(i);
-                } else {
-                    scrollToChild(i - 1);
-                }
-                invalidate();
-            }
-        }
     }
 }

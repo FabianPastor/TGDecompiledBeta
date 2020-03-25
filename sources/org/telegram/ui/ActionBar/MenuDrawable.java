@@ -9,7 +9,6 @@ import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 
 public class MenuDrawable extends Drawable {
-    private boolean animationInProgress;
     private int currentAnimationTime;
     private float currentRotation;
     private float finalRotation;
@@ -73,8 +72,8 @@ public class MenuDrawable extends Drawable {
             long elapsedRealtime = SystemClock.elapsedRealtime();
             long j = this.lastFrameTime;
             if (j != 0) {
-                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (elapsedRealtime - j));
-                int i = this.currentAnimationTime;
+                int i = (int) (((long) this.currentAnimationTime) + (elapsedRealtime - j));
+                this.currentAnimationTime = i;
                 if (i >= 200) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
@@ -110,12 +109,12 @@ public class MenuDrawable extends Drawable {
             f2 = (float) AndroidUtilities.dp(9.0f);
             f = Math.abs(this.currentRotation);
         }
-        float f7 = f3 + (f2 * f);
-        Canvas canvas2 = canvas;
-        float f8 = f7;
-        float f9 = f5;
-        canvas2.drawLine(f8, -f4, f9, -f6, this.paint);
-        canvas2.drawLine(f8, f4, f9, f6, this.paint);
+        float f7 = f6;
+        float f8 = f5;
+        float f9 = f4;
+        float var_ = f3 + (f2 * f);
+        canvas.drawLine(var_, -f9, f8, -f7, this.paint);
+        canvas.drawLine(var_, f9, f8, f7, this.paint);
         canvas.restore();
     }
 

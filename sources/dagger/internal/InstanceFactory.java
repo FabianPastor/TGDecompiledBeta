@@ -1,8 +1,6 @@
 package dagger.internal;
 
-import dagger.Lazy;
-
-public final class InstanceFactory<T> implements Factory<T>, Lazy<T> {
+public final class InstanceFactory<T> implements Factory<T> {
     private final T instance;
 
     public static <T> Factory<T> create(T t) {

@@ -248,8 +248,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 this.currentAnimation.cancel();
             }
             this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.currentAnimation = animatorSet2;
+            animatorSet2.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     View unused = SpansContainer.this.addingSpan = null;
                     AnimatorSet unused2 = SpansContainer.this.currentAnimation = null;
@@ -277,8 +278,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 this.currentAnimation.cancel();
             }
             this.animationStarted = false;
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.currentAnimation = animatorSet2;
+            animatorSet2.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     SpansContainer.this.removeView(groupCreateSpan);
                     View unused = SpansContainer.this.removingSpan = null;
@@ -350,7 +352,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 }
             }
         });
-        this.fragmentView = new ViewGroup(context2) {
+        AnonymousClass2 r4 = new ViewGroup(context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int i3;
@@ -396,8 +398,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 return drawChild;
             }
         };
-        ViewGroup viewGroup = (ViewGroup) this.fragmentView;
-        this.scrollView = new ScrollView(context2) {
+        this.fragmentView = r4;
+        ViewGroup viewGroup = r4;
+        AnonymousClass3 r6 = new ScrollView(context2) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 if (InviteContactsActivity.this.ignoreScrollEvent) {
                     boolean unused = InviteContactsActivity.this.ignoreScrollEvent = false;
@@ -409,12 +412,14 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 return super.requestChildRectangleOnScreen(view, rect, z);
             }
         };
-        this.scrollView.setVerticalScrollBarEnabled(false);
+        this.scrollView = r6;
+        r6.setVerticalScrollBarEnabled(false);
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("windowBackgroundWhite"));
         viewGroup.addView(this.scrollView);
-        this.spansContainer = new SpansContainer(context2);
-        this.scrollView.addView(this.spansContainer, LayoutHelper.createFrame(-1, -2.0f));
-        this.editText = new EditTextBoldCursor(context2) {
+        SpansContainer spansContainer2 = new SpansContainer(context2);
+        this.spansContainer = spansContainer2;
+        this.scrollView.addView(spansContainer2, LayoutHelper.createFrame(-1, -2.0f));
+        AnonymousClass4 r62 = new EditTextBoldCursor(context2) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (InviteContactsActivity.this.currentDeletingSpan != null) {
                     InviteContactsActivity.this.currentDeletingSpan.cancelDeleteAnimation();
@@ -427,7 +432,8 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.editText.setTextSize(1, 18.0f);
+        this.editText = r62;
+        r62.setTextSize(1, 18.0f);
         this.editText.setHintColor(Theme.getColor("groupcreate_hintText"));
         this.editText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.editText.setCursorColor(Theme.getColor("groupcreate_cursor"));
@@ -443,7 +449,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
         this.editText.setHintText(LocaleController.getString("SearchFriends", NUM));
-        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+        this.editText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -508,19 +514,20 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
         viewGroup.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
-        this.listView = new RecyclerListView(context2);
-        this.listView.setEmptyView(this.emptyView);
-        RecyclerListView recyclerListView = this.listView;
+        RecyclerListView recyclerListView = new RecyclerListView(context2);
+        this.listView = recyclerListView;
+        recyclerListView.setEmptyView(this.emptyView);
+        RecyclerListView recyclerListView2 = this.listView;
         InviteAdapter inviteAdapter = new InviteAdapter(context2);
         this.adapter = inviteAdapter;
-        recyclerListView.setAdapter(inviteAdapter);
+        recyclerListView2.setAdapter(inviteAdapter);
         this.listView.setLayoutManager(linearLayoutManager);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        RecyclerListView recyclerListView2 = this.listView;
+        RecyclerListView recyclerListView3 = this.listView;
         GroupCreateDividerItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
         this.decoration = groupCreateDividerItemDecoration;
-        recyclerListView2.addItemDecoration(groupCreateDividerItemDecoration);
+        recyclerListView3.addItemDecoration(groupCreateDividerItemDecoration);
         viewGroup.addView(this.listView);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
@@ -534,8 +541,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 }
             }
         });
-        this.infoTextView = new TextView(context2);
-        this.infoTextView.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
+        TextView textView2 = new TextView(context2);
+        this.infoTextView = textView2;
+        textView2.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
         this.infoTextView.setTextColor(Theme.getColor("contacts_inviteText"));
         this.infoTextView.setGravity(17);
         this.infoTextView.setText(LocaleController.getString("InviteFriendsHelp", NUM));
@@ -543,8 +551,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.infoTextView.setPadding(AndroidUtilities.dp(17.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(17.0f), AndroidUtilities.dp(9.0f));
         viewGroup.addView(this.infoTextView, LayoutHelper.createFrame(-1, -2, 83));
-        this.counterView = new FrameLayout(context2);
-        this.counterView.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.counterView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
         this.counterView.setVisibility(4);
         viewGroup.addView(this.counterView, LayoutHelper.createFrame(-1, 48, 83));
         this.counterView.setOnClickListener(new View.OnClickListener() {
@@ -555,8 +564,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         this.counterView.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 17));
-        this.counterTextView = new TextView(context2);
-        this.counterTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        TextView textView3 = new TextView(context2);
+        this.counterTextView = textView3;
+        textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.counterTextView.setTextSize(1, 14.0f);
         this.counterTextView.setTextColor(Theme.getColor("contacts_inviteBackground"));
         this.counterTextView.setGravity(17);
@@ -564,8 +574,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         this.counterTextView.setMinWidth(AndroidUtilities.dp(20.0f));
         this.counterTextView.setPadding(AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(1.0f));
         linearLayout.addView(this.counterTextView, LayoutHelper.createLinear(-2, 20, 16, 0, 0, 10, 0));
-        this.textView = new TextView(context2);
-        this.textView.setTextSize(1, 14.0f);
+        TextView textView4 = new TextView(context2);
+        this.textView = textView4;
+        textView4.setTextSize(1, 14.0f);
         this.textView.setTextColor(Theme.getColor("contacts_inviteText"));
         this.textView.setGravity(17);
         this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
@@ -711,6 +722,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         }
     }
 
+    @Keep
     public int getContainerHeight() {
         return this.containerHeight;
     }
@@ -773,8 +785,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     }
 
     private void fetchContacts() {
-        this.phoneBookContacts = new ArrayList<>(ContactsController.getInstance(this.currentAccount).phoneBookContacts);
-        Collections.sort(this.phoneBookContacts, $$Lambda$InviteContactsActivity$r58ALapXATHsxuXB3Kf3_z6GjIA.INSTANCE);
+        ArrayList<ContactsController.Contact> arrayList = new ArrayList<>(ContactsController.getInstance(this.currentAccount).phoneBookContacts);
+        this.phoneBookContacts = arrayList;
+        Collections.sort(arrayList, $$Lambda$InviteContactsActivity$r58ALapXATHsxuXB3Kf3_z6GjIA.INSTANCE);
         EmptyTextProgressView emptyTextProgressView = this.emptyView;
         if (emptyTextProgressView != null) {
             emptyTextProgressView.showTextView();
@@ -905,8 +918,9 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                 notifyDataSetChanged();
                 return;
             }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
+            Timer timer = new Timer();
+            this.searchTimer = timer;
+            timer.schedule(new TimerTask() {
                 public void run() {
                     try {
                         InviteAdapter.this.searchTimer.cancel();
@@ -1039,7 +1053,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         r0 = move-exception
                         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
                     L_0x0014:
-                        java.lang.String r0 = r8
+                        java.lang.String r0 = r7
                         org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$puDDzs3DCPG3FhnDL1PVs4vd3QI r1 = new org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$puDDzs3DCPG3FhnDL1PVs4vd3QI
                         r1.<init>(r2, r0)
                         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
@@ -1169,11 +1183,11 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.InviteAdapter.AnonymousClass1.lambda$run$1$InviteContactsActivity$InviteAdapter$1(java.lang.String):void");
                 }
 
-                /* JADX WARNING: Code restructure failed: missing block: B:32:0x00c7, code lost:
-                    if (r10.contains(" " + r14) != false) goto L_0x00c9;
+                /* JADX WARNING: Code restructure failed: missing block: B:32:0x00c6, code lost:
+                    if (r11.contains(" " + r14) != false) goto L_0x00c8;
                  */
-                /* JADX WARNING: Removed duplicated region for block: B:36:0x00db A[LOOP:1: B:23:0x008b->B:36:0x00db, LOOP_END] */
-                /* JADX WARNING: Removed duplicated region for block: B:43:0x00cc A[SYNTHETIC] */
+                /* JADX WARNING: Removed duplicated region for block: B:36:0x00da A[LOOP:1: B:23:0x008a->B:36:0x00da, LOOP_END] */
+                /* JADX WARNING: Removed duplicated region for block: B:43:0x00cb A[SYNTHETIC] */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(java.lang.String r17) {
                     /*
@@ -1210,82 +1224,81 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         r6 = 0
                     L_0x003d:
                         int r6 = r6 + r5
-                        java.lang.String[] r6 = new java.lang.String[r6]
-                        r6[r3] = r1
+                        java.lang.String[] r7 = new java.lang.String[r6]
+                        r7[r3] = r1
                         if (r2 == 0) goto L_0x0046
-                        r6[r5] = r2
+                        r7[r5] = r2
                     L_0x0046:
                         java.util.ArrayList r1 = new java.util.ArrayList
                         r1.<init>()
                         java.util.ArrayList r2 = new java.util.ArrayList
                         r2.<init>()
-                        r7 = 0
+                        r8 = 0
                     L_0x0051:
-                        org.telegram.ui.InviteContactsActivity$InviteAdapter r8 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
-                        org.telegram.ui.InviteContactsActivity r8 = org.telegram.ui.InviteContactsActivity.this
-                        java.util.ArrayList r8 = r8.phoneBookContacts
-                        int r8 = r8.size()
-                        if (r7 >= r8) goto L_0x00e4
-                        org.telegram.ui.InviteContactsActivity$InviteAdapter r8 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
-                        org.telegram.ui.InviteContactsActivity r8 = org.telegram.ui.InviteContactsActivity.this
-                        java.util.ArrayList r8 = r8.phoneBookContacts
-                        java.lang.Object r8 = r8.get(r7)
-                        org.telegram.messenger.ContactsController$Contact r8 = (org.telegram.messenger.ContactsController.Contact) r8
-                        java.lang.String r9 = r8.first_name
-                        java.lang.String r10 = r8.last_name
-                        java.lang.String r9 = org.telegram.messenger.ContactsController.formatName(r9, r10)
-                        java.lang.String r9 = r9.toLowerCase()
-                        org.telegram.messenger.LocaleController r10 = org.telegram.messenger.LocaleController.getInstance()
-                        java.lang.String r10 = r10.getTranslitString(r9)
-                        boolean r11 = r9.equals(r10)
-                        if (r11 == 0) goto L_0x0088
-                        r10 = r4
+                        org.telegram.ui.InviteContactsActivity$InviteAdapter r9 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
+                        org.telegram.ui.InviteContactsActivity r9 = org.telegram.ui.InviteContactsActivity.this
+                        java.util.ArrayList r9 = r9.phoneBookContacts
+                        int r9 = r9.size()
+                        if (r8 >= r9) goto L_0x00e3
+                        org.telegram.ui.InviteContactsActivity$InviteAdapter r9 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
+                        org.telegram.ui.InviteContactsActivity r9 = org.telegram.ui.InviteContactsActivity.this
+                        java.util.ArrayList r9 = r9.phoneBookContacts
+                        java.lang.Object r9 = r9.get(r8)
+                        org.telegram.messenger.ContactsController$Contact r9 = (org.telegram.messenger.ContactsController.Contact) r9
+                        java.lang.String r10 = r9.first_name
+                        java.lang.String r11 = r9.last_name
+                        java.lang.String r10 = org.telegram.messenger.ContactsController.formatName(r10, r11)
+                        java.lang.String r10 = r10.toLowerCase()
+                        org.telegram.messenger.LocaleController r11 = org.telegram.messenger.LocaleController.getInstance()
+                        java.lang.String r11 = r11.getTranslitString(r10)
+                        boolean r12 = r10.equals(r11)
+                        if (r12 == 0) goto L_0x0088
+                        r11 = r4
                     L_0x0088:
-                        int r11 = r6.length
                         r12 = 0
                         r13 = 0
-                    L_0x008b:
-                        if (r12 >= r11) goto L_0x00df
-                        r14 = r6[r12]
-                        boolean r15 = r9.startsWith(r14)
-                        if (r15 != 0) goto L_0x00c9
+                    L_0x008a:
+                        if (r12 >= r6) goto L_0x00de
+                        r14 = r7[r12]
+                        boolean r15 = r10.startsWith(r14)
+                        if (r15 != 0) goto L_0x00c8
                         java.lang.StringBuilder r15 = new java.lang.StringBuilder
                         r15.<init>()
                         java.lang.String r3 = " "
                         r15.append(r3)
                         r15.append(r14)
                         java.lang.String r15 = r15.toString()
-                        boolean r15 = r9.contains(r15)
-                        if (r15 != 0) goto L_0x00c9
-                        if (r10 == 0) goto L_0x00ca
-                        boolean r15 = r10.startsWith(r14)
-                        if (r15 != 0) goto L_0x00c9
+                        boolean r15 = r10.contains(r15)
+                        if (r15 != 0) goto L_0x00c8
+                        if (r11 == 0) goto L_0x00c9
+                        boolean r15 = r11.startsWith(r14)
+                        if (r15 != 0) goto L_0x00c8
                         java.lang.StringBuilder r15 = new java.lang.StringBuilder
                         r15.<init>()
                         r15.append(r3)
                         r15.append(r14)
                         java.lang.String r3 = r15.toString()
-                        boolean r3 = r10.contains(r3)
-                        if (r3 == 0) goto L_0x00ca
-                    L_0x00c9:
+                        boolean r3 = r11.contains(r3)
+                        if (r3 == 0) goto L_0x00c9
+                    L_0x00c8:
                         r13 = 1
-                    L_0x00ca:
-                        if (r13 == 0) goto L_0x00db
-                        java.lang.String r3 = r8.first_name
-                        java.lang.String r9 = r8.last_name
-                        java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r9, r14)
+                    L_0x00c9:
+                        if (r13 == 0) goto L_0x00da
+                        java.lang.String r3 = r9.first_name
+                        java.lang.String r10 = r9.last_name
+                        java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r10, r14)
                         r2.add(r3)
-                        r1.add(r8)
-                        goto L_0x00df
-                    L_0x00db:
+                        r1.add(r9)
+                        goto L_0x00de
+                    L_0x00da:
                         int r12 = r12 + 1
                         r3 = 0
-                        goto L_0x008b
-                    L_0x00df:
-                        int r7 = r7 + 1
+                        goto L_0x008a
+                    L_0x00de:
+                        int r8 = r8 + 1
                         r3 = 0
                         goto L_0x0051
-                    L_0x00e4:
+                    L_0x00e3:
                         org.telegram.ui.InviteContactsActivity$InviteAdapter r3 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
                         r3.updateSearchResults(r1, r2)
                         return
@@ -1340,7 +1353,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             }
         };
         $$Lambda$InviteContactsActivity$lRM1FXgooIebl8RwlJ1GDWMOI r7 = r9;
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_hintText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_cursor"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionShadow"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundGroupCreateSpanBlue"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue"), new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText"), new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.counterView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText"), new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText")};
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_hintText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_cursor"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionShadow"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{InviteUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription(this.listView, 0, new Class[]{InviteUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{InviteTextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue"), new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText"), new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.counterView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteBackground"), new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText"), new ThemeDescription(this.counterTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contacts_inviteText")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$3$InviteContactsActivity() {

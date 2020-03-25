@@ -28,11 +28,13 @@ public class EmptyTextProgressView extends FrameLayout {
 
     public EmptyTextProgressView(Context context) {
         super(context);
-        this.progressBar = new RadialProgressView(context);
-        this.progressBar.setVisibility(4);
+        RadialProgressView radialProgressView = new RadialProgressView(context);
+        this.progressBar = radialProgressView;
+        radialProgressView.setVisibility(4);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2.0f));
-        this.textView = new TextView(context);
-        this.textView.setTextSize(1, 20.0f);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextSize(1, 20.0f);
         this.textView.setTextColor(Theme.getColor("emptyListPlaceholder"));
         this.textView.setGravity(17);
         this.textView.setVisibility(4);

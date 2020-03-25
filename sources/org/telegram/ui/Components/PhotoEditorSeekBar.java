@@ -80,11 +80,11 @@ public class PhotoEditorSeekBar extends View {
     public void setProgress(int i, boolean z) {
         PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate;
         int i2 = this.minValue;
-        if (i >= i2 && i <= (i2 = this.maxValue)) {
-            i2 = i;
+        if (i < i2 || i > (i2 = this.maxValue)) {
+            i = i2;
         }
         int i3 = this.minValue;
-        this.progress = ((float) (i2 - i3)) / ((float) (this.maxValue - i3));
+        this.progress = ((float) (i - i3)) / ((float) (this.maxValue - i3));
         invalidate();
         if (z && (photoEditorSeekBarDelegate = this.delegate) != null) {
             photoEditorSeekBarDelegate.onProgressChanged(((Integer) getTag()).intValue(), getProgress());

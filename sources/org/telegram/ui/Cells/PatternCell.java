@@ -18,7 +18,9 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.RadialProgress2;
@@ -30,13 +32,12 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     private int currentGradientAngle;
     private int currentGradientColor1;
     private int currentGradientColor2;
-    private TLRPC.TL_wallPaper currentPattern;
+    private TLRPC$TL_wallPaper currentPattern;
     private PatternCellDelegate delegate;
     private LinearGradient gradientShader;
     private int maxWallpaperSize;
     private RadialProgress2 radialProgress;
     private RectF rect = new RectF();
-    private boolean wasSelected;
 
     public interface PatternCellDelegate {
         int getBackgroundColor();
@@ -47,7 +48,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
 
         int getPatternColor();
 
-        TLRPC.TL_wallPaper getSelectedPattern();
+        TLRPC$TL_wallPaper getSelectedPattern();
     }
 
     public void onProgressUpload(String str, long j, long j2, boolean z) {
@@ -58,16 +59,17 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         setRoundRadius(AndroidUtilities.dp(6.0f));
         this.maxWallpaperSize = i;
         this.delegate = patternCellDelegate;
-        this.radialProgress = new RadialProgress2(this);
-        this.radialProgress.setProgressRect(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f), AndroidUtilities.dp(70.0f), AndroidUtilities.dp(70.0f));
+        RadialProgress2 radialProgress2 = new RadialProgress2(this);
+        this.radialProgress = radialProgress2;
+        radialProgress2.setProgressRect(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f), AndroidUtilities.dp(70.0f), AndroidUtilities.dp(70.0f));
         this.backgroundPaint = new Paint(1);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     }
 
-    public void setPattern(TLRPC.TL_wallPaper tL_wallPaper) {
-        this.currentPattern = tL_wallPaper;
-        if (tL_wallPaper != null) {
-            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tL_wallPaper.document.thumbs, 100), tL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", 0, 1, tL_wallPaper);
+    public void setPattern(TLRPC$TL_wallPaper tLRPC$TL_wallPaper) {
+        this.currentPattern = tLRPC$TL_wallPaper;
+        if (tLRPC$TL_wallPaper != null) {
+            setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 100), tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", 0, 1, tLRPC$TL_wallPaper);
         } else {
             setImageDrawable((Drawable) null);
         }
@@ -124,21 +126,21 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     private void updateButtonState(Object obj, boolean z, boolean z2) {
         File file;
         String str;
-        boolean z3 = obj instanceof TLRPC.TL_wallPaper;
+        boolean z3 = obj instanceof TLRPC$TL_wallPaper;
         if (z3 || (obj instanceof MediaController.SearchImage)) {
             if (z3) {
-                TLRPC.TL_wallPaper tL_wallPaper = (TLRPC.TL_wallPaper) obj;
-                str = FileLoader.getAttachFileName(tL_wallPaper.document);
+                TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj;
+                str = FileLoader.getAttachFileName(tLRPC$TL_wallPaper.document);
                 if (!TextUtils.isEmpty(str)) {
-                    file = FileLoader.getPathToAttach(tL_wallPaper.document, true);
+                    file = FileLoader.getPathToAttach(tLRPC$TL_wallPaper.document, true);
                 } else {
                     return;
                 }
             } else {
                 MediaController.SearchImage searchImage = (MediaController.SearchImage) obj;
-                TLRPC.Photo photo = searchImage.photo;
-                if (photo != null) {
-                    TLRPC.PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, this.maxWallpaperSize, true);
+                TLRPC$Photo tLRPC$Photo = searchImage.photo;
+                if (tLRPC$Photo != null) {
+                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, this.maxWallpaperSize, true);
                     File pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
                     str = FileLoader.getAttachFileName(closestPhotoSizeWithSize);
                     file = pathToAttach;
@@ -183,7 +185,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
             this.currentGradientColor1 = backgroundColor;
             this.currentGradientColor2 = backgroundGradientColor;
             this.currentGradientAngle = backgroundGradientAngle;
-            Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(this.currentGradientAngle, getMeasuredWidth(), getMeasuredHeight());
+            Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
             this.gradientShader = new LinearGradient((float) gradientPoints.left, (float) gradientPoints.top, (float) gradientPoints.right, (float) gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor}, (float[]) null, Shader.TileMode.CLAMP);
         }
         this.backgroundPaint.setShader(this.gradientShader);

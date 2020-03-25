@@ -18,8 +18,9 @@ public class LoadingCell extends FrameLayout {
     public LoadingCell(Context context, int i, int i2) {
         super(context);
         this.height = i2;
-        this.progressBar = new RadialProgressView(context);
-        this.progressBar.setSize(i);
+        RadialProgressView radialProgressView = new RadialProgressView(context);
+        this.progressBar = radialProgressView;
+        radialProgressView.setSize(i);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
     }
 

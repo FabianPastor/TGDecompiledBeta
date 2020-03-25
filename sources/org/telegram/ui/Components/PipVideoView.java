@@ -34,7 +34,6 @@ public class PipVideoView {
     public View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
     private boolean isInAppOnly;
-    private Activity parentActivity;
     /* access modifiers changed from: private */
     public EmbedBottomSheet parentSheet;
     /* access modifiers changed from: private */
@@ -89,8 +88,9 @@ public class PipVideoView {
 
         public MiniControlsView(Context context, boolean z) {
             super(context);
-            this.inlineButton = new ImageView(context);
-            this.inlineButton.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView = new ImageView(context);
+            this.inlineButton = imageView;
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.inlineButton.setImageResource(NUM);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new View.OnClickListener() {
@@ -99,13 +99,16 @@ public class PipVideoView {
                 }
             });
             if (z) {
-                this.progressPaint = new Paint();
-                this.progressPaint.setColor(-15095832);
-                this.progressInnerPaint = new Paint();
-                this.progressInnerPaint.setColor(-6975081);
+                Paint paint = new Paint();
+                this.progressPaint = paint;
+                paint.setColor(-15095832);
+                Paint paint2 = new Paint();
+                this.progressInnerPaint = paint2;
+                paint2.setColor(-6975081);
                 setWillNotDraw(false);
-                this.playButton = new ImageView(context);
-                this.playButton.setScaleType(ImageView.ScaleType.CENTER);
+                ImageView imageView2 = new ImageView(context);
+                this.playButton = imageView2;
+                imageView2.setScaleType(ImageView.ScaleType.CENTER);
                 addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
                 this.playButton.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
@@ -172,8 +175,9 @@ public class PipVideoView {
                 }
                 if (this.isVisible) {
                     if (z2) {
-                        this.currentAnimation = new AnimatorSet();
-                        this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f})});
+                        AnimatorSet animatorSet2 = new AnimatorSet();
+                        this.currentAnimation = animatorSet2;
+                        animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{1.0f})});
                         this.currentAnimation.setDuration(150);
                         this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -185,8 +189,9 @@ public class PipVideoView {
                         setAlpha(1.0f);
                     }
                 } else if (z2) {
-                    this.currentAnimation = new AnimatorSet();
-                    this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f})});
+                    AnimatorSet animatorSet3 = new AnimatorSet();
+                    this.currentAnimation = animatorSet3;
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f})});
                     this.currentAnimation.setDuration(150);
                     this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
@@ -269,7 +274,6 @@ public class PipVideoView {
     public TextureView show(Activity activity, PhotoViewer photoViewer2, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
         TextureView textureView;
         this.parentSheet = embedBottomSheet;
-        this.parentActivity = activity;
         this.photoViewer = photoViewer2;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
@@ -337,11 +341,13 @@ public class PipVideoView {
             }
         };
         if (f > 1.0f) {
-            this.videoWidth = AndroidUtilities.dp(192.0f);
-            this.videoHeight = (int) (((float) this.videoWidth) / f);
+            int dp = AndroidUtilities.dp(192.0f);
+            this.videoWidth = dp;
+            this.videoHeight = (int) (((float) dp) / f);
         } else {
-            this.videoHeight = AndroidUtilities.dp(192.0f);
-            this.videoWidth = (int) (((float) this.videoHeight) * f);
+            int dp2 = AndroidUtilities.dp(192.0f);
+            this.videoHeight = dp2;
+            this.videoWidth = (int) (((float) dp2) * f);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
         aspectRatioFrameLayout.setAspectRatio(f, i);
@@ -368,16 +374,18 @@ public class PipVideoView {
         } else {
             this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
         }
-        this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-        int i2 = this.preferences.getInt("sidex", 1);
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
+        this.preferences = sharedPreferences;
+        int i2 = sharedPreferences.getInt("sidex", 1);
         int i3 = this.preferences.getInt("sidey", 0);
         float f2 = this.preferences.getFloat("px", 0.0f);
         float f3 = this.preferences.getFloat("py", 0.0f);
         try {
-            this.windowLayoutParams = new WindowManager.LayoutParams();
-            this.windowLayoutParams.width = this.videoWidth;
-            this.windowLayoutParams.height = this.videoHeight;
-            this.windowLayoutParams.x = getSideCoord(true, i2, f2, this.videoWidth);
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            this.windowLayoutParams = layoutParams;
+            layoutParams.width = this.videoWidth;
+            layoutParams.height = this.videoHeight;
+            layoutParams.x = getSideCoord(true, i2, f2, this.videoWidth);
             this.windowLayoutParams.y = getSideCoord(false, i3, f3, this.videoHeight);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
@@ -453,7 +461,6 @@ public class PipVideoView {
         }
         this.parentSheet = null;
         this.photoViewer = null;
-        this.parentActivity = null;
     }
 
     public void onConfigurationChanged() {
@@ -552,7 +559,7 @@ public class PipVideoView {
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2)
             r1.add(r2)
         L_0x00a4:
-            r10 = 1
+            r5 = 1
             goto L_0x0115
         L_0x00a6:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
@@ -590,7 +597,7 @@ public class PipVideoView {
             r2[r10] = r5
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2)
             r1.add(r2)
-            goto L_0x0115
+            goto L_0x0114
         L_0x00e8:
             r10 = 0
             java.util.ArrayList r2 = new java.util.ArrayList
@@ -612,15 +619,15 @@ public class PipVideoView {
             r2.add(r1)
             r1 = r2
         L_0x0114:
-            r10 = 0
+            r5 = 0
         L_0x0115:
-            if (r10 != 0) goto L_0x0182
+            if (r5 != 0) goto L_0x0182
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
             int r2 = r6 - r2
             int r2 = java.lang.Math.abs(r2)
             java.lang.String r3 = "y"
-            java.lang.String r5 = "sidey"
+            java.lang.String r10 = "sidey"
             if (r2 <= r9) goto L_0x0169
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
@@ -637,10 +644,10 @@ public class PipVideoView {
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
         L_0x0146:
-            r8.putInt(r5, r4)
+            r8.putInt(r10, r4)
             int[] r2 = new int[r4]
-            r5 = 0
-            r2[r5] = r7
+            r6 = 0
+            r2[r6] = r7
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r2)
             r1.add(r2)
             goto L_0x017f
@@ -655,7 +662,7 @@ public class PipVideoView {
             java.lang.String r3 = "py"
             r8.putFloat(r3, r2)
             r2 = 2
-            r8.putInt(r5, r2)
+            r8.putInt(r10, r2)
             goto L_0x017f
         L_0x0169:
             if (r1 != 0) goto L_0x0170
@@ -663,10 +670,10 @@ public class PipVideoView {
             r1.<init>()
         L_0x0170:
             r2 = 0
-            r8.putInt(r5, r2)
-            int[] r5 = new int[r4]
-            r5[r2] = r6
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r5)
+            r8.putInt(r10, r2)
+            int[] r7 = new int[r4]
+            r7[r2] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r7)
             r1.add(r2)
         L_0x017f:
             r8.commit()
@@ -682,9 +689,9 @@ public class PipVideoView {
             r2.<init>()
             android.view.animation.DecelerateInterpolator r3 = r0.decelerateInterpolator
             r2.setInterpolator(r3)
-            r5 = 150(0x96, double:7.4E-322)
-            r2.setDuration(r5)
-            if (r10 == 0) goto L_0x01b7
+            r6 = 150(0x96, double:7.4E-322)
+            r2.setDuration(r6)
+            if (r5 == 0) goto L_0x01b7
             android.widget.FrameLayout r3 = r0.windowView
             float[] r4 = new float[r4]
             r5 = 0
@@ -713,15 +720,15 @@ public class PipVideoView {
         float f2 = sharedPreferences.getFloat("px", 0.0f);
         float f3 = sharedPreferences.getFloat("py", 0.0f);
         if (f > 1.0f) {
+            i2 = AndroidUtilities.dp(192.0f);
+            i = (int) (((float) i2) / f);
+        } else {
             int dp = AndroidUtilities.dp(192.0f);
             int i5 = dp;
-            i2 = (int) (((float) dp) / f);
+            i2 = (int) (((float) dp) * f);
             i = i5;
-        } else {
-            i2 = AndroidUtilities.dp(192.0f);
-            i = (int) (((float) i2) * f);
         }
-        return new Rect((float) getSideCoord(true, i3, f2, i), (float) getSideCoord(false, i4, f3, i2), (float) i, (float) i2);
+        return new Rect((float) getSideCoord(true, i3, f2, i2), (float) getSideCoord(false, i4, f3, i), (float) i2, (float) i);
     }
 
     @Keep

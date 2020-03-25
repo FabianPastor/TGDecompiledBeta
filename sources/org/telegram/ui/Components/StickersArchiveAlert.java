@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -20,17 +20,14 @@ import org.telegram.ui.StickersActivity;
 
 public class StickersArchiveAlert extends AlertDialog.Builder {
     private int currentType;
-    private boolean ignoreLayout;
     private BaseFragment parentFragment;
-    private int reqId;
-    private int scrollOffsetY;
     /* access modifiers changed from: private */
-    public ArrayList<TLRPC.StickerSetCovered> stickerSets;
+    public ArrayList<TLRPC$StickerSetCovered> stickerSets;
 
-    public StickersArchiveAlert(Context context, BaseFragment baseFragment, ArrayList<TLRPC.StickerSetCovered> arrayList) {
+    public StickersArchiveAlert(Context context, BaseFragment baseFragment, ArrayList<TLRPC$StickerSetCovered> arrayList) {
         super(context);
-        TLRPC.StickerSetCovered stickerSetCovered = arrayList.get(0);
-        if (stickerSetCovered.set.masks) {
+        TLRPC$StickerSetCovered tLRPC$StickerSetCovered = arrayList.get(0);
+        if (tLRPC$StickerSetCovered.set.masks) {
             this.currentType = 1;
             setTitle(LocaleController.getString("ArchivedMasksAlertTitle", NUM));
         } else {
@@ -44,9 +41,10 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
         setView(linearLayout);
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView.setGravity(LayoutHelper.getAbsoluteGravityStart());
         textView.setTextSize(1, 16.0f);
         textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(23.0f), 0);
-        if (stickerSetCovered.set.masks) {
+        if (tLRPC$StickerSetCovered.set.masks) {
             textView.setText(LocaleController.getString("ArchivedMasksAlertInfo", NUM));
         } else {
             textView.setText(LocaleController.getString("ArchivedStickersAlertInfo", NUM));
@@ -97,12 +95,12 @@ public class StickersArchiveAlert extends AlertDialog.Builder {
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) viewHolder.itemView;
-            TLRPC.StickerSetCovered stickerSetCovered = (TLRPC.StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(i);
+            TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(i);
             boolean z = true;
             if (i == StickersArchiveAlert.this.stickerSets.size() - 1) {
                 z = false;
             }
-            archivedStickerSetCell.setStickersSet(stickerSetCovered, z);
+            archivedStickerSetCell.setStickersSet(tLRPC$StickerSetCovered, z);
         }
     }
 }

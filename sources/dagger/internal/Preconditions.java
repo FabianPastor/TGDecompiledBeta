@@ -5,7 +5,7 @@ public final class Preconditions {
         if (t != null) {
             return t;
         }
-        throw new NullPointerException();
+        throw null;
     }
 
     public static <T> T checkNotNull(T t, String str) {

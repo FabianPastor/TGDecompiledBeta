@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.animation.AnimatorSet;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +38,6 @@ public class LogoutActivity extends BaseFragment {
     public int alternativeHeaderRow;
     /* access modifiers changed from: private */
     public int alternativeSectionRow;
-    private AnimatorSet animatorSet;
     /* access modifiers changed from: private */
     public int cacheRow;
     private ListAdapter listAdapter;
@@ -61,41 +58,40 @@ public class LogoutActivity extends BaseFragment {
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         this.rowCount = 0;
-        int i = this.rowCount;
-        this.rowCount = i + 1;
-        this.alternativeHeaderRow = i;
+        this.rowCount = 0 + 1;
+        this.alternativeHeaderRow = 0;
         if (UserConfig.getActivatedAccountsCount() < 3) {
-            int i2 = this.rowCount;
-            this.rowCount = i2 + 1;
-            this.addAccountRow = i2;
+            int i = this.rowCount;
+            this.rowCount = i + 1;
+            this.addAccountRow = i;
         } else {
             this.addAccountRow = -1;
         }
         if (SharedConfig.passcodeHash.length() <= 0) {
-            int i3 = this.rowCount;
-            this.rowCount = i3 + 1;
-            this.passcodeRow = i3;
+            int i2 = this.rowCount;
+            this.rowCount = i2 + 1;
+            this.passcodeRow = i2;
         } else {
             this.passcodeRow = -1;
         }
-        int i4 = this.rowCount;
-        this.rowCount = i4 + 1;
-        this.cacheRow = i4;
-        int i5 = this.rowCount;
-        this.rowCount = i5 + 1;
-        this.phoneRow = i5;
-        int i6 = this.rowCount;
-        this.rowCount = i6 + 1;
-        this.supportRow = i6;
-        int i7 = this.rowCount;
-        this.rowCount = i7 + 1;
-        this.alternativeSectionRow = i7;
-        int i8 = this.rowCount;
+        int i3 = this.rowCount;
+        int i4 = i3 + 1;
+        this.rowCount = i4;
+        this.cacheRow = i3;
+        int i5 = i4 + 1;
+        this.rowCount = i5;
+        this.phoneRow = i4;
+        int i6 = i5 + 1;
+        this.rowCount = i6;
+        this.supportRow = i5;
+        int i7 = i6 + 1;
+        this.rowCount = i7;
+        this.alternativeSectionRow = i6;
+        int i8 = i7 + 1;
+        this.rowCount = i8;
+        this.logoutRow = i7;
         this.rowCount = i8 + 1;
-        this.logoutRow = i8;
-        int i9 = this.rowCount;
-        this.rowCount = i9 + 1;
-        this.logoutSectionRow = i9;
+        this.logoutSectionRow = i8;
         return true;
     }
 
@@ -114,10 +110,12 @@ public class LogoutActivity extends BaseFragment {
             }
         });
         this.listAdapter = new ListAdapter(context);
-        this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.listView = new RecyclerListView(context);
-        this.listView.setVerticalScrollBarEnabled(false);
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        recyclerListView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
@@ -131,19 +129,20 @@ public class LogoutActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int i, float f, float f2) {
         int i2 = 0;
+        int i3 = -1;
         if (i == this.addAccountRow) {
             while (true) {
                 if (i2 >= 3) {
-                    i2 = -1;
                     break;
                 } else if (!UserConfig.getInstance(i2).isClientActivated()) {
+                    i3 = i2;
                     break;
                 } else {
                     i2++;
                 }
             }
-            if (i2 >= 0) {
-                presentFragment(new LoginActivity(i2));
+            if (i3 >= 0) {
+                presentFragment(new LoginActivity(i3));
             }
         } else if (i == this.passcodeRow) {
             presentFragment(new PasscodeActivity(0));
@@ -244,33 +243,71 @@ public class LogoutActivity extends BaseFragment {
             return adapterPosition == LogoutActivity.this.addAccountRow || adapterPosition == LogoutActivity.this.passcodeRow || adapterPosition == LogoutActivity.this.cacheRow || adapterPosition == LogoutActivity.this.phoneRow || adapterPosition == LogoutActivity.this.supportRow || adapterPosition == LogoutActivity.this.logoutRow;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextSettingsCell textSettingsCell;
-            View shadowSectionCell;
-            if (i == 0) {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
-                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textSettingsCell = headerCell;
-            } else if (i != 1) {
-                if (i == 2) {
-                    shadowSectionCell = new ShadowSectionCell(this.mContext);
-                } else if (i != 3) {
-                    shadowSectionCell = new TextInfoPrivacyCell(this.mContext);
-                    shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else {
-                    TextSettingsCell textSettingsCell2 = new TextSettingsCell(this.mContext);
-                    textSettingsCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textSettingsCell = textSettingsCell2;
-                }
-                textSettingsCell = shadowSectionCell;
-            } else {
-                TextDetailSettingsCell textDetailSettingsCell = new TextDetailSettingsCell(this.mContext);
-                textDetailSettingsCell.setMultilineDetail(true);
-                textDetailSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textSettingsCell = textDetailSettingsCell;
-            }
-            textSettingsCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(textSettingsCell);
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v12, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v13, resolved type: org.telegram.ui.Cells.TextSettingsCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
+            /*
+                r2 = this;
+                java.lang.String r3 = "windowBackgroundWhite"
+                if (r4 == 0) goto L_0x004e
+                r0 = 1
+                if (r4 == r0) goto L_0x003c
+                r0 = 2
+                if (r4 == r0) goto L_0x0034
+                r0 = 3
+                if (r4 == r0) goto L_0x0025
+                org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+                android.content.Context r4 = r2.mContext
+                r3.<init>(r4)
+                android.content.Context r4 = r2.mContext
+                r0 = 2131165417(0x7var_e9, float:1.794505E38)
+                java.lang.String r1 = "windowBackgroundGrayShadow"
+                android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
+                r3.setBackgroundDrawable(r4)
+                goto L_0x005d
+            L_0x0025:
+                org.telegram.ui.Cells.TextSettingsCell r4 = new org.telegram.ui.Cells.TextSettingsCell
+                android.content.Context r0 = r2.mContext
+                r4.<init>(r0)
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                r4.setBackgroundColor(r3)
+                goto L_0x005c
+            L_0x0034:
+                org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
+                android.content.Context r4 = r2.mContext
+                r3.<init>(r4)
+                goto L_0x005d
+            L_0x003c:
+                org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
+                android.content.Context r1 = r2.mContext
+                r4.<init>(r1)
+                r4.setMultilineDetail(r0)
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                r4.setBackgroundColor(r3)
+                goto L_0x005c
+            L_0x004e:
+                org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
+                android.content.Context r0 = r2.mContext
+                r4.<init>(r0)
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                r4.setBackgroundColor(r3)
+            L_0x005c:
+                r3 = r4
+            L_0x005d:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r4.<init>((int) r0, (int) r1)
+                r3.setLayoutParams(r4)
+                org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r4.<init>(r3)
+                return r4
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LogoutActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
         public int getItemViewType(int i) {

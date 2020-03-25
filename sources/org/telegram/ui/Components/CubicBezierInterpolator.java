@@ -7,7 +7,6 @@ public class CubicBezierInterpolator implements Interpolator {
     public static final CubicBezierInterpolator DEFAULT = new CubicBezierInterpolator(0.25d, 0.1d, 0.25d, 1.0d);
     public static final CubicBezierInterpolator EASE_BOTH = new CubicBezierInterpolator(0.42d, 0.0d, 0.58d, 1.0d);
     public static final CubicBezierInterpolator EASE_IN = new CubicBezierInterpolator(0.42d, 0.0d, 1.0d, 1.0d);
-    public static final CubicBezierInterpolator EASE_IN_OUT_QUAD = new CubicBezierInterpolator(0.455d, 0.03d, 0.515d, 0.955d);
     public static final CubicBezierInterpolator EASE_OUT = new CubicBezierInterpolator(0.0d, 0.0d, 0.58d, 1.0d);
     public static final CubicBezierInterpolator EASE_OUT_QUINT = new CubicBezierInterpolator(0.23d, 1.0d, 0.32d, 1.0d);
     protected PointF a;
@@ -48,12 +47,15 @@ public class CubicBezierInterpolator implements Interpolator {
     public float getBezierCoordinateY(float f) {
         PointF pointF = this.c;
         PointF pointF2 = this.start;
-        pointF.y = pointF2.y * 3.0f;
+        float f2 = pointF2.y * 3.0f;
+        pointF.y = f2;
         PointF pointF3 = this.b;
-        pointF3.y = ((this.end.y - pointF2.y) * 3.0f) - pointF.y;
+        float f3 = ((this.end.y - pointF2.y) * 3.0f) - f2;
+        pointF3.y = f3;
         PointF pointF4 = this.a;
-        pointF4.y = (1.0f - pointF.y) - pointF3.y;
-        return f * (pointF.y + ((pointF3.y + (pointF4.y * f)) * f));
+        float f4 = (1.0f - pointF.y) - f3;
+        pointF4.y = f4;
+        return f * (pointF.y + ((pointF3.y + (f4 * f)) * f));
     }
 
     /* access modifiers changed from: protected */
@@ -76,11 +78,14 @@ public class CubicBezierInterpolator implements Interpolator {
     private float getBezierCoordinateX(float f) {
         PointF pointF = this.c;
         PointF pointF2 = this.start;
-        pointF.x = pointF2.x * 3.0f;
+        float f2 = pointF2.x * 3.0f;
+        pointF.x = f2;
         PointF pointF3 = this.b;
-        pointF3.x = ((this.end.x - pointF2.x) * 3.0f) - pointF.x;
+        float f3 = ((this.end.x - pointF2.x) * 3.0f) - f2;
+        pointF3.x = f3;
         PointF pointF4 = this.a;
-        pointF4.x = (1.0f - pointF.x) - pointF3.x;
-        return f * (pointF.x + ((pointF3.x + (pointF4.x * f)) * f));
+        float f4 = (1.0f - pointF.x) - f3;
+        pointF4.x = f4;
+        return f * (pointF.x + ((pointF3.x + (f4 * f)) * f));
     }
 }

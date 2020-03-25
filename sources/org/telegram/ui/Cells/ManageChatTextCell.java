@@ -20,19 +20,22 @@ public class ManageChatTextCell extends FrameLayout {
 
     public ManageChatTextCell(Context context) {
         super(context);
-        this.textView = new SimpleTextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.textView = simpleTextView;
+        simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(16);
         int i = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
-        this.valueTextView = new SimpleTextView(context);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
+        SimpleTextView simpleTextView2 = new SimpleTextView(context);
+        this.valueTextView = simpleTextView2;
+        simpleTextView2.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(16);
         this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i);
         addView(this.valueTextView);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }
@@ -95,7 +98,7 @@ public class ManageChatTextCell extends FrameLayout {
         this.imageView.setPadding(0, AndroidUtilities.dp(5.0f), 0, 0);
         this.imageView.setImageResource(i);
         this.divider = z;
-        setWillNotDraw(!this.divider);
+        setWillNotDraw(!z);
     }
 
     /* access modifiers changed from: protected */

@@ -34,7 +34,7 @@ public class EmuDetector {
     private boolean isCheckPackage = true;
     private boolean isTelephony = false;
     private final Context mContext;
-    private List<String> mListPackageName = new ArrayList();
+    private List<String> mListPackageName;
 
     public interface OnEmulatorDetectorListener {
         void onResult(boolean z);
@@ -61,8 +61,10 @@ public class EmuDetector {
     }
 
     private EmuDetector(Context context) {
+        ArrayList arrayList = new ArrayList();
+        this.mListPackageName = arrayList;
         this.mContext = context;
-        this.mListPackageName.add("com.google.android.launcher.layouts.genymotion");
+        arrayList.add("com.google.android.launcher.layouts.genymotion");
         this.mListPackageName.add("com.bluestacks");
         this.mListPackageName.add("com.bignox.app");
     }
@@ -188,7 +190,9 @@ public class EmuDetector {
     }
 
     private boolean checkQEmuDrivers() {
-        for (File file : new File[]{new File("/proc/tty/drivers"), new File("/proc/cpuinfo")}) {
+        File[] fileArr = {new File("/proc/tty/drivers"), new File("/proc/cpuinfo")};
+        for (int i = 0; i < 2; i++) {
+            File file = fileArr[i];
             if (file.exists() && file.canRead()) {
                 byte[] bArr = new byte[1024];
                 try {

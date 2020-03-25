@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,8 +18,10 @@ public class DrawerActionCell extends FrameLayout {
 
     public DrawerActionCell(Context context) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
+        new RectF();
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);

@@ -18,10 +18,6 @@ public class ActionBarMenu extends LinearLayout {
         this.parentActionBar = actionBar;
     }
 
-    public ActionBarMenu(Context context) {
-        super(context);
-    }
-
     /* access modifiers changed from: protected */
     public void updateItemsBackgroundColor() {
         int childCount = getChildCount();

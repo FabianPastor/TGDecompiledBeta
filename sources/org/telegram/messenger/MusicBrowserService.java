@@ -33,7 +33,9 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.tgnet.NativeByteBuffer;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$Message;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.LaunchActivity;
 
 @TargetApi(21)
@@ -48,7 +50,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private static final int STOP_DELAY = 30000;
     private RectF bitmapRect;
     /* access modifiers changed from: private */
-    public SparseArray<TLRPC.Chat> chats = new SparseArray<>();
+    public SparseArray<TLRPC$Chat> chats = new SparseArray<>();
     private boolean chatsLoaded;
     /* access modifiers changed from: private */
     public int currentAccount = UserConfig.selectedAccount;
@@ -68,7 +70,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     /* access modifiers changed from: private */
     public boolean serviceStarted;
     /* access modifiers changed from: private */
-    public SparseArray<TLRPC.User> users = new SparseArray<>();
+    public SparseArray<TLRPC$User> users = new SparseArray<>();
 
     public int onStartCommand(Intent intent, int i, int i2) {
         return 1;
@@ -78,8 +80,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         super.onCreate();
         ApplicationLoader.postInitApplication();
         this.lastSelectedDialog = MessagesController.getNotificationsSettings(this.currentAccount).getInt("auto_lastSelectedDialog", 0);
-        this.mediaSession = new MediaSession(this, "MusicService");
-        setSessionToken(this.mediaSession.getSessionToken());
+        MediaSession mediaSession2 = new MediaSession(this, "MusicService");
+        this.mediaSession = mediaSession2;
+        setSessionToken(mediaSession2.getSessionToken());
         this.mediaSession.setCallback(new MediaSessionCallback());
         this.mediaSession.setFlags(3);
         Context applicationContext = getApplicationContext();
@@ -161,7 +164,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 while (queryFinalized2.next()) {
                     NativeByteBuffer byteBufferValue = queryFinalized2.byteBufferValue(1);
                     if (byteBufferValue != null) {
-                        TLRPC.Message TLdeserialize = TLRPC.Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                        TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                         TLdeserialize.readAttachPath(byteBufferValue, UserConfig.getInstance(this.currentAccount).clientUserId);
                         byteBufferValue.reuse();
                         if (MessageObject.isMusicMessage(TLdeserialize)) {
@@ -191,16 +194,16 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     ArrayList arrayList5 = new ArrayList();
                     messagesStorage2.getUsersInternal(TextUtils.join(",", arrayList), arrayList5);
                     for (int i = 0; i < arrayList5.size(); i++) {
-                        TLRPC.User user = (TLRPC.User) arrayList5.get(i);
-                        this.users.put(user.id, user);
+                        TLRPC$User tLRPC$User = (TLRPC$User) arrayList5.get(i);
+                        this.users.put(tLRPC$User.id, tLRPC$User);
                     }
                 }
                 if (!arrayList2.isEmpty()) {
                     ArrayList arrayList6 = new ArrayList();
                     messagesStorage2.getChatsInternal(TextUtils.join(",", arrayList2), arrayList6);
                     for (int i2 = 0; i2 < arrayList6.size(); i2++) {
-                        TLRPC.Chat chat = (TLRPC.Chat) arrayList6.get(i2);
-                        this.chats.put(chat.id, chat);
+                        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) arrayList6.get(i2);
+                        this.chats.put(tLRPC$Chat.id, tLRPC$Chat);
                     }
                 }
             }
@@ -237,16 +240,16 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 this.mediaSession.setQueue(arrayList2);
                 int i2 = this.lastSelectedDialog;
                 if (i2 > 0) {
-                    TLRPC.User user = this.users.get(i2);
-                    if (user != null) {
-                        this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
+                    TLRPC$User tLRPC$User = this.users.get(i2);
+                    if (tLRPC$User != null) {
+                        this.mediaSession.setQueueTitle(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
                     } else {
                         this.mediaSession.setQueueTitle("DELETED USER");
                     }
                 } else {
-                    TLRPC.Chat chat = this.chats.get(-i2);
-                    if (chat != null) {
-                        this.mediaSession.setQueueTitle(chat.title);
+                    TLRPC$Chat tLRPC$Chat = this.chats.get(-i2);
+                    if (tLRPC$Chat != null) {
+                        this.mediaSession.setQueueTitle(tLRPC$Chat.title);
                     } else {
                         this.mediaSession.setQueueTitle("DELETED CHAT");
                     }
@@ -263,10 +266,10 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:11:0x005c, code lost:
-        if ((r8 instanceof org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable) == false) goto L_0x0086;
+        if ((r8 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable) == false) goto L_0x0086;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:18:0x007d, code lost:
-        if ((r8 instanceof org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable) == false) goto L_0x0086;
+        if ((r8 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable) == false) goto L_0x0086;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void loadChildrenImpl(java.lang.String r8, android.service.media.MediaBrowserService.Result<java.util.List<android.media.browse.MediaBrowser.MediaItem>> r9) {
@@ -299,7 +302,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (r8 <= 0) goto L_0x0065
             android.util.SparseArray<org.telegram.tgnet.TLRPC$User> r5 = r7.users
             java.lang.Object r8 = r5.get(r8)
-            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC.User) r8
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
             if (r8 == 0) goto L_0x005f
             java.lang.String r5 = r8.first_name
             java.lang.String r6 = r8.last_name
@@ -308,7 +311,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             org.telegram.tgnet.TLRPC$UserProfilePhoto r8 = r8.photo
             if (r8 == 0) goto L_0x0085
             org.telegram.tgnet.TLRPC$FileLocation r8 = r8.photo_small
-            boolean r5 = r8 instanceof org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable
+            boolean r5 = r8 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             if (r5 != 0) goto L_0x0085
             goto L_0x0086
         L_0x005f:
@@ -319,14 +322,14 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             android.util.SparseArray<org.telegram.tgnet.TLRPC$Chat> r5 = r7.chats
             int r8 = -r8
             java.lang.Object r8 = r5.get(r8)
-            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC.Chat) r8
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
             if (r8 == 0) goto L_0x0080
             java.lang.String r5 = r8.title
             r1.setTitle(r5)
             org.telegram.tgnet.TLRPC$ChatPhoto r8 = r8.photo
             if (r8 == 0) goto L_0x0085
             org.telegram.tgnet.TLRPC$FileLocation r8 = r8.photo_small
-            boolean r5 = r8 instanceof org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable
+            boolean r5 = r8 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             if (r5 != 0) goto L_0x0085
             goto L_0x0086
         L_0x0080:
@@ -480,16 +483,16 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                             MediaController.getInstance().setPlaylist(arrayList, (MessageObject) arrayList.get(parseInt2), false);
                             MusicBrowserService.this.mediaSession.setQueue(arrayList2);
                             if (parseInt > 0) {
-                                TLRPC.User user = (TLRPC.User) MusicBrowserService.this.users.get(parseInt);
-                                if (user != null) {
-                                    MusicBrowserService.this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
+                                TLRPC$User tLRPC$User = (TLRPC$User) MusicBrowserService.this.users.get(parseInt);
+                                if (tLRPC$User != null) {
+                                    MusicBrowserService.this.mediaSession.setQueueTitle(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
                                 } else {
                                     MusicBrowserService.this.mediaSession.setQueueTitle("DELETED USER");
                                 }
                             } else {
-                                TLRPC.Chat chat = (TLRPC.Chat) MusicBrowserService.this.chats.get(-parseInt);
-                                if (chat != null) {
-                                    MusicBrowserService.this.mediaSession.setQueueTitle(chat.title);
+                                TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) MusicBrowserService.this.chats.get(-parseInt);
+                                if (tLRPC$Chat != null) {
+                                    MusicBrowserService.this.mediaSession.setQueueTitle(tLRPC$Chat.title);
                                 } else {
                                     MusicBrowserService.this.mediaSession.setQueueTitle("DELETED CHAT");
                                 }
@@ -528,14 +531,14 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 for (int i = 0; i < MusicBrowserService.this.dialogs.size(); i++) {
                     int intValue = ((Integer) MusicBrowserService.this.dialogs.get(i)).intValue();
                     if (intValue > 0) {
-                        TLRPC.User user = (TLRPC.User) MusicBrowserService.this.users.get(intValue);
-                        if (user != null && (((str3 = user.first_name) != null && str3.startsWith(lowerCase)) || ((str4 = user.last_name) != null && str4.startsWith(lowerCase)))) {
+                        TLRPC$User tLRPC$User = (TLRPC$User) MusicBrowserService.this.users.get(intValue);
+                        if (tLRPC$User != null && (((str3 = tLRPC$User.first_name) != null && str3.startsWith(lowerCase)) || ((str4 = tLRPC$User.last_name) != null && str4.startsWith(lowerCase)))) {
                             onPlayFromMediaId(intValue + "_" + 0, (Bundle) null);
                             return;
                         }
                     } else {
-                        TLRPC.Chat chat = (TLRPC.Chat) MusicBrowserService.this.chats.get(-intValue);
-                        if (!(chat == null || (str2 = chat.title) == null || !str2.toLowerCase().contains(lowerCase))) {
+                        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) MusicBrowserService.this.chats.get(-intValue);
+                        if (!(tLRPC$Chat == null || (str2 = tLRPC$Chat.title) == null || !str2.toLowerCase().contains(lowerCase))) {
                             onPlayFromMediaId(intValue + "_" + 0, (Bundle) null);
                             return;
                         }

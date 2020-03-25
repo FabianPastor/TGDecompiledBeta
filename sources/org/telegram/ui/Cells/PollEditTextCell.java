@@ -17,7 +17,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -27,6 +26,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class PollEditTextCell extends FrameLayout {
+    private boolean alwaysShowText2;
     private CheckBox2 checkBox;
     private AnimatorSet checkBoxAnimation;
     private ImageView deleteImageView;
@@ -61,7 +61,7 @@ public class PollEditTextCell extends FrameLayout {
         super(context);
         Context context2 = context;
         View.OnClickListener onClickListener2 = onClickListener;
-        this.textView = new EditTextBoldCursor(context2) {
+        AnonymousClass1 r3 = new EditTextBoldCursor(context2) {
             public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                 InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
                 if (PollEditTextCell.this.showNextButton) {
@@ -83,7 +83,8 @@ public class PollEditTextCell extends FrameLayout {
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView = r3;
+        r3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.textView.setTextSize(1, 16.0f);
         int i = 5;
@@ -95,14 +96,16 @@ public class PollEditTextCell extends FrameLayout {
         editTextBoldCursor2.setInputType(editTextBoldCursor2.getInputType() | 16384);
         if (onClickListener2 != null) {
             addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 58.0f : 64.0f, 0.0f, !LocaleController.isRTL ? 58.0f : 64.0f, 0.0f));
-            this.moveImageView = new ImageView(context2);
-            this.moveImageView.setFocusable(false);
+            ImageView imageView = new ImageView(context2);
+            this.moveImageView = imageView;
+            imageView.setFocusable(false);
             this.moveImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.moveImageView.setImageResource(NUM);
             this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.moveImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, 6.0f, 2.0f, 6.0f, 0.0f));
-            this.deleteImageView = new ImageView(context2);
-            this.deleteImageView.setFocusable(false);
+            ImageView imageView2 = new ImageView(context2);
+            this.deleteImageView = imageView2;
+            imageView2.setFocusable(false);
             this.deleteImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.deleteImageView.setImageResource(NUM);
@@ -110,12 +113,14 @@ public class PollEditTextCell extends FrameLayout {
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
             this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
             addView(this.deleteImageView, LayoutHelper.createFrame(48, 50.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 3.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 3.0f, 0.0f));
-            this.textView2 = new SimpleTextView(context2);
-            this.textView2.setTextSize(13);
+            SimpleTextView simpleTextView = new SimpleTextView(context2);
+            this.textView2 = simpleTextView;
+            simpleTextView.setTextSize(13);
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             addView(this.textView2, LayoutHelper.createFrame(48, 24.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
-            this.checkBox = new CheckBox2(context2, 21);
-            this.checkBox.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
+            CheckBox2 checkBox2 = new CheckBox2(context2, 21);
+            this.checkBox = checkBox2;
+            checkBox2.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
             this.checkBox.setDrawUnchecked(true);
             this.checkBox.setChecked(true, false);
             this.checkBox.setAlpha(0.0f);
@@ -138,15 +143,17 @@ public class PollEditTextCell extends FrameLayout {
     }
 
     public void createErrorTextView() {
-        this.textView2 = new SimpleTextView(getContext());
-        this.textView2.setTextSize(13);
+        this.alwaysShowText2 = true;
+        SimpleTextView simpleTextView = new SimpleTextView(getContext());
+        this.textView2 = simpleTextView;
+        simpleTextView.setTextSize(13);
         int i = 3;
         this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        SimpleTextView simpleTextView = this.textView2;
+        SimpleTextView simpleTextView2 = this.textView2;
         if (!LocaleController.isRTL) {
             i = 5;
         }
-        addView(simpleTextView, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
     }
 
     /* access modifiers changed from: protected */
@@ -172,7 +179,7 @@ public class PollEditTextCell extends FrameLayout {
         int measuredHeight = this.textView.getMeasuredHeight();
         setMeasuredDimension(size, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + (this.needDivider ? 1 : 0));
         SimpleTextView simpleTextView2 = this.textView2;
-        if (simpleTextView2 != null) {
+        if (simpleTextView2 != null && !this.alwaysShowText2) {
             simpleTextView2.setAlpha(measuredHeight >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
         }
     }
@@ -222,10 +229,6 @@ public class PollEditTextCell extends FrameLayout {
         return this.textView.getText().toString();
     }
 
-    public int length() {
-        return this.textView.length();
-    }
-
     public void setTextColor(int i) {
         this.textView.setTextColor(i);
     }
@@ -245,8 +248,8 @@ public class PollEditTextCell extends FrameLayout {
             checkBox2.setTag(i);
             float f = 1.0f;
             if (z2) {
-                this.checkBoxAnimation = new AnimatorSet();
-                AnimatorSet animatorSet2 = this.checkBoxAnimation;
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.checkBoxAnimation = animatorSet2;
                 Animator[] animatorArr = new Animator[2];
                 CheckBox2 checkBox22 = this.checkBox;
                 Property property = View.ALPHA;
@@ -275,12 +278,6 @@ public class PollEditTextCell extends FrameLayout {
         }
     }
 
-    public void setText(CharSequence charSequence, boolean z) {
-        this.textView.setText(charSequence);
-        this.needDivider = z;
-        setWillNotDraw(!z);
-    }
-
     public void setTextAndHint(CharSequence charSequence, String str, boolean z) {
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
@@ -294,10 +291,6 @@ public class PollEditTextCell extends FrameLayout {
         this.textView.setHint(str);
         this.needDivider = z;
         setWillNotDraw(!z);
-    }
-
-    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
-        setEnabled(z);
     }
 
     public void setText2(String str) {

@@ -43,22 +43,25 @@ public class PhotoEditToolCell extends FrameLayout {
 
     public PhotoEditToolCell(Context context) {
         super(context);
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setGravity(5);
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setGravity(5);
         this.nameTextView.setTextColor(-1);
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(80, -2.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-9649153);
+        TextView textView2 = new TextView(context);
+        this.valueTextView = textView2;
+        textView2.setTextColor(-9649153);
         this.valueTextView.setTextSize(1, 12.0f);
         this.valueTextView.setGravity(5);
         this.valueTextView.setSingleLine(true);
         addView(this.valueTextView, LayoutHelper.createFrame(80, -2.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.seekBar = new PhotoEditorSeekBar(context);
-        addView(this.seekBar, LayoutHelper.createFrame(-1, 40.0f, 19, 96.0f, 0.0f, 24.0f, 0.0f));
+        PhotoEditorSeekBar photoEditorSeekBar = new PhotoEditorSeekBar(context);
+        this.seekBar = photoEditorSeekBar;
+        addView(photoEditorSeekBar, LayoutHelper.createFrame(-1, 40.0f, 19, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
     public void setSeekBarDelegate(final PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {

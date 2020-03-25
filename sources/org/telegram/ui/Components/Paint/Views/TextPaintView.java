@@ -25,8 +25,9 @@ public class TextPaintView extends EntityView {
     public TextPaintView(Context context, Point point, int i, String str, Swatch swatch2, boolean z) {
         super(context, point);
         this.baseFontSize = i;
-        this.editText = new EditTextOutline(context);
-        this.editText.setBackgroundColor(0);
+        EditTextOutline editTextOutline = new EditTextOutline(context);
+        this.editText = editTextOutline;
+        editTextOutline.setBackgroundColor(0);
         this.editText.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
         this.editText.setClickable(false);
         this.editText.setEnabled(false);
@@ -38,8 +39,8 @@ public class TextPaintView extends EntityView {
         this.editText.setHorizontallyScrolling(false);
         this.editText.setImeOptions(NUM);
         this.editText.setFocusableInTouchMode(true);
-        EditTextOutline editTextOutline = this.editText;
-        editTextOutline.setInputType(editTextOutline.getInputType() | 16384);
+        EditTextOutline editTextOutline2 = this.editText;
+        editTextOutline2.setInputType(editTextOutline2.getInputType() | 16384);
         addView(this.editText, LayoutHelper.createFrame(-2, -2, 51));
         if (Build.VERSION.SDK_INT >= 23) {
             this.editText.setBreakStrategy(0);
@@ -150,11 +151,11 @@ public class TextPaintView extends EntityView {
 
     /* access modifiers changed from: protected */
     public TextViewSelectionView createSelectionView() {
-        return new TextViewSelectionView(getContext());
+        return new TextViewSelectionView(this, getContext());
     }
 
     public class TextViewSelectionView extends EntityView.SelectionView {
-        public TextViewSelectionView(Context context) {
+        public TextViewSelectionView(TextPaintView textPaintView, Context context) {
             super(context);
         }
 

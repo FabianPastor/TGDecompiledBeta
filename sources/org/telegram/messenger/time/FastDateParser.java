@@ -93,8 +93,9 @@ public class FastDateParser implements DateParser, Serializable {
             instance.setTime(new Date());
             i = instance.get(1) - 80;
         }
-        this.century = (i / 100) * 100;
-        this.startYear = i - this.century;
+        int i2 = (i / 100) * 100;
+        this.century = i2;
+        this.startYear = i - i2;
         init(instance);
     }
 
@@ -103,19 +104,20 @@ public class FastDateParser implements DateParser, Serializable {
         ArrayList arrayList = new ArrayList();
         Matcher matcher = formatPattern.matcher(this.pattern);
         if (matcher.lookingAt()) {
-            this.currentFormatField = matcher.group();
-            Strategy strategy = getStrategy(this.currentFormatField, calendar);
+            String group = matcher.group();
+            this.currentFormatField = group;
+            Strategy strategy = getStrategy(group, calendar);
             while (true) {
                 matcher.region(matcher.end(), matcher.regionEnd());
                 if (!matcher.lookingAt()) {
                     break;
                 }
-                String group = matcher.group();
-                this.nextStrategy = getStrategy(group, calendar);
+                String group2 = matcher.group();
+                this.nextStrategy = getStrategy(group2, calendar);
                 if (strategy.addRegex(this, sb)) {
                     arrayList.add(strategy);
                 }
-                this.currentFormatField = group;
+                this.currentFormatField = group2;
                 strategy = this.nextStrategy;
             }
             this.nextStrategy = null;

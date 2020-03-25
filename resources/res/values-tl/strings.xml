@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Taga-verify ng Assistant</string>
     <string name="google_assistant_verification_notification_title">Nagpapadala ng mensahe ang Google Assistant</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Bumili gamit ang Google</string>
 </resources>

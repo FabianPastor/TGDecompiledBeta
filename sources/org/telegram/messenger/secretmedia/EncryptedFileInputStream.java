@@ -10,13 +10,16 @@ import org.telegram.messenger.Utilities;
 public class EncryptedFileInputStream extends FileInputStream {
     private static final int MODE_CBC = 1;
     private static final int MODE_CTR = 0;
-    private int currentMode = 0;
+    private int currentMode;
     private int fileOffset;
-    private byte[] iv = new byte[16];
-    private byte[] key = new byte[32];
+    private byte[] iv;
+    private byte[] key;
 
     public EncryptedFileInputStream(File file, File file2) throws Exception {
         super(file);
+        this.key = new byte[32];
+        this.iv = new byte[16];
+        this.currentMode = 0;
         RandomAccessFile randomAccessFile = new RandomAccessFile(file2, "r");
         randomAccessFile.read(this.key, 0, 32);
         randomAccessFile.read(this.iv, 0, 16);
@@ -25,12 +28,14 @@ public class EncryptedFileInputStream extends FileInputStream {
 
     public EncryptedFileInputStream(File file, SecureDocumentKey secureDocumentKey) throws Exception {
         super(file);
-        byte[] bArr = secureDocumentKey.file_key;
-        byte[] bArr2 = this.key;
-        System.arraycopy(bArr, 0, bArr2, 0, bArr2.length);
-        byte[] bArr3 = secureDocumentKey.file_iv;
-        byte[] bArr4 = this.iv;
-        System.arraycopy(bArr3, 0, bArr4, 0, bArr4.length);
+        byte[] bArr = new byte[32];
+        this.key = bArr;
+        this.iv = new byte[16];
+        this.currentMode = 1;
+        System.arraycopy(secureDocumentKey.file_key, 0, bArr, 0, bArr.length);
+        byte[] bArr2 = secureDocumentKey.file_iv;
+        byte[] bArr3 = this.iv;
+        System.arraycopy(bArr2, 0, bArr3, 0, bArr3.length);
     }
 
     public int read(byte[] bArr, int i, int i2) throws IOException {

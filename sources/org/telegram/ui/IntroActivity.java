@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Shader;
 import android.graphics.SurfaceTexture;
@@ -27,7 +26,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -40,7 +38,11 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$LangPackString;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_langPackString;
+import org.telegram.tgnet.TLRPC$TL_langpack_getStrings;
+import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -113,8 +115,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         };
         r4.setBackgroundColor(-1);
         scrollView.addView(r4, LayoutHelper.createScroll(-1, -2, 51));
-        this.frameLayout2 = new FrameLayout(this);
-        r4.addView(this.frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
+        FrameLayout frameLayout = new FrameLayout(this);
+        this.frameLayout2 = frameLayout;
+        r4.addView(frameLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         TextureView textureView = new TextureView(this);
         this.frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, 17));
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -123,8 +126,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
 
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
                 if (IntroActivity.this.eglThread == null && surfaceTexture != null) {
-                    IntroActivity introActivity = IntroActivity.this;
-                    EGLThread unused = introActivity.eglThread = new EGLThread(surfaceTexture);
+                    EGLThread unused = IntroActivity.this.eglThread = new EGLThread(surfaceTexture);
                     IntroActivity.this.eglThread.setSurfaceTextureSize(i, i2);
                     IntroActivity.this.eglThread.postRunnable(new Runnable() {
                         public final void run() {
@@ -153,8 +155,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 return true;
             }
         });
-        this.viewPager = new ViewPager(this);
-        this.viewPager.setAdapter(new IntroAdapter());
+        ViewPager viewPager2 = new ViewPager(this);
+        this.viewPager = viewPager2;
+        viewPager2.setAdapter(new IntroAdapter());
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
         r4.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
@@ -188,8 +191,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
         });
-        this.startMessagingButton = new TextView(this);
-        this.startMessagingButton.setText(LocaleController.getString("StartMessaging", NUM));
+        TextView textView2 = new TextView(this);
+        this.startMessagingButton = textView2;
+        textView2.setText(LocaleController.getString("StartMessaging", NUM));
         this.startMessagingButton.setGravity(17);
         this.startMessagingButton.setTextColor(-1);
         this.startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -209,10 +213,12 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             });
         }
-        this.bottomPages = new BottomPagesView(this, this.viewPager, 6);
-        r4.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
-        this.textView = new TextView(this);
-        this.textView.setTextColor(-15494190);
+        BottomPagesView bottomPagesView = new BottomPagesView(this, this.viewPager, 6);
+        this.bottomPages = bottomPagesView;
+        r4.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
+        TextView textView3 = new TextView(this);
+        this.textView = textView3;
+        textView3.setTextColor(-15494190);
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
         r4.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
@@ -222,18 +228,18 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             }
         });
         if (AndroidUtilities.isTablet()) {
-            FrameLayout frameLayout = new FrameLayout(this);
-            setContentView(frameLayout);
+            FrameLayout frameLayout3 = new FrameLayout(this);
+            setContentView(frameLayout3);
             ImageView imageView = new ImageView(this);
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM);
             Shader.TileMode tileMode = Shader.TileMode.REPEAT;
             bitmapDrawable.setTileModeXY(tileMode, tileMode);
             imageView.setBackgroundDrawable(bitmapDrawable);
-            frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-            FrameLayout frameLayout3 = new FrameLayout(this);
-            frameLayout3.setBackgroundResource(NUM);
-            frameLayout3.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
-            frameLayout.addView(frameLayout3, LayoutHelper.createFrame(498, 528, 17));
+            frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+            FrameLayout frameLayout4 = new FrameLayout(this);
+            frameLayout4.setBackgroundResource(NUM);
+            frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
+            frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
         } else {
             setRequestedOrientation(1);
             setContentView(scrollView);
@@ -243,6 +249,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         this.justCreated = true;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         AndroidUtilities.handleProxyIntent(this, getIntent());
+        AndroidUtilities.startAppCenter(this);
     }
 
     public /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
@@ -286,15 +293,12 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             }
             this.justCreated = false;
         }
-        AndroidUtilities.checkForCrashes(this);
-        AndroidUtilities.checkForUpdates(this);
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
     }
 
     /* access modifiers changed from: protected */
     public void onPause() {
         super.onPause();
-        AndroidUtilities.unregisterUpdates();
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
     }
 
@@ -326,37 +330,37 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             }
         }
         if (localeInfo2 != null && localeInfo3 != null && localeInfo2 != localeInfo3) {
-            TLRPC.TL_langpack_getStrings tL_langpack_getStrings = new TLRPC.TL_langpack_getStrings();
+            TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings = new TLRPC$TL_langpack_getStrings();
             if (localeInfo3 != currentLocaleInfo) {
-                tL_langpack_getStrings.lang_code = localeInfo3.getLangCode();
+                tLRPC$TL_langpack_getStrings.lang_code = localeInfo3.getLangCode();
                 this.localeInfo = localeInfo3;
             } else {
-                tL_langpack_getStrings.lang_code = localeInfo2.getLangCode();
+                tLRPC$TL_langpack_getStrings.lang_code = localeInfo2.getLangCode();
                 this.localeInfo = localeInfo2;
             }
-            tL_langpack_getStrings.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_langpack_getStrings, new RequestDelegate(str) {
+            tLRPC$TL_langpack_getStrings.keys.add("ContinueOnThisLanguage");
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new RequestDelegate(str) {
                 private final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
                 }
 
-                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    IntroActivity.this.lambda$checkContinueText$4$IntroActivity(this.f$1, tLObject, tL_error);
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    IntroActivity.this.lambda$checkContinueText$4$IntroActivity(this.f$1, tLObject, tLRPC$TL_error);
                 }
             }, 8);
         }
     }
 
-    public /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String str, TLObject tLObject, TLRPC.TL_error tL_error) {
+    public /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            TLRPC.Vector vector = (TLRPC.Vector) tLObject;
-            if (!vector.objects.isEmpty()) {
-                TLRPC.LangPackString langPackString = (TLRPC.LangPackString) vector.objects.get(0);
-                if (langPackString instanceof TLRPC.TL_langPackString) {
-                    AndroidUtilities.runOnUIThread(new Runnable(langPackString, str) {
-                        private final /* synthetic */ TLRPC.LangPackString f$1;
+            TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
+            if (!tLRPC$Vector.objects.isEmpty()) {
+                TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(0);
+                if (tLRPC$LangPackString instanceof TLRPC$TL_langPackString) {
+                    AndroidUtilities.runOnUIThread(new Runnable(tLRPC$LangPackString, str) {
+                        private final /* synthetic */ TLRPC$LangPackString f$1;
                         private final /* synthetic */ String f$2;
 
                         {
@@ -373,9 +377,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         }
     }
 
-    public /* synthetic */ void lambda$null$3$IntroActivity(TLRPC.LangPackString langPackString, String str) {
+    public /* synthetic */ void lambda$null$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
-            this.textView.setText(langPackString.value);
+            this.textView.setText(tLRPC$LangPackString.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();
         }
     }
@@ -404,7 +408,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public Object instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             final TextView textView2 = new TextView(viewGroup.getContext());
-            AnonymousClass1 r2 = new FrameLayout(viewGroup.getContext()) {
+            AnonymousClass1 r2 = new FrameLayout(this, viewGroup.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int dp = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
@@ -444,17 +448,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public boolean isViewFromObject(View view, Object obj) {
             return view.equals(obj);
         }
-
-        public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-            if (dataSetObserver != null) {
-                super.unregisterDataSetObserver(dataSetObserver);
-            }
-        }
     }
 
     public class EGLThread extends DispatchQueue {
-        private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private static final int EGL_OPENGL_ES2_BIT = 4;
         /* access modifiers changed from: private */
         public Runnable drawRunnable = new Runnable() {
             public void run() {
@@ -656,10 +652,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 public EGLDisplay eglDisplay;
                 /* access modifiers changed from: private */
                 public EGLSurface eglSurface;
-                private GL gl;
                 /* access modifiers changed from: private */
                 public boolean initied;
-                private long lastRenderCallTime;
                 private SurfaceTexture surfaceTexture;
                 private int[] textures = new int[23];
 
@@ -669,17 +663,18 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
 
                 private boolean initGL() {
-                    this.egl10 = (EGL10) EGLContext.getEGL();
-                    this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-                    EGLDisplay eGLDisplay = this.eglDisplay;
-                    if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
+                    EGL10 egl102 = (EGL10) EGLContext.getEGL();
+                    this.egl10 = egl102;
+                    EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+                    this.eglDisplay = eglGetDisplay;
+                    if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
                     }
-                    if (!this.egl10.eglInitialize(eGLDisplay, new int[2])) {
+                    if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
@@ -695,9 +690,11 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         finish();
                         return false;
                     } else if (iArr[0] > 0) {
-                        this.eglConfig = eGLConfigArr[0];
-                        this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                        if (this.eglContext == null) {
+                        EGLConfig eGLConfig = eGLConfigArr[0];
+                        this.eglConfig = eGLConfig;
+                        EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                        this.eglContext = eglCreateContext;
+                        if (eglCreateContext == null) {
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             }
@@ -706,22 +703,22 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         }
                         SurfaceTexture surfaceTexture2 = this.surfaceTexture;
                         if (surfaceTexture2 instanceof SurfaceTexture) {
-                            this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
-                            EGLSurface eGLSurface = this.eglSurface;
-                            if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
+                            EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                            this.eglSurface = eglCreateWindowSurface;
+                            if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
                                 if (BuildVars.LOGS_ENABLED) {
                                     FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                                 }
                                 finish();
                                 return false;
-                            } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                            } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
                                 if (BuildVars.LOGS_ENABLED) {
                                     FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                                 }
                                 finish();
                                 return false;
                             } else {
-                                this.gl = this.eglContext.getGL();
+                                this.eglContext.getGL();
                                 GLES20.glGenTextures(23, this.textures, 0);
                                 loadTexture(NUM, 0);
                                 loadTexture(NUM, 1);

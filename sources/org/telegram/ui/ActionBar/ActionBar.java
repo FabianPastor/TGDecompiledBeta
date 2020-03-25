@@ -51,7 +51,6 @@ public class ActionBar extends FrameLayout {
     private Paint.FontMetricsInt fontMetricsInt;
     private boolean ignoreLayoutRequest;
     private boolean interceptTouches;
-    private boolean isBackOverlayVisible;
     protected boolean isSearchFieldVisible;
     protected int itemsActionModeBackgroundColor;
     protected int itemsActionModeColor;
@@ -82,6 +81,7 @@ public class ActionBar extends FrameLayout {
         }
 
         public void onItemClick(int i) {
+            throw null;
         }
     }
 
@@ -111,12 +111,12 @@ public class ActionBar extends FrameLayout {
 
     private void createBackButtonImage() {
         if (this.backButtonImageView == null) {
-            this.backButtonImageView = new ImageView(getContext());
-            this.backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView = new ImageView(getContext());
+            this.backButtonImageView = imageView;
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(this.itemsBackgroundColor));
-            int i = this.itemsColor;
-            if (i != 0) {
-                this.backButtonImageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+            if (this.itemsColor != 0) {
+                this.backButtonImageView.setColorFilter(new PorterDuffColorFilter(this.itemsColor, PorterDuff.Mode.MULTIPLY));
             }
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
@@ -164,7 +164,7 @@ public class ActionBar extends FrameLayout {
 
     public void setSupportsHolidayImage(boolean z) {
         this.supportsHolidayImage = z;
-        if (this.supportsHolidayImage) {
+        if (z) {
             this.fontMetricsInt = new Paint.FontMetricsInt();
             this.rect = new Rect();
         }
@@ -193,7 +193,7 @@ public class ActionBar extends FrameLayout {
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         Drawable currentHolidayDrawable;
-        boolean z = this.clipContent && (view == this.titleTextView || view == this.subtitleTextView || view == this.actionMode || view == this.menu || view == this.backButtonImageView);
+        boolean z = this.clipContent && (view == this.titleTextView || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView);
         if (z) {
             canvas.save();
             canvas.clipRect(0.0f, (-getTranslationY()) + ((float) (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0)), (float) getMeasuredWidth(), (float) getMeasuredHeight());
@@ -247,8 +247,9 @@ public class ActionBar extends FrameLayout {
 
     private void createSubtitleTextView() {
         if (this.subtitleTextView == null) {
-            this.subtitleTextView = new SimpleTextView(getContext());
-            this.subtitleTextView.setGravity(3);
+            SimpleTextView simpleTextView = new SimpleTextView(getContext());
+            this.subtitleTextView = simpleTextView;
+            simpleTextView.setGravity(3);
             this.subtitleTextView.setVisibility(8);
             this.subtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
             addView(this.subtitleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
@@ -280,8 +281,9 @@ public class ActionBar extends FrameLayout {
 
     private void createTitleTextView() {
         if (this.titleTextView == null) {
-            this.titleTextView = new SimpleTextView(getContext());
-            this.titleTextView.setGravity(3);
+            SimpleTextView simpleTextView = new SimpleTextView(getContext());
+            this.titleTextView = simpleTextView;
+            simpleTextView.setGravity(3);
             this.titleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
             this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             addView(this.titleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
@@ -377,8 +379,9 @@ public class ActionBar extends FrameLayout {
         if (actionBarMenu != null) {
             return actionBarMenu;
         }
-        this.menu = new ActionBarMenu(getContext(), this);
-        addView(this.menu, 0, LayoutHelper.createFrame(-2, -1, 5));
+        ActionBarMenu actionBarMenu2 = new ActionBarMenu(getContext(), this);
+        this.menu = actionBarMenu2;
+        addView(actionBarMenu2, 0, LayoutHelper.createFrame(-2, -1, 5));
         return this.menu;
     }
 
@@ -403,8 +406,8 @@ public class ActionBar extends FrameLayout {
         if (actionBarMenu != null) {
             return actionBarMenu;
         }
-        this.actionMode = new ActionBarMenu(getContext(), this);
-        ActionBarMenu actionBarMenu2 = this.actionMode;
+        ActionBarMenu actionBarMenu2 = new ActionBarMenu(getContext(), this);
+        this.actionMode = actionBarMenu2;
         actionBarMenu2.isActionMode = true;
         actionBarMenu2.setClickable(true);
         this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
@@ -418,8 +421,9 @@ public class ActionBar extends FrameLayout {
         this.actionMode.setLayoutParams(layoutParams);
         this.actionMode.setVisibility(4);
         if (this.occupyStatusBar && z && this.actionModeTop == null) {
-            this.actionModeTop = new View(getContext());
-            this.actionModeTop.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
+            View view = new View(getContext());
+            this.actionModeTop = view;
+            view.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
             addView(this.actionModeTop);
             FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.actionModeTop.getLayoutParams();
             layoutParams2.height = AndroidUtilities.statusBarHeight;
@@ -465,8 +469,9 @@ public class ActionBar extends FrameLayout {
             if (animatorSet != null) {
                 animatorSet.cancel();
             }
-            this.actionModeAnimation = new AnimatorSet();
-            this.actionModeAnimation.playTogether(arrayList);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.actionModeAnimation = animatorSet2;
+            animatorSet2.playTogether(arrayList);
             this.actionModeAnimation.setDuration(200);
             this.actionModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
@@ -555,8 +560,9 @@ public class ActionBar extends FrameLayout {
             if (animatorSet != null) {
                 animatorSet.cancel();
             }
-            this.actionModeAnimation = new AnimatorSet();
-            this.actionModeAnimation.playTogether(arrayList);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.actionModeAnimation = animatorSet2;
+            animatorSet2.playTogether(arrayList);
             this.actionModeAnimation.setDuration(200);
             this.actionModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -606,8 +612,9 @@ public class ActionBar extends FrameLayout {
 
     public void showActionModeTop() {
         if (this.occupyStatusBar && this.actionModeTop == null) {
-            this.actionModeTop = new View(getContext());
-            this.actionModeTop.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
+            View view = new View(getContext());
+            this.actionModeTop = view;
+            view.setBackgroundColor(Theme.getColor("actionBarActionModeDefaultTop"));
             addView(this.actionModeTop);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.actionModeTop.getLayoutParams();
             layoutParams.height = AndroidUtilities.statusBarHeight;
@@ -820,7 +827,7 @@ public class ActionBar extends FrameLayout {
 
     /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:81:0x0177  */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x018b  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0184  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onLayout(boolean r11, int r12, int r13, int r14, int r15) {
         /*
@@ -970,19 +977,19 @@ public class ActionBar extends FrameLayout {
         L_0x011f:
             int r11 = r10.getChildCount()
         L_0x0123:
-            if (r0 >= r11) goto L_0x019e
+            if (r0 >= r11) goto L_0x0197
             android.view.View r1 = r10.getChildAt(r0)
             int r3 = r1.getVisibility()
-            if (r3 == r2) goto L_0x019b
+            if (r3 == r2) goto L_0x0194
             org.telegram.ui.ActionBar.SimpleTextView r3 = r10.titleTextView
-            if (r1 == r3) goto L_0x019b
+            if (r1 == r3) goto L_0x0194
             org.telegram.ui.ActionBar.SimpleTextView r3 = r10.subtitleTextView
-            if (r1 == r3) goto L_0x019b
+            if (r1 == r3) goto L_0x0194
             org.telegram.ui.ActionBar.ActionBarMenu r3 = r10.menu
-            if (r1 == r3) goto L_0x019b
+            if (r1 == r3) goto L_0x0194
             android.widget.ImageView r3 = r10.backButtonImageView
             if (r1 != r3) goto L_0x0140
-            goto L_0x019b
+            goto L_0x0194
         L_0x0140:
             android.view.ViewGroup$LayoutParams r3 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
@@ -1017,38 +1024,33 @@ public class ActionBar extends FrameLayout {
             int r8 = r8 - r9
         L_0x0173:
             r9 = 16
-            if (r7 == r9) goto L_0x018b
-            r9 = 48
-            if (r7 == r9) goto L_0x0188
+            if (r7 == r9) goto L_0x0184
             r9 = 80
-            if (r7 == r9) goto L_0x0182
+            if (r7 == r9) goto L_0x017e
             int r3 = r3.topMargin
-            goto L_0x0196
-        L_0x0182:
+            goto L_0x018f
+        L_0x017e:
             int r7 = r15 - r13
             int r7 = r7 - r6
             int r3 = r3.bottomMargin
-            goto L_0x0194
-        L_0x0188:
-            int r3 = r3.topMargin
-            goto L_0x0196
-        L_0x018b:
+            goto L_0x018d
+        L_0x0184:
             int r7 = r15 - r13
             int r7 = r7 - r6
             int r7 = r7 / r4
             int r9 = r3.topMargin
             int r7 = r7 + r9
             int r3 = r3.bottomMargin
-        L_0x0194:
+        L_0x018d:
             int r3 = r7 - r3
-        L_0x0196:
+        L_0x018f:
             int r5 = r5 + r8
             int r6 = r6 + r3
             r1.layout(r8, r3, r5, r6)
-        L_0x019b:
+        L_0x0194:
             int r0 = r0 + 1
             goto L_0x0123
-        L_0x019e:
+        L_0x0197:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.onLayout(boolean, int, int, int, int):void");
@@ -1113,7 +1115,7 @@ public class ActionBar extends FrameLayout {
         this.occupyStatusBar = z;
         ActionBarMenu actionBarMenu = this.actionMode;
         if (actionBarMenu != null) {
-            actionBarMenu.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
+            actionBarMenu.setPadding(0, z ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         }
     }
 
@@ -1126,7 +1128,7 @@ public class ActionBar extends FrameLayout {
         if (z) {
             this.itemsActionModeBackgroundColor = i;
             if (this.actionModeVisible && (imageView = this.backButtonImageView) != null) {
-                imageView.setBackgroundDrawable(Theme.createSelectorDrawable(this.itemsActionModeBackgroundColor));
+                imageView.setBackgroundDrawable(Theme.createSelectorDrawable(i));
             }
             ActionBarMenu actionBarMenu = this.actionMode;
             if (actionBarMenu != null) {
@@ -1138,7 +1140,7 @@ public class ActionBar extends FrameLayout {
         this.itemsBackgroundColor = i;
         ImageView imageView2 = this.backButtonImageView;
         if (imageView2 != null) {
-            imageView2.setBackgroundDrawable(Theme.createSelectorDrawable(this.itemsBackgroundColor));
+            imageView2.setBackgroundDrawable(Theme.createSelectorDrawable(i));
         }
         ActionBarMenu actionBarMenu2 = this.menu;
         if (actionBarMenu2 != null) {
@@ -1147,7 +1149,6 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setItemsColor(int i, boolean z) {
-        int i2;
         if (z) {
             this.itemsActionModeColor = i;
             ActionBarMenu actionBarMenu = this.actionMode;
@@ -1167,8 +1168,8 @@ public class ActionBar extends FrameLayout {
         }
         this.itemsColor = i;
         ImageView imageView2 = this.backButtonImageView;
-        if (!(imageView2 == null || (i2 = this.itemsColor) == 0)) {
-            imageView2.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
+        if (!(imageView2 == null || i == 0)) {
+            imageView2.setColorFilter(new PorterDuffColorFilter(this.itemsColor, PorterDuff.Mode.MULTIPLY));
             Drawable drawable2 = this.backButtonImageView.getDrawable();
             if (drawable2 instanceof BackDrawable) {
                 ((BackDrawable) drawable2).setColor(i);

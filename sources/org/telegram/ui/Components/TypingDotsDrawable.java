@@ -36,13 +36,12 @@ public class TypingDotsDrawable extends StatusDrawable {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        long j2 = 50;
-        if (j <= 50) {
-            j2 = j;
+        if (j > 50) {
+            j = 50;
         }
         for (int i = 0; i < 3; i++) {
             float[] fArr = this.elapsedTimes;
-            fArr[i] = fArr[i] + ((float) j2);
+            fArr[i] = fArr[i] + ((float) j);
             float f = fArr[i];
             float[] fArr2 = this.startTimes;
             float f2 = f - fArr2[i];

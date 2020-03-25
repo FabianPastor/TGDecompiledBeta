@@ -8,7 +8,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class Shader {
-    private int fragmentShader;
     protected int program = GLES20.glCreateProgram();
     protected Map<String, Integer> uniformsMap = new HashMap();
     private int vertexShader;
@@ -63,7 +62,7 @@ public class Shader {
         int shader;
         int status;
 
-        CompilationResult(int i, int i2) {
+        CompilationResult(Shader shader2, int i, int i2) {
             this.shader = i;
             this.status = i2;
         }
@@ -82,7 +81,7 @@ public class Shader {
         if (iArr[0] == 0 && BuildVars.LOGS_ENABLED) {
             FileLog.e(GLES20.glGetShaderInfoLog(glCreateShader));
         }
-        return new CompilationResult(glCreateShader, iArr[0]);
+        return new CompilationResult(this, glCreateShader, iArr[0]);
     }
 
     private int linkProgram(int i) {

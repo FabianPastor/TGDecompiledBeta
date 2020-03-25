@@ -22,35 +22,34 @@ public class HeaderCell extends FrameLayout {
     private SimpleTextView textView2;
 
     public HeaderCell(Context context) {
-        this(context, false, 21, 15, false);
+        this(context, "windowBackgroundWhiteBlueHeader", 21, 15, false);
     }
 
     public HeaderCell(Context context, int i) {
-        this(context, false, i, 15, false);
+        this(context, "windowBackgroundWhiteBlueHeader", i, 15, false);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public HeaderCell(Context context, boolean z, int i, int i2, boolean z2) {
+    public HeaderCell(Context context, String str, int i, int i2, boolean z) {
         super(context);
         int i3 = i2;
         this.height = 40;
-        this.textView = new TextView(getContext());
-        this.textView.setTextSize(1, 15.0f);
+        TextView textView3 = new TextView(getContext());
+        this.textView = textView3;
+        textView3.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i4 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - i3)));
-        if (z) {
-            this.textView.setTextColor(Theme.getColor("dialogTextBlue2"));
-        } else {
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
-        }
+        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTag(str);
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, (float) i3, f, 0.0f));
-        if (z2) {
-            this.textView2 = new SimpleTextView(getContext());
-            this.textView2.setTextSize(13);
+        if (z) {
+            SimpleTextView simpleTextView = new SimpleTextView(getContext());
+            this.textView2 = simpleTextView;
+            simpleTextView.setTextSize(13);
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : i4) | 48, f, 21.0f, f, 0.0f));
         }

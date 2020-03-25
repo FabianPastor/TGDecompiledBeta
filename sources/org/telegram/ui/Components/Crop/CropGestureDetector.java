@@ -8,7 +8,6 @@ import android.view.ViewConfiguration;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CropGestureDetector {
-    private static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId = -1;
     private int mActivePointerIndex = 0;
     private ScaleGestureDetector mDetector;
@@ -140,10 +139,10 @@ public class CropGestureDetector {
             return true;
         }
         if (!this.started) {
-            this.mVelocityTracker = VelocityTracker.obtain();
-            VelocityTracker velocityTracker3 = this.mVelocityTracker;
-            if (velocityTracker3 != null) {
-                velocityTracker3.addMovement(motionEvent);
+            VelocityTracker obtain = VelocityTracker.obtain();
+            this.mVelocityTracker = obtain;
+            if (obtain != null) {
+                obtain.addMovement(motionEvent);
             }
             this.mLastTouchX = getActiveX(motionEvent);
             this.mLastTouchY = getActiveY(motionEvent);
@@ -165,9 +164,9 @@ public class CropGestureDetector {
             this.mListener.onDrag(f, f2);
             this.mLastTouchX = activeX;
             this.mLastTouchY = activeY;
-            VelocityTracker velocityTracker4 = this.mVelocityTracker;
-            if (velocityTracker4 != null) {
-                velocityTracker4.addMovement(motionEvent);
+            VelocityTracker velocityTracker3 = this.mVelocityTracker;
+            if (velocityTracker3 != null) {
+                velocityTracker3.addMovement(motionEvent);
             }
         }
         return true;

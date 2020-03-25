@@ -45,7 +45,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -159,7 +159,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         Context context2 = context;
-        this.searchWas = false;
         this.searching = false;
         this.actionBar.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.actionBar.setTitleColor(Theme.getColor("dialogTextBlack"));
@@ -175,7 +174,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
             }
         });
-        this.searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
+        addItem.setIsSearchField(true);
+        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = AudioSelectActivity.this.searching = true;
             }
@@ -194,15 +195,15 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 AudioSelectActivity.this.searchAdapter.search(editText.getText().toString());
             }
         });
-        this.searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem = addItem;
+        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
         searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
-        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
+        AnonymousClass3 r3 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
             private boolean ignoreLayout;
-            private int lastItemSize;
             private int lastNotifyWidth;
 
             /* access modifiers changed from: protected */
@@ -414,41 +415,48 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
             }
         };
-        this.sizeNotifierFrameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
+        this.sizeNotifierFrameLayout = r3;
+        r3.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.fragmentView = this.sizeNotifierFrameLayout;
-        this.progressView = new EmptyTextProgressView(context2);
-        this.progressView.showProgress();
+        EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context2);
+        this.progressView = emptyTextProgressView;
+        emptyTextProgressView.showProgress();
         this.sizeNotifierFrameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView = new LinearLayout(context2);
-        this.emptyView.setOrientation(1);
+        LinearLayout linearLayout = new LinearLayout(context2);
+        this.emptyView = linearLayout;
+        linearLayout.setOrientation(1);
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         this.sizeNotifierFrameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setOnTouchListener($$Lambda$AudioSelectActivity$TsXMP3OMn_MrWzh_GvC6AvDPzsY.INSTANCE);
-        this.emptyImageView = new ImageView(context2);
-        this.emptyImageView.setImageResource(NUM);
+        ImageView imageView = new ImageView(context2);
+        this.emptyImageView = imageView;
+        imageView.setImageResource(NUM);
         this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
-        this.emptyTitleTextView = new TextView(context2);
-        this.emptyTitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
+        TextView textView = new TextView(context2);
+        this.emptyTitleTextView = textView;
+        textView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptyTitleTextView.setGravity(17);
         this.emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.emptyTitleTextView.setTextSize(1, 17.0f);
         this.emptyTitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
         this.emptyView.addView(this.emptyTitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 11, 0, 0));
-        this.emptySubtitleTextView = new TextView(context2);
-        this.emptySubtitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
+        TextView textView2 = new TextView(context2);
+        this.emptySubtitleTextView = textView2;
+        textView2.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptySubtitleTextView.setGravity(17);
         this.emptySubtitleTextView.setTextSize(1, 15.0f);
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
-        this.listView = new RecyclerListView(context2);
-        this.listView.setClipToPadding(false);
+        RecyclerListView recyclerListView = new RecyclerListView(context2);
+        this.listView = recyclerListView;
+        recyclerListView.setClipToPadding(false);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
-        RecyclerListView recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         ListAdapter listAdapter2 = new ListAdapter(context2);
         this.listAdapter = listAdapter2;
-        recyclerListView.setAdapter(listAdapter2);
+        recyclerListView2.setAdapter(listAdapter2);
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.searchAdapter = new SearchAdapter(context2);
@@ -469,12 +477,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 }
             }
         });
-        this.shadow = new View(context2);
-        this.shadow.setBackgroundResource(NUM);
+        View view = new View(context2);
+        this.shadow = view;
+        view.setBackgroundResource(NUM);
         this.shadow.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-        this.frameLayout2 = new FrameLayout(context2);
-        this.frameLayout2.setBackgroundColor(Theme.getColor("dialogBackground"));
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.frameLayout2 = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.frameLayout2.setVisibility(4);
         this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
@@ -491,15 +501,22 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         editText.setMaxLines(1);
         editText.setSingleLine(true);
         this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 84.0f, 0.0f));
-        this.writeButtonContainer = new FrameLayout(context2);
-        this.writeButtonContainer.setVisibility(4);
+        FrameLayout frameLayout3 = new FrameLayout(context2);
+        this.writeButtonContainer = frameLayout3;
+        frameLayout3.setVisibility(4);
         this.writeButtonContainer.setScaleX(0.2f);
         this.writeButtonContainer.setScaleY(0.2f);
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
+        int dp = AndroidUtilities.dp(56.0f);
+        String str = "dialogFloatingButton";
+        int color = Theme.getColor(str);
+        if (Build.VERSION.SDK_INT >= 21) {
+            str = "dialogFloatingButtonPressed";
+        }
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
@@ -512,7 +529,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
         this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
-            this.writeButton.setOutlineProvider(new ViewOutlineProvider() {
+            this.writeButton.setOutlineProvider(new ViewOutlineProvider(this) {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -532,7 +549,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         });
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.selectedCountView = new View(context2) {
+        AnonymousClass7 r32 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, AudioSelectActivity.this.selectedAudios.size()))});
@@ -553,7 +570,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                 canvas.drawText(format, (float) (measuredWidth - (ceil / 2)), (float) AndroidUtilities.dp(16.2f), AudioSelectActivity.this.textPaint);
             }
         };
-        this.selectedCountView.setAlpha(0.0f);
+        this.selectedCountView = r32;
+        r32.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
         this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
@@ -591,13 +609,14 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             return false;
         }
         chatActivity2.getCurrentChat();
-        TLRPC.User currentUser = this.chatActivity.getCurrentUser();
+        TLRPC$User currentUser = this.chatActivity.getCurrentUser();
         if (this.chatActivity.getCurrentEncryptedChat() != null) {
             return false;
         }
         if (this.sendPopupLayout == null) {
-            this.sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
-            this.sendPopupLayout.setAnimationEnabled(false);
+            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
+            this.sendPopupLayout = actionBarPopupWindowLayout;
+            actionBarPopupWindowLayout.setAnimationEnabled(false);
             this.sendPopupLayout.setOnTouchListener(new View.OnTouchListener() {
                 private Rect popupRect = new Rect();
 
@@ -647,8 +666,9 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                     });
                 }
             }
-            this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
-            this.sendPopupWindow.setAnimationEnabled(false);
+            ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
+            this.sendPopupWindow = actionBarPopupWindow;
+            actionBarPopupWindow.setAnimationEnabled(false);
             this.sendPopupWindow.setAnimationStyle(NUM);
             this.sendPopupWindow.setOutsideTouchable(true);
             this.sendPopupWindow.setClippingEnabled(true);
@@ -980,203 +1000,202 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         });
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0163, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0160, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0164, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0161, code lost:
         r3 = r0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0165, code lost:
-        if (r2 != null) goto L_0x0167;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0162, code lost:
+        if (r2 != null) goto L_0x0164;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:23:?, code lost:
         r2.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x016a */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0167 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadAudio$9$AudioSelectActivity() {
         /*
-            r16 = this;
-            r1 = r16
+            r18 = this;
+            r1 = r18
             r0 = 6
             java.lang.String[] r4 = new java.lang.String[r0]
-            r0 = 0
-            java.lang.String r2 = "_id"
-            r4[r0] = r2
-            r8 = 1
-            java.lang.String r2 = "artist"
-            r4[r8] = r2
-            r9 = 2
-            java.lang.String r2 = "title"
-            r4[r9] = r2
-            r10 = 3
-            java.lang.String r2 = "_data"
-            r4[r10] = r2
-            r11 = 4
-            java.lang.String r2 = "duration"
-            r4[r11] = r2
-            r12 = 5
-            java.lang.String r2 = "album"
-            r4[r12] = r2
-            java.util.ArrayList r13 = new java.util.ArrayList
-            r13.<init>()
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x016b }
-            android.content.ContentResolver r2 = r2.getContentResolver()     // Catch:{ Exception -> 0x016b }
-            android.net.Uri r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x016b }
+            java.lang.String r0 = "_id"
+            r8 = 0
+            r4[r8] = r0
+            java.lang.String r0 = "artist"
+            r9 = 1
+            r4[r9] = r0
+            java.lang.String r0 = "title"
+            r10 = 2
+            r4[r10] = r0
+            java.lang.String r0 = "_data"
+            r11 = 3
+            r4[r11] = r0
+            java.lang.String r0 = "duration"
+            r12 = 4
+            r4[r12] = r0
+            java.lang.String r0 = "album"
+            r13 = 5
+            r4[r13] = r0
+            java.util.ArrayList r14 = new java.util.ArrayList
+            r14.<init>()
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0168 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0168 }
+            android.net.Uri r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI     // Catch:{ Exception -> 0x0168 }
             java.lang.String r5 = "is_music != 0"
             r6 = 0
             java.lang.String r7 = "title"
-            android.database.Cursor r2 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x016b }
-            r3 = -2000000000(0xfffffffvar_ca6CLASSNAME, float:-1.2182823E-33)
+            android.database.Cursor r2 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0168 }
+            r0 = -2000000000(0xfffffffvar_ca6CLASSNAME, float:-1.2182823E-33)
         L_0x003c:
-            boolean r4 = r2.moveToNext()     // Catch:{ all -> 0x0161 }
-            if (r4 == 0) goto L_0x015b
-            org.telegram.messenger.MediaController$AudioEntry r4 = new org.telegram.messenger.MediaController$AudioEntry     // Catch:{ all -> 0x0161 }
-            r4.<init>()     // Catch:{ all -> 0x0161 }
-            int r5 = r2.getInt(r0)     // Catch:{ all -> 0x0161 }
-            long r5 = (long) r5     // Catch:{ all -> 0x0161 }
-            r4.id = r5     // Catch:{ all -> 0x0161 }
-            java.lang.String r5 = r2.getString(r8)     // Catch:{ all -> 0x0161 }
-            r4.author = r5     // Catch:{ all -> 0x0161 }
-            java.lang.String r5 = r2.getString(r9)     // Catch:{ all -> 0x0161 }
-            r4.title = r5     // Catch:{ all -> 0x0161 }
-            java.lang.String r5 = r2.getString(r10)     // Catch:{ all -> 0x0161 }
-            r4.path = r5     // Catch:{ all -> 0x0161 }
-            long r5 = r2.getLong(r11)     // Catch:{ all -> 0x0161 }
-            r14 = 1000(0x3e8, double:4.94E-321)
-            long r5 = r5 / r14
-            int r6 = (int) r5     // Catch:{ all -> 0x0161 }
-            r4.duration = r6     // Catch:{ all -> 0x0161 }
-            java.lang.String r5 = r2.getString(r12)     // Catch:{ all -> 0x0161 }
-            r4.genre = r5     // Catch:{ all -> 0x0161 }
-            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0161 }
-            java.lang.String r6 = r4.path     // Catch:{ all -> 0x0161 }
-            r5.<init>(r6)     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_message r6 = new org.telegram.tgnet.TLRPC$TL_message     // Catch:{ all -> 0x0161 }
-            r6.<init>()     // Catch:{ all -> 0x0161 }
-            r6.out = r8     // Catch:{ all -> 0x0161 }
-            r6.id = r3     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_peerUser r7 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x0161 }
-            r7.<init>()     // Catch:{ all -> 0x0161 }
-            r6.to_id = r7     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Peer r7 = r6.to_id     // Catch:{ all -> 0x0161 }
-            int r8 = r1.currentAccount     // Catch:{ all -> 0x0161 }
-            org.telegram.messenger.UserConfig r8 = org.telegram.messenger.UserConfig.getInstance(r8)     // Catch:{ all -> 0x0161 }
-            int r8 = r8.getClientUserId()     // Catch:{ all -> 0x0161 }
-            r6.from_id = r8     // Catch:{ all -> 0x0161 }
-            r7.user_id = r8     // Catch:{ all -> 0x0161 }
-            long r7 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0161 }
-            long r7 = r7 / r14
-            int r8 = (int) r7     // Catch:{ all -> 0x0161 }
-            r6.date = r8     // Catch:{ all -> 0x0161 }
-            java.lang.String r7 = ""
-            r6.message = r7     // Catch:{ all -> 0x0161 }
-            java.lang.String r7 = r4.path     // Catch:{ all -> 0x0161 }
-            r6.attachPath = r7     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_messageMediaDocument r7 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ all -> 0x0161 }
-            r7.<init>()     // Catch:{ all -> 0x0161 }
-            r6.media = r7     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0161 }
-            int r8 = r7.flags     // Catch:{ all -> 0x0161 }
-            r8 = r8 | r10
-            r7.flags = r8     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_document r8 = new org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x0161 }
-            r8.<init>()     // Catch:{ all -> 0x0161 }
-            r7.document = r8     // Catch:{ all -> 0x0161 }
-            int r7 = r6.flags     // Catch:{ all -> 0x0161 }
-            r7 = r7 | 768(0x300, float:1.076E-42)
-            r6.flags = r7     // Catch:{ all -> 0x0161 }
-            java.lang.String r7 = org.telegram.messenger.FileLoader.getFileExtension(r5)     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            r14 = 0
-            r8.id = r14     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            r8.access_hash = r14     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            byte[] r14 = new byte[r0]     // Catch:{ all -> 0x0161 }
-            r8.file_reference = r14     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            int r14 = r6.date     // Catch:{ all -> 0x0161 }
-            r8.date = r14     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ all -> 0x0161 }
-            r14.<init>()     // Catch:{ all -> 0x0161 }
-            java.lang.String r15 = "audio/"
-            r14.append(r15)     // Catch:{ all -> 0x0161 }
-            int r15 = r7.length()     // Catch:{ all -> 0x0161 }
-            if (r15 <= 0) goto L_0x00fb
-            goto L_0x00fd
-        L_0x00fb:
-            java.lang.String r7 = "mp3"
-        L_0x00fd:
-            r14.append(r7)     // Catch:{ all -> 0x0161 }
-            java.lang.String r7 = r14.toString()     // Catch:{ all -> 0x0161 }
-            r8.mime_type = r7     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x0161 }
-            long r14 = r5.length()     // Catch:{ all -> 0x0161 }
-            int r8 = (int) r14     // Catch:{ all -> 0x0161 }
-            r7.size = r8     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r7 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x0161 }
-            r7.dc_id = r0     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio     // Catch:{ all -> 0x0161 }
-            r7.<init>()     // Catch:{ all -> 0x0161 }
-            int r8 = r4.duration     // Catch:{ all -> 0x0161 }
-            r7.duration = r8     // Catch:{ all -> 0x0161 }
-            java.lang.String r8 = r4.title     // Catch:{ all -> 0x0161 }
-            r7.title = r8     // Catch:{ all -> 0x0161 }
-            java.lang.String r8 = r4.author     // Catch:{ all -> 0x0161 }
-            r7.performer = r8     // Catch:{ all -> 0x0161 }
-            int r8 = r7.flags     // Catch:{ all -> 0x0161 }
-            r8 = r8 | r10
-            r7.flags = r8     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r8 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r8 = r8.document     // Catch:{ all -> 0x0161 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r8 = r8.attributes     // Catch:{ all -> 0x0161 }
-            r8.add(r7)     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$TL_documentAttributeFilename r7 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename     // Catch:{ all -> 0x0161 }
-            r7.<init>()     // Catch:{ all -> 0x0161 }
-            java.lang.String r5 = r5.getName()     // Catch:{ all -> 0x0161 }
-            r7.file_name = r5     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$MessageMedia r5 = r6.media     // Catch:{ all -> 0x0161 }
-            org.telegram.tgnet.TLRPC$Document r5 = r5.document     // Catch:{ all -> 0x0161 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r5 = r5.attributes     // Catch:{ all -> 0x0161 }
-            r5.add(r7)     // Catch:{ all -> 0x0161 }
-            org.telegram.messenger.MessageObject r5 = new org.telegram.messenger.MessageObject     // Catch:{ all -> 0x0161 }
-            int r7 = r1.currentAccount     // Catch:{ all -> 0x0161 }
-            r5.<init>(r7, r6, r0)     // Catch:{ all -> 0x0161 }
-            r4.messageObject = r5     // Catch:{ all -> 0x0161 }
-            r13.add(r4)     // Catch:{ all -> 0x0161 }
-            int r3 = r3 + -1
-            r8 = 1
+            boolean r3 = r2.moveToNext()     // Catch:{ all -> 0x015e }
+            if (r3 == 0) goto L_0x0158
+            org.telegram.messenger.MediaController$AudioEntry r3 = new org.telegram.messenger.MediaController$AudioEntry     // Catch:{ all -> 0x015e }
+            r3.<init>()     // Catch:{ all -> 0x015e }
+            int r4 = r2.getInt(r8)     // Catch:{ all -> 0x015e }
+            long r4 = (long) r4     // Catch:{ all -> 0x015e }
+            r3.id = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r9)     // Catch:{ all -> 0x015e }
+            r3.author = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r10)     // Catch:{ all -> 0x015e }
+            r3.title = r4     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r11)     // Catch:{ all -> 0x015e }
+            r3.path = r4     // Catch:{ all -> 0x015e }
+            long r4 = r2.getLong(r12)     // Catch:{ all -> 0x015e }
+            r6 = 1000(0x3e8, double:4.94E-321)
+            long r4 = r4 / r6
+            int r5 = (int) r4     // Catch:{ all -> 0x015e }
+            r3.duration = r5     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r2.getString(r13)     // Catch:{ all -> 0x015e }
+            r3.genre = r4     // Catch:{ all -> 0x015e }
+            java.io.File r4 = new java.io.File     // Catch:{ all -> 0x015e }
+            java.lang.String r5 = r3.path     // Catch:{ all -> 0x015e }
+            r4.<init>(r5)     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_message r5 = new org.telegram.tgnet.TLRPC$TL_message     // Catch:{ all -> 0x015e }
+            r5.<init>()     // Catch:{ all -> 0x015e }
+            r5.out = r9     // Catch:{ all -> 0x015e }
+            r5.id = r0     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x015e }
+            r15.<init>()     // Catch:{ all -> 0x015e }
+            r5.to_id = r15     // Catch:{ all -> 0x015e }
+            int r9 = r1.currentAccount     // Catch:{ all -> 0x015e }
+            org.telegram.messenger.UserConfig r9 = org.telegram.messenger.UserConfig.getInstance(r9)     // Catch:{ all -> 0x015e }
+            int r9 = r9.getClientUserId()     // Catch:{ all -> 0x015e }
+            r5.from_id = r9     // Catch:{ all -> 0x015e }
+            r15.user_id = r9     // Catch:{ all -> 0x015e }
+            long r16 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x015e }
+            long r6 = r16 / r6
+            int r7 = (int) r6     // Catch:{ all -> 0x015e }
+            r5.date = r7     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = ""
+            r5.message = r6     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = r3.path     // Catch:{ all -> 0x015e }
+            r5.attachPath = r6     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_messageMediaDocument r6 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument     // Catch:{ all -> 0x015e }
+            r6.<init>()     // Catch:{ all -> 0x015e }
+            r5.media = r6     // Catch:{ all -> 0x015e }
+            int r7 = r6.flags     // Catch:{ all -> 0x015e }
+            r7 = r7 | r11
+            r6.flags = r7     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_document r7 = new org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x015e }
+            r7.<init>()     // Catch:{ all -> 0x015e }
+            r6.document = r7     // Catch:{ all -> 0x015e }
+            int r6 = r5.flags     // Catch:{ all -> 0x015e }
+            r6 = r6 | 768(0x300, float:1.076E-42)
+            r5.flags = r6     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = org.telegram.messenger.FileLoader.getFileExtension(r4)     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            r12 = 0
+            r7.id = r12     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            r7.access_hash = r12     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            byte[] r12 = new byte[r8]     // Catch:{ all -> 0x015e }
+            r7.file_reference = r12     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            int r12 = r5.date     // Catch:{ all -> 0x015e }
+            r7.date = r12     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ all -> 0x015e }
+            r12.<init>()     // Catch:{ all -> 0x015e }
+            java.lang.String r13 = "audio/"
+            r12.append(r13)     // Catch:{ all -> 0x015e }
+            int r13 = r6.length()     // Catch:{ all -> 0x015e }
+            if (r13 <= 0) goto L_0x00f6
+            goto L_0x00f8
+        L_0x00f6:
+            java.lang.String r6 = "mp3"
+        L_0x00f8:
+            r12.append(r6)     // Catch:{ all -> 0x015e }
+            java.lang.String r6 = r12.toString()     // Catch:{ all -> 0x015e }
+            r7.mime_type = r6     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r6 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r6 = r6.document     // Catch:{ all -> 0x015e }
+            long r12 = r4.length()     // Catch:{ all -> 0x015e }
+            int r7 = (int) r12     // Catch:{ all -> 0x015e }
+            r6.size = r7     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r6 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r6 = r6.document     // Catch:{ all -> 0x015e }
+            r6.dc_id = r8     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio     // Catch:{ all -> 0x015e }
+            r6.<init>()     // Catch:{ all -> 0x015e }
+            int r7 = r3.duration     // Catch:{ all -> 0x015e }
+            r6.duration = r7     // Catch:{ all -> 0x015e }
+            java.lang.String r7 = r3.title     // Catch:{ all -> 0x015e }
+            r6.title = r7     // Catch:{ all -> 0x015e }
+            java.lang.String r7 = r3.author     // Catch:{ all -> 0x015e }
+            r6.performer = r7     // Catch:{ all -> 0x015e }
+            int r7 = r6.flags     // Catch:{ all -> 0x015e }
+            r7 = r7 | r11
+            r6.flags = r7     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r7 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r7 = r7.document     // Catch:{ all -> 0x015e }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r7 = r7.attributes     // Catch:{ all -> 0x015e }
+            r7.add(r6)     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$TL_documentAttributeFilename r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename     // Catch:{ all -> 0x015e }
+            r6.<init>()     // Catch:{ all -> 0x015e }
+            java.lang.String r4 = r4.getName()     // Catch:{ all -> 0x015e }
+            r6.file_name = r4     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r5.media     // Catch:{ all -> 0x015e }
+            org.telegram.tgnet.TLRPC$Document r4 = r4.document     // Catch:{ all -> 0x015e }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r4 = r4.attributes     // Catch:{ all -> 0x015e }
+            r4.add(r6)     // Catch:{ all -> 0x015e }
+            org.telegram.messenger.MessageObject r4 = new org.telegram.messenger.MessageObject     // Catch:{ all -> 0x015e }
+            int r6 = r1.currentAccount     // Catch:{ all -> 0x015e }
+            r4.<init>(r6, r5, r8)     // Catch:{ all -> 0x015e }
+            r3.messageObject = r4     // Catch:{ all -> 0x015e }
+            r14.add(r3)     // Catch:{ all -> 0x015e }
+            int r0 = r0 + -1
+            r9 = 1
+            r12 = 4
+            r13 = 5
             goto L_0x003c
-        L_0x015b:
-            if (r2 == 0) goto L_0x016f
-            r2.close()     // Catch:{ Exception -> 0x016b }
-            goto L_0x016f
-        L_0x0161:
+        L_0x0158:
+            if (r2 == 0) goto L_0x016c
+            r2.close()     // Catch:{ Exception -> 0x0168 }
+            goto L_0x016c
+        L_0x015e:
             r0 = move-exception
-            throw r0     // Catch:{ all -> 0x0163 }
-        L_0x0163:
+            throw r0     // Catch:{ all -> 0x0160 }
+        L_0x0160:
             r0 = move-exception
             r3 = r0
-            if (r2 == 0) goto L_0x016a
-            r2.close()     // Catch:{ all -> 0x016a }
-        L_0x016a:
-            throw r3     // Catch:{ Exception -> 0x016b }
-        L_0x016b:
+            if (r2 == 0) goto L_0x0167
+            r2.close()     // Catch:{ all -> 0x0167 }
+        L_0x0167:
+            throw r3     // Catch:{ Exception -> 0x0168 }
+        L_0x0168:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x016f:
+        L_0x016c:
             org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c r0 = new org.telegram.ui.-$$Lambda$AudioSelectActivity$qHu3jZT6Csp1zx-1DQDOfjLHr4c
-            r0.<init>(r13)
+            r0.<init>(r14)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
@@ -1186,7 +1205,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     public /* synthetic */ void lambda$null$8$AudioSelectActivity(ArrayList arrayList) {
         this.loadingAudio = false;
         this.audioEntries = arrayList;
-        if (this.audioEntries.isEmpty()) {
+        if (arrayList.isEmpty()) {
             this.searchItem.setVisibility(8);
         }
         updateEmptyView();
@@ -1216,10 +1235,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             return AudioSelectActivity.this.audioEntries.size();
         }
 
-        public Object getItem(int i) {
-            return AudioSelectActivity.this.audioEntries.get(i);
-        }
-
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             AnonymousClass1 r1 = new SharedAudioCell(this.mContext) {
                 public boolean needPlayMessage(MessageObject messageObject) {
@@ -1247,9 +1262,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     }
 
     public class SearchAdapter extends RecyclerListView.SelectionAdapter {
-        private int lastReqId;
         private Context mContext;
-        private int reqId = 0;
         private ArrayList<MediaController.AudioEntry> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
 
@@ -1323,20 +1336,21 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             if (lowerCase.equals(translitString) || translitString.length() == 0) {
                 translitString = null;
             }
-            String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
+            int i = (translitString != null ? 1 : 0) + 1;
+            String[] strArr = new String[i];
             strArr[0] = lowerCase;
             if (translitString != null) {
                 strArr[1] = translitString;
             }
             ArrayList arrayList2 = new ArrayList();
-            for (int i = 0; i < arrayList.size(); i++) {
-                MediaController.AudioEntry audioEntry = (MediaController.AudioEntry) arrayList.get(i);
-                int i2 = 0;
+            for (int i2 = 0; i2 < arrayList.size(); i2++) {
+                MediaController.AudioEntry audioEntry = (MediaController.AudioEntry) arrayList.get(i2);
+                int i3 = 0;
                 while (true) {
-                    if (i2 >= strArr.length) {
+                    if (i3 >= i) {
                         break;
                     }
-                    String str3 = strArr[i2];
+                    String str3 = strArr[i3];
                     String str4 = audioEntry.author;
                     boolean contains = str4 != null ? str4.toLowerCase().contains(str3) : false;
                     if (!contains && (str2 = audioEntry.title) != null) {
@@ -1346,7 +1360,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         arrayList2.add(audioEntry);
                         break;
                     }
-                    i2++;
+                    i3++;
                 }
             }
             updateSearchResults(arrayList2, str);
@@ -1383,10 +1397,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
         public int getItemCount() {
             return this.searchResult.size();
-        }
-
-        public MediaController.AudioEntry getItem(int i) {
-            return this.searchResult.get(i);
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

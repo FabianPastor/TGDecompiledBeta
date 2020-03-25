@@ -30,7 +30,7 @@ public class CropAreaView extends View {
     private float bottomPadding;
     private RectF bottomRightCorner = new RectF();
     private Bitmap circleBitmap;
-    Paint dimPaint = new Paint();
+    Paint dimPaint;
     private boolean dimVisibile = true;
     private Paint eraserPaint;
     Paint framePaint;
@@ -87,23 +87,30 @@ public class CropAreaView extends View {
 
     public CropAreaView(Context context) {
         super(context);
-        this.dimPaint.setColor(-NUM);
-        this.shadowPaint = new Paint();
-        this.shadowPaint.setStyle(Paint.Style.FILL);
+        Paint paint = new Paint();
+        this.dimPaint = paint;
+        paint.setColor(-NUM);
+        Paint paint2 = new Paint();
+        this.shadowPaint = paint2;
+        paint2.setStyle(Paint.Style.FILL);
         this.shadowPaint.setColor(NUM);
         this.shadowPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.linePaint = new Paint();
-        this.linePaint.setStyle(Paint.Style.FILL);
+        Paint paint3 = new Paint();
+        this.linePaint = paint3;
+        paint3.setStyle(Paint.Style.FILL);
         this.linePaint.setColor(-1);
         this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        this.handlePaint = new Paint();
-        this.handlePaint.setStyle(Paint.Style.FILL);
+        Paint paint4 = new Paint();
+        this.handlePaint = paint4;
+        paint4.setStyle(Paint.Style.FILL);
         this.handlePaint.setColor(-1);
-        this.framePaint = new Paint();
-        this.framePaint.setStyle(Paint.Style.FILL);
+        Paint paint5 = new Paint();
+        this.framePaint = paint5;
+        paint5.setStyle(Paint.Style.FILL);
         this.framePaint.setColor(-NUM);
-        this.eraserPaint = new Paint(1);
-        this.eraserPaint.setColor(0);
+        Paint paint6 = new Paint(1);
+        this.eraserPaint = paint6;
+        paint6.setColor(0);
         this.eraserPaint.setStyle(Paint.Style.FILL);
         this.eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
@@ -446,8 +453,9 @@ public class CropAreaView extends View {
                 invalidate();
                 return;
             }
-            this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, f});
-            this.gridAnimator.setDuration(200);
+            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, f});
+            this.gridAnimator = ofFloat;
+            ofFloat.setDuration(200);
             this.gridAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     Animator unused = CropAreaView.this.gridAnimator = null;
@@ -466,6 +474,7 @@ public class CropAreaView extends View {
         invalidate();
     }
 
+    @Keep
     private float getGridProgress() {
         return this.gridProgress;
     }
@@ -523,6 +532,7 @@ public class CropAreaView extends View {
         invalidate();
     }
 
+    @Keep
     public float getCropLeft() {
         return this.actualRect.left;
     }
@@ -533,6 +543,7 @@ public class CropAreaView extends View {
         invalidate();
     }
 
+    @Keep
     public float getCropTop() {
         return this.actualRect.top;
     }
@@ -543,6 +554,7 @@ public class CropAreaView extends View {
         invalidate();
     }
 
+    @Keep
     public float getCropRight() {
         return this.actualRect.right;
     }
@@ -553,6 +565,7 @@ public class CropAreaView extends View {
         invalidate();
     }
 
+    @Keep
     public float getCropBottom() {
         return this.actualRect.bottom;
     }
@@ -868,72 +881,73 @@ public class CropAreaView extends View {
 
     /* renamed from: org.telegram.ui.Components.Crop.CropAreaView$3  reason: invalid class name */
     static /* synthetic */ class AnonymousClass3 {
-        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control = new int[Control.values().length];
+        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control;
 
-        /* JADX WARNING: Can't wrap try/catch for region: R(16:0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|(3:15|16|18)) */
         /* JADX WARNING: Can't wrap try/catch for region: R(18:0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|18) */
+        /* JADX WARNING: Code restructure failed: missing block: B:19:?, code lost:
+            return;
+         */
         /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x0040 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x004b */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x0056 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0014 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001f */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x002a */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0035 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x003e */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x0049 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x0054 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0033 */
         static {
             /*
                 org.telegram.ui.Components.Crop.CropAreaView$Control[] r0 = org.telegram.ui.Components.Crop.CropAreaView.Control.values()
                 int r0 = r0.length
                 int[] r0 = new int[r0]
                 $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control = r0
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0014 }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP_LEFT     // Catch:{ NoSuchFieldError -> 0x0014 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0014 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP_LEFT     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
                 r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0014 }
-            L_0x0014:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x001f }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP_RIGHT     // Catch:{ NoSuchFieldError -> 0x001f }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001f }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP_RIGHT     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
                 r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001f }
-            L_0x001f:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x002a }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM_LEFT     // Catch:{ NoSuchFieldError -> 0x002a }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x002a }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0028 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM_LEFT     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
                 r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x002a }
-            L_0x002a:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0035 }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM_RIGHT     // Catch:{ NoSuchFieldError -> 0x0035 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0035 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0033 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM_RIGHT     // Catch:{ NoSuchFieldError -> 0x0033 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
                 r2 = 4
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0035 }
-            L_0x0035:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0040 }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP     // Catch:{ NoSuchFieldError -> 0x0040 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0040 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
+            L_0x0033:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x003e }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.TOP     // Catch:{ NoSuchFieldError -> 0x003e }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x003e }
                 r2 = 5
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0040 }
-            L_0x0040:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x004b }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.LEFT     // Catch:{ NoSuchFieldError -> 0x004b }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x004b }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x003e }
+            L_0x003e:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0049 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.LEFT     // Catch:{ NoSuchFieldError -> 0x0049 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0049 }
                 r2 = 6
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x004b }
-            L_0x004b:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0056 }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.RIGHT     // Catch:{ NoSuchFieldError -> 0x0056 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0056 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0049 }
+            L_0x0049:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0054 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.RIGHT     // Catch:{ NoSuchFieldError -> 0x0054 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0054 }
                 r2 = 7
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0056 }
-            L_0x0056:
-                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0062 }
-                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM     // Catch:{ NoSuchFieldError -> 0x0062 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0062 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0054 }
+            L_0x0054:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$Crop$CropAreaView$Control     // Catch:{ NoSuchFieldError -> 0x0060 }
+                org.telegram.ui.Components.Crop.CropAreaView$Control r1 = org.telegram.ui.Components.Crop.CropAreaView.Control.BOTTOM     // Catch:{ NoSuchFieldError -> 0x0060 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0060 }
                 r2 = 8
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0062 }
-            L_0x0062:
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0060 }
+            L_0x0060:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Crop.CropAreaView.AnonymousClass3.<clinit>():void");

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
@@ -24,14 +25,13 @@ public class ColorPicker extends FrameLayout {
     private static final float[] LOCATIONS = {0.0f, 0.14f, 0.24f, 0.39f, 0.49f, 0.62f, 0.73f, 0.85f, 1.0f};
     private Paint backgroundPaint = new Paint(1);
     private boolean changingWeight;
-    /* access modifiers changed from: private */
-    public ColorPickerDelegate delegate;
+    private ColorPickerDelegate delegate;
     private boolean dragging;
     private float draggingFactor;
     private Paint gradientPaint = new Paint(1);
     private boolean interacting;
     private OvershootInterpolator interpolator = new OvershootInterpolator(1.02f);
-    private float location = 1.0f;
+    private float location;
     private RectF rectF = new RectF();
     private ImageView settingsButton;
     private Drawable shadowDrawable;
@@ -60,30 +60,43 @@ public class ColorPicker extends FrameLayout {
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Paint.Style.STROKE);
         this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        this.settingsButton = new ImageView(context);
-        this.settingsButton.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.settingsButton = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.settingsButton.setImageResource(NUM);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
         this.settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (ColorPicker.this.delegate != null) {
-                    ColorPicker.this.delegate.onSettingsPressed();
-                }
+            public final void onClick(View view) {
+                ColorPicker.this.lambda$new$0$ColorPicker(view);
             }
         });
-        this.undoButton = new ImageView(context);
-        this.undoButton.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.undoButton = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.undoButton.setImageResource(NUM);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
         this.undoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (ColorPicker.this.delegate != null) {
-                    ColorPicker.this.delegate.onUndoPressed();
-                }
+            public final void onClick(View view) {
+                ColorPicker.this.lambda$new$1$ColorPicker(view);
             }
         });
-        this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
-        setLocation(this.location);
+        float f = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
+        this.location = f;
+        setLocation(f);
+    }
+
+    public /* synthetic */ void lambda$new$0$ColorPicker(View view) {
+        ColorPickerDelegate colorPickerDelegate = this.delegate;
+        if (colorPickerDelegate != null) {
+            colorPickerDelegate.onSettingsPressed();
+        }
+    }
+
+    public /* synthetic */ void lambda$new$1$ColorPicker(View view) {
+        ColorPickerDelegate colorPickerDelegate = this.delegate;
+        if (colorPickerDelegate != null) {
+            colorPickerDelegate.onUndoPressed();
+        }
     }
 
     public void setUndoEnabled(boolean z) {
@@ -244,11 +257,13 @@ public class ColorPicker extends FrameLayout {
         canvas.drawCircle(f, f2, floor - ((float) AndroidUtilities.dp(0.5f)), this.swatchStrokePaint);
     }
 
+    @Keep
     private void setDraggingFactor(float f) {
         this.draggingFactor = f;
         invalidate();
     }
 
+    @Keep
     public float getDraggingFactor() {
         return this.draggingFactor;
     }
@@ -256,7 +271,7 @@ public class ColorPicker extends FrameLayout {
     private void setDragging(boolean z, boolean z2) {
         if (this.dragging != z) {
             this.dragging = z;
-            float f = this.dragging ? 1.0f : 0.0f;
+            float f = z ? 1.0f : 0.0f;
             if (z2) {
                 ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "draggingFactor", new float[]{this.draggingFactor, f});
                 ofFloat.setInterpolator(this.interpolator);

@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 /* renamed from: org.telegram.messenger.-$$Lambda$MediaDataController$qEygjg7VUDQOR7MrWcYE_q6DKjQ  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,7 +12,7 @@ public final /* synthetic */ class $$Lambda$MediaDataController$qEygjg7VUDQOR7Mr
     private /* synthetic */ $$Lambda$MediaDataController$qEygjg7VUDQOR7MrWcYE_q6DKjQ() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        MediaDataController.lambda$markFaturedStickersByIdAsRead$29(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MediaDataController.lambda$markFaturedStickersByIdAsRead$29(tLObject, tLRPC$TL_error);
     }
 }

@@ -25,21 +25,22 @@ public final class R {
         public static final int popup_context_in = NUM;
         public static final int popup_in = NUM;
         public static final int popup_out = NUM;
+
+        private anim() {
+        }
     }
 
     public static final class array {
         public static final int android_wear_capabilities = NUM;
+
+        private array() {
+        }
     }
 
     public static final class attr {
         public static final int alpha = NUM;
         public static final int ambientEnabled = NUM;
-        public static final int appTheme = NUM;
         public static final int buttonSize = NUM;
-        public static final int buyButtonAppearance = NUM;
-        public static final int buyButtonHeight = NUM;
-        public static final int buyButtonText = NUM;
-        public static final int buyButtonWidth = NUM;
         public static final int cameraBearing = NUM;
         public static final int cameraMaxZoomPreference = NUM;
         public static final int cameraMinZoomPreference = NUM;
@@ -50,8 +51,6 @@ public final class R {
         public static final int circleCrop = NUM;
         public static final int colorScheme = NUM;
         public static final int coordinatorLayoutStyle = NUM;
-        public static final int customThemeStyle = NUM;
-        public static final int environment = NUM;
         public static final int font = NUM;
         public static final int fontProviderAuthority = NUM;
         public static final int fontProviderCerts = NUM;
@@ -62,8 +61,6 @@ public final class R {
         public static final int fontStyle = NUM;
         public static final int fontVariationSettings = NUM;
         public static final int fontWeight = NUM;
-        public static final int fragmentMode = NUM;
-        public static final int fragmentStyle = NUM;
         public static final int imageAspectRatio = NUM;
         public static final int imageAspectRatioAdjust = NUM;
         public static final int keylines = NUM;
@@ -79,16 +76,8 @@ public final class R {
         public static final int layout_keyline = NUM;
         public static final int liteMode = NUM;
         public static final int mapType = NUM;
-        public static final int maskedWalletDetailsBackground = NUM;
-        public static final int maskedWalletDetailsButtonBackground = NUM;
-        public static final int maskedWalletDetailsButtonTextAppearance = NUM;
-        public static final int maskedWalletDetailsHeaderTextAppearance = NUM;
-        public static final int maskedWalletDetailsLogoImageType = NUM;
-        public static final int maskedWalletDetailsLogoTextColor = NUM;
-        public static final int maskedWalletDetailsTextAppearance = NUM;
         public static final int scopeUris = NUM;
         public static final int statusBarBackground = NUM;
-        public static final int toolbarTextColorStyle = NUM;
         public static final int ttcIndex = NUM;
         public static final int uiCompass = NUM;
         public static final int uiMapToolbar = NUM;
@@ -99,13 +88,18 @@ public final class R {
         public static final int uiZoomControls = NUM;
         public static final int uiZoomGestures = NUM;
         public static final int useViewLifecycle = NUM;
-        public static final int windowTransitionStyle = NUM;
         public static final int zOrderOnTop = NUM;
+
+        private attr() {
+        }
     }
 
     public static final class bool {
         public static final int isTablet = NUM;
         public static final int useHardwareAcceleration = NUM;
+
+        private bool() {
+        }
     }
 
     public static final class color {
@@ -121,33 +115,13 @@ public final class R {
         public static final int common_google_signin_btn_text_light_pressed = NUM;
         public static final int common_google_signin_btn_tint = NUM;
         public static final int divider = NUM;
-        public static final int hockeyapp_background_header = NUM;
-        public static final int hockeyapp_background_light = NUM;
-        public static final int hockeyapp_background_white = NUM;
-        public static final int hockeyapp_button_background = NUM;
-        public static final int hockeyapp_button_background_pressed = NUM;
-        public static final int hockeyapp_button_background_selected = NUM;
-        public static final int hockeyapp_text_black = NUM;
-        public static final int hockeyapp_text_light = NUM;
-        public static final int hockeyapp_text_normal = NUM;
-        public static final int hockeyapp_text_white = NUM;
         public static final int notification_action_color_filter = NUM;
         public static final int notification_icon_bg_color = NUM;
         public static final int ripple_material_light = NUM;
         public static final int secondary_text_default_material_light = NUM;
-        public static final int wallet_bright_foreground_disabled_holo_light = NUM;
-        public static final int wallet_bright_foreground_holo_dark = NUM;
-        public static final int wallet_bright_foreground_holo_light = NUM;
-        public static final int wallet_dim_foreground_disabled_holo_dark = NUM;
-        public static final int wallet_dim_foreground_holo_dark = NUM;
-        public static final int wallet_highlighted_text_holo_dark = NUM;
-        public static final int wallet_highlighted_text_holo_light = NUM;
-        public static final int wallet_hint_foreground_holo_dark = NUM;
-        public static final int wallet_hint_foreground_holo_light = NUM;
-        public static final int wallet_holo_blue_light = NUM;
-        public static final int wallet_link_text_light = NUM;
-        public static final int wallet_primary_text_holo_light = NUM;
-        public static final int wallet_secondary_text_holo_dark = NUM;
+
+        private color() {
+        }
     }
 
     public static final class dimen {
@@ -174,6 +148,9 @@ public final class R {
         public static final int notification_subtext_size = NUM;
         public static final int notification_top_pad = NUM;
         public static final int notification_top_pad_large_text = NUM;
+
+        private dimen() {
+        }
     }
 
     public static final class drawable {
@@ -183,6 +160,7 @@ public final class R {
         public static final int account_check = NUM;
         public static final int actionbtn_next = NUM;
         public static final int actions_addadmin = NUM;
+        public static final int actions_addchat = NUM;
         public static final int actions_addmember2 = NUM;
         public static final int actions_nearby_off = NUM;
         public static final int actions_nearby_on = NUM;
@@ -271,7 +249,6 @@ public final class R {
         public static final int circle = NUM;
         public static final int circle_big = NUM;
         public static final int cloud_big = NUM;
-        public static final int collapse_down = NUM;
         public static final int collapse_up = NUM;
         public static final int common_full_open_on_phone = NUM;
         public static final int common_google_signin_btn_icon_dark = NUM;
@@ -329,6 +306,14 @@ public final class R {
         public static final int floating_pencil = NUM;
         public static final int floating_shadow = NUM;
         public static final int floating_shadow_profile = NUM;
+        public static final int folders_archive = NUM;
+        public static final int folders_bot = NUM;
+        public static final int folders_channel = NUM;
+        public static final int folders_group = NUM;
+        public static final int folders_mute = NUM;
+        public static final int folders_private = NUM;
+        public static final int folders_read = NUM;
+        public static final int folders_requests = NUM;
         public static final int forwardvideo = NUM;
         public static final int foursquare = NUM;
         public static final int ft_avd_toarrow = NUM;
@@ -364,7 +349,6 @@ public final class R {
         public static final int header_shadow = NUM;
         public static final int header_shadow_reverse = NUM;
         public static final int heart_confetti = NUM;
-        public static final int hockeyapp_btn_background = NUM;
         public static final int ic_ab_back = NUM;
         public static final int ic_ab_copy = NUM;
         public static final int ic_ab_delete = NUM;
@@ -393,6 +377,7 @@ public final class R {
         public static final int ic_call_notification_decline = NUM;
         public static final int ic_call_received_green_18dp = NUM;
         public static final int ic_chat_bubble_white_24dp = NUM;
+        public static final int ic_chevron_right_black_18dp = NUM;
         public static final int ic_close_white = NUM;
         public static final int ic_done = NUM;
         public static final int ic_fingerprint_error = NUM;
@@ -438,6 +423,7 @@ public final class R {
         public static final int input_gif = NUM;
         public static final int input_keyboard = NUM;
         public static final int input_mic = NUM;
+        public static final int input_mic_pressed = NUM;
         public static final int input_notify_off = NUM;
         public static final int input_notify_on = NUM;
         public static final int input_reply = NUM;
@@ -445,6 +431,7 @@ public final class R {
         public static final int input_smile = NUM;
         public static final int input_sticker = NUM;
         public static final int input_video = NUM;
+        public static final int input_video_pressed = NUM;
         public static final int instant_camera = NUM;
         public static final int instant_link = NUM;
         public static final int intro_fast_arrow = NUM;
@@ -493,13 +480,9 @@ public final class R {
         public static final int location_empty = NUM;
         public static final int location_panel = NUM;
         public static final int location_type = NUM;
-        public static final int lock_arrow = NUM;
         public static final int lock_close = NUM;
-        public static final int lock_middle = NUM;
         public static final int lock_open = NUM;
-        public static final int lock_round = NUM;
         public static final int lock_round_shadow = NUM;
-        public static final int lock_top = NUM;
         public static final int log_info = NUM;
         public static final int logo_avatar = NUM;
         public static final int logo_middle = NUM;
@@ -538,6 +521,8 @@ public final class R {
         public static final int menu_data = NUM;
         public static final int menu_date = NUM;
         public static final int menu_devices = NUM;
+        public static final int menu_expand = NUM;
+        public static final int menu_folders = NUM;
         public static final int menu_groups = NUM;
         public static final int menu_groups_14 = NUM;
         public static final int menu_groups_ny = NUM;
@@ -550,11 +535,13 @@ public final class R {
         public static final int menu_language = NUM;
         public static final int menu_location = NUM;
         public static final int menu_mail = NUM;
+        public static final int menu_newfilter = NUM;
         public static final int menu_newphone = NUM;
         public static final int menu_night = NUM;
         public static final int menu_notifications = NUM;
         public static final int menu_palette = NUM;
         public static final int menu_passcode = NUM;
+        public static final int menu_policy = NUM;
         public static final int menu_read = NUM;
         public static final int menu_recent = NUM;
         public static final int menu_saved = NUM;
@@ -569,6 +556,7 @@ public final class R {
         public static final int menu_settings_ny = NUM;
         public static final int menu_shadow = NUM;
         public static final int menu_support = NUM;
+        public static final int menu_support2 = NUM;
         public static final int menu_switch = NUM;
         public static final int menu_wallet = NUM;
         public static final int menu_wallet_ny = NUM;
@@ -628,6 +616,7 @@ public final class R {
         public static final int msg_photo_shadow = NUM;
         public static final int msg_pin = NUM;
         public static final int msg_pollstop = NUM;
+        public static final int msg_reorder = NUM;
         public static final int msg_reply = NUM;
         public static final int msg_report = NUM;
         public static final int msg_reset = NUM;
@@ -835,6 +824,8 @@ public final class R {
         public static final int sms_bubble = NUM;
         public static final int sms_code = NUM;
         public static final int sms_devices = NUM;
+        public static final int stats_tooltip = NUM;
+        public static final int stats_zoom = NUM;
         public static final int sticker_added = NUM;
         public static final int stickers_back_all = NUM;
         public static final int stickers_back_arrow = NUM;
@@ -850,6 +841,7 @@ public final class R {
         public static final int switch_track = NUM;
         public static final int system = NUM;
         public static final int system_loader = NUM;
+        public static final int tabs_reorder = NUM;
         public static final int theme_picker = NUM;
         public static final int theme_preview_image = NUM;
         public static final int tip1 = NUM;
@@ -1018,6 +1010,9 @@ public final class R {
         public static final int $fingerprint_dialog_fp_to_error__8 = NUM;
         /* added by JADX */
         public static final int $fingerprint_dialog_fp_to_error__9 = NUM;
+
+        private drawable() {
+        }
     }
 
     public static final class id {
@@ -1065,33 +1060,17 @@ public final class R {
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
         public static final int all = NUM;
-        public static final int android_pay = NUM;
-        public static final int android_pay_dark = NUM;
-        public static final int android_pay_light = NUM;
-        public static final int android_pay_light_with_border = NUM;
         public static final int answer_btn = NUM;
         public static final int answer_text = NUM;
         public static final int async = NUM;
         public static final int auto = NUM;
         public static final int blocking = NUM;
-        public static final int book_now = NUM;
         public static final int bottom = NUM;
-        public static final int button_add_response = NUM;
-        public static final int button_attachment = NUM;
-        public static final int button_login = NUM;
-        public static final int button_refresh = NUM;
-        public static final int button_send = NUM;
-        public static final int button_update = NUM;
         public static final int buttons = NUM;
-        public static final int buyButton = NUM;
-        public static final int buy_now = NUM;
-        public static final int buy_with = NUM;
-        public static final int buy_with_google = NUM;
         public static final int center = NUM;
         public static final int center_horizontal = NUM;
         public static final int center_vertical = NUM;
         public static final int chronometer = NUM;
-        public static final int classic = NUM;
         public static final int clip_horizontal = NUM;
         public static final int clip_vertical = NUM;
         public static final int current_animation = NUM;
@@ -1099,48 +1078,22 @@ public final class R {
         public static final int decline_btn = NUM;
         public static final int decline_text = NUM;
         public static final int dialog_button = NUM;
-        public static final int donate_with = NUM;
-        public static final int donate_with_google = NUM;
         public static final int end = NUM;
         public static final int fill = NUM;
         public static final int fill_horizontal = NUM;
         public static final int fill_vertical = NUM;
         public static final int forever = NUM;
-        public static final int googleMaterial2 = NUM;
-        public static final int google_wallet_classic = NUM;
-        public static final int google_wallet_grayscale = NUM;
-        public static final int google_wallet_monochrome = NUM;
-        public static final int grayscale = NUM;
-        public static final int holo_dark = NUM;
-        public static final int holo_light = NUM;
         public static final int hybrid = NUM;
         public static final int icon = NUM;
         public static final int icon_group = NUM;
         public static final int icon_only = NUM;
         public static final int index_tag = NUM;
         public static final int info = NUM;
-        public static final int input_email = NUM;
-        public static final int input_message = NUM;
-        public static final int input_name = NUM;
-        public static final int input_password = NUM;
-        public static final int input_subject = NUM;
         public static final int italic = NUM;
-        public static final int label_author = NUM;
-        public static final int label_date = NUM;
-        public static final int label_last_updated = NUM;
-        public static final int label_message = NUM;
-        public static final int label_text = NUM;
-        public static final int label_title = NUM;
-        public static final int label_version = NUM;
         public static final int left = NUM;
         public static final int light = NUM;
         public static final int line1 = NUM;
         public static final int line3 = NUM;
-        public static final int list_attachments = NUM;
-        public static final int list_feedback_messages = NUM;
-        public static final int logo_only = NUM;
-        public static final int match_parent = NUM;
-        public static final int material = NUM;
         public static final int menu_bold = NUM;
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
@@ -1149,7 +1102,6 @@ public final class R {
         public static final int menu_regular = NUM;
         public static final int menu_strike = NUM;
         public static final int menu_underline = NUM;
-        public static final int monochrome = NUM;
         public static final int name = NUM;
         public static final int none = NUM;
         public static final int normal = NUM;
@@ -1181,17 +1133,12 @@ public final class R {
         public static final int player_previous = NUM;
         public static final int player_progress_bar = NUM;
         public static final int player_song_name = NUM;
-        public static final int production = NUM;
         public static final int right = NUM;
         public static final int right_icon = NUM;
         public static final int right_side = NUM;
-        public static final int sandbox = NUM;
         public static final int satellite = NUM;
-        public static final int selectionDetails = NUM;
-        public static final int slide = NUM;
         public static final int standard = NUM;
         public static final int start = NUM;
-        public static final int strict_sandbox = NUM;
         public static final int subtitle = NUM;
         public static final int tag_accessibility_actions = NUM;
         public static final int tag_accessibility_clickable_spans = NUM;
@@ -1202,45 +1149,39 @@ public final class R {
         public static final int tag_unhandled_key_event_manager = NUM;
         public static final int tag_unhandled_key_listeners = NUM;
         public static final int terrain = NUM;
-        public static final int test = NUM;
         public static final int text = NUM;
         public static final int text2 = NUM;
-        public static final int text_headline = NUM;
         public static final int text_wrap = NUM;
         public static final int time = NUM;
         public static final int title = NUM;
         public static final int top = NUM;
-        public static final int view_header = NUM;
-        public static final int web_update_details = NUM;
         public static final int wide = NUM;
-        public static final int wrap_content = NUM;
-        public static final int wrapper_attachments = NUM;
-        public static final int wrapper_feedback = NUM;
-        public static final int wrapper_feedback_scroll = NUM;
-        public static final int wrapper_messages = NUM;
-        public static final int wrapper_messages_buttons = NUM;
+
+        private id() {
+        }
     }
 
     public static final class integer {
         public static final int google_play_services_version = NUM;
         public static final int status_bar_notification_info_maxnum = NUM;
+
+        private integer() {
+        }
     }
 
     public static final class interpolator {
         public static final int ft_avd_toarrow_animation_interpolator_1 = NUM;
         public static final int ft_avd_toarrow_animation_interpolator_2 = NUM;
         public static final int ft_avd_toarrow_animation_interpolator_5 = NUM;
+
+        private interpolator() {
+        }
     }
 
     public static final class layout {
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
         public static final int custom_dialog = NUM;
-        public static final int hockeyapp_activity_expiry_info = NUM;
-        public static final int hockeyapp_activity_feedback = NUM;
-        public static final int hockeyapp_activity_login = NUM;
-        public static final int hockeyapp_fragment_update = NUM;
-        public static final int hockeyapp_view_feedback_message = NUM;
         public static final int notification_action = NUM;
         public static final int notification_action_tombstone = NUM;
         public static final int notification_template_custom_big = NUM;
@@ -1249,7 +1190,9 @@ public final class R {
         public static final int notification_template_part_time = NUM;
         public static final int player_big_notification = NUM;
         public static final int player_small_notification = NUM;
-        public static final int wallet_test_layout = NUM;
+
+        private layout() {
+        }
     }
 
     public static final class mipmap {
@@ -1259,9 +1202,14 @@ public final class R {
         public static final int icon_background_round = NUM;
         public static final int icon_foreground = NUM;
         public static final int icon_foreground_round = NUM;
+
+        private mipmap() {
+        }
     }
 
     public static final class raw {
+        public static final int chat_audio_record_delete = NUM;
+        public static final int chat_audio_record_delete_2 = NUM;
         public static final int chats_archive = NUM;
         public static final int chats_archiveavatar = NUM;
         public static final int chats_archived = NUM;
@@ -1271,10 +1219,21 @@ public final class R {
         public static final int chats_unarchive = NUM;
         public static final int chats_unhide = NUM;
         public static final int contact_check = NUM;
+        public static final int dice1 = NUM;
+        public static final int dice2 = NUM;
+        public static final int dice3 = NUM;
+        public static final int dice4 = NUM;
+        public static final int dice5 = NUM;
+        public static final int dice6 = NUM;
+        public static final int diceloop = NUM;
+        public static final int filter_new = NUM;
+        public static final int filter_no_chats = NUM;
+        public static final int filters = NUM;
         public static final int mapstyle_night = NUM;
         public static final int qr_login = NUM;
         public static final int sound_in = NUM;
         public static final int sound_out = NUM;
+        public static final int statistic_preload = NUM;
         public static final int voip_busy = NUM;
         public static final int voip_connecting = NUM;
         public static final int voip_end = NUM;
@@ -1292,6 +1251,9 @@ public final class R {
         public static final int wallet_science = NUM;
         public static final int wallet_sync = NUM;
         public static final int wallet_toobad = NUM;
+
+        private raw() {
+        }
     }
 
     public static final class string {
@@ -1477,6 +1439,7 @@ public final class R {
         public static final int AddExceptions = NUM;
         public static final int AddMasks = NUM;
         public static final int AddMasksInstalled = NUM;
+        public static final int AddMasksInstalledInfo = NUM;
         public static final int AddMember = NUM;
         public static final int AddMembersAlertCountText = NUM;
         public static final int AddMembersAlertNamesText = NUM;
@@ -1492,6 +1455,7 @@ public final class R {
         public static final int AddStickers = NUM;
         public static final int AddStickersCount = NUM;
         public static final int AddStickersInstalled = NUM;
+        public static final int AddStickersInstalledInfo = NUM;
         public static final int AddStickersNotFound = NUM;
         public static final int AddSubscriber = NUM;
         public static final int AddToContacts = NUM;
@@ -1569,6 +1533,8 @@ public final class R {
         public static final int ArchiveHintText3 = NUM;
         public static final int ArchivePinned = NUM;
         public static final int ArchivePinnedInfo = NUM;
+        public static final int ArchiveStickersAlertMessage = NUM;
+        public static final int ArchiveStickersAlertTitle = NUM;
         public static final int ArchivedChats = NUM;
         public static final int ArchivedMasks = NUM;
         public static final int ArchivedMasksAlertInfo = NUM;
@@ -1972,6 +1938,9 @@ public final class R {
         public static final int ChannelUserLeftError = NUM;
         public static final int ChannelUsernameHelp = NUM;
         public static final int ChannelUsernamePlaceholder = NUM;
+        public static final int ChannelVerifiedNameChange = NUM;
+        public static final int ChannelVerifiedUsernameChange = NUM;
+        public static final int ChannelVerifiedWarning = NUM;
         public static final int Channels_few = NUM;
         public static final int Channels_many = NUM;
         public static final int Channels_one = NUM;
@@ -2157,6 +2126,8 @@ public final class R {
         public static final int CreateMyWallet = NUM;
         public static final int CreateMyWalletTerms = NUM;
         public static final int CreateNewContact = NUM;
+        public static final int CreateNewFilter = NUM;
+        public static final int CreateNewFilterInfo = NUM;
         public static final int CreateNewThemeAlert = NUM;
         public static final int CreateNewThemeHelp = NUM;
         public static final int CreateNewThemeMenu = NUM;
@@ -2257,6 +2228,8 @@ public final class R {
         public static final int DeleteProxy = NUM;
         public static final int DeleteReportSpam = NUM;
         public static final int DeleteSingleMessagesTitle = NUM;
+        public static final int DeleteStickersAlertMessage = NUM;
+        public static final int DeleteStickersAlertTitle = NUM;
         public static final int DeleteTheme = NUM;
         public static final int DeleteThemeAlert = NUM;
         public static final int DeleteThemeTitle = NUM;
@@ -2267,6 +2240,9 @@ public final class R {
         public static final int DescriptionOptionalPlaceholder = NUM;
         public static final int DescriptionPlaceholder = NUM;
         public static final int Devices = NUM;
+        public static final int DialogPin = NUM;
+        public static final int DialogUnpin = NUM;
+        public static final int DiceInfo = NUM;
         public static final int DidNotGetTheCode = NUM;
         public static final int DidNotGetTheCodeSms = NUM;
         public static final int Digits_few = NUM;
@@ -2532,6 +2508,66 @@ public final class R {
         public static final int Files_other = NUM;
         public static final int Files_two = NUM;
         public static final int Files_zero = NUM;
+        public static final int FilterAddChats = NUM;
+        public static final int FilterAddException = NUM;
+        public static final int FilterAddingChats = NUM;
+        public static final int FilterAddingChatsInfo = NUM;
+        public static final int FilterAllChats = NUM;
+        public static final int FilterAllChatsShort = NUM;
+        public static final int FilterAlwaysShow = NUM;
+        public static final int FilterArchived = NUM;
+        public static final int FilterAvailableText = NUM;
+        public static final int FilterAvailableTitle = NUM;
+        public static final int FilterBots = NUM;
+        public static final int FilterChannels = NUM;
+        public static final int FilterChatTypes = NUM;
+        public static final int FilterChats = NUM;
+        public static final int FilterContact = NUM;
+        public static final int FilterContacts = NUM;
+        public static final int FilterDelete = NUM;
+        public static final int FilterDeleteAlert = NUM;
+        public static final int FilterDeleteItem = NUM;
+        public static final int FilterDiscardAlert = NUM;
+        public static final int FilterDiscardNewAlert = NUM;
+        public static final int FilterDiscardNewSave = NUM;
+        public static final int FilterDiscardNewTitle = NUM;
+        public static final int FilterDiscardTitle = NUM;
+        public static final int FilterEdit = NUM;
+        public static final int FilterEditAll = NUM;
+        public static final int FilterEditItem = NUM;
+        public static final int FilterExclude = NUM;
+        public static final int FilterExcludeArchived = NUM;
+        public static final int FilterExcludeMuted = NUM;
+        public static final int FilterExcludeRead = NUM;
+        public static final int FilterGroups = NUM;
+        public static final int FilterInclude = NUM;
+        public static final int FilterMuted = NUM;
+        public static final int FilterNameHint = NUM;
+        public static final int FilterNeverShow = NUM;
+        public static final int FilterNew = NUM;
+        public static final int FilterNoChats = NUM;
+        public static final int FilterNoChatsToDisplay = NUM;
+        public static final int FilterNoChatsToDisplayInfo = NUM;
+        public static final int FilterNonContact = NUM;
+        public static final int FilterNonContacts = NUM;
+        public static final int FilterRead = NUM;
+        public static final int FilterRecommended = NUM;
+        public static final int FilterRemoveChats = NUM;
+        public static final int FilterRemoveExclusionText = NUM;
+        public static final int FilterRemoveExclusionTitle = NUM;
+        public static final int FilterRemoveInclusionText = NUM;
+        public static final int FilterRemoveInclusionTitle = NUM;
+        public static final int FilterReorder = NUM;
+        public static final int FilterSecretChats = NUM;
+        public static final int FilterShowMoreChats_few = NUM;
+        public static final int FilterShowMoreChats_many = NUM;
+        public static final int FilterShowMoreChats_one = NUM;
+        public static final int FilterShowMoreChats_other = NUM;
+        public static final int FilterShowMoreChats_two = NUM;
+        public static final int FilterShowMoreChats_zero = NUM;
+        public static final int FilterUnread = NUM;
+        public static final int Filters = NUM;
+        public static final int FiltersSetup = NUM;
         public static final int FinalResults = NUM;
         public static final int FingerprintHelp = NUM;
         public static final int FingerprintInfo = NUM;
@@ -2540,6 +2576,7 @@ public final class R {
         public static final int FloodWait = NUM;
         public static final int FloodWaitTime = NUM;
         public static final int Folder = NUM;
+        public static final int FollowersChartTitle = NUM;
         public static final int FontSize = NUM;
         public static final int FontSizePreviewLine1 = NUM;
         public static final int FontSizePreviewLine2 = NUM;
@@ -2629,6 +2666,12 @@ public final class R {
         public static final int FromFormatted = NUM;
         public static final int FromGalley = NUM;
         public static final int FromYou = NUM;
+        public static final int GIFs_few = NUM;
+        public static final int GIFs_many = NUM;
+        public static final int GIFs_one = NUM;
+        public static final int GIFs_other = NUM;
+        public static final int GIFs_two = NUM;
+        public static final int GIFs_zero = NUM;
         public static final int Gallery = NUM;
         public static final int GalleryInfo = NUM;
         public static final int GalleryPermissionText = NUM;
@@ -2674,6 +2717,8 @@ public final class R {
         public static final int GroupUserCantAdmin = NUM;
         public static final int GroupUserCantBot = NUM;
         public static final int GroupUserLeftError = NUM;
+        public static final int GroupVerifiedNameChange = NUM;
+        public static final int GroupVerifiedUsernameChange = NUM;
         public static final int GroupsAndChannels = NUM;
         public static final int GroupsAndChannelsHelp = NUM;
         public static final int GroupsInCommon = NUM;
@@ -2684,6 +2729,7 @@ public final class R {
         public static final int Groups_other = NUM;
         public static final int Groups_two = NUM;
         public static final int Groups_zero = NUM;
+        public static final int GrowthChartTitle = NUM;
         public static final int Hashtags = NUM;
         public static final int HidAccount = NUM;
         public static final int HiddenName = NUM;
@@ -2707,6 +2753,7 @@ public final class R {
         public static final int Hours_two = NUM;
         public static final int Hours_zero = NUM;
         public static final int Hybrid = NUM;
+        public static final int IVInteractionsChartTitle = NUM;
         public static final int ImagesTab2 = NUM;
         public static final int ImportContacts = NUM;
         public static final int ImportExistingWallet = NUM;
@@ -2726,6 +2773,7 @@ public final class R {
         public static final int InstantView = NUM;
         public static final int InstantViewNightMode = NUM;
         public static final int InstantViewReference = NUM;
+        public static final int InteractionsChartTitle = NUM;
         public static final int InternalFolderInfo = NUM;
         public static final int InternalStorage = NUM;
         public static final int InvalidCode = NUM;
@@ -2785,6 +2833,7 @@ public final class R {
         public static final int LanguageUnknownTitle = NUM;
         public static final int LanguageUnofficial = NUM;
         public static final int LanguageUnsupportedError = NUM;
+        public static final int LanguagesChartTitle = NUM;
         public static final int LargeEmoji = NUM;
         public static final int LastName = NUM;
         public static final int LastSeen = NUM;
@@ -2837,6 +2886,8 @@ public final class R {
         public static final int LiveLocations = NUM;
         public static final int Loading = NUM;
         public static final int LoadingFullImage = NUM;
+        public static final int LoadingStats = NUM;
+        public static final int LoadingStatsDescription = NUM;
         public static final int LocalAudioCache = NUM;
         public static final int LocalCache = NUM;
         public static final int LocalDatabase = NUM;
@@ -2861,6 +2912,7 @@ public final class R {
         public static final int LoginPasswordText = NUM;
         public static final int Long = NUM;
         public static final int LoopAnimatedStickers = NUM;
+        public static final int LoopAnimatedStickersInfo = NUM;
         public static final int LowDiskSpaceMessage = NUM;
         public static final int LowDiskSpaceNeverRemove = NUM;
         public static final int LowDiskSpaceTitle = NUM;
@@ -2885,6 +2937,8 @@ public final class R {
         public static final int MarkAsRead = NUM;
         public static final int MarkAsUnread = NUM;
         public static final int Masks = NUM;
+        public static final int MasksArchived = NUM;
+        public static final int MasksArchivedInfo = NUM;
         public static final int MasksCount_few = NUM;
         public static final int MasksCount_many = NUM;
         public static final int MasksCount_one = NUM;
@@ -2893,6 +2947,7 @@ public final class R {
         public static final int MasksCount_zero = NUM;
         public static final int MasksInfo = NUM;
         public static final int MasksRemoved = NUM;
+        public static final int MasksRemovedInfo = NUM;
         public static final int May = NUM;
         public static final int MediaSelected_few = NUM;
         public static final int MediaSelected_many = NUM;
@@ -3013,6 +3068,7 @@ public final class R {
         public static final int NewChannel = NUM;
         public static final int NewContact = NUM;
         public static final int NewConversationShortcut = NUM;
+        public static final int NewFollowersBySourceChartTitle = NUM;
         public static final int NewGroup = NUM;
         public static final int NewMessageTitle = NUM;
         public static final int NewMessages_few = NUM;
@@ -3050,6 +3106,7 @@ public final class R {
         public static final int NoFilesFound = NUM;
         public static final int NoFilesFoundInfo = NUM;
         public static final int NoFilesInfo = NUM;
+        public static final int NoGIFs = NUM;
         public static final int NoGIFsFound = NUM;
         public static final int NoGroupsInCommon = NUM;
         public static final int NoHandleAppInstalled = NUM;
@@ -3077,6 +3134,7 @@ public final class R {
         public static final int NoSharedAudioSecret = NUM;
         public static final int NoSharedFiles = NUM;
         public static final int NoSharedFilesSecret = NUM;
+        public static final int NoSharedGifSecret = NUM;
         public static final int NoSharedLinks = NUM;
         public static final int NoSharedLinksSecret = NUM;
         public static final int NoSharedVoice = NUM;
@@ -3605,6 +3663,7 @@ public final class R {
         public static final int Photos_other = NUM;
         public static final int Photos_two = NUM;
         public static final int Photos_zero = NUM;
+        public static final int PinFolderLimitReached = NUM;
         public static final int PinInTheList = NUM;
         public static final int PinMessage = NUM;
         public static final int PinMessageAlert = NUM;
@@ -3650,7 +3709,7 @@ public final class R {
         public static final int PopupDisabled = NUM;
         public static final int PopupEnabled = NUM;
         public static final int PopupNotification = NUM;
-        public static final int PreviewFeedback = NUM;
+        public static final int PreviewFeedback2 = NUM;
         public static final int PriorityInfo = NUM;
         public static final int PrivacyAddAnException = NUM;
         public static final int PrivacyAdvanced = NUM;
@@ -3731,6 +3790,7 @@ public final class R {
         public static final int ReEnterYourPasscode = NUM;
         public static final int Recent = NUM;
         public static final int RecentFiles = NUM;
+        public static final int RecentPosts = NUM;
         public static final int RecentStickers = NUM;
         public static final int RecentlyViewed = NUM;
         public static final int RecentlyViewedHide = NUM;
@@ -3971,6 +4031,7 @@ public final class R {
         public static final int SetUrlInvalidStartNumber = NUM;
         public static final int SetUrlPlaceholder = NUM;
         public static final int Settings = NUM;
+        public static final int SettingsDebug = NUM;
         public static final int SettingsFaqSearchTitle = NUM;
         public static final int SettingsHelp = NUM;
         public static final int SettingsNoRecent = NUM;
@@ -4000,6 +4061,7 @@ public final class R {
         public static final int SharedContent = NUM;
         public static final int SharedContentTitle = NUM;
         public static final int SharedFilesTab2 = NUM;
+        public static final int SharedGIFsTab2 = NUM;
         public static final int SharedGroupsTab2 = NUM;
         public static final int SharedLinks = NUM;
         public static final int SharedLinksTab2 = NUM;
@@ -4010,12 +4072,19 @@ public final class R {
         public static final int SharedPhotosAndVideos = NUM;
         public static final int SharedPlace = NUM;
         public static final int SharedVoiceTab2 = NUM;
+        public static final int Shares_few = NUM;
+        public static final int Shares_many = NUM;
+        public static final int Shares_one = NUM;
+        public static final int Shares_other = NUM;
+        public static final int Shares_two = NUM;
+        public static final int Shares_zero = NUM;
         public static final int SharingLiveLocationTitle = NUM;
         public static final int SharingYouAndOtherName = NUM;
         public static final int Sharpen = NUM;
         public static final int Short = NUM;
         public static final int ShortMessageLifetimeForever = NUM;
         public static final int ShowAllFiles = NUM;
+        public static final int ShowAllGIFs = NUM;
         public static final int ShowAllMedia = NUM;
         public static final int ShowAllThemes = NUM;
         public static final int ShowAsGrid = NUM;
@@ -4033,6 +4102,7 @@ public final class R {
         public static final int SignUp = NUM;
         public static final int SinglePhotosHelp = NUM;
         public static final int SlideToCancel = NUM;
+        public static final int SlideUpToLock = NUM;
         public static final int SlowModeHint = NUM;
         public static final int Slowmode = NUM;
         public static final int SlowmodeHours = NUM;
@@ -4064,11 +4134,17 @@ public final class R {
         public static final int StartText = NUM;
         public static final int Statistics = NUM;
         public static final int StickersAndMasks = NUM;
+        public static final int StickersArchived = NUM;
+        public static final int StickersArchivedInfo = NUM;
+        public static final int StickersBotInfo = NUM;
         public static final int StickersCopy = NUM;
         public static final int StickersHide = NUM;
         public static final int StickersName = NUM;
         public static final int StickersRemove = NUM;
         public static final int StickersRemoved = NUM;
+        public static final int StickersRemovedInfo = NUM;
+        public static final int StickersReorder = NUM;
+        public static final int StickersReorderHint = NUM;
         public static final int StickersShare = NUM;
         public static final int Stickers_few = NUM;
         public static final int Stickers_many = NUM;
@@ -4231,6 +4307,7 @@ public final class R {
         public static final int TooManyCommunitiesHintEdit = NUM;
         public static final int TooManyCommunitiesHintJoin = NUM;
         public static final int TooManyTries = NUM;
+        public static final int TopHoursChartTitle = NUM;
         public static final int TosAgeText = NUM;
         public static final int TosAgeTitle = NUM;
         public static final int TosDecline = NUM;
@@ -4404,6 +4481,13 @@ public final class R {
         public static final int ViewContact = NUM;
         public static final int ViewExceptions = NUM;
         public static final int ViewPackPreview = NUM;
+        public static final int ViewsBySourceChartTitle = NUM;
+        public static final int Views_few = NUM;
+        public static final int Views_many = NUM;
+        public static final int Views_one = NUM;
+        public static final int Views_other = NUM;
+        public static final int Views_two = NUM;
+        public static final int Views_zero = NUM;
         public static final int Vignette = NUM;
         public static final int Voice_few = NUM;
         public static final int Voice_many = NUM;
@@ -4667,6 +4751,28 @@ public final class R {
         public static final int YourPasswordSuccess = NUM;
         public static final int YourPasswordSuccessText = NUM;
         public static final int YourPhone = NUM;
+        public static final int ZoomOut = NUM;
+        public static final int appcenter_distribute_dialog_actioned_on_disabled_toast = NUM;
+        public static final int appcenter_distribute_download_progress_number_format = NUM;
+        public static final int appcenter_distribute_downloading_error = NUM;
+        public static final int appcenter_distribute_downloading_mandatory_update = NUM;
+        public static final int appcenter_distribute_downloading_update = NUM;
+        public static final int appcenter_distribute_install = NUM;
+        public static final int appcenter_distribute_install_ready_message = NUM;
+        public static final int appcenter_distribute_install_ready_title = NUM;
+        public static final int appcenter_distribute_notification_category = NUM;
+        public static final int appcenter_distribute_unknown_sources_dialog_message = NUM;
+        public static final int appcenter_distribute_unknown_sources_dialog_settings = NUM;
+        public static final int appcenter_distribute_update_dialog_download = NUM;
+        public static final int appcenter_distribute_update_dialog_message_mandatory = NUM;
+        public static final int appcenter_distribute_update_dialog_message_optional = NUM;
+        public static final int appcenter_distribute_update_dialog_postpone = NUM;
+        public static final int appcenter_distribute_update_dialog_title = NUM;
+        public static final int appcenter_distribute_update_dialog_view_release_notes = NUM;
+        public static final int appcenter_distribute_update_failed_dialog_ignore = NUM;
+        public static final int appcenter_distribute_update_failed_dialog_message = NUM;
+        public static final int appcenter_distribute_update_failed_dialog_reinstall = NUM;
+        public static final int appcenter_distribute_update_failed_dialog_title = NUM;
         public static final int chatDate = NUM;
         public static final int chatFullDate = NUM;
         public static final int common_google_play_services_enable_button = NUM;
@@ -4714,92 +4820,6 @@ public final class R {
         public static final int google_assistant_verification_notification_title = NUM;
         public static final int google_crash_reporting_api_key = NUM;
         public static final int google_storage_bucket = NUM;
-        public static final int hockeyapp_crash_dialog_app_name_fallback = NUM;
-        public static final int hockeyapp_crash_dialog_message = NUM;
-        public static final int hockeyapp_crash_dialog_negative_button = NUM;
-        public static final int hockeyapp_crash_dialog_neutral_button = NUM;
-        public static final int hockeyapp_crash_dialog_positive_button = NUM;
-        public static final int hockeyapp_crash_dialog_title = NUM;
-        public static final int hockeyapp_dialog_error_message = NUM;
-        public static final int hockeyapp_dialog_error_title = NUM;
-        public static final int hockeyapp_dialog_positive_button = NUM;
-        public static final int hockeyapp_download_failed_dialog_message = NUM;
-        public static final int hockeyapp_download_failed_dialog_negative_button = NUM;
-        public static final int hockeyapp_download_failed_dialog_positive_button = NUM;
-        public static final int hockeyapp_download_failed_dialog_title = NUM;
-        public static final int hockeyapp_error_install_form_unknown_sources_disabled = NUM;
-        public static final int hockeyapp_error_no_external_storage_permission = NUM;
-        public static final int hockeyapp_error_no_network_message = NUM;
-        public static final int hockeyapp_expiry_info_text = NUM;
-        public static final int hockeyapp_expiry_info_title = NUM;
-        public static final int hockeyapp_feedback_attach_file = NUM;
-        public static final int hockeyapp_feedback_attach_picture = NUM;
-        public static final int hockeyapp_feedback_attachment_added = NUM;
-        public static final int hockeyapp_feedback_attachment_button_text = NUM;
-        public static final int hockeyapp_feedback_attachment_error = NUM;
-        public static final int hockeyapp_feedback_attachment_loading = NUM;
-        public static final int hockeyapp_feedback_attachment_remove_description = NUM;
-        public static final int hockeyapp_feedback_attachment_removed = NUM;
-        public static final int hockeyapp_feedback_email_hint = NUM;
-        public static final int hockeyapp_feedback_email_hint_required = NUM;
-        public static final int hockeyapp_feedback_fetching_feedback_text = NUM;
-        public static final int hockeyapp_feedback_last_updated_text = NUM;
-        public static final int hockeyapp_feedback_max_attachments_allowed = NUM;
-        public static final int hockeyapp_feedback_message_hint = NUM;
-        public static final int hockeyapp_feedback_message_hint_required = NUM;
-        public static final int hockeyapp_feedback_name_hint = NUM;
-        public static final int hockeyapp_feedback_name_hint_required = NUM;
-        public static final int hockeyapp_feedback_new_answer_notification_message = NUM;
-        public static final int hockeyapp_feedback_notification_channel = NUM;
-        public static final int hockeyapp_feedback_notification_title = NUM;
-        public static final int hockeyapp_feedback_refresh_button_text = NUM;
-        public static final int hockeyapp_feedback_response_button_text = NUM;
-        public static final int hockeyapp_feedback_screenshot_fail = NUM;
-        public static final int hockeyapp_feedback_screenshot_notification_message = NUM;
-        public static final int hockeyapp_feedback_select_file = NUM;
-        public static final int hockeyapp_feedback_select_picture = NUM;
-        public static final int hockeyapp_feedback_send_button_text = NUM;
-        public static final int hockeyapp_feedback_send_generic_error = NUM;
-        public static final int hockeyapp_feedback_send_network_error = NUM;
-        public static final int hockeyapp_feedback_sending_feedback_text = NUM;
-        public static final int hockeyapp_feedback_sent_toast = NUM;
-        public static final int hockeyapp_feedback_subject_hint = NUM;
-        public static final int hockeyapp_feedback_subject_hint_required = NUM;
-        public static final int hockeyapp_feedback_title = NUM;
-        public static final int hockeyapp_feedback_validate_email_empty = NUM;
-        public static final int hockeyapp_feedback_validate_email_error = NUM;
-        public static final int hockeyapp_feedback_validate_name_error = NUM;
-        public static final int hockeyapp_feedback_validate_subject_error = NUM;
-        public static final int hockeyapp_feedback_validate_text_error = NUM;
-        public static final int hockeyapp_login_email_hint_required = NUM;
-        public static final int hockeyapp_login_headline_text = NUM;
-        public static final int hockeyapp_login_headline_text_email_only = NUM;
-        public static final int hockeyapp_login_login_button_text = NUM;
-        public static final int hockeyapp_login_missing_credentials_toast = NUM;
-        public static final int hockeyapp_login_password_hint_required = NUM;
-        public static final int hockeyapp_paint_dialog_message = NUM;
-        public static final int hockeyapp_paint_dialog_negative_button = NUM;
-        public static final int hockeyapp_paint_dialog_neutral_button = NUM;
-        public static final int hockeyapp_paint_dialog_positive_button = NUM;
-        public static final int hockeyapp_paint_indicator_toast = NUM;
-        public static final int hockeyapp_paint_menu_clear = NUM;
-        public static final int hockeyapp_paint_menu_save = NUM;
-        public static final int hockeyapp_paint_menu_undo = NUM;
-        public static final int hockeyapp_update_already_installed = NUM;
-        public static final int hockeyapp_update_button = NUM;
-        public static final int hockeyapp_update_dialog_message = NUM;
-        public static final int hockeyapp_update_dialog_negative_button = NUM;
-        public static final int hockeyapp_update_dialog_positive_button = NUM;
-        public static final int hockeyapp_update_dialog_title = NUM;
-        public static final int hockeyapp_update_loading = NUM;
-        public static final int hockeyapp_update_mandatory_toast = NUM;
-        public static final int hockeyapp_update_newest_version = NUM;
-        public static final int hockeyapp_update_no_info = NUM;
-        public static final int hockeyapp_update_restore = NUM;
-        public static final int hockeyapp_update_title = NUM;
-        public static final int hockeyapp_update_unknown_size = NUM;
-        public static final int hockeyapp_update_version = NUM;
-        public static final int hockeyapp_update_version_details_label = NUM;
         public static final int items_few = NUM;
         public static final int items_many = NUM;
         public static final int items_one = NUM;
@@ -4814,16 +4834,15 @@ public final class R {
         public static final int messages_zero = NUM;
         public static final int project_id = NUM;
         public static final int status_bar_notification_info_overflow = NUM;
-        public static final int wallet_buy_button_place_holder = NUM;
+
+        private string() {
+        }
     }
 
     public static final class style {
         public static final int ActionBar_Transparent_TMessages_Item = NUM;
         public static final int ActionBar_Transparent_TMessages_Start = NUM;
         public static final int DialogNoAnimation = NUM;
-        public static final int HockeyApp_ButtonStyle = NUM;
-        public static final int HockeyApp_EditTextStyle = NUM;
-        public static final int HockeyApp_SingleLineInputStyle = NUM;
         public static final int MyTextViewStyle = NUM;
         public static final int PopupAnimation = NUM;
         public static final int PopupContextAnimation = NUM;
@@ -4846,14 +4865,13 @@ public final class R {
         public static final int Theme_TMessages_Transparent = NUM;
         public static final int Theme_TMessages_TransparentWithAlerts = NUM;
         public static final int TransparentDialog = NUM;
-        public static final int WalletFragmentDefaultButtonTextAppearance = NUM;
-        public static final int WalletFragmentDefaultDetailsHeaderTextAppearance = NUM;
-        public static final int WalletFragmentDefaultDetailsTextAppearance = NUM;
-        public static final int WalletFragmentDefaultStyle = NUM;
         public static final int Widget_Compat_NotificationActionContainer = NUM;
         public static final int Widget_Compat_NotificationActionText = NUM;
         public static final int Widget_Support_CoordinatorLayout = NUM;
         public static final int scrollbarShapeStyle = NUM;
+
+        private style() {
+        }
     }
 
     public static final class styleable {
@@ -4872,10 +4890,6 @@ public final class R {
         public static final int CoordinatorLayout_Layout_layout_keyline = 6;
         public static final int CoordinatorLayout_keylines = 0;
         public static final int CoordinatorLayout_statusBarBackground = 1;
-        public static final int[] CustomWalletTheme = {NUM, NUM, NUM};
-        public static final int CustomWalletTheme_customThemeStyle = 0;
-        public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
-        public static final int CustomWalletTheme_windowTransitionStyle = 2;
         public static final int[] FontFamily = {NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int[] FontFamilyFont = {16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
         public static final int FontFamilyFont_android_font = 0;
@@ -4943,23 +4957,9 @@ public final class R {
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = {NUM, NUM, NUM, NUM};
-        public static final int WalletFragmentOptions_appTheme = 0;
-        public static final int WalletFragmentOptions_environment = 1;
-        public static final int WalletFragmentOptions_fragmentMode = 2;
-        public static final int WalletFragmentOptions_fragmentStyle = 3;
-        public static final int[] WalletFragmentStyle = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
-        public static final int WalletFragmentStyle_buyButtonAppearance = 0;
-        public static final int WalletFragmentStyle_buyButtonHeight = 1;
-        public static final int WalletFragmentStyle_buyButtonText = 2;
-        public static final int WalletFragmentStyle_buyButtonWidth = 3;
-        public static final int WalletFragmentStyle_maskedWalletDetailsBackground = 4;
-        public static final int WalletFragmentStyle_maskedWalletDetailsButtonBackground = 5;
-        public static final int WalletFragmentStyle_maskedWalletDetailsButtonTextAppearance = 6;
-        public static final int WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance = 7;
-        public static final int WalletFragmentStyle_maskedWalletDetailsLogoImageType = 8;
-        public static final int WalletFragmentStyle_maskedWalletDetailsLogoTextColor = 9;
-        public static final int WalletFragmentStyle_maskedWalletDetailsTextAppearance = 10;
+
+        private styleable() {
+        }
     }
 
     public static final class xml {
@@ -4969,5 +4969,11 @@ public final class R {
         public static final int contacts = NUM;
         public static final int provider_paths = NUM;
         public static final int sync_contacts = NUM;
+
+        private xml() {
+        }
+    }
+
+    private R() {
     }
 }

@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">เครื่องมือยืนยัน Assistant</string>
     <string name="google_assistant_verification_notification_title">Google Assistant กำลังส่งข้อความ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">ซื้อด้วย Google</string>
 </resources>

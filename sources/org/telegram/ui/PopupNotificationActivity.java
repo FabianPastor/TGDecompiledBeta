@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -38,7 +37,12 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$KeyboardButton;
+import org.telegram.tgnet.TLRPC$ReplyMarkup;
+import org.telegram.tgnet.TLRPC$TL_keyboardButtonCallback;
+import org.telegram.tgnet.TLRPC$TL_keyboardButtonRow;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -56,7 +60,6 @@ import org.telegram.ui.Components.StatusDrawable;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
 public class PopupNotificationActivity extends Activity implements NotificationCenter.NotificationCenterDelegate {
-    private static final int id_chat_compose_panel = 1000;
     private ActionBar actionBar;
     private boolean animationInProgress = false;
     private long animationStartTime = 0;
@@ -71,12 +74,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     /* access modifiers changed from: private */
     public int classGuid;
     private TextView countText;
-    private TLRPC.Chat currentChat;
+    private TLRPC$Chat currentChat;
     /* access modifiers changed from: private */
     public int currentMessageNum = 0;
     /* access modifiers changed from: private */
     public MessageObject currentMessageObject = null;
-    private TLRPC.User currentUser;
+    private TLRPC$User currentUser;
     private boolean finished = false;
     private ArrayList<ViewGroup> imageViews = new ArrayList<>();
     private boolean isReply;
@@ -111,14 +114,6 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private class FrameLayoutTouch extends FrameLayout {
         public FrameLayoutTouch(Context context) {
             super(context);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attributeSet) {
-            super(context, attributeSet);
-        }
-
-        public FrameLayoutTouch(Context context, AttributeSet attributeSet, int i) {
-            super(context, attributeSet, i);
         }
 
         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -325,7 +320,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         r2.setBackgroundColor(-NUM);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         r2.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
-        this.popupContainer = new RelativeLayout(this) {
+        AnonymousClass2 r9 = new RelativeLayout(this) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, i2);
@@ -350,16 +345,22 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
         };
-        this.popupContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        this.popupContainer = r9;
+        r9.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         relativeLayout.addView(this.popupContainer, LayoutHelper.createRelative(-1, 240, 12, 0, 12, 0, 13));
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 != null) {
             chatActivityEnterView2.onDestroy();
         }
-        this.chatActivityEnterView = new ChatActivityEnterView(this, r2, (ChatActivity) null, false);
-        this.chatActivityEnterView.setId(1000);
+        ChatActivityEnterView chatActivityEnterView3 = new ChatActivityEnterView(this, r2, (ChatActivity) null, false);
+        this.chatActivityEnterView = chatActivityEnterView3;
+        chatActivityEnterView3.setId(1000);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
         this.chatActivityEnterView.setDelegate(new ChatActivityEnterView.ChatActivityEnterViewDelegate() {
+            public /* synthetic */ void bottomPanelTranslationYChanged(float f) {
+                ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$bottomPanelTranslationYChanged(this, f);
+            }
+
             public void didPressedAttachButton() {
             }
 
@@ -383,6 +384,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
 
             public void onAttachButtonShow() {
+            }
+
+            public void onAudioVideoInterfaceUpdated() {
             }
 
             public void onMessageEditEnd(boolean z) {
@@ -443,10 +447,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
         });
-        this.messageContainer = new FrameLayoutTouch(this);
-        this.popupContainer.addView(this.messageContainer, 0);
-        this.actionBar = new ActionBar(this);
-        this.actionBar.setOccupyStatusBar(false);
+        FrameLayoutTouch frameLayoutTouch = new FrameLayoutTouch(this);
+        this.messageContainer = frameLayoutTouch;
+        this.popupContainer.addView(frameLayoutTouch, 0);
+        ActionBar actionBar2 = new ActionBar(this);
+        this.actionBar = actionBar2;
+        actionBar2.setOccupyStatusBar(false);
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setBackgroundColor(Theme.getColor("actionBarDefault"));
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
@@ -455,13 +461,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams.width = -1;
         this.actionBar.setLayoutParams(layoutParams);
         ActionBarMenuItem addItemWithWidth = this.actionBar.createMenu().addItemWithWidth(2, 0, AndroidUtilities.dp(56.0f));
-        this.countText = new TextView(this);
-        this.countText.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+        TextView textView = new TextView(this);
+        this.countText = textView;
+        textView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
         this.countText.setTextSize(1, 14.0f);
         this.countText.setGravity(17);
         addItemWithWidth.addView(this.countText, LayoutHelper.createFrame(56, -1.0f));
-        this.avatarContainer = new FrameLayout(this);
-        this.avatarContainer.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+        FrameLayout frameLayout = new FrameLayout(this);
+        this.avatarContainer = frameLayout;
+        frameLayout.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
         this.actionBar.addView(this.avatarContainer);
         FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.avatarContainer.getLayoutParams();
         layoutParams2.height = -1;
@@ -470,16 +478,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.leftMargin = AndroidUtilities.dp(60.0f);
         layoutParams2.gravity = 51;
         this.avatarContainer.setLayoutParams(layoutParams2);
-        this.avatarImageView = new BackupImageView(this);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
+        BackupImageView backupImageView = new BackupImageView(this);
+        this.avatarImageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         this.avatarContainer.addView(this.avatarImageView);
         FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.avatarImageView.getLayoutParams();
         layoutParams3.width = AndroidUtilities.dp(42.0f);
         layoutParams3.height = AndroidUtilities.dp(42.0f);
         layoutParams3.topMargin = AndroidUtilities.dp(3.0f);
         this.avatarImageView.setLayoutParams(layoutParams3);
-        this.nameTextView = new TextView(this);
-        this.nameTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
+        TextView textView2 = new TextView(this);
+        this.nameTextView = textView2;
+        textView2.setTextColor(Theme.getColor("actionBarDefaultTitle"));
         this.nameTextView.setTextSize(1, 18.0f);
         this.nameTextView.setLines(1);
         this.nameTextView.setMaxLines(1);
@@ -495,8 +505,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams4.bottomMargin = AndroidUtilities.dp(22.0f);
         layoutParams4.gravity = 80;
         this.nameTextView.setLayoutParams(layoutParams4);
-        this.onlineTextView = new TextView(this);
-        this.onlineTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
+        TextView textView3 = new TextView(this);
+        this.onlineTextView = textView3;
+        textView3.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
         this.onlineTextView.setTextSize(1, 14.0f);
         this.onlineTextView.setLines(1);
         this.onlineTextView.setMaxLines(1);
@@ -523,8 +534,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
         });
-        this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(NUM, "screen");
-        this.wakeLock.setReferenceCounted(false);
+        PowerManager.WakeLock newWakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(NUM, "screen");
+        this.wakeLock = newWakeLock;
+        newWakeLock.setReferenceCounted(false);
         handleIntent(getIntent());
     }
 
@@ -623,7 +635,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (r0 != 0) goto L_0x0018
             float r14 = r14.getX()
             r13.moveStartX = r14
-            goto L_0x01c5
+            goto L_0x01c4
         L_0x0018:
             r0 = -1082130432(0xffffffffbvar_, float:-1.0)
             r2 = 2
@@ -657,7 +669,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r5 = 0
         L_0x0057:
             boolean r0 = r13.startedMoving
-            if (r0 == 0) goto L_0x01c5
+            if (r0 == 0) goto L_0x01c4
             android.view.ViewGroup r0 = r13.leftView
             if (r0 != 0) goto L_0x0062
             if (r5 <= 0) goto L_0x0062
@@ -675,19 +687,19 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r0.addMovement(r14)
         L_0x0071:
             r13.applyViewsLayoutParams(r1)
-            goto L_0x01c5
+            goto L_0x01c4
         L_0x0076:
             r4 = 3
             if (r14 == 0) goto L_0x0085
             int r5 = r14.getAction()
             if (r5 == r3) goto L_0x0085
             int r5 = r14.getAction()
-            if (r5 != r4) goto L_0x01c5
+            if (r5 != r4) goto L_0x01c4
         L_0x0085:
             r5 = 0
-            if (r14 == 0) goto L_0x01b5
+            if (r14 == 0) goto L_0x01b4
             boolean r6 = r13.startedMoving
-            if (r6 == 0) goto L_0x01b5
+            if (r6 == 0) goto L_0x01b4
             float r14 = r14.getX()
             float r6 = r13.moveStartX
             float r14 = r14 - r6
@@ -789,7 +801,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r14 = 0
         L_0x0133:
             int r7 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
-            if (r7 == 0) goto L_0x01b8
+            if (r7 == 0) goto L_0x01b7
             float r6 = (float) r6
             float r6 = r14 / r6
             float r6 = java.lang.Math.abs(r6)
@@ -807,30 +819,30 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9)
             r7.add(r8)
             android.view.ViewGroup r8 = r13.centerButtonsView
-            if (r8 == 0) goto L_0x0171
+            if (r8 == 0) goto L_0x0170
             float[] r9 = new float[r3]
             float r11 = r8.getTranslationX()
             float r11 = r11 + r14
             r9[r1] = r11
             android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r10, r9)
             r7.add(r8)
-        L_0x0171:
-            if (r2 == 0) goto L_0x0183
+        L_0x0170:
+            if (r2 == 0) goto L_0x0182
             float[] r8 = new float[r3]
             float r9 = r2.getTranslationX()
             float r9 = r9 + r14
             r8[r1] = r9
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r8)
             r7.add(r2)
-        L_0x0183:
-            if (r4 == 0) goto L_0x0195
+        L_0x0182:
+            if (r4 == 0) goto L_0x0194
             float[] r2 = new float[r3]
             float r8 = r4.getTranslationX()
             float r8 = r8 + r14
             r2[r1] = r8
             android.animation.ObjectAnimator r14 = android.animation.ObjectAnimator.ofFloat(r4, r10, r2)
             r7.add(r14)
-        L_0x0195:
+        L_0x0194:
             android.animation.AnimatorSet r14 = new android.animation.AnimatorSet
             r14.<init>()
             r14.playTogether(r7)
@@ -843,18 +855,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r13.animationInProgress = r3
             long r2 = java.lang.System.currentTimeMillis()
             r13.animationStartTime = r2
-            goto L_0x01b8
-        L_0x01b5:
+            goto L_0x01b7
+        L_0x01b4:
             r13.applyViewsLayoutParams(r1)
-        L_0x01b8:
+        L_0x01b7:
             android.view.VelocityTracker r14 = r13.velocityTracker
-            if (r14 == 0) goto L_0x01c1
+            if (r14 == 0) goto L_0x01c0
             r14.recycle()
             r13.velocityTracker = r5
-        L_0x01c1:
+        L_0x01c0:
             r13.startedMoving = r1
             r13.moveStartX = r0
-        L_0x01c5:
+        L_0x01c4:
             boolean r14 = r13.startedMoving
             return r14
         */
@@ -938,59 +950,53 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             i3 = 0;
         }
         MessageObject messageObject = this.popupMessages.get(i3);
-        TLRPC.ReplyMarkup replyMarkup = messageObject.messageOwner.reply_markup;
-        if (messageObject.getDialogId() != 777000 || replyMarkup == null) {
+        TLRPC$ReplyMarkup tLRPC$ReplyMarkup = messageObject.messageOwner.reply_markup;
+        if (messageObject.getDialogId() != 777000 || tLRPC$ReplyMarkup == null) {
             i2 = 0;
         } else {
-            ArrayList<TLRPC.TL_keyboardButtonRow> arrayList = replyMarkup.rows;
+            ArrayList<TLRPC$TL_keyboardButtonRow> arrayList = tLRPC$ReplyMarkup.rows;
             int size = arrayList.size();
-            int i5 = 0;
             i2 = 0;
-            while (i5 < size) {
-                TLRPC.TL_keyboardButtonRow tL_keyboardButtonRow = arrayList.get(i5);
-                int size2 = tL_keyboardButtonRow.buttons.size();
-                int i6 = i2;
-                for (int i7 = 0; i7 < size2; i7++) {
-                    if (tL_keyboardButtonRow.buttons.get(i7) instanceof TLRPC.TL_keyboardButtonCallback) {
-                        i6++;
+            for (int i5 = 0; i5 < size; i5++) {
+                TLRPC$TL_keyboardButtonRow tLRPC$TL_keyboardButtonRow = arrayList.get(i5);
+                int size2 = tLRPC$TL_keyboardButtonRow.buttons.size();
+                for (int i6 = 0; i6 < size2; i6++) {
+                    if (tLRPC$TL_keyboardButtonRow.buttons.get(i6) instanceof TLRPC$TL_keyboardButtonCallback) {
+                        i2++;
                     }
                 }
-                i5++;
-                i2 = i6;
             }
         }
-        int i8 = messageObject.currentAccount;
+        int i7 = messageObject.currentAccount;
         if (i2 > 0) {
-            ArrayList<TLRPC.TL_keyboardButtonRow> arrayList2 = replyMarkup.rows;
+            ArrayList<TLRPC$TL_keyboardButtonRow> arrayList2 = tLRPC$ReplyMarkup.rows;
             int size3 = arrayList2.size();
-            LinearLayout linearLayout2 = null;
-            int i9 = 0;
-            while (i9 < size3) {
-                TLRPC.TL_keyboardButtonRow tL_keyboardButtonRow2 = arrayList2.get(i9);
-                int size4 = tL_keyboardButtonRow2.buttons.size();
-                LinearLayout linearLayout3 = linearLayout2;
-                int i10 = 0;
-                while (i10 < size4) {
-                    TLRPC.KeyboardButton keyboardButton = tL_keyboardButtonRow2.buttons.get(i10);
-                    if (keyboardButton instanceof TLRPC.TL_keyboardButtonCallback) {
-                        if (linearLayout3 == null) {
-                            linearLayout3 = new LinearLayout(this);
-                            linearLayout3.setOrientation(i4);
-                            linearLayout3.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                            linearLayout3.setWeightSum(100.0f);
-                            linearLayout3.setTag("b");
-                            linearLayout3.setOnTouchListener($$Lambda$PopupNotificationActivity$XvlaP2ODWCCStorSQi9nplxzY4s.INSTANCE);
+            int i8 = 0;
+            while (i8 < size3) {
+                TLRPC$TL_keyboardButtonRow tLRPC$TL_keyboardButtonRow2 = arrayList2.get(i8);
+                int size4 = tLRPC$TL_keyboardButtonRow2.buttons.size();
+                int i9 = 0;
+                while (i9 < size4) {
+                    TLRPC$KeyboardButton tLRPC$KeyboardButton = tLRPC$TL_keyboardButtonRow2.buttons.get(i9);
+                    if (tLRPC$KeyboardButton instanceof TLRPC$TL_keyboardButtonCallback) {
+                        if (linearLayout == null) {
+                            linearLayout = new LinearLayout(this);
+                            linearLayout.setOrientation(i4);
+                            linearLayout.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                            linearLayout.setWeightSum(100.0f);
+                            linearLayout.setTag("b");
+                            linearLayout.setOnTouchListener($$Lambda$PopupNotificationActivity$XvlaP2ODWCCStorSQi9nplxzY4s.INSTANCE);
                         }
                         TextView textView = new TextView(this);
                         textView.setTextSize(1, 16.0f);
                         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
                         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        textView.setText(keyboardButton.text.toUpperCase());
-                        textView.setTag(keyboardButton);
+                        textView.setText(tLRPC$KeyboardButton.text.toUpperCase());
+                        textView.setTag(tLRPC$KeyboardButton);
                         textView.setGravity(17);
                         textView.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-                        linearLayout3.addView(textView, LayoutHelper.createLinear(-1, -1, 100.0f / ((float) i2)));
-                        textView.setOnClickListener(new View.OnClickListener(i8, messageObject) {
+                        linearLayout.addView(textView, LayoutHelper.createLinear(-1, -1, 100.0f / ((float) i2)));
+                        textView.setOnClickListener(new View.OnClickListener(i7, messageObject) {
                             private final /* synthetic */ int f$0;
                             private final /* synthetic */ MessageObject f$1;
 
@@ -1004,26 +1010,24 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                             }
                         });
                     }
-                    i10++;
+                    i9++;
                     i4 = 0;
                 }
-                i9++;
-                linearLayout2 = linearLayout3;
+                i8++;
                 i4 = 0;
             }
-            linearLayout = linearLayout2;
         }
         if (linearLayout != null) {
             int dp = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(-1, -2);
             layoutParams.addRule(12);
             if (z) {
-                int i11 = this.currentMessageNum;
-                if (i3 == i11) {
+                int i10 = this.currentMessageNum;
+                if (i3 == i10) {
                     linearLayout.setTranslationX(0.0f);
-                } else if (i3 == i11 - 1) {
+                } else if (i3 == i10 - 1) {
                     linearLayout.setTranslationX((float) (-dp));
-                } else if (i3 == i11 + 1) {
+                } else if (i3 == i10 + 1) {
                     linearLayout.setTranslationX((float) dp);
                 }
             }
@@ -1033,20 +1037,20 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     static /* synthetic */ void lambda$getButtonsViewForMessage$5(int i, MessageObject messageObject, View view) {
-        TLRPC.KeyboardButton keyboardButton = (TLRPC.KeyboardButton) view.getTag();
-        if (keyboardButton != null) {
-            SendMessagesHelper.getInstance(i).sendNotificationCallback(messageObject.getDialogId(), messageObject.getId(), keyboardButton.data);
+        TLRPC$KeyboardButton tLRPC$KeyboardButton = (TLRPC$KeyboardButton) view.getTag();
+        if (tLRPC$KeyboardButton != null) {
+            SendMessagesHelper.getInstance(i).sendNotificationCallback(messageObject.getDialogId(), messageObject.getId(), tLRPC$KeyboardButton.data);
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x016d  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0181  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x016b  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x017f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private android.view.ViewGroup getViewForMessage(int r28, boolean r29) {
+    private android.view.ViewGroup getViewForMessage(int r29, boolean r30) {
         /*
-            r27 = this;
-            r0 = r27
-            r1 = r28
+            r28 = this;
+            r0 = r28
+            r1 = r29
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.popupMessages
             int r2 = r2.size()
             r3 = 0
@@ -1083,21 +1087,22 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r13 = -1082130432(0xffffffffbvar_, float:-1.0)
             r15 = 1092616192(0x41200000, float:10.0)
             if (r7 == r4) goto L_0x0048
-            if (r7 != r9) goto L_0x01ea
+            if (r7 != r9) goto L_0x01e8
         L_0x0048:
             boolean r7 = r6.isSecretMedia()
-            if (r7 != 0) goto L_0x01ea
+            if (r7 != 0) goto L_0x01e8
             java.util.ArrayList<android.view.ViewGroup> r7 = r0.imageViews
             int r7 = r7.size()
-            r16 = 311(0x137, float:4.36E-43)
-            if (r7 <= 0) goto L_0x0066
+            r16 = 312(0x138, float:4.37E-43)
+            r17 = 311(0x137, float:4.36E-43)
+            if (r7 <= 0) goto L_0x0068
             java.util.ArrayList<android.view.ViewGroup> r7 = r0.imageViews
             java.lang.Object r7 = r7.get(r5)
             android.view.ViewGroup r7 = (android.view.ViewGroup) r7
             java.util.ArrayList<android.view.ViewGroup> r8 = r0.imageViews
             r8.remove(r5)
             goto L_0x00d7
-        L_0x0066:
+        L_0x0068:
             android.widget.FrameLayout r7 = new android.widget.FrameLayout
             r7.<init>(r0)
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
@@ -1113,7 +1118,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r7.addView(r3, r9)
             org.telegram.ui.Components.BackupImageView r9 = new org.telegram.ui.Components.BackupImageView
             r9.<init>(r0)
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r16)
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r17)
             r9.setTag(r10)
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r13)
             r3.addView(r9, r10)
@@ -1123,11 +1128,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r9.setTextColor(r10)
             r9.setTextSize(r4, r8)
             r9.setGravity(r12)
-            r8 = 312(0x138, float:4.37E-43)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r16)
             r9.setTag(r8)
             r8 = -2
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r2, (int) r8, (int) r12)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r8, r12)
             r3.addView(r9, r8)
             r3 = 2
             java.lang.Integer r8 = java.lang.Integer.valueOf(r3)
@@ -1137,12 +1141,11 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r7.setOnClickListener(r3)
         L_0x00d7:
             r3 = r7
-            r7 = 312(0x138, float:4.37E-43)
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r16)
             android.view.View r7 = r3.findViewWithTag(r7)
             r14 = r7
             android.widget.TextView r14 = (android.widget.TextView) r14
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r16)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r17)
             android.view.View r7 = r3.findViewWithTag(r7)
             r15 = r7
             org.telegram.ui.Components.BackupImageView r15 = (org.telegram.ui.Components.BackupImageView) r15
@@ -1150,34 +1153,34 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             int r7 = r6.type
             r13 = 8
             r8 = 100
-            if (r7 != r4) goto L_0x0189
+            if (r7 != r4) goto L_0x0187
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r6.photoThumbs
             int r9 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r9)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r6.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r8)
-            if (r7 == 0) goto L_0x0168
+            if (r7 == 0) goto L_0x0166
             int r9 = r6.type
-            if (r9 != r4) goto L_0x011f
+            if (r9 != r4) goto L_0x011d
             org.telegram.tgnet.TLRPC$Message r9 = r6.messageOwner
             java.io.File r9 = org.telegram.messenger.FileLoader.getPathToMessage(r9)
             boolean r9 = r9.exists()
-            if (r9 != 0) goto L_0x011f
+            if (r9 != 0) goto L_0x011d
             r9 = 0
-            goto L_0x0120
-        L_0x011f:
+            goto L_0x011e
+        L_0x011d:
             r9 = 1
-        L_0x0120:
+        L_0x011e:
             boolean r10 = r6.needDrawBluredPreview()
-            if (r10 != 0) goto L_0x0168
-            if (r9 != 0) goto L_0x0149
+            if (r10 != 0) goto L_0x0166
+            if (r9 != 0) goto L_0x0147
             int r9 = r6.currentAccount
             org.telegram.messenger.DownloadController r9 = org.telegram.messenger.DownloadController.getInstance(r9)
             boolean r9 = r9.canDownloadMedia((org.telegram.messenger.MessageObject) r6)
-            if (r9 == 0) goto L_0x0135
-            goto L_0x0149
-        L_0x0135:
-            if (r8 == 0) goto L_0x0168
+            if (r9 == 0) goto L_0x0133
+            goto L_0x0147
+        L_0x0133:
+            if (r8 == 0) goto L_0x0166
             org.telegram.tgnet.TLObject r7 = r6.photoThumbsObject
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForObject(r8, r7)
             r10 = 0
@@ -1185,10 +1188,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             java.lang.String r9 = "100_100_b"
             r7 = r15
             r12 = r6
-            r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12)
+            r7.setImage(r8, r9, r10, r11, r12)
             r4 = 8
-            goto L_0x0166
-        L_0x0149:
+            goto L_0x0164
+        L_0x0147:
             org.telegram.tgnet.TLObject r9 = r6.photoThumbsObject
             org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForObject(r7, r9)
             org.telegram.tgnet.TLObject r10 = r6.photoThumbsObject
@@ -1203,14 +1206,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4 = 8
             r13 = r6
             r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (org.telegram.messenger.ImageLocation) r10, (java.lang.String) r11, (int) r12, (java.lang.Object) r13)
-        L_0x0166:
+        L_0x0164:
             r7 = 1
-            goto L_0x016b
-        L_0x0168:
+            goto L_0x0169
+        L_0x0166:
             r4 = 8
             r7 = 0
-        L_0x016b:
-            if (r7 != 0) goto L_0x0181
+        L_0x0169:
+            if (r7 != 0) goto L_0x017f
             r15.setVisibility(r4)
             r14.setVisibility(r5)
             int r4 = org.telegram.messenger.SharedConfig.fontSize
@@ -1219,15 +1222,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r14.setTextSize(r7, r4)
             java.lang.CharSequence r4 = r6.messageText
             r14.setText(r4)
-            goto L_0x032f
-        L_0x0181:
+            goto L_0x032a
+        L_0x017f:
             r15.setVisibility(r5)
             r14.setVisibility(r4)
-            goto L_0x032f
-        L_0x0189:
+            goto L_0x032a
+        L_0x0187:
             r4 = 8
             r9 = 4
-            if (r7 != r9) goto L_0x032f
+            if (r7 != r9) goto L_0x032a
             r14.setVisibility(r4)
             java.lang.CharSequence r4 = r6.messageText
             r14.setText(r4)
@@ -1241,7 +1244,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             int r7 = r7.mapProvider
             r13 = 2
-            if (r7 != r13) goto L_0x01ce
+            if (r7 != r13) goto L_0x01cc
             r7 = 15
             float r9 = org.telegram.messenger.AndroidUtilities.density
             double r9 = (double) r9
@@ -1255,138 +1258,137 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r11 = 0
             r7 = r15
             r12 = r6
-            r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12)
-            goto L_0x032f
-        L_0x01ce:
+            r7.setImage(r8, r9, r10, r11, r12)
+            goto L_0x032a
+        L_0x01cc:
             int r4 = r6.currentAccount
-            r22 = 100
             r23 = 100
-            r24 = 1
-            r25 = 15
-            r26 = -1
-            r17 = r4
-            r18 = r9
-            r20 = r11
-            java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r17, r18, r20, r22, r23, r24, r25, r26)
+            r24 = 100
+            r25 = 1
+            r26 = 15
+            r27 = -1
+            r18 = r4
+            r19 = r9
+            r21 = r11
+            java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r18, r19, r21, r23, r24, r25, r26, r27)
             r6 = 0
             r15.setImage(r4, r6, r6)
-            goto L_0x032f
-        L_0x01ea:
+            goto L_0x032a
+        L_0x01e8:
             int r3 = r6.type
             r4 = 2
-            if (r3 != r4) goto L_0x0288
+            if (r3 != r4) goto L_0x0285
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.audioViews
             int r3 = r3.size()
-            if (r3 <= 0) goto L_0x0211
+            r4 = 300(0x12c, float:4.2E-43)
+            if (r3 <= 0) goto L_0x020f
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.audioViews
             java.lang.Object r3 = r3.get(r5)
             android.view.ViewGroup r3 = (android.view.ViewGroup) r3
-            java.util.ArrayList<android.view.ViewGroup> r4 = r0.audioViews
-            r4.remove(r5)
-            r4 = 300(0x12c, float:4.2E-43)
+            java.util.ArrayList<android.view.ViewGroup> r7 = r0.audioViews
+            r7.remove(r5)
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             android.view.View r4 = r3.findViewWithTag(r4)
             org.telegram.ui.Components.PopupAudioView r4 = (org.telegram.ui.Components.PopupAudioView) r4
-            goto L_0x0274
-        L_0x0211:
+            goto L_0x0271
+        L_0x020f:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r0)
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            r7.<init>(r0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            r4.setPadding(r7, r8, r9, r10)
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
-            r4.setBackgroundDrawable(r7)
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r13)
-            r3.addView(r4, r7)
-            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r7.setPadding(r8, r9, r10, r11)
+            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
+            r7.setBackgroundDrawable(r8)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r13)
+            r3.addView(r7, r8)
+            android.widget.FrameLayout r8 = new android.widget.FrameLayout
+            r8.<init>(r0)
+            r9 = -1
+            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r11 = 17
+            r12 = 1101004800(0x41a00000, float:20.0)
+            r13 = 0
+            r14 = 1101004800(0x41a00000, float:20.0)
+            r15 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r7.addView(r8, r9)
+            org.telegram.ui.Components.PopupAudioView r7 = new org.telegram.ui.Components.PopupAudioView
             r7.<init>(r0)
-            r8 = -1
-            r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r10 = 17
-            r11 = 1101004800(0x41a00000, float:20.0)
-            r12 = 0
-            r13 = 1101004800(0x41a00000, float:20.0)
-            r14 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r4.addView(r7, r8)
-            org.telegram.ui.Components.PopupAudioView r4 = new org.telegram.ui.Components.PopupAudioView
-            r4.<init>(r0)
-            r8 = 300(0x12c, float:4.2E-43)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            r4.setTag(r8)
-            r7.addView(r4)
-            r7 = 3
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            r3.setTag(r7)
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$VFWwjWrjLI64daw5erAQKADNXUs r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$VFWwjWrjLI64daw5erAQKADNXUs
-            r7.<init>()
-            r3.setOnClickListener(r7)
-        L_0x0274:
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            r7.setTag(r4)
+            r8.addView(r7)
+            r4 = 3
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            r3.setTag(r4)
+            org.telegram.ui.-$$Lambda$PopupNotificationActivity$VFWwjWrjLI64daw5erAQKADNXUs r4 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$VFWwjWrjLI64daw5erAQKADNXUs
+            r4.<init>()
+            r3.setOnClickListener(r4)
+            r4 = r7
+        L_0x0271:
             r4.setMessageObject(r6)
             int r7 = r6.currentAccount
             org.telegram.messenger.DownloadController r7 = org.telegram.messenger.DownloadController.getInstance(r7)
             boolean r6 = r7.canDownloadMedia((org.telegram.messenger.MessageObject) r6)
-            if (r6 == 0) goto L_0x032f
+            if (r6 == 0) goto L_0x032a
             r4.downloadAudioIfNeed()
-            goto L_0x032f
-        L_0x0288:
+            goto L_0x032a
+        L_0x0285:
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.textViews
             int r3 = r3.size()
-            if (r3 <= 0) goto L_0x029e
+            r4 = 301(0x12d, float:4.22E-43)
+            if (r3 <= 0) goto L_0x029d
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.textViews
             java.lang.Object r3 = r3.get(r5)
             android.view.ViewGroup r3 = (android.view.ViewGroup) r3
-            java.util.ArrayList<android.view.ViewGroup> r4 = r0.textViews
-            r4.remove(r5)
-            goto L_0x0317
-        L_0x029e:
+            java.util.ArrayList<android.view.ViewGroup> r7 = r0.textViews
+            r7.remove(r5)
+            goto L_0x0314
+        L_0x029d:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r0)
-            android.widget.ScrollView r4 = new android.widget.ScrollView
-            r4.<init>(r0)
-            r7 = 1
-            r4.setFillViewport(r7)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r13)
-            r3.addView(r4, r9)
-            android.widget.LinearLayout r9 = new android.widget.LinearLayout
-            r9.<init>(r0)
-            r9.setOrientation(r5)
-            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
-            r9.setBackgroundDrawable(r10)
-            r10 = -2
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createScroll(r2, r10, r7)
-            r4.addView(r9, r13)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            android.widget.ScrollView r7 = new android.widget.ScrollView
+            r7.<init>(r0)
+            r9 = 1
+            r7.setFillViewport(r9)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r13)
+            r3.addView(r7, r10)
+            android.widget.LinearLayout r10 = new android.widget.LinearLayout
+            r10.<init>(r0)
+            r10.setOrientation(r5)
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
+            r10.setBackgroundDrawable(r13)
+            r13 = -2
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createScroll(r2, r13, r9)
+            r7.addView(r10, r14)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            r9.setPadding(r4, r7, r10, r13)
-            org.telegram.ui.-$$Lambda$PopupNotificationActivity$1_iHFPQDV_CYBmOOqbZFgFmuyU8 r4 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$1_iHFPQDV_CYBmOOqbZFgFmuyU8
-            r4.<init>()
-            r9.setOnClickListener(r4)
-            android.widget.TextView r4 = new android.widget.TextView
-            r4.<init>(r0)
-            r7 = 1
-            r4.setTextSize(r7, r8)
-            r8 = 301(0x12d, float:4.22E-43)
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-            r4.setTag(r8)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r10.setPadding(r7, r9, r13, r14)
+            org.telegram.ui.-$$Lambda$PopupNotificationActivity$1_iHFPQDV_CYBmOOqbZFgFmuyU8 r7 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$1_iHFPQDV_CYBmOOqbZFgFmuyU8
+            r7.<init>()
+            r10.setOnClickListener(r7)
+            android.widget.TextView r7 = new android.widget.TextView
+            r7.<init>(r0)
+            r9 = 1
+            r7.setTextSize(r9, r8)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r4)
+            r7.setTag(r8)
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setTextColor(r8)
+            r7.setTextColor(r8)
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setLinkTextColor(r8)
-            r4.setGravity(r12)
+            r7.setLinkTextColor(r8)
+            r7.setGravity(r12)
             r8 = -2
             android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r2, (int) r8, (int) r12)
-            r9.addView(r4, r8)
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r7)
-            r3.setTag(r4)
-        L_0x0317:
-            r4 = 301(0x12d, float:4.22E-43)
+            r10.addView(r7, r8)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
+            r3.setTag(r7)
+        L_0x0314:
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             android.view.View r4 = r3.findViewWithTag(r4)
             android.widget.TextView r4 = (android.widget.TextView) r4
@@ -1396,14 +1398,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4.setTextSize(r8, r7)
             java.lang.CharSequence r6 = r6.messageText
             r4.setText(r6)
-        L_0x032f:
+        L_0x032a:
             android.view.ViewParent r4 = r3.getParent()
-            if (r4 != 0) goto L_0x033a
+            if (r4 != 0) goto L_0x0335
             android.view.ViewGroup r4 = r0.messageContainer
             r4.addView(r3)
-        L_0x033a:
+        L_0x0335:
             r3.setVisibility(r5)
-            if (r29 == 0) goto L_0x0379
+            if (r30 == 0) goto L_0x0374
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r4 = r4.x
             r5 = 1103101952(0x41CLASSNAME, float:24.0)
@@ -1416,27 +1418,27 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r5.height = r2
             r5.width = r4
             int r2 = r0.currentMessageNum
-            if (r1 != r2) goto L_0x0361
+            if (r1 != r2) goto L_0x035c
             r1 = 0
             r3.setTranslationX(r1)
-            goto L_0x0373
-        L_0x0361:
+            goto L_0x036e
+        L_0x035c:
             int r6 = r2 + -1
-            if (r1 != r6) goto L_0x036b
+            if (r1 != r6) goto L_0x0366
             int r1 = -r4
             float r1 = (float) r1
             r3.setTranslationX(r1)
-            goto L_0x0373
-        L_0x036b:
+            goto L_0x036e
+        L_0x0366:
             r6 = 1
             int r2 = r2 + r6
-            if (r1 != r2) goto L_0x0373
+            if (r1 != r2) goto L_0x036e
             float r1 = (float) r4
             r3.setTranslationX(r1)
-        L_0x0373:
+        L_0x036e:
             r3.setLayoutParams(r5)
             r3.invalidate()
-        L_0x0379:
+        L_0x0374:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PopupNotificationActivity.getViewForMessage(int, boolean):android.view.ViewGroup");
@@ -1528,7 +1530,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 ViewGroup viewForMessage = getViewForMessage(this.currentMessageNum + 1, false);
                 this.rightView = viewForMessage;
                 if (viewForMessage != null) {
-                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.rightView.getLayoutParams();
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) viewForMessage.getLayoutParams();
                     layoutParams.width = dp;
                     this.rightView.setLayoutParams(layoutParams);
                     this.rightView.setTranslationX(translationX);
@@ -1542,7 +1544,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 LinearLayout buttonsViewForMessage = getButtonsViewForMessage(this.currentMessageNum + 1, false);
                 this.rightButtonsView = buttonsViewForMessage;
                 if (buttonsViewForMessage != null) {
-                    this.rightButtonsView.setTranslationX(translationX2);
+                    buttonsViewForMessage.setTranslationX(translationX2);
                 }
             }
         } else if (i == 4) {
@@ -1553,7 +1555,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 ViewGroup viewForMessage2 = getViewForMessage(0, false);
                 this.leftView = viewForMessage2;
                 if (viewForMessage2 != null) {
-                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.leftView.getLayoutParams();
+                    FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) viewForMessage2.getLayoutParams();
                     layoutParams2.width = dp;
                     this.leftView.setLayoutParams(layoutParams2);
                     this.leftView.setTranslationX(translationX3);
@@ -1567,7 +1569,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 LinearLayout buttonsViewForMessage2 = getButtonsViewForMessage(0, false);
                 this.leftButtonsView = buttonsViewForMessage2;
                 if (buttonsViewForMessage2 != null) {
-                    this.leftButtonsView.setTranslationX(translationX4);
+                    buttonsViewForMessage2.setTranslationX(translationX4);
                 }
             }
         }
@@ -1700,28 +1702,29 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 if (i2 >= 0) {
                     ConnectionsManager.getInstance(i2).setAppPaused(true, false);
                 }
-                this.lastResumedAccount = this.currentMessageObject.currentAccount;
-                ConnectionsManager.getInstance(this.lastResumedAccount).setAppPaused(false, false);
+                int i3 = this.currentMessageObject.currentAccount;
+                this.lastResumedAccount = i3;
+                ConnectionsManager.getInstance(i3).setAppPaused(false, false);
             }
             this.currentChat = null;
             this.currentUser = null;
             long dialogId = this.currentMessageObject.getDialogId();
             this.chatActivityEnterView.setDialogId(dialogId, this.currentMessageObject.currentAccount);
-            int i3 = (int) dialogId;
-            if (i3 == 0) {
+            int i4 = (int) dialogId;
+            if (i4 == 0) {
                 this.currentUser = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(this.currentMessageObject.currentAccount).getEncryptedChat(Integer.valueOf((int) (dialogId >> 32))).user_id));
-            } else if (i3 > 0) {
-                this.currentUser = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(i3));
+            } else if (i4 > 0) {
+                this.currentUser = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(i4));
             } else {
-                this.currentChat = MessagesController.getInstance(this.currentMessageObject.currentAccount).getChat(Integer.valueOf(-i3));
+                this.currentChat = MessagesController.getInstance(this.currentMessageObject.currentAccount).getChat(Integer.valueOf(-i4));
                 this.currentUser = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
             }
-            TLRPC.Chat chat = this.currentChat;
-            if (chat == null || this.currentUser == null) {
-                TLRPC.User user = this.currentUser;
-                if (user != null) {
-                    this.nameTextView.setText(UserObject.getUserName(user));
-                    if (i3 == 0) {
+            TLRPC$Chat tLRPC$Chat = this.currentChat;
+            if (tLRPC$Chat == null || this.currentUser == null) {
+                TLRPC$User tLRPC$User = this.currentUser;
+                if (tLRPC$User != null) {
+                    this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
+                    if (i4 == 0) {
                         this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(NUM, 0, 0, 0);
                         this.nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                     } else {
@@ -1730,7 +1733,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     }
                 }
             } else {
-                this.nameTextView.setText(chat.title);
+                this.nameTextView.setText(tLRPC$Chat.title);
                 this.onlineTextView.setText(UserObject.getUserName(this.currentUser));
                 this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 this.nameTextView.setCompoundDrawablePadding(0);
@@ -1744,9 +1747,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void updateSubtitle() {
         MessageObject messageObject;
-        TLRPC.User user;
-        if (this.actionBar != null && (messageObject = this.currentMessageObject) != null && this.currentChat == null && (user = this.currentUser) != null) {
-            int i = user.id;
+        TLRPC$User tLRPC$User;
+        if (this.actionBar != null && (messageObject = this.currentMessageObject) != null && this.currentChat == null && (tLRPC$User = this.currentUser) != null) {
+            int i = tLRPC$User.id;
             if (i / 1000 == 777 || i / 1000 == 333 || ContactsController.getInstance(messageObject.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentMessageObject.currentAccount).isLoadingContacts())) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else {
@@ -1759,15 +1762,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     textView.setText(instance.format("+" + this.currentUser.phone));
                 }
             }
-            TLRPC.User user2 = this.currentUser;
-            if (user2 == null || user2.id != 777000) {
+            TLRPC$User tLRPC$User2 = this.currentUser;
+            if (tLRPC$User2 == null || tLRPC$User2.id != 777000) {
                 CharSequence charSequence = MessagesController.getInstance(this.currentMessageObject.currentAccount).printingStrings.get(this.currentMessageObject.getDialogId());
                 if (charSequence == null || charSequence.length() == 0) {
                     this.lastPrintString = null;
                     setTypingAnimation(false);
-                    TLRPC.User user3 = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
-                    if (user3 != null) {
-                        this.currentUser = user3;
+                    TLRPC$User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
+                    if (user != null) {
+                        this.currentUser = user;
                     }
                     this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentMessageObject.currentAccount, this.currentUser));
                     return;
@@ -1782,11 +1785,11 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     private void checkAndUpdateAvatar() {
-        TLRPC.User user;
+        TLRPC$User user;
         MessageObject messageObject = this.currentMessageObject;
         if (messageObject != null) {
             if (this.currentChat != null) {
-                TLRPC.Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(Integer.valueOf(this.currentChat.id));
+                TLRPC$Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(Integer.valueOf(this.currentChat.id));
                 if (chat != null) {
                     this.currentChat = chat;
                     if (this.avatarImageView != null) {

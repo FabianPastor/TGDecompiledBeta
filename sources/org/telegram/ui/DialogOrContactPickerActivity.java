@@ -25,7 +25,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -42,7 +42,6 @@ import org.telegram.ui.DialogsActivity;
 public class DialogOrContactPickerActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public static final Interpolator interpolator = $$Lambda$DialogOrContactPickerActivity$VAmOOWLwronwq33cK0iXRproy5M.INSTANCE;
-    private static final int search_button = 0;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -73,7 +72,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
     }
 
-    private class ViewPage extends FrameLayout {
+    private static class ViewPage extends FrameLayout {
         /* access modifiers changed from: private */
         public ActionBar actionBar;
         /* access modifiers changed from: private */
@@ -98,8 +97,9 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         bundle.putBoolean("checkCanWrite", false);
         bundle.putBoolean("resetDelegate", false);
         bundle.putInt("dialogsType", 4);
-        this.dialogsActivity = new DialogsActivity(bundle);
-        this.dialogsActivity.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
+        DialogsActivity dialogsActivity2 = new DialogsActivity(bundle);
+        this.dialogsActivity = dialogsActivity2;
+        dialogsActivity2.setDelegate(new DialogsActivity.DialogsActivityDelegate() {
             public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
                 DialogOrContactPickerActivity.this.lambda$new$1$DialogOrContactPickerActivity(dialogsActivity, arrayList, charSequence, z);
             }
@@ -113,10 +113,11 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         bundle2.putBoolean("needFinishFragment", false);
         bundle2.putBoolean("resetDelegate", false);
         bundle2.putBoolean("allowSelf", false);
-        this.contactsActivity = new ContactsActivity(bundle2);
-        this.contactsActivity.setDelegate(new ContactsActivity.ContactsActivityDelegate() {
-            public final void didSelectContact(TLRPC.User user, String str, ContactsActivity contactsActivity) {
-                DialogOrContactPickerActivity.this.lambda$new$2$DialogOrContactPickerActivity(user, str, contactsActivity);
+        ContactsActivity contactsActivity2 = new ContactsActivity(bundle2);
+        this.contactsActivity = contactsActivity2;
+        contactsActivity2.setDelegate(new ContactsActivity.ContactsActivityDelegate() {
+            public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+                DialogOrContactPickerActivity.this.lambda$new$2$DialogOrContactPickerActivity(tLRPC$User, str, contactsActivity);
             }
         });
         this.contactsActivity.onFragmentCreate();
@@ -132,8 +133,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         }
     }
 
-    public /* synthetic */ void lambda$new$2$DialogOrContactPickerActivity(TLRPC.User user, String str, ContactsActivity contactsActivity2) {
-        showBlockAlert(user);
+    public /* synthetic */ void lambda$new$2$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity2) {
+        showBlockAlert(tLRPC$User);
     }
 
     public View createView(Context context) {
@@ -155,7 +156,9 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             }
         });
         this.hasOwnBackground = true;
-        this.searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
+        addItem.setIsSearchField(true);
+        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 DialogOrContactPickerActivity.this.dialogsActivity.getActionBar().openSearchField("", false);
                 DialogOrContactPickerActivity.this.contactsActivity.getActionBar().openSearchField("", false);
@@ -172,8 +175,10 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 DialogOrContactPickerActivity.this.contactsActivity.getActionBar().setSearchFieldText(editText.getText().toString());
             }
         });
-        this.scrollSlidingTextTabStrip = new ScrollSlidingTextTabStrip(context);
-        this.scrollSlidingTextTabStrip.setUseSameWidth(true);
+        this.searchItem = addItem;
+        ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = new ScrollSlidingTextTabStrip(context);
+        this.scrollSlidingTextTabStrip = scrollSlidingTextTabStrip2;
+        scrollSlidingTextTabStrip2.setUseSameWidth(true);
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate() {
             public /* synthetic */ void onSamePageSelected() {
@@ -400,10 +405,10 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 float f;
                 int i;
+                boolean z = false;
                 if (DialogOrContactPickerActivity.this.parentLayout.checkTransitionAnimation() || checkTabsAnimationInProgress()) {
                     return false;
                 }
-                boolean z = true;
                 if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
                     this.startedTrackingPointerId = motionEvent.getPointerId(0);
                     this.maybeStartTracking = true;
@@ -424,21 +429,23 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                         if (!prepareForMoving(motionEvent, x < 0)) {
                             this.maybeStartTracking = true;
                             this.startedTracking = false;
+                            DialogOrContactPickerActivity.this.viewPages[0].setTranslationX(0.0f);
+                            DialogOrContactPickerActivity.this.viewPages[1].setTranslationX((float) (DialogOrContactPickerActivity.this.animatingForward ? DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth() : -DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()));
+                            DialogOrContactPickerActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DialogOrContactPickerActivity.this.viewPages[1].selectedType, 0.0f);
                         }
                     }
                     if (this.maybeStartTracking && !this.startedTracking) {
-                        if (((float) Math.abs(x)) >= AndroidUtilities.getPixelsInCM(0.3f, true) && Math.abs(x) / 3 > abs) {
-                            if (x >= 0) {
-                                z = false;
+                        if (((float) Math.abs(x)) >= AndroidUtilities.getPixelsInCM(0.3f, true) && Math.abs(x) > abs) {
+                            if (x < 0) {
+                                z = true;
                             }
                             prepareForMoving(motionEvent, z);
                         }
                     } else if (this.startedTracking) {
+                        DialogOrContactPickerActivity.this.viewPages[0].setTranslationX((float) x);
                         if (DialogOrContactPickerActivity.this.animatingForward) {
-                            DialogOrContactPickerActivity.this.viewPages[0].setTranslationX((float) x);
                             DialogOrContactPickerActivity.this.viewPages[1].setTranslationX((float) (DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth() + x));
                         } else {
-                            DialogOrContactPickerActivity.this.viewPages[0].setTranslationX((float) x);
                             DialogOrContactPickerActivity.this.viewPages[1].setTranslationX((float) (x - DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()));
                         }
                         DialogOrContactPickerActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DialogOrContactPickerActivity.this.viewPages[1].selectedType, ((float) Math.abs(x)) / ((float) DialogOrContactPickerActivity.this.viewPages[0].getMeasuredWidth()));
@@ -684,13 +691,13 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         }
     }
 
-    private void showBlockAlert(TLRPC.User user) {
-        if (user != null) {
+    private void showBlockAlert(TLRPC$User tLRPC$User) {
+        if (tLRPC$User != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("BlockUser", NUM));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", NUM, ContactsController.formatName(user.first_name, user.last_name))));
-            builder.setPositiveButton(LocaleController.getString("BlockContact", NUM), new DialogInterface.OnClickListener(user) {
-                private final /* synthetic */ TLRPC.User f$1;
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
+            builder.setPositiveButton(LocaleController.getString("BlockContact", NUM), new DialogInterface.OnClickListener(tLRPC$User) {
+                private final /* synthetic */ TLRPC$User f$1;
 
                 {
                     this.f$1 = r2;
@@ -710,11 +717,11 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         }
     }
 
-    public /* synthetic */ void lambda$showBlockAlert$3$DialogOrContactPickerActivity(TLRPC.User user, DialogInterface dialogInterface, int i) {
-        if (MessagesController.isSupportUser(user)) {
+    public /* synthetic */ void lambda$showBlockAlert$3$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
+        if (MessagesController.isSupportUser(tLRPC$User)) {
             AlertsCreator.showSimpleToast(this, LocaleController.getString("ErrorOccurred", NUM));
         } else {
-            MessagesController.getInstance(this.currentAccount).blockUser(user.id);
+            MessagesController.getInstance(this.currentAccount).blockUser(tLRPC$User.id);
             AlertsCreator.showSimpleToast(this, LocaleController.getString("UserBlocked", NUM));
         }
         finishFragment();

@@ -15,10 +15,6 @@ public class URLSpanMono extends MetricAffectingSpan {
     private byte currentType;
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanMono(CharSequence charSequence, int i, int i2, byte b) {
-        this(charSequence, i, i2, b, (TextStyleSpan.TextStyleRun) null);
-    }
-
     public URLSpanMono(CharSequence charSequence, int i, int i2, byte b, TextStyleSpan.TextStyleRun textStyleRun) {
         this.currentMessage = charSequence;
         this.currentStart = i;

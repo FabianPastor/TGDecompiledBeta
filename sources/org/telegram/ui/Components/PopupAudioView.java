@@ -14,7 +14,8 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
 import org.telegram.ui.Components.SeekBar;
@@ -33,7 +34,7 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
     private int seekBarX;
     private int seekBarY;
     private StaticLayout timeLayout;
-    private TextPaint timePaint = new TextPaint(1);
+    private TextPaint timePaint;
     int timeWidth = 0;
     private int timeX;
     private boolean wasLayout = false;
@@ -47,10 +48,13 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
 
     public PopupAudioView(Context context) {
         super(context);
-        this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+        TextPaint textPaint = new TextPaint(1);
+        this.timePaint = textPaint;
+        textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
-        this.seekBar = new SeekBar(this);
-        this.seekBar.setDelegate(this);
+        SeekBar seekBar2 = new SeekBar(this);
+        this.seekBar = seekBar2;
+        seekBar2.setDelegate(this);
         this.progressView = new ProgressView();
     }
 
@@ -282,9 +286,9 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
                     if (i2 >= this.currentMessageObject.getDocument().attributes.size()) {
                         break;
                     }
-                    TLRPC.DocumentAttribute documentAttribute = this.currentMessageObject.getDocument().attributes.get(i2);
-                    if (documentAttribute instanceof TLRPC.TL_documentAttributeAudio) {
-                        i = documentAttribute.duration;
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.currentMessageObject.getDocument().attributes.get(i2);
+                    if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) {
+                        i = tLRPC$DocumentAttribute.duration;
                         break;
                     }
                     i2++;

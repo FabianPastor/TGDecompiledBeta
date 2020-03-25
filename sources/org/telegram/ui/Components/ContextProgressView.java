@@ -10,7 +10,6 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class ContextProgressView extends View {
     private RectF cicleRect = new RectF();
-    private int currentColorType;
     private String innerKey;
     private Paint innerPaint = new Paint(1);
     private long lastUpdateTime;

@@ -20,7 +20,10 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_document;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 
 public class VideoSeekPreviewImage extends View {
     private Paint bitmapPaint = new Paint(2);
@@ -70,8 +73,9 @@ public class VideoSeekPreviewImage extends View {
             }
         }
         long j = (long) (((float) this.duration) * f);
-        this.frameTime = AndroidUtilities.formatShortDuration((int) (j / 1000));
-        this.timeWidth = (int) Math.ceil((double) this.textPaint.measureText(this.frameTime));
+        String formatShortDuration = AndroidUtilities.formatShortDuration((int) (j / 1000));
+        this.frameTime = formatShortDuration;
+        this.timeWidth = (int) Math.ceil((double) this.textPaint.measureText(formatShortDuration));
         invalidate();
         if (this.progressRunnable != null) {
             Utilities.globalQueue.cancelRunnable(this.progressRunnable);
@@ -153,23 +157,24 @@ public class VideoSeekPreviewImage extends View {
             this.bitmapToDraw = bitmap;
             Bitmap bitmap3 = this.bitmapToDraw;
             Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-            this.bitmapShader = new BitmapShader(bitmap3, tileMode, tileMode);
-            this.bitmapShader.setLocalMatrix(this.matrix);
+            BitmapShader bitmapShader2 = new BitmapShader(bitmap3, tileMode, tileMode);
+            this.bitmapShader = bitmapShader2;
+            bitmapShader2.setLocalMatrix(this.matrix);
             this.bitmapPaint.setShader(this.bitmapShader);
             invalidate();
             int dp = AndroidUtilities.dp(150.0f);
             float width = ((float) bitmap.getWidth()) / ((float) bitmap.getHeight());
             if (width > 1.0f) {
-                int i2 = dp;
-                dp = (int) (((float) dp) / width);
-                i = i2;
+                i = (int) (((float) dp) / width);
             } else {
-                i = (int) (((float) dp) * width);
+                int i2 = dp;
+                dp = (int) (((float) dp) * width);
+                i = i2;
             }
             ViewGroup.LayoutParams layoutParams = getLayoutParams();
-            if (!(getVisibility() == 0 && layoutParams.width == i && layoutParams.height == dp)) {
-                layoutParams.width = i;
-                layoutParams.height = dp;
+            if (!(getVisibility() == 0 && layoutParams.width == dp && layoutParams.height == i)) {
+                layoutParams.width = dp;
+                layoutParams.height = i;
                 setVisibility(0);
                 requestLayout();
             }
@@ -202,26 +207,26 @@ public class VideoSeekPreviewImage extends View {
         if ("tg".equals(uri.getScheme())) {
             int intValue = Utilities.parseInt(uri.getQueryParameter("account")).intValue();
             Object parentObject = FileLoader.getInstance(intValue).getParentObject(Utilities.parseInt(uri.getQueryParameter("rid")).intValue());
-            TLRPC.TL_document tL_document = new TLRPC.TL_document();
-            tL_document.access_hash = Utilities.parseLong(uri.getQueryParameter("hash")).longValue();
-            tL_document.id = Utilities.parseLong(uri.getQueryParameter("id")).longValue();
-            tL_document.size = Utilities.parseInt(uri.getQueryParameter("size")).intValue();
-            tL_document.dc_id = Utilities.parseInt(uri.getQueryParameter("dc")).intValue();
-            tL_document.mime_type = uri.getQueryParameter("mime");
-            tL_document.file_reference = Utilities.hexToBytes(uri.getQueryParameter("reference"));
-            TLRPC.TL_documentAttributeFilename tL_documentAttributeFilename = new TLRPC.TL_documentAttributeFilename();
-            tL_documentAttributeFilename.file_name = uri.getQueryParameter("name");
-            tL_document.attributes.add(tL_documentAttributeFilename);
-            tL_document.attributes.add(new TLRPC.TL_documentAttributeVideo());
-            if (FileLoader.getInstance(intValue).isLoadingFile(FileLoader.getAttachFileName(tL_document))) {
+            TLRPC$TL_document tLRPC$TL_document = new TLRPC$TL_document();
+            tLRPC$TL_document.access_hash = Utilities.parseLong(uri.getQueryParameter("hash")).longValue();
+            tLRPC$TL_document.id = Utilities.parseLong(uri.getQueryParameter("id")).longValue();
+            tLRPC$TL_document.size = Utilities.parseInt(uri.getQueryParameter("size")).intValue();
+            tLRPC$TL_document.dc_id = Utilities.parseInt(uri.getQueryParameter("dc")).intValue();
+            tLRPC$TL_document.mime_type = uri.getQueryParameter("mime");
+            tLRPC$TL_document.file_reference = Utilities.hexToBytes(uri.getQueryParameter("reference"));
+            TLRPC$TL_documentAttributeFilename tLRPC$TL_documentAttributeFilename = new TLRPC$TL_documentAttributeFilename();
+            tLRPC$TL_documentAttributeFilename.file_name = uri.getQueryParameter("name");
+            tLRPC$TL_document.attributes.add(tLRPC$TL_documentAttributeFilename);
+            tLRPC$TL_document.attributes.add(new TLRPC$TL_documentAttributeVideo());
+            if (FileLoader.getInstance(intValue).isLoadingFile(FileLoader.getAttachFileName(tLRPC$TL_document))) {
                 File directory = FileLoader.getDirectory(4);
-                str = new File(directory, tL_document.dc_id + "_" + tL_document.id + ".temp").getAbsolutePath();
+                str = new File(directory, tLRPC$TL_document.dc_id + "_" + tLRPC$TL_document.id + ".temp").getAbsolutePath();
             } else {
-                str = FileLoader.getPathToAttach(tL_document, false).getAbsolutePath();
+                str = FileLoader.getPathToAttach(tLRPC$TL_document, false).getAbsolutePath();
             }
-            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, (long) tL_document.size, tL_document, parentObject, intValue, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, (long) tLRPC$TL_document.size, tLRPC$TL_document, parentObject, intValue, true);
         } else {
-            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC.Document) null, (Object) null, 0, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC$Document) null, (Object) null, 0, true);
         }
         this.duration = (long) this.fileDrawable.getDurationMs();
         float f = this.pendingProgress;

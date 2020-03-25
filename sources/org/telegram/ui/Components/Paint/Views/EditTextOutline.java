@@ -13,14 +13,18 @@ import android.widget.EditText;
 public class EditTextOutline extends EditText {
     private Bitmap mCache;
     private final Canvas mCanvas = new Canvas();
-    private final TextPaint mPaint = new TextPaint();
-    private int mStrokeColor = 0;
+    private final TextPaint mPaint;
+    private int mStrokeColor;
     private float mStrokeWidth;
-    private boolean mUpdateCachedBitmap = true;
+    private boolean mUpdateCachedBitmap;
 
     public EditTextOutline(Context context) {
         super(context);
-        this.mPaint.setAntiAlias(true);
+        TextPaint textPaint = new TextPaint();
+        this.mPaint = textPaint;
+        this.mStrokeColor = 0;
+        this.mUpdateCachedBitmap = true;
+        textPaint.setAntiAlias(true);
         this.mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 

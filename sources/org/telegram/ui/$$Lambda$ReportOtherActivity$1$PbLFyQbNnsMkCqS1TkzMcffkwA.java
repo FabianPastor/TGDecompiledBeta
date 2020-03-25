@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ReportOtherActivity;
 
 /* renamed from: org.telegram.ui.-$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkC-qS1TkzMcffkwA  reason: invalid class name */
@@ -13,7 +13,7 @@ public final /* synthetic */ class $$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkCq
     private /* synthetic */ $$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkCqS1TkzMcffkwA() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        ReportOtherActivity.AnonymousClass1.lambda$onItemClick$0(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ReportOtherActivity.AnonymousClass1.lambda$onItemClick$0(tLObject, tLRPC$TL_error);
     }
 }

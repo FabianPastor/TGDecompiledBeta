@@ -83,7 +83,7 @@ public class ZoomControlView extends View {
             }
             this.zoom = f;
             if (z && (zoomControlViewDelegate = this.delegate) != null) {
-                zoomControlViewDelegate.didSetZoom(this.zoom);
+                zoomControlViewDelegate.didSetZoom(f);
             }
             invalidate();
         }
@@ -93,8 +93,8 @@ public class ZoomControlView extends View {
         this.delegate = zoomControlViewDelegate;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x01de  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01f5 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x01da  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01f1 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:98:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r15) {
@@ -135,9 +135,9 @@ public class ZoomControlView extends View {
             goto L_0x0078
         L_0x003a:
             r7 = 2
-            if (r2 != r7) goto L_0x01db
+            if (r2 != r7) goto L_0x01d7
             boolean r7 = r14.knobPressed
-            if (r7 == 0) goto L_0x01db
+            if (r7 == 0) goto L_0x01d7
             if (r3 == 0) goto L_0x004e
             float r1 = r14.knobStartX
             float r0 = r0 + r1
@@ -176,7 +176,7 @@ public class ZoomControlView extends View {
             r0.didSetZoom(r1)
         L_0x0073:
             r14.invalidate()
-            goto L_0x01db
+            goto L_0x01d7
         L_0x0078:
             r4 = 1101004800(0x41a00000, float:20.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -211,7 +211,7 @@ public class ZoomControlView extends View {
             r14.invalidate()
         L_0x00b5:
             r0 = 1
-            goto L_0x01dc
+            goto L_0x01d8
         L_0x00b8:
             int r4 = r14.minusCx
             r7 = 1098907648(0x41800000, float:16.0)
@@ -297,15 +297,15 @@ public class ZoomControlView extends View {
             goto L_0x00b5
         L_0x0159:
             r4 = 1092616192(0x41200000, float:10.0)
-            if (r3 == 0) goto L_0x019c
+            if (r3 == 0) goto L_0x019a
             int r1 = r14.progressStartX
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x01db
+            if (r1 < 0) goto L_0x01d7
             int r1 = r14.progressEndX
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x01db
+            if (r1 > 0) goto L_0x01d7
             if (r2 != 0) goto L_0x0173
             r14.knobStartX = r0
             r14.pressed = r6
@@ -326,27 +326,26 @@ public class ZoomControlView extends View {
             float r1 = (float) r3
             float r0 = r0 / r1
             r14.zoom = r0
-            org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r0 = r14.delegate
-            if (r0 == 0) goto L_0x0197
-            float r1 = r14.zoom
-            r0.didSetZoom(r1)
-        L_0x0197:
+            org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r1 = r14.delegate
+            if (r1 == 0) goto L_0x0195
+            r1.didSetZoom(r0)
+        L_0x0195:
             r14.invalidate()
             goto L_0x00b5
-        L_0x019c:
+        L_0x019a:
             int r0 = r14.progressStartY
             float r0 = (float) r0
             int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x01db
+            if (r0 < 0) goto L_0x01d7
             int r0 = r14.progressEndY
             float r0 = (float) r0
             int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-            if (r0 > 0) goto L_0x01db
-            if (r2 != r6) goto L_0x01b2
+            if (r0 > 0) goto L_0x01d7
+            if (r2 != r6) goto L_0x01b0
             r14.knobStartY = r1
             r14.pressed = r6
             goto L_0x00b5
-        L_0x01b2:
+        L_0x01b0:
             float r0 = r14.knobStartY
             float r0 = r0 - r1
             float r0 = java.lang.Math.abs(r0)
@@ -363,30 +362,29 @@ public class ZoomControlView extends View {
             float r1 = r1 / r0
             r14.zoom = r1
             org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r0 = r14.delegate
-            if (r0 == 0) goto L_0x01d6
-            float r1 = r14.zoom
+            if (r0 == 0) goto L_0x01d2
             r0.didSetZoom(r1)
-        L_0x01d6:
+        L_0x01d2:
             r14.invalidate()
             goto L_0x00b5
-        L_0x01db:
+        L_0x01d7:
             r0 = 0
-        L_0x01dc:
-            if (r2 != r6) goto L_0x01e5
+        L_0x01d8:
+            if (r2 != r6) goto L_0x01e1
             r14.pressed = r5
             r14.knobPressed = r5
             r14.invalidate()
-        L_0x01e5:
-            if (r0 != 0) goto L_0x01f5
+        L_0x01e1:
+            if (r0 != 0) goto L_0x01f1
             boolean r0 = r14.pressed
-            if (r0 != 0) goto L_0x01f5
+            if (r0 != 0) goto L_0x01f1
             boolean r0 = r14.knobPressed
-            if (r0 != 0) goto L_0x01f5
+            if (r0 != 0) goto L_0x01f1
             boolean r15 = super.onTouchEvent(r15)
-            if (r15 == 0) goto L_0x01f6
-        L_0x01f5:
+            if (r15 == 0) goto L_0x01f2
+        L_0x01f1:
             r5 = 1
-        L_0x01f6:
+        L_0x01f2:
             return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ZoomControlView.onTouchEvent(android.view.MotionEvent):boolean");
@@ -401,8 +399,9 @@ public class ZoomControlView extends View {
             animatorSet2.cancel();
         }
         this.animatingToZoom = f;
-        this.animatorSet = new AnimatorSet();
-        this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.ZOOM_PROPERTY, new float[]{f})});
+        AnimatorSet animatorSet3 = new AnimatorSet();
+        this.animatorSet = animatorSet3;
+        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.ZOOM_PROPERTY, new float[]{f})});
         this.animatorSet.setDuration(180);
         this.animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {

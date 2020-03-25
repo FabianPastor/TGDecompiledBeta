@@ -89,7 +89,6 @@ public class ThemeDescription {
     private int changeFlags;
     private int currentColor;
     private String currentKey;
-    private int defaultColor;
     private ThemeDescriptionDelegate delegate;
     private Drawable[] drawablesToUpdate;
     private Class[] listClasses;
@@ -115,9 +114,8 @@ public class ThemeDescription {
         this.changeFlags = i;
         this.listClasses = clsArr;
         this.delegate = themeDescriptionDelegate;
-        View view2 = this.viewToInvalidate;
-        if (view2 instanceof EditTextEmoji) {
-            this.viewToInvalidate = ((EditTextEmoji) view2).getEditText();
+        if (view instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) view).getEditText();
         }
     }
 
@@ -133,9 +131,8 @@ public class ThemeDescription {
         this.changeFlags = i;
         this.listClasses = clsArr;
         this.delegate = themeDescriptionDelegate;
-        View view2 = this.viewToInvalidate;
-        if (view2 instanceof EditTextEmoji) {
-            this.viewToInvalidate = ((EditTextEmoji) view2).getEditText();
+        if (view instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) view).getEditText();
         }
     }
 
@@ -148,9 +145,8 @@ public class ThemeDescription {
         this.viewToInvalidate = view;
         this.changeFlags = i;
         this.listClasses = clsArr;
-        View view2 = this.viewToInvalidate;
-        if (view2 instanceof EditTextEmoji) {
-            this.viewToInvalidate = ((EditTextEmoji) view2).getEditText();
+        if (view instanceof EditTextEmoji) {
+            this.viewToInvalidate = ((EditTextEmoji) view).getEditText();
         }
     }
 

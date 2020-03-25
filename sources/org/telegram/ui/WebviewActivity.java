@@ -37,7 +37,9 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getStatsURL;
+import org.telegram.tgnet.TLRPC$TL_statsURL;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -50,10 +52,6 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.WebviewActivity;
 
 public class WebviewActivity extends BaseFragment {
-    private static final int TYPE_GAME = 0;
-    private static final int TYPE_STAT = 1;
-    private static final int open_in = 2;
-    private static final int share = 1;
     /* access modifiers changed from: private */
     public String currentBot;
     private long currentDialogId;
@@ -156,12 +154,6 @@ public class WebviewActivity extends BaseFragment {
         this.type = 0;
     }
 
-    public WebviewActivity(String str, long j) {
-        this.currentUrl = str;
-        this.currentDialogId = j;
-        this.type = 1;
-    }
-
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         AndroidUtilities.cancelRunOnUIThread(this.typingRunnable);
@@ -204,12 +196,13 @@ public class WebviewActivity extends BaseFragment {
         this.progressItem = createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         int i = this.type;
         if (i == 0) {
-            createMenu.addItem(0, NUM).addSubItem(2, NUM, (CharSequence) LocaleController.getString("OpenInExternalApp", NUM));
+            createMenu.addItem(0, NUM).addSubItem(2, NUM, LocaleController.getString("OpenInExternalApp", NUM));
             this.actionBar.setTitle(this.currentGame);
             ActionBar actionBar = this.actionBar;
             actionBar.setSubtitle("@" + this.currentBot);
-            this.progressView = new ContextProgressView(context, 1);
-            this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+            ContextProgressView contextProgressView = new ContextProgressView(context, 1);
+            this.progressView = contextProgressView;
+            this.progressItem.addView(contextProgressView, LayoutHelper.createFrame(-1, -1.0f));
             this.progressView.setAlpha(0.0f);
             this.progressView.setScaleX(0.1f);
             this.progressView.setScaleY(0.1f);
@@ -221,8 +214,9 @@ public class WebviewActivity extends BaseFragment {
             this.actionBar.setTitleColor(Theme.getColor("player_actionBarTitle"));
             this.actionBar.setSubtitleColor(Theme.getColor("player_actionBarSubtitle"));
             this.actionBar.setTitle(LocaleController.getString("Statistics", NUM));
-            this.progressView = new ContextProgressView(context, 3);
-            this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
+            ContextProgressView contextProgressView2 = new ContextProgressView(context, 3);
+            this.progressView = contextProgressView2;
+            this.progressItem.addView(contextProgressView2, LayoutHelper.createFrame(-1, -1.0f));
             this.progressView.setAlpha(1.0f);
             this.progressView.setScaleX(1.0f);
             this.progressView.setScaleY(1.0f);
@@ -230,11 +224,13 @@ public class WebviewActivity extends BaseFragment {
             this.progressItem.getContentView().setVisibility(8);
             this.progressItem.setEnabled(false);
         }
-        this.webView = new WebView(context);
-        this.webView.getSettings().setJavaScriptEnabled(true);
+        WebView webView2 = new WebView(context);
+        this.webView = webView2;
+        webView2.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
-        this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        FrameLayout frameLayout2 = frameLayout;
         if (Build.VERSION.SDK_INT >= 19) {
             this.webView.setLayerType(2, (Paint) null);
         }
@@ -309,7 +305,7 @@ public class WebviewActivity extends BaseFragment {
                 }
             }
         });
-        frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout2.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
         return this.fragmentView;
     }
 
@@ -335,22 +331,22 @@ public class WebviewActivity extends BaseFragment {
     public void reloadStats(String str) {
         if (!this.loadStats) {
             this.loadStats = true;
-            TLRPC.TL_messages_getStatsURL tL_messages_getStatsURL = new TLRPC.TL_messages_getStatsURL();
-            tL_messages_getStatsURL.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) this.currentDialogId);
+            TLRPC$TL_messages_getStatsURL tLRPC$TL_messages_getStatsURL = new TLRPC$TL_messages_getStatsURL();
+            tLRPC$TL_messages_getStatsURL.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) this.currentDialogId);
             if (str == null) {
                 str = "";
             }
-            tL_messages_getStatsURL.params = str;
-            tL_messages_getStatsURL.dark = Theme.getCurrentTheme().isDark();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getStatsURL, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    WebviewActivity.this.lambda$reloadStats$1$WebviewActivity(tLObject, tL_error);
+            tLRPC$TL_messages_getStatsURL.params = str;
+            tLRPC$TL_messages_getStatsURL.dark = Theme.getCurrentTheme().isDark();
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStatsURL, new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    WebviewActivity.this.lambda$reloadStats$1$WebviewActivity(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject tLObject, TLRPC.TL_error tL_error) {
+    public /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             private final /* synthetic */ TLObject f$1;
 
@@ -368,7 +364,7 @@ public class WebviewActivity extends BaseFragment {
         this.loadStats = false;
         if (tLObject != null) {
             WebView webView2 = this.webView;
-            String str = ((TLRPC.TL_statsURL) tLObject).url;
+            String str = ((TLRPC$TL_statsURL) tLObject).url;
             this.currentUrl = str;
             webView2.loadUrl(str);
         }

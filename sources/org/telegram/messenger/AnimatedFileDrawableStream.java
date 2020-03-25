@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
 import java.util.concurrent.CountDownLatch;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
 
 public class AnimatedFileDrawableStream implements FileLoadOperationStream {
     private volatile boolean canceled;
     private CountDownLatch countDownLatch;
     private int currentAccount;
-    private TLRPC.Document document;
+    private TLRPC$Document document;
     private int lastOffset;
     private FileLoadOperation loadOperation;
     private Object parentObject;
@@ -15,12 +15,12 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
     private final Object sync = new Object();
     private boolean waitingForLoad;
 
-    public AnimatedFileDrawableStream(TLRPC.Document document2, Object obj, int i, boolean z) {
-        this.document = document2;
+    public AnimatedFileDrawableStream(TLRPC$Document tLRPC$Document, Object obj, int i, boolean z) {
+        this.document = tLRPC$Document;
         this.parentObject = obj;
         this.currentAccount = i;
         this.preview = z;
-        this.loadOperation = FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, 0, this.preview);
+        this.loadOperation = FileLoader.getInstance(i).loadStreamFile(this, this.document, this.parentObject, 0, this.preview);
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:10:0x000e, code lost:
@@ -207,7 +207,7 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
         }
     }
 
-    public TLRPC.Document getDocument() {
+    public TLRPC$Document getDocument() {
         return this.document;
     }
 

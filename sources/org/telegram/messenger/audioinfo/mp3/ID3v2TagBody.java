@@ -7,12 +7,14 @@ import java.util.zip.InflaterInputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class ID3v2TagBody {
-    private final ID3v2DataInput data = new ID3v2DataInput(this.input);
+    private final ID3v2DataInput data;
     private final RangeInputStream input;
     private final ID3v2TagHeader tagHeader;
 
     ID3v2TagBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader) throws IOException {
-        this.input = new RangeInputStream(inputStream, j, (long) i);
+        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
+        this.input = rangeInputStream;
+        this.data = new ID3v2DataInput(rangeInputStream);
         this.tagHeader = iD3v2TagHeader;
     }
 

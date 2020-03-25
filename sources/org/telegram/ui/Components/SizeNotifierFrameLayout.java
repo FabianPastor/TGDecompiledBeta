@@ -63,8 +63,9 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
         this.backgroundDrawable = drawable;
         if (z) {
             if (this.parallaxEffect == null) {
-                this.parallaxEffect = new WallpaperParallaxEffect(getContext());
-                this.parallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
+                WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
+                this.parallaxEffect = wallpaperParallaxEffect;
+                wallpaperParallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
                     public final void onOffsetsChanged(int i, int i2) {
                         SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2);
                     }
@@ -77,9 +78,9 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
                 this.parallaxEffect.setEnabled(true);
             }
         } else {
-            WallpaperParallaxEffect wallpaperParallaxEffect = this.parallaxEffect;
-            if (wallpaperParallaxEffect != null) {
-                wallpaperParallaxEffect.setEnabled(false);
+            WallpaperParallaxEffect wallpaperParallaxEffect2 = this.parallaxEffect;
+            if (wallpaperParallaxEffect2 != null) {
+                wallpaperParallaxEffect2.setEnabled(false);
                 this.parallaxEffect = null;
                 this.parallaxScale = 1.0f;
                 this.translationX = 0.0f;

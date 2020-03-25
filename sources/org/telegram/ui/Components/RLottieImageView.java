@@ -12,7 +12,6 @@ public class RLottieImageView extends ImageView {
     private RLottieDrawable drawable;
     private HashMap<String, Integer> layerColors;
     private boolean playing;
-    private boolean startOnAttach;
 
     public RLottieImageView(Context context) {
         super(context);
@@ -41,9 +40,10 @@ public class RLottieImageView extends ImageView {
     }
 
     public void setAnimation(int i, int i2, int i3, int[] iArr) {
-        this.drawable = new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr);
+        RLottieDrawable rLottieDrawable = new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr);
+        this.drawable = rLottieDrawable;
         if (this.autoRepeat) {
-            this.drawable.setAutoRepeat(1);
+            rLottieDrawable.setAutoRepeat(1);
         }
         if (this.layerColors != null) {
             this.drawable.beginApplyLayerColors();
@@ -76,6 +76,11 @@ public class RLottieImageView extends ImageView {
         }
     }
 
+    public boolean isPlaying() {
+        RLottieDrawable rLottieDrawable = this.drawable;
+        return rLottieDrawable != null && rLottieDrawable.isRunning();
+    }
+
     public void setAutoRepeat(boolean z) {
         this.autoRepeat = z;
     }
@@ -93,8 +98,16 @@ public class RLottieImageView extends ImageView {
             this.playing = true;
             if (this.attachedToWindow) {
                 rLottieDrawable.start();
-            } else {
-                this.startOnAttach = true;
+            }
+        }
+    }
+
+    public void stopAnimation() {
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            this.playing = false;
+            if (this.attachedToWindow) {
+                rLottieDrawable.stop();
             }
         }
     }

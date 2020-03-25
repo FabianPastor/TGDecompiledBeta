@@ -11,31 +11,19 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.MEDIA_BUTTON")) {
             if (intent.getExtras() != null && (keyEvent = (KeyEvent) intent.getExtras().get("android.intent.extra.KEY_EVENT")) != null && keyEvent.getAction() == 0) {
                 int keyCode = keyEvent.getKeyCode();
-                if (keyCode != 79) {
-                    if (keyCode == 126) {
+                if (keyCode == 79 || keyCode == 85) {
+                    if (MediaController.getInstance().isMessagePaused()) {
                         MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
-                        return;
-                    } else if (keyCode != 127) {
-                        switch (keyCode) {
-                            case 85:
-                                break;
-                            case 87:
-                                MediaController.getInstance().playNextMessage();
-                                return;
-                            case 88:
-                                MediaController.getInstance().playPreviousMessage();
-                                return;
-                            default:
-                                return;
-                        }
                     } else {
                         MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
-                        return;
                     }
-                }
-                if (MediaController.getInstance().isMessagePaused()) {
+                } else if (keyCode == 87) {
+                    MediaController.getInstance().playNextMessage();
+                } else if (keyCode == 88) {
+                    MediaController.getInstance().playPreviousMessage();
+                } else if (keyCode == 126) {
                     MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
-                } else {
+                } else if (keyCode == 127) {
                     MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
                 }
             }

@@ -337,9 +337,10 @@ public class ID3v2Info extends AudioInfo {
                                 }
                             }
                             options.inJustDecodeBounds = false;
-                            this.cover = BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
-                            if (this.cover != null) {
-                                float max2 = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / 120.0f;
+                            Bitmap decodeByteArray = BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+                            this.cover = decodeByteArray;
+                            if (decodeByteArray != null) {
+                                float max2 = ((float) Math.max(decodeByteArray.getWidth(), this.cover.getHeight())) / 120.0f;
                                 if (max2 > 0.0f) {
                                     this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / max2), (int) (((float) this.cover.getHeight()) / max2), true);
                                 } else {

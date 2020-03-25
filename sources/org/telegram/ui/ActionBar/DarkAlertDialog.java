@@ -74,9 +74,5 @@ public class DarkAlertDialog extends AlertDialog {
         public Builder(Context context) {
             super((AlertDialog) new DarkAlertDialog(context, 0));
         }
-
-        public Builder(Context context, int i) {
-            super((AlertDialog) new DarkAlertDialog(context, i));
-        }
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class $$Lambda$ThemeActivity$cs0N3OVBAa2T6bewE_YVZM
     }
 
     public final int compare(Object obj, Object obj2) {
-        return Integer.compare(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
+        return C$r8$backportedMethods$utility$Integer$2$compare.compare(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

@@ -7,8 +7,6 @@ import java.util.regex.Pattern;
 
 public class RuleSet {
     public static Pattern pattern = Pattern.compile("[0-9]+");
-    public boolean hasRuleWithIntlPrefix;
-    public boolean hasRuleWithTrunkPrefix;
     public int matchLen;
     public ArrayList<PhoneRule> rules = new ArrayList<>();
 
@@ -60,52 +58,5 @@ public class RuleSet {
             }
         }
         return null;
-    }
-
-    /* access modifiers changed from: package-private */
-    public boolean isValid(String str, String str2, String str3, boolean z) {
-        int length = str.length();
-        int i = this.matchLen;
-        if (length >= i) {
-            Matcher matcher = pattern.matcher(str.substring(0, i));
-            int parseInt = matcher.find() ? Integer.parseInt(matcher.group(0)) : 0;
-            Iterator<PhoneRule> it = this.rules.iterator();
-            while (it.hasNext()) {
-                PhoneRule next = it.next();
-                if (parseInt >= next.minVal && parseInt <= next.maxVal && str.length() == next.maxLen) {
-                    if (z) {
-                        if (((next.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
-                            return true;
-                        }
-                    } else if ((str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
-                        return true;
-                    }
-                }
-            }
-            if (!z) {
-                if (str2 != null && !this.hasRuleWithIntlPrefix) {
-                    Iterator<PhoneRule> it2 = this.rules.iterator();
-                    while (it2.hasNext()) {
-                        PhoneRule next2 = it2.next();
-                        if (parseInt >= next2.minVal && parseInt <= next2.maxVal && str.length() == next2.maxLen) {
-                            if (str3 == null || (next2.flag12 & 1) != 0) {
-                                return true;
-                            }
-                        }
-                    }
-                } else if (str3 != null && !this.hasRuleWithTrunkPrefix) {
-                    Iterator<PhoneRule> it3 = this.rules.iterator();
-                    while (it3.hasNext()) {
-                        PhoneRule next3 = it3.next();
-                        if (parseInt >= next3.minVal && parseInt <= next3.maxVal && str.length() == next3.maxLen) {
-                            if (str2 == null || (next3.flag12 & 2) != 0) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
     }
 }

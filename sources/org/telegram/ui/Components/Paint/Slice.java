@@ -67,7 +67,7 @@ public class Slice {
                     inflater.setInput(bArr, 0, read);
                 }
                 while (true) {
-                    int inflate = inflater.inflate(bArr2, 0, bArr2.length);
+                    int inflate = inflater.inflate(bArr2, 0, 1024);
                     if (inflate == 0) {
                         break;
                     }

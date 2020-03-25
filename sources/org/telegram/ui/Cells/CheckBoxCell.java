@@ -32,9 +32,10 @@ public class CheckBoxCell extends FrameLayout {
         int i3 = i;
         int i4 = i2;
         this.currentType = i3;
-        this.textView = new TextView(context2);
+        TextView textView2 = new TextView(context2);
+        this.textView = textView2;
         boolean z = true;
-        this.textView.setTextColor(Theme.getColor(i3 == 1 ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        textView2.setTextColor(Theme.getColor(i3 == 1 ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setLinkTextColor(Theme.getColor(i3 == 1 ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
@@ -53,8 +54,9 @@ public class CheckBoxCell extends FrameLayout {
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? i4 : (i4 - 17) + 46), 0.0f, (float) (LocaleController.isRTL ? (i4 - 17) + 46 : i4), 0.0f));
             }
         }
-        this.valueTextView = new TextView(context2);
-        this.valueTextView.setTextColor(Theme.getColor(i3 == 1 ? "dialogTextBlue" : "windowBackgroundWhiteValueText"));
+        TextView textView3 = new TextView(context2);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor(i3 == 1 ? "dialogTextBlue" : "windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -63,13 +65,14 @@ public class CheckBoxCell extends FrameLayout {
         this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         float f = (float) i4;
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, f, 0.0f, f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context2, i3 != 1 ? false : z);
+        CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context2, i3 != 1 ? false : z);
+        this.checkBox = checkBoxSquare;
         if (i3 == 3) {
-            addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, 51, 0.0f, 15.0f, 0.0f, 0.0f));
+            addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, 51, 0.0f, 15.0f, 0.0f, 0.0f));
         } else if (i3 == 2) {
-            addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 15.0f, 0.0f, 0.0f));
+            addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 15.0f, 0.0f, 0.0f));
         } else {
-            addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : i4), 16.0f, (float) (!LocaleController.isRTL ? 0 : i4), 0.0f));
+            addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : i4), 16.0f, (float) (!LocaleController.isRTL ? 0 : i4), 0.0f));
         }
     }
 

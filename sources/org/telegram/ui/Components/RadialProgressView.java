@@ -13,8 +13,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RadialProgressView extends View {
-    private static final float risingTime = 500.0f;
-    private static final float rotationTime = 2000.0f;
     private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private RectF cicleRect = new RectF();
     private float currentCircleLength;
@@ -22,7 +20,7 @@ public class RadialProgressView extends View {
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
     private int progressColor = Theme.getColor("progressCircle");
-    private Paint progressPaint = new Paint(1);
+    private Paint progressPaint;
     private float radOffset;
     private boolean risingCircleLength;
     private int size = AndroidUtilities.dp(40.0f);
@@ -30,7 +28,9 @@ public class RadialProgressView extends View {
 
     public RadialProgressView(Context context) {
         super(context);
-        this.progressPaint.setStyle(Paint.Style.STROKE);
+        Paint paint = new Paint(1);
+        this.progressPaint = paint;
+        paint.setStyle(Paint.Style.STROKE);
         this.progressPaint.setStrokeCap(Paint.Cap.ROUND);
         this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.progressPaint.setColor(this.progressColor);
@@ -60,11 +60,12 @@ public class RadialProgressView extends View {
             j = 17;
         }
         this.lastUpdateTime = currentTimeMillis;
-        this.radOffset += ((float) (360 * j)) / 2000.0f;
-        float f = this.radOffset;
+        float f = this.radOffset + (((float) (360 * j)) / 2000.0f);
+        this.radOffset = f;
         this.radOffset = f - ((float) (((int) (f / 360.0f)) * 360));
-        this.currentProgressTime += (float) j;
-        if (this.currentProgressTime >= 500.0f) {
+        float f2 = this.currentProgressTime + ((float) j);
+        this.currentProgressTime = f2;
+        if (f2 >= 500.0f) {
             this.currentProgressTime = 500.0f;
         }
         if (this.risingCircleLength) {
@@ -94,7 +95,7 @@ public class RadialProgressView extends View {
 
     public void setProgressColor(int i) {
         this.progressColor = i;
-        this.progressPaint.setColor(this.progressColor);
+        this.progressPaint.setColor(i);
     }
 
     /* access modifiers changed from: protected */

@@ -17,20 +17,21 @@ import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SideMenultItemAnimator;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
-    private boolean accountsShowed;
-    private RecyclerView.ItemAnimator itemAnimator;
+    private boolean accountsShown;
+    private SideMenultItemAnimator itemAnimator;
     private ArrayList<Item> items = new ArrayList<>(11);
     private Context mContext;
     private DrawerProfileCell profileCell;
 
-    public DrawerLayoutAdapter(Context context, RecyclerView.ItemAnimator itemAnimator2) {
+    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator sideMenultItemAnimator) {
         this.mContext = context;
-        this.itemAnimator = itemAnimator2;
+        this.itemAnimator = sideMenultItemAnimator;
         boolean z = true;
-        this.accountsShowed = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShowed", true)) ? false : z;
+        this.accountsShown = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true)) ? false : z;
         Theme.createDialogsResources(context);
         resetItems();
     }
@@ -42,29 +43,32 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     public int getItemCount() {
         int size = this.items.size() + 2;
-        return this.accountsShowed ? size + getAccountRowsCount() : size;
+        return this.accountsShown ? size + getAccountRowsCount() : size;
     }
 
-    public void setAccountsShowed(boolean z, boolean z2) {
-        if (this.accountsShowed != z && !this.itemAnimator.isRunning()) {
-            this.accountsShowed = z;
+    public void setAccountsShown(boolean z, boolean z2) {
+        if (this.accountsShown != z && !this.itemAnimator.isRunning()) {
+            this.accountsShown = z;
             DrawerProfileCell drawerProfileCell = this.profileCell;
             if (drawerProfileCell != null) {
-                drawerProfileCell.setAccountsShowed(this.accountsShowed, z2);
+                drawerProfileCell.setAccountsShown(z, z2);
             }
-            MessagesController.getGlobalMainSettings().edit().putBoolean("accountsShowed", this.accountsShowed).commit();
-            if (!z2) {
-                notifyDataSetChanged();
-            } else if (this.accountsShowed) {
-                notifyItemRangeInserted(2, getAccountRowsCount());
+            MessagesController.getGlobalMainSettings().edit().putBoolean("accountsShown", this.accountsShown).commit();
+            if (z2) {
+                this.itemAnimator.setShouldClipChildren(false);
+                if (this.accountsShown) {
+                    notifyItemRangeInserted(2, getAccountRowsCount());
+                } else {
+                    notifyItemRangeRemoved(2, getAccountRowsCount());
+                }
             } else {
-                notifyItemRangeRemoved(2, getAccountRowsCount());
+                notifyDataSetChanged();
             }
         }
     }
 
-    public boolean isAccountsShowed() {
-        return this.accountsShowed;
+    public boolean isAccountsShown() {
+        return this.accountsShown;
     }
 
     public void notifyDataSetChanged() {
@@ -74,7 +78,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
-        return itemViewType == 3 || itemViewType == 4 || itemViewType == 5;
+        return itemViewType == 3 || itemViewType == 4 || itemViewType == 5 || itemViewType == 6;
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -101,13 +105,13 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
-            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
+            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
         } else if (itemViewType == 3) {
+            DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
             int i2 = i - 2;
-            if (this.accountsShowed) {
+            if (this.accountsShown) {
                 i2 -= getAccountRowsCount();
             }
-            DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
             this.items.get(i2).bind(drawerActionCell);
             drawerActionCell.setPadding(0, 0, 0, 0);
         } else if (itemViewType == 4) {
@@ -123,7 +127,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             return 1;
         }
         int i2 = i - 2;
-        if (this.accountsShowed) {
+        if (this.accountsShown) {
             if (i2 < this.accountNumbers.size()) {
                 return 4;
             }
@@ -143,50 +147,66 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     private void resetItems() {
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        int i5;
+        int i6;
+        int i7;
+        int i8;
         this.accountNumbers.clear();
-        for (int i = 0; i < 3; i++) {
-            if (UserConfig.getInstance(i).isClientActivated()) {
-                this.accountNumbers.add(Integer.valueOf(i));
+        for (int i9 = 0; i9 < 3; i9++) {
+            if (UserConfig.getInstance(i9).isClientActivated()) {
+                this.accountNumbers.add(Integer.valueOf(i9));
             }
         }
         Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrAJKuc.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             int eventType = Theme.getEventType();
+            int i10 = NUM;
             if (eventType == 0) {
-                this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
-                this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
-                this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
-                this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                this.items.add((Object) null);
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
-                this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
-            } else if (eventType == 1) {
-                this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
-                this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
-                this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
-                this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                this.items.add((Object) null);
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
-                this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
+                i8 = NUM;
+                i7 = NUM;
+                i6 = NUM;
+                i5 = NUM;
+                i4 = NUM;
+                i3 = NUM;
+                i2 = NUM;
+                i = NUM;
             } else {
-                this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), NUM));
-                this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), NUM));
-                this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), NUM));
-                this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), NUM));
-                this.items.add(new Item(10, LocaleController.getString("Calls", NUM), NUM));
-                this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), NUM));
-                this.items.add(new Item(8, LocaleController.getString("Settings", NUM), NUM));
-                this.items.add((Object) null);
-                this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), NUM));
-                this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), NUM));
+                if (eventType == 1) {
+                    i8 = NUM;
+                    i7 = NUM;
+                    i10 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                    i2 = NUM;
+                } else {
+                    i8 = NUM;
+                    i10 = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                    i2 = NUM;
+                }
+                i = NUM;
             }
+            this.items.add(new Item(this, 2, LocaleController.getString("NewGroup", NUM), i8));
+            this.items.add(new Item(this, 3, LocaleController.getString("NewSecretChat", NUM), i10));
+            this.items.add(new Item(this, 4, LocaleController.getString("NewChannel", NUM), i7));
+            this.items.add(new Item(this, 6, LocaleController.getString("Contacts", NUM), i6));
+            this.items.add(new Item(this, 10, LocaleController.getString("Calls", NUM), i5));
+            this.items.add(new Item(this, 11, LocaleController.getString("SavedMessages", NUM), i4));
+            this.items.add(new Item(this, 8, LocaleController.getString("Settings", NUM), i3));
+            this.items.add((Object) null);
+            this.items.add(new Item(this, 7, LocaleController.getString("InviteFriends", NUM), i2));
+            this.items.add(new Item(this, 9, LocaleController.getString("TelegramFAQ", NUM), i));
         }
     }
 
@@ -202,7 +222,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     public int getId(int i) {
         Item item;
         int i2 = i - 2;
-        if (this.accountsShowed) {
+        if (this.accountsShown) {
             i2 -= getAccountRowsCount();
         }
         if (i2 < 0 || i2 >= this.items.size() || (item = this.items.get(i2)) == null) {
@@ -216,7 +236,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         public int id;
         public String text;
 
-        public Item(int i, String str, int i2) {
+        public Item(DrawerLayoutAdapter drawerLayoutAdapter, int i, String str, int i2) {
             this.icon = i2;
             this.id = i;
             this.text = str;

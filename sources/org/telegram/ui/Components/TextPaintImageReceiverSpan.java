@@ -10,7 +10,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
 
 public class TextPaintImageReceiverSpan extends ReplacementSpan {
     private boolean alignTop;
@@ -18,22 +18,23 @@ public class TextPaintImageReceiverSpan extends ReplacementSpan {
     private ImageReceiver imageReceiver;
     private int width;
 
-    public TextPaintImageReceiverSpan(View view, TLRPC.Document document, Object obj, int i, int i2, boolean z, boolean z2) {
-        TLRPC.Document document2 = document;
+    public TextPaintImageReceiverSpan(View view, TLRPC$Document tLRPC$Document, Object obj, int i, int i2, boolean z, boolean z2) {
+        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
         String format = String.format(Locale.US, "%d_%d_i", new Object[]{Integer.valueOf(i), Integer.valueOf(i2)});
         this.width = i;
         this.height = i2;
-        this.imageReceiver = new ImageReceiver(view);
-        this.imageReceiver.setInvalidateAll(true);
+        ImageReceiver imageReceiver2 = new ImageReceiver(view);
+        this.imageReceiver = imageReceiver2;
+        imageReceiver2.setInvalidateAll(true);
         if (z2) {
-            this.imageReceiver.setDelegate($$Lambda$TextPaintImageReceiverSpan$Cb0mzcqNIfBx1iovVDp8PZkH5ug.INSTANCE);
+            this.imageReceiver.setDelegate($$Lambda$TextPaintImageReceiverSpan$x0NtYGCv_nR9J6999CLASSNAMEM45NipY.INSTANCE);
         }
         String str = format;
-        this.imageReceiver.setImage(ImageLocation.getForDocument(document), str, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2), format, -1, (String) null, obj, 1);
+        this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), str, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90), tLRPC$Document2), format, -1, (String) null, obj, 1);
         this.alignTop = z;
     }
 
-    static /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver2, boolean z, boolean z2) {
+    static /* synthetic */ void lambda$new$0(ImageReceiver imageReceiver2, boolean z, boolean z2, boolean z3) {
         if (imageReceiver2.canInvertBitmap()) {
             imageReceiver2.setColorFilter(new ColorMatrixColorFilter(new float[]{-1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 0.0f, -1.0f, 0.0f, 0.0f, 255.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }

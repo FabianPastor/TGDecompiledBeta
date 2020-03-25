@@ -1,6 +1,10 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.tgnet.TLRPC$Peer;
+import org.telegram.tgnet.TLRPC$TL_dialog;
+import org.telegram.tgnet.TLRPC$TL_dialogFolder;
 
 public class DialogObject {
     public static boolean isFolderDialogId(long j) {
@@ -24,65 +28,65 @@ public class DialogObject {
         return ((long) i) << 32;
     }
 
-    public static boolean isChannel(TLRPC.Dialog dialog) {
-        return (dialog == null || (dialog.flags & 1) == 0) ? false : true;
+    public static boolean isChannel(TLRPC$Dialog tLRPC$Dialog) {
+        return (tLRPC$Dialog == null || (tLRPC$Dialog.flags & 1) == 0) ? false : true;
     }
 
-    public static void initDialog(TLRPC.Dialog dialog) {
-        if (dialog != null && dialog.id == 0) {
-            if (dialog instanceof TLRPC.TL_dialog) {
-                TLRPC.Peer peer = dialog.peer;
-                if (peer != null) {
-                    int i = peer.user_id;
+    public static void initDialog(TLRPC$Dialog tLRPC$Dialog) {
+        if (tLRPC$Dialog != null && tLRPC$Dialog.id == 0) {
+            if (tLRPC$Dialog instanceof TLRPC$TL_dialog) {
+                TLRPC$Peer tLRPC$Peer = tLRPC$Dialog.peer;
+                if (tLRPC$Peer != null) {
+                    int i = tLRPC$Peer.user_id;
                     if (i != 0) {
-                        dialog.id = (long) i;
+                        tLRPC$Dialog.id = (long) i;
                         return;
                     }
-                    int i2 = peer.chat_id;
+                    int i2 = tLRPC$Peer.chat_id;
                     if (i2 != 0) {
-                        dialog.id = (long) (-i2);
+                        tLRPC$Dialog.id = (long) (-i2);
                     } else {
-                        dialog.id = (long) (-peer.channel_id);
+                        tLRPC$Dialog.id = (long) (-tLRPC$Peer.channel_id);
                     }
                 }
-            } else if (dialog instanceof TLRPC.TL_dialogFolder) {
-                dialog.id = makeFolderDialogId(((TLRPC.TL_dialogFolder) dialog).folder.id);
+            } else if (tLRPC$Dialog instanceof TLRPC$TL_dialogFolder) {
+                tLRPC$Dialog.id = makeFolderDialogId(((TLRPC$TL_dialogFolder) tLRPC$Dialog).folder.id);
             }
         }
     }
 
-    public static long getPeerDialogId(TLRPC.Peer peer) {
+    public static long getPeerDialogId(TLRPC$Peer tLRPC$Peer) {
         int i;
-        if (peer == null) {
+        if (tLRPC$Peer == null) {
             return 0;
         }
-        int i2 = peer.user_id;
+        int i2 = tLRPC$Peer.user_id;
         if (i2 != 0) {
             return (long) i2;
         }
-        int i3 = peer.chat_id;
+        int i3 = tLRPC$Peer.chat_id;
         if (i3 != 0) {
             i = -i3;
         } else {
-            i = -peer.channel_id;
+            i = -tLRPC$Peer.channel_id;
         }
         return (long) i;
     }
 
-    public static long getPeerDialogId(TLRPC.InputPeer inputPeer) {
+    public static long getPeerDialogId(TLRPC$InputPeer tLRPC$InputPeer) {
         int i;
-        if (inputPeer == null) {
+        if (tLRPC$InputPeer == null) {
             return 0;
         }
-        int i2 = inputPeer.user_id;
+        int i2 = tLRPC$InputPeer.user_id;
         if (i2 != 0) {
             return (long) i2;
         }
-        int i3 = inputPeer.chat_id;
+        int i3 = tLRPC$InputPeer.chat_id;
         if (i3 != 0) {
             i = -i3;
         } else {
-            i = -inputPeer.channel_id;
+            i = -tLRPC$InputPeer.channel_id;
         }
         return (long) i;
     }
@@ -91,7 +95,7 @@ public class DialogObject {
         r2 = r2.date;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static long getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC.Dialog r1, org.telegram.tgnet.TLRPC.DraftMessage r2) {
+    public static long getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC$Dialog r1, org.telegram.tgnet.TLRPC$DraftMessage r2) {
         /*
             if (r2 == 0) goto L_0x000a
             int r2 = r2.date

@@ -23,8 +23,9 @@ public class LineProgressView extends View {
         super(context);
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
-            progressPaint = new Paint(1);
-            progressPaint.setStrokeCap(Paint.Cap.ROUND);
+            Paint paint = new Paint(1);
+            progressPaint = paint;
+            paint.setStrokeCap(Paint.Cap.ROUND);
             progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }
     }
@@ -40,8 +41,8 @@ public class LineProgressView extends View {
                 float f3 = this.animationProgressStart;
                 float f4 = f2 - f3;
                 if (f4 > 0.0f) {
-                    this.currentProgressTime += j;
-                    long j2 = this.currentProgressTime;
+                    long j2 = this.currentProgressTime + j;
+                    this.currentProgressTime = j2;
                     if (j2 >= 300) {
                         this.animatedProgressValue = f2;
                         this.animationProgressStart = f2;
@@ -57,8 +58,9 @@ public class LineProgressView extends View {
         if (f5 >= 1.0f && f5 == 1.0f) {
             float f6 = this.animatedAlphaValue;
             if (f6 != 0.0f) {
-                this.animatedAlphaValue = f6 - (((float) j) / 200.0f);
-                if (this.animatedAlphaValue <= 0.0f) {
+                float f7 = f6 - (((float) j) / 200.0f);
+                this.animatedAlphaValue = f7;
+                if (f7 <= 0.0f) {
                     this.animatedAlphaValue = 0.0f;
                 }
                 invalidate();

@@ -10,7 +10,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -24,11 +24,13 @@ public class JoinSheetUserCell extends FrameLayout {
 
     public JoinSheetUserCell(Context context) {
         super(context);
-        this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.dp(27.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.getColor("dialogTextBlack"));
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setTextColor(Theme.getColor("dialogTextBlack"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setGravity(49);
@@ -43,10 +45,10 @@ public class JoinSheetUserCell extends FrameLayout {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
     }
 
-    public void setUser(TLRPC.User user) {
-        this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-        this.avatarDrawable.setInfo(user);
-        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+    public void setUser(TLRPC$User tLRPC$User) {
+        this.nameTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
+        this.avatarDrawable.setInfo(tLRPC$User);
+        this.imageView.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
     }
 
     public void setCount(int i) {

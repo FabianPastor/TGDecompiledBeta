@@ -21,7 +21,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
@@ -107,7 +107,7 @@ public class ApplicationLoader extends Application {
                 } else {
                     ConnectionsManager.getInstance(i);
                 }
-                TLRPC.User currentUser = UserConfig.getInstance(i).getCurrentUser();
+                TLRPC$User currentUser = UserConfig.getInstance(i).getCurrentUser();
                 if (currentUser != null) {
                     MessagesController.getInstance(i).putUser(currentUser, true);
                     SendMessagesHelper.getInstance(i).checkUnsentMessages();

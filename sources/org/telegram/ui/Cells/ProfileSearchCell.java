@@ -20,15 +20,19 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$FileLocation;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.NotificationsSettingsActivity;
 
 public class ProfileSearchCell extends BaseCell {
     private AvatarDrawable avatarDrawable;
-    private ImageReceiver avatarImage = new ImageReceiver(this);
-    private TLRPC.Chat chat;
+    private ImageReceiver avatarImage;
+    private TLRPC$Chat chat;
     private StaticLayout countLayout;
     private int countLeft;
     private int countTop = AndroidUtilities.dp(19.0f);
@@ -42,8 +46,8 @@ public class ProfileSearchCell extends BaseCell {
     private boolean drawNameBroadcast;
     private boolean drawNameGroup;
     private boolean drawNameLock;
-    private TLRPC.EncryptedChat encryptedChat;
-    private TLRPC.FileLocation lastAvatar;
+    private TLRPC$EncryptedChat encryptedChat;
+    private TLRPC$FileLocation lastAvatar;
     private String lastName;
     private int lastStatus;
     private int lastUnreadCount;
@@ -61,77 +65,30 @@ public class ProfileSearchCell extends BaseCell {
     private int sublabelOffsetX;
     private int sublabelOffsetY;
     public boolean useSeparator;
-    private TLRPC.User user;
+    private TLRPC$User user;
 
     public ProfileSearchCell(Context context) {
         super(context);
-        this.avatarImage.setRoundRadius(AndroidUtilities.dp(23.0f));
+        ImageReceiver imageReceiver = new ImageReceiver(this);
+        this.avatarImage = imageReceiver;
+        imageReceiver.setRoundRadius(AndroidUtilities.dp(23.0f));
         this.avatarDrawable = new AvatarDrawable();
     }
 
-    public void setData(TLObject tLObject, TLRPC.EncryptedChat encryptedChat2, CharSequence charSequence, CharSequence charSequence2, boolean z, boolean z2) {
+    public void setData(TLObject tLObject, TLRPC$EncryptedChat tLRPC$EncryptedChat, CharSequence charSequence, CharSequence charSequence2, boolean z, boolean z2) {
         this.currentName = charSequence;
-        if (tLObject instanceof TLRPC.User) {
-            this.user = (TLRPC.User) tLObject;
+        if (tLObject instanceof TLRPC$User) {
+            this.user = (TLRPC$User) tLObject;
             this.chat = null;
-        } else if (tLObject instanceof TLRPC.Chat) {
-            this.chat = (TLRPC.Chat) tLObject;
+        } else if (tLObject instanceof TLRPC$Chat) {
+            this.chat = (TLRPC$Chat) tLObject;
             this.user = null;
         }
-        this.encryptedChat = encryptedChat2;
+        this.encryptedChat = tLRPC$EncryptedChat;
         this.subLabel = charSequence2;
         this.drawCount = z;
         this.savedMessages = z2;
         update(0);
-    }
-
-    public void setException(NotificationsSettingsActivity.NotificationException notificationException, CharSequence charSequence) {
-        String str;
-        TLRPC.User user2;
-        boolean z = notificationException.hasCustom;
-        int i = notificationException.notify;
-        int i2 = notificationException.muteUntil;
-        boolean z2 = false;
-        if (i != 3 || i2 == Integer.MAX_VALUE) {
-            if (i == 0 || i == 1) {
-                z2 = true;
-            }
-            str = (!z2 || !z) ? z2 ? LocaleController.getString("NotificationsUnmuted", NUM) : LocaleController.getString("NotificationsMuted", NUM) : LocaleController.getString("NotificationsCustom", NUM);
-        } else {
-            int currentTime = i2 - ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            if (currentTime <= 0) {
-                str = z ? LocaleController.getString("NotificationsCustom", NUM) : LocaleController.getString("NotificationsUnmuted", NUM);
-            } else if (currentTime < 3600) {
-                str = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Minutes", currentTime / 60));
-            } else if (currentTime < 86400) {
-                str = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) currentTime) / 60.0f) / 60.0f))));
-            } else {
-                str = currentTime < 31536000 ? LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) currentTime) / 60.0f) / 60.0f) / 24.0f)))) : null;
-            }
-        }
-        if (str == null) {
-            str = LocaleController.getString("NotificationsOff", NUM);
-        }
-        String str2 = str;
-        long j = notificationException.did;
-        int i3 = (int) j;
-        int i4 = (int) (j >> 32);
-        if (i3 == 0) {
-            TLRPC.EncryptedChat encryptedChat2 = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(i4));
-            if (encryptedChat2 != null && (user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat2.user_id))) != null) {
-                setData(user2, encryptedChat2, charSequence, str2, false, false);
-            }
-        } else if (i3 > 0) {
-            TLRPC.User user3 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i3));
-            if (user3 != null) {
-                setData(user3, (TLRPC.EncryptedChat) null, charSequence, str2, false, false);
-            }
-        } else {
-            TLRPC.Chat chat2 = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i3));
-            if (chat2 != null) {
-                setData(chat2, (TLRPC.EncryptedChat) null, charSequence, str2, false, false);
-            }
-        }
     }
 
     /* access modifiers changed from: protected */
@@ -158,11 +115,11 @@ public class ProfileSearchCell extends BaseCell {
         }
     }
 
-    public TLRPC.User getUser() {
+    public TLRPC$User getUser() {
         return this.user;
     }
 
-    public TLRPC.Chat getChat() {
+    public TLRPC$Chat getChat() {
         return this.chat;
     }
 
@@ -176,7 +133,7 @@ public class ProfileSearchCell extends BaseCell {
         int i;
         CharSequence charSequence;
         int i2;
-        TLRPC.UserStatus userStatus;
+        TLRPC$UserStatus tLRPC$UserStatus;
         int i3;
         String str;
         String str2;
@@ -185,10 +142,10 @@ public class ProfileSearchCell extends BaseCell {
         this.drawNameGroup = false;
         this.drawCheck = false;
         this.drawNameBot = false;
-        TLRPC.EncryptedChat encryptedChat2 = this.encryptedChat;
-        if (encryptedChat2 != null) {
+        TLRPC$EncryptedChat tLRPC$EncryptedChat = this.encryptedChat;
+        if (tLRPC$EncryptedChat != null) {
             this.drawNameLock = true;
-            this.dialog_id = ((long) encryptedChat2.id) << 32;
+            this.dialog_id = ((long) tLRPC$EncryptedChat.id) << 32;
             if (!LocaleController.isRTL) {
                 this.nameLockLeft = AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
                 this.nameLeft = AndroidUtilities.dp((float) (AndroidUtilities.leftBaseline + 4)) + Theme.dialogs_lockDrawable.getIntrinsicWidth();
@@ -198,11 +155,11 @@ public class ProfileSearchCell extends BaseCell {
             }
             this.nameLockTop = AndroidUtilities.dp(22.0f);
         } else {
-            TLRPC.Chat chat2 = this.chat;
-            if (chat2 != null) {
-                this.dialog_id = (long) (-chat2.id);
+            TLRPC$Chat tLRPC$Chat = this.chat;
+            if (tLRPC$Chat != null) {
+                this.dialog_id = (long) (-tLRPC$Chat.id);
                 if (SharedConfig.drawDialogIcons) {
-                    if (!ChatObject.isChannel(chat2) || this.chat.megagroup) {
+                    if (!ChatObject.isChannel(tLRPC$Chat) || this.chat.megagroup) {
                         this.drawNameGroup = true;
                         this.nameLockTop = AndroidUtilities.dp(24.0f);
                     } else {
@@ -225,17 +182,17 @@ public class ProfileSearchCell extends BaseCell {
                     this.nameLeft = AndroidUtilities.dp(11.0f);
                 }
             } else {
-                TLRPC.User user2 = this.user;
-                if (user2 != null) {
-                    this.dialog_id = (long) user2.id;
+                TLRPC$User tLRPC$User = this.user;
+                if (tLRPC$User != null) {
+                    this.dialog_id = (long) tLRPC$User.id;
                     if (!LocaleController.isRTL) {
                         this.nameLeft = AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
                     } else {
                         this.nameLeft = AndroidUtilities.dp(11.0f);
                     }
                     if (SharedConfig.drawDialogIcons) {
-                        TLRPC.User user3 = this.user;
-                        if (user3.bot && !MessagesController.isSupportUser(user3)) {
+                        TLRPC$User tLRPC$User2 = this.user;
+                        if (tLRPC$User2.bot && !MessagesController.isSupportUser(tLRPC$User2)) {
                             this.drawNameBot = true;
                             if (!LocaleController.isRTL) {
                                 this.nameLockLeft = AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
@@ -255,18 +212,18 @@ public class ProfileSearchCell extends BaseCell {
         }
         CharSequence charSequence2 = this.currentName;
         if (charSequence2 == null) {
-            TLRPC.Chat chat3 = this.chat;
-            if (chat3 != null) {
-                str2 = chat3.title;
+            TLRPC$Chat tLRPC$Chat2 = this.chat;
+            if (tLRPC$Chat2 != null) {
+                str2 = tLRPC$Chat2.title;
             } else {
-                TLRPC.User user4 = this.user;
-                str2 = user4 != null ? UserObject.getUserName(user4) : "";
+                TLRPC$User tLRPC$User3 = this.user;
+                str2 = tLRPC$User3 != null ? UserObject.getUserName(tLRPC$User3) : "";
             }
             charSequence2 = str2.replace(10, ' ');
         }
         if (charSequence2.length() == 0) {
-            TLRPC.User user5 = this.user;
-            if (user5 == null || (str = user5.phone) == null || str.length() == 0) {
+            TLRPC$User tLRPC$User4 = this.user;
+            if (tLRPC$User4 == null || (str = tLRPC$User4.phone) == null || str.length() == 0) {
                 charSequence2 = LocaleController.getString("HiddenName", NUM);
             } else {
                 charSequence2 = PhoneFormat.getInstance().format("+" + this.user.phone);
@@ -297,8 +254,8 @@ public class ProfileSearchCell extends BaseCell {
         this.nameWidth -= getPaddingLeft() + getPaddingRight();
         int paddingLeft = i - (getPaddingLeft() + getPaddingRight());
         if (this.drawCount) {
-            TLRPC.Dialog dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
-            if (dialog == null || (i3 = dialog.unread_count) == 0) {
+            TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
+            if (tLRPC$Dialog == null || (i3 = tLRPC$Dialog.unread_count) == 0) {
                 this.lastUnreadCount = 0;
                 this.countLayout = null;
             } else {
@@ -326,27 +283,27 @@ public class ProfileSearchCell extends BaseCell {
         } else {
             this.statusLeft = AndroidUtilities.dp(11.0f);
         }
-        TLRPC.Chat chat4 = this.chat;
-        if (chat4 == null || this.subLabel != null) {
+        TLRPC$Chat tLRPC$Chat3 = this.chat;
+        if (tLRPC$Chat3 == null || this.subLabel != null) {
             CharSequence charSequence3 = this.subLabel;
             if (charSequence3 == null) {
-                TLRPC.User user6 = this.user;
-                if (user6 == null) {
+                TLRPC$User tLRPC$User5 = this.user;
+                if (tLRPC$User5 == null) {
                     charSequence3 = null;
-                } else if (MessagesController.isSupportUser(user6)) {
+                } else if (MessagesController.isSupportUser(tLRPC$User5)) {
                     charSequence3 = LocaleController.getString("SupportStatus", NUM);
                 } else {
-                    TLRPC.User user7 = this.user;
-                    if (user7.bot) {
+                    TLRPC$User tLRPC$User6 = this.user;
+                    if (tLRPC$User6.bot) {
                         charSequence3 = LocaleController.getString("Bot", NUM);
                     } else {
-                        int i4 = user7.id;
+                        int i4 = tLRPC$User6.id;
                         if (i4 == 333000 || i4 == 777000) {
                             charSequence3 = LocaleController.getString("ServiceNotifications", NUM);
                         } else {
-                            charSequence3 = LocaleController.formatUserStatus(this.currentAccount, user7);
-                            TLRPC.User user8 = this.user;
-                            if (user8 != null && (user8.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((userStatus = this.user.status) != null && userStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
+                            charSequence3 = LocaleController.formatUserStatus(this.currentAccount, tLRPC$User6);
+                            TLRPC$User tLRPC$User7 = this.user;
+                            if (tLRPC$User7 != null && (tLRPC$User7.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((tLRPC$UserStatus = this.user.status) != null && tLRPC$UserStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                                 textPaint3 = Theme.dialogs_onlinePaint;
                                 charSequence3 = LocaleController.getString("Online", NUM);
                             }
@@ -359,22 +316,22 @@ public class ProfileSearchCell extends BaseCell {
                 charSequence = null;
             }
         } else {
-            if (chat4 != null) {
-                if (ChatObject.isChannel(chat4)) {
-                    TLRPC.Chat chat5 = this.chat;
-                    if (!chat5.megagroup) {
-                        int i5 = chat5.participants_count;
-                        charSequence = i5 != 0 ? LocaleController.formatPluralString("Subscribers", i5) : TextUtils.isEmpty(chat5.username) ? LocaleController.getString("ChannelPrivate", NUM).toLowerCase() : LocaleController.getString("ChannelPublic", NUM).toLowerCase();
+            if (tLRPC$Chat3 != null) {
+                if (ChatObject.isChannel(tLRPC$Chat3)) {
+                    TLRPC$Chat tLRPC$Chat4 = this.chat;
+                    if (!tLRPC$Chat4.megagroup) {
+                        int i5 = tLRPC$Chat4.participants_count;
+                        charSequence = i5 != 0 ? LocaleController.formatPluralString("Subscribers", i5) : TextUtils.isEmpty(tLRPC$Chat4.username) ? LocaleController.getString("ChannelPrivate", NUM).toLowerCase() : LocaleController.getString("ChannelPublic", NUM).toLowerCase();
                     }
                 }
-                TLRPC.Chat chat6 = this.chat;
-                int i6 = chat6.participants_count;
+                TLRPC$Chat tLRPC$Chat5 = this.chat;
+                int i6 = tLRPC$Chat5.participants_count;
                 if (i6 != 0) {
                     charSequence = LocaleController.formatPluralString("Members", i6);
-                } else if (chat6.has_geo) {
+                } else if (tLRPC$Chat5.has_geo) {
                     charSequence = LocaleController.getString("MegaLocation", NUM);
                 } else {
-                    charSequence = TextUtils.isEmpty(chat6.username) ? LocaleController.getString("MegaPrivate", NUM).toLowerCase() : LocaleController.getString("MegaPublic", NUM).toLowerCase();
+                    charSequence = TextUtils.isEmpty(tLRPC$Chat5.username) ? LocaleController.getString("MegaPrivate", NUM).toLowerCase() : LocaleController.getString("MegaPublic", NUM).toLowerCase();
                 }
             } else {
                 charSequence = null;
@@ -460,7 +417,7 @@ public class ProfileSearchCell extends BaseCell {
             r3 = 0
             if (r0 == 0) goto L_0x003e
             org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC.User) r0)
+            r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
             boolean r0 = r12.savedMessages
             if (r0 == 0) goto L_0x0022
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
@@ -499,7 +456,7 @@ public class ProfileSearchCell extends BaseCell {
         L_0x0048:
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
-            r0.setInfo((org.telegram.tgnet.TLRPC.Chat) r4)
+            r0.setInfo((org.telegram.tgnet.TLRPC$Chat) r4)
             org.telegram.messenger.ImageReceiver r5 = r12.avatarImage
             org.telegram.tgnet.TLRPC$Chat r0 = r12.chat
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForChat(r0, r3)
@@ -522,7 +479,7 @@ public class ProfileSearchCell extends BaseCell {
             r10 = 0
             r4.setImage(r5, r6, r7, r8, r9, r10)
         L_0x0074:
-            if (r13 == 0) goto L_0x0121
+            if (r13 == 0) goto L_0x0122
             r0 = r13 & 2
             if (r0 == 0) goto L_0x007e
             org.telegram.tgnet.TLRPC$User r0 = r12.user
@@ -615,26 +572,28 @@ public class ProfileSearchCell extends BaseCell {
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r13 = r13.dialogs_dict
             long r4 = r12.dialog_id
             java.lang.Object r13 = r13.get(r4)
-            org.telegram.tgnet.TLRPC$Dialog r13 = (org.telegram.tgnet.TLRPC.Dialog) r13
+            org.telegram.tgnet.TLRPC$Dialog r13 = (org.telegram.tgnet.TLRPC$Dialog) r13
             if (r13 == 0) goto L_0x011e
             int r13 = r13.unread_count
             int r4 = r12.lastUnreadCount
             if (r13 == r4) goto L_0x011e
-            r0 = 1
+            goto L_0x011f
         L_0x011e:
-            if (r0 != 0) goto L_0x0121
+            r2 = r0
+        L_0x011f:
+            if (r2 != 0) goto L_0x0122
             return
-        L_0x0121:
+        L_0x0122:
             org.telegram.tgnet.TLRPC$User r13 = r12.user
-            if (r13 == 0) goto L_0x014a
+            if (r13 == 0) goto L_0x014b
             org.telegram.tgnet.TLRPC$UserStatus r13 = r13.status
-            if (r13 == 0) goto L_0x012e
+            if (r13 == 0) goto L_0x012f
             int r13 = r13.expires
             r12.lastStatus = r13
-            goto L_0x0130
-        L_0x012e:
+            goto L_0x0131
+        L_0x012f:
             r12.lastStatus = r3
-        L_0x0130:
+        L_0x0131:
             java.lang.StringBuilder r13 = new java.lang.StringBuilder
             r13.<init>()
             org.telegram.tgnet.TLRPC$User r0 = r12.user
@@ -645,25 +604,25 @@ public class ProfileSearchCell extends BaseCell {
             r13.append(r0)
             java.lang.String r13 = r13.toString()
             r12.lastName = r13
-            goto L_0x0152
-        L_0x014a:
+            goto L_0x0153
+        L_0x014b:
             org.telegram.tgnet.TLRPC$Chat r13 = r12.chat
-            if (r13 == 0) goto L_0x0152
+            if (r13 == 0) goto L_0x0153
             java.lang.String r13 = r13.title
             r12.lastName = r13
-        L_0x0152:
+        L_0x0153:
             r12.lastAvatar = r1
             int r13 = r12.getMeasuredWidth()
-            if (r13 != 0) goto L_0x0165
+            if (r13 != 0) goto L_0x0166
             int r13 = r12.getMeasuredHeight()
-            if (r13 == 0) goto L_0x0161
-            goto L_0x0165
-        L_0x0161:
+            if (r13 == 0) goto L_0x0162
+            goto L_0x0166
+        L_0x0162:
             r12.requestLayout()
-            goto L_0x0168
-        L_0x0165:
+            goto L_0x0169
+        L_0x0166:
             r12.buildLayout()
-        L_0x0168:
+        L_0x0169:
             r12.postInvalidate()
             return
         */

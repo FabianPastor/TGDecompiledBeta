@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class Track {
-    private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap();
+    private static Map<Integer, Integer> samplingFrequencyIndexMap;
     private Date creationTime = new Date();
     private long duration = 0;
     private boolean first = true;
@@ -57,7 +57,9 @@ public class Track {
     }
 
     static {
-        samplingFrequencyIndexMap.put(96000, 0);
+        HashMap hashMap = new HashMap();
+        samplingFrequencyIndexMap = hashMap;
+        hashMap.put(96000, 0);
         samplingFrequencyIndexMap.put(88200, 1);
         samplingFrequencyIndexMap.put(64000, 2);
         samplingFrequencyIndexMap.put(48000, 3);
@@ -72,17 +74,19 @@ public class Track {
     }
 
     public Track(int i, MediaFormat mediaFormat, boolean z) {
+        MediaFormat mediaFormat2 = mediaFormat;
+        boolean z2 = z;
         this.trackId = (long) i;
-        this.isAudio = z;
-        if (!this.isAudio) {
-            this.width = mediaFormat.getInteger("width");
-            this.height = mediaFormat.getInteger("height");
+        this.isAudio = z2;
+        if (!z2) {
+            this.width = mediaFormat2.getInteger("width");
+            this.height = mediaFormat2.getInteger("height");
             this.timeScale = 90000;
             this.syncSamples = new LinkedList<>();
             this.handler = "vide";
             this.headerBox = new VideoMediaHeaderBox();
             this.sampleDescriptionBox = new SampleDescriptionBox();
-            String string = mediaFormat.getString("mime");
+            String string = mediaFormat2.getString("mime");
             if (string.equals("video/avc")) {
                 VisualSampleEntry visualSampleEntry = new VisualSampleEntry("avc1");
                 visualSampleEntry.setDataReferenceIndex(1);
@@ -93,15 +97,15 @@ public class Track {
                 visualSampleEntry.setWidth(this.width);
                 visualSampleEntry.setHeight(this.height);
                 AvcConfigurationBox avcConfigurationBox = new AvcConfigurationBox();
-                if (mediaFormat.getByteBuffer("csd-0") != null) {
+                if (mediaFormat2.getByteBuffer("csd-0") != null) {
                     ArrayList arrayList = new ArrayList();
-                    ByteBuffer byteBuffer = mediaFormat.getByteBuffer("csd-0");
+                    ByteBuffer byteBuffer = mediaFormat2.getByteBuffer("csd-0");
                     byteBuffer.position(4);
                     byte[] bArr = new byte[byteBuffer.remaining()];
                     byteBuffer.get(bArr);
                     arrayList.add(bArr);
                     ArrayList arrayList2 = new ArrayList();
-                    ByteBuffer byteBuffer2 = mediaFormat.getByteBuffer("csd-1");
+                    ByteBuffer byteBuffer2 = mediaFormat2.getByteBuffer("csd-1");
                     byteBuffer2.position(4);
                     byte[] bArr2 = new byte[byteBuffer2.remaining()];
                     byteBuffer2.get(bArr2);
@@ -109,8 +113,8 @@ public class Track {
                     avcConfigurationBox.setSequenceParameterSets(arrayList);
                     avcConfigurationBox.setPictureParameterSets(arrayList2);
                 }
-                if (mediaFormat.containsKey("level")) {
-                    int integer = mediaFormat.getInteger("level");
+                if (mediaFormat2.containsKey("level")) {
+                    int integer = mediaFormat2.getInteger("level");
                     if (integer == 1) {
                         avcConfigurationBox.setAvcLevelIndication(1);
                     } else if (integer == 32) {
@@ -149,8 +153,8 @@ public class Track {
                 } else {
                     avcConfigurationBox.setAvcLevelIndication(13);
                 }
-                if (mediaFormat.containsKey("profile")) {
-                    int integer2 = mediaFormat.getInteger("profile");
+                if (mediaFormat2.containsKey("profile")) {
+                    int integer2 = mediaFormat2.getInteger("profile");
                     if (integer2 == 1) {
                         avcConfigurationBox.setAvcProfileIndication(66);
                     } else if (integer2 == 2) {
@@ -190,13 +194,13 @@ public class Track {
             }
         } else {
             this.volume = 1.0f;
-            this.timeScale = mediaFormat.getInteger("sample-rate");
+            this.timeScale = mediaFormat2.getInteger("sample-rate");
             this.handler = "soun";
             this.headerBox = new SoundMediaHeaderBox();
             this.sampleDescriptionBox = new SampleDescriptionBox();
             AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
-            audioSampleEntry.setChannelCount(mediaFormat.getInteger("channel-count"));
-            audioSampleEntry.setSampleRate((long) mediaFormat.getInteger("sample-rate"));
+            audioSampleEntry.setChannelCount(mediaFormat2.getInteger("channel-count"));
+            audioSampleEntry.setSampleRate((long) mediaFormat2.getInteger("sample-rate"));
             audioSampleEntry.setDataReferenceIndex(1);
             audioSampleEntry.setSampleSize(16);
             ESDescriptorBox eSDescriptorBox = new ESDescriptorBox();
@@ -205,7 +209,7 @@ public class Track {
             SLConfigDescriptor sLConfigDescriptor = new SLConfigDescriptor();
             sLConfigDescriptor.setPredefined(2);
             eSDescriptor.setSlConfigDescriptor(sLConfigDescriptor);
-            String string2 = mediaFormat.containsKey("mime") ? mediaFormat.getString("mime") : "audio/mp4-latm";
+            String string2 = mediaFormat2.containsKey("mime") ? mediaFormat2.getString("mime") : "audio/mp4-latm";
             DecoderConfigDescriptor decoderConfigDescriptor = new DecoderConfigDescriptor();
             if ("audio/mpeg".equals(string2)) {
                 decoderConfigDescriptor.setObjectTypeIndication(105);
@@ -214,8 +218,8 @@ public class Track {
             }
             decoderConfigDescriptor.setStreamType(5);
             decoderConfigDescriptor.setBufferSizeDB(1536);
-            if (mediaFormat.containsKey("max-bitrate")) {
-                decoderConfigDescriptor.setMaxBitRate((long) mediaFormat.getInteger("max-bitrate"));
+            if (mediaFormat2.containsKey("max-bitrate")) {
+                decoderConfigDescriptor.setMaxBitRate((long) mediaFormat2.getInteger("max-bitrate"));
             } else {
                 decoderConfigDescriptor.setMaxBitRate(96000);
             }
@@ -254,52 +258,47 @@ public class Track {
 
     public void prepare() {
         int i;
-        int i2;
         ArrayList arrayList = new ArrayList(this.samplePresentationTimes);
         Collections.sort(this.samplePresentationTimes, $$Lambda$Track$WwpAJwhUb2DZllFb8kOYdyyS8pU.INSTANCE);
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long j = Long.MAX_VALUE;
-        int i3 = 0;
-        boolean z = false;
         long j2 = 0;
+        int i2 = 0;
+        boolean z = false;
         while (true) {
-            if (i3 >= this.samplePresentationTimes.size()) {
+            if (i2 >= this.samplePresentationTimes.size()) {
                 break;
             }
-            SamplePresentationTime samplePresentationTime = this.samplePresentationTimes.get(i3);
+            SamplePresentationTime samplePresentationTime = this.samplePresentationTimes.get(i2);
             long access$000 = samplePresentationTime.presentationTime - j2;
             j2 = samplePresentationTime.presentationTime;
             this.sampleDurations[samplePresentationTime.index] = access$000;
-            int i4 = i3;
+            long j3 = j;
             if (samplePresentationTime.index != 0) {
                 this.duration += access$000;
             }
+            j = j3;
             if (access$000 != 0) {
                 j = Math.min(j, access$000);
             }
-            int i5 = i4;
-            if (samplePresentationTime.index != i5) {
+            if (samplePresentationTime.index != i2) {
                 z = true;
             }
-            i3 = i5 + 1;
+            i2++;
         }
         long[] jArr = this.sampleDurations;
         if (jArr.length > 0) {
-            i2 = 0;
             jArr[0] = j;
             this.duration += j;
-        } else {
-            i2 = 0;
         }
         for (i = 1; i < arrayList.size(); i++) {
             long unused = ((SamplePresentationTime) arrayList.get(i)).dt = this.sampleDurations[i] + ((SamplePresentationTime) arrayList.get(i - 1)).dt;
         }
         if (z) {
             this.sampleCompositions = new int[this.samplePresentationTimes.size()];
-            while (i2 < this.samplePresentationTimes.size()) {
-                SamplePresentationTime samplePresentationTime2 = this.samplePresentationTimes.get(i2);
+            for (int i3 = 0; i3 < this.samplePresentationTimes.size(); i3++) {
+                SamplePresentationTime samplePresentationTime2 = this.samplePresentationTimes.get(i3);
                 this.sampleCompositions[samplePresentationTime2.index] = (int) (samplePresentationTime2.presentationTime - samplePresentationTime2.dt);
-                i2++;
             }
         }
     }

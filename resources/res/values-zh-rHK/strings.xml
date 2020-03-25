@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">「Google 助理」驗證程序</string>
     <string name="google_assistant_verification_notification_title">「Google 助理」正在傳送訊息</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">透過 Google 購物</string>
 </resources>

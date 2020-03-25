@@ -16,7 +16,10 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -27,7 +30,7 @@ public class HintDialogCell extends FrameLayout {
     private StaticLayout countLayout;
     private int countWidth;
     private int currentAccount = UserConfig.selectedAccount;
-    private TLRPC.User currentUser;
+    private TLRPC$User currentUser;
     private long dialog_id;
     private BackupImageView imageView;
     private int lastUnreadCount;
@@ -36,11 +39,13 @@ public class HintDialogCell extends FrameLayout {
 
     public HintDialogCell(Context context) {
         super(context);
-        this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.dp(27.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setGravity(49);
@@ -62,8 +67,8 @@ public class HintDialogCell extends FrameLayout {
             invalidate();
         }
         if (i == 0 || (i & 256) != 0 || (i & 2048) != 0) {
-            TLRPC.Dialog dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
-            if (dialog == null || (i2 = dialog.unread_count) == 0) {
+            TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
+            if (tLRPC$Dialog == null || (i2 = tLRPC$Dialog.unread_count) == 0) {
                 if (this.countLayout != null) {
                     if (i != 0) {
                         invalidate();
@@ -86,8 +91,9 @@ public class HintDialogCell extends FrameLayout {
     public void update() {
         int i = (int) this.dialog_id;
         if (i > 0) {
-            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
-            this.avatarDrawable.setInfo(this.currentUser);
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            this.currentUser = user;
+            this.avatarDrawable.setInfo(user);
             return;
         }
         this.avatarDrawable.setInfo(MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i)));
@@ -97,21 +103,19 @@ public class HintDialogCell extends FrameLayout {
     public void setDialog(int i, boolean z, CharSequence charSequence) {
         this.dialog_id = (long) i;
         if (i > 0) {
-            this.currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            this.currentUser = user;
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
+            } else if (user != null) {
+                this.nameTextView.setText(UserObject.getFirstName(user));
             } else {
-                TLRPC.User user = this.currentUser;
-                if (user != null) {
-                    this.nameTextView.setText(UserObject.getFirstName(user));
-                } else {
-                    this.nameTextView.setText("");
-                }
+                this.nameTextView.setText("");
             }
             this.avatarDrawable.setInfo(this.currentUser);
             this.imageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
         } else {
-            TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+            TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (charSequence != null) {
                 this.nameTextView.setText(charSequence);
             } else if (chat != null) {
@@ -132,7 +136,7 @@ public class HintDialogCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
-        TLRPC.UserStatus userStatus;
+        TLRPC$UserStatus tLRPC$UserStatus;
         boolean drawChild = super.drawChild(canvas, view, j);
         if (view == this.imageView) {
             if (this.countLayout != null) {
@@ -148,8 +152,8 @@ public class HintDialogCell extends FrameLayout {
                 this.countLayout.draw(canvas);
                 canvas.restore();
             }
-            TLRPC.User user = this.currentUser;
-            if (user != null && !user.bot && (((userStatus = user.status) != null && userStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
+            TLRPC$User tLRPC$User = this.currentUser;
+            if (tLRPC$User != null && !tLRPC$User.bot && (((tLRPC$UserStatus = tLRPC$User.status) != null && tLRPC$UserStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 int dp4 = AndroidUtilities.dp(53.0f);
                 int dp5 = AndroidUtilities.dp(59.0f);
                 Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor("windowBackgroundWhite"));

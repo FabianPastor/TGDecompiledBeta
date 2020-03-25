@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Padėjėjo patvirtinimo priemonė</string>
     <string name="google_assistant_verification_notification_title">„Google“ padėjėjas siunčia pranešimą</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Pirkti naudojant „Google“</string>
 </resources>

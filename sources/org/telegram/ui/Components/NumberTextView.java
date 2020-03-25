@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.View;
+import androidx.annotation.Keep;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -28,6 +29,7 @@ public class NumberTextView extends View {
         super(context);
     }
 
+    @Keep
     public void setProgress(float f) {
         if (this.progress != f) {
             this.progress = f;
@@ -35,6 +37,7 @@ public class NumberTextView extends View {
         }
     }
 
+    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -73,8 +76,9 @@ public class NumberTextView extends View {
                 float[] fArr = new float[2];
                 fArr[0] = z2 ? -1.0f : 1.0f;
                 fArr[1] = 0.0f;
-                this.animator = ObjectAnimator.ofFloat(this, "progress", fArr);
-                this.animator.setDuration(150);
+                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+                this.animator = ofFloat;
+                ofFloat.setDuration(150);
                 this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         ObjectAnimator unused = NumberTextView.this.animator = null;

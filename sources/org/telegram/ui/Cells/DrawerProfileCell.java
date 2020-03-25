@@ -24,7 +24,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -33,11 +33,13 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 public class DrawerProfileCell extends FrameLayout {
-    private boolean accountsShowed;
+    private boolean accountsShown;
     private ImageView arrowView;
     private BackupImageView avatarImageView;
+    private Paint backPaint = new Paint(1);
     private Integer currentColor;
     private Integer currentMoonColor;
+    private int darkThemeBackgroundColor;
     private ImageView darkThemeView;
     private Rect destRect = new Rect();
     private TextView nameTextView;
@@ -49,16 +51,19 @@ public class DrawerProfileCell extends FrameLayout {
 
     public DrawerProfileCell(Context context) {
         super(context);
-        this.shadowView = new ImageView(context);
-        this.shadowView.setVisibility(4);
+        ImageView imageView = new ImageView(context);
+        this.shadowView = imageView;
+        imageView.setVisibility(4);
         this.shadowView.setScaleType(ImageView.ScaleType.FIT_XY);
         this.shadowView.setImageResource(NUM);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
-        this.avatarImageView = new BackupImageView(context);
-        this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.avatarImageView = backupImageView;
+        backupImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(64, 64.0f, 83, 16.0f, 0.0f, 0.0f, 67.0f));
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextSize(1, 15.0f);
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setTextSize(1, 15.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setLines(1);
         this.nameTextView.setMaxLines(1);
@@ -66,24 +71,30 @@ public class DrawerProfileCell extends FrameLayout {
         this.nameTextView.setGravity(3);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 28.0f));
-        this.phoneTextView = new TextView(context);
-        this.phoneTextView.setTextSize(1, 13.0f);
+        TextView textView2 = new TextView(context);
+        this.phoneTextView = textView2;
+        textView2.setTextSize(1, 13.0f);
         this.phoneTextView.setLines(1);
         this.phoneTextView.setMaxLines(1);
         this.phoneTextView.setSingleLine(true);
         this.phoneTextView.setGravity(3);
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
-        this.arrowView = new ImageView(context);
-        this.arrowView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.arrowView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.arrowView.setImageResource(NUM);
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         setArrowState(false);
-        this.darkThemeView = new ImageView(context);
-        this.darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView3 = new ImageView(context);
+        this.darkThemeView = imageView3;
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
         this.darkThemeView.setImageResource(NUM);
         this.darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuName"), PorterDuff.Mode.MULTIPLY));
         if (Build.VERSION.SDK_INT >= 21) {
-            this.darkThemeView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+            ImageView imageView4 = this.darkThemeView;
+            int color = Theme.getColor("listSelectorSDK21");
+            this.darkThemeBackgroundColor = color;
+            imageView4.setBackgroundDrawable(Theme.createSelectorDrawable(color, 1, AndroidUtilities.dp(17.0f)));
             Theme.setRippleDrawableForceSoftware((RippleDrawable) this.darkThemeView.getBackground());
         }
         this.darkThemeView.setOnClickListener(new View.OnClickListener() {
@@ -93,13 +104,17 @@ public class DrawerProfileCell extends FrameLayout {
         });
         addView(this.darkThemeView, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 6.0f, 90.0f));
         if (Theme.getEventType() == 0) {
-            this.snowflakesEffect = new SnowflakesEffect();
-            this.snowflakesEffect.setColorKey("chats_menuName");
+            SnowflakesEffect snowflakesEffect2 = new SnowflakesEffect();
+            this.snowflakesEffect = snowflakesEffect2;
+            snowflakesEffect2.setColorKey("chats_menuName");
         }
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object[]} */
     /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x004a  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0052  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$new$0$DrawerProfileCell(android.view.View r8) {
         /*
@@ -124,26 +139,28 @@ public class DrawerProfileCell extends FrameLayout {
         L_0x0027:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r5 = r2.equals(r8)
-            if (r5 == 0) goto L_0x003a
-            boolean r5 = r4.isDark()
             if (r5 == 0) goto L_0x0039
-            r2 = r1
-            goto L_0x003a
+            boolean r5 = r4.isDark()
+            if (r5 == 0) goto L_0x003a
+            r3 = r8
+            goto L_0x003b
         L_0x0039:
-            r8 = r3
+            r3 = r8
         L_0x003a:
-            java.lang.String r1 = r4.getKey()
-            boolean r1 = r2.equals(r1)
-            if (r1 == 0) goto L_0x0049
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-            goto L_0x004d
-        L_0x0049:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
-        L_0x004d:
+            r1 = r2
+        L_0x003b:
+            java.lang.String r8 = r4.getKey()
+            boolean r8 = r1.equals(r8)
+            if (r8 == 0) goto L_0x004a
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r3)
+            goto L_0x004e
+        L_0x004a:
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r1)
+        L_0x004e:
             int r1 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r1 == 0) goto L_0x006d
+            if (r1 == 0) goto L_0x006e
             android.content.Context r1 = r7.getContext()
-            r2 = 2131624361(0x7f0e01a9, float:1.88759E38)
+            r2 = 2131624365(0x7f0e01ad, float:1.8875908E38)
             java.lang.String r3 = "AutoNightModeOff"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.widget.Toast r1 = android.widget.Toast.makeText(r1, r2, r0)
@@ -151,7 +168,7 @@ public class DrawerProfileCell extends FrameLayout {
             org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r0
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
-        L_0x006d:
+        L_0x006e:
             r1 = 2
             int[] r2 = new int[r1]
             android.widget.ImageView r3 = r7.darkThemeView
@@ -209,20 +226,21 @@ public class DrawerProfileCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        boolean z;
         int i;
         Drawable cachedWallpaper = Theme.getCachedWallpaper();
         int i2 = 0;
-        boolean z = true;
         boolean z2 = !applyBackground(false).equals("chats_menuTopBackground") && Theme.isCustomTheme() && !Theme.isPatternWallpaper() && cachedWallpaper != null && !(cachedWallpaper instanceof ColorDrawable) && !(cachedWallpaper instanceof GradientDrawable);
         if (z2 || !Theme.hasThemeKey("chats_menuTopShadowCats")) {
             if (Theme.hasThemeKey("chats_menuTopShadow")) {
                 i = Theme.getColor("chats_menuTopShadow");
             } else {
-                i = -16777216 | Theme.getServiceMessageColor();
+                i = Theme.getServiceMessageColor() | -16777216;
             }
             z = false;
         } else {
             i = Theme.getColor("chats_menuTopShadowCats");
+            z = true;
         }
         Integer num = this.currentColor;
         if (num == null || num.intValue() != i) {
@@ -243,6 +261,7 @@ public class DrawerProfileCell extends FrameLayout {
             if ((cachedWallpaper instanceof ColorDrawable) || (cachedWallpaper instanceof GradientDrawable)) {
                 cachedWallpaper.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 cachedWallpaper.draw(canvas);
+                i2 = Theme.getColor("listSelectorSDK21");
             } else if (cachedWallpaper instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
                 float measuredWidth = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
@@ -261,6 +280,7 @@ public class DrawerProfileCell extends FrameLayout {
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
+                i2 = (Theme.getServiceMessageColor() & 16777215) | NUM;
             }
         } else {
             if (!z) {
@@ -271,6 +291,22 @@ public class DrawerProfileCell extends FrameLayout {
             }
             this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhoneCats"));
             super.onDraw(canvas);
+            i2 = Theme.getColor("listSelectorSDK21");
+        }
+        if (i2 != 0) {
+            if (i2 != this.darkThemeBackgroundColor) {
+                Paint paint2 = this.backPaint;
+                this.darkThemeBackgroundColor = i2;
+                paint2.setColor(i2);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Drawable background = this.darkThemeView.getBackground();
+                    this.darkThemeBackgroundColor = i2;
+                    Theme.setSelectorDrawableColor(background, i2, true);
+                }
+            }
+            if (z2 && (cachedWallpaper instanceof BitmapDrawable)) {
+                canvas.drawCircle(this.darkThemeView.getX() + ((float) (this.darkThemeView.getMeasuredWidth() / 2)), this.darkThemeView.getY() + ((float) (this.darkThemeView.getMeasuredHeight() / 2)), (float) AndroidUtilities.dp(17.0f), this.backPaint);
+            }
         }
         SnowflakesEffect snowflakesEffect2 = this.snowflakesEffect;
         if (snowflakesEffect2 != null) {
@@ -278,28 +314,24 @@ public class DrawerProfileCell extends FrameLayout {
         }
     }
 
-    public boolean isAccountsShowed() {
-        return this.accountsShowed;
-    }
-
-    public void setAccountsShowed(boolean z, boolean z2) {
-        if (this.accountsShowed != z) {
-            this.accountsShowed = z;
+    public void setAccountsShown(boolean z, boolean z2) {
+        if (this.accountsShown != z) {
+            this.accountsShown = z;
             setArrowState(z2);
         }
     }
 
-    public void setUser(TLRPC.User user, boolean z) {
-        if (user != null) {
-            this.accountsShowed = z;
+    public void setUser(TLRPC$User tLRPC$User, boolean z) {
+        if (tLRPC$User != null) {
+            this.accountsShown = z;
             setArrowState(false);
-            this.nameTextView.setText(UserObject.getUserName(user));
+            this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
             TextView textView = this.phoneTextView;
             PhoneFormat instance = PhoneFormat.getInstance();
-            textView.setText(instance.format("+" + user.phone));
-            AvatarDrawable avatarDrawable = new AvatarDrawable(user);
+            textView.setText(instance.format("+" + tLRPC$User.phone));
+            AvatarDrawable avatarDrawable = new AvatarDrawable(tLRPC$User);
             avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
-            this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) avatarDrawable, (Object) user);
+            this.avatarImageView.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
             applyBackground(true);
         }
     }
@@ -327,7 +359,7 @@ public class DrawerProfileCell extends FrameLayout {
     private void setArrowState(boolean z) {
         String str;
         int i;
-        float f = this.accountsShowed ? 180.0f : 0.0f;
+        float f = this.accountsShown ? 180.0f : 0.0f;
         if (z) {
             this.arrowView.animate().rotation(f).setDuration(220).setInterpolator(CubicBezierInterpolator.EASE_OUT).start();
         } else {
@@ -335,7 +367,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.arrowView.setRotation(f);
         }
         ImageView imageView = this.arrowView;
-        if (this.accountsShowed) {
+        if (this.accountsShown) {
             i = NUM;
             str = "AccDescrHideAccounts";
         } else {

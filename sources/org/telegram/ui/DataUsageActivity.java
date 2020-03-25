@@ -70,13 +70,12 @@ public class DataUsageActivity extends BaseFragment {
     private class ViewPage extends FrameLayout {
         /* access modifiers changed from: private */
         public LinearLayoutManager layoutManager;
-        private ListAdapter listAdapter;
         /* access modifiers changed from: private */
         public RecyclerListView listView;
         /* access modifiers changed from: private */
         public int selectedType;
 
-        public ViewPage(Context context) {
+        public ViewPage(DataUsageActivity dataUsageActivity, Context context) {
             super(context);
         }
     }
@@ -104,8 +103,9 @@ public class DataUsageActivity extends BaseFragment {
         this.mobileAdapter = new ListAdapter(context, 0);
         this.wifiAdapter = new ListAdapter(context, 1);
         this.roamingAdapter = new ListAdapter(context, 2);
-        this.scrollSlidingTextTabStrip = new ScrollSlidingTextTabStrip(context);
-        this.scrollSlidingTextTabStrip.setUseSameWidth(true);
+        ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = new ScrollSlidingTextTabStrip(context);
+        this.scrollSlidingTextTabStrip = scrollSlidingTextTabStrip2;
+        scrollSlidingTextTabStrip2.setUseSameWidth(true);
         this.actionBar.addView(this.scrollSlidingTextTabStrip, LayoutHelper.createFrame(-1, 44, 83));
         this.scrollSlidingTextTabStrip.setDelegate(new ScrollSlidingTextTabStrip.ScrollSlidingTabStripDelegate() {
             public /* synthetic */ void onSamePageSelected() {
@@ -174,10 +174,6 @@ public class DataUsageActivity extends BaseFragment {
                     DataUsageActivity.this.viewPages[1].setTranslationX((float) (-DataUsageActivity.this.viewPages[0].getMeasuredWidth()));
                 }
                 return true;
-            }
-
-            public void forceHasOverlappingRendering(boolean z) {
-                super.forceHasOverlappingRendering(z);
             }
 
             /* access modifiers changed from: protected */
@@ -327,10 +323,10 @@ public class DataUsageActivity extends BaseFragment {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 float f;
                 int i;
+                boolean z = false;
                 if (DataUsageActivity.this.parentLayout.checkTransitionAnimation() || checkTabsAnimationInProgress()) {
                     return false;
                 }
-                boolean z = true;
                 if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
                     this.startedTrackingPointerId = motionEvent.getPointerId(0);
                     this.maybeStartTracking = true;
@@ -351,12 +347,15 @@ public class DataUsageActivity extends BaseFragment {
                         if (!prepareForMoving(motionEvent, x < 0)) {
                             this.maybeStartTracking = true;
                             this.startedTracking = false;
+                            DataUsageActivity.this.viewPages[0].setTranslationX(0.0f);
+                            DataUsageActivity.this.viewPages[1].setTranslationX((float) (DataUsageActivity.this.animatingForward ? DataUsageActivity.this.viewPages[0].getMeasuredWidth() : -DataUsageActivity.this.viewPages[0].getMeasuredWidth()));
+                            DataUsageActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DataUsageActivity.this.viewPages[1].selectedType, 0.0f);
                         }
                     }
                     if (this.maybeStartTracking && !this.startedTracking) {
-                        if (((float) Math.abs(x)) >= AndroidUtilities.getPixelsInCM(0.3f, true) && Math.abs(x) / 3 > abs) {
-                            if (x >= 0) {
-                                z = false;
+                        if (((float) Math.abs(x)) >= AndroidUtilities.getPixelsInCM(0.3f, true) && Math.abs(x) > abs) {
+                            if (x < 0) {
+                                z = true;
                             }
                             prepareForMoving(motionEvent, z);
                         }
@@ -480,17 +479,19 @@ public class DataUsageActivity extends BaseFragment {
             r0.addView(r8, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i] = r8;
-            LinearLayoutManager access$2802 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
+            ViewPage viewPage = viewPageArr2[i];
+            AnonymousClass5 r10 = new LinearLayoutManager(this, context, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
             };
+            LinearLayoutManager unused = viewPage.layoutManager = r10;
             RecyclerListView recyclerListView = new RecyclerListView(context);
-            RecyclerListView unused = this.viewPages[i].listView = recyclerListView;
+            RecyclerListView unused2 = this.viewPages[i].listView = recyclerListView;
             this.viewPages[i].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
             this.viewPages[i].listView.setClipToPadding(false);
             this.viewPages[i].listView.setSectionsType(2);
-            this.viewPages[i].listView.setLayoutManager(access$2802);
+            this.viewPages[i].listView.setLayoutManager(r10);
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(recyclerListView) {
@@ -535,7 +536,7 @@ public class DataUsageActivity extends BaseFragment {
                 }
             });
             if (i == 0 && i2 != -1) {
-                access$2802.scrollToPositionWithOffset(i2, i3);
+                r10.scrollToPositionWithOffset(i2, i3);
             }
             if (i != 0) {
                 this.viewPages[i].setVisibility(8);
@@ -780,131 +781,130 @@ public class DataUsageActivity extends BaseFragment {
         public ListAdapter(Context context, int i) {
             this.mContext = context;
             this.currentType = i;
-            int i2 = this.rowCount;
-            this.rowCount = i2 + 1;
-            this.photosSectionRow = i2;
-            int i3 = this.rowCount;
-            this.rowCount = i3 + 1;
-            this.photosSentRow = i3;
-            int i4 = this.rowCount;
-            this.rowCount = i4 + 1;
-            this.photosReceivedRow = i4;
-            int i5 = this.rowCount;
-            this.rowCount = i5 + 1;
-            this.photosBytesSentRow = i5;
-            int i6 = this.rowCount;
-            this.rowCount = i6 + 1;
-            this.photosBytesReceivedRow = i6;
-            int i7 = this.rowCount;
-            this.rowCount = i7 + 1;
-            this.photosSection2Row = i7;
-            int i8 = this.rowCount;
-            this.rowCount = i8 + 1;
-            this.videosSectionRow = i8;
-            int i9 = this.rowCount;
-            this.rowCount = i9 + 1;
-            this.videosSentRow = i9;
-            int i10 = this.rowCount;
-            this.rowCount = i10 + 1;
-            this.videosReceivedRow = i10;
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.videosBytesSentRow = i11;
-            int i12 = this.rowCount;
-            this.rowCount = i12 + 1;
-            this.videosBytesReceivedRow = i12;
-            int i13 = this.rowCount;
-            this.rowCount = i13 + 1;
-            this.videosSection2Row = i13;
-            int i14 = this.rowCount;
-            this.rowCount = i14 + 1;
-            this.audiosSectionRow = i14;
-            int i15 = this.rowCount;
-            this.rowCount = i15 + 1;
-            this.audiosSentRow = i15;
-            int i16 = this.rowCount;
-            this.rowCount = i16 + 1;
-            this.audiosReceivedRow = i16;
-            int i17 = this.rowCount;
-            this.rowCount = i17 + 1;
-            this.audiosBytesSentRow = i17;
-            int i18 = this.rowCount;
-            this.rowCount = i18 + 1;
-            this.audiosBytesReceivedRow = i18;
-            int i19 = this.rowCount;
-            this.rowCount = i19 + 1;
-            this.audiosSection2Row = i19;
-            int i20 = this.rowCount;
-            this.rowCount = i20 + 1;
-            this.filesSectionRow = i20;
-            int i21 = this.rowCount;
-            this.rowCount = i21 + 1;
-            this.filesSentRow = i21;
-            int i22 = this.rowCount;
-            this.rowCount = i22 + 1;
-            this.filesReceivedRow = i22;
-            int i23 = this.rowCount;
-            this.rowCount = i23 + 1;
-            this.filesBytesSentRow = i23;
-            int i24 = this.rowCount;
-            this.rowCount = i24 + 1;
-            this.filesBytesReceivedRow = i24;
-            int i25 = this.rowCount;
-            this.rowCount = i25 + 1;
-            this.filesSection2Row = i25;
-            int i26 = this.rowCount;
-            this.rowCount = i26 + 1;
-            this.callsSectionRow = i26;
-            int i27 = this.rowCount;
-            this.rowCount = i27 + 1;
-            this.callsSentRow = i27;
-            int i28 = this.rowCount;
-            this.rowCount = i28 + 1;
-            this.callsReceivedRow = i28;
-            int i29 = this.rowCount;
-            this.rowCount = i29 + 1;
-            this.callsBytesSentRow = i29;
-            int i30 = this.rowCount;
-            this.rowCount = i30 + 1;
-            this.callsBytesReceivedRow = i30;
-            int i31 = this.rowCount;
-            this.rowCount = i31 + 1;
-            this.callsTotalTimeRow = i31;
-            int i32 = this.rowCount;
-            this.rowCount = i32 + 1;
-            this.callsSection2Row = i32;
-            int i33 = this.rowCount;
-            this.rowCount = i33 + 1;
-            this.messagesSectionRow = i33;
+            int i2 = 0 + 1;
+            this.rowCount = i2;
+            this.photosSectionRow = 0;
+            int i3 = i2 + 1;
+            this.rowCount = i3;
+            this.photosSentRow = i2;
+            int i4 = i3 + 1;
+            this.rowCount = i4;
+            this.photosReceivedRow = i3;
+            int i5 = i4 + 1;
+            this.rowCount = i5;
+            this.photosBytesSentRow = i4;
+            int i6 = i5 + 1;
+            this.rowCount = i6;
+            this.photosBytesReceivedRow = i5;
+            int i7 = i6 + 1;
+            this.rowCount = i7;
+            this.photosSection2Row = i6;
+            int i8 = i7 + 1;
+            this.rowCount = i8;
+            this.videosSectionRow = i7;
+            int i9 = i8 + 1;
+            this.rowCount = i9;
+            this.videosSentRow = i8;
+            int i10 = i9 + 1;
+            this.rowCount = i10;
+            this.videosReceivedRow = i9;
+            int i11 = i10 + 1;
+            this.rowCount = i11;
+            this.videosBytesSentRow = i10;
+            int i12 = i11 + 1;
+            this.rowCount = i12;
+            this.videosBytesReceivedRow = i11;
+            int i13 = i12 + 1;
+            this.rowCount = i13;
+            this.videosSection2Row = i12;
+            int i14 = i13 + 1;
+            this.rowCount = i14;
+            this.audiosSectionRow = i13;
+            int i15 = i14 + 1;
+            this.rowCount = i15;
+            this.audiosSentRow = i14;
+            int i16 = i15 + 1;
+            this.rowCount = i16;
+            this.audiosReceivedRow = i15;
+            int i17 = i16 + 1;
+            this.rowCount = i17;
+            this.audiosBytesSentRow = i16;
+            int i18 = i17 + 1;
+            this.rowCount = i18;
+            this.audiosBytesReceivedRow = i17;
+            int i19 = i18 + 1;
+            this.rowCount = i19;
+            this.audiosSection2Row = i18;
+            int i20 = i19 + 1;
+            this.rowCount = i20;
+            this.filesSectionRow = i19;
+            int i21 = i20 + 1;
+            this.rowCount = i21;
+            this.filesSentRow = i20;
+            int i22 = i21 + 1;
+            this.rowCount = i22;
+            this.filesReceivedRow = i21;
+            int i23 = i22 + 1;
+            this.rowCount = i23;
+            this.filesBytesSentRow = i22;
+            int i24 = i23 + 1;
+            this.rowCount = i24;
+            this.filesBytesReceivedRow = i23;
+            int i25 = i24 + 1;
+            this.rowCount = i25;
+            this.filesSection2Row = i24;
+            int i26 = i25 + 1;
+            this.rowCount = i26;
+            this.callsSectionRow = i25;
+            int i27 = i26 + 1;
+            this.rowCount = i27;
+            this.callsSentRow = i26;
+            int i28 = i27 + 1;
+            this.rowCount = i28;
+            this.callsReceivedRow = i27;
+            int i29 = i28 + 1;
+            this.rowCount = i29;
+            this.callsBytesSentRow = i28;
+            int i30 = i29 + 1;
+            this.rowCount = i30;
+            this.callsBytesReceivedRow = i29;
+            int i31 = i30 + 1;
+            this.rowCount = i31;
+            this.callsTotalTimeRow = i30;
+            int i32 = i31 + 1;
+            this.rowCount = i32;
+            this.callsSection2Row = i31;
+            int i33 = i32 + 1;
+            this.rowCount = i33;
+            this.messagesSectionRow = i32;
             this.messagesSentRow = -1;
             this.messagesReceivedRow = -1;
-            int i34 = this.rowCount;
-            this.rowCount = i34 + 1;
-            this.messagesBytesSentRow = i34;
-            int i35 = this.rowCount;
-            this.rowCount = i35 + 1;
-            this.messagesBytesReceivedRow = i35;
-            int i36 = this.rowCount;
-            this.rowCount = i36 + 1;
-            this.messagesSection2Row = i36;
-            int i37 = this.rowCount;
-            this.rowCount = i37 + 1;
-            this.totalSectionRow = i37;
-            int i38 = this.rowCount;
-            this.rowCount = i38 + 1;
-            this.totalBytesSentRow = i38;
-            int i39 = this.rowCount;
-            this.rowCount = i39 + 1;
-            this.totalBytesReceivedRow = i39;
-            int i40 = this.rowCount;
-            this.rowCount = i40 + 1;
-            this.totalSection2Row = i40;
-            int i41 = this.rowCount;
+            int i34 = i33 + 1;
+            this.rowCount = i34;
+            this.messagesBytesSentRow = i33;
+            int i35 = i34 + 1;
+            this.rowCount = i35;
+            this.messagesBytesReceivedRow = i34;
+            int i36 = i35 + 1;
+            this.rowCount = i36;
+            this.messagesSection2Row = i35;
+            int i37 = i36 + 1;
+            this.rowCount = i37;
+            this.totalSectionRow = i36;
+            int i38 = i37 + 1;
+            this.rowCount = i38;
+            this.totalBytesSentRow = i37;
+            int i39 = i38 + 1;
+            this.rowCount = i39;
+            this.totalBytesReceivedRow = i38;
+            int i40 = i39 + 1;
+            this.rowCount = i40;
+            this.totalSection2Row = i39;
+            int i41 = i40 + 1;
+            this.rowCount = i41;
+            this.resetRow = i40;
             this.rowCount = i41 + 1;
-            this.resetRow = i41;
-            int i42 = this.rowCount;
-            this.rowCount = i42 + 1;
-            this.resetSection2Row = i42;
+            this.resetSection2Row = i41;
         }
 
         public int getItemCount() {
@@ -1027,13 +1027,8 @@ public class DataUsageActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabUnactiveText"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{TextView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabLine"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, new Drawable[]{this.scrollSlidingTextTabStrip.getSelectorDrawable()}, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabSelector"));
-        int i = 0;
-        while (true) {
-            ViewPage[] viewPageArr = this.viewPages;
-            if (i >= viewPageArr.length) {
-                return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
-            }
-            arrayList.add(new ThemeDescription(viewPageArr[i].listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        for (int i = 0; i < this.viewPages.length; i++) {
+            arrayList.add(new ThemeDescription(this.viewPages[i].listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
             arrayList.add(new ThemeDescription(this.viewPages[i].listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
             arrayList.add(new ThemeDescription(this.viewPages[i].listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
             arrayList.add(new ThemeDescription(this.viewPages[i].listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
@@ -1044,7 +1039,7 @@ public class DataUsageActivity extends BaseFragment {
             arrayList.add(new ThemeDescription((View) this.viewPages[i].listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription((View) this.viewPages[i].listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
             arrayList.add(new ThemeDescription((View) this.viewPages[i].listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText2"));
-            i++;
         }
+        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
     }
 }

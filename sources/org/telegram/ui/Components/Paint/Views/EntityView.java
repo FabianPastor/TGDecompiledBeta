@@ -253,9 +253,6 @@ public class EntityView extends FrameLayout {
     }
 
     public class SelectionView extends FrameLayout {
-        public static final int SELECTION_LEFT_HANDLE = 1;
-        public static final int SELECTION_RIGHT_HANDLE = 2;
-        public static final int SELECTION_WHOLE_HANDLE = 3;
         private int currentHandle;
         protected Paint dotPaint = new Paint(1);
         protected Paint dotStrokePaint = new Paint(1);
@@ -263,7 +260,7 @@ public class EntityView extends FrameLayout {
 
         /* access modifiers changed from: protected */
         public int pointInsideHandle(float f, float f2) {
-            return 0;
+            throw null;
         }
 
         public SelectionView(Context context) {

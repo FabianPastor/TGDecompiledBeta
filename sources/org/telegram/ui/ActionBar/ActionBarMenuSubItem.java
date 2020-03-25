@@ -15,21 +15,25 @@ import org.telegram.ui.Components.LayoutHelper;
 public class ActionBarMenuSubItem extends FrameLayout {
     private int iconColor = Theme.getColor("actionBarDefaultSubmenuItemIcon");
     private ImageView imageView;
-    private int selectorColor = Theme.getColor("dialogButtonSelector");
+    private int selectorColor;
     private int textColor = Theme.getColor("actionBarDefaultSubmenuItem");
     private TextView textView;
 
     public ActionBarMenuSubItem(Context context) {
         super(context);
-        setBackground(Theme.createSelectorDrawable(this.selectorColor, 2));
+        int color = Theme.getColor("dialogButtonSelector");
+        this.selectorColor = color;
+        setBackground(Theme.createSelectorDrawable(color, 2));
         setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.MULTIPLY));
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(-2, 40, (LocaleController.isRTL ? 5 : 3) | 16));
-        this.textView = new TextView(context);
-        this.textView.setLines(1);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity(1);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);

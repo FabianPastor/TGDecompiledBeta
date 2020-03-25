@@ -52,10 +52,6 @@ public class CrossfadeDrawable extends Drawable {
         return this.topDrawable.getIntrinsicHeight();
     }
 
-    public float getProgress() {
-        return this.progress;
-    }
-
     public void setProgress(float f) {
         this.progress = f;
     }

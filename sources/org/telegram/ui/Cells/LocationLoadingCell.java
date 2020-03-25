@@ -20,14 +20,17 @@ public class LocationLoadingCell extends FrameLayout {
 
     public LocationLoadingCell(Context context) {
         super(context);
-        this.progressBar = new RadialProgressView(context);
-        addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
-        this.imageView = new ImageView(context);
-        this.imageView.setImageResource(NUM);
+        RadialProgressView radialProgressView = new RadialProgressView(context);
+        this.progressBar = radialProgressView;
+        addView(radialProgressView, LayoutHelper.createFrame(-2, -2, 17));
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setImageResource(NUM);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 24.0f));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("dialogEmptyText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("dialogEmptyText"));
         this.textView.setGravity(17);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextSize(1, 17.0f);

@@ -171,7 +171,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             int r12 = r4.size()
             if (r11 >= r12) goto L_0x0151
             java.lang.Object r12 = r4.get(r11)
-            org.telegram.tgnet.TLRPC$User r12 = (org.telegram.tgnet.TLRPC.User) r12
+            org.telegram.tgnet.TLRPC$User r12 = (org.telegram.tgnet.TLRPC$User) r12
             int r14 = r12.id
             if (r14 != r7) goto L_0x014e
             boolean r11 = r12.bot
@@ -182,7 +182,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             r13.putLong(r8, r14)
             boolean r7 = org.telegram.messenger.UserObject.isUserSelf(r12)
             if (r7 == 0) goto L_0x0134
-            r7 = 2131626482(0x7f0e09f2, float:1.8880201E38)
+            r7 = 2131626581(0x7f0e0a55, float:1.8880402E38)
             java.lang.String r8 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r7)
             android.graphics.drawable.Icon r7 = r17.createSavedMessagesIcon()
@@ -216,7 +216,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             int r12 = r3.size()
             if (r11 >= r12) goto L_0x0196
             java.lang.Object r12 = r3.get(r11)
-            org.telegram.tgnet.TLRPC$Chat r12 = (org.telegram.tgnet.TLRPC.Chat) r12
+            org.telegram.tgnet.TLRPC$Chat r12 = (org.telegram.tgnet.TLRPC$Chat) r12
             int r14 = r12.id
             int r15 = -r7
             if (r14 != r15) goto L_0x0193
@@ -250,7 +250,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             if (r9 == 0) goto L_0x01b5
             if (r10 != 0) goto L_0x01a5
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r8 = 2131165566(0x7var_e, float:1.7945353E38)
+            r8 = 2131165572(0x7var_, float:1.7945365E38)
             android.graphics.drawable.Icon r7 = android.graphics.drawable.Icon.createWithResource(r7, r8)
             r10 = r7
         L_0x01a5:

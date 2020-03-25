@@ -9,7 +9,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 
@@ -32,7 +32,7 @@ public class DialogMeUrlCell extends BaseCell {
     private int nameLockLeft;
     private int nameLockTop;
     private int nameMuteLeft;
-    private TLRPC.RecentMeUrl recentMeUrl;
+    private TLRPC$RecentMeUrl recentMeUrl;
     public boolean useSeparator;
 
     public boolean hasOverlappingRendering() {
@@ -45,8 +45,8 @@ public class DialogMeUrlCell extends BaseCell {
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(26.0f));
     }
 
-    public void setRecentMeUrl(TLRPC.RecentMeUrl recentMeUrl2) {
-        this.recentMeUrl = recentMeUrl2;
+    public void setRecentMeUrl(TLRPC$RecentMeUrl tLRPC$RecentMeUrl) {
+        this.recentMeUrl = tLRPC$RecentMeUrl;
         requestLayout();
     }
 
@@ -95,7 +95,7 @@ public class DialogMeUrlCell extends BaseCell {
             r1.drawNameBot = r2
             r1.drawVerified = r2
             org.telegram.tgnet.TLRPC$RecentMeUrl r0 = r1.recentMeUrl
-            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_recentMeUrlChat
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChat
             r4 = 1099694080(0x418CLASSNAME, float:17.5)
             r6 = 1099169792(0x41840000, float:16.5)
             r7 = 1
@@ -168,7 +168,7 @@ public class DialogMeUrlCell extends BaseCell {
         L_0x00a1:
             java.lang.String r3 = r0.title
             org.telegram.ui.Components.AvatarDrawable r4 = r1.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC.Chat) r0)
+            r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
             org.telegram.messenger.ImageReceiver r12 = r1.avatarImage
             org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForChat(r0, r2)
             org.telegram.ui.Components.AvatarDrawable r15 = r1.avatarDrawable
@@ -180,7 +180,7 @@ public class DialogMeUrlCell extends BaseCell {
             r12.setImage(r13, r14, r15, r16, r17, r18)
             goto L_0x02e2
         L_0x00bf:
-            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_recentMeUrlUser
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlUser
             if (r3 == 0) goto L_0x0156
             int r0 = r1.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
@@ -238,7 +238,7 @@ public class DialogMeUrlCell extends BaseCell {
         L_0x0136:
             java.lang.String r3 = org.telegram.messenger.UserObject.getUserName(r0)
             org.telegram.ui.Components.AvatarDrawable r4 = r1.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC.User) r0)
+            r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
             org.telegram.messenger.ImageReceiver r12 = r1.avatarImage
             org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForUser(r0, r2)
             org.telegram.ui.Components.AvatarDrawable r15 = r1.avatarDrawable
@@ -250,7 +250,7 @@ public class DialogMeUrlCell extends BaseCell {
             r12.setImage(r13, r14, r15, r16, r17, r18)
             goto L_0x02e2
         L_0x0156:
-            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_recentMeUrlStickerSet
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlStickerSet
             r9 = 0
             r10 = 5
             if (r3 == 0) goto L_0x0199
@@ -285,7 +285,7 @@ public class DialogMeUrlCell extends BaseCell {
             r12.setImage(r13, r14, r15, r16, r17, r18)
             goto L_0x02e2
         L_0x0199:
-            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_recentMeUrlChatInvite
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite
             if (r3 == 0) goto L_0x02a5
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
             if (r0 != 0) goto L_0x01ab
@@ -303,7 +303,7 @@ public class DialogMeUrlCell extends BaseCell {
             org.telegram.tgnet.TLRPC$Chat r3 = r0.chat
             if (r3 == 0) goto L_0x020c
             org.telegram.ui.Components.AvatarDrawable r0 = r1.avatarDrawable
-            r0.setInfo((org.telegram.tgnet.TLRPC.Chat) r3)
+            r0.setInfo((org.telegram.tgnet.TLRPC$Chat) r3)
             org.telegram.tgnet.TLRPC$RecentMeUrl r0 = r1.recentMeUrl
             org.telegram.tgnet.TLRPC$ChatInvite r0 = r0.chat_invite
             org.telegram.tgnet.TLRPC$Chat r0 = r0.chat
@@ -425,7 +425,7 @@ public class DialogMeUrlCell extends BaseCell {
             r1.nameLeft = r0
             goto L_0x02e2
         L_0x02a5:
-            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_recentMeUrlUnknown
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlUnknown
             if (r3 == 0) goto L_0x02d1
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
             if (r0 != 0) goto L_0x02b7
@@ -474,7 +474,7 @@ public class DialogMeUrlCell extends BaseCell {
             java.lang.String r12 = r0.toString()
             boolean r0 = android.text.TextUtils.isEmpty(r3)
             if (r0 == 0) goto L_0x0311
-            r0 = 2131625327(0x7f0e056f, float:1.8877859E38)
+            r0 = 2131625411(0x7f0e05c3, float:1.887803E38)
             java.lang.String r3 = "HiddenName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r0)
         L_0x0311:

@@ -19,7 +19,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 
 public class BackgroundGradientDrawable extends GradientDrawable {
-    public static final float DEFAULT_COMPRESS_RATIO = 0.5f;
     private final Paint bitmapPaint = new Paint(1);
     private final ArrayMap<IntSize, Bitmap> bitmaps = new ArrayMap<>();
     private final int[] colors;
@@ -57,8 +56,8 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         }
 
         private Sizes(int i, int i2, int... iArr) {
-            this.arr = new IntSize[((iArr.length / 2) + 1)];
-            IntSize[] intSizeArr = this.arr;
+            IntSize[] intSizeArr = new IntSize[((iArr.length / 2) + 1)];
+            this.arr = intSizeArr;
             IntSize intSize = new IntSize(i, i2);
             int i3 = 0;
             intSizeArr[0] = intSize;
@@ -80,6 +79,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
 
         public static Sizes ofDeviceScreen(float f) {
             return ofDeviceScreen(f, Orientation.BOTH);
+        }
+
+        public static Sizes ofDeviceScreen(Orientation orientation) {
+            return ofDeviceScreen(0.5f, orientation);
         }
 
         public static Sizes ofDeviceScreen(float f, Orientation orientation) {
@@ -431,65 +434,64 @@ public class BackgroundGradientDrawable extends GradientDrawable {
 
     /* renamed from: org.telegram.ui.Components.BackgroundGradientDrawable$2  reason: invalid class name */
     static /* synthetic */ class AnonymousClass2 {
-        static final /* synthetic */ int[] $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation = new int[GradientDrawable.Orientation.values().length];
+        static final /* synthetic */ int[] $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation;
 
         /* JADX WARNING: Can't wrap try/catch for region: R(14:0|1|2|3|4|5|6|7|8|9|10|11|12|(3:13|14|16)) */
         /* JADX WARNING: Can't wrap try/catch for region: R(16:0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|16) */
         /* JADX WARNING: Failed to process nested try/catch */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x0040 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x004b */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0014 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001f */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x002a */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0035 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:11:0x003e */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x0049 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x0028 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:9:0x0033 */
         static {
             /*
                 android.graphics.drawable.GradientDrawable$Orientation[] r0 = android.graphics.drawable.GradientDrawable.Orientation.values()
                 int r0 = r0.length
                 int[] r0 = new int[r0]
                 $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation = r0
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0014 }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ NoSuchFieldError -> 0x0014 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0014 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
                 r2 = 1
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0014 }
-            L_0x0014:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x001f }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TR_BL     // Catch:{ NoSuchFieldError -> 0x001f }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001f }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x001d }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.TR_BL     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
                 r2 = 2
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001f }
-            L_0x001f:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x002a }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.RIGHT_LEFT     // Catch:{ NoSuchFieldError -> 0x002a }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x002a }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0028 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.RIGHT_LEFT     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
                 r2 = 3
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x002a }
-            L_0x002a:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0035 }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BR_TL     // Catch:{ NoSuchFieldError -> 0x0035 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0035 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0033 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BR_TL     // Catch:{ NoSuchFieldError -> 0x0033 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0033 }
                 r2 = 4
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0035 }
-            L_0x0035:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0040 }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BOTTOM_TOP     // Catch:{ NoSuchFieldError -> 0x0040 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0040 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0033 }
+            L_0x0033:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x003e }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BOTTOM_TOP     // Catch:{ NoSuchFieldError -> 0x003e }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x003e }
                 r2 = 5
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0040 }
-            L_0x0040:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x004b }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR     // Catch:{ NoSuchFieldError -> 0x004b }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x004b }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x003e }
+            L_0x003e:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0049 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.BL_TR     // Catch:{ NoSuchFieldError -> 0x0049 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0049 }
                 r2 = 6
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x004b }
-            L_0x004b:
-                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0056 }
-                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT     // Catch:{ NoSuchFieldError -> 0x0056 }
-                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0056 }
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0049 }
+            L_0x0049:
+                int[] r0 = $SwitchMap$android$graphics$drawable$GradientDrawable$Orientation     // Catch:{ NoSuchFieldError -> 0x0054 }
+                android.graphics.drawable.GradientDrawable$Orientation r1 = android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT     // Catch:{ NoSuchFieldError -> 0x0054 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0054 }
                 r2 = 7
-                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0056 }
-            L_0x0056:
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0054 }
+            L_0x0054:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackgroundGradientDrawable.AnonymousClass2.<clinit>():void");
@@ -500,9 +502,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         Rect rect = new Rect();
         switch (AnonymousClass2.$SwitchMap$android$graphics$drawable$GradientDrawable$Orientation[orientation.ordinal()]) {
             case 1:
-                rect.left = i / 2;
+                int i3 = i / 2;
+                rect.left = i3;
                 rect.top = 0;
-                rect.right = rect.left;
+                rect.right = i3;
                 rect.bottom = i2;
                 break;
             case 2:
@@ -513,9 +516,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
                 break;
             case 3:
                 rect.left = i;
-                rect.top = i2 / 2;
+                int i4 = i2 / 2;
+                rect.top = i4;
                 rect.right = 0;
-                rect.bottom = rect.top;
+                rect.bottom = i4;
                 break;
             case 4:
                 rect.left = i;
@@ -524,9 +528,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
                 rect.bottom = 0;
                 break;
             case 5:
-                rect.left = i / 2;
+                int i5 = i / 2;
+                rect.left = i5;
                 rect.top = i2;
-                rect.right = rect.left;
+                rect.right = i5;
                 rect.bottom = 0;
                 break;
             case 6:
@@ -537,9 +542,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
                 break;
             case 7:
                 rect.left = 0;
-                rect.top = i2 / 2;
+                int i6 = i2 / 2;
+                rect.top = i6;
                 rect.right = i;
-                rect.bottom = rect.top;
+                rect.bottom = i6;
                 break;
             default:
                 rect.left = 0;

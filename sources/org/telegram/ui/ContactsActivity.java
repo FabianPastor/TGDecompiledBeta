@@ -48,7 +48,8 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -68,8 +69,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ContactsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private static final int search_button = 0;
-    private static final int sort_button = 1;
     private boolean allowBots = true;
     private boolean allowSelf = true;
     private boolean allowUsernameSearch = true;
@@ -91,7 +90,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     public boolean floatingHidden;
     private AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private boolean hasGps;
-    private SparseArray<TLRPC.User> ignoreUsers;
+    private SparseArray<TLRPC$User> ignoreUsers;
     /* access modifiers changed from: private */
     public LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
@@ -125,7 +124,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     public ActionBarMenuItem sortItem;
 
     public interface ContactsActivityDelegate {
-        void didSelectContact(TLRPC.User user, String str, ContactsActivity contactsActivity);
+        void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity);
     }
 
     public ContactsActivity(Bundle bundle) {
@@ -175,23 +174,23 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.delegate = null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x014a  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0152  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x01f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x01f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x01ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x0202  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x020b  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x021a  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x021d  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0225  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0228  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0267  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x02c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x032d  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x0330  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0337  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x014c  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x01e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x01e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x01f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x01f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0200  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x020c  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x020f  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0217  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x021a  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0257  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x02b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x031b  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031e  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0325  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r25) {
         /*
@@ -202,7 +201,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r8.searching = r6
             r8.searchWas = r6
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131165430(0x7var_f6, float:1.7945077E38)
+            r1 = 2131165437(0x7var_fd, float:1.7945091E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
             r5 = 1
@@ -212,7 +211,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r8.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131626535(0x7f0e0a27, float:1.8880309E38)
+            r1 = 2131626634(0x7f0e0a8a, float:1.888051E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -221,21 +220,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r8.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131625664(0x7f0e06c0, float:1.8878542E38)
+            r1 = 2131625758(0x7f0e071e, float:1.8878733E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131625655(0x7f0e06b7, float:1.8878524E38)
+            r1 = 2131625749(0x7f0e0715, float:1.8878715E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131624766(0x7f0e033e, float:1.887672E38)
+            r1 = 2131624773(0x7f0e0345, float:1.8876735E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -246,37 +245,36 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165440(0x7var_, float:1.7945097E38)
+            r1 = 2131165447(0x7var_, float:1.7945111E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r6, (int) r1)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r5)
+            r1.setIsSearchField(r5)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
             r2.<init>()
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
-            r2 = 2131626494(0x7f0e09fe, float:1.8880226E38)
+            r1.setActionBarMenuItemSearchListener(r2)
+            r2 = 2131626593(0x7f0e0a61, float:1.8880427E38)
             java.lang.String r3 = "Search"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
             boolean r1 = r8.createSecretChat
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00b8
             boolean r1 = r8.returnAsResult
-            if (r1 != 0) goto L_0x00bc
+            if (r1 != 0) goto L_0x00b8
             boolean r1 = r8.sortByName
-            if (r1 == 0) goto L_0x00a5
+            if (r1 == 0) goto L_0x00a3
             r1 = 2131165359(0x7var_af, float:1.7944933E38)
-            goto L_0x00a8
-        L_0x00a5:
+            goto L_0x00a6
+        L_0x00a3:
             r1 = 2131165358(0x7var_ae, float:1.794493E38)
-        L_0x00a8:
+        L_0x00a6:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r5, (int) r1)
             r8.sortItem = r0
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.sortItem
             r1 = 2131623966(0x7f0e001e, float:1.8875098E38)
             java.lang.String r2 = "AccDescrContactSorting"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
-        L_0x00bc:
+        L_0x00b8:
             org.telegram.ui.Adapters.SearchAdapter r0 = new org.telegram.ui.Adapters.SearchAdapter
             android.util.SparseArray<org.telegram.tgnet.TLRPC$User> r11 = r8.ignoreUsers
             boolean r12 = r8.allowUsernameSearch
@@ -294,46 +292,46 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             int r0 = r8.chatId
             r9 = 3
             r10 = 2
-            if (r0 == 0) goto L_0x00f2
+            if (r0 == 0) goto L_0x00ee
             int r0 = r8.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r1 = r8.chatId
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
             boolean r0 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r9)
-        L_0x00f0:
+        L_0x00ec:
             r11 = r0
-            goto L_0x0119
-        L_0x00f2:
+            goto L_0x0115
+        L_0x00ee:
             int r0 = r8.channelId
-            if (r0 == 0) goto L_0x0118
+            if (r0 == 0) goto L_0x0114
             int r0 = r8.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r1 = r8.channelId
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
             boolean r1 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r9)
-            if (r1 == 0) goto L_0x0116
+            if (r1 == 0) goto L_0x0112
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x0116
+            if (r0 == 0) goto L_0x0112
             r0 = 2
-            goto L_0x00f0
-        L_0x0116:
+            goto L_0x00ec
+        L_0x0112:
             r0 = 0
-            goto L_0x00f0
-        L_0x0118:
+            goto L_0x00ec
+        L_0x0114:
             r11 = 0
-        L_0x0119:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0128 }
-            android.content.pm.PackageManager r0 = r0.getPackageManager()     // Catch:{ all -> 0x0128 }
+        L_0x0115:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0124 }
+            android.content.pm.PackageManager r0 = r0.getPackageManager()     // Catch:{ all -> 0x0124 }
             java.lang.String r1 = "android.hardware.location.gps"
-            boolean r0 = r0.hasSystemFeature(r1)     // Catch:{ all -> 0x0128 }
-            r8.hasGps = r0     // Catch:{ all -> 0x0128 }
-            goto L_0x012a
-        L_0x0128:
+            boolean r0 = r0.hasSystemFeature(r1)     // Catch:{ all -> 0x0124 }
+            r8.hasGps = r0     // Catch:{ all -> 0x0124 }
+            goto L_0x0126
+        L_0x0124:
             r8.hasGps = r6
-        L_0x012a:
+        L_0x0126:
             org.telegram.ui.ContactsActivity$3 r12 = new org.telegram.ui.ContactsActivity$3
             boolean r3 = r8.onlyUsers
             boolean r4 = r8.needPhonebook
@@ -350,35 +348,32 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r7 = r14
             r0.<init>(r2, r3, r4, r5, r6, r7)
             r8.listViewAdapter = r12
-            org.telegram.ui.Adapters.ContactsAdapter r0 = r8.listViewAdapter
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.sortItem
-            if (r1 == 0) goto L_0x0152
-            boolean r1 = r8.sortByName
-            if (r1 == 0) goto L_0x0150
-            r1 = 1
-            goto L_0x0153
-        L_0x0150:
-            r1 = 2
-            goto L_0x0153
-        L_0x0152:
-            r1 = 0
-        L_0x0153:
-            r0.setSortType(r1)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.sortItem
+            if (r0 == 0) goto L_0x014c
+            boolean r0 = r8.sortByName
+            if (r0 == 0) goto L_0x014a
+            r6 = 1
+            goto L_0x014d
+        L_0x014a:
+            r6 = 2
+            goto L_0x014d
+        L_0x014c:
+            r6 = 0
+        L_0x014d:
+            r12.setSortType(r6)
             org.telegram.ui.Adapters.ContactsAdapter r0 = r8.listViewAdapter
             boolean r1 = r8.disableSections
             r0.setDisableSections(r1)
             org.telegram.ui.ContactsActivity$4 r0 = new org.telegram.ui.ContactsActivity$4
             r0.<init>(r9)
             r8.fragmentView = r0
-            android.view.View r0 = r8.fragmentView
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.Components.EmptyTextProgressView r1 = new org.telegram.ui.Components.EmptyTextProgressView
             r1.<init>(r9)
             r8.emptyView = r1
-            org.telegram.ui.Components.EmptyTextProgressView r1 = r8.emptyView
             r1.setShowAtCenter(r15)
             org.telegram.ui.Components.EmptyTextProgressView r1 = r8.emptyView
-            r2 = 2131625685(0x7f0e06d5, float:1.8878585E38)
+            r2 = 2131625779(0x7f0e0733, float:1.8878776E38)
             java.lang.String r3 = "NoContacts"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -392,7 +387,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.ContactsActivity$5 r1 = new org.telegram.ui.ContactsActivity$5
             r1.<init>(r9)
             r8.listView = r1
-            org.telegram.ui.Components.RecyclerListView r1 = r8.listView
             r1.setSectionsType(r15)
             org.telegram.ui.Components.RecyclerListView r1 = r8.listView
             r1.setVerticalScrollBarEnabled(r13)
@@ -418,59 +412,58 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             r1.setOnScrollListener(r2)
             boolean r1 = r8.createSecretChat
-            if (r1 != 0) goto L_0x0349
+            if (r1 != 0) goto L_0x0337
             boolean r1 = r8.returnAsResult
-            if (r1 != 0) goto L_0x0349
+            if (r1 != 0) goto L_0x0337
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
             r1.<init>(r9)
             r8.floatingButtonContainer = r1
-            android.widget.FrameLayout r1 = r8.floatingButtonContainer
             int r2 = android.os.Build.VERSION.SDK_INT
             r3 = 56
             r4 = 60
             r5 = 21
-            if (r2 < r5) goto L_0x01f7
+            if (r2 < r5) goto L_0x01e9
             r2 = 56
-            goto L_0x01f9
-        L_0x01f7:
+            goto L_0x01eb
+        L_0x01e9:
             r2 = 60
-        L_0x01f9:
+        L_0x01eb:
             int r17 = r2 + 20
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 < r5) goto L_0x0202
+            if (r2 < r5) goto L_0x01f4
             r2 = 56
-            goto L_0x0204
-        L_0x0202:
+            goto L_0x01f6
+        L_0x01f4:
             r2 = 60
-        L_0x0204:
+        L_0x01f6:
             int r2 = r2 + 14
             float r2 = (float) r2
             boolean r6 = org.telegram.messenger.LocaleController.isRTL
-            if (r6 == 0) goto L_0x020e
+            if (r6 == 0) goto L_0x0200
             r16 = 3
-            goto L_0x0211
-        L_0x020e:
+            goto L_0x0203
+        L_0x0200:
             r6 = 5
             r16 = 5
-        L_0x0211:
+        L_0x0203:
             r19 = r16 | 80
             boolean r6 = org.telegram.messenger.LocaleController.isRTL
             r7 = 0
             r11 = 1082130432(0x40800000, float:4.0)
-            if (r6 == 0) goto L_0x021d
+            if (r6 == 0) goto L_0x020f
             r20 = 1082130432(0x40800000, float:4.0)
-            goto L_0x021f
-        L_0x021d:
+            goto L_0x0211
+        L_0x020f:
             r20 = 0
-        L_0x021f:
+        L_0x0211:
             r21 = 0
             boolean r6 = org.telegram.messenger.LocaleController.isRTL
-            if (r6 == 0) goto L_0x0228
+            if (r6 == 0) goto L_0x021a
             r22 = 0
-            goto L_0x022a
-        L_0x0228:
+            goto L_0x021c
+        L_0x021a:
             r22 = 1082130432(0x40800000, float:4.0)
-        L_0x022a:
+        L_0x021c:
             r23 = 0
             r18 = r2
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
@@ -482,7 +475,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r9)
             r8.floatingButton = r0
-            android.widget.ImageView r0 = r8.floatingButton
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             r0 = 1113587712(0x42600000, float:56.0)
@@ -493,7 +485,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r2, r6)
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 >= r5) goto L_0x0293
+            if (r2 >= r5) goto L_0x0283
             android.content.res.Resources r2 = r25.getResources()
             r6 = 2131165392(0x7var_d0, float:1.7945E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r6)
@@ -509,7 +501,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r6.setIconSize(r1, r0)
             r1 = r6
-        L_0x0293:
+        L_0x0283:
             android.widget.ImageView r0 = r8.floatingButton
             r0.setBackgroundDrawable(r1)
             android.widget.ImageView r0 = r8.floatingButton
@@ -520,15 +512,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.<init>(r2, r6)
             r0.setColorFilter(r1)
             android.widget.ImageView r0 = r8.floatingButton
-            r1 = 2131165258(0x7var_a, float:1.7944728E38)
+            r1 = 2131165259(0x7var_b, float:1.794473E38)
             r0.setImageResource(r1)
             android.widget.FrameLayout r0 = r8.floatingButtonContainer
-            r1 = 2131624797(0x7f0e035d, float:1.8876784E38)
+            r1 = 2131624804(0x7f0e0364, float:1.8876798E38)
             java.lang.String r2 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r5) goto L_0x0325
+            if (r0 < r5) goto L_0x0313
             android.animation.StateListAnimator r0 = new android.animation.StateListAnimator
             r0.<init>()
             int[] r1 = new int[r15]
@@ -550,40 +542,39 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.addState(r1, r2)
             int[] r1 = new int[r13]
             android.widget.ImageView r2 = r8.floatingButton
-            android.util.Property r6 = android.view.View.TRANSLATION_Z
-            float[] r7 = new float[r10]
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r10 = (float) r10
-            r7[r13] = r10
+            android.util.Property r12 = android.view.View.TRANSLATION_Z
+            float[] r10 = new float[r10]
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
+            r10[r13] = r11
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             float r9 = (float) r9
-            r7[r15] = r9
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r6, r7)
-            r6 = 200(0xc8, double:9.9E-322)
+            r10[r15] = r9
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r12, r10)
             android.animation.ObjectAnimator r2 = r2.setDuration(r6)
             r0.addState(r1, r2)
             android.widget.ImageView r1 = r8.floatingButton
             r1.setStateListAnimator(r0)
             android.widget.ImageView r0 = r8.floatingButton
             org.telegram.ui.ContactsActivity$7 r1 = new org.telegram.ui.ContactsActivity$7
-            r1.<init>()
+            r1.<init>(r8)
             r0.setOutlineProvider(r1)
-        L_0x0325:
+        L_0x0313:
             android.widget.FrameLayout r0 = r8.floatingButtonContainer
             android.widget.ImageView r1 = r8.floatingButton
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 < r5) goto L_0x0330
+            if (r2 < r5) goto L_0x031e
             r9 = 56
-            goto L_0x0332
-        L_0x0330:
+            goto L_0x0320
+        L_0x031e:
             r9 = 60
-        L_0x0332:
+        L_0x0320:
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 < r5) goto L_0x0337
-            goto L_0x0339
-        L_0x0337:
+            if (r2 < r5) goto L_0x0325
+            goto L_0x0327
+        L_0x0325:
             r3 = 60
-        L_0x0339:
+        L_0x0327:
             float r10 = (float) r3
             r11 = 51
             r12 = 1092616192(0x41200000, float:10.0)
@@ -592,7 +583,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r15 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
             r0.addView(r1, r2)
-        L_0x0349:
+        L_0x0337:
             android.view.View r0 = r8.fragmentView
             return r0
         */
@@ -601,26 +592,27 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$createView$1$ContactsActivity(int i, View view, int i2) {
         Activity parentActivity;
-        boolean z = true;
+        boolean z = false;
+        boolean z2 = true;
         if (!this.searching || !this.searchWas) {
             int sectionForPosition = this.listViewAdapter.getSectionForPosition(i2);
             int positionInSectionForPosition = this.listViewAdapter.getPositionInSectionForPosition(i2);
             if (positionInSectionForPosition >= 0 && sectionForPosition >= 0) {
                 if ((this.onlyUsers && i == 0) || sectionForPosition != 0) {
                     Object item = this.listViewAdapter.getItem(sectionForPosition, positionInSectionForPosition);
-                    if (item instanceof TLRPC.User) {
-                        TLRPC.User user = (TLRPC.User) item;
+                    if (item instanceof TLRPC$User) {
+                        TLRPC$User tLRPC$User = (TLRPC$User) item;
                         if (this.returnAsResult) {
-                            SparseArray<TLRPC.User> sparseArray = this.ignoreUsers;
-                            if (sparseArray == null || sparseArray.indexOfKey(user.id) < 0) {
-                                didSelectResult(user, true, (String) null);
+                            SparseArray<TLRPC$User> sparseArray = this.ignoreUsers;
+                            if (sparseArray == null || sparseArray.indexOfKey(tLRPC$User.id) < 0) {
+                                didSelectResult(tLRPC$User, true, (String) null);
                             }
                         } else if (this.createSecretChat) {
                             this.creatingChat = true;
-                            SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), user);
+                            SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), tLRPC$User);
                         } else {
                             Bundle bundle = new Bundle();
-                            bundle.putInt("user_id", user.id);
+                            bundle.putInt("user_id", tLRPC$User.id);
                             if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(bundle, this)) {
                                 presentFragment(new ChatActivity(bundle), true);
                             }
@@ -654,17 +646,18 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         if (Build.VERSION.SDK_INT < 23 || (parentActivity = getParentActivity()) == null || parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
                             int i3 = Build.VERSION.SDK_INT;
                             if (i3 >= 28) {
-                                z = ((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isLocationEnabled();
+                                z2 = ((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isLocationEnabled();
                             } else if (i3 >= 19) {
                                 try {
-                                    if (Settings.Secure.getInt(ApplicationLoader.applicationContext.getContentResolver(), "location_mode", 0) == 0) {
-                                        z = false;
+                                    if (Settings.Secure.getInt(ApplicationLoader.applicationContext.getContentResolver(), "location_mode", 0) != 0) {
+                                        z = true;
                                     }
+                                    z2 = z;
                                 } catch (Throwable th) {
                                     FileLog.e(th);
                                 }
                             }
-                            if (!z) {
+                            if (!z2) {
                                 presentFragment(new ActionIntroActivity(4));
                             } else {
                                 presentFragment(new PeopleNearbyActivity());
@@ -705,29 +698,29 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             }
         } else {
             Object item2 = this.searchListViewAdapter.getItem(i2);
-            if (item2 instanceof TLRPC.User) {
-                TLRPC.User user2 = (TLRPC.User) item2;
-                if (user2 != null) {
+            if (item2 instanceof TLRPC$User) {
+                TLRPC$User tLRPC$User2 = (TLRPC$User) item2;
+                if (tLRPC$User2 != null) {
                     if (this.searchListViewAdapter.isGlobalSearch(i2)) {
                         ArrayList arrayList = new ArrayList();
-                        arrayList.add(user2);
+                        arrayList.add(tLRPC$User2);
                         MessagesController.getInstance(this.currentAccount).putUsers(arrayList, false);
-                        MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC.Chat>) null, false, true);
+                        MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC$Chat>) null, false, true);
                     }
                     if (this.returnAsResult) {
-                        SparseArray<TLRPC.User> sparseArray2 = this.ignoreUsers;
-                        if (sparseArray2 == null || sparseArray2.indexOfKey(user2.id) < 0) {
-                            didSelectResult(user2, true, (String) null);
+                        SparseArray<TLRPC$User> sparseArray2 = this.ignoreUsers;
+                        if (sparseArray2 == null || sparseArray2.indexOfKey(tLRPC$User2.id) < 0) {
+                            didSelectResult(tLRPC$User2, true, (String) null);
                         }
                     } else if (!this.createSecretChat) {
                         Bundle bundle4 = new Bundle();
-                        bundle4.putInt("user_id", user2.id);
+                        bundle4.putInt("user_id", tLRPC$User2.id);
                         if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(bundle4, this)) {
                             presentFragment(new ChatActivity(bundle4), true);
                         }
-                    } else if (user2.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                    } else if (tLRPC$User2.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         this.creatingChat = true;
-                        SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), user2);
+                        SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), tLRPC$User2);
                     }
                 }
             } else if (item2 instanceof String) {
@@ -755,12 +748,12 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         presentFragment(new NewContactActivity());
     }
 
-    private void didSelectResult(TLRPC.User user, boolean z, String str) {
+    private void didSelectResult(TLRPC$User tLRPC$User, boolean z, String str) {
         final EditTextBoldCursor editTextBoldCursor;
         if (!z || this.selectAlertString == null) {
             ContactsActivityDelegate contactsActivityDelegate = this.delegate;
             if (contactsActivityDelegate != null) {
-                contactsActivityDelegate.didSelectContact(user, str, this);
+                contactsActivityDelegate.didSelectContact(tLRPC$User, str, this);
                 if (this.resetDelegate) {
                     this.delegate = null;
                 }
@@ -769,8 +762,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 finishFragment();
             }
         } else if (getParentActivity() != null) {
-            if (user.bot) {
-                if (user.bot_nochats) {
+            if (tLRPC$User.bot) {
+                if (tLRPC$User.bot_nochats) {
                     try {
                         Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", NUM), 0).show();
                         return;
@@ -779,13 +772,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         return;
                     }
                 } else if (this.channelId != 0) {
-                    TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.channelId));
+                    TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.channelId));
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     if (ChatObject.canAddAdmins(chat)) {
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
-                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", NUM), new DialogInterface.OnClickListener(user, str) {
-                            private final /* synthetic */ TLRPC.User f$1;
+                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", NUM), new DialogInterface.OnClickListener(tLRPC$User, str) {
+                            private final /* synthetic */ TLRPC$User f$1;
                             private final /* synthetic */ String f$2;
 
                             {
@@ -808,8 +801,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             }
             AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
             builder2.setTitle(LocaleController.getString("AppName", NUM));
-            String formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(user));
-            if (user.bot || !this.needForwardCount) {
+            String formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(tLRPC$User));
+            if (tLRPC$User.bot || !this.needForwardCount) {
                 editTextBoldCursor = null;
             } else {
                 formatStringSimple = String.format("%s\n\n%s", new Object[]{formatStringSimple, LocaleController.getString("AddToTheGroupForwardCount", NUM)});
@@ -821,7 +814,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 editTextBoldCursor.setInputType(2);
                 editTextBoldCursor.setImeOptions(6);
                 editTextBoldCursor.setBackgroundDrawable(Theme.createEditTextDrawable(getParentActivity(), true));
-                editTextBoldCursor.addTextChangedListener(new TextWatcher() {
+                editTextBoldCursor.addTextChangedListener(new TextWatcher(this) {
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
@@ -855,8 +848,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 builder2.setView(editTextBoldCursor);
             }
             builder2.setMessage(formatStringSimple);
-            builder2.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(user, editTextBoldCursor) {
-                private final /* synthetic */ TLRPC.User f$1;
+            builder2.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$User, editTextBoldCursor) {
+                private final /* synthetic */ TLRPC$User f$1;
                 private final /* synthetic */ EditText f$2;
 
                 {
@@ -887,16 +880,16 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$didSelectResult$3$ContactsActivity(TLRPC.User user, String str, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$didSelectResult$3$ContactsActivity(TLRPC$User tLRPC$User, String str, DialogInterface dialogInterface, int i) {
         ContactsActivityDelegate contactsActivityDelegate = this.delegate;
         if (contactsActivityDelegate != null) {
-            contactsActivityDelegate.didSelectContact(user, str, this);
+            contactsActivityDelegate.didSelectContact(tLRPC$User, str, this);
             this.delegate = null;
         }
     }
 
-    public /* synthetic */ void lambda$didSelectResult$4$ContactsActivity(TLRPC.User user, EditText editText, DialogInterface dialogInterface, int i) {
-        didSelectResult(user, false, editText != null ? editText.getText().toString() : "0");
+    public /* synthetic */ void lambda$didSelectResult$4$ContactsActivity(TLRPC$User tLRPC$User, EditText editText, DialogInterface dialogInterface, int i) {
+        didSelectResult(tLRPC$User, false, editText != null ? editText.getText().toString() : "0");
     }
 
     public void onResume() {
@@ -1080,10 +1073,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.delegate = contactsActivityDelegate;
     }
 
-    public void setIgnoreUsers(SparseArray<TLRPC.User> sparseArray) {
-        this.ignoreUsers = sparseArray;
-    }
-
     public ThemeDescription[] getThemeDescriptions() {
         $$Lambda$ContactsActivity$mX2AyzEZkfKNXN64OUntWgWNyBY r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
@@ -1094,7 +1083,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         $$Lambda$ContactsActivity$mX2AyzEZkfKNXN64OUntWgWNyBY r7 = r10;
         TextPaint[] textPaintArr = Theme.dialogs_namePaint;
         TextPaint[] textPaintArr2 = Theme.dialogs_nameEncryptedPaint;
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearchPlaceholder"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionIcon"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionPressedBackground"), new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedCheck"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedBackground"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText3"), new ThemeDescription((View) this.listView, 0, new Class[]{ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr[0], textPaintArr[1], Theme.dialogs_searchNamePaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_name"), new ThemeDescription((View) this.listView, 0, new Class[]{ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr2[0], textPaintArr2[1], Theme.dialogs_searchNameEncryptedPaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretName")};
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearch"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSearchPlaceholder"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionIcon"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"), new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionPressedBackground"), new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedCheck"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_verifiedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_verifiedBackground"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"), new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText3"), new ThemeDescription((View) this.listView, 0, new Class[]{ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr[0], textPaintArr[1], Theme.dialogs_searchNamePaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_name"), new ThemeDescription((View) this.listView, 0, new Class[]{ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr2[0], textPaintArr2[1], Theme.dialogs_searchNameEncryptedPaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretName")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$7$ContactsActivity() {

@@ -17,8 +17,9 @@ public class DrawerAddCell extends FrameLayout {
 
     public DrawerAddCell(Context context) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("chats_menuItemText"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);

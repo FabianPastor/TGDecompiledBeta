@@ -53,12 +53,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         super(context);
         setFillViewport(true);
         setWillNotDraw(false);
-        this.tabsContainer = new LinearLayout(context);
-        this.tabsContainer.setOrientation(0);
+        LinearLayout linearLayout = new LinearLayout(context);
+        this.tabsContainer = linearLayout;
+        linearLayout.setOrientation(0);
         this.tabsContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         addView(this.tabsContainer);
-        this.rectPaint = new Paint();
-        this.rectPaint.setAntiAlias(true);
+        Paint paint = new Paint();
+        this.rectPaint = paint;
+        paint.setAntiAlias(true);
         this.rectPaint.setStyle(Paint.Style.FILL);
         this.defaultTabLayoutParams = new LinearLayout.LayoutParams(-2, -1);
     }

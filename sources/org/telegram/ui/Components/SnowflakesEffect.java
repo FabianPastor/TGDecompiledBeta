@@ -10,13 +10,12 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SnowflakesEffect {
-    final float angleDiff = 1.0471976f;
     private int color;
     private String colorKey = "actionBarDefaultTitle";
     private ArrayList<Particle> freeParticles = new ArrayList<>();
     private long lastAnimationTime;
     /* access modifiers changed from: private */
-    public Paint particlePaint = new Paint(1);
+    public Paint particlePaint;
     /* access modifiers changed from: private */
     public Paint particleThinPaint;
     private ArrayList<Particle> particles = new ArrayList<>();
@@ -94,11 +93,14 @@ public class SnowflakesEffect {
     }
 
     public SnowflakesEffect() {
-        this.particlePaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
+        Paint paint = new Paint(1);
+        this.particlePaint = paint;
+        paint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         this.particlePaint.setStrokeCap(Paint.Cap.ROUND);
         this.particlePaint.setStyle(Paint.Style.STROKE);
-        this.particleThinPaint = new Paint(1);
-        this.particleThinPaint.setStrokeWidth((float) AndroidUtilities.dp(0.5f));
+        Paint paint2 = new Paint(1);
+        this.particleThinPaint = paint2;
+        paint2.setStrokeWidth((float) AndroidUtilities.dp(0.5f));
         this.particleThinPaint.setStrokeCap(Paint.Cap.ROUND);
         this.particleThinPaint.setStyle(Paint.Style.STROKE);
         updateColors();

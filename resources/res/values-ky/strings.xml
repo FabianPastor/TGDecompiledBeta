@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Жардамчыны ырастагыч</string>
     <string name="google_assistant_verification_notification_title">Google Жардамчы билдирүү жөнөтүүдө</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Google аркылуу сатып алуу</string>
 </resources>

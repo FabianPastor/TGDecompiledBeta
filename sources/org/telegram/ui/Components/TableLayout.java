@@ -14,13 +14,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_pageTableCell;
 import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Cells.TextSelectionHelper;
 
 public class TableLayout extends View {
-    public static final int ALIGN_BOUNDS = 0;
-    public static final int ALIGN_MARGINS = 1;
     public static final Alignment BASELINE = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
             return Integer.MIN_VALUE;
@@ -32,7 +30,7 @@ public class TableLayout extends View {
         }
 
         public Bounds getBounds() {
-            return new Bounds() {
+            return new Bounds(this) {
                 private int size;
 
                 /* access modifiers changed from: protected */
@@ -59,23 +57,6 @@ public class TableLayout extends View {
             };
         }
     };
-    public static final Alignment BOTTOM;
-    private static final int CAN_STRETCH = 2;
-    public static final Alignment CENTER = new Alignment() {
-        public int getAlignmentValue(Child child, int i) {
-            return i >> 1;
-        }
-
-        /* access modifiers changed from: package-private */
-        public int getGravityOffset(Child child, int i) {
-            return i >> 1;
-        }
-    };
-    private static final int DEFAULT_ALIGNMENT_MODE = 1;
-    private static final int DEFAULT_COUNT = Integer.MIN_VALUE;
-    private static final boolean DEFAULT_ORDER_PRESERVED = true;
-    private static final int DEFAULT_ORIENTATION = 0;
-    private static final boolean DEFAULT_USE_DEFAULT_MARGINS = false;
     public static final Alignment END;
     public static final Alignment FILL = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
@@ -91,8 +72,6 @@ public class TableLayout extends View {
             return i2;
         }
     };
-    public static final int HORIZONTAL = 0;
-    private static final int INFLEXIBLE = 0;
     private static final Alignment LEADING = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
             return 0;
@@ -103,22 +82,8 @@ public class TableLayout extends View {
             return 0;
         }
     };
-    public static final Alignment LEFT = createSwitchingAlignment(START);
-    static final int MAX_SIZE = 100000;
-    public static final Alignment RIGHT = createSwitchingAlignment(END);
     public static final Alignment START;
-    public static final Alignment TOP;
-    private static final Alignment TRAILING = new Alignment() {
-        public int getAlignmentValue(Child child, int i) {
-            return i;
-        }
-
-        /* access modifiers changed from: package-private */
-        public int getGravityOffset(Child child, int i) {
-            return i;
-        }
-    };
-    public static final int UNDEFINED = Integer.MIN_VALUE;
+    private static final Alignment TRAILING;
     static final Alignment UNDEFINED_ALIGNMENT = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
             return Integer.MIN_VALUE;
@@ -129,12 +94,10 @@ public class TableLayout extends View {
             return Integer.MIN_VALUE;
         }
     };
-    static final int UNINITIALIZED_HASH = 0;
-    public static final int VERTICAL = 1;
     /* access modifiers changed from: private */
-    public Path backgroundPath = new Path();
+    public Path backgroundPath;
     private ArrayList<Child> cellsToFixHeight = new ArrayList<>();
-    private ArrayList<Child> childrens = new ArrayList<>();
+    private ArrayList<Child> childrens;
     private int colCount;
     /* access modifiers changed from: private */
     public TableLayoutDelegate delegate;
@@ -147,7 +110,6 @@ public class TableLayout extends View {
     public int itemPaddingLeft = AndroidUtilities.dp(8.0f);
     /* access modifiers changed from: private */
     public int itemPaddingTop = AndroidUtilities.dp(7.0f);
-    private Path linePath = new Path();
     private int mAlignmentMode = 1;
     private int mDefaultGap;
     private final Axis mHorizontalAxis = new Axis(true);
@@ -156,17 +118,15 @@ public class TableLayout extends View {
     private boolean mUseDefaultMargins = false;
     private final Axis mVerticalAxis = new Axis(false);
     /* access modifiers changed from: private */
-    public float[] radii = new float[8];
+    public float[] radii;
     /* access modifiers changed from: private */
-    public RectF rect = new RectF();
+    public RectF rect;
     private ArrayList<Point> rowSpans = new ArrayList<>();
     /* access modifiers changed from: private */
     public TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
 
     public interface TableLayoutDelegate {
-        ArticleViewer.DrawingText createTextLayout(TLRPC.TL_pageTableCell tL_pageTableCell, int i);
-
-        Paint getHalfLinePaint();
+        ArticleViewer.DrawingText createTextLayout(TLRPC$TL_pageTableCell tLRPC$TL_pageTableCell, int i);
 
         Paint getHeaderPaint();
 
@@ -181,9 +141,14 @@ public class TableLayout extends View {
         return (i & 2) != 0;
     }
 
+    static /* synthetic */ void access$1800(String str) {
+        handleInvalidParams(str);
+        throw null;
+    }
+
     public class Child {
         /* access modifiers changed from: private */
-        public TLRPC.TL_pageTableCell cell;
+        public TLRPC$TL_pageTableCell cell;
         /* access modifiers changed from: private */
         public int fixedHeight;
         /* access modifiers changed from: private */
@@ -221,8 +186,8 @@ public class TableLayout extends View {
             return this.measuredHeight;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:22:0x004e, code lost:
-            if (r2.align_right == false) goto L_0x0077;
+        /* JADX WARNING: Code restructure failed: missing block: B:22:0x004c, code lost:
+            if (r2.align_right == false) goto L_0x0075;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void measure(int r2, int r3, boolean r4) {
@@ -230,23 +195,22 @@ public class TableLayout extends View {
                 r1 = this;
                 r1.measuredWidth = r2
                 r1.measuredHeight = r3
-                if (r4 == 0) goto L_0x000a
-                int r2 = r1.measuredHeight
-                r1.fixedHeight = r2
-            L_0x000a:
+                if (r4 == 0) goto L_0x0008
+                r1.fixedHeight = r3
+            L_0x0008:
                 org.telegram.tgnet.TLRPC$TL_pageTableCell r2 = r1.cell
-                if (r2 == 0) goto L_0x00c0
+                if (r2 == 0) goto L_0x00b8
                 boolean r3 = r2.valign_middle
-                if (r3 == 0) goto L_0x001c
+                if (r3 == 0) goto L_0x001a
                 int r2 = r1.measuredHeight
                 int r3 = r1.textHeight
                 int r2 = r2 - r3
                 int r2 = r2 / 2
                 r1.textY = r2
-                goto L_0x0037
-            L_0x001c:
+                goto L_0x0035
+            L_0x001a:
                 boolean r2 = r2.valign_bottom
-                if (r2 == 0) goto L_0x002f
+                if (r2 == 0) goto L_0x002d
                 int r2 = r1.measuredHeight
                 int r3 = r1.textHeight
                 int r2 = r2 - r3
@@ -254,25 +218,25 @@ public class TableLayout extends View {
                 int r3 = r3.itemPaddingTop
                 int r2 = r2 - r3
                 r1.textY = r2
-                goto L_0x0037
-            L_0x002f:
+                goto L_0x0035
+            L_0x002d:
                 org.telegram.ui.Components.TableLayout r2 = org.telegram.ui.Components.TableLayout.this
                 int r2 = r2.itemPaddingTop
                 r1.textY = r2
-            L_0x0037:
+            L_0x0035:
                 org.telegram.ui.ArticleViewer$DrawingText r2 = r1.textLayout
-                if (r2 == 0) goto L_0x00c0
+                if (r2 == 0) goto L_0x00b8
                 int r2 = r2.getLineCount()
-                if (r4 != 0) goto L_0x0077
+                if (r4 != 0) goto L_0x0075
                 r3 = 1
-                if (r2 > r3) goto L_0x0050
-                if (r2 <= 0) goto L_0x0077
+                if (r2 > r3) goto L_0x004e
+                if (r2 <= 0) goto L_0x0075
                 org.telegram.tgnet.TLRPC$TL_pageTableCell r2 = r1.cell
                 boolean r3 = r2.align_center
-                if (r3 != 0) goto L_0x0050
+                if (r3 != 0) goto L_0x004e
                 boolean r2 = r2.align_right
-                if (r2 == 0) goto L_0x0077
-            L_0x0050:
+                if (r2 == 0) goto L_0x0075
+            L_0x004e:
                 org.telegram.ui.Components.TableLayout r2 = org.telegram.ui.Components.TableLayout.this
                 org.telegram.ui.Components.TableLayout$TableLayoutDelegate r2 = r2.delegate
                 org.telegram.tgnet.TLRPC$TL_pageTableCell r3 = r1.cell
@@ -289,15 +253,14 @@ public class TableLayout extends View {
                 int r3 = r3 * 2
                 int r2 = r2 + r3
                 r1.fixedHeight = r2
-            L_0x0077:
+            L_0x0075:
                 int r2 = r1.textLeft
-                if (r2 == 0) goto L_0x00b8
+                if (r2 == 0) goto L_0x00b0
                 int r2 = -r2
                 r1.textX = r2
-                org.telegram.tgnet.TLRPC$TL_pageTableCell r2 = r1.cell
-                boolean r3 = r2.align_right
-                if (r3 == 0) goto L_0x0096
-                int r2 = r1.textX
+                org.telegram.tgnet.TLRPC$TL_pageTableCell r3 = r1.cell
+                boolean r4 = r3.align_right
+                if (r4 == 0) goto L_0x0092
                 int r3 = r1.measuredWidth
                 int r4 = r1.textWidth
                 int r3 = r3 - r4
@@ -306,11 +269,10 @@ public class TableLayout extends View {
                 int r3 = r3 - r4
                 int r2 = r2 + r3
                 r1.textX = r2
-                goto L_0x00c0
-            L_0x0096:
-                boolean r2 = r2.align_center
-                if (r2 == 0) goto L_0x00ac
-                int r2 = r1.textX
+                goto L_0x00b8
+            L_0x0092:
+                boolean r3 = r3.align_center
+                if (r3 == 0) goto L_0x00a6
                 int r3 = r1.measuredWidth
                 int r4 = r1.textWidth
                 int r3 = r3 - r4
@@ -319,19 +281,18 @@ public class TableLayout extends View {
                 int r3 = java.lang.Math.round(r3)
                 int r2 = r2 + r3
                 r1.textX = r2
-                goto L_0x00c0
-            L_0x00ac:
-                int r2 = r1.textX
+                goto L_0x00b8
+            L_0x00a6:
                 org.telegram.ui.Components.TableLayout r3 = org.telegram.ui.Components.TableLayout.this
                 int r3 = r3.itemPaddingLeft
                 int r2 = r2 + r3
                 r1.textX = r2
-                goto L_0x00c0
-            L_0x00b8:
+                goto L_0x00b8
+            L_0x00b0:
                 org.telegram.ui.Components.TableLayout r2 = org.telegram.ui.Components.TableLayout.this
                 int r2 = r2.itemPaddingLeft
                 r1.textX = r2
-            L_0x00c0:
+            L_0x00b8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TableLayout.Child.measure(int, int, boolean):void");
@@ -372,12 +333,13 @@ public class TableLayout extends View {
         }
 
         public void setFixedHeight(int i) {
-            this.measuredHeight = this.fixedHeight;
-            TLRPC.TL_pageTableCell tL_pageTableCell = this.cell;
-            if (tL_pageTableCell.valign_middle) {
-                this.textY = (this.measuredHeight - this.textHeight) / 2;
-            } else if (tL_pageTableCell.valign_bottom) {
-                this.textY = (this.measuredHeight - this.textHeight) - TableLayout.this.itemPaddingTop;
+            int i2 = this.fixedHeight;
+            this.measuredHeight = i2;
+            TLRPC$TL_pageTableCell tLRPC$TL_pageTableCell = this.cell;
+            if (tLRPC$TL_pageTableCell.valign_middle) {
+                this.textY = (i2 - this.textHeight) / 2;
+            } else if (tLRPC$TL_pageTableCell.valign_bottom) {
+                this.textY = (i2 - this.textHeight) - TableLayout.this.itemPaddingTop;
             }
         }
 
@@ -389,8 +351,9 @@ public class TableLayout extends View {
             int i;
             if (this.cell != null) {
                 boolean z = false;
-                boolean z2 = this.x + this.measuredWidth == TableLayout.this.getMeasuredWidth();
-                boolean z3 = this.y + this.measuredHeight == TableLayout.this.getMeasuredHeight();
+                boolean z2 = true;
+                boolean z3 = this.x + this.measuredWidth == TableLayout.this.getMeasuredWidth();
+                boolean z4 = this.y + this.measuredHeight == TableLayout.this.getMeasuredHeight();
                 int dp = AndroidUtilities.dp(3.0f);
                 if (this.cell.header || (TableLayout.this.isStriped && this.layoutParams.rowSpec.span.min % 2 == 0)) {
                     if (this.x == 0 && this.y == 0) {
@@ -404,7 +367,7 @@ public class TableLayout extends View {
                         TableLayout.this.radii[1] = 0.0f;
                         access$5002[0] = 0.0f;
                     }
-                    if (!z2 || this.y != 0) {
+                    if (!z3 || this.y != 0) {
                         float[] access$5003 = TableLayout.this.radii;
                         TableLayout.this.radii[3] = 0.0f;
                         access$5003[2] = 0.0f;
@@ -415,7 +378,7 @@ public class TableLayout extends View {
                         access$5004[2] = f6;
                         z = true;
                     }
-                    if (!z2 || !z3) {
+                    if (!z3 || !z4) {
                         float[] access$5005 = TableLayout.this.radii;
                         TableLayout.this.radii[5] = 0.0f;
                         access$5005[4] = 0.0f;
@@ -426,18 +389,18 @@ public class TableLayout extends View {
                         access$5006[4] = f7;
                         z = true;
                     }
-                    if (this.x != 0 || !z3) {
+                    if (this.x != 0 || !z4) {
                         float[] access$5007 = TableLayout.this.radii;
                         TableLayout.this.radii[7] = 0.0f;
                         access$5007[6] = 0.0f;
+                        z2 = z;
                     } else {
                         float[] access$5008 = TableLayout.this.radii;
                         float f8 = (float) dp;
                         TableLayout.this.radii[7] = f8;
                         access$5008[6] = f8;
-                        z = true;
                     }
-                    if (z) {
+                    if (z2) {
                         RectF access$600 = TableLayout.this.rect;
                         int i2 = this.x;
                         int i3 = this.y;
@@ -509,13 +472,13 @@ public class TableLayout extends View {
                         int i15 = this.x;
                         canvas.drawLine((float) i15, ((float) i12) - strokeWidth2, (float) (i15 + this.measuredWidth), ((float) i12) - strokeWidth2, linePaint2);
                     }
-                    if (!z2 || (i = this.y) != 0) {
+                    if (!z3 || (i = this.y) != 0) {
                         f = ((float) this.y) - strokeWidth;
                     } else {
                         f = (float) (i + dp);
                     }
                     float var_ = f;
-                    if (!z2 || !z3) {
+                    if (!z3 || !z4) {
                         f2 = ((float) (this.y + this.measuredHeight)) - strokeWidth;
                     } else {
                         f2 = (float) ((this.y + this.measuredHeight) - dp);
@@ -525,13 +488,13 @@ public class TableLayout extends View {
                     int i17 = this.measuredWidth;
                     canvas.drawLine(((float) (i16 + i17)) - strokeWidth, var_, ((float) (i16 + i17)) - strokeWidth, var_, linePaint);
                     int i18 = this.x;
-                    if (i18 != 0 || !z3) {
+                    if (i18 != 0 || !z4) {
                         f3 = ((float) this.x) - strokeWidth;
                     } else {
                         f3 = (float) (i18 + dp);
                     }
                     float var_ = f3;
-                    if (!z2 || !z3) {
+                    if (!z3 || !z4) {
                         f4 = ((float) (this.x + this.measuredWidth)) - strokeWidth;
                     } else {
                         f4 = (float) ((this.x + this.measuredWidth) - dp);
@@ -548,7 +511,7 @@ public class TableLayout extends View {
                         access$6002.set(((float) i21) + strokeWidth, ((float) i22) + strokeWidth, ((float) i21) + strokeWidth + var_, ((float) i22) + strokeWidth + var_);
                         canvas.drawArc(TableLayout.this.rect, -180.0f, 90.0f, false, linePaint);
                     }
-                    if (z2 && this.y == 0) {
+                    if (z3 && this.y == 0) {
                         RectF access$6003 = TableLayout.this.rect;
                         int i23 = this.x;
                         int i24 = this.measuredWidth;
@@ -557,7 +520,7 @@ public class TableLayout extends View {
                         access$6003.set((((float) (i23 + i24)) - strokeWidth) - var_, ((float) i25) + strokeWidth, ((float) (i23 + i24)) - strokeWidth, ((float) i25) + strokeWidth + var_);
                         canvas.drawArc(TableLayout.this.rect, 0.0f, -90.0f, false, linePaint);
                     }
-                    if (this.x == 0 && z3) {
+                    if (this.x == 0 && z4) {
                         RectF access$6004 = TableLayout.this.rect;
                         int i26 = this.x;
                         int i27 = this.y;
@@ -566,7 +529,7 @@ public class TableLayout extends View {
                         access$6004.set(((float) i26) + strokeWidth, (((float) (i27 + i28)) - strokeWidth) - var_, ((float) i26) + strokeWidth + var_, ((float) (i27 + i28)) - strokeWidth);
                         canvas.drawArc(TableLayout.this.rect, 180.0f, -90.0f, false, linePaint);
                     }
-                    if (z2 && z3) {
+                    if (z3 && z4) {
                         RectF access$6005 = TableLayout.this.rect;
                         int i29 = this.x;
                         int i30 = this.measuredWidth;
@@ -602,15 +565,15 @@ public class TableLayout extends View {
         invalidateStructure();
     }
 
-    public void addChild(TLRPC.TL_pageTableCell tL_pageTableCell, int i, int i2, int i3) {
-        TLRPC.TL_pageTableCell tL_pageTableCell2 = tL_pageTableCell;
+    public void addChild(TLRPC$TL_pageTableCell tLRPC$TL_pageTableCell, int i, int i2, int i3) {
+        TLRPC$TL_pageTableCell tLRPC$TL_pageTableCell2 = tLRPC$TL_pageTableCell;
         int i4 = i;
         int i5 = i2;
         int i6 = i3 == 0 ? 1 : i3;
         Child child = new Child(this.childrens.size());
-        TLRPC.TL_pageTableCell unused = child.cell = tL_pageTableCell2;
+        TLRPC$TL_pageTableCell unused = child.cell = tLRPC$TL_pageTableCell2;
         LayoutParams layoutParams = new LayoutParams();
-        int i7 = tL_pageTableCell2.rowspan;
+        int i7 = tLRPC$TL_pageTableCell2.rowspan;
         if (i7 == 0) {
             i7 = 1;
         }
@@ -619,7 +582,7 @@ public class TableLayout extends View {
         LayoutParams unused2 = child.layoutParams = layoutParams;
         child.rowspan = i5;
         this.childrens.add(child);
-        int i8 = tL_pageTableCell2.rowspan;
+        int i8 = tLRPC$TL_pageTableCell2.rowspan;
         if (i8 > 1) {
             this.rowSpans.add(new Point((float) i5, (float) (i8 + i5)));
         }
@@ -657,6 +620,11 @@ public class TableLayout extends View {
 
     public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate, TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper) {
         super(context);
+        new Path();
+        this.backgroundPath = new Path();
+        this.rect = new RectF();
+        this.radii = new float[8];
+        this.childrens = new ArrayList<>();
         this.textSelectionHelper = articleTextSelectionHelper;
         setRowCount(Integer.MIN_VALUE);
         setColumnCount(Integer.MIN_VALUE);
@@ -718,18 +686,10 @@ public class TableLayout extends View {
         requestLayout();
     }
 
-    public boolean isRowOrderPreserved() {
-        return this.mVerticalAxis.isOrderPreserved();
-    }
-
     public void setRowOrderPreserved(boolean z) {
         this.mVerticalAxis.setOrderPreserved(z);
         invalidateStructure();
         requestLayout();
-    }
-
-    public boolean isColumnOrderPreserved() {
-        return this.mHorizontalAxis.isOrderPreserved();
     }
 
     public void setColumnOrderPreserved(boolean z) {
@@ -750,29 +710,6 @@ public class TableLayout extends View {
         System.arraycopy(tArr, 0, tArr3, 0, tArr.length);
         System.arraycopy(tArr2, 0, tArr3, tArr.length, tArr2.length);
         return tArr3;
-    }
-
-    static Alignment getAlignment(int i, boolean z) {
-        int i2 = (i & (z ? 7 : 112)) >> (z ? 0 : 4);
-        if (i2 == 1) {
-            return CENTER;
-        }
-        if (i2 == 3) {
-            return z ? LEFT : TOP;
-        }
-        if (i2 == 5) {
-            return z ? RIGHT : BOTTOM;
-        }
-        if (i2 == 7) {
-            return FILL;
-        }
-        if (i2 == 8388611) {
-            return START;
-        }
-        if (i2 != 8388613) {
-            return UNDEFINED_ALIGNMENT;
-        }
-        return END;
     }
 
     private int getDefaultMargin(Child child, boolean z, boolean z2) {
@@ -918,27 +855,8 @@ public class TableLayout extends View {
         }
     }
 
-    /* access modifiers changed from: private */
-    public static void handleInvalidParams(String str) {
+    private static void handleInvalidParams(String str) {
         throw new IllegalArgumentException(str + ". ");
-    }
-
-    private void checkLayoutParams(LayoutParams layoutParams, boolean z) {
-        String str = z ? "column" : "row";
-        Interval interval = (z ? layoutParams.columnSpec : layoutParams.rowSpec).span;
-        int i = interval.min;
-        if (i != Integer.MIN_VALUE && i < 0) {
-            handleInvalidParams(str + " indices must be positive");
-        }
-        int i2 = (z ? this.mHorizontalAxis : this.mVerticalAxis).definedCount;
-        if (i2 != Integer.MIN_VALUE) {
-            if (interval.max > i2) {
-                handleInvalidParams(str + " indices (start + span) mustn't exceed the " + str + " count");
-            }
-            if (interval.size() > i2) {
-                handleInvalidParams(str + " span mustn't exceed the " + str + " count");
-            }
-        }
     }
 
     /* access modifiers changed from: protected */
@@ -1006,10 +924,6 @@ public class TableLayout extends View {
         }
     }
 
-    static int adjust(int i, int i2) {
-        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2 + i), View.MeasureSpec.getMode(i));
-    }
-
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         int i3;
@@ -1029,18 +943,18 @@ public class TableLayout extends View {
         boolean z4 = true;
         measureChildrenWithMargins(i5, i6, true);
         if (this.mOrientation == 0) {
-            int measure = this.mHorizontalAxis.getMeasure(i5);
+            i3 = this.mHorizontalAxis.getMeasure(i5);
+            measureChildrenWithMargins(i5, i6, false);
+            i4 = this.mVerticalAxis.getMeasure(i6);
+        } else {
+            int measure = this.mVerticalAxis.getMeasure(i6);
             measureChildrenWithMargins(i5, i6, false);
             int i8 = measure;
-            i3 = this.mVerticalAxis.getMeasure(i6);
+            i3 = this.mHorizontalAxis.getMeasure(i5);
             i4 = i8;
-        } else {
-            i3 = this.mVerticalAxis.getMeasure(i6);
-            measureChildrenWithMargins(i5, i6, false);
-            i4 = this.mHorizontalAxis.getMeasure(i5);
         }
-        int max = Math.max(i4, View.MeasureSpec.getSize(i));
-        int max2 = Math.max(i3, getSuggestedMinimumHeight());
+        int max = Math.max(i3, View.MeasureSpec.getSize(i));
+        int max2 = Math.max(i4, getSuggestedMinimumHeight());
         setMeasuredDimension(max, max2);
         this.mHorizontalAxis.layout(max);
         this.mVerticalAxis.layout(max2);
@@ -1118,8 +1032,8 @@ public class TableLayout extends View {
             z3 = false;
             z4 = true;
         }
-        int size2 = this.cellsToFixHeight.size();
         int i22 = max2;
+        int size2 = this.cellsToFixHeight.size();
         int i23 = 0;
         while (i23 < size2) {
             Child child2 = this.cellsToFixHeight.get(i23);
@@ -1168,20 +1082,19 @@ public class TableLayout extends View {
             }
             if (!z) {
                 child2.setFixedHeight(child2.fixedHeight);
-                i22 -= access$1500;
+                max2 -= access$1500;
                 int size4 = this.childrens.size();
-                int i24 = size2;
-                int i25 = i23;
-                for (int i26 = 0; i26 < size4; i26++) {
-                    Child child5 = this.childrens.get(i26);
+                int i24 = i23;
+                for (int i25 = 0; i25 < size4; i25++) {
+                    Child child5 = this.childrens.get(i25);
                     if (child2 != child5) {
                         if (child2.layoutParams.rowSpec.span.min == child5.layoutParams.rowSpec.span.min) {
                             if (child5.fixedHeight != child5.measuredHeight) {
                                 this.cellsToFixHeight.remove(child5);
                                 if (child5.index < child2.index) {
-                                    i25--;
+                                    i24--;
                                 }
-                                i24--;
+                                size2--;
                             }
                             int unused = child5.measuredHeight = child5.measuredHeight - access$1500;
                             child5.measure(child5.measuredWidth, child5.measuredHeight, true);
@@ -1190,17 +1103,16 @@ public class TableLayout extends View {
                         }
                     }
                 }
-                i23 = i25;
-                size2 = i24;
+                i23 = i24;
             }
             i23++;
         }
         int childCount3 = getChildCount();
-        for (int i27 = 0; i27 < childCount3; i27++) {
-            Child childAt2 = getChildAt(i27);
+        for (int i26 = 0; i26 < childCount3; i26++) {
+            Child childAt2 = getChildAt(i26);
             this.delegate.onLayoutChild(childAt2.textLayout, childAt2.getTextX(), childAt2.getTextY());
         }
-        setMeasuredDimension(i9, i22);
+        setMeasuredDimension(i9, max2);
     }
 
     private int getMeasurement(Child child, boolean z) {
@@ -1223,9 +1135,6 @@ public class TableLayout extends View {
     }
 
     final class Axis {
-        private static final int COMPLETE = 2;
-        private static final int NEW = 0;
-        private static final int PENDING = 1;
         public Arc[] arcs;
         public boolean arcsValid;
         PackedMap<Interval, MutableInt> backwardLinks;
@@ -1293,17 +1202,15 @@ public class TableLayout extends View {
         }
 
         public void setCount(int i) {
-            if (i != Integer.MIN_VALUE && i < getMaxIndex()) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(this.horizontal ? "column" : "row");
-                sb.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
-                TableLayout.handleInvalidParams(sb.toString());
+            if (i == Integer.MIN_VALUE || i >= getMaxIndex()) {
+                this.definedCount = i;
+                return;
             }
-            this.definedCount = i;
-        }
-
-        public boolean isOrderPreserved() {
-            return this.orderPreserved;
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.horizontal ? "column" : "row");
+            sb.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
+            TableLayout.access$1800(sb.toString());
+            throw null;
         }
 
         public void setOrderPreserved(boolean z) {
@@ -1422,7 +1329,7 @@ public class TableLayout extends View {
                 int i = arc.span.min;
                 iArr[i] = iArr[i] + 1;
             }
-            for (int i2 = 0; i2 < iArr.length; i2++) {
+            for (int i2 = 0; i2 < count; i2++) {
                 arcArr2[i2] = new Arc[iArr[i2]];
             }
             Arrays.fill(iArr, 0);
@@ -1439,15 +1346,16 @@ public class TableLayout extends View {
         private Arc[] topologicalSort(final Arc[] arcArr) {
             return new Object() {
                 Arc[][] arcsByVertex;
-                int cursor = (this.result.length - 1);
+                int cursor;
                 Arc[] result;
-                int[] visited;
+                int[] visited = new int[(Axis.this.getCount() + 1)];
 
                 {
                     Arc[] arcArr = arcArr;
-                    this.result = new Arc[arcArr.length];
+                    Arc[] arcArr2 = new Arc[arcArr.length];
+                    this.result = arcArr2;
+                    this.cursor = arcArr2.length - 1;
                     this.arcsByVertex = Axis.this.groupArcsByFirstVertex(arcArr);
-                    this.visited = new int[(Axis.this.getCount() + 1)];
                 }
 
                 /* access modifiers changed from: package-private */
@@ -1478,7 +1386,7 @@ public class TableLayout extends View {
         }
 
         private Arc[] topologicalSort(List<Arc> list) {
-            return topologicalSort((Arc[]) list.toArray(new Arc[list.size()]));
+            return topologicalSort((Arc[]) list.toArray(new Arc[0]));
         }
 
         private void addComponentSizes(List<Arc> list, PackedMap<Interval, MutableInt> packedMap) {
@@ -1676,24 +1584,24 @@ public class TableLayout extends View {
         private void solveAndDistributeSpace(int[] iArr) {
             Arrays.fill(getDeltas(), 0);
             solve(iArr);
+            boolean z = true;
             int childCount = (this.parentMin.value * TableLayout.this.getChildCount()) + 1;
             if (childCount >= 2) {
                 float calculateTotalWeight = calculateTotalWeight();
                 int i = -1;
-                int i2 = childCount;
-                int i3 = 0;
-                boolean z = true;
-                while (i3 < i2) {
-                    int i4 = (int) ((((long) i3) + ((long) i2)) / 2);
+                int i2 = 0;
+                while (i2 < childCount) {
+                    int i3 = (int) ((((long) i2) + ((long) childCount)) / 2);
                     invalidateValues();
-                    shareOutDelta(i4, calculateTotalWeight);
-                    z = solve(getArcs(), iArr, false);
-                    if (z) {
-                        i3 = i4 + 1;
-                        i = i4;
+                    shareOutDelta(i3, calculateTotalWeight);
+                    boolean solve = solve(getArcs(), iArr, false);
+                    if (solve) {
+                        i2 = i3 + 1;
+                        i = i3;
                     } else {
-                        i2 = i4;
+                        childCount = i3;
                     }
+                    z = solve;
                 }
                 if (i > 0 && !z) {
                     invalidateValues();
@@ -1800,13 +1708,15 @@ public class TableLayout extends View {
     }
 
     public static class LayoutParams extends ViewGroup.MarginLayoutParams {
-        private static final int DEFAULT_HEIGHT = -2;
-        private static final int DEFAULT_MARGIN = Integer.MIN_VALUE;
-        private static final Interval DEFAULT_SPAN = new Interval(Integer.MIN_VALUE, -NUM);
-        private static final int DEFAULT_SPAN_SIZE = DEFAULT_SPAN.size();
-        private static final int DEFAULT_WIDTH = -2;
+        private static final Interval DEFAULT_SPAN;
         public Spec columnSpec;
         public Spec rowSpec;
+
+        static {
+            Interval interval = new Interval(Integer.MIN_VALUE, -NUM);
+            DEFAULT_SPAN = interval;
+            interval.size();
+        }
 
         private LayoutParams(int i, int i2, int i3, int i4, int i5, int i6, Spec spec, Spec spec2) {
             super(i, i2);
@@ -1832,34 +1742,6 @@ public class TableLayout extends View {
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TableLayout.LayoutParams.<init>():void");
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams layoutParams) {
-            super(layoutParams);
-            Spec spec = Spec.UNDEFINED;
-            this.rowSpec = spec;
-            this.columnSpec = spec;
-        }
-
-        public LayoutParams(ViewGroup.MarginLayoutParams marginLayoutParams) {
-            super(marginLayoutParams);
-            Spec spec = Spec.UNDEFINED;
-            this.rowSpec = spec;
-            this.columnSpec = spec;
-        }
-
-        public LayoutParams(LayoutParams layoutParams) {
-            super(layoutParams);
-            Spec spec = Spec.UNDEFINED;
-            this.rowSpec = spec;
-            this.columnSpec = spec;
-            this.rowSpec = layoutParams.rowSpec;
-            this.columnSpec = layoutParams.columnSpec;
-        }
-
-        public void setGravity(int i) {
-            this.rowSpec = this.rowSpec.copyWriteAlignment(TableLayout.getAlignment(i, false));
-            this.columnSpec = this.columnSpec.copyWriteAlignment(TableLayout.getAlignment(i, true));
         }
 
         /* access modifiers changed from: package-private */
@@ -1950,8 +1832,9 @@ public class TableLayout extends View {
         public final V[] values;
 
         private PackedMap(K[] kArr, V[] vArr) {
-            this.index = createIndex(kArr);
-            this.keys = compact(kArr, this.index);
+            int[] createIndex = createIndex(kArr);
+            this.index = createIndex;
+            this.keys = compact(kArr, createIndex);
             this.values = compact(vArr, this.index);
         }
 
@@ -2064,7 +1947,6 @@ public class TableLayout extends View {
     }
 
     public static class Spec {
-        static final float DEFAULT_WEIGHT = 0.0f;
         static final Spec UNDEFINED = TableLayout.spec(Integer.MIN_VALUE);
         final Alignment alignment;
         final Interval span;
@@ -2100,11 +1982,6 @@ public class TableLayout extends View {
         }
 
         /* access modifiers changed from: package-private */
-        public final Spec copyWriteAlignment(Alignment alignment2) {
-            return new Spec(this.startDefined, this.span, alignment2, this.weight);
-        }
-
-        /* access modifiers changed from: package-private */
         public final int getFlexibility() {
             return (this.alignment == TableLayout.UNDEFINED_ALIGNMENT && this.weight == 0.0f) ? 0 : 2;
         }
@@ -2129,24 +2006,8 @@ public class TableLayout extends View {
         return new Spec(i != Integer.MIN_VALUE, i, i2, alignment, f);
     }
 
-    public static Spec spec(int i, Alignment alignment, float f) {
-        return spec(i, 1, alignment, f);
-    }
-
-    public static Spec spec(int i, int i2, float f) {
-        return spec(i, i2, UNDEFINED_ALIGNMENT, f);
-    }
-
-    public static Spec spec(int i, float f) {
-        return spec(i, 1, f);
-    }
-
     public static Spec spec(int i, int i2, Alignment alignment) {
         return spec(i, i2, alignment, 0.0f);
-    }
-
-    public static Spec spec(int i, Alignment alignment) {
-        return spec(i, 1, alignment);
     }
 
     public static Spec spec(int i, int i2) {
@@ -2179,12 +2040,32 @@ public class TableLayout extends View {
     }
 
     static {
+        AnonymousClass3 r0 = new Alignment() {
+            public int getAlignmentValue(Child child, int i) {
+                return i;
+            }
+
+            /* access modifiers changed from: package-private */
+            public int getGravityOffset(Child child, int i) {
+                return i;
+            }
+        };
+        TRAILING = r0;
         Alignment alignment = LEADING;
-        TOP = alignment;
-        Alignment alignment2 = TRAILING;
-        BOTTOM = alignment2;
         START = alignment;
-        END = alignment2;
+        END = r0;
+        createSwitchingAlignment(alignment);
+        createSwitchingAlignment(END);
+        new Alignment() {
+            public int getAlignmentValue(Child child, int i) {
+                return i >> 1;
+            }
+
+            /* access modifiers changed from: package-private */
+            public int getGravityOffset(Child child, int i) {
+                return i >> 1;
+            }
+        };
     }
 
     private static Alignment createSwitchingAlignment(final Alignment alignment) {

@@ -17,13 +17,15 @@ public class InviteTextCell extends FrameLayout {
 
     public InviteTextCell(Context context) {
         super(context);
-        this.textView = new SimpleTextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.textView = simpleTextView;
+        simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(17);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
     }

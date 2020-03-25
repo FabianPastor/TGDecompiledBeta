@@ -19,23 +19,27 @@ public class ArchiveHintInnerCell extends FrameLayout {
 
     public ArchiveHintInnerCell(Context context, int i) {
         super(context);
-        this.imageView = new ImageView(context);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
-        this.headerTextView = new TextView(context);
-        this.headerTextView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
+        ImageView imageView3 = new ImageView(context);
+        this.imageView = imageView3;
+        imageView3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
+        TextView textView = new TextView(context);
+        this.headerTextView = textView;
+        textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.headerTextView.setTextSize(1, 20.0f);
         this.headerTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.headerTextView.setGravity(17);
         addView(this.headerTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 75.0f, 52.0f, 0.0f));
-        this.messageTextView = new TextView(context);
-        this.messageTextView.setTextColor(Theme.getColor("chats_message"));
+        TextView textView2 = new TextView(context);
+        this.messageTextView = textView2;
+        textView2.setTextColor(Theme.getColor("chats_message"));
         this.messageTextView.setTextSize(1, 14.0f);
         this.messageTextView.setGravity(17);
         addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 110.0f, 52.0f, 0.0f));
         if (i == 0) {
             addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
-            this.imageView2 = new ImageView(context);
-            this.imageView2.setImageResource(NUM);
+            ImageView imageView4 = new ImageView(context);
+            this.imageView2 = imageView4;
+            imageView4.setImageResource(NUM);
             this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), PorterDuff.Mode.MULTIPLY));
             addView(this.imageView2, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
             this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", NUM));

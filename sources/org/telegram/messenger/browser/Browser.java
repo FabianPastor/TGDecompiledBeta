@@ -50,8 +50,9 @@ public class Browser {
         if (customTabsClient2 == null) {
             customTabsSession = null;
         } else if (customTabsSession == null) {
-            customTabsSession = customTabsClient2.newSession(new NavigationCallback());
-            setCurrentSession(customTabsSession);
+            CustomTabsSession newSession = customTabsClient2.newSession(new NavigationCallback());
+            customTabsSession = newSession;
+            setCurrentSession(newSession);
         }
         return customTabsSession;
     }
@@ -66,12 +67,13 @@ public class Browser {
             currentCustomTabsActivity = new WeakReference<>(activity);
             try {
                 if (TextUtils.isEmpty(customTabsPackageToBind)) {
-                    customTabsPackageToBind = CustomTabsHelper.getPackageNameToUse(activity);
-                    if (customTabsPackageToBind == null) {
+                    String packageNameToUse = CustomTabsHelper.getPackageNameToUse(activity);
+                    customTabsPackageToBind = packageNameToUse;
+                    if (packageNameToUse == null) {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new ServiceConnectionCallback() {
+                ServiceConnection serviceConnection = new ServiceConnection(new ServiceConnectionCallback() {
                     public void onServiceConnected(CustomTabsClient customTabsClient) {
                         CustomTabsClient unused = Browser.customTabsClient = customTabsClient;
                         if (SharedConfig.customTabs && Browser.customTabsClient != null) {
@@ -87,7 +89,8 @@ public class Browser {
                         CustomTabsClient unused = Browser.customTabsClient = null;
                     }
                 });
-                if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
+                customTabsServiceConnection = serviceConnection;
+                if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, serviceConnection)) {
                     customTabsServiceConnection = null;
                 }
             } catch (Exception e) {
@@ -384,7 +387,7 @@ public class Browser {
             org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x0223 }
             r2.<init>(r3)     // Catch:{ Exception -> 0x0223 }
             java.lang.String r3 = "CopyLink"
-            r4 = 2131624782(0x7f0e034e, float:1.8876753E38)
+            r4 = 2131624789(0x7f0e0355, float:1.8876768E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0223 }
             r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x0223 }
             java.lang.String r1 = "actionBarBrowser"
@@ -396,7 +399,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0223 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131626622(0x7f0e0a7e, float:1.8880485E38)
+            r4 = 2131626722(0x7f0e0ae2, float:1.8880688E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0223 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0223 }
             android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12)     // Catch:{ Exception -> 0x0223 }
@@ -450,12 +453,12 @@ public class Browser {
         L_0x0008:
             r1 = 0
             r3[r0] = r1
-            boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage
+            boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
             r1 = 1
             if (r3 == 0) goto L_0x0033
-            org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r4 = (org.telegram.tgnet.TLRPC.TL_messageMediaWebPage) r4
+            org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r4 = (org.telegram.tgnet.TLRPC$TL_messageMediaWebPage) r4
             org.telegram.tgnet.TLRPC$WebPage r3 = r4.webpage
-            boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webPage
+            boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_webPage
             if (r2 == 0) goto L_0x0033
             org.telegram.tgnet.TLRPC$Page r3 = r3.cached_page
             if (r3 == 0) goto L_0x0033

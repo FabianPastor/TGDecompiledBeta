@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.PassportActivity;
 
 /* renamed from: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$V0ORURFAuRbPRy3yre_3sf3Qzvs  reason: invalid class name */
@@ -13,7 +13,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$PhoneConfirmationVi
     private /* synthetic */ $$Lambda$PassportActivity$PhoneConfirmationView$V0ORURFAuRbPRy3yre_3sf3Qzvs() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        PassportActivity.PhoneConfirmationView.lambda$onBackPressed$9(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        PassportActivity.PhoneConfirmationView.lambda$onBackPressed$9(tLObject, tLRPC$TL_error);
     }
 }

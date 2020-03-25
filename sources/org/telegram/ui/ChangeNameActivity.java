@@ -16,7 +16,9 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_account_updateProfile;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -25,18 +27,16 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeNameActivity extends BaseFragment {
-    private static final int done_button = 1;
     private View doneButton;
     /* access modifiers changed from: private */
     public EditTextBoldCursor firstNameField;
-    private View headerLabelView;
     private EditTextBoldCursor lastNameField;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ void lambda$saveName$3(TLObject tLObject, TLRPC.TL_error tL_error) {
+    static /* synthetic */ void lambda$saveName$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public View createView(Context context) {
@@ -55,17 +55,18 @@ public class ChangeNameActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
             user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
         LinearLayout linearLayout = new LinearLayout(context2);
         this.fragmentView = linearLayout;
-        this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
         this.fragmentView.setOnTouchListener($$Lambda$ChangeNameActivity$2QrIPiMPNtI7lMzO9NvXqRR4gnI.INSTANCE);
-        this.firstNameField = new EditTextBoldCursor(context2);
-        this.firstNameField.setTextSize(1, 18.0f);
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
+        this.firstNameField = editTextBoldCursor;
+        editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
@@ -86,19 +87,20 @@ public class ChangeNameActivity extends BaseFragment {
                 return ChangeNameActivity.this.lambda$createView$1$ChangeNameActivity(textView, i, keyEvent);
             }
         });
-        this.lastNameField = new EditTextBoldCursor(context2);
-        this.lastNameField.setTextSize(1, 18.0f);
+        EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
+        this.lastNameField = editTextBoldCursor2;
+        editTextBoldCursor2.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.lastNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
         this.lastNameField.setMaxLines(1);
         this.lastNameField.setLines(1);
         this.lastNameField.setSingleLine(true);
-        EditTextBoldCursor editTextBoldCursor = this.lastNameField;
+        EditTextBoldCursor editTextBoldCursor3 = this.lastNameField;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        editTextBoldCursor.setGravity(i);
+        editTextBoldCursor3.setGravity(i);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
         this.lastNameField.setHint(LocaleController.getString("LastName", NUM));
@@ -113,8 +115,8 @@ public class ChangeNameActivity extends BaseFragment {
         });
         if (user != null) {
             this.firstNameField.setText(user.first_name);
-            EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
-            editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
+            EditTextBoldCursor editTextBoldCursor4 = this.firstNameField;
+            editTextBoldCursor4.setSelection(editTextBoldCursor4.length());
             this.lastNameField.setText(user.last_name);
         }
         return this.fragmentView;
@@ -149,27 +151,27 @@ public class ChangeNameActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public void saveName() {
         String str;
-        TLRPC.User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
+        TLRPC$User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         if (currentUser != null && this.lastNameField.getText() != null && this.firstNameField.getText() != null) {
             String obj = this.firstNameField.getText().toString();
             String obj2 = this.lastNameField.getText().toString();
             String str2 = currentUser.first_name;
             if (str2 == null || !str2.equals(obj) || (str = currentUser.last_name) == null || !str.equals(obj2)) {
-                TLRPC.TL_account_updateProfile tL_account_updateProfile = new TLRPC.TL_account_updateProfile();
-                tL_account_updateProfile.flags = 3;
-                tL_account_updateProfile.first_name = obj;
+                TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile = new TLRPC$TL_account_updateProfile();
+                tLRPC$TL_account_updateProfile.flags = 3;
+                tLRPC$TL_account_updateProfile.first_name = obj;
                 currentUser.first_name = obj;
-                tL_account_updateProfile.last_name = obj2;
+                tLRPC$TL_account_updateProfile.last_name = obj2;
                 currentUser.last_name = obj2;
-                TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
                 if (user != null) {
-                    user.first_name = tL_account_updateProfile.first_name;
-                    user.last_name = tL_account_updateProfile.last_name;
+                    user.first_name = tLRPC$TL_account_updateProfile.first_name;
+                    user.last_name = tLRPC$TL_account_updateProfile.last_name;
                 }
                 UserConfig.getInstance(this.currentAccount).saveConfig(true);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateProfile, $$Lambda$ChangeNameActivity$6bo7pFwsMx83tkMlu0ygZxpDMfM.INSTANCE);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$ChangeNameActivity$6bo7pFwsMx83tkMlu0ygZxpDMfM.INSTANCE);
             }
         }
     }

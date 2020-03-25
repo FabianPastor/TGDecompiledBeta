@@ -4,17 +4,9 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 
 public class TextStyleSpan extends MetricAffectingSpan {
-    public static final int FLAG_STYLE_BOLD = 1;
-    public static final int FLAG_STYLE_ITALIC = 2;
-    public static final int FLAG_STYLE_MENTION = 64;
-    public static final int FLAG_STYLE_MONO = 4;
-    public static final int FLAG_STYLE_QUOTE = 32;
-    public static final int FLAG_STYLE_STRIKE = 8;
-    public static final int FLAG_STYLE_UNDERLINE = 16;
-    public static final int FLAG_STYLE_URL = 128;
     private int color;
     private TextStyleRun style;
     private int textSize;
@@ -23,7 +15,7 @@ public class TextStyleSpan extends MetricAffectingSpan {
         public int end;
         public int flags;
         public int start;
-        public TLRPC.MessageEntity urlEntity;
+        public TLRPC$MessageEntity urlEntity;
 
         public TextStyleRun() {
         }
@@ -36,10 +28,10 @@ public class TextStyleSpan extends MetricAffectingSpan {
         }
 
         public void merge(TextStyleRun textStyleRun) {
-            TLRPC.MessageEntity messageEntity;
+            TLRPC$MessageEntity tLRPC$MessageEntity;
             this.flags |= textStyleRun.flags;
-            if (this.urlEntity == null && (messageEntity = textStyleRun.urlEntity) != null) {
-                this.urlEntity = messageEntity;
+            if (this.urlEntity == null && (tLRPC$MessageEntity = textStyleRun.urlEntity) != null) {
+                this.urlEntity = tLRPC$MessageEntity;
             }
         }
 
@@ -88,10 +80,6 @@ public class TextStyleSpan extends MetricAffectingSpan {
         this(textStyleRun, 0, 0);
     }
 
-    public TextStyleSpan(TextStyleRun textStyleRun, int i) {
-        this(textStyleRun, i, 0);
-    }
-
     public TextStyleSpan(TextStyleRun textStyleRun, int i, int i2) {
         this.style = textStyleRun;
         if (i > 0) {
@@ -106,30 +94,6 @@ public class TextStyleSpan extends MetricAffectingSpan {
 
     public TextStyleRun getTextStyleRun() {
         return this.style;
-    }
-
-    public Typeface getTypeface() {
-        return this.style.getTypeface();
-    }
-
-    public void setColor(int i) {
-        this.color = i;
-    }
-
-    public boolean isMono() {
-        return this.style.getTypeface() == Typeface.MONOSPACE;
-    }
-
-    public boolean isBold() {
-        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/rmedium.ttf");
-    }
-
-    public boolean isItalic() {
-        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
-    }
-
-    public boolean isBoldItalic() {
-        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf");
     }
 
     public void updateMeasureState(TextPaint textPaint) {

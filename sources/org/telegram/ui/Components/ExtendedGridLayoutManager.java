@@ -12,6 +12,11 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     private SparseIntArray itemsToRow = new SparseIntArray();
     private int rowsCount;
 
+    /* access modifiers changed from: protected */
+    public Size getSizeForItem(int i) {
+        throw null;
+    }
+
     public boolean supportsPredictiveItemAnimations() {
         return false;
     }
@@ -40,22 +45,21 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
                 if (i != 0) {
                     int i4 = i / i2;
                     int i5 = i3 - i2;
-                    int i6 = i;
-                    int i7 = i5;
+                    int i6 = i5;
                     while (true) {
-                        int i8 = i5 + i2;
-                        if (i7 >= i8) {
+                        int i7 = i5 + i2;
+                        if (i6 >= i7) {
                             break;
                         }
-                        if (i7 == i8 - 1) {
+                        if (i6 == i7 - 1) {
                             SparseIntArray sparseIntArray = this.itemSpans;
-                            sparseIntArray.put(i7, sparseIntArray.get(i7) + i6);
+                            sparseIntArray.put(i6, sparseIntArray.get(i6) + i);
                         } else {
                             SparseIntArray sparseIntArray2 = this.itemSpans;
-                            sparseIntArray2.put(i7, sparseIntArray2.get(i7) + i4);
+                            sparseIntArray2.put(i6, sparseIntArray2.get(i6) + i4);
                         }
-                        i6 -= i4;
-                        i7++;
+                        i -= i4;
+                        i6++;
                     }
                     this.itemsToRow.put(i3 - 1, this.rowsCount);
                 }
@@ -95,11 +99,6 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
             sizeForItem.height = max;
         }
         return sizeForItem;
-    }
-
-    /* access modifiers changed from: protected */
-    public Size getSizeForItem(int i) {
-        return new Size(100.0f, 100.0f);
     }
 
     private void checkLayout() {

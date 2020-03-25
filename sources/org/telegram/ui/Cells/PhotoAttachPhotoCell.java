@@ -27,7 +27,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -50,7 +50,6 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     private boolean isVertical;
     private int itemSize;
     private boolean itemSizeChanged;
-    private boolean needCheckShow;
     private MediaController.PhotoEntry photoEntry;
     private boolean pressed;
     private MediaController.SearchImage searchEntry;
@@ -65,11 +64,13 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     public PhotoAttachPhotoCell(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.container = new FrameLayout(context);
-        addView(this.container, LayoutHelper.createFrame(80, 80.0f));
-        this.imageView = new BackupImageView(context);
-        this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-        this.videoInfoContainer = new FrameLayout(context) {
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.container = frameLayout;
+        addView(frameLayout, LayoutHelper.createFrame(80, 80.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        this.container.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
+        AnonymousClass1 r2 = new FrameLayout(this, context) {
             private RectF rect = new RectF();
 
             /* access modifiers changed from: protected */
@@ -78,26 +79,30 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_timeBackgroundPaint);
             }
         };
-        this.videoInfoContainer.setWillNotDraw(false);
+        this.videoInfoContainer = r2;
+        r2.setWillNotDraw(false);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), 0);
         this.container.addView(this.videoInfoContainer, LayoutHelper.createFrame(-2, 17.0f, 83, 4.0f, 0.0f, 0.0f, 4.0f));
         ImageView imageView2 = new ImageView(context);
         imageView2.setImageResource(NUM);
         this.videoInfoContainer.addView(imageView2, LayoutHelper.createFrame(-2, -2, 19));
-        this.videoTextView = new TextView(context);
-        this.videoTextView.setTextColor(-1);
+        TextView textView = new TextView(context);
+        this.videoTextView = textView;
+        textView.setTextColor(-1);
         this.videoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoTextView.setImportantForAccessibility(2);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 13.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox2(context, 24);
-        this.checkBox.setDrawBackgroundAsArc(7);
+        CheckBox2 checkBox2 = new CheckBox2(context, 24);
+        this.checkBox = checkBox2;
+        checkBox2.setDrawBackgroundAsArc(7);
         this.checkBox.setColor("chat_attachCheckBoxBackground", "chat_attachPhotoBackground", "chat_attachCheckBoxCheck");
         addView(this.checkBox, LayoutHelper.createFrame(26, 26.0f, 51, 52.0f, 4.0f, 0.0f, 0.0f));
         this.checkBox.setVisibility(0);
         setFocusable(true);
-        this.checkFrame = new FrameLayout(context);
-        addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
+        FrameLayout frameLayout2 = new FrameLayout(context);
+        this.checkFrame = frameLayout2;
+        addView(frameLayout2, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
         this.itemSize = AndroidUtilities.dp(80.0f);
     }
 
@@ -174,7 +179,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.pressed = false;
         this.photoEntry = photoEntry2;
         this.isLast = z2;
-        if (this.photoEntry.isVideo) {
+        if (photoEntry2.isVideo) {
             this.imageView.setOrientation(0, true);
             this.videoInfoContainer.setVisibility(0);
             this.videoTextView.setText(AndroidUtilities.formatShortDuration(this.photoEntry.duration));
@@ -215,13 +220,13 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.searchEntry = searchImage;
         this.isLast = z2;
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
-        TLRPC.PhotoSize photoSize = searchImage.thumbPhotoSize;
-        if (photoSize != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
+        TLRPC$PhotoSize tLRPC$PhotoSize = searchImage.thumbPhotoSize;
+        if (tLRPC$PhotoSize != null) {
+            this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
         } else {
-            TLRPC.PhotoSize photoSize2 = searchImage.photoSize;
-            if (photoSize2 != null) {
-                this.imageView.setImage(ImageLocation.getForPhoto(photoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
+            TLRPC$PhotoSize tLRPC$PhotoSize2 = searchImage.photoSize;
+            if (tLRPC$PhotoSize2 != null) {
+                this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
             } else {
                 String str = searchImage.thumbPath;
                 if (str != null) {
@@ -266,8 +271,8 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             }
             float f = 0.787f;
             if (z2) {
-                this.animator = new AnimatorSet();
-                AnimatorSet animatorSet3 = this.animator;
+                AnimatorSet animatorSet3 = new AnimatorSet();
+                this.animator = animatorSet3;
                 Animator[] animatorArr = new Animator[2];
                 FrameLayout frameLayout = this.container;
                 Property property = View.SCALE_X;
@@ -343,10 +348,11 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 animatorSet2.cancel();
                 this.animatorSet = null;
             }
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.setInterpolator(new DecelerateInterpolator());
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
+            animatorSet3.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(180);
-            AnimatorSet animatorSet3 = this.animatorSet;
+            AnimatorSet animatorSet4 = this.animatorSet;
             Animator[] animatorArr = new Animator[2];
             FrameLayout frameLayout = this.videoInfoContainer;
             Property property = View.ALPHA;
@@ -361,7 +367,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             }
             fArr2[0] = f;
             animatorArr[1] = ObjectAnimator.ofFloat(checkBox2, property2, fArr2);
-            animatorSet3.playTogether(animatorArr);
+            animatorSet4.playTogether(animatorArr);
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     if (animator.equals(PhotoAttachPhotoCell.this.animatorSet)) {

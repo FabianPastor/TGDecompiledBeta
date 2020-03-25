@@ -25,7 +25,10 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_account_updateProfile;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -36,7 +39,6 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeBioActivity extends BaseFragment {
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public TextView checkTextView;
     /* access modifiers changed from: private */
@@ -65,25 +67,27 @@ public class ChangeBioActivity extends BaseFragment {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        this.fragmentView = new LinearLayout(context2);
-        LinearLayout linearLayout = (LinearLayout) this.fragmentView;
-        linearLayout.setOrientation(1);
+        LinearLayout linearLayout = new LinearLayout(context2);
+        this.fragmentView = linearLayout;
+        LinearLayout linearLayout2 = linearLayout;
+        linearLayout2.setOrientation(1);
         this.fragmentView.setOnTouchListener($$Lambda$ChangeBioActivity$QHxoa1XUfskp3fsOABXGjgD9Sl4.INSTANCE);
         FrameLayout frameLayout = new FrameLayout(context2);
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
-        this.firstNameField = new EditTextBoldCursor(context2);
-        this.firstNameField.setTextSize(1, 18.0f);
+        linearLayout2.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
+        this.firstNameField = editTextBoldCursor;
+        editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
         this.firstNameField.setMaxLines(4);
-        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+        EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
         float f = 24.0f;
         int dp = AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f);
         if (LocaleController.isRTL) {
             f = 0.0f;
         }
-        editTextBoldCursor.setPadding(dp, 0, AndroidUtilities.dp(f), AndroidUtilities.dp(6.0f));
+        editTextBoldCursor2.setPadding(dp, 0, AndroidUtilities.dp(f), AndroidUtilities.dp(6.0f));
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setImeOptions(NUM);
         this.firstNameField.setInputType(147457);
@@ -127,22 +131,24 @@ public class ChangeBioActivity extends BaseFragment {
             }
         });
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
-        this.checkTextView = new TextView(context2);
-        this.checkTextView.setTextSize(1, 15.0f);
+        TextView textView = new TextView(context2);
+        this.checkTextView = textView;
+        textView.setTextSize(1, 15.0f);
         this.checkTextView.setText(String.format("%d", new Object[]{70}));
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
-        this.helpTextView = new TextView(context2);
-        this.helpTextView.setTextSize(1, 15.0f);
+        TextView textView2 = new TextView(context2);
+        this.helpTextView = textView2;
+        textView2.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", NUM)));
-        linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
-        TLRPC.UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
+        linearLayout2.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
+        TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (!(userFull == null || (str = userFull.about) == null)) {
             this.firstNameField.setText(str);
-            EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
-            editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
+            EditTextBoldCursor editTextBoldCursor3 = this.firstNameField;
+            editTextBoldCursor3.setSelection(editTextBoldCursor3.length());
         }
         return this.fragmentView;
     }
@@ -166,7 +172,7 @@ public class ChangeBioActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public void saveName() {
-        TLRPC.UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
+        TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (getParentActivity() != null && userFull != null) {
             String str = userFull.about;
             if (str == null) {
@@ -178,14 +184,14 @@ public class ChangeBioActivity extends BaseFragment {
                 return;
             }
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-            TLRPC.TL_account_updateProfile tL_account_updateProfile = new TLRPC.TL_account_updateProfile();
-            tL_account_updateProfile.about = replace;
-            tL_account_updateProfile.flags |= 4;
-            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateProfile, new RequestDelegate(alertDialog, userFull, replace, tL_account_updateProfile) {
+            TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile = new TLRPC$TL_account_updateProfile();
+            tLRPC$TL_account_updateProfile.about = replace;
+            tLRPC$TL_account_updateProfile.flags |= 4;
+            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, new RequestDelegate(alertDialog, userFull, replace, tLRPC$TL_account_updateProfile) {
                 private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC.UserFull f$2;
+                private final /* synthetic */ TLRPC$UserFull f$2;
                 private final /* synthetic */ String f$3;
-                private final /* synthetic */ TLRPC.TL_account_updateProfile f$4;
+                private final /* synthetic */ TLRPC$TL_account_updateProfile f$4;
 
                 {
                     this.f$1 = r2;
@@ -194,8 +200,8 @@ public class ChangeBioActivity extends BaseFragment {
                     this.f$4 = r5;
                 }
 
-                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    ChangeBioActivity.this.lambda$saveName$4$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    ChangeBioActivity.this.lambda$saveName$4$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
                 }
             }, 2);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
@@ -214,13 +220,13 @@ public class ChangeBioActivity extends BaseFragment {
         }
     }
 
-    public /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog alertDialog, TLRPC.UserFull userFull, String str, TLRPC.TL_account_updateProfile tL_account_updateProfile, TLObject tLObject, TLRPC.TL_error tL_error) {
-        if (tL_error == null) {
-            AndroidUtilities.runOnUIThread(new Runnable(alertDialog, userFull, str, (TLRPC.User) tLObject) {
+    public /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        if (tLRPC$TL_error == null) {
+            AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$UserFull, str, (TLRPC$User) tLObject) {
                 private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC.UserFull f$2;
+                private final /* synthetic */ TLRPC$UserFull f$2;
                 private final /* synthetic */ String f$3;
-                private final /* synthetic */ TLRPC.User f$4;
+                private final /* synthetic */ TLRPC$User f$4;
 
                 {
                     this.f$1 = r2;
@@ -235,10 +241,10 @@ public class ChangeBioActivity extends BaseFragment {
             });
             return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tL_error, tL_account_updateProfile) {
+        AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateProfile) {
             private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC.TL_error f$2;
-            private final /* synthetic */ TLRPC.TL_account_updateProfile f$3;
+            private final /* synthetic */ TLRPC$TL_error f$2;
+            private final /* synthetic */ TLRPC$TL_account_updateProfile f$3;
 
             {
                 this.f$1 = r2;
@@ -252,24 +258,24 @@ public class ChangeBioActivity extends BaseFragment {
         });
     }
 
-    public /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog alertDialog, TLRPC.UserFull userFull, String str, TLRPC.User user) {
+    public /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$User tLRPC$User) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        userFull.about = str;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.id), userFull, null);
+        tLRPC$UserFull.about = str;
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull, null);
         finishFragment();
     }
 
-    public /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog alertDialog, TLRPC.TL_error tL_error, TLRPC.TL_account_updateProfile tL_account_updateProfile) {
+    public /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        AlertsCreator.processError(this.currentAccount, tL_error, this, tL_account_updateProfile, new Object[0]);
+        AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_account_updateProfile, new Object[0]);
     }
 
     public /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int i, DialogInterface dialogInterface) {

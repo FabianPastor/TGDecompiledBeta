@@ -29,8 +29,9 @@ public class LanguageCell extends FrameLayout {
         boolean z2 = z;
         setWillNotDraw(false);
         this.isDialog = z2;
-        this.textView = new TextView(context2);
-        this.textView.setTextColor(Theme.getColor(z2 ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView3 = new TextView(context2);
+        this.textView = textView3;
+        textView3.setTextColor(Theme.getColor(z2 ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -39,8 +40,9 @@ public class LanguageCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 4 : 7), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
-        this.textView2 = new TextView(context2);
-        this.textView2.setTextColor(Theme.getColor(z2 ? "dialogTextGray3" : "windowBackgroundWhiteGrayText3"));
+        TextView textView4 = new TextView(context2);
+        this.textView2 = textView4;
+        textView4.setTextColor(Theme.getColor(z2 ? "dialogTextGray3" : "windowBackgroundWhiteGrayText3"));
         this.textView2.setTextSize(1, 13.0f);
         this.textView2.setLines(1);
         this.textView2.setMaxLines(1);
@@ -48,8 +50,9 @@ public class LanguageCell extends FrameLayout {
         this.textView2.setEllipsize(TextUtils.TruncateAt.END);
         this.textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 25 : 29), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
-        this.checkImage = new ImageView(context2);
-        this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = new ImageView(context2);
+        this.checkImage = imageView;
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
         this.checkImage.setImageResource(NUM);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : i) | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }

@@ -120,8 +120,9 @@ public class SQLiteCursor {
                 throw new SQLiteException("sqlite busy");
             }
         }
-        this.inRow = step == 0;
-        return this.inRow;
+        boolean z = step == 0;
+        this.inRow = z;
+        return z;
     }
 
     public long getStatementHandle() {

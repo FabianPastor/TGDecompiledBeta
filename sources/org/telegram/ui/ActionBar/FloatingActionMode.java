@@ -14,14 +14,11 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import java.util.Arrays;
 import org.telegram.messenger.AndroidUtilities;
 
 @TargetApi(23)
 public final class FloatingActionMode extends ActionMode {
-    private static final int MAX_HIDE_DURATION = 3000;
-    private static final int MOVING_HIDE_DELAY = 50;
     private final int mBottomAllowance;
     private final ActionMode.Callback2 mCallback;
     private final Rect mContentRect;
@@ -105,7 +102,7 @@ public final class FloatingActionMode extends ActionMode {
         this.mPreviousViewRectOnScreen = new Rect();
         this.mScreenRect = new Rect();
         this.mOriginatingView = view;
-        this.mOriginatingView.getLocationOnScreen(this.mViewPositionOnScreen);
+        view.getLocationOnScreen(this.mViewPositionOnScreen);
         this.mBottomAllowance = AndroidUtilities.dp(20.0f);
         this.mDisplaySize = new Point();
         setFloatingToolbar(floatingToolbar);
@@ -116,13 +113,16 @@ public final class FloatingActionMode extends ActionMode {
     }
 
     private void setFloatingToolbar(FloatingToolbar floatingToolbar) {
-        this.mFloatingToolbar = floatingToolbar.setMenu(this.mMenu).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        floatingToolbar.setMenu(this.mMenu);
+        floatingToolbar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             public final boolean onMenuItemClick(MenuItem menuItem) {
                 return FloatingActionMode.this.lambda$setFloatingToolbar$1$FloatingActionMode(menuItem);
             }
         });
-        this.mFloatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(this.mFloatingToolbar);
-        this.mFloatingToolbarVisibilityHelper.activate();
+        this.mFloatingToolbar = floatingToolbar;
+        FloatingToolbarVisibilityHelper floatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(floatingToolbar);
+        this.mFloatingToolbarVisibilityHelper = floatingToolbarVisibilityHelper;
+        floatingToolbarVisibilityHelper.activate();
     }
 
     public /* synthetic */ boolean lambda$setFloatingToolbar$1$FloatingActionMode(MenuItem menuItem) {
@@ -223,10 +223,6 @@ public final class FloatingActionMode extends ActionMode {
         this.mOriginatingView.postDelayed(this.mHideOff, min);
     }
 
-    public void setOutsideTouchable(boolean z, PopupWindow.OnDismissListener onDismissListener) {
-        this.mFloatingToolbar.setOutsideTouchable(z, onDismissListener);
-    }
-
     public void onWindowFocusChanged(boolean z) {
         this.mFloatingToolbarVisibilityHelper.setWindowFocused(z);
         this.mFloatingToolbarVisibilityHelper.updateToolbarVisibility();
@@ -258,7 +254,6 @@ public final class FloatingActionMode extends ActionMode {
     }
 
     private static final class FloatingToolbarVisibilityHelper {
-        private static final long MIN_SHOW_DURATION_FOR_MOVE_HIDE = 500;
         private boolean mActive;
         private boolean mHideRequested;
         private long mLastShowTime;

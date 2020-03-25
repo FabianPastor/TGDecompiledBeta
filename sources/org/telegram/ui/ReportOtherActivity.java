@@ -14,7 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -23,13 +23,11 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ReportOtherActivity extends BaseFragment {
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public long dialog_id = getArguments().getLong("dialog_id", 0);
     private View doneButton;
     /* access modifiers changed from: private */
     public EditTextBoldCursor firstNameField;
-    private View headerLabelView;
     /* access modifiers changed from: private */
     public int message_id = getArguments().getInt("message_id", 0);
 
@@ -46,7 +44,7 @@ public class ReportOtherActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TLRPC.TL_error tL_error) {
+            static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             }
 
             /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
@@ -127,7 +125,7 @@ public class ReportOtherActivity extends BaseFragment {
                     if (r4 == 0) goto L_0x00c5
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
-                    r0 = 2131626411(0x7f0e09ab, float:1.8880057E38)
+                    r0 = 2131626510(0x7f0e0a0e, float:1.8880258E38)
                     java.lang.String r1 = "ReportChatSent"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r1 = 0
@@ -145,11 +143,12 @@ public class ReportOtherActivity extends BaseFragment {
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
-        this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
         this.fragmentView.setOnTouchListener($$Lambda$ReportOtherActivity$VcwTn4nik4XOSC4IbcsIN4IckE.INSTANCE);
-        this.firstNameField = new EditTextBoldCursor(context);
-        this.firstNameField.setTextSize(1, 18.0f);
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context);
+        this.firstNameField = editTextBoldCursor;
+        editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
@@ -159,11 +158,11 @@ public class ReportOtherActivity extends BaseFragment {
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(180224);
         this.firstNameField.setImeOptions(6);
-        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+        EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        editTextBoldCursor.setGravity(i);
+        editTextBoldCursor2.setGravity(i);
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -174,8 +173,8 @@ public class ReportOtherActivity extends BaseFragment {
         });
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", NUM));
-        EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
-        editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
+        EditTextBoldCursor editTextBoldCursor3 = this.firstNameField;
+        editTextBoldCursor3.setSelection(editTextBoldCursor3.length());
         return this.fragmentView;
     }
 

@@ -60,8 +60,9 @@ public class TextCheckCell extends FrameLayout {
     public TextCheckCell(Context context, int i, boolean z) {
         super(context);
         this.height = 50;
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -70,8 +71,9 @@ public class TextCheckCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 70.0f : (float) i, 0.0f, LocaleController.isRTL ? (float) i : 70.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -80,8 +82,9 @@ public class TextCheckCell extends FrameLayout {
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : (float) i, 36.0f, LocaleController.isRTL ? (float) i : 64.0f, 0.0f));
-        this.checkBox = new Switch(context);
-        this.checkBox.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
+        Switch switchR = new Switch(context);
+        this.checkBox = switchR;
+        switchR.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
         addView(this.checkBox, LayoutHelper.createFrame(37, 20.0f, (LocaleController.isRTL ? 3 : i2) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
         setClipChildren(false);
     }
@@ -234,10 +237,11 @@ public class TextCheckCell extends FrameLayout {
         }
         switchR.setOverrideColor(i3);
         this.animatedColorBackground = i;
-        this.animationPaint.setColor(this.animatedColorBackground);
+        this.animationPaint.setColor(i);
         this.animationProgress = 0.0f;
-        this.animator = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, new float[]{0.0f, 1.0f});
-        this.animator.addListener(new AnimatorListenerAdapter() {
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, new float[]{0.0f, 1.0f});
+        this.animator = ofFloat;
+        ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 TextCheckCell textCheckCell = TextCheckCell.this;
                 textCheckCell.setBackgroundColor(textCheckCell.animatedColorBackground);

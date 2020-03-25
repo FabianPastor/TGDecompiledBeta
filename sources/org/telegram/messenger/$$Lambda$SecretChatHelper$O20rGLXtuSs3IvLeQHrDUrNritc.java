@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
 import java.util.Comparator;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 
 /* renamed from: org.telegram.messenger.-$$Lambda$SecretChatHelper$O20rGLXtuSs3IvLeQHrDUrNritc  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,6 +12,6 @@ public final /* synthetic */ class $$Lambda$SecretChatHelper$O20rGLXtuSs3IvLeQHr
     }
 
     public final int compare(Object obj, Object obj2) {
-        return AndroidUtilities.compare(((TLRPC.Message) obj).seq_out, ((TLRPC.Message) obj2).seq_out);
+        return AndroidUtilities.compare(((TLRPC$Message) obj).seq_out, ((TLRPC$Message) obj2).seq_out);
     }
 }

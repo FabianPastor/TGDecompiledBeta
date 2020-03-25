@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class RenderState {
-    private static final int DEFAULT_STATE_SIZE = 256;
     private int allocatedCount;
     public float alpha;
     public float angle;
@@ -24,8 +23,9 @@ public class RenderState {
         this.count = 0;
         if (this.buffer == null) {
             this.allocatedCount = 256;
-            this.buffer = ByteBuffer.allocateDirect(this.allocatedCount * 5 * 4);
-            this.buffer.order(ByteOrder.nativeOrder());
+            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(256 * 5 * 4);
+            this.buffer = allocateDirect;
+            allocateDirect.order(ByteOrder.nativeOrder());
             this.buffer.position(0);
         }
     }
@@ -53,9 +53,11 @@ public class RenderState {
         if (this.buffer != null) {
             this.buffer = null;
         }
-        this.allocatedCount = Math.max(this.allocatedCount * 2, 256);
-        this.buffer = ByteBuffer.allocateDirect(this.allocatedCount * 5 * 4);
-        this.buffer.order(ByteOrder.nativeOrder());
+        int max = Math.max(this.allocatedCount * 2, 256);
+        this.allocatedCount = max;
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(max * 5 * 4);
+        this.buffer = allocateDirect;
+        allocateDirect.order(ByteOrder.nativeOrder());
         this.buffer.position(0);
     }
 

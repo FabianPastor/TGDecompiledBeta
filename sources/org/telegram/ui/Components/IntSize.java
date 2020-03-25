@@ -7,17 +7,7 @@ public class IntSize {
     public IntSize() {
     }
 
-    public IntSize(IntSize intSize) {
-        this.width = intSize.width;
-        this.height = intSize.height;
-    }
-
     public IntSize(int i, int i2) {
-        this.width = i;
-        this.height = i2;
-    }
-
-    public void set(int i, int i2) {
         this.width = i;
         this.height = i2;
     }

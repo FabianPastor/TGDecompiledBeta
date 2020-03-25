@@ -29,10 +29,10 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
 
 public class DrawerLayoutContainer extends FrameLayout {
-    private static final int MIN_DRAWER_MARGIN = 64;
     private AdjustPanLayoutHelper adjustPanLayoutHelper = new AdjustPanLayoutHelper(this);
     private boolean allowDrawContent = true;
     private boolean allowOpenDrawer;
+    private boolean allowOpenDrawerBySwipe = true;
     private Paint backgroundPaint = new Paint();
     private boolean beginTrackingSent;
     private int behindKeyboardColor;
@@ -45,7 +45,6 @@ public class DrawerLayoutContainer extends FrameLayout {
     private Object lastInsets;
     private boolean maybeStartTracking;
     private int minDrawerMargin = ((int) ((AndroidUtilities.density * 64.0f) + 0.5f));
-    private int paddingTop;
     private ActionBarLayout parentActionBarLayout;
     private Rect rect = new Rect();
     private float scrimOpacity;
@@ -126,16 +125,9 @@ public class DrawerLayoutContainer extends FrameLayout {
         marginLayoutParams.bottomMargin = windowInsets.getSystemWindowInsetBottom();
     }
 
-    private int getTopInset(Object obj) {
-        if (Build.VERSION.SDK_INT < 21 || obj == null) {
-            return 0;
-        }
-        return ((WindowInsets) obj).getSystemWindowInsetTop();
-    }
-
     public void setDrawerLayout(ViewGroup viewGroup) {
         this.drawerLayout = viewGroup;
-        addView(this.drawerLayout);
+        addView(viewGroup);
         this.drawerLayout.setVisibility(4);
         if (Build.VERSION.SDK_INT >= 21) {
             this.drawerLayout.setFitsSystemWindows(true);
@@ -149,7 +141,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     @Keep
     public void setDrawerPosition(float f) {
         this.drawerPosition = f;
-        if (this.drawerPosition > ((float) this.drawerLayout.getMeasuredWidth())) {
+        if (f > ((float) this.drawerLayout.getMeasuredWidth())) {
             this.drawerPosition = (float) this.drawerLayout.getMeasuredWidth();
         } else if (this.drawerPosition < 0.0f) {
             this.drawerPosition = 0.0f;
@@ -162,6 +154,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         setScrimOpacity(this.drawerPosition / ((float) this.drawerLayout.getMeasuredWidth()));
     }
 
+    @Keep
     public float getDrawerPosition() {
         return this.drawerPosition;
     }
@@ -259,7 +252,7 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     public void setAllowOpenDrawer(boolean z, boolean z2) {
         this.allowOpenDrawer = z;
-        if (!this.allowOpenDrawer && this.drawerPosition != 0.0f) {
+        if (!z && this.drawerPosition != 0.0f) {
             if (!z2) {
                 setDrawerPosition(0.0f);
                 onDrawerAnimationEnd(false);
@@ -267,6 +260,10 @@ public class DrawerLayoutContainer extends FrameLayout {
             }
             closeDrawer(true);
         }
+    }
+
+    public void setAllowOpenDrawerBySwipe(boolean z) {
+        this.allowOpenDrawerBySwipe = z;
     }
 
     private void prepareForDrawerOpen(MotionEvent motionEvent) {
@@ -289,258 +286,282 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:87:0x0185, code lost:
-        if (r8 != ((float) r7.drawerLayout.getMeasuredWidth())) goto L_0x0187;
+    /* JADX WARNING: Code restructure failed: missing block: B:91:0x018c, code lost:
+        if (r9 != ((float) r8.drawerLayout.getMeasuredWidth())) goto L_0x018e;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x01f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x01f9  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onTouchEvent(android.view.MotionEvent r8) {
+    public boolean onTouchEvent(android.view.MotionEvent r9) {
         /*
-            r7 = this;
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.parentActionBarLayout
+            r8 = this;
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
             boolean r0 = r0.checkTransitionAnimation()
             r1 = 0
-            if (r0 != 0) goto L_0x01fb
-            boolean r0 = r7.drawerOpened
+            if (r0 != 0) goto L_0x022d
+            boolean r0 = r8.drawerOpened
             r2 = 1
             if (r0 == 0) goto L_0x0028
-            if (r8 == 0) goto L_0x0028
-            float r0 = r8.getX()
-            float r3 = r7.drawerPosition
+            if (r9 == 0) goto L_0x0028
+            float r0 = r9.getX()
+            float r3 = r8.drawerPosition
             int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r0 <= 0) goto L_0x0028
-            boolean r0 = r7.startedTracking
+            boolean r0 = r8.startedTracking
             if (r0 != 0) goto L_0x0028
-            int r8 = r8.getAction()
-            if (r8 != r2) goto L_0x0027
-            r7.closeDrawer(r1)
+            int r9 = r9.getAction()
+            if (r9 != r2) goto L_0x0027
+            r8.closeDrawer(r1)
         L_0x0027:
             return r2
         L_0x0028:
-            boolean r0 = r7.allowOpenDrawer
-            if (r0 == 0) goto L_0x01f8
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.parentActionBarLayout
+            boolean r0 = r8.allowOpenDrawerBySwipe
+            r3 = 6
+            r4 = 3
+            r5 = 0
+            if (r0 != 0) goto L_0x0033
+            boolean r0 = r8.drawerOpened
+            if (r0 == 0) goto L_0x01ff
+        L_0x0033:
+            boolean r0 = r8.allowOpenDrawer
+            if (r0 == 0) goto L_0x01ff
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
-            if (r0 != r2) goto L_0x01f8
+            if (r0 != r2) goto L_0x01ff
             r0 = 2
-            if (r8 == 0) goto L_0x0082
-            int r3 = r8.getAction()
-            if (r3 == 0) goto L_0x0045
-            int r3 = r8.getAction()
-            if (r3 != r0) goto L_0x0082
-        L_0x0045:
-            boolean r3 = r7.startedTracking
-            if (r3 != 0) goto L_0x0082
-            boolean r3 = r7.maybeStartTracking
-            if (r3 != 0) goto L_0x0082
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.parentActionBarLayout
-            android.graphics.Rect r3 = r7.rect
+            if (r9 == 0) goto L_0x008b
+            int r6 = r9.getAction()
+            if (r6 == 0) goto L_0x0050
+            int r6 = r9.getAction()
+            if (r6 != r0) goto L_0x008b
+        L_0x0050:
+            boolean r6 = r8.startedTracking
+            if (r6 != 0) goto L_0x008b
+            boolean r6 = r8.maybeStartTracking
+            if (r6 != 0) goto L_0x008b
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
+            android.graphics.Rect r3 = r8.rect
             r0.getHitRect(r3)
-            float r0 = r8.getX()
+            float r0 = r9.getX()
             int r0 = (int) r0
-            r7.startedTrackingX = r0
-            float r0 = r8.getY()
+            r8.startedTrackingX = r0
+            float r0 = r9.getY()
             int r0 = (int) r0
-            r7.startedTrackingY = r0
-            android.graphics.Rect r0 = r7.rect
-            int r3 = r7.startedTrackingX
-            int r4 = r7.startedTrackingY
-            boolean r0 = r0.contains(r3, r4)
-            if (r0 == 0) goto L_0x01f8
-            int r8 = r8.getPointerId(r1)
-            r7.startedTrackingPointerId = r8
-            r7.maybeStartTracking = r2
-            r7.cancelCurrentAnimation()
-            android.view.VelocityTracker r8 = r7.velocityTracker
-            if (r8 == 0) goto L_0x01f8
-            r8.clear()
-            goto L_0x01f8
-        L_0x0082:
-            r3 = 0
-            if (r8 == 0) goto L_0x0141
-            int r4 = r8.getAction()
-            if (r4 != r0) goto L_0x0141
-            int r0 = r8.getPointerId(r1)
-            int r4 = r7.startedTrackingPointerId
-            if (r0 != r4) goto L_0x0141
-            android.view.VelocityTracker r0 = r7.velocityTracker
-            if (r0 != 0) goto L_0x009d
+            r8.startedTrackingY = r0
+            android.graphics.Rect r3 = r8.rect
+            int r4 = r8.startedTrackingX
+            boolean r0 = r3.contains(r4, r0)
+            if (r0 == 0) goto L_0x022a
+            int r9 = r9.getPointerId(r1)
+            r8.startedTrackingPointerId = r9
+            r8.maybeStartTracking = r2
+            r8.cancelCurrentAnimation()
+            android.view.VelocityTracker r9 = r8.velocityTracker
+            if (r9 == 0) goto L_0x022a
+            r9.clear()
+            goto L_0x022a
+        L_0x008b:
+            r6 = 0
+            if (r9 == 0) goto L_0x014a
+            int r7 = r9.getAction()
+            if (r7 != r0) goto L_0x014a
+            int r0 = r9.getPointerId(r1)
+            int r7 = r8.startedTrackingPointerId
+            if (r0 != r7) goto L_0x014a
+            android.view.VelocityTracker r0 = r8.velocityTracker
+            if (r0 != 0) goto L_0x00a6
             android.view.VelocityTracker r0 = android.view.VelocityTracker.obtain()
-            r7.velocityTracker = r0
-        L_0x009d:
-            float r0 = r8.getX()
-            int r1 = r7.startedTrackingX
+            r8.velocityTracker = r0
+        L_0x00a6:
+            float r0 = r9.getX()
+            int r1 = r8.startedTrackingX
             float r1 = (float) r1
             float r0 = r0 - r1
             int r0 = (int) r0
             float r0 = (float) r0
-            float r1 = r8.getY()
+            float r1 = r9.getY()
             int r1 = (int) r1
-            int r4 = r7.startedTrackingY
-            int r1 = r1 - r4
+            int r3 = r8.startedTrackingY
+            int r1 = r1 - r3
             int r1 = java.lang.Math.abs(r1)
             float r1 = (float) r1
-            android.view.VelocityTracker r4 = r7.velocityTracker
-            r4.addMovement(r8)
-            boolean r4 = r7.maybeStartTracking
-            if (r4 == 0) goto L_0x0112
-            boolean r4 = r7.startedTracking
-            if (r4 != 0) goto L_0x0112
-            int r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x00e0
-            r4 = 1077936128(0x40400000, float:3.0)
-            float r4 = r0 / r4
-            float r5 = java.lang.Math.abs(r1)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 <= 0) goto L_0x00e0
-            float r4 = java.lang.Math.abs(r0)
-            r5 = 1045220557(0x3e4ccccd, float:0.2)
-            float r5 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r5, r2)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0103
-        L_0x00e0:
-            boolean r4 = r7.drawerOpened
-            if (r4 == 0) goto L_0x0112
-            int r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0112
+            android.view.VelocityTracker r3 = r8.velocityTracker
+            r3.addMovement(r9)
+            boolean r3 = r8.maybeStartTracking
+            if (r3 == 0) goto L_0x011b
+            boolean r3 = r8.startedTracking
+            if (r3 != 0) goto L_0x011b
+            int r3 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
+            if (r3 <= 0) goto L_0x00e9
+            r3 = 1077936128(0x40400000, float:3.0)
+            float r3 = r0 / r3
+            float r4 = java.lang.Math.abs(r1)
+            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r3 <= 0) goto L_0x00e9
+            float r3 = java.lang.Math.abs(r0)
+            r4 = 1045220557(0x3e4ccccd, float:0.2)
+            float r4 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r4, r2)
+            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r3 >= 0) goto L_0x010c
+        L_0x00e9:
+            boolean r3 = r8.drawerOpened
+            if (r3 == 0) goto L_0x011b
+            int r3 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
+            if (r3 >= 0) goto L_0x011b
             float r3 = java.lang.Math.abs(r0)
             float r1 = java.lang.Math.abs(r1)
             int r1 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x0112
+            if (r1 < 0) goto L_0x011b
             float r1 = java.lang.Math.abs(r0)
             r3 = 1053609165(0x3ecccccd, float:0.4)
             float r3 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r2)
             int r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r1 < 0) goto L_0x0112
-        L_0x0103:
-            r7.prepareForDrawerOpen(r8)
-            float r8 = r8.getX()
-            int r8 = (int) r8
-            r7.startedTrackingX = r8
-            r7.requestDisallowInterceptTouchEvent(r2)
-            goto L_0x01f8
-        L_0x0112:
-            boolean r1 = r7.startedTracking
-            if (r1 == 0) goto L_0x01f8
-            boolean r1 = r7.beginTrackingSent
-            if (r1 != 0) goto L_0x0135
-            android.content.Context r1 = r7.getContext()
+            if (r1 < 0) goto L_0x011b
+        L_0x010c:
+            r8.prepareForDrawerOpen(r9)
+            float r9 = r9.getX()
+            int r9 = (int) r9
+            r8.startedTrackingX = r9
+            r8.requestDisallowInterceptTouchEvent(r2)
+            goto L_0x022a
+        L_0x011b:
+            boolean r1 = r8.startedTracking
+            if (r1 == 0) goto L_0x022a
+            boolean r1 = r8.beginTrackingSent
+            if (r1 != 0) goto L_0x013e
+            android.content.Context r1 = r8.getContext()
             android.app.Activity r1 = (android.app.Activity) r1
             android.view.View r1 = r1.getCurrentFocus()
-            if (r1 == 0) goto L_0x0133
-            android.content.Context r1 = r7.getContext()
+            if (r1 == 0) goto L_0x013c
+            android.content.Context r1 = r8.getContext()
             android.app.Activity r1 = (android.app.Activity) r1
             android.view.View r1 = r1.getCurrentFocus()
             org.telegram.messenger.AndroidUtilities.hideKeyboard(r1)
-        L_0x0133:
-            r7.beginTrackingSent = r2
-        L_0x0135:
-            r7.moveDrawerByX(r0)
-            float r8 = r8.getX()
-            int r8 = (int) r8
-            r7.startedTrackingX = r8
-            goto L_0x01f8
-        L_0x0141:
-            if (r8 == 0) goto L_0x0161
-            if (r8 == 0) goto L_0x01f8
-            int r0 = r8.getPointerId(r1)
-            int r4 = r7.startedTrackingPointerId
-            if (r0 != r4) goto L_0x01f8
-            int r0 = r8.getAction()
-            r4 = 3
-            if (r0 == r4) goto L_0x0161
-            int r0 = r8.getAction()
-            if (r0 == r2) goto L_0x0161
-            int r8 = r8.getAction()
-            r0 = 6
-            if (r8 != r0) goto L_0x01f8
-        L_0x0161:
-            android.view.VelocityTracker r8 = r7.velocityTracker
-            if (r8 != 0) goto L_0x016b
-            android.view.VelocityTracker r8 = android.view.VelocityTracker.obtain()
-            r7.velocityTracker = r8
-        L_0x016b:
-            android.view.VelocityTracker r8 = r7.velocityTracker
+        L_0x013c:
+            r8.beginTrackingSent = r2
+        L_0x013e:
+            r8.moveDrawerByX(r0)
+            float r9 = r9.getX()
+            int r9 = (int) r9
+            r8.startedTrackingX = r9
+            goto L_0x022a
+        L_0x014a:
+            if (r9 == 0) goto L_0x0168
+            if (r9 == 0) goto L_0x022a
+            int r0 = r9.getPointerId(r1)
+            int r7 = r8.startedTrackingPointerId
+            if (r0 != r7) goto L_0x022a
+            int r0 = r9.getAction()
+            if (r0 == r4) goto L_0x0168
+            int r0 = r9.getAction()
+            if (r0 == r2) goto L_0x0168
+            int r9 = r9.getAction()
+            if (r9 != r3) goto L_0x022a
+        L_0x0168:
+            android.view.VelocityTracker r9 = r8.velocityTracker
+            if (r9 != 0) goto L_0x0172
+            android.view.VelocityTracker r9 = android.view.VelocityTracker.obtain()
+            r8.velocityTracker = r9
+        L_0x0172:
+            android.view.VelocityTracker r9 = r8.velocityTracker
             r0 = 1000(0x3e8, float:1.401E-42)
-            r8.computeCurrentVelocity(r0)
-            boolean r8 = r7.startedTracking
-            if (r8 != 0) goto L_0x0187
-            float r8 = r7.drawerPosition
-            int r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-            if (r0 == 0) goto L_0x01ea
-            android.view.ViewGroup r0 = r7.drawerLayout
+            r9.computeCurrentVelocity(r0)
+            boolean r9 = r8.startedTracking
+            if (r9 != 0) goto L_0x018e
+            float r9 = r8.drawerPosition
+            int r0 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
+            if (r0 == 0) goto L_0x01f1
+            android.view.ViewGroup r0 = r8.drawerLayout
             int r0 = r0.getMeasuredWidth()
             float r0 = (float) r0
-            int r8 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r8 == 0) goto L_0x01ea
-        L_0x0187:
-            android.view.VelocityTracker r8 = r7.velocityTracker
-            float r8 = r8.getXVelocity()
-            android.view.VelocityTracker r0 = r7.velocityTracker
+            int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
+            if (r9 == 0) goto L_0x01f1
+        L_0x018e:
+            android.view.VelocityTracker r9 = r8.velocityTracker
+            float r9 = r9.getXVelocity()
+            android.view.VelocityTracker r0 = r8.velocityTracker
             float r0 = r0.getYVelocity()
-            float r4 = r7.drawerPosition
-            android.view.ViewGroup r5 = r7.drawerLayout
-            int r5 = r5.getMeasuredWidth()
-            float r5 = (float) r5
-            r6 = 1073741824(0x40000000, float:2.0)
-            float r5 = r5 / r6
-            r6 = 1163575296(0x455aCLASSNAME, float:3500.0)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 >= 0) goto L_0x01b6
-            int r4 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
-            if (r4 < 0) goto L_0x01c2
-            float r4 = java.lang.Math.abs(r8)
+            float r3 = r8.drawerPosition
+            android.view.ViewGroup r4 = r8.drawerLayout
+            int r4 = r4.getMeasuredWidth()
+            float r4 = (float) r4
+            r7 = 1073741824(0x40000000, float:2.0)
+            float r4 = r4 / r7
+            r7 = 1163575296(0x455aCLASSNAME, float:3500.0)
+            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r3 >= 0) goto L_0x01bd
+            int r3 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+            if (r3 < 0) goto L_0x01c9
+            float r3 = java.lang.Math.abs(r9)
             float r0 = java.lang.Math.abs(r0)
-            int r0 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x01c2
-        L_0x01b6:
-            int r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01c4
-            float r0 = java.lang.Math.abs(r8)
-            int r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r0 < 0) goto L_0x01c4
-        L_0x01c2:
+            int r0 = (r3 > r0 ? 1 : (r3 == r0 ? 0 : -1))
+            if (r0 < 0) goto L_0x01c9
+        L_0x01bd:
+            int r0 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
+            if (r0 >= 0) goto L_0x01cb
+            float r0 = java.lang.Math.abs(r9)
+            int r0 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
+            if (r0 < 0) goto L_0x01cb
+        L_0x01c9:
             r0 = 1
-            goto L_0x01c5
-        L_0x01c4:
+            goto L_0x01cc
+        L_0x01cb:
             r0 = 0
-        L_0x01c5:
-            if (r0 != 0) goto L_0x01d9
-            boolean r0 = r7.drawerOpened
-            if (r0 != 0) goto L_0x01d4
-            float r8 = java.lang.Math.abs(r8)
-            int r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
-            if (r8 < 0) goto L_0x01d4
-            goto L_0x01d5
-        L_0x01d4:
+        L_0x01cc:
+            if (r0 != 0) goto L_0x01e0
+            boolean r0 = r8.drawerOpened
+            if (r0 != 0) goto L_0x01db
+            float r9 = java.lang.Math.abs(r9)
+            int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+            if (r9 < 0) goto L_0x01db
+            goto L_0x01dc
+        L_0x01db:
             r2 = 0
-        L_0x01d5:
-            r7.openDrawer(r2)
-            goto L_0x01ea
-        L_0x01d9:
-            boolean r0 = r7.drawerOpened
-            if (r0 == 0) goto L_0x01e6
-            float r8 = java.lang.Math.abs(r8)
-            int r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
-            if (r8 < 0) goto L_0x01e6
-            goto L_0x01e7
-        L_0x01e6:
+        L_0x01dc:
+            r8.openDrawer(r2)
+            goto L_0x01f1
+        L_0x01e0:
+            boolean r0 = r8.drawerOpened
+            if (r0 == 0) goto L_0x01ed
+            float r9 = java.lang.Math.abs(r9)
+            int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+            if (r9 < 0) goto L_0x01ed
+            goto L_0x01ee
+        L_0x01ed:
             r2 = 0
-        L_0x01e7:
-            r7.closeDrawer(r2)
-        L_0x01ea:
-            r7.startedTracking = r1
-            r7.maybeStartTracking = r1
-            android.view.VelocityTracker r8 = r7.velocityTracker
-            if (r8 == 0) goto L_0x01f8
-            r8.recycle()
-            r8 = 0
-            r7.velocityTracker = r8
-        L_0x01f8:
-            boolean r8 = r7.startedTracking
-            return r8
-        L_0x01fb:
+        L_0x01ee:
+            r8.closeDrawer(r2)
+        L_0x01f1:
+            r8.startedTracking = r1
+            r8.maybeStartTracking = r1
+            android.view.VelocityTracker r9 = r8.velocityTracker
+            if (r9 == 0) goto L_0x022a
+            r9.recycle()
+            r8.velocityTracker = r5
+            goto L_0x022a
+        L_0x01ff:
+            if (r9 == 0) goto L_0x021d
+            if (r9 == 0) goto L_0x022a
+            int r0 = r9.getPointerId(r1)
+            int r6 = r8.startedTrackingPointerId
+            if (r0 != r6) goto L_0x022a
+            int r0 = r9.getAction()
+            if (r0 == r4) goto L_0x021d
+            int r0 = r9.getAction()
+            if (r0 == r2) goto L_0x021d
+            int r9 = r9.getAction()
+            if (r9 != r3) goto L_0x022a
+        L_0x021d:
+            r8.startedTracking = r1
+            r8.maybeStartTracking = r1
+            android.view.VelocityTracker r9 = r8.velocityTracker
+            if (r9 == 0) goto L_0x022a
+            r9.recycle()
+            r8.velocityTracker = r5
+        L_0x022a:
+            boolean r9 = r8.startedTracking
+            return r9
+        L_0x022d:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DrawerLayoutContainer.onTouchEvent(android.view.MotionEvent):boolean");
@@ -646,7 +667,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         int i;
-        int measuredWidth;
+        int x;
         Canvas canvas2 = canvas;
         View view2 = view;
         int i2 = 0;
@@ -659,19 +680,19 @@ public class DrawerLayoutContainer extends FrameLayout {
         int save = canvas.save();
         if (z) {
             int childCount = getChildCount();
-            int i3 = 0;
             i = 0;
+            int i3 = 0;
             for (int i4 = 0; i4 < childCount; i4++) {
                 View childAt = getChildAt(i4);
                 if (childAt.getVisibility() == 0 && childAt != this.drawerLayout) {
-                    i = i4;
+                    i3 = i4;
                 }
-                if (childAt != view2 && childAt.getVisibility() == 0 && childAt == this.drawerLayout && childAt.getHeight() >= height && (measuredWidth = childAt.getMeasuredWidth() + ((int) childAt.getX())) > i3) {
-                    i3 = measuredWidth;
+                if (childAt != view2 && childAt.getVisibility() == 0 && childAt == this.drawerLayout && childAt.getHeight() >= height && (x = ((int) childAt.getX()) + childAt.getMeasuredWidth()) > i) {
+                    i = x;
                 }
             }
-            if (i3 != 0) {
-                canvas.clipRect(i3, 0, width, getHeight());
+            if (i != 0) {
+                canvas.clipRect(i, 0, width, getHeight());
             }
             i2 = i3;
         } else {
@@ -688,9 +709,9 @@ public class DrawerLayoutContainer extends FrameLayout {
                     this.shadowLeft.draw(canvas);
                 }
             }
-        } else if (indexOfChild(view2) == i) {
+        } else if (indexOfChild(view2) == i2) {
             this.scrimPaint.setColor(((int) (this.scrimOpacity * 153.0f)) << 24);
-            canvas.drawRect((float) i2, 0.0f, (float) width, (float) getHeight(), this.scrimPaint);
+            canvas.drawRect((float) i, 0.0f, (float) width, (float) getHeight(), this.scrimPaint);
         }
         return drawChild;
     }

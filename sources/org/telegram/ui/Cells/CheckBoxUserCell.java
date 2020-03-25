@@ -11,7 +11,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -21,15 +21,16 @@ import org.telegram.ui.Components.LayoutHelper;
 public class CheckBoxUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private CheckBoxSquare checkBox;
-    private TLRPC.User currentUser;
+    private TLRPC$User currentUser;
     private BackupImageView imageView;
     private boolean needDivider;
     private TextView textView;
 
     public CheckBoxUserCell(Context context, boolean z) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -37,13 +38,16 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        int i2 = 21;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 21 : 94), 0.0f, (float) (!LocaleController.isRTL ? 21 : 94), 0.0f));
         this.avatarDrawable = new AvatarDrawable();
-        this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.dp(36.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(36.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 7.0f, 48.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context, z);
-        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 0 : 21), 16.0f, (float) (LocaleController.isRTL ? 21 : 0), 0.0f));
+        CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
+        this.checkBox = checkBoxSquare;
+        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 0 : 21), 16.0f, (float) (!LocaleController.isRTL ? 0 : i2), 0.0f));
     }
 
     /* access modifiers changed from: protected */
@@ -55,16 +59,16 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setTextColor(i);
     }
 
-    public TLRPC.User getCurrentUser() {
+    public TLRPC$User getCurrentUser() {
         return this.currentUser;
     }
 
-    public void setUser(TLRPC.User user, boolean z, boolean z2) {
-        this.currentUser = user;
-        this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
+    public void setUser(TLRPC$User tLRPC$User, boolean z, boolean z2) {
+        this.currentUser = tLRPC$User;
+        this.textView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
         this.checkBox.setChecked(z, false);
-        this.avatarDrawable.setInfo(user);
-        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+        this.avatarDrawable.setInfo(tLRPC$User);
+        this.imageView.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
         this.needDivider = z2;
         setWillNotDraw(!z2);
     }

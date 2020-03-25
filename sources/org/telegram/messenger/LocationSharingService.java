@@ -10,7 +10,7 @@ import androidx.core.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.ui.LaunchActivity;
 
 public class LocationSharingService extends Service implements NotificationCenter.NotificationCenterDelegate {
@@ -29,12 +29,13 @@ public class LocationSharingService extends Service implements NotificationCente
     public void onCreate() {
         super.onCreate();
         this.handler = new Handler();
-        this.runnable = new Runnable() {
+        $$Lambda$LocationSharingService$nPgxbLYJUuL6mX_Yd5lVL7HSSeY r0 = new Runnable() {
             public final void run() {
                 LocationSharingService.this.lambda$onCreate$1$LocationSharingService();
             }
         };
-        this.handler.postDelayed(this.runnable, 1000);
+        this.runnable = r0;
+        this.handler.postDelayed(r0, 1000);
     }
 
     public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
@@ -100,7 +101,7 @@ public class LocationSharingService extends Service implements NotificationCente
                 if (dialogId > 0) {
                     str = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
                 } else {
-                    TLRPC.Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
+                    TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
                     str = chat != null ? chat.title : "";
                 }
             } else {
@@ -124,8 +125,9 @@ public class LocationSharingService extends Service implements NotificationCente
             intent2.setAction("org.tmessages.openlocations");
             intent2.addCategory("android.intent.category.LAUNCHER");
             PendingIntent activity = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
-            this.builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
-            this.builder.setWhen(System.currentTimeMillis());
+            NotificationCompat.Builder builder2 = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+            this.builder = builder2;
+            builder2.setWhen(System.currentTimeMillis());
             this.builder.setSmallIcon(NUM);
             this.builder.setContentIntent(activity);
             NotificationsController.checkOtherNotificationsChannel();

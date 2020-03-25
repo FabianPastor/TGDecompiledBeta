@@ -13,7 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -21,19 +21,23 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class AccountSelectCell extends FrameLayout {
     private int accountNumber;
-    private AvatarDrawable avatarDrawable = new AvatarDrawable();
+    private AvatarDrawable avatarDrawable;
     private ImageView checkImageView;
     private BackupImageView imageView;
     private TextView textView;
 
     public AccountSelectCell(Context context) {
         super(context);
-        this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
-        this.imageView = new BackupImageView(context);
-        this.imageView.setRoundRadius(AndroidUtilities.dp(18.0f));
+        AvatarDrawable avatarDrawable2 = new AvatarDrawable();
+        this.avatarDrawable = avatarDrawable2;
+        avatarDrawable2.setTextSize(AndroidUtilities.dp(12.0f));
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, 51, 10.0f, 10.0f, 0.0f, 0.0f));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setLines(1);
@@ -42,8 +46,9 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setGravity(19);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, 51, 61.0f, 0.0f, 56.0f, 0.0f));
-        this.checkImageView = new ImageView(context);
-        this.checkImageView.setImageResource(NUM);
+        ImageView imageView2 = new ImageView(context);
+        this.checkImageView = imageView2;
+        imageView2.setImageResource(NUM);
         this.checkImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemCheck"), PorterDuff.Mode.MULTIPLY));
         addView(this.checkImageView, LayoutHelper.createFrame(40, -1.0f, 53, 0.0f, 0.0f, 6.0f, 0.0f));
@@ -62,7 +67,7 @@ public class AccountSelectCell extends FrameLayout {
 
     public void setAccount(int i, boolean z) {
         this.accountNumber = i;
-        TLRPC.User currentUser = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        TLRPC$User currentUser = UserConfig.getInstance(i).getCurrentUser();
         this.avatarDrawable.setInfo(currentUser);
         this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
         this.imageView.getImageReceiver().setCurrentAccount(i);

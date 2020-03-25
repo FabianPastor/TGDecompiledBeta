@@ -55,15 +55,13 @@ public class Painting {
         DispatchQueue requestDispatchQueue();
 
         UndoStore requestUndoStore();
-
-        void strokeCommited();
     }
 
     public class PaintingData {
         public Bitmap bitmap;
         public ByteBuffer data;
 
-        PaintingData(Bitmap bitmap2, ByteBuffer byteBuffer) {
+        PaintingData(Painting painting, Bitmap bitmap2, ByteBuffer byteBuffer) {
             this.bitmap = bitmap2;
             this.data = byteBuffer;
         }
@@ -71,13 +69,13 @@ public class Painting {
 
     public Painting(Size size2) {
         this.size = size2;
+        this.dataBuffer = ByteBuffer.allocateDirect(((int) size2.width) * ((int) size2.height) * 4);
         Size size3 = this.size;
-        this.dataBuffer = ByteBuffer.allocateDirect(((int) size3.width) * ((int) size3.height) * 4);
-        Size size4 = this.size;
-        this.projection = GLMatrix.LoadOrtho(0.0f, size4.width, 0.0f, size4.height, -1.0f, 1.0f);
+        this.projection = GLMatrix.LoadOrtho(0.0f, size3.width, 0.0f, size3.height, -1.0f, 1.0f);
         if (this.vertexBuffer == null) {
-            this.vertexBuffer = ByteBuffer.allocateDirect(32);
-            this.vertexBuffer.order(ByteOrder.nativeOrder());
+            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(32);
+            this.vertexBuffer = allocateDirect;
+            allocateDirect.order(ByteOrder.nativeOrder());
         }
         this.vertexBuffer.putFloat(0.0f);
         this.vertexBuffer.putFloat(0.0f);
@@ -89,8 +87,9 @@ public class Painting {
         this.vertexBuffer.putFloat(this.size.height);
         this.vertexBuffer.rewind();
         if (this.textureBuffer == null) {
-            this.textureBuffer = ByteBuffer.allocateDirect(32);
-            this.textureBuffer.order(ByteOrder.nativeOrder());
+            ByteBuffer allocateDirect2 = ByteBuffer.allocateDirect(32);
+            this.textureBuffer = allocateDirect2;
+            allocateDirect2.order(ByteOrder.nativeOrder());
             this.textureBuffer.putFloat(0.0f);
             this.textureBuffer.putFloat(0.0f);
             this.textureBuffer.putFloat(1.0f);
@@ -383,11 +382,11 @@ public class Painting {
         this.dataBuffer.limit(width * height * 4);
         GLES20.glReadPixels(0, 0, width, height, 6408, 5121, this.dataBuffer);
         if (z) {
-            paintingData = new PaintingData((Bitmap) null, this.dataBuffer);
+            paintingData = new PaintingData(this, (Bitmap) null, this.dataBuffer);
         } else {
             Bitmap createBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             createBitmap.copyPixelsFromBuffer(this.dataBuffer);
-            paintingData = new PaintingData(createBitmap, (ByteBuffer) null);
+            paintingData = new PaintingData(this, createBitmap, (ByteBuffer) null);
         }
         int[] iArr = this.buffers;
         iArr[0] = i6;

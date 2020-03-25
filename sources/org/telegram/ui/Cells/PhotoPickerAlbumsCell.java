@@ -48,7 +48,6 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 org.telegram.ui.Components.BackupImageView r1 = new org.telegram.ui.Components.BackupImageView
                 r1.<init>(r2)
                 r0.imageView = r1
-                org.telegram.ui.Components.BackupImageView r1 = r0.imageView
                 r3 = -1082130432(0xffffffffbvar_, float:-1.0)
                 r4 = -1
                 android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
@@ -57,16 +56,15 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 r1.<init>(r2)
                 r5 = 0
                 r1.setOrientation(r5)
-                r6 = 2131165259(0x7var_b, float:1.794473E38)
+                r6 = 2131165260(0x7var_c, float:1.7944732E38)
                 r1.setBackgroundResource(r6)
                 r6 = 60
                 r7 = 83
-                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r4, (int) r6, (int) r7)
+                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r7)
                 r0.addView(r1, r6)
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r2)
                 r0.nameTextView = r6
-                android.widget.TextView r6 = r0.nameTextView
                 r7 = 1095761920(0x41500000, float:13.0)
                 r8 = 1
                 r6.setTextSize(r8, r7)
@@ -95,7 +93,6 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r2)
                 r0.countTextView = r6
-                android.widget.TextView r6 = r0.countTextView
                 r6.setTextSize(r8, r7)
                 android.widget.TextView r6 = r0.countTextView
                 r6.setTextColor(r4)
@@ -120,7 +117,6 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 android.view.View r1 = new android.view.View
                 r1.<init>(r2)
                 r0.selector = r1
-                android.view.View r1 = r0.selector
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
                 r1.setBackgroundDrawable(r2)
                 android.view.View r1 = r0.selector

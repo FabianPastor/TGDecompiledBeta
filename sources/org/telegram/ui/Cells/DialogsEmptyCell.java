@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -11,16 +12,18 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RLottieImageView;
 
 public class DialogsEmptyCell extends LinearLayout {
     private int currentAccount = UserConfig.selectedAccount;
     private int currentType;
     private TextView emptyTextView1;
     private TextView emptyTextView2;
+    private RLottieImageView imageView;
 
     static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
@@ -31,8 +34,18 @@ public class DialogsEmptyCell extends LinearLayout {
         setGravity(17);
         setOrientation(1);
         setOnTouchListener($$Lambda$DialogsEmptyCell$7lLGhZthID2bSlrXEXwZZGk1ZsM.INSTANCE);
-        this.emptyTextView1 = new TextView(context);
-        this.emptyTextView1.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
+        this.imageView = rLottieImageView;
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+        addView(this.imageView, LayoutHelper.createFrame(100, 100.0f, 17, 52.0f, 4.0f, 52.0f, 0.0f));
+        this.imageView.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                DialogsEmptyCell.this.lambda$new$1$DialogsEmptyCell(view);
+            }
+        });
+        TextView textView = new TextView(context);
+        this.emptyTextView1 = textView;
+        textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.emptyTextView1.setText(LocaleController.getString("NoChats", NUM));
         this.emptyTextView1.setTextSize(1, 20.0f);
         this.emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -51,21 +64,103 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.emptyTextView2, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
-    public void setType(int i) {
-        String str;
-        this.currentType = i;
-        if (this.currentType == 0) {
-            str = LocaleController.getString("NoChatsHelp", NUM);
-            if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                str = str.replace(10, ' ');
-            }
-        } else {
-            str = LocaleController.getString("NoChatsContactsHelp", NUM);
-            if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                str = str.replace(10, ' ');
-            }
+    public /* synthetic */ void lambda$new$1$DialogsEmptyCell(View view) {
+        if (!this.imageView.isPlaying()) {
+            this.imageView.setProgress(0.0f);
+            this.imageView.playAnimation();
         }
-        this.emptyTextView2.setText(str);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x007e  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0090  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setType(int r6) {
+        /*
+            r5 = this;
+            int r0 = r5.currentType
+            if (r0 != r6) goto L_0x0005
+            return
+        L_0x0005:
+            r5.currentType = r6
+            r0 = 2131625776(0x7f0e0730, float:1.887877E38)
+            java.lang.String r1 = "NoChats"
+            r2 = 0
+            if (r6 != 0) goto L_0x0024
+            r6 = 2131625778(0x7f0e0732, float:1.8878774E38)
+            java.lang.String r3 = "NoChatsHelp"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
+            android.widget.TextView r3 = r5.emptyTextView1
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r3.setText(r0)
+        L_0x0021:
+            r0 = r6
+            r6 = 0
+            goto L_0x007c
+        L_0x0024:
+            r3 = 1
+            if (r6 != r3) goto L_0x003a
+            r6 = 2131625777(0x7f0e0731, float:1.8878772E38)
+            java.lang.String r3 = "NoChatsContactsHelp"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
+            android.widget.TextView r3 = r5.emptyTextView1
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r3.setText(r0)
+            goto L_0x0021
+        L_0x003a:
+            r0 = 2
+            if (r6 != r0) goto L_0x005d
+            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
+            r6.setAutoRepeat(r2)
+            r6 = 2131558419(0x7f0d0013, float:1.8742153E38)
+            r0 = 2131625226(0x7f0e050a, float:1.8877654E38)
+            java.lang.String r1 = "FilterNoChatsToDisplayInfo"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.widget.TextView r1 = r5.emptyTextView1
+            r3 = 2131625225(0x7f0e0509, float:1.8877652E38)
+            java.lang.String r4 = "FilterNoChatsToDisplay"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            goto L_0x007c
+        L_0x005d:
+            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
+            r6.setAutoRepeat(r3)
+            r6 = 2131558418(0x7f0d0012, float:1.8742151E38)
+            r0 = 2131625190(0x7f0e04e6, float:1.887758E38)
+            java.lang.String r1 = "FilterAddingChatsInfo"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.widget.TextView r1 = r5.emptyTextView1
+            r3 = 2131625189(0x7f0e04e5, float:1.8877579E38)
+            java.lang.String r4 = "FilterAddingChats"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+        L_0x007c:
+            if (r6 == 0) goto L_0x0090
+            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
+            r1.setVisibility(r2)
+            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
+            r2 = 100
+            r1.setAnimation(r6, r2, r2)
+            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
+            r6.playAnimation()
+            goto L_0x0097
+        L_0x0090:
+            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
+            r1 = 8
+            r6.setVisibility(r1)
+        L_0x0097:
+            boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r6 == 0) goto L_0x00ab
+            boolean r6 = org.telegram.messenger.AndroidUtilities.isSmallTablet()
+            if (r6 != 0) goto L_0x00ab
+            r6 = 10
+            r1 = 32
+            java.lang.String r0 = r0.replace(r6, r1)
+        L_0x00ab:
+            android.widget.TextView r6 = r5.emptyTextView2
+            r6.setText(r0)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogsEmptyCell.setType(int):void");
     }
 
     /* access modifiers changed from: protected */
@@ -74,8 +169,9 @@ public class DialogsEmptyCell extends LinearLayout {
         if (size == 0) {
             size = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        if (this.currentType == 0) {
-            ArrayList<TLRPC.RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
+        int i3 = this.currentType;
+        if (i3 == 0 || i3 == 2 || i3 == 3) {
+            ArrayList<TLRPC$RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
                 size -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
             }

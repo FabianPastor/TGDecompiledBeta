@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Vérificateur d\'Assistant</string>
     <string name="google_assistant_verification_notification_title">Envoi de message par l\'Assistant Google en cours…</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Acheter avec Google</string>
 </resources>

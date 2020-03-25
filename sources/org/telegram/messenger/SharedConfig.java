@@ -50,6 +50,7 @@ public class SharedConfig {
     public static String lastUpdateVersion = null;
     public static long lastUptimeMillis = 0;
     private static final Object localIdSync = new Object();
+    public static int lockRecordAudioVideoHint = 0;
     public static boolean loopStickers = false;
     public static int mapPreviewType = 2;
     public static boolean noSoundHintShowed = false;
@@ -82,6 +83,7 @@ public class SharedConfig {
     public static boolean smoothKeyboard = false;
     public static boolean sortContactsByName = false;
     public static boolean sortFilesByName = false;
+    public static boolean stickersReorderingHintUsed = false;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
     public static boolean streamMkv = false;
@@ -114,7 +116,7 @@ public class SharedConfig {
             this.username = str2;
             this.password = str3;
             this.secret = str4;
-            if (this.address == null) {
+            if (str == null) {
                 this.address = "";
             }
             if (this.password == null) {
@@ -155,6 +157,7 @@ public class SharedConfig {
                 edit.putBoolean("sortFilesByName", sortFilesByName);
                 edit.putInt("textSelectionHintShows", textSelectionHintShows);
                 edit.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
+                edit.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
                 edit.commit();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -243,8 +246,10 @@ public class SharedConfig {
                 lastKeepMediaCheckTime = sharedPreferences2.getInt("lastKeepMediaCheckTime", 0);
                 searchMessagesAsListHintShows = sharedPreferences2.getInt("searchMessagesAsListHintShows", 0);
                 searchMessagesAsListUsed = sharedPreferences2.getBoolean("searchMessagesAsListUsed", false);
+                stickersReorderingHintUsed = sharedPreferences2.getBoolean("stickersReorderingHintUsed", false);
                 textSelectionHintShows = sharedPreferences2.getInt("textSelectionHintShows", 0);
                 scheduledOrNoSoundHintShows = sharedPreferences2.getInt("scheduledOrNoSoundHintShows", 0);
+                lockRecordAudioVideoHint = sharedPreferences2.getInt("lockRecordAudioVideoHint", 0);
                 showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
                 configLoaded = true;
             }
@@ -252,8 +257,8 @@ public class SharedConfig {
     }
 
     public static void increaseBadPasscodeTries() {
-        badPasscodeTries++;
-        int i = badPasscodeTries;
+        int i = badPasscodeTries + 1;
+        badPasscodeTries = i;
         if (i >= 3) {
             if (i == 3) {
                 passcodeRetryInMs = 5000;
@@ -310,11 +315,12 @@ public class SharedConfig {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
                     byte[] bytes = str.getBytes("UTF-8");
-                    byte[] bArr = new byte[(bytes.length + 32)];
+                    int length = bytes.length + 32;
+                    byte[] bArr = new byte[length];
                     System.arraycopy(passcodeSalt, 0, bArr, 0, 16);
                     System.arraycopy(bytes, 0, bArr, 16, bytes.length);
                     System.arraycopy(passcodeSalt, 0, bArr, bytes.length + 16, 16);
-                    passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, bArr.length));
+                    passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, length));
                     saveConfig();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
@@ -324,11 +330,12 @@ public class SharedConfig {
         }
         try {
             byte[] bytes2 = str.getBytes("UTF-8");
-            byte[] bArr2 = new byte[(bytes2.length + 32)];
+            int length2 = bytes2.length + 32;
+            byte[] bArr2 = new byte[length2];
             System.arraycopy(passcodeSalt, 0, bArr2, 0, 16);
             System.arraycopy(bytes2, 0, bArr2, 16, bytes2.length);
             System.arraycopy(passcodeSalt, 0, bArr2, bytes2.length + 16, 16);
-            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bArr2, 0, bArr2.length)));
+            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bArr2, 0, length2)));
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
             return false;
@@ -352,6 +359,7 @@ public class SharedConfig {
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         textSelectionHintShows = 0;
         scheduledOrNoSoundHintShows = 0;
+        lockRecordAudioVideoHint = 0;
         saveConfig();
     }
 
@@ -366,6 +374,13 @@ public class SharedConfig {
         searchMessagesAsListUsed = z;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("searchMessagesAsListUsed", z);
+        edit.commit();
+    }
+
+    public static void setStickersReorderingHintUsed(boolean z) {
+        stickersReorderingHintUsed = z;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("stickersReorderingHintUsed", z);
         edit.commit();
     }
 
@@ -394,6 +409,20 @@ public class SharedConfig {
     public static void removeScheduledOrNoSuoundHint() {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("scheduledOrNoSoundHintShows", 3);
+        edit.commit();
+    }
+
+    public static void increaseLockRecordAudioVideoHintShowed() {
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        int i = lockRecordAudioVideoHint + 1;
+        lockRecordAudioVideoHint = i;
+        edit.putInt("lockRecordAudioVideoHint", i);
+        edit.commit();
+    }
+
+    public static void removeLockRecordAudioVideoHint() {
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("lockRecordAudioVideoHint", 3);
         edit.commit();
     }
 
@@ -488,8 +517,9 @@ public class SharedConfig {
     }
 
     public static void toggleRepeatMode() {
-        repeatMode++;
-        if (repeatMode > 2) {
+        int i = repeatMode + 1;
+        repeatMode = i;
+        if (i > 2) {
             repeatMode = 0;
         }
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
@@ -692,26 +722,27 @@ public class SharedConfig {
         for (int i = 0; i < size; i++) {
             ProxyInfo proxyInfo = proxyList.get(i);
             String str = proxyInfo.address;
+            String str2 = "";
             if (str == null) {
-                str = "";
+                str = str2;
             }
             serializedData.writeString(str);
             serializedData.writeInt32(proxyInfo.port);
-            String str2 = proxyInfo.username;
-            if (str2 == null) {
-                str2 = "";
-            }
-            serializedData.writeString(str2);
-            String str3 = proxyInfo.password;
+            String str3 = proxyInfo.username;
             if (str3 == null) {
-                str3 = "";
+                str3 = str2;
             }
             serializedData.writeString(str3);
-            String str4 = proxyInfo.secret;
+            String str4 = proxyInfo.password;
             if (str4 == null) {
-                str4 = "";
+                str4 = str2;
             }
             serializedData.writeString(str4);
+            String str5 = proxyInfo.secret;
+            if (str5 != null) {
+                str2 = str5;
+            }
+            serializedData.writeString(str2);
         }
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("proxy_list", Base64.encodeToString(serializedData.toByteArray(), 2)).commit();
         serializedData.cleanup();
@@ -771,10 +802,10 @@ public class SharedConfig {
                 return;
             }
             if (file2.isDirectory()) {
-                new File(file2, ".nomedia").createNewFile();
+                AndroidUtilities.createEmptyFile(new File(file2, ".nomedia"));
             }
             if (file3.isDirectory()) {
-                new File(file3, ".nomedia").createNewFile();
+                AndroidUtilities.createEmptyFile(new File(file3, ".nomedia"));
             }
         } catch (Throwable th) {
             FileLog.e(th);

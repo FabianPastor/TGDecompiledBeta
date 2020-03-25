@@ -19,8 +19,9 @@ public class TextDetailCell extends FrameLayout {
 
     public TextDetailCell(Context context) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setLines(1);
@@ -28,8 +29,9 @@ public class TextDetailCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -47,7 +49,7 @@ public class TextDetailCell extends FrameLayout {
         this.textView.setText(str);
         this.valueTextView.setText(str2);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextWithEmojiAndValue(String str, CharSequence charSequence, boolean z) {

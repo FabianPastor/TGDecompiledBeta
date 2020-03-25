@@ -16,13 +16,15 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_document;
+import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
 public class UpdateAppAlertDialog extends AlertDialog implements NotificationCenter.NotificationCenterDelegate {
     private int accountNum;
-    private TLRPC.TL_help_appUpdate appUpdate;
+    private TLRPC$TL_help_appUpdate appUpdate;
     private String fileName;
     private Activity parentActivity;
     /* access modifiers changed from: private */
@@ -32,21 +34,21 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     /* access modifiers changed from: private */
     public FrameLayout radialProgressView;
 
-    public UpdateAppAlertDialog(Activity activity, TLRPC.TL_help_appUpdate tL_help_appUpdate, int i) {
+    public UpdateAppAlertDialog(Activity activity, TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, int i) {
         super(activity, 0);
-        this.appUpdate = tL_help_appUpdate;
+        this.appUpdate = tLRPC$TL_help_appUpdate;
         this.accountNum = i;
-        TLRPC.Document document = tL_help_appUpdate.document;
-        if (document instanceof TLRPC.TL_document) {
-            this.fileName = FileLoader.getAttachFileName(document);
+        TLRPC$Document tLRPC$Document = tLRPC$TL_help_appUpdate.document;
+        if (tLRPC$Document instanceof TLRPC$TL_document) {
+            this.fileName = FileLoader.getAttachFileName(tLRPC$Document);
         }
         this.parentActivity = activity;
         setTopImage(NUM, Theme.getColor("dialogTopBackground"));
         setTopHeight(175);
         setMessage(this.appUpdate.text);
-        TLRPC.Document document2 = this.appUpdate.document;
-        if (document2 instanceof TLRPC.TL_document) {
-            setSecondTitle(AndroidUtilities.formatFileSize((long) document2.size));
+        TLRPC$Document tLRPC$Document2 = this.appUpdate.document;
+        if (tLRPC$Document2 instanceof TLRPC$TL_document) {
+            setSecondTitle(AndroidUtilities.formatFileSize((long) tLRPC$Document2.size));
         }
         setDismissDialogByButtons(false);
         setTitle(LocaleController.getString("UpdateTelegram", NUM));
@@ -60,7 +62,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
                 UpdateAppAlertDialog.this.lambda$new$1$UpdateAppAlertDialog(dialogInterface, i);
             }
         });
-        this.radialProgressView = new FrameLayout(this.parentActivity) {
+        AnonymousClass1 r2 = new FrameLayout(this.parentActivity) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -75,27 +77,29 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
                 UpdateAppAlertDialog.this.radialProgress.draw(canvas);
             }
         };
-        this.radialProgressView.setWillNotDraw(false);
+        this.radialProgressView = r2;
+        r2.setWillNotDraw(false);
         this.radialProgressView.setAlpha(0.0f);
         this.radialProgressView.setScaleX(0.1f);
         this.radialProgressView.setScaleY(0.1f);
         this.radialProgressView.setVisibility(4);
-        this.radialProgress = new RadialProgress(this.radialProgressView);
-        this.radialProgress.setStrokeWidth(AndroidUtilities.dp(2.0f));
+        RadialProgress radialProgress2 = new RadialProgress(this.radialProgressView);
+        this.radialProgress = radialProgress2;
+        radialProgress2.setStrokeWidth(AndroidUtilities.dp(2.0f));
         this.radialProgress.setBackground((Drawable) null, true, false);
         this.radialProgress.setProgressColor(Theme.getColor("dialogButton"));
     }
 
     public /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
         if (BlockingUpdateView.checkApkInstallPermissions(getContext())) {
-            TLRPC.TL_help_appUpdate tL_help_appUpdate = this.appUpdate;
-            TLRPC.Document document = tL_help_appUpdate.document;
-            if (document instanceof TLRPC.TL_document) {
-                if (!BlockingUpdateView.openApkInstall(this.parentActivity, document)) {
+            TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = this.appUpdate;
+            TLRPC$Document tLRPC$Document = tLRPC$TL_help_appUpdate.document;
+            if (tLRPC$Document instanceof TLRPC$TL_document) {
+                if (!BlockingUpdateView.openApkInstall(this.parentActivity, tLRPC$Document)) {
                     FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
                     showProgress(true);
                 }
-            } else if (tL_help_appUpdate.url != null) {
+            } else if (tLRPC$TL_help_appUpdate.url != null) {
                 Browser.openUrl(getContext(), this.appUpdate.url);
                 dialogInterface.dismiss();
             }
@@ -103,7 +107,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
     }
 
     public /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
-        if (this.appUpdate.document instanceof TLRPC.TL_document) {
+        if (this.appUpdate.document instanceof TLRPC$TL_document) {
             FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);
         }
         dialogInterface.dismiss();

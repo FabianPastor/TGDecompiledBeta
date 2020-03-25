@@ -14,7 +14,7 @@ public class AnimatedArrowDrawable extends Drawable {
     private float animateToProgress;
     private boolean isSmall;
     private long lastUpdateTime;
-    private Paint paint = new Paint(1);
+    private Paint paint;
     private Path path = new Path();
 
     public int getOpacity() {
@@ -25,7 +25,9 @@ public class AnimatedArrowDrawable extends Drawable {
     }
 
     public AnimatedArrowDrawable(int i, boolean z) {
-        this.paint.setStyle(Paint.Style.STROKE);
+        Paint paint2 = new Paint(1);
+        this.paint = paint2;
+        paint2.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setColor(i);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
@@ -77,13 +79,15 @@ public class AnimatedArrowDrawable extends Drawable {
             float f = this.animProgress;
             float f2 = this.animateToProgress;
             if (f < f2) {
-                this.animProgress = f + (((float) j) / 180.0f);
-                if (this.animProgress > f2) {
+                float f3 = f + (((float) j) / 180.0f);
+                this.animProgress = f3;
+                if (f3 > f2) {
                     this.animProgress = f2;
                 }
             } else {
-                this.animProgress = f - (((float) j) / 180.0f);
-                if (this.animProgress < f2) {
+                float f4 = f - (((float) j) / 180.0f);
+                this.animProgress = f4;
+                if (f4 < f2) {
                     this.animProgress = f2;
                 }
             }
@@ -92,10 +96,7 @@ public class AnimatedArrowDrawable extends Drawable {
         }
     }
 
-    public void setColor(int i) {
-        this.paint.setColor(i);
-    }
-
+    @Keep
     public float getAnimationProgress() {
         return this.animProgress;
     }

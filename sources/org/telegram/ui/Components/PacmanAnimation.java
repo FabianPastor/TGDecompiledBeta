@@ -37,24 +37,26 @@ public class PacmanAnimation {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        long j2 = 17;
-        if (j <= 17) {
-            j2 = j;
+        if (j > 17) {
+            j = 17;
         }
         if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
-        float f = (float) j2;
-        this.progress += f / 400.0f;
-        if (this.progress > 1.0f) {
+        float f = (float) j;
+        float f2 = this.progress + (f / 400.0f);
+        this.progress = f2;
+        if (f2 > 1.0f) {
             this.progress = 1.0f;
         }
-        this.translationProgress += f / 2000.0f;
-        if (this.translationProgress > 1.0f) {
+        float f3 = this.translationProgress + (f / 2000.0f);
+        this.translationProgress = f3;
+        if (f3 > 1.0f) {
             this.translationProgress = 1.0f;
         }
-        this.ghostProgress += f / 200.0f;
-        if (this.ghostProgress >= 1.0f) {
+        float f4 = this.ghostProgress + (f / 200.0f);
+        this.ghostProgress = f4;
+        if (f4 >= 1.0f) {
             this.ghostWalk = !this.ghostWalk;
             this.ghostProgress = 0.0f;
         }
@@ -76,8 +78,9 @@ public class PacmanAnimation {
                 this.ghostPath = new Path();
             }
             this.ghostPath.reset();
-            this.currentGhostWalk = this.ghostWalk;
-            if (this.currentGhostWalk) {
+            boolean z = this.ghostWalk;
+            this.currentGhostWalk = z;
+            if (z) {
                 this.ghostPath.moveTo(0.0f, (float) AndroidUtilities.dp(50.0f));
                 this.ghostPath.lineTo(0.0f, (float) AndroidUtilities.dp(24.0f));
                 this.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(42.0f), (float) AndroidUtilities.dp(24.0f));

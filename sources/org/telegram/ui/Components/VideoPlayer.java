@@ -34,9 +34,6 @@ import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
 @SuppressLint({"NewApi"})
 public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoListener, NotificationCenter.NotificationCenterDelegate {
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private static final int RENDERER_BUILDING_STATE_BUILDING = 2;
-    private static final int RENDERER_BUILDING_STATE_BUILT = 3;
-    private static final int RENDERER_BUILDING_STATE_IDLE = 1;
     private SimpleExoPlayer audioPlayer;
     /* access modifiers changed from: private */
     public boolean audioPlayerReady;
@@ -54,12 +51,6 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     private TextureView textureView;
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
     private boolean videoPlayerReady;
-
-    public interface RendererBuilder {
-        void buildRenderers(VideoPlayer videoPlayer);
-
-        void cancel();
-    }
 
     public interface VideoPlayerDelegate {
         void onError(Exception exc);
@@ -92,13 +83,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     public void onPositionDiscontinuity(int i) {
     }
 
-    public void onRepeatModeChanged(int i) {
-    }
-
     public void onSeekProcessed() {
-    }
-
-    public void onShuffleModeEnabledChanged(boolean z) {
     }
 
     public void onSurfaceSizeChanged(int i, int i2) {
@@ -126,15 +111,17 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     private void ensurePleyaerCreated() {
         DefaultLoadControl defaultLoadControl = new DefaultLoadControl(new DefaultAllocator(true, 65536), 15000, 50000, 100, 5000, -1, true);
         if (this.player == null) {
-            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
-            this.player.addListener(this);
+            SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
+            this.player = newSimpleInstance;
+            newSimpleInstance.addListener(this);
             this.player.setVideoListener(this);
             this.player.setVideoTextureView(this.textureView);
             this.player.setPlayWhenReady(this.autoplay);
         }
         if (this.mixedAudio && this.audioPlayer == null) {
-            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
-            this.audioPlayer.addListener(new Player.EventListener() {
+            SimpleExoPlayer newSimpleInstance2 = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
+            this.audioPlayer = newSimpleInstance2;
+            newSimpleInstance2.addListener(new Player.EventListener() {
                 public /* synthetic */ void onIsPlayingChanged(boolean z) {
                     Player.EventListener.CC.$default$onIsPlayingChanged(this, z);
                 }
@@ -155,13 +142,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 public void onPositionDiscontinuity(int i) {
                 }
 
-                public void onRepeatModeChanged(int i) {
-                }
-
                 public void onSeekProcessed() {
-                }
-
-                public void onShuffleModeEnabledChanged(boolean z) {
                 }
 
                 public void onTimelineChanged(Timeline timeline, Object obj, int i) {
@@ -200,49 +181,48 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r14.ensurePleyaerCreated()
             r3 = 0
             r4 = r3
-            r5 = r4
-            r3 = 0
-        L_0x0010:
+            r5 = 0
+        L_0x000f:
             r6 = 2
-            if (r3 >= r6) goto L_0x00a0
-            if (r3 != 0) goto L_0x0019
+            if (r5 >= r6) goto L_0x009f
+            if (r5 != 0) goto L_0x0018
             r9 = r15
             r7 = r16
-            goto L_0x001d
-        L_0x0019:
+            goto L_0x001c
+        L_0x0018:
             r9 = r17
             r7 = r18
-        L_0x001d:
+        L_0x001c:
             r8 = -1
             int r10 = r7.hashCode()
             r11 = 3680(0xe60, float:5.157E-42)
-            if (r10 == r11) goto L_0x0045
+            if (r10 == r11) goto L_0x0044
             r11 = 103407(0x193ef, float:1.44904E-40)
-            if (r10 == r11) goto L_0x003b
+            if (r10 == r11) goto L_0x003a
             r11 = 3075986(0x2eevar_, float:4.310374E-39)
-            if (r10 == r11) goto L_0x0031
-            goto L_0x004e
-        L_0x0031:
+            if (r10 == r11) goto L_0x0030
+            goto L_0x004d
+        L_0x0030:
             java.lang.String r10 = "dash"
             boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004e
+            if (r7 == 0) goto L_0x004d
             r8 = 0
-            goto L_0x004e
-        L_0x003b:
+            goto L_0x004d
+        L_0x003a:
             java.lang.String r10 = "hls"
             boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004e
+            if (r7 == 0) goto L_0x004d
             r8 = 1
-            goto L_0x004e
-        L_0x0045:
+            goto L_0x004d
+        L_0x0044:
             java.lang.String r10 = "ss"
             boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004e
+            if (r7 == 0) goto L_0x004d
             r8 = 2
-        L_0x004e:
-            if (r8 == 0) goto L_0x0082
-            if (r8 == r1) goto L_0x0076
-            if (r8 == r6) goto L_0x0065
+        L_0x004d:
+            if (r8 == 0) goto L_0x0081
+            if (r8 == r1) goto L_0x0075
+            if (r8 == r6) goto L_0x0064
             com.google.android.exoplayer2.source.ExtractorMediaSource r6 = new com.google.android.exoplayer2.source.ExtractorMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
             com.google.android.exoplayer2.extractor.DefaultExtractorsFactory r11 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -251,8 +231,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r13 = 0
             r8 = r6
             r8.<init>(r9, r10, r11, r12, r13)
-            goto L_0x0092
-        L_0x0065:
+            goto L_0x0091
+        L_0x0064:
             com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource r6 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
             com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory r11 = new com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory
@@ -261,14 +241,14 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r13 = 0
             r8 = r6
             r8.<init>(r9, r10, r11, r12, r13)
-            goto L_0x0092
-        L_0x0076:
+            goto L_0x0091
+        L_0x0075:
             com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory r6 = new com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
             com.google.android.exoplayer2.upstream.DataSource$Factory r7 = r0.mediaDataSourceFactory
             r6.<init>((com.google.android.exoplayer2.upstream.DataSource.Factory) r7)
             com.google.android.exoplayer2.source.hls.HlsMediaSource r6 = r6.createMediaSource(r9)
-            goto L_0x0092
-        L_0x0082:
+            goto L_0x0091
+        L_0x0081:
             com.google.android.exoplayer2.source.dash.DashMediaSource r6 = new com.google.android.exoplayer2.source.dash.DashMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
             com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory r11 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory
@@ -277,22 +257,22 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r13 = 0
             r8 = r6
             r8.<init>(r9, r10, r11, r12, r13)
-        L_0x0092:
+        L_0x0091:
             com.google.android.exoplayer2.source.LoopingMediaSource r7 = new com.google.android.exoplayer2.source.LoopingMediaSource
             r7.<init>(r6)
-            if (r3 != 0) goto L_0x009b
+            if (r5 != 0) goto L_0x009a
+            r3 = r7
+            goto L_0x009b
+        L_0x009a:
             r4 = r7
-            goto L_0x009c
         L_0x009b:
-            r5 = r7
-        L_0x009c:
-            int r3 = r3 + 1
-            goto L_0x0010
-        L_0x00a0:
+            int r5 = r5 + 1
+            goto L_0x000f
+        L_0x009f:
             com.google.android.exoplayer2.SimpleExoPlayer r2 = r0.player
-            r2.prepare(r4, r1, r1)
+            r2.prepare(r3, r1, r1)
             com.google.android.exoplayer2.SimpleExoPlayer r2 = r0.audioPlayer
-            r2.prepare(r5, r1, r1)
+            r2.prepare(r4, r1, r1)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoPlayer.preparePlayerLoop(android.net.Uri, java.lang.String, android.net.Uri, java.lang.String):void");
@@ -431,7 +411,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             this.textureView = textureView2;
             SimpleExoPlayer simpleExoPlayer = this.player;
             if (simpleExoPlayer != null) {
-                simpleExoPlayer.setVideoTextureView(this.textureView);
+                simpleExoPlayer.setVideoTextureView(textureView2);
             }
         }
     }
@@ -577,27 +557,12 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         this.delegate = videoPlayerDelegate;
     }
 
-    public int getBufferedPercentage() {
-        if (!this.isStreaming) {
-            return 100;
-        }
-        SimpleExoPlayer simpleExoPlayer = this.player;
-        if (simpleExoPlayer != null) {
-            return simpleExoPlayer.getBufferedPercentage();
-        }
-        return 0;
-    }
-
     public long getBufferedPosition() {
         SimpleExoPlayer simpleExoPlayer = this.player;
         if (simpleExoPlayer != null) {
             return this.isStreaming ? simpleExoPlayer.getBufferedPosition() : simpleExoPlayer.getDuration();
         }
         return 0;
-    }
-
-    public boolean isStreaming() {
-        return this.isStreaming;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:4:0x0008, code lost:
@@ -625,10 +590,6 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoPlayer.isPlaying():boolean");
-    }
-
-    public boolean isBuffering() {
-        return this.player != null && this.lastReportedPlaybackState == 2;
     }
 
     public void setStreamType(int i) {

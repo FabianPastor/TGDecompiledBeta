@@ -68,8 +68,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     public View createView(Context context) {
-        this.searching = false;
-        this.searchWas = false;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Language", NUM));
@@ -80,7 +78,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
+        addItem.setIsSearchField(true);
+        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = LanguageSelectActivity.this.searching = true;
             }
@@ -105,23 +105,27 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     }
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
+        });
+        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
-        this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", NUM));
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
+        EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context);
+        this.emptyView = emptyTextProgressView;
+        emptyTextProgressView.setText(LocaleController.getString("NoResult", NUM));
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView = new RecyclerListView(context);
-        this.listView.setEmptyView(this.emptyView);
+        frameLayout2.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        recyclerListView.setEmptyView(this.emptyView);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 LanguageSelectActivity.this.lambda$createView$0$LanguageSelectActivity(view, i);
@@ -270,8 +274,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        this.searchTimer = new Timer();
-        this.searchTimer.schedule(new TimerTask() {
+        Timer timer = new Timer();
+        this.searchTimer = timer;
+        timer.schedule(new TimerTask() {
             public void run() {
                 try {
                     LanguageSelectActivity.this.searchTimer.cancel();
@@ -414,13 +419,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0038
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165409(0x7var_e1, float:1.7945034E38)
+                r0 = 2131165417(0x7var_e9, float:1.794505E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
             L_0x0038:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165410(0x7var_e2, float:1.7945036E38)
+                r0 = 2131165418(0x7var_ea, float:1.7945053E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
@@ -493,7 +498,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625416(0x7f0e05c8, float:1.887804E38)
+                r4 = 2131625502(0x7f0e061e, float:1.8878214E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

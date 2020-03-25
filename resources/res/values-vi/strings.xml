@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Trình xác minh của Trợ lý</string>
     <string name="google_assistant_verification_notification_title">Trợ lý Google đang gửi thông báo</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Mua hàng bằng Google</string>
 </resources>

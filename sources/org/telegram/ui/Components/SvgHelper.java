@@ -212,21 +212,28 @@ public class SvgHelper {
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x00ea, code lost:
-        r5 = r5 + r4;
+    /* JADX WARNING: Code restructure failed: missing block: B:16:0x004a, code lost:
+        if (r4 != 'L') goto L_0x004d;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:17:0x004d, code lost:
+        r2.advance();
+        r4 = r7;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:40:0x00ea, code lost:
+        r5 = r5 + r7;
         r6 = r6 + r8;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x005f  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0067  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0075  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0087  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x00f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0148  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0186  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x018a A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x005f  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0067  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0075  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0087  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x00f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0109  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0182  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0186 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.Path doPath(java.lang.String r24) {
         /*
@@ -248,7 +255,7 @@ public class SvgHelper {
             r17 = 0
         L_0x001e:
             int r7 = r2.pos
-            if (r7 >= r1) goto L_0x0191
+            if (r7 >= r1) goto L_0x018d
             char r7 = r0.charAt(r7)
             r8 = 43
             r9 = 108(0x6c, float:1.51E-43)
@@ -273,36 +280,35 @@ public class SvgHelper {
         L_0x0037:
             goto L_0x004d
         L_0x0038:
-            if (r4 == r11) goto L_0x0055
+            if (r4 == r11) goto L_0x0054
             r8 = 77
             if (r4 != r8) goto L_0x003f
-            goto L_0x0055
+            goto L_0x0054
         L_0x003f:
-            if (r4 == r10) goto L_0x0053
+            if (r4 == r10) goto L_0x0051
             r8 = 67
             if (r4 != r8) goto L_0x0046
-            goto L_0x0053
+            goto L_0x0051
         L_0x0046:
-            if (r4 == r9) goto L_0x0053
+            if (r4 == r9) goto L_0x0051
             r8 = 76
             if (r4 != r8) goto L_0x004d
-            goto L_0x0053
+            goto L_0x0051
         L_0x004d:
             r2.advance()
-        L_0x0050:
-            r18 = r7
+            r4 = r7
+        L_0x0051:
+            r18 = r4
             goto L_0x005a
-        L_0x0053:
-            r7 = r4
-            goto L_0x0050
-        L_0x0055:
+        L_0x0054:
             int r7 = r4 + -1
             char r7 = (char) r7
             r18 = r4
+            r4 = r7
         L_0x005a:
             r19 = 1
-            switch(r7) {
-                case 65: goto L_0x0148;
+            switch(r4) {
+                case 65: goto L_0x0144;
                 case 67: goto L_0x0109;
                 case 72: goto L_0x00f5;
                 case 76: goto L_0x00dd;
@@ -310,7 +316,7 @@ public class SvgHelper {
                 case 83: goto L_0x0087;
                 case 86: goto L_0x0075;
                 case 90: goto L_0x0067;
-                case 97: goto L_0x0148;
+                case 97: goto L_0x0144;
                 case 99: goto L_0x0109;
                 case 104: goto L_0x00f5;
                 case 108: goto L_0x00dd;
@@ -325,7 +331,7 @@ public class SvgHelper {
             r22 = r13
         L_0x0063:
             r19 = 0
-            goto L_0x0184
+            goto L_0x0180
         L_0x0067:
             r14.close()
             r14.moveTo(r13, r12)
@@ -333,31 +339,31 @@ public class SvgHelper {
             r17 = r6
             r5 = r13
             r16 = r5
-            goto L_0x0184
+            goto L_0x0180
         L_0x0075:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             r8 = 118(0x76, float:1.65E-43)
-            if (r7 != r8) goto L_0x0082
-            r14.rLineTo(r15, r4)
-            float r6 = r6 + r4
+            if (r4 != r8) goto L_0x0082
+            r14.rLineTo(r15, r7)
+            float r6 = r6 + r7
             goto L_0x0063
         L_0x0082:
-            r14.lineTo(r5, r4)
-            r6 = r4
+            r14.lineTo(r5, r7)
+            r6 = r7
             goto L_0x0063
         L_0x0087:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
             float r9 = r2.nextFloat()
             float r10 = r2.nextFloat()
             r11 = 115(0x73, float:1.61E-43)
-            if (r7 != r11) goto L_0x009f
-            float r4 = r4 + r5
+            if (r4 != r11) goto L_0x009f
+            float r7 = r7 + r5
             float r9 = r9 + r5
             float r8 = r8 + r6
             float r10 = r10 + r6
         L_0x009f:
-            r11 = r4
+            r11 = r7
             r20 = r8
             r21 = r9
             r22 = r10
@@ -376,80 +382,78 @@ public class SvgHelper {
             r17 = r20
             r5 = r21
             r6 = r22
-            goto L_0x0184
+            goto L_0x0180
         L_0x00c5:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
-            if (r7 != r11) goto L_0x00d5
-            float r13 = r13 + r4
+            if (r4 != r11) goto L_0x00d5
+            float r13 = r13 + r7
             float r12 = r12 + r8
-            r14.rMoveTo(r4, r8)
+            r14.rMoveTo(r7, r8)
             goto L_0x00ea
         L_0x00d5:
-            r14.moveTo(r4, r8)
-            r5 = r4
+            r14.moveTo(r7, r8)
+            r5 = r7
             r13 = r5
             r6 = r8
             r12 = r6
             goto L_0x0063
         L_0x00dd:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
-            if (r7 != r9) goto L_0x00ee
-            r14.rLineTo(r4, r8)
+            if (r4 != r9) goto L_0x00ee
+            r14.rLineTo(r7, r8)
         L_0x00ea:
-            float r5 = r5 + r4
+            float r5 = r5 + r7
             float r6 = r6 + r8
             goto L_0x0063
         L_0x00ee:
-            r14.lineTo(r4, r8)
-            r5 = r4
+            r14.lineTo(r7, r8)
+            r5 = r7
             r6 = r8
             goto L_0x0063
         L_0x00f5:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             r8 = 104(0x68, float:1.46E-43)
-            if (r7 != r8) goto L_0x0103
-            r14.rLineTo(r4, r15)
-            float r5 = r5 + r4
+            if (r4 != r8) goto L_0x0103
+            r14.rLineTo(r7, r15)
+            float r5 = r5 + r7
             goto L_0x0063
         L_0x0103:
-            r14.lineTo(r4, r6)
-            r5 = r4
+            r14.lineTo(r7, r6)
+            r5 = r7
             goto L_0x0063
         L_0x0109:
-            float r4 = r2.nextFloat()
+            float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
             float r9 = r2.nextFloat()
             float r11 = r2.nextFloat()
             float r16 = r2.nextFloat()
             float r17 = r2.nextFloat()
-            if (r7 != r10) goto L_0x012b
-            float r4 = r4 + r5
+            if (r4 != r10) goto L_0x012b
+            float r7 = r7 + r5
             float r9 = r9 + r5
             float r16 = r16 + r5
             float r8 = r8 + r6
             float r11 = r11 + r6
             float r17 = r17 + r6
         L_0x012b:
-            r5 = r4
+            r5 = r7
             r6 = r8
-            r20 = r17
-            r17 = r16
-            r16 = r11
+            r20 = r11
             r11 = r9
             r4 = r14
             r7 = r11
-            r8 = r16
-            r9 = r17
-            r10 = r20
+            r8 = r20
+            r9 = r16
+            r10 = r17
             r4.cubicTo(r5, r6, r7, r8, r9, r10)
-            r5 = r17
-            r6 = r20
-            r17 = r16
+            r5 = r16
+            r6 = r17
+            r17 = r20
             r16 = r11
-            goto L_0x0184
-        L_0x0148:
+            goto L_0x0180
+        L_0x0144:
             float r9 = r2.nextFloat()
             float r10 = r2.nextFloat()
             float r11 = r2.nextFloat()
@@ -474,15 +478,15 @@ public class SvgHelper {
             r13 = r22
             r12 = r23
             goto L_0x0063
-        L_0x0184:
-            if (r19 != 0) goto L_0x018a
+        L_0x0180:
+            if (r19 != 0) goto L_0x0186
             r16 = r5
             r17 = r6
-        L_0x018a:
+        L_0x0186:
             r2.skipWhitespace()
             r4 = r18
             goto L_0x001e
-        L_0x0191:
+        L_0x018d:
             return r14
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.doPath(java.lang.String):android.graphics.Path");
@@ -526,18 +530,6 @@ public class SvgHelper {
             return null;
         }
         return Float.valueOf(Float.parseFloat(stringAttr));
-    }
-
-    private static Integer getHexAttr(String str, Attributes attributes) {
-        String stringAttr = getStringAttr(str, attributes);
-        if (stringAttr == null) {
-            return null;
-        }
-        try {
-            return Integer.valueOf(Integer.parseInt(stringAttr.substring(1), 16));
-        } catch (NumberFormatException unused) {
-            return getColorByName(stringAttr);
-        }
     }
 
     /* access modifiers changed from: private */
@@ -674,31 +666,16 @@ public class SvgHelper {
     }
 
     private static class NumberParse {
-        private int nextCmd;
         /* access modifiers changed from: private */
         public ArrayList<Float> numbers;
 
         public NumberParse(ArrayList<Float> arrayList, int i) {
             this.numbers = arrayList;
-            this.nextCmd = i;
-        }
-
-        public int getNextCmd() {
-            return this.nextCmd;
-        }
-
-        public float getNumber(int i) {
-            return this.numbers.get(i).floatValue();
         }
     }
 
     private static class StyleSet {
         HashMap<String, String> styleMap;
-
-        private StyleSet(StyleSet styleSet) {
-            this.styleMap = new HashMap<>();
-            this.styleMap.putAll(styleSet.styleMap);
-        }
 
         private StyleSet(String str) {
             this.styleMap = new HashMap<>();
@@ -723,8 +700,9 @@ public class SvgHelper {
             this.atts = attributes;
             String access$200 = SvgHelper.getStringAttr("style", attributes);
             if (access$200 != null) {
-                this.styles = new ArrayList<>();
-                this.styles.add(new StyleSet(access$200));
+                ArrayList<StyleSet> arrayList = new ArrayList<>();
+                this.styles = arrayList;
+                arrayList.add(new StyleSet(access$200));
                 return;
             }
             String access$2002 = SvgHelper.getStringAttr("class", attributes);
@@ -769,11 +747,6 @@ public class SvgHelper {
             } catch (NumberFormatException unused) {
                 return SvgHelper.getColorByName(attr);
             }
-        }
-
-        public Float getFloat(String str, float f) {
-            Float f2 = getFloat(str);
-            return f2 == null ? Float.valueOf(f) : f2;
         }
 
         public Float getFloat(String str) {
@@ -897,8 +870,9 @@ public class SvgHelper {
 
         private void pushTransform(Attributes attributes) {
             String access$200 = SvgHelper.getStringAttr("transform", attributes);
-            this.pushed = access$200 != null;
-            if (this.pushed) {
+            boolean z = access$200 != null;
+            this.pushed = z;
+            if (z) {
                 Matrix access$500 = SvgHelper.parseTransform(access$200);
                 this.canvas.save();
                 this.canvas.concat(access$500);
@@ -1013,17 +987,19 @@ public class SvgHelper {
                         } else {
                             float f = (float) ceil;
                             float f2 = (float) ceil2;
-                            this.scale = Math.min(((float) this.desiredWidth) / f, ((float) this.desiredHeight) / f2);
-                            float f3 = this.scale;
-                            i2 = (int) (f * f3);
-                            i = (int) (f2 * f3);
+                            float min = Math.min(((float) this.desiredWidth) / f, ((float) this.desiredHeight) / f2);
+                            this.scale = min;
+                            i2 = (int) (f * min);
+                            i = (int) (f2 * min);
                         }
-                        this.bitmap = Bitmap.createBitmap(i2, i, Bitmap.Config.ARGB_8888);
-                        this.bitmap.eraseColor(0);
-                        this.canvas = new Canvas(this.bitmap);
-                        float f4 = this.scale;
-                        if (f4 != 0.0f) {
-                            this.canvas.scale(f4, f4);
+                        Bitmap createBitmap = Bitmap.createBitmap(i2, i, Bitmap.Config.ARGB_8888);
+                        this.bitmap = createBitmap;
+                        createBitmap.eraseColor(0);
+                        Canvas canvas2 = new Canvas(this.bitmap);
+                        this.canvas = canvas2;
+                        float f3 = this.scale;
+                        if (f3 != 0.0f) {
+                            canvas2.scale(f3, f3);
                             return;
                         }
                         return;
@@ -1171,8 +1147,8 @@ public class SvgHelper {
                 r9 = 4
                 r0 = 3
                 r1 = 2
-                r2 = 0
-                r3 = 1
+                r2 = 1
+                r3 = 0
                 switch(r7) {
                     case 103: goto L_0x0035;
                     case 114276: goto L_0x002b;
@@ -1216,26 +1192,25 @@ public class SvgHelper {
             L_0x003f:
                 r7 = -1
             L_0x0040:
-                if (r7 == 0) goto L_0x004e
-                if (r7 == r3) goto L_0x00b6
-                if (r7 == r1) goto L_0x004b
-                if (r7 == r0) goto L_0x004b
-                if (r7 == r9) goto L_0x004b
-                goto L_0x00b6
-            L_0x004b:
-                r6.boundsMode = r2
-                goto L_0x00b6
-            L_0x004e:
+                if (r7 == 0) goto L_0x004c
+                if (r7 == r1) goto L_0x0049
+                if (r7 == r0) goto L_0x0049
+                if (r7 == r9) goto L_0x0049
+                goto L_0x00b4
+            L_0x0049:
+                r6.boundsMode = r3
+                goto L_0x00b4
+            L_0x004c:
                 java.lang.StringBuilder r7 = r6.styles
-                if (r7 == 0) goto L_0x00b6
+                if (r7 == 0) goto L_0x00b4
                 java.lang.String r7 = r7.toString()
                 java.lang.String r8 = "\\}"
                 java.lang.String[] r7 = r7.split(r8)
                 r8 = 0
-            L_0x005d:
+            L_0x005b:
                 int r9 = r7.length
                 r0 = 0
-                if (r8 >= r9) goto L_0x00b4
+                if (r8 >= r9) goto L_0x00b2
                 r9 = r7[r8]
                 java.lang.String r9 = r9.trim()
                 java.lang.String r1 = ""
@@ -1246,21 +1221,21 @@ public class SvgHelper {
                 r7[r8] = r9
                 r9 = r7[r8]
                 int r9 = r9.length()
-                if (r9 == 0) goto L_0x00b1
+                if (r9 == 0) goto L_0x00af
                 r9 = r7[r8]
-                char r9 = r9.charAt(r2)
+                char r9 = r9.charAt(r3)
                 r1 = 46
-                if (r9 == r1) goto L_0x008a
-                goto L_0x00b1
-            L_0x008a:
+                if (r9 == r1) goto L_0x0088
+                goto L_0x00af
+            L_0x0088:
                 r9 = r7[r8]
                 r1 = 123(0x7b, float:1.72E-43)
                 int r9 = r9.indexOf(r1)
-                if (r9 >= 0) goto L_0x0095
-                goto L_0x00b1
-            L_0x0095:
+                if (r9 >= 0) goto L_0x0093
+                goto L_0x00af
+            L_0x0093:
                 r1 = r7[r8]
-                java.lang.String r1 = r1.substring(r3, r9)
+                java.lang.String r1 = r1.substring(r2, r9)
                 java.lang.String r1 = r1.trim()
                 r4 = r7[r8]
                 int r9 = r9 + 1
@@ -1269,12 +1244,12 @@ public class SvgHelper {
                 org.telegram.ui.Components.SvgHelper$StyleSet r5 = new org.telegram.ui.Components.SvgHelper$StyleSet
                 r5.<init>(r9)
                 r4.put(r1, r5)
-            L_0x00b1:
+            L_0x00af:
                 int r8 = r8 + 1
-                goto L_0x005d
-            L_0x00b4:
+                goto L_0x005b
+            L_0x00b2:
                 r6.styles = r0
-            L_0x00b6:
+            L_0x00b4:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.SVGHandler.endElement(java.lang.String, java.lang.String, java.lang.String):void");
@@ -1354,22 +1329,22 @@ public class SvgHelper {
             this.current = read();
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:10:0x0028, code lost:
-            r15.current = read();
-            r5 = r15.current;
+        /* JADX WARNING: Code restructure failed: missing block: B:10:0x002a, code lost:
+            r6 = read();
+            r0.current = r6;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:11:0x0030, code lost:
-            if (r5 == '.') goto L_0x005b;
+            if (r6 == '.') goto L_0x0055;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:12:0x0032, code lost:
-            if (r5 == 'E') goto L_0x005b;
+            if (r6 == 'E') goto L_0x0055;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:13:0x0034, code lost:
-            if (r5 == 'e') goto L_0x005b;
+            if (r6 == 'e') goto L_0x0055;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:14:0x0036, code lost:
-            switch(r5) {
-                case 48: goto L_0x0028;
+            switch(r6) {
+                case 48: goto L_0x002a;
                 case 49: goto L_0x003a;
                 case 50: goto L_0x003a;
                 case 51: goto L_0x003a;
@@ -1386,25 +1361,26 @@ public class SvgHelper {
             return 0.0f;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:16:0x003a, code lost:
-            r5 = 0;
-            r11 = 0;
+            r6 = 0;
             r12 = 0;
+            r13 = 0;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:17:0x003d, code lost:
-            if (r5 >= 9) goto L_0x0049;
+            if (r6 >= 9) goto L_0x0049;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:18:0x003f, code lost:
-            r5 = r5 + 1;
-            r12 = (r12 * 10) + (r15.current - '0');
+            r6 = r6 + 1;
+            r13 = (r13 * 10) + (r0.current - '0');
          */
         /* JADX WARNING: Code restructure failed: missing block: B:19:0x0049, code lost:
-            r11 = r11 + 1;
+            r12 = r12 + 1;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:20:0x004b, code lost:
-            r15.current = read();
+            r14 = read();
+            r0.current = r14;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:21:0x0053, code lost:
-            switch(r15.current) {
+        /* JADX WARNING: Code restructure failed: missing block: B:21:0x0051, code lost:
+            switch(r14) {
                 case 48: goto L_0x003d;
                 case 49: goto L_0x003d;
                 case 50: goto L_0x003d;
@@ -1415,117 +1391,114 @@ public class SvgHelper {
                 case 55: goto L_0x003d;
                 case 56: goto L_0x003d;
                 case 57: goto L_0x003d;
-                default: goto L_0x0056;
+                default: goto L_0x0054;
             };
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:22:0x0056, code lost:
-            r13 = r12;
-            r12 = r11;
-            r11 = r5;
-            r5 = true;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:23:0x005b, code lost:
-            r5 = true;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x005e, code lost:
-            r11 = 0;
+        /* JADX WARNING: Code restructure failed: missing block: B:22:0x0055, code lost:
+            r6 = 0;
             r12 = 0;
             r13 = 0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:58:0x00d0, code lost:
-            r15.current = read();
+        /* JADX WARNING: Code restructure failed: missing block: B:23:0x0058, code lost:
+            r14 = true;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:59:0x00d8, code lost:
-            switch(r15.current) {
-                case 48: goto L_0x00d0;
-                case 49: goto L_0x00dc;
-                case 50: goto L_0x00dc;
-                case 51: goto L_0x00dc;
-                case 52: goto L_0x00dc;
-                case 53: goto L_0x00dc;
-                case 54: goto L_0x00dc;
-                case 55: goto L_0x00dc;
-                case 56: goto L_0x00dc;
-                case 57: goto L_0x00dc;
-                default: goto L_0x00db;
+        /* JADX WARNING: Code restructure failed: missing block: B:56:0x00c7, code lost:
+            r2 = read();
+            r0.current = r2;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:57:0x00cd, code lost:
+            switch(r2) {
+                case 48: goto L_0x00c7;
+                case 49: goto L_0x00d1;
+                case 50: goto L_0x00d1;
+                case 51: goto L_0x00d1;
+                case 52: goto L_0x00d1;
+                case 53: goto L_0x00d1;
+                case 54: goto L_0x00d1;
+                case 55: goto L_0x00d1;
+                case 56: goto L_0x00d1;
+                case 57: goto L_0x00d1;
+                default: goto L_0x00d0;
             };
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:60:0x00dc, code lost:
-            r1 = 0;
+        /* JADX WARNING: Code restructure failed: missing block: B:58:0x00d1, code lost:
+            r2 = 0;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:60:0x00d3, code lost:
+            if (r5 >= 3) goto L_0x00de;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:61:0x00d5, code lost:
+            r5 = r5 + 1;
+            r2 = (r2 * 10) + (r0.current - '0');
          */
         /* JADX WARNING: Code restructure failed: missing block: B:62:0x00de, code lost:
-            if (r4 >= 3) goto L_0x00e9;
+            r3 = read();
+            r0.current = r3;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:63:0x00e0, code lost:
-            r4 = r4 + 1;
-            r1 = (r1 * 10) + (r15.current - '0');
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:64:0x00e9, code lost:
-            r15.current = read();
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:65:0x00f1, code lost:
-            switch(r15.current) {
-                case 48: goto L_0x00dd;
-                case 49: goto L_0x00dd;
-                case 50: goto L_0x00dd;
-                case 51: goto L_0x00dd;
-                case 52: goto L_0x00dd;
-                case 53: goto L_0x00dd;
-                case 54: goto L_0x00dd;
-                case 55: goto L_0x00dd;
-                case 56: goto L_0x00dd;
-                case 57: goto L_0x00dd;
-                default: goto L_0x00f4;
+        /* JADX WARNING: Code restructure failed: missing block: B:63:0x00e4, code lost:
+            switch(r3) {
+                case 48: goto L_0x00d2;
+                case 49: goto L_0x00d2;
+                case 50: goto L_0x00d2;
+                case 51: goto L_0x00d2;
+                case 52: goto L_0x00d2;
+                case 53: goto L_0x00d2;
+                case 54: goto L_0x00d2;
+                case 55: goto L_0x00d2;
+                case 56: goto L_0x00d2;
+                case 57: goto L_0x00d2;
+                default: goto L_0x00e7;
             };
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:66:0x00f4, code lost:
-            r4 = r1;
+        /* JADX WARNING: Code restructure failed: missing block: B:64:0x00e7, code lost:
+            r5 = r2;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:24:0x005d  */
-        /* JADX WARNING: Removed duplicated region for block: B:28:0x0065  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x0078 A[LOOP_START, PHI: r12 
-          PHI: (r12v6 int) = (r12v0 int), (r12v7 int) binds: [B:33:0x0076, B:35:0x0082] A[DONT_GENERATE, DONT_INLINE]] */
-        /* JADX WARNING: Removed duplicated region for block: B:38:0x0088 A[LOOP_START, PHI: r11 r12 r13 
-          PHI: (r11v1 int) = (r11v0 int), (r11v2 int) binds: [B:83:0x0088, B:41:0x009d] A[DONT_GENERATE, DONT_INLINE]
-          PHI: (r12v3 int) = (r12v2 int), (r12v4 int) binds: [B:83:0x0088, B:41:0x009d] A[DONT_GENERATE, DONT_INLINE]
-          PHI: (r13v4 int) = (r13v0 int), (r13v5 int) binds: [B:83:0x0088, B:41:0x009d] A[DONT_GENERATE, DONT_INLINE]] */
-        /* JADX WARNING: Removed duplicated region for block: B:47:0x00b1  */
-        /* JADX WARNING: Removed duplicated region for block: B:54:0x00c6  */
-        /* JADX WARNING: Removed duplicated region for block: B:68:0x00f7  */
-        /* JADX WARNING: Removed duplicated region for block: B:71:0x00fb  */
-        /* JADX WARNING: Removed duplicated region for block: B:9:0x0025 A[RETURN] */
+        /* JADX WARNING: Removed duplicated region for block: B:24:0x005a  */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x0064  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0072 A[LOOP_START, PHI: r12 
+          PHI: (r12v6 int) = (r12v0 int), (r12v7 int) binds: [B:30:0x0070, B:32:0x007a] A[DONT_GENERATE, DONT_INLINE]] */
+        /* JADX WARNING: Removed duplicated region for block: B:35:0x0080 A[LOOP_START, PHI: r6 r12 r13 
+          PHI: (r6v4 int) = (r6v1 int), (r6v5 int) binds: [B:82:0x0080, B:38:0x0093] A[DONT_GENERATE, DONT_INLINE]
+          PHI: (r12v3 int) = (r12v2 int), (r12v4 int) binds: [B:82:0x0080, B:38:0x0093] A[DONT_GENERATE, DONT_INLINE]
+          PHI: (r13v4 int) = (r13v0 int), (r13v5 int) binds: [B:82:0x0080, B:38:0x0093] A[DONT_GENERATE, DONT_INLINE]] */
+        /* JADX WARNING: Removed duplicated region for block: B:46:0x00aa  */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x00bd  */
+        /* JADX WARNING: Removed duplicated region for block: B:66:0x00ea  */
+        /* JADX WARNING: Removed duplicated region for block: B:69:0x00ee  */
+        /* JADX WARNING: Removed duplicated region for block: B:9:0x0027 A[RETURN] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public float parseFloat() {
             /*
-                r15 = this;
-                char r0 = r15.current
-                r1 = 45
-                r2 = 43
-                r3 = 1
-                r4 = 0
-                if (r0 == r2) goto L_0x0010
-                if (r0 == r1) goto L_0x000e
-                r0 = 1
-                goto L_0x0017
-            L_0x000e:
-                r0 = 0
-                goto L_0x0011
+                r17 = this;
+                r0 = r17
+                char r1 = r0.current
+                r2 = 45
+                r3 = 43
+                r4 = 1
+                r5 = 0
+                if (r1 == r3) goto L_0x0012
+                if (r1 == r2) goto L_0x0010
+                r1 = 1
+                goto L_0x0019
             L_0x0010:
-                r0 = 1
-            L_0x0011:
-                char r5 = r15.read()
-                r15.current = r5
-            L_0x0017:
-                char r5 = r15.current
-                r6 = 101(0x65, float:1.42E-43)
-                r7 = 69
-                r8 = 46
-                r9 = 9
-                r10 = 0
-                switch(r5) {
-                    case 46: goto L_0x005d;
-                    case 47: goto L_0x0025;
-                    case 48: goto L_0x0028;
+                r1 = 0
+                goto L_0x0013
+            L_0x0012:
+                r1 = 1
+            L_0x0013:
+                char r6 = r17.read()
+                r0.current = r6
+            L_0x0019:
+                char r6 = r0.current
+                r7 = 0
+                r8 = 101(0x65, float:1.42E-43)
+                r9 = 69
+                r10 = 46
+                r11 = 9
+                switch(r6) {
+                    case 46: goto L_0x005a;
+                    case 47: goto L_0x0027;
+                    case 48: goto L_0x002a;
                     case 49: goto L_0x003a;
                     case 50: goto L_0x003a;
                     case 51: goto L_0x003a;
@@ -1535,20 +1508,19 @@ public class SvgHelper {
                     case 55: goto L_0x003a;
                     case 56: goto L_0x003a;
                     case 57: goto L_0x003a;
-                    default: goto L_0x0025;
+                    default: goto L_0x0027;
                 }
-            L_0x0025:
-                r0 = 2143289344(0x7fCLASSNAME, float:NaN)
-                return r0
-            L_0x0028:
-                char r5 = r15.read()
-                r15.current = r5
-                char r5 = r15.current
-                if (r5 == r8) goto L_0x005b
-                if (r5 == r7) goto L_0x005b
-                if (r5 == r6) goto L_0x005b
-                switch(r5) {
-                    case 48: goto L_0x0028;
+            L_0x0027:
+                r1 = 2143289344(0x7fCLASSNAME, float:NaN)
+                return r1
+            L_0x002a:
+                char r6 = r17.read()
+                r0.current = r6
+                if (r6 == r10) goto L_0x0055
+                if (r6 == r9) goto L_0x0055
+                if (r6 == r8) goto L_0x0055
+                switch(r6) {
+                    case 48: goto L_0x002a;
                     case 49: goto L_0x003a;
                     case 50: goto L_0x003a;
                     case 51: goto L_0x003a;
@@ -1561,26 +1533,25 @@ public class SvgHelper {
                     default: goto L_0x0039;
                 }
             L_0x0039:
-                return r10
+                return r7
             L_0x003a:
-                r5 = 0
-                r11 = 0
+                r6 = 0
                 r12 = 0
+                r13 = 0
             L_0x003d:
-                if (r5 >= r9) goto L_0x0049
-                int r5 = r5 + 1
-                int r12 = r12 * 10
-                char r13 = r15.current
-                int r13 = r13 + -48
-                int r12 = r12 + r13
+                if (r6 >= r11) goto L_0x0049
+                int r6 = r6 + 1
+                int r13 = r13 * 10
+                char r14 = r0.current
+                int r14 = r14 + -48
+                int r13 = r13 + r14
                 goto L_0x004b
             L_0x0049:
-                int r11 = r11 + 1
+                int r12 = r12 + 1
             L_0x004b:
-                char r13 = r15.read()
-                r15.current = r13
-                char r13 = r15.current
-                switch(r13) {
+                char r14 = r17.read()
+                r0.current = r14
+                switch(r14) {
                     case 48: goto L_0x003d;
                     case 49: goto L_0x003d;
                     case 50: goto L_0x003d;
@@ -1591,218 +1562,217 @@ public class SvgHelper {
                     case 55: goto L_0x003d;
                     case 56: goto L_0x003d;
                     case 57: goto L_0x003d;
-                    default: goto L_0x0056;
+                    default: goto L_0x0054;
                 }
-            L_0x0056:
-                r13 = r12
-                r12 = r11
-                r11 = r5
-                r5 = 1
-                goto L_0x0061
-            L_0x005b:
-                r5 = 1
-                goto L_0x005e
-            L_0x005d:
-                r5 = 0
-            L_0x005e:
-                r11 = 0
+            L_0x0054:
+                goto L_0x0058
+            L_0x0055:
+                r6 = 0
                 r12 = 0
                 r13 = 0
-            L_0x0061:
-                char r14 = r15.current
-                if (r14 != r8) goto L_0x00a0
-                char r8 = r15.read()
-                r15.current = r8
-                char r8 = r15.current
-                switch(r8) {
-                    case 48: goto L_0x0076;
-                    case 49: goto L_0x0088;
-                    case 50: goto L_0x0088;
-                    case 51: goto L_0x0088;
-                    case 52: goto L_0x0088;
-                    case 53: goto L_0x0088;
-                    case 54: goto L_0x0088;
-                    case 55: goto L_0x0088;
-                    case 56: goto L_0x0088;
-                    case 57: goto L_0x0088;
-                    default: goto L_0x0070;
+            L_0x0058:
+                r14 = 1
+                goto L_0x005e
+            L_0x005a:
+                r6 = 0
+                r12 = 0
+                r13 = 0
+                r14 = 0
+            L_0x005e:
+                char r15 = r0.current
+                r16 = 0
+                if (r15 != r10) goto L_0x009b
+                char r10 = r17.read()
+                r0.current = r10
+                switch(r10) {
+                    case 48: goto L_0x0070;
+                    case 49: goto L_0x0080;
+                    case 50: goto L_0x0080;
+                    case 51: goto L_0x0080;
+                    case 52: goto L_0x0080;
+                    case 53: goto L_0x0080;
+                    case 54: goto L_0x0080;
+                    case 55: goto L_0x0080;
+                    case 56: goto L_0x0080;
+                    case 57: goto L_0x0080;
+                    default: goto L_0x006d;
                 }
+            L_0x006d:
+                if (r14 == 0) goto L_0x0097
+                goto L_0x009b
             L_0x0070:
-                if (r5 != 0) goto L_0x00a0
-                r15.reportUnexpectedCharacterError(r8)
-                return r10
-            L_0x0076:
-                if (r11 != 0) goto L_0x0088
-            L_0x0078:
-                char r8 = r15.read()
-                r15.current = r8
+                if (r6 != 0) goto L_0x0080
+            L_0x0072:
+                char r10 = r17.read()
+                r0.current = r10
                 int r12 = r12 + -1
-                char r8 = r15.current
-                switch(r8) {
-                    case 48: goto L_0x0078;
-                    case 49: goto L_0x0088;
-                    case 50: goto L_0x0088;
-                    case 51: goto L_0x0088;
-                    case 52: goto L_0x0088;
-                    case 53: goto L_0x0088;
-                    case 54: goto L_0x0088;
-                    case 55: goto L_0x0088;
-                    case 56: goto L_0x0088;
-                    case 57: goto L_0x0088;
-                    default: goto L_0x0085;
+                switch(r10) {
+                    case 48: goto L_0x0072;
+                    case 49: goto L_0x0080;
+                    case 50: goto L_0x0080;
+                    case 51: goto L_0x0080;
+                    case 52: goto L_0x0080;
+                    case 53: goto L_0x0080;
+                    case 54: goto L_0x0080;
+                    case 55: goto L_0x0080;
+                    case 56: goto L_0x0080;
+                    case 57: goto L_0x0080;
+                    default: goto L_0x007d;
                 }
-            L_0x0085:
-                if (r5 != 0) goto L_0x00a0
-                return r10
-            L_0x0088:
-                if (r11 >= r9) goto L_0x0095
-                int r11 = r11 + 1
+            L_0x007d:
+                if (r14 != 0) goto L_0x009b
+                return r7
+            L_0x0080:
+                if (r6 >= r11) goto L_0x008d
+                int r6 = r6 + 1
                 int r13 = r13 * 10
-                char r5 = r15.current
-                int r5 = r5 + -48
-                int r13 = r13 + r5
+                char r7 = r0.current
+                int r7 = r7 + -48
+                int r13 = r13 + r7
                 int r12 = r12 + -1
-            L_0x0095:
-                char r5 = r15.read()
-                r15.current = r5
-                char r5 = r15.current
-                switch(r5) {
-                    case 48: goto L_0x0088;
-                    case 49: goto L_0x0088;
-                    case 50: goto L_0x0088;
-                    case 51: goto L_0x0088;
-                    case 52: goto L_0x0088;
-                    case 53: goto L_0x0088;
-                    case 54: goto L_0x0088;
-                    case 55: goto L_0x0088;
-                    case 56: goto L_0x0088;
-                    case 57: goto L_0x0088;
-                    default: goto L_0x00a0;
+            L_0x008d:
+                char r7 = r17.read()
+                r0.current = r7
+                switch(r7) {
+                    case 48: goto L_0x0080;
+                    case 49: goto L_0x0080;
+                    case 50: goto L_0x0080;
+                    case 51: goto L_0x0080;
+                    case 52: goto L_0x0080;
+                    case 53: goto L_0x0080;
+                    case 54: goto L_0x0080;
+                    case 55: goto L_0x0080;
+                    case 56: goto L_0x0080;
+                    case 57: goto L_0x0080;
+                    default: goto L_0x0096;
                 }
-            L_0x00a0:
-                char r5 = r15.current
-                if (r5 == r7) goto L_0x00a7
-                if (r5 == r6) goto L_0x00a7
-                goto L_0x00f5
-            L_0x00a7:
-                char r5 = r15.read()
-                r15.current = r5
-                char r5 = r15.current
-                if (r5 == r2) goto L_0x00bb
-                if (r5 == r1) goto L_0x00ba
-                switch(r5) {
-                    case 48: goto L_0x00ca;
-                    case 49: goto L_0x00ca;
-                    case 50: goto L_0x00ca;
-                    case 51: goto L_0x00ca;
-                    case 52: goto L_0x00ca;
-                    case 53: goto L_0x00ca;
-                    case 54: goto L_0x00ca;
-                    case 55: goto L_0x00ca;
-                    case 56: goto L_0x00ca;
-                    case 57: goto L_0x00ca;
-                    default: goto L_0x00b6;
+            L_0x0096:
+                goto L_0x009b
+            L_0x0097:
+                r0.reportUnexpectedCharacterError(r10)
+                throw r16
+            L_0x009b:
+                char r6 = r0.current
+                if (r6 == r9) goto L_0x00a2
+                if (r6 == r8) goto L_0x00a2
+                goto L_0x00e8
+            L_0x00a2:
+                char r6 = r17.read()
+                r0.current = r6
+                if (r6 == r3) goto L_0x00b4
+                if (r6 == r2) goto L_0x00b3
+                switch(r6) {
+                    case 48: goto L_0x00c1;
+                    case 49: goto L_0x00c1;
+                    case 50: goto L_0x00c1;
+                    case 51: goto L_0x00c1;
+                    case 52: goto L_0x00c1;
+                    case 53: goto L_0x00c1;
+                    case 54: goto L_0x00c1;
+                    case 55: goto L_0x00c1;
+                    case 56: goto L_0x00c1;
+                    case 57: goto L_0x00c1;
+                    default: goto L_0x00af;
                 }
-            L_0x00b6:
-                r15.reportUnexpectedCharacterError(r5)
-                return r10
-            L_0x00ba:
-                r3 = 0
-            L_0x00bb:
-                char r1 = r15.read()
-                r15.current = r1
-                char r1 = r15.current
-                switch(r1) {
-                    case 48: goto L_0x00ca;
-                    case 49: goto L_0x00ca;
-                    case 50: goto L_0x00ca;
-                    case 51: goto L_0x00ca;
-                    case 52: goto L_0x00ca;
-                    case 53: goto L_0x00ca;
-                    case 54: goto L_0x00ca;
-                    case 55: goto L_0x00ca;
-                    case 56: goto L_0x00ca;
-                    case 57: goto L_0x00ca;
+            L_0x00af:
+                r0.reportUnexpectedCharacterError(r6)
+                throw r16
+            L_0x00b3:
+                r4 = 0
+            L_0x00b4:
+                char r2 = r17.read()
+                r0.current = r2
+                switch(r2) {
+                    case 48: goto L_0x00c1;
+                    case 49: goto L_0x00c1;
+                    case 50: goto L_0x00c1;
+                    case 51: goto L_0x00c1;
+                    case 52: goto L_0x00c1;
+                    case 53: goto L_0x00c1;
+                    case 54: goto L_0x00c1;
+                    case 55: goto L_0x00c1;
+                    case 56: goto L_0x00c1;
+                    case 57: goto L_0x00c1;
+                    default: goto L_0x00bd;
+                }
+            L_0x00bd:
+                r0.reportUnexpectedCharacterError(r2)
+                goto L_0x00f4
+            L_0x00c1:
+                char r2 = r0.current
+                switch(r2) {
+                    case 48: goto L_0x00c7;
+                    case 49: goto L_0x00d1;
+                    case 50: goto L_0x00d1;
+                    case 51: goto L_0x00d1;
+                    case 52: goto L_0x00d1;
+                    case 53: goto L_0x00d1;
+                    case 54: goto L_0x00d1;
+                    case 55: goto L_0x00d1;
+                    case 56: goto L_0x00d1;
+                    case 57: goto L_0x00d1;
                     default: goto L_0x00c6;
                 }
             L_0x00c6:
-                r15.reportUnexpectedCharacterError(r1)
-                return r10
-            L_0x00ca:
-                char r1 = r15.current
-                switch(r1) {
-                    case 48: goto L_0x00d0;
-                    case 49: goto L_0x00dc;
-                    case 50: goto L_0x00dc;
-                    case 51: goto L_0x00dc;
-                    case 52: goto L_0x00dc;
-                    case 53: goto L_0x00dc;
-                    case 54: goto L_0x00dc;
-                    case 55: goto L_0x00dc;
-                    case 56: goto L_0x00dc;
-                    case 57: goto L_0x00dc;
-                    default: goto L_0x00cf;
-                }
-            L_0x00cf:
-                goto L_0x00f5
-            L_0x00d0:
-                char r1 = r15.read()
-                r15.current = r1
-                char r1 = r15.current
-                switch(r1) {
-                    case 48: goto L_0x00d0;
-                    case 49: goto L_0x00dc;
-                    case 50: goto L_0x00dc;
-                    case 51: goto L_0x00dc;
-                    case 52: goto L_0x00dc;
-                    case 53: goto L_0x00dc;
-                    case 54: goto L_0x00dc;
-                    case 55: goto L_0x00dc;
-                    case 56: goto L_0x00dc;
-                    case 57: goto L_0x00dc;
-                    default: goto L_0x00db;
-                }
-            L_0x00db:
-                goto L_0x00f5
-            L_0x00dc:
-                r1 = 0
-            L_0x00dd:
-                r2 = 3
-                if (r4 >= r2) goto L_0x00e9
-                int r4 = r4 + 1
-                int r1 = r1 * 10
-                char r2 = r15.current
-                int r2 = r2 + -48
-                int r1 = r1 + r2
-            L_0x00e9:
-                char r2 = r15.read()
-                r15.current = r2
-                char r2 = r15.current
+                goto L_0x00e8
+            L_0x00c7:
+                char r2 = r17.read()
+                r0.current = r2
                 switch(r2) {
-                    case 48: goto L_0x00dd;
-                    case 49: goto L_0x00dd;
-                    case 50: goto L_0x00dd;
-                    case 51: goto L_0x00dd;
-                    case 52: goto L_0x00dd;
-                    case 53: goto L_0x00dd;
-                    case 54: goto L_0x00dd;
-                    case 55: goto L_0x00dd;
-                    case 56: goto L_0x00dd;
-                    case 57: goto L_0x00dd;
-                    default: goto L_0x00f4;
+                    case 48: goto L_0x00c7;
+                    case 49: goto L_0x00d1;
+                    case 50: goto L_0x00d1;
+                    case 51: goto L_0x00d1;
+                    case 52: goto L_0x00d1;
+                    case 53: goto L_0x00d1;
+                    case 54: goto L_0x00d1;
+                    case 55: goto L_0x00d1;
+                    case 56: goto L_0x00d1;
+                    case 57: goto L_0x00d1;
+                    default: goto L_0x00d0;
                 }
-            L_0x00f4:
-                r4 = r1
-            L_0x00f5:
-                if (r3 != 0) goto L_0x00f8
-                int r4 = -r4
-            L_0x00f8:
-                int r4 = r4 + r12
-                if (r0 != 0) goto L_0x00fc
+            L_0x00d0:
+                goto L_0x00e8
+            L_0x00d1:
+                r2 = 0
+            L_0x00d2:
+                r3 = 3
+                if (r5 >= r3) goto L_0x00de
+                int r5 = r5 + 1
+                int r2 = r2 * 10
+                char r3 = r0.current
+                int r3 = r3 + -48
+                int r2 = r2 + r3
+            L_0x00de:
+                char r3 = r17.read()
+                r0.current = r3
+                switch(r3) {
+                    case 48: goto L_0x00d2;
+                    case 49: goto L_0x00d2;
+                    case 50: goto L_0x00d2;
+                    case 51: goto L_0x00d2;
+                    case 52: goto L_0x00d2;
+                    case 53: goto L_0x00d2;
+                    case 54: goto L_0x00d2;
+                    case 55: goto L_0x00d2;
+                    case 56: goto L_0x00d2;
+                    case 57: goto L_0x00d2;
+                    default: goto L_0x00e7;
+                }
+            L_0x00e7:
+                r5 = r2
+            L_0x00e8:
+                if (r4 != 0) goto L_0x00eb
+                int r5 = -r5
+            L_0x00eb:
+                int r5 = r5 + r12
+                if (r1 != 0) goto L_0x00ef
                 int r13 = -r13
-            L_0x00fc:
-                float r0 = r15.buildFloat(r13, r4)
-                return r0
+            L_0x00ef:
+                float r1 = r0.buildFloat(r13, r5)
+                return r1
+            L_0x00f4:
+                throw r16
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.ParserHelper.parseFloat():float");
         }

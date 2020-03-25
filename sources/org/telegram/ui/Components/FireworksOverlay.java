@@ -19,14 +19,13 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 
 public class FireworksOverlay extends View {
-    private static int[] colors = {-13845272, -6421296, -79102, -187561, -14185218, -10897300};
+    private static int[] colors;
     private static final int fallParticlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 20 : 30);
     private static int[] heartColors = {-1944197, -10498574, -9623, -2399389, -1870160};
     /* access modifiers changed from: private */
     public static Drawable[] heartDrawable;
-    private static Paint[] heartPaint;
     /* access modifiers changed from: private */
-    public static Paint[] paint = new Paint[colors.length];
+    public static Paint[] paint;
     private static final int particlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 50 : 60);
     private int fallingDownCount;
     private boolean isFebruary14;
@@ -46,6 +45,9 @@ public class FireworksOverlay extends View {
     }
 
     static {
+        int[] iArr = {-13845272, -6421296, -79102, -187561, -14185218, -10897300};
+        colors = iArr;
+        paint = new Paint[iArr.length];
         int i = 0;
         while (true) {
             Paint[] paintArr = paint;
@@ -112,46 +114,50 @@ public class FireworksOverlay extends View {
             if (this.xFinished != 0) {
                 float dp = ((float) AndroidUtilities.dp(1.0f)) * 0.5f;
                 if (this.xFinished == 1) {
-                    this.moveX += dp * f * 0.05f;
-                    if (this.moveX >= dp) {
+                    float f4 = this.moveX + (dp * f * 0.05f);
+                    this.moveX = f4;
+                    if (f4 >= dp) {
                         this.xFinished = 2;
                     }
                 } else {
-                    this.moveX -= (dp * f) * 0.05f;
-                    if (this.moveX <= (-dp)) {
+                    float f5 = this.moveX - ((dp * f) * 0.05f);
+                    this.moveX = f5;
+                    if (f5 <= (-dp)) {
                         this.xFinished = 1;
                     }
                 }
             } else if (this.side == 0) {
                 if (f3 > 0.0f) {
-                    this.moveX = f3 - (0.05f * f);
-                    if (this.moveX <= 0.0f) {
+                    float f6 = f3 - (0.05f * f);
+                    this.moveX = f6;
+                    if (f6 <= 0.0f) {
                         this.moveX = 0.0f;
                         this.xFinished = this.finishedStart;
                     }
                 }
             } else if (f3 < 0.0f) {
-                this.moveX = f3 + (0.05f * f);
-                if (this.moveX >= 0.0f) {
+                float f7 = f3 + (0.05f * f);
+                this.moveX = f7;
+                if (f7 >= 0.0f) {
                     this.moveX = 0.0f;
                     this.xFinished = this.finishedStart;
                 }
             }
-            float f4 = ((float) (-AndroidUtilities.dp(1.0f))) / 2.0f;
-            boolean z = this.moveY < f4;
-            float f5 = this.moveY;
-            if (f5 > f4) {
-                this.moveY = f5 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f * FireworksOverlay.this.speedCoef);
+            float f8 = ((float) (-AndroidUtilities.dp(1.0f))) / 2.0f;
+            boolean z = this.moveY < f8;
+            float f9 = this.moveY;
+            if (f9 > f8) {
+                this.moveY = f9 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f * FireworksOverlay.this.speedCoef);
             } else {
-                this.moveY = f5 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f);
+                this.moveY = f9 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f);
             }
-            if (z && this.moveY > f4) {
+            if (z && this.moveY > f8) {
                 FireworksOverlay.access$408(FireworksOverlay.this);
             }
             byte b = this.type;
             if (b == 1 || b == 2) {
-                this.rotation = (short) ((int) (((float) this.rotation) + (f * 10.0f)));
-                short s = this.rotation;
+                short s = (short) ((int) (((float) this.rotation) + (f * 10.0f)));
+                this.rotation = s;
                 if (s > 360) {
                     this.rotation = (short) (s - 360);
                 }
@@ -186,8 +192,9 @@ public class FireworksOverlay extends View {
 
     private Particle createParticle(boolean z) {
         Particle particle = new Particle();
-        particle.type = (byte) Utilities.random.nextInt(2);
-        if (!this.isFebruary14 || particle.type != 0) {
+        byte nextInt = (byte) Utilities.random.nextInt(2);
+        particle.type = nextInt;
+        if (!this.isFebruary14 || nextInt != 0) {
             particle.colorType = (byte) Utilities.random.nextInt(colors.length);
         } else {
             particle.type = 2;
@@ -241,7 +248,7 @@ public class FireworksOverlay extends View {
             z = false;
         }
         this.isFebruary14 = z;
-        if (this.isFebruary14) {
+        if (z) {
             loadHeartDrawables();
         }
         for (int i2 = 0; i2 < particlesCount; i2++) {
@@ -281,8 +288,9 @@ public class FireworksOverlay extends View {
         }
         if (this.fallingDownCount >= particlesCount / 2 && this.speedCoef > 0.2f) {
             startFall();
-            this.speedCoef -= (((float) i) / 16.0f) * 0.15f;
-            if (this.speedCoef < 0.2f) {
+            float f = this.speedCoef - ((((float) i) / 16.0f) * 0.15f);
+            this.speedCoef = f;
+            if (f < 0.2f) {
                 this.speedCoef = 0.2f;
             }
         }

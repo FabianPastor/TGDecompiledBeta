@@ -27,7 +27,6 @@ import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.CountrySelectActivity;
 
 public class NewContactActivity extends BaseFragment implements AdapterView.OnItemSelectedListener {
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public AvatarDrawable avatarDrawable;
     /* access modifiers changed from: private */
@@ -78,15 +77,15 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x04b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0490  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r23) {
+    public android.view.View createView(android.content.Context r24) {
         /*
-            r22 = this;
-            r1 = r22
-            r0 = r23
+            r23 = this;
+            r1 = r23
+            r0 = r24
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165430(0x7var_f6, float:1.7945077E38)
+            r3 = 2131165437(0x7var_fd, float:1.7945091E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
@@ -103,7 +102,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.AvatarDrawable r2 = new org.telegram.ui.Components.AvatarDrawable
             r2.<init>()
             r1.avatarDrawable = r2
-            org.telegram.ui.Components.AvatarDrawable r2 = r1.avatarDrawable
             java.lang.String r4 = ""
             r5 = 5
             r2.setInfo(r5, r4, r4)
@@ -111,23 +109,21 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r4 = 1113587712(0x42600000, float:56.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r6 = 2131165459(0x7var_, float:1.7945136E38)
+            r6 = 2131165467(0x7var_b, float:1.7945152E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r4)
             r1.editDoneItem = r2
-            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r1.editDoneItem
             java.lang.String r4 = "Done"
-            r6 = 2131624955(0x7f0e03fb, float:1.8877104E38)
+            r6 = 2131624969(0x7f0e0409, float:1.8877133E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r6)
             r2.setContentDescription(r4)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
             r2.<init>(r0, r3)
             r1.editDoneItemProgress = r2
-            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r1.editDoneItem
-            org.telegram.ui.Components.ContextProgressView r4 = r1.editDoneItemProgress
+            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r1.editDoneItem
             r6 = -1
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
-            r2.addView(r4, r7)
+            r4.addView(r2, r7)
             org.telegram.ui.Components.ContextProgressView r2 = r1.editDoneItemProgress
             r4 = 4
             r2.setVisibility(r4)
@@ -137,7 +133,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.LinearLayout r2 = new android.widget.LinearLayout
             r2.<init>(r0)
             r1.contentLayout = r2
-            android.widget.LinearLayout r2 = r1.contentLayout
             r4 = 1103101952(0x41CLASSNAME, float:24.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -169,7 +164,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.BackupImageView r4 = new org.telegram.ui.Components.BackupImageView
             r4.<init>(r0)
             r1.avatarImage = r4
-            org.telegram.ui.Components.BackupImageView r4 = r1.avatarImage
             org.telegram.ui.Components.AvatarDrawable r9 = r1.avatarDrawable
             r4.setImageDrawable(r9)
             org.telegram.ui.Components.BackupImageView r4 = r1.avatarImage
@@ -184,7 +178,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
             r4.<init>(r0)
             r1.firstNameField = r4
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
             r9 = 1099956224(0x41900000, float:18.0)
             r4.setTextSize(r3, r9)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
@@ -213,52 +206,51 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
             r4.setImeOptions(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            java.lang.String r13 = "FirstName"
-            r14 = 2131625177(0x7f0e04d9, float:1.8877555E38)
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r14)
-            r4.setHint(r13)
+            java.lang.String r14 = "FirstName"
+            r15 = 2131625251(0x7f0e0523, float:1.8877705E38)
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
+            r4.setHint(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setCursorColor(r13)
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setCursorColor(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r13 = 1101004800(0x41a00000, float:20.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r4.setCursorSize(r14)
+            r14 = 1101004800(0x41a00000, float:20.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            r4.setCursorSize(r15)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r14 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r4.setCursorWidth(r14)
+            r15 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r4.setCursorWidth(r15)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r15 = -1
-            r16 = 1107820544(0x42080000, float:34.0)
-            r17 = 51
-            r18 = 1118306304(0x42a80000, float:84.0)
-            r19 = 0
+            r16 = -1
+            r17 = 1107820544(0x42080000, float:34.0)
+            r18 = 51
+            r19 = 1118306304(0x42a80000, float:84.0)
             r20 = 0
             r21 = 0
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r2.addView(r4, r15)
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r2.addView(r4, r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4 r15 = new org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4
-            r15.<init>()
-            r4.setOnEditorActionListener(r15)
+            org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4 r6 = new org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4
+            r6.<init>()
+            r4.setOnEditorActionListener(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            org.telegram.ui.NewContactActivity$2 r15 = new org.telegram.ui.NewContactActivity$2
-            r15.<init>()
-            r4.addTextChangedListener(r15)
+            org.telegram.ui.NewContactActivity$2 r6 = new org.telegram.ui.NewContactActivity$2
+            r6.<init>()
+            r4.addTextChangedListener(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
             r4.<init>(r0)
             r1.lastNameField = r4
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             r4.setTextSize(r3, r9)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setHintTextColor(r15)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r4.setHintTextColor(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setTextColor(r15)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setTextColor(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
-            r4.setBackgroundDrawable(r15)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
+            r4.setBackgroundDrawable(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             r4.setMaxLines(r3)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
@@ -268,27 +260,25 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             r4.setGravity(r12)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r15 = 49152(0xCLASSNAME, float:6.8877E-41)
-            r4.setInputType(r15)
+            r4.setInputType(r13)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             r4.setImeOptions(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             java.lang.String r5 = "LastName"
-            r15 = 2131625427(0x7f0e05d3, float:1.8878062E38)
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r15)
+            r6 = 2131625514(0x7f0e062a, float:1.8878238E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r4.setHint(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r4.setCursorColor(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r14)
             r4.setCursorSize(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setCursorWidth(r14)
+            r4.setCursorWidth(r15)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r15 = -1
-            r19 = 1110441984(0x42300000, float:44.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
+            r20 = 1110441984(0x42300000, float:44.0)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r2.addView(r4, r5)
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.lastNameField
             org.telegram.ui.-$$Lambda$NewContactActivity$caCQM7G1cFeQM5WDamEHC5G1jDk r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$caCQM7G1cFeQM5WDamEHC5G1jDk
@@ -301,14 +291,12 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r0)
             r1.countryButton = r2
-            android.widget.TextView r2 = r1.countryButton
             r2.setTextSize(r3, r9)
             android.widget.TextView r2 = r1.countryButton
             r4 = 1082130432(0x40800000, float:4.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 1082130432(0x40800000, float:4.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r2.setPadding(r8, r4, r8, r5)
+            r2.setPadding(r8, r5, r8, r4)
             android.widget.TextView r2 = r1.countryButton
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r2.setTextColor(r4)
@@ -326,12 +314,12 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setBackground(r4)
             android.widget.LinearLayout r2 = r1.contentLayout
             android.widget.TextView r4 = r1.countryButton
-            r16 = 36
-            r17 = 0
-            r18 = 1103101952(0x41CLASSNAME, float:24.0)
-            r19 = 0
-            r20 = 1096810496(0x41600000, float:14.0)
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r16, r17, r18, r19, r20)
+            r17 = 36
+            r18 = 0
+            r19 = 1103101952(0x41CLASSNAME, float:24.0)
+            r20 = 0
+            r21 = 1096810496(0x41600000, float:14.0)
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21)
             r2.addView(r4, r5)
             android.widget.TextView r2 = r1.countryButton
             org.telegram.ui.-$$Lambda$NewContactActivity$1MsqwwjUsbFVncyFfb6LZrQJtdc r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$1MsqwwjUsbFVncyFfb6LZrQJtdc
@@ -340,35 +328,32 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.view.View r2 = new android.view.View
             r2.<init>(r0)
             r1.lineView = r2
-            android.view.View r2 = r1.lineView
             r4 = 1090519040(0x41000000, float:8.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 1090519040(0x41000000, float:8.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r2.setPadding(r4, r8, r5, r8)
+            r2.setPadding(r5, r8, r4, r8)
             android.view.View r2 = r1.lineView
             java.lang.String r4 = "windowBackgroundWhiteGrayLine"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r2.setBackgroundColor(r4)
             android.widget.LinearLayout r2 = r1.contentLayout
             android.view.View r4 = r1.lineView
-            r16 = 1
-            r18 = -1047789568(0xffffffffCLASSNAMECLASSNAME, float:-17.5)
-            r20 = 0
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r16, r17, r18, r19, r20)
+            r17 = 1
+            r19 = -1047789568(0xffffffffCLASSNAMECLASSNAME, float:-17.5)
+            r21 = 0
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21)
             r2.addView(r4, r5)
             android.widget.LinearLayout r2 = new android.widget.LinearLayout
             r2.<init>(r0)
             r2.setOrientation(r8)
             android.widget.LinearLayout r4 = r1.contentLayout
-            r16 = -2
-            r18 = 1101004800(0x41a00000, float:20.0)
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r16, r17, r18, r19, r20)
+            r17 = -2
+            r19 = 1101004800(0x41a00000, float:20.0)
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21)
             r4.addView(r2, r5)
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r0)
             r1.textView = r4
-            android.widget.TextView r4 = r1.textView
             java.lang.String r5 = "+"
             r4.setText(r5)
             android.widget.TextView r4 = r1.textView
@@ -380,48 +365,47 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r5 = 2
             r4.setImportantForAccessibility(r5)
             android.widget.TextView r4 = r1.textView
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7)
-            r2.addView(r4, r7)
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r7)
+            r2.addView(r4, r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
             r4.<init>(r0)
             r1.codeField = r4
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
             r4.setInputType(r12)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setTextColor(r7)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setTextColor(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
-            r4.setBackgroundDrawable(r7)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
+            r4.setBackgroundDrawable(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setCursorColor(r7)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setCursorColor(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r4.setCursorSize(r7)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            r4.setCursorSize(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            r4.setCursorWidth(r14)
+            r4.setCursorWidth(r15)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            r7 = 1092616192(0x41200000, float:10.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r4.setPadding(r7, r8, r8, r8)
+            r6 = 1092616192(0x41200000, float:10.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r4.setPadding(r6, r8, r8, r8)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
             r4.setTextSize(r3, r9)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
             r4.setMaxLines(r3)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            r7 = 19
-            r4.setGravity(r7)
+            r6 = 19
+            r4.setGravity(r6)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
             r7 = 268435461(0x10000005, float:2.5243564E-29)
             r4.setImeOptions(r7)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            r15 = 55
-            r16 = 36
-            r17 = -1055916032(0xffffffffCLASSNAME, float:-9.0)
-            r18 = 0
-            r19 = 1098907648(0x41800000, float:16.0)
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r16, r17, r18, r19, r20)
+            r16 = 55
+            r17 = 36
+            r18 = -1055916032(0xffffffffCLASSNAME, float:-9.0)
+            r19 = 0
+            r20 = 1098907648(0x41800000, float:16.0)
+            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21)
             r2.addView(r4, r7)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
             org.telegram.ui.NewContactActivity$4 r7 = new org.telegram.ui.NewContactActivity$4
@@ -434,7 +418,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.HintEditText r4 = new org.telegram.ui.Components.HintEditText
             r4.<init>(r0)
             r1.phoneField = r4
-            org.telegram.ui.Components.HintEditText r4 = r1.phoneField
             r4.setInputType(r12)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
@@ -451,24 +434,24 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r4.setCursorColor(r7)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r14)
             r4.setCursorSize(r7)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
-            r4.setCursorWidth(r14)
+            r4.setCursorWidth(r15)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
             r4.setTextSize(r3, r9)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
             r4.setMaxLines(r3)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
-            r7 = 19
-            r4.setGravity(r7)
+            r4.setGravity(r6)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
-            r7 = 268435462(0x10000006, float:2.5243567E-29)
-            r4.setImeOptions(r7)
+            r6 = 268435462(0x10000006, float:2.5243567E-29)
+            r4.setImeOptions(r6)
             org.telegram.ui.Components.HintEditText r4 = r1.phoneField
-            r7 = 1108344832(0x42100000, float:36.0)
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
-            r2.addView(r4, r7)
+            r6 = 1108344832(0x42100000, float:36.0)
+            r7 = -1
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r6)
+            r2.addView(r4, r6)
             org.telegram.ui.Components.HintEditText r2 = r1.phoneField
             org.telegram.ui.NewContactActivity$5 r4 = new org.telegram.ui.NewContactActivity$5
             r4.<init>()
@@ -483,101 +466,100 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setOnKeyListener(r4)
             java.util.HashMap r2 = new java.util.HashMap
             r2.<init>()
-            java.io.BufferedReader r4 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0450 }
-            java.io.InputStreamReader r7 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x0450 }
-            android.content.res.Resources r0 = r23.getResources()     // Catch:{ Exception -> 0x0450 }
-            android.content.res.AssetManager r0 = r0.getAssets()     // Catch:{ Exception -> 0x0450 }
-            java.lang.String r9 = "countries.txt"
-            java.io.InputStream r0 = r0.open(r9)     // Catch:{ Exception -> 0x0450 }
-            r7.<init>(r0)     // Catch:{ Exception -> 0x0450 }
-            r4.<init>(r7)     // Catch:{ Exception -> 0x0450 }
-        L_0x0413:
-            java.lang.String r0 = r4.readLine()     // Catch:{ Exception -> 0x0450 }
-            if (r0 == 0) goto L_0x044c
-            java.lang.String r7 = ";"
-            java.lang.String[] r0 = r0.split(r7)     // Catch:{ Exception -> 0x0450 }
-            java.util.ArrayList<java.lang.String> r7 = r1.countriesArray     // Catch:{ Exception -> 0x0450 }
-            r9 = r0[r5]     // Catch:{ Exception -> 0x0450 }
-            r7.add(r8, r9)     // Catch:{ Exception -> 0x0450 }
-            java.util.HashMap<java.lang.String, java.lang.String> r7 = r1.countriesMap     // Catch:{ Exception -> 0x0450 }
-            r9 = r0[r5]     // Catch:{ Exception -> 0x0450 }
-            r10 = r0[r8]     // Catch:{ Exception -> 0x0450 }
-            r7.put(r9, r10)     // Catch:{ Exception -> 0x0450 }
-            java.util.HashMap<java.lang.String, java.lang.String> r7 = r1.codesMap     // Catch:{ Exception -> 0x0450 }
-            r9 = r0[r8]     // Catch:{ Exception -> 0x0450 }
-            r10 = r0[r5]     // Catch:{ Exception -> 0x0450 }
-            r7.put(r9, r10)     // Catch:{ Exception -> 0x0450 }
-            int r7 = r0.length     // Catch:{ Exception -> 0x0450 }
-            if (r7 <= r12) goto L_0x0444
-            java.util.HashMap<java.lang.String, java.lang.String> r7 = r1.phoneFormatMap     // Catch:{ Exception -> 0x0450 }
-            r9 = r0[r8]     // Catch:{ Exception -> 0x0450 }
-            r10 = r0[r12]     // Catch:{ Exception -> 0x0450 }
-            r7.put(r9, r10)     // Catch:{ Exception -> 0x0450 }
-        L_0x0444:
-            r7 = r0[r3]     // Catch:{ Exception -> 0x0450 }
-            r0 = r0[r5]     // Catch:{ Exception -> 0x0450 }
-            r2.put(r7, r0)     // Catch:{ Exception -> 0x0450 }
-            goto L_0x0413
-        L_0x044c:
-            r4.close()     // Catch:{ Exception -> 0x0450 }
-            goto L_0x0454
-        L_0x0450:
+            java.io.BufferedReader r4 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0430 }
+            java.io.InputStreamReader r6 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x0430 }
+            android.content.res.Resources r0 = r24.getResources()     // Catch:{ Exception -> 0x0430 }
+            android.content.res.AssetManager r0 = r0.getAssets()     // Catch:{ Exception -> 0x0430 }
+            java.lang.String r7 = "countries.txt"
+            java.io.InputStream r0 = r0.open(r7)     // Catch:{ Exception -> 0x0430 }
+            r6.<init>(r0)     // Catch:{ Exception -> 0x0430 }
+            r4.<init>(r6)     // Catch:{ Exception -> 0x0430 }
+        L_0x03f3:
+            java.lang.String r0 = r4.readLine()     // Catch:{ Exception -> 0x0430 }
+            if (r0 == 0) goto L_0x042c
+            java.lang.String r6 = ";"
+            java.lang.String[] r0 = r0.split(r6)     // Catch:{ Exception -> 0x0430 }
+            java.util.ArrayList<java.lang.String> r6 = r1.countriesArray     // Catch:{ Exception -> 0x0430 }
+            r7 = r0[r5]     // Catch:{ Exception -> 0x0430 }
+            r6.add(r8, r7)     // Catch:{ Exception -> 0x0430 }
+            java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.countriesMap     // Catch:{ Exception -> 0x0430 }
+            r7 = r0[r5]     // Catch:{ Exception -> 0x0430 }
+            r9 = r0[r8]     // Catch:{ Exception -> 0x0430 }
+            r6.put(r7, r9)     // Catch:{ Exception -> 0x0430 }
+            java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.codesMap     // Catch:{ Exception -> 0x0430 }
+            r7 = r0[r8]     // Catch:{ Exception -> 0x0430 }
+            r9 = r0[r5]     // Catch:{ Exception -> 0x0430 }
+            r6.put(r7, r9)     // Catch:{ Exception -> 0x0430 }
+            int r6 = r0.length     // Catch:{ Exception -> 0x0430 }
+            if (r6 <= r12) goto L_0x0424
+            java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.phoneFormatMap     // Catch:{ Exception -> 0x0430 }
+            r7 = r0[r8]     // Catch:{ Exception -> 0x0430 }
+            r9 = r0[r12]     // Catch:{ Exception -> 0x0430 }
+            r6.put(r7, r9)     // Catch:{ Exception -> 0x0430 }
+        L_0x0424:
+            r6 = r0[r3]     // Catch:{ Exception -> 0x0430 }
+            r0 = r0[r5]     // Catch:{ Exception -> 0x0430 }
+            r2.put(r6, r0)     // Catch:{ Exception -> 0x0430 }
+            goto L_0x03f3
+        L_0x042c:
+            r4.close()     // Catch:{ Exception -> 0x0430 }
+            goto L_0x0434
+        L_0x0430:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0454:
+        L_0x0434:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
-            org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r4 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
-            java.util.Collections.sort(r0, r4)
+            org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r3 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
+            java.util.Collections.sort(r0, r3)
             java.lang.String r0 = r1.initialPhoneNumber
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            r4 = 0
-            if (r0 != 0) goto L_0x046e
+            r3 = 0
+            if (r0 != 0) goto L_0x044e
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             java.lang.String r2 = r1.initialPhoneNumber
             r0.setText(r2)
-            r1.initialPhoneNumber = r4
-            goto L_0x04c6
-        L_0x046e:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0483 }
-            java.lang.String r5 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r5)     // Catch:{ Exception -> 0x0483 }
-            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0483 }
-            if (r0 == 0) goto L_0x0487
-            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0483 }
-            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0483 }
-            goto L_0x0488
-        L_0x0483:
+            r1.initialPhoneNumber = r3
+            goto L_0x04a3
+        L_0x044e:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0463 }
+            java.lang.String r4 = "phone"
+            java.lang.Object r0 = r0.getSystemService(r4)     // Catch:{ Exception -> 0x0463 }
+            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0463 }
+            if (r0 == 0) goto L_0x0467
+            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0463 }
+            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0463 }
+            goto L_0x0468
+        L_0x0463:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0487:
-            r0 = r4
-        L_0x0488:
-            if (r0 == 0) goto L_0x04a9
+        L_0x0467:
+            r0 = r3
+        L_0x0468:
+            if (r0 == 0) goto L_0x0488
             java.lang.Object r0 = r2.get(r0)
             java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x04a9
+            if (r0 == 0) goto L_0x0488
             java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
             int r2 = r2.indexOf(r0)
-            if (r2 == r6) goto L_0x04a9
+            r4 = -1
+            if (r2 == r4) goto L_0x0488
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.codeField
-            java.util.HashMap<java.lang.String, java.lang.String> r5 = r1.countriesMap
-            java.lang.Object r0 = r5.get(r0)
+            java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.countriesMap
+            java.lang.Object r0 = r4.get(r0)
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             r2.setText(r0)
-            r1.countryState = r8
-        L_0x04a9:
+        L_0x0488:
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             int r0 = r0.length()
-            if (r0 != 0) goto L_0x04c6
+            if (r0 != 0) goto L_0x04a3
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131624688(0x7f0e02f0, float:1.8876563E38)
-            java.lang.String r5 = "ChooseCountry"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
+            r2 = 2131624695(0x7f0e02f7, float:1.8876577E38)
+            java.lang.String r4 = "ChooseCountry"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
             org.telegram.ui.Components.HintEditText r0 = r1.phoneField
-            r0.setHintText(r4)
-            r1.countryState = r3
-        L_0x04c6:
+            r0.setHintText(r3)
+        L_0x04a3:
             android.view.View r0 = r1.fragmentView
             return r0
         */
@@ -673,7 +655,6 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             this.countryButton.setText(str);
             String str3 = this.phoneFormatMap.get(str2);
             this.phoneField.setHintText(str3 != null ? str3.replace('X', 8211) : null);
-            this.countryState = 0;
             this.ignoreOnTextChange = false;
         }
     }
@@ -749,13 +730,12 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        $$Lambda$NewContactActivity$w3KTwAlwLqpY0K9fVsMRxI5REAU r9 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$NewContactActivity$w3KTwAlwLqpY0K9fVsMRxI5REAU r7 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 NewContactActivity.this.lambda$getThemeDescriptions$8$NewContactActivity();
             }
         };
-        $$Lambda$NewContactActivity$w3KTwAlwLqpY0K9fVsMRxI5REAU r7 = r9;
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.lineView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayLine"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"), new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, r7, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink")};
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.lineView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayLine"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.countryButton, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"), new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, r7, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$8$NewContactActivity() {

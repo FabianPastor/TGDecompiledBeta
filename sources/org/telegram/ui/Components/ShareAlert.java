@@ -48,7 +48,15 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$ReplyMarkup;
+import org.telegram.tgnet.TLRPC$TL_dialog;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_exportedMessageLink;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -63,7 +71,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     public EditTextEmoji commentTextView;
     private boolean copyLinkOnEnd;
     private ShareAlertDelegate delegate;
-    private TLRPC.TL_exportedMessageLink exportedMessageLink;
+    private TLRPC$TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
     /* access modifiers changed from: private */
     public FrameLayout frameLayout2;
@@ -91,7 +99,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     public EmptyTextProgressView searchEmptyView;
     private View selectedCountView;
     /* access modifiers changed from: private */
-    public LongSparseArray<TLRPC.Dialog> selectedDialogs = new LongSparseArray<>();
+    public LongSparseArray<TLRPC$Dialog> selectedDialogs = new LongSparseArray<>();
     private ArrayList<MessageObject> sendingMessageObjects;
     private String sendingText;
     /* access modifiers changed from: private */
@@ -121,7 +129,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     }
 
     private class SearchField extends FrameLayout {
-        private View backgroundView;
         /* access modifiers changed from: private */
         public ImageView clearSearchImageView;
         private CloseProgressDrawable2 progressDrawable;
@@ -132,20 +139,23 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         public SearchField(Context context) {
             super(context);
-            this.searchBackground = new View(context);
-            this.searchBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialogSearchBackground")));
+            View view = new View(context);
+            this.searchBackground = view;
+            view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialogSearchBackground")));
             addView(this.searchBackground, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
-            this.searchIconImageView = new ImageView(context);
-            this.searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView = new ImageView(context);
+            this.searchIconImageView = imageView;
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.searchIconImageView.setImageResource(NUM);
             this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.searchIconImageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
-            this.clearSearchImageView = new ImageView(context);
-            this.clearSearchImageView.setScaleType(ImageView.ScaleType.CENTER);
-            ImageView imageView = this.clearSearchImageView;
+            ImageView imageView2 = new ImageView(context);
+            this.clearSearchImageView = imageView2;
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView3 = this.clearSearchImageView;
             CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
             this.progressDrawable = closeProgressDrawable2;
-            imageView.setImageDrawable(closeProgressDrawable2);
+            imageView3.setImageDrawable(closeProgressDrawable2);
             this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
             this.clearSearchImageView.setScaleX(0.1f);
             this.clearSearchImageView.setScaleY(0.1f);
@@ -157,7 +167,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     ShareAlert.SearchField.this.lambda$new$0$ShareAlert$SearchField(view);
                 }
             });
-            this.searchEditText = new EditTextBoldCursor(context, ShareAlert.this) {
+            AnonymousClass1 r0 = new EditTextBoldCursor(context, ShareAlert.this) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     MotionEvent obtain = MotionEvent.obtain(motionEvent);
                     obtain.setLocation(obtain.getRawX(), obtain.getRawY() - ShareAlert.this.containerView.getTranslationY());
@@ -166,7 +176,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     return super.dispatchTouchEvent(motionEvent);
                 }
             };
-            this.searchEditText.setTextSize(1, 16.0f);
+            this.searchEditText = r0;
+            r0.setTextSize(1, 16.0f);
             this.searchEditText.setHintTextColor(Theme.getColor("dialogSearchHint"));
             this.searchEditText.setTextColor(Theme.getColor("dialogSearchText"));
             this.searchEditText.setBackgroundDrawable((Drawable) null);
@@ -298,11 +309,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.<init>(r4)
             r0.textPaint = r6
             android.content.res.Resources r6 = r22.getResources()
-            r7 = 2131165865(0x7var_a9, float:1.794596E38)
+            r7 = 2131165877(0x7var_b5, float:1.7945984E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
-            android.graphics.drawable.Drawable r6 = r0.shadowDrawable
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
             java.lang.String r8 = "dialogBackground"
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r8)
@@ -322,32 +332,31 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r0.sendingText = r6
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r0.sendingMessageObjects
             r7 = 0
-            if (r6 == 0) goto L_0x0098
+            if (r6 == 0) goto L_0x0094
             int r6 = r6.size()
             r9 = 0
-        L_0x0075:
-            if (r9 >= r6) goto L_0x0098
+        L_0x0073:
+            if (r9 >= r6) goto L_0x0094
             java.util.ArrayList<org.telegram.messenger.MessageObject> r10 = r0.sendingMessageObjects
             java.lang.Object r10 = r10.get(r9)
             org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
             boolean r11 = r10.isPoll()
-            if (r11 == 0) goto L_0x0095
+            if (r11 == 0) goto L_0x0091
             boolean r10 = r10.isPublicPoll()
-            if (r10 == 0) goto L_0x008d
+            if (r10 == 0) goto L_0x008b
             r10 = 2
-            goto L_0x008e
-        L_0x008d:
+            goto L_0x008c
+        L_0x008b:
             r10 = 1
-        L_0x008e:
+        L_0x008c:
             r0.hasPoll = r10
-            int r10 = r0.hasPoll
-            if (r10 != r5) goto L_0x0095
-            goto L_0x0098
-        L_0x0095:
+            if (r10 != r5) goto L_0x0091
+            goto L_0x0094
+        L_0x0091:
             int r9 = r9 + 1
-            goto L_0x0075
-        L_0x0098:
-            if (r3 == 0) goto L_0x00d3
+            goto L_0x0073
+        L_0x0094:
+            if (r3 == 0) goto L_0x00cf
             r0.loadingLink = r4
             org.telegram.tgnet.TLRPC$TL_channels_exportMessageLink r3 = new org.telegram.tgnet.TLRPC$TL_channels_exportMessageLink
             r3.<init>()
@@ -369,19 +378,17 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.-$$Lambda$ShareAlert$-zt1k1mc1Pf5YI45UjblkHkDCiI r5 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$-zt1k1mc1Pf5YI45UjblkHkDCiI
             r5.<init>(r1)
             r2.sendRequest(r3, r5)
-        L_0x00d3:
+        L_0x00cf:
             org.telegram.ui.Components.ShareAlert$1 r2 = new org.telegram.ui.Components.ShareAlert$1
             r2.<init>(r1, r7)
             r0.containerView = r2
-            android.view.ViewGroup r3 = r0.containerView
-            r3.setWillNotDraw(r7)
+            r2.setWillNotDraw(r7)
             android.view.ViewGroup r3 = r0.containerView
             int r5 = r0.backgroundPaddingLeft
             r3.setPadding(r5, r7, r5, r7)
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r1)
             r0.frameLayout = r3
-            android.widget.FrameLayout r3 = r0.frameLayout
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r8)
             r3.setBackgroundColor(r5)
             org.telegram.ui.Components.ShareAlert$SearchField r3 = new org.telegram.ui.Components.ShareAlert$SearchField
@@ -389,12 +396,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r5 = r0.frameLayout
             r6 = 51
             r9 = -1
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r9, (int) r6)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r6)
             r5.addView(r3, r10)
             org.telegram.ui.Components.ShareAlert$2 r5 = new org.telegram.ui.Components.ShareAlert$2
             r5.<init>(r1)
             r0.gridView = r5
-            org.telegram.ui.Components.RecyclerListView r5 = r0.gridView
             r10 = 13
             java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
             r5.setTag(r10)
@@ -421,7 +427,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5.setVerticalScrollBarEnabled(r7)
             org.telegram.ui.Components.RecyclerListView r5 = r0.gridView
             org.telegram.ui.Components.ShareAlert$4 r11 = new org.telegram.ui.Components.ShareAlert$4
-            r11.<init>()
+            r11.<init>(r0)
             r5.addItemDecoration(r11)
             android.view.ViewGroup r5 = r0.containerView
             org.telegram.ui.Components.RecyclerListView r11 = r0.gridView
@@ -454,12 +460,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = new org.telegram.ui.Components.EmptyTextProgressView
             r3.<init>(r1)
             r0.searchEmptyView = r3
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.setShowAtCenter(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r5 = 2131625682(0x7f0e06d2, float:1.8878579E38)
+            r5 = 2131625776(0x7f0e0730, float:1.887877E38)
             java.lang.String r11 = "NoChats"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r3.setText(r5)
@@ -501,7 +506,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.view.ViewGroup r3 = r0.containerView
             android.widget.FrameLayout r5 = r0.frameLayout
             r14 = 58
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r14, (int) r6)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r14, r6)
             r3.addView(r5, r6)
             android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
             int r5 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
@@ -522,75 +527,72 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r10 = r10[r4]
             r5.addView(r10, r3)
             boolean r3 = r0.isChannel
-            if (r3 != 0) goto L_0x025d
+            r5 = 48
+            java.lang.String r10 = "fonts/rmedium.ttf"
+            if (r3 != 0) goto L_0x0255
             java.lang.String r3 = r0.linkToCopy
-            if (r3 == 0) goto L_0x0255
-            goto L_0x025d
-        L_0x0255:
+            if (r3 == 0) goto L_0x024d
+            goto L_0x0255
+        L_0x024d:
             android.view.View[] r3 = r0.shadow
             r3 = r3[r4]
             r3.setAlpha(r12)
-            goto L_0x02d3
-        L_0x025d:
+            goto L_0x02c5
+        L_0x0255:
             android.widget.TextView r3 = new android.widget.TextView
             r3.<init>(r1)
             r0.pickerBottomLayout = r3
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            java.lang.String r14 = "listSelectorSDK21"
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r11, r14)
+            r3.setBackgroundDrawable(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            java.lang.String r10 = "listSelectorSDK21"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r5, r10)
-            r3.setBackgroundDrawable(r5)
+            java.lang.String r11 = "dialogTextBlue2"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r3.setTextColor(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            java.lang.String r5 = "dialogTextBlue2"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r3.setTextColor(r5)
+            r11 = 1096810496(0x41600000, float:14.0)
+            r3.setTextSize(r4, r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r5 = 1096810496(0x41600000, float:14.0)
-            r3.setTextSize(r4, r5)
+            r11 = 1099956224(0x41900000, float:18.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r3.setPadding(r14, r7, r11, r7)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r5 = 1099956224(0x41900000, float:18.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r3.setPadding(r10, r7, r5, r7)
+            android.graphics.Typeface r11 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
+            r3.setTypeface(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            java.lang.String r5 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
-            r3.setTypeface(r5)
+            r11 = 17
+            r3.setGravity(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r5 = 17
-            r3.setGravity(r5)
+            r11 = 2131624789(0x7f0e0355, float:1.8876768E38)
+            java.lang.String r14 = "CopyLink"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
+            java.lang.String r11 = r11.toUpperCase()
+            r3.setText(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r5 = 2131624782(0x7f0e034e, float:1.8876753E38)
-            java.lang.String r10 = "CopyLink"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r5)
-            java.lang.String r5 = r5.toUpperCase()
-            r3.setText(r5)
-            android.widget.TextView r3 = r0.pickerBottomLayout
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$Y4YbUqwWCug5T2hNA6sxQRQyLJ0 r5 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Y4YbUqwWCug5T2hNA6sxQRQyLJ0
-            r5.<init>()
-            r3.setOnClickListener(r5)
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$Y4YbUqwWCug5T2hNA6sxQRQyLJ0 r11 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Y4YbUqwWCug5T2hNA6sxQRQyLJ0
+            r11.<init>()
+            r3.setOnClickListener(r11)
             android.view.ViewGroup r3 = r0.containerView
-            android.widget.TextView r5 = r0.pickerBottomLayout
-            r10 = 48
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r10, (int) r6)
-            r3.addView(r5, r10)
-        L_0x02d3:
+            android.widget.TextView r11 = r0.pickerBottomLayout
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r5, r6)
+            r3.addView(r11, r14)
+        L_0x02c5:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r1)
             r0.frameLayout2 = r3
-            android.widget.FrameLayout r3 = r0.frameLayout2
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r3.setBackgroundColor(r5)
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            r3.setBackgroundColor(r8)
             android.widget.FrameLayout r3 = r0.frameLayout2
             r3.setAlpha(r12)
             android.widget.FrameLayout r3 = r0.frameLayout2
             r3.setVisibility(r13)
             android.view.ViewGroup r3 = r0.containerView
-            android.widget.FrameLayout r5 = r0.frameLayout2
-            r8 = 48
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r8, (int) r6)
-            r3.addView(r5, r6)
+            android.widget.FrameLayout r8 = r0.frameLayout2
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r5, r6)
+            r3.addView(r8, r5)
             android.widget.FrameLayout r3 = r0.frameLayout2
             org.telegram.ui.Components.-$$Lambda$ShareAlert$e30oQsfKYZ5WdxxCC6xZg65lanw r5 = org.telegram.ui.Components.$$Lambda$ShareAlert$e30oQsfKYZ5WdxxCC6xZg65lanw.INSTANCE
             r3.setOnTouchListener(r5)
@@ -598,11 +600,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = 0
             r3.<init>(r1, r2, r5, r4)
             r0.commentTextView = r3
-            org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131626619(0x7f0e0a7b, float:1.888048E38)
+            r2 = 2131626719(0x7f0e0adf, float:1.8880682E38)
             java.lang.String r5 = "ShareComment"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            r2.setHint(r3)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
+            r3.setHint(r2)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
             r2.onResume()
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
@@ -623,7 +624,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.writeButtonContainer = r2
-            android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setVisibility(r13)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r3 = 1045220557(0x3e4ccccd, float:0.2)
@@ -633,7 +633,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setAlpha(r12)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r5 = 2131626540(0x7f0e0a2c, float:1.888032E38)
+            r5 = 2131626639(0x7f0e0a8f, float:1.888052E38)
             java.lang.String r6 = "Send"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setContentDescription(r5)
@@ -652,39 +652,34 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = 1113587712(0x42600000, float:56.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
             java.lang.String r8 = "dialogFloatingButton"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            int r11 = android.os.Build.VERSION.SDK_INT
+            r13 = 21
+            if (r11 < r13) goto L_0x0386
+            java.lang.String r8 = "dialogFloatingButtonPressed"
+        L_0x0386:
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            int r9 = android.os.Build.VERSION.SDK_INT
-            r10 = 21
-            if (r9 < r10) goto L_0x039d
-            java.lang.String r9 = "dialogFloatingButtonPressed"
-            goto L_0x039f
-        L_0x039d:
-            java.lang.String r9 = "dialogFloatingButton"
-        L_0x039f:
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r6, r8, r9)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r6, r9, r8)
             int r8 = android.os.Build.VERSION.SDK_INT
-            if (r8 >= r10) goto L_0x03d7
+            if (r8 >= r13) goto L_0x03be
             android.content.res.Resources r8 = r22.getResources()
             r9 = 2131165393(0x7var_d1, float:1.7945002E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
             r11 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r9.<init>(r11, r13)
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r9.<init>(r11, r14)
             r8.setColorFilter(r9)
             org.telegram.ui.Components.CombinedDrawable r9 = new org.telegram.ui.Components.CombinedDrawable
             r9.<init>(r8, r6, r7, r7)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r5)
             r9.setIconSize(r6, r8)
-            goto L_0x03d8
-        L_0x03d7:
-            r9 = r6
-        L_0x03d8:
-            r2.setBackgroundDrawable(r9)
-            r6 = 2131165272(0x7var_, float:1.7944756E38)
+            r6 = r9
+        L_0x03be:
+            r2.setBackgroundDrawable(r6)
+            r6 = 2131165273(0x7var_, float:1.7944758E38)
             r2.setImageResource(r6)
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
             java.lang.String r8 = "dialogFloatingIcon"
@@ -695,42 +690,42 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r6)
             int r6 = android.os.Build.VERSION.SDK_INT
-            if (r6 < r10) goto L_0x0402
+            if (r6 < r13) goto L_0x03e8
             org.telegram.ui.Components.ShareAlert$6 r6 = new org.telegram.ui.Components.ShareAlert$6
-            r6.<init>()
+            r6.<init>(r0)
             r2.setOutlineProvider(r6)
-        L_0x0402:
+        L_0x03e8:
             android.widget.FrameLayout r6 = r0.writeButtonContainer
             int r8 = android.os.Build.VERSION.SDK_INT
-            if (r8 < r10) goto L_0x040d
+            if (r8 < r13) goto L_0x03f3
             r8 = 56
-            r13 = 56
-            goto L_0x0411
-        L_0x040d:
+            r14 = 56
+            goto L_0x03f7
+        L_0x03f3:
             r8 = 60
-            r13 = 60
-        L_0x0411:
+            r14 = 60
+        L_0x03f7:
             int r8 = android.os.Build.VERSION.SDK_INT
-            if (r8 < r10) goto L_0x0418
-            r14 = 1113587712(0x42600000, float:56.0)
-            goto L_0x041c
-        L_0x0418:
+            if (r8 < r13) goto L_0x03fe
+            r15 = 1113587712(0x42600000, float:56.0)
+            goto L_0x0402
+        L_0x03fe:
             r5 = 1114636288(0x42700000, float:60.0)
-            r14 = 1114636288(0x42700000, float:60.0)
-        L_0x041c:
-            r15 = 51
+            r15 = 1114636288(0x42700000, float:60.0)
+        L_0x0402:
+            r16 = 51
             int r5 = android.os.Build.VERSION.SDK_INT
-            if (r5 < r10) goto L_0x0427
+            if (r5 < r13) goto L_0x040d
             r5 = 1073741824(0x40000000, float:2.0)
-            r16 = 1073741824(0x40000000, float:2.0)
-            goto L_0x0429
-        L_0x0427:
-            r16 = 0
-        L_0x0429:
+            r17 = 1073741824(0x40000000, float:2.0)
+            goto L_0x040f
+        L_0x040d:
             r17 = 0
+        L_0x040f:
             r18 = 0
             r19 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r20 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
             r6.addView(r2, r5)
             org.telegram.ui.Components.-$$Lambda$ShareAlert$7m2JWNxMvSKoRyVHsLYwsIAMWC0 r5 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$7m2JWNxMvSKoRyVHsLYwsIAMWC0
             r5.<init>()
@@ -741,14 +736,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             float r5 = (float) r5
             r2.setTextSize(r5)
             android.text.TextPaint r2 = r0.textPaint
-            java.lang.String r5 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
+            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
             r2.setTypeface(r5)
             org.telegram.ui.Components.ShareAlert$7 r2 = new org.telegram.ui.Components.ShareAlert$7
             r2.<init>(r1)
             r0.selectedCountView = r2
-            android.view.View r1 = r0.selectedCountView
-            r1.setAlpha(r12)
+            r2.setAlpha(r12)
             android.view.View r1 = r0.selectedCountView
             r1.setScaleX(r3)
             android.view.View r1 = r0.selectedCountView
@@ -768,7 +761,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             boolean[] r1 = org.telegram.ui.DialogsActivity.dialogsLoaded
             int r2 = r0.currentAccount
             boolean r1 = r1[r2]
-            if (r1 != 0) goto L_0x04a5
+            if (r1 != 0) goto L_0x0487
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r2)
             r2 = 100
             r1.loadDialogs(r7, r7, r2, r4)
@@ -778,22 +771,22 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             boolean[] r1 = org.telegram.ui.DialogsActivity.dialogsLoaded
             int r2 = r0.currentAccount
             r1[r2] = r4
-        L_0x04a5:
+        L_0x0487:
             org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter r1 = r0.listAdapter
             java.util.ArrayList r1 = r1.dialogs
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x04bc
+            if (r1 == 0) goto L_0x049e
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
             r1.addObserver(r0, r2)
-        L_0x04bc:
+        L_0x049e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.<init>(android.content.Context, java.util.ArrayList, java.lang.String, boolean, java.lang.String, boolean):void");
     }
 
-    public /* synthetic */ void lambda$new$1$ShareAlert(Context context, TLObject tLObject, TLRPC.TL_error tL_error) {
+    public /* synthetic */ void lambda$new$1$ShareAlert(Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, context) {
             private final /* synthetic */ TLObject f$1;
             private final /* synthetic */ Context f$2;
@@ -811,7 +804,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     public /* synthetic */ void lambda$null$0$ShareAlert(TLObject tLObject, Context context) {
         if (tLObject != null) {
-            this.exportedMessageLink = (TLRPC.TL_exportedMessageLink) tLObject;
+            this.exportedMessageLink = (TLRPC$TL_exportedMessageLink) tLObject;
             if (this.copyLinkOnEnd) {
                 copyLink(context);
             }
@@ -820,19 +813,19 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     }
 
     public /* synthetic */ void lambda$new$2$ShareAlert(SearchField searchField, View view, int i) {
-        TLRPC.Dialog dialog;
+        TLRPC$Dialog tLRPC$Dialog;
         int i2;
         if (i >= 0) {
             RecyclerView.Adapter adapter = this.gridView.getAdapter();
             ShareDialogsAdapter shareDialogsAdapter = this.listAdapter;
             if (adapter == shareDialogsAdapter) {
-                dialog = shareDialogsAdapter.getItem(i);
+                tLRPC$Dialog = shareDialogsAdapter.getItem(i);
             } else {
-                dialog = this.searchAdapter.getItem(i);
+                tLRPC$Dialog = this.searchAdapter.getItem(i);
             }
-            if (dialog != null) {
-                if (this.hasPoll != 0 && (i2 = (int) dialog.id) < 0) {
-                    TLRPC.Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i2));
+            if (tLRPC$Dialog != null) {
+                if (this.hasPoll != 0 && (i2 = (int) tLRPC$Dialog.id) < 0) {
+                    TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i2));
                     boolean z = ChatObject.isChannel(chat) && this.hasPoll == 2 && !chat.megagroup;
                     if (z || !ChatObject.canSendPolls(chat)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -850,24 +843,24 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                 }
                 ShareDialogCell shareDialogCell = (ShareDialogCell) view;
-                if (this.selectedDialogs.indexOfKey(dialog.id) >= 0) {
-                    this.selectedDialogs.remove(dialog.id);
+                if (this.selectedDialogs.indexOfKey(tLRPC$Dialog.id) >= 0) {
+                    this.selectedDialogs.remove(tLRPC$Dialog.id);
                     shareDialogCell.setChecked(false, true);
                     updateSelectedCount(1);
                     return;
                 }
-                this.selectedDialogs.put(dialog.id, dialog);
+                this.selectedDialogs.put(tLRPC$Dialog.id, tLRPC$Dialog);
                 shareDialogCell.setChecked(true, true);
                 updateSelectedCount(2);
                 int i3 = UserConfig.getInstance(this.currentAccount).clientUserId;
                 if (this.gridView.getAdapter() == this.searchAdapter) {
-                    TLRPC.Dialog dialog2 = (TLRPC.Dialog) this.listAdapter.dialogsMap.get(dialog.id);
-                    if (dialog2 == null) {
-                        this.listAdapter.dialogsMap.put(dialog.id, dialog);
-                        this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ true ? 1 : 0, dialog);
-                    } else if (dialog2.id != ((long) i3)) {
-                        this.listAdapter.dialogs.remove(dialog2);
-                        this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ true ? 1 : 0, dialog2);
+                    TLRPC$Dialog tLRPC$Dialog2 = (TLRPC$Dialog) this.listAdapter.dialogsMap.get(tLRPC$Dialog.id);
+                    if (tLRPC$Dialog2 == null) {
+                        this.listAdapter.dialogsMap.put(tLRPC$Dialog.id, tLRPC$Dialog);
+                        this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ true ? 1 : 0, tLRPC$Dialog);
+                    } else if (tLRPC$Dialog2.id != ((long) i3)) {
+                        this.listAdapter.dialogs.remove(tLRPC$Dialog2);
+                        this.listAdapter.dialogs.add(this.listAdapter.dialogs.isEmpty() ^ true ? 1 : 0, tLRPC$Dialog2);
                     }
                     searchField.searchEditText.setText("");
                     this.gridView.setAdapter(this.listAdapter);
@@ -906,7 +899,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             while (i < this.selectedDialogs.size()) {
                 long keyAt = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt, (MessageObject) null, (TLRPC.WebPage) null, true, (ArrayList<TLRPC.MessageEntity>) null, (TLRPC.ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                 }
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt, true, 0);
                 i++;
@@ -915,9 +908,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             while (i < this.selectedDialogs.size()) {
                 long keyAt2 = this.selectedDialogs.keyAt(i);
                 if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (TLRPC.WebPage) null, true, (ArrayList<TLRPC.MessageEntity>) null, (TLRPC.ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                 }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, (MessageObject) null, (TLRPC.WebPage) null, true, (ArrayList<TLRPC.MessageEntity>) null, (TLRPC.ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText, keyAt2, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                 i++;
             }
         }
@@ -944,10 +937,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             i = childAt.getTop();
         }
         return paddingTop - i;
-    }
-
-    public void setDelegate(ShareAlertDelegate shareAlertDelegate) {
-        this.delegate = shareAlertDelegate;
     }
 
     public void dismissInternal() {
@@ -1201,11 +1190,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     private class ShareDialogsAdapter extends RecyclerListView.SelectionAdapter {
         private Context context;
-        private int currentCount;
         /* access modifiers changed from: private */
-        public ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>();
+        public ArrayList<TLRPC$Dialog> dialogs = new ArrayList<>();
         /* access modifiers changed from: private */
-        public LongSparseArray<TLRPC.Dialog> dialogsMap = new LongSparseArray<>();
+        public LongSparseArray<TLRPC$Dialog> dialogsMap = new LongSparseArray<>();
 
         public int getItemViewType(int i) {
             return i == 0 ? 1 : 0;
@@ -1243,7 +1231,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r1.dialogsForward
                 java.lang.Object r1 = r1.get(r2)
-                org.telegram.tgnet.TLRPC$Dialog r1 = (org.telegram.tgnet.TLRPC.Dialog) r1
+                org.telegram.tgnet.TLRPC$Dialog r1 = (org.telegram.tgnet.TLRPC$Dialog) r1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r8.dialogs
                 r3.add(r1)
                 android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r3 = r8.dialogsMap
@@ -1258,8 +1246,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 int r3 = r1.size()
                 if (r2 >= r3) goto L_0x00c4
                 java.lang.Object r3 = r1.get(r2)
-                org.telegram.tgnet.TLRPC$Dialog r3 = (org.telegram.tgnet.TLRPC.Dialog) r3
-                boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_dialog
+                org.telegram.tgnet.TLRPC$Dialog r3 = (org.telegram.tgnet.TLRPC$Dialog) r3
+                boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_dialog
                 if (r4 != 0) goto L_0x0066
                 goto L_0x00c1
             L_0x0066:
@@ -1323,7 +1311,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             return size != 0 ? size + 1 : size;
         }
 
-        public TLRPC.Dialog getItem(int i) {
+        public TLRPC$Dialog getItem(int i) {
             int i2 = i - 1;
             if (i2 < 0 || i2 >= this.dialogs.size()) {
                 return null;
@@ -1350,7 +1338,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             if (viewHolder.getItemViewType() == 0) {
                 ShareDialogCell shareDialogCell = (ShareDialogCell) viewHolder.itemView;
-                TLRPC.Dialog item = getItem(i);
+                TLRPC$Dialog item = getItem(i);
                 shareDialogCell.setDialog((int) item.id, ShareAlert.this.selectedDialogs.indexOfKey(item.id) >= 0, (CharSequence) null);
             }
         }
@@ -1358,10 +1346,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     public class ShareSearchAdapter extends RecyclerListView.SelectionAdapter {
         private Context context;
-        private int lastReqId;
         private int lastSearchId;
         private String lastSearchText;
-        private int reqId;
         private ArrayList<DialogSearchResult> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
 
@@ -1371,12 +1357,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         private class DialogSearchResult {
             public int date;
-            public TLRPC.Dialog dialog;
+            public TLRPC$Dialog dialog;
             public CharSequence name;
             public TLObject object;
 
-            private DialogSearchResult() {
-                this.dialog = new TLRPC.TL_dialog();
+            private DialogSearchResult(ShareSearchAdapter shareSearchAdapter) {
+                this.dialog = new TLRPC$TL_dialog();
             }
         }
 
@@ -1402,39 +1388,39 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             });
         }
 
-        /* JADX WARNING: type inference failed for: r15v10 */
-        /* JADX WARNING: type inference failed for: r15v12 */
-        /* JADX WARNING: type inference failed for: r15v16 */
-        /* JADX WARNING: type inference failed for: r15v18 */
+        /* JADX WARNING: type inference failed for: r11v24 */
+        /* JADX WARNING: type inference failed for: r11v26 */
+        /* JADX WARNING: type inference failed for: r11v30 */
+        /* JADX WARNING: type inference failed for: r11v32 */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A[Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:189:0x0165 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:214:0x038c A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A[Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:176:0x040b A[Catch:{ Exception -> 0x0427 }, LOOP:7: B:148:0x0355->B:176:0x040b, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:194:0x0164 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:215:0x039f A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:77:0x01d5 A[Catch:{ Exception -> 0x0427 }, LOOP:2: B:46:0x0111->B:77:0x01d5, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*
                 r20 = this;
                 r1 = r20
-                java.lang.String r0 = r21.trim()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0414 }
-                int r2 = r0.length()     // Catch:{ Exception -> 0x0414 }
+                java.lang.String r0 = r21.trim()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0427 }
+                int r2 = r0.length()     // Catch:{ Exception -> 0x0427 }
                 r3 = -1
                 if (r2 != 0) goto L_0x001e
-                r1.lastSearchId = r3     // Catch:{ Exception -> 0x0414 }
-                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0414 }
-                r0.<init>()     // Catch:{ Exception -> 0x0414 }
-                int r2 = r1.lastSearchId     // Catch:{ Exception -> 0x0414 }
-                r1.updateSearchResults(r0, r2)     // Catch:{ Exception -> 0x0414 }
+                r1.lastSearchId = r3     // Catch:{ Exception -> 0x0427 }
+                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0427 }
+                r0.<init>()     // Catch:{ Exception -> 0x0427 }
+                int r2 = r1.lastSearchId     // Catch:{ Exception -> 0x0427 }
+                r1.updateSearchResults(r0, r2)     // Catch:{ Exception -> 0x0427 }
                 return
             L_0x001e:
-                org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r2 = r2.getTranslitString(r0)     // Catch:{ Exception -> 0x0414 }
-                boolean r4 = r0.equals(r2)     // Catch:{ Exception -> 0x0414 }
+                org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r2 = r2.getTranslitString(r0)     // Catch:{ Exception -> 0x0427 }
+                boolean r4 = r0.equals(r2)     // Catch:{ Exception -> 0x0427 }
                 r5 = 0
                 if (r4 != 0) goto L_0x0033
-                int r4 = r2.length()     // Catch:{ Exception -> 0x0414 }
+                int r4 = r2.length()     // Catch:{ Exception -> 0x0427 }
                 if (r4 != 0) goto L_0x0034
             L_0x0033:
                 r2 = r5
@@ -1448,475 +1434,490 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 r7 = 0
             L_0x003b:
                 int r7 = r7 + r4
-                java.lang.String[] r7 = new java.lang.String[r7]     // Catch:{ Exception -> 0x0414 }
-                r7[r6] = r0     // Catch:{ Exception -> 0x0414 }
+                java.lang.String[] r8 = new java.lang.String[r7]     // Catch:{ Exception -> 0x0427 }
+                r8[r6] = r0     // Catch:{ Exception -> 0x0427 }
                 if (r2 == 0) goto L_0x0044
-                r7[r4] = r2     // Catch:{ Exception -> 0x0414 }
+                r8[r4] = r2     // Catch:{ Exception -> 0x0427 }
             L_0x0044:
-                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0414 }
-                r0.<init>()     // Catch:{ Exception -> 0x0414 }
-                java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0414 }
-                r2.<init>()     // Catch:{ Exception -> 0x0414 }
-                android.util.LongSparseArray r8 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x0414 }
-                r8.<init>()     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert r9 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0414 }
-                int r9 = r9.currentAccount     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.MessagesStorage r9 = org.telegram.messenger.MessagesStorage.getInstance(r9)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = "SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 400"
-                java.lang.Object[] r11 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r10, r11)     // Catch:{ Exception -> 0x0414 }
+                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0427 }
+                r0.<init>()     // Catch:{ Exception -> 0x0427 }
+                java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0427 }
+                r2.<init>()     // Catch:{ Exception -> 0x0427 }
+                android.util.LongSparseArray r9 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x0427 }
+                r9.<init>()     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert r10 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0427 }
+                int r10 = r10.currentAccount     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.MessagesStorage r10 = org.telegram.messenger.MessagesStorage.getInstance(r10)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteDatabase r10 = r10.getDatabase()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = "SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 400"
+                java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteCursor r10 = r10.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x0427 }
             L_0x0069:
-                boolean r10 = r9.next()     // Catch:{ Exception -> 0x0414 }
-                if (r10 == 0) goto L_0x00b1
-                long r10 = r9.longValue(r6)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r12 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0414 }
-                r12.<init>()     // Catch:{ Exception -> 0x0414 }
-                int r13 = r9.intValue(r4)     // Catch:{ Exception -> 0x0414 }
-                r12.date = r13     // Catch:{ Exception -> 0x0414 }
-                r8.put(r10, r12)     // Catch:{ Exception -> 0x0414 }
-                int r12 = (int) r10     // Catch:{ Exception -> 0x0414 }
-                r13 = 32
-                long r10 = r10 >> r13
-                int r11 = (int) r10     // Catch:{ Exception -> 0x0414 }
-                if (r12 == 0) goto L_0x0069
-                if (r11 == r4) goto L_0x0069
-                if (r12 <= 0) goto L_0x009e
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x0414 }
-                boolean r10 = r0.contains(r10)     // Catch:{ Exception -> 0x0414 }
-                if (r10 != 0) goto L_0x0069
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x0414 }
-                r0.add(r10)     // Catch:{ Exception -> 0x0414 }
+                boolean r11 = r10.next()     // Catch:{ Exception -> 0x0427 }
+                if (r11 == 0) goto L_0x00b1
+                long r11 = r10.longValue(r6)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r13 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0427 }
+                r13.<init>()     // Catch:{ Exception -> 0x0427 }
+                int r14 = r10.intValue(r4)     // Catch:{ Exception -> 0x0427 }
+                r13.date = r14     // Catch:{ Exception -> 0x0427 }
+                r9.put(r11, r13)     // Catch:{ Exception -> 0x0427 }
+                int r13 = (int) r11     // Catch:{ Exception -> 0x0427 }
+                r14 = 32
+                long r11 = r11 >> r14
+                int r12 = (int) r11     // Catch:{ Exception -> 0x0427 }
+                if (r13 == 0) goto L_0x0069
+                if (r12 == r4) goto L_0x0069
+                if (r13 <= 0) goto L_0x009e
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x0427 }
+                boolean r11 = r0.contains(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r11 != 0) goto L_0x0069
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x0427 }
+                r0.add(r11)     // Catch:{ Exception -> 0x0427 }
                 goto L_0x0069
             L_0x009e:
-                int r10 = -r12
-                java.lang.Integer r11 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0414 }
-                boolean r11 = r2.contains(r11)     // Catch:{ Exception -> 0x0414 }
-                if (r11 != 0) goto L_0x0069
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ Exception -> 0x0414 }
-                r2.add(r10)     // Catch:{ Exception -> 0x0414 }
+                int r11 = -r13
+                java.lang.Integer r12 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x0427 }
+                boolean r12 = r2.contains(r12)     // Catch:{ Exception -> 0x0427 }
+                if (r12 != 0) goto L_0x0069
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x0427 }
+                r2.add(r11)     // Catch:{ Exception -> 0x0427 }
                 goto L_0x0069
             L_0x00b1:
-                r9.dispose()     // Catch:{ Exception -> 0x0414 }
-                boolean r9 = r0.isEmpty()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = ";;;"
-                java.lang.String r11 = ","
-                java.lang.String r12 = "@"
-                r13 = 2
-                java.lang.String r14 = " "
-                if (r9 != 0) goto L_0x01ef
-                org.telegram.ui.Components.ShareAlert r9 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0414 }
-                int r9 = r9.currentAccount     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.MessagesStorage r9 = org.telegram.messenger.MessagesStorage.getInstance(r9)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x0414 }
-                java.util.Locale r15 = java.util.Locale.US     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = "SELECT data, status, name FROM users WHERE uid IN(%s)"
-                java.lang.Object[] r3 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r0 = android.text.TextUtils.join(r11, r0)     // Catch:{ Exception -> 0x0414 }
-                r3[r6] = r0     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r0 = java.lang.String.format(r15, r5, r3)     // Catch:{ Exception -> 0x0414 }
-                java.lang.Object[] r3 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteCursor r0 = r9.queryFinalized(r0, r3)     // Catch:{ Exception -> 0x0414 }
+                r10.dispose()     // Catch:{ Exception -> 0x0427 }
+                boolean r10 = r0.isEmpty()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = ";;;"
+                java.lang.String r12 = ","
+                java.lang.String r13 = "@"
+                java.lang.String r15 = " "
+                if (r10 != 0) goto L_0x01f4
+                org.telegram.ui.Components.ShareAlert r10 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0427 }
+                int r10 = r10.currentAccount     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.MessagesStorage r10 = org.telegram.messenger.MessagesStorage.getInstance(r10)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteDatabase r10 = r10.getDatabase()     // Catch:{ Exception -> 0x0427 }
+                java.util.Locale r5 = java.util.Locale.US     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r3 = "SELECT data, status, name FROM users WHERE uid IN(%s)"
+                java.lang.Object[] r14 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r0 = android.text.TextUtils.join(r12, r0)     // Catch:{ Exception -> 0x0427 }
+                r14[r6] = r0     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r0 = java.lang.String.format(r5, r3, r14)     // Catch:{ Exception -> 0x0427 }
+                java.lang.Object[] r3 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteCursor r0 = r10.queryFinalized(r0, r3)     // Catch:{ Exception -> 0x0427 }
                 r3 = 0
-            L_0x00e8:
-                boolean r5 = r0.next()     // Catch:{ Exception -> 0x0414 }
-                if (r5 == 0) goto L_0x01e9
-                java.lang.String r5 = r0.stringValue(r13)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.LocaleController r9 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r9 = r9.getTranslitString(r5)     // Catch:{ Exception -> 0x0414 }
-                boolean r15 = r5.equals(r9)     // Catch:{ Exception -> 0x0414 }
-                if (r15 == 0) goto L_0x0101
-                r9 = 0
+            L_0x00e7:
+                boolean r5 = r0.next()     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x01ec
+                r5 = 2
+                java.lang.String r10 = r0.stringValue(r5)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.LocaleController r5 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r5 = r5.getTranslitString(r10)     // Catch:{ Exception -> 0x0427 }
+                boolean r14 = r10.equals(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r14 == 0) goto L_0x0101
+                r5 = 0
             L_0x0101:
-                int r15 = r5.lastIndexOf(r10)     // Catch:{ Exception -> 0x0414 }
-                r13 = -1
-                if (r15 == r13) goto L_0x010f
-                int r15 = r15 + 3
-                java.lang.String r13 = r5.substring(r15)     // Catch:{ Exception -> 0x0414 }
+                int r14 = r10.lastIndexOf(r11)     // Catch:{ Exception -> 0x0427 }
+                r4 = -1
+                if (r14 == r4) goto L_0x010f
+                int r14 = r14 + 3
+                java.lang.String r4 = r10.substring(r14)     // Catch:{ Exception -> 0x0427 }
                 goto L_0x0110
             L_0x010f:
-                r13 = 0
-            L_0x0110:
-                int r15 = r7.length     // Catch:{ Exception -> 0x0414 }
                 r4 = 0
-                r17 = 0
-            L_0x0114:
-                if (r4 >= r15) goto L_0x01e0
-                r6 = r7[r4]     // Catch:{ Exception -> 0x0414 }
-                boolean r18 = r5.startsWith(r6)     // Catch:{ Exception -> 0x0414 }
-                if (r18 != 0) goto L_0x0160
-                r18 = r15
-                java.lang.StringBuilder r15 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r15.<init>()     // Catch:{ Exception -> 0x0414 }
-                r15.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r15.append(r6)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r15 = r15.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r15 = r5.contains(r15)     // Catch:{ Exception -> 0x0414 }
-                if (r15 != 0) goto L_0x0162
-                if (r9 == 0) goto L_0x0153
-                boolean r15 = r9.startsWith(r6)     // Catch:{ Exception -> 0x0414 }
-                if (r15 != 0) goto L_0x0162
-                java.lang.StringBuilder r15 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r15.<init>()     // Catch:{ Exception -> 0x0414 }
-                r15.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r15.append(r6)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r15 = r15.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r15 = r9.contains(r15)     // Catch:{ Exception -> 0x0414 }
-                if (r15 == 0) goto L_0x0153
+            L_0x0110:
+                r14 = 0
+            L_0x0111:
+                if (r6 >= r7) goto L_0x01e0
+                r17 = r14
+                r14 = r8[r6]     // Catch:{ Exception -> 0x0427 }
+                boolean r18 = r10.startsWith(r14)     // Catch:{ Exception -> 0x0427 }
+                if (r18 != 0) goto L_0x015f
+                r18 = r11
+                java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r11.<init>()     // Catch:{ Exception -> 0x0427 }
+                r11.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r11.append(r14)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r11 = r10.contains(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r11 != 0) goto L_0x0161
+                if (r5 == 0) goto L_0x0152
+                boolean r11 = r5.startsWith(r14)     // Catch:{ Exception -> 0x0427 }
+                if (r11 != 0) goto L_0x0161
+                java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r11.<init>()     // Catch:{ Exception -> 0x0427 }
+                r11.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r11.append(r14)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r11 = r5.contains(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r11 == 0) goto L_0x0152
+                goto L_0x0161
+            L_0x0152:
+                if (r4 == 0) goto L_0x015c
+                boolean r11 = r4.startsWith(r14)     // Catch:{ Exception -> 0x0427 }
+                if (r11 == 0) goto L_0x015c
+                r11 = 2
                 goto L_0x0162
-            L_0x0153:
-                if (r13 == 0) goto L_0x015d
-                boolean r15 = r13.startsWith(r6)     // Catch:{ Exception -> 0x0414 }
-                if (r15 == 0) goto L_0x015d
-                r15 = 2
-                goto L_0x0163
-            L_0x015d:
-                r15 = r17
-                goto L_0x0163
-            L_0x0160:
-                r18 = r15
+            L_0x015c:
+                r11 = r17
+                goto L_0x0162
+            L_0x015f:
+                r18 = r11
+            L_0x0161:
+                r11 = 1
             L_0x0162:
-                r15 = 1
-            L_0x0163:
-                if (r15 == 0) goto L_0x01d3
-                r5 = 0
-                org.telegram.tgnet.NativeByteBuffer r4 = r0.byteBufferValue(r5)     // Catch:{ Exception -> 0x0414 }
-                if (r4 == 0) goto L_0x01e0
-                int r9 = r4.readInt32(r5)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$User r9 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r4, r9, r5)     // Catch:{ Exception -> 0x0414 }
-                r4.reuse()     // Catch:{ Exception -> 0x0414 }
-                int r4 = r9.id     // Catch:{ Exception -> 0x0414 }
-                long r4 = (long) r4     // Catch:{ Exception -> 0x0414 }
-                java.lang.Object r4 = r8.get(r4)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$UserStatus r5 = r9.status     // Catch:{ Exception -> 0x0414 }
-                if (r5 == 0) goto L_0x0190
-                org.telegram.tgnet.TLRPC$UserStatus r5 = r9.status     // Catch:{ Exception -> 0x0414 }
-                r19 = r10
-                r13 = 1
-                int r10 = r0.intValue(r13)     // Catch:{ Exception -> 0x0414 }
-                r5.expires = r10     // Catch:{ Exception -> 0x0414 }
-                goto L_0x0192
-            L_0x0190:
-                r19 = r10
-            L_0x0192:
+                if (r11 == 0) goto L_0x01d5
+                r4 = 0
+                org.telegram.tgnet.NativeByteBuffer r5 = r0.byteBufferValue(r4)     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x01d2
+                int r6 = r5.readInt32(r4)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$User r6 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r5, r6, r4)     // Catch:{ Exception -> 0x0427 }
+                r5.reuse()     // Catch:{ Exception -> 0x0427 }
+                int r4 = r6.id     // Catch:{ Exception -> 0x0427 }
+                long r4 = (long) r4     // Catch:{ Exception -> 0x0427 }
+                java.lang.Object r4 = r9.get(r4)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$UserStatus r5 = r6.status     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x018f
+                org.telegram.tgnet.TLRPC$UserStatus r5 = r6.status     // Catch:{ Exception -> 0x0427 }
+                r19 = r9
+                r10 = 1
+                int r9 = r0.intValue(r10)     // Catch:{ Exception -> 0x0427 }
+                r5.expires = r9     // Catch:{ Exception -> 0x0427 }
+                goto L_0x0191
+            L_0x018f:
+                r19 = r9
+            L_0x0191:
                 r5 = 1
-                if (r15 != r5) goto L_0x01a0
-                java.lang.String r5 = r9.first_name     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = r9.last_name     // Catch:{ Exception -> 0x0414 }
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r6)     // Catch:{ Exception -> 0x0414 }
-                r4.name = r5     // Catch:{ Exception -> 0x0414 }
-                goto L_0x01c7
-            L_0x01a0:
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r5.<init>()     // Catch:{ Exception -> 0x0414 }
-                r5.append(r12)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = r9.username     // Catch:{ Exception -> 0x0414 }
-                r5.append(r10)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x0414 }
-                java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r10.<init>()     // Catch:{ Exception -> 0x0414 }
-                r10.append(r12)     // Catch:{ Exception -> 0x0414 }
-                r10.append(r6)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r6 = r10.toString()     // Catch:{ Exception -> 0x0414 }
+                if (r11 != r5) goto L_0x019f
+                java.lang.String r5 = r6.first_name     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r6.last_name     // Catch:{ Exception -> 0x0427 }
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r14)     // Catch:{ Exception -> 0x0427 }
+                r4.name = r5     // Catch:{ Exception -> 0x0427 }
+                goto L_0x01c6
+            L_0x019f:
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r5.<init>()     // Catch:{ Exception -> 0x0427 }
+                r5.append(r13)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r6.username     // Catch:{ Exception -> 0x0427 }
+                r5.append(r9)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x0427 }
+                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r9.<init>()     // Catch:{ Exception -> 0x0427 }
+                r9.append(r13)     // Catch:{ Exception -> 0x0427 }
+                r9.append(r14)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0427 }
                 r10 = 0
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r6)     // Catch:{ Exception -> 0x0414 }
-                r4.name = r5     // Catch:{ Exception -> 0x0414 }
-            L_0x01c7:
-                r4.object = r9     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$Dialog r4 = r4.dialog     // Catch:{ Exception -> 0x0414 }
-                int r5 = r9.id     // Catch:{ Exception -> 0x0414 }
-                long r5 = (long) r5     // Catch:{ Exception -> 0x0414 }
-                r4.id = r5     // Catch:{ Exception -> 0x0414 }
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r9)     // Catch:{ Exception -> 0x0427 }
+                r4.name = r5     // Catch:{ Exception -> 0x0427 }
+            L_0x01c6:
+                r4.object = r6     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$Dialog r4 = r4.dialog     // Catch:{ Exception -> 0x0427 }
+                int r5 = r6.id     // Catch:{ Exception -> 0x0427 }
+                long r5 = (long) r5     // Catch:{ Exception -> 0x0427 }
+                r4.id = r5     // Catch:{ Exception -> 0x0427 }
                 int r3 = r3 + 1
-                goto L_0x01e2
-            L_0x01d3:
-                r17 = r5
-                r19 = r10
-                int r4 = r4 + 1
-                r6 = 0
-                r17 = r15
-                r15 = r18
-                goto L_0x0114
+                goto L_0x01e4
+            L_0x01d2:
+                r19 = r9
+                goto L_0x01e4
+            L_0x01d5:
+                r17 = r4
+                r19 = r9
+                int r6 = r6 + 1
+                r14 = r11
+                r11 = r18
+                goto L_0x0111
             L_0x01e0:
-                r19 = r10
-            L_0x01e2:
-                r10 = r19
+                r19 = r9
+                r18 = r11
+            L_0x01e4:
+                r11 = r18
+                r9 = r19
                 r4 = 1
                 r6 = 0
-                r13 = 2
-                goto L_0x00e8
-            L_0x01e9:
-                r19 = r10
-                r0.dispose()     // Catch:{ Exception -> 0x0414 }
-                goto L_0x01f2
-            L_0x01ef:
-                r19 = r10
+                goto L_0x00e7
+            L_0x01ec:
+                r19 = r9
+                r18 = r11
+                r0.dispose()     // Catch:{ Exception -> 0x0427 }
+                goto L_0x01f9
+            L_0x01f4:
+                r19 = r9
+                r18 = r11
                 r3 = 0
-            L_0x01f2:
-                boolean r0 = r2.isEmpty()     // Catch:{ Exception -> 0x0414 }
-                if (r0 != 0) goto L_0x02d0
-                org.telegram.ui.Components.ShareAlert r0 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0414 }
-                int r0 = r0.currentAccount     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteDatabase r0 = r0.getDatabase()     // Catch:{ Exception -> 0x0414 }
-                java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x0414 }
+            L_0x01f9:
+                boolean r0 = r2.isEmpty()     // Catch:{ Exception -> 0x0427 }
+                if (r0 != 0) goto L_0x02e0
+                org.telegram.ui.Components.ShareAlert r0 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0427 }
+                int r0 = r0.currentAccount     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteDatabase r0 = r0.getDatabase()     // Catch:{ Exception -> 0x0427 }
+                java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x0427 }
                 java.lang.String r5 = "SELECT data, name FROM chats WHERE uid IN(%s)"
                 r6 = 1
-                java.lang.Object[] r9 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r2 = android.text.TextUtils.join(r11, r2)     // Catch:{ Exception -> 0x0414 }
+                java.lang.Object[] r9 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r2 = android.text.TextUtils.join(r12, r2)     // Catch:{ Exception -> 0x0427 }
                 r6 = 0
-                r9[r6] = r2     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r2 = java.lang.String.format(r4, r5, r9)     // Catch:{ Exception -> 0x0414 }
-                java.lang.Object[] r4 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteCursor r0 = r0.queryFinalized(r2, r4)     // Catch:{ Exception -> 0x0414 }
-            L_0x021e:
-                boolean r2 = r0.next()     // Catch:{ Exception -> 0x0414 }
-                if (r2 == 0) goto L_0x02cd
+                r9[r6] = r2     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r2 = java.lang.String.format(r4, r5, r9)     // Catch:{ Exception -> 0x0427 }
+                java.lang.Object[] r4 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteCursor r0 = r0.queryFinalized(r2, r4)     // Catch:{ Exception -> 0x0427 }
+            L_0x0225:
+                boolean r2 = r0.next()     // Catch:{ Exception -> 0x0427 }
+                if (r2 == 0) goto L_0x02da
                 r2 = 1
-                java.lang.String r4 = r0.stringValue(r2)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r2.getTranslitString(r4)     // Catch:{ Exception -> 0x0414 }
-                boolean r2 = r4.equals(r5)     // Catch:{ Exception -> 0x0414 }
-                if (r2 == 0) goto L_0x0238
+                java.lang.String r4 = r0.stringValue(r2)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r2 = r2.getTranslitString(r4)     // Catch:{ Exception -> 0x0427 }
+                boolean r5 = r4.equals(r2)     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x023f
+                r2 = 0
+            L_0x023f:
                 r5 = 0
-            L_0x0238:
+            L_0x0240:
+                if (r5 >= r7) goto L_0x02d4
+                r6 = r8[r5]     // Catch:{ Exception -> 0x0427 }
+                boolean r9 = r4.startsWith(r6)     // Catch:{ Exception -> 0x0427 }
+                if (r9 != 0) goto L_0x0280
+                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r9.<init>()     // Catch:{ Exception -> 0x0427 }
+                r9.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r9.append(r6)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r9 = r4.contains(r9)     // Catch:{ Exception -> 0x0427 }
+                if (r9 != 0) goto L_0x0280
+                if (r2 == 0) goto L_0x027d
+                boolean r9 = r2.startsWith(r6)     // Catch:{ Exception -> 0x0427 }
+                if (r9 != 0) goto L_0x0280
+                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r9.<init>()     // Catch:{ Exception -> 0x0427 }
+                r9.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r9.append(r6)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r9 = r2.contains(r9)     // Catch:{ Exception -> 0x0427 }
+                if (r9 == 0) goto L_0x027d
+                goto L_0x0280
+            L_0x027d:
+                int r5 = r5 + 1
+                goto L_0x0240
+            L_0x0280:
                 r2 = 0
-            L_0x0239:
-                int r6 = r7.length     // Catch:{ Exception -> 0x0414 }
-                if (r2 >= r6) goto L_0x021e
-                r6 = r7[r2]     // Catch:{ Exception -> 0x0414 }
-                boolean r9 = r4.startsWith(r6)     // Catch:{ Exception -> 0x0414 }
-                if (r9 != 0) goto L_0x027a
-                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r9.<init>()     // Catch:{ Exception -> 0x0414 }
-                r9.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r9.append(r6)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r9 = r4.contains(r9)     // Catch:{ Exception -> 0x0414 }
-                if (r9 != 0) goto L_0x027a
-                if (r5 == 0) goto L_0x0277
-                boolean r9 = r5.startsWith(r6)     // Catch:{ Exception -> 0x0414 }
-                if (r9 != 0) goto L_0x027a
-                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r9.<init>()     // Catch:{ Exception -> 0x0414 }
-                r9.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r9.append(r6)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r9 = r5.contains(r9)     // Catch:{ Exception -> 0x0414 }
-                if (r9 == 0) goto L_0x0277
-                goto L_0x027a
-            L_0x0277:
-                int r2 = r2 + 1
-                goto L_0x0239
-            L_0x027a:
-                r2 = 0
-                org.telegram.tgnet.NativeByteBuffer r4 = r0.byteBufferValue(r2)     // Catch:{ Exception -> 0x0414 }
-                if (r4 == 0) goto L_0x021e
-                int r5 = r4.readInt32(r2)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$Chat r5 = org.telegram.tgnet.TLRPC.Chat.TLdeserialize(r4, r5, r2)     // Catch:{ Exception -> 0x0414 }
-                r4.reuse()     // Catch:{ Exception -> 0x0414 }
-                if (r5 == 0) goto L_0x021e
-                boolean r2 = org.telegram.messenger.ChatObject.isNotInChat(r5)     // Catch:{ Exception -> 0x0414 }
-                if (r2 != 0) goto L_0x021e
-                boolean r2 = org.telegram.messenger.ChatObject.isChannel(r5)     // Catch:{ Exception -> 0x0414 }
-                if (r2 == 0) goto L_0x02ac
-                boolean r2 = r5.creator     // Catch:{ Exception -> 0x0414 }
-                if (r2 != 0) goto L_0x02ac
-                org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r5.admin_rights     // Catch:{ Exception -> 0x0414 }
-                if (r2 == 0) goto L_0x02a8
-                org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r5.admin_rights     // Catch:{ Exception -> 0x0414 }
-                boolean r2 = r2.post_messages     // Catch:{ Exception -> 0x0414 }
-                if (r2 != 0) goto L_0x02ac
-            L_0x02a8:
-                boolean r2 = r5.megagroup     // Catch:{ Exception -> 0x0414 }
-                if (r2 == 0) goto L_0x021e
-            L_0x02ac:
-                int r2 = r5.id     // Catch:{ Exception -> 0x0414 }
-                long r9 = (long) r2     // Catch:{ Exception -> 0x0414 }
+                org.telegram.tgnet.NativeByteBuffer r4 = r0.byteBufferValue(r2)     // Catch:{ Exception -> 0x0427 }
+                if (r4 == 0) goto L_0x02d4
+                int r5 = r4.readInt32(r2)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$Chat r5 = org.telegram.tgnet.TLRPC$Chat.TLdeserialize(r4, r5, r2)     // Catch:{ Exception -> 0x0427 }
+                r4.reuse()     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x02d4
+                boolean r2 = org.telegram.messenger.ChatObject.isNotInChat(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r2 != 0) goto L_0x02d4
+                boolean r2 = org.telegram.messenger.ChatObject.isChannel(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r2 == 0) goto L_0x02b2
+                boolean r2 = r5.creator     // Catch:{ Exception -> 0x0427 }
+                if (r2 != 0) goto L_0x02b2
+                org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r5.admin_rights     // Catch:{ Exception -> 0x0427 }
+                if (r2 == 0) goto L_0x02ae
+                org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r5.admin_rights     // Catch:{ Exception -> 0x0427 }
+                boolean r2 = r2.post_messages     // Catch:{ Exception -> 0x0427 }
+                if (r2 != 0) goto L_0x02b2
+            L_0x02ae:
+                boolean r2 = r5.megagroup     // Catch:{ Exception -> 0x0427 }
+                if (r2 == 0) goto L_0x02d4
+            L_0x02b2:
+                int r2 = r5.id     // Catch:{ Exception -> 0x0427 }
+                long r9 = (long) r2     // Catch:{ Exception -> 0x0427 }
                 long r9 = -r9
-                java.lang.Object r2 = r8.get(r9)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r2 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r2     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r4 = r5.title     // Catch:{ Exception -> 0x0414 }
-                r9 = 0
-                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r9, r6)     // Catch:{ Exception -> 0x0414 }
-                r2.name = r4     // Catch:{ Exception -> 0x0414 }
-                r2.object = r5     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$Dialog r2 = r2.dialog     // Catch:{ Exception -> 0x0414 }
-                int r4 = r5.id     // Catch:{ Exception -> 0x0414 }
-                int r4 = -r4
-                long r4 = (long) r4     // Catch:{ Exception -> 0x0414 }
-                r2.id = r4     // Catch:{ Exception -> 0x0414 }
-                int r3 = r3 + 1
-                goto L_0x021e
-            L_0x02cd:
-                r0.dispose()     // Catch:{ Exception -> 0x0414 }
-            L_0x02d0:
-                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0414 }
-                r0.<init>(r3)     // Catch:{ Exception -> 0x0414 }
-                r2 = 0
-            L_0x02d6:
-                int r3 = r8.size()     // Catch:{ Exception -> 0x0414 }
-                if (r2 >= r3) goto L_0x02f0
-                java.lang.Object r3 = r8.valueAt(r2)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r3 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r3     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLObject r4 = r3.object     // Catch:{ Exception -> 0x0414 }
-                if (r4 == 0) goto L_0x02ed
-                java.lang.CharSequence r4 = r3.name     // Catch:{ Exception -> 0x0414 }
-                if (r4 == 0) goto L_0x02ed
-                r0.add(r3)     // Catch:{ Exception -> 0x0414 }
-            L_0x02ed:
-                int r2 = r2 + 1
-                goto L_0x02d6
-            L_0x02f0:
-                org.telegram.ui.Components.ShareAlert r2 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0414 }
-                int r2 = r2.currentAccount     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.MessagesStorage r2 = org.telegram.messenger.MessagesStorage.getInstance(r2)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteDatabase r2 = r2.getDatabase()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r3 = "SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid"
-                r4 = 0
-                java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x0414 }
-                org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r5)     // Catch:{ Exception -> 0x0414 }
-            L_0x0307:
-                boolean r3 = r2.next()     // Catch:{ Exception -> 0x0414 }
-                if (r3 == 0) goto L_0x0406
-                r3 = 3
-                int r3 = r2.intValue(r3)     // Catch:{ Exception -> 0x0414 }
-                long r3 = (long) r3     // Catch:{ Exception -> 0x0414 }
-                int r3 = r8.indexOfKey(r3)     // Catch:{ Exception -> 0x0414 }
-                if (r3 < 0) goto L_0x031a
-                goto L_0x0307
-            L_0x031a:
-                r3 = 2
-                java.lang.String r4 = r2.stringValue(r3)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.messenger.LocaleController r5 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r5.getTranslitString(r4)     // Catch:{ Exception -> 0x0414 }
-                boolean r6 = r4.equals(r5)     // Catch:{ Exception -> 0x0414 }
-                if (r6 == 0) goto L_0x032e
-                r5 = 0
-            L_0x032e:
-                r6 = r19
-                int r9 = r4.lastIndexOf(r6)     // Catch:{ Exception -> 0x0414 }
-                r10 = -1
-                if (r9 == r10) goto L_0x033e
-                int r9 = r9 + 3
-                java.lang.String r9 = r4.substring(r9)     // Catch:{ Exception -> 0x0414 }
-                goto L_0x033f
-            L_0x033e:
-                r9 = 0
-            L_0x033f:
-                int r11 = r7.length     // Catch:{ Exception -> 0x0414 }
-                r13 = 0
-                r15 = 0
-            L_0x0342:
-                if (r13 >= r11) goto L_0x0400
-                r3 = r7[r13]     // Catch:{ Exception -> 0x0414 }
-                boolean r16 = r4.startsWith(r3)     // Catch:{ Exception -> 0x0414 }
-                if (r16 != 0) goto L_0x0389
-                java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r10.<init>()     // Catch:{ Exception -> 0x0414 }
-                r10.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r10.append(r3)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r10 = r4.contains(r10)     // Catch:{ Exception -> 0x0414 }
-                if (r10 != 0) goto L_0x0389
-                if (r5 == 0) goto L_0x037f
-                boolean r10 = r5.startsWith(r3)     // Catch:{ Exception -> 0x0414 }
-                if (r10 != 0) goto L_0x0389
-                java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r10.<init>()     // Catch:{ Exception -> 0x0414 }
-                r10.append(r14)     // Catch:{ Exception -> 0x0414 }
-                r10.append(r3)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0414 }
-                boolean r10 = r5.contains(r10)     // Catch:{ Exception -> 0x0414 }
-                if (r10 == 0) goto L_0x037f
-                goto L_0x0389
-            L_0x037f:
-                if (r9 == 0) goto L_0x038a
-                boolean r10 = r9.startsWith(r3)     // Catch:{ Exception -> 0x0414 }
-                if (r10 == 0) goto L_0x038a
-                r15 = 2
-                goto L_0x038a
-            L_0x0389:
-                r15 = 1
-            L_0x038a:
-                if (r15 == 0) goto L_0x03f8
+                r2 = r19
+                java.lang.Object r4 = r2.get(r9)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r5.title     // Catch:{ Exception -> 0x0427 }
                 r10 = 0
-                org.telegram.tgnet.NativeByteBuffer r4 = r2.byteBufferValue(r10)     // Catch:{ Exception -> 0x0414 }
-                if (r4 == 0) goto L_0x03f5
-                int r5 = r4.readInt32(r10)     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$User r5 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r4, r5, r10)     // Catch:{ Exception -> 0x0414 }
-                r4.reuse()     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0414 }
-                r9 = 0
-                r4.<init>()     // Catch:{ Exception -> 0x0414 }
-                org.telegram.tgnet.TLRPC$UserStatus r9 = r5.status     // Catch:{ Exception -> 0x0414 }
-                if (r9 == 0) goto L_0x03b1
-                org.telegram.tgnet.TLRPC$UserStatus r9 = r5.status     // Catch:{ Exception -> 0x0414 }
-                r11 = 1
-                int r13 = r2.intValue(r11)     // Catch:{ Exception -> 0x0414 }
-                r9.expires = r13     // Catch:{ Exception -> 0x0414 }
-            L_0x03b1:
-                org.telegram.tgnet.TLRPC$Dialog r9 = r4.dialog     // Catch:{ Exception -> 0x0414 }
-                int r11 = r5.id     // Catch:{ Exception -> 0x0414 }
-                long r10 = (long) r11     // Catch:{ Exception -> 0x0414 }
-                r9.id = r10     // Catch:{ Exception -> 0x0414 }
-                r4.object = r5     // Catch:{ Exception -> 0x0414 }
-                r10 = 1
-                if (r15 != r10) goto L_0x03c9
-                java.lang.String r9 = r5.first_name     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r5.last_name     // Catch:{ Exception -> 0x0414 }
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r9, r5, r3)     // Catch:{ Exception -> 0x0414 }
-                r4.name = r3     // Catch:{ Exception -> 0x0414 }
-                r9 = 0
-                goto L_0x03f0
-            L_0x03c9:
-                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r9.<init>()     // Catch:{ Exception -> 0x0414 }
-                r9.append(r12)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r5.username     // Catch:{ Exception -> 0x0414 }
-                r9.append(r5)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r5 = r9.toString()     // Catch:{ Exception -> 0x0414 }
-                java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0414 }
-                r9.<init>()     // Catch:{ Exception -> 0x0414 }
-                r9.append(r12)     // Catch:{ Exception -> 0x0414 }
-                r9.append(r3)     // Catch:{ Exception -> 0x0414 }
-                java.lang.String r3 = r9.toString()     // Catch:{ Exception -> 0x0414 }
-                r9 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r3)     // Catch:{ Exception -> 0x0414 }
-                r4.name = r3     // Catch:{ Exception -> 0x0414 }
-            L_0x03f0:
-                r0.add(r4)     // Catch:{ Exception -> 0x0414 }
-                r3 = r9
-                goto L_0x0402
-            L_0x03f5:
-                r10 = 1
+                java.lang.CharSequence r6 = org.telegram.messenger.AndroidUtilities.generateSearchName(r9, r10, r6)     // Catch:{ Exception -> 0x0427 }
+                r4.name = r6     // Catch:{ Exception -> 0x0427 }
+                r4.object = r5     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$Dialog r4 = r4.dialog     // Catch:{ Exception -> 0x0427 }
+                int r5 = r5.id     // Catch:{ Exception -> 0x0427 }
+                int r5 = -r5
+                long r5 = (long) r5     // Catch:{ Exception -> 0x0427 }
+                r4.id = r5     // Catch:{ Exception -> 0x0427 }
+                int r3 = r3 + 1
+                goto L_0x02d6
+            L_0x02d4:
+                r2 = r19
+            L_0x02d6:
+                r19 = r2
+                goto L_0x0225
+            L_0x02da:
+                r2 = r19
+                r0.dispose()     // Catch:{ Exception -> 0x0427 }
+                goto L_0x02e2
+            L_0x02e0:
+                r2 = r19
+            L_0x02e2:
+                java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0427 }
+                r0.<init>(r3)     // Catch:{ Exception -> 0x0427 }
                 r3 = 0
-                goto L_0x0402
-            L_0x03f8:
-                r3 = 0
-                r10 = 1
-                int r13 = r13 + 1
-                r3 = 2
-                r10 = -1
+            L_0x02e8:
+                int r4 = r2.size()     // Catch:{ Exception -> 0x0427 }
+                if (r3 >= r4) goto L_0x0302
+                java.lang.Object r4 = r2.valueAt(r3)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = (org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.DialogSearchResult) r4     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLObject r5 = r4.object     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x02ff
+                java.lang.CharSequence r5 = r4.name     // Catch:{ Exception -> 0x0427 }
+                if (r5 == 0) goto L_0x02ff
+                r0.add(r4)     // Catch:{ Exception -> 0x0427 }
+            L_0x02ff:
+                int r3 = r3 + 1
+                goto L_0x02e8
+            L_0x0302:
+                org.telegram.ui.Components.ShareAlert r3 = org.telegram.ui.Components.ShareAlert.this     // Catch:{ Exception -> 0x0427 }
+                int r3 = r3.currentAccount     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.MessagesStorage r3 = org.telegram.messenger.MessagesStorage.getInstance(r3)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteDatabase r3 = r3.getDatabase()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r4 = "SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid"
+                r5 = 0
+                java.lang.Object[] r6 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x0427 }
+                org.telegram.SQLite.SQLiteCursor r3 = r3.queryFinalized(r4, r6)     // Catch:{ Exception -> 0x0427 }
+            L_0x0319:
+                boolean r4 = r3.next()     // Catch:{ Exception -> 0x0427 }
+                if (r4 == 0) goto L_0x0419
+                r4 = 3
+                int r4 = r3.intValue(r4)     // Catch:{ Exception -> 0x0427 }
+                long r4 = (long) r4     // Catch:{ Exception -> 0x0427 }
+                int r4 = r2.indexOfKey(r4)     // Catch:{ Exception -> 0x0427 }
+                if (r4 < 0) goto L_0x032c
+                goto L_0x0319
+            L_0x032c:
+                r5 = 2
+                java.lang.String r4 = r3.stringValue(r5)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r6 = r6.getTranslitString(r4)     // Catch:{ Exception -> 0x0427 }
+                boolean r9 = r4.equals(r6)     // Catch:{ Exception -> 0x0427 }
+                if (r9 == 0) goto L_0x0341
+                r10 = 0
                 goto L_0x0342
-            L_0x0400:
-                r3 = 0
-                r10 = 1
-            L_0x0402:
-                r19 = r6
-                goto L_0x0307
-            L_0x0406:
-                r2.dispose()     // Catch:{ Exception -> 0x0414 }
-                org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$yOcjYAtW1X0Tew0aYHc9oPG3azM r2 = org.telegram.ui.Components.$$Lambda$ShareAlert$ShareSearchAdapter$yOcjYAtW1X0Tew0aYHc9oPG3azM.INSTANCE     // Catch:{ Exception -> 0x0414 }
-                java.util.Collections.sort(r0, r2)     // Catch:{ Exception -> 0x0414 }
+            L_0x0341:
+                r10 = r6
+            L_0x0342:
+                r6 = r18
+                int r9 = r4.lastIndexOf(r6)     // Catch:{ Exception -> 0x0427 }
+                r11 = -1
+                if (r9 == r11) goto L_0x0352
+                int r9 = r9 + 3
+                java.lang.String r9 = r4.substring(r9)     // Catch:{ Exception -> 0x0427 }
+                goto L_0x0353
+            L_0x0352:
+                r9 = 0
+            L_0x0353:
+                r12 = 0
+                r14 = 0
+            L_0x0355:
+                if (r12 >= r7) goto L_0x0413
+                r5 = r8[r12]     // Catch:{ Exception -> 0x0427 }
+                boolean r16 = r4.startsWith(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r16 != 0) goto L_0x039c
+                java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r11.<init>()     // Catch:{ Exception -> 0x0427 }
+                r11.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r11.append(r5)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r11 != 0) goto L_0x039c
+                if (r10 == 0) goto L_0x0392
+                boolean r11 = r10.startsWith(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r11 != 0) goto L_0x039c
+                java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r11.<init>()     // Catch:{ Exception -> 0x0427 }
+                r11.append(r15)     // Catch:{ Exception -> 0x0427 }
+                r11.append(r5)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0427 }
+                boolean r11 = r10.contains(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r11 == 0) goto L_0x0392
+                goto L_0x039c
+            L_0x0392:
+                if (r9 == 0) goto L_0x039d
+                boolean r11 = r9.startsWith(r5)     // Catch:{ Exception -> 0x0427 }
+                if (r11 == 0) goto L_0x039d
+                r14 = 2
+                goto L_0x039d
+            L_0x039c:
+                r14 = 1
+            L_0x039d:
+                if (r14 == 0) goto L_0x040b
+                r11 = 0
+                org.telegram.tgnet.NativeByteBuffer r4 = r3.byteBufferValue(r11)     // Catch:{ Exception -> 0x0427 }
+                if (r4 == 0) goto L_0x0408
+                int r9 = r4.readInt32(r11)     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$User r9 = org.telegram.tgnet.TLRPC$User.TLdeserialize(r4, r9, r11)     // Catch:{ Exception -> 0x0427 }
+                r4.reuse()     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult r4 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$DialogSearchResult     // Catch:{ Exception -> 0x0427 }
+                r10 = 0
+                r4.<init>()     // Catch:{ Exception -> 0x0427 }
+                org.telegram.tgnet.TLRPC$UserStatus r10 = r9.status     // Catch:{ Exception -> 0x0427 }
+                if (r10 == 0) goto L_0x03c4
+                org.telegram.tgnet.TLRPC$UserStatus r10 = r9.status     // Catch:{ Exception -> 0x0427 }
+                r12 = 1
+                int r11 = r3.intValue(r12)     // Catch:{ Exception -> 0x0427 }
+                r10.expires = r11     // Catch:{ Exception -> 0x0427 }
+            L_0x03c4:
+                org.telegram.tgnet.TLRPC$Dialog r10 = r4.dialog     // Catch:{ Exception -> 0x0427 }
+                int r11 = r9.id     // Catch:{ Exception -> 0x0427 }
+                long r11 = (long) r11     // Catch:{ Exception -> 0x0427 }
+                r10.id = r11     // Catch:{ Exception -> 0x0427 }
+                r4.object = r9     // Catch:{ Exception -> 0x0427 }
+                r11 = 1
+                if (r14 != r11) goto L_0x03dc
+                java.lang.String r10 = r9.first_name     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r9.last_name     // Catch:{ Exception -> 0x0427 }
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r10, r9, r5)     // Catch:{ Exception -> 0x0427 }
+                r4.name = r5     // Catch:{ Exception -> 0x0427 }
+                r10 = 0
+                goto L_0x0403
+            L_0x03dc:
+                java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r10.<init>()     // Catch:{ Exception -> 0x0427 }
+                r10.append(r13)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r9.username     // Catch:{ Exception -> 0x0427 }
+                r10.append(r9)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r9 = r10.toString()     // Catch:{ Exception -> 0x0427 }
+                java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0427 }
+                r10.<init>()     // Catch:{ Exception -> 0x0427 }
+                r10.append(r13)     // Catch:{ Exception -> 0x0427 }
+                r10.append(r5)     // Catch:{ Exception -> 0x0427 }
+                java.lang.String r5 = r10.toString()     // Catch:{ Exception -> 0x0427 }
+                r10 = 0
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r9, r10, r5)     // Catch:{ Exception -> 0x0427 }
+                r4.name = r5     // Catch:{ Exception -> 0x0427 }
+            L_0x0403:
+                r0.add(r4)     // Catch:{ Exception -> 0x0427 }
+                r5 = r10
+                goto L_0x0415
+            L_0x0408:
+                r11 = 1
+                r5 = 0
+                goto L_0x0415
+            L_0x040b:
+                r5 = 0
+                r11 = 1
+                int r12 = r12 + 1
+                r5 = 2
+                r11 = -1
+                goto L_0x0355
+            L_0x0413:
+                r5 = 0
+                r11 = 1
+            L_0x0415:
+                r18 = r6
+                goto L_0x0319
+            L_0x0419:
+                r3.dispose()     // Catch:{ Exception -> 0x0427 }
+                org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$yOcjYAtW1X0Tew0aYHc9oPG3azM r2 = org.telegram.ui.Components.$$Lambda$ShareAlert$ShareSearchAdapter$yOcjYAtW1X0Tew0aYHc9oPG3azM.INSTANCE     // Catch:{ Exception -> 0x0427 }
+                java.util.Collections.sort(r0, r2)     // Catch:{ Exception -> 0x0427 }
                 r2 = r22
-                r1.updateSearchResults(r0, r2)     // Catch:{ Exception -> 0x0414 }
-                goto L_0x0418
-            L_0x0414:
+                r1.updateSearchResults(r0, r2)     // Catch:{ Exception -> 0x0427 }
+                goto L_0x042b
+            L_0x0427:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0418:
+            L_0x042b:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.ShareSearchAdapter.lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String, int):void");
@@ -1963,10 +1964,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         break;
                     }
                     TLObject tLObject = ((DialogSearchResult) arrayList.get(i2)).object;
-                    if (tLObject instanceof TLRPC.User) {
-                        MessagesController.getInstance(ShareAlert.this.currentAccount).putUser((TLRPC.User) tLObject, true);
-                    } else if (tLObject instanceof TLRPC.Chat) {
-                        MessagesController.getInstance(ShareAlert.this.currentAccount).putChat((TLRPC.Chat) tLObject, true);
+                    if (tLObject instanceof TLRPC$User) {
+                        MessagesController.getInstance(ShareAlert.this.currentAccount).putUser((TLRPC$User) tLObject, true);
+                    } else if (tLObject instanceof TLRPC$Chat) {
+                        MessagesController.getInstance(ShareAlert.this.currentAccount).putChat((TLRPC$Chat) tLObject, true);
                     }
                     i2++;
                 }
@@ -2027,7 +2028,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             return size != 0 ? size + 1 : size;
         }
 
-        public TLRPC.Dialog getItem(int i) {
+        public TLRPC$Dialog getItem(int i) {
             int i2 = i - 1;
             if (i2 < 0 || i2 >= this.searchResult.size()) {
                 return null;

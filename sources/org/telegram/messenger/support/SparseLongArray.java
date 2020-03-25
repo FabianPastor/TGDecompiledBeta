@@ -17,17 +17,18 @@ public class SparseLongArray implements Cloneable {
     }
 
     public SparseLongArray clone() {
+        SparseLongArray sparseLongArray = null;
         try {
-            SparseLongArray sparseLongArray = (SparseLongArray) super.clone();
+            SparseLongArray sparseLongArray2 = (SparseLongArray) super.clone();
             try {
-                sparseLongArray.mKeys = (int[]) this.mKeys.clone();
-                sparseLongArray.mValues = (long[]) this.mValues.clone();
-                return sparseLongArray;
+                sparseLongArray2.mKeys = (int[]) this.mKeys.clone();
+                sparseLongArray2.mValues = (long[]) this.mValues.clone();
+                return sparseLongArray2;
             } catch (CloneNotSupportedException unused) {
-                return sparseLongArray;
+                sparseLongArray = sparseLongArray2;
             }
         } catch (CloneNotSupportedException unused2) {
-            return null;
+            return sparseLongArray;
         }
     }
 

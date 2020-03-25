@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Property;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
@@ -30,8 +29,6 @@ import org.telegram.ui.PhotoViewer;
 public class PhotoPickerPhotoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public AnimatorSet animator;
-    /* access modifiers changed from: private */
-    public AnimatorSet animatorSet;
     private Paint backgroundPaint = new Paint();
     public CheckBox checkBox;
     public FrameLayout checkFrame;
@@ -46,24 +43,29 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         super(context);
         setWillNotDraw(false);
         this.zoomOnSelect = z;
-        this.imageView = new BackupImageView(context);
-        addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-        this.checkFrame = new FrameLayout(context);
-        addView(this.checkFrame, LayoutHelper.createFrame(42, 42, 53));
-        this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(NUM);
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.checkFrame = frameLayout;
+        addView(frameLayout, LayoutHelper.createFrame(42, 42, 53));
+        FrameLayout frameLayout2 = new FrameLayout(context);
+        this.videoInfoContainer = frameLayout2;
+        frameLayout2.setBackgroundResource(NUM);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
         ImageView imageView2 = new ImageView(context);
         imageView2.setImageResource(NUM);
         this.videoInfoContainer.addView(imageView2, LayoutHelper.createFrame(-2, -2, 19));
-        this.videoTextView = new TextView(context);
-        this.videoTextView.setTextColor(-1);
+        TextView textView = new TextView(context);
+        this.videoTextView = textView;
+        textView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
         this.videoTextView.setImportantForAccessibility(2);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, NUM);
-        this.checkBox.setSize(z ? 30 : 26);
+        CheckBox checkBox2 = new CheckBox(context, NUM);
+        this.checkBox = checkBox2;
+        checkBox2.setSize(z ? 30 : 26);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
         this.checkBox.setColor(Theme.getColor("dialogFloatingButton"), -1);
@@ -86,40 +88,6 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         this.checkBox.setColor(Theme.getColor("dialogFloatingButton"), -1);
     }
 
-    public void showCheck(boolean z) {
-        AnimatorSet animatorSet2 = this.animatorSet;
-        if (animatorSet2 != null) {
-            animatorSet2.cancel();
-            this.animatorSet = null;
-        }
-        this.animatorSet = new AnimatorSet();
-        this.animatorSet.setInterpolator(new DecelerateInterpolator());
-        this.animatorSet.setDuration(180);
-        AnimatorSet animatorSet3 = this.animatorSet;
-        Animator[] animatorArr = new Animator[2];
-        FrameLayout frameLayout = this.videoInfoContainer;
-        float[] fArr = new float[1];
-        float f = 1.0f;
-        fArr[0] = z ? 1.0f : 0.0f;
-        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, "alpha", fArr);
-        CheckBox checkBox2 = this.checkBox;
-        float[] fArr2 = new float[1];
-        if (!z) {
-            f = 0.0f;
-        }
-        fArr2[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(checkBox2, "alpha", fArr2);
-        animatorSet3.playTogether(animatorArr);
-        this.animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (animator.equals(PhotoPickerPhotoCell.this.animatorSet)) {
-                    AnimatorSet unused = PhotoPickerPhotoCell.this.animatorSet = null;
-                }
-            }
-        });
-        this.animatorSet.start();
-    }
-
     public void setNum(int i) {
         this.checkBox.setNum(i);
     }
@@ -127,12 +95,11 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     public void setImage(MediaController.PhotoEntry photoEntry2) {
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
         this.photoEntry = photoEntry2;
-        MediaController.PhotoEntry photoEntry3 = this.photoEntry;
-        String str = photoEntry3.thumbPath;
+        String str = photoEntry2.thumbPath;
         if (str != null) {
             this.imageView.setImage(str, (String) null, drawable);
-        } else if (photoEntry3.path != null) {
-            this.imageView.setOrientation(photoEntry3.orientation, true);
+        } else if (photoEntry2.path != null) {
+            this.imageView.setOrientation(photoEntry2.orientation, true);
             if (this.photoEntry.isVideo) {
                 this.videoInfoContainer.setVisibility(0);
                 this.videoTextView.setText(AndroidUtilities.formatShortDuration(this.photoEntry.duration));
@@ -152,14 +119,14 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
     public void setImage(MediaController.SearchImage searchImage) {
         Drawable drawable = this.zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(NUM);
-        TLRPC.PhotoSize photoSize = searchImage.thumbPhotoSize;
-        if (photoSize != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(photoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
+        TLRPC$PhotoSize tLRPC$PhotoSize = searchImage.thumbPhotoSize;
+        if (tLRPC$PhotoSize != null) {
+            this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), (String) null, drawable, (Object) searchImage);
             return;
         }
-        TLRPC.PhotoSize photoSize2 = searchImage.photoSize;
-        if (photoSize2 != null) {
-            this.imageView.setImage(ImageLocation.getForPhoto(photoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
+        TLRPC$PhotoSize tLRPC$PhotoSize2 = searchImage.photoSize;
+        if (tLRPC$PhotoSize2 != null) {
+            this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize2, searchImage.photo), "80_80", drawable, (Object) searchImage);
             return;
         }
         String str = searchImage.thumbPath;
@@ -179,16 +146,16 @@ public class PhotoPickerPhotoCell extends FrameLayout {
 
     public void setChecked(int i, final boolean z, boolean z2) {
         this.checkBox.setChecked(i, z, z2);
-        AnimatorSet animatorSet2 = this.animator;
-        if (animatorSet2 != null) {
-            animatorSet2.cancel();
+        AnimatorSet animatorSet = this.animator;
+        if (animatorSet != null) {
+            animatorSet.cancel();
             this.animator = null;
         }
         if (this.zoomOnSelect) {
             float f = 0.85f;
             if (z2) {
-                this.animator = new AnimatorSet();
-                AnimatorSet animatorSet3 = this.animator;
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.animator = animatorSet2;
                 Animator[] animatorArr = new Animator[2];
                 BackupImageView backupImageView = this.imageView;
                 Property property = View.SCALE_X;
@@ -203,7 +170,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
                 }
                 fArr2[0] = f;
                 animatorArr[1] = ObjectAnimator.ofFloat(backupImageView2, property2, fArr2);
-                animatorSet3.playTogether(animatorArr);
+                animatorSet2.playTogether(animatorArr);
                 this.animator.setDuration(200);
                 this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {

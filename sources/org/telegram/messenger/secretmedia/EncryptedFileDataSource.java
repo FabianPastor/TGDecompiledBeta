@@ -50,11 +50,13 @@ public final class EncryptedFileDataSource extends BaseDataSource {
             randomAccessFile.read(this.key);
             randomAccessFile.read(this.iv);
             randomAccessFile.close();
-            this.file = new RandomAccessFile(file2, "r");
-            this.file.seek(dataSpec.position);
+            RandomAccessFile randomAccessFile2 = new RandomAccessFile(file2, "r");
+            this.file = randomAccessFile2;
+            randomAccessFile2.seek(dataSpec.position);
             this.fileOffset = (int) dataSpec.position;
-            this.bytesRemaining = dataSpec.length == -1 ? this.file.length() - dataSpec.position : dataSpec.length;
-            if (this.bytesRemaining >= 0) {
+            long length = dataSpec.length == -1 ? this.file.length() - dataSpec.position : dataSpec.length;
+            this.bytesRemaining = length;
+            if (length >= 0) {
                 this.opened = true;
                 transferStarted(dataSpec);
                 return this.bytesRemaining;

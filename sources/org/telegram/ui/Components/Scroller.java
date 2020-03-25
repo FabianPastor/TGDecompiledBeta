@@ -7,11 +7,7 @@ import android.view.animation.Interpolator;
 
 public class Scroller {
     private static float DECELERATION_RATE = ((float) (Math.log(0.75d) / Math.log(0.9d)));
-    private static final int DEFAULT_DURATION = 250;
-    private static float END_TENSION = (1.0f - START_TENSION);
-    private static final int FLING_MODE = 1;
-    private static final int NB_SAMPLES = 100;
-    private static final int SCROLL_MODE = 0;
+    private static float END_TENSION = (1.0f - 0.4f);
     private static final float[] SPLINE = new float[101];
     private static float START_TENSION = 0.4f;
     private static float sViscousFluidNormalize;
@@ -83,10 +79,6 @@ public class Scroller {
         this.mFlywheel = z;
     }
 
-    public final void setFriction(float f) {
-        this.mDeceleration = computeDeceleration(f);
-    }
-
     private float computeDeceleration(float f) {
         return this.mPpi * 386.0878f * f;
     }
@@ -97,10 +89,6 @@ public class Scroller {
 
     public final void forceFinished(boolean z) {
         this.mFinished = z;
-    }
-
-    public final int getDuration() {
-        return this.mDuration;
     }
 
     public final int getCurrX() {
@@ -121,10 +109,6 @@ public class Scroller {
 
     public final int getStartY() {
         return this.mStartY;
-    }
-
-    public final int getFinalX() {
-        return this.mFinalX;
     }
 
     public final int getFinalY() {
@@ -159,14 +143,19 @@ public class Scroller {
                 float f5 = fArr[i3];
                 float f6 = f5 + (((f3 - f4) / ((((float) i4) / 100.0f) - f4)) * (fArr[i4] - f5));
                 int i5 = this.mStartX;
-                this.mCurrX = i5 + Math.round(((float) (this.mFinalX - i5)) * f6);
-                this.mCurrX = Math.min(this.mCurrX, this.mMaxX);
-                this.mCurrX = Math.max(this.mCurrX, this.mMinX);
+                int round = i5 + Math.round(((float) (this.mFinalX - i5)) * f6);
+                this.mCurrX = round;
+                int min = Math.min(round, this.mMaxX);
+                this.mCurrX = min;
+                this.mCurrX = Math.max(min, this.mMinX);
                 int i6 = this.mStartY;
-                this.mCurrY = i6 + Math.round(f6 * ((float) (this.mFinalY - i6)));
-                this.mCurrY = Math.min(this.mCurrY, this.mMaxY);
-                this.mCurrY = Math.max(this.mCurrY, this.mMinY);
-                if (this.mCurrX == this.mFinalX && this.mCurrY == this.mFinalY) {
+                int round2 = i6 + Math.round(f6 * ((float) (this.mFinalY - i6)));
+                this.mCurrY = round2;
+                int min2 = Math.min(round2, this.mMaxY);
+                this.mCurrY = min2;
+                int max = Math.max(min2, this.mMinY);
+                this.mCurrY = max;
+                if (this.mCurrX == this.mFinalX && max == this.mFinalY) {
                     this.mFinished = true;
                 }
             }
@@ -176,10 +165,6 @@ public class Scroller {
             this.mFinished = true;
         }
         return true;
-    }
-
-    public void startScroll(int i, int i2, int i3, int i4) {
-        startScroll(i, i2, i3, i4, 250);
     }
 
     public void startScroll(int i, int i2, int i3, int i4, int i5) {
@@ -327,11 +312,9 @@ public class Scroller {
             int r3 = java.lang.Math.round(r3)
             int r1 = r1 + r3
             r0.mFinalX = r1
-            int r1 = r0.mFinalX
             int r3 = r0.mMaxX
             int r1 = java.lang.Math.min(r1, r3)
             r0.mFinalX = r1
-            int r1 = r0.mFinalX
             int r3 = r0.mMinX
             int r1 = java.lang.Math.max(r1, r3)
             r0.mFinalX = r1
@@ -339,11 +322,9 @@ public class Scroller {
             int r1 = java.lang.Math.round(r4)
             int r1 = r1 + r2
             r0.mFinalY = r1
-            int r1 = r0.mFinalY
             int r2 = r0.mMaxY
             int r1 = java.lang.Math.min(r1, r2)
             r0.mFinalY = r1
-            int r1 = r0.mFinalY
             int r2 = r0.mMinY
             int r1 = java.lang.Math.max(r1, r2)
             r0.mFinalY = r1
@@ -369,29 +350,7 @@ public class Scroller {
         this.mFinished = true;
     }
 
-    public void extendDuration(int i) {
-        this.mDuration = timePassed() + i;
-        this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
-        this.mFinished = false;
-    }
-
     public int timePassed() {
         return (int) (AnimationUtils.currentAnimationTimeMillis() - this.mStartTime);
-    }
-
-    public void setFinalX(int i) {
-        this.mFinalX = i;
-        this.mDeltaX = (float) (this.mFinalX - this.mStartX);
-        this.mFinished = false;
-    }
-
-    public void setFinalY(int i) {
-        this.mFinalY = i;
-        this.mDeltaY = (float) (this.mFinalY - this.mStartY);
-        this.mFinished = false;
-    }
-
-    public boolean isScrollingInDirection(float f, float f2) {
-        return !this.mFinished && Math.signum(f) == Math.signum((float) (this.mFinalX - this.mStartX)) && Math.signum(f2) == Math.signum((float) (this.mFinalY - this.mStartY));
     }
 }

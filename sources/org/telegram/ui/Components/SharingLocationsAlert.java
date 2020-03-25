@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
@@ -33,14 +32,12 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     public boolean ignoreLayout;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
-    private int reqId;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
     /* access modifiers changed from: private */
     public TextView textView;
-    private Pattern urlPattern;
 
     public interface SharingLocationsAlertDelegate {
         void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo);
@@ -55,9 +52,10 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         super(context, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
         this.delegate = sharingLocationsAlertDelegate;
-        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
-        this.containerView = new FrameLayout(context) {
+        Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+        this.shadowDrawable = mutate;
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
+        AnonymousClass1 r12 = new FrameLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() != 0 || SharingLocationsAlert.this.scrollOffsetY == 0 || motionEvent.getY() >= ((float) SharingLocationsAlert.this.scrollOffsetY)) {
                     return super.onInterceptTouchEvent(motionEvent);
@@ -114,11 +112,12 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 SharingLocationsAlert.this.shadowDrawable.draw(canvas);
             }
         };
-        this.containerView.setWillNotDraw(false);
+        this.containerView = r12;
+        r12.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
         int i = this.backgroundPaddingLeft;
         viewGroup.setPadding(i, 0, i, 0);
-        this.listView = new RecyclerListView(context) {
+        AnonymousClass2 r122 = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 boolean onInterceptTouchEvent = ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, SharingLocationsAlert.this.listView, 0, (ContentPreviewViewer.ContentPreviewViewerDelegate) null);
                 if (super.onInterceptTouchEvent(motionEvent) || onInterceptTouchEvent) {
@@ -133,7 +132,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 }
             }
         };
-        this.listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        this.listView = r122;
+        r122.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
         RecyclerListView recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
@@ -209,16 +209,17 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
             this.containerView.invalidate();
             return;
         }
+        int i = 0;
         View childAt = this.listView.getChildAt(0);
         RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
         int top = childAt.getTop() - AndroidUtilities.dp(8.0f);
-        if (top <= 0 || holder == null || holder.getAdapterPosition() != 0) {
-            top = 0;
+        if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
+            i = top;
         }
-        if (this.scrollOffsetY != top) {
+        if (this.scrollOffsetY != i) {
             RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = top;
-            recyclerListView2.setTopGlowOffset(top);
+            this.scrollOffsetY = i;
+            recyclerListView2.setTopGlowOffset(i);
             this.containerView.invalidate();
         }
     }
@@ -273,7 +274,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i != 0) {
-                frameLayout = new FrameLayout(this.context) {
+                frameLayout = new FrameLayout(this, this.context) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + 1, NUM));

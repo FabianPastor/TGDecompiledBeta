@@ -30,12 +30,14 @@ public class RadioButton extends View {
     public RadioButton(Context context) {
         super(context);
         if (paint == null) {
-            paint = new Paint(1);
-            paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            Paint paint2 = new Paint(1);
+            paint = paint2;
+            paint2.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
             paint.setStyle(Paint.Style.STROKE);
             checkedPaint = new Paint(1);
-            eraser = new Paint(1);
-            eraser.setColor(0);
+            Paint paint3 = new Paint(1);
+            eraser = paint3;
+            paint3.setColor(0);
             eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         try {
@@ -54,6 +56,7 @@ public class RadioButton extends View {
         }
     }
 
+    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -90,8 +93,9 @@ public class RadioButton extends View {
     private void animateToCheckedState(boolean z) {
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
-        this.checkAnimator.setDuration(200);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.setDuration(200);
         this.checkAnimator.start();
     }
 

@@ -29,20 +29,21 @@ public class ChatListCell extends LinearLayout {
         private RectF rect = new RectF();
         private TextPaint textPaint;
 
-        public ListView(Context context, boolean z) {
+        public ListView(ChatListCell chatListCell, Context context, boolean z) {
             super(context);
             boolean z2 = true;
             this.textPaint = new TextPaint(1);
             setWillNotDraw(false);
             this.isThreeLines = z;
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-            this.button = new RadioButton(context, ChatListCell.this) {
+            AnonymousClass1 r12 = new RadioButton(context, chatListCell) {
                 public void invalidate() {
                     super.invalidate();
                     ListView.this.invalidate();
                 }
             };
-            this.button.setSize(AndroidUtilities.dp(20.0f));
+            this.button = r12;
+            r12.setSize(AndroidUtilities.dp(20.0f));
             addView(this.button, LayoutHelper.createFrame(22, 22.0f, 53, 0.0f, 26.0f, 10.0f, 0.0f));
             RadioButton radioButton = this.button;
             if ((!this.isThreeLines || !SharedConfig.useThreeLinesLayout) && (this.isThreeLines || SharedConfig.useThreeLinesLayout)) {
@@ -126,7 +127,7 @@ public class ChatListCell extends LinearLayout {
         int i = 0;
         while (i < this.listView.length) {
             boolean z = i == 1;
-            this.listView[i] = new ListView(context, z);
+            this.listView[i] = new ListView(this, context, z);
             addView(this.listView[i], LayoutHelper.createLinear(-1, -1, 0.5f, i == 1 ? 10 : 0, 0, 0, 0));
             this.listView[i].setOnClickListener(new View.OnClickListener(z) {
                 private final /* synthetic */ boolean f$1;

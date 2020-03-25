@@ -5,10 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,7 +22,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -56,14 +52,6 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ProxySettingsActivity extends BaseFragment {
-    private static final int FIELD_IP = 0;
-    private static final int FIELD_PASSWORD = 3;
-    private static final int FIELD_PORT = 1;
-    private static final int FIELD_SECRET = 4;
-    private static final int FIELD_USER = 2;
-    private static final int TYPE_MTPROTO = 1;
-    private static final int TYPE_SOCKS5 = 0;
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public boolean addingNewProxy;
     private TextInfoPrivacyCell[] bottomCells;
@@ -93,53 +81,6 @@ public class ProxySettingsActivity extends BaseFragment {
     private float shareDoneProgress;
     private float[] shareDoneProgressAnimValues;
     private RadioCell[] typeCell;
-
-    public class TypeCell extends FrameLayout {
-        private ImageView checkImage;
-        private boolean needDivider;
-        private TextView textView;
-
-        public TypeCell(Context context) {
-            super(context);
-            setWillNotDraw(false);
-            this.textView = new TextView(context);
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.textView.setTextSize(1, 16.0f);
-            this.textView.setLines(1);
-            this.textView.setMaxLines(1);
-            this.textView.setSingleLine(true);
-            this.textView.setEllipsize(TextUtils.TruncateAt.END);
-            int i = 5;
-            this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
-            this.checkImage = new ImageView(context);
-            this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
-            this.checkImage.setImageResource(NUM);
-            addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
-        }
-
-        /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
-        }
-
-        public void setValue(String str, boolean z, boolean z2) {
-            this.textView.setText(str);
-            this.checkImage.setVisibility(z ? 0 : 4);
-            this.needDivider = z2;
-        }
-
-        public void setTypeChecked(boolean z) {
-            this.checkImage.setVisibility(z ? 0 : 4);
-        }
-
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            if (this.needDivider) {
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
-            }
-        }
-    }
 
     public ProxySettingsActivity() {
         this.sectionCell = new ShadowSectionCell[3];
@@ -239,17 +180,20 @@ public class ProxySettingsActivity extends BaseFragment {
                 }
             }
         });
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        this.doneItem.setContentDescription(LocaleController.getString("Done", NUM));
-        this.fragmentView = new FrameLayout(context2);
-        View view = this.fragmentView;
-        view.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.scrollView = new ScrollView(context2);
-        this.scrollView.setFillViewport(true);
+        ActionBarMenuItem addItemWithWidth = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneItem = addItemWithWidth;
+        addItemWithWidth.setContentDescription(LocaleController.getString("Done", NUM));
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        ScrollView scrollView2 = new ScrollView(context2);
+        this.scrollView = scrollView2;
+        scrollView2.setFillViewport(true);
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("actionBarDefault"));
-        ((FrameLayout) view).addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
-        this.linearLayout2 = new LinearLayout(context2);
-        this.linearLayout2.setOrientation(1);
+        frameLayout.addView(this.scrollView, LayoutHelper.createFrame(-1, -1.0f));
+        LinearLayout linearLayout = new LinearLayout(context2);
+        this.linearLayout2 = linearLayout;
+        linearLayout.setOrientation(1);
         this.scrollView.addView(this.linearLayout2, new FrameLayout.LayoutParams(-1, -2));
         $$Lambda$ProxySettingsActivity$m9BkTAI6IqJctow06HtssG_kLaQ r2 = new View.OnClickListener() {
             public final void onClick(View view) {
@@ -272,8 +216,9 @@ public class ProxySettingsActivity extends BaseFragment {
         }
         this.sectionCell[0] = new ShadowSectionCell(context2);
         this.linearLayout2.addView(this.sectionCell[0], LayoutHelper.createLinear(-1, -2));
-        this.inputFieldsContainer = new LinearLayout(context2);
-        this.inputFieldsContainer.setOrientation(1);
+        LinearLayout linearLayout3 = new LinearLayout(context2);
+        this.inputFieldsContainer = linearLayout3;
+        linearLayout3.setOrientation(1);
         this.inputFieldsContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         if (Build.VERSION.SDK_INT >= 21) {
             this.inputFieldsContainer.setElevation((float) AndroidUtilities.dp(1.0f));
@@ -283,8 +228,8 @@ public class ProxySettingsActivity extends BaseFragment {
         this.inputFields = new EditTextBoldCursor[5];
         int i2 = 0;
         for (int i3 = 5; i2 < i3; i3 = 5) {
-            FrameLayout frameLayout = new FrameLayout(context2);
-            this.inputFieldsContainer.addView(frameLayout, LayoutHelper.createLinear(-1, 64));
+            FrameLayout frameLayout2 = new FrameLayout(context2);
+            this.inputFieldsContainer.addView(frameLayout2, LayoutHelper.createLinear(-1, 64));
             this.inputFields[i2] = new EditTextBoldCursor(context2);
             this.inputFields[i2].setTag(Integer.valueOf(i2));
             this.inputFields[i2].setTextSize(1, 16.0f);
@@ -385,7 +330,7 @@ public class ProxySettingsActivity extends BaseFragment {
             EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
             editTextBoldCursorArr[i2].setSelection(editTextBoldCursorArr[i2].length());
             this.inputFields[i2].setPadding(0, 0, 0, 0);
-            frameLayout.addView(this.inputFields[i2], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, i2 == 0 ? 12.0f : 0.0f, 17.0f, 0.0f));
+            frameLayout2.addView(this.inputFields[i2], LayoutHelper.createFrame(-1, -1.0f, 51, 17.0f, i2 == 0 ? 12.0f : 0.0f, 17.0f, 0.0f));
             this.inputFields[i2].setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                     return ProxySettingsActivity.this.lambda$createView$1$ProxySettingsActivity(textView, i, keyEvent);
@@ -405,8 +350,9 @@ public class ProxySettingsActivity extends BaseFragment {
             }
             this.linearLayout2.addView(this.bottomCells[i4], LayoutHelper.createLinear(-1, -2));
         }
-        this.pasteCell = new TextSettingsCell(this.fragmentView.getContext());
-        this.pasteCell.setBackground(Theme.getSelectorDrawable(true));
+        TextSettingsCell textSettingsCell = new TextSettingsCell(this.fragmentView.getContext());
+        this.pasteCell = textSettingsCell;
+        textSettingsCell.setBackground(Theme.getSelectorDrawable(true));
         this.pasteCell.setText(LocaleController.getString("PasteFromClipboard", NUM), false);
         this.pasteCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
         this.pasteCell.setOnClickListener(new View.OnClickListener() {
@@ -420,8 +366,9 @@ public class ProxySettingsActivity extends BaseFragment {
         this.sectionCell[2].setBackground(Theme.getThemedDrawable(this.fragmentView.getContext(), NUM, "windowBackgroundGrayShadow"));
         this.linearLayout2.addView(this.sectionCell[2], 1, LayoutHelper.createLinear(-1, -2));
         this.sectionCell[2].setVisibility(8);
-        this.shareCell = new TextSettingsCell(context2);
-        this.shareCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        TextSettingsCell textSettingsCell2 = new TextSettingsCell(context2);
+        this.shareCell = textSettingsCell2;
+        textSettingsCell2.setBackgroundDrawable(Theme.getSelectorDrawable(true));
         this.shareCell.setText(LocaleController.getString("ShareFile", NUM), false);
         this.shareCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
         this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
@@ -593,178 +540,176 @@ public class ProxySettingsActivity extends BaseFragment {
             java.lang.String[] r4 = new java.lang.String[r4]
             r11.pasteFields = r4
             r4 = 2
-            if (r0 == 0) goto L_0x012b
+            if (r0 == 0) goto L_0x0128
             java.lang.String[] r5 = new java.lang.String[r4]
             java.lang.String r6 = "t.me/socks?"
             r5[r2] = r6
-            r6 = 1
-            java.lang.String r7 = "tg://socks?"
-            r5[r6] = r7
-            r7 = 0
+            java.lang.String r6 = "tg://socks?"
+            r7 = 1
+            r5[r7] = r6
+            r6 = 0
         L_0x0048:
-            int r8 = r5.length
-            java.lang.String r9 = "&"
-            if (r7 >= r8) goto L_0x006a
-            r8 = r5[r7]
-            int r8 = r0.indexOf(r8)
-            if (r8 < 0) goto L_0x0067
+            java.lang.String r8 = "&"
+            if (r6 >= r4) goto L_0x0069
+            r9 = r5[r6]
+            int r9 = r0.indexOf(r9)
+            if (r9 < 0) goto L_0x0066
             r11.pasteType = r2
-            r1 = r5[r7]
+            r1 = r5[r6]
             int r1 = r1.length()
-            int r8 = r8 + r1
-            java.lang.String r1 = r0.substring(r8)
-            java.lang.String[] r1 = r1.split(r9)
-            goto L_0x006a
-        L_0x0067:
-            int r7 = r7 + 1
+            int r9 = r9 + r1
+            java.lang.String r1 = r0.substring(r9)
+            java.lang.String[] r1 = r1.split(r8)
+            goto L_0x0069
+        L_0x0066:
+            int r6 = r6 + 1
             goto L_0x0048
-        L_0x006a:
-            if (r1 != 0) goto L_0x0097
+        L_0x0069:
+            if (r1 != 0) goto L_0x0095
             java.lang.String[] r5 = new java.lang.String[r4]
-            java.lang.String r7 = "t.me/proxy?"
-            r5[r2] = r7
-            java.lang.String r7 = "tg://proxy?"
-            r5[r6] = r7
-            r7 = 0
-        L_0x0077:
-            int r8 = r5.length
-            if (r7 >= r8) goto L_0x0097
-            r8 = r5[r7]
-            int r8 = r0.indexOf(r8)
-            if (r8 < 0) goto L_0x0094
-            r11.pasteType = r6
-            r1 = r5[r7]
+            java.lang.String r6 = "t.me/proxy?"
+            r5[r2] = r6
+            java.lang.String r6 = "tg://proxy?"
+            r5[r7] = r6
+            r6 = 0
+        L_0x0076:
+            if (r6 >= r4) goto L_0x0095
+            r9 = r5[r6]
+            int r9 = r0.indexOf(r9)
+            if (r9 < 0) goto L_0x0092
+            r11.pasteType = r7
+            r1 = r5[r6]
             int r1 = r1.length()
-            int r8 = r8 + r1
-            java.lang.String r0 = r0.substring(r8)
-            java.lang.String[] r1 = r0.split(r9)
-            goto L_0x0097
-        L_0x0094:
-            int r7 = r7 + 1
-            goto L_0x0077
-        L_0x0097:
-            if (r1 == 0) goto L_0x012b
+            int r9 = r9 + r1
+            java.lang.String r0 = r0.substring(r9)
+            java.lang.String[] r1 = r0.split(r8)
+            goto L_0x0095
+        L_0x0092:
+            int r6 = r6 + 1
+            goto L_0x0076
+        L_0x0095:
+            if (r1 == 0) goto L_0x0128
             r0 = 0
-        L_0x009a:
+        L_0x0098:
             int r5 = r1.length
-            if (r0 >= r5) goto L_0x012b
+            if (r0 >= r5) goto L_0x0128
             r5 = r1[r0]
-            java.lang.String r7 = "="
-            java.lang.String[] r5 = r5.split(r7)
-            int r7 = r5.length
-            if (r7 == r4) goto L_0x00aa
-            goto L_0x0127
-        L_0x00aa:
-            r7 = r5[r2]
-            java.lang.String r7 = r7.toLowerCase()
-            int r8 = r7.hashCode()
+            java.lang.String r6 = "="
+            java.lang.String[] r5 = r5.split(r6)
+            int r6 = r5.length
+            if (r6 == r4) goto L_0x00a8
+            goto L_0x0124
+        L_0x00a8:
+            r6 = r5[r2]
+            java.lang.String r6 = r6.toLowerCase()
+            int r8 = r6.hashCode()
             r9 = 4
             r10 = 3
             switch(r8) {
-                case -906277200: goto L_0x00e3;
-                case -905826493: goto L_0x00d9;
-                case 3433489: goto L_0x00cf;
-                case 3446913: goto L_0x00c5;
-                case 3599307: goto L_0x00ba;
-                default: goto L_0x00b9;
+                case -906277200: goto L_0x00e0;
+                case -905826493: goto L_0x00d6;
+                case 3433489: goto L_0x00cc;
+                case 3446913: goto L_0x00c2;
+                case 3599307: goto L_0x00b8;
+                default: goto L_0x00b7;
             }
-        L_0x00b9:
-            goto L_0x00ed
-        L_0x00ba:
+        L_0x00b7:
+            goto L_0x00ea
+        L_0x00b8:
             java.lang.String r8 = "user"
-            boolean r7 = r7.equals(r8)
-            if (r7 == 0) goto L_0x00ed
-            r7 = 2
-            goto L_0x00ee
-        L_0x00c5:
+            boolean r6 = r6.equals(r8)
+            if (r6 == 0) goto L_0x00ea
+            r6 = 2
+            goto L_0x00eb
+        L_0x00c2:
             java.lang.String r8 = "port"
-            boolean r7 = r7.equals(r8)
-            if (r7 == 0) goto L_0x00ed
-            r7 = 1
-            goto L_0x00ee
-        L_0x00cf:
+            boolean r6 = r6.equals(r8)
+            if (r6 == 0) goto L_0x00ea
+            r6 = 1
+            goto L_0x00eb
+        L_0x00cc:
             java.lang.String r8 = "pass"
-            boolean r7 = r7.equals(r8)
-            if (r7 == 0) goto L_0x00ed
-            r7 = 3
-            goto L_0x00ee
-        L_0x00d9:
+            boolean r6 = r6.equals(r8)
+            if (r6 == 0) goto L_0x00ea
+            r6 = 3
+            goto L_0x00eb
+        L_0x00d6:
             java.lang.String r8 = "server"
-            boolean r7 = r7.equals(r8)
-            if (r7 == 0) goto L_0x00ed
-            r7 = 0
-            goto L_0x00ee
-        L_0x00e3:
+            boolean r6 = r6.equals(r8)
+            if (r6 == 0) goto L_0x00ea
+            r6 = 0
+            goto L_0x00eb
+        L_0x00e0:
             java.lang.String r8 = "secret"
-            boolean r7 = r7.equals(r8)
-            if (r7 == 0) goto L_0x00ed
-            r7 = 4
-            goto L_0x00ee
-        L_0x00ed:
-            r7 = -1
-        L_0x00ee:
-            if (r7 == 0) goto L_0x0121
-            if (r7 == r6) goto L_0x011a
-            if (r7 == r4) goto L_0x010f
-            if (r7 == r10) goto L_0x0104
-            if (r7 == r9) goto L_0x00f9
-            goto L_0x0127
-        L_0x00f9:
-            int r7 = r11.pasteType
-            if (r7 != r6) goto L_0x0127
-            java.lang.String[] r7 = r11.pasteFields
-            r5 = r5[r6]
-            r7[r9] = r5
-            goto L_0x0127
-        L_0x0104:
-            int r7 = r11.pasteType
-            if (r7 != 0) goto L_0x0127
-            java.lang.String[] r7 = r11.pasteFields
-            r5 = r5[r6]
-            r7[r10] = r5
-            goto L_0x0127
-        L_0x010f:
-            int r7 = r11.pasteType
-            if (r7 != 0) goto L_0x0127
-            java.lang.String[] r7 = r11.pasteFields
-            r5 = r5[r6]
-            r7[r4] = r5
-            goto L_0x0127
-        L_0x011a:
-            java.lang.String[] r7 = r11.pasteFields
-            r5 = r5[r6]
-            r7[r6] = r5
-            goto L_0x0127
-        L_0x0121:
-            java.lang.String[] r7 = r11.pasteFields
-            r5 = r5[r6]
-            r7[r2] = r5
-        L_0x0127:
+            boolean r6 = r6.equals(r8)
+            if (r6 == 0) goto L_0x00ea
+            r6 = 4
+            goto L_0x00eb
+        L_0x00ea:
+            r6 = -1
+        L_0x00eb:
+            if (r6 == 0) goto L_0x011e
+            if (r6 == r7) goto L_0x0117
+            if (r6 == r4) goto L_0x010c
+            if (r6 == r10) goto L_0x0101
+            if (r6 == r9) goto L_0x00f6
+            goto L_0x0124
+        L_0x00f6:
+            int r6 = r11.pasteType
+            if (r6 != r7) goto L_0x0124
+            java.lang.String[] r6 = r11.pasteFields
+            r5 = r5[r7]
+            r6[r9] = r5
+            goto L_0x0124
+        L_0x0101:
+            int r6 = r11.pasteType
+            if (r6 != 0) goto L_0x0124
+            java.lang.String[] r6 = r11.pasteFields
+            r5 = r5[r7]
+            r6[r10] = r5
+            goto L_0x0124
+        L_0x010c:
+            int r6 = r11.pasteType
+            if (r6 != 0) goto L_0x0124
+            java.lang.String[] r6 = r11.pasteFields
+            r5 = r5[r7]
+            r6[r4] = r5
+            goto L_0x0124
+        L_0x0117:
+            java.lang.String[] r6 = r11.pasteFields
+            r5 = r5[r7]
+            r6[r7] = r5
+            goto L_0x0124
+        L_0x011e:
+            java.lang.String[] r6 = r11.pasteFields
+            r5 = r5[r7]
+            r6[r2] = r5
+        L_0x0124:
             int r0 = r0 + 1
-            goto L_0x009a
-        L_0x012b:
+            goto L_0x0098
+        L_0x0128:
             int r0 = r11.pasteType
-            if (r0 == r3) goto L_0x0144
+            if (r0 == r3) goto L_0x0141
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             int r0 = r0.getVisibility()
-            if (r0 == 0) goto L_0x015a
+            if (r0 == 0) goto L_0x0157
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             r0.setVisibility(r2)
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
             r0 = r0[r4]
             r0.setVisibility(r2)
-            goto L_0x015a
-        L_0x0144:
+            goto L_0x0157
+        L_0x0141:
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             int r0 = r0.getVisibility()
             r1 = 8
-            if (r0 == r1) goto L_0x015a
+            if (r0 == r1) goto L_0x0157
             org.telegram.ui.Cells.TextSettingsCell r0 = r11.pasteCell
             r0.setVisibility(r1)
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r11.sectionCell
             r0 = r0[r4]
             r0.setVisibility(r1)
-        L_0x015a:
+        L_0x0157:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProxySettingsActivity.updatePasteCell():void");
@@ -776,8 +721,9 @@ public class ProxySettingsActivity extends BaseFragment {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             } else if (z2) {
-                this.shareDoneAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                this.shareDoneAnimator.setDuration(200);
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                this.shareDoneAnimator = ofFloat;
+                ofFloat.setDuration(200);
                 this.shareDoneAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                         ProxySettingsActivity.this.lambda$setShareDoneEnabled$5$ProxySettingsActivity(valueAnimator);
@@ -846,7 +792,7 @@ public class ProxySettingsActivity extends BaseFragment {
             if (z && Build.VERSION.SDK_INT >= 21) {
                 TransitionSet duration = new TransitionSet().addTransition(new Fade(2)).addTransition(new ChangeBounds()).addTransition(new Fade(1)).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
                 if (runnable != null) {
-                    duration.addListener(new Transition.TransitionListener() {
+                    duration.addListener(new Transition.TransitionListener(this) {
                         public void onTransitionCancel(Transition transition) {
                         }
 
@@ -922,27 +868,16 @@ public class ProxySettingsActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.pasteCell, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription((View) this.pasteCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-        int i = 0;
-        while (true) {
-            RadioCell[] radioCellArr = this.typeCell;
-            if (i >= radioCellArr.length) {
-                break;
-            }
-            arrayList.add(new ThemeDescription(radioCellArr[i], ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        for (int i = 0; i < this.typeCell.length; i++) {
+            arrayList.add(new ThemeDescription(this.typeCell[i], ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
             arrayList.add(new ThemeDescription(this.typeCell[i], ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
             arrayList.add(new ThemeDescription((View) this.typeCell[i], 0, new Class[]{RadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription((View) this.typeCell[i], ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"));
             arrayList.add(new ThemeDescription((View) this.typeCell[i], ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"));
-            i++;
         }
         if (this.inputFields != null) {
-            int i2 = 0;
-            while (true) {
-                EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
-                if (i2 >= editTextBoldCursorArr.length) {
-                    break;
-                }
-                arrayList.add(new ThemeDescription(editTextBoldCursorArr[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            for (int i2 = 0; i2 < this.inputFields.length; i2++) {
+                arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                 arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
                 arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
                 arrayList.add(new ThemeDescription(this.inputFields[i2], ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
@@ -950,7 +885,6 @@ public class ProxySettingsActivity extends BaseFragment {
                 arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteInputField"));
                 arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteInputFieldActivated"));
                 arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteRedText3"));
-                i2++;
             }
         } else {
             arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
@@ -965,21 +899,16 @@ public class ProxySettingsActivity extends BaseFragment {
                 break;
             }
             if (shadowSectionCellArr[i3] != null) {
-                arrayList.add(new ThemeDescription(shadowSectionCellArr[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+                arrayList.add(new ThemeDescription(this.sectionCell[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
             }
             i3++;
         }
-        int i4 = 0;
-        while (true) {
-            TextInfoPrivacyCell[] textInfoPrivacyCellArr = this.bottomCells;
-            if (i4 >= textInfoPrivacyCellArr.length) {
-                return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
-            }
-            arrayList.add(new ThemeDescription(textInfoPrivacyCellArr[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+        for (int i4 = 0; i4 < this.bottomCells.length; i4++) {
+            arrayList.add(new ThemeDescription(this.bottomCells[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
             arrayList.add(new ThemeDescription((View) this.bottomCells[i4], 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
             arrayList.add(new ThemeDescription((View) this.bottomCells[i4], ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
-            i4++;
         }
+        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$6$ProxySettingsActivity() {

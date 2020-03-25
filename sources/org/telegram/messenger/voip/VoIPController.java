@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_phoneConnection;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPController {
@@ -106,7 +106,7 @@ public class VoIPController {
 
     private native void nativeSetProxy(long j, String str, int i, String str2, String str3);
 
-    private native void nativeSetRemoteEndpoints(long j, TLRPC.TL_phoneConnection[] tL_phoneConnectionArr, boolean z, boolean z2, int i);
+    private native void nativeSetRemoteEndpoints(long j, TLRPC$TL_phoneConnection[] tLRPC$TL_phoneConnectionArr, boolean z, boolean z2, int i);
 
     public static native void nativeSetVideoRenderer(long j, long j2);
 
@@ -129,24 +129,24 @@ public class VoIPController {
         nativeConnect(this.nativeInst);
     }
 
-    public void setRemoteEndpoints(TLRPC.TL_phoneConnection[] tL_phoneConnectionArr, boolean z, boolean z2, int i) {
-        if (tL_phoneConnectionArr.length != 0) {
+    public void setRemoteEndpoints(TLRPC$TL_phoneConnection[] tLRPC$TL_phoneConnectionArr, boolean z, boolean z2, int i) {
+        if (tLRPC$TL_phoneConnectionArr.length != 0) {
             int i2 = 0;
-            while (i2 < tL_phoneConnectionArr.length) {
-                TLRPC.TL_phoneConnection tL_phoneConnection = tL_phoneConnectionArr[i2];
-                String str = tL_phoneConnection.ip;
+            while (i2 < tLRPC$TL_phoneConnectionArr.length) {
+                TLRPC$TL_phoneConnection tLRPC$TL_phoneConnection = tLRPC$TL_phoneConnectionArr[i2];
+                String str = tLRPC$TL_phoneConnection.ip;
                 if (str == null || str.length() == 0) {
-                    throw new IllegalArgumentException("endpoint " + tL_phoneConnection + " has empty/null ipv4");
+                    throw new IllegalArgumentException("endpoint " + tLRPC$TL_phoneConnection + " has empty/null ipv4");
                 }
-                byte[] bArr = tL_phoneConnection.peer_tag;
+                byte[] bArr = tLRPC$TL_phoneConnection.peer_tag;
                 if (bArr == null || bArr.length == 16) {
                     i2++;
                 } else {
-                    throw new IllegalArgumentException("endpoint " + tL_phoneConnection + " has peer_tag of wrong length");
+                    throw new IllegalArgumentException("endpoint " + tLRPC$TL_phoneConnection + " has peer_tag of wrong length");
                 }
             }
             ensureNativeInstance();
-            nativeSetRemoteEndpoints(this.nativeInst, tL_phoneConnectionArr, z, z2, i);
+            nativeSetRemoteEndpoints(this.nativeInst, tLRPC$TL_phoneConnectionArr, z, z2, i);
             return;
         }
         throw new IllegalArgumentException("endpoints size is 0");
@@ -239,12 +239,12 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0032  */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0034  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0041  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0043  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0049  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0060  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x0031  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0033  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x003f  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0041  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0047  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x005d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setConfig(double r17, double r19, int r21, long r22) {
         /*
@@ -269,31 +269,31 @@ public class VoIPController {
             boolean r5 = r5.getBoolean(r6, r3)
             long r6 = r14.nativeInst
             r8 = 1
-            if (r2 == 0) goto L_0x0034
+            if (r2 == 0) goto L_0x0033
             java.lang.String r2 = "use_system_aec"
             boolean r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8)
-            if (r2 != 0) goto L_0x0032
-            goto L_0x0034
-        L_0x0032:
+            if (r2 != 0) goto L_0x0031
+            goto L_0x0033
+        L_0x0031:
             r9 = 0
-            goto L_0x0035
-        L_0x0034:
+            goto L_0x0034
+        L_0x0033:
             r9 = 1
-        L_0x0035:
-            if (r4 == 0) goto L_0x0043
+        L_0x0034:
+            if (r4 == 0) goto L_0x0041
             java.lang.String r2 = "use_system_ns"
             boolean r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8)
-            if (r2 != 0) goto L_0x0041
-            goto L_0x0043
-        L_0x0041:
+            if (r2 != 0) goto L_0x003f
+            goto L_0x0041
+        L_0x003f:
             r10 = 0
-            goto L_0x0044
-        L_0x0043:
+            goto L_0x0042
+        L_0x0041:
             r10 = 1
-        L_0x0044:
+        L_0x0042:
             r11 = 1
             boolean r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r2 == 0) goto L_0x0060
+            if (r2 == 0) goto L_0x005d
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r3 = "voip"
@@ -301,20 +301,20 @@ public class VoIPController {
             r2.append(r0)
             java.lang.String r0 = r2.toString()
             java.lang.String r0 = r14.getLogFilePath((java.lang.String) r0)
-            goto L_0x0064
-        L_0x0060:
+            goto L_0x0061
+        L_0x005d:
             java.lang.String r0 = r14.getLogFilePath((long) r0)
-        L_0x0064:
+        L_0x0061:
             r12 = r0
             boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r0 == 0) goto L_0x0073
-            if (r5 == 0) goto L_0x0073
+            if (r0 == 0) goto L_0x006f
+            if (r5 == 0) goto L_0x006f
             java.lang.String r0 = "voipStats"
             java.lang.String r0 = r14.getLogFilePath((java.lang.String) r0)
-            goto L_0x0074
-        L_0x0073:
+            goto L_0x0070
+        L_0x006f:
             r0 = 0
-        L_0x0074:
+        L_0x0070:
             r13 = r0
             boolean r15 = org.telegram.messenger.BuildVars.DEBUG_VERSION
             r0 = r16

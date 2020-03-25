@@ -18,9 +18,6 @@ import java.util.List;
 import org.telegram.ui.Cells.DialogCell;
 
 public class DialogsItemAnimator extends SimpleItemAnimator {
-    private static final boolean DEBUG = false;
-    private static final int changeDuration = 180;
-    private static final int deleteDuration = 180;
     private static TimeInterpolator sDefaultInterpolator = new DecelerateInterpolator();
     private int bottomClip;
     ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<>();
@@ -43,6 +40,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
 
     /* access modifiers changed from: protected */
     public void onAllAnimationsDone() {
+        throw null;
     }
 
     private static class MoveInfo {
@@ -196,14 +194,15 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             final DialogCell dialogCell = (DialogCell) view;
             this.removingDialog = dialogCell;
             if (this.topClip != Integer.MAX_VALUE) {
-                int measuredHeight = this.removingDialog.getMeasuredHeight();
+                int measuredHeight = dialogCell.getMeasuredHeight();
                 int i = this.topClip;
                 this.bottomClip = measuredHeight - i;
                 this.removingDialog.setTopClip(i);
                 this.removingDialog.setBottomClip(this.bottomClip);
             } else if (this.bottomClip != Integer.MAX_VALUE) {
-                this.topClip = this.removingDialog.getMeasuredHeight() - this.bottomClip;
-                this.removingDialog.setTopClip(this.topClip);
+                int measuredHeight2 = dialogCell.getMeasuredHeight() - this.bottomClip;
+                this.topClip = measuredHeight2;
+                this.removingDialog.setTopClip(measuredHeight2);
                 this.removingDialog.setBottomClip(this.bottomClip);
             }
             if (Build.VERSION.SDK_INT >= 21) {
@@ -368,8 +367,9 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 this.removingDialog.setTopClip(i7);
                 this.removingDialog.setBottomClip(this.bottomClip);
             } else if (this.bottomClip != Integer.MAX_VALUE) {
-                this.topClip = dialogCell.getMeasuredHeight() - this.bottomClip;
-                this.removingDialog.setTopClip(this.topClip);
+                int measuredHeight2 = dialogCell.getMeasuredHeight() - this.bottomClip;
+                this.topClip = measuredHeight2;
+                this.removingDialog.setTopClip(measuredHeight2);
                 this.removingDialog.setBottomClip(this.bottomClip);
             }
         }

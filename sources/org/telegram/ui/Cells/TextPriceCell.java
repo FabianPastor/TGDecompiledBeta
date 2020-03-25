@@ -18,8 +18,9 @@ public class TextPriceCell extends FrameLayout {
     public TextPriceCell(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.textView = new TextView(context);
-        this.textView.setTextSize(1, 16.0f);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
@@ -27,8 +28,9 @@ public class TextPriceCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 0.0f, 21.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextSize(1, 16.0f);
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextSize(1, 16.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);

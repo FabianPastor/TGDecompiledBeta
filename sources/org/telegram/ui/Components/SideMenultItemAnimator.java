@@ -25,6 +25,8 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
     ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<>();
+    private RecyclerListView parentRecyclerView;
+    private boolean shouldClipChildren;
 
     static /* synthetic */ int lambda$new$0(int i, int i2) {
         if (i2 == i - 1) {
@@ -79,8 +81,9 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    public SideMenultItemAnimator(RecyclerView recyclerView) {
-        recyclerView.setChildDrawingOrderCallback($$Lambda$SideMenultItemAnimator$cpmqh8LIS4phD2GDdX7QI5CFM.INSTANCE);
+    public SideMenultItemAnimator(RecyclerListView recyclerListView) {
+        this.parentRecyclerView = recyclerListView;
+        recyclerListView.setChildDrawingOrderCallback($$Lambda$SideMenultItemAnimator$cpmqh8LIS4phD2GDdX7QI5CFM.INSTANCE);
     }
 
     public void runPendingAnimations() {
@@ -138,6 +141,8 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
                 arrayList3.clear();
                 this.mAdditionsList.remove(arrayList3);
             }
+            this.parentRecyclerView.invalidateViews();
+            this.parentRecyclerView.invalidate();
         }
     }
 
@@ -443,6 +448,54 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
 
     public boolean isRunning() {
         return !this.mPendingAdditions.isEmpty() || !this.mPendingChanges.isEmpty() || !this.mPendingMoves.isEmpty() || !this.mPendingRemovals.isEmpty() || !this.mMoveAnimations.isEmpty() || !this.mRemoveAnimations.isEmpty() || !this.mAddAnimations.isEmpty() || !this.mChangeAnimations.isEmpty() || !this.mMovesList.isEmpty() || !this.mAdditionsList.isEmpty() || !this.mChangesList.isEmpty();
+    }
+
+    public boolean isAnimatingChild(View view) {
+        if (!this.shouldClipChildren) {
+            return false;
+        }
+        int size = this.mRemoveAnimations.size();
+        for (int i = 0; i < size; i++) {
+            if (this.mRemoveAnimations.get(i).itemView == view) {
+                return true;
+            }
+        }
+        int size2 = this.mAddAnimations.size();
+        for (int i2 = 0; i2 < size2; i2++) {
+            if (this.mAddAnimations.get(i2).itemView == view) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setShouldClipChildren(boolean z) {
+        this.shouldClipChildren = z;
+    }
+
+    public int getAnimationClipTop() {
+        int i = 0;
+        if (!this.shouldClipChildren) {
+            return 0;
+        }
+        int i2 = Integer.MAX_VALUE;
+        if (!this.mRemoveAnimations.isEmpty()) {
+            int size = this.mRemoveAnimations.size();
+            while (i < size) {
+                i2 = Math.min(i2, this.mRemoveAnimations.get(i).itemView.getTop());
+                i++;
+            }
+            return i2;
+        } else if (this.mAddAnimations.isEmpty()) {
+            return 0;
+        } else {
+            int size2 = this.mAddAnimations.size();
+            while (i < size2) {
+                i2 = Math.min(i2, this.mAddAnimations.get(i).itemView.getTop());
+                i++;
+            }
+            return i2;
+        }
     }
 
     /* access modifiers changed from: package-private */

@@ -26,22 +26,25 @@ public class StickerSetNameCell extends FrameLayout {
     public StickerSetNameCell(Context context, boolean z) {
         super(context);
         this.isEmoji = z;
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setSingleLine(true);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, z ? 15.0f : 17.0f, 4.0f, 57.0f, 0.0f));
-        this.urlTextView = new TextView(context);
-        this.urlTextView.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
+        TextView textView3 = new TextView(context);
+        this.urlTextView = textView3;
+        textView3.setTextColor(Theme.getColor("chat_emojiPanelStickerSetName"));
         this.urlTextView.setTextSize(1, 12.0f);
         this.urlTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.urlTextView.setSingleLine(true);
         this.urlTextView.setVisibility(4);
         addView(this.urlTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 17.0f, 6.0f, 17.0f, 0.0f));
-        this.buttonView = new ImageView(context);
-        this.buttonView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        this.buttonView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.buttonView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelStickerSetNameIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.buttonView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
     }

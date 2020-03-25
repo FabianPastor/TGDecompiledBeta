@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
@@ -92,18 +90,6 @@ public class SerializedData extends AbstractSerializedData {
         } catch (Exception e4) {
             FileLog.e((Throwable) e4);
         }
-    }
-
-    public SerializedData(File file) throws Exception {
-        this.isOut = true;
-        this.justCalc = false;
-        FileInputStream fileInputStream = new FileInputStream(file);
-        byte[] bArr = new byte[((int) file.length())];
-        new DataInputStream(fileInputStream).readFully(bArr);
-        fileInputStream.close();
-        this.isOut = false;
-        this.inbuf = new ByteArrayInputStream(bArr);
-        this.in = new DataInputStream(this.inbuf);
     }
 
     public void writeInt32(int i) {
@@ -317,13 +303,6 @@ public class SerializedData extends AbstractSerializedData {
             return this.isOut ? this.outbuf.size() : this.inbuf.available();
         }
         return this.len;
-    }
-
-    /* access modifiers changed from: protected */
-    public void set(byte[] bArr) {
-        this.isOut = false;
-        this.inbuf = new ByteArrayInputStream(bArr);
-        this.in = new DataInputStream(this.inbuf);
     }
 
     public byte[] toByteArray() {

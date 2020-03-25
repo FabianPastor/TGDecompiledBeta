@@ -51,7 +51,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     public int connectionsHeaderRow;
     /* access modifiers changed from: private */
     public int currentConnectionState;
-    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -84,8 +83,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         public TextDetailProxyCell(Context context) {
             super(context);
-            this.textView = new TextView(context);
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            TextView textView2 = new TextView(context);
+            this.textView = textView2;
+            textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.textView.setTextSize(1, 16.0f);
             this.textView.setLines(1);
             this.textView.setMaxLines(1);
@@ -95,8 +95,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             int i2 = 56;
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 56 : 21), 10.0f, (float) (LocaleController.isRTL ? 21 : 56), 0.0f));
-            this.valueTextView = new TextView(context);
-            this.valueTextView.setTextSize(1, 13.0f);
+            TextView textView3 = new TextView(context);
+            this.valueTextView = textView3;
+            textView3.setTextSize(1, 13.0f);
             this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.valueTextView.setLines(1);
             this.valueTextView.setMaxLines(1);
@@ -105,8 +106,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
             this.valueTextView.setPadding(0, 0, 0, 0);
             addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 56 : 21), 35.0f, (float) (LocaleController.isRTL ? 21 : i2), 0.0f));
-            this.checkImageView = new ImageView(context);
-            this.checkImageView.setImageResource(NUM);
+            ImageView imageView = new ImageView(context);
+            this.checkImageView = imageView;
+            imageView.setImageResource(NUM);
             this.checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText3"), PorterDuff.Mode.MULTIPLY));
             this.checkImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.checkImageView.setContentDescription(LocaleController.getString("Edit", NUM));
@@ -247,15 +249,14 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
         });
         this.listAdapter = new ListAdapter(context);
-        this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.listView = new RecyclerListView(context);
-        ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        ((DefaultItemAnimator) recyclerListView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setVerticalScrollBarEnabled(false);
-        RecyclerListView recyclerListView = this.listView;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.layoutManager = linearLayoutManager;
-        recyclerListView.setLayoutManager(linearLayoutManager);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
@@ -317,8 +318,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }
             }
         } else if (i == this.callsRow) {
-            this.useProxyForCalls = !this.useProxyForCalls;
-            ((TextCheckCell) view).setChecked(this.useProxyForCalls);
+            boolean z2 = !this.useProxyForCalls;
+            this.useProxyForCalls = z2;
+            ((TextCheckCell) view).setChecked(z2);
             SharedPreferences.Editor edit3 = MessagesController.getGlobalMainSettings().edit();
             edit3.putBoolean("proxy_enabled_calls", this.useProxyForCalls);
             edit3.commit();
@@ -353,9 +355,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 if (holder4 != null) {
                     ((TextCheckCell) holder4.itemView).setChecked(true);
                 }
-                boolean z2 = this.useProxySettings;
+                boolean z3 = this.useProxySettings;
                 SharedConfig.ProxyInfo proxyInfo3 = SharedConfig.currentProxy;
-                ConnectionsManager.setProxySettings(z2, proxyInfo3.address, proxyInfo3.port, proxyInfo3.username, proxyInfo3.password, proxyInfo3.secret);
+                ConnectionsManager.setProxySettings(z3, proxyInfo3.address, proxyInfo3.port, proxyInfo3.username, proxyInfo3.password, proxyInfo3.secret);
             } else if (i == this.proxyAddRow) {
                 presentFragment(new ProxySettingsActivity());
             }
@@ -412,41 +414,41 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         ListAdapter listAdapter2;
         boolean z2 = false;
         this.rowCount = 0;
-        int i = this.rowCount;
-        this.rowCount = i + 1;
-        this.useProxyRow = i;
-        int i2 = this.rowCount;
+        int i = 0 + 1;
+        this.rowCount = i;
+        this.useProxyRow = 0;
+        int i2 = i + 1;
+        this.rowCount = i2;
+        this.useProxyDetailRow = i;
         this.rowCount = i2 + 1;
-        this.useProxyDetailRow = i2;
-        int i3 = this.rowCount;
-        this.rowCount = i3 + 1;
-        this.connectionsHeaderRow = i3;
+        this.connectionsHeaderRow = i2;
         if (!SharedConfig.proxyList.isEmpty()) {
-            int i4 = this.rowCount;
-            this.proxyStartRow = i4;
-            this.rowCount = i4 + SharedConfig.proxyList.size();
-            this.proxyEndRow = this.rowCount;
+            int i3 = this.rowCount;
+            this.proxyStartRow = i3;
+            int size = i3 + SharedConfig.proxyList.size();
+            this.rowCount = size;
+            this.proxyEndRow = size;
         } else {
             this.proxyStartRow = -1;
             this.proxyEndRow = -1;
         }
-        int i5 = this.rowCount;
+        int i4 = this.rowCount;
+        int i5 = i4 + 1;
+        this.rowCount = i5;
+        this.proxyAddRow = i4;
         this.rowCount = i5 + 1;
-        this.proxyAddRow = i5;
-        int i6 = this.rowCount;
-        this.rowCount = i6 + 1;
-        this.proxyDetailRow = i6;
+        this.proxyDetailRow = i5;
         SharedConfig.ProxyInfo proxyInfo = SharedConfig.currentProxy;
         if (proxyInfo == null || proxyInfo.secret.isEmpty()) {
             if (this.callsRow == -1) {
                 z2 = true;
             }
-            int i7 = this.rowCount;
+            int i6 = this.rowCount;
+            int i7 = i6 + 1;
+            this.rowCount = i7;
+            this.callsRow = i6;
             this.rowCount = i7 + 1;
-            this.callsRow = i7;
-            int i8 = this.rowCount;
-            this.rowCount = i8 + 1;
-            this.callsDetailRow = i8;
+            this.callsDetailRow = i7;
             if (!z && z2) {
                 this.listAdapter.notifyItemChanged(this.proxyDetailRow);
                 this.listAdapter.notifyItemRangeInserted(this.proxyDetailRow + 1, 2);
@@ -540,7 +542,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
-        public static final int PAYLOAD_CHECKED_CHANGED = 0;
         private Context mContext;
 
         public ListAdapter(Context context) {

@@ -22,7 +22,15 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
+import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC$TL_messages_stickers;
+import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.ui.Cells.EmojiReplacementCell;
 import org.telegram.ui.Cells.StickerCell;
 import org.telegram.ui.Components.RecyclerListView;
@@ -38,7 +46,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     private Context mContext;
     private Runnable searchRunnable;
     private ArrayList<StickerResult> stickers;
-    private HashMap<String, TLRPC.Document> stickersMap;
+    private HashMap<String, TLRPC$Document> stickersMap;
     private ArrayList<String> stickersToLoad = new ArrayList<>();
     private boolean visible;
 
@@ -52,10 +60,10 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     private class StickerResult {
         public Object parent;
-        public TLRPC.Document sticker;
+        public TLRPC$Document sticker;
 
-        public StickerResult(TLRPC.Document document, Object obj) {
-            this.sticker = document;
+        public StickerResult(StickersAdapter stickersAdapter, TLRPC$Document tLRPC$Document, Object obj) {
+            this.sticker = tLRPC$Document;
             this.parent = obj;
         }
     }
@@ -109,8 +117,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         int min = Math.min(6, this.stickers.size());
         for (int i = 0; i < min; i++) {
             StickerResult stickerResult = this.stickers.get(i);
-            TLRPC.PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(stickerResult.sticker.thumbs, 90);
-            if ((closestPhotoSizeWithSize instanceof TLRPC.TL_photoSize) && !FileLoader.getPathToAttach(closestPhotoSizeWithSize, "webp", true).exists()) {
+            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(stickerResult.sticker.thumbs, 90);
+            if ((closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) && !FileLoader.getPathToAttach(closestPhotoSizeWithSize, "webp", true).exists()) {
                 this.stickersToLoad.add(FileLoader.getAttachFileName(closestPhotoSizeWithSize, "webp"));
                 FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerResult.sticker), stickerResult.parent, "webp", 1, 1);
             }
@@ -118,16 +126,16 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return this.stickersToLoad.isEmpty();
     }
 
-    private boolean isValidSticker(TLRPC.Document document, String str) {
-        int size = document.attributes.size();
+    private boolean isValidSticker(TLRPC$Document tLRPC$Document, String str) {
+        int size = tLRPC$Document.attributes.size();
         int i = 0;
         while (true) {
             if (i >= size) {
                 break;
             }
-            TLRPC.DocumentAttribute documentAttribute = document.attributes.get(i);
-            if (documentAttribute instanceof TLRPC.TL_documentAttributeSticker) {
-                String str2 = documentAttribute.alt;
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                String str2 = tLRPC$DocumentAttribute.alt;
                 if (str2 == null || !str2.contains(str)) {
                     return false;
                 }
@@ -138,49 +146,48 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return false;
     }
 
-    private void addStickerToResult(TLRPC.Document document, Object obj) {
-        if (document != null) {
-            String str = document.dc_id + "_" + document.id;
-            HashMap<String, TLRPC.Document> hashMap = this.stickersMap;
+    private void addStickerToResult(TLRPC$Document tLRPC$Document, Object obj) {
+        if (tLRPC$Document != null) {
+            String str = tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
+            HashMap<String, TLRPC$Document> hashMap = this.stickersMap;
             if (hashMap == null || !hashMap.containsKey(str)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList<>();
                     this.stickersMap = new HashMap<>();
                 }
-                this.stickers.add(new StickerResult(document, obj));
-                this.stickersMap.put(str, document);
+                this.stickers.add(new StickerResult(this, tLRPC$Document, obj));
+                this.stickersMap.put(str, tLRPC$Document);
             }
         }
     }
 
-    private void addStickersToResult(ArrayList<TLRPC.Document> arrayList, Object obj) {
+    private void addStickersToResult(ArrayList<TLRPC$Document> arrayList, Object obj) {
         if (arrayList != null && !arrayList.isEmpty()) {
             int size = arrayList.size();
-            Object obj2 = obj;
             for (int i = 0; i < size; i++) {
-                TLRPC.Document document = arrayList.get(i);
-                String str = document.dc_id + "_" + document.id;
-                HashMap<String, TLRPC.Document> hashMap = this.stickersMap;
+                TLRPC$Document tLRPC$Document = arrayList.get(i);
+                String str = tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
+                HashMap<String, TLRPC$Document> hashMap = this.stickersMap;
                 if (hashMap == null || !hashMap.containsKey(str)) {
                     if (this.stickers == null) {
                         this.stickers = new ArrayList<>();
                         this.stickersMap = new HashMap<>();
                     }
-                    int size2 = document.attributes.size();
+                    int size2 = tLRPC$Document.attributes.size();
                     int i2 = 0;
                     while (true) {
                         if (i2 >= size2) {
                             break;
                         }
-                        TLRPC.DocumentAttribute documentAttribute = document.attributes.get(i2);
-                        if (documentAttribute instanceof TLRPC.TL_documentAttributeSticker) {
-                            obj2 = documentAttribute.stickerset;
+                        TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i2);
+                        if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                            obj = tLRPC$DocumentAttribute.stickerset;
                             break;
                         }
                         i2++;
                     }
-                    this.stickers.add(new StickerResult(document, obj2));
-                    this.stickersMap.put(str, document);
+                    this.stickers.add(new StickerResult(this, tLRPC$Document, obj));
+                    this.stickersMap.put(str, tLRPC$Document);
                 }
             }
         }
@@ -261,21 +268,20 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     public void loadStikersForEmoji(CharSequence charSequence, boolean z) {
         ArrayList<MediaDataController.KeywordResult> arrayList;
-        TLRPC.Document emojiAnimatedSticker;
+        TLRPC$Document emojiAnimatedSticker;
         boolean z2 = charSequence != null && charSequence.length() > 0 && charSequence.length() <= 14;
         String charSequence2 = charSequence.toString();
         int length = charSequence.length();
-        CharSequence charSequence3 = charSequence;
         int i = 0;
         while (i < length) {
-            char charAt = charSequence3.charAt(i);
+            char charAt = charSequence.charAt(i);
             int i2 = length - 1;
-            char charAt2 = i < i2 ? charSequence3.charAt(i + 1) : 0;
+            char charAt2 = i < i2 ? charSequence.charAt(i + 1) : 0;
             if (i < i2 && charAt == 55356 && charAt2 >= 57339 && charAt2 <= 57343) {
-                charSequence3 = TextUtils.concat(new CharSequence[]{charSequence3.subSequence(0, i), charSequence3.subSequence(i + 2, charSequence3.length())});
+                charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 2, charSequence.length())});
                 length -= 2;
             } else if (charAt == 65039) {
-                charSequence3 = TextUtils.concat(new CharSequence[]{charSequence3.subSequence(0, i), charSequence3.subSequence(i + 1, charSequence3.length())});
+                charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 1, charSequence.length())});
                 length--;
             } else {
                 i++;
@@ -283,11 +289,11 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             i--;
             i++;
         }
-        this.lastSticker = charSequence3.toString();
+        this.lastSticker = charSequence.toString();
         this.stickersToLoad.clear();
         boolean z3 = z2 && (Emoji.isValidEmoji(charSequence2) || Emoji.isValidEmoji(this.lastSticker));
-        if (z3 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence3)) != null) {
-            ArrayList<TLRPC.TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
+        if (z3 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence)) != null) {
+            ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
             if (!FileLoader.getPathToAttach(emojiAnimatedSticker, true).exists()) {
                 FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(emojiAnimatedSticker), stickerSets.get(0), (String) null, 1, 1);
             }
@@ -312,14 +318,14 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             this.lastReqId = 0;
         }
         this.delayLocalResults = false;
-        final ArrayList<TLRPC.Document> recentStickersNoCopy = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
-        final ArrayList<TLRPC.Document> recentStickersNoCopy2 = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
+        final ArrayList<TLRPC$Document> recentStickersNoCopy = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
+        final ArrayList<TLRPC$Document> recentStickersNoCopy2 = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
         int size = recentStickersNoCopy.size();
         int i3 = 0;
         for (int i4 = 0; i4 < size; i4++) {
-            TLRPC.Document document = recentStickersNoCopy.get(i4);
-            if (isValidSticker(document, this.lastSticker)) {
-                addStickerToResult(document, "recent");
+            TLRPC$Document tLRPC$Document = recentStickersNoCopy.get(i4);
+            if (isValidSticker(tLRPC$Document, this.lastSticker)) {
+                addStickerToResult(tLRPC$Document, "recent");
                 i3++;
                 if (i3 >= 5) {
                     break;
@@ -328,27 +334,27 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         }
         int size2 = recentStickersNoCopy2.size();
         for (int i5 = 0; i5 < size2; i5++) {
-            TLRPC.Document document2 = recentStickersNoCopy2.get(i5);
-            if (isValidSticker(document2, this.lastSticker)) {
-                addStickerToResult(document2, "fav");
+            TLRPC$Document tLRPC$Document2 = recentStickersNoCopy2.get(i5);
+            if (isValidSticker(tLRPC$Document2, this.lastSticker)) {
+                addStickerToResult(tLRPC$Document2, "fav");
             }
         }
-        HashMap<String, ArrayList<TLRPC.Document>> allStickers = MediaDataController.getInstance(this.currentAccount).getAllStickers();
+        HashMap<String, ArrayList<TLRPC$Document>> allStickers = MediaDataController.getInstance(this.currentAccount).getAllStickers();
         ArrayList arrayList2 = allStickers != null ? allStickers.get(this.lastSticker) : null;
         if (arrayList2 != null && !arrayList2.isEmpty()) {
             addStickersToResult(arrayList2, (Object) null);
         }
         ArrayList<StickerResult> arrayList3 = this.stickers;
         if (arrayList3 != null) {
-            Collections.sort(arrayList3, new Comparator<StickerResult>() {
+            Collections.sort(arrayList3, new Comparator<StickerResult>(this) {
                 private int getIndex(long j) {
                     for (int i = 0; i < recentStickersNoCopy2.size(); i++) {
-                        if (((TLRPC.Document) recentStickersNoCopy2.get(i)).id == j) {
+                        if (((TLRPC$Document) recentStickersNoCopy2.get(i)).id == j) {
                             return i + 1000;
                         }
                     }
                     for (int i2 = 0; i2 < recentStickersNoCopy.size(); i2++) {
-                        if (((TLRPC.Document) recentStickersNoCopy.get(i2)).id == j) {
+                        if (((TLRPC$Document) recentStickersNoCopy.get(i2)).id == j) {
                             return i2;
                         }
                     }
@@ -402,23 +408,23 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     private void searchServerStickers(String str, String str2) {
-        TLRPC.TL_messages_getStickers tL_messages_getStickers = new TLRPC.TL_messages_getStickers();
-        tL_messages_getStickers.emoticon = str2;
-        tL_messages_getStickers.hash = 0;
-        this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getStickers, new RequestDelegate(str) {
+        TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers = new TLRPC$TL_messages_getStickers();
+        tLRPC$TL_messages_getStickers.emoticon = str2;
+        tLRPC$TL_messages_getStickers.hash = 0;
+        this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickers, new RequestDelegate(str) {
             private final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
             }
 
-            public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                StickersAdapter.this.lambda$searchServerStickers$3$StickersAdapter(this.f$1, tLObject, tL_error);
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                StickersAdapter.this.lambda$searchServerStickers$3$StickersAdapter(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
     }
 
-    public /* synthetic */ void lambda$searchServerStickers$3$StickersAdapter(String str, TLObject tLObject, TLRPC.TL_error tL_error) {
+    public /* synthetic */ void lambda$searchServerStickers$3$StickersAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLObject) {
             private final /* synthetic */ String f$1;
             private final /* synthetic */ TLObject f$2;
@@ -438,12 +444,12 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         ArrayList<StickerResult> arrayList;
         int i = 0;
         this.lastReqId = 0;
-        if (str.equals(this.lastSticker) && (tLObject instanceof TLRPC.TL_messages_stickers)) {
+        if (str.equals(this.lastSticker) && (tLObject instanceof TLRPC$TL_messages_stickers)) {
             this.delayLocalResults = false;
-            TLRPC.TL_messages_stickers tL_messages_stickers = (TLRPC.TL_messages_stickers) tLObject;
+            TLRPC$TL_messages_stickers tLRPC$TL_messages_stickers = (TLRPC$TL_messages_stickers) tLObject;
             ArrayList<StickerResult> arrayList2 = this.stickers;
             int size = arrayList2 != null ? arrayList2.size() : 0;
-            ArrayList<TLRPC.Document> arrayList3 = tL_messages_stickers.stickers;
+            ArrayList<TLRPC$Document> arrayList3 = tLRPC$TL_messages_stickers.stickers;
             addStickersToResult(arrayList3, "sticker_search_" + str);
             ArrayList<StickerResult> arrayList4 = this.stickers;
             if (arrayList4 != null) {

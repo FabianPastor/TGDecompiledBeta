@@ -2344,7 +2344,6 @@
     <string name="PopupDisabled">معطَّلة</string>
     <string name="PopupEnabled">مفعَّلة</string>
     <string name="PopupNotification">الإشعارات المنبثقة</string>
-    <string name="PreviewFeedback">اكتب رأيك حول هذا الإستعراض</string>
     <string name="PriorityInfo">ستعمل الإشعارات الأكثر أهمية حتى في حال تفعيل وضعية عدم الإزعاج.</string>
     <string name="PrivacyAddAnException">إضافة مستخدمين أو مجموعات</string>
     <string name="PrivacyAdvanced">إعدادات متقدمة</string>
@@ -3262,5 +3261,4 @@
     <string name="messages_two">الرسالتين</string>
     <string name="messages_zero">%1$d رسالة</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
 </resources>

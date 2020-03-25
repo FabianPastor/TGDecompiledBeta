@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -26,16 +26,17 @@ public class LocationCell extends FrameLayout {
     public LocationCell(Context context, boolean z) {
         super(context);
         this.wrapContent = z;
-        this.imageView = new BackupImageView(context);
-        BackupImageView backupImageView = this.imageView;
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
         ShapeDrawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(42.0f), -1);
         this.circleDrawable = createCircleDrawable;
         backupImageView.setBackground(createCircleDrawable);
         this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 11.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextSize(1, 16.0f);
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setTextSize(1, 16.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setSingleLine(true);
@@ -44,8 +45,9 @@ public class LocationCell extends FrameLayout {
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         int i2 = 16;
         addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 16 : 73), 10.0f, (float) (LocaleController.isRTL ? 73 : 16), 0.0f));
-        this.addressTextView = new TextView(context);
-        this.addressTextView.setTextSize(1, 14.0f);
+        TextView textView2 = new TextView(context);
+        this.addressTextView = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.addressTextView.setMaxLines(1);
         this.addressTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.addressTextView.setSingleLine(true);
@@ -67,8 +69,8 @@ public class LocationCell extends FrameLayout {
         return this.imageView;
     }
 
-    public void setLocation(TLRPC.TL_messageMediaVenue tL_messageMediaVenue, String str, int i, boolean z) {
-        setLocation(tL_messageMediaVenue, str, (String) null, i, z);
+    public void setLocation(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, String str, int i, boolean z) {
+        setLocation(tLRPC$TL_messageMediaVenue, str, (String) null, i, z);
     }
 
     public static int getColorForIndex(int i) {
@@ -91,14 +93,14 @@ public class LocationCell extends FrameLayout {
         return -7900675;
     }
 
-    public void setLocation(TLRPC.TL_messageMediaVenue tL_messageMediaVenue, String str, String str2, int i, boolean z) {
+    public void setLocation(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, String str, String str2, int i, boolean z) {
         this.needDivider = z;
         this.circleDrawable.getPaint().setColor(getColorForIndex(i));
-        this.nameTextView.setText(tL_messageMediaVenue.title);
+        this.nameTextView.setText(tLRPC$TL_messageMediaVenue.title);
         if (str2 != null) {
             this.addressTextView.setText(str2);
         } else {
-            this.addressTextView.setText(tL_messageMediaVenue.address);
+            this.addressTextView.setText(tLRPC$TL_messageMediaVenue.address);
         }
         this.imageView.setImage(str, (String) null, (Drawable) null);
         setWillNotDraw(!z);

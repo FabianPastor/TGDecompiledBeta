@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 
 public class RecyclerViewItemRangeSelector implements RecyclerView.OnItemTouchListener {
-    private static final int AUTO_SCROLL_DELAY = 15;
     private Runnable autoScrollRunnable = new Runnable() {
         public void run() {
             if (RecyclerViewItemRangeSelector.this.recyclerView != null) {
@@ -36,14 +35,11 @@ public class RecyclerViewItemRangeSelector implements RecyclerView.OnItemTouchLi
     /* access modifiers changed from: private */
     public boolean inTopHotspot;
     private int initialSelection;
-    private boolean isAutoScrolling;
     private int lastDraggedIndex = -1;
     /* access modifiers changed from: private */
     public RecyclerView recyclerView;
 
     public interface RecyclerViewItemRangeSelectorDelegate {
-        int getItemCount();
-
         boolean isIndexSelectable(int i);
 
         boolean isSelected(int i);
@@ -58,12 +54,6 @@ public class RecyclerViewItemRangeSelector implements RecyclerView.OnItemTouchLi
 
     public RecyclerViewItemRangeSelector(RecyclerViewItemRangeSelectorDelegate recyclerViewItemRangeSelectorDelegate) {
         this.delegate = recyclerViewItemRangeSelectorDelegate;
-    }
-
-    private void disableAutoScroll() {
-        this.hotspotHeight = -1;
-        this.hotspotOffsetTop = -1;
-        this.hotspotOffsetBottom = -1;
     }
 
     public boolean onInterceptTouchEvent(RecyclerView recyclerView2, MotionEvent motionEvent) {
@@ -126,8 +116,7 @@ public class RecyclerViewItemRangeSelector implements RecyclerView.OnItemTouchLi
             if (childAdapterPosition != -1 && this.lastDraggedIndex != childAdapterPosition) {
                 this.lastDraggedIndex = childAdapterPosition;
                 RecyclerViewItemRangeSelectorDelegate recyclerViewItemRangeSelectorDelegate = this.delegate;
-                int i4 = this.lastDraggedIndex;
-                recyclerViewItemRangeSelectorDelegate.setSelected(findChildViewUnder, i4, !recyclerViewItemRangeSelectorDelegate.isSelected(i4));
+                recyclerViewItemRangeSelectorDelegate.setSelected(findChildViewUnder, childAdapterPosition, !recyclerViewItemRangeSelectorDelegate.isSelected(childAdapterPosition));
             }
         }
     }

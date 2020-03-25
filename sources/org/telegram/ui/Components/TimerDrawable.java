@@ -41,14 +41,13 @@ public class TimerDrawable extends Drawable {
     public void setTime(int i) {
         String str;
         this.time = i;
-        int i2 = this.time;
-        if (i2 < 1 || i2 >= 60) {
-            int i3 = this.time;
-            if (i3 < 60 || i3 >= 3600) {
-                int i4 = this.time;
-                if (i4 < 3600 || i4 >= 86400) {
-                    int i5 = this.time;
-                    if (i5 < 86400 || i5 >= 604800) {
+        if (i < 1 || i >= 60) {
+            int i2 = this.time;
+            if (i2 < 60 || i2 >= 3600) {
+                int i3 = this.time;
+                if (i3 < 3600 || i3 >= 86400) {
+                    int i4 = this.time;
+                    if (i4 < 86400 || i4 >= 604800) {
                         str = "" + ((((i / 60) / 60) / 24) / 7);
                         if (str.length() < 2) {
                             str = str + "w";
@@ -82,8 +81,9 @@ public class TimerDrawable extends Drawable {
         String str2 = str;
         this.timeWidth = this.timePaint.measureText(str2);
         try {
-            this.timeLayout = new StaticLayout(str2, this.timePaint, (int) Math.ceil((double) this.timeWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            this.timeHeight = this.timeLayout.getHeight();
+            StaticLayout staticLayout = new StaticLayout(str2, this.timePaint, (int) Math.ceil((double) this.timeWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.timeLayout = staticLayout;
+            this.timeHeight = staticLayout.getHeight();
         } catch (Exception e) {
             this.timeLayout = null;
             FileLog.e((Throwable) e);

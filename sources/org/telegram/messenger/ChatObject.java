@@ -1,6 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_channel;
+import org.telegram.tgnet.TLRPC$TL_channelForbidden;
+import org.telegram.tgnet.TLRPC$TL_channel_layer48;
+import org.telegram.tgnet.TLRPC$TL_channel_layer67;
+import org.telegram.tgnet.TLRPC$TL_channel_layer72;
+import org.telegram.tgnet.TLRPC$TL_channel_layer77;
+import org.telegram.tgnet.TLRPC$TL_channel_layer92;
+import org.telegram.tgnet.TLRPC$TL_channel_old;
+import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
+import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
+import org.telegram.tgnet.TLRPC$TL_chatEmpty;
+import org.telegram.tgnet.TLRPC$TL_chatForbidden;
+import org.telegram.tgnet.TLRPC$TL_chat_layer92;
+import org.telegram.tgnet.TLRPC$TL_chat_old;
+import org.telegram.tgnet.TLRPC$TL_chat_old2;
 
 public class ChatObject {
     public static final int ACTION_ADD_ADMINS = 4;
@@ -43,74 +58,74 @@ public class ChatObject {
         return true;
     }
 
-    private static boolean getBannedRight(TLRPC.TL_chatBannedRights tL_chatBannedRights, int i) {
-        if (tL_chatBannedRights == null) {
+    private static boolean getBannedRight(TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, int i) {
+        if (tLRPC$TL_chatBannedRights == null) {
             return false;
         }
         if (i == 0) {
-            return tL_chatBannedRights.pin_messages;
+            return tLRPC$TL_chatBannedRights.pin_messages;
         }
         if (i == 1) {
-            return tL_chatBannedRights.change_info;
+            return tLRPC$TL_chatBannedRights.change_info;
         }
         if (i == 3) {
-            return tL_chatBannedRights.invite_users;
+            return tLRPC$TL_chatBannedRights.invite_users;
         }
         switch (i) {
             case 6:
-                return tL_chatBannedRights.send_messages;
+                return tLRPC$TL_chatBannedRights.send_messages;
             case 7:
-                return tL_chatBannedRights.send_media;
+                return tLRPC$TL_chatBannedRights.send_media;
             case 8:
-                return tL_chatBannedRights.send_stickers;
+                return tLRPC$TL_chatBannedRights.send_stickers;
             case 9:
-                return tL_chatBannedRights.embed_links;
+                return tLRPC$TL_chatBannedRights.embed_links;
             case 10:
-                return tL_chatBannedRights.send_polls;
+                return tLRPC$TL_chatBannedRights.send_polls;
             case 11:
-                return tL_chatBannedRights.view_messages;
+                return tLRPC$TL_chatBannedRights.view_messages;
             default:
                 return false;
         }
     }
 
-    public static boolean isActionBannedByDefault(TLRPC.Chat chat, int i) {
-        if (getBannedRight(chat.banned_rights, i)) {
+    public static boolean isActionBannedByDefault(TLRPC$Chat tLRPC$Chat, int i) {
+        if (getBannedRight(tLRPC$Chat.banned_rights, i)) {
             return false;
         }
-        return getBannedRight(chat.default_banned_rights, i);
+        return getBannedRight(tLRPC$Chat.default_banned_rights, i);
     }
 
-    public static boolean isActionBanned(TLRPC.Chat chat, int i) {
-        return chat != null && (getBannedRight(chat.banned_rights, i) || getBannedRight(chat.default_banned_rights, i));
+    public static boolean isActionBanned(TLRPC$Chat tLRPC$Chat, int i) {
+        return tLRPC$Chat != null && (getBannedRight(tLRPC$Chat.banned_rights, i) || getBannedRight(tLRPC$Chat.default_banned_rights, i));
     }
 
-    public static boolean canUserDoAdminAction(TLRPC.Chat chat, int i) {
+    public static boolean canUserDoAdminAction(TLRPC$Chat tLRPC$Chat, int i) {
         boolean z;
-        if (chat == null) {
+        if (tLRPC$Chat == null) {
             return false;
         }
-        if (chat.creator) {
+        if (tLRPC$Chat.creator) {
             return true;
         }
-        TLRPC.TL_chatAdminRights tL_chatAdminRights = chat.admin_rights;
-        if (tL_chatAdminRights != null) {
+        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
+        if (tLRPC$TL_chatAdminRights != null) {
             if (i == 0) {
-                z = tL_chatAdminRights.pin_messages;
+                z = tLRPC$TL_chatAdminRights.pin_messages;
             } else if (i == 1) {
-                z = tL_chatAdminRights.change_info;
+                z = tLRPC$TL_chatAdminRights.change_info;
             } else if (i == 2) {
-                z = tL_chatAdminRights.ban_users;
+                z = tLRPC$TL_chatAdminRights.ban_users;
             } else if (i == 3) {
-                z = tL_chatAdminRights.invite_users;
+                z = tLRPC$TL_chatAdminRights.invite_users;
             } else if (i == 4) {
-                z = tL_chatAdminRights.add_admins;
+                z = tLRPC$TL_chatAdminRights.add_admins;
             } else if (i == 5) {
-                z = tL_chatAdminRights.post_messages;
+                z = tLRPC$TL_chatAdminRights.post_messages;
             } else if (i != 12) {
-                z = i != 13 ? false : tL_chatAdminRights.delete_messages;
+                z = i != 13 ? false : tLRPC$TL_chatAdminRights.delete_messages;
             } else {
-                z = tL_chatAdminRights.edit_messages;
+                z = tLRPC$TL_chatAdminRights.edit_messages;
             }
             if (z) {
                 return true;
@@ -119,19 +134,19 @@ public class ChatObject {
         return false;
     }
 
-    public static boolean canUserDoAction(TLRPC.Chat chat, int i) {
-        if (chat == null || canUserDoAdminAction(chat, i)) {
+    public static boolean canUserDoAction(TLRPC$Chat tLRPC$Chat, int i) {
+        if (tLRPC$Chat == null || canUserDoAdminAction(tLRPC$Chat, i)) {
             return true;
         }
-        if (!getBannedRight(chat.banned_rights, i) && isBannableAction(i)) {
-            if (chat.admin_rights != null && !isAdminAction(i)) {
+        if (!getBannedRight(tLRPC$Chat.banned_rights, i) && isBannableAction(i)) {
+            if (tLRPC$Chat.admin_rights != null && !isAdminAction(i)) {
                 return true;
             }
-            if (chat.default_banned_rights == null && ((chat instanceof TLRPC.TL_chat_layer92) || (chat instanceof TLRPC.TL_chat_old) || (chat instanceof TLRPC.TL_chat_old2) || (chat instanceof TLRPC.TL_channel_layer92) || (chat instanceof TLRPC.TL_channel_layer77) || (chat instanceof TLRPC.TL_channel_layer72) || (chat instanceof TLRPC.TL_channel_layer67) || (chat instanceof TLRPC.TL_channel_layer48) || (chat instanceof TLRPC.TL_channel_old))) {
+            if (tLRPC$Chat.default_banned_rights == null && ((tLRPC$Chat instanceof TLRPC$TL_chat_layer92) || (tLRPC$Chat instanceof TLRPC$TL_chat_old) || (tLRPC$Chat instanceof TLRPC$TL_chat_old2) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer92) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer77) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer72) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer67) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer48) || (tLRPC$Chat instanceof TLRPC$TL_channel_old))) {
                 return true;
             }
-            TLRPC.TL_chatBannedRights tL_chatBannedRights = chat.default_banned_rights;
-            if (tL_chatBannedRights == null || getBannedRight(tL_chatBannedRights, i)) {
+            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
+            if (tLRPC$TL_chatBannedRights == null || getBannedRight(tLRPC$TL_chatBannedRights, i)) {
                 return false;
             }
             return true;
@@ -139,22 +154,22 @@ public class ChatObject {
         return false;
     }
 
-    public static boolean isLeftFromChat(TLRPC.Chat chat) {
-        return chat == null || (chat instanceof TLRPC.TL_chatEmpty) || (chat instanceof TLRPC.TL_chatForbidden) || (chat instanceof TLRPC.TL_channelForbidden) || chat.left || chat.deactivated;
+    public static boolean isLeftFromChat(TLRPC$Chat tLRPC$Chat) {
+        return tLRPC$Chat == null || (tLRPC$Chat instanceof TLRPC$TL_chatEmpty) || (tLRPC$Chat instanceof TLRPC$TL_chatForbidden) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden) || tLRPC$Chat.left || tLRPC$Chat.deactivated;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:11:0x0016, code lost:
         r1 = r1.banned_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean isKickedFromChat(org.telegram.tgnet.TLRPC.Chat r1) {
+    public static boolean isKickedFromChat(org.telegram.tgnet.TLRPC$Chat r1) {
         /*
             if (r1 == 0) goto L_0x0021
-            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC.TL_chatEmpty
+            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_chatEmpty
             if (r0 != 0) goto L_0x0021
-            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC.TL_chatForbidden
+            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_chatForbidden
             if (r0 != 0) goto L_0x0021
-            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC.TL_channelForbidden
+            boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelForbidden
             if (r0 != 0) goto L_0x0021
             boolean r0 = r1.kicked
             if (r0 != 0) goto L_0x0021
@@ -176,23 +191,23 @@ public class ChatObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.isKickedFromChat(org.telegram.tgnet.TLRPC$Chat):boolean");
     }
 
-    public static boolean isNotInChat(TLRPC.Chat chat) {
-        return chat == null || (chat instanceof TLRPC.TL_chatEmpty) || (chat instanceof TLRPC.TL_chatForbidden) || (chat instanceof TLRPC.TL_channelForbidden) || chat.left || chat.kicked || chat.deactivated;
+    public static boolean isNotInChat(TLRPC$Chat tLRPC$Chat) {
+        return tLRPC$Chat == null || (tLRPC$Chat instanceof TLRPC$TL_chatEmpty) || (tLRPC$Chat instanceof TLRPC$TL_chatForbidden) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden) || tLRPC$Chat.left || tLRPC$Chat.kicked || tLRPC$Chat.deactivated;
     }
 
-    public static boolean isChannel(TLRPC.Chat chat) {
-        return (chat instanceof TLRPC.TL_channel) || (chat instanceof TLRPC.TL_channelForbidden);
+    public static boolean isChannel(TLRPC$Chat tLRPC$Chat) {
+        return (tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden);
     }
 
-    public static boolean isMegagroup(TLRPC.Chat chat) {
-        return ((chat instanceof TLRPC.TL_channel) || (chat instanceof TLRPC.TL_channelForbidden)) && chat.megagroup;
+    public static boolean isMegagroup(TLRPC$Chat tLRPC$Chat) {
+        return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && tLRPC$Chat.megagroup;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:3:0x0006, code lost:
         r1 = r1.admin_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean hasAdminRights(org.telegram.tgnet.TLRPC.Chat r1) {
+    public static boolean hasAdminRights(org.telegram.tgnet.TLRPC$Chat r1) {
         /*
             if (r1 == 0) goto L_0x0010
             boolean r0 = r1.creator
@@ -212,57 +227,57 @@ public class ChatObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.hasAdminRights(org.telegram.tgnet.TLRPC$Chat):boolean");
     }
 
-    public static boolean canChangeChatInfo(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 1);
+    public static boolean canChangeChatInfo(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 1);
     }
 
-    public static boolean canAddAdmins(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 4);
+    public static boolean canAddAdmins(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 4);
     }
 
-    public static boolean canBlockUsers(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 2);
+    public static boolean canBlockUsers(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 2);
     }
 
-    public static boolean canSendStickers(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 8);
+    public static boolean canSendStickers(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 8);
     }
 
-    public static boolean canSendEmbed(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 9);
+    public static boolean canSendEmbed(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 9);
     }
 
-    public static boolean canSendMedia(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 7);
+    public static boolean canSendMedia(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 7);
     }
 
-    public static boolean canSendPolls(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 10);
+    public static boolean canSendPolls(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 10);
     }
 
-    public static boolean canSendMessages(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 6);
+    public static boolean canSendMessages(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 6);
     }
 
-    public static boolean canPost(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 5);
+    public static boolean canPost(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 5);
     }
 
-    public static boolean canAddUsers(TLRPC.Chat chat) {
-        return canUserDoAction(chat, 3);
+    public static boolean canAddUsers(TLRPC$Chat tLRPC$Chat) {
+        return canUserDoAction(tLRPC$Chat, 3);
     }
 
-    public static boolean canAddBotsToChat(TLRPC.Chat chat) {
-        if (isChannel(chat)) {
-            if (chat == null || !chat.megagroup) {
+    public static boolean canAddBotsToChat(TLRPC$Chat tLRPC$Chat) {
+        if (isChannel(tLRPC$Chat)) {
+            if (tLRPC$Chat == null || !tLRPC$Chat.megagroup) {
                 return false;
             }
-            TLRPC.TL_chatAdminRights tL_chatAdminRights = chat.admin_rights;
-            if ((tL_chatAdminRights == null || (!tL_chatAdminRights.post_messages && !tL_chatAdminRights.add_admins)) && !chat.creator) {
+            TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
+            if ((tLRPC$TL_chatAdminRights == null || (!tLRPC$TL_chatAdminRights.post_messages && !tLRPC$TL_chatAdminRights.add_admins)) && !tLRPC$Chat.creator) {
                 return false;
             }
             return true;
-        } else if (chat.migrated_to == null) {
+        } else if (tLRPC$Chat.migrated_to == null) {
             return true;
         } else {
             return false;
@@ -273,7 +288,7 @@ public class ChatObject {
         r2 = r2.admin_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean canPinMessages(org.telegram.tgnet.TLRPC.Chat r2) {
+    public static boolean canPinMessages(org.telegram.tgnet.TLRPC$Chat r2) {
         /*
             r0 = 0
             boolean r1 = canUserDoAction(r2, r0)
@@ -295,12 +310,12 @@ public class ChatObject {
     }
 
     public static boolean isChannel(int i, int i2) {
-        TLRPC.Chat chat = MessagesController.getInstance(i2).getChat(Integer.valueOf(i));
-        return (chat instanceof TLRPC.TL_channel) || (chat instanceof TLRPC.TL_channelForbidden);
+        TLRPC$Chat chat = MessagesController.getInstance(i2).getChat(Integer.valueOf(i));
+        return (chat instanceof TLRPC$TL_channel) || (chat instanceof TLRPC$TL_channelForbidden);
     }
 
     public static boolean isCanWriteToChannel(int i, int i2) {
-        TLRPC.Chat chat = MessagesController.getInstance(i2).getChat(Integer.valueOf(i));
+        TLRPC$Chat chat = MessagesController.getInstance(i2).getChat(Integer.valueOf(i));
         return canSendMessages(chat) || (chat != null && chat.megagroup);
     }
 
@@ -308,7 +323,7 @@ public class ChatObject {
         r0 = r1.admin_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean canWriteToChat(org.telegram.tgnet.TLRPC.Chat r1) {
+    public static boolean canWriteToChat(org.telegram.tgnet.TLRPC$Chat r1) {
         /*
             boolean r0 = isChannel(r1)
             if (r0 == 0) goto L_0x0019
@@ -333,11 +348,11 @@ public class ChatObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.canWriteToChat(org.telegram.tgnet.TLRPC$Chat):boolean");
     }
 
-    public static String getBannedRightsString(TLRPC.TL_chatBannedRights tL_chatBannedRights) {
-        return (((((((((((("" + (tL_chatBannedRights.view_messages ? 1 : 0)) + (tL_chatBannedRights.send_messages ? 1 : 0)) + (tL_chatBannedRights.send_media ? 1 : 0)) + (tL_chatBannedRights.send_stickers ? 1 : 0)) + (tL_chatBannedRights.send_gifs ? 1 : 0)) + (tL_chatBannedRights.send_games ? 1 : 0)) + (tL_chatBannedRights.send_inline ? 1 : 0)) + (tL_chatBannedRights.embed_links ? 1 : 0)) + (tL_chatBannedRights.send_polls ? 1 : 0)) + (tL_chatBannedRights.invite_users ? 1 : 0)) + (tL_chatBannedRights.change_info ? 1 : 0)) + (tL_chatBannedRights.pin_messages ? 1 : 0)) + tL_chatBannedRights.until_date;
+    public static String getBannedRightsString(TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights) {
+        return (((((((((((("" + (tLRPC$TL_chatBannedRights.view_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_messages ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_media ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_stickers ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_gifs ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_games ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_inline ? 1 : 0)) + (tLRPC$TL_chatBannedRights.embed_links ? 1 : 0)) + (tLRPC$TL_chatBannedRights.send_polls ? 1 : 0)) + (tLRPC$TL_chatBannedRights.invite_users ? 1 : 0)) + (tLRPC$TL_chatBannedRights.change_info ? 1 : 0)) + (tLRPC$TL_chatBannedRights.pin_messages ? 1 : 0)) + tLRPC$TL_chatBannedRights.until_date;
     }
 
-    public static TLRPC.Chat getChatByDialog(long j, int i) {
+    public static TLRPC$Chat getChatByDialog(long j, int i) {
         int i2 = (int) j;
         if (i2 < 0) {
             return MessagesController.getInstance(i).getChat(Integer.valueOf(-i2));

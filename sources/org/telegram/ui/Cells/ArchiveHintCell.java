@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +21,7 @@ public class ArchiveHintCell extends FrameLayout {
 
     public ArchiveHintCell(Context context) {
         super(context);
-        this.viewPager = new ViewPager(context) {
+        AnonymousClass1 r0 = new ViewPager(this, context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -36,7 +35,8 @@ public class ArchiveHintCell extends FrameLayout {
                 requestLayout();
             }
         };
-        AndroidUtilities.setViewPagerEdgeEffectColor(this.viewPager, Theme.getColor("actionBarDefaultArchived"));
+        this.viewPager = r0;
+        AndroidUtilities.setViewPagerEdgeEffectColor(r0, Theme.getColor("actionBarDefaultArchived"));
         this.viewPager.setAdapter(new Adapter());
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
@@ -54,8 +54,9 @@ public class ArchiveHintCell extends FrameLayout {
                 FileLog.d("test1");
             }
         });
-        this.bottomPages = new BottomPagesView(context, this.viewPager, 3);
-        this.bottomPages.setColor("chats_unreadCounterMuted", "chats_actionBackground");
+        BottomPagesView bottomPagesView = new BottomPagesView(context, this.viewPager, 3);
+        this.bottomPages = bottomPagesView;
+        bottomPagesView.setColor("chats_unreadCounterMuted", "chats_actionBackground");
         addView(this.bottomPages, LayoutHelper.createFrame(33, 5.0f, 81, 0.0f, 0.0f, 0.0f, 19.0f));
     }
 
@@ -108,12 +109,6 @@ public class ArchiveHintCell extends FrameLayout {
 
         public boolean isViewFromObject(View view, Object obj) {
             return view.equals(obj);
-        }
-
-        public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
-            if (dataSetObserver != null) {
-                super.unregisterDataSetObserver(dataSetObserver);
-            }
         }
     }
 }

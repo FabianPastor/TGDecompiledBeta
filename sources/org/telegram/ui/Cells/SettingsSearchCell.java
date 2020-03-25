@@ -27,7 +27,7 @@ public class SettingsSearchCell extends FrameLayout {
     private TextView valueTextView;
 
     public class VerticalImageSpan extends ImageSpan {
-        public VerticalImageSpan(Drawable drawable) {
+        public VerticalImageSpan(SettingsSearchCell settingsSearchCell, Drawable drawable) {
             super(drawable);
         }
 
@@ -39,10 +39,12 @@ public class SettingsSearchCell extends FrameLayout {
                 int i4 = fontMetricsInt2.ascent;
                 int i5 = i4 + ((i3 - i4) / 2);
                 int i6 = (bounds.bottom - bounds.top) / 2;
-                fontMetricsInt.ascent = i5 - i6;
-                fontMetricsInt.top = fontMetricsInt.ascent;
-                fontMetricsInt.bottom = i5 + i6;
-                fontMetricsInt.descent = fontMetricsInt.bottom;
+                int i7 = i5 - i6;
+                fontMetricsInt.ascent = i7;
+                fontMetricsInt.top = i7;
+                int i8 = i5 + i6;
+                fontMetricsInt.bottom = i8;
+                fontMetricsInt.descent = i8;
             }
             return bounds.right;
         }
@@ -63,8 +65,9 @@ public class SettingsSearchCell extends FrameLayout {
 
     public SettingsSearchCell(Context context) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setLines(1);
@@ -72,16 +75,18 @@ public class SettingsSearchCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        TextView textView3 = new TextView(context);
+        this.valueTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 33.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, LocaleController.isRTL ? 5 : 3, 10.0f, 8.0f, 10.0f, 0.0f));
     }
@@ -105,7 +110,7 @@ public class SettingsSearchCell extends FrameLayout {
                     Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
-                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(this, mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i2]);
             }
@@ -130,7 +135,7 @@ public class SettingsSearchCell extends FrameLayout {
         }
         this.left = 69;
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndValue(CharSequence charSequence, String[] strArr, boolean z, boolean z2) {
@@ -144,7 +149,7 @@ public class SettingsSearchCell extends FrameLayout {
                     Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
-                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(this, mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i]);
             }
@@ -161,7 +166,7 @@ public class SettingsSearchCell extends FrameLayout {
                         Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
                         mutate2.setBounds(0, 0, mutate2.getIntrinsicWidth(), mutate2.getIntrinsicHeight());
                         mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
-                        spannableStringBuilder2.setSpan(new VerticalImageSpan(mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);
+                        spannableStringBuilder2.setSpan(new VerticalImageSpan(this, mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);
                     }
                     spannableStringBuilder2.append(strArr[i2]);
                 }
@@ -182,7 +187,7 @@ public class SettingsSearchCell extends FrameLayout {
         layoutParams2.leftMargin = dp2;
         this.imageView.setVisibility(8);
         this.needDivider = z2;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z2);
         this.left = 16;
     }
 

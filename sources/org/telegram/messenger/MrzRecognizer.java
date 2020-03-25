@@ -370,25 +370,25 @@ public class MrzRecognizer {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MrzRecognizer.recognizeBarcode(android.graphics.Bitmap):org.telegram.messenger.MrzRecognizer$Result");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x045d  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x04c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x026c A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x028b A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0246  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0257  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x026d  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x03d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x040b  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x0446  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x04a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0252 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:179:0x0271 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x01f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x022c  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x023d  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0253  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x03c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x03f4  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static org.telegram.messenger.MrzRecognizer.Result recognizeMRZ(android.graphics.Bitmap r26) {
+    private static org.telegram.messenger.MrzRecognizer.Result recognizeMRZ(android.graphics.Bitmap r25) {
         /*
-            r0 = r26
-            int r1 = r26.getWidth()
+            r0 = r25
+            int r1 = r25.getWidth()
             r2 = 1
             r3 = 512(0x200, float:7.175E-43)
             if (r1 > r3) goto L_0x0018
-            int r1 = r26.getHeight()
+            int r1 = r25.getHeight()
             r3 = 512(0x200, float:7.175E-43)
             if (r1 <= r3) goto L_0x0014
             goto L_0x0018
@@ -398,16 +398,16 @@ public class MrzRecognizer {
             goto L_0x0042
         L_0x0018:
             r1 = 1140850688(0x44000000, float:512.0)
-            int r3 = r26.getWidth()
-            int r4 = r26.getHeight()
+            int r3 = r25.getWidth()
+            int r4 = r25.getHeight()
             int r3 = java.lang.Math.max(r3, r4)
             float r3 = (float) r3
             float r1 = r1 / r3
-            int r3 = r26.getWidth()
+            int r3 = r25.getWidth()
             float r3 = (float) r3
             float r3 = r3 * r1
             int r3 = java.lang.Math.round(r3)
-            int r4 = r26.getHeight()
+            int r4 = r25.getHeight()
             float r4 = (float) r4
             float r4 = r4 * r1
             int r4 = java.lang.Math.round(r4)
@@ -416,422 +416,416 @@ public class MrzRecognizer {
             int[] r3 = findCornerPoints(r3)
             r4 = 1065353216(0x3var_, float:1.0)
             float r4 = r4 / r1
-            r1 = 6
-            r5 = 3
-            r6 = 5
-            r7 = 2
-            r8 = 0
-            if (r3 == 0) goto L_0x01c4
-            android.graphics.Point r9 = new android.graphics.Point
-            r10 = r3[r8]
-            r11 = r3[r2]
-            r9.<init>(r10, r11)
+            r1 = 7
+            r5 = 6
+            r6 = 3
+            r7 = 5
+            r8 = 2
+            r9 = 0
+            if (r3 == 0) goto L_0x01aa
             android.graphics.Point r10 = new android.graphics.Point
-            r11 = r3[r7]
-            r12 = r3[r5]
+            r11 = r3[r9]
+            r12 = r3[r2]
             r10.<init>(r11, r12)
             android.graphics.Point r11 = new android.graphics.Point
-            r12 = 4
-            r12 = r3[r12]
+            r12 = r3[r8]
             r13 = r3[r6]
             r11.<init>(r12, r13)
             android.graphics.Point r12 = new android.graphics.Point
-            r13 = r3[r1]
-            r14 = 7
-            r3 = r3[r14]
-            r12.<init>(r13, r3)
-            int r3 = r10.x
-            int r13 = r9.x
-            if (r3 >= r13) goto L_0x007d
+            r13 = 4
+            r13 = r3[r13]
+            r14 = r3[r7]
+            r12.<init>(r13, r14)
+            android.graphics.Point r13 = new android.graphics.Point
+            r14 = r3[r5]
+            r3 = r3[r1]
+            r13.<init>(r14, r3)
+            int r3 = r11.x
+            int r14 = r10.x
+            if (r3 >= r14) goto L_0x007d
             goto L_0x0087
         L_0x007d:
-            r24 = r10
-            r10 = r9
-            r9 = r24
-            r25 = r12
-            r12 = r11
-            r11 = r25
+            r23 = r11
+            r11 = r10
+            r10 = r23
+            r24 = r13
+            r13 = r12
+            r12 = r24
         L_0x0087:
-            int r3 = r9.x
-            int r13 = r10.x
-            int r3 = r3 - r13
-            double r13 = (double) r3
-            int r3 = r9.y
-            int r15 = r10.y
-            int r3 = r3 - r15
+            int r3 = r10.x
+            int r14 = r11.x
+            int r3 = r3 - r14
+            double r14 = (double) r3
+            int r3 = r10.y
+            int r1 = r11.y
+            int r3 = r3 - r1
             double r5 = (double) r3
-            double r5 = java.lang.Math.hypot(r13, r5)
-            int r3 = r11.x
-            int r13 = r12.x
-            int r3 = r3 - r13
-            double r13 = (double) r3
-            int r3 = r11.y
-            int r15 = r12.y
-            int r3 = r3 - r15
-            double r1 = (double) r3
-            double r1 = java.lang.Math.hypot(r13, r1)
+            double r5 = java.lang.Math.hypot(r14, r5)
             int r3 = r12.x
-            int r13 = r10.x
-            int r3 = r3 - r13
-            double r13 = (double) r3
+            int r14 = r13.x
+            int r3 = r3 - r14
+            double r14 = (double) r3
             int r3 = r12.y
-            int r15 = r10.y
-            int r3 = r3 - r15
+            int r1 = r13.y
+            int r3 = r3 - r1
             double r7 = (double) r3
-            double r7 = java.lang.Math.hypot(r13, r7)
+            double r7 = java.lang.Math.hypot(r14, r7)
+            int r1 = r13.x
             int r3 = r11.x
-            int r13 = r9.x
-            int r3 = r3 - r13
-            double r13 = (double) r3
+            int r1 = r1 - r3
+            double r14 = (double) r1
+            int r1 = r13.y
             int r3 = r11.y
-            int r15 = r9.y
-            int r3 = r3 - r15
-            r16 = r11
-            r17 = r12
-            double r11 = (double) r3
-            double r11 = java.lang.Math.hypot(r13, r11)
-            double r13 = r5 / r7
-            double r5 = r5 / r11
-            double r7 = r1 / r7
-            double r1 = r1 / r11
-            r11 = 4608758678669597082(0x3fvar_a, double:1.35)
-            int r3 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
-            if (r3 < 0) goto L_0x01d5
-            r11 = 4610560118520545280(0x3ffcNUM, double:1.75)
-            int r3 = (r13 > r11 ? 1 : (r13 == r11 ? 0 : -1))
-            if (r3 > 0) goto L_0x01d5
-            r11 = 4608758678669597082(0x3fvar_a, double:1.35)
-            int r3 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-            if (r3 < 0) goto L_0x01d5
-            r11 = 4610560118520545280(0x3ffcNUM, double:1.75)
-            int r3 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-            if (r3 > 0) goto L_0x01d5
-            r11 = 4608758678669597082(0x3fvar_a, double:1.35)
-            int r3 = (r5 > r11 ? 1 : (r5 == r11 ? 0 : -1))
-            if (r3 < 0) goto L_0x01d5
-            r11 = 4610560118520545280(0x3ffcNUM, double:1.75)
-            int r3 = (r5 > r11 ? 1 : (r5 == r11 ? 0 : -1))
-            if (r3 > 0) goto L_0x01d5
-            r11 = 4608758678669597082(0x3fvar_a, double:1.35)
-            int r3 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r3 < 0) goto L_0x01d5
-            r11 = 4610560118520545280(0x3ffcNUM, double:1.75)
-            int r3 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r3 > 0) goto L_0x01d5
-            double r13 = r13 + r5
-            double r13 = r13 + r7
-            double r13 = r13 + r1
+            int r1 = r1 - r3
+            double r2 = (double) r1
+            double r1 = java.lang.Math.hypot(r14, r2)
+            int r3 = r12.x
+            int r14 = r10.x
+            int r3 = r3 - r14
+            double r14 = (double) r3
+            int r3 = r12.y
+            int r9 = r10.y
+            int r3 = r3 - r9
+            r9 = r12
+            r16 = r13
+            double r12 = (double) r3
+            double r12 = java.lang.Math.hypot(r14, r12)
+            double r14 = r5 / r1
+            double r5 = r5 / r12
+            double r1 = r7 / r1
+            double r7 = r7 / r12
+            r12 = 4608758678669597082(0x3fvar_a, double:1.35)
+            int r3 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1))
+            if (r3 < 0) goto L_0x01bb
+            r17 = 4610560118520545280(0x3ffcNUM, double:1.75)
+            int r3 = (r14 > r17 ? 1 : (r14 == r17 ? 0 : -1))
+            if (r3 > 0) goto L_0x01bb
+            int r3 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
+            if (r3 < 0) goto L_0x01bb
+            int r3 = (r1 > r17 ? 1 : (r1 == r17 ? 0 : -1))
+            if (r3 > 0) goto L_0x01bb
+            int r3 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
+            if (r3 < 0) goto L_0x01bb
+            int r3 = (r5 > r17 ? 1 : (r5 == r17 ? 0 : -1))
+            if (r3 > 0) goto L_0x01bb
+            int r3 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1))
+            if (r3 < 0) goto L_0x01bb
+            int r3 = (r7 > r17 ? 1 : (r7 == r17 ? 0 : -1))
+            if (r3 > 0) goto L_0x01bb
+            double r14 = r14 + r5
+            double r14 = r14 + r1
+            double r14 = r14 + r7
             r1 = 4616189618054758400(0xNUM, double:4.0)
-            double r13 = r13 / r1
+            double r14 = r14 / r1
             r1 = 1024(0x400, float:1.435E-42)
             r2 = 4652218415073722368(0xNUM, double:1024.0)
-            double r2 = r2 / r13
+            double r2 = r2 / r14
             long r2 = java.lang.Math.round(r2)
             int r3 = (int) r2
             android.graphics.Bitmap$Config r2 = android.graphics.Bitmap.Config.ARGB_8888
-            android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r3, r2)
-            android.graphics.Canvas r2 = new android.graphics.Canvas
-            r2.<init>(r1)
-            r3 = 8
-            float[] r3 = new float[r3]
-            r5 = 0
+            android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r1, r3, r2)
+            android.graphics.Canvas r3 = new android.graphics.Canvas
+            r3.<init>(r2)
+            r1 = 8
+            float[] r5 = new float[r1]
+            r1 = 0
             r6 = 0
-            r3[r6] = r5
+            r5[r6] = r1
             r6 = 1
-            r3[r6] = r5
-            int r5 = r1.getWidth()
-            float r5 = (float) r5
+            r5[r6] = r1
+            int r1 = r2.getWidth()
+            float r1 = (float) r1
             r6 = 2
-            r3[r6] = r5
-            r5 = 0
+            r5[r6] = r1
+            r1 = 0
             r6 = 3
-            r3[r6] = r5
-            r5 = 4
-            int r6 = r1.getWidth()
+            r5[r6] = r1
+            r1 = 4
+            int r6 = r2.getWidth()
             float r6 = (float) r6
-            r3[r5] = r6
-            int r5 = r1.getHeight()
-            float r5 = (float) r5
+            r5[r1] = r6
+            int r1 = r2.getHeight()
+            float r1 = (float) r1
             r6 = 5
-            r3[r6] = r5
-            r5 = 0
+            r5[r6] = r1
+            r1 = 0
             r6 = 6
-            r3[r6] = r5
-            r5 = 7
-            int r6 = r1.getHeight()
+            r5[r6] = r1
+            int r6 = r2.getHeight()
             float r6 = (float) r6
-            r3[r5] = r6
-            r5 = 8
-            float[] r5 = new float[r5]
-            int r6 = r10.x
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 0
+            r7 = 7
             r5[r7] = r6
-            int r6 = r10.y
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 1
-            r5[r7] = r6
-            int r6 = r9.x
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 2
-            r5[r7] = r6
-            int r6 = r9.y
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 3
-            r5[r7] = r6
-            r6 = 4
-            r11 = r16
+            r6 = 8
+            float[] r6 = new float[r6]
             int r7 = r11.x
             float r7 = (float) r7
             float r7 = r7 * r4
-            r5[r6] = r7
-            int r6 = r11.y
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 5
-            r5[r7] = r6
-            r11 = r17
-            int r6 = r11.x
-            float r6 = (float) r6
-            float r6 = r6 * r4
-            r7 = 6
-            r5[r7] = r6
-            r6 = 7
+            r8 = 0
+            r6[r8] = r7
             int r7 = r11.y
             float r7 = (float) r7
             float r7 = r7 * r4
-            r5[r6] = r7
+            r8 = 1
+            r6[r8] = r7
+            int r7 = r10.x
+            float r7 = (float) r7
+            float r7 = r7 * r4
+            r8 = 2
+            r6[r8] = r7
+            int r7 = r10.y
+            float r7 = (float) r7
+            float r7 = r7 * r4
+            r8 = 3
+            r6[r8] = r7
+            r7 = 4
+            int r8 = r9.x
+            float r8 = (float) r8
+            float r8 = r8 * r4
+            r6[r7] = r8
+            int r7 = r9.y
+            float r7 = (float) r7
+            float r7 = r7 * r4
+            r8 = 5
+            r6[r8] = r7
+            r12 = r16
+            int r7 = r12.x
+            float r7 = (float) r7
+            float r7 = r7 * r4
+            r1 = 6
+            r6[r1] = r7
+            int r7 = r12.y
+            float r7 = (float) r7
+            float r7 = r7 * r4
+            r4 = 7
+            r6[r4] = r7
             android.graphics.Matrix r4 = new android.graphics.Matrix
             r4.<init>()
-            r20 = 0
-            r22 = 0
-            int r6 = r5.length
-            r7 = 1
-            int r23 = r6 >> 1
-            r18 = r4
-            r19 = r5
-            r21 = r3
-            r18.setPolyToPoly(r19, r20, r21, r22, r23)
-            android.graphics.Paint r3 = new android.graphics.Paint
-            r5 = 2
-            r3.<init>(r5)
-            r2.drawBitmap(r0, r4, r3)
-            r0 = r1
-            goto L_0x01d5
-        L_0x01c4:
-            int r1 = r26.getWidth()
-            r2 = 1500(0x5dc, float:2.102E-42)
-            if (r1 > r2) goto L_0x01d7
-            int r1 = r26.getHeight()
-            r2 = 1500(0x5dc, float:2.102E-42)
-            if (r1 <= r2) goto L_0x01d5
-            goto L_0x01d7
-        L_0x01d5:
-            r3 = 1
-            goto L_0x0203
-        L_0x01d7:
-            r1 = 1153138688(0x44bb8000, float:1500.0)
-            int r2 = r26.getWidth()
-            int r3 = r26.getHeight()
-            int r2 = java.lang.Math.max(r2, r3)
-            float r2 = (float) r2
-            float r1 = r1 / r2
-            int r2 = r26.getWidth()
-            float r2 = (float) r2
-            float r2 = r2 * r1
-            int r2 = java.lang.Math.round(r2)
-            int r3 = r26.getHeight()
+            r19 = 0
+            r21 = 0
+            r22 = 4
+            r17 = r4
+            r18 = r6
+            r20 = r5
+            r17.setPolyToPoly(r18, r19, r20, r21, r22)
+            android.graphics.Paint r5 = new android.graphics.Paint
+            r6 = 2
+            r5.<init>(r6)
+            r3.drawBitmap(r0, r4, r5)
+            r0 = r2
+            goto L_0x01bb
+        L_0x01aa:
+            int r2 = r25.getWidth()
+            r3 = 1500(0x5dc, float:2.102E-42)
+            if (r2 > r3) goto L_0x01bd
+            int r2 = r25.getHeight()
+            r3 = 1500(0x5dc, float:2.102E-42)
+            if (r2 <= r3) goto L_0x01bb
+            goto L_0x01bd
+        L_0x01bb:
+            r4 = 1
+            goto L_0x01e9
+        L_0x01bd:
+            r2 = 1153138688(0x44bb8000, float:1500.0)
+            int r3 = r25.getWidth()
+            int r4 = r25.getHeight()
+            int r3 = java.lang.Math.max(r3, r4)
             float r3 = (float) r3
-            float r3 = r3 * r1
-            int r1 = java.lang.Math.round(r3)
-            r3 = 1
-            android.graphics.Bitmap r0 = android.graphics.Bitmap.createScaledBitmap(r0, r2, r1, r3)
-        L_0x0203:
-            r1 = 0
-            r4 = r1
-            r5 = r4
+            float r2 = r2 / r3
+            int r3 = r25.getWidth()
+            float r3 = (float) r3
+            float r3 = r3 * r2
+            int r3 = java.lang.Math.round(r3)
+            int r4 = r25.getHeight()
+            float r4 = (float) r4
+            float r4 = r4 * r2
+            int r2 = java.lang.Math.round(r4)
+            r4 = 1
+            android.graphics.Bitmap r0 = android.graphics.Bitmap.createScaledBitmap(r0, r3, r2, r4)
+        L_0x01e9:
             r2 = 0
+            r5 = r2
+            r6 = r5
+            r3 = 0
+            r12 = 0
+            r13 = 0
+        L_0x01ef:
+            r14 = 30
+            r7 = 3
+            if (r3 >= r7) goto L_0x0271
+            if (r3 == r4) goto L_0x0212
+            r4 = 2
+            if (r3 == r4) goto L_0x01fb
+            r10 = r2
+            goto L_0x022a
+        L_0x01fb:
+            android.graphics.Matrix r5 = new android.graphics.Matrix
+            r5.<init>()
+            r6 = -1082130432(0xffffffffbvar_, float:-1.0)
+            int r7 = r0.getWidth()
+            int r7 = r7 / r4
+            float r7 = (float) r7
+            int r8 = r0.getHeight()
+            int r8 = r8 / r4
+            float r8 = (float) r8
+            r5.setRotate(r6, r7, r8)
+            goto L_0x0229
+        L_0x0212:
+            r4 = 2
+            android.graphics.Matrix r5 = new android.graphics.Matrix
+            r5.<init>()
+            r6 = 1065353216(0x3var_, float:1.0)
+            int r7 = r0.getWidth()
+            int r7 = r7 / r4
+            float r7 = (float) r7
+            int r8 = r0.getHeight()
+            int r8 = r8 / r4
+            float r4 = (float) r8
+            r5.setRotate(r6, r7, r4)
+        L_0x0229:
+            r10 = r5
+        L_0x022a:
+            if (r10 == 0) goto L_0x023d
+            r6 = 0
+            r7 = 0
+            int r8 = r0.getWidth()
+            int r9 = r0.getHeight()
+            r11 = 1
+            r5 = r0
+            android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r5, r6, r7, r8, r9, r10, r11)
+            goto L_0x023e
+        L_0x023d:
+            r4 = r0
+        L_0x023e:
+            int r5 = r4.getWidth()
+            int r6 = r4.getHeight()
+            android.graphics.Bitmap$Config r7 = android.graphics.Bitmap.Config.ALPHA_8
+            android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r5, r6, r7)
+            android.graphics.Rect[][] r6 = binarizeAndFindCharacters(r4, r5)
+            if (r6 != 0) goto L_0x0253
+            return r2
+        L_0x0253:
+            int r4 = r6.length
+            r7 = 0
+        L_0x0255:
+            if (r7 >= r4) goto L_0x0266
+            r8 = r6[r7]
+            int r9 = r8.length
+            int r12 = java.lang.Math.max(r9, r12)
+            int r8 = r8.length
+            if (r8 <= 0) goto L_0x0263
+            int r13 = r13 + 1
+        L_0x0263:
+            int r7 = r7 + 1
+            goto L_0x0255
+        L_0x0266:
+            r7 = 2
+            if (r13 < r7) goto L_0x026c
+            if (r12 < r14) goto L_0x026c
+            goto L_0x0272
+        L_0x026c:
+            int r3 = r3 + 1
+            r4 = 1
+            goto L_0x01ef
+        L_0x0271:
+            r7 = 2
+        L_0x0272:
+            if (r12 < r14) goto L_0x077f
+            if (r13 >= r7) goto L_0x0278
+            goto L_0x077f
+        L_0x0278:
+            r0 = 0
+            r3 = r6[r0]
+            int r0 = r3.length
+            r3 = 10
+            int r0 = r0 * 10
+            int r4 = r6.length
+            r7 = 15
+            int r4 = r4 * 15
+            android.graphics.Bitmap$Config r8 = android.graphics.Bitmap.Config.ALPHA_8
+            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r0, r4, r8)
+            android.graphics.Canvas r4 = new android.graphics.Canvas
+            r4.<init>(r0)
+            android.graphics.Paint r8 = new android.graphics.Paint
+            r9 = 2
+            r8.<init>(r9)
+            android.graphics.Rect r9 = new android.graphics.Rect
+            r10 = 0
+            r9.<init>(r10, r10, r3, r7)
+            int r10 = r6.length
             r11 = 0
             r12 = 0
-        L_0x0209:
-            r13 = 30
-            r6 = 3
-            if (r2 >= r6) goto L_0x028b
-            if (r2 == r3) goto L_0x022c
-            r3 = 2
-            if (r2 == r3) goto L_0x0215
-            r9 = r1
-            goto L_0x0244
-        L_0x0215:
-            android.graphics.Matrix r4 = new android.graphics.Matrix
-            r4.<init>()
-            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
-            int r6 = r0.getWidth()
-            int r6 = r6 / r3
-            float r6 = (float) r6
-            int r7 = r0.getHeight()
-            int r7 = r7 / r3
-            float r7 = (float) r7
-            r4.setRotate(r5, r6, r7)
-            goto L_0x0243
-        L_0x022c:
-            r3 = 2
-            android.graphics.Matrix r4 = new android.graphics.Matrix
-            r4.<init>()
-            r5 = 1065353216(0x3var_, float:1.0)
-            int r6 = r0.getWidth()
-            int r6 = r6 / r3
-            float r6 = (float) r6
-            int r7 = r0.getHeight()
-            int r7 = r7 / r3
-            float r3 = (float) r7
-            r4.setRotate(r5, r6, r3)
-        L_0x0243:
-            r9 = r4
-        L_0x0244:
-            if (r9 == 0) goto L_0x0257
-            r5 = 0
-            r6 = 0
-            int r7 = r0.getWidth()
-            int r8 = r0.getHeight()
-            r10 = 1
-            r4 = r0
-            android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x0258
-        L_0x0257:
-            r3 = r0
-        L_0x0258:
-            int r4 = r3.getWidth()
-            int r5 = r3.getHeight()
-            android.graphics.Bitmap$Config r6 = android.graphics.Bitmap.Config.ALPHA_8
-            android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r4, r5, r6)
-            android.graphics.Rect[][] r5 = binarizeAndFindCharacters(r3, r4)
-            if (r5 != 0) goto L_0x026d
-            return r1
-        L_0x026d:
-            int r3 = r5.length
-            r6 = 0
-        L_0x026f:
-            if (r6 >= r3) goto L_0x0280
-            r7 = r5[r6]
-            int r8 = r7.length
-            int r11 = java.lang.Math.max(r8, r11)
-            int r7 = r7.length
-            if (r7 <= 0) goto L_0x027d
-            int r12 = r12 + 1
-        L_0x027d:
-            int r6 = r6 + 1
-            goto L_0x026f
-        L_0x0280:
-            r6 = 2
-            if (r12 < r6) goto L_0x0286
-            if (r11 < r13) goto L_0x0286
-            goto L_0x028c
-        L_0x0286:
-            int r2 = r2 + 1
-            r3 = 1
-            goto L_0x0209
-        L_0x028b:
-            r6 = 2
-        L_0x028c:
-            if (r11 < r13) goto L_0x07a4
-            if (r12 >= r6) goto L_0x0292
-            goto L_0x07a4
-        L_0x0292:
-            r0 = 0
-            r2 = r5[r0]
-            int r0 = r2.length
-            int r0 = r0 * 10
-            int r2 = r5.length
-            int r2 = r2 * 15
-            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ALPHA_8
-            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r0, r2, r3)
-            android.graphics.Canvas r2 = new android.graphics.Canvas
-            r2.<init>(r0)
-            android.graphics.Paint r3 = new android.graphics.Paint
-            r6 = 2
-            r3.<init>(r6)
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r7 = 10
-            r8 = 15
-            r9 = 0
-            r6.<init>(r9, r9, r7, r8)
-            int r7 = r5.length
-            r8 = 0
-            r9 = 0
-        L_0x02b9:
-            if (r8 >= r7) goto L_0x02ec
-            r10 = r5[r8]
-            int r11 = r10.length
-            r12 = 0
-            r14 = 0
-        L_0x02c0:
-            if (r12 >= r11) goto L_0x02e2
-            r15 = r10[r12]
-            int r13 = r14 * 10
-            int r1 = r9 * 15
-            r17 = r7
-            int r7 = r13 + 10
-            r18 = r10
-            int r10 = r1 + 15
-            r6.set(r13, r1, r7, r10)
-            r2.drawBitmap(r4, r15, r6, r3)
-            r1 = 1
-            int r14 = r14 + r1
-            int r12 = r12 + 1
-            r7 = r17
-            r10 = r18
+        L_0x029f:
+            if (r11 >= r10) goto L_0x02d8
+            r13 = r6[r11]
+            int r15 = r13.length
             r1 = 0
-            r13 = 30
-            goto L_0x02c0
-        L_0x02e2:
-            r17 = r7
-            int r9 = r9 + 1
-            int r8 = r8 + 1
-            r1 = 0
-            r13 = 30
-            goto L_0x02b9
-        L_0x02ec:
-            int r1 = r5.length
+            r16 = 0
+        L_0x02a7:
+            if (r1 >= r15) goto L_0x02ca
+            r7 = r13[r1]
+            int r3 = r16 * 10
+            int r14 = r12 * 15
+            int r2 = r3 + 10
+            r20 = r10
+            int r10 = r14 + 15
+            r9.set(r3, r14, r2, r10)
+            r4.drawBitmap(r5, r7, r9, r8)
+            r2 = 1
+            int r16 = r16 + 1
+            int r1 = r1 + 1
+            r10 = r20
             r2 = 0
-            r3 = r5[r2]
+            r3 = 10
+            r7 = 15
+            r14 = 30
+            goto L_0x02a7
+        L_0x02ca:
+            r20 = r10
+            int r12 = r12 + 1
+            int r11 = r11 + 1
+            r2 = 0
+            r3 = 10
+            r7 = 15
+            r14 = 30
+            goto L_0x029f
+        L_0x02d8:
+            int r1 = r6.length
+            r2 = 0
+            r3 = r6[r2]
             int r2 = r3.length
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.AssetManager r3 = r3.getAssets()
             java.lang.String r0 = performRecognition(r0, r1, r2, r3)
-            if (r0 != 0) goto L_0x02ff
+            if (r0 != 0) goto L_0x02eb
             r1 = 0
             return r1
-        L_0x02ff:
+        L_0x02eb:
             java.lang.String r1 = "\n"
             java.lang.String[] r0 = android.text.TextUtils.split(r0, r1)
-            org.telegram.messenger.MrzRecognizer$Result r1 = new org.telegram.messenger.MrzRecognizer$Result
-            r1.<init>()
-            int r2 = r0.length
+            org.telegram.messenger.MrzRecognizer$Result r2 = new org.telegram.messenger.MrzRecognizer$Result
+            r2.<init>()
+            int r1 = r0.length
             r3 = 2
-            if (r2 < r3) goto L_0x07a2
-            r2 = 0
-            r3 = r0[r2]
+            if (r1 < r3) goto L_0x077d
+            r1 = 0
+            r3 = r0[r1]
             int r3 = r3.length()
             r4 = 30
-            if (r3 < r4) goto L_0x07a2
+            if (r3 < r4) goto L_0x077d
             r3 = 1
             r4 = r0[r3]
             int r3 = r4.length()
-            r4 = r0[r2]
+            r4 = r0[r1]
             int r4 = r4.length()
-            if (r3 != r4) goto L_0x07a2
+            if (r3 != r4) goto L_0x077d
             java.lang.String r3 = "\n"
             java.lang.String r3 = android.text.TextUtils.join(r3, r0)
-            r1.rawMRZ = r3
+            r2.rawMRZ = r3
             java.util.HashMap r3 = getCountriesMap()
-            r4 = r0[r2]
-            char r4 = r4.charAt(r2)
-            r5 = 80
+            r4 = r0[r1]
+            char r4 = r4.charAt(r1)
+            r1 = 80
+            r5 = 13
             r6 = 49
             r7 = 27
             r8 = 73
@@ -839,463 +833,454 @@ public class MrzRecognizer {
             r10 = 60
             r11 = 79
             r12 = 48
-            if (r4 != r5) goto L_0x04ee
-            r5 = 1
-            r1.type = r5
-            r4 = r0[r2]
+            if (r4 != r1) goto L_0x04d7
+            r1 = 1
+            r2.type = r1
+            r1 = 0
+            r4 = r0[r1]
             int r4 = r4.length()
-            r5 = 44
-            if (r4 != r5) goto L_0x077b
-            r4 = r0[r2]
-            r5 = 5
-            r13 = 2
-            java.lang.String r4 = r4.substring(r13, r5)
-            r1.issuingCountry = r4
-            r4 = r0[r2]
-            java.lang.String r13 = "<<"
-            r14 = 6
-            int r4 = r4.indexOf(r13, r14)
-            r13 = -1
-            if (r4 == r13) goto L_0x03b3
-            r13 = r0[r2]
-            java.lang.String r5 = r13.substring(r5, r4)
-            java.lang.String r5 = r5.replace(r10, r9)
-            java.lang.String r5 = r5.replace(r12, r11)
-            java.lang.String r5 = r5.trim()
-            r1.lastName = r5
-            r5 = r0[r2]
-            r2 = 2
-            int r4 = r4 + r2
-            java.lang.String r2 = r5.substring(r4)
-            java.lang.String r2 = r2.replace(r10, r9)
-            java.lang.String r2 = r2.replace(r12, r11)
-            java.lang.String r2 = r2.trim()
-            r1.firstName = r2
-            java.lang.String r2 = r1.firstName
+            r13 = 44
+            if (r4 != r13) goto L_0x0756
+            r4 = r0[r1]
+            r13 = 5
+            r14 = 2
+            java.lang.String r4 = r4.substring(r14, r13)
+            r2.issuingCountry = r4
+            r4 = r0[r1]
+            java.lang.String r14 = "<<"
+            r15 = 6
+            int r4 = r4.indexOf(r14, r15)
+            r14 = -1
+            if (r4 == r14) goto L_0x03a0
+            r14 = r0[r1]
+            java.lang.String r13 = r14.substring(r13, r4)
+            java.lang.String r13 = r13.replace(r10, r9)
+            java.lang.String r13 = r13.replace(r12, r11)
+            java.lang.String r13 = r13.trim()
+            r2.lastName = r13
+            r13 = r0[r1]
+            r1 = 2
+            int r4 = r4 + r1
+            java.lang.String r1 = r13.substring(r4)
+            java.lang.String r1 = r1.replace(r10, r9)
+            java.lang.String r1 = r1.replace(r12, r11)
+            java.lang.String r1 = r1.trim()
+            r2.firstName = r1
             java.lang.String r4 = "   "
-            boolean r2 = r2.contains(r4)
-            if (r2 == 0) goto L_0x03b3
-            java.lang.String r2 = r1.firstName
+            boolean r1 = r1.contains(r4)
+            if (r1 == 0) goto L_0x03a0
+            java.lang.String r1 = r2.firstName
             java.lang.String r4 = "   "
-            int r4 = r2.indexOf(r4)
-            r5 = 0
-            java.lang.String r2 = r2.substring(r5, r4)
-            r1.firstName = r2
-            goto L_0x03b4
-        L_0x03b3:
-            r5 = 0
-        L_0x03b4:
-            r2 = 1
-            r4 = r0[r2]
-            r13 = 9
-            java.lang.String r4 = r4.substring(r5, r13)
+            int r4 = r1.indexOf(r4)
+            r13 = 0
+            java.lang.String r1 = r1.substring(r13, r4)
+            r2.firstName = r1
+            goto L_0x03a1
+        L_0x03a0:
+            r13 = 0
+        L_0x03a1:
+            r1 = 1
+            r4 = r0[r1]
+            r14 = 9
+            java.lang.String r4 = r4.substring(r13, r14)
             java.lang.String r4 = r4.replace(r10, r9)
             java.lang.String r4 = r4.replace(r11, r12)
             java.lang.String r4 = r4.trim()
-            int r5 = checksum(r4)
-            r9 = r0[r2]
-            char r9 = r9.charAt(r13)
-            int r9 = getNumber(r9)
-            if (r5 != r9) goto L_0x03db
-            r1.number = r4
-        L_0x03db:
-            r4 = r0[r2]
-            r5 = 10
-            r9 = 13
-            java.lang.String r4 = r4.substring(r5, r9)
-            r1.nationality = r4
-            r4 = r0[r2]
-            r5 = 13
+            int r9 = checksum(r4)
+            r13 = r0[r1]
+            char r13 = r13.charAt(r14)
+            int r13 = getNumber(r13)
+            if (r9 != r13) goto L_0x03c8
+            r2.number = r4
+        L_0x03c8:
+            r4 = r0[r1]
+            r9 = 10
+            java.lang.String r4 = r4.substring(r9, r5)
+            r2.nationality = r4
+            r4 = r0[r1]
             r9 = 19
             java.lang.String r4 = r4.substring(r5, r9)
             java.lang.String r4 = r4.replace(r11, r12)
             java.lang.String r4 = r4.replace(r8, r6)
             int r5 = checksum(r4)
-            r9 = r0[r2]
+            r9 = r0[r1]
             r13 = 19
             char r9 = r9.charAt(r13)
             int r9 = getNumber(r9)
-            if (r5 != r9) goto L_0x040e
-            parseBirthDate(r4, r1)
-        L_0x040e:
-            r4 = r0[r2]
+            if (r5 != r9) goto L_0x03f7
+            parseBirthDate(r4, r2)
+        L_0x03f7:
+            r4 = r0[r1]
             r5 = 20
             char r4 = r4.charAt(r5)
             int r4 = parseGender(r4)
-            r1.gender = r4
-            r4 = r0[r2]
+            r2.gender = r4
+            r4 = r0[r1]
             r5 = 21
             java.lang.String r4 = r4.substring(r5, r7)
             java.lang.String r4 = r4.replace(r11, r12)
             java.lang.String r4 = r4.replace(r8, r6)
             int r5 = checksum(r4)
-            r6 = r0[r2]
+            r6 = r0[r1]
             char r6 = r6.charAt(r7)
             int r6 = getNumber(r6)
-            if (r5 == r6) goto L_0x0444
-            r5 = r0[r2]
-            char r2 = r5.charAt(r7)
-            if (r2 != r10) goto L_0x0447
-        L_0x0444:
-            parseExpiryDate(r4, r1)
-        L_0x0447:
-            java.lang.String r2 = r1.issuingCountry
+            if (r5 == r6) goto L_0x042d
+            r5 = r0[r1]
+            char r1 = r5.charAt(r7)
+            if (r1 != r10) goto L_0x0430
+        L_0x042d:
+            parseExpiryDate(r4, r2)
+        L_0x0430:
+            java.lang.String r1 = r2.issuingCountry
             java.lang.String r4 = "RUS"
-            boolean r2 = r4.equals(r2)
-            if (r2 == 0) goto L_0x04c0
-            r2 = 0
-            r4 = r0[r2]
+            boolean r1 = r4.equals(r1)
+            if (r1 == 0) goto L_0x04a9
+            r1 = 0
+            r4 = r0[r1]
             r5 = 1
             char r4 = r4.charAt(r5)
             r5 = 78
-            if (r4 != r5) goto L_0x04c0
+            if (r4 != r5) goto L_0x04a9
             r4 = 3
-            r1.type = r4
-            java.lang.String r4 = r1.firstName
+            r2.type = r4
+            java.lang.String r4 = r2.firstName
             java.lang.String r5 = " "
             java.lang.String[] r4 = r4.split(r5)
-            r5 = r4[r2]
-            java.lang.String r2 = russianPassportTranslit(r5)
-            java.lang.String r2 = cyrillicToLatin(r2)
-            r1.firstName = r2
-            int r2 = r4.length
+            r5 = r4[r1]
+            java.lang.String r1 = russianPassportTranslit(r5)
+            java.lang.String r1 = cyrillicToLatin(r1)
+            r2.firstName = r1
+            int r1 = r4.length
             r5 = 1
-            if (r2 <= r5) goto L_0x0484
-            r2 = r4[r5]
-            java.lang.String r2 = russianPassportTranslit(r2)
-            java.lang.String r2 = cyrillicToLatin(r2)
-            r1.middleName = r2
-        L_0x0484:
-            java.lang.String r2 = r1.lastName
-            java.lang.String r2 = russianPassportTranslit(r2)
-            java.lang.String r2 = cyrillicToLatin(r2)
-            r1.lastName = r2
-            java.lang.String r2 = r1.number
-            if (r2 == 0) goto L_0x04d4
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            java.lang.String r4 = r1.number
+            if (r1 <= r5) goto L_0x046d
+            r1 = r4[r5]
+            java.lang.String r1 = russianPassportTranslit(r1)
+            java.lang.String r1 = cyrillicToLatin(r1)
+            r2.middleName = r1
+        L_0x046d:
+            java.lang.String r1 = r2.lastName
+            java.lang.String r1 = russianPassportTranslit(r1)
+            java.lang.String r1 = cyrillicToLatin(r1)
+            r2.lastName = r1
+            java.lang.String r1 = r2.number
+            if (r1 == 0) goto L_0x04bd
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            java.lang.String r4 = r2.number
             r5 = 3
             r6 = 0
             java.lang.String r4 = r4.substring(r6, r5)
-            r2.append(r4)
+            r1.append(r4)
             r4 = 1
             r0 = r0[r4]
             r4 = 28
             char r0 = r0.charAt(r4)
-            r2.append(r0)
-            java.lang.String r0 = r1.number
+            r1.append(r0)
+            java.lang.String r0 = r2.number
             java.lang.String r0 = r0.substring(r5)
-            r2.append(r0)
-            java.lang.String r0 = r2.toString()
-            r1.number = r0
-            goto L_0x04d4
-        L_0x04c0:
-            java.lang.String r0 = r1.firstName
-            r2 = 56
+            r1.append(r0)
+            java.lang.String r0 = r1.toString()
+            r2.number = r0
+            goto L_0x04bd
+        L_0x04a9:
+            java.lang.String r0 = r2.firstName
+            r1 = 56
             r4 = 66
-            java.lang.String r0 = r0.replace(r2, r4)
-            r1.firstName = r0
-            java.lang.String r0 = r1.lastName
-            java.lang.String r0 = r0.replace(r2, r4)
-            r1.lastName = r0
-        L_0x04d4:
-            java.lang.String r0 = r1.lastName
+            java.lang.String r0 = r0.replace(r1, r4)
+            r2.firstName = r0
+            java.lang.String r0 = r2.lastName
+            java.lang.String r0 = r0.replace(r1, r4)
+            r2.lastName = r0
+        L_0x04bd:
+            java.lang.String r0 = r2.lastName
             java.lang.String r0 = capitalize(r0)
-            r1.lastName = r0
-            java.lang.String r0 = r1.firstName
+            r2.lastName = r0
+            java.lang.String r0 = r2.firstName
             java.lang.String r0 = capitalize(r0)
-            r1.firstName = r0
-            java.lang.String r0 = r1.middleName
+            r2.firstName = r0
+            java.lang.String r0 = r2.middleName
             java.lang.String r0 = capitalize(r0)
-            r1.middleName = r0
-            goto L_0x077b
-        L_0x04ee:
-            if (r4 == r8) goto L_0x04fb
-            r2 = 65
-            if (r4 == r2) goto L_0x04fb
-            r2 = 67
-            if (r4 != r2) goto L_0x04f9
-            goto L_0x04fb
-        L_0x04f9:
-            r2 = 0
-            return r2
-        L_0x04fb:
-            r2 = 2
-            r1.type = r2
-            int r5 = r0.length
-            r13 = 3
-            if (r5 != r13) goto L_0x05de
-            r5 = 0
-            r13 = r0[r5]
-            int r13 = r13.length()
-            r14 = 30
-            if (r13 != r14) goto L_0x05de
-            r13 = r0[r2]
-            int r13 = r13.length()
-            if (r13 != r14) goto L_0x05de
-            r4 = r0[r5]
-            r7 = 5
-            java.lang.String r4 = r4.substring(r2, r7)
-            r1.issuingCountry = r4
-            r2 = r0[r5]
-            r4 = 14
-            java.lang.String r2 = r2.substring(r7, r4)
-            java.lang.String r2 = r2.replace(r10, r9)
-            java.lang.String r2 = r2.replace(r11, r12)
-            java.lang.String r2 = r2.trim()
-            int r4 = checksum(r2)
-            r7 = r0[r5]
-            r13 = 14
-            char r7 = r7.charAt(r13)
+            r2.middleName = r0
+            goto L_0x0756
+        L_0x04d7:
+            if (r4 == r8) goto L_0x04e4
+            r13 = 65
+            if (r4 == r13) goto L_0x04e4
+            r13 = 67
+            if (r4 != r13) goto L_0x04e2
+            goto L_0x04e4
+        L_0x04e2:
+            r13 = 0
+            return r13
+        L_0x04e4:
+            r13 = 2
+            r2.type = r13
+            int r14 = r0.length
+            r15 = 3
+            if (r14 != r15) goto L_0x05c1
+            r14 = 0
+            r15 = r0[r14]
+            int r15 = r15.length()
+            r1 = 30
+            if (r15 != r1) goto L_0x05c1
+            r15 = r0[r13]
+            int r15 = r15.length()
+            if (r15 != r1) goto L_0x05c1
+            r1 = r0[r14]
+            r4 = 5
+            java.lang.String r1 = r1.substring(r13, r4)
+            r2.issuingCountry = r1
+            r1 = r0[r14]
+            r5 = 14
+            java.lang.String r1 = r1.substring(r4, r5)
+            java.lang.String r1 = r1.replace(r10, r9)
+            java.lang.String r1 = r1.replace(r11, r12)
+            java.lang.String r1 = r1.trim()
+            int r4 = checksum(r1)
+            r7 = r0[r14]
+            char r7 = r7.charAt(r5)
             int r7 = r7 - r12
-            if (r4 != r7) goto L_0x0543
-            r1.number = r2
-        L_0x0543:
-            r2 = 1
-            r4 = r0[r2]
+            if (r4 != r7) goto L_0x052a
+            r2.number = r1
+        L_0x052a:
+            r1 = 1
+            r4 = r0[r1]
             r7 = 6
-            java.lang.String r4 = r4.substring(r5, r7)
+            java.lang.String r4 = r4.substring(r14, r7)
             java.lang.String r4 = r4.replace(r11, r12)
             java.lang.String r4 = r4.replace(r8, r6)
-            int r5 = checksum(r4)
-            r13 = r0[r2]
-            char r7 = r13.charAt(r7)
+            int r13 = checksum(r4)
+            r14 = r0[r1]
+            char r7 = r14.charAt(r7)
             int r7 = getNumber(r7)
-            if (r5 != r7) goto L_0x0566
-            parseBirthDate(r4, r1)
-        L_0x0566:
-            r4 = r0[r2]
-            r5 = 7
-            char r4 = r4.charAt(r5)
+            if (r13 != r7) goto L_0x054d
+            parseBirthDate(r4, r2)
+        L_0x054d:
+            r4 = r0[r1]
+            r7 = 7
+            char r4 = r4.charAt(r7)
             int r4 = parseGender(r4)
-            r1.gender = r4
-            r4 = r0[r2]
-            r5 = 8
-            r7 = 14
-            java.lang.String r4 = r4.substring(r5, r7)
+            r2.gender = r4
+            r4 = r0[r1]
+            r7 = 8
+            java.lang.String r4 = r4.substring(r7, r5)
             java.lang.String r4 = r4.replace(r11, r12)
             java.lang.String r4 = r4.replace(r8, r6)
-            int r5 = checksum(r4)
-            r6 = r0[r2]
-            char r6 = r6.charAt(r7)
-            int r6 = getNumber(r6)
-            if (r5 == r6) goto L_0x059f
-            r5 = r0[r2]
-            r6 = 14
-            char r5 = r5.charAt(r6)
-            if (r5 != r10) goto L_0x05a2
-        L_0x059f:
-            parseExpiryDate(r4, r1)
-        L_0x05a2:
-            r2 = r0[r2]
-            r4 = 15
-            r5 = 18
-            java.lang.String r2 = r2.substring(r4, r5)
-            r1.nationality = r2
-            r2 = 2
-            r4 = r0[r2]
+            int r6 = checksum(r4)
+            r7 = r0[r1]
+            char r7 = r7.charAt(r5)
+            int r7 = getNumber(r7)
+            if (r6 == r7) goto L_0x0582
+            r6 = r0[r1]
+            char r5 = r6.charAt(r5)
+            if (r5 != r10) goto L_0x0585
+        L_0x0582:
+            parseExpiryDate(r4, r2)
+        L_0x0585:
+            r1 = r0[r1]
+            r4 = 18
+            r5 = 15
+            java.lang.String r1 = r1.substring(r5, r4)
+            r2.nationality = r1
+            r1 = 2
+            r4 = r0[r1]
             java.lang.String r5 = "<<"
             int r4 = r4.indexOf(r5)
             r5 = -1
-            if (r4 == r5) goto L_0x0757
-            r5 = r0[r2]
+            if (r4 == r5) goto L_0x0732
+            r5 = r0[r1]
             r6 = 0
             java.lang.String r5 = r5.substring(r6, r4)
             java.lang.String r5 = r5.replace(r10, r9)
             java.lang.String r5 = r5.trim()
-            r1.lastName = r5
-            r0 = r0[r2]
-            int r4 = r4 + r2
+            r2.lastName = r5
+            r0 = r0[r1]
+            int r4 = r4 + r1
             java.lang.String r0 = r0.substring(r4)
             java.lang.String r0 = r0.replace(r10, r9)
             java.lang.String r0 = r0.trim()
-            r1.firstName = r0
-            goto L_0x0757
-        L_0x05de:
-            int r2 = r0.length
-            r5 = 2
-            if (r2 != r5) goto L_0x0757
-            r2 = 0
-            r13 = r0[r2]
-            int r13 = r13.length()
-            r14 = 36
-            if (r13 != r14) goto L_0x0757
-            r13 = r0[r2]
-            r14 = 5
-            java.lang.String r13 = r13.substring(r5, r14)
-            r1.issuingCountry = r13
-            java.lang.String r5 = r1.issuingCountry
-            java.lang.String r13 = "FRA"
-            boolean r5 = r13.equals(r5)
-            if (r5 == 0) goto L_0x0696
-            if (r4 != r8) goto L_0x0696
-            r4 = r0[r2]
-            r5 = 1
-            char r4 = r4.charAt(r5)
-            r13 = 68
-            if (r4 != r13) goto L_0x0696
-            java.lang.String r4 = "FRA"
-            r1.nationality = r4
-            r4 = r0[r2]
-            r2 = 30
-            r13 = 5
-            java.lang.String r2 = r4.substring(r13, r2)
-            java.lang.String r2 = r2.replace(r10, r9)
-            java.lang.String r2 = r2.trim()
-            r1.lastName = r2
-            r2 = r0[r5]
-            r4 = 13
-            java.lang.String r2 = r2.substring(r4, r7)
-            java.lang.String r4 = "<<"
-            java.lang.String r13 = ", "
-            java.lang.String r2 = r2.replace(r4, r13)
-            java.lang.String r2 = r2.replace(r10, r9)
-            java.lang.String r2 = r2.trim()
-            r1.firstName = r2
-            r2 = r0[r5]
-            r4 = 12
-            r9 = 0
-            java.lang.String r2 = r2.substring(r9, r4)
-            java.lang.String r2 = r2.replace(r11, r12)
-            int r4 = checksum(r2)
-            r9 = r0[r5]
-            r10 = 12
-            char r9 = r9.charAt(r10)
-            int r9 = getNumber(r9)
-            if (r4 != r9) goto L_0x065f
-            r1.number = r2
-        L_0x065f:
-            r2 = r0[r5]
-            r4 = 33
-            java.lang.String r2 = r2.substring(r7, r4)
-            java.lang.String r2 = r2.replace(r11, r12)
-            java.lang.String r2 = r2.replace(r8, r6)
-            int r4 = checksum(r2)
-            r6 = r0[r5]
-            r7 = 33
-            char r6 = r6.charAt(r7)
-            int r6 = getNumber(r6)
-            if (r4 != r6) goto L_0x0684
-            parseBirthDate(r2, r1)
-        L_0x0684:
-            r0 = r0[r5]
-            r2 = 34
-            char r0 = r0.charAt(r2)
-            int r0 = parseGender(r0)
-            r1.gender = r0
-            r1.doesNotExpire = r5
-            goto L_0x0757
-        L_0x0696:
-            r4 = r0[r2]
-            java.lang.String r5 = "<<"
-            int r4 = r4.indexOf(r5)
-            r5 = -1
-            if (r4 == r5) goto L_0x06c4
-            r5 = r0[r2]
-            r13 = 5
-            java.lang.String r5 = r5.substring(r13, r4)
-            java.lang.String r5 = r5.replace(r10, r9)
-            java.lang.String r5 = r5.trim()
-            r1.lastName = r5
-            r5 = r0[r2]
+            r2.firstName = r0
+            goto L_0x0732
+        L_0x05c1:
+            int r1 = r0.length
             r13 = 2
-            int r4 = r4 + r13
-            java.lang.String r4 = r5.substring(r4)
+            if (r1 != r13) goto L_0x0732
+            r1 = 0
+            r14 = r0[r1]
+            int r14 = r14.length()
+            r15 = 36
+            if (r14 != r15) goto L_0x0732
+            r14 = r0[r1]
+            r15 = 5
+            java.lang.String r14 = r14.substring(r13, r15)
+            r2.issuingCountry = r14
+            java.lang.String r13 = "FRA"
+            boolean r13 = r13.equals(r14)
+            if (r13 == 0) goto L_0x0675
+            if (r4 != r8) goto L_0x0675
+            r4 = r0[r1]
+            r13 = 1
+            char r4 = r4.charAt(r13)
+            r14 = 68
+            if (r4 != r14) goto L_0x0675
+            java.lang.String r4 = "FRA"
+            r2.nationality = r4
+            r4 = r0[r1]
+            r1 = 30
+            r14 = 5
+            java.lang.String r1 = r4.substring(r14, r1)
+            java.lang.String r1 = r1.replace(r10, r9)
+            java.lang.String r1 = r1.trim()
+            r2.lastName = r1
+            r1 = r0[r13]
+            java.lang.String r1 = r1.substring(r5, r7)
+            java.lang.String r4 = "<<"
+            java.lang.String r5 = ", "
+            java.lang.String r1 = r1.replace(r4, r5)
+            java.lang.String r1 = r1.replace(r10, r9)
+            java.lang.String r1 = r1.trim()
+            r2.firstName = r1
+            r1 = r0[r13]
+            r4 = 12
+            r5 = 0
+            java.lang.String r1 = r1.substring(r5, r4)
+            java.lang.String r1 = r1.replace(r11, r12)
+            int r4 = checksum(r1)
+            r5 = r0[r13]
+            r9 = 12
+            char r5 = r5.charAt(r9)
+            int r5 = getNumber(r5)
+            if (r4 != r5) goto L_0x063e
+            r2.number = r1
+        L_0x063e:
+            r1 = r0[r13]
+            r4 = 33
+            java.lang.String r1 = r1.substring(r7, r4)
+            java.lang.String r1 = r1.replace(r11, r12)
+            java.lang.String r1 = r1.replace(r8, r6)
+            int r4 = checksum(r1)
+            r5 = r0[r13]
+            r6 = 33
+            char r5 = r5.charAt(r6)
+            int r5 = getNumber(r5)
+            if (r4 != r5) goto L_0x0663
+            parseBirthDate(r1, r2)
+        L_0x0663:
+            r0 = r0[r13]
+            r1 = 34
+            char r0 = r0.charAt(r1)
+            int r0 = parseGender(r0)
+            r2.gender = r0
+            r2.doesNotExpire = r13
+            goto L_0x0732
+        L_0x0675:
+            r4 = r0[r1]
+            java.lang.String r13 = "<<"
+            int r4 = r4.indexOf(r13)
+            r13 = -1
+            if (r4 == r13) goto L_0x06a3
+            r13 = r0[r1]
+            r14 = 5
+            java.lang.String r13 = r13.substring(r14, r4)
+            java.lang.String r13 = r13.replace(r10, r9)
+            java.lang.String r13 = r13.trim()
+            r2.lastName = r13
+            r13 = r0[r1]
+            r14 = 2
+            int r4 = r4 + r14
+            java.lang.String r4 = r13.substring(r4)
             java.lang.String r4 = r4.replace(r10, r9)
             java.lang.String r4 = r4.trim()
-            r1.firstName = r4
-        L_0x06c4:
+            r2.firstName = r4
+        L_0x06a3:
             r4 = 1
-            r5 = r0[r4]
-            r13 = 9
-            java.lang.String r2 = r5.substring(r2, r13)
-            java.lang.String r2 = r2.replace(r10, r9)
-            java.lang.String r2 = r2.replace(r11, r12)
-            java.lang.String r2 = r2.trim()
-            int r5 = checksum(r2)
-            r9 = r0[r4]
-            char r9 = r9.charAt(r13)
-            int r9 = getNumber(r9)
-            if (r5 != r9) goto L_0x06eb
-            r1.number = r2
-        L_0x06eb:
-            r2 = r0[r4]
-            r5 = 10
-            r9 = 13
-            java.lang.String r2 = r2.substring(r5, r9)
-            r1.nationality = r2
-            r2 = r0[r4]
-            r5 = 13
+            r13 = r0[r4]
+            r14 = 9
+            java.lang.String r1 = r13.substring(r1, r14)
+            java.lang.String r1 = r1.replace(r10, r9)
+            java.lang.String r1 = r1.replace(r11, r12)
+            java.lang.String r1 = r1.trim()
+            int r9 = checksum(r1)
+            r13 = r0[r4]
+            char r13 = r13.charAt(r14)
+            int r13 = getNumber(r13)
+            if (r9 != r13) goto L_0x06ca
+            r2.number = r1
+        L_0x06ca:
+            r1 = r0[r4]
+            r9 = 10
+            java.lang.String r1 = r1.substring(r9, r5)
+            r2.nationality = r1
+            r1 = r0[r4]
             r9 = 19
-            java.lang.String r2 = r2.substring(r5, r9)
-            java.lang.String r2 = r2.replace(r11, r12)
-            java.lang.String r2 = r2.replace(r8, r6)
-            int r5 = checksum(r2)
+            java.lang.String r1 = r1.substring(r5, r9)
+            java.lang.String r1 = r1.replace(r11, r12)
+            java.lang.String r1 = r1.replace(r8, r6)
+            int r5 = checksum(r1)
             r9 = r0[r4]
             r13 = 19
             char r9 = r9.charAt(r13)
             int r9 = getNumber(r9)
-            if (r5 != r9) goto L_0x071e
-            parseBirthDate(r2, r1)
-        L_0x071e:
-            r2 = r0[r4]
+            if (r5 != r9) goto L_0x06f9
+            parseBirthDate(r1, r2)
+        L_0x06f9:
+            r1 = r0[r4]
             r5 = 20
-            char r2 = r2.charAt(r5)
-            int r2 = parseGender(r2)
-            r1.gender = r2
-            r2 = r0[r4]
+            char r1 = r1.charAt(r5)
+            int r1 = parseGender(r1)
+            r2.gender = r1
+            r1 = r0[r4]
             r5 = 21
-            java.lang.String r2 = r2.substring(r5, r7)
-            java.lang.String r2 = r2.replace(r11, r12)
-            java.lang.String r2 = r2.replace(r8, r6)
-            int r5 = checksum(r2)
+            java.lang.String r1 = r1.substring(r5, r7)
+            java.lang.String r1 = r1.replace(r11, r12)
+            java.lang.String r1 = r1.replace(r8, r6)
+            int r5 = checksum(r1)
             r6 = r0[r4]
             char r6 = r6.charAt(r7)
             int r6 = getNumber(r6)
-            if (r5 == r6) goto L_0x0754
+            if (r5 == r6) goto L_0x072f
             r0 = r0[r4]
             char r0 = r0.charAt(r7)
-            if (r0 != r10) goto L_0x0757
-        L_0x0754:
-            parseExpiryDate(r2, r1)
-        L_0x0757:
-            java.lang.String r0 = r1.firstName
+            if (r0 != r10) goto L_0x0732
+        L_0x072f:
+            parseExpiryDate(r1, r2)
+        L_0x0732:
+            java.lang.String r0 = r2.firstName
             java.lang.String r0 = r0.replace(r12, r11)
-            r2 = 56
+            r1 = 56
             r4 = 66
-            java.lang.String r0 = r0.replace(r2, r4)
+            java.lang.String r0 = r0.replace(r1, r4)
             java.lang.String r0 = capitalize(r0)
-            r1.firstName = r0
-            java.lang.String r0 = r1.lastName
+            r2.firstName = r0
+            java.lang.String r0 = r2.lastName
             java.lang.String r0 = r0.replace(r12, r11)
-            java.lang.String r0 = r0.replace(r2, r4)
+            java.lang.String r0 = r0.replace(r1, r4)
             java.lang.String r0 = capitalize(r0)
-            r1.lastName = r0
-        L_0x077b:
-            java.lang.String r0 = r1.firstName
+            r2.lastName = r0
+        L_0x0756:
+            java.lang.String r0 = r2.firstName
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x078d
-            java.lang.String r0 = r1.lastName
+            if (r0 == 0) goto L_0x0768
+            java.lang.String r0 = r2.lastName
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x078d
+            if (r0 == 0) goto L_0x0768
             r0 = 0
             return r0
-        L_0x078d:
-            java.lang.String r0 = r1.issuingCountry
+        L_0x0768:
+            java.lang.String r0 = r2.issuingCountry
             java.lang.Object r0 = r3.get(r0)
             java.lang.String r0 = (java.lang.String) r0
-            r1.issuingCountry = r0
-            java.lang.String r0 = r1.nationality
+            r2.issuingCountry = r0
+            java.lang.String r0 = r2.nationality
             java.lang.Object r0 = r3.get(r0)
             java.lang.String r0 = (java.lang.String) r0
-            r1.nationality = r0
-            return r1
-        L_0x07a2:
+            r2.nationality = r0
+            return r2
+        L_0x077d:
             r0 = 0
             return r0
-        L_0x07a4:
-            r0 = r1
+        L_0x077f:
+            r0 = r2
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MrzRecognizer.recognizeMRZ(android.graphics.Bitmap):org.telegram.messenger.MrzRecognizer$Result");
@@ -1339,15 +1324,16 @@ public class MrzRecognizer {
             } else {
                 i = charArray[i3] - '0';
             }
-            i2 += i * iArr[i3 % iArr.length];
+            i2 += i * iArr[i3 % 3];
         }
         return i2 % 10;
     }
 
     private static void parseBirthDate(String str, Result result) {
         try {
-            result.birthYear = Integer.parseInt(str.substring(0, 2));
-            result.birthYear = result.birthYear < (Calendar.getInstance().get(1) % 100) + -5 ? result.birthYear + 2000 : result.birthYear + 1900;
+            int parseInt = Integer.parseInt(str.substring(0, 2));
+            result.birthYear = parseInt;
+            result.birthYear = parseInt < (Calendar.getInstance().get(1) % 100) + -5 ? result.birthYear + 2000 : result.birthYear + 1900;
             result.birthMonth = Integer.parseInt(str.substring(2, 4));
             result.birthDay = Integer.parseInt(str.substring(4));
         } catch (NumberFormatException unused) {
@@ -1381,7 +1367,7 @@ public class MrzRecognizer {
     private static String cyrillicToLatin(String str) {
         int i = 0;
         String[] strArr = {"A", "B", "V", "G", "D", "E", "E", "ZH", "Z", "I", "I", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "F", "KH", "TS", "CH", "SH", "SHCH", "IE", "Y", "", "E", "IU", "IA"};
-        while (i < strArr.length) {
+        while (i < 33) {
             int i2 = i + 1;
             str = str.replace("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ".substring(i, i2), strArr[i]);
             i = i2;

@@ -13,9 +13,6 @@ import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class RecyclerAnimationScrollHelper {
-    public static final int SCROLL_DIRECTION_DOWN = 0;
-    public static final int SCROLL_DIRECTION_UNSET = -1;
-    public static final int SCROLL_DIRECTION_UP = 1;
     /* access modifiers changed from: private */
     public AnimationCallback animationCallback;
     /* access modifiers changed from: private */
@@ -29,6 +26,7 @@ public class RecyclerAnimationScrollHelper {
 
     public static class AnimationCallback {
         public void onEndAnimation() {
+            throw null;
         }
 
         public void onStartAnimation() {
@@ -42,14 +40,6 @@ public class RecyclerAnimationScrollHelper {
     public RecyclerAnimationScrollHelper(RecyclerListView recyclerListView, LinearLayoutManager linearLayoutManager) {
         this.recyclerView = recyclerListView;
         this.layoutManager = linearLayoutManager;
-    }
-
-    public void scrollToPosition(int i, int i2) {
-        scrollToPosition(i, i2, this.layoutManager.getReverseLayout(), false);
-    }
-
-    public void scrollToPosition(int i, int i2, boolean z) {
-        scrollToPosition(i, i2, z, false);
     }
 
     public void scrollToPosition(int i, int i2, boolean z, boolean z2) {

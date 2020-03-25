@@ -36,15 +36,15 @@ public class PlayingGameDrawable extends StatusDrawable {
         long currentTimeMillis = System.currentTimeMillis();
         long j = currentTimeMillis - this.lastUpdateTime;
         this.lastUpdateTime = currentTimeMillis;
-        long j2 = 16;
-        if (j <= 16) {
-            j2 = j;
+        if (j > 16) {
+            j = 16;
         }
         if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
-        this.progress += ((float) j2) / 300.0f;
-        if (this.progress > 1.0f) {
+        float f = this.progress + (((float) j) / 300.0f);
+        this.progress = f;
+        if (f > 1.0f) {
             this.progress = 1.0f;
         }
         invalidateSelf();

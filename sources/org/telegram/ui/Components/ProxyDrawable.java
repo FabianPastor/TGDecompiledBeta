@@ -14,7 +14,6 @@ public class ProxyDrawable extends Drawable {
     private RectF cicleRect = new RectF();
     private boolean connected;
     private float connectedAnimationProgress;
-    private int currentColorType;
     private Drawable emptyDrawable;
     private Drawable fullDrawable;
     private boolean isEnabled;
@@ -77,8 +76,9 @@ public class ProxyDrawable extends Drawable {
         if (this.connected) {
             float f = this.connectedAnimationProgress;
             if (f != 1.0f) {
-                this.connectedAnimationProgress = f + (((float) j) / 300.0f);
-                if (this.connectedAnimationProgress > 1.0f) {
+                float f2 = f + (((float) j) / 300.0f);
+                this.connectedAnimationProgress = f2;
+                if (f2 > 1.0f) {
                     this.connectedAnimationProgress = 1.0f;
                 }
                 invalidateSelf();
@@ -86,10 +86,11 @@ public class ProxyDrawable extends Drawable {
             }
         }
         if (!this.connected) {
-            float f2 = this.connectedAnimationProgress;
-            if (f2 != 0.0f) {
-                this.connectedAnimationProgress = f2 - (((float) j) / 300.0f);
-                if (this.connectedAnimationProgress < 0.0f) {
+            float f3 = this.connectedAnimationProgress;
+            if (f3 != 0.0f) {
+                float f4 = f3 - (((float) j) / 300.0f);
+                this.connectedAnimationProgress = f4;
+                if (f4 < 0.0f) {
                     this.connectedAnimationProgress = 0.0f;
                 }
                 invalidateSelf();

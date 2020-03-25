@@ -11,7 +11,9 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -27,22 +29,24 @@ public class StickerEmojiCell extends FrameLayout {
     private boolean recent;
     private float scale;
     private boolean scaled;
-    private TLRPC.Document sticker;
+    private TLRPC$Document sticker;
     private long time;
 
     public StickerEmojiCell(Context context) {
         super(context);
-        this.imageView = new BackupImageView(context);
-        this.imageView.setAspectFit(true);
+        BackupImageView backupImageView = new BackupImageView(context);
+        this.imageView = backupImageView;
+        backupImageView.setAspectFit(true);
         this.imageView.setLayerNum(1);
         addView(this.imageView, LayoutHelper.createFrame(66, 66, 17));
-        this.emojiTextView = new TextView(context);
-        this.emojiTextView.setTextSize(1, 16.0f);
+        TextView textView = new TextView(context);
+        this.emojiTextView = textView;
+        textView.setTextSize(1, 16.0f);
         addView(this.emojiTextView, LayoutHelper.createFrame(28, 28, 85));
         setFocusable(true);
     }
 
-    public TLRPC.Document getSticker() {
+    public TLRPC$Document getSticker() {
         return this.sticker;
     }
 
@@ -58,15 +62,15 @@ public class StickerEmojiCell extends FrameLayout {
         this.recent = z;
     }
 
-    public void setSticker(TLRPC.Document document, Object obj, boolean z) {
-        setSticker(document, obj, (String) null, z);
+    public void setSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z) {
+        setSticker(tLRPC$Document, obj, (String) null, z);
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:25:0x00c6, code lost:
         r1 = false;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setSticker(org.telegram.tgnet.TLRPC.Document r19, java.lang.Object r20, java.lang.String r21, boolean r22) {
+    public void setSticker(org.telegram.tgnet.TLRPC$Document r19, java.lang.Object r20, java.lang.String r21, boolean r22) {
         /*
             r18 = this;
             r0 = r18
@@ -99,7 +103,7 @@ public class StickerEmojiCell extends FrameLayout {
             java.lang.Object r3 = r0.parentObject
             java.lang.String r14 = "80_80"
             r17 = r3
-            r12.setImage((org.telegram.messenger.ImageLocation) r13, (java.lang.String) r14, (java.lang.String) r15, (android.graphics.drawable.Drawable) r16, (java.lang.Object) r17)
+            r12.setImage(r13, r14, r15, r16, r17)
             goto L_0x0068
         L_0x0045:
             if (r3 == 0) goto L_0x0058
@@ -109,7 +113,7 @@ public class StickerEmojiCell extends FrameLayout {
             r8 = 0
             java.lang.Object r9 = r0.parentObject
             java.lang.String r7 = "webp"
-            r4.setImage((org.telegram.messenger.ImageLocation) r5, (java.lang.String) r6, (java.lang.String) r7, (android.graphics.drawable.Drawable) r8, (java.lang.Object) r9)
+            r4.setImage(r5, r6, r7, r8, r9)
             goto L_0x0068
         L_0x0058:
             org.telegram.ui.Components.BackupImageView r10 = r0.imageView
@@ -118,7 +122,7 @@ public class StickerEmojiCell extends FrameLayout {
             r14 = 0
             java.lang.Object r15 = r0.parentObject
             java.lang.String r13 = "webp"
-            r10.setImage((org.telegram.messenger.ImageLocation) r11, (java.lang.String) r12, (java.lang.String) r13, (android.graphics.drawable.Drawable) r14, (java.lang.Object) r15)
+            r10.setImage(r11, r12, r13, r14, r15)
         L_0x0068:
             r3 = 1098907648(0x41800000, float:16.0)
             r4 = 0
@@ -141,8 +145,8 @@ public class StickerEmojiCell extends FrameLayout {
             if (r2 >= r5) goto L_0x00c6
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r5 = r1.attributes
             java.lang.Object r5 = r5.get(r2)
-            org.telegram.tgnet.TLRPC$DocumentAttribute r5 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r5
-            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker
+            org.telegram.tgnet.TLRPC$DocumentAttribute r5 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r5
+            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeSticker
             if (r6 == 0) goto L_0x00c3
             java.lang.String r1 = r5.alt
             if (r1 == 0) goto L_0x00c6
@@ -231,12 +235,14 @@ public class StickerEmojiCell extends FrameLayout {
             long j2 = currentTimeMillis - this.lastUpdateTime;
             this.lastUpdateTime = currentTimeMillis;
             if (this.changingAlpha) {
-                this.time += j2;
-                if (this.time > 1050) {
+                long j3 = this.time + j2;
+                this.time = j3;
+                if (j3 > 1050) {
                     this.time = 1050;
                 }
-                this.alpha = (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f) + 0.5f;
-                if (this.alpha >= 1.0f) {
+                float interpolation = (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f) + 0.5f;
+                this.alpha = interpolation;
+                if (interpolation >= 1.0f) {
                     this.changingAlpha = false;
                     this.alpha = 1.0f;
                 }
@@ -245,14 +251,16 @@ public class StickerEmojiCell extends FrameLayout {
                 if (this.scaled) {
                     float f = this.scale;
                     if (f != 0.8f) {
-                        this.scale = f - (((float) j2) / 400.0f);
-                        if (this.scale < 0.8f) {
+                        float f2 = f - (((float) j2) / 400.0f);
+                        this.scale = f2;
+                        if (f2 < 0.8f) {
                             this.scale = 0.8f;
                         }
                     }
                 }
-                this.scale += ((float) j2) / 400.0f;
-                if (this.scale > 1.0f) {
+                float f3 = this.scale + (((float) j2) / 400.0f);
+                this.scale = f3;
+                if (f3 > 1.0f) {
                     this.scale = 1.0f;
                 }
             }
@@ -272,13 +280,13 @@ public class StickerEmojiCell extends FrameLayout {
             if (i >= this.sticker.attributes.size()) {
                 break;
             }
-            TLRPC.DocumentAttribute documentAttribute = this.sticker.attributes.get(i);
-            if (documentAttribute instanceof TLRPC.TL_documentAttributeSticker) {
-                String str = documentAttribute.alt;
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
+            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                String str = tLRPC$DocumentAttribute.alt;
                 if (str != null && str.length() > 0) {
                     TextView textView = this.emojiTextView;
-                    textView.setText(Emoji.replaceEmoji(documentAttribute.alt, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
-                    string = documentAttribute.alt + " " + string;
+                    textView.setText(Emoji.replaceEmoji(tLRPC$DocumentAttribute.alt, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                    string = tLRPC$DocumentAttribute.alt + " " + string;
                 }
             } else {
                 i++;

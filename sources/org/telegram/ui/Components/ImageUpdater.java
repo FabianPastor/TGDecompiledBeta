@@ -28,7 +28,10 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$InputDocument;
+import org.telegram.tgnet.TLRPC$InputFile;
+import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -40,7 +43,7 @@ import org.telegram.ui.PhotoPickerActivity;
 import org.telegram.ui.PhotoViewer;
 
 public class ImageUpdater implements NotificationCenter.NotificationCenterDelegate, PhotoCropActivity.PhotoEditActivityDelegate {
-    private TLRPC.PhotoSize bigPhoto;
+    private TLRPC$PhotoSize bigPhoto;
     private boolean clearAfterUpdate;
     private int currentAccount = UserConfig.selectedAccount;
     public String currentPicturePath;
@@ -48,9 +51,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private String finalPath;
     private ImageReceiver imageReceiver = new ImageReceiver((View) null);
     public BaseFragment parentFragment;
-    private File picturePath = null;
     private boolean searchAvailable = true;
-    private TLRPC.PhotoSize smallPhoto;
+    private TLRPC$PhotoSize smallPhoto;
     private boolean uploadAfterSelect = true;
     public String uploadingImage;
 
@@ -63,7 +65,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             }
         }
 
-        void didUploadPhoto(TLRPC.InputFile inputFile, TLRPC.PhotoSize photoSize, TLRPC.PhotoSize photoSize2);
+        void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2);
 
         String getInitialSearchString();
     }
@@ -148,9 +150,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             photoPickerActivity.setDelegate(new PhotoPickerActivity.PhotoPickerActivityDelegate() {
                 private boolean sendPressed;
 
-                private void sendSelectedPhotos(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, boolean z, int i) {
-                }
-
                 public void onCaptionChanged(CharSequence charSequence) {
                 }
 
@@ -178,7 +177,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                     sendingMediaInfo.searchImage = searchImage;
                                 }
                                 CharSequence charSequence = searchImage.caption;
-                                ArrayList<TLRPC.InputDocument> arrayList2 = null;
+                                ArrayList<TLRPC$InputDocument> arrayList2 = null;
                                 sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
                                 sendingMediaInfo.entities = searchImage.entities;
                                 if (!searchImage.stickers.isEmpty()) {
@@ -200,7 +199,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     /* access modifiers changed from: private */
     public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList) {
         Bitmap loadBitmap;
-        File file;
         if (!arrayList.isEmpty()) {
             SendMessagesHelper.SendingMediaInfo sendingMediaInfo = arrayList.get(0);
             String str = sendingMediaInfo.path;
@@ -210,22 +208,20 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             } else {
                 MediaController.SearchImage searchImage = sendingMediaInfo.searchImage;
                 if (searchImage != null) {
-                    TLRPC.Photo photo = searchImage.photo;
-                    if (photo != null) {
-                        TLRPC.PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
+                    TLRPC$Photo tLRPC$Photo = searchImage.photo;
+                    if (tLRPC$Photo != null) {
+                        TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, AndroidUtilities.getPhotoSize());
                         if (closestPhotoSizeWithSize != null) {
                             File pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
                             this.finalPath = pathToAttach.getAbsolutePath();
                             if (!pathToAttach.exists()) {
-                                file = FileLoader.getPathToAttach(closestPhotoSizeWithSize, false);
-                                if (!file.exists()) {
-                                    file = null;
+                                pathToAttach = FileLoader.getPathToAttach(closestPhotoSizeWithSize, false);
+                                if (!pathToAttach.exists()) {
+                                    pathToAttach = null;
                                 }
-                            } else {
-                                file = pathToAttach;
                             }
-                            if (file != null) {
-                                loadBitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), (Uri) null, 800.0f, 800.0f, true);
+                            if (pathToAttach != null) {
+                                loadBitmap = ImageLoader.loadBitmap(pathToAttach.getAbsolutePath(), (Uri) null, 800.0f, 800.0f, true);
                             } else {
                                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
                                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
@@ -234,15 +230,15 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             }
                         }
                     } else if (searchImage.imageUrl != null) {
-                        File file2 = new File(FileLoader.getDirectory(4), Utilities.MD5(sendingMediaInfo.searchImage.imageUrl) + "." + ImageLoader.getHttpUrlExtension(sendingMediaInfo.searchImage.imageUrl, "jpg"));
-                        this.finalPath = file2.getAbsolutePath();
-                        if (!file2.exists() || file2.length() == 0) {
+                        File file = new File(FileLoader.getDirectory(4), Utilities.MD5(sendingMediaInfo.searchImage.imageUrl) + "." + ImageLoader.getHttpUrlExtension(sendingMediaInfo.searchImage.imageUrl, "jpg"));
+                        this.finalPath = file.getAbsolutePath();
+                        if (!file.exists() || file.length() == 0) {
                             this.uploadingImage = sendingMediaInfo.searchImage.imageUrl;
                             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
                             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
                             this.imageReceiver.setImage(sendingMediaInfo.searchImage.imageUrl, (String) null, (Drawable) null, "jpg", 1);
                         } else {
-                            loadBitmap = ImageLoader.loadBitmap(file2.getAbsolutePath(), (Uri) null, 800.0f, 800.0f, true);
+                            loadBitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), (Uri) null, 800.0f, 800.0f, true);
                         }
                     }
                     bitmap = loadBitmap;
@@ -381,11 +377,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public void processBitmap(Bitmap bitmap) {
         if (bitmap != null) {
             this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 800.0f, 800.0f, 80, false, 320, 320);
-            this.smallPhoto = ImageLoader.scaleAndSaveImage(bitmap, 150.0f, 150.0f, 80, false, 150, 150);
-            TLRPC.PhotoSize photoSize = this.smallPhoto;
-            if (photoSize != null) {
+            TLRPC$PhotoSize scaleAndSaveImage = ImageLoader.scaleAndSaveImage(bitmap, 150.0f, 150.0f, 80, false, 150, 150);
+            this.smallPhoto = scaleAndSaveImage;
+            if (scaleAndSaveImage != null) {
                 try {
-                    Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoSize, true).getAbsolutePath());
+                    Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath());
                     ImageLoader.getInstance().putImageToCache(new BitmapDrawable(decodeFile), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
                 } catch (Throwable unused) {
                 }
@@ -401,7 +397,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 ImageUpdaterDelegate imageUpdaterDelegate = this.delegate;
                 if (imageUpdaterDelegate != null) {
-                    imageUpdaterDelegate.didUploadPhoto((TLRPC.InputFile) null, this.bigPhoto, this.smallPhoto);
+                    imageUpdaterDelegate.didUploadPhoto((TLRPC$InputFile) null, this.bigPhoto, this.smallPhoto);
                 }
             }
         }

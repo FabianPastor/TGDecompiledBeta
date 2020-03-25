@@ -33,8 +33,9 @@ public class TextSettingsCell extends FrameLayout {
     public TextSettingsCell(Context context, int i) {
         super(context);
         Context context2 = context;
-        this.textView = new TextView(context2);
-        this.textView.setTextSize(1, 16.0f);
+        TextView textView2 = new TextView(context2);
+        this.textView = textView2;
+        textView2.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
@@ -44,8 +45,9 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         float f = (float) i;
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, 0.0f, f, 0.0f));
-        this.valueTextView = new TextView(context2);
-        this.valueTextView.setTextSize(1, 16.0f);
+        TextView textView3 = new TextView(context2);
+        this.valueTextView = textView3;
+        textView3.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
@@ -53,8 +55,9 @@ public class TextSettingsCell extends FrameLayout {
         this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, f, 0.0f, f, 0.0f));
-        this.valueImageView = new ImageView(context2);
-        this.valueImageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context2);
+        this.valueImageView = imageView;
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
         this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.valueImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : i2) | 16, f, 0.0f, f, 0.0f));
@@ -115,19 +118,6 @@ public class TextSettingsCell extends FrameLayout {
         this.needDivider = z;
         setWillNotDraw(!z);
         requestLayout();
-    }
-
-    public void setTextAndIcon(String str, int i, boolean z) {
-        this.textView.setText(str);
-        this.valueTextView.setVisibility(4);
-        if (i != 0) {
-            this.valueImageView.setVisibility(0);
-            this.valueImageView.setImageResource(i);
-        } else {
-            this.valueImageView.setVisibility(4);
-        }
-        this.needDivider = z;
-        setWillNotDraw(!z);
     }
 
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {

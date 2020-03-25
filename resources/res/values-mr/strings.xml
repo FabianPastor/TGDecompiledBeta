@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">असिस्टंटची पडताळणी करणारा</string>
     <string name="google_assistant_verification_notification_title">Google असिस्टंट मेसेज पाठवत आहे</string>
     <string name="status_bar_notification_info_overflow">९९९+</string>
-    <string name="wallet_buy_button_place_holder">Google सह खरेदी करा</string>
 </resources>

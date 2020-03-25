@@ -13,7 +13,7 @@ public class ScamDrawable extends Drawable {
     private Paint paint = new Paint(1);
     private RectF rect = new RectF();
     private String text;
-    private TextPaint textPaint = new TextPaint(1);
+    private TextPaint textPaint;
     private int textWidth;
 
     public int getOpacity() {
@@ -27,19 +27,22 @@ public class ScamDrawable extends Drawable {
     }
 
     public ScamDrawable(int i) {
-        this.textPaint.setTextSize((float) AndroidUtilities.dp((float) i));
+        TextPaint textPaint2 = new TextPaint(1);
+        this.textPaint = textPaint2;
+        textPaint2.setTextSize((float) AndroidUtilities.dp((float) i));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        this.text = LocaleController.getString("ScamMessage", NUM);
-        this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(this.text));
+        String string = LocaleController.getString("ScamMessage", NUM);
+        this.text = string;
+        this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(string));
     }
 
     public void checkText() {
         String string = LocaleController.getString("ScamMessage", NUM);
         if (!string.equals(this.text)) {
             this.text = string;
-            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(this.text));
+            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(string));
         }
     }
 

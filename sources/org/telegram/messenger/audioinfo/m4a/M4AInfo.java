@@ -1,11 +1,14 @@
 package org.telegram.messenger.audioinfo.m4a;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
+import org.telegram.messenger.audioinfo.mp3.ID3v1Genre;
 
 public class M4AInfo extends AudioInfo {
     private static final String ASCII = "ISO8859_1";
@@ -36,8 +39,9 @@ public class M4AInfo extends AudioInfo {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, mP4Atom.toString());
         }
-        this.brand = mP4Atom.readString(4, "ISO8859_1").trim();
-        if (this.brand.matches("M4V|MP4|mp42|isom")) {
+        String trim = mP4Atom.readString(4, "ISO8859_1").trim();
+        this.brand = trim;
+        if (trim.matches("M4V|MP4|mp42|isom")) {
             Logger logger = LOGGER;
             logger.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (experimental)");
         } else if (!this.brand.matches("M4A|M4P")) {
@@ -190,392 +194,263 @@ public class M4AInfo extends AudioInfo {
     }
 
     /* access modifiers changed from: package-private */
-    /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void data(org.telegram.messenger.audioinfo.m4a.MP4Atom r8) throws java.io.IOException {
-        /*
-            r7 = this;
-            java.util.logging.Logger r0 = LOGGER
-            java.util.logging.Level r1 = r7.debugLevel
-            boolean r0 = r0.isLoggable(r1)
-            if (r0 == 0) goto L_0x0015
-            java.util.logging.Logger r0 = LOGGER
-            java.util.logging.Level r1 = r7.debugLevel
-            java.lang.String r2 = r8.toString()
-            r0.log(r1, r2)
-        L_0x0015:
-            r0 = 4
-            r8.skip(r0)
-            r8.skip(r0)
-            org.telegram.messenger.audioinfo.m4a.MP4Box r1 = r8.getParent()
-            java.lang.String r1 = r1.getType()
-            r2 = -1
-            int r3 = r1.hashCode()
-            r4 = 0
-            r5 = 1
-            r6 = 2
-            switch(r3) {
-                case 2954818: goto L_0x0111;
-                case 3059752: goto L_0x0107;
-                case 3060304: goto L_0x00fd;
-                case 3060591: goto L_0x00f2;
-                case 3083677: goto L_0x00e7;
-                case 3177818: goto L_0x00dc;
-                case 3511163: goto L_0x00d1;
-                case 3564088: goto L_0x00c6;
-                case 3568737: goto L_0x00ba;
-                case 5099770: goto L_0x00af;
-                case 5131342: goto L_0x00a3;
-                case 5133313: goto L_0x0097;
-                case 5133368: goto L_0x008b;
-                case 5133411: goto L_0x007e;
-                case 5133907: goto L_0x0071;
-                case 5136903: goto L_0x0064;
-                case 5137308: goto L_0x0057;
-                case 5142332: goto L_0x004a;
-                case 5143505: goto L_0x003d;
-                case 5152688: goto L_0x0031;
-                default: goto L_0x002f;
-            }
-        L_0x002f:
-            goto L_0x011b
-        L_0x0031:
-            java.lang.String r3 = "©wrt"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 5
-            goto L_0x011c
-        L_0x003d:
-            java.lang.String r3 = "©nam"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 16
-            goto L_0x011c
-        L_0x004a:
-            java.lang.String r3 = "©lyr"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 15
-            goto L_0x011c
-        L_0x0057:
-            java.lang.String r3 = "©grp"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 14
-            goto L_0x011c
-        L_0x0064:
-            java.lang.String r3 = "©gen"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 13
-            goto L_0x011c
-        L_0x0071:
-            java.lang.String r3 = "©day"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 10
-            goto L_0x011c
-        L_0x007e:
-            java.lang.String r3 = "©cpy"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 9
-            goto L_0x011c
-        L_0x008b:
-            java.lang.String r3 = "©com"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 4
-            goto L_0x011c
-        L_0x0097:
-            java.lang.String r3 = "©cmt"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 3
-            goto L_0x011c
-        L_0x00a3:
-            java.lang.String r3 = "©alb"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 0
-            goto L_0x011c
-        L_0x00af:
-            java.lang.String r3 = "©ART"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 2
-            goto L_0x011c
-        L_0x00ba:
-            java.lang.String r3 = "trkn"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 19
-            goto L_0x011c
-        L_0x00c6:
-            java.lang.String r3 = "tmpo"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 18
-            goto L_0x011c
-        L_0x00d1:
-            java.lang.String r3 = "rtng"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 17
-            goto L_0x011c
-        L_0x00dc:
-            java.lang.String r3 = "gnre"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 12
-            goto L_0x011c
-        L_0x00e7:
-            java.lang.String r3 = "disk"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 11
-            goto L_0x011c
-        L_0x00f2:
-            java.lang.String r3 = "cprt"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 8
-            goto L_0x011c
-        L_0x00fd:
-            java.lang.String r3 = "cpil"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 7
-            goto L_0x011c
-        L_0x0107:
-            java.lang.String r3 = "covr"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 6
-            goto L_0x011c
-        L_0x0111:
-            java.lang.String r3 = "aART"
-            boolean r1 = r1.equals(r3)
-            if (r1 == 0) goto L_0x011b
-            r1 = 1
-            goto L_0x011c
-        L_0x011b:
-            r1 = -1
-        L_0x011c:
-            java.lang.String r2 = "UTF-8"
-            switch(r1) {
-                case 0: goto L_0x029d;
-                case 1: goto L_0x0296;
-                case 2: goto L_0x028f;
-                case 3: goto L_0x0288;
-                case 4: goto L_0x0273;
-                case 5: goto L_0x0273;
-                case 6: goto L_0x01f2;
-                case 7: goto L_0x01ea;
-                case 8: goto L_0x01d4;
-                case 9: goto L_0x01d4;
-                case 10: goto L_0x01b6;
-                case 11: goto L_0x01a5;
-                case 12: goto L_0x0172;
-                case 13: goto L_0x015c;
-                case 14: goto L_0x0154;
-                case 15: goto L_0x014c;
-                case 16: goto L_0x0144;
-                case 17: goto L_0x013c;
-                case 18: goto L_0x0134;
-                case 19: goto L_0x0123;
-                default: goto L_0x0121;
-            }
-        L_0x0121:
-            goto L_0x02a3
-        L_0x0123:
-            r8.skip(r6)
-            short r0 = r8.readShort()
-            r7.track = r0
-            short r8 = r8.readShort()
-            r7.tracks = r8
-            goto L_0x02a3
-        L_0x0134:
-            short r8 = r8.readShort()
-            r7.tempo = r8
-            goto L_0x02a3
-        L_0x013c:
-            byte r8 = r8.readByte()
-            r7.rating = r8
-            goto L_0x02a3
-        L_0x0144:
-            java.lang.String r8 = r8.readString(r2)
-            r7.title = r8
-            goto L_0x02a3
-        L_0x014c:
-            java.lang.String r8 = r8.readString(r2)
-            r7.lyrics = r8
-            goto L_0x02a3
-        L_0x0154:
-            java.lang.String r8 = r8.readString(r2)
-            r7.grouping = r8
-            goto L_0x02a3
-        L_0x015c:
-            java.lang.String r0 = r7.genre
-            if (r0 == 0) goto L_0x016a
-            java.lang.String r0 = r0.trim()
-            int r0 = r0.length()
-            if (r0 != 0) goto L_0x02a3
-        L_0x016a:
-            java.lang.String r8 = r8.readString(r2)
-            r7.genre = r8
-            goto L_0x02a3
-        L_0x0172:
-            java.lang.String r0 = r7.genre
-            if (r0 == 0) goto L_0x0180
-            java.lang.String r0 = r0.trim()
-            int r0 = r0.length()
-            if (r0 != 0) goto L_0x02a3
-        L_0x0180:
-            long r0 = r8.getRemaining()
-            r3 = 2
-            int r6 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r6 != 0) goto L_0x019d
-            short r8 = r8.readShort()
-            int r8 = r8 - r5
-            org.telegram.messenger.audioinfo.mp3.ID3v1Genre r8 = org.telegram.messenger.audioinfo.mp3.ID3v1Genre.getGenre(r8)
-            if (r8 == 0) goto L_0x02a3
-            java.lang.String r8 = r8.getDescription()
-            r7.genre = r8
-            goto L_0x02a3
-        L_0x019d:
-            java.lang.String r8 = r8.readString(r2)
-            r7.genre = r8
-            goto L_0x02a3
-        L_0x01a5:
-            r8.skip(r6)
-            short r0 = r8.readShort()
-            r7.disc = r0
-            short r8 = r8.readShort()
-            r7.discs = r8
-            goto L_0x02a3
-        L_0x01b6:
-            java.lang.String r8 = r8.readString(r2)
-            java.lang.String r8 = r8.trim()
-            int r1 = r8.length()
-            if (r1 < r0) goto L_0x02a3
-            java.lang.String r8 = r8.substring(r4, r0)     // Catch:{ NumberFormatException -> 0x02a3 }
-            java.lang.Short r8 = java.lang.Short.valueOf(r8)     // Catch:{ NumberFormatException -> 0x02a3 }
-            short r8 = r8.shortValue()     // Catch:{ NumberFormatException -> 0x02a3 }
-            r7.year = r8     // Catch:{ NumberFormatException -> 0x02a3 }
-            goto L_0x02a3
-        L_0x01d4:
-            java.lang.String r0 = r7.copyright
-            if (r0 == 0) goto L_0x01e2
-            java.lang.String r0 = r0.trim()
-            int r0 = r0.length()
-            if (r0 != 0) goto L_0x02a3
-        L_0x01e2:
-            java.lang.String r8 = r8.readString(r2)
-            r7.copyright = r8
-            goto L_0x02a3
-        L_0x01ea:
-            boolean r8 = r8.readBoolean()
-            r7.compilation = r8
-            goto L_0x02a3
-        L_0x01f2:
-            byte[] r8 = r8.readBytes()     // Catch:{ Exception -> 0x026e }
-            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ Exception -> 0x026e }
-            r0.<init>()     // Catch:{ Exception -> 0x026e }
-            r0.inJustDecodeBounds = r5     // Catch:{ Exception -> 0x026e }
-            r0.inSampleSize = r5     // Catch:{ Exception -> 0x026e }
-            int r1 = r8.length     // Catch:{ Exception -> 0x026e }
-            android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0)     // Catch:{ Exception -> 0x026e }
-            int r1 = r0.outWidth     // Catch:{ Exception -> 0x026e }
-            r2 = 800(0x320, float:1.121E-42)
-            if (r1 > r2) goto L_0x020d
-            int r1 = r0.outHeight     // Catch:{ Exception -> 0x026e }
-            if (r1 <= r2) goto L_0x0220
-        L_0x020d:
-            int r1 = r0.outWidth     // Catch:{ Exception -> 0x026e }
-            int r3 = r0.outHeight     // Catch:{ Exception -> 0x026e }
-            int r1 = java.lang.Math.max(r1, r3)     // Catch:{ Exception -> 0x026e }
-        L_0x0215:
-            if (r1 <= r2) goto L_0x0220
-            int r3 = r0.inSampleSize     // Catch:{ Exception -> 0x026e }
-            int r3 = r3 * 2
-            r0.inSampleSize = r3     // Catch:{ Exception -> 0x026e }
-            int r1 = r1 / 2
-            goto L_0x0215
-        L_0x0220:
-            r0.inJustDecodeBounds = r4     // Catch:{ Exception -> 0x026e }
-            int r1 = r8.length     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r8 = android.graphics.BitmapFactory.decodeByteArray(r8, r4, r1, r0)     // Catch:{ Exception -> 0x026e }
-            r7.cover = r8     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r8 = r7.cover     // Catch:{ Exception -> 0x026e }
-            if (r8 == 0) goto L_0x02a3
-            android.graphics.Bitmap r8 = r7.cover     // Catch:{ Exception -> 0x026e }
-            int r8 = r8.getWidth()     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r0 = r7.cover     // Catch:{ Exception -> 0x026e }
-            int r0 = r0.getHeight()     // Catch:{ Exception -> 0x026e }
-            int r8 = java.lang.Math.max(r8, r0)     // Catch:{ Exception -> 0x026e }
-            float r8 = (float) r8     // Catch:{ Exception -> 0x026e }
-            r0 = 1123024896(0x42var_, float:120.0)
-            float r8 = r8 / r0
-            r0 = 0
-            int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0261
-            android.graphics.Bitmap r0 = r7.cover     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r1 = r7.cover     // Catch:{ Exception -> 0x026e }
-            int r1 = r1.getWidth()     // Catch:{ Exception -> 0x026e }
-            float r1 = (float) r1     // Catch:{ Exception -> 0x026e }
-            float r1 = r1 / r8
-            int r1 = (int) r1     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r2 = r7.cover     // Catch:{ Exception -> 0x026e }
-            int r2 = r2.getHeight()     // Catch:{ Exception -> 0x026e }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x026e }
-            float r2 = r2 / r8
-            int r8 = (int) r2     // Catch:{ Exception -> 0x026e }
-            android.graphics.Bitmap r8 = android.graphics.Bitmap.createScaledBitmap(r0, r1, r8, r5)     // Catch:{ Exception -> 0x026e }
-            r7.smallCover = r8     // Catch:{ Exception -> 0x026e }
-            goto L_0x0265
-        L_0x0261:
-            android.graphics.Bitmap r8 = r7.cover     // Catch:{ Exception -> 0x026e }
-            r7.smallCover = r8     // Catch:{ Exception -> 0x026e }
-        L_0x0265:
-            android.graphics.Bitmap r8 = r7.smallCover     // Catch:{ Exception -> 0x026e }
-            if (r8 != 0) goto L_0x02a3
-            android.graphics.Bitmap r8 = r7.cover     // Catch:{ Exception -> 0x026e }
-            r7.smallCover = r8     // Catch:{ Exception -> 0x026e }
-            goto L_0x02a3
-        L_0x026e:
-            r8 = move-exception
-            r8.printStackTrace()
-            goto L_0x02a3
-        L_0x0273:
-            java.lang.String r0 = r7.composer
-            if (r0 == 0) goto L_0x0281
-            java.lang.String r0 = r0.trim()
-            int r0 = r0.length()
-            if (r0 != 0) goto L_0x02a3
-        L_0x0281:
-            java.lang.String r8 = r8.readString(r2)
-            r7.composer = r8
-            goto L_0x02a3
-        L_0x0288:
-            java.lang.String r8 = r8.readString(r2)
-            r7.comment = r8
-            goto L_0x02a3
-        L_0x028f:
-            java.lang.String r8 = r8.readString(r2)
-            r7.artist = r8
-            goto L_0x02a3
-        L_0x0296:
-            java.lang.String r8 = r8.readString(r2)
-            r7.albumArtist = r8
-            goto L_0x02a3
-        L_0x029d:
-            java.lang.String r8 = r8.readString(r2)
-            r7.album = r8
-        L_0x02a3:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.m4a.M4AInfo.data(org.telegram.messenger.audioinfo.m4a.MP4Atom):void");
+    public void data(MP4Atom mP4Atom) throws IOException {
+        if (LOGGER.isLoggable(this.debugLevel)) {
+            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        }
+        mP4Atom.skip(4);
+        mP4Atom.skip(4);
+        String type = mP4Atom.getParent().getType();
+        char c = 65535;
+        switch (type.hashCode()) {
+            case 2954818:
+                if (type.equals("aART")) {
+                    c = 1;
+                    break;
+                }
+                break;
+            case 3059752:
+                if (type.equals("covr")) {
+                    c = 6;
+                    break;
+                }
+                break;
+            case 3060304:
+                if (type.equals("cpil")) {
+                    c = 7;
+                    break;
+                }
+                break;
+            case 3060591:
+                if (type.equals("cprt")) {
+                    c = 8;
+                    break;
+                }
+                break;
+            case 3083677:
+                if (type.equals("disk")) {
+                    c = 11;
+                    break;
+                }
+                break;
+            case 3177818:
+                if (type.equals("gnre")) {
+                    c = 12;
+                    break;
+                }
+                break;
+            case 3511163:
+                if (type.equals("rtng")) {
+                    c = 17;
+                    break;
+                }
+                break;
+            case 3564088:
+                if (type.equals("tmpo")) {
+                    c = 18;
+                    break;
+                }
+                break;
+            case 3568737:
+                if (type.equals("trkn")) {
+                    c = 19;
+                    break;
+                }
+                break;
+            case 5099770:
+                if (type.equals("©ART")) {
+                    c = 2;
+                    break;
+                }
+                break;
+            case 5131342:
+                if (type.equals("©alb")) {
+                    c = 0;
+                    break;
+                }
+                break;
+            case 5133313:
+                if (type.equals("©cmt")) {
+                    c = 3;
+                    break;
+                }
+                break;
+            case 5133368:
+                if (type.equals("©com")) {
+                    c = 4;
+                    break;
+                }
+                break;
+            case 5133411:
+                if (type.equals("©cpy")) {
+                    c = 9;
+                    break;
+                }
+                break;
+            case 5133907:
+                if (type.equals("©day")) {
+                    c = 10;
+                    break;
+                }
+                break;
+            case 5136903:
+                if (type.equals("©gen")) {
+                    c = 13;
+                    break;
+                }
+                break;
+            case 5137308:
+                if (type.equals("©grp")) {
+                    c = 14;
+                    break;
+                }
+                break;
+            case 5142332:
+                if (type.equals("©lyr")) {
+                    c = 15;
+                    break;
+                }
+                break;
+            case 5143505:
+                if (type.equals("©nam")) {
+                    c = 16;
+                    break;
+                }
+                break;
+            case 5152688:
+                if (type.equals("©wrt")) {
+                    c = 5;
+                    break;
+                }
+                break;
+        }
+        switch (c) {
+            case 0:
+                this.album = mP4Atom.readString("UTF-8");
+                return;
+            case 1:
+                this.albumArtist = mP4Atom.readString("UTF-8");
+                return;
+            case 2:
+                this.artist = mP4Atom.readString("UTF-8");
+                return;
+            case 3:
+                this.comment = mP4Atom.readString("UTF-8");
+                return;
+            case 4:
+            case 5:
+                String str = this.composer;
+                if (str == null || str.trim().length() == 0) {
+                    this.composer = mP4Atom.readString("UTF-8");
+                    return;
+                }
+                return;
+            case 6:
+                try {
+                    byte[] readBytes = mP4Atom.readBytes();
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    options.inSampleSize = 1;
+                    BitmapFactory.decodeByteArray(readBytes, 0, readBytes.length, options);
+                    if (options.outWidth > 800 || options.outHeight > 800) {
+                        for (int max = Math.max(options.outWidth, options.outHeight); max > 800; max /= 2) {
+                            options.inSampleSize *= 2;
+                        }
+                    }
+                    options.inJustDecodeBounds = false;
+                    Bitmap decodeByteArray = BitmapFactory.decodeByteArray(readBytes, 0, readBytes.length, options);
+                    this.cover = decodeByteArray;
+                    if (decodeByteArray != null) {
+                        float max2 = ((float) Math.max(decodeByteArray.getWidth(), this.cover.getHeight())) / 120.0f;
+                        if (max2 > 0.0f) {
+                            this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / max2), (int) (((float) this.cover.getHeight()) / max2), true);
+                        } else {
+                            this.smallCover = this.cover;
+                        }
+                        if (this.smallCover == null) {
+                            this.smallCover = this.cover;
+                            return;
+                        }
+                        return;
+                    }
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
+            case 7:
+                this.compilation = mP4Atom.readBoolean();
+                return;
+            case 8:
+            case 9:
+                String str2 = this.copyright;
+                if (str2 == null || str2.trim().length() == 0) {
+                    this.copyright = mP4Atom.readString("UTF-8");
+                    return;
+                }
+                return;
+            case 10:
+                String trim = mP4Atom.readString("UTF-8").trim();
+                if (trim.length() >= 4) {
+                    try {
+                        this.year = Short.valueOf(trim.substring(0, 4)).shortValue();
+                        return;
+                    } catch (NumberFormatException unused) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            case 11:
+                mP4Atom.skip(2);
+                this.disc = mP4Atom.readShort();
+                this.discs = mP4Atom.readShort();
+                return;
+            case 12:
+                String str3 = this.genre;
+                if (str3 != null && str3.trim().length() != 0) {
+                    return;
+                }
+                if (mP4Atom.getRemaining() == 2) {
+                    ID3v1Genre genre = ID3v1Genre.getGenre(mP4Atom.readShort() - 1);
+                    if (genre != null) {
+                        this.genre = genre.getDescription();
+                        return;
+                    }
+                    return;
+                }
+                this.genre = mP4Atom.readString("UTF-8");
+                return;
+            case 13:
+                String str4 = this.genre;
+                if (str4 == null || str4.trim().length() == 0) {
+                    this.genre = mP4Atom.readString("UTF-8");
+                    return;
+                }
+                return;
+            case 14:
+                this.grouping = mP4Atom.readString("UTF-8");
+                return;
+            case 15:
+                this.lyrics = mP4Atom.readString("UTF-8");
+                return;
+            case 16:
+                this.title = mP4Atom.readString("UTF-8");
+                return;
+            case 17:
+                this.rating = mP4Atom.readByte();
+                return;
+            case 18:
+                this.tempo = mP4Atom.readShort();
+                return;
+            case 19:
+                mP4Atom.skip(2);
+                this.track = mP4Atom.readShort();
+                this.tracks = mP4Atom.readShort();
+                return;
+            default:
+                return;
+        }
     }
 
     public short getTempo() {

@@ -79,10 +79,6 @@ public class VideoForwardDrawable extends Drawable {
         this.paint.setColorFilter(colorFilter);
     }
 
-    public void setColor(int i) {
-        this.paint.setColor(i);
-    }
-
     public void draw(Canvas canvas) {
         int i;
         Rect bounds = getBounds();
@@ -149,8 +145,9 @@ public class VideoForwardDrawable extends Drawable {
             this.lastAnimationTime = currentTimeMillis;
             float f7 = this.animationProgress;
             if (f7 < 1.0f) {
-                this.animationProgress = f7 + (((float) j) / 800.0f);
-                if (this.animationProgress >= 1.0f) {
+                float f8 = f7 + (((float) j) / 800.0f);
+                this.animationProgress = f8;
+                if (f8 >= 1.0f) {
                     this.animationProgress = 0.0f;
                     this.animating = false;
                     VideoForwardDrawableDelegate videoForwardDrawableDelegate = this.delegate;

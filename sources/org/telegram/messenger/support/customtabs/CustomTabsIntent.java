@@ -70,14 +70,15 @@ public final class CustomTabsIntent {
         }
 
         public Builder(CustomTabsSession customTabsSession) {
-            this.mIntent = new Intent("android.intent.action.VIEW");
+            Intent intent = new Intent("android.intent.action.VIEW");
+            this.mIntent = intent;
             IBinder iBinder = null;
             this.mMenuItems = null;
             this.mStartAnimationBundle = null;
             this.mActionButtons = null;
             this.mInstantAppsEnabled = true;
             if (customTabsSession != null) {
-                this.mIntent.setPackage(customTabsSession.getComponentName().getPackageName());
+                intent.setPackage(customTabsSession.getComponentName().getPackageName());
             }
             Bundle bundle = new Bundle();
             BundleCompat.putBinder(bundle, "android.support.customtabs.extra.SESSION", customTabsSession != null ? customTabsSession.getBinder() : iBinder);

@@ -3,7 +3,7 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -28,16 +28,16 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         LocationCell locationCell = (LocationCell) viewHolder.itemView;
-        TLRPC.TL_messageMediaVenue tL_messageMediaVenue = this.places.get(i);
+        TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue = this.places.get(i);
         String str = this.iconUrls.get(i);
         boolean z = true;
         if (i == this.places.size() - 1) {
             z = false;
         }
-        locationCell.setLocation(tL_messageMediaVenue, str, i, z);
+        locationCell.setLocation(tLRPC$TL_messageMediaVenue, str, i, z);
     }
 
-    public TLRPC.TL_messageMediaVenue getItem(int i) {
+    public TLRPC$TL_messageMediaVenue getItem(int i) {
         if (i < 0 || i >= this.places.size()) {
             return null;
         }

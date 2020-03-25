@@ -33,7 +33,8 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -55,7 +56,6 @@ import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.ProfileNotificationsActivity;
 
 public class ProfileNotificationsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private static final int done_button = 1;
     /* access modifiers changed from: private */
     public ListAdapter adapter;
     /* access modifiers changed from: private */
@@ -131,12 +131,12 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.addingException = bundle.getBoolean("exception", false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x0103  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0147  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x0149  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x017a  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0129  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x012b  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x015c  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0170  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onFragmentCreate() {
         /*
@@ -145,165 +145,152 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r8.rowCount = r0
             boolean r1 = r8.addingException
             r2 = -1
-            if (r1 == 0) goto L_0x001d
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
-            r8.avatarRow = r1
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            r3 = 1
+            if (r1 == 0) goto L_0x001a
+            r1 = 0
+            int r1 = r1 + r3
+            r8.rowCount = r1
+            r8.avatarRow = r0
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.avatarSectionRow = r1
             r8.customRow = r2
             r8.customInfoRow = r2
-            goto L_0x0031
-        L_0x001d:
+            goto L_0x002a
+        L_0x001a:
             r8.avatarRow = r2
             r8.avatarSectionRow = r2
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
-            r8.customRow = r1
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            r1 = 0
+            int r1 = r1 + r3
+            r8.rowCount = r1
+            r8.customRow = r0
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.customInfoRow = r1
-        L_0x0031:
+        L_0x002a:
             int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.generalRow = r1
             boolean r1 = r8.addingException
-            if (r1 == 0) goto L_0x0046
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
-            r8.enableRow = r1
-            goto L_0x0048
-        L_0x0046:
+            if (r1 == 0) goto L_0x003d
+            int r1 = r4 + 1
+            r8.rowCount = r1
+            r8.enableRow = r4
+            goto L_0x003f
+        L_0x003d:
             r8.enableRow = r2
-        L_0x0048:
-            long r3 = r8.dialog_id
-            int r1 = (int) r3
-            if (r1 == 0) goto L_0x0056
+        L_0x003f:
+            long r4 = r8.dialog_id
+            int r1 = (int) r4
+            if (r1 == 0) goto L_0x004d
             int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.previewRow = r1
-            goto L_0x0058
-        L_0x0056:
+            goto L_0x004f
+        L_0x004d:
             r8.previewRow = r2
-        L_0x0058:
+        L_0x004f:
             int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.soundRow = r1
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
-            r8.vibrateRow = r1
-            long r3 = r8.dialog_id
-            int r1 = (int) r3
-            if (r1 >= 0) goto L_0x0076
-            int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r1 = r4 + 1
+            r8.rowCount = r1
+            r8.vibrateRow = r4
+            long r4 = r8.dialog_id
+            int r5 = (int) r4
+            if (r5 >= 0) goto L_0x0069
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.smartRow = r1
-            goto L_0x0078
-        L_0x0076:
+            goto L_0x006b
+        L_0x0069:
             r8.smartRow = r2
-        L_0x0078:
+        L_0x006b:
             int r1 = android.os.Build.VERSION.SDK_INT
-            r3 = 21
-            if (r1 < r3) goto L_0x0087
+            r4 = 21
+            if (r1 < r4) goto L_0x007a
             int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.priorityRow = r1
-            goto L_0x0089
-        L_0x0087:
+            goto L_0x007c
+        L_0x007a:
             r8.priorityRow = r2
-        L_0x0089:
+        L_0x007c:
             int r1 = r8.rowCount
-            int r3 = r1 + 1
-            r8.rowCount = r3
+            int r4 = r1 + 1
+            r8.rowCount = r4
             r8.priorityInfoRow = r1
-            long r3 = r8.dialog_id
-            int r1 = (int) r3
-            r3 = 1
-            if (r1 >= 0) goto L_0x00b2
+            long r4 = r8.dialog_id
+            int r1 = (int) r4
+            if (r1 >= 0) goto L_0x00a4
             int r4 = r8.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             int r5 = -r1
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r5)
             boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r5 == 0) goto L_0x00b2
+            if (r5 == 0) goto L_0x00a4
             boolean r4 = r4.megagroup
-            if (r4 != 0) goto L_0x00b2
+            if (r4 != 0) goto L_0x00a4
             r4 = 1
-            goto L_0x00b3
-        L_0x00b2:
+            goto L_0x00a5
+        L_0x00a4:
             r4 = 0
-        L_0x00b3:
-            if (r1 == 0) goto L_0x00d8
-            if (r4 != 0) goto L_0x00d8
+        L_0x00a5:
+            if (r1 == 0) goto L_0x00c4
+            if (r4 != 0) goto L_0x00c4
             int r4 = r8.rowCount
             int r5 = r4 + 1
             r8.rowCount = r5
             r8.popupRow = r4
-            int r4 = r8.rowCount
-            int r5 = r4 + 1
-            r8.rowCount = r5
-            r8.popupEnabledRow = r4
-            int r4 = r8.rowCount
+            int r4 = r5 + 1
+            r8.rowCount = r4
+            r8.popupEnabledRow = r5
             int r5 = r4 + 1
             r8.rowCount = r5
             r8.popupDisabledRow = r4
-            int r4 = r8.rowCount
-            int r5 = r4 + 1
-            r8.rowCount = r5
-            r8.popupInfoRow = r4
-            goto L_0x00e0
-        L_0x00d8:
+            int r4 = r5 + 1
+            r8.rowCount = r4
+            r8.popupInfoRow = r5
+            goto L_0x00cc
+        L_0x00c4:
             r8.popupRow = r2
             r8.popupEnabledRow = r2
             r8.popupDisabledRow = r2
             r8.popupInfoRow = r2
-        L_0x00e0:
-            if (r1 <= 0) goto L_0x0103
+        L_0x00cc:
+            if (r1 <= 0) goto L_0x00e9
             int r1 = r8.rowCount
             int r2 = r1 + 1
             r8.rowCount = r2
             r8.callsRow = r1
-            int r1 = r8.rowCount
-            int r2 = r1 + 1
-            r8.rowCount = r2
-            r8.callsVibrateRow = r1
-            int r1 = r8.rowCount
+            int r1 = r2 + 1
+            r8.rowCount = r1
+            r8.callsVibrateRow = r2
             int r2 = r1 + 1
             r8.rowCount = r2
             r8.ringtoneRow = r1
-            int r1 = r8.rowCount
-            int r2 = r1 + 1
-            r8.rowCount = r2
-            r8.ringtoneInfoRow = r1
-            goto L_0x010b
-        L_0x0103:
+            int r1 = r2 + 1
+            r8.rowCount = r1
+            r8.ringtoneInfoRow = r2
+            goto L_0x00f1
+        L_0x00e9:
             r8.callsRow = r2
             r8.callsVibrateRow = r2
             r8.ringtoneRow = r2
             r8.ringtoneInfoRow = r2
-        L_0x010b:
+        L_0x00f1:
             int r1 = r8.rowCount
             int r2 = r1 + 1
             r8.rowCount = r2
             r8.ledRow = r1
-            int r1 = r8.rowCount
-            int r2 = r1 + 1
-            r8.rowCount = r2
-            r8.colorRow = r1
-            int r1 = r8.rowCount
+            int r1 = r2 + 1
+            r8.rowCount = r1
+            r8.colorRow = r2
             int r2 = r1 + 1
             r8.rowCount = r2
             r8.ledInfoRow = r1
@@ -317,16 +304,16 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r2.append(r4)
             java.lang.String r2 = r2.toString()
             boolean r2 = r1.getBoolean(r2, r0)
-            if (r2 != 0) goto L_0x0149
+            if (r2 != 0) goto L_0x012b
             boolean r2 = r8.addingException
-            if (r2 == 0) goto L_0x0147
-            goto L_0x0149
-        L_0x0147:
+            if (r2 == 0) goto L_0x0129
+            goto L_0x012b
+        L_0x0129:
             r2 = 0
-            goto L_0x014a
-        L_0x0149:
+            goto L_0x012c
+        L_0x012b:
             r2 = 1
-        L_0x014a:
+        L_0x012c:
             r8.customEnabled = r2
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
@@ -343,29 +330,29 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r5.append(r6)
             java.lang.String r4 = r5.toString()
             int r1 = r1.getInt(r4, r0)
-            if (r1 != 0) goto L_0x018e
-            if (r2 == 0) goto L_0x017f
+            if (r1 != 0) goto L_0x0170
+            if (r2 == 0) goto L_0x0161
             r8.notificationsEnabled = r3
-            goto L_0x019b
-        L_0x017f:
+            goto L_0x017d
+        L_0x0161:
             int r0 = r8.currentAccount
             org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r0)
             long r1 = r8.dialog_id
             boolean r0 = r0.isGlobalNotificationsEnabled((long) r1)
             r8.notificationsEnabled = r0
-            goto L_0x019b
-        L_0x018e:
-            if (r1 != r3) goto L_0x0193
+            goto L_0x017d
+        L_0x0170:
+            if (r1 != r3) goto L_0x0175
             r8.notificationsEnabled = r3
-            goto L_0x019b
-        L_0x0193:
+            goto L_0x017d
+        L_0x0175:
             r2 = 2
-            if (r1 != r2) goto L_0x0199
+            if (r1 != r2) goto L_0x017b
             r8.notificationsEnabled = r0
-            goto L_0x019b
-        L_0x0199:
+            goto L_0x017d
+        L_0x017b:
             r8.notificationsEnabled = r0
-        L_0x019b:
+        L_0x017d:
             int r0 = r8.currentAccount
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r1 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated
@@ -395,20 +382,21 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                     SharedPreferences.Editor edit2 = notificationsSettings.edit();
                     edit2.putBoolean("custom_" + ProfileNotificationsActivity.this.dialog_id, true);
-                    TLRPC.Dialog dialog = MessagesController.getInstance(ProfileNotificationsActivity.this.currentAccount).dialogs_dict.get(ProfileNotificationsActivity.this.dialog_id);
+                    TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(ProfileNotificationsActivity.this.currentAccount).dialogs_dict.get(ProfileNotificationsActivity.this.dialog_id);
                     if (ProfileNotificationsActivity.this.notificationsEnabled) {
                         edit2.putInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 0);
                         MessagesStorage.getInstance(ProfileNotificationsActivity.this.currentAccount).setDialogFlags(ProfileNotificationsActivity.this.dialog_id, 0);
-                        if (dialog != null) {
-                            dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
+                        if (tLRPC$Dialog != null) {
+                            tLRPC$Dialog.notify_settings = new TLRPC$TL_peerNotifySettings();
                         }
                     } else {
                         edit2.putInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 2);
                         NotificationsController.getInstance(ProfileNotificationsActivity.this.currentAccount).removeNotificationsForDialog(ProfileNotificationsActivity.this.dialog_id);
                         MessagesStorage.getInstance(ProfileNotificationsActivity.this.currentAccount).setDialogFlags(ProfileNotificationsActivity.this.dialog_id, 1);
-                        if (dialog != null) {
-                            dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
-                            dialog.notify_settings.mute_until = Integer.MAX_VALUE;
+                        if (tLRPC$Dialog != null) {
+                            TLRPC$TL_peerNotifySettings tLRPC$TL_peerNotifySettings = new TLRPC$TL_peerNotifySettings();
+                            tLRPC$Dialog.notify_settings = tLRPC$TL_peerNotifySettings;
+                            tLRPC$TL_peerNotifySettings.mute_until = Integer.MAX_VALUE;
                         }
                     }
                     edit2.commit();
@@ -417,8 +405,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         NotificationsSettingsActivity.NotificationException notificationException = new NotificationsSettingsActivity.NotificationException();
                         notificationException.did = ProfileNotificationsActivity.this.dialog_id;
                         notificationException.hasCustom = true;
-                        notificationException.notify = notificationsSettings.getInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                        if (notificationException.notify != 0) {
+                        int i2 = notificationsSettings.getInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 0);
+                        notificationException.notify = i2;
+                        if (i2 != 0) {
                             notificationException.muteUntil = notificationsSettings.getInt("notifyuntil_" + ProfileNotificationsActivity.this.dialog_id, 0);
                         }
                         ProfileNotificationsActivity.this.delegate.didCreateNewException(notificationException);
@@ -433,18 +422,20 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         } else {
             this.actionBar.setTitle(LocaleController.getString("CustomNotifications", NUM));
         }
-        this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.listView = new RecyclerListView(context);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        RecyclerListView recyclerListView = this.listView;
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.fragmentView = frameLayout;
+        FrameLayout frameLayout2 = frameLayout;
+        frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.listView = recyclerListView;
+        frameLayout2.addView(recyclerListView, LayoutHelper.createFrame(-1, -1.0f));
+        RecyclerListView recyclerListView2 = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
-        recyclerListView.setAdapter(listAdapter);
+        recyclerListView2.setAdapter(listAdapter);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
-        this.listView.setLayoutManager(new LinearLayoutManager(context) {
+        this.listView.setLayoutManager(new LinearLayoutManager(this, context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -463,6 +454,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     ProfileNotificationsActivity.this.checkRowsEnabled();
                 } else if (ProfileNotificationsActivity.this.customEnabled && view.isEnabled()) {
                     Uri uri = null;
+                    int i2 = 2;
                     if (i == ProfileNotificationsActivity.this.soundRow) {
                         try {
                             Intent intent = new Intent("android.intent.action.RINGTONE_PICKER");
@@ -536,16 +528,16 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                             final Activity parentActivity = ProfileNotificationsActivity.this.getParentActivity();
                             SharedPreferences notificationsSettings4 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
-                            int i2 = notificationsSettings4.getInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 2);
-                            int i3 = notificationsSettings4.getInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, 180);
-                            if (i2 == 0) {
-                                i2 = 2;
+                            int i3 = notificationsSettings4.getInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 2);
+                            int i4 = notificationsSettings4.getInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, 180);
+                            if (i3 != 0) {
+                                i2 = i3;
                             }
-                            final int i4 = ((((i3 / 60) - 1) * 10) + i2) - 1;
+                            final int i5 = ((((i4 / 60) - 1) * 10) + i2) - 1;
                             RecyclerListView recyclerListView = new RecyclerListView(ProfileNotificationsActivity.this.getParentActivity());
                             recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
                             recyclerListView.setClipToPadding(true);
-                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
+                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter(this) {
                                 public int getItemCount() {
                                     return 100;
                                 }
@@ -555,7 +547,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
 
                                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                                    AnonymousClass1 r3 = new TextView(parentActivity) {
+                                    AnonymousClass1 r3 = new TextView(this, parentActivity) {
                                         /* access modifiers changed from: protected */
                                         public void onMeasure(int i, int i2) {
                                             super.onMeasure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
@@ -571,7 +563,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
                                 public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
                                     TextView textView = (TextView) viewHolder.itemView;
-                                    textView.setTextColor(Theme.getColor(i == i4 ? "dialogTextGray" : "dialogTextBlack"));
+                                    textView.setTextColor(Theme.getColor(i == i5 ? "dialogTextGray" : "dialogTextBlack"));
                                     textView.setText(LocaleController.formatString("SmartNotificationsDetail", NUM, LocaleController.formatPluralString("Times", (i % 10) + 1), LocaleController.formatPluralString("Minutes", (i / 10) + 1)));
                                 }
                             });
@@ -774,8 +766,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             if (animatorSet2 != null) {
                 animatorSet2.cancel();
             }
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(arrayList);
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
+            animatorSet3.playTogether(arrayList);
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     if (animator.equals(ProfileNotificationsActivity.this.animatorSet)) {
@@ -828,8 +821,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextCheckCell textCheckCell;
             View view;
+            TextCheckCell textCheckCell;
             switch (i) {
                 case 0:
                     HeaderCell headerCell = new HeaderCell(this.context);
@@ -873,62 +866,68 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     textCheckCell = textCheckCell2;
                     break;
             }
-            textCheckCell = view;
-            textCheckCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(textCheckCell);
+            view = textCheckCell;
+            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             int i2;
             TLObject tLObject;
+            RecyclerView.ViewHolder viewHolder2 = viewHolder;
+            int i3 = i;
             boolean z = false;
             boolean z2 = true;
             switch (viewHolder.getItemViewType()) {
                 case 0:
-                    HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                    if (i == ProfileNotificationsActivity.this.generalRow) {
+                    HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
+                    if (i3 == ProfileNotificationsActivity.this.generalRow) {
                         headerCell.setText(LocaleController.getString("General", NUM));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.popupRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.popupRow) {
                         headerCell.setText(LocaleController.getString("ProfilePopupNotification", NUM));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.ledRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.ledRow) {
                         headerCell.setText(LocaleController.getString("NotificationsLed", NUM));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.callsRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.callsRow) {
                         headerCell.setText(LocaleController.getString("VoipNotificationSettings", NUM));
                         return;
                     } else {
                         return;
                     }
                 case 1:
-                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
+                    TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder2.itemView;
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
-                    if (i == ProfileNotificationsActivity.this.soundRow) {
+                    if (i3 == ProfileNotificationsActivity.this.soundRow) {
                         String string = notificationsSettings.getString("sound_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("SoundDefault", NUM));
                         if (string.equals("NoSound")) {
                             string = LocaleController.getString("NoSound", NUM);
                         }
                         textSettingsCell.setTextAndValue(LocaleController.getString("Sound", NUM), string, true);
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.ringtoneRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.ringtoneRow) {
                         String string2 = notificationsSettings.getString("ringtone_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("DefaultRingtone", NUM));
                         if (string2.equals("NoSound")) {
                             string2 = LocaleController.getString("NoSound", NUM);
                         }
                         textSettingsCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", NUM), string2, false);
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.vibrateRow) {
-                        int i3 = notificationsSettings.getInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                        if (i3 == 0 || i3 == 4) {
+                    } else if (i3 == ProfileNotificationsActivity.this.vibrateRow) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("vibrate_");
+                        String str = "VibrationDefault";
+                        sb.append(ProfileNotificationsActivity.this.dialog_id);
+                        int i4 = notificationsSettings.getInt(sb.toString(), 0);
+                        if (i4 == 0 || i4 == 4) {
                             String string3 = LocaleController.getString("Vibrate", NUM);
-                            String string4 = LocaleController.getString("VibrationDefault", NUM);
+                            String string4 = LocaleController.getString(str, NUM);
                             if (!(ProfileNotificationsActivity.this.smartRow == -1 && ProfileNotificationsActivity.this.priorityRow == -1)) {
                                 z = true;
                             }
                             textSettingsCell.setTextAndValue(string3, string4, z);
                             return;
-                        } else if (i3 == 1) {
+                        } else if (i4 == 1) {
                             String string5 = LocaleController.getString("Vibrate", NUM);
                             String string6 = LocaleController.getString("Short", NUM);
                             if (!(ProfileNotificationsActivity.this.smartRow == -1 && ProfileNotificationsActivity.this.priorityRow == -1)) {
@@ -936,7 +935,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             }
                             textSettingsCell.setTextAndValue(string5, string6, z);
                             return;
-                        } else if (i3 == 2) {
+                        } else if (i4 == 2) {
                             String string7 = LocaleController.getString("Vibrate", NUM);
                             String string8 = LocaleController.getString("VibrationDisabled", NUM);
                             if (!(ProfileNotificationsActivity.this.smartRow == -1 && ProfileNotificationsActivity.this.priorityRow == -1)) {
@@ -944,7 +943,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             }
                             textSettingsCell.setTextAndValue(string7, string8, z);
                             return;
-                        } else if (i3 == 3) {
+                        } else if (i4 == 3) {
                             String string9 = LocaleController.getString("Vibrate", NUM);
                             String string10 = LocaleController.getString("Long", NUM);
                             if (!(ProfileNotificationsActivity.this.smartRow == -1 && ProfileNotificationsActivity.this.priorityRow == -1)) {
@@ -955,77 +954,80 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         } else {
                             return;
                         }
-                    } else if (i == ProfileNotificationsActivity.this.priorityRow) {
-                        int i4 = notificationsSettings.getInt("priority_" + ProfileNotificationsActivity.this.dialog_id, 3);
-                        if (i4 == 0) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityHigh", NUM), false);
-                            return;
-                        } else if (i4 == 1 || i4 == 2) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityUrgent", NUM), false);
-                            return;
-                        } else if (i4 == 3) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPrioritySettings", NUM), false);
-                            return;
-                        } else if (i4 == 4) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityLow", NUM), false);
-                            return;
-                        } else if (i4 == 5) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityMedium", NUM), false);
-                            return;
-                        } else {
-                            return;
-                        }
-                    } else if (i == ProfileNotificationsActivity.this.smartRow) {
-                        int i5 = notificationsSettings.getInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 2);
-                        int i6 = notificationsSettings.getInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, 180);
-                        if (i5 == 0) {
-                            String string11 = LocaleController.getString("SmartNotifications", NUM);
-                            String string12 = LocaleController.getString("SmartNotificationsDisabled", NUM);
+                    } else {
+                        String str2 = "VibrationDefault";
+                        if (i3 == ProfileNotificationsActivity.this.priorityRow) {
+                            int i5 = notificationsSettings.getInt("priority_" + ProfileNotificationsActivity.this.dialog_id, 3);
+                            if (i5 == 0) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityHigh", NUM), false);
+                                return;
+                            } else if (i5 == 1 || i5 == 2) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityUrgent", NUM), false);
+                                return;
+                            } else if (i5 == 3) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPrioritySettings", NUM), false);
+                                return;
+                            } else if (i5 == 4) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityLow", NUM), false);
+                                return;
+                            } else if (i5 == 5) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("NotificationsImportance", NUM), LocaleController.getString("NotificationsPriorityMedium", NUM), false);
+                                return;
+                            } else {
+                                return;
+                            }
+                        } else if (i3 == ProfileNotificationsActivity.this.smartRow) {
+                            int i6 = notificationsSettings.getInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 2);
+                            int i7 = notificationsSettings.getInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, 180);
+                            if (i6 == 0) {
+                                String string11 = LocaleController.getString("SmartNotifications", NUM);
+                                String string12 = LocaleController.getString("SmartNotificationsDisabled", NUM);
+                                if (ProfileNotificationsActivity.this.priorityRow != -1) {
+                                    z = true;
+                                }
+                                textSettingsCell.setTextAndValue(string11, string12, z);
+                                return;
+                            }
+                            String formatPluralString = LocaleController.formatPluralString("Minutes", i7 / 60);
+                            String string13 = LocaleController.getString("SmartNotifications", NUM);
+                            String formatString = LocaleController.formatString("SmartNotificationsInfo", NUM, Integer.valueOf(i6), formatPluralString);
                             if (ProfileNotificationsActivity.this.priorityRow != -1) {
                                 z = true;
                             }
-                            textSettingsCell.setTextAndValue(string11, string12, z);
+                            textSettingsCell.setTextAndValue(string13, formatString, z);
                             return;
-                        }
-                        String formatPluralString = LocaleController.formatPluralString("Minutes", i6 / 60);
-                        String string13 = LocaleController.getString("SmartNotifications", NUM);
-                        String formatString = LocaleController.formatString("SmartNotificationsInfo", NUM, Integer.valueOf(i5), formatPluralString);
-                        if (ProfileNotificationsActivity.this.priorityRow != -1) {
-                            z = true;
-                        }
-                        textSettingsCell.setTextAndValue(string13, formatString, z);
-                        return;
-                    } else if (i == ProfileNotificationsActivity.this.callsVibrateRow) {
-                        int i7 = notificationsSettings.getInt("calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                        if (i7 == 0 || i7 == 4) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("VibrationDefault", NUM), true);
-                            return;
-                        } else if (i7 == 1) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Short", NUM), true);
-                            return;
-                        } else if (i7 == 2) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("VibrationDisabled", NUM), true);
-                            return;
-                        } else if (i7 == 3) {
-                            textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Long", NUM), true);
-                            return;
+                        } else if (i3 == ProfileNotificationsActivity.this.callsVibrateRow) {
+                            int i8 = notificationsSettings.getInt("calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
+                            if (i8 == 0 || i8 == 4) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString(str2, NUM), true);
+                                return;
+                            } else if (i8 == 1) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Short", NUM), true);
+                                return;
+                            } else if (i8 == 2) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("VibrationDisabled", NUM), true);
+                                return;
+                            } else if (i8 == 3) {
+                                textSettingsCell.setTextAndValue(LocaleController.getString("Vibrate", NUM), LocaleController.getString("Long", NUM), true);
+                                return;
+                            } else {
+                                return;
+                            }
                         } else {
                             return;
                         }
-                    } else {
-                        return;
                     }
                 case 2:
-                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                    if (i == ProfileNotificationsActivity.this.popupInfoRow) {
+                    TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder2.itemView;
+                    if (i3 == ProfileNotificationsActivity.this.popupInfoRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("ProfilePopupNotificationInfo", NUM));
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.ledInfoRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.ledInfoRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("NotificationsLedInfo", NUM));
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.priorityInfoRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.priorityInfoRow) {
                         if (ProfileNotificationsActivity.this.priorityRow == -1) {
                             textInfoPrivacyCell.setText("");
                         } else {
@@ -1033,11 +1035,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.customInfoRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.customInfoRow) {
                         textInfoPrivacyCell.setText((CharSequence) null);
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.ringtoneInfoRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.ringtoneInfoRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("VoipRingtoneInfo", NUM));
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                         return;
@@ -1045,7 +1047,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         return;
                     }
                 case 3:
-                    TextColorCell textColorCell = (TextColorCell) viewHolder.itemView;
+                    TextColorCell textColorCell = (TextColorCell) viewHolder2.itemView;
                     SharedPreferences notificationsSettings2 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                     if (notificationsSettings2.contains("color_" + ProfileNotificationsActivity.this.dialog_id)) {
                         i2 = notificationsSettings2.getInt("color_" + ProfileNotificationsActivity.this.dialog_id, -16776961);
@@ -1054,36 +1056,36 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     } else {
                         i2 = notificationsSettings2.getInt("MessagesLed", -16776961);
                     }
-                    int i8 = 0;
+                    int i9 = 0;
                     while (true) {
-                        if (i8 < 9) {
-                            if (TextColorCell.colorsToSave[i8] == i2) {
-                                i2 = TextColorCell.colors[i8];
+                        if (i9 < 9) {
+                            if (TextColorCell.colorsToSave[i9] == i2) {
+                                i2 = TextColorCell.colors[i9];
                             } else {
-                                i8++;
+                                i9++;
                             }
                         }
                     }
                     textColorCell.setTextAndColor(LocaleController.getString("NotificationsLedColor", NUM), i2, false);
                     return;
                 case 4:
-                    RadioCell radioCell = (RadioCell) viewHolder.itemView;
+                    RadioCell radioCell = (RadioCell) viewHolder2.itemView;
                     SharedPreferences notificationsSettings3 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
-                    int i9 = notificationsSettings3.getInt("popup_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                    if (i9 == 0) {
-                        i9 = notificationsSettings3.getInt(((int) ProfileNotificationsActivity.this.dialog_id) < 0 ? "popupGroup" : "popupAll", 0) != 0 ? 1 : 2;
+                    int i10 = notificationsSettings3.getInt("popup_" + ProfileNotificationsActivity.this.dialog_id, 0);
+                    if (i10 == 0) {
+                        i10 = notificationsSettings3.getInt(((int) ProfileNotificationsActivity.this.dialog_id) < 0 ? "popupGroup" : "popupAll", 0) != 0 ? 1 : 2;
                     }
-                    if (i == ProfileNotificationsActivity.this.popupEnabledRow) {
+                    if (i3 == ProfileNotificationsActivity.this.popupEnabledRow) {
                         String string14 = LocaleController.getString("PopupEnabled", NUM);
-                        if (i9 == 1) {
+                        if (i10 == 1) {
                             z = true;
                         }
                         radioCell.setText(string14, z, true);
                         radioCell.setTag(1);
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.popupDisabledRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.popupDisabledRow) {
                         String string15 = LocaleController.getString("PopupDisabled", NUM);
-                        if (i9 != 2) {
+                        if (i10 != 2) {
                             z2 = false;
                         }
                         radioCell.setText(string15, z2, false);
@@ -1093,7 +1095,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         return;
                     }
                 case 5:
-                    TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) viewHolder.itemView;
+                    TextCheckBoxCell textCheckBoxCell = (TextCheckBoxCell) viewHolder2.itemView;
                     MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                     String string16 = LocaleController.getString("NotificationsEnableCustom", NUM);
                     if (!ProfileNotificationsActivity.this.customEnabled || !ProfileNotificationsActivity.this.notificationsEnabled) {
@@ -1102,7 +1104,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     textCheckBoxCell.setTextAndCheck(string16, z2, false);
                     return;
                 case 6:
-                    UserCell2 userCell2 = (UserCell2) viewHolder.itemView;
+                    UserCell2 userCell2 = (UserCell2) viewHolder2.itemView;
                     int access$400 = (int) ProfileNotificationsActivity.this.dialog_id;
                     if (access$400 > 0) {
                         tLObject = MessagesController.getInstance(ProfileNotificationsActivity.this.currentAccount).getUser(Integer.valueOf(access$400));
@@ -1112,12 +1114,12 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     userCell2.setData(tLObject, (CharSequence) null, (CharSequence) null, 0);
                     return;
                 case 8:
-                    TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
+                    TextCheckCell textCheckCell = (TextCheckCell) viewHolder2.itemView;
                     SharedPreferences notificationsSettings4 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
-                    if (i == ProfileNotificationsActivity.this.enableRow) {
+                    if (i3 == ProfileNotificationsActivity.this.enableRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("Notifications", NUM), ProfileNotificationsActivity.this.notificationsEnabled, true);
                         return;
-                    } else if (i == ProfileNotificationsActivity.this.previewRow) {
+                    } else if (i3 == ProfileNotificationsActivity.this.previewRow) {
                         String string17 = LocaleController.getString("MessagePreview", NUM);
                         textCheckCell.setTextAndCheck(string17, notificationsSettings4.getBoolean("content_preview_" + ProfileNotificationsActivity.this.dialog_id, true), true);
                         return;
@@ -1211,7 +1213,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         };
         $$Lambda$ProfileNotificationsActivity$7A70wCksskw_wSSS5mOEgsRl6M r8 = r10;
         $$Lambda$ProfileNotificationsActivity$7A70wCksskw_wSSS5mOEgsRl6M r7 = r10;
-        return new ThemeDescription[]{new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextSettingsCell.class, TextColorCell.class, RadioCell.class, UserCell2.class, TextCheckCell.class, TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"), new ThemeDescription((View) this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{RadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, (Paint) null, new Drawable[]{Theme.avatar_savedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareUnchecked"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareDisabled"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareBackground"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareCheck")};
+        return new ThemeDescription[]{new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextSettingsCell.class, TextColorCell.class, RadioCell.class, UserCell2.class, TextCheckCell.class, TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"), new ThemeDescription((View) this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{RadioCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareUnchecked"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareDisabled"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareBackground"), new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxSquareCheck")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$0$ProfileNotificationsActivity() {

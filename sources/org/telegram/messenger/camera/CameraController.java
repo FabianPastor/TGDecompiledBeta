@@ -92,8 +92,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00db, code lost:
-        if (r15.height != 720) goto L_0x011b;
+    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00da, code lost:
+        if (r15.height != 720) goto L_0x011a;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$initCamera$4$CameraController(boolean r20, java.lang.Runnable r21) {
@@ -101,298 +101,297 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             r19 = this;
             r1 = r19
             java.lang.String r0 = "cameraCache"
-            java.util.ArrayList<org.telegram.messenger.camera.CameraInfo> r2 = r1.cameraInfos     // Catch:{ Exception -> 0x0256 }
-            if (r2 != 0) goto L_0x024d
-            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0256 }
+            java.util.ArrayList<org.telegram.messenger.camera.CameraInfo> r2 = r1.cameraInfos     // Catch:{ Exception -> 0x0255 }
+            if (r2 != 0) goto L_0x024c
+            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0255 }
             r3 = 0
-            java.lang.String r3 = r2.getString(r0, r3)     // Catch:{ Exception -> 0x0256 }
-            org.telegram.messenger.camera.-$$Lambda$CameraController$dwxNXb3SuNA_od-SPUyypaONvgM r4 = org.telegram.messenger.camera.$$Lambda$CameraController$dwxNXb3SuNA_odSPUyypaONvgM.INSTANCE     // Catch:{ Exception -> 0x0256 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0256 }
-            r5.<init>()     // Catch:{ Exception -> 0x0256 }
+            java.lang.String r3 = r2.getString(r0, r3)     // Catch:{ Exception -> 0x0255 }
+            org.telegram.messenger.camera.-$$Lambda$CameraController$dwxNXb3SuNA_od-SPUyypaONvgM r4 = org.telegram.messenger.camera.$$Lambda$CameraController$dwxNXb3SuNA_odSPUyypaONvgM.INSTANCE     // Catch:{ Exception -> 0x0255 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0255 }
+            r5.<init>()     // Catch:{ Exception -> 0x0255 }
             r6 = 0
             if (r3 == 0) goto L_0x0085
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0256 }
-            byte[] r2 = android.util.Base64.decode(r3, r6)     // Catch:{ Exception -> 0x0256 }
-            r0.<init>((byte[]) r2)     // Catch:{ Exception -> 0x0256 }
-            int r2 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
+            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0255 }
+            byte[] r2 = android.util.Base64.decode(r3, r6)     // Catch:{ Exception -> 0x0255 }
+            r0.<init>((byte[]) r2)     // Catch:{ Exception -> 0x0255 }
+            int r2 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
             r3 = 0
         L_0x0029:
             if (r3 >= r2) goto L_0x0080
-            org.telegram.messenger.camera.CameraInfo r7 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0256 }
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            int r9 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            r7.<init>(r8, r9)     // Catch:{ Exception -> 0x0256 }
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
+            org.telegram.messenger.camera.CameraInfo r7 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0255 }
+            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            int r9 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            r7.<init>(r8, r9)     // Catch:{ Exception -> 0x0255 }
+            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
             r9 = 0
         L_0x003d:
             if (r9 >= r8) goto L_0x0054
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.previewSizes     // Catch:{ Exception -> 0x0256 }
-            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0256 }
-            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0256 }
-            r10.add(r11)     // Catch:{ Exception -> 0x0256 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.previewSizes     // Catch:{ Exception -> 0x0255 }
+            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0255 }
+            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0255 }
+            r10.add(r11)     // Catch:{ Exception -> 0x0255 }
             int r9 = r9 + 1
             goto L_0x003d
         L_0x0054:
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
+            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
             r9 = 0
         L_0x0059:
             if (r9 >= r8) goto L_0x0070
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.pictureSizes     // Catch:{ Exception -> 0x0256 }
-            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0256 }
-            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0256 }
-            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0256 }
-            r10.add(r11)     // Catch:{ Exception -> 0x0256 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.pictureSizes     // Catch:{ Exception -> 0x0255 }
+            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0255 }
+            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
+            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0255 }
+            r10.add(r11)     // Catch:{ Exception -> 0x0255 }
             int r9 = r9 + 1
             goto L_0x0059
         L_0x0070:
-            r5.add(r7)     // Catch:{ Exception -> 0x0256 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r7.previewSizes     // Catch:{ Exception -> 0x0256 }
-            java.util.Collections.sort(r8, r4)     // Catch:{ Exception -> 0x0256 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r7.pictureSizes     // Catch:{ Exception -> 0x0256 }
-            java.util.Collections.sort(r7, r4)     // Catch:{ Exception -> 0x0256 }
+            r5.add(r7)     // Catch:{ Exception -> 0x0255 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r7.previewSizes     // Catch:{ Exception -> 0x0255 }
+            java.util.Collections.sort(r8, r4)     // Catch:{ Exception -> 0x0255 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r7.pictureSizes     // Catch:{ Exception -> 0x0255 }
+            java.util.Collections.sort(r7, r4)     // Catch:{ Exception -> 0x0255 }
             int r3 = r3 + 1
             goto L_0x0029
         L_0x0080:
-            r0.cleanup()     // Catch:{ Exception -> 0x0256 }
-            goto L_0x0246
+            r0.cleanup()     // Catch:{ Exception -> 0x0255 }
+            goto L_0x0245
         L_0x0085:
-            int r3 = android.hardware.Camera.getNumberOfCameras()     // Catch:{ Exception -> 0x0256 }
-            android.hardware.Camera$CameraInfo r7 = new android.hardware.Camera$CameraInfo     // Catch:{ Exception -> 0x0256 }
-            r7.<init>()     // Catch:{ Exception -> 0x0256 }
+            int r3 = android.hardware.Camera.getNumberOfCameras()     // Catch:{ Exception -> 0x0255 }
+            android.hardware.Camera$CameraInfo r7 = new android.hardware.Camera$CameraInfo     // Catch:{ Exception -> 0x0255 }
+            r7.<init>()     // Catch:{ Exception -> 0x0255 }
             r8 = 4
-            r8 = 0
-            r9 = 4
-        L_0x0091:
-            if (r8 >= r3) goto L_0x01c5
-            android.hardware.Camera.getCameraInfo(r8, r7)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.CameraInfo r10 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0249 }
-            int r11 = r7.facing     // Catch:{ Exception -> 0x0249 }
-            r10.<init>(r8, r11)     // Catch:{ Exception -> 0x0249 }
-            boolean r11 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused     // Catch:{ Exception -> 0x0249 }
-            if (r11 == 0) goto L_0x00ae
-            boolean r11 = org.telegram.messenger.ApplicationLoader.externalInterfacePaused     // Catch:{ Exception -> 0x0256 }
-            if (r11 != 0) goto L_0x00a6
-            goto L_0x00ae
-        L_0x00a6:
-            java.lang.RuntimeException r0 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x0256 }
+            r9 = 0
+        L_0x0090:
+            if (r9 >= r3) goto L_0x01c4
+            android.hardware.Camera.getCameraInfo(r9, r7)     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.CameraInfo r10 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0248 }
+            int r11 = r7.facing     // Catch:{ Exception -> 0x0248 }
+            r10.<init>(r9, r11)     // Catch:{ Exception -> 0x0248 }
+            boolean r11 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused     // Catch:{ Exception -> 0x0248 }
+            if (r11 == 0) goto L_0x00ad
+            boolean r11 = org.telegram.messenger.ApplicationLoader.externalInterfacePaused     // Catch:{ Exception -> 0x0255 }
+            if (r11 != 0) goto L_0x00a5
+            goto L_0x00ad
+        L_0x00a5:
+            java.lang.RuntimeException r0 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x0255 }
             java.lang.String r2 = "APP_PAUSED"
-            r0.<init>(r2)     // Catch:{ Exception -> 0x0256 }
-            throw r0     // Catch:{ Exception -> 0x0256 }
-        L_0x00ae:
-            int r11 = r10.getCameraId()     // Catch:{ Exception -> 0x0249 }
-            android.hardware.Camera r11 = android.hardware.Camera.open(r11)     // Catch:{ Exception -> 0x0249 }
-            android.hardware.Camera$Parameters r12 = r11.getParameters()     // Catch:{ Exception -> 0x0249 }
-            java.util.List r13 = r12.getSupportedPreviewSizes()     // Catch:{ Exception -> 0x0249 }
+            r0.<init>(r2)     // Catch:{ Exception -> 0x0255 }
+            throw r0     // Catch:{ Exception -> 0x0255 }
+        L_0x00ad:
+            int r11 = r10.getCameraId()     // Catch:{ Exception -> 0x0248 }
+            android.hardware.Camera r11 = android.hardware.Camera.open(r11)     // Catch:{ Exception -> 0x0248 }
+            android.hardware.Camera$Parameters r12 = r11.getParameters()     // Catch:{ Exception -> 0x0248 }
+            java.util.List r13 = r12.getSupportedPreviewSizes()     // Catch:{ Exception -> 0x0248 }
             r14 = 0
-        L_0x00bf:
-            int r15 = r13.size()     // Catch:{ Exception -> 0x0249 }
+        L_0x00be:
+            int r15 = r13.size()     // Catch:{ Exception -> 0x0248 }
             java.lang.String r6 = " "
             r16 = r7
             r7 = 1280(0x500, float:1.794E-42)
-            if (r14 >= r15) goto L_0x0129
-            java.lang.Object r15 = r13.get(r14)     // Catch:{ Exception -> 0x0249 }
-            android.hardware.Camera$Size r15 = (android.hardware.Camera.Size) r15     // Catch:{ Exception -> 0x0249 }
+            if (r14 >= r15) goto L_0x0128
+            java.lang.Object r15 = r13.get(r14)     // Catch:{ Exception -> 0x0248 }
+            android.hardware.Camera$Size r15 = (android.hardware.Camera.Size) r15     // Catch:{ Exception -> 0x0248 }
             r17 = r13
-            int r13 = r15.width     // Catch:{ Exception -> 0x0249 }
-            if (r13 != r7) goto L_0x00de
-            int r7 = r15.height     // Catch:{ Exception -> 0x0256 }
+            int r13 = r15.width     // Catch:{ Exception -> 0x0248 }
+            if (r13 != r7) goto L_0x00dd
+            int r7 = r15.height     // Catch:{ Exception -> 0x0255 }
             r13 = 720(0x2d0, float:1.009E-42)
-            if (r7 == r13) goto L_0x00de
-            goto L_0x011b
-        L_0x00de:
-            int r7 = r15.height     // Catch:{ Exception -> 0x0249 }
+            if (r7 == r13) goto L_0x00dd
+            goto L_0x011a
+        L_0x00dd:
+            int r7 = r15.height     // Catch:{ Exception -> 0x0248 }
             r13 = 2160(0x870, float:3.027E-42)
-            if (r7 >= r13) goto L_0x011b
-            int r7 = r15.width     // Catch:{ Exception -> 0x0249 }
-            if (r7 >= r13) goto L_0x011b
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r10.previewSizes     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.Size r13 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0249 }
-            int r1 = r15.width     // Catch:{ Exception -> 0x0249 }
+            if (r7 >= r13) goto L_0x011a
+            int r7 = r15.width     // Catch:{ Exception -> 0x0248 }
+            if (r7 >= r13) goto L_0x011a
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.Size r13 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0248 }
+            int r1 = r15.width     // Catch:{ Exception -> 0x0248 }
             r18 = r0
-            int r0 = r15.height     // Catch:{ Exception -> 0x0249 }
-            r13.<init>(r1, r0)     // Catch:{ Exception -> 0x0249 }
-            r7.add(r13)     // Catch:{ Exception -> 0x0249 }
-            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0249 }
-            if (r0 == 0) goto L_0x011d
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0249 }
-            r0.<init>()     // Catch:{ Exception -> 0x0249 }
+            int r0 = r15.height     // Catch:{ Exception -> 0x0248 }
+            r13.<init>(r1, r0)     // Catch:{ Exception -> 0x0248 }
+            r7.add(r13)     // Catch:{ Exception -> 0x0248 }
+            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0248 }
+            if (r0 == 0) goto L_0x011c
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0248 }
+            r0.<init>()     // Catch:{ Exception -> 0x0248 }
             java.lang.String r1 = "preview size = "
-            r0.append(r1)     // Catch:{ Exception -> 0x0249 }
-            int r1 = r15.width     // Catch:{ Exception -> 0x0249 }
-            r0.append(r1)     // Catch:{ Exception -> 0x0249 }
-            r0.append(r6)     // Catch:{ Exception -> 0x0249 }
-            int r1 = r15.height     // Catch:{ Exception -> 0x0249 }
-            r0.append(r1)     // Catch:{ Exception -> 0x0249 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x0249 }
-            goto L_0x011d
-        L_0x011b:
+            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
+            int r1 = r15.width     // Catch:{ Exception -> 0x0248 }
+            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
+            r0.append(r6)     // Catch:{ Exception -> 0x0248 }
+            int r1 = r15.height     // Catch:{ Exception -> 0x0248 }
+            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x0248 }
+            goto L_0x011c
+        L_0x011a:
             r18 = r0
-        L_0x011d:
+        L_0x011c:
             int r14 = r14 + 1
             r1 = r19
             r7 = r16
             r13 = r17
             r0 = r18
             r6 = 0
-            goto L_0x00bf
-        L_0x0129:
+            goto L_0x00be
+        L_0x0128:
             r18 = r0
-            java.util.List r0 = r12.getSupportedPictureSizes()     // Catch:{ Exception -> 0x0249 }
+            java.util.List r0 = r12.getSupportedPictureSizes()     // Catch:{ Exception -> 0x0248 }
             r1 = 0
-        L_0x0130:
-            int r12 = r0.size()     // Catch:{ Exception -> 0x0249 }
-            if (r1 >= r12) goto L_0x0198
-            java.lang.Object r12 = r0.get(r1)     // Catch:{ Exception -> 0x0249 }
-            android.hardware.Camera$Size r12 = (android.hardware.Camera.Size) r12     // Catch:{ Exception -> 0x0249 }
-            int r13 = r12.width     // Catch:{ Exception -> 0x0249 }
-            if (r13 != r7) goto L_0x0147
-            int r13 = r12.height     // Catch:{ Exception -> 0x0249 }
+        L_0x012f:
+            int r12 = r0.size()     // Catch:{ Exception -> 0x0248 }
+            if (r1 >= r12) goto L_0x0197
+            java.lang.Object r12 = r0.get(r1)     // Catch:{ Exception -> 0x0248 }
+            android.hardware.Camera$Size r12 = (android.hardware.Camera.Size) r12     // Catch:{ Exception -> 0x0248 }
+            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
+            if (r13 != r7) goto L_0x0146
+            int r13 = r12.height     // Catch:{ Exception -> 0x0248 }
             r14 = 720(0x2d0, float:1.009E-42)
-            if (r13 == r14) goto L_0x0149
-            goto L_0x0193
-        L_0x0147:
+            if (r13 == r14) goto L_0x0148
+            goto L_0x0192
+        L_0x0146:
             r14 = 720(0x2d0, float:1.009E-42)
-        L_0x0149:
+        L_0x0148:
             java.lang.String r13 = "samsung"
-            java.lang.String r15 = android.os.Build.MANUFACTURER     // Catch:{ Exception -> 0x0249 }
-            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0249 }
-            if (r13 == 0) goto L_0x0163
+            java.lang.String r15 = android.os.Build.MANUFACTURER     // Catch:{ Exception -> 0x0248 }
+            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0248 }
+            if (r13 == 0) goto L_0x0162
             java.lang.String r13 = "jflteuc"
-            java.lang.String r15 = android.os.Build.PRODUCT     // Catch:{ Exception -> 0x0249 }
-            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0249 }
-            if (r13 == 0) goto L_0x0163
-            int r13 = r12.width     // Catch:{ Exception -> 0x0249 }
+            java.lang.String r15 = android.os.Build.PRODUCT     // Catch:{ Exception -> 0x0248 }
+            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0248 }
+            if (r13 == 0) goto L_0x0162
+            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
             r15 = 2048(0x800, float:2.87E-42)
-            if (r13 >= r15) goto L_0x0193
-        L_0x0163:
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r13 = r10.pictureSizes     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.Size r15 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0249 }
-            int r7 = r12.width     // Catch:{ Exception -> 0x0249 }
-            int r14 = r12.height     // Catch:{ Exception -> 0x0249 }
-            r15.<init>(r7, r14)     // Catch:{ Exception -> 0x0249 }
-            r13.add(r15)     // Catch:{ Exception -> 0x0249 }
-            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0249 }
-            if (r7 == 0) goto L_0x0193
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0249 }
-            r7.<init>()     // Catch:{ Exception -> 0x0249 }
+            if (r13 >= r15) goto L_0x0192
+        L_0x0162:
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r13 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.Size r15 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0248 }
+            int r7 = r12.width     // Catch:{ Exception -> 0x0248 }
+            int r14 = r12.height     // Catch:{ Exception -> 0x0248 }
+            r15.<init>(r7, r14)     // Catch:{ Exception -> 0x0248 }
+            r13.add(r15)     // Catch:{ Exception -> 0x0248 }
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0248 }
+            if (r7 == 0) goto L_0x0192
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0248 }
+            r7.<init>()     // Catch:{ Exception -> 0x0248 }
             java.lang.String r13 = "picture size = "
-            r7.append(r13)     // Catch:{ Exception -> 0x0249 }
-            int r13 = r12.width     // Catch:{ Exception -> 0x0249 }
-            r7.append(r13)     // Catch:{ Exception -> 0x0249 }
-            r7.append(r6)     // Catch:{ Exception -> 0x0249 }
-            int r12 = r12.height     // Catch:{ Exception -> 0x0249 }
-            r7.append(r12)     // Catch:{ Exception -> 0x0249 }
-            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.FileLog.d(r7)     // Catch:{ Exception -> 0x0249 }
-        L_0x0193:
+            r7.append(r13)     // Catch:{ Exception -> 0x0248 }
+            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
+            r7.append(r13)     // Catch:{ Exception -> 0x0248 }
+            r7.append(r6)     // Catch:{ Exception -> 0x0248 }
+            int r12 = r12.height     // Catch:{ Exception -> 0x0248 }
+            r7.append(r12)     // Catch:{ Exception -> 0x0248 }
+            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.FileLog.d(r7)     // Catch:{ Exception -> 0x0248 }
+        L_0x0192:
             int r1 = r1 + 1
             r7 = 1280(0x500, float:1.794E-42)
-            goto L_0x0130
-        L_0x0198:
-            r11.release()     // Catch:{ Exception -> 0x0249 }
-            r5.add(r10)     // Catch:{ Exception -> 0x0249 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0249 }
-            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0249 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.pictureSizes     // Catch:{ Exception -> 0x0249 }
-            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0249 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0249 }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x0249 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r1 = r10.pictureSizes     // Catch:{ Exception -> 0x0249 }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x0249 }
+            goto L_0x012f
+        L_0x0197:
+            r11.release()     // Catch:{ Exception -> 0x0248 }
+            r5.add(r10)     // Catch:{ Exception -> 0x0248 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
+            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0248 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
+            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0248 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x0248 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r1 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
+            int r1 = r1.size()     // Catch:{ Exception -> 0x0248 }
             int r0 = r0 + r1
             int r0 = r0 * 8
             int r0 = r0 + 8
-            int r9 = r9 + r0
-            int r8 = r8 + 1
+            int r8 = r8 + r0
+            int r9 = r9 + 1
             r6 = 0
             r1 = r19
             r7 = r16
             r0 = r18
-            goto L_0x0091
-        L_0x01c5:
+            goto L_0x0090
+        L_0x01c4:
             r18 = r0
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0249 }
-            r0.<init>((int) r9)     // Catch:{ Exception -> 0x0249 }
-            int r1 = r5.size()     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r1)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0248 }
+            r0.<init>((int) r8)     // Catch:{ Exception -> 0x0248 }
+            int r1 = r5.size()     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r1)     // Catch:{ Exception -> 0x0248 }
             r1 = 0
-        L_0x01d4:
-            if (r1 >= r3) goto L_0x022b
-            java.lang.Object r4 = r5.get(r1)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.CameraInfo r4 = (org.telegram.messenger.camera.CameraInfo) r4     // Catch:{ Exception -> 0x0249 }
-            int r6 = r4.cameraId     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0249 }
-            int r6 = r4.frontCamera     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0249 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.previewSizes     // Catch:{ Exception -> 0x0249 }
-            int r6 = r6.size()     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0249 }
+        L_0x01d3:
+            if (r1 >= r3) goto L_0x022a
+            java.lang.Object r4 = r5.get(r1)     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.CameraInfo r4 = (org.telegram.messenger.camera.CameraInfo) r4     // Catch:{ Exception -> 0x0248 }
+            int r6 = r4.cameraId     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
+            int r6 = r4.frontCamera     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.previewSizes     // Catch:{ Exception -> 0x0248 }
+            int r6 = r6.size()     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
             r7 = 0
-        L_0x01f0:
-            if (r7 >= r6) goto L_0x0207
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.previewSizes     // Catch:{ Exception -> 0x0249 }
-            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0249 }
-            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0249 }
-            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0249 }
+        L_0x01ef:
+            if (r7 >= r6) goto L_0x0206
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.previewSizes     // Catch:{ Exception -> 0x0248 }
+            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0248 }
+            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0248 }
+            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0248 }
             int r7 = r7 + 1
-            goto L_0x01f0
-        L_0x0207:
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.pictureSizes     // Catch:{ Exception -> 0x0249 }
-            int r6 = r6.size()     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01ef
+        L_0x0206:
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.pictureSizes     // Catch:{ Exception -> 0x0248 }
+            int r6 = r6.size()     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
             r7 = 0
-        L_0x0211:
-            if (r7 >= r6) goto L_0x0228
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.pictureSizes     // Catch:{ Exception -> 0x0249 }
-            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0249 }
-            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0249 }
-            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0249 }
-            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0249 }
-            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0249 }
+        L_0x0210:
+            if (r7 >= r6) goto L_0x0227
+            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.pictureSizes     // Catch:{ Exception -> 0x0248 }
+            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0248 }
+            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0248 }
+            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0248 }
+            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0248 }
+            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0248 }
             int r7 = r7 + 1
-            goto L_0x0211
-        L_0x0228:
+            goto L_0x0210
+        L_0x0227:
             int r1 = r1 + 1
-            goto L_0x01d4
-        L_0x022b:
-            android.content.SharedPreferences$Editor r1 = r2.edit()     // Catch:{ Exception -> 0x0249 }
-            byte[] r2 = r0.toByteArray()     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01d3
+        L_0x022a:
+            android.content.SharedPreferences$Editor r1 = r2.edit()     // Catch:{ Exception -> 0x0248 }
+            byte[] r2 = r0.toByteArray()     // Catch:{ Exception -> 0x0248 }
             r3 = 0
-            java.lang.String r2 = android.util.Base64.encodeToString(r2, r3)     // Catch:{ Exception -> 0x0249 }
+            java.lang.String r2 = android.util.Base64.encodeToString(r2, r3)     // Catch:{ Exception -> 0x0248 }
             r3 = r18
-            android.content.SharedPreferences$Editor r1 = r1.putString(r3, r2)     // Catch:{ Exception -> 0x0249 }
-            r1.commit()     // Catch:{ Exception -> 0x0249 }
-            r0.cleanup()     // Catch:{ Exception -> 0x0249 }
+            android.content.SharedPreferences$Editor r1 = r1.putString(r3, r2)     // Catch:{ Exception -> 0x0248 }
+            r1.commit()     // Catch:{ Exception -> 0x0248 }
+            r0.cleanup()     // Catch:{ Exception -> 0x0248 }
             r1 = r19
-        L_0x0246:
-            r1.cameraInfos = r5     // Catch:{ Exception -> 0x0256 }
-            goto L_0x024d
-        L_0x0249:
+        L_0x0245:
+            r1.cameraInfos = r5     // Catch:{ Exception -> 0x0255 }
+            goto L_0x024c
+        L_0x0248:
             r0 = move-exception
             r1 = r19
-            goto L_0x0257
-        L_0x024d:
-            org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE     // Catch:{ Exception -> 0x0256 }
-            r0.<init>()     // Catch:{ Exception -> 0x0256 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0256 }
-            goto L_0x0263
+            goto L_0x0256
+        L_0x024c:
+            org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE     // Catch:{ Exception -> 0x0255 }
+            r0.<init>()     // Catch:{ Exception -> 0x0255 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0255 }
+            goto L_0x0262
+        L_0x0255:
+            r0 = move-exception
         L_0x0256:
-            r0 = move-exception
-        L_0x0257:
             org.telegram.messenger.camera.-$$Lambda$CameraController$88xHVzlx_IKS4IavCNfpJS9ZRAE r2 = new org.telegram.messenger.camera.-$$Lambda$CameraController$88xHVzlx_IKS4IavCNfpJS9ZRAE
             r3 = r20
             r4 = r21
             r2.<init>(r3, r0, r4)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-        L_0x0263:
+        L_0x0262:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.lambda$initCamera$4$CameraController(boolean, java.lang.Runnable):void");
@@ -519,94 +518,85 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         r1 = r2;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:33:0x0060, code lost:
-        r2 = 0;
+        r3 = 0;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:34:0x0061, code lost:
-        if (r2 <= 8) goto L_0x00bd;
+        if (r3 <= 8) goto L_0x00b9;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:35:0x0063, code lost:
-        r3 = pack(r10, r1, 4, false);
+        r2 = pack(r10, r1, 4, false);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:36:0x006a, code lost:
-        if (r3 == NUM) goto L_0x0072;
+        if (r2 == NUM) goto L_0x0072;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:38:0x006f, code lost:
-        if (r3 == NUM) goto L_0x0072;
+        if (r2 == NUM) goto L_0x0072;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:39:0x0071, code lost:
         return 0;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:40:0x0072, code lost:
-        if (r3 != NUM) goto L_0x0076;
+        if (r2 != NUM) goto L_0x0075;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x0074, code lost:
-        r3 = true;
+    /* JADX WARNING: Code restructure failed: missing block: B:41:0x0075, code lost:
+        r5 = false;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:42:0x0076, code lost:
-        r3 = false;
+        r2 = pack(r10, r1 + 4, 4, r5) + 2;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0077, code lost:
-        r4 = pack(r10, r1 + 4, 4, r3) + 2;
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x007f, code lost:
+        if (r2 < 10) goto L_0x00b9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x0080, code lost:
-        if (r4 < 10) goto L_0x00bd;
+    /* JADX WARNING: Code restructure failed: missing block: B:44:0x0081, code lost:
+        if (r2 <= r3) goto L_0x0084;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:45:0x0082, code lost:
-        if (r4 <= r2) goto L_0x0085;
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x0084, code lost:
+        r1 = r1 + r2;
+        r3 = r3 - r2;
+        r2 = pack(r10, r1 - 2, 2, r5);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:46:0x0085, code lost:
-        r1 = r1 + r4;
-        r2 = r2 - r4;
-        r4 = pack(r10, r1 - 2, 2, r3);
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x008c, code lost:
+        r4 = r2 - 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:47:0x008d, code lost:
-        r8 = r4 - 1;
+    /* JADX WARNING: Code restructure failed: missing block: B:47:0x008e, code lost:
+        if (r2 <= 0) goto L_0x00b9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:48:0x008f, code lost:
-        if (r4 <= 0) goto L_0x00bd;
+    /* JADX WARNING: Code restructure failed: missing block: B:49:0x0092, code lost:
+        if (r3 < 12) goto L_0x00b9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:50:0x0093, code lost:
-        if (r2 < 12) goto L_0x00bd;
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x009a, code lost:
+        if (pack(r10, r1, 2, r5) != 274) goto L_0x00b3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:52:0x009b, code lost:
-        if (pack(r10, r1, 2, r3) != 274) goto L_0x00b7;
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x009c, code lost:
+        r10 = pack(r10, r1 + 8, 2, r5);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:53:0x009d, code lost:
-        r10 = pack(r10, r1 + 8, 2, r3);
+    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00a2, code lost:
+        if (r10 == 3) goto L_0x00b0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00a2, code lost:
-        if (r10 == 1) goto L_0x00b6;
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00a5, code lost:
+        if (r10 == 6) goto L_0x00ad;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00a5, code lost:
-        if (r10 == 3) goto L_0x00b3;
+    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00a7, code lost:
+        if (r10 == 8) goto L_0x00aa;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:58:0x00a8, code lost:
-        if (r10 == 6) goto L_0x00b0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:59:0x00aa, code lost:
-        if (r10 == 8) goto L_0x00ad;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:60:0x00ac, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:57:0x00a9, code lost:
         return 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:61:0x00ad, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:58:0x00aa, code lost:
         return 270;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:62:0x00b0, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:59:0x00ad, code lost:
         return 90;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:63:0x00b3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:60:0x00b0, code lost:
         return 180;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:64:0x00b6, code lost:
-        return 0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x00b7, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:61:0x00b3, code lost:
         r1 = r1 + 12;
-        r2 = r2 - 12;
-        r4 = r8;
+        r3 = r3 - 12;
+        r2 = r4;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:66:0x00bd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:62:0x00b9, code lost:
         return 0;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -665,7 +655,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             int r1 = pack(r10, r1, r7, r0)
             if (r1 != 0) goto L_0x005a
             int r1 = r2 + 8
-            int r2 = r3 + -8
+            int r3 = r3 + -8
             goto L_0x0061
         L_0x005a:
             r1 = r8
@@ -678,68 +668,64 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         L_0x005f:
             r1 = r2
         L_0x0060:
-            r2 = 0
+            r3 = 0
         L_0x0061:
-            if (r2 <= r6) goto L_0x00bd
-            int r3 = pack(r10, r1, r4, r0)
+            if (r3 <= r6) goto L_0x00b9
+            int r2 = pack(r10, r1, r4, r0)
             r8 = 1229531648(0x49492a00, float:823968.0)
-            if (r3 == r8) goto L_0x0072
+            if (r2 == r8) goto L_0x0072
             r9 = 1296891946(0x4d4d002a, float:2.14958752E8)
-            if (r3 == r9) goto L_0x0072
+            if (r2 == r9) goto L_0x0072
             return r0
         L_0x0072:
-            if (r3 != r8) goto L_0x0076
-            r3 = 1
-            goto L_0x0077
+            if (r2 != r8) goto L_0x0075
+            goto L_0x0076
+        L_0x0075:
+            r5 = 0
         L_0x0076:
-            r3 = 0
-        L_0x0077:
-            int r8 = r1 + 4
-            int r4 = pack(r10, r8, r4, r3)
-            int r4 = r4 + r7
-            r8 = 10
-            if (r4 < r8) goto L_0x00bd
-            if (r4 <= r2) goto L_0x0085
-            goto L_0x00bd
-        L_0x0085:
-            int r1 = r1 + r4
-            int r2 = r2 - r4
-            int r4 = r1 + -2
-            int r4 = pack(r10, r4, r7, r3)
-        L_0x008d:
-            int r8 = r4 + -1
-            if (r4 <= 0) goto L_0x00bd
-            r4 = 12
-            if (r2 < r4) goto L_0x00bd
-            int r4 = pack(r10, r1, r7, r3)
-            r9 = 274(0x112, float:3.84E-43)
-            if (r4 != r9) goto L_0x00b7
+            int r2 = r1 + 4
+            int r2 = pack(r10, r2, r4, r5)
+            int r2 = r2 + r7
+            r4 = 10
+            if (r2 < r4) goto L_0x00b9
+            if (r2 <= r3) goto L_0x0084
+            goto L_0x00b9
+        L_0x0084:
+            int r1 = r1 + r2
+            int r3 = r3 - r2
+            int r2 = r1 + -2
+            int r2 = pack(r10, r2, r7, r5)
+        L_0x008c:
+            int r4 = r2 + -1
+            if (r2 <= 0) goto L_0x00b9
+            r2 = 12
+            if (r3 < r2) goto L_0x00b9
+            int r2 = pack(r10, r1, r7, r5)
+            r8 = 274(0x112, float:3.84E-43)
+            if (r2 != r8) goto L_0x00b3
             int r1 = r1 + r6
-            int r10 = pack(r10, r1, r7, r3)
-            if (r10 == r5) goto L_0x00b6
+            int r10 = pack(r10, r1, r7, r5)
             r1 = 3
-            if (r10 == r1) goto L_0x00b3
-            r1 = 6
             if (r10 == r1) goto L_0x00b0
-            if (r10 == r6) goto L_0x00ad
+            r1 = 6
+            if (r10 == r1) goto L_0x00ad
+            if (r10 == r6) goto L_0x00aa
             return r0
-        L_0x00ad:
+        L_0x00aa:
             r10 = 270(0x10e, float:3.78E-43)
             return r10
-        L_0x00b0:
+        L_0x00ad:
             r10 = 90
             return r10
-        L_0x00b3:
+        L_0x00b0:
             r10 = 180(0xb4, float:2.52E-43)
             return r10
-        L_0x00b6:
-            return r0
-        L_0x00b7:
+        L_0x00b3:
             int r1 = r1 + 12
-            int r2 = r2 + -12
-            r4 = r8
-            goto L_0x008d
-        L_0x00bd:
+            int r3 = r3 + -12
+            r2 = r4
+            goto L_0x008c
+        L_0x00b9:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.getOrientation(byte[]):int");
@@ -1079,8 +1065,9 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
             camera.unlock();
             try {
-                this.recorder = new MediaRecorder();
-                this.recorder.setCamera(camera);
+                MediaRecorder mediaRecorder = new MediaRecorder();
+                this.recorder = mediaRecorder;
+                mediaRecorder.setCamera(camera);
                 this.recorder.setVideoSource(1);
                 this.recorder.setAudioSource(5);
                 cameraSession.configureRecorder(1, this.recorder);
@@ -1089,7 +1076,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 this.recorder.setVideoFrameRate(30);
                 this.recorder.setMaxDuration(0);
                 Size chooseOptimalSize = chooseOptimalSize(cameraInfo.getPictureSizes(), 720, 480, new Size(16, 9));
-                this.recorder.setVideoEncodingBitRate(1800000);
+                this.recorder.setVideoEncodingBitRate(Math.min(chooseOptimalSize.mHeight, chooseOptimalSize.mWidth) >= 720 ? 3500000 : 1800000);
                 this.recorder.setVideoSize(chooseOptimalSize.getWidth(), chooseOptimalSize.getHeight());
                 this.recorder.setOnInfoListener(this);
                 this.recorder.prepare();

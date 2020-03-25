@@ -10,7 +10,7 @@ import java.io.IOException;
 /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
 public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
     /* access modifiers changed from: private */
-    public static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE = new FirebaseAbt$ExperimentLite();
+    public static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE;
     private static volatile Parser<FirebaseAbt$ExperimentLite> PARSER;
     private String experimentId_ = "";
 
@@ -86,7 +86,9 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
     }
 
     static {
-        DEFAULT_INSTANCE.makeImmutable();
+        FirebaseAbt$ExperimentLite firebaseAbt$ExperimentLite = new FirebaseAbt$ExperimentLite();
+        DEFAULT_INSTANCE = firebaseAbt$ExperimentLite;
+        firebaseAbt$ExperimentLite.makeImmutable();
     }
 
     public static Parser<FirebaseAbt$ExperimentLite> parser() {

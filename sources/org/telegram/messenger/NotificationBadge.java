@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationBadge {
-    private static final List<Class<? extends Badger>> BADGERS = new LinkedList();
+    private static final List<Class<? extends Badger>> BADGERS;
     private static Badger badger;
     /* access modifiers changed from: private */
     public static ComponentName componentName;
@@ -35,7 +35,9 @@ public class NotificationBadge {
     }
 
     static {
-        BADGERS.add(AdwHomeBadger.class);
+        LinkedList linkedList = new LinkedList();
+        BADGERS = linkedList;
+        linkedList.add(AdwHomeBadger.class);
         BADGERS.add(ApexHomeBadger.class);
         BADGERS.add(NewHtcHomeBadger.class);
         BADGERS.add(NovaHomeBadger.class);

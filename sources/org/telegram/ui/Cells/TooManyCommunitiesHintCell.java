@@ -23,16 +23,19 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
 
     public TooManyCommunitiesHintCell(Context context) {
         super(context);
-        this.imageView = new ImageView(context);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
-        this.headerTextView = new TextView(context);
-        this.headerTextView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_nameMessage_threeLines"), PorterDuff.Mode.MULTIPLY));
+        TextView textView = new TextView(context);
+        this.headerTextView = textView;
+        textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.headerTextView.setTextSize(1, 20.0f);
         this.headerTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.headerTextView.setGravity(17);
         addView(this.headerTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 75.0f, 52.0f, 0.0f));
-        this.messageTextView = new TextView(context);
-        this.messageTextView.setTextColor(Theme.getColor("chats_message"));
+        TextView textView2 = new TextView(context);
+        this.messageTextView = textView2;
+        textView2.setTextColor(Theme.getColor("chats_message"));
         this.messageTextView.setTextSize(1, 14.0f);
         this.messageTextView.setGravity(17);
         addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 36.0f, 110.0f, 36.0f, 0.0f));
@@ -41,7 +44,7 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
         textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         final Paint paint = new Paint(1);
-        this.imageLayout = new FrameLayout(context, "500") {
+        AnonymousClass1 r4 = new FrameLayout(this, context, "500") {
             RectF rect = new RectF();
 
             /* access modifiers changed from: protected */
@@ -58,7 +61,8 @@ public class TooManyCommunitiesHintCell extends FrameLayout {
                 canvas.restore();
             }
         };
-        this.imageLayout.setWillNotDraw(false);
+        this.imageLayout = r4;
+        r4.setWillNotDraw(false);
         this.imageLayout.addView(this.imageView, LayoutHelper.createFrame(-2, -2, 1));
         addView(this.imageLayout, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 12.0f, 0.0f, 6.0f));
         this.headerTextView.setText(LocaleController.getString("TooManyCommunities", NUM));

@@ -13,9 +13,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateCheckBox extends View {
-    private static Paint eraser = null;
-    private static Paint eraser2 = null;
-    private static final float progressBounceDiff = 0.2f;
+    private static Paint eraser;
+    private static Paint eraser2;
     private boolean attachedToWindow;
     private Paint backgroundInnerPaint;
     private String backgroundKey = "checkboxCheck";
@@ -35,18 +34,21 @@ public class GroupCreateCheckBox extends View {
     public GroupCreateCheckBox(Context context) {
         super(context);
         if (eraser == null) {
-            eraser = new Paint(1);
-            eraser.setColor(0);
+            Paint paint = new Paint(1);
+            eraser = paint;
+            paint.setColor(0);
             eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            eraser2 = new Paint(1);
-            eraser2.setColor(0);
+            Paint paint2 = new Paint(1);
+            eraser2 = paint2;
+            paint2.setColor(0);
             eraser2.setStyle(Paint.Style.STROKE);
             eraser2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         this.backgroundPaint = new Paint(1);
         this.backgroundInnerPaint = new Paint(1);
-        this.checkPaint = new Paint(1);
-        this.checkPaint.setStyle(Paint.Style.STROKE);
+        Paint paint3 = new Paint(1);
+        this.checkPaint = paint3;
+        paint3.setStyle(Paint.Style.STROKE);
         this.innerRadDiff = AndroidUtilities.dp(2.0f);
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
@@ -77,6 +79,7 @@ public class GroupCreateCheckBox extends View {
         }
     }
 
+    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -96,8 +99,9 @@ public class GroupCreateCheckBox extends View {
         this.isCheckAnimation = z;
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
-        this.checkAnimator.setDuration(300);
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.setDuration(300);
         this.checkAnimator.start();
     }
 
@@ -124,10 +128,6 @@ public class GroupCreateCheckBox extends View {
             }
             animateToCheckedState(z);
         }
-    }
-
-    public boolean isChecked() {
-        return this.isChecked;
     }
 
     public void setInnerRadDiff(int i) {

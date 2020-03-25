@@ -78,9 +78,10 @@ public class BotHelpCell extends View {
             spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, string.length(), 33);
             Emoji.replaceEmoji(spannableStringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             try {
-                this.textLayout = new StaticLayout(spannableStringBuilder, Theme.chat_msgTextPaint, i2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                StaticLayout staticLayout = new StaticLayout(spannableStringBuilder, Theme.chat_msgTextPaint, i2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = staticLayout;
                 this.width = 0;
-                this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
+                this.height = staticLayout.getHeight() + AndroidUtilities.dp(22.0f);
                 int lineCount = this.textLayout.getLineCount();
                 for (int i4 = 0; i4 < lineCount; i4++) {
                     this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(i4) + this.textLayout.getLineLeft(i4)));
@@ -95,7 +96,7 @@ public class BotHelpCell extends View {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x010b A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0109 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:62:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
@@ -106,7 +107,7 @@ public class BotHelpCell extends View {
             android.text.StaticLayout r2 = r7.textLayout
             r3 = 0
             r4 = 1
-            if (r2 == 0) goto L_0x0102
+            if (r2 == 0) goto L_0x0100
             int r2 = r8.getAction()
             if (r2 == 0) goto L_0x002b
             android.text.style.ClickableSpan r2 = r7.pressedLink
@@ -117,131 +118,130 @@ public class BotHelpCell extends View {
         L_0x001f:
             int r0 = r8.getAction()
             r1 = 3
-            if (r0 != r1) goto L_0x0102
+            if (r0 != r1) goto L_0x0100
             r7.resetPressedLink()
-            goto L_0x0102
+            goto L_0x0100
         L_0x002b:
             int r2 = r8.getAction()
-            if (r2 != 0) goto L_0x00b1
+            if (r2 != 0) goto L_0x00af
             r7.resetPressedLink()
-            int r2 = r7.textX     // Catch:{ Exception -> 0x00a7 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a7 }
+            int r2 = r7.textX     // Catch:{ Exception -> 0x00a5 }
+            float r2 = (float) r2     // Catch:{ Exception -> 0x00a5 }
             float r0 = r0 - r2
-            int r0 = (int) r0     // Catch:{ Exception -> 0x00a7 }
-            int r2 = r7.textY     // Catch:{ Exception -> 0x00a7 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a7 }
+            int r0 = (int) r0     // Catch:{ Exception -> 0x00a5 }
+            int r2 = r7.textY     // Catch:{ Exception -> 0x00a5 }
+            float r2 = (float) r2     // Catch:{ Exception -> 0x00a5 }
             float r1 = r1 - r2
-            int r1 = (int) r1     // Catch:{ Exception -> 0x00a7 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a7 }
-            int r1 = r2.getLineForVertical(r1)     // Catch:{ Exception -> 0x00a7 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a7 }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x00a7 }
-            int r2 = r2.getOffsetForHorizontal(r1, r0)     // Catch:{ Exception -> 0x00a7 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x00a7 }
-            float r5 = r5.getLineLeft(r1)     // Catch:{ Exception -> 0x00a7 }
+            int r1 = (int) r1     // Catch:{ Exception -> 0x00a5 }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
+            int r1 = r2.getLineForVertical(r1)     // Catch:{ Exception -> 0x00a5 }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x00a5 }
+            int r2 = r2.getOffsetForHorizontal(r1, r0)     // Catch:{ Exception -> 0x00a5 }
+            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
+            float r5 = r5.getLineLeft(r1)     // Catch:{ Exception -> 0x00a5 }
             int r6 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r6 > 0) goto L_0x00a3
-            android.text.StaticLayout r6 = r7.textLayout     // Catch:{ Exception -> 0x00a7 }
-            float r1 = r6.getLineWidth(r1)     // Catch:{ Exception -> 0x00a7 }
+            if (r6 > 0) goto L_0x00a1
+            android.text.StaticLayout r6 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
+            float r1 = r6.getLineWidth(r1)     // Catch:{ Exception -> 0x00a5 }
             float r5 = r5 + r1
             int r0 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x00a3
-            android.text.StaticLayout r0 = r7.textLayout     // Catch:{ Exception -> 0x00a7 }
-            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x00a7 }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a7 }
+            if (r0 < 0) goto L_0x00a1
+            android.text.StaticLayout r0 = r7.textLayout     // Catch:{ Exception -> 0x00a5 }
+            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x00a5 }
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a5 }
             java.lang.Class<android.text.style.ClickableSpan> r1 = android.text.style.ClickableSpan.class
-            java.lang.Object[] r1 = r0.getSpans(r2, r2, r1)     // Catch:{ Exception -> 0x00a7 }
-            android.text.style.ClickableSpan[] r1 = (android.text.style.ClickableSpan[]) r1     // Catch:{ Exception -> 0x00a7 }
-            int r2 = r1.length     // Catch:{ Exception -> 0x00a7 }
-            if (r2 == 0) goto L_0x009f
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a7 }
-            r1 = r1[r3]     // Catch:{ Exception -> 0x00a7 }
-            r7.pressedLink = r1     // Catch:{ Exception -> 0x00a7 }
-            android.text.style.ClickableSpan r1 = r7.pressedLink     // Catch:{ Exception -> 0x0097 }
-            int r1 = r0.getSpanStart(r1)     // Catch:{ Exception -> 0x0097 }
-            org.telegram.ui.Components.LinkPath r2 = r7.urlPath     // Catch:{ Exception -> 0x0097 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x0097 }
+            java.lang.Object[] r1 = r0.getSpans(r2, r2, r1)     // Catch:{ Exception -> 0x00a5 }
+            android.text.style.ClickableSpan[] r1 = (android.text.style.ClickableSpan[]) r1     // Catch:{ Exception -> 0x00a5 }
+            int r2 = r1.length     // Catch:{ Exception -> 0x00a5 }
+            if (r2 == 0) goto L_0x009d
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
+            r1 = r1[r3]     // Catch:{ Exception -> 0x00a5 }
+            r7.pressedLink = r1     // Catch:{ Exception -> 0x00a5 }
+            int r1 = r0.getSpanStart(r1)     // Catch:{ Exception -> 0x0095 }
+            org.telegram.ui.Components.LinkPath r2 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
+            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
             r6 = 0
-            r2.setCurrentLayout(r5, r1, r6)     // Catch:{ Exception -> 0x0097 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x0097 }
-            android.text.style.ClickableSpan r5 = r7.pressedLink     // Catch:{ Exception -> 0x0097 }
-            int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0097 }
-            org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0097 }
-            r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0097 }
-            goto L_0x0100
-        L_0x0097:
+            r2.setCurrentLayout(r5, r1, r6)     // Catch:{ Exception -> 0x0095 }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
+            android.text.style.ClickableSpan r5 = r7.pressedLink     // Catch:{ Exception -> 0x0095 }
+            int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0095 }
+            org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
+            r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0095 }
+            goto L_0x00fe
+        L_0x0095:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x009c }
-            goto L_0x0100
-        L_0x009c:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x009a }
+            goto L_0x00fe
+        L_0x009a:
             r0 = move-exception
             r1 = 1
-            goto L_0x00a9
-        L_0x009f:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a7 }
-            goto L_0x0102
-        L_0x00a3:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a7 }
-            goto L_0x0102
-        L_0x00a7:
+            goto L_0x00a7
+        L_0x009d:
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
+            goto L_0x0100
+        L_0x00a1:
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
+            goto L_0x0100
+        L_0x00a5:
             r0 = move-exception
             r1 = 0
-        L_0x00a9:
+        L_0x00a7:
             r7.resetPressedLink()
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0 = r1
-            goto L_0x0103
-        L_0x00b1:
+            goto L_0x0101
+        L_0x00af:
             android.text.style.ClickableSpan r0 = r7.pressedLink
-            if (r0 == 0) goto L_0x0102
-            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00f9 }
-            if (r1 == 0) goto L_0x00e1
-            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00f9 }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f9 }
+            if (r0 == 0) goto L_0x0100
+            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00f7 }
+            if (r1 == 0) goto L_0x00df
+            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00f7 }
+            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f7 }
             java.lang.String r1 = "@"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f9 }
-            if (r1 != 0) goto L_0x00d7
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
+            if (r1 != 0) goto L_0x00d5
             java.lang.String r1 = "#"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f9 }
-            if (r1 != 0) goto L_0x00d7
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
+            if (r1 != 0) goto L_0x00d5
             java.lang.String r1 = "/"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f9 }
-            if (r1 == 0) goto L_0x00fd
-        L_0x00d7:
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f9 }
-            if (r1 == 0) goto L_0x00fd
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f9 }
-            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f9 }
-            goto L_0x00fd
-        L_0x00e1:
-            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f9 }
-            if (r1 == 0) goto L_0x00f5
-            android.content.Context r0 = r7.getContext()     // Catch:{ Exception -> 0x00f9 }
-            android.text.style.ClickableSpan r1 = r7.pressedLink     // Catch:{ Exception -> 0x00f9 }
-            android.text.style.URLSpan r1 = (android.text.style.URLSpan) r1     // Catch:{ Exception -> 0x00f9 }
-            java.lang.String r1 = r1.getURL()     // Catch:{ Exception -> 0x00f9 }
-            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r1)     // Catch:{ Exception -> 0x00f9 }
-            goto L_0x00fd
-        L_0x00f5:
-            r0.onClick(r7)     // Catch:{ Exception -> 0x00f9 }
-            goto L_0x00fd
-        L_0x00f9:
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
+            if (r1 == 0) goto L_0x00fb
+        L_0x00d5:
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
+            if (r1 == 0) goto L_0x00fb
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
+            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f7 }
+            goto L_0x00fb
+        L_0x00df:
+            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f7 }
+            if (r1 == 0) goto L_0x00f3
+            android.content.Context r0 = r7.getContext()     // Catch:{ Exception -> 0x00f7 }
+            android.text.style.ClickableSpan r1 = r7.pressedLink     // Catch:{ Exception -> 0x00f7 }
+            android.text.style.URLSpan r1 = (android.text.style.URLSpan) r1     // Catch:{ Exception -> 0x00f7 }
+            java.lang.String r1 = r1.getURL()     // Catch:{ Exception -> 0x00f7 }
+            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r1)     // Catch:{ Exception -> 0x00f7 }
+            goto L_0x00fb
+        L_0x00f3:
+            r0.onClick(r7)     // Catch:{ Exception -> 0x00f7 }
+            goto L_0x00fb
+        L_0x00f7:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00fd:
+        L_0x00fb:
             r7.resetPressedLink()
-        L_0x0100:
+        L_0x00fe:
             r0 = 1
-            goto L_0x0103
-        L_0x0102:
+            goto L_0x0101
+        L_0x0100:
             r0 = 0
-        L_0x0103:
-            if (r0 != 0) goto L_0x010b
+        L_0x0101:
+            if (r0 != 0) goto L_0x0109
             boolean r8 = super.onTouchEvent(r8)
-            if (r8 == 0) goto L_0x010c
-        L_0x010b:
+            if (r8 == 0) goto L_0x010a
+        L_0x0109:
             r3 = 1
-        L_0x010c:
+        L_0x010a:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.BotHelpCell.onTouchEvent(android.view.MotionEvent):boolean");

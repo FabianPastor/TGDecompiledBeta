@@ -47,8 +47,9 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     private void init() {
         List<Rule> parsePattern = parsePattern();
-        this.mRules = (Rule[]) parsePattern.toArray(new Rule[parsePattern.size()]);
-        int length = this.mRules.length;
+        Rule[] ruleArr = (Rule[]) parsePattern.toArray(new Rule[parsePattern.size()]);
+        this.mRules = ruleArr;
+        int length = ruleArr.length;
         int i = 0;
         while (true) {
             length--;
@@ -87,7 +88,6 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                 return arrayList;
             }
             char charAt = parseToken.charAt(i);
-            int i4 = 4;
             if (charAt != 'y') {
                 if (charAt != 'z') {
                     switch (charAt) {
@@ -210,10 +210,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             } else if (length2 == 2) {
                 obj2 = TwoDigitYearField.INSTANCE;
             } else {
-                if (length2 >= 4) {
-                    i4 = length2;
+                if (length2 < 4) {
+                    length2 = 4;
                 }
-                obj = selectNumberRule(1, i4);
+                obj = selectNumberRule(1, length2);
                 arrayList.add(obj);
                 i2 = i3 + 1;
                 i = 0;

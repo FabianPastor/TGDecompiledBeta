@@ -10,7 +10,6 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;
-    private boolean animationInProgress;
     private float animationTime = 300.0f;
     private int arrowRotation;
     private int color = -1;
@@ -83,40 +82,36 @@ public class BackDrawable extends Drawable {
         this.animationTime = f;
     }
 
-    public void setRotated(boolean z) {
-        this.rotated = z;
-    }
-
     public void draw(Canvas canvas) {
         float f;
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
-                this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
-                int i = this.currentAnimationTime;
+                int currentTimeMillis = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
+                this.currentAnimationTime = currentTimeMillis;
                 float f2 = this.animationTime;
-                if (((float) i) >= f2) {
+                if (((float) currentTimeMillis) >= f2) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) i) / f2) * this.finalRotation;
+                    this.currentRotation = this.interpolator.getInterpolation(((float) currentTimeMillis) / f2) * this.finalRotation;
                 } else {
-                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) i) / f2);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) currentTimeMillis) / f2);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
-        int i2 = 0;
+        int i = 0;
         int red = this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0;
         int green = this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0;
         if (this.rotated) {
-            i2 = (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation);
+            i = (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation);
         }
-        this.paint.setColor(Color.rgb(Color.red(this.color) + red, Color.green(this.color) + green, Color.blue(this.color) + i2));
+        this.paint.setColor(Color.rgb(Color.red(this.color) + red, Color.green(this.color) + green, Color.blue(this.color) + i));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        int i3 = this.arrowRotation;
-        if (i3 != 0) {
-            canvas.rotate((float) i3);
+        int i2 = this.arrowRotation;
+        if (i2 != 0) {
+            canvas.rotate((float) i2);
         }
         float f3 = this.currentRotation;
         if (!this.alwaysClose) {

@@ -40,8 +40,9 @@ public class NativeByteBuffer extends AbstractSerializedData {
             }
             nativeByteBuffer.address = j;
             nativeByteBuffer.reused = false;
-            nativeByteBuffer.buffer = native_getJavaByteBuffer(j);
-            nativeByteBuffer.buffer.limit(native_limit(j));
+            ByteBuffer native_getJavaByteBuffer = native_getJavaByteBuffer(j);
+            nativeByteBuffer.buffer = native_getJavaByteBuffer;
+            native_getJavaByteBuffer.limit(native_limit(j));
             int native_position = native_position(j);
             if (native_position <= nativeByteBuffer.buffer.limit()) {
                 nativeByteBuffer.buffer.position(native_position);
@@ -58,11 +59,12 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public NativeByteBuffer(int i) throws Exception {
         this.reused = true;
         if (i >= 0) {
-            this.address = native_getFreeBuffer(i);
-            long j = this.address;
-            if (j != 0) {
-                this.buffer = native_getJavaByteBuffer(j);
-                this.buffer.position(0);
+            long native_getFreeBuffer = native_getFreeBuffer(i);
+            this.address = native_getFreeBuffer;
+            if (native_getFreeBuffer != 0) {
+                ByteBuffer native_getJavaByteBuffer = native_getJavaByteBuffer(native_getFreeBuffer);
+                this.buffer = native_getJavaByteBuffer;
+                native_getJavaByteBuffer.position(0);
                 this.buffer.limit(i);
                 this.buffer.order(ByteOrder.LITTLE_ENDIAN);
                 return;

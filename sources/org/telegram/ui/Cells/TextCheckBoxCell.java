@@ -24,8 +24,9 @@ public class TextCheckBoxCell extends FrameLayout {
 
     public TextCheckBoxCell(Context context, boolean z) {
         super(context);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -34,8 +35,9 @@ public class TextCheckBoxCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context, z);
-        this.checkBox.setDuplicateParentStateEnabled(false);
+        CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
+        this.checkBox = checkBoxSquare;
+        checkBoxSquare.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);
         this.checkBox.setClickable(false);

@@ -4,10 +4,8 @@ import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
 public class TextPaintUrlSpan extends MetricAffectingSpan {
-    private int color;
     private String currentUrl;
     private TextPaint textPaint;
-    private int textSize;
 
     public TextPaintUrlSpan(TextPaint textPaint2, String str) {
         this.textPaint = textPaint2;

@@ -11,14 +11,16 @@ import org.aspectj.runtime.reflect.JoinPointImpl;
 public final class Factory {
     private static Object[] NO_ARGS = new Object[0];
     static /* synthetic */ Class class$java$lang$ClassNotFoundException;
-    static Hashtable prims = new Hashtable();
+    static Hashtable prims;
     int count = 0;
     String filename;
     Class lexicalClass;
     ClassLoader lookupClassLoader;
 
     static {
-        prims.put("void", Void.TYPE);
+        Hashtable hashtable = new Hashtable();
+        prims = hashtable;
+        hashtable.put("void", Void.TYPE);
         prims.put("boolean", Boolean.TYPE);
         prims.put("byte", Byte.TYPE);
         prims.put("char", Character.TYPE);

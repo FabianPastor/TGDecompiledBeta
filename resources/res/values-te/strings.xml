@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Assistant వెరిఫైయర్‌</string>
     <string name="google_assistant_verification_notification_title">Google అసిస్టెంట్ మెసేజ్‌ పంపుతోంది</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Googleతో కొనుగోలు చేయి</string>
 </resources>

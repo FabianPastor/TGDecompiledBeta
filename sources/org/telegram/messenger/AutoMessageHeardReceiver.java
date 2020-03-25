@@ -3,7 +3,8 @@ package org.telegram.messenger;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 
 public class AutoMessageHeardReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
@@ -31,7 +32,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
 
                         public final void run() {
                             AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getUserSync(this.f$1), this.f$2, this.f$3, this.f$4) {
-                                private final /* synthetic */ TLRPC.User f$1;
+                                private final /* synthetic */ TLRPC$User f$1;
                                 private final /* synthetic */ int f$2;
                                 private final /* synthetic */ long f$3;
                                 private final /* synthetic */ int f$4;
@@ -67,7 +68,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
 
                     public final void run() {
                         AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getChatSync(-this.f$1), this.f$2, this.f$3, this.f$4) {
-                            private final /* synthetic */ TLRPC.Chat f$1;
+                            private final /* synthetic */ TLRPC$Chat f$1;
                             private final /* synthetic */ int f$2;
                             private final /* synthetic */ long f$3;
                             private final /* synthetic */ int f$4;
@@ -91,15 +92,15 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
         }
     }
 
-    static /* synthetic */ void lambda$null$0(AccountInstance accountInstance, TLRPC.User user, int i, long j, int i2) {
-        TLRPC.User user2 = user;
-        accountInstance.getMessagesController().putUser(user, true);
+    static /* synthetic */ void lambda$null$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
+        TLRPC$User tLRPC$User2 = tLRPC$User;
+        accountInstance.getMessagesController().putUser(tLRPC$User, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
     }
 
-    static /* synthetic */ void lambda$null$2(AccountInstance accountInstance, TLRPC.Chat chat, int i, long j, int i2) {
-        TLRPC.Chat chat2 = chat;
-        accountInstance.getMessagesController().putChat(chat, true);
+    static /* synthetic */ void lambda$null$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
+        TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
+        accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
     }
 }

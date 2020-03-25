@@ -10,10 +10,6 @@ import org.telegram.ui.Components.TextStyleSpan;
 public class URLSpanBrowser extends URLSpan {
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanBrowser(String str) {
-        this(str, (TextStyleSpan.TextStyleRun) null);
-    }
-
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public URLSpanBrowser(String str, TextStyleSpan.TextStyleRun textStyleRun) {
         super(str != null ? str.replace(8238, ' ') : str);

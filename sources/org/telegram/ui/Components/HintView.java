@@ -22,8 +22,6 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.HintView;
 
 public class HintView extends FrameLayout {
-    public static final int TYPE_POLL_VOTE = 5;
-    public static final int TYPE_SEARCH_AS_LIST = 3;
     /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
     private ImageView arrowImageView;
@@ -56,8 +54,9 @@ public class HintView extends FrameLayout {
         this.showingDuration = 2000;
         this.currentType = i2;
         this.isTopArrow = z2;
-        this.textView = new CorrectlyMeasuringTextView(context2);
-        this.textView.setTextColor(Theme.getColor("chat_gifSaveHintText"));
+        CorrectlyMeasuringTextView correctlyMeasuringTextView = new CorrectlyMeasuringTextView(context2);
+        this.textView = correctlyMeasuringTextView;
+        correctlyMeasuringTextView.setTextColor(Theme.getColor("chat_gifSaveHintText"));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setMaxLines(2);
         this.textView.setMaxWidth(AndroidUtilities.dp(i2 == 4 ? 280.0f : 250.0f));
@@ -81,14 +80,16 @@ public class HintView extends FrameLayout {
         }
         if (i2 == 0) {
             this.textView.setText(LocaleController.getString("AutoplayVideoInfo", NUM));
-            this.imageView = new ImageView(context2);
-            this.imageView.setImageResource(NUM);
+            ImageView imageView2 = new ImageView(context2);
+            this.imageView = imageView2;
+            imageView2.setImageResource(NUM);
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_gifSaveHintText"), PorterDuff.Mode.MULTIPLY));
             addView(this.imageView, LayoutHelper.createFrame(38, 34.0f, 51, 7.0f, 7.0f, 0.0f, 0.0f));
         }
-        this.arrowImageView = new ImageView(context2);
-        this.arrowImageView.setImageResource(z2 ? NUM : NUM);
+        ImageView imageView3 = new ImageView(context2);
+        this.arrowImageView = imageView3;
+        imageView3.setImageResource(z2 ? NUM : NUM);
         this.arrowImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_gifSaveHintBackground"), PorterDuff.Mode.MULTIPLY));
         addView(this.arrowImageView, LayoutHelper.createFrame(14, 6.0f, (z2 ? 48 : 80) | 3, 0.0f, 0.0f, 0.0f, 0.0f));
     }
@@ -220,16 +221,20 @@ public class HintView extends FrameLayout {
         setTag(1);
         setVisibility(0);
         if (z) {
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
+            animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = HintView.this.animatorSet = null;
-                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new Runnable() {
+                    HintView hintView = HintView.this;
+                    $$Lambda$HintView$1$OoYArBkq6553J0682j2MQqGlbY r0 = new Runnable() {
                         public final void run() {
                             HintView.AnonymousClass1.this.lambda$onAnimationEnd$0$HintView$1();
                         }
-                    }, HintView.this.currentType == 0 ? 10000 : 2000);
+                    };
+                    Runnable unused2 = hintView.hideRunnable = r0;
+                    AndroidUtilities.runOnUIThread(r0, HintView.this.currentType == 0 ? 10000 : 2000);
                 }
 
                 public /* synthetic */ void lambda$onAnimationEnd$0$HintView$1() {
@@ -324,16 +329,20 @@ public class HintView extends FrameLayout {
         setTag(1);
         setVisibility(0);
         if (z) {
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
+            animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f, 1.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = HintView.this.animatorSet = null;
-                    AndroidUtilities.runOnUIThread(HintView.this.hideRunnable = new Runnable() {
+                    HintView hintView = HintView.this;
+                    $$Lambda$HintView$2$jvm1hL0MTRZE1LibhgmMBpjU0UA r0 = new Runnable() {
                         public final void run() {
                             HintView.AnonymousClass2.this.lambda$onAnimationEnd$0$HintView$2();
                         }
-                    }, HintView.this.showingDuration);
+                    };
+                    Runnable unused2 = hintView.hideRunnable = r0;
+                    AndroidUtilities.runOnUIThread(r0, HintView.this.showingDuration);
                 }
 
                 public /* synthetic */ void lambda$onAnimationEnd$0$HintView$2() {
@@ -361,8 +370,9 @@ public class HintView extends FrameLayout {
                 animatorSet2.cancel();
                 this.animatorSet = null;
             }
-            this.animatorSet = new AnimatorSet();
-            this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f})});
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
+            animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.ALPHA, new float[]{0.0f})});
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     HintView.this.setVisibility(4);

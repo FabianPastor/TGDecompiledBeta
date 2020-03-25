@@ -30,23 +30,27 @@ public class InviteUserCell extends FrameLayout {
     public InviteUserCell(Context context, boolean z) {
         super(context);
         Context context2 = context;
-        this.avatarImageView = new BackupImageView(context2);
-        this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
+        BackupImageView backupImageView = new BackupImageView(context2);
+        this.avatarImageView = backupImageView;
+        backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         int i = 5;
         addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
-        this.nameTextView = new SimpleTextView(context2);
-        this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        SimpleTextView simpleTextView = new SimpleTextView(context2);
+        this.nameTextView = simpleTextView;
+        simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-        this.statusTextView = new SimpleTextView(context2);
-        this.statusTextView.setTextSize(16);
+        SimpleTextView simpleTextView2 = new SimpleTextView(context2);
+        this.statusTextView = simpleTextView2;
+        simpleTextView2.setTextSize(16);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (z) {
-            this.checkBox = new CheckBox2(context2, 21);
-            this.checkBox.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
+            CheckBox2 checkBox2 = new CheckBox2(context2, 21);
+            this.checkBox = checkBox2;
+            checkBox2.setColor((String) null, "windowBackgroundWhite", "checkboxCheck");
             this.checkBox.setDrawUnchecked(false);
             this.checkBox.setDrawBackgroundAsArc(3);
             addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 0.0f : 40.0f, 40.0f, LocaleController.isRTL ? 39.0f : 0.0f, 0.0f));

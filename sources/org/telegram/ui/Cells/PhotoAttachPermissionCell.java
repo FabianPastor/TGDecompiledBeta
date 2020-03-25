@@ -20,16 +20,19 @@ public class PhotoAttachPermissionCell extends FrameLayout {
 
     public PhotoAttachPermissionCell(Context context) {
         super(context);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView3 = new ImageView(context);
+        this.imageView = imageView3;
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionImage"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
-        this.imageView2 = new ImageView(context);
-        this.imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView4 = new ImageView(context);
+        this.imageView2 = imageView4;
+        imageView4.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_attachPermissionMark"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView2, LayoutHelper.createFrame(44, 44.0f, 17, 5.0f, 0.0f, 0.0f, 27.0f));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("chat_attachPermissionText"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("chat_attachPermissionText"));
         this.textView.setTextSize(1, 12.0f);
         this.textView.setGravity(17);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 5.0f, 13.0f, 5.0f, 0.0f));

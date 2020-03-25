@@ -39,9 +39,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 
 public class ColorPicker extends FrameLayout {
-    private static final int item_delete = 3;
-    private static final int item_edit = 1;
-    private static final int item_share = 2;
     private Drawable circleDrawable;
     private Paint circlePaint;
     private boolean circlePressed;
@@ -82,32 +79,9 @@ public class ColorPicker extends FrameLayout {
     private Paint valueSliderPaint;
 
     public interface ColorPickerDelegate {
-
-        /* renamed from: org.telegram.ui.Components.ColorPicker$ColorPickerDelegate$-CC  reason: invalid class name */
-        public final /* synthetic */ class CC {
-            public static void $default$deleteTheme(ColorPickerDelegate colorPickerDelegate) {
-            }
-
-            public static int $default$getDefaultColor(ColorPickerDelegate colorPickerDelegate, int i) {
-                return 0;
-            }
-
-            public static boolean $default$hasChanges(ColorPickerDelegate colorPickerDelegate) {
-                return true;
-            }
-
-            public static void $default$openThemeCreate(ColorPickerDelegate colorPickerDelegate, boolean z) {
-            }
-
-            public static void $default$rotateColors(ColorPickerDelegate colorPickerDelegate) {
-            }
-        }
-
         void deleteTheme();
 
         int getDefaultColor(int i);
-
-        boolean hasChanges();
 
         void openThemeCreate(boolean z);
 
@@ -135,8 +109,9 @@ public class ColorPicker extends FrameLayout {
         this.colorWheelPaint = new Paint(5);
         this.valueSliderPaint = new Paint(5);
         this.editTextCirclePaint = new Paint(1);
-        this.linePaint = new Paint();
-        this.linePaint.setColor(NUM);
+        Paint paint = new Paint();
+        this.linePaint = paint;
+        paint.setColor(NUM);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         addView(linearLayout, LayoutHelper.createFrame(-1, 54.0f, 51, 22.0f, 0.0f, 22.0f, 0.0f));
@@ -270,8 +245,9 @@ public class ColorPicker extends FrameLayout {
             }
             i++;
         }
-        this.exchangeButton = new ImageView(getContext());
-        this.exchangeButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
+        ImageView imageView = new ImageView(getContext());
+        this.exchangeButton = imageView;
+        imageView.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
         this.exchangeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.exchangeButton.setScaleType(ImageView.ScaleType.CENTER);
         this.exchangeButton.setVisibility(8);
@@ -281,8 +257,9 @@ public class ColorPicker extends FrameLayout {
             }
         });
         addView(this.exchangeButton, LayoutHelper.createFrame(42, 42.0f, 51, 126.0f, 0.0f, 0.0f, 0.0f));
-        this.clearButton = new ImageView(getContext());
-        this.clearButton.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
+        ImageView imageView2 = new ImageView(getContext());
+        this.clearButton = imageView2;
+        imageView2.setBackground(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 1));
         this.clearButton.setImageDrawable(new CloseProgressDrawable2());
         this.clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.clearButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -294,8 +271,9 @@ public class ColorPicker extends FrameLayout {
         });
         this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
         addView(this.clearButton, LayoutHelper.createFrame(42, 42.0f, 53, 0.0f, 0.0f, 9.0f, 0.0f));
-        this.resetButton = new TextView(context2);
-        this.resetButton.setTextSize(1, 15.0f);
+        TextView textView = new TextView(context2);
+        this.resetButton = textView;
+        textView.setTextSize(1, 15.0f);
         this.resetButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.resetButton.setGravity(17);
         this.resetButton.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
@@ -307,13 +285,14 @@ public class ColorPicker extends FrameLayout {
             }
         });
         if (z) {
-            this.menuItem = new ActionBarMenuItem(context2, (ActionBarMenu) null, 0, Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.menuItem.setLongClickEnabled(false);
+            ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context2, (ActionBarMenu) null, 0, Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.menuItem = actionBarMenuItem;
+            actionBarMenuItem.setLongClickEnabled(false);
             this.menuItem.setIcon(NUM);
             this.menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
-            this.menuItem.addSubItem(1, NUM, (CharSequence) LocaleController.getString("OpenInEditor", NUM));
-            this.menuItem.addSubItem(2, NUM, (CharSequence) LocaleController.getString("ShareTheme", NUM));
-            this.menuItem.addSubItem(3, NUM, (CharSequence) LocaleController.getString("DeleteTheme", NUM));
+            this.menuItem.addSubItem(1, NUM, LocaleController.getString("OpenInEditor", NUM));
+            this.menuItem.addSubItem(2, NUM, LocaleController.getString("ShareTheme", NUM));
+            this.menuItem.addSubItem(3, NUM, LocaleController.getString("DeleteTheme", NUM));
             this.menuItem.setMenuYOffset(-AndroidUtilities.dp(80.0f));
             this.menuItem.setSubMenuOpenSide(2);
             this.menuItem.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
@@ -644,7 +623,7 @@ public class ColorPicker extends FrameLayout {
             float r4 = (float) r9
             r0.set(r2, r3, r1, r4)
             android.graphics.LinearGradient r0 = r6.colorGradient
-            if (r0 != 0) goto L_0x0158
+            if (r0 != 0) goto L_0x0156
             float[] r0 = r6.hsvTemp
             float r1 = r6.minHsvBrightness
             r0[r12] = r1
@@ -671,9 +650,8 @@ public class ColorPicker extends FrameLayout {
             r14.<init>(r15, r16, r17, r18, r19, r20, r21)
             r6.colorGradient = r2
             android.graphics.Paint r0 = r6.valueSliderPaint
-            android.graphics.LinearGradient r1 = r6.colorGradient
-            r0.setShader(r1)
-        L_0x0158:
+            r0.setShader(r2)
+        L_0x0156:
             android.graphics.RectF r0 = r6.sliderRect
             r1 = 1082130432(0x40800000, float:4.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -685,17 +663,17 @@ public class ColorPicker extends FrameLayout {
             float r0 = r6.minHsvBrightness
             float r1 = r6.maxHsvBrightness
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 != 0) goto L_0x0176
+            if (r0 != 0) goto L_0x0174
             r0 = 1056964608(0x3var_, float:0.5)
-            goto L_0x0181
-        L_0x0176:
+            goto L_0x017f
+        L_0x0174:
             float r0 = r22.getBrightness()
             float r1 = r6.minHsvBrightness
             float r0 = r0 - r1
             float r2 = r6.maxHsvBrightness
             float r2 = r2 - r1
             float r0 = r0 / r2
-        L_0x0181:
+        L_0x017f:
             android.graphics.RectF r1 = r6.sliderRect
             float r2 = r1.left
             float r0 = r13 - r0
@@ -712,10 +690,10 @@ public class ColorPicker extends FrameLayout {
             r1 = r23
             r0.drawPointerArrow(r1, r2, r3, r4, r5)
             boolean r0 = r6.circlePressed
-            if (r0 != 0) goto L_0x01ca
+            if (r0 != 0) goto L_0x01c6
             float r0 = r6.pressedMoveProgress
             int r0 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01ca
+            if (r0 >= 0) goto L_0x01c6
             long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
@@ -726,13 +704,12 @@ public class ColorPicker extends FrameLayout {
             float r1 = r1 / r2
             float r0 = r0 + r1
             r6.pressedMoveProgress = r0
-            float r0 = r6.pressedMoveProgress
             int r0 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
-            if (r0 <= 0) goto L_0x01c7
+            if (r0 <= 0) goto L_0x01c3
             r6.pressedMoveProgress = r13
-        L_0x01c7:
+        L_0x01c3:
             r22.invalidate()
-        L_0x01ca:
+        L_0x01c6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ColorPicker.onDraw(android.graphics.Canvas):void");
@@ -763,7 +740,7 @@ public class ColorPicker extends FrameLayout {
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         if (this.colorWheelWidth != i) {
             this.colorWheelWidth = i;
-            this.colorWheelBitmap = createColorWheelBitmap(this.colorWheelWidth, AndroidUtilities.dp(180.0f));
+            this.colorWheelBitmap = createColorWheelBitmap(i, AndroidUtilities.dp(180.0f));
             this.colorGradient = null;
         }
     }
@@ -773,10 +750,9 @@ public class ColorPicker extends FrameLayout {
         int i4 = i2;
         Bitmap createBitmap = Bitmap.createBitmap(i3, i4, Bitmap.Config.ARGB_8888);
         float f = (float) i3;
-        float f2 = (float) (i4 / 3);
-        float f3 = (float) i4;
-        this.colorWheelPaint.setShader(new ComposeShader(new LinearGradient(0.0f, f2, 0.0f, f3, new int[]{-1, 0}, (float[]) null, Shader.TileMode.CLAMP), new LinearGradient(0.0f, 0.0f, f, 0.0f, new int[]{-65536, -256, -16711936, -16711681, -16776961, -65281, -65536}, (float[]) null, Shader.TileMode.CLAMP), PorterDuff.Mode.MULTIPLY));
-        new Canvas(createBitmap).drawRect(0.0f, 0.0f, f, f3, this.colorWheelPaint);
+        float f2 = (float) i4;
+        this.colorWheelPaint.setShader(new ComposeShader(new LinearGradient(0.0f, (float) (i4 / 3), 0.0f, f2, new int[]{-1, 0}, (float[]) null, Shader.TileMode.CLAMP), new LinearGradient(0.0f, 0.0f, f, 0.0f, new int[]{-65536, -256, -16711936, -16711681, -16776961, -65281, -65536}, (float[]) null, Shader.TileMode.CLAMP), PorterDuff.Mode.MULTIPLY));
+        new Canvas(createBitmap).drawRect(0.0f, 0.0f, f, f2, this.colorWheelPaint);
         return createBitmap;
     }
 
@@ -786,7 +762,7 @@ public class ColorPicker extends FrameLayout {
     /* JADX WARNING: Code restructure failed: missing block: B:3:0x000b, code lost:
         if (r0 != 2) goto L_0x001b;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0150  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0151  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r12) {
         /*
@@ -897,15 +873,15 @@ public class ColorPicker extends FrameLayout {
             boolean r4 = r11.colorPressed
             if (r4 != 0) goto L_0x010c
             boolean r4 = r11.circlePressed
-            if (r4 != 0) goto L_0x0140
+            if (r4 != 0) goto L_0x0141
             float r4 = (float) r0
             android.graphics.RectF r6 = r11.sliderRect
             float r8 = r6.left
             int r8 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r8 < 0) goto L_0x0140
+            if (r8 < 0) goto L_0x0141
             float r8 = r6.right
             int r4 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r4 > 0) goto L_0x0140
+            if (r4 > 0) goto L_0x0141
             float r12 = (float) r12
             float r4 = r6.top
             r6 = 1088421888(0x40e00000, float:7.0)
@@ -913,14 +889,14 @@ public class ColorPicker extends FrameLayout {
             float r8 = (float) r8
             float r4 = r4 - r8
             int r4 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x0140
+            if (r4 < 0) goto L_0x0141
             android.graphics.RectF r4 = r11.sliderRect
             float r4 = r4.bottom
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r6 = (float) r6
             float r4 = r4 + r6
             int r12 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r12 > 0) goto L_0x0140
+            if (r12 > 0) goto L_0x0141
         L_0x010c:
             float r12 = (float) r0
             android.graphics.RectF r0 = r11.sliderRect
@@ -930,37 +906,39 @@ public class ColorPicker extends FrameLayout {
             float r12 = r12 / r0
             float r12 = r7 - r12
             int r0 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1))
-            if (r0 >= 0) goto L_0x011f
-            r12 = 0
-            goto L_0x0125
-        L_0x011f:
+            if (r0 >= 0) goto L_0x011e
+            goto L_0x0126
+        L_0x011e:
             int r0 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
             if (r0 <= 0) goto L_0x0125
-            r12 = 1065353216(0x3var_, float:1.0)
+            r5 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0126
         L_0x0125:
-            float[] r0 = r11.colorHSV
-            float r4 = r11.minHsvBrightness
-            float r7 = r7 - r12
-            float r4 = r4 * r7
-            float r5 = r11.maxHsvBrightness
-            float r5 = r5 * r12
-            float r4 = r4 + r5
-            r0[r1] = r4
+            r5 = r12
+        L_0x0126:
+            float[] r12 = r11.colorHSV
+            float r0 = r11.minHsvBrightness
+            float r7 = r7 - r5
+            float r0 = r0 * r7
+            float r4 = r11.maxHsvBrightness
+            float r4 = r4 * r5
+            float r0 = r0 + r4
+            r12[r1] = r0
             boolean r12 = r11.colorPressed
-            if (r12 != 0) goto L_0x013e
+            if (r12 != 0) goto L_0x013f
             android.view.ViewParent r12 = r11.getParent()
             r12.requestDisallowInterceptTouchEvent(r3)
-        L_0x013e:
+        L_0x013f:
             r11.colorPressed = r3
-        L_0x0140:
+        L_0x0141:
             boolean r12 = r11.colorPressed
-            if (r12 != 0) goto L_0x0148
+            if (r12 != 0) goto L_0x0149
             boolean r12 = r11.circlePressed
-            if (r12 == 0) goto L_0x01a0
-        L_0x0148:
+            if (r12 == 0) goto L_0x01a1
+        L_0x0149:
             int r12 = r11.getColor()
             boolean r0 = r11.ignoreTextChange
-            if (r0 != 0) goto L_0x0196
+            if (r0 != 0) goto L_0x0197
             int r0 = android.graphics.Color.red(r12)
             int r4 = android.graphics.Color.green(r12)
             int r5 = android.graphics.Color.blue(r12)
@@ -981,20 +959,20 @@ public class ColorPicker extends FrameLayout {
             java.lang.String r0 = r0.toUpperCase()
             org.telegram.ui.Components.EditTextBoldCursor[] r1 = r11.colorEditText
             int r4 = r11.selectedEditText
-            if (r4 != 0) goto L_0x0187
+            if (r4 != 0) goto L_0x0188
             r6 = 1
-        L_0x0187:
+        L_0x0188:
             r1 = r1[r6]
             android.text.Editable r1 = r1.getText()
             int r4 = r1.length()
             r1.replace(r2, r4, r0)
             r11.ignoreTextChange = r2
-        L_0x0196:
+        L_0x0197:
             org.telegram.ui.Components.ColorPicker$ColorPickerDelegate r0 = r11.delegate
             int r1 = r11.selectedEditText
             r0.setColor(r12, r1, r2)
             r11.invalidate()
-        L_0x01a0:
+        L_0x01a1:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ColorPicker.onTouchEvent(android.view.MotionEvent):boolean");
@@ -1060,16 +1038,17 @@ public class ColorPicker extends FrameLayout {
     }
 
     public void setType(int i, boolean z, boolean z2, boolean z3, boolean z4, int i2, boolean z5) {
-        float f;
         String str;
         int i3;
         int i4 = i;
         final boolean z6 = z;
         final boolean z7 = z2;
         final boolean z8 = z3;
+        boolean z9 = z4;
         this.currentResetType = i4;
-        this.myMessagesColor = z4;
-        if (this.myMessagesColor) {
+        this.myMessagesColor = z9;
+        float f = 0.0f;
+        if (z9) {
             this.exchangeButton.setImageResource(NUM);
             this.exchangeButton.setRotation(0.0f);
         } else {
@@ -1077,7 +1056,7 @@ public class ColorPicker extends FrameLayout {
             this.exchangeButton.setRotation((float) (i2 - 45));
         }
         ActionBarMenuItem actionBarMenuItem = this.menuItem;
-        int i5 = 0;
+        int i5 = 8;
         if (actionBarMenuItem != null) {
             if (i4 == 1) {
                 actionBarMenuItem.setVisibility(0);
@@ -1092,7 +1071,7 @@ public class ColorPicker extends FrameLayout {
         }
         int i7 = 2;
         while (true) {
-            f = 1.0f;
+            float f2 = 1.0f;
             if (i7 >= 4) {
                 break;
             }
@@ -1104,17 +1083,17 @@ public class ColorPicker extends FrameLayout {
                 Property property = View.ALPHA;
                 float[] fArr = new float[1];
                 if (!z7 || !z8) {
-                    f = 0.0f;
+                    f2 = 0.0f;
                 }
-                fArr[0] = f;
+                fArr[0] = f2;
                 arrayList.add(ObjectAnimator.ofFloat(editTextBoldCursor, property, fArr));
             } else {
                 this.colorEditText[i7].setVisibility(z7 ? 0 : 8);
                 EditTextBoldCursor editTextBoldCursor2 = this.colorEditText[i7];
                 if (!z7 || !z8) {
-                    f = 0.0f;
+                    f2 = 0.0f;
                 }
-                editTextBoldCursor2.setAlpha(f);
+                editTextBoldCursor2.setAlpha(f2);
             }
             this.colorEditText[i7].setTag(z7 ? 1 : null);
             i7++;
@@ -1166,13 +1145,13 @@ public class ColorPicker extends FrameLayout {
         ((FrameLayout.LayoutParams) this.resetButton.getLayoutParams()).rightMargin = AndroidUtilities.dp(i4 == 1 ? 14.0f : 61.0f);
         if (!z5) {
             TextView textView3 = this.resetButton;
-            if (!z6 || z8) {
-                f = 0.0f;
+            if (z6 && !z8) {
+                f = 1.0f;
             }
             textView3.setAlpha(f);
             TextView textView4 = this.resetButton;
-            if (!z6 || z8) {
-                i5 = 8;
+            if (z6 && !z8) {
+                i5 = 0;
             }
             textView4.setVisibility(i5);
         } else if (!z6 || (this.resetButton.getVisibility() == 0 && z8)) {
@@ -1230,8 +1209,9 @@ public class ColorPicker extends FrameLayout {
         int HSVToColor = Color.HSVToColor(fArr);
         this.colorHSV[2] = f3;
         float computePerceivedBrightness = AndroidUtilities.computePerceivedBrightness(HSVToColor);
-        this.minHsvBrightness = Math.max(0.0f, Math.min(f / computePerceivedBrightness, 1.0f));
-        this.maxHsvBrightness = Math.max(this.minHsvBrightness, Math.min(f2 / computePerceivedBrightness, 1.0f));
+        float max = Math.max(0.0f, Math.min(f / computePerceivedBrightness, 1.0f));
+        this.minHsvBrightness = max;
+        this.maxHsvBrightness = Math.max(max, Math.min(f2 / computePerceivedBrightness, 1.0f));
     }
 
     public void setMinBrightness(float f) {
@@ -1246,37 +1226,29 @@ public class ColorPicker extends FrameLayout {
 
     public void provideThemeDescriptions(List<ThemeDescription> list) {
         List<ThemeDescription> list2 = list;
-        int i = 0;
-        while (true) {
-            EditTextBoldCursor[] editTextBoldCursorArr = this.colorEditText;
-            if (i >= editTextBoldCursorArr.length) {
-                break;
-            }
-            list2.add(new ThemeDescription(editTextBoldCursorArr[i], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        for (int i = 0; i < this.colorEditText.length; i++) {
+            list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
             list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
             list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_HINTTEXTCOLOR | ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
             list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
             list2.add(new ThemeDescription(this.colorEditText[i], ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-            i++;
         }
         list2.add(new ThemeDescription(this.clearButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         list2.add(new ThemeDescription(this.clearButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector"));
         list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector"));
-        ActionBarMenuItem actionBarMenuItem = this.menuItem;
-        if (actionBarMenuItem != null) {
-            $$Lambda$ColorPicker$eK23zZ0tDQoHxAcV4d7wlQCco r2 = new ThemeDescription.ThemeDescriptionDelegate() {
+        if (this.menuItem != null) {
+            $$Lambda$ColorPicker$eK23zZ0tDQoHxAcV4d7wlQCco r9 = new ThemeDescription.ThemeDescriptionDelegate() {
                 public final void didSetColor() {
                     ColorPicker.this.lambda$provideThemeDescriptions$7$ColorPicker();
                 }
             };
-            list2.add(new ThemeDescription(actionBarMenuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r2, "windowBackgroundWhiteBlackText"));
-            $$Lambda$ColorPicker$eK23zZ0tDQoHxAcV4d7wlQCco r11 = r2;
-            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r11, "dialogButtonSelector"));
-            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r11, "actionBarDefaultSubmenuItem"));
-            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r11, "actionBarDefaultSubmenuItemIcon"));
-            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r11, "actionBarDefaultSubmenuBackground"));
+            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "windowBackgroundWhiteBlackText"));
+            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "dialogButtonSelector"));
+            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "actionBarDefaultSubmenuItem"));
+            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "actionBarDefaultSubmenuItemIcon"));
+            list2.add(new ThemeDescription(this.menuItem, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r9, "actionBarDefaultSubmenuBackground"));
         }
     }
 

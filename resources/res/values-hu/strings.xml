@@ -22,5 +22,4 @@
     <string name="google_assistant_verification_channel_name">Segéd-hitelesítő</string>
     <string name="google_assistant_verification_notification_title">A Google Segéd üzenetet küld</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="wallet_buy_button_place_holder">Vásárlás a Google-lal</string>
 </resources>

@@ -5,10 +5,13 @@ import java.util.Iterator;
 
 public class CallingCodeInfo {
     public String callingCode = "";
-    public ArrayList<String> countries = new ArrayList<>();
     public ArrayList<String> intlPrefixes = new ArrayList<>();
     public ArrayList<RuleSet> ruleSets = new ArrayList<>();
     public ArrayList<String> trunkPrefixes = new ArrayList<>();
+
+    public CallingCodeInfo() {
+        new ArrayList();
+    }
 
     /* access modifiers changed from: package-private */
     public String matchingAccessCode(String str) {
@@ -71,37 +74,5 @@ public class CallingCodeInfo {
             return str;
         }
         return String.format("%s %s", new Object[]{str3, str2});
-    }
-
-    /* access modifiers changed from: package-private */
-    public boolean isValidPhoneNumber(String str) {
-        String str2;
-        String str3 = null;
-        if (str.startsWith(this.callingCode)) {
-            str2 = this.callingCode;
-            str = str.substring(str2.length());
-        } else {
-            String matchingTrunkCode = matchingTrunkCode(str);
-            if (matchingTrunkCode != null) {
-                str = str.substring(matchingTrunkCode.length());
-                str3 = matchingTrunkCode;
-                str2 = null;
-            } else {
-                str2 = null;
-            }
-        }
-        Iterator<RuleSet> it = this.ruleSets.iterator();
-        while (it.hasNext()) {
-            if (it.next().isValid(str, str2, str3, true)) {
-                return true;
-            }
-        }
-        Iterator<RuleSet> it2 = this.ruleSets.iterator();
-        while (it2.hasNext()) {
-            if (it2.next().isValid(str, str2, str3, false)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

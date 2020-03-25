@@ -20,9 +20,10 @@ public class PickerBottomLayoutViewer extends FrameLayout {
     public PickerBottomLayoutViewer(Context context, boolean z) {
         super(context);
         this.isDarkTheme = z;
-        setBackgroundColor(this.isDarkTheme ? -15066598 : -1);
-        this.cancelButton = new TextView(context);
-        this.cancelButton.setTextSize(1, 14.0f);
+        setBackgroundColor(z ? -15066598 : -1);
+        TextView textView = new TextView(context);
+        this.cancelButton = textView;
+        textView.setTextSize(1, 14.0f);
         int i = -15095832;
         this.cancelButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.cancelButton.setGravity(17);
@@ -32,8 +33,9 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-        this.doneButton = new TextView(context);
-        this.doneButton.setTextSize(1, 14.0f);
+        TextView textView2 = new TextView(context);
+        this.doneButton = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.doneButton.setTextColor(this.isDarkTheme ? -1 : i);
         this.doneButton.setGravity(17);
         this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(!this.isDarkTheme ? NUM : i2, 0));
@@ -41,8 +43,9 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.doneButton.setText(LocaleController.getString("Send", NUM).toUpperCase());
         this.doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        this.doneButtonBadgeTextView = new TextView(context);
-        this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        TextView textView3 = new TextView(context);
+        this.doneButtonBadgeTextView = textView3;
+        textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
         this.doneButtonBadgeTextView.setTextColor(-1);
         this.doneButtonBadgeTextView.setGravity(17);

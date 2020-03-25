@@ -26,16 +26,18 @@ public class PhotoEditRadioCell extends FrameLayout {
 
     public PhotoEditRadioCell(Context context) {
         super(context);
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setGravity(5);
+        TextView textView = new TextView(context);
+        this.nameTextView = textView;
+        textView.setGravity(5);
         this.nameTextView.setTextColor(-1);
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(80, -2.0f, 19, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.tintButtonsContainer = new LinearLayout(context);
-        this.tintButtonsContainer.setOrientation(0);
+        LinearLayout linearLayout = new LinearLayout(context);
+        this.tintButtonsContainer = linearLayout;
+        linearLayout.setOrientation(0);
         for (int i = 0; i < this.tintShadowColors.length; i++) {
             RadioButton radioButton = new RadioButton(context);
             radioButton.setSize(AndroidUtilities.dp(20.0f));

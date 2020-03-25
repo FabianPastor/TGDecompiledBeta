@@ -21,7 +21,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
-import android.os.StatFs;
 import android.text.InputFilter;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -56,7 +55,8 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$InputDocument;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -81,9 +81,6 @@ import org.telegram.ui.DocumentSelectActivity;
 import org.telegram.ui.PhotoPickerActivity;
 
 public class DocumentSelectActivity extends BaseFragment {
-    private static final int search_button = 0;
-    private static final long sizeLimit = NUM;
-    private static final int sort_button = 1;
     private boolean allowMusic;
     /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
@@ -210,7 +207,7 @@ public class DocumentSelectActivity extends BaseFragment {
         public String thumb;
         public String title;
 
-        private ListItem() {
+        private ListItem(DocumentSelectActivity documentSelectActivity) {
             this.subtitle = "";
             this.ext = "";
         }
@@ -222,7 +219,7 @@ public class DocumentSelectActivity extends BaseFragment {
         int scrollOffset;
         String title;
 
-        private HistoryEntry() {
+        private HistoryEntry(DocumentSelectActivity documentSelectActivity) {
         }
     }
 
@@ -254,7 +251,6 @@ public class DocumentSelectActivity extends BaseFragment {
     public View createView(Context context) {
         Context context2 = context;
         this.searching = false;
-        this.searchWas = false;
         if (!this.receiverRegistered) {
             this.receiverRegistered = true;
             IntentFilter intentFilter = new IntentFilter();
@@ -294,7 +290,9 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         });
         ActionBarMenu createMenu = this.actionBar.createMenu();
-        this.searchItem = createMenu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
+        addItem.setIsSearchField(true);
+        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = DocumentSelectActivity.this.searching = true;
                 DocumentSelectActivity.this.sortItem.setVisibility(8);
@@ -315,18 +313,19 @@ public class DocumentSelectActivity extends BaseFragment {
                 DocumentSelectActivity.this.searchAdapter.search(editText.getText().toString());
             }
         });
-        this.searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem = addItem;
+        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
         searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
-        this.sortItem = createMenu.addItem(1, this.sortByName ? NUM : NUM);
-        this.sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", NUM));
+        ActionBarMenuItem addItem2 = createMenu.addItem(1, this.sortByName ? NUM : NUM);
+        this.sortItem = addItem2;
+        addItem2.setContentDescription(LocaleController.getString("AccDescrContactSorting", NUM));
         this.selectedFiles.clear();
-        this.sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
+        AnonymousClass4 r3 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
             private boolean ignoreLayout;
-            private int lastItemSize;
             private int lastNotifyWidth;
 
             /* access modifiers changed from: protected */
@@ -538,42 +537,48 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             }
         };
-        this.sizeNotifierFrameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
+        this.sizeNotifierFrameLayout = r3;
+        r3.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.fragmentView = this.sizeNotifierFrameLayout;
-        this.emptyView = new LinearLayout(context2);
-        this.emptyView.setOrientation(1);
+        LinearLayout linearLayout = new LinearLayout(context2);
+        this.emptyView = linearLayout;
+        linearLayout.setOrientation(1);
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         this.sizeNotifierFrameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setOnTouchListener($$Lambda$DocumentSelectActivity$wOAW0__TUXtkjQZ0vg8d4FmxpE.INSTANCE);
-        this.emptyImageView = new ImageView(context2);
-        this.emptyImageView.setImageResource(NUM);
+        ImageView imageView = new ImageView(context2);
+        this.emptyImageView = imageView;
+        imageView.setImageResource(NUM);
         this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
         this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
-        this.emptyTitleTextView = new TextView(context2);
-        this.emptyTitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
+        TextView textView = new TextView(context2);
+        this.emptyTitleTextView = textView;
+        textView.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptyTitleTextView.setGravity(17);
         this.emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.emptyTitleTextView.setTextSize(1, 17.0f);
         this.emptyTitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
         this.emptyView.addView(this.emptyTitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 11, 0, 0));
-        this.emptySubtitleTextView = new TextView(context2);
-        this.emptySubtitleTextView.setTextColor(Theme.getColor("dialogEmptyText"));
+        TextView textView2 = new TextView(context2);
+        this.emptySubtitleTextView = textView2;
+        textView2.setTextColor(Theme.getColor("dialogEmptyText"));
         this.emptySubtitleTextView.setGravity(17);
         this.emptySubtitleTextView.setTextSize(1, 15.0f);
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
-        this.listView = new RecyclerListView(context2);
-        this.listView.setVerticalScrollBarEnabled(false);
-        RecyclerListView recyclerListView = this.listView;
+        RecyclerListView recyclerListView = new RecyclerListView(context2);
+        this.listView = recyclerListView;
+        recyclerListView.setVerticalScrollBarEnabled(false);
+        RecyclerListView recyclerListView2 = this.listView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
         this.layoutManager = linearLayoutManager;
-        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView2.setLayoutManager(linearLayoutManager);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setClipToPadding(false);
-        RecyclerListView recyclerListView2 = this.listView;
+        RecyclerListView recyclerListView3 = this.listView;
         ListAdapter listAdapter2 = new ListAdapter(context2);
         this.listAdapter = listAdapter2;
-        recyclerListView2.setAdapter(listAdapter2);
+        recyclerListView3.setAdapter(listAdapter2);
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.searchAdapter = new SearchAdapter(context2);
@@ -595,12 +600,14 @@ public class DocumentSelectActivity extends BaseFragment {
                 return DocumentSelectActivity.this.lambda$createView$2$DocumentSelectActivity(view, i);
             }
         });
-        this.shadow = new View(context2);
-        this.shadow.setBackgroundResource(NUM);
+        View view = new View(context2);
+        this.shadow = view;
+        view.setBackgroundResource(NUM);
         this.shadow.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-        this.frameLayout2 = new FrameLayout(context2);
-        this.frameLayout2.setBackgroundColor(Theme.getColor("dialogBackground"));
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.frameLayout2 = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.frameLayout2.setVisibility(4);
         this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(48.0f));
         this.sizeNotifierFrameLayout.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
@@ -620,15 +627,22 @@ public class DocumentSelectActivity extends BaseFragment {
         if (this.chatActivity == null) {
             this.commentTextView.setVisibility(8);
         }
-        this.writeButtonContainer = new FrameLayout(context2);
-        this.writeButtonContainer.setVisibility(4);
+        FrameLayout frameLayout3 = new FrameLayout(context2);
+        this.writeButtonContainer = frameLayout3;
+        frameLayout3.setVisibility(4);
         this.writeButtonContainer.setScaleX(0.2f);
         this.writeButtonContainer.setScaleY(0.2f);
         this.writeButtonContainer.setAlpha(0.0f);
         this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("dialogFloatingButton"), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? "dialogFloatingButtonPressed" : "dialogFloatingButton"));
+        int dp = AndroidUtilities.dp(56.0f);
+        String str = "dialogFloatingButton";
+        int color = Theme.getColor(str);
+        if (Build.VERSION.SDK_INT >= 21) {
+            str = "dialogFloatingButtonPressed";
+        }
+        Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
         if (Build.VERSION.SDK_INT < 21) {
             Drawable mutate = context.getResources().getDrawable(NUM).mutate();
             mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
@@ -641,7 +655,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
         this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
-            this.writeButton.setOutlineProvider(new ViewOutlineProvider() {
+            this.writeButton.setOutlineProvider(new ViewOutlineProvider(this) {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -661,7 +675,7 @@ public class DocumentSelectActivity extends BaseFragment {
         });
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.selectedCountView = new View(context2) {
+        AnonymousClass9 r32 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, DocumentSelectActivity.this.selectedFiles.size()))});
@@ -682,7 +696,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 canvas.drawText(format, (float) (measuredWidth - (ceil / 2)), (float) AndroidUtilities.dp(16.2f), DocumentSelectActivity.this.textPaint);
             }
         };
-        this.selectedCountView.setAlpha(0.0f);
+        this.selectedCountView = r32;
+        r32.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
         this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
@@ -752,8 +767,9 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             } else if (file.isDirectory()) {
                 HistoryEntry historyEntry = new HistoryEntry();
-                historyEntry.scrollItem = this.layoutManager.findLastVisibleItemPosition();
-                View findViewByPosition = this.layoutManager.findViewByPosition(historyEntry.scrollItem);
+                int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
+                historyEntry.scrollItem = findLastVisibleItemPosition;
+                View findViewByPosition = this.layoutManager.findViewByPosition(findLastVisibleItemPosition);
                 if (findViewByPosition != null) {
                     historyEntry.scrollOffset = findViewByPosition.getTop();
                 }
@@ -803,13 +819,14 @@ public class DocumentSelectActivity extends BaseFragment {
             return false;
         }
         chatActivity2.getCurrentChat();
-        TLRPC.User currentUser = this.chatActivity.getCurrentUser();
+        TLRPC$User currentUser = this.chatActivity.getCurrentUser();
         if (this.chatActivity.getCurrentEncryptedChat() != null) {
             return false;
         }
         if (this.sendPopupLayout == null) {
-            this.sendPopupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
-            this.sendPopupLayout.setAnimationEnabled(false);
+            ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
+            this.sendPopupLayout = actionBarPopupWindowLayout;
+            actionBarPopupWindowLayout.setAnimationEnabled(false);
             this.sendPopupLayout.setOnTouchListener(new View.OnTouchListener() {
                 private Rect popupRect = new Rect();
 
@@ -859,8 +876,9 @@ public class DocumentSelectActivity extends BaseFragment {
                     });
                 }
             }
-            this.sendPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
-            this.sendPopupWindow.setAnimationEnabled(false);
+            ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
+            this.sendPopupWindow = actionBarPopupWindow;
+            actionBarPopupWindow.setAnimationEnabled(false);
             this.sendPopupWindow.setAnimationStyle(NUM);
             this.sendPopupWindow.setOutsideTouchable(true);
             this.sendPopupWindow.setClippingEnabled(true);
@@ -1160,7 +1178,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     }
                     sendingMediaInfo.isVideo = photoEntry.isVideo;
                     CharSequence charSequence = photoEntry.caption;
-                    ArrayList<TLRPC.InputDocument> arrayList3 = null;
+                    ArrayList<TLRPC$InputDocument> arrayList3 = null;
                     sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
                     sendingMediaInfo.entities = photoEntry.entities;
                     if (!photoEntry.stickers.isEmpty()) {
@@ -1431,17 +1449,19 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private void showErrorBox(String str) {
         if (getParentActivity() != null) {
-            new AlertDialog.Builder((Context) getParentActivity()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(str).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(str);
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+            builder.show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x013c A[Catch:{ Exception -> 0x0164 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x0143 A[Catch:{ Exception -> 0x0164 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x01b7 A[Catch:{ Exception -> 0x01d3 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x0202  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0232  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0244 A[SYNTHETIC, Splitter:B:85:0x0244] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x01b4 A[Catch:{ Exception -> 0x01d0 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0242 A[SYNTHETIC, Splitter:B:84:0x0242] */
     @android.annotation.SuppressLint({"NewApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void listRoots() {
@@ -1462,10 +1482,10 @@ public class DocumentSelectActivity extends BaseFragment {
             java.lang.String r4 = android.os.Environment.getExternalStorageState()
             java.lang.String r5 = "mounted"
             boolean r5 = r4.equals(r5)
-            r6 = 2131625158(0x7f0e04c6, float:1.8877516E38)
+            r6 = 2131625172(0x7f0e04d4, float:1.8877544E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165379(0x7var_c3, float:1.7944973E38)
-            r9 = 2131626493(0x7f0e09fd, float:1.8880224E38)
+            r9 = 2131626592(0x7f0e0a60, float:1.8880425E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1483,13 +1503,13 @@ public class DocumentSelectActivity extends BaseFragment {
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625368(0x7f0e0598, float:1.8877942E38)
+            r5 = 2131625454(0x7f0e05ee, float:1.8878116E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
             r5 = 2131165381(0x7var_c5, float:1.7944978E38)
             r4.icon = r5
-            r5 = 2131625367(0x7f0e0597, float:1.887794E38)
+            r5 = 2131625453(0x7f0e05ed, float:1.8878114E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1500,132 +1520,129 @@ public class DocumentSelectActivity extends BaseFragment {
             r5.add(r4)
             r2.add(r3)
         L_0x0081:
-            java.io.BufferedReader r3 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0174, all -> 0x0170 }
-            java.io.FileReader r4 = new java.io.FileReader     // Catch:{ Exception -> 0x0174, all -> 0x0170 }
+            java.io.BufferedReader r3 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0171, all -> 0x016e }
+            java.io.FileReader r4 = new java.io.FileReader     // Catch:{ Exception -> 0x0171, all -> 0x016e }
             java.lang.String r5 = "/proc/mounts"
-            r4.<init>(r5)     // Catch:{ Exception -> 0x0174, all -> 0x0170 }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x0174, all -> 0x0170 }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x0171, all -> 0x016e }
+            r3.<init>(r4)     // Catch:{ Exception -> 0x0171, all -> 0x016e }
         L_0x008d:
-            java.lang.String r4 = r3.readLine()     // Catch:{ Exception -> 0x016e }
-            if (r4 == 0) goto L_0x016a
+            java.lang.String r4 = r3.readLine()     // Catch:{ Exception -> 0x016c }
+            if (r4 == 0) goto L_0x0168
             java.lang.String r5 = "vfat"
-            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016e }
-            if (r5 != 0) goto L_0x00a4
+            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016c }
+            if (r5 != 0) goto L_0x00a3
             java.lang.String r5 = "/mnt"
-            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016e }
+            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016c }
             if (r5 == 0) goto L_0x008d
-        L_0x00a4:
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x016e }
-            if (r5 == 0) goto L_0x00ab
-            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x016e }
-        L_0x00ab:
-            java.util.StringTokenizer r5 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x016e }
+        L_0x00a3:
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x016c }
+            if (r5 == 0) goto L_0x00aa
+            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x016c }
+        L_0x00aa:
+            java.util.StringTokenizer r5 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x016c }
             java.lang.String r11 = " "
-            r5.<init>(r4, r11)     // Catch:{ Exception -> 0x016e }
-            r5.nextToken()     // Catch:{ Exception -> 0x016e }
-            java.lang.String r5 = r5.nextToken()     // Catch:{ Exception -> 0x016e }
-            boolean r11 = r2.contains(r5)     // Catch:{ Exception -> 0x016e }
-            if (r11 == 0) goto L_0x00c0
+            r5.<init>(r4, r11)     // Catch:{ Exception -> 0x016c }
+            r5.nextToken()     // Catch:{ Exception -> 0x016c }
+            java.lang.String r5 = r5.nextToken()     // Catch:{ Exception -> 0x016c }
+            boolean r11 = r2.contains(r5)     // Catch:{ Exception -> 0x016c }
+            if (r11 == 0) goto L_0x00bf
             goto L_0x008d
-        L_0x00c0:
+        L_0x00bf:
             java.lang.String r11 = "/dev/block/vold"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r11 == 0) goto L_0x008d
             java.lang.String r11 = "/mnt/secure"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r11 != 0) goto L_0x008d
             java.lang.String r11 = "/mnt/asec"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r11 != 0) goto L_0x008d
             java.lang.String r11 = "/mnt/obb"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r11 != 0) goto L_0x008d
             java.lang.String r11 = "/dev/mapper"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r11 != 0) goto L_0x008d
             java.lang.String r11 = "tmpfs"
-            boolean r4 = r4.contains(r11)     // Catch:{ Exception -> 0x016e }
+            boolean r4 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
             if (r4 != 0) goto L_0x008d
-            java.io.File r4 = new java.io.File     // Catch:{ Exception -> 0x016e }
-            r4.<init>(r5)     // Catch:{ Exception -> 0x016e }
-            boolean r4 = r4.isDirectory()     // Catch:{ Exception -> 0x016e }
-            if (r4 != 0) goto L_0x0127
+            java.io.File r4 = new java.io.File     // Catch:{ Exception -> 0x016c }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x016c }
+            boolean r4 = r4.isDirectory()     // Catch:{ Exception -> 0x016c }
+            if (r4 != 0) goto L_0x0126
             r4 = 47
-            int r4 = r5.lastIndexOf(r4)     // Catch:{ Exception -> 0x016e }
+            int r4 = r5.lastIndexOf(r4)     // Catch:{ Exception -> 0x016c }
             r11 = -1
-            if (r4 == r11) goto L_0x0127
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x016e }
-            r11.<init>()     // Catch:{ Exception -> 0x016e }
+            if (r4 == r11) goto L_0x0126
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x016c }
+            r11.<init>()     // Catch:{ Exception -> 0x016c }
             java.lang.String r12 = "/storage/"
-            r11.append(r12)     // Catch:{ Exception -> 0x016e }
+            r11.append(r12)     // Catch:{ Exception -> 0x016c }
             int r4 = r4 + 1
-            java.lang.String r4 = r5.substring(r4)     // Catch:{ Exception -> 0x016e }
-            r11.append(r4)     // Catch:{ Exception -> 0x016e }
-            java.lang.String r4 = r11.toString()     // Catch:{ Exception -> 0x016e }
-            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x016e }
-            r11.<init>(r4)     // Catch:{ Exception -> 0x016e }
-            boolean r11 = r11.isDirectory()     // Catch:{ Exception -> 0x016e }
-            if (r11 == 0) goto L_0x0127
-            goto L_0x0128
-        L_0x0127:
-            r4 = r5
-        L_0x0128:
-            r2.add(r4)     // Catch:{ Exception -> 0x016e }
-            org.telegram.ui.DocumentSelectActivity$ListItem r5 = new org.telegram.ui.DocumentSelectActivity$ListItem     // Catch:{ Exception -> 0x0164 }
-            r5.<init>()     // Catch:{ Exception -> 0x0164 }
-            java.lang.String r11 = r4.toLowerCase()     // Catch:{ Exception -> 0x0164 }
+            java.lang.String r4 = r5.substring(r4)     // Catch:{ Exception -> 0x016c }
+            r11.append(r4)     // Catch:{ Exception -> 0x016c }
+            java.lang.String r4 = r11.toString()     // Catch:{ Exception -> 0x016c }
+            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x016c }
+            r11.<init>(r4)     // Catch:{ Exception -> 0x016c }
+            boolean r11 = r11.isDirectory()     // Catch:{ Exception -> 0x016c }
+            if (r11 == 0) goto L_0x0126
+            r5 = r4
+        L_0x0126:
+            r2.add(r5)     // Catch:{ Exception -> 0x016c }
+            org.telegram.ui.DocumentSelectActivity$ListItem r4 = new org.telegram.ui.DocumentSelectActivity$ListItem     // Catch:{ Exception -> 0x0162 }
+            r4.<init>()     // Catch:{ Exception -> 0x0162 }
+            java.lang.String r11 = r5.toLowerCase()     // Catch:{ Exception -> 0x0162 }
             java.lang.String r12 = "sd"
-            boolean r11 = r11.contains(r12)     // Catch:{ Exception -> 0x0164 }
-            if (r11 == 0) goto L_0x0143
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r9)     // Catch:{ Exception -> 0x0164 }
-            r5.title = r11     // Catch:{ Exception -> 0x0164 }
-            goto L_0x014e
-        L_0x0143:
+            boolean r11 = r11.contains(r12)     // Catch:{ Exception -> 0x0162 }
+            if (r11 == 0) goto L_0x0141
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r9)     // Catch:{ Exception -> 0x0162 }
+            r4.title = r11     // Catch:{ Exception -> 0x0162 }
+            goto L_0x014c
+        L_0x0141:
             java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625159(0x7f0e04c7, float:1.8877518E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0164 }
-            r5.title = r11     // Catch:{ Exception -> 0x0164 }
-        L_0x014e:
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r7, r6)     // Catch:{ Exception -> 0x0164 }
-            r5.subtitle = r11     // Catch:{ Exception -> 0x0164 }
-            r5.icon = r8     // Catch:{ Exception -> 0x0164 }
-            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x0164 }
-            r11.<init>(r4)     // Catch:{ Exception -> 0x0164 }
-            r5.file = r11     // Catch:{ Exception -> 0x0164 }
-            java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r4 = r13.items     // Catch:{ Exception -> 0x0164 }
-            r4.add(r5)     // Catch:{ Exception -> 0x0164 }
+            r12 = 2131625173(0x7f0e04d5, float:1.8877546E38)
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0162 }
+            r4.title = r11     // Catch:{ Exception -> 0x0162 }
+        L_0x014c:
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r7, r6)     // Catch:{ Exception -> 0x0162 }
+            r4.subtitle = r11     // Catch:{ Exception -> 0x0162 }
+            r4.icon = r8     // Catch:{ Exception -> 0x0162 }
+            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x0162 }
+            r11.<init>(r5)     // Catch:{ Exception -> 0x0162 }
+            r4.file = r11     // Catch:{ Exception -> 0x0162 }
+            java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r5 = r13.items     // Catch:{ Exception -> 0x0162 }
+            r5.add(r4)     // Catch:{ Exception -> 0x0162 }
             goto L_0x008d
-        L_0x0164:
+        L_0x0162:
             r4 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ Exception -> 0x016e }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ Exception -> 0x016c }
             goto L_0x008d
-        L_0x016a:
-            r3.close()     // Catch:{ Exception -> 0x017f }
-            goto L_0x0183
+        L_0x0168:
+            r3.close()     // Catch:{ Exception -> 0x017c }
+            goto L_0x0180
+        L_0x016c:
+            r2 = move-exception
+            goto L_0x0173
         L_0x016e:
-            r2 = move-exception
-            goto L_0x0176
-        L_0x0170:
             r0 = move-exception
-            r3 = r1
-            goto L_0x0242
-        L_0x0174:
+            goto L_0x0240
+        L_0x0171:
             r2 = move-exception
             r3 = r1
-        L_0x0176:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x0241 }
-            if (r3 == 0) goto L_0x0183
-            r3.close()     // Catch:{ Exception -> 0x017f }
-            goto L_0x0183
-        L_0x017f:
+        L_0x0173:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x023e }
+            if (r3 == 0) goto L_0x0180
+            r3.close()     // Catch:{ Exception -> 0x017c }
+            goto L_0x0180
+        L_0x017c:
             r2 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0183:
+        L_0x0180:
             org.telegram.ui.DocumentSelectActivity$ListItem r2 = new org.telegram.ui.DocumentSelectActivity$ListItem
             r2.<init>()
             java.lang.String r3 = "/"
             r2.title = r3
-            r4 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r4 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
             java.lang.String r5 = "SystemRoot"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.subtitle = r4
@@ -1636,34 +1653,34 @@ public class DocumentSelectActivity extends BaseFragment {
             r2.file = r5
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r3 = r13.items
             r3.add(r2)
-            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x01d3 }
-            java.io.File r3 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x01d3 }
-            r2.<init>(r3, r0)     // Catch:{ Exception -> 0x01d3 }
-            boolean r3 = r2.exists()     // Catch:{ Exception -> 0x01d3 }
-            if (r3 == 0) goto L_0x01d7
-            org.telegram.ui.DocumentSelectActivity$ListItem r3 = new org.telegram.ui.DocumentSelectActivity$ListItem     // Catch:{ Exception -> 0x01d3 }
-            r3.<init>()     // Catch:{ Exception -> 0x01d3 }
-            r3.title = r0     // Catch:{ Exception -> 0x01d3 }
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x01d0 }
+            java.io.File r3 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x01d0 }
+            r2.<init>(r3, r0)     // Catch:{ Exception -> 0x01d0 }
+            boolean r3 = r2.exists()     // Catch:{ Exception -> 0x01d0 }
+            if (r3 == 0) goto L_0x01d4
+            org.telegram.ui.DocumentSelectActivity$ListItem r3 = new org.telegram.ui.DocumentSelectActivity$ListItem     // Catch:{ Exception -> 0x01d0 }
+            r3.<init>()     // Catch:{ Exception -> 0x01d0 }
+            r3.title = r0     // Catch:{ Exception -> 0x01d0 }
             java.lang.String r0 = "AppFolderInfo"
-            r5 = 2131624191(0x7f0e00ff, float:1.8875555E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r5)     // Catch:{ Exception -> 0x01d3 }
-            r3.subtitle = r0     // Catch:{ Exception -> 0x01d3 }
-            r3.icon = r4     // Catch:{ Exception -> 0x01d3 }
-            r3.file = r2     // Catch:{ Exception -> 0x01d3 }
-            java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r0 = r13.items     // Catch:{ Exception -> 0x01d3 }
-            r0.add(r3)     // Catch:{ Exception -> 0x01d3 }
-            goto L_0x01d7
-        L_0x01d3:
+            r5 = 2131624193(0x7f0e0101, float:1.8875559E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r5)     // Catch:{ Exception -> 0x01d0 }
+            r3.subtitle = r0     // Catch:{ Exception -> 0x01d0 }
+            r3.icon = r4     // Catch:{ Exception -> 0x01d0 }
+            r3.file = r2     // Catch:{ Exception -> 0x01d0 }
+            java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r0 = r13.items     // Catch:{ Exception -> 0x01d0 }
+            r0.add(r3)     // Catch:{ Exception -> 0x01d0 }
+            goto L_0x01d4
+        L_0x01d0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01d7:
+        L_0x01d4:
             org.telegram.ui.DocumentSelectActivity$ListItem r0 = new org.telegram.ui.DocumentSelectActivity$ListItem
             r0.<init>()
-            r2 = 2131625270(0x7f0e0536, float:1.8877743E38)
+            r2 = 2131625351(0x7f0e0587, float:1.8877908E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625271(0x7f0e0537, float:1.8877745E38)
+            r2 = 2131625352(0x7f0e0588, float:1.887791E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
@@ -1673,14 +1690,14 @@ public class DocumentSelectActivity extends BaseFragment {
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r2 = r13.items
             r2.add(r0)
             boolean r0 = r13.allowMusic
-            if (r0 == 0) goto L_0x0229
+            if (r0 == 0) goto L_0x0226
             org.telegram.ui.DocumentSelectActivity$ListItem r0 = new org.telegram.ui.DocumentSelectActivity$ListItem
             r0.<init>()
-            r2 = 2131624289(0x7f0e0161, float:1.8875754E38)
+            r2 = 2131624293(0x7f0e0165, float:1.8875762E38)
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625633(0x7f0e06a1, float:1.887848E38)
+            r2 = 2131625726(0x7f0e06fe, float:1.8878668E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
@@ -1689,51 +1706,37 @@ public class DocumentSelectActivity extends BaseFragment {
             r0.file = r1
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r1 = r13.items
             r1.add(r0)
-        L_0x0229:
+        L_0x0226:
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r0 = r13.recentItems
             boolean r0 = r0.isEmpty()
             r1 = 1
-            if (r0 != 0) goto L_0x0234
+            if (r0 != 0) goto L_0x0231
             r13.hasFiles = r1
-        L_0x0234:
+        L_0x0231:
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r0)
             r13.scrolling = r1
             org.telegram.ui.DocumentSelectActivity$ListAdapter r0 = r13.listAdapter
             r0.notifyDataSetChanged()
             return
-        L_0x0241:
+        L_0x023e:
             r0 = move-exception
-        L_0x0242:
-            if (r3 == 0) goto L_0x024c
-            r3.close()     // Catch:{ Exception -> 0x0248 }
-            goto L_0x024c
-        L_0x0248:
+            r1 = r3
+        L_0x0240:
+            if (r1 == 0) goto L_0x024a
+            r1.close()     // Catch:{ Exception -> 0x0246 }
+            goto L_0x024a
+        L_0x0246:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x024c:
-            goto L_0x024e
-        L_0x024d:
+        L_0x024a:
+            goto L_0x024c
+        L_0x024b:
             throw r0
-        L_0x024e:
-            goto L_0x024d
+        L_0x024c:
+            goto L_0x024b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DocumentSelectActivity.listRoots():void");
-    }
-
-    private String getRootSubtitle(String str) {
-        try {
-            StatFs statFs = new StatFs(str);
-            long blockCount = ((long) statFs.getBlockCount()) * ((long) statFs.getBlockSize());
-            long availableBlocks = ((long) statFs.getAvailableBlocks()) * ((long) statFs.getBlockSize());
-            if (blockCount == 0) {
-                return "";
-            }
-            return LocaleController.formatString("FreeOfTotal", NUM, AndroidUtilities.formatFileSize(availableBlocks), AndroidUtilities.formatFileSize(blockCount));
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return str;
-        }
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
@@ -1810,9 +1813,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     public class SearchAdapter extends RecyclerListView.SelectionAdapter {
-        private int lastReqId;
         private Context mContext;
-        private int reqId = 0;
         private ArrayList<ListItem> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
 
@@ -1889,28 +1890,29 @@ public class DocumentSelectActivity extends BaseFragment {
             if (lowerCase.equals(translitString) || translitString.length() == 0) {
                 translitString = null;
             }
-            String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
+            int i = (translitString != null ? 1 : 0) + 1;
+            String[] strArr = new String[i];
             strArr[0] = lowerCase;
             if (translitString != null) {
                 strArr[1] = translitString;
             }
             ArrayList arrayList2 = new ArrayList();
-            for (int i = 0; i < arrayList.size(); i++) {
-                ListItem listItem = (ListItem) arrayList.get(i);
+            for (int i2 = 0; i2 < arrayList.size(); i2++) {
+                ListItem listItem = (ListItem) arrayList.get(i2);
                 File file = listItem.file;
                 if (file != null && !file.isDirectory()) {
-                    int i2 = 0;
+                    int i3 = 0;
                     while (true) {
-                        if (i2 >= strArr.length) {
+                        if (i3 >= i) {
                             break;
                         }
-                        String str2 = strArr[i2];
+                        String str2 = strArr[i3];
                         String str3 = listItem.title;
                         if (str3 != null ? str3.toLowerCase().contains(str2) : false) {
                             arrayList2.add(listItem);
                             break;
                         }
-                        i2++;
+                        i3++;
                     }
                 }
             }

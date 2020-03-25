@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 /* renamed from: org.telegram.ui.-$$Lambda$PaymentFormActivity$sO9JvHK-i_UoC8_6WynH4daVgdY  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,7 +12,7 @@ public final /* synthetic */ class $$Lambda$PaymentFormActivity$sO9JvHKi_UoC8_6W
     private /* synthetic */ $$Lambda$PaymentFormActivity$sO9JvHKi_UoC8_6WynH4daVgdY() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        PaymentFormActivity.lambda$null$34(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        PaymentFormActivity.lambda$null$34(tLObject, tLRPC$TL_error);
     }
 }

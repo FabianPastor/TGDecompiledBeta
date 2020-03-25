@@ -38,7 +38,7 @@ public class SQLiteDatabase {
     }
 
     public SQLitePreparedStatement executeFast(String str) throws SQLiteException {
-        return new SQLitePreparedStatement(this, str, true);
+        return new SQLitePreparedStatement(this, str);
     }
 
     public Integer executeInt(String str, Object... objArr) throws SQLiteException {
@@ -58,7 +58,7 @@ public class SQLiteDatabase {
 
     public void explainQuery(String str, Object... objArr) throws SQLiteException {
         checkOpened();
-        SQLiteCursor query = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + str, true).query(objArr);
+        SQLiteCursor query = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + str).query(objArr);
         while (query.next()) {
             int columnCount = query.getColumnCount();
             StringBuilder sb = new StringBuilder();
@@ -73,7 +73,7 @@ public class SQLiteDatabase {
 
     public SQLiteCursor queryFinalized(String str, Object... objArr) throws SQLiteException {
         checkOpened();
-        return new SQLitePreparedStatement(this, str, true).query(objArr);
+        return new SQLitePreparedStatement(this, str).query(objArr);
     }
 
     public void close() {

@@ -20,29 +20,29 @@ public class CheckBoxBase {
     private static Paint eraser;
     private static Paint paint;
     private boolean attachedToWindow;
-    private String background2ColorKey;
-    private float backgroundAlpha;
-    private String backgroundColorKey;
+    private String background2ColorKey = "chat_serviceBackground";
+    private float backgroundAlpha = 1.0f;
+    private String backgroundColorKey = "chat_serviceBackground";
     private Paint backgroundPaint;
     private Canvas bitmapCanvas;
-    private Rect bounds;
+    private Rect bounds = new Rect();
     /* access modifiers changed from: private */
     public ObjectAnimator checkAnimator;
-    private String checkColorKey;
+    private String checkColorKey = "checkboxCheck";
     private Paint checkPaint;
     /* access modifiers changed from: private */
     public String checkedText;
     private int drawBackgroundAsArc;
     private Bitmap drawBitmap;
-    private boolean drawUnchecked;
-    private boolean enabled;
+    private boolean drawUnchecked = true;
+    private boolean enabled = true;
     /* access modifiers changed from: private */
     public boolean isChecked;
     private View parentView;
-    private Path path;
+    private Path path = new Path();
     private float progress;
     private ProgressDelegate progressDelegate;
-    private RectF rect;
+    private RectF rect = new RectF();
     private float size;
     private TextPaint textPaint;
     private boolean useDefaultCheck;
@@ -51,35 +51,25 @@ public class CheckBoxBase {
         void setProgress(float f);
     }
 
-    public CheckBoxBase(View view) {
-        this(view, 21);
-    }
-
     public CheckBoxBase(View view, int i) {
-        this.bounds = new Rect();
-        this.rect = new RectF();
-        this.path = new Path();
-        this.enabled = true;
-        this.backgroundAlpha = 1.0f;
-        this.checkColorKey = "checkboxCheck";
-        this.backgroundColorKey = "chat_serviceBackground";
-        this.background2ColorKey = "chat_serviceBackground";
-        this.drawUnchecked = true;
         this.parentView = view;
         this.size = (float) i;
         if (paint == null) {
             paint = new Paint(1);
-            eraser = new Paint(1);
-            eraser.setColor(0);
+            Paint paint2 = new Paint(1);
+            eraser = paint2;
+            paint2.setColor(0);
             eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
-        this.checkPaint = new Paint(1);
-        this.checkPaint.setStrokeCap(Paint.Cap.ROUND);
+        Paint paint3 = new Paint(1);
+        this.checkPaint = paint3;
+        paint3.setStrokeCap(Paint.Cap.ROUND);
         this.checkPaint.setStyle(Paint.Style.STROKE);
         this.checkPaint.setStrokeJoin(Paint.Join.ROUND);
         this.checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.9f));
-        this.backgroundPaint = new Paint(1);
-        this.backgroundPaint.setStyle(Paint.Style.STROKE);
+        Paint paint4 = new Paint(1);
+        this.backgroundPaint = paint4;
+        paint4.setStyle(Paint.Style.STROKE);
         this.backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(1.2f));
         this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(this.size), AndroidUtilities.dp(this.size), Bitmap.Config.ARGB_4444);
         this.bitmapCanvas = new Canvas(this.drawBitmap);
@@ -128,6 +118,7 @@ public class CheckBoxBase {
         this.progressDelegate = progressDelegate2;
     }
 
+    @Keep
     public float getProgress() {
         return this.progress;
     }
@@ -165,8 +156,9 @@ public class CheckBoxBase {
     private void animateToCheckedState(boolean z) {
         float[] fArr = new float[1];
         fArr[0] = z ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
-        this.checkAnimator.addListener(new AnimatorListenerAdapter() {
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
+        this.checkAnimator = ofFloat;
+        ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (animator.equals(CheckBoxBase.this.checkAnimator)) {
                     ObjectAnimator unused = CheckBoxBase.this.checkAnimator = null;
@@ -224,7 +216,7 @@ public class CheckBoxBase {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:111:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:112:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x01fa  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r21) {
@@ -508,7 +500,7 @@ public class CheckBoxBase {
         L_0x01f5:
             r1 = 0
             int r2 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x038e
+            if (r2 <= 0) goto L_0x0390
             float r2 = r0.progress
             r3 = 1056964608(0x3var_, float:0.5)
             int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
@@ -609,39 +601,40 @@ public class CheckBoxBase {
             r8 = 0
             r7.drawBitmap(r3, r4, r6, r8)
             int r1 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1))
-            if (r1 == 0) goto L_0x038e
+            if (r1 == 0) goto L_0x0390
             java.lang.String r1 = r0.checkedText
-            if (r1 == 0) goto L_0x0329
+            if (r1 == 0) goto L_0x0328
             android.text.TextPaint r1 = r0.textPaint
-            if (r1 != 0) goto L_0x02d2
+            if (r1 != 0) goto L_0x02d1
             android.text.TextPaint r1 = new android.text.TextPaint
             r3 = 1
             r1.<init>(r3)
             r0.textPaint = r1
-            android.text.TextPaint r1 = r0.textPaint
-            java.lang.String r3 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)
-            r1.setTypeface(r3)
+            java.lang.String r4 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
+            r1.setTypeface(r4)
+            goto L_0x02d2
+        L_0x02d1:
+            r3 = 1
         L_0x02d2:
             java.lang.String r1 = r0.checkedText
             int r1 = r1.length()
-            if (r1 == 0) goto L_0x02ec
-            r3 = 1
-            if (r1 == r3) goto L_0x02ec
-            if (r1 == r5) goto L_0x02ec
+            if (r1 == 0) goto L_0x02eb
+            if (r1 == r3) goto L_0x02eb
+            if (r1 == r5) goto L_0x02eb
             r3 = 3
-            if (r1 == r3) goto L_0x02e7
+            if (r1 == r3) goto L_0x02e6
             r1 = 1090519040(0x41000000, float:8.0)
             r3 = 1098645504(0x417CLASSNAME, float:15.75)
-            goto L_0x02f0
-        L_0x02e7:
+            goto L_0x02ef
+        L_0x02e6:
             r1 = 1092616192(0x41200000, float:10.0)
             r3 = 1099169792(0x41840000, float:16.5)
-            goto L_0x02f0
-        L_0x02ec:
+            goto L_0x02ef
+        L_0x02eb:
             r1 = 1096810496(0x41600000, float:14.0)
             r3 = 1099956224(0x41900000, float:18.0)
-        L_0x02f0:
+        L_0x02ef:
             android.text.TextPaint r4 = r0.textPaint
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
@@ -653,8 +646,8 @@ public class CheckBoxBase {
             r21.save()
             float r1 = (float) r13
             float r4 = (float) r14
-            r10 = 1065353216(0x3var_, float:1.0)
-            r7.scale(r2, r10, r1, r4)
+            r5 = 1065353216(0x3var_, float:1.0)
+            r7.scale(r2, r5, r1, r4)
             java.lang.String r2 = r0.checkedText
             android.text.TextPaint r4 = r0.textPaint
             float r4 = r4.measureText(r2)
@@ -666,16 +659,19 @@ public class CheckBoxBase {
             android.text.TextPaint r4 = r0.textPaint
             r7.drawText(r2, r1, r3, r4)
             r21.restore()
-            goto L_0x038e
-        L_0x0329:
-            r10 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0390
+        L_0x0328:
+            r5 = 1065353216(0x3var_, float:1.0)
             android.graphics.Path r1 = r0.path
             r1.reset()
             int r1 = r0.drawBackgroundAsArc
             r3 = 5
             if (r1 != r3) goto L_0x0338
             r10 = 1061997773(0x3f4ccccd, float:0.8)
+            goto L_0x033a
         L_0x0338:
+            r10 = 1065353216(0x3var_, float:1.0)
+        L_0x033a:
             r1 = 1091567616(0x41100000, float:9.0)
             float r1 = r1 * r10
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -718,7 +714,7 @@ public class CheckBoxBase {
             android.graphics.Path r1 = r0.path
             android.graphics.Paint r2 = r0.checkPaint
             r7.drawPath(r1, r2)
-        L_0x038e:
+        L_0x0390:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.CheckBoxBase.draw(android.graphics.Canvas):void");

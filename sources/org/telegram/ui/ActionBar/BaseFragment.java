@@ -196,7 +196,7 @@ public class BaseFragment {
         ActionBar actionBar2 = this.actionBar;
         if (actionBar2 != null) {
             boolean z2 = false;
-            if (this.inPreviewMode) {
+            if (z) {
                 actionBar2.setOccupyStatusBar(false);
                 return;
             }
@@ -279,8 +279,9 @@ public class BaseFragment {
             }
             ActionBarLayout actionBarLayout4 = this.parentLayout;
             if (actionBarLayout4 != null && this.actionBar == null) {
-                this.actionBar = createActionBar(actionBarLayout4.getContext());
-                this.actionBar.parentFragment = this;
+                ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
+                this.actionBar = createActionBar;
+                createActionBar.parentFragment = this;
             }
         }
     }
@@ -332,7 +333,8 @@ public class BaseFragment {
     }
 
     public void onFragmentDestroy() {
-        ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
+        getConnectionsManager().cancelRequestsForGuid(this.classGuid);
+        getMessagesStorage().cancelTasksForGuid(this.classGuid);
         this.isFinished = true;
         ActionBar actionBar2 = this.actionBar;
         if (actionBar2 != null) {
@@ -475,7 +477,7 @@ public class BaseFragment {
             }
             try {
                 this.visibleDialog = dialog;
-                this.visibleDialog.setCanceledOnTouchOutside(true);
+                dialog.setCanceledOnTouchOutside(true);
                 this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener(onDismissListener) {
                     private final /* synthetic */ DialogInterface.OnDismissListener f$1;
 
@@ -514,10 +516,6 @@ public class BaseFragment {
         return 0;
     }
 
-    public Dialog getVisibleDialog() {
-        return this.visibleDialog;
-    }
-
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
     }
@@ -553,7 +551,6 @@ public class BaseFragment {
         return getAccountInstance().getNotificationsController();
     }
 
-    /* access modifiers changed from: protected */
     public MessagesStorage getMessagesStorage() {
         return getAccountInstance().getMessagesStorage();
     }

@@ -10,11 +10,13 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class SharedMediaSectionCell extends FrameLayout {
-    private TextView textView = new TextView(getContext());
+    private TextView textView;
 
     public SharedMediaSectionCell(Context context) {
         super(context);
-        this.textView.setTextSize(1, 14.0f);
+        TextView textView2 = new TextView(getContext());
+        this.textView = textView2;
+        textView2.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         int i = 5;

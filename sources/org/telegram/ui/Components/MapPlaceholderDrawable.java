@@ -8,7 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class MapPlaceholderDrawable extends Drawable {
-    private Paint linePaint = new Paint();
+    private Paint linePaint;
     private Paint paint = new Paint();
 
     public int getIntrinsicHeight() {
@@ -30,7 +30,9 @@ public class MapPlaceholderDrawable extends Drawable {
     }
 
     public MapPlaceholderDrawable() {
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
+        Paint paint2 = new Paint();
+        this.linePaint = paint2;
+        paint2.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         if (Theme.getCurrentTheme().isDark()) {
             this.paint.setColor(-14865331);
             this.linePaint.setColor(-15854042);

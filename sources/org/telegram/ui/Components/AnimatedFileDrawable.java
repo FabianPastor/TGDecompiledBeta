@@ -24,21 +24,9 @@ import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
-    public static final int PARAM_NUM_AUDIO_FRAME_SIZE = 5;
-    public static final int PARAM_NUM_BITRATE = 3;
-    public static final int PARAM_NUM_COUNT = 11;
-    public static final int PARAM_NUM_DURATION = 4;
-    public static final int PARAM_NUM_FRAMERATE = 7;
-    public static final int PARAM_NUM_HAS_AUDIO = 10;
-    public static final int PARAM_NUM_HEIGHT = 2;
-    public static final int PARAM_NUM_ROTATION = 8;
-    public static final int PARAM_NUM_SUPPORTED_AUDIO_CODEC = 9;
-    public static final int PARAM_NUM_SUPPORTED_VIDEO_CODEC = 0;
-    public static final int PARAM_NUM_VIDEO_FRAME_SIZE = 6;
-    public static final int PARAM_NUM_WIDTH = 1;
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new ThreadPoolExecutor.DiscardPolicy());
     private static float[] radii = new float[8];
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -72,15 +60,18 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public int lastTimeStamp;
     private Runnable loadFrameRunnable = new Runnable() {
         public void run() {
-            boolean z;
             if (!AnimatedFileDrawable.this.isRecycled) {
+                boolean z = false;
                 if (!AnimatedFileDrawable.this.decoderCreated && AnimatedFileDrawable.this.nativePtr == 0) {
                     AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
                     animatedFileDrawable.nativePtr = AnimatedFileDrawable.createDecoder(animatedFileDrawable.path.getAbsolutePath(), AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.currentAccount, AnimatedFileDrawable.this.streamFileSize, AnimatedFileDrawable.this.stream, false);
+                    if (AnimatedFileDrawable.this.nativePtr != 0 && (AnimatedFileDrawable.this.metaData[0] > 3840 || AnimatedFileDrawable.this.metaData[1] > 3840)) {
+                        AnimatedFileDrawable.destroyDecoder(AnimatedFileDrawable.this.nativePtr);
+                        AnimatedFileDrawable.this.nativePtr = 0;
+                    }
                     boolean unused = AnimatedFileDrawable.this.decoderCreated = true;
                 }
                 try {
-                    z = false;
                     if (AnimatedFileDrawable.this.nativePtr == 0 && AnimatedFileDrawable.this.metaData[0] != 0) {
                         if (AnimatedFileDrawable.this.metaData[1] != 0) {
                             AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnableNoFrame);
@@ -318,16 +309,28 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    public AnimatedFileDrawable(File file, boolean z, long j, TLRPC.Document document, Object obj, int i, boolean z2) {
+    public AnimatedFileDrawable(File file, boolean z, long j, TLRPC$Document tLRPC$Document, Object obj, int i, boolean z2) {
+        long j2 = j;
+        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
+        int i2 = i;
         this.path = file;
-        this.streamFileSize = j;
-        this.currentAccount = i;
+        this.streamFileSize = j2;
+        this.currentAccount = i2;
         getPaint().setFlags(2);
-        if (!(j == 0 || document == null)) {
-            this.stream = new AnimatedFileDrawableStream(document, obj, i, z2);
+        if (j2 == 0 || tLRPC$Document2 == null) {
+            boolean z3 = z2;
+        } else {
+            this.stream = new AnimatedFileDrawableStream(tLRPC$Document, obj, i2, z2);
         }
         if (z) {
             this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream, z2);
+            if (this.nativePtr != 0) {
+                int[] iArr = this.metaData;
+                if (iArr[0] > 2000 || iArr[1] > 2000) {
+                    destroyDecoder(this.nativePtr);
+                    this.nativePtr = 0;
+                }
+            }
             this.decoderCreated = true;
         }
     }
@@ -374,7 +377,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public void setAllowDecodeSingleFrame(boolean z) {
         this.decodeSingleFrame = z;
-        if (this.decodeSingleFrame) {
+        if (z) {
             scheduleNextGetFrame();
         }
     }
@@ -387,7 +390,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             if (this.decoderCreated && this.stream != null) {
                 this.stream.cancel(z);
                 this.pendingRemoveLoading = z;
-                this.pendingRemoveLoadingFramesReset = this.pendingRemoveLoading ? 0 : 10;
+                this.pendingRemoveLoadingFramesReset = z ? 0 : 10;
             }
         }
     }
@@ -696,18 +699,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         return i == 0 ? AndroidUtilities.dp(100.0f) : i;
     }
 
-    public Bitmap getRenderingBitmap() {
-        return this.renderingBitmap;
-    }
-
-    public Bitmap getNextRenderingBitmap() {
-        return this.nextRenderingBitmap;
-    }
-
-    public Bitmap getBackgroundBitmap() {
-        return this.backgroundBitmap;
-    }
-
     public Bitmap getAnimatedBitmap() {
         Bitmap bitmap = this.renderingBitmap;
         if (bitmap != null) {
@@ -767,13 +758,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (animatedFileDrawableStream != null) {
             File file = this.path;
             long j = this.streamFileSize;
-            TLRPC.Document document = animatedFileDrawableStream.getDocument();
+            TLRPC$Document document = animatedFileDrawableStream.getDocument();
             Object parentObject = this.stream.getParentObject();
             int i = this.currentAccount;
             AnimatedFileDrawableStream animatedFileDrawableStream2 = this.stream;
             animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document, parentObject, i, animatedFileDrawableStream2 != null && animatedFileDrawableStream2.isPreview());
         } else {
-            animatedFileDrawable = new AnimatedFileDrawable(this.path, false, this.streamFileSize, (TLRPC.Document) null, (Object) null, this.currentAccount, animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview());
+            animatedFileDrawable = new AnimatedFileDrawable(this.path, false, this.streamFileSize, (TLRPC$Document) null, (Object) null, this.currentAccount, animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview());
         }
         int[] iArr = animatedFileDrawable.metaData;
         int[] iArr2 = this.metaData;

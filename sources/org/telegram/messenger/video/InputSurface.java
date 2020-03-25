@@ -24,17 +24,17 @@ public class InputSurface {
             eglSetup();
             return;
         }
-        throw new NullPointerException();
+        throw null;
     }
 
     private void eglSetup() {
-        this.mEGLDisplay = EGL14.eglGetDisplay(0);
-        EGLDisplay eGLDisplay = this.mEGLDisplay;
-        if (eGLDisplay != EGL14.EGL_NO_DISPLAY) {
+        EGLDisplay eglGetDisplay = EGL14.eglGetDisplay(0);
+        this.mEGLDisplay = eglGetDisplay;
+        if (eglGetDisplay != EGL14.EGL_NO_DISPLAY) {
             int[] iArr = new int[2];
-            if (EGL14.eglInitialize(eGLDisplay, iArr, 0, iArr, 1)) {
+            if (EGL14.eglInitialize(eglGetDisplay, iArr, 0, iArr, 1)) {
                 EGLConfig[] eGLConfigArr = new EGLConfig[1];
-                if (EGL14.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12352, 4, 12610, 1, 12344}, 0, eGLConfigArr, 0, eGLConfigArr.length, new int[1], 0)) {
+                if (EGL14.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12352, 4, 12610, 1, 12344}, 0, eGLConfigArr, 0, 1, new int[1], 0)) {
                     this.mEGLContext = EGL14.eglCreateContext(this.mEGLDisplay, eGLConfigArr[0], EGL14.EGL_NO_CONTEXT, new int[]{12440, 2, 12344}, 0);
                     checkEglError("eglCreateContext");
                     if (this.mEGLContext != null) {

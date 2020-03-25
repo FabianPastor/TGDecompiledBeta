@@ -22,6 +22,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private String linkTextColorKey;
     private CharSequence text;
     private TextView textView;
+    private int topPadding;
 
     public TextInfoPrivacyCell(Context context) {
         this(context, 21);
@@ -30,9 +31,11 @@ public class TextInfoPrivacyCell extends FrameLayout {
     public TextInfoPrivacyCell(Context context, int i) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
+        this.topPadding = 10;
         this.bottomPadding = 17;
-        this.textView = new TextView(context);
-        this.textView.setTextSize(1, 14.0f);
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextSize(1, 14.0f);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
@@ -56,6 +59,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
         }
     }
 
+    public void setTopPadding(int i) {
+        this.topPadding = i;
+    }
+
     public void setBottomPadding(int i) {
         this.bottomPadding = i;
     }
@@ -70,7 +77,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
             if (charSequence == null) {
                 this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
             } else {
-                this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
+                this.textView.setPadding(0, AndroidUtilities.dp((float) this.topPadding), 0, AndroidUtilities.dp((float) this.bottomPadding));
             }
             SpannableString spannableString = null;
             if (charSequence != null) {

@@ -1,14 +1,16 @@
 package org.telegram.SQLite;
 
+import android.os.SystemClock;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.NativeByteBuffer;
 
 public class SQLitePreparedStatement {
-    private boolean finalizeAfterQuery;
     private boolean isFinalized = false;
+    private String query;
     private long sqliteStatementHandle;
+    private long startTime;
 
     /* access modifiers changed from: package-private */
     public native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
@@ -44,9 +46,12 @@ public class SQLitePreparedStatement {
         return this.sqliteStatementHandle;
     }
 
-    public SQLitePreparedStatement(SQLiteDatabase sQLiteDatabase, String str, boolean z) throws SQLiteException {
-        this.finalizeAfterQuery = z;
+    public SQLitePreparedStatement(SQLiteDatabase sQLiteDatabase, String str) throws SQLiteException {
         this.sqliteStatementHandle = prepare(sQLiteDatabase.getSQLiteHandle(), str);
+        if (BuildVars.DEBUG_VERSION) {
+            this.query = str;
+            this.startTime = SystemClock.elapsedRealtime();
+        }
     }
 
     public SQLiteCursor query(Object[] objArr) throws SQLiteException {
@@ -90,9 +95,7 @@ public class SQLitePreparedStatement {
     }
 
     public void dispose() {
-        if (this.finalizeAfterQuery) {
-            finalizeQuery();
-        }
+        finalizeQuery();
     }
 
     /* access modifiers changed from: package-private */
@@ -104,6 +107,12 @@ public class SQLitePreparedStatement {
 
     public void finalizeQuery() {
         if (!this.isFinalized) {
+            if (BuildVars.DEBUG_VERSION) {
+                long elapsedRealtime = SystemClock.elapsedRealtime() - this.startTime;
+                if (elapsedRealtime > 500) {
+                    FileLog.d("sqlite query " + this.query + " took " + elapsedRealtime + "ms");
+                }
+            }
             try {
                 this.isFinalized = true;
                 finalize(this.sqliteStatementHandle);

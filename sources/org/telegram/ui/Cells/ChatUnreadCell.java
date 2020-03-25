@@ -18,17 +18,20 @@ public class ChatUnreadCell extends FrameLayout {
 
     public ChatUnreadCell(Context context) {
         super(context);
-        this.backgroundLayout = new FrameLayout(context);
-        this.backgroundLayout.setBackgroundResource(NUM);
+        FrameLayout frameLayout = new FrameLayout(context);
+        this.backgroundLayout = frameLayout;
+        frameLayout.setBackgroundResource(NUM);
         this.backgroundLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_unreadMessagesStartBackground"), PorterDuff.Mode.MULTIPLY));
         addView(this.backgroundLayout, LayoutHelper.createFrame(-1, 27.0f, 51, 0.0f, 7.0f, 0.0f, 0.0f));
-        this.imageView = new ImageView(context);
-        this.imageView.setImageResource(NUM);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setImageResource(NUM);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_unreadMessagesStartArrowIcon"), PorterDuff.Mode.MULTIPLY));
         this.imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.backgroundLayout.addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 10.0f, 0.0f));
-        this.textView = new TextView(context);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTextColor(Theme.getColor("chat_unreadMessagesStartText"));
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

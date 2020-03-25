@@ -20,7 +20,10 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$TL_contact;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.GraySectionCell;
@@ -38,7 +41,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     private int channelId;
     private SparseArray<?> checkedMap;
     /* access modifiers changed from: private */
-    public SparseArray<TLRPC.User> ignoreUsers;
+    public SparseArray<TLRPC$User> ignoreUsers;
     private Context mContext;
     private boolean onlyMutual;
     private SearchAdapterHelper searchAdapterHelper;
@@ -48,7 +51,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     public Timer searchTimer;
     private boolean useUserCell;
 
-    public SearchAdapter(Context context, SparseArray<TLRPC.User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, int i) {
+    public SearchAdapter(Context context, SparseArray<TLRPC$User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, int i) {
         this.mContext = context;
         this.ignoreUsers = sparseArray;
         this.onlyMutual = z2;
@@ -58,8 +61,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         this.channelId = i;
         this.allowSelf = z5;
         this.allowPhoneNumbers = z6;
-        this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
+        SearchAdapterHelper searchAdapterHelper2 = new SearchAdapterHelper(true);
+        this.searchAdapterHelper = searchAdapterHelper2;
+        searchAdapterHelper2.setDelegate(new SearchAdapterHelper.SearchAdapterHelperDelegate() {
             public /* synthetic */ boolean canApplySearchResults(int i) {
                 return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
@@ -72,21 +76,14 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 SearchAdapter.this.notifyDataSetChanged();
             }
 
-            public SparseArray<TLRPC.User> getExcludeUsers() {
+            public SparseArray<TLRPC$User> getExcludeUsers() {
                 return SearchAdapter.this.ignoreUsers;
             }
         });
     }
 
-    public void setCheckedMap(SparseArray<?> sparseArray) {
-        this.checkedMap = sparseArray;
-    }
-
-    public void setUseUserCell(boolean z) {
-        this.useUserCell = z;
-    }
-
-    public void searchDialogs(final String str) {
+    public void searchDialogs(String str) {
+        final String str2 = str;
         try {
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
@@ -94,7 +91,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        if (str == null) {
+        if (str2 == null) {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
@@ -103,8 +100,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             notifyDataSetChanged();
             return;
         }
-        this.searchTimer = new Timer();
-        this.searchTimer.schedule(new TimerTask() {
+        Timer timer = new Timer();
+        this.searchTimer = timer;
+        timer.schedule(new TimerTask() {
             public void run() {
                 try {
                     SearchAdapter.this.searchTimer.cancel();
@@ -112,7 +110,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
-                SearchAdapter.this.processSearch(str);
+                SearchAdapter.this.processSearch(str2);
             }
         }, 200, 300);
     }
@@ -156,7 +154,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     public /* synthetic */ void lambda$null$0$SearchAdapter(String str, ArrayList arrayList, int i) {
         String str2;
-        SparseArray<TLRPC.User> sparseArray;
+        SparseArray<TLRPC$User> sparseArray;
         String str3;
         String lowerCase = str.trim().toLowerCase();
         if (lowerCase.length() == 0) {
@@ -168,9 +166,10 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         if (lowerCase.equals(translitString) || translitString.length() == 0) {
             translitString = null;
         }
-        int i2 = 0;
-        char c = 1;
-        String[] strArr = new String[((translitString != null ? 1 : 0) + 1)];
+        char c = 0;
+        char c2 = 1;
+        int i2 = (translitString != null ? 1 : 0) + 1;
+        String[] strArr = new String[i2];
         strArr[0] = lowerCase;
         if (translitString != null) {
             strArr[1] = translitString;
@@ -179,31 +178,32 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         ArrayList arrayList3 = new ArrayList();
         int i3 = 0;
         while (i3 < arrayList.size()) {
-            TLRPC.TL_contact tL_contact = (TLRPC.TL_contact) arrayList.get(i3);
-            TLRPC.User user = MessagesController.getInstance(i).getUser(Integer.valueOf(tL_contact.user_id));
-            if ((this.allowSelf || !user.self) && ((!this.onlyMutual || user.mutual_contact) && ((sparseArray = this.ignoreUsers) == null || sparseArray.indexOfKey(tL_contact.user_id) < 0))) {
+            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList.get(i3);
+            TLRPC$User user = MessagesController.getInstance(i).getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
+            if ((this.allowSelf || !user.self) && ((!this.onlyMutual || user.mutual_contact) && ((sparseArray = this.ignoreUsers) == null || sparseArray.indexOfKey(tLRPC$TL_contact.user_id) < 0))) {
+                int i4 = 3;
                 String[] strArr2 = new String[3];
-                strArr2[i2] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-                strArr2[c] = LocaleController.getInstance().getTranslitString(strArr2[i2]);
-                if (strArr2[i2].equals(strArr2[c])) {
-                    strArr2[c] = str4;
+                strArr2[c] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                strArr2[c2] = LocaleController.getInstance().getTranslitString(strArr2[c]);
+                if (strArr2[c].equals(strArr2[c2])) {
+                    strArr2[c2] = str4;
                 }
                 if (user.self) {
                     strArr2[2] = LocaleController.getString("SavedMessages", NUM).toLowerCase();
                 }
-                int length = strArr.length;
-                int i4 = 0;
-                char c2 = 0;
+                int i5 = 0;
+                char c3 = 0;
                 while (true) {
-                    if (i4 >= length) {
+                    if (i5 >= i2) {
                         break;
                     }
-                    String str5 = strArr[i4];
+                    String str5 = strArr[i5];
+                    int i6 = 0;
                     while (true) {
-                        if (i2 >= strArr2.length) {
+                        if (i6 >= i4) {
                             break;
                         }
-                        String str6 = strArr2[i2];
+                        String str6 = strArr2[i6];
                         if (str6 != null) {
                             if (str6.startsWith(str5)) {
                                 break;
@@ -212,14 +212,15 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                                 break;
                             }
                         }
-                        i2++;
+                        i6++;
+                        i4 = 3;
                     }
-                    c2 = 1;
-                    if (c2 == 0 && (str3 = user.username) != null && str3.startsWith(str5)) {
-                        c2 = 2;
+                    c3 = 1;
+                    if (c3 == 0 && (str3 = user.username) != null && str3.startsWith(str5)) {
+                        c3 = 2;
                     }
-                    if (c2 != 0) {
-                        if (c2 == 1) {
+                    if (c3 != 0) {
+                        if (c3 == 1) {
                             arrayList3.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str5));
                             str2 = null;
                         } else {
@@ -228,17 +229,17 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                         }
                         arrayList2.add(user);
                     } else {
-                        i4++;
+                        i5++;
                         str4 = null;
-                        i2 = 0;
+                        i4 = 3;
                     }
                 }
             }
             str2 = str4;
             i3++;
             str4 = str2;
-            i2 = 0;
-            c = 1;
+            c = 0;
+            c2 = 1;
         }
         updateSearchResults(arrayList2, arrayList3);
     }
@@ -331,8 +332,8 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         boolean z;
-        String str;
         int i2;
+        String str;
         CharSequence charSequence;
         int itemViewType = viewHolder.getItemViewType();
         CharSequence charSequence2 = null;
@@ -341,17 +342,16 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         if (itemViewType == 0) {
             TLObject tLObject = (TLObject) getItem(i);
             if (tLObject != null) {
-                if (tLObject instanceof TLRPC.User) {
-                    TLRPC.User user = (TLRPC.User) tLObject;
-                    str = user.username;
-                    int i3 = user.id;
-                    z = user.self;
-                    i2 = i3;
+                if (tLObject instanceof TLRPC$User) {
+                    TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                    str = tLRPC$User.username;
+                    i2 = tLRPC$User.id;
+                    z = tLRPC$User.self;
                 } else {
-                    if (tLObject instanceof TLRPC.Chat) {
-                        TLRPC.Chat chat = (TLRPC.Chat) tLObject;
-                        str = chat.username;
-                        i2 = chat.id;
+                    if (tLObject instanceof TLRPC$Chat) {
+                        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
+                        str = tLRPC$Chat.username;
+                        i2 = tLRPC$Chat.id;
                     } else {
                         str = null;
                         i2 = 0;
@@ -409,7 +409,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     return;
                 }
                 ProfileSearchCell profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                profileSearchCell.setData(tLObject, (TLRPC.EncryptedChat) null, z ? LocaleController.getString("SavedMessages", NUM) : charSequence2, charSequence, false, z);
+                profileSearchCell.setData(tLObject, (TLRPC$EncryptedChat) null, z ? LocaleController.getString("SavedMessages", NUM) : charSequence2, charSequence, false, z);
                 if (!(i == getItemCount() - 1 || i == this.searchResult.size() - 1)) {
                     z2 = true;
                 }

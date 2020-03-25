@@ -51,7 +51,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     public ExtendedDefaultDataSource(Context context2, DataSource dataSource2) {
         this.context = context2.getApplicationContext();
-        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource2);
+        Assertions.checkNotNull(dataSource2);
+        this.baseDataSource = dataSource2;
         this.transferListeners = new ArrayList();
     }
 
@@ -115,7 +116,9 @@ public final class ExtendedDefaultDataSource implements DataSource {
     }
 
     public int read(byte[] bArr, int i, int i2) throws IOException {
-        return ((DataSource) Assertions.checkNotNull(this.dataSource)).read(bArr, i, i2);
+        DataSource dataSource2 = this.dataSource;
+        Assertions.checkNotNull(dataSource2);
+        return dataSource2.read(bArr, i, i2);
     }
 
     public Uri getUri() {
@@ -144,24 +147,27 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     private DataSource getFileDataSource() {
         if (this.fileDataSource == null) {
-            this.fileDataSource = new FileDataSource();
-            addListenersToDataSource(this.fileDataSource);
+            FileDataSource fileDataSource2 = new FileDataSource();
+            this.fileDataSource = fileDataSource2;
+            addListenersToDataSource(fileDataSource2);
         }
         return this.fileDataSource;
     }
 
     private DataSource getAssetDataSource() {
         if (this.assetDataSource == null) {
-            this.assetDataSource = new AssetDataSource(this.context);
-            addListenersToDataSource(this.assetDataSource);
+            AssetDataSource assetDataSource2 = new AssetDataSource(this.context);
+            this.assetDataSource = assetDataSource2;
+            addListenersToDataSource(assetDataSource2);
         }
         return this.assetDataSource;
     }
 
     private DataSource getEncryptedFileDataSource() {
         if (this.encryptedFileDataSource == null) {
-            this.encryptedFileDataSource = new EncryptedFileDataSource();
-            addListenersToDataSource(this.encryptedFileDataSource);
+            EncryptedFileDataSource encryptedFileDataSource2 = new EncryptedFileDataSource();
+            this.encryptedFileDataSource = encryptedFileDataSource2;
+            addListenersToDataSource(encryptedFileDataSource2);
         }
         return this.encryptedFileDataSource;
     }
@@ -174,8 +180,9 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     private DataSource getContentDataSource() {
         if (this.contentDataSource == null) {
-            this.contentDataSource = new ContentDataSource(this.context);
-            addListenersToDataSource(this.contentDataSource);
+            ContentDataSource contentDataSource2 = new ContentDataSource(this.context);
+            this.contentDataSource = contentDataSource2;
+            addListenersToDataSource(contentDataSource2);
         }
         return this.contentDataSource;
     }
@@ -183,8 +190,9 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private DataSource getRtmpDataSource() {
         if (this.rtmpDataSource == null) {
             try {
-                this.rtmpDataSource = (DataSource) Class.forName("com.google.android.exoplayer2.ext.rtmp.RtmpDataSource").getConstructor(new Class[0]).newInstance(new Object[0]);
-                addListenersToDataSource(this.rtmpDataSource);
+                DataSource dataSource2 = (DataSource) Class.forName("com.google.android.exoplayer2.ext.rtmp.RtmpDataSource").getConstructor(new Class[0]).newInstance(new Object[0]);
+                this.rtmpDataSource = dataSource2;
+                addListenersToDataSource(dataSource2);
             } catch (ClassNotFoundException unused) {
                 Log.w("ExtendedDefaultDataSource", "Attempting to play RTMP stream without depending on the RTMP extension");
             } catch (Exception e) {
@@ -199,16 +207,18 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     private DataSource getDataSchemeDataSource() {
         if (this.dataSchemeDataSource == null) {
-            this.dataSchemeDataSource = new DataSchemeDataSource();
-            addListenersToDataSource(this.dataSchemeDataSource);
+            DataSchemeDataSource dataSchemeDataSource2 = new DataSchemeDataSource();
+            this.dataSchemeDataSource = dataSchemeDataSource2;
+            addListenersToDataSource(dataSchemeDataSource2);
         }
         return this.dataSchemeDataSource;
     }
 
     private DataSource getRawResourceDataSource() {
         if (this.rawResourceDataSource == null) {
-            this.rawResourceDataSource = new RawResourceDataSource(this.context);
-            addListenersToDataSource(this.rawResourceDataSource);
+            RawResourceDataSource rawResourceDataSource2 = new RawResourceDataSource(this.context);
+            this.rawResourceDataSource = rawResourceDataSource2;
+            addListenersToDataSource(rawResourceDataSource2);
         }
         return this.rawResourceDataSource;
     }

@@ -33,12 +33,14 @@ public class AudioRecoder {
     public AudioRecoder(MediaFormat mediaFormat, MediaExtractor mediaExtractor, int i) throws IOException {
         this.extractor = mediaExtractor;
         this.trackIndex = i;
-        this.decoder = MediaCodec.createDecoderByType(mediaFormat.getString("mime"));
-        this.decoder.configure(mediaFormat, (Surface) null, (MediaCrypto) null, 0);
+        MediaCodec createDecoderByType = MediaCodec.createDecoderByType(mediaFormat.getString("mime"));
+        this.decoder = createDecoderByType;
+        createDecoderByType.configure(mediaFormat, (Surface) null, (MediaCrypto) null, 0);
         this.decoder.start();
         this.encoder = MediaCodec.createEncoderByType("audio/mp4a-latm");
-        this.format = MediaFormat.createAudioFormat("audio/mp4a-latm", mediaFormat.getInteger("sample-rate"), mediaFormat.getInteger("channel-count"));
-        this.format.setInteger("bitrate", 65536);
+        MediaFormat createAudioFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", mediaFormat.getInteger("sample-rate"), mediaFormat.getInteger("channel-count"));
+        this.format = createAudioFormat;
+        createAudioFormat.setInteger("bitrate", 65536);
         this.encoder.configure(this.format, (Surface) null, (MediaCrypto) null, 1);
         this.encoder.start();
         this.decoderInputBuffers = this.decoder.getInputBuffers();
@@ -80,8 +82,9 @@ public class AudioRecoder {
             if (readSampleData >= 0) {
                 this.decoder.queueInputBuffer(dequeueInputBuffer2, 0, readSampleData, this.extractor.getSampleTime(), this.extractor.getSampleFlags());
             }
-            this.extractorDone = !this.extractor.advance();
-            if (this.extractorDone) {
+            boolean z = !this.extractor.advance();
+            this.extractorDone = z;
+            if (z) {
                 this.decoder.queueInputBuffer(this.decoder.dequeueInputBuffer(2500), 0, 0, 0, 4);
             }
         }

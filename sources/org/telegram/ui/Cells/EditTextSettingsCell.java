@@ -1,14 +1,11 @@
 package org.telegram.ui.Cells;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.FrameLayout;
-import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
@@ -21,8 +18,9 @@ public class EditTextSettingsCell extends FrameLayout {
 
     public EditTextSettingsCell(Context context) {
         super(context);
-        this.textView = new EditTextBoldCursor(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context);
+        this.textView = editTextBoldCursor;
+        editTextBoldCursor.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
@@ -33,8 +31,8 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setBackgroundDrawable((Drawable) null);
         this.textView.setPadding(0, 0, 0, 0);
-        EditTextBoldCursor editTextBoldCursor = this.textView;
-        editTextBoldCursor.setInputType(editTextBoldCursor.getInputType() | 16384);
+        EditTextBoldCursor editTextBoldCursor2 = this.textView;
+        editTextBoldCursor2.setInputType(editTextBoldCursor2.getInputType() | 16384);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
@@ -46,10 +44,6 @@ public class EditTextSettingsCell extends FrameLayout {
 
     public EditTextBoldCursor getTextView() {
         return this.textView;
-    }
-
-    public void addTextWatcher(TextWatcher textWatcher) {
-        this.textView.addTextChangedListener(textWatcher);
     }
 
     public String getText() {
@@ -75,10 +69,6 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setHint(str2);
         this.needDivider = z;
         setWillNotDraw(!z);
-    }
-
-    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
-        setEnabled(z);
     }
 
     /* access modifiers changed from: protected */

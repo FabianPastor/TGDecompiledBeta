@@ -17,7 +17,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.ui.Components.ShareAlert;
 
 public class ShareActivity extends Activity {
@@ -51,7 +51,7 @@ public class ShareActivity extends Activity {
             return;
         }
         SerializedData serializedData = new SerializedData(Utilities.hexToBytes(string));
-        TLRPC.Message TLdeserialize = TLRPC.Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+        TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
         TLdeserialize.readAttachPath(serializedData, 0);
         serializedData.cleanup();
         if (TLdeserialize == null) {
@@ -62,8 +62,9 @@ public class ShareActivity extends Activity {
         MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, TLdeserialize, false);
         messageObject.messageOwner.with_my_score = true;
         try {
-            this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, (String) null, false, string2, false);
-            this.visibleDialog.setCanceledOnTouchOutside(true);
+            ShareAlert createShareAlert = ShareAlert.createShareAlert(this, messageObject, (String) null, false, string2, false);
+            this.visibleDialog = createShareAlert;
+            createShareAlert.setCanceledOnTouchOutside(true);
             this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
                     ShareActivity.this.lambda$onCreate$0$ShareActivity(dialogInterface);

@@ -53,7 +53,7 @@ public class BetterRatingView extends View {
                 this.selectedRating = i;
                 OnRatingChangeListener onRatingChangeListener = this.listener;
                 if (onRatingChangeListener != null) {
-                    onRatingChangeListener.onRatingChanged(this.selectedRating);
+                    onRatingChangeListener.onRatingChanged(i);
                 }
                 invalidate();
                 return true;

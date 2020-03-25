@@ -38,7 +38,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$FileLocation;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -72,7 +73,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
     public int topBeforeSwitch;
 
     public interface PhonebookShareAlertDelegate {
-        void didSelectContact(TLRPC.User user, boolean z, int i);
+        void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i);
     }
 
     /* access modifiers changed from: protected */
@@ -83,12 +84,11 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
     public class UserCell extends FrameLayout {
         private AvatarDrawable avatarDrawable = new AvatarDrawable();
         private BackupImageView avatarImageView;
-        private int currentAccount = UserConfig.selectedAccount;
         private int currentId;
         private CharSequence currentName;
         private CharSequence currentStatus;
-        private TLRPC.User currentUser;
-        private TLRPC.FileLocation lastAvatar;
+        private TLRPC$User currentUser;
+        private TLRPC$FileLocation lastAvatar;
         private String lastName;
         private int lastStatus;
         private SimpleTextView nameTextView;
@@ -99,31 +99,35 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             return false;
         }
 
-        public UserCell(Context context) {
+        public UserCell(PhonebookSelectShareAlert phonebookSelectShareAlert, Context context) {
             super(context);
-            this.avatarImageView = new BackupImageView(context);
-            this.avatarImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
-            int i = 5;
+            int i = UserConfig.selectedAccount;
+            BackupImageView backupImageView = new BackupImageView(context);
+            this.avatarImageView = backupImageView;
+            backupImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
+            int i2 = 5;
             addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 14.0f, 9.0f, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f));
-            this.nameTextView = new SimpleTextView(context);
-            this.nameTextView.setTextColor(Theme.getColor("dialogTextBlack"));
+            SimpleTextView simpleTextView = new SimpleTextView(context);
+            this.nameTextView = simpleTextView;
+            simpleTextView.setTextColor(Theme.getColor("dialogTextBlack"));
             this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.nameTextView.setTextSize(16);
             this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 12.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-            this.statusTextView = new SimpleTextView(context);
-            this.statusTextView.setTextSize(13);
+            SimpleTextView simpleTextView2 = new SimpleTextView(context);
+            this.statusTextView = simpleTextView2;
+            simpleTextView2.setTextSize(13);
             this.statusTextView.setTextColor(Theme.getColor("dialogTextGray2"));
             this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 36.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+            addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i2) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 36.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         }
 
         public void setCurrentId(int i) {
             this.currentId = i;
         }
 
-        public void setData(TLRPC.User user, CharSequence charSequence, CharSequence charSequence2, boolean z) {
-            if (user == null && charSequence == null && charSequence2 == null) {
+        public void setData(TLRPC$User tLRPC$User, CharSequence charSequence, CharSequence charSequence2, boolean z) {
+            if (tLRPC$User == null && charSequence == null && charSequence2 == null) {
                 this.currentStatus = null;
                 this.currentName = null;
                 this.nameTextView.setText("");
@@ -133,9 +137,9 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             }
             this.currentStatus = charSequence2;
             this.currentName = charSequence;
-            this.currentUser = user;
+            this.currentUser = tLRPC$User;
             this.needDivider = z;
-            setWillNotDraw(!this.needDivider);
+            setWillNotDraw(!z);
             update(0);
         }
 
@@ -146,6 +150,9 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
 
         /* JADX WARNING: Code restructure failed: missing block: B:2:0x0005, code lost:
             r0 = r0.photo;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:49:0x006c, code lost:
+            if (r11.equals(r10.lastName) == false) goto L_0x0071;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void update(int r11) {
@@ -206,13 +213,13 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 if (r5 == r6) goto L_0x004f
                 r3 = 1
             L_0x004f:
-                if (r3 != 0) goto L_0x0070
+                if (r3 != 0) goto L_0x006f
                 java.lang.CharSequence r5 = r10.currentName
-                if (r5 != 0) goto L_0x0070
+                if (r5 != 0) goto L_0x006f
                 java.lang.String r5 = r10.lastName
-                if (r5 == 0) goto L_0x0070
+                if (r5 == 0) goto L_0x006f
                 r11 = r11 & r4
-                if (r11 == 0) goto L_0x0070
+                if (r11 == 0) goto L_0x006f
                 org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
                 if (r11 == 0) goto L_0x0065
                 java.lang.String r11 = org.telegram.messenger.UserObject.getUserName(r11)
@@ -222,13 +229,14 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             L_0x0066:
                 java.lang.String r5 = r10.lastName
                 boolean r5 = r11.equals(r5)
-                if (r5 != 0) goto L_0x0071
-                r3 = 1
+                if (r5 != 0) goto L_0x0070
                 goto L_0x0071
-            L_0x0070:
+            L_0x006f:
                 r11 = r1
+            L_0x0070:
+                r4 = r3
             L_0x0071:
-                if (r3 != 0) goto L_0x0075
+                if (r4 != 0) goto L_0x0075
                 return
             L_0x0074:
                 r11 = r1
@@ -236,7 +244,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
                 if (r3 == 0) goto L_0x008c
                 org.telegram.ui.Components.AvatarDrawable r4 = r10.avatarDrawable
-                r4.setInfo((org.telegram.tgnet.TLRPC.User) r3)
+                r4.setInfo((org.telegram.tgnet.TLRPC$User) r3)
                 org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
                 org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
                 if (r3 == 0) goto L_0x0089
@@ -294,7 +302,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 boolean r11 = android.text.TextUtils.isEmpty(r11)
                 if (r11 == 0) goto L_0x00ee
                 org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                r1 = 2131625881(0x7f0e0799, float:1.8878982E38)
+                r1 = 2131625977(0x7f0e07f9, float:1.8879177E38)
                 java.lang.String r3 = "NumberUnknown"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r11.setText(r1)
@@ -342,7 +350,6 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
     }
 
     private class SearchField extends FrameLayout {
-        private View backgroundView;
         /* access modifiers changed from: private */
         public ImageView clearSearchImageView;
         private CloseProgressDrawable2 progressDrawable;
@@ -353,20 +360,23 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
 
         public SearchField(Context context) {
             super(context);
-            this.searchBackground = new View(context);
-            this.searchBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialogSearchBackground")));
+            View view = new View(context);
+            this.searchBackground = view;
+            view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialogSearchBackground")));
             addView(this.searchBackground, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
-            this.searchIconImageView = new ImageView(context);
-            this.searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView = new ImageView(context);
+            this.searchIconImageView = imageView;
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.searchIconImageView.setImageResource(NUM);
             this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.searchIconImageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
-            this.clearSearchImageView = new ImageView(context);
-            this.clearSearchImageView.setScaleType(ImageView.ScaleType.CENTER);
-            ImageView imageView = this.clearSearchImageView;
+            ImageView imageView2 = new ImageView(context);
+            this.clearSearchImageView = imageView2;
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView3 = this.clearSearchImageView;
             CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
             this.progressDrawable = closeProgressDrawable2;
-            imageView.setImageDrawable(closeProgressDrawable2);
+            imageView3.setImageDrawable(closeProgressDrawable2);
             this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
             this.clearSearchImageView.setScaleX(0.1f);
             this.clearSearchImageView.setScaleY(0.1f);
@@ -378,7 +388,7 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                     PhonebookSelectShareAlert.SearchField.this.lambda$new$0$PhonebookSelectShareAlert$SearchField(view);
                 }
             });
-            this.searchEditText = new EditTextBoldCursor(context, PhonebookSelectShareAlert.this) {
+            AnonymousClass1 r0 = new EditTextBoldCursor(context, PhonebookSelectShareAlert.this) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     MotionEvent obtain = MotionEvent.obtain(motionEvent);
                     obtain.setLocation(obtain.getRawX(), obtain.getRawY() - PhonebookSelectShareAlert.this.containerView.getTranslationY());
@@ -387,7 +397,8 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                     return super.dispatchTouchEvent(motionEvent);
                 }
             };
-            this.searchEditText.setTextSize(1, 16.0f);
+            this.searchEditText = r0;
+            r0.setTextSize(1, 16.0f);
             this.searchEditText.setHintTextColor(Theme.getColor("dialogSearchHint"));
             this.searchEditText.setTextColor(Theme.getColor("dialogSearchText"));
             this.searchEditText.setBackgroundDrawable((Drawable) null);
@@ -470,10 +481,6 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             return false;
         }
 
-        public void hideKeyboard() {
-            AndroidUtilities.hideKeyboard(this.searchEditText);
-        }
-
         public void requestDisallowInterceptTouchEvent(boolean z) {
             super.requestDisallowInterceptTouchEvent(z);
         }
@@ -483,10 +490,11 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
         super(chatActivity2.getParentActivity(), true);
         this.chatActivity = chatActivity2;
         Activity parentActivity = chatActivity2.getParentActivity();
-        this.shadowDrawable = parentActivity.getResources().getDrawable(NUM).mutate();
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
+        Drawable mutate = parentActivity.getResources().getDrawable(NUM).mutate();
+        this.shadowDrawable = mutate;
+        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         this.searchAdapter = new ShareSearchAdapter(parentActivity);
-        this.containerView = new FrameLayout(parentActivity) {
+        AnonymousClass1 r0 = new FrameLayout(parentActivity) {
             private boolean fullHeight;
             private boolean ignoreLayout = false;
             private RectF rect1 = new RectF();
@@ -750,20 +758,23 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookSelectShareAlert.AnonymousClass1.onDraw(android.graphics.Canvas):void");
             }
         };
-        this.containerView.setWillNotDraw(false);
+        this.containerView = r0;
+        r0.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
         int i = this.backgroundPaddingLeft;
         viewGroup.setPadding(i, 0, i, 0);
-        this.frameLayout = new FrameLayout(parentActivity);
-        this.frameLayout.setBackgroundColor(Theme.getColor("dialogBackground"));
+        FrameLayout frameLayout2 = new FrameLayout(parentActivity);
+        this.frameLayout = frameLayout2;
+        frameLayout2.setBackgroundColor(Theme.getColor("dialogBackground"));
         this.frameLayout.addView(new SearchField(parentActivity), LayoutHelper.createFrame(-1, -1, 51));
-        this.listView = new RecyclerListView(parentActivity) {
+        AnonymousClass2 r02 = new RecyclerListView(parentActivity) {
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
                 return f2 >= ((float) ((PhonebookSelectShareAlert.this.scrollOffsetY + AndroidUtilities.dp(48.0f)) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
             }
         };
-        this.listView.setClipToPadding(false);
+        this.listView = r02;
+        r02.setClipToPadding(false);
         RecyclerListView recyclerListView = this.listView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), 1, false);
         this.layoutManager = linearLayoutManager;
@@ -786,16 +797,18 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 PhonebookSelectShareAlert.this.updateLayout();
             }
         });
-        this.searchEmptyView = new EmptyTextProgressView(parentActivity);
-        this.searchEmptyView.setShowAtCenter(true);
+        EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(parentActivity);
+        this.searchEmptyView = emptyTextProgressView;
+        emptyTextProgressView.setShowAtCenter(true);
         this.searchEmptyView.showTextView();
         this.searchEmptyView.setText(LocaleController.getString("NoContacts", NUM));
         this.listView.setEmptyView(this.searchEmptyView);
         this.containerView.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 52.0f, 0.0f, 0.0f));
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-1, AndroidUtilities.getShadowHeight(), 51);
         layoutParams.topMargin = AndroidUtilities.dp(58.0f);
-        this.shadow = new View(parentActivity);
-        this.shadow.setBackgroundColor(Theme.getColor("dialogShadowLine"));
+        View view = new View(parentActivity);
+        this.shadow = view;
+        view.setBackgroundColor(Theme.getColor("dialogShadowLine"));
         this.shadow.setAlpha(0.0f);
         this.shadow.setTag(1);
         this.containerView.addView(this.shadow, layoutParams);
@@ -823,32 +836,32 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
         if (obj != null) {
             if (obj instanceof ContactsController.Contact) {
                 ContactsController.Contact contact2 = (ContactsController.Contact) obj;
-                TLRPC.User user = contact2.user;
+                TLRPC$User tLRPC$User = contact2.user;
                 contact = contact2;
-                str = user != null ? ContactsController.formatName(user.first_name, user.last_name) : "";
+                str = tLRPC$User != null ? ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name) : "";
             } else {
-                TLRPC.User user2 = (TLRPC.User) obj;
+                TLRPC$User tLRPC$User2 = (TLRPC$User) obj;
                 ContactsController.Contact contact3 = new ContactsController.Contact();
-                contact3.first_name = user2.first_name;
-                contact3.last_name = user2.last_name;
-                contact3.phones.add(user2.phone);
-                contact3.user = user2;
+                contact3.first_name = tLRPC$User2.first_name;
+                contact3.last_name = tLRPC$User2.last_name;
+                contact3.phones.add(tLRPC$User2.phone);
+                contact3.user = tLRPC$User2;
                 str = ContactsController.formatName(contact3.first_name, contact3.last_name);
                 contact = contact3;
             }
-            PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.chatActivity, contact, (TLRPC.User) null, (Uri) null, (File) null, str);
+            PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.chatActivity, contact, (TLRPC$User) null, (Uri) null, (File) null, str);
             phonebookShareAlert.setDelegate(new PhonebookShareAlertDelegate() {
-                public final void didSelectContact(TLRPC.User user, boolean z, int i) {
-                    PhonebookSelectShareAlert.this.lambda$null$0$PhonebookSelectShareAlert(user, z, i);
+                public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
+                    PhonebookSelectShareAlert.this.lambda$null$0$PhonebookSelectShareAlert(tLRPC$User, z, i);
                 }
             });
             phonebookShareAlert.show();
         }
     }
 
-    public /* synthetic */ void lambda$null$0$PhonebookSelectShareAlert(TLRPC.User user, boolean z, int i) {
+    public /* synthetic */ void lambda$null$0$PhonebookSelectShareAlert(TLRPC$User tLRPC$User, boolean z, int i) {
         dismiss();
-        this.delegate.didSelectContact(user, z, i);
+        this.delegate.didSelectContact(tLRPC$User, z, i);
     }
 
     /* access modifiers changed from: private */
@@ -915,8 +928,8 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             if (animatorSet != null) {
                 animatorSet.cancel();
             }
-            this.shadowAnimation = new AnimatorSet();
-            AnimatorSet animatorSet2 = this.shadowAnimation;
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.shadowAnimation = animatorSet2;
             Animator[] animatorArr = new Animator[1];
             View view = this.shadow;
             Property property = View.ALPHA;
@@ -1023,13 +1036,13 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 view = new View(this.mContext);
                 view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
             } else {
-                view = new UserCell(this.mContext);
+                view = new UserCell(PhonebookSelectShareAlert.this, this.mContext);
             }
             return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
-            TLRPC.User user;
+            TLRPC$User tLRPC$User;
             if (viewHolder.getItemViewType() == 0) {
                 UserCell userCell = (UserCell) viewHolder.itemView;
                 Object item = getItem(i, i2);
@@ -1039,17 +1052,17 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 }
                 if (item instanceof ContactsController.Contact) {
                     ContactsController.Contact contact = (ContactsController.Contact) item;
-                    user = contact.user;
-                    if (user == null) {
+                    tLRPC$User = contact.user;
+                    if (tLRPC$User == null) {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData((TLRPC.User) null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
-                        user = null;
+                        userCell.setData((TLRPC$User) null, ContactsController.formatName(contact.first_name, contact.last_name), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
+                        tLRPC$User = null;
                     }
                 } else {
-                    user = (TLRPC.User) item;
+                    tLRPC$User = (TLRPC$User) item;
                 }
-                if (user != null) {
-                    userCell.setData(user, (CharSequence) null, PhoneFormat.getInstance().format("+" + user.phone), z);
+                if (tLRPC$User != null) {
+                    userCell.setData(tLRPC$User, (CharSequence) null, PhoneFormat.getInstance().format("+" + tLRPC$User.phone), z);
                 }
             }
         }
@@ -1146,36 +1159,36 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
             });
         }
 
-        /* JADX WARNING: type inference failed for: r0v6 */
-        /* JADX WARNING: type inference failed for: r0v18 */
-        /* JADX WARNING: type inference failed for: r0v21 */
-        /* JADX WARNING: type inference failed for: r0v25 */
-        /* JADX WARNING: type inference failed for: r0v32 */
-        /* JADX WARNING: Code restructure failed: missing block: B:33:0x00c7, code lost:
-            if (r5.contains(" " + r6) == false) goto L_0x00c9;
+        /* JADX WARNING: type inference failed for: r1v4 */
+        /* JADX WARNING: type inference failed for: r1v12 */
+        /* JADX WARNING: type inference failed for: r1v15 */
+        /* JADX WARNING: type inference failed for: r1v19 */
+        /* JADX WARNING: type inference failed for: r1v26 */
+        /* JADX WARNING: Code restructure failed: missing block: B:33:0x00c4, code lost:
+            if (r5.contains(" " + r0) == false) goto L_0x00c6;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:38:0x00e4, code lost:
-            if (r11.contains(" " + r6) != false) goto L_0x00e6;
+        /* JADX WARNING: Code restructure failed: missing block: B:38:0x00e1, code lost:
+            if (r6.contains(" " + r0) != false) goto L_0x00e3;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:55:0x012e, code lost:
-            if (r15.contains(" " + r6) != false) goto L_0x0134;
+        /* JADX WARNING: Code restructure failed: missing block: B:55:0x012b, code lost:
+            if (r12.contains(" " + r0) != false) goto L_0x0131;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:0x0224, code lost:
-            if (r9.contains(" " + r15) != false) goto L_0x0233;
+        /* JADX WARNING: Code restructure failed: missing block: B:91:0x0222, code lost:
+            if (r6.contains(" " + r12) != false) goto L_0x0231;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:104:0x0272 A[LOOP:3: B:82:0x01ea->B:104:0x0272, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x0137 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:116:0x0236 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x018f A[LOOP:1: B:27:0x00a6->B:70:0x018f, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:104:0x0270 A[LOOP:3: B:82:0x01e8->B:104:0x0270, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:111:0x0134 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$PhonebookSelectShareAlert$ShareSearchAdapter(java.lang.String r21, java.util.ArrayList r22, java.util.ArrayList r23, int r24, int r25) {
+        public /* synthetic */ void lambda$null$1$PhonebookSelectShareAlert$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
             /*
-                r20 = this;
-                r0 = r20
-                r1 = r21
-                java.lang.String r2 = r21.trim()
+                r18 = this;
+                r0 = r18
+                r1 = r19
+                java.lang.String r2 = r19.trim()
                 java.lang.String r2 = r2.toLowerCase()
                 int r3 = r2.length()
                 if (r3 != 0) goto L_0x0025
@@ -1207,277 +1220,275 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 r7 = 0
             L_0x0041:
                 int r7 = r7 + r6
-                java.lang.String[] r7 = new java.lang.String[r7]
-                r7[r4] = r2
+                java.lang.String[] r8 = new java.lang.String[r7]
+                r8[r4] = r2
                 if (r3 == 0) goto L_0x004a
-                r7[r6] = r3
+                r8[r6] = r3
             L_0x004a:
                 java.util.ArrayList r2 = new java.util.ArrayList
                 r2.<init>()
                 java.util.ArrayList r3 = new java.util.ArrayList
                 r3.<init>()
-                android.util.SparseBooleanArray r8 = new android.util.SparseBooleanArray
-                r8.<init>()
-                r9 = 0
+                android.util.SparseBooleanArray r9 = new android.util.SparseBooleanArray
+                r9.<init>()
+                r10 = 0
             L_0x005a:
-                int r10 = r22.size()
-                java.lang.String r12 = "@"
-                java.lang.String r13 = " "
-                if (r9 >= r10) goto L_0x01a3
-                r10 = r22
-                java.lang.Object r14 = r10.get(r9)
-                org.telegram.messenger.ContactsController$Contact r14 = (org.telegram.messenger.ContactsController.Contact) r14
-                java.lang.String r15 = r14.first_name
-                java.lang.String r4 = r14.last_name
-                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r15, r4)
+                int r11 = r20.size()
+                java.lang.String r13 = "@"
+                java.lang.String r14 = " "
+                if (r10 >= r11) goto L_0x01a2
+                r11 = r20
+                java.lang.Object r15 = r11.get(r10)
+                org.telegram.messenger.ContactsController$Contact r15 = (org.telegram.messenger.ContactsController.Contact) r15
+                java.lang.String r4 = r15.first_name
+                java.lang.String r12 = r15.last_name
+                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r12)
                 java.lang.String r4 = r4.toLowerCase()
-                org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r15 = r15.getTranslitString(r4)
-                org.telegram.tgnet.TLRPC$User r11 = r14.user
-                if (r11 == 0) goto L_0x0099
-                java.lang.String r5 = r11.first_name
-                java.lang.String r11 = r11.last_name
-                java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r5, r11)
+                org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r12 = r12.getTranslitString(r4)
+                org.telegram.tgnet.TLRPC$User r5 = r15.user
+                if (r5 == 0) goto L_0x0099
+                java.lang.String r6 = r5.first_name
+                java.lang.String r5 = r5.last_name
+                java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r6, r5)
                 java.lang.String r5 = r5.toLowerCase()
-                org.telegram.messenger.LocaleController r11 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r11 = r11.getTranslitString(r4)
+                org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r6 = r6.getTranslitString(r4)
                 goto L_0x009b
             L_0x0099:
                 r5 = 0
-                r11 = 0
+                r6 = 0
             L_0x009b:
-                boolean r16 = r4.equals(r15)
+                boolean r16 = r4.equals(r12)
                 if (r16 == 0) goto L_0x00a2
-                r15 = 0
+                r12 = 0
             L_0x00a2:
-                int r6 = r7.length
-                r10 = 0
-                r17 = 0
-            L_0x00a6:
-                if (r10 >= r6) goto L_0x019b
-                r18 = r6
-                r6 = r7[r10]
-                if (r5 == 0) goto L_0x00c9
-                boolean r19 = r5.startsWith(r6)
-                if (r19 != 0) goto L_0x00e6
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                r0.append(r13)
-                r0.append(r6)
-                java.lang.String r0 = r0.toString()
-                boolean r0 = r5.contains(r0)
-                if (r0 != 0) goto L_0x00e6
-            L_0x00c9:
-                if (r11 == 0) goto L_0x00e8
-                boolean r0 = r11.startsWith(r6)
-                if (r0 != 0) goto L_0x00e6
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                r0.append(r13)
-                r0.append(r6)
-                java.lang.String r0 = r0.toString()
-                boolean r0 = r11.contains(r0)
-                if (r0 == 0) goto L_0x00e8
-            L_0x00e6:
-                r0 = 1
-                goto L_0x0135
-            L_0x00e8:
-                org.telegram.tgnet.TLRPC$User r0 = r14.user
-                if (r0 == 0) goto L_0x00f8
-                java.lang.String r0 = r0.username
-                if (r0 == 0) goto L_0x00f8
-                boolean r0 = r0.startsWith(r6)
-                if (r0 == 0) goto L_0x00f8
-                r0 = 2
-                goto L_0x0135
-            L_0x00f8:
-                boolean r0 = r4.startsWith(r6)
-                if (r0 != 0) goto L_0x0134
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                r0.append(r13)
-                r0.append(r6)
-                java.lang.String r0 = r0.toString()
-                boolean r0 = r4.contains(r0)
-                if (r0 != 0) goto L_0x0134
-                if (r15 == 0) goto L_0x0131
-                boolean r0 = r15.startsWith(r6)
-                if (r0 != 0) goto L_0x0134
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                r0.append(r13)
-                r0.append(r6)
-                java.lang.String r0 = r0.toString()
-                boolean r0 = r15.contains(r0)
-                if (r0 == 0) goto L_0x0131
-                goto L_0x0134
+                r11 = 0
+                r16 = 0
+            L_0x00a5:
+                if (r11 >= r7) goto L_0x0198
+                r0 = r8[r11]
+                if (r5 == 0) goto L_0x00c6
+                boolean r17 = r5.startsWith(r0)
+                if (r17 != 0) goto L_0x00e3
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                r1.append(r14)
+                r1.append(r0)
+                java.lang.String r1 = r1.toString()
+                boolean r1 = r5.contains(r1)
+                if (r1 != 0) goto L_0x00e3
+            L_0x00c6:
+                if (r6 == 0) goto L_0x00e5
+                boolean r1 = r6.startsWith(r0)
+                if (r1 != 0) goto L_0x00e3
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                r1.append(r14)
+                r1.append(r0)
+                java.lang.String r1 = r1.toString()
+                boolean r1 = r6.contains(r1)
+                if (r1 == 0) goto L_0x00e5
+            L_0x00e3:
+                r1 = 1
+                goto L_0x0132
+            L_0x00e5:
+                org.telegram.tgnet.TLRPC$User r1 = r15.user
+                if (r1 == 0) goto L_0x00f5
+                java.lang.String r1 = r1.username
+                if (r1 == 0) goto L_0x00f5
+                boolean r1 = r1.startsWith(r0)
+                if (r1 == 0) goto L_0x00f5
+                r1 = 2
+                goto L_0x0132
+            L_0x00f5:
+                boolean r1 = r4.startsWith(r0)
+                if (r1 != 0) goto L_0x0131
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                r1.append(r14)
+                r1.append(r0)
+                java.lang.String r1 = r1.toString()
+                boolean r1 = r4.contains(r1)
+                if (r1 != 0) goto L_0x0131
+                if (r12 == 0) goto L_0x012e
+                boolean r1 = r12.startsWith(r0)
+                if (r1 != 0) goto L_0x0131
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                r1.append(r14)
+                r1.append(r0)
+                java.lang.String r1 = r1.toString()
+                boolean r1 = r12.contains(r1)
+                if (r1 == 0) goto L_0x012e
+                goto L_0x0131
+            L_0x012e:
+                r1 = r16
+                goto L_0x0132
             L_0x0131:
-                r0 = r17
-                goto L_0x0135
-            L_0x0134:
-                r0 = 3
-            L_0x0135:
-                if (r0 == 0) goto L_0x018f
+                r1 = 3
+            L_0x0132:
+                if (r1 == 0) goto L_0x018c
                 r4 = 3
-                if (r0 != r4) goto L_0x0146
-                java.lang.String r0 = r14.first_name
-                java.lang.String r4 = r14.last_name
-                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r0, r4, r6)
+                if (r1 != r4) goto L_0x0143
+                java.lang.String r1 = r15.first_name
+                java.lang.String r4 = r15.last_name
+                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r4, r0)
                 r3.add(r0)
-                goto L_0x0181
-            L_0x0146:
+                goto L_0x017e
+            L_0x0143:
                 r4 = 1
-                if (r0 != r4) goto L_0x0157
-                org.telegram.tgnet.TLRPC$User r0 = r14.user
-                java.lang.String r4 = r0.first_name
-                java.lang.String r0 = r0.last_name
-                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r0, r6)
+                if (r1 != r4) goto L_0x0154
+                org.telegram.tgnet.TLRPC$User r1 = r15.user
+                java.lang.String r4 = r1.first_name
+                java.lang.String r1 = r1.last_name
+                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r1, r0)
                 r3.add(r0)
-                goto L_0x0181
-            L_0x0157:
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                r0.append(r12)
-                org.telegram.tgnet.TLRPC$User r4 = r14.user
+                goto L_0x017e
+            L_0x0154:
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
+                r1.append(r13)
+                org.telegram.tgnet.TLRPC$User r4 = r15.user
                 java.lang.String r4 = r4.username
-                r0.append(r4)
-                java.lang.String r0 = r0.toString()
+                r1.append(r4)
+                java.lang.String r1 = r1.toString()
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
-                r4.append(r12)
-                r4.append(r6)
-                java.lang.String r4 = r4.toString()
-                r5 = 0
-                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r0, r5, r4)
+                r4.append(r13)
+                r4.append(r0)
+                java.lang.String r0 = r4.toString()
+                r4 = 0
+                java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r4, r0)
                 r3.add(r0)
-            L_0x0181:
-                org.telegram.tgnet.TLRPC$User r0 = r14.user
-                if (r0 == 0) goto L_0x018b
+            L_0x017e:
+                org.telegram.tgnet.TLRPC$User r0 = r15.user
+                if (r0 == 0) goto L_0x0188
                 int r0 = r0.id
-                r4 = 1
-                r8.put(r0, r4)
-            L_0x018b:
-                r2.add(r14)
-                goto L_0x019b
-            L_0x018f:
-                r17 = r4
+                r1 = 1
+                r9.put(r0, r1)
+            L_0x0188:
+                r2.add(r15)
+                goto L_0x0198
+            L_0x018c:
+                r16 = r4
+                int r11 = r11 + 1
+                r0 = r18
+                r16 = r1
+                r1 = r19
+                goto L_0x00a5
+            L_0x0198:
                 int r10 = r10 + 1
-                r6 = r18
-                r17 = r0
-                r0 = r20
-                goto L_0x00a6
-            L_0x019b:
-                int r9 = r9 + 1
                 r4 = 0
                 r6 = 1
-                r0 = r20
+                r0 = r18
+                r1 = r19
                 goto L_0x005a
-            L_0x01a3:
+            L_0x01a2:
                 r0 = 0
-            L_0x01a4:
-                int r4 = r23.size()
-                if (r0 >= r4) goto L_0x027e
-                r4 = r23
-                java.lang.Object r5 = r4.get(r0)
-                org.telegram.tgnet.TLRPC$TL_contact r5 = (org.telegram.tgnet.TLRPC.TL_contact) r5
-                int r6 = r5.user_id
-                int r6 = r8.indexOfKey(r6)
-                if (r6 < 0) goto L_0x01be
-            L_0x01ba:
-                r4 = 1
-                r15 = 0
-                goto L_0x027a
-            L_0x01be:
-                org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r24)
-                int r5 = r5.user_id
-                java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-                org.telegram.tgnet.TLRPC$User r5 = r6.getUser(r5)
-                java.lang.String r6 = r5.first_name
-                java.lang.String r9 = r5.last_name
-                java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r6, r9)
-                java.lang.String r6 = r6.toLowerCase()
-                org.telegram.messenger.LocaleController r9 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r9 = r9.getTranslitString(r6)
-                boolean r10 = r6.equals(r9)
-                if (r10 == 0) goto L_0x01e7
-                r9 = 0
-            L_0x01e7:
-                int r10 = r7.length
+            L_0x01a3:
+                int r1 = r21.size()
+                if (r0 >= r1) goto L_0x027a
+                r1 = r21
+                java.lang.Object r4 = r1.get(r0)
+                org.telegram.tgnet.TLRPC$TL_contact r4 = (org.telegram.tgnet.TLRPC$TL_contact) r4
+                int r5 = r4.user_id
+                int r5 = r9.indexOfKey(r5)
+                if (r5 < 0) goto L_0x01bd
+            L_0x01b9:
+                r12 = 0
+                r15 = 1
+                goto L_0x0276
+            L_0x01bd:
+                org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r22)
+                int r4 = r4.user_id
+                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+                org.telegram.tgnet.TLRPC$User r4 = r5.getUser(r4)
+                java.lang.String r5 = r4.first_name
+                java.lang.String r6 = r4.last_name
+                java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r5, r6)
+                java.lang.String r5 = r5.toLowerCase()
+                org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r6 = r6.getTranslitString(r5)
+                boolean r10 = r5.equals(r6)
+                if (r10 == 0) goto L_0x01e6
+                r6 = 0
+            L_0x01e6:
+                r10 = 0
                 r11 = 0
-                r14 = 0
-            L_0x01ea:
-                if (r11 >= r10) goto L_0x01ba
-                r15 = r7[r11]
-                boolean r17 = r6.startsWith(r15)
-                if (r17 != 0) goto L_0x0233
-                java.lang.StringBuilder r4 = new java.lang.StringBuilder
-                r4.<init>()
-                r4.append(r13)
-                r4.append(r15)
-                java.lang.String r4 = r4.toString()
-                boolean r4 = r6.contains(r4)
-                if (r4 != 0) goto L_0x0233
-                if (r9 == 0) goto L_0x0227
-                boolean r4 = r9.startsWith(r15)
-                if (r4 != 0) goto L_0x0233
-                java.lang.StringBuilder r4 = new java.lang.StringBuilder
-                r4.<init>()
-                r4.append(r13)
-                r4.append(r15)
-                java.lang.String r4 = r4.toString()
-                boolean r4 = r9.contains(r4)
-                if (r4 == 0) goto L_0x0227
-                goto L_0x0233
-            L_0x0227:
-                java.lang.String r4 = r5.username
-                if (r4 == 0) goto L_0x0234
-                boolean r4 = r4.startsWith(r15)
-                if (r4 == 0) goto L_0x0234
-                r14 = 2
-                goto L_0x0234
-            L_0x0233:
-                r14 = 1
-            L_0x0234:
-                if (r14 == 0) goto L_0x0272
-                r4 = 1
-                if (r14 != r4) goto L_0x0246
-                java.lang.String r6 = r5.first_name
-                java.lang.String r9 = r5.last_name
-                java.lang.CharSequence r6 = org.telegram.messenger.AndroidUtilities.generateSearchName(r6, r9, r15)
-                r3.add(r6)
-                r15 = 0
-                goto L_0x026e
-            L_0x0246:
+            L_0x01e8:
+                if (r11 >= r7) goto L_0x01b9
+                r12 = r8[r11]
+                boolean r15 = r5.startsWith(r12)
+                if (r15 != 0) goto L_0x0231
+                java.lang.StringBuilder r15 = new java.lang.StringBuilder
+                r15.<init>()
+                r15.append(r14)
+                r15.append(r12)
+                java.lang.String r15 = r15.toString()
+                boolean r15 = r5.contains(r15)
+                if (r15 != 0) goto L_0x0231
+                if (r6 == 0) goto L_0x0225
+                boolean r15 = r6.startsWith(r12)
+                if (r15 != 0) goto L_0x0231
+                java.lang.StringBuilder r15 = new java.lang.StringBuilder
+                r15.<init>()
+                r15.append(r14)
+                r15.append(r12)
+                java.lang.String r15 = r15.toString()
+                boolean r15 = r6.contains(r15)
+                if (r15 == 0) goto L_0x0225
+                goto L_0x0231
+            L_0x0225:
+                java.lang.String r15 = r4.username
+                if (r15 == 0) goto L_0x0232
+                boolean r15 = r15.startsWith(r12)
+                if (r15 == 0) goto L_0x0232
+                r10 = 2
+                goto L_0x0232
+            L_0x0231:
+                r10 = 1
+            L_0x0232:
+                if (r10 == 0) goto L_0x0270
+                r15 = 1
+                if (r10 != r15) goto L_0x0244
+                java.lang.String r5 = r4.first_name
+                java.lang.String r6 = r4.last_name
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r12)
+                r3.add(r5)
+                r12 = 0
+                goto L_0x026c
+            L_0x0244:
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                r5.append(r13)
+                java.lang.String r6 = r4.username
+                r5.append(r6)
+                java.lang.String r5 = r5.toString()
                 java.lang.StringBuilder r6 = new java.lang.StringBuilder
                 r6.<init>()
+                r6.append(r13)
                 r6.append(r12)
-                java.lang.String r9 = r5.username
-                r6.append(r9)
                 java.lang.String r6 = r6.toString()
-                java.lang.StringBuilder r9 = new java.lang.StringBuilder
-                r9.<init>()
-                r9.append(r12)
-                r9.append(r15)
-                java.lang.String r9 = r9.toString()
-                r15 = 0
-                java.lang.CharSequence r6 = org.telegram.messenger.AndroidUtilities.generateSearchName(r6, r15, r9)
-                r3.add(r6)
-            L_0x026e:
-                r2.add(r5)
-                goto L_0x027a
-            L_0x0272:
-                r4 = 1
-                r15 = 0
+                r12 = 0
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r12, r6)
+                r3.add(r5)
+            L_0x026c:
+                r2.add(r4)
+                goto L_0x0276
+            L_0x0270:
+                r12 = 0
+                r15 = 1
                 int r11 = r11 + 1
-                r4 = r23
-                goto L_0x01ea
-            L_0x027a:
+                goto L_0x01e8
+            L_0x0276:
                 int r0 = r0 + 1
-                goto L_0x01a4
-            L_0x027e:
-                r0 = r20
-                r5 = r25
-                r0.updateSearchResults(r1, r2, r3, r5)
+                goto L_0x01a3
+            L_0x027a:
+                r0 = r18
+                r4 = r19
+                r5 = r23
+                r0.updateSearchResults(r4, r2, r3, r5)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookSelectShareAlert.ShareSearchAdapter.lambda$null$1$PhonebookSelectShareAlert$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
@@ -1547,30 +1558,30 @@ public class PhonebookSelectShareAlert extends BottomSheet implements Notificati
                 view = new View(this.mContext);
                 view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(56.0f)));
             } else {
-                view = new UserCell(this.mContext);
+                view = new UserCell(PhonebookSelectShareAlert.this, this.mContext);
             }
             return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            TLRPC.User user;
+            TLRPC$User tLRPC$User;
             if (viewHolder.getItemViewType() == 0) {
                 UserCell userCell = (UserCell) viewHolder.itemView;
                 boolean z = i != getItemCount() - 1;
                 Object item = getItem(i);
                 if (item instanceof ContactsController.Contact) {
                     ContactsController.Contact contact = (ContactsController.Contact) item;
-                    user = contact.user;
-                    if (user == null) {
+                    tLRPC$User = contact.user;
+                    if (tLRPC$User == null) {
                         userCell.setCurrentId(contact.contact_id);
-                        userCell.setData((TLRPC.User) null, this.searchResultNames.get(i - 1), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
-                        user = null;
+                        userCell.setData((TLRPC$User) null, this.searchResultNames.get(i - 1), contact.phones.isEmpty() ? "" : PhoneFormat.getInstance().format(contact.phones.get(0)), z);
+                        tLRPC$User = null;
                     }
                 } else {
-                    user = (TLRPC.User) item;
+                    tLRPC$User = (TLRPC$User) item;
                 }
-                if (user != null) {
-                    userCell.setData(user, this.searchResultNames.get(i - 1), PhoneFormat.getInstance().format("+" + user.phone), z);
+                if (tLRPC$User != null) {
+                    userCell.setData(tLRPC$User, this.searchResultNames.get(i - 1), PhoneFormat.getInstance().format("+" + tLRPC$User.phone), z);
                 }
             }
         }

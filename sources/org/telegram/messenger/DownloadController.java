@@ -16,7 +16,13 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$TL_account_autoDownloadSettings;
+import org.telegram.tgnet.TLRPC$TL_account_getAutoDownloadSettings;
+import org.telegram.tgnet.TLRPC$TL_account_saveAutoDownloadSettings;
+import org.telegram.tgnet.TLRPC$TL_autoDownloadSettings;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
     public static final int AUTODOWNLOAD_TYPE_AUDIO = 2;
@@ -69,7 +75,7 @@ public class DownloadController extends BaseController implements NotificationCe
         void onSuccessDownload(String str);
     }
 
-    static /* synthetic */ void lambda$savePresetToServer$3(TLObject tLObject, TLRPC.TL_error tL_error) {
+    static /* synthetic */ void lambda$savePresetToServer$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public static int typeToIndex(int i) {
@@ -88,14 +94,16 @@ public class DownloadController extends BaseController implements NotificationCe
     public static class Preset {
         public boolean enabled;
         public boolean lessCallData;
-        public int[] mask = new int[4];
+        public int[] mask;
         public int maxVideoBitrate;
         public boolean preloadMusic;
         public boolean preloadVideo;
-        public int[] sizes = new int[4];
+        public int[] sizes;
 
         public Preset(int[] iArr, int i, int i2, int i3, boolean z, boolean z2, boolean z3, boolean z4, int i4) {
-            int[] iArr2 = this.mask;
+            int[] iArr2 = new int[4];
+            this.mask = iArr2;
+            this.sizes = new int[4];
             System.arraycopy(iArr, 0, iArr2, 0, iArr2.length);
             int[] iArr3 = this.sizes;
             iArr3[0] = i;
@@ -111,6 +119,8 @@ public class DownloadController extends BaseController implements NotificationCe
 
         public Preset(String str, String str2) {
             String[] strArr;
+            this.mask = new int[4];
+            this.sizes = new int[4];
             String[] split = str.split("_");
             if (split.length >= 11) {
                 boolean z = false;
@@ -153,32 +163,32 @@ public class DownloadController extends BaseController implements NotificationCe
             this.maxVideoBitrate = preset.maxVideoBitrate;
         }
 
-        public void set(TLRPC.TL_autoDownloadSettings tL_autoDownloadSettings) {
-            this.preloadMusic = tL_autoDownloadSettings.audio_preload_next;
-            this.preloadVideo = tL_autoDownloadSettings.video_preload_large;
-            this.lessCallData = tL_autoDownloadSettings.phonecalls_less_data;
-            this.maxVideoBitrate = tL_autoDownloadSettings.video_upload_maxbitrate;
+        public void set(TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings) {
+            this.preloadMusic = tLRPC$TL_autoDownloadSettings.audio_preload_next;
+            this.preloadVideo = tLRPC$TL_autoDownloadSettings.video_preload_large;
+            this.lessCallData = tLRPC$TL_autoDownloadSettings.phonecalls_less_data;
+            this.maxVideoBitrate = tLRPC$TL_autoDownloadSettings.video_upload_maxbitrate;
             int i = 0;
-            this.sizes[0] = Math.max(512000, tL_autoDownloadSettings.photo_size_max);
-            this.sizes[1] = Math.max(512000, tL_autoDownloadSettings.video_size_max);
-            this.sizes[2] = Math.max(512000, tL_autoDownloadSettings.file_size_max);
+            this.sizes[0] = Math.max(512000, tLRPC$TL_autoDownloadSettings.photo_size_max);
+            this.sizes[1] = Math.max(512000, tLRPC$TL_autoDownloadSettings.video_size_max);
+            this.sizes[2] = Math.max(512000, tLRPC$TL_autoDownloadSettings.file_size_max);
             while (true) {
                 int[] iArr = this.mask;
                 if (i < iArr.length) {
-                    if (tL_autoDownloadSettings.photo_size_max == 0 || tL_autoDownloadSettings.disabled) {
+                    if (tLRPC$TL_autoDownloadSettings.photo_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
                         int[] iArr2 = this.mask;
                         iArr2[i] = iArr2[i] & -2;
                     } else {
                         iArr[i] = iArr[i] | 1;
                     }
-                    if (tL_autoDownloadSettings.video_size_max == 0 || tL_autoDownloadSettings.disabled) {
+                    if (tLRPC$TL_autoDownloadSettings.video_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
                         int[] iArr3 = this.mask;
                         iArr3[i] = iArr3[i] & -5;
                     } else {
                         int[] iArr4 = this.mask;
                         iArr4[i] = iArr4[i] | 4;
                     }
-                    if (tL_autoDownloadSettings.file_size_max == 0 || tL_autoDownloadSettings.disabled) {
+                    if (tLRPC$TL_autoDownloadSettings.file_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
                         int[] iArr5 = this.mask;
                         iArr5[i] = iArr5[i] & -9;
                     } else {
@@ -354,15 +364,15 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         if (z || Math.abs(System.currentTimeMillis() - getUserConfig().autoDownloadConfigLoadTime) >= 86400000) {
             this.loadingAutoDownloadConfig = true;
-            getConnectionsManager().sendRequest(new TLRPC.TL_account_getAutoDownloadSettings(), new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-                    DownloadController.this.lambda$loadAutoDownloadConfig$2$DownloadController(tLObject, tL_error);
+            getConnectionsManager().sendRequest(new TLRPC$TL_account_getAutoDownloadSettings(), new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    DownloadController.this.lambda$loadAutoDownloadConfig$2$DownloadController(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject tLObject, TLRPC.TL_error tL_error) {
+    public /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             private final /* synthetic */ TLObject f$1;
 
@@ -382,10 +392,10 @@ public class DownloadController extends BaseController implements NotificationCe
         getUserConfig().autoDownloadConfigLoadTime = System.currentTimeMillis();
         getUserConfig().saveConfig(false);
         if (tLObject != null) {
-            TLRPC.TL_account_autoDownloadSettings tL_account_autoDownloadSettings = (TLRPC.TL_account_autoDownloadSettings) tLObject;
-            this.lowPreset.set(tL_account_autoDownloadSettings.low);
-            this.mediumPreset.set(tL_account_autoDownloadSettings.medium);
-            this.highPreset.set(tL_account_autoDownloadSettings.high);
+            TLRPC$TL_account_autoDownloadSettings tLRPC$TL_account_autoDownloadSettings = (TLRPC$TL_account_autoDownloadSettings) tLObject;
+            this.lowPreset.set(tLRPC$TL_account_autoDownloadSettings.low);
+            this.mediumPreset.set(tLRPC$TL_account_autoDownloadSettings.medium);
+            this.highPreset.set(tLRPC$TL_account_autoDownloadSettings.high);
             for (int i = 0; i < 3; i++) {
                 if (i == 0) {
                     preset = this.mobilePreset;
@@ -395,11 +405,11 @@ public class DownloadController extends BaseController implements NotificationCe
                     preset = this.roamingPreset;
                 }
                 if (preset.equals(this.lowPreset)) {
-                    preset.set(tL_account_autoDownloadSettings.low);
+                    preset.set(tLRPC$TL_account_autoDownloadSettings.low);
                 } else if (preset.equals(this.mediumPreset)) {
-                    preset.set(tL_account_autoDownloadSettings.medium);
+                    preset.set(tLRPC$TL_account_autoDownloadSettings.medium);
                 } else if (preset.equals(this.highPreset)) {
-                    preset.set(tL_account_autoDownloadSettings.high);
+                    preset.set(tLRPC$TL_account_autoDownloadSettings.high);
                 }
             }
             SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
@@ -545,10 +555,10 @@ public class DownloadController extends BaseController implements NotificationCe
                 for (int i = 0; i < this.photoDownloadQueue.size(); i++) {
                     DownloadObject downloadObject = this.photoDownloadQueue.get(i);
                     TLObject tLObject = downloadObject.object;
-                    if (tLObject instanceof TLRPC.Photo) {
-                        getFileLoader().cancelLoadFile(FileLoader.getClosestPhotoSizeWithSize(((TLRPC.Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()));
-                    } else if (tLObject instanceof TLRPC.Document) {
-                        getFileLoader().cancelLoadFile((TLRPC.Document) downloadObject.object);
+                    if (tLObject instanceof TLRPC$Photo) {
+                        getFileLoader().cancelLoadFile(FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()));
+                    } else if (tLObject instanceof TLRPC$Document) {
+                        getFileLoader().cancelLoadFile((TLRPC$Document) downloadObject.object);
                     }
                 }
                 this.photoDownloadQueue.clear();
@@ -557,7 +567,7 @@ public class DownloadController extends BaseController implements NotificationCe
             }
             if ((currentDownloadMask & 2) == 0) {
                 for (int i2 = 0; i2 < this.audioDownloadQueue.size(); i2++) {
-                    getFileLoader().cancelLoadFile((TLRPC.Document) this.audioDownloadQueue.get(i2).object);
+                    getFileLoader().cancelLoadFile((TLRPC$Document) this.audioDownloadQueue.get(i2).object);
                 }
                 this.audioDownloadQueue.clear();
             } else if (this.audioDownloadQueue.isEmpty()) {
@@ -565,7 +575,7 @@ public class DownloadController extends BaseController implements NotificationCe
             }
             if ((currentDownloadMask & 8) == 0) {
                 for (int i3 = 0; i3 < this.documentDownloadQueue.size(); i3++) {
-                    getFileLoader().cancelLoadFile((TLRPC.Document) this.documentDownloadQueue.get(i3).object);
+                    getFileLoader().cancelLoadFile((TLRPC$Document) this.documentDownloadQueue.get(i3).object);
                 }
                 this.documentDownloadQueue.clear();
             } else if (this.documentDownloadQueue.isEmpty()) {
@@ -573,7 +583,7 @@ public class DownloadController extends BaseController implements NotificationCe
             }
             if ((currentDownloadMask & 4) == 0) {
                 for (int i4 = 0; i4 < this.videoDownloadQueue.size(); i4++) {
-                    getFileLoader().cancelLoadFile((TLRPC.Document) this.videoDownloadQueue.get(i4).object);
+                    getFileLoader().cancelLoadFile((TLRPC$Document) this.videoDownloadQueue.get(i4).object);
                 }
                 this.videoDownloadQueue.clear();
             } else if (this.videoDownloadQueue.isEmpty()) {
@@ -647,7 +657,7 @@ public class DownloadController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:79:0x00f9 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:83:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int canDownloadMedia(org.telegram.tgnet.TLRPC.Message r10) {
+    public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r10) {
         /*
             r9 = this;
             r0 = 0
@@ -854,7 +864,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public void savePresetToServer(int i) {
         Preset preset;
         boolean z;
-        TLRPC.TL_account_saveAutoDownloadSettings tL_account_saveAutoDownloadSettings = new TLRPC.TL_account_saveAutoDownloadSettings();
+        TLRPC$TL_account_saveAutoDownloadSettings tLRPC$TL_account_saveAutoDownloadSettings = new TLRPC$TL_account_saveAutoDownloadSettings();
         if (i == 0) {
             preset = getCurrentMobilePreset();
             z = this.mobilePreset.enabled;
@@ -865,13 +875,13 @@ public class DownloadController extends BaseController implements NotificationCe
             preset = getCurrentRoamingPreset();
             z = this.roamingPreset.enabled;
         }
-        tL_account_saveAutoDownloadSettings.settings = new TLRPC.TL_autoDownloadSettings();
-        TLRPC.TL_autoDownloadSettings tL_autoDownloadSettings = tL_account_saveAutoDownloadSettings.settings;
-        tL_autoDownloadSettings.audio_preload_next = preset.preloadMusic;
-        tL_autoDownloadSettings.video_preload_large = preset.preloadVideo;
-        tL_autoDownloadSettings.phonecalls_less_data = preset.lessCallData;
-        tL_autoDownloadSettings.video_upload_maxbitrate = preset.maxVideoBitrate;
-        tL_autoDownloadSettings.disabled = !z;
+        TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings = new TLRPC$TL_autoDownloadSettings();
+        tLRPC$TL_account_saveAutoDownloadSettings.settings = tLRPC$TL_autoDownloadSettings;
+        tLRPC$TL_autoDownloadSettings.audio_preload_next = preset.preloadMusic;
+        tLRPC$TL_autoDownloadSettings.video_preload_large = preset.preloadVideo;
+        tLRPC$TL_autoDownloadSettings.phonecalls_less_data = preset.lessCallData;
+        tLRPC$TL_autoDownloadSettings.video_upload_maxbitrate = preset.maxVideoBitrate;
+        tLRPC$TL_autoDownloadSettings.disabled = !z;
         int i2 = 0;
         int i3 = 0;
         boolean z2 = false;
@@ -897,14 +907,14 @@ public class DownloadController extends BaseController implements NotificationCe
                 break;
             }
         }
-        tL_account_saveAutoDownloadSettings.settings.photo_size_max = z2 ? preset.sizes[0] : 0;
-        tL_account_saveAutoDownloadSettings.settings.video_size_max = z3 ? preset.sizes[1] : 0;
-        TLRPC.TL_autoDownloadSettings tL_autoDownloadSettings2 = tL_account_saveAutoDownloadSettings.settings;
+        tLRPC$TL_account_saveAutoDownloadSettings.settings.photo_size_max = z2 ? preset.sizes[0] : 0;
+        tLRPC$TL_account_saveAutoDownloadSettings.settings.video_size_max = z3 ? preset.sizes[1] : 0;
+        TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings2 = tLRPC$TL_account_saveAutoDownloadSettings.settings;
         if (z4) {
             i2 = preset.sizes[2];
         }
-        tL_autoDownloadSettings2.file_size_max = i2;
-        getConnectionsManager().sendRequest(tL_account_saveAutoDownloadSettings, $$Lambda$DownloadController$0LtKveHOl8NLZKxEDiX80oSJa0.INSTANCE);
+        tLRPC$TL_autoDownloadSettings2.file_size_max = i2;
+        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, $$Lambda$DownloadController$0LtKveHOl8NLZKxEDiX80oSJa0.INSTANCE);
     }
 
     /* access modifiers changed from: protected */
@@ -952,16 +962,16 @@ public class DownloadController extends BaseController implements NotificationCe
             java.lang.Object r8 = r7.get(r6)
             org.telegram.messenger.DownloadObject r8 = (org.telegram.messenger.DownloadObject) r8
             org.telegram.tgnet.TLObject r9 = r8.object
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC.Document
+            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$Document
             if (r10 == 0) goto L_0x0044
-            org.telegram.tgnet.TLRPC$Document r9 = (org.telegram.tgnet.TLRPC.Document) r9
+            org.telegram.tgnet.TLRPC$Document r9 = (org.telegram.tgnet.TLRPC$Document) r9
             java.lang.String r9 = org.telegram.messenger.FileLoader.getAttachFileName(r9)
             r10 = r3
             goto L_0x0060
         L_0x0044:
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC.Photo
+            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$Photo
             if (r10 == 0) goto L_0x005e
-            org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC.Photo) r9
+            org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC$Photo) r9
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.sizes
             int r10 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r10)
@@ -982,7 +992,7 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x006b:
             if (r10 == 0) goto L_0x0093
             org.telegram.tgnet.TLObject r11 = r8.object
-            org.telegram.tgnet.TLRPC$Photo r11 = (org.telegram.tgnet.TLRPC.Photo) r11
+            org.telegram.tgnet.TLRPC$Photo r11 = (org.telegram.tgnet.TLRPC$Photo) r11
             boolean r12 = r8.secret
             if (r12 == 0) goto L_0x0078
             r18 = 2
@@ -1004,9 +1014,9 @@ public class DownloadController extends BaseController implements NotificationCe
             goto L_0x00ab
         L_0x0093:
             org.telegram.tgnet.TLObject r10 = r8.object
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC.Document
+            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$Document
             if (r11 == 0) goto L_0x00ad
-            org.telegram.tgnet.TLRPC$Document r10 = (org.telegram.tgnet.TLRPC.Document) r10
+            org.telegram.tgnet.TLRPC$Document r10 = (org.telegram.tgnet.TLRPC$Document) r10
             org.telegram.messenger.FileLoader r11 = r20.getFileLoader()
             java.lang.String r12 = r8.parent
             boolean r13 = r8.secret

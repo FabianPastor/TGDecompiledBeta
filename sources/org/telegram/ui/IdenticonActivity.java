@@ -31,7 +31,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -51,13 +52,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private String emojiText;
     /* access modifiers changed from: private */
     public TextView emojiTextView;
-    private AnimatorSet hintAnimatorSet;
     /* access modifiers changed from: private */
     public LinearLayout linearLayout;
     /* access modifiers changed from: private */
     public LinearLayout linearLayout1;
     private TextView textView;
-    private int textWidth;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
@@ -103,21 +102,22 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 }
             }
         });
-        this.fragmentView = new FrameLayout(context);
-        View view = this.fragmentView;
-        view.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        this.fragmentView.setOnTouchListener($$Lambda$IdenticonActivity$Yvzzx489TCib4oTluPwFgAoS_54.INSTANCE);
-        this.linearLayout = new LinearLayout(context);
-        this.linearLayout.setOrientation(1);
-        this.linearLayout.setWeightSum(100.0f);
-        ((FrameLayout) view).addView(this.linearLayout, LayoutHelper.createFrame(-1, -1.0f));
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f));
-        this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -1, 50.0f));
+        this.fragmentView = frameLayout;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        this.fragmentView.setOnTouchListener($$Lambda$IdenticonActivity$Yvzzx489TCib4oTluPwFgAoS_54.INSTANCE);
+        LinearLayout linearLayout2 = new LinearLayout(context);
+        this.linearLayout = linearLayout2;
+        linearLayout2.setOrientation(1);
+        this.linearLayout.setWeightSum(100.0f);
+        frameLayout.addView(this.linearLayout, LayoutHelper.createFrame(-1, -1.0f));
+        FrameLayout frameLayout2 = new FrameLayout(context);
+        frameLayout2.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f));
+        this.linearLayout.addView(frameLayout2, LayoutHelper.createLinear(-1, -1, 50.0f));
         ImageView imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-        this.container = new FrameLayout(context) {
+        frameLayout2.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+        AnonymousClass2 r0 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -128,20 +128,24 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 }
             }
         };
-        this.container.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        this.container = r0;
+        r0.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.linearLayout.addView(this.container, LayoutHelper.createLinear(-1, -1, 50.0f));
-        this.linearLayout1 = new LinearLayout(context);
-        this.linearLayout1.setOrientation(1);
+        LinearLayout linearLayout3 = new LinearLayout(context);
+        this.linearLayout1 = linearLayout3;
+        linearLayout3.setOrientation(1);
         this.linearLayout1.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         this.container.addView(this.linearLayout1, LayoutHelper.createFrame(-2, -2, 17));
-        this.codeTextView = new TextView(context);
-        this.codeTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        TextView textView2 = new TextView(context);
+        this.codeTextView = textView2;
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.codeTextView.setGravity(17);
         this.codeTextView.setTypeface(Typeface.MONOSPACE);
         this.codeTextView.setTextSize(1, 16.0f);
         this.linearLayout1.addView(this.codeTextView, LayoutHelper.createLinear(-2, -2, 1));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        TextView textView3 = new TextView(context);
+        this.textView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.textView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLinksClickable(true);
@@ -149,17 +153,18 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.textView.setGravity(17);
         this.textView.setMovementMethod(new LinkMovementMethodMy());
         this.linearLayout1.addView(this.textView, LayoutHelper.createFrame(-2, -2, 1));
-        this.emojiTextView = new TextView(context);
-        this.emojiTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        TextView textView4 = new TextView(context);
+        this.emojiTextView = textView4;
+        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.emojiTextView.setGravity(17);
         this.emojiTextView.setTextSize(1, 32.0f);
         this.container.addView(this.emojiTextView, LayoutHelper.createFrame(-2, -2.0f));
-        TLRPC.EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(this.chat_id));
+        TLRPC$EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(this.chat_id));
         if (encryptedChat != null) {
             IdenticonDrawable identiconDrawable = new IdenticonDrawable();
             imageView.setImageDrawable(identiconDrawable);
             identiconDrawable.setEncryptedChat(encryptedChat);
-            TLRPC.User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
             StringBuilder sb = new StringBuilder();
             byte[] bArr = encryptedChat.key_hash;
@@ -229,8 +234,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         }
         float f = 1.0f;
         if (z) {
-            this.animatorSet = new AnimatorSet();
-            AnimatorSet animatorSet3 = this.animatorSet;
+            AnimatorSet animatorSet3 = new AnimatorSet();
+            this.animatorSet = animatorSet3;
             Animator[] animatorArr = new Animator[6];
             TextView textView2 = this.emojiTextView;
             float[] fArr = new float[1];

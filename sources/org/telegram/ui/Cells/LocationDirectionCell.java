@@ -15,11 +15,13 @@ public class LocationDirectionCell extends FrameLayout {
 
     public LocationDirectionCell(Context context) {
         super(context);
-        this.frameLayout = new FrameLayout(context);
-        this.frameLayout.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        FrameLayout frameLayout2 = new FrameLayout(context);
+        this.frameLayout = frameLayout2;
+        frameLayout2.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 16.0f, 10.0f, 16.0f, 0.0f));
-        this.buttonTextView = new SimpleTextView(context);
-        this.buttonTextView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.buttonTextView = simpleTextView;
+        simpleTextView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         this.buttonTextView.setGravity(17);
         this.buttonTextView.setDrawablePadding(AndroidUtilities.dp(8.0f));
         this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));

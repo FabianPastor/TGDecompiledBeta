@@ -42,7 +42,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.FloatingToolbar;
@@ -50,9 +49,6 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 @TargetApi(23)
 public final class FloatingToolbar {
     private static final MenuItem.OnMenuItemClickListener NO_OP_MENUITEM_CLICK_LISTENER = $$Lambda$FloatingToolbar$uBffYWeN3XYcSKbFDG7nEMNVsU.INSTANCE;
-    public static final int STYLE_BLACK = 2;
-    public static final int STYLE_DIALOG = 0;
-    public static final int STYLE_THEME = 1;
     /* access modifiers changed from: private */
     public int currentStyle;
     private final Rect mContentRect = new Rect();
@@ -114,14 +110,6 @@ public final class FloatingToolbar {
         return this;
     }
 
-    public FloatingToolbar setSuggestedWidth(int i) {
-        double d = (double) this.mSuggestedWidth;
-        Double.isNaN(d);
-        this.mWidthChanged = ((double) Math.abs(i - this.mSuggestedWidth)) > d * 0.2d;
-        this.mSuggestedWidth = i;
-        return this;
-    }
-
     public FloatingToolbar show() {
         registerOrientationHandler();
         doShow();
@@ -142,21 +130,6 @@ public final class FloatingToolbar {
 
     public void hide() {
         this.mPopup.hide();
-    }
-
-    public boolean isShowing() {
-        return this.mPopup.isShowing();
-    }
-
-    public boolean isHidden() {
-        return this.mPopup.isHidden();
-    }
-
-    public void setOutsideTouchable(boolean z, PopupWindow.OnDismissListener onDismissListener) {
-        if (this.mPopup.setOutsideTouchable(z, onDismissListener) && isShowing()) {
-            dismiss();
-            doShow();
-        }
     }
 
     private void doShow() {
@@ -184,7 +157,7 @@ public final class FloatingToolbar {
         for (int i = 0; i < size; i++) {
             MenuItem menuItem = list.get(i);
             MenuItem menuItem2 = this.mShowingMenuItems.get(i);
-            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !Objects.equals(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
+            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !C$r8$backportedMethods$utility$Objects$2$equals.equals(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
                 return false;
             }
         }
@@ -219,8 +192,6 @@ public final class FloatingToolbar {
     }
 
     private final class FloatingToolbarPopup {
-        private static final int MAX_OVERFLOW_SIZE = 4;
-        private static final int MIN_OVERFLOW_SIZE = 2;
         private final Drawable mArrow;
         private final AnimationSet mCloseOverflowAnimation;
         /* access modifiers changed from: private */
@@ -297,8 +268,9 @@ public final class FloatingToolbar {
         public FloatingToolbarPopup(Context context, View view) {
             this.mParent = view;
             this.mContext = context;
-            this.mContentContainer = FloatingToolbar.this.createContentContainer(context);
-            this.mPopupWindow = FloatingToolbar.createPopupWindow(this.mContentContainer);
+            ViewGroup access$600 = FloatingToolbar.this.createContentContainer(context);
+            this.mContentContainer = access$600;
+            this.mPopupWindow = FloatingToolbar.createPopupWindow(access$600);
             this.mMarginHorizontal = AndroidUtilities.dp(16.0f);
             this.mMarginVertical = AndroidUtilities.dp(8.0f);
             this.mLineHeight = AndroidUtilities.dp(48.0f);
@@ -307,24 +279,31 @@ public final class FloatingToolbar {
             this.mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563661);
             this.mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563662);
             this.mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563663);
-            this.mArrow = this.mContext.getDrawable(NUM).mutate();
-            this.mArrow.setAutoMirrored(true);
-            this.mOverflow = this.mContext.getDrawable(NUM).mutate();
-            this.mOverflow.setAutoMirrored(true);
-            this.mToArrow = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
-            this.mToArrow.setAutoMirrored(true);
-            this.mToOverflow = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
-            this.mToOverflow.setAutoMirrored(true);
-            this.mOverflowButton = createOverflowButton();
-            this.mOverflowButtonSize = measure(this.mOverflowButton);
+            Drawable mutate = this.mContext.getDrawable(NUM).mutate();
+            this.mArrow = mutate;
+            mutate.setAutoMirrored(true);
+            Drawable mutate2 = this.mContext.getDrawable(NUM).mutate();
+            this.mOverflow = mutate2;
+            mutate2.setAutoMirrored(true);
+            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
+            this.mToArrow = animatedVectorDrawable;
+            animatedVectorDrawable.setAutoMirrored(true);
+            AnimatedVectorDrawable animatedVectorDrawable2 = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
+            this.mToOverflow = animatedVectorDrawable2;
+            animatedVectorDrawable2.setAutoMirrored(true);
+            ImageButton createOverflowButton = createOverflowButton();
+            this.mOverflowButton = createOverflowButton;
+            this.mOverflowButtonSize = measure(createOverflowButton);
             this.mMainPanel = createMainPanel();
             this.mOverflowPanelViewHelper = new OverflowPanelViewHelper(this.mContext, this.mIconTextSpacing);
             this.mOverflowPanel = createOverflowPanel();
             Animation.AnimationListener createOverflowAnimationListener = createOverflowAnimationListener();
-            this.mOpenOverflowAnimation = new AnimationSet(true);
-            this.mOpenOverflowAnimation.setAnimationListener(createOverflowAnimationListener);
-            this.mCloseOverflowAnimation = new AnimationSet(true);
-            this.mCloseOverflowAnimation.setAnimationListener(createOverflowAnimationListener);
+            AnimationSet animationSet = new AnimationSet(true);
+            this.mOpenOverflowAnimation = animationSet;
+            animationSet.setAnimationListener(createOverflowAnimationListener);
+            AnimationSet animationSet2 = new AnimationSet(true);
+            this.mCloseOverflowAnimation = animationSet2;
+            animationSet2.setAnimationListener(createOverflowAnimationListener);
             this.mShowAnimation = FloatingToolbar.createEnterAnimation(this.mContentContainer);
             this.mDismissAnimation = FloatingToolbar.createExitAnimation(this.mContentContainer, 150, new AnimatorListenerAdapter(FloatingToolbar.this) {
                 public void onAnimationEnd(Animator animator) {
@@ -337,18 +316,6 @@ public final class FloatingToolbar {
                     FloatingToolbarPopup.this.mPopupWindow.dismiss();
                 }
             });
-        }
-
-        public boolean setOutsideTouchable(boolean z, PopupWindow.OnDismissListener onDismissListener) {
-            boolean z2 = true;
-            if (this.mPopupWindow.isOutsideTouchable() ^ z) {
-                this.mPopupWindow.setOutsideTouchable(z);
-                this.mPopupWindow.setFocusable(!z);
-            } else {
-                z2 = false;
-            }
-            this.mPopupWindow.setOnDismissListener(onDismissListener);
-            return z2;
         }
 
         public void layoutMenuItems(List<MenuItem> list, MenuItem.OnMenuItemClickListener onMenuItemClickListener, int i) {
@@ -399,10 +366,6 @@ public final class FloatingToolbar {
 
         public boolean isShowing() {
             return !this.mDismissed && !this.mHidden;
-        }
-
-        public boolean isHidden() {
-            return this.mHidden;
         }
 
         public void updateCoordinates(Rect rect) {
@@ -724,18 +687,19 @@ public final class FloatingToolbar {
             Size size = this.mMainPanelSize;
             int i2 = 0;
             if (size != null) {
-                i = Math.max(0, size.getWidth());
-                i2 = Math.max(0, this.mMainPanelSize.getHeight());
+                int max = Math.max(0, size.getWidth());
+                i2 = max;
+                i = Math.max(0, this.mMainPanelSize.getHeight());
             } else {
                 i = 0;
             }
             Size size2 = this.mOverflowPanelSize;
             if (size2 != null) {
-                i = Math.max(i, size2.getWidth());
-                i2 = Math.max(i2, this.mOverflowPanelSize.getHeight());
+                i2 = Math.max(i2, size2.getWidth());
+                i = Math.max(i, this.mOverflowPanelSize.getHeight());
             }
-            this.mPopupWindow.setWidth(i + (this.mMarginHorizontal * 2));
-            this.mPopupWindow.setHeight(i2 + (this.mMarginVertical * 2));
+            this.mPopupWindow.setWidth(i2 + (this.mMarginHorizontal * 2));
+            this.mPopupWindow.setHeight(i + (this.mMarginVertical * 2));
             maybeComputeTransitionDurationScale();
         }
 
@@ -835,8 +799,9 @@ public final class FloatingToolbar {
             } else {
                 this.mOverflowPanel.setY((float) this.mOverflowButtonSize.getHeight());
             }
-            this.mOverflowPanelSize = new Size(Math.max(getOverflowWidth(), this.mOverflowButtonSize.getWidth()), calculateOverflowHeight(4));
-            setSize(this.mOverflowPanel, this.mOverflowPanelSize);
+            Size size2 = new Size(Math.max(getOverflowWidth(), this.mOverflowButtonSize.getWidth()), calculateOverflowHeight(4));
+            this.mOverflowPanelSize = size2;
+            setSize(this.mOverflowPanel, size2);
         }
 
         private void preparePopupContent() {
@@ -979,7 +944,7 @@ public final class FloatingToolbar {
         }
 
         private OverflowPanel createOverflowPanel() {
-            OverflowPanel overflowPanel = new OverflowPanel(this);
+            OverflowPanel overflowPanel = new OverflowPanel(this, this);
             overflowPanel.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
             overflowPanel.setDivider((Drawable) null);
             overflowPanel.setDividerHeight(0);
@@ -1190,11 +1155,11 @@ public final class FloatingToolbar {
         private final class OverflowPanel extends ListView {
             private final FloatingToolbarPopup mPopup;
 
-            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup) {
-                super(floatingToolbarPopup.mContext);
-                this.mPopup = floatingToolbarPopup;
+            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup, FloatingToolbarPopup floatingToolbarPopup2) {
+                super(floatingToolbarPopup2.mContext);
+                this.mPopup = floatingToolbarPopup2;
                 setVerticalScrollBarEnabled(false);
-                setOutlineProvider(new ViewOutlineProvider(FloatingToolbarPopup.this) {
+                setOutlineProvider(new ViewOutlineProvider(this, floatingToolbarPopup) {
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
                     }
@@ -1221,11 +1186,9 @@ public final class FloatingToolbar {
         }
 
         private final class LogAccelerateInterpolator implements Interpolator {
-            private final int BASE;
             private final float LOGS_SCALE;
 
-            private LogAccelerateInterpolator() {
-                this.BASE = 100;
+            private LogAccelerateInterpolator(FloatingToolbarPopup floatingToolbarPopup) {
                 this.LOGS_SCALE = 1.0f / computeLog(1.0f, 100);
             }
 

@@ -53,8 +53,9 @@ public class CallSwipeView extends View {
 
     private void init() {
         setClickable(true);
-        this.arrowsPaint = new Paint(1);
-        this.arrowsPaint.setColor(-1);
+        Paint paint = new Paint(1);
+        this.arrowsPaint = paint;
+        paint.setColor(-1);
         this.arrowsPaint.setStyle(Paint.Style.STROKE);
         this.arrowsPaint.setStrokeWidth((float) AndroidUtilities.dp(2.5f));
         this.pullBgPaint = new Paint(1);
@@ -65,8 +66,9 @@ public class CallSwipeView extends View {
             ofInt.setStartDelay((long) (i * 200));
             arrayList.add(ofInt);
         }
-        this.arrowAnim = new AnimatorSet();
-        this.arrowAnim.playTogether(arrayList);
+        AnimatorSet animatorSet = new AnimatorSet();
+        this.arrowAnim = animatorSet;
+        animatorSet.playTogether(arrayList);
         this.arrowAnim.addListener(new AnimatorListenerAdapter() {
             private Runnable restarter = new Runnable() {
                 public void run() {

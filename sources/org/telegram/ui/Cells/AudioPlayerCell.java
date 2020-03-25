@@ -20,7 +20,9 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress2;
 
@@ -37,7 +39,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     private int hasMiniProgress;
     private boolean miniButtonPressed;
     private int miniButtonState;
-    private RadialProgress2 radialProgress = new RadialProgress2(this);
+    private RadialProgress2 radialProgress;
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
 
@@ -46,7 +48,9 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
 
     public AudioPlayerCell(Context context) {
         super(context);
-        this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
+        RadialProgress2 radialProgress2 = new RadialProgress2(this);
+        this.radialProgress = radialProgress2;
+        radialProgress2.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setFocusable(true);
     }
@@ -81,16 +85,16 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
 
     public void setMessageObject(MessageObject messageObject) {
         this.currentMessageObject = messageObject;
-        TLRPC.Document document = messageObject.getDocument();
-        TLRPC.PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
-        if (closestPhotoSizeWithSize instanceof TLRPC.TL_photoSize) {
+        TLRPC$Document document = messageObject.getDocument();
+        TLRPC$PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
+        if (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) {
             this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
         } else {
             String artworkUrl = messageObject.getArtworkUrl(true);
             if (!TextUtils.isEmpty(artworkUrl)) {
                 this.radialProgress.setImageOverlay(artworkUrl);
             } else {
-                this.radialProgress.setImageOverlay((TLRPC.PhotoSize) null, (TLRPC.Document) null, (Object) null);
+                this.radialProgress.setImageOverlay((TLRPC$PhotoSize) null, (TLRPC$Document) null, (Object) null);
             }
         }
         requestLayout();
@@ -115,7 +119,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:14:0x0039  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0048  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0046  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkAudioMotionEvent(android.view.MotionEvent r9) {
         /*
@@ -150,45 +154,44 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             r0 = 0
         L_0x0033:
             int r1 = r9.getAction()
-            if (r1 != 0) goto L_0x0048
-            if (r0 == 0) goto L_0x0080
+            if (r1 != 0) goto L_0x0046
+            if (r0 == 0) goto L_0x007e
             r8.miniButtonPressed = r4
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
-            boolean r0 = r8.miniButtonPressed
-            r9.setPressed(r0, r4)
+            r9.setPressed(r4, r4)
             r8.invalidate()
-            goto L_0x0081
-        L_0x0048:
+            goto L_0x007f
+        L_0x0046:
             boolean r1 = r8.miniButtonPressed
-            if (r1 == 0) goto L_0x0080
+            if (r1 == 0) goto L_0x007e
             int r1 = r9.getAction()
-            if (r1 != r4) goto L_0x005e
+            if (r1 != r4) goto L_0x005c
             r8.miniButtonPressed = r5
             r8.playSoundEffect(r5)
             r8.didPressedMiniButton(r4)
             r8.invalidate()
-            goto L_0x0079
-        L_0x005e:
+            goto L_0x0077
+        L_0x005c:
             int r1 = r9.getAction()
             r2 = 3
-            if (r1 != r2) goto L_0x006b
+            if (r1 != r2) goto L_0x0069
             r8.miniButtonPressed = r5
             r8.invalidate()
-            goto L_0x0079
-        L_0x006b:
+            goto L_0x0077
+        L_0x0069:
             int r9 = r9.getAction()
             r1 = 2
-            if (r9 != r1) goto L_0x0079
-            if (r0 != 0) goto L_0x0079
+            if (r9 != r1) goto L_0x0077
+            if (r0 != 0) goto L_0x0077
             r8.miniButtonPressed = r5
             r8.invalidate()
-        L_0x0079:
+        L_0x0077:
             org.telegram.ui.Components.RadialProgress2 r9 = r8.radialProgress
             boolean r0 = r8.miniButtonPressed
             r9.setPressed(r0, r4)
-        L_0x0080:
+        L_0x007e:
             r4 = 0
-        L_0x0081:
+        L_0x007f:
             return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AudioPlayerCell.checkAudioMotionEvent(android.view.MotionEvent):boolean");

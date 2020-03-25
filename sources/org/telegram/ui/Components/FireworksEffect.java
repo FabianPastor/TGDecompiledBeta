@@ -10,11 +10,10 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class FireworksEffect {
-    final float angleDiff = 1.0471976f;
     private ArrayList<Particle> freeParticles = new ArrayList<>();
     private long lastAnimationTime;
     /* access modifiers changed from: private */
-    public Paint particlePaint = new Paint(1);
+    public Paint particlePaint;
     private ArrayList<Particle> particles = new ArrayList<>();
 
     private class Particle {
@@ -44,7 +43,9 @@ public class FireworksEffect {
     }
 
     public FireworksEffect() {
-        this.particlePaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
+        Paint paint = new Paint(1);
+        this.particlePaint = paint;
+        paint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         this.particlePaint.setColor(Theme.getColor("actionBarDefaultTitle") & -1644826);
         this.particlePaint.setStrokeCap(Paint.Cap.ROUND);
         this.particlePaint.setStyle(Paint.Style.STROKE);

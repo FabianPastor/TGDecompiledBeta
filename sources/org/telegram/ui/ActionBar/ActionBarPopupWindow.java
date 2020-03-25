@@ -86,17 +86,19 @@ public class ActionBarPopupWindow extends PopupWindow {
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
             try {
-                this.scrollView = new ScrollView(context);
-                this.scrollView.setVerticalScrollBarEnabled(false);
+                ScrollView scrollView2 = new ScrollView(context);
+                this.scrollView = scrollView2;
+                scrollView2.setVerticalScrollBarEnabled(false);
                 addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
             } catch (Throwable th) {
                 FileLog.e(th);
             }
-            this.linearLayout = new LinearLayout(context);
-            this.linearLayout.setOrientation(1);
-            ScrollView scrollView2 = this.scrollView;
-            if (scrollView2 != null) {
-                scrollView2.addView(this.linearLayout, new FrameLayout.LayoutParams(-2, -2));
+            LinearLayout linearLayout2 = new LinearLayout(context);
+            this.linearLayout = linearLayout2;
+            linearLayout2.setOrientation(1);
+            ScrollView scrollView3 = this.scrollView;
+            if (scrollView3 != null) {
+                scrollView3.addView(this.linearLayout, new FrameLayout.LayoutParams(-2, -2));
             } else {
                 addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f));
             }
@@ -267,30 +269,6 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
     }
 
-    public ActionBarPopupWindow() {
-        init();
-    }
-
-    public ActionBarPopupWindow(Context context) {
-        super(context);
-        init();
-    }
-
-    public ActionBarPopupWindow(int i, int i2) {
-        super(i, i2);
-        init();
-    }
-
-    public ActionBarPopupWindow(View view) {
-        super(view);
-        init();
-    }
-
-    public ActionBarPopupWindow(View view, int i, int i2, boolean z) {
-        super(view, i, i2, z);
-        init();
-    }
-
     public ActionBarPopupWindow(View view, int i, int i2) {
         super(view, i, i2);
         init();
@@ -303,8 +281,9 @@ public class ActionBarPopupWindow extends PopupWindow {
     public void setLayoutInScreen(boolean z) {
         try {
             if (layoutInScreenMethod == null) {
-                layoutInScreenMethod = PopupWindow.class.getDeclaredMethod("setLayoutInScreenEnabled", new Class[]{Boolean.TYPE});
-                layoutInScreenMethod.setAccessible(true);
+                Method declaredMethod = PopupWindow.class.getDeclaredMethod("setLayoutInScreenEnabled", new Class[]{Boolean.TYPE});
+                layoutInScreenMethod = declaredMethod;
+                declaredMethod.setAccessible(true);
             }
             layoutInScreenMethod.invoke(this, new Object[]{true});
         } catch (Exception e) {
@@ -395,8 +374,9 @@ public class ActionBarPopupWindow extends PopupWindow {
             } else {
                 int unused2 = actionBarPopupWindowLayout.lastStartedChild = 0;
             }
-            this.windowAnimatorSet = new AnimatorSet();
-            this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(actionBarPopupWindowLayout, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(actionBarPopupWindowLayout, "backAlpha", new int[]{0, 255})});
+            AnimatorSet animatorSet = new AnimatorSet();
+            this.windowAnimatorSet = animatorSet;
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(actionBarPopupWindowLayout, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(actionBarPopupWindowLayout, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((i * 16) + 150));
             this.windowAnimatorSet.addListener(new Animator.AnimatorListener() {
                 public void onAnimationRepeat(Animator animator) {
@@ -465,8 +445,8 @@ public class ActionBarPopupWindow extends PopupWindow {
             }
             actionBarPopupWindowLayout.itemAnimators.clear();
         }
-        this.windowAnimatorSet = new AnimatorSet();
-        AnimatorSet animatorSet3 = this.windowAnimatorSet;
+        AnimatorSet animatorSet3 = new AnimatorSet();
+        this.windowAnimatorSet = animatorSet3;
         Animator[] animatorArr = new Animator[2];
         Property property = View.TRANSLATION_Y;
         float[] fArr = new float[1];

@@ -31,8 +31,9 @@ public class MaxFileSizeCell extends FrameLayout {
     public MaxFileSizeCell(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        TextView textView2 = new TextView(context);
+        this.textView = textView2;
+        textView2.setTextColor(Theme.getColor("dialogTextBlack"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -41,15 +42,16 @@ public class MaxFileSizeCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        this.sizeTextView = new TextView(context);
-        this.sizeTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
+        TextView textView3 = new TextView(context);
+        this.sizeTextView = textView3;
+        textView3.setTextColor(Theme.getColor("dialogTextBlue2"));
         this.sizeTextView.setTextSize(1, 16.0f);
         this.sizeTextView.setLines(1);
         this.sizeTextView.setMaxLines(1);
         this.sizeTextView.setSingleLine(true);
         this.sizeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         addView(this.sizeTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        this.seekBarView = new SeekBarView(context) {
+        AnonymousClass1 r0 = new SeekBarView(this, context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -57,7 +59,8 @@ public class MaxFileSizeCell extends FrameLayout {
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.seekBarView.setReportChanges(true);
+        this.seekBarView = r0;
+        r0.setReportChanges(true);
         this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
             public void onSeekBarPressed(boolean z) {
             }

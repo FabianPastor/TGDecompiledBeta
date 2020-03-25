@@ -3,7 +3,7 @@ package org.telegram.ui;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 /* renamed from: org.telegram.ui.-$$Lambda$PassportActivity$pP0eV3Hy639MJNxG0c3lV4tp0MM  reason: invalid class name */
 /* compiled from: lambda */
@@ -13,12 +13,12 @@ public final /* synthetic */ class $$Lambda$PassportActivity$pP0eV3Hy639MJNxG0c3
     private /* synthetic */ $$Lambda$PassportActivity$pP0eV3Hy639MJNxG0c3lV4tp0MM() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(
         /*  JADX ERROR: Method code generation error
             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0000: INVOKE  
               (r1v0 'tLObject' org.telegram.tgnet.TLObject)
-              (r2v0 'tL_error' org.telegram.tgnet.TLRPC$TL_error)
+              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
              org.telegram.ui.PassportActivity.lambda$new$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void type: STATIC in method: org.telegram.ui.-$$Lambda$PassportActivity$pP0eV3Hy639MJNxG0c3lV4tp0MM.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)

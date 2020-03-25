@@ -20,21 +20,14 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ThemePreviewDrawable extends BitmapDrawable {
-    private DocumentObject.ThemeDocument themeDocument;
-
-    public ThemePreviewDrawable(File file, DocumentObject.ThemeDocument themeDocument2) {
-        super(createPreview(file, themeDocument2));
-        this.themeDocument = themeDocument2;
+    public ThemePreviewDrawable(File file, DocumentObject.ThemeDocument themeDocument) {
+        super(createPreview(file, themeDocument));
     }
 
-    public DocumentObject.ThemeDocument getThemeDocument() {
-        return this.themeDocument;
-    }
-
-    /* JADX WARNING: type inference failed for: r12v5, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r12v5, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r12v6 */
     /* JADX WARNING: type inference failed for: r12v21 */
-    private static Bitmap createPreview(File file, DocumentObject.ThemeDocument themeDocument2) {
+    private static Bitmap createPreview(File file, DocumentObject.ThemeDocument themeDocument) {
         boolean z;
         ? r12;
         int i;
@@ -42,14 +35,14 @@ public class ThemePreviewDrawable extends BitmapDrawable {
         Drawable drawable;
         Bitmap bitmap;
         File file2 = file;
-        DocumentObject.ThemeDocument themeDocument3 = themeDocument2;
+        DocumentObject.ThemeDocument themeDocument2 = themeDocument;
         RectF rectF = new RectF();
         Paint paint = new Paint();
         Bitmap createBitmap = Bitmaps.createBitmap(560, 678, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(createBitmap);
-        HashMap<String, Integer> themeFileValues = Theme.getThemeFileValues((File) null, themeDocument3.baseTheme.assetName, (String[]) null);
+        HashMap<String, Integer> themeFileValues = Theme.getThemeFileValues((File) null, themeDocument2.baseTheme.assetName, (String[]) null);
         final HashMap hashMap = new HashMap(themeFileValues);
-        themeDocument3.accent.fillAccentColors(themeFileValues, hashMap);
+        themeDocument2.accent.fillAccentColors(themeFileValues, hashMap);
         int previewColor = Theme.getPreviewColor(hashMap, "actionBarDefault");
         int previewColor2 = Theme.getPreviewColor(hashMap, "actionBarDefaultIcon");
         int previewColor3 = Theme.getPreviewColor(hashMap, "chat_messagePanelBackground");
@@ -126,7 +119,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
                 num3 = Integer.valueOf(AndroidUtilities.calcDrawableColor(new ColorDrawable(num2.intValue()))[0]);
             }
             if (file2 != null) {
-                if ("application/x-tgwallpattern".equals(themeDocument3.mime_type)) {
+                if ("application/x-tgwallpattern".equals(themeDocument2.mime_type)) {
                     bitmap = SvgHelper.getBitmap(file2, 560, 678, false);
                 } else {
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -154,7 +147,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
                 if (bitmap != null) {
                     Paint paint2 = new Paint(2);
                     paint2.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.SRC_IN));
-                    paint2.setAlpha((int) (themeDocument3.accent.patternIntensity * 255.0f));
+                    paint2.setAlpha((int) (themeDocument2.accent.patternIntensity * 255.0f));
                     float max = Math.max(560.0f / ((float) bitmap.getWidth()), 678.0f / ((float) bitmap.getHeight()));
                     canvas.save();
                     canvas.translate((float) ((560 - ((int) (((float) bitmap.getWidth()) * max))) / 2), (float) ((678 - ((int) (((float) bitmap.getHeight()) * max))) / 2));

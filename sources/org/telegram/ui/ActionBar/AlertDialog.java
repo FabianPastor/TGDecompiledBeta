@@ -89,7 +89,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private DialogInterface.OnCancelListener onCancelListener;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
-    private DialogInterface.OnDismissListener onDismissListener;
     /* access modifiers changed from: private */
     public ViewTreeObserver.OnScrollChangedListener onScrollChangedListener;
     /* access modifiers changed from: private */
@@ -100,7 +99,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public FrameLayout progressViewContainer;
     /* access modifiers changed from: private */
     public int progressViewStyle;
-    private TextView progressViewTextView;
     /* access modifiers changed from: private */
     public LinearLayout scrollContainer;
     private CharSequence secondTitle;
@@ -127,8 +125,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public FrameLayout titleContainer;
     /* access modifiers changed from: private */
     public TextView titleTextView;
-    /* access modifiers changed from: private */
-    public int topAnimationId;
+    private int topAnimationId;
     /* access modifiers changed from: private */
     public int topBackgroundColor;
     /* access modifiers changed from: private */
@@ -163,13 +160,15 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             super(context);
             setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 2));
             setPadding(AndroidUtilities.dp(23.0f), 0, AndroidUtilities.dp(23.0f), 0);
-            this.imageView = new ImageView(context);
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView2 = new ImageView(context);
+            this.imageView = imageView2;
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogIcon"), PorterDuff.Mode.MULTIPLY));
             int i = 5;
             addView(this.imageView, LayoutHelper.createFrame(-2, 40, (LocaleController.isRTL ? 5 : 3) | 16));
-            this.textView = new TextView(context);
-            this.textView.setLines(1);
+            TextView textView2 = new TextView(context);
+            this.textView = textView2;
+            textView2.setLines(1);
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -207,8 +206,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public AlertDialog(Context context, int i) {
         super(context, NUM);
         if (i != 3) {
-            this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
-            this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
+            Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+            this.shadowDrawable = mutate;
+            mutate.setColorFilter(new PorterDuffColorFilter(getThemeColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
             this.shadowDrawable.getPadding(this.backgroundPaddings);
         }
         this.progressViewStyle = i;
@@ -678,16 +678,17 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         setContentView(r1);
         boolean z = (this.positiveButtonText == null && this.negativeButtonText == null && this.neutralButtonText == null) ? false : true;
         if (!(this.topResId == 0 && this.topAnimationId == 0 && this.topDrawable == null)) {
-            this.topImageView = new RLottieImageView(getContext());
+            RLottieImageView rLottieImageView = new RLottieImageView(getContext());
+            this.topImageView = rLottieImageView;
             Drawable drawable = this.topDrawable;
             if (drawable != null) {
-                this.topImageView.setImageDrawable(drawable);
+                rLottieImageView.setImageDrawable(drawable);
             } else {
                 int i2 = this.topResId;
                 if (i2 != 0) {
-                    this.topImageView.setImageResource(i2);
+                    rLottieImageView.setImageResource(i2);
                 } else {
-                    this.topImageView.setAutoRepeat(true);
+                    rLottieImageView.setAutoRepeat(true);
                     this.topImageView.setAnimation(this.topAnimationId, 94, 94);
                     this.topImageView.playAnimation();
                 }
@@ -699,10 +700,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             r1.addView(this.topImageView, LayoutHelper.createLinear(-1, this.topHeight, 51, -8, -8, 0, 0));
         }
         if (this.title != null) {
-            this.titleContainer = new FrameLayout(getContext());
-            r1.addView(this.titleContainer, LayoutHelper.createLinear(-2, -2, 24.0f, 0.0f, 24.0f, 0.0f));
-            this.titleTextView = new TextView(getContext());
-            this.titleTextView.setText(this.title);
+            FrameLayout frameLayout = new FrameLayout(getContext());
+            this.titleContainer = frameLayout;
+            r1.addView(frameLayout, LayoutHelper.createLinear(-2, -2, 24.0f, 0.0f, 24.0f, 0.0f));
+            TextView textView = new TextView(getContext());
+            this.titleTextView = textView;
+            textView.setText(this.title);
             this.titleTextView.setTextColor(getThemeColor("dialogTextBlack"));
             this.titleTextView.setTextSize(1, 20.0f);
             this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -710,16 +713,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.titleContainer.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 19.0f, 0.0f, (float) (this.subtitle != null ? 2 : this.items != null ? 14 : 10)));
         }
         if (!(this.secondTitle == null || this.title == null)) {
-            this.secondTitleTextView = new TextView(getContext());
-            this.secondTitleTextView.setText(this.secondTitle);
+            TextView textView2 = new TextView(getContext());
+            this.secondTitleTextView = textView2;
+            textView2.setText(this.secondTitle);
             this.secondTitleTextView.setTextColor(getThemeColor("dialogTextGray3"));
             this.secondTitleTextView.setTextSize(1, 18.0f);
             this.secondTitleTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             this.titleContainer.addView(this.secondTitleTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, 0.0f, 21.0f, 0.0f, 0.0f));
         }
         if (this.subtitle != null) {
-            this.subtitleTextView = new TextView(getContext());
-            this.subtitleTextView.setText(this.subtitle);
+            TextView textView3 = new TextView(getContext());
+            this.subtitleTextView = textView3;
+            textView3.setText(this.subtitle);
             this.subtitleTextView.setTextColor(getThemeColor("dialogIcon"));
             this.subtitleTextView.setTextSize(1, 14.0f);
             this.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -732,7 +737,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);
             this.shadow[1].setCallback(this);
-            this.contentScrollView = new ScrollView(getContext()) {
+            AnonymousClass2 r5 = new ScrollView(getContext()) {
                 /* access modifiers changed from: protected */
                 public boolean drawChild(Canvas canvas, View view, long j) {
                     boolean drawChild = super.drawChild(canvas, view, j);
@@ -747,15 +752,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     return drawChild;
                 }
             };
-            this.contentScrollView.setVerticalScrollBarEnabled(false);
+            this.contentScrollView = r5;
+            r5.setVerticalScrollBarEnabled(false);
             AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, getThemeColor("dialogScrollGlow"));
             r1.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
-            this.scrollContainer = new LinearLayout(getContext());
-            this.scrollContainer.setOrientation(1);
+            LinearLayout linearLayout = new LinearLayout(getContext());
+            this.scrollContainer = linearLayout;
+            linearLayout.setOrientation(1);
             this.contentScrollView.addView(this.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
         }
-        this.messageTextView = new TextView(getContext());
-        this.messageTextView.setTextColor(getThemeColor("dialogTextBlack"));
+        TextView textView4 = new TextView(getContext());
+        this.messageTextView = textView4;
+        textView4.setTextColor(getThemeColor("dialogTextBlack"));
         this.messageTextView.setTextSize(1, 16.0f);
         this.messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         this.messageTextView.setLinkTextColor(getThemeColor("dialogTextLink"));
@@ -766,8 +774,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         int i3 = this.progressViewStyle;
         if (i3 == 1) {
-            this.progressViewContainer = new FrameLayout(getContext());
-            r1.addView(this.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
+            FrameLayout frameLayout2 = new FrameLayout(getContext());
+            this.progressViewContainer = frameLayout2;
+            r1.addView(frameLayout2, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
             RadialProgressView radialProgressView = new RadialProgressView(getContext());
             radialProgressView.setProgressColor(getThemeColor("dialogProgressCircle"));
             this.progressViewContainer.addView(radialProgressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
@@ -776,13 +785,15 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.progressViewContainer.addView(this.messageTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 62), 0.0f, (float) (LocaleController.isRTL ? 62 : 0), 0.0f));
         } else if (i3 == 2) {
             r1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
-            this.lineProgressView = new LineProgressView(getContext());
-            this.lineProgressView.setProgress(((float) this.currentProgress) / 100.0f, false);
+            LineProgressView lineProgressView2 = new LineProgressView(getContext());
+            this.lineProgressView = lineProgressView2;
+            lineProgressView2.setProgress(((float) this.currentProgress) / 100.0f, false);
             this.lineProgressView.setProgressColor(getThemeColor("dialogLineProgress"));
             this.lineProgressView.setBackColor(getThemeColor("dialogLineProgressBackground"));
             r1.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
-            this.lineProgressViewPercent = new TextView(getContext());
-            this.lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextView textView5 = new TextView(getContext());
+            this.lineProgressViewPercent = textView5;
+            textView5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             this.lineProgressViewPercent.setTextColor(getThemeColor("dialogTextGray2"));
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
@@ -791,8 +802,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         } else if (i3 == 3) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
-            this.progressViewContainer = new FrameLayout(getContext());
-            this.progressViewContainer.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialog_inlineProgressBackground")));
+            FrameLayout frameLayout3 = new FrameLayout(getContext());
+            this.progressViewContainer = frameLayout3;
+            frameLayout3.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialog_inlineProgressBackground")));
             r1.addView(this.progressViewContainer, LayoutHelper.createLinear(86, 86, 17));
             RadialProgressView radialProgressView2 = new RadialProgressView(getContext());
             radialProgressView2.setProgressColor(getThemeColor("dialog_inlineProgress"));
@@ -838,7 +850,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, this.customViewHeight));
         }
         if (z) {
-            this.buttonsLayout = new FrameLayout(getContext()) {
+            AnonymousClass3 r3 = new FrameLayout(this, getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int i5;
@@ -916,10 +928,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     }
                 }
             };
-            this.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            this.buttonsLayout = r3;
+            r3.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             r1.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
             if (this.positiveButtonText != null) {
-                AnonymousClass4 r12 = new TextView(getContext()) {
+                AnonymousClass4 r12 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -947,7 +960,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 });
             }
             if (this.negativeButtonText != null) {
-                AnonymousClass5 r13 = new TextView(getContext()) {
+                AnonymousClass5 r13 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -977,7 +990,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 });
             }
             if (this.neutralButtonText != null) {
-                AnonymousClass6 r14 = new TextView(getContext()) {
+                AnonymousClass6 r14 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1164,10 +1177,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
-    public void setProgressStyle(int i) {
-        this.progressViewStyle = i;
-    }
-
     public void setDismissDialogByButtons(boolean z) {
         this.dismissDialogByButtons = z;
     }
@@ -1228,18 +1237,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.topBackgroundColor = i2;
     }
 
-    public void setTopAnimation(int i, int i2) {
-        this.topAnimationId = i;
-        this.topBackgroundColor = i2;
-    }
-
     public void setTopHeight(int i) {
         this.topHeight = i;
-    }
-
-    public void setTopImage(Drawable drawable, int i) {
-        this.topDrawable = drawable;
-        this.topBackgroundColor = i;
     }
 
     public void setTitle(CharSequence charSequence) {
@@ -1257,11 +1256,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public void setPositiveButton(CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
         this.positiveButtonText = charSequence;
         this.positiveButtonListener = onClickListener2;
-    }
-
-    public void setNegativeButton(CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
-        this.negativeButtonText = charSequence;
-        this.negativeButtonListener = onClickListener2;
     }
 
     public void setNeutralButton(CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
@@ -1286,29 +1280,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (this.messageTextView == null) {
             return;
         }
-        if (!TextUtils.isEmpty(this.message)) {
+        if (!TextUtils.isEmpty(charSequence)) {
             this.messageTextView.setText(this.message);
             this.messageTextView.setVisibility(0);
             return;
         }
         this.messageTextView.setVisibility(8);
-    }
-
-    public void setMessageTextViewClickable(boolean z) {
-        this.messageTextViewClickable = z;
-    }
-
-    public void setButton(int i, CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
-        if (i == -3) {
-            this.neutralButtonText = charSequence;
-            this.neutralButtonListener = onClickListener2;
-        } else if (i == -2) {
-            this.negativeButtonText = charSequence;
-            this.negativeButtonListener = onClickListener2;
-        } else if (i == -1) {
-            this.positiveButtonText = charSequence;
-            this.positiveButtonListener = onClickListener2;
-        }
     }
 
     public View getButton(int i) {
@@ -1390,7 +1367,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         public Builder setView(View view) {
-            return setView(view, -2);
+            setView(view, -2);
+            return this;
         }
 
         public Builder setView(View view, int i) {
@@ -1411,12 +1389,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setTopImage(int i, int i2) {
             int unused = this.alertDialog.topResId = i;
-            int unused2 = this.alertDialog.topBackgroundColor = i2;
-            return this;
-        }
-
-        public Builder setTopAnimation(int i, int i2) {
-            int unused = this.alertDialog.topAnimationId = i;
             int unused2 = this.alertDialog.topBackgroundColor = i2;
             return this;
         }
@@ -1452,11 +1424,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setOnBackButtonListener(DialogInterface.OnClickListener onClickListener) {
             DialogInterface.OnClickListener unused = this.alertDialog.onBackButtonListener = onClickListener;
-            return this;
-        }
-
-        public Builder setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
-            this.alertDialog.setOnCancelListener(onCancelListener);
             return this;
         }
 

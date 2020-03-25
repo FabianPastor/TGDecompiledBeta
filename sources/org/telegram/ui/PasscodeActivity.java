@@ -56,14 +56,10 @@ import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private static final int done_button = 1;
-    private static final int password_item = 3;
-    private static final int pin_item = 2;
     /* access modifiers changed from: private */
     public int autoLockDetailRow;
     /* access modifiers changed from: private */
     public int autoLockRow;
-    private int badPasscodeTries;
     /* access modifiers changed from: private */
     public int captureDetailRow;
     /* access modifiers changed from: private */
@@ -78,7 +74,6 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public int fingerprintRow;
     private String firstPassword;
-    private long lastPasscodeTry;
     private ListAdapter listAdapter;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
@@ -142,13 +137,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-        this.fragmentView = new FrameLayout(context2);
-        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.fragmentView = frameLayout;
+        FrameLayout frameLayout2 = frameLayout;
         if (this.type != 0) {
             ActionBarMenu createMenu = this.actionBar.createMenu();
             createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-            this.titleTextView = new TextView(context2);
-            this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
+            TextView textView = new TextView(context2);
+            this.titleTextView = textView;
+            textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
             if (this.type != 1) {
                 this.titleTextView.setText(LocaleController.getString("EnterCurrentPasscode", NUM));
             } else if (SharedConfig.passcodeHash.length() != 0) {
@@ -158,9 +155,10 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
             this.titleTextView.setTextSize(1, 18.0f);
             this.titleTextView.setGravity(1);
-            frameLayout.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 38.0f, 0.0f, 0.0f));
-            this.passwordEditText = new EditTextBoldCursor(context2);
-            this.passwordEditText.setTextSize(1, 20.0f);
+            frameLayout2.addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 1, 0.0f, 38.0f, 0.0f, 0.0f));
+            EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
+            this.passwordEditText = editTextBoldCursor;
+            editTextBoldCursor.setTextSize(1, 20.0f);
             this.passwordEditText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.passwordEditText.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
             this.passwordEditText.setMaxLines(1);
@@ -179,7 +177,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.passwordEditText.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.passwordEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.passwordEditText.setCursorWidth(1.5f);
-            frameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
+            frameLayout2.addView(this.passwordEditText, LayoutHelper.createFrame(-1, 36.0f, 51, 40.0f, 90.0f, 40.0f, 0.0f));
             this.passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                     return PasscodeActivity.this.lambda$createView$0$PasscodeActivity(textView, i, keyEvent);
@@ -208,7 +206,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             });
-            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -225,9 +223,10 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
             });
             if (this.type == 1) {
-                frameLayout.setTag("windowBackgroundWhite");
-                this.dropDownContainer = new ActionBarMenuItem(context2, createMenu, 0, 0);
-                this.dropDownContainer.setSubMenuOpenSide(1);
+                frameLayout2.setTag("windowBackgroundWhite");
+                ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context2, createMenu, 0, 0);
+                this.dropDownContainer = actionBarMenuItem;
+                actionBarMenuItem.setSubMenuOpenSide(1);
                 this.dropDownContainer.addSubItem(2, LocaleController.getString("PasscodePIN", NUM));
                 this.dropDownContainer.addSubItem(3, LocaleController.getString("PasscodePassword", NUM));
                 this.actionBar.addView(this.dropDownContainer, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
@@ -236,16 +235,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         PasscodeActivity.this.lambda$createView$1$PasscodeActivity(view);
                     }
                 });
-                this.dropDown = new TextView(context2);
-                this.dropDown.setGravity(3);
+                TextView textView2 = new TextView(context2);
+                this.dropDown = textView2;
+                textView2.setGravity(3);
                 this.dropDown.setSingleLine(true);
                 this.dropDown.setLines(1);
                 this.dropDown.setMaxLines(1);
                 this.dropDown.setEllipsize(TextUtils.TruncateAt.END);
                 this.dropDown.setTextColor(Theme.getColor("actionBarDefaultTitle"));
                 this.dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                this.dropDownDrawable = context.getResources().getDrawable(NUM).mutate();
-                this.dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultTitle"), PorterDuff.Mode.MULTIPLY));
+                Drawable mutate = context.getResources().getDrawable(NUM).mutate();
+                this.dropDownDrawable = mutate;
+                mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultTitle"), PorterDuff.Mode.MULTIPLY));
                 this.dropDown.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, this.dropDownDrawable, (Drawable) null);
                 this.dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                 this.dropDown.setPadding(0, 0, AndroidUtilities.dp(10.0f), 0);
@@ -256,10 +257,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             updateDropDownTextView();
         } else {
             this.actionBar.setTitle(LocaleController.getString("Passcode", NUM));
-            frameLayout.setTag("windowBackgroundGray");
-            frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-            this.listView = new RecyclerListView(context2);
-            this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false) {
+            frameLayout2.setTag("windowBackgroundGray");
+            frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+            RecyclerListView recyclerListView = new RecyclerListView(context2);
+            this.listView = recyclerListView;
+            recyclerListView.setLayoutManager(new LinearLayoutManager(this, context2, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -267,11 +269,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             this.listView.setVerticalScrollBarEnabled(false);
             this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
             this.listView.setLayoutAnimation((LayoutAnimationController) null);
-            frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-            RecyclerListView recyclerListView = this.listView;
+            frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+            RecyclerListView recyclerListView2 = this.listView;
             ListAdapter listAdapter2 = new ListAdapter(context2);
             this.listAdapter = listAdapter2;
-            recyclerListView.setAdapter(listAdapter2);
+            recyclerListView2.setAdapter(listAdapter2);
             this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
                 public final void onItemClick(View view, int i) {
                     PasscodeActivity.this.lambda$createView$4$PasscodeActivity(view, i);
@@ -453,37 +455,36 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
     private void updateRows() {
         this.rowCount = 0;
-        int i = this.rowCount;
-        this.rowCount = i + 1;
-        this.passcodeRow = i;
-        int i2 = this.rowCount;
+        int i = 0 + 1;
+        this.rowCount = i;
+        this.passcodeRow = 0;
+        int i2 = i + 1;
+        this.rowCount = i2;
+        this.changePasscodeRow = i;
         this.rowCount = i2 + 1;
-        this.changePasscodeRow = i2;
-        int i3 = this.rowCount;
-        this.rowCount = i3 + 1;
-        this.passcodeDetailRow = i3;
+        this.passcodeDetailRow = i2;
         if (SharedConfig.passcodeHash.length() > 0) {
             try {
                 if (Build.VERSION.SDK_INT >= 23 && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected()) {
-                    int i4 = this.rowCount;
-                    this.rowCount = i4 + 1;
-                    this.fingerprintRow = i4;
+                    int i3 = this.rowCount;
+                    this.rowCount = i3 + 1;
+                    this.fingerprintRow = i3;
                 }
             } catch (Throwable th) {
                 FileLog.e(th);
             }
-            int i5 = this.rowCount;
-            this.rowCount = i5 + 1;
-            this.autoLockRow = i5;
-            int i6 = this.rowCount;
-            this.rowCount = i6 + 1;
-            this.autoLockDetailRow = i6;
-            int i7 = this.rowCount;
+            int i4 = this.rowCount;
+            int i5 = i4 + 1;
+            this.rowCount = i5;
+            this.autoLockRow = i4;
+            int i6 = i5 + 1;
+            this.rowCount = i6;
+            this.autoLockDetailRow = i5;
+            int i7 = i6 + 1;
+            this.rowCount = i7;
+            this.captureRow = i6;
             this.rowCount = i7 + 1;
-            this.captureRow = i7;
-            int i8 = this.rowCount;
-            this.rowCount = i8 + 1;
-            this.captureDetailRow = i8;
+            this.captureDetailRow = i7;
             return;
         }
         this.captureRow = -1;
@@ -576,11 +577,12 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 SharedConfig.passcodeSalt = new byte[16];
                 Utilities.random.nextBytes(SharedConfig.passcodeSalt);
                 byte[] bytes = this.firstPassword.getBytes("UTF-8");
-                byte[] bArr = new byte[(bytes.length + 32)];
+                int length = bytes.length + 32;
+                byte[] bArr = new byte[length];
                 System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, 0, 16);
                 System.arraycopy(bytes, 0, bArr, 16, bytes.length);
                 System.arraycopy(SharedConfig.passcodeSalt, 0, bArr, bytes.length + 16, 16);
-                SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, bArr.length));
+                SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, length));
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
             }
@@ -658,19 +660,22 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextInfoPrivacyCell textInfoPrivacyCell;
+            View view;
+            TextSettingsCell textSettingsCell;
             if (i == 0) {
                 TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
                 textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textInfoPrivacyCell = textCheckCell;
+                textSettingsCell = textCheckCell;
             } else if (i != 1) {
-                textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
+                view = new TextInfoPrivacyCell(this.mContext);
+                return new RecyclerListView.Holder(view);
             } else {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textInfoPrivacyCell = textSettingsCell;
+                TextSettingsCell textSettingsCell2 = new TextSettingsCell(this.mContext);
+                textSettingsCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                textSettingsCell = textSettingsCell2;
             }
-            return new RecyclerListView.Holder(textInfoPrivacyCell);
+            view = textSettingsCell;
+            return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

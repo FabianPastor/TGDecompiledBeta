@@ -43,9 +43,9 @@ public class VideoEncodingService extends Service implements NotificationCenter.
             if (i2 == this.currentAccount && (str = this.path) != null && str.equals(str2)) {
                 float min = Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue()));
                 Boolean bool = objArr[3];
-                this.currentProgress = (int) (min * 100.0f);
+                int i3 = (int) (min * 100.0f);
+                this.currentProgress = i3;
                 NotificationCompat.Builder builder2 = this.builder;
-                int i3 = this.currentProgress;
                 if (i3 != 0) {
                     z = false;
                 }
@@ -70,12 +70,12 @@ public class VideoEncodingService extends Service implements NotificationCenter.
     public int onStartCommand(Intent intent, int i, int i2) {
         this.path = intent.getStringExtra("path");
         int i3 = this.currentAccount;
-        this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
-        if (i3 != this.currentAccount) {
+        int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+        this.currentAccount = intExtra;
+        if (i3 != intExtra) {
             NotificationCenter.getInstance(i3).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
         }
-        boolean z = false;
         boolean booleanExtra = intent.getBooleanExtra("gif", false);
         if (this.path == null) {
             stopSelf();
@@ -86,8 +86,9 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         }
         if (this.builder == null) {
             NotificationsController.checkOtherNotificationsChannel();
-            this.builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
-            this.builder.setSmallIcon(17301640);
+            NotificationCompat.Builder builder2 = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+            this.builder = builder2;
+            builder2.setSmallIcon(17301640);
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
@@ -100,12 +101,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
             }
         }
         this.currentProgress = 0;
-        NotificationCompat.Builder builder2 = this.builder;
-        int i4 = this.currentProgress;
-        if (i4 == 0) {
-            z = true;
-        }
-        builder2.setProgress(100, i4, z);
+        this.builder.setProgress(100, 0, 0 == 0);
         startForeground(4, this.builder.build());
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         return 2;

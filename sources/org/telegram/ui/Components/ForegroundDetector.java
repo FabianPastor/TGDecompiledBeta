@@ -49,22 +49,6 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
         application.registerActivityLifecycleCallbacks(this);
     }
 
-    public boolean isForeground() {
-        return this.refs > 0;
-    }
-
-    public boolean isBackground() {
-        return this.refs == 0;
-    }
-
-    public void addListener(Listener listener) {
-        this.listeners.add(listener);
-    }
-
-    public void removeListener(Listener listener) {
-        this.listeners.remove(listener);
-    }
-
     public void onActivityStarted(Activity activity) {
         int i = this.refs + 1;
         this.refs = i;

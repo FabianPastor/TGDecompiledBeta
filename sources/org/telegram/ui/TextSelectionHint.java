@@ -108,14 +108,15 @@ class TextSelectionHint extends View {
             }
             this.animateToStart = 0;
             StaticLayout staticLayout = this.textLayout;
-            this.animateToEnd = staticLayout.getOffsetForHorizontal(staticLayout.getLineForOffset(this.end), (float) (this.textLayout.getWidth() - 1));
+            int offsetForHorizontal = staticLayout.getOffsetForHorizontal(staticLayout.getLineForOffset(this.end), (float) (this.textLayout.getWidth() - 1));
+            this.animateToEnd = offsetForHorizontal;
             this.currentStart = this.start;
             this.currentEnd = this.end;
             if (this.showing) {
                 this.prepareProgress = 1.0f;
                 this.enterValue = 1.0f;
                 this.currentStart = this.animateToStart;
-                this.currentEnd = this.animateToEnd;
+                this.currentEnd = offsetForHorizontal;
                 this.startOffsetValue = 0.0f;
                 this.endOffsetValue = 0.0f;
             } else if (this.showOnMeasure) {
@@ -311,7 +312,7 @@ class TextSelectionHint extends View {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(new Animator[]{ofFloat, ofFloat2, ofFloat3, ofFloat4});
         this.a = animatorSet;
-        this.a.start();
+        animatorSet.start();
         AndroidUtilities.runOnUIThread(this.dismissTunnable, 5000);
     }
 
@@ -326,16 +327,18 @@ class TextSelectionHint extends View {
     }
 
     public /* synthetic */ void lambda$show$2$TextSelectionHint(ValueAnimator valueAnimator) {
-        this.startOffsetValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.startOffsetValue = floatValue;
         int i = this.animateToStart;
-        this.currentStart = (int) (((float) i) + (((float) (this.start - i)) * this.startOffsetValue));
+        this.currentStart = (int) (((float) i) + (((float) (this.start - i)) * floatValue));
         invalidate();
     }
 
     public /* synthetic */ void lambda$show$3$TextSelectionHint(ValueAnimator valueAnimator) {
-        this.endOffsetValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.endOffsetValue = floatValue;
         int i = this.animateToEnd;
-        this.currentEnd = i + ((int) Math.ceil((double) (((float) (this.end - i)) * this.endOffsetValue)));
+        this.currentEnd = i + ((int) Math.ceil((double) (((float) (this.end - i)) * floatValue)));
         invalidate();
     }
 
@@ -364,7 +367,7 @@ class TextSelectionHint extends View {
             }
         });
         this.a = ofFloat;
-        this.a.start();
+        ofFloat.start();
     }
 
     public /* synthetic */ void lambda$hideInternal$4$TextSelectionHint(ValueAnimator valueAnimator) {

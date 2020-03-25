@@ -33,23 +33,27 @@ public class TextCell extends FrameLayout {
         this.offsetFromImage = 71;
         this.imageLeft = 21;
         this.leftPadding = i;
-        this.textView = new SimpleTextView(context);
-        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        SimpleTextView simpleTextView = new SimpleTextView(context);
+        this.textView = simpleTextView;
+        simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(16);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
-        this.valueTextView = new SimpleTextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
+        SimpleTextView simpleTextView2 = new SimpleTextView(context);
+        this.valueTextView = simpleTextView2;
+        simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(16);
         this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i2);
         addView(this.valueTextView);
-        this.imageView = new ImageView(context);
-        this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
         addView(this.imageView);
-        this.valueImageView = new ImageView(context);
-        this.valueImageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView3 = new ImageView(context);
+        this.valueImageView = imageView3;
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.valueImageView);
         setFocusable(true);
     }
@@ -132,7 +136,7 @@ public class TextCell extends FrameLayout {
         this.valueTextView.setVisibility(8);
         this.valueImageView.setVisibility(8);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndIcon(String str, int i, boolean z) {
@@ -144,7 +148,7 @@ public class TextCell extends FrameLayout {
         this.valueImageView.setVisibility(8);
         this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndIcon(String str, Drawable drawable, boolean z) {
@@ -159,7 +163,7 @@ public class TextCell extends FrameLayout {
         this.valueImageView.setVisibility(8);
         this.imageView.setPadding(0, AndroidUtilities.dp(6.0f), 0, 0);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setOffsetFromImage(int i) {
@@ -173,7 +177,7 @@ public class TextCell extends FrameLayout {
         this.imageView.setVisibility(8);
         this.valueImageView.setVisibility(8);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndValueAndIcon(String str, String str2, int i, boolean z) {
@@ -185,7 +189,7 @@ public class TextCell extends FrameLayout {
         this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         this.imageView.setImageResource(i);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     public void setTextAndValueDrawable(String str, Drawable drawable, boolean z) {
@@ -197,7 +201,7 @@ public class TextCell extends FrameLayout {
         this.imageView.setVisibility(8);
         this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
         this.needDivider = z;
-        setWillNotDraw(!this.needDivider);
+        setWillNotDraw(!z);
     }
 
     /* access modifiers changed from: protected */

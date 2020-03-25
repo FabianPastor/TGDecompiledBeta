@@ -17,7 +17,8 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$Message;
 
 public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable implements DownloadController.FileDownloadProgressListener {
     private static TextPaint buttonPaint = new TextPaint(1);
@@ -84,15 +85,17 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         this.parentView = view;
         this.parentMessageObject = messageObject;
         this.TAG = DownloadController.getInstance(messageObject.currentAccount).generateObserverTag();
-        TLRPC.Document document = messageObject.getDocument();
+        TLRPC$Document document = messageObject.getDocument();
         if (document != null) {
-            this.fileName = FileLoader.getDocumentFileName(messageObject.getDocument());
-            if (TextUtils.isEmpty(this.fileName)) {
+            String documentFileName = FileLoader.getDocumentFileName(messageObject.getDocument());
+            this.fileName = documentFileName;
+            if (TextUtils.isEmpty(documentFileName)) {
                 this.fileName = "name";
             }
             int lastIndexOf = this.fileName.lastIndexOf(46);
-            this.ext = lastIndexOf == -1 ? "" : this.fileName.substring(lastIndexOf + 1).toUpperCase();
-            if (((int) Math.ceil((double) docPaint.measureText(this.ext))) > AndroidUtilities.dp(40.0f)) {
+            String upperCase = lastIndexOf == -1 ? "" : this.fileName.substring(lastIndexOf + 1).toUpperCase();
+            this.ext = upperCase;
+            if (((int) Math.ceil((double) docPaint.measureText(upperCase))) > AndroidUtilities.dp(40.0f)) {
                 this.ext = TextUtils.ellipsize(this.ext, docPaint, (float) AndroidUtilities.dp(40.0f), TextUtils.TruncateAt.END).toString();
             }
             this.thumbDrawable = context.getResources().getDrawable(AndroidUtilities.getThumbForNameOrMime(this.fileName, messageObject.getDocument().mime_type, true)).mutate();
@@ -215,10 +218,10 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
     public void checkFileExist() {
         MessageObject messageObject = this.parentMessageObject;
         if (messageObject != null) {
-            TLRPC.Message message = messageObject.messageOwner;
-            if (message.media != null) {
+            TLRPC$Message tLRPC$Message = messageObject.messageOwner;
+            if (tLRPC$Message.media != null) {
                 String str = null;
-                if ((TextUtils.isEmpty(message.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
+                if ((TextUtils.isEmpty(tLRPC$Message.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
                     str = FileLoader.getAttachFileName(this.parentMessageObject.getDocument());
                 }
                 this.loaded = false;
@@ -229,8 +232,9 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
                     DownloadController.getInstance(this.parentMessageObject.currentAccount).removeLoadingFileObserver(this);
                 } else {
                     DownloadController.getInstance(this.parentMessageObject.currentAccount).addLoadingFileObserver(str, this);
-                    this.loading = FileLoader.getInstance(this.parentMessageObject.currentAccount).isLoadingFile(str);
-                    if (this.loading) {
+                    boolean isLoadingFile = FileLoader.getInstance(this.parentMessageObject.currentAccount).isLoadingFile(str);
+                    this.loading = isLoadingFile;
+                    if (isLoadingFile) {
                         this.progressVisible = true;
                         Float fileProgress = ImageLoader.getInstance().getFileProgress(str);
                         if (fileProgress == null) {
@@ -263,8 +267,8 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
                 float f3 = this.animationProgressStart;
                 float f4 = f2 - f3;
                 if (f4 > 0.0f) {
-                    this.currentProgressTime += j;
-                    long j2 = this.currentProgressTime;
+                    long j2 = this.currentProgressTime + j;
+                    this.currentProgressTime = j2;
                     if (j2 >= 300) {
                         this.animatedProgressValue = f2;
                         this.animationProgressStart = f2;
@@ -280,8 +284,9 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         if (f5 >= 1.0f && f5 == 1.0f) {
             float f6 = this.animatedAlphaValue;
             if (f6 != 0.0f) {
-                this.animatedAlphaValue = f6 - (((float) j) / 200.0f);
-                if (this.animatedAlphaValue <= 0.0f) {
+                float f7 = f6 - (((float) j) / 200.0f);
+                this.animatedAlphaValue = f7;
+                if (f7 <= 0.0f) {
                     this.animatedAlphaValue = 0.0f;
                 }
                 this.parentView.invalidate();
@@ -304,9 +309,5 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         this.currentProgressTime = 0;
         this.lastUpdateTime = System.currentTimeMillis();
         this.parentView.invalidate();
-    }
-
-    public float getCurrentProgress() {
-        return this.currentProgress;
     }
 }

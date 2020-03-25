@@ -61,8 +61,7 @@ public class Mp4Movie {
     }
 
     public int addTrack(MediaFormat mediaFormat, boolean z) {
-        ArrayList<Track> arrayList = this.tracks;
-        arrayList.add(new Track(arrayList.size(), mediaFormat, z));
+        this.tracks.add(new Track(this.tracks.size(), mediaFormat, z));
         return this.tracks.size() - 1;
     }
 }

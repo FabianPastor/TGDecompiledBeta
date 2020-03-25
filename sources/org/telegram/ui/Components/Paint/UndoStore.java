@@ -48,12 +48,6 @@ public class UndoStore {
         }
     }
 
-    public void reset() {
-        this.operations.clear();
-        this.uuidToOperationMap.clear();
-        notifyOfHistoryChanges();
-    }
-
     private void notifyOfHistoryChanges() {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {

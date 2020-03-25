@@ -58,12 +58,14 @@ public class MP4Builder {
 
     public MP4Builder createMovie(Mp4Movie mp4Movie, boolean z) throws Exception {
         this.currentMp4Movie = mp4Movie;
-        this.fos = new FileOutputStream(mp4Movie.getCacheFile());
-        this.fc = this.fos.getChannel();
+        FileOutputStream fileOutputStream = new FileOutputStream(mp4Movie.getCacheFile());
+        this.fos = fileOutputStream;
+        this.fc = fileOutputStream.getChannel();
         FileTypeBox createFileTypeBox = createFileTypeBox();
         createFileTypeBox.getBox(this.fc);
-        this.dataOffset += createFileTypeBox.getSize();
-        this.wroteSinceLastMdat += this.dataOffset;
+        long size = this.dataOffset + createFileTypeBox.getSize();
+        this.dataOffset = size;
+        this.wroteSinceLastMdat += size;
         this.splitMdat = z;
         this.mdat = new InterleaveChunkMdat();
         this.sizeBuffer = ByteBuffer.allocateDirect(4);
@@ -92,9 +94,10 @@ public class MP4Builder {
         }
         InterleaveChunkMdat interleaveChunkMdat = this.mdat;
         interleaveChunkMdat.setContentSize(interleaveChunkMdat.getContentSize() + ((long) bufferInfo.size));
-        this.wroteSinceLastMdat += (long) bufferInfo.size;
+        long j = this.wroteSinceLastMdat + ((long) bufferInfo.size);
+        this.wroteSinceLastMdat = j;
         boolean z2 = true;
-        if (this.wroteSinceLastMdat >= 32768) {
+        if (j >= 32768) {
             if (this.splitMdat) {
                 flushCurrentMdat();
                 this.writeNewMdat = true;
@@ -136,8 +139,9 @@ public class MP4Builder {
         while (it.hasNext()) {
             Track next = it.next();
             ArrayList<Sample> samples = next.getSamples();
-            long[] jArr = new long[samples.size()];
-            for (int i = 0; i < jArr.length; i++) {
+            int size = samples.size();
+            long[] jArr = new long[size];
+            for (int i = 0; i < size; i++) {
                 jArr[i] = samples.get(i).getSize();
             }
             this.track2SampleSizes.put(next, jArr);
@@ -388,24 +392,22 @@ public class MP4Builder {
         SampleToChunkBox sampleToChunkBox = new SampleToChunkBox();
         sampleToChunkBox.setEntries(new LinkedList());
         int size = track.getSamples().size();
-        int i = 0;
+        int i = -1;
         int i2 = 0;
-        int i3 = -1;
+        int i3 = 0;
         int i4 = 1;
-        while (i < size) {
-            Sample sample = track.getSamples().get(i);
-            i2++;
-            if (i == size + -1 || sample.getOffset() + sample.getSize() != track.getSamples().get(i + 1).getOffset()) {
-                if (i3 != i2) {
-                    sampleToChunkBox.getEntries().add(new SampleToChunkBox.Entry((long) i4, (long) i2, 1));
-                } else {
-                    i2 = i3;
+        while (i2 < size) {
+            Sample sample = track.getSamples().get(i2);
+            i3++;
+            if (i2 == size + -1 || sample.getOffset() + sample.getSize() != track.getSamples().get(i2 + 1).getOffset()) {
+                if (i != i3) {
+                    sampleToChunkBox.getEntries().add(new SampleToChunkBox.Entry((long) i4, (long) i3, 1));
+                    i = i3;
                 }
                 i4++;
-                i3 = i2;
-                i2 = 0;
+                i3 = 0;
             }
-            i++;
+            i2++;
         }
         sampleTableBox.addBox(sampleToChunkBox);
     }

@@ -21,8 +21,9 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         textView.setTextSize(1, 14.0f);
         textView.setText(LocaleController.getString("GroupStickersInfo", NUM));
         addView(textView, LayoutHelper.createLinear(-1, -2, 51, 17, 4, 17, 0));
-        this.addButton = new TextView(context);
-        this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
+        TextView textView2 = new TextView(context);
+        this.addButton = textView2;
+        textView2.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.addButton.setTextSize(1, 14.0f);

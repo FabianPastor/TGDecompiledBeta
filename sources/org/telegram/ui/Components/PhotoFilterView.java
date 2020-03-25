@@ -18,9 +18,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -33,7 +31,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -44,15 +41,11 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.PhotoEditRadioCell;
 import org.telegram.ui.Cells.PhotoEditToolCell;
-import org.telegram.ui.Components.PhotoFilterBlurControl;
-import org.telegram.ui.Components.PhotoFilterCurvesControl;
 import org.telegram.ui.Components.PhotoFilterView;
 import org.telegram.ui.Components.RecyclerListView;
 
 @SuppressLint({"NewApi"})
 public class PhotoFilterView extends FrameLayout {
-    private static final int curveDataStep = 2;
-    private static final int curveGranularity = 100;
     /* access modifiers changed from: private */
     public Bitmap bitmapToEdit;
     /* access modifiers changed from: private */
@@ -149,11 +142,6 @@ public class PhotoFilterView extends FrameLayout {
         public float[] cachedDataPoints;
         public float highlightsLevel = 75.0f;
         public float midtonesLevel = 50.0f;
-        public float previousBlacksLevel = 0.0f;
-        public float previousHighlightsLevel = 75.0f;
-        public float previousMidtonesLevel = 50.0f;
-        public float previousShadowsLevel = 25.0f;
-        public float previousWhitesLevel = 100.0f;
         public float shadowsLevel = 25.0f;
         public float whitesLevel = 100.0f;
 
@@ -162,23 +150,6 @@ public class PhotoFilterView extends FrameLayout {
                 interpolateCurve();
             }
             return this.cachedDataPoints;
-        }
-
-        public void saveValues() {
-            this.previousBlacksLevel = this.blacksLevel;
-            this.previousShadowsLevel = this.shadowsLevel;
-            this.previousMidtonesLevel = this.midtonesLevel;
-            this.previousHighlightsLevel = this.highlightsLevel;
-            this.previousWhitesLevel = this.whitesLevel;
-        }
-
-        public void restoreValues() {
-            this.blacksLevel = this.previousBlacksLevel;
-            this.shadowsLevel = this.previousShadowsLevel;
-            this.midtonesLevel = this.previousMidtonesLevel;
-            this.highlightsLevel = this.previousHighlightsLevel;
-            this.whitesLevel = this.previousWhitesLevel;
-            interpolateCurve();
         }
 
         public float[] interpolateCurve() {
@@ -192,7 +163,7 @@ public class PhotoFilterView extends FrameLayout {
             arrayList2.add(Float.valueOf(fArr[0]));
             arrayList2.add(Float.valueOf(fArr[1]));
             int i2 = 1;
-            while (i2 < (fArr.length / 2) - 2) {
+            while (i2 < 5) {
                 int i3 = (i2 - 1) * 2;
                 float f4 = fArr[i3];
                 float f5 = fArr[i3 + i];
@@ -241,8 +212,9 @@ public class PhotoFilterView extends FrameLayout {
                 fArr2[i9] = ((Float) arrayList.get(i9)).floatValue();
                 i9++;
             }
-            float[] fArr3 = new float[arrayList2.size()];
-            for (int i10 = 0; i10 < fArr3.length; i10++) {
+            int size = arrayList2.size();
+            float[] fArr3 = new float[size];
+            for (int i10 = 0; i10 < size; i10++) {
                 fArr3[i10] = ((Float) arrayList2.get(i10)).floatValue();
             }
             return fArr3;
@@ -254,19 +226,17 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     public static class CurvesToolValue {
-        public static final int CurvesTypeBlue = 3;
-        public static final int CurvesTypeGreen = 2;
-        public static final int CurvesTypeLuminance = 0;
-        public static final int CurvesTypeRed = 1;
         public int activeType;
         public CurvesValue blueCurve = new CurvesValue();
-        public ByteBuffer curveBuffer = ByteBuffer.allocateDirect(800);
+        public ByteBuffer curveBuffer;
         public CurvesValue greenCurve = new CurvesValue();
         public CurvesValue luminanceCurve = new CurvesValue();
         public CurvesValue redCurve = new CurvesValue();
 
         public CurvesToolValue() {
-            this.curveBuffer.order(ByteOrder.LITTLE_ENDIAN);
+            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(800);
+            this.curveBuffer = allocateDirect;
+            allocateDirect.order(ByteOrder.LITTLE_ENDIAN);
         }
 
         public void fillBuffer() {
@@ -290,21 +260,6 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     public class EGLThread extends DispatchQueue {
-        private static final int PGPhotoEnhanceHistogramBins = 256;
-        private static final int PGPhotoEnhanceSegments = 4;
-        private static final String blurFragmentShaderCode = "uniform sampler2D sourceImage;varying highp vec2 blurCoordinates[9];void main() {lowp vec4 sum = vec4(0.0);sum += texture2D(sourceImage, blurCoordinates[0]) * 0.133571;sum += texture2D(sourceImage, blurCoordinates[1]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[2]) * 0.233308;sum += texture2D(sourceImage, blurCoordinates[3]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[4]) * 0.135928;sum += texture2D(sourceImage, blurCoordinates[5]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[6]) * 0.051383;sum += texture2D(sourceImage, blurCoordinates[7]) * 0.012595;sum += texture2D(sourceImage, blurCoordinates[8]) * 0.012595;gl_FragColor = sum;}";
-        private static final String blurVertexShaderCode = "attribute vec4 position;attribute vec4 inputTexCoord;uniform highp float texelWidthOffset;uniform highp float texelHeightOffset;varying vec2 blurCoordinates[9];void main() {gl_Position = position;vec2 singleStepOffset = vec2(texelWidthOffset, texelHeightOffset);blurCoordinates[0] = inputTexCoord.xy;blurCoordinates[1] = inputTexCoord.xy + singleStepOffset * 1.458430;blurCoordinates[2] = inputTexCoord.xy - singleStepOffset * 1.458430;blurCoordinates[3] = inputTexCoord.xy + singleStepOffset * 3.403985;blurCoordinates[4] = inputTexCoord.xy - singleStepOffset * 3.403985;blurCoordinates[5] = inputTexCoord.xy + singleStepOffset * 5.351806;blurCoordinates[6] = inputTexCoord.xy - singleStepOffset * 5.351806;blurCoordinates[7] = inputTexCoord.xy + singleStepOffset * 7.302940;blurCoordinates[8] = inputTexCoord.xy - singleStepOffset * 7.302940;}";
-        private static final String enhanceFragmentShaderCode = "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform float intensity;float enhance(float value) {const vec2 offset = vec2(0.NUM, 0.03125);value = value + offset.x;vec2 coord = (clamp(texCoord, 0.125, 1.0 - 0.125001) - 0.125) * 4.0;vec2 frac = fract(coord);coord = floor(coord);float p00 = float(coord.y * 4.0 + coord.x) * 0.0625 + offset.y;float p01 = float(coord.y * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;float p10 = float((coord.y + 1.0) * 4.0 + coord.x) * 0.0625 + offset.y;float p11 = float((coord.y + 1.0) * 4.0 + coord.x + 1.0) * 0.0625 + offset.y;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p00)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p01)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p10)).rgb;vec3 CLASSNAME = texture2D(inputImageTexture2, vec2(value, p11)).rgb;float c1 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c2 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c3 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c4 = ((CLASSNAME.r - CLASSNAME.g) / (CLASSNAME.b - CLASSNAME.g));float c1_2 = mix(c1, c2, frac.x);float c3_4 = mix(c3, c4, frac.x);return mix(c1_2, c3_4, frac.y);}vec3 hsv_to_rgb(vec3 c) {vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}void main() {vec4 texel = texture2D(sourceImage, texCoord);vec4 hsv = texel;hsv.y = min(1.0, hsv.y * 1.2);hsv.z = min(1.0, enhance(hsv.z) * 1.1);gl_FragColor = vec4(hsv_to_rgb(mix(texel.xyz, hsv.xyz, intensity)), texel.w);}";
-        private static final String linearBlurFragmentShaderCode = "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float angle;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = abs((texCoordToUse.x - excludePoint.x) * aspectRatio * cos(angle) + (texCoordToUse.y - excludePoint.y) * sin(angle));gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}";
-        private static final String radialBlurFragmentShaderCode = "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = distance(excludePoint, texCoordToUse);gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}";
-        private static final String rgbToHsvFragmentShaderCode = "precision highp float;varying vec2 texCoord;uniform sampler2D sourceImage;vec3 rgb_to_hsv(vec3 c) {vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);float d = q.x - min(q.w, q.y);float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}void main() {vec4 texel = texture2D(sourceImage, texCoord);gl_FragColor = vec4(rgb_to_hsv(texel.rgb), texel.a);}";
-        private static final String sharpenFragmentShaderCode = "precision highp float;varying vec2 texCoord;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;uniform sampler2D sourceImage;uniform float sharpen;void main() {vec4 result = texture2D(sourceImage, texCoord);vec3 leftTextureColor = texture2D(sourceImage, leftTexCoord).rgb;vec3 rightTextureColor = texture2D(sourceImage, rightTexCoord).rgb;vec3 topTextureColor = texture2D(sourceImage, topTexCoord).rgb;vec3 bottomTextureColor = texture2D(sourceImage, bottomTexCoord).rgb;result.rgb = result.rgb * (1.0 + 4.0 * sharpen) - (leftTextureColor + rightTextureColor + topTextureColor + bottomTextureColor) * sharpen;gl_FragColor = result;}";
-        private static final String sharpenVertexShaderCode = "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;uniform highp float inputWidth;uniform highp float inputHeight;varying vec2 leftTexCoord;varying vec2 rightTexCoord;varying vec2 topTexCoord;varying vec2 bottomTexCoord;void main() {gl_Position = position;texCoord = inputTexCoord;highp vec2 widthStep = vec2(1.0 / inputWidth, 0.0);highp vec2 heightStep = vec2(0.0, 1.0 / inputHeight);leftTexCoord = inputTexCoord - widthStep;rightTexCoord = inputTexCoord + widthStep;topTexCoord = inputTexCoord + heightStep;bottomTexCoord = inputTexCoord - heightStep;}";
-        private static final String simpleFragmentShaderCode = "varying highp vec2 texCoord;uniform sampler2D sourceImage;void main() {gl_FragColor = texture2D(sourceImage, texCoord);}";
-        private static final String simpleVertexShaderCode = "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}";
-        private static final String toolsFragmentShaderCode = "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform highp float width;uniform highp float height;uniform sampler2D curvesImage;uniform lowp float skipTone;uniform lowp float shadows;const mediump vec3 hsLuminanceWeighting = vec3(0.3, 0.3, 0.3);uniform lowp float highlights;uniform lowp float contrast;uniform lowp float fadeAmount;const mediump vec3 satLuminanceWeighting = vec3(0.2126, 0.7152, 0.0722);uniform lowp float saturation;uniform lowp float shadowsTintIntensity;uniform lowp float highlightsTintIntensity;uniform lowp vec3 shadowsTintColor;uniform lowp vec3 highlightsTintColor;uniform lowp float exposure;uniform lowp float warmth;uniform lowp float grain;const lowp float permTexUnit = 1.0 / 256.0;const lowp float permTexUnitHalf = 0.5 / 256.0;const lowp float grainsize = 2.3;uniform lowp float vignette;highp float getLuma(highp vec3 rgbP) {return (0.299 * rgbP.r) + (0.587 * rgbP.g) + (0.114 * rgbP.b);}lowp vec3 rgbToHsv(lowp vec3 c) {highp vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);highp vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);highp vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);highp float d = q.x - min(q.w, q.y);highp float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}lowp vec3 hsvToRgb(lowp vec3 c) {highp vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);highp vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);}highp vec3 rgbToHsl(highp vec3 color) {highp vec3 hsl;highp float fmin = min(min(color.r, color.g), color.b);highp float fmax = max(max(color.r, color.g), color.b);highp float delta = fmax - fmin;hsl.z = (fmax + fmin) / 2.0;if (delta == 0.0) {hsl.x = 0.0;hsl.y = 0.0;} else {if (hsl.z < 0.5) {hsl.y = delta / (fmax + fmin);} else {hsl.y = delta / (2.0 - fmax - fmin);}highp float deltaR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;highp float deltaG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;highp float deltaB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;if (color.r == fmax) {hsl.x = deltaB - deltaG;} else if (color.g == fmax) {hsl.x = (1.0 / 3.0) + deltaR - deltaB;} else if (color.b == fmax) {hsl.x = (2.0 / 3.0) + deltaG - deltaR;}if (hsl.x < 0.0) {hsl.x += 1.0;} else if (hsl.x > 1.0) {hsl.x -= 1.0;}}return hsl;}highp float hueToRgb(highp float f1, highp float f2, highp float hue) {if (hue < 0.0) {hue += 1.0;} else if (hue > 1.0) {hue -= 1.0;}highp float res;if ((6.0 * hue) < 1.0) {res = f1 + (f2 - f1) * 6.0 * hue;} else if ((2.0 * hue) < 1.0) {res = f2;} else if ((3.0 * hue) < 2.0) {res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;} else {res = f1;} return res;}highp vec3 hslToRgb(highp vec3 hsl) {if (hsl.y == 0.0) {return vec3(hsl.z);} else {highp float f2;if (hsl.z < 0.5) {f2 = hsl.z * (1.0 + hsl.y);} else {f2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);}highp float f1 = 2.0 * hsl.z - f2;return vec3(hueToRgb(f1, f2, hsl.x + (1.0/3.0)), hueToRgb(f1, f2, hsl.x), hueToRgb(f1, f2, hsl.x - (1.0/3.0)));}}highp vec3 rgbToYuv(highp vec3 inP) {highp float luma = getLuma(inP);return vec3(luma, (1.0 / 1.772) * (inP.b - luma), (1.0 / 1.402) * (inP.r - luma));}lowp vec3 yuvToRgb(highp vec3 inP) {return vec3(1.402 * inP.b + inP.r, (inP.r - (0.299 * 1.402 / 0.587) * inP.b - (0.114 * 1.772 / 0.587) * inP.g), 1.772 * inP.g + inP.r);}lowp float easeInOutSigmoid(lowp float value, lowp float strength) {if (value > 0.5) {return 1.0 - pow(2.0 - 2.0 * value, 1.0 / (1.0 - strength)) * 0.5;} else {return pow(2.0 * value, 1.0 / (1.0 - strength)) * 0.5;}}lowp vec3 applyLuminanceCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.z / (1.0 / 200.0), 0.0, 199.0));pixel.y = mix(0.0, pixel.y, smoothstep(0.0, 0.1, pixel.z) * (1.0 - smoothstep(0.8, 1.0, pixel.z)));pixel.z = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).a;return pixel;}lowp vec3 applyRGBCurve(lowp vec3 pixel) {highp float index = floor(clamp(pixel.r / (1.0 / 200.0), 0.0, 199.0));pixel.r = texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).r;index = floor(clamp(pixel.g / (1.0 / 200.0), 0.0, 199.0));pixel.g = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).g, 0.0, 1.0);index = floor(clamp(pixel.b / (1.0 / 200.0), 0.0, 199.0));pixel.b = clamp(texture2D(curvesImage, vec2(1.0 / 200.0 * index, 0)).b, 0.0, 1.0);return pixel;}highp vec3 fadeAdjust(highp vec3 color, highp float fadeVal) {return (color * (1.0 - fadeVal)) + ((color + (vec3(-0.9772) * pow(vec3(color), vec3(3.0)) + vec3(1.708) * pow(vec3(color), vec3(2.0)) + vec3(-0.1603) * vec3(color) + vec3(0.2878) - color * vec3(0.9))) * fadeVal);}lowp vec3 tintRaiseShadowsCurve(lowp vec3 color) {return vec3(-0.003671) * pow(color, vec3(3.0)) + vec3(0.3842) * pow(color, vec3(2.0)) + vec3(0.3764) * color + vec3(0.2515);}lowp vec3 tintShadows(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, tintRaiseShadowsCurve(texel), tintColor), tintAmount), 0.0, 1.0);} lowp vec3 tintHighlights(lowp vec3 texel, lowp vec3 tintColor, lowp float tintAmount) {return clamp(mix(texel, mix(texel, vec3(1.0) - tintRaiseShadowsCurve(vec3(1.0) - texel), (vec3(1.0) - tintColor)), tintAmount), 0.0, 1.0);}highp vec4 rnm(in highp vec2 tc) {highp float noise = sin(dot(tc, vec2(12.9898, 78.233))) * 43758.5453;return vec4(fract(noise), fract(noise * 1.2154), fract(noise * 1.3453), fract(noise * 1.3647)) * 2.0 - 1.0;}highp float fade(in highp float t) {return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);}highp float pnoise3D(in highp vec3 p) {highp vec3 pi = permTexUnit * floor(p) + permTexUnitHalf;highp vec3 pf = fract(p);highp float perm = rnm(pi.xy).a;highp float n000 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf);highp float n001 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(0.0, permTexUnit)).a;highp float n010 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 0.0));highp float n011 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(0.0, 1.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, 0.0)).a;highp float n100 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 0.0));highp float n101 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 0.0, 1.0));perm = rnm(pi.xy + vec2(permTexUnit, permTexUnit)).a;highp float n110 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 0.0));highp float n111 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 1.0));highp vec4 n_x = mix(vec4(n000, n001, n010, n011), vec4(n100, n101, n110, n111), fade(pf.x));highp vec2 n_xy = mix(n_x.xy, n_x.zw, fade(pf.y));return mix(n_xy.x, n_xy.y, fade(pf.z));}lowp vec2 coordRot(in lowp vec2 tc, in lowp float angle) {return vec2(((tc.x * 2.0 - 1.0) * cos(angle) - (tc.y * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5, ((tc.y * 2.0 - 1.0) * cos(angle) + (tc.x * 2.0 - 1.0) * sin(angle)) * 0.5 + 0.5);}void main() {lowp vec4 source = texture2D(sourceImage, texCoord);lowp vec4 result = source;const lowp float toolEpsilon = 0.005;if (skipTone < toolEpsilon) {result = vec4(applyRGBCurve(hslToRgb(applyLuminanceCurve(rgbToHsl(result.rgb)))), result.a);}mediump float hsLuminance = dot(result.rgb, hsLuminanceWeighting);mediump float shadow = clamp((pow(hsLuminance, 1.0 / shadows) + (-0.76) * pow(hsLuminance, 2.0 / shadows)) - hsLuminance, 0.0, 1.0);mediump float highlight = clamp((1.0 - (pow(1.0 - hsLuminance, 1.0 / (2.0 - highlights)) + (-0.8) * pow(1.0 - hsLuminance, 2.0 / (2.0 - highlights)))) - hsLuminance, -1.0, 0.0);lowp vec3 hsresult = vec3(0.0, 0.0, 0.0) + ((hsLuminance + shadow + highlight) - 0.0) * ((result.rgb - vec3(0.0, 0.0, 0.0)) / (hsLuminance - 0.0));mediump float contrastedLuminance = ((hsLuminance - 0.5) * 1.5) + 0.5;mediump float whiteInterp = contrastedLuminance * contrastedLuminance * contrastedLuminance;mediump float whiteTarget = clamp(highlights, 1.0, 2.0) - 1.0;hsresult = mix(hsresult, vec3(1.0), whiteInterp * whiteTarget);mediump float invContrastedLuminance = 1.0 - contrastedLuminance;mediump float blackInterp = invContrastedLuminance * invContrastedLuminance * invContrastedLuminance;mediump float blackTarget = 1.0 - clamp(shadows, 0.0, 1.0);hsresult = mix(hsresult, vec3(0.0), blackInterp * blackTarget);result = vec4(hsresult.rgb, result.a);result = vec4(clamp(((result.rgb - vec3(0.5)) * contrast + vec3(0.5)), 0.0, 1.0), result.a);if (abs(fadeAmount) > toolEpsilon) {result.rgb = fadeAdjust(result.rgb, fadeAmount);}lowp float satLuminance = dot(result.rgb, satLuminanceWeighting);lowp vec3 greyScaleColor = vec3(satLuminance);result = vec4(clamp(mix(greyScaleColor, result.rgb, saturation), 0.0, 1.0), result.a);if (abs(shadowsTintIntensity) > toolEpsilon) {result.rgb = tintShadows(result.rgb, shadowsTintColor, shadowsTintIntensity * 2.0);}if (abs(highlightsTintIntensity) > toolEpsilon) {result.rgb = tintHighlights(result.rgb, highlightsTintColor, highlightsTintIntensity * 2.0);}if (abs(exposure) > toolEpsilon) {mediump float mag = exposure * 1.045;mediump float exppower = 1.0 + abs(mag);if (mag < 0.0) {exppower = 1.0 / exppower;}result.r = 1.0 - pow((1.0 - result.r), exppower);result.g = 1.0 - pow((1.0 - result.g), exppower);result.b = 1.0 - pow((1.0 - result.b), exppower);}if (abs(warmth) > toolEpsilon) {highp vec3 yuvVec;if (warmth > 0.0 ) {yuvVec = vec3(0.1765, -0.1255, 0.0902);} else {yuvVec = -vec3(0.0588, 0.1569, -0.1255);}highp vec3 yuvColor = rgbToYuv(result.rgb);highp float luma = yuvColor.r;highp float curveScale = sin(luma * 3.14159);yuvColor += 0.375 * warmth * curveScale * yuvVec;result.rgb = yuvToRgb(yuvColor);}if (abs(grain) > toolEpsilon) {highp vec3 rotOffset = vec3(1.425, 3.892, 5.835);highp vec2 rotCoordsR = coordRot(texCoord, rotOffset.x);highp vec3 noise = vec3(pnoise3D(vec3(rotCoordsR * vec2(width / grainsize, height / grainsize),0.0)));lowp vec3 lumcoeff = vec3(0.299,0.587,0.114);lowp float luminance = dot(result.rgb, lumcoeff);lowp float lum = smoothstep(0.2, 0.0, luminance);lum += luminance;noise = mix(noise,vec3(0.0),pow(lum,4.0));result.rgb = result.rgb + noise * grain;}if (abs(vignette) > toolEpsilon) {const lowp float midpoint = 0.7;const lowp float fuzziness = 0.62;lowp float radDist = length(texCoord - 0.5) / sqrt(0.5);lowp float mag = easeInOutSigmoid(radDist * midpoint, fuzziness) * vignette * 0.645;result.rgb = mix(pow(result.rgb, vec3(1.0 / (1.0 - mag))), vec3(0.0), mag * mag);}gl_FragColor = result;}";
-        private final int EGL_CONTEXT_CLIENT_VERSION = 12440;
-        private final int EGL_OPENGL_ES2_BIT = 4;
         private int blurHeightHandle;
         private int blurInputTexCoordHandle;
         private int blurPositionHandle;
@@ -364,7 +319,6 @@ public class PhotoFilterView extends FrameLayout {
         private int[] enhanceTextures = new int[2];
         private int exposureHandle;
         private int fadeAmountHandle;
-        private GL gl;
         private int grainHandle;
         private int heightHandle;
         private int highlightsHandle;
@@ -466,17 +420,18 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         private boolean initGL() {
-            this.egl10 = (EGL10) EGLContext.getEGL();
-            this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-            EGLDisplay eGLDisplay = this.eglDisplay;
-            if (eGLDisplay == EGL10.EGL_NO_DISPLAY) {
+            EGL10 egl102 = (EGL10) EGLContext.getEGL();
+            this.egl10 = egl102;
+            EGLDisplay eglGetDisplay = egl102.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            this.eglDisplay = eglGetDisplay;
+            if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
-            if (!this.egl10.eglInitialize(eGLDisplay, new int[2])) {
+            if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
@@ -492,9 +447,11 @@ public class PhotoFilterView extends FrameLayout {
                 finish();
                 return false;
             } else if (iArr[0] > 0) {
-                this.eglConfig = eGLConfigArr[0];
-                this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                if (this.eglContext == null) {
+                EGLConfig eGLConfig = eGLConfigArr[0];
+                this.eglConfig = eGLConfig;
+                EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                this.eglContext = eglCreateContext;
+                if (eglCreateContext == null) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
@@ -503,39 +460,39 @@ public class PhotoFilterView extends FrameLayout {
                 }
                 SurfaceTexture surfaceTexture2 = this.surfaceTexture;
                 if (surfaceTexture2 instanceof SurfaceTexture) {
-                    this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
-                    EGLSurface eGLSurface = this.eglSurface;
-                    if (eGLSurface == null || eGLSurface == EGL10.EGL_NO_SURFACE) {
+                    EGLSurface eglCreateWindowSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, surfaceTexture2, (int[]) null);
+                    this.eglSurface = eglCreateWindowSurface;
+                    if (eglCreateWindowSurface == null || eglCreateWindowSurface == EGL10.EGL_NO_SURFACE) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
-                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
                     } else {
-                        this.gl = this.eglContext.getGL();
-                        float[] fArr = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
-                        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(fArr.length * 4);
+                        this.eglContext.getGL();
+                        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(32);
                         allocateDirect.order(ByteOrder.nativeOrder());
-                        this.vertexBuffer = allocateDirect.asFloatBuffer();
-                        this.vertexBuffer.put(fArr);
+                        FloatBuffer asFloatBuffer = allocateDirect.asFloatBuffer();
+                        this.vertexBuffer = asFloatBuffer;
+                        asFloatBuffer.put(new float[]{-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f});
                         this.vertexBuffer.position(0);
-                        float[] fArr2 = {-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
-                        ByteBuffer allocateDirect2 = ByteBuffer.allocateDirect(fArr2.length * 4);
+                        ByteBuffer allocateDirect2 = ByteBuffer.allocateDirect(32);
                         allocateDirect2.order(ByteOrder.nativeOrder());
-                        this.vertexInvertBuffer = allocateDirect2.asFloatBuffer();
-                        this.vertexInvertBuffer.put(fArr2);
+                        FloatBuffer asFloatBuffer2 = allocateDirect2.asFloatBuffer();
+                        this.vertexInvertBuffer = asFloatBuffer2;
+                        asFloatBuffer2.put(new float[]{-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f});
                         this.vertexInvertBuffer.position(0);
-                        float[] fArr3 = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
-                        ByteBuffer allocateDirect3 = ByteBuffer.allocateDirect(fArr3.length * 4);
+                        ByteBuffer allocateDirect3 = ByteBuffer.allocateDirect(32);
                         allocateDirect3.order(ByteOrder.nativeOrder());
-                        this.textureBuffer = allocateDirect3.asFloatBuffer();
-                        this.textureBuffer.put(fArr3);
+                        FloatBuffer asFloatBuffer3 = allocateDirect3.asFloatBuffer();
+                        this.textureBuffer = asFloatBuffer3;
+                        asFloatBuffer3.put(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f});
                         this.textureBuffer.position(0);
                         GLES20.glGenTextures(1, this.curveTextures, 0);
                         GLES20.glGenTextures(2, this.enhanceTextures, 0);
@@ -545,8 +502,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.toolsShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.toolsShaderProgram, loadShader);
+                        int glCreateProgram = GLES20.glCreateProgram();
+                        this.toolsShaderProgram = glCreateProgram;
+                        GLES20.glAttachShader(glCreateProgram, loadShader);
                         GLES20.glAttachShader(this.toolsShaderProgram, loadShader2);
                         GLES20.glBindAttribLocation(this.toolsShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.toolsShaderProgram, 1, "inputTexCoord");
@@ -584,8 +542,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.sharpenShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.sharpenShaderProgram, loadShader3);
+                        int glCreateProgram2 = GLES20.glCreateProgram();
+                        this.sharpenShaderProgram = glCreateProgram2;
+                        GLES20.glAttachShader(glCreateProgram2, loadShader3);
                         GLES20.glAttachShader(this.sharpenShaderProgram, loadShader4);
                         GLES20.glBindAttribLocation(this.sharpenShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.sharpenShaderProgram, 1, "inputTexCoord");
@@ -609,8 +568,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.blurShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.blurShaderProgram, loadShader5);
+                        int glCreateProgram3 = GLES20.glCreateProgram();
+                        this.blurShaderProgram = glCreateProgram3;
+                        GLES20.glAttachShader(glCreateProgram3, loadShader5);
                         GLES20.glAttachShader(this.blurShaderProgram, loadShader6);
                         GLES20.glBindAttribLocation(this.blurShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.blurShaderProgram, 1, "inputTexCoord");
@@ -633,8 +593,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.linearBlurShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader7);
+                        int glCreateProgram4 = GLES20.glCreateProgram();
+                        this.linearBlurShaderProgram = glCreateProgram4;
+                        GLES20.glAttachShader(glCreateProgram4, loadShader7);
                         GLES20.glAttachShader(this.linearBlurShaderProgram, loadShader8);
                         GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.linearBlurShaderProgram, 1, "inputTexCoord");
@@ -661,8 +622,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.radialBlurShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader9);
+                        int glCreateProgram5 = GLES20.glCreateProgram();
+                        this.radialBlurShaderProgram = glCreateProgram5;
+                        GLES20.glAttachShader(glCreateProgram5, loadShader9);
                         GLES20.glAttachShader(this.radialBlurShaderProgram, loadShader10);
                         GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.radialBlurShaderProgram, 1, "inputTexCoord");
@@ -688,8 +650,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.rgbToHsvShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader11);
+                        int glCreateProgram6 = GLES20.glCreateProgram();
+                        this.rgbToHsvShaderProgram = glCreateProgram6;
+                        GLES20.glAttachShader(glCreateProgram6, loadShader11);
                         GLES20.glAttachShader(this.rgbToHsvShaderProgram, loadShader12);
                         GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.rgbToHsvShaderProgram, 1, "inputTexCoord");
@@ -710,8 +673,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.enhanceShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.enhanceShaderProgram, loadShader13);
+                        int glCreateProgram7 = GLES20.glCreateProgram();
+                        this.enhanceShaderProgram = glCreateProgram7;
+                        GLES20.glAttachShader(glCreateProgram7, loadShader13);
                         GLES20.glAttachShader(this.enhanceShaderProgram, loadShader14);
                         GLES20.glBindAttribLocation(this.enhanceShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.enhanceShaderProgram, 1, "inputTexCoord");
@@ -734,8 +698,9 @@ public class PhotoFilterView extends FrameLayout {
                             finish();
                             return false;
                         }
-                        this.simpleShaderProgram = GLES20.glCreateProgram();
-                        GLES20.glAttachShader(this.simpleShaderProgram, loadShader15);
+                        int glCreateProgram8 = GLES20.glCreateProgram();
+                        this.simpleShaderProgram = glCreateProgram8;
+                        GLES20.glAttachShader(glCreateProgram8, loadShader15);
                         GLES20.glAttachShader(this.simpleShaderProgram, loadShader16);
                         GLES20.glBindAttribLocation(this.simpleShaderProgram, 0, "position");
                         GLES20.glBindAttribLocation(this.simpleShaderProgram, 1, "inputTexCoord");
@@ -1165,250 +1130,589 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PhotoFilterView(Context context, Bitmap bitmap, int i, MediaController.SavedFilterState savedFilterState) {
-        super(context);
-        Context context2 = context;
-        MediaController.SavedFilterState savedFilterState2 = savedFilterState;
-        if (savedFilterState2 != null) {
-            this.enhanceValue = savedFilterState2.enhanceValue;
-            this.exposureValue = savedFilterState2.exposureValue;
-            this.contrastValue = savedFilterState2.contrastValue;
-            this.warmthValue = savedFilterState2.warmthValue;
-            this.saturationValue = savedFilterState2.saturationValue;
-            this.fadeValue = savedFilterState2.fadeValue;
-            this.tintShadowsColor = savedFilterState2.tintShadowsColor;
-            this.tintHighlightsColor = savedFilterState2.tintHighlightsColor;
-            this.highlightsValue = savedFilterState2.highlightsValue;
-            this.shadowsValue = savedFilterState2.shadowsValue;
-            this.vignetteValue = savedFilterState2.vignetteValue;
-            this.grainValue = savedFilterState2.grainValue;
-            this.blurType = savedFilterState2.blurType;
-            this.sharpenValue = savedFilterState2.sharpenValue;
-            this.curvesToolValue = savedFilterState2.curvesToolValue;
-            this.blurExcludeSize = savedFilterState2.blurExcludeSize;
-            this.blurExcludePoint = savedFilterState2.blurExcludePoint;
-            this.blurExcludeBlurSize = savedFilterState2.blurExcludeBlurSize;
-            this.blurAngle = savedFilterState2.blurAngle;
-            this.lastState = savedFilterState2;
-        } else {
-            this.curvesToolValue = new CurvesToolValue();
-            this.blurExcludeSize = 0.35f;
-            this.blurExcludePoint = new Point(0.5f, 0.5f);
-            this.blurExcludeBlurSize = 0.15f;
-            this.blurAngle = 1.5707964f;
-        }
-        this.bitmapToEdit = bitmap;
-        this.orientation = i;
-        this.textureView = new TextureView(context2);
-        addView(this.textureView, LayoutHelper.createFrame(-1, -1, 51));
-        this.textureView.setVisibility(4);
-        this.textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-            }
-
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (PhotoFilterView.this.eglThread == null && surfaceTexture != null) {
-                    PhotoFilterView photoFilterView = PhotoFilterView.this;
-                    EGLThread unused = photoFilterView.eglThread = new EGLThread(surfaceTexture, photoFilterView.bitmapToEdit);
-                    PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
-                    PhotoFilterView.this.eglThread.requestRender(true, true);
-                }
-            }
-
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
-                    PhotoFilterView.this.eglThread.requestRender(false, true);
-                    PhotoFilterView.this.eglThread.postRunnable(new Runnable() {
-                        public final void run() {
-                            PhotoFilterView.AnonymousClass1.this.lambda$onSurfaceTextureSizeChanged$0$PhotoFilterView$1();
-                        }
-                    });
-                }
-            }
-
-            public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$0$PhotoFilterView$1() {
-                if (PhotoFilterView.this.eglThread != null) {
-                    PhotoFilterView.this.eglThread.requestRender(false, true);
-                }
-            }
-
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                if (PhotoFilterView.this.eglThread == null) {
-                    return true;
-                }
-                PhotoFilterView.this.eglThread.shutdown();
-                EGLThread unused = PhotoFilterView.this.eglThread = null;
-                return true;
-            }
-        });
-        this.blurControl = new PhotoFilterBlurControl(context2);
-        this.blurControl.setVisibility(4);
-        addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new PhotoFilterBlurControl.PhotoFilterLinearBlurControlDelegate() {
-            public final void valueChanged(Point point, float f, float f2, float f3) {
-                PhotoFilterView.this.lambda$new$0$PhotoFilterView(point, f, f2, f3);
-            }
-        });
-        this.curvesControl = new PhotoFilterCurvesControl(context2, this.curvesToolValue);
-        this.curvesControl.setDelegate(new PhotoFilterCurvesControl.PhotoFilterCurvesControlDelegate() {
-            public final void valueChanged() {
-                PhotoFilterView.this.lambda$new$1$PhotoFilterView();
-            }
-        });
-        this.curvesControl.setVisibility(4);
-        addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.toolsView = new FrameLayout(context2);
-        addView(this.toolsView, LayoutHelper.createFrame(-1, 186, 83));
-        FrameLayout frameLayout = new FrameLayout(context2);
-        frameLayout.setBackgroundColor(-16777216);
-        this.toolsView.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
-        this.cancelTextView = new TextView(context2);
-        this.cancelTextView.setTextSize(1, 14.0f);
-        this.cancelTextView.setTextColor(-1);
-        this.cancelTextView.setGravity(17);
-        this.cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        this.cancelTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.cancelTextView.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        this.cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
-        this.doneTextView = new TextView(context2);
-        this.doneTextView.setTextSize(1, 14.0f);
-        this.doneTextView.setTextColor(Theme.getColor("dialogFloatingButton"));
-        this.doneTextView.setGravity(17);
-        this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.doneTextView.setText(LocaleController.getString("Done", NUM).toUpperCase());
-        this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
-        LinearLayout linearLayout = new LinearLayout(context2);
-        frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 1));
-        this.tuneItem = new ImageView(context2);
-        this.tuneItem.setScaleType(ImageView.ScaleType.CENTER);
-        this.tuneItem.setImageResource(NUM);
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
-        this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$2$PhotoFilterView(view);
-            }
-        });
-        this.blurItem = new ImageView(context2);
-        this.blurItem.setScaleType(ImageView.ScaleType.CENTER);
-        this.blurItem.setImageResource(NUM);
-        this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$3$PhotoFilterView(view);
-            }
-        });
-        this.curveItem = new ImageView(context2);
-        this.curveItem.setScaleType(ImageView.ScaleType.CENTER);
-        this.curveItem.setImageResource(NUM);
-        this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$4$PhotoFilterView(view);
-            }
-        });
-        this.recyclerListView = new RecyclerListView(context2);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
-        linearLayoutManager.setOrientation(1);
-        this.recyclerListView.setLayoutManager(linearLayoutManager);
-        this.recyclerListView.setClipToPadding(false);
-        this.recyclerListView.setOverScrollMode(2);
-        this.recyclerListView.setAdapter(new ToolsAdapter(context2));
-        this.toolsView.addView(this.recyclerListView, LayoutHelper.createFrame(-1, 120, 51));
-        this.curveLayout = new FrameLayout(context2);
-        this.curveLayout.setVisibility(4);
-        this.toolsView.addView(this.curveLayout, LayoutHelper.createFrame(-1, 78.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
-        LinearLayout linearLayout2 = new LinearLayout(context2);
-        linearLayout2.setOrientation(0);
-        this.curveLayout.addView(linearLayout2, LayoutHelper.createFrame(-2, -2, 1));
-        int i2 = 0;
-        while (i2 < 4) {
-            FrameLayout frameLayout2 = new FrameLayout(context2);
-            frameLayout2.setTag(Integer.valueOf(i2));
-            this.curveRadioButton[i2] = new RadioButton(context2);
-            this.curveRadioButton[i2].setSize(AndroidUtilities.dp(20.0f));
-            frameLayout2.addView(this.curveRadioButton[i2], LayoutHelper.createFrame(30, 30, 49));
-            TextView textView = new TextView(context2);
-            textView.setTextSize(1, 12.0f);
-            textView.setGravity(16);
-            if (i2 == 0) {
-                String string = LocaleController.getString("CurvesAll", NUM);
-                textView.setText(string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase());
-                textView.setTextColor(-1);
-                this.curveRadioButton[i2].setColor(-1, -1);
-            } else if (i2 == 1) {
-                String string2 = LocaleController.getString("CurvesRed", NUM);
-                textView.setText(string2.substring(0, 1).toUpperCase() + string2.substring(1).toLowerCase());
-                textView.setTextColor(-1684147);
-                this.curveRadioButton[i2].setColor(-1684147, -1684147);
-            } else if (i2 == 2) {
-                String string3 = LocaleController.getString("CurvesGreen", NUM);
-                textView.setText(string3.substring(0, 1).toUpperCase() + string3.substring(1).toLowerCase());
-                textView.setTextColor(-10831009);
-                this.curveRadioButton[i2].setColor(-10831009, -10831009);
-            } else if (i2 == 3) {
-                String string4 = LocaleController.getString("CurvesBlue", NUM);
-                textView.setText(string4.substring(0, 1).toUpperCase() + string4.substring(1).toLowerCase());
-                textView.setTextColor(-12734994);
-                this.curveRadioButton[i2].setColor(-12734994, -12734994);
-            }
-            frameLayout2.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
-            linearLayout2.addView(frameLayout2, LayoutHelper.createLinear(-2, -2, i2 == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout2.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PhotoFilterView.this.lambda$new$5$PhotoFilterView(view);
-                }
-            });
-            i2++;
-        }
-        this.blurLayout = new FrameLayout(context2);
-        this.blurLayout.setVisibility(4);
-        this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, 60.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
-        this.blurOffButton = new TextView(context2);
-        this.blurOffButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurOffButton.setTextSize(1, 13.0f);
-        this.blurOffButton.setGravity(1);
-        this.blurOffButton.setText(LocaleController.getString("BlurOff", NUM));
-        this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$6$PhotoFilterView(view);
-            }
-        });
-        this.blurRadialButton = new TextView(context2);
-        this.blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurRadialButton.setTextSize(1, 13.0f);
-        this.blurRadialButton.setGravity(1);
-        this.blurRadialButton.setText(LocaleController.getString("BlurRadial", NUM));
-        this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$7$PhotoFilterView(view);
-            }
-        });
-        this.blurLinearButton = new TextView(context2);
-        this.blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurLinearButton.setTextSize(1, 13.0f);
-        this.blurLinearButton.setGravity(1);
-        this.blurLinearButton.setText(LocaleController.getString("BlurLinear", NUM));
-        this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
-        this.blurLinearButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$8$PhotoFilterView(view);
-            }
-        });
-        updateSelectedBlurType();
-        if (Build.VERSION.SDK_INT >= 21) {
-            ((FrameLayout.LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
-            ((FrameLayout.LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x044b  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x044f  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public PhotoFilterView(android.content.Context r24, android.graphics.Bitmap r25, int r26, org.telegram.messenger.MediaController.SavedFilterState r27) {
+        /*
+            r23 = this;
+            r0 = r23
+            r1 = r24
+            r2 = r27
+            r23.<init>(r24)
+            r3 = 0
+            r0.enhanceTool = r3
+            r4 = 1
+            r0.exposureTool = r4
+            r5 = 2
+            r0.contrastTool = r5
+            r6 = 3
+            r0.saturationTool = r6
+            r7 = 4
+            r0.warmthTool = r7
+            r8 = 5
+            r0.fadeTool = r8
+            r8 = 6
+            r0.highlightsTool = r8
+            r8 = 7
+            r0.shadowsTool = r8
+            r8 = 8
+            r0.vignetteTool = r8
+            r8 = 9
+            r0.grainTool = r8
+            r8 = 10
+            r0.sharpenTool = r8
+            r8 = 11
+            r0.tintShadowsTool = r8
+            r8 = 12
+            r0.tintHighlightsTool = r8
+            org.telegram.ui.Components.RadioButton[] r8 = new org.telegram.ui.Components.RadioButton[r7]
+            r0.curveRadioButton = r8
+            if (r2 == 0) goto L_0x008a
+            float r8 = r2.enhanceValue
+            r0.enhanceValue = r8
+            float r8 = r2.exposureValue
+            r0.exposureValue = r8
+            float r8 = r2.contrastValue
+            r0.contrastValue = r8
+            float r8 = r2.warmthValue
+            r0.warmthValue = r8
+            float r8 = r2.saturationValue
+            r0.saturationValue = r8
+            float r8 = r2.fadeValue
+            r0.fadeValue = r8
+            int r8 = r2.tintShadowsColor
+            r0.tintShadowsColor = r8
+            int r8 = r2.tintHighlightsColor
+            r0.tintHighlightsColor = r8
+            float r8 = r2.highlightsValue
+            r0.highlightsValue = r8
+            float r8 = r2.shadowsValue
+            r0.shadowsValue = r8
+            float r8 = r2.vignetteValue
+            r0.vignetteValue = r8
+            float r8 = r2.grainValue
+            r0.grainValue = r8
+            int r8 = r2.blurType
+            r0.blurType = r8
+            float r8 = r2.sharpenValue
+            r0.sharpenValue = r8
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r8 = r2.curvesToolValue
+            r0.curvesToolValue = r8
+            float r8 = r2.blurExcludeSize
+            r0.blurExcludeSize = r8
+            org.telegram.ui.Components.Point r8 = r2.blurExcludePoint
+            r0.blurExcludePoint = r8
+            float r8 = r2.blurExcludeBlurSize
+            r0.blurExcludeBlurSize = r8
+            float r8 = r2.blurAngle
+            r0.blurAngle = r8
+            r0.lastState = r2
+            goto L_0x00a9
+        L_0x008a:
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r2 = new org.telegram.ui.Components.PhotoFilterView$CurvesToolValue
+            r2.<init>()
+            r0.curvesToolValue = r2
+            r2 = 1051931443(0x3eb33333, float:0.35)
+            r0.blurExcludeSize = r2
+            org.telegram.ui.Components.Point r2 = new org.telegram.ui.Components.Point
+            r8 = 1056964608(0x3var_, float:0.5)
+            r2.<init>(r8, r8)
+            r0.blurExcludePoint = r2
+            r2 = 1041865114(0x3e19999a, float:0.15)
+            r0.blurExcludeBlurSize = r2
+            r2 = 1070141403(0x3fCLASSNAMEfdb, float:1.5707964)
+            r0.blurAngle = r2
+        L_0x00a9:
+            r2 = r25
+            r0.bitmapToEdit = r2
+            r2 = r26
+            r0.orientation = r2
+            android.view.TextureView r2 = new android.view.TextureView
+            r2.<init>(r1)
+            r0.textureView = r2
+            r8 = 51
+            r9 = -1
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r8)
+            r0.addView(r2, r10)
+            android.view.TextureView r2 = r0.textureView
+            r2.setVisibility(r7)
+            android.view.TextureView r2 = r0.textureView
+            org.telegram.ui.Components.PhotoFilterView$1 r10 = new org.telegram.ui.Components.PhotoFilterView$1
+            r10.<init>()
+            r2.setSurfaceTextureListener(r10)
+            org.telegram.ui.Components.PhotoFilterBlurControl r2 = new org.telegram.ui.Components.PhotoFilterBlurControl
+            r2.<init>(r1)
+            r0.blurControl = r2
+            r2.setVisibility(r7)
+            org.telegram.ui.Components.PhotoFilterBlurControl r2 = r0.blurControl
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r8)
+            r0.addView(r2, r10)
+            org.telegram.ui.Components.PhotoFilterBlurControl r2 = r0.blurControl
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$wsvuAfZFAJpyt9V1ZYZMPETINLA r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$wsvuAfZFAJpyt9V1ZYZMPETINLA
+            r10.<init>()
+            r2.setDelegate(r10)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r2 = new org.telegram.ui.Components.PhotoFilterCurvesControl
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r10 = r0.curvesToolValue
+            r2.<init>(r1, r10)
+            r0.curvesControl = r2
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$Q8Q0QxhBgkn0x_QyOvZIPgaDQJM r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$Q8Q0QxhBgkn0x_QyOvZIPgaDQJM
+            r10.<init>()
+            r2.setDelegate(r10)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r2 = r0.curvesControl
+            r2.setVisibility(r7)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r2 = r0.curvesControl
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r8)
+            r0.addView(r2, r10)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.toolsView = r2
+            r10 = 186(0xba, float:2.6E-43)
+            r11 = 83
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11)
+            r0.addView(r2, r10)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r10 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r2.setBackgroundColor(r10)
+            android.widget.FrameLayout r10 = r0.toolsView
+            r12 = 48
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12, r11)
+            r10.addView(r2, r11)
+            android.widget.TextView r10 = new android.widget.TextView
+            r10.<init>(r1)
+            r0.cancelTextView = r10
+            r11 = 1096810496(0x41600000, float:14.0)
+            r10.setTextSize(r4, r11)
+            android.widget.TextView r10 = r0.cancelTextView
+            r10.setTextColor(r9)
+            android.widget.TextView r10 = r0.cancelTextView
+            r13 = 17
+            r10.setGravity(r13)
+            android.widget.TextView r10 = r0.cancelTextView
+            r14 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
+            android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r3)
+            r10.setBackgroundDrawable(r15)
+            android.widget.TextView r10 = r0.cancelTextView
+            r15 = 1101004800(0x41a00000, float:20.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r10.setPadding(r6, r3, r7, r3)
+            android.widget.TextView r6 = r0.cancelTextView
+            r7 = 2131624483(0x7f0e0223, float:1.8876147E38)
+            java.lang.String r10 = "Cancel"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
+            java.lang.String r7 = r7.toUpperCase()
+            r6.setText(r7)
+            android.widget.TextView r6 = r0.cancelTextView
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r6.setTypeface(r7)
+            android.widget.TextView r6 = r0.cancelTextView
+            r7 = -2
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9, r8)
+            r2.addView(r6, r10)
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            r0.doneTextView = r6
+            r6.setTextSize(r4, r11)
+            android.widget.TextView r6 = r0.doneTextView
+            java.lang.String r10 = "dialogFloatingButton"
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r6.setTextColor(r10)
+            android.widget.TextView r6 = r0.doneTextView
+            r6.setGravity(r13)
+            android.widget.TextView r6 = r0.doneTextView
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r3)
+            r6.setBackgroundDrawable(r10)
+            android.widget.TextView r6 = r0.doneTextView
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r6.setPadding(r10, r3, r11, r3)
+            android.widget.TextView r6 = r0.doneTextView
+            r10 = 2131624969(0x7f0e0409, float:1.8877133E38)
+            java.lang.String r11 = "Done"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.String r10 = r10.toUpperCase()
+            r6.setText(r10)
+            android.widget.TextView r6 = r0.doneTextView
+            java.lang.String r10 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r10)
+            r6.setTypeface(r10)
+            android.widget.TextView r6 = r0.doneTextView
+            r10 = 53
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9, r10)
+            r2.addView(r6, r10)
+            android.widget.LinearLayout r6 = new android.widget.LinearLayout
+            r6.<init>(r1)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9, r4)
+            r2.addView(r6, r10)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            r0.tuneItem = r2
+            android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r10)
+            android.widget.ImageView r2 = r0.tuneItem
+            r10 = 2131165799(0x7var_, float:1.7945825E38)
+            r2.setImageResource(r10)
+            android.widget.ImageView r2 = r0.tuneItem
+            android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r11 = "dialogFloatingButton"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r10.<init>(r11, r13)
+            r2.setColorFilter(r10)
+            android.widget.ImageView r2 = r0.tuneItem
+            r10 = 1090519039(0x40ffffff, float:7.9999995)
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
+            r2.setBackgroundDrawable(r11)
+            android.widget.ImageView r2 = r0.tuneItem
+            r11 = 56
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
+            r6.addView(r2, r13)
+            android.widget.ImageView r2 = r0.tuneItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$4hvar_H88dpzJN2DxB_cny05r_QI r13 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$4hvar_H88dpzJN2DxB_cny05r_QI
+            r13.<init>()
+            r2.setOnClickListener(r13)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            r0.blurItem = r2
+            android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r13)
+            android.widget.ImageView r2 = r0.blurItem
+            r13 = 2131165940(0x7var_f4, float:1.7946111E38)
+            r2.setImageResource(r13)
+            android.widget.ImageView r2 = r0.blurItem
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
+            r2.setBackgroundDrawable(r13)
+            android.widget.ImageView r2 = r0.blurItem
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
+            r6.addView(r2, r13)
+            android.widget.ImageView r2 = r0.blurItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DKhAjcvz5psQCw7kBhsHKlWIYQM r13 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DKhAjcvz5psQCw7kBhsHKlWIYQM
+            r13.<init>()
+            r2.setOnClickListener(r13)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            r0.curveItem = r2
+            android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r13)
+            android.widget.ImageView r2 = r0.curveItem
+            r13 = 2131165942(0x7var_f6, float:1.7946115E38)
+            r2.setImageResource(r13)
+            android.widget.ImageView r2 = r0.curveItem
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
+            r2.setBackgroundDrawable(r10)
+            android.widget.ImageView r2 = r0.curveItem
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
+            r6.addView(r2, r10)
+            android.widget.ImageView r2 = r0.curveItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug r6 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug
+            r6.<init>()
+            r2.setOnClickListener(r6)
+            org.telegram.ui.Components.RecyclerListView r2 = new org.telegram.ui.Components.RecyclerListView
+            r2.<init>(r1)
+            r0.recyclerListView = r2
+            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
+            r2.<init>(r1)
+            r2.setOrientation(r4)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.recyclerListView
+            r6.setLayoutManager(r2)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            r2.setClipToPadding(r3)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            r2.setOverScrollMode(r5)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            org.telegram.ui.Components.PhotoFilterView$ToolsAdapter r6 = new org.telegram.ui.Components.PhotoFilterView$ToolsAdapter
+            r6.<init>(r1)
+            r2.setAdapter(r6)
+            android.widget.FrameLayout r2 = r0.toolsView
+            org.telegram.ui.Components.RecyclerListView r6 = r0.recyclerListView
+            r10 = 120(0x78, float:1.68E-43)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r8)
+            r2.addView(r6, r8)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.curveLayout = r2
+            r6 = 4
+            r2.setVisibility(r6)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.FrameLayout r6 = r0.curveLayout
+            r16 = -1
+            r17 = 1117519872(0x429CLASSNAME, float:78.0)
+            r18 = 1
+            r19 = 0
+            r20 = 1109393408(0x42200000, float:40.0)
+            r21 = 0
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r2.addView(r6, r8)
+            android.widget.LinearLayout r2 = new android.widget.LinearLayout
+            r2.<init>(r1)
+            r2.setOrientation(r3)
+            android.widget.FrameLayout r6 = r0.curveLayout
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r4)
+            r6.addView(r2, r7)
+            r6 = 0
+        L_0x0304:
+            r7 = 4
+            if (r6 >= r7) goto L_0x046c
+            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            r7.<init>(r1)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
+            r7.setTag(r8)
+            org.telegram.ui.Components.RadioButton[] r8 = r0.curveRadioButton
+            org.telegram.ui.Components.RadioButton r10 = new org.telegram.ui.Components.RadioButton
+            r10.<init>(r1)
+            r8[r6] = r10
+            org.telegram.ui.Components.RadioButton[] r8 = r0.curveRadioButton
+            r8 = r8[r6]
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r8.setSize(r10)
+            org.telegram.ui.Components.RadioButton[] r8 = r0.curveRadioButton
+            r8 = r8[r6]
+            r10 = 30
+            r11 = 30
+            r12 = 49
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12)
+            r7.addView(r8, r10)
+            android.widget.TextView r8 = new android.widget.TextView
+            r8.<init>(r1)
+            r10 = 1094713344(0x41400000, float:12.0)
+            r8.setTextSize(r4, r10)
+            r10 = 16
+            r8.setGravity(r10)
+            if (r6 != 0) goto L_0x0381
+            r10 = 2131624818(0x7f0e0372, float:1.8876826E38)
+            java.lang.String r11 = "CurvesAll"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = r10.substring(r3, r4)
+            java.lang.String r12 = r12.toUpperCase()
+            r11.append(r12)
+            java.lang.String r10 = r10.substring(r4)
+            java.lang.String r10 = r10.toLowerCase()
+            r11.append(r10)
+            java.lang.String r10 = r11.toString()
+            r8.setText(r10)
+            r8.setTextColor(r9)
+            org.telegram.ui.Components.RadioButton[] r10 = r0.curveRadioButton
+            r10 = r10[r6]
+            r10.setColor(r9, r9)
+        L_0x037e:
+            r10 = 3
+            goto L_0x0432
+        L_0x0381:
+            if (r6 != r4) goto L_0x03bc
+            r10 = 2131624821(0x7f0e0375, float:1.8876833E38)
+            java.lang.String r11 = "CurvesRed"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = r10.substring(r3, r4)
+            java.lang.String r12 = r12.toUpperCase()
+            r11.append(r12)
+            java.lang.String r10 = r10.substring(r4)
+            java.lang.String r10 = r10.toLowerCase()
+            r11.append(r10)
+            java.lang.String r10 = r11.toString()
+            r8.setText(r10)
+            r10 = -1684147(0xffffffffffe64d4d, float:NaN)
+            r8.setTextColor(r10)
+            org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
+            r11 = r11[r6]
+            r11.setColor(r10, r10)
+            goto L_0x037e
+        L_0x03bc:
+            if (r6 != r5) goto L_0x03f7
+            r10 = 2131624820(0x7f0e0374, float:1.887683E38)
+            java.lang.String r11 = "CurvesGreen"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = r10.substring(r3, r4)
+            java.lang.String r12 = r12.toUpperCase()
+            r11.append(r12)
+            java.lang.String r10 = r10.substring(r4)
+            java.lang.String r10 = r10.toLowerCase()
+            r11.append(r10)
+            java.lang.String r10 = r11.toString()
+            r8.setText(r10)
+            r10 = -10831009(0xffffffffff5abb5f, float:-2.9074459E38)
+            r8.setTextColor(r10)
+            org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
+            r11 = r11[r6]
+            r11.setColor(r10, r10)
+            goto L_0x037e
+        L_0x03f7:
+            r10 = 3
+            if (r6 != r10) goto L_0x0432
+            r11 = 2131624819(0x7f0e0373, float:1.8876828E38)
+            java.lang.String r12 = "CurvesBlue"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder
+            r12.<init>()
+            java.lang.String r13 = r11.substring(r3, r4)
+            java.lang.String r13 = r13.toUpperCase()
+            r12.append(r13)
+            java.lang.String r11 = r11.substring(r4)
+            java.lang.String r11 = r11.toLowerCase()
+            r12.append(r11)
+            java.lang.String r11 = r12.toString()
+            r8.setText(r11)
+            r11 = -12734994(0xffffffffff3dadee, float:-2.5212719E38)
+            r8.setTextColor(r11)
+            org.telegram.ui.Components.RadioButton[] r12 = r0.curveRadioButton
+            r12 = r12[r6]
+            r12.setColor(r11, r11)
+        L_0x0432:
+            r16 = -2
+            r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r18 = 49
+            r19 = 0
+            r20 = 1108869120(0x42180000, float:38.0)
+            r21 = 0
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r7.addView(r8, r11)
+            r17 = -2
+            if (r6 != 0) goto L_0x044f
+            r8 = 0
+            r18 = 0
+            goto L_0x0453
+        L_0x044f:
+            r8 = 1106247680(0x41var_, float:30.0)
+            r18 = 1106247680(0x41var_, float:30.0)
+        L_0x0453:
+            r19 = 0
+            r20 = 0
+            r21 = 0
+            android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear(r16, r17, r18, r19, r20, r21)
+            r2.addView(r7, r8)
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L20A01o2AsZwohbyfeeuMPbGEQI r8 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L20A01o2AsZwohbyfeeuMPbGEQI
+            r8.<init>()
+            r7.setOnClickListener(r8)
+            int r6 = r6 + 1
+            goto L_0x0304
+        L_0x046c:
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.blurLayout = r2
+            r3 = 4
+            r2.setVisibility(r3)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.FrameLayout r3 = r0.blurLayout
+            r5 = 280(0x118, float:3.92E-43)
+            r6 = 1114636288(0x42700000, float:60.0)
+            r7 = 1
+            r8 = 0
+            r9 = 1109393408(0x42200000, float:40.0)
+            r10 = 0
+            r11 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r7, r8, r9, r10, r11)
+            r2.addView(r3, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurOffButton = r2
+            r3 = 1073741824(0x40000000, float:2.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r5)
+            android.widget.TextView r2 = r0.blurOffButton
+            r5 = 1095761920(0x41500000, float:13.0)
+            r2.setTextSize(r4, r5)
+            android.widget.TextView r2 = r0.blurOffButton
+            r2.setGravity(r4)
+            android.widget.TextView r2 = r0.blurOffButton
+            r6 = 2131624435(0x7f0e01f3, float:1.887605E38)
+            java.lang.String r7 = "BlurOff"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r2.setText(r6)
+            android.widget.FrameLayout r2 = r0.blurLayout
+            android.widget.TextView r6 = r0.blurOffButton
+            r7 = 80
+            r8 = 1114636288(0x42700000, float:60.0)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8)
+            r2.addView(r6, r7)
+            android.widget.TextView r2 = r0.blurOffButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EHBGA4T-Wcgx03trAGzstG0gXqg r6 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EHBGA4T-Wcgx03trAGzstG0gXqg
+            r6.<init>()
+            r2.setOnClickListener(r6)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurRadialButton = r2
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r6)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r2.setTextSize(r4, r5)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r2.setGravity(r4)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r6 = 2131624436(0x7f0e01f4, float:1.8876052E38)
+            java.lang.String r7 = "BlurRadial"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r2.setText(r6)
+            android.widget.FrameLayout r2 = r0.blurLayout
+            android.widget.TextView r6 = r0.blurRadialButton
+            r7 = 80
+            r8 = 1117782016(0x42a00000, float:80.0)
+            r9 = 51
+            r10 = 1120403456(0x42CLASSNAME, float:100.0)
+            r12 = 0
+            r13 = 0
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
+            r2.addView(r6, r7)
+            android.widget.TextView r2 = r0.blurRadialButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$SHP9jNXWESNEp5KZC_qRcZYRL1Y r6 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$SHP9jNXWESNEp5KZC_qRcZYRL1Y
+            r6.<init>()
+            r2.setOnClickListener(r6)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurLinearButton = r2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r1)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r1.setTextSize(r4, r5)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r1.setGravity(r4)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r2 = 2131624434(0x7f0e01f2, float:1.8876048E38)
+            java.lang.String r3 = "BlurLinear"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            android.widget.FrameLayout r1 = r0.blurLayout
+            android.widget.TextView r2 = r0.blurLinearButton
+            r3 = 80
+            r4 = 1117782016(0x42a00000, float:80.0)
+            r5 = 51
+            r6 = 1128792064(0x43480000, float:200.0)
+            r7 = 0
+            r8 = 0
+            r9 = 0
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r5, r6, r7, r8, r9)
+            r1.addView(r2, r3)
+            android.widget.TextView r1 = r0.blurLinearButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$TdTpIDy0jwl-mIhu0bpchkPiKg8 r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$TdTpIDy0jwl-mIhu0bpchkPiKg8
+            r2.<init>()
+            r1.setOnClickListener(r2)
+            r23.updateSelectedBlurType()
+            int r1 = android.os.Build.VERSION.SDK_INT
+            r2 = 21
+            if (r1 < r2) goto L_0x057b
+            android.view.TextureView r1 = r0.textureView
+            android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            r1.topMargin = r2
+            org.telegram.ui.Components.PhotoFilterCurvesControl r1 = r0.curvesControl
+            android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            r1.topMargin = r2
+        L_0x057b:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterView.<init>(android.content.Context, android.graphics.Bitmap, int, org.telegram.messenger.MediaController$SavedFilterState):void");
     }
 
     public /* synthetic */ void lambda$new$0$PhotoFilterView(Point point, float f, float f2, float f3) {
