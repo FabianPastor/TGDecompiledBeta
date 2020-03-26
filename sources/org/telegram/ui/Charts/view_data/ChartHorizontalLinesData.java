@@ -193,6 +193,9 @@ public class ChartHorizontalLinesData {
             f /= 1000.0f;
             i3++;
         }
+        if (((double) f) < 0.1d) {
+            return "0";
+        }
         int i4 = (int) f;
         if (f == ((float) i4)) {
             return String.format(Locale.ENGLISH, "%s%s", new Object[]{formatCount(i4), s[i3]});

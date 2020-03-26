@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -681,6 +682,35 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
     }
 
+    public void removeRecentSearch(long j) {
+        RecentSearchObject recentSearchObject = this.recentSearchObjectsById.get(j);
+        if (recentSearchObject != null) {
+            this.recentSearchObjectsById.remove(j);
+            this.recentSearchObjects.remove(recentSearchObject);
+            notifyDataSetChanged();
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(j) {
+                private final /* synthetic */ long f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    DialogsSearchAdapter.this.lambda$removeRecentSearch$7$DialogsSearchAdapter(this.f$1);
+                }
+            });
+        }
+    }
+
+    public /* synthetic */ void lambda$removeRecentSearch$7$DialogsSearchAdapter(long j) {
+        try {
+            SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
+            database.executeFast("DELETE FROM search_recent WHERE did = " + j).stepThis().dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+    }
+
     public void addHashtagsFromMessage(CharSequence charSequence) {
         this.searchAdapterHelper.addHashtagsFromMessage(charSequence);
     }
@@ -716,7 +746,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
 
                 public final void run() {
-                    DialogsSearchAdapter.this.lambda$searchDialogsInternal$8$DialogsSearchAdapter(this.f$1, this.f$2);
+                    DialogsSearchAdapter.this.lambda$searchDialogsInternal$9$DialogsSearchAdapter(this.f$1, this.f$2);
                 }
             });
         }
@@ -743,12 +773,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARNING: Removed duplicated region for block: B:99:0x024e A[Catch:{ Exception -> 0x06a5 }, LOOP:2: B:69:0x0190->B:99:0x024e, LOOP_END] */
     /* JADX WARNING: Unknown variable types count: 2 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String r24, int r25) {
+    public /* synthetic */ void lambda$searchDialogsInternal$9$DialogsSearchAdapter(java.lang.String r24, int r25) {
         /*
             r23 = this;
             r1 = r23
             java.lang.String r0 = "SavedMessages"
-            r2 = 2131626581(0x7f0e0a55, float:1.8880402E38)
+            r2 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x06a5 }
             java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x06a5 }
             java.lang.String r2 = r24.trim()     // Catch:{ Exception -> 0x06a5 }
@@ -1389,7 +1419,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r0 = r0 + 1
             goto L_0x053a
         L_0x0554:
-            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$FVguPxj8QpbjyrNjyvgW9r4iI6c r0 = org.telegram.ui.Adapters.$$Lambda$DialogsSearchAdapter$FVguPxj8QpbjyrNjyvgW9r4iI6c.INSTANCE     // Catch:{ Exception -> 0x06a5 }
+            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$_pBPL6sPCHJiVM9cPl1od_rxvJg r0 = org.telegram.ui.Adapters.$$Lambda$DialogsSearchAdapter$_pBPL6sPCHJiVM9cPl1od_rxvJg.INSTANCE     // Catch:{ Exception -> 0x06a5 }
             java.util.Collections.sort(r2, r0)     // Catch:{ Exception -> 0x06a5 }
             java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x06a5 }
             r0.<init>()     // Catch:{ Exception -> 0x06a5 }
@@ -1561,10 +1591,10 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         L_0x06a9:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.lambda$searchDialogsInternal$9$DialogsSearchAdapter(java.lang.String, int):void");
     }
 
-    static /* synthetic */ int lambda$null$7(DialogSearchResult dialogSearchResult, DialogSearchResult dialogSearchResult2) {
+    static /* synthetic */ int lambda$null$8(DialogSearchResult dialogSearchResult, DialogSearchResult dialogSearchResult2) {
         int i = dialogSearchResult.date;
         int i2 = dialogSearchResult2.date;
         if (i < i2) {
@@ -1588,12 +1618,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                DialogsSearchAdapter.this.lambda$updateSearchResults$9$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
+                DialogsSearchAdapter.this.lambda$updateSearchResults$10$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
-    public /* synthetic */ void lambda$updateSearchResults$9$DialogsSearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
+    public /* synthetic */ void lambda$updateSearchResults$10$DialogsSearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
         if (i == this.lastSearchId) {
             this.lastLocalSearchId = i;
             if (this.lastGlobalSearchId != i) {
@@ -1690,7 +1720,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int i2 = this.lastSearchId + 1;
             this.lastSearchId = i2;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$DialogsSearchAdapter$5hlgRbUoNpWg__zB2HOstsRRhkE r5 = new Runnable(trim, i2, str2) {
+            $$Lambda$DialogsSearchAdapter$zjKeY8XytNvyYaDr1bnMPC5nRGc r5 = new Runnable(trim, i2, str2) {
                 private final /* synthetic */ String f$1;
                 private final /* synthetic */ int f$2;
                 private final /* synthetic */ String f$3;
@@ -1702,7 +1732,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
 
                 public final void run() {
-                    DialogsSearchAdapter.this.lambda$searchDialogs$11$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
+                    DialogsSearchAdapter.this.lambda$searchDialogs$12$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
                 }
             };
             this.searchRunnable = r5;
@@ -1710,10 +1740,10 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
     }
 
-    public /* synthetic */ void lambda$searchDialogs$11$DialogsSearchAdapter(String str, int i, String str2) {
+    public /* synthetic */ void lambda$searchDialogs$12$DialogsSearchAdapter(String str, int i, String str2) {
         this.searchRunnable = null;
         searchDialogsInternal(str, i);
-        $$Lambda$DialogsSearchAdapter$bhs4AL0tZyn7iTR6w_7zHv9HkA0 r0 = new Runnable(i, str, str2) {
+        $$Lambda$DialogsSearchAdapter$IbsY0jvr3UriSBn7nmzOA4zDytw r0 = new Runnable(i, str, str2) {
             private final /* synthetic */ int f$1;
             private final /* synthetic */ String f$2;
             private final /* synthetic */ String f$3;
@@ -1725,14 +1755,14 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             public final void run() {
-                DialogsSearchAdapter.this.lambda$null$10$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
+                DialogsSearchAdapter.this.lambda$null$11$DialogsSearchAdapter(this.f$1, this.f$2, this.f$3);
             }
         };
         this.searchRunnable2 = r0;
         AndroidUtilities.runOnUIThread(r0);
     }
 
-    public /* synthetic */ void lambda$null$10$DialogsSearchAdapter(int i, String str, String str2) {
+    public /* synthetic */ void lambda$null$11$DialogsSearchAdapter(int i, String str, String str2) {
         int i2 = i;
         this.searchRunnable2 = null;
         if (i2 == this.lastSearchId) {
@@ -1866,14 +1896,14 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         return (itemViewType == 1 || itemViewType == 3) ? false : true;
     }
 
-    public /* synthetic */ void lambda$onCreateViewHolder$12$DialogsSearchAdapter(View view, int i) {
+    public /* synthetic */ void lambda$onCreateViewHolder$13$DialogsSearchAdapter(View view, int i) {
         DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate = this.delegate;
         if (dialogsSearchAdapterDelegate != null) {
             dialogsSearchAdapterDelegate.didPressedOnSubDialog((long) ((Integer) view.getTag()).intValue());
         }
     }
 
-    public /* synthetic */ boolean lambda$onCreateViewHolder$13$DialogsSearchAdapter(View view, int i) {
+    public /* synthetic */ boolean lambda$onCreateViewHolder$14$DialogsSearchAdapter(View view, int i) {
         DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate = this.delegate;
         if (dialogsSearchAdapterDelegate == null) {
             return true;
@@ -1922,12 +1952,12 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 r1.setAdapter(new CategoryAdapterRecycler());
                 r1.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
                     public final void onItemClick(View view, int i) {
-                        DialogsSearchAdapter.this.lambda$onCreateViewHolder$12$DialogsSearchAdapter(view, i);
+                        DialogsSearchAdapter.this.lambda$onCreateViewHolder$13$DialogsSearchAdapter(view, i);
                     }
                 });
                 r1.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
                     public final boolean onItemClick(View view, int i) {
-                        return DialogsSearchAdapter.this.lambda$onCreateViewHolder$13$DialogsSearchAdapter(view, i);
+                        return DialogsSearchAdapter.this.lambda$onCreateViewHolder$14$DialogsSearchAdapter(view, i);
                     }
                 });
                 this.innerListView = r1;
@@ -2061,7 +2091,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.view.View r0 = r0.itemView
             org.telegram.ui.Cells.GraySectionCell r0 = (org.telegram.ui.Cells.GraySectionCell) r0
             boolean r3 = r16.isRecentSearchDisplayed()
-            r5 = 2131624711(0x7f0e0307, float:1.887661E38)
+            r5 = 2131624709(0x7f0e0305, float:1.8876605E38)
             java.lang.String r8 = "ClearButton"
             if (r3 == 0) goto L_0x00f3
             int r3 = r1.currentAccount
@@ -2074,17 +2104,17 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r4 = 0
         L_0x00cc:
             if (r2 >= r4) goto L_0x00dc
-            r2 = 2131624634(0x7f0e02ba, float:1.8876453E38)
+            r2 = 2131624632(0x7f0e02b8, float:1.887645E38)
             java.lang.String r3 = "ChatHints"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             goto L_0x037c
         L_0x00dc:
-            r2 = 2131626468(0x7f0e09e4, float:1.8880173E38)
+            r2 = 2131626473(0x7f0e09e9, float:1.8880183E38)
             java.lang.String r3 = "Recent"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r5)
-            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$941fnPDSgReuKOmz7WsSoxVuOTY r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$941fnPDSgReuKOmz7WsSoxVuOTY
+            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$honrBco-zV9w0fwaI91SKdwfMI0 r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$honrBco-zV9w0fwaI91SKdwfMI0
             r4.<init>()
             r0.setText(r2, r3, r4)
             goto L_0x037c
@@ -2092,11 +2122,11 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<java.lang.String> r3 = r1.searchResultHashtags
             boolean r3 = r3.isEmpty()
             if (r3 != 0) goto L_0x0112
-            r2 = 2131625409(0x7f0e05c1, float:1.8878025E38)
+            r2 = 2131625414(0x7f0e05c6, float:1.8878035E38)
             java.lang.String r3 = "Hashtags"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r5)
-            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$honrBco-zV9w0fwaI91SKdwfMI0 r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$honrBco-zV9w0fwaI91SKdwfMI0
+            org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$YI57NotkimI_aZA_lycnYL-wN7k r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$YI57NotkimI_aZA_lycnYL-wN7k
             r4.<init>()
             r0.setText(r2, r3, r4)
             goto L_0x037c
@@ -2130,7 +2160,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 - r4
             if (r2 < 0) goto L_0x0161
             if (r2 >= r8) goto L_0x0161
-            r2 = 2131626326(0x7f0e0956, float:1.8879885E38)
+            r2 = 2131626331(0x7f0e095b, float:1.8879895E38)
             java.lang.String r3 = "PhoneNumberSearch"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -2139,13 +2169,13 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 - r8
             if (r2 < 0) goto L_0x0174
             if (r2 >= r6) goto L_0x0174
-            r2 = 2131625362(0x7f0e0592, float:1.887793E38)
+            r2 = 2131625369(0x7f0e0599, float:1.8877944E38)
             java.lang.String r3 = "GlobalSearch"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             goto L_0x037c
         L_0x0174:
-            r2 = 2131626608(0x7f0e0a70, float:1.8880457E38)
+            r2 = 2131626614(0x7f0e0a76, float:1.888047E38)
             java.lang.String r3 = "SearchMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -2372,7 +2402,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r0 = r3.id
             int r2 = r1.selfUserId
             if (r0 != r2) goto L_0x0329
-            r0 = 2131626581(0x7f0e0a55, float:1.8880402E38)
+            r0 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
             java.lang.String r2 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r5 = 0
@@ -2434,14 +2464,14 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
     }
 
-    public /* synthetic */ void lambda$onBindViewHolder$14$DialogsSearchAdapter(View view) {
+    public /* synthetic */ void lambda$onBindViewHolder$15$DialogsSearchAdapter(View view) {
         DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate = this.delegate;
         if (dialogsSearchAdapterDelegate != null) {
             dialogsSearchAdapterDelegate.needClearList();
         }
     }
 
-    public /* synthetic */ void lambda$onBindViewHolder$15$DialogsSearchAdapter(View view) {
+    public /* synthetic */ void lambda$onBindViewHolder$16$DialogsSearchAdapter(View view) {
         DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate = this.delegate;
         if (dialogsSearchAdapterDelegate != null) {
             dialogsSearchAdapterDelegate.needClearList();

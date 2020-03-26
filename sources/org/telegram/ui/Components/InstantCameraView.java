@@ -498,7 +498,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.key = null;
             this.iv = null;
             if (initCamera()) {
-                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
                 File directory = FileLoader.getDirectory(4);
                 this.cameraFile = new File(directory, SharedConfig.getLastLocalId() + ".mp4");
                 SharedConfig.saveConfig();

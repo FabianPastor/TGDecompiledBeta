@@ -564,7 +564,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01cf  */
     /* JADX WARNING: Removed duplicated region for block: B:48:0x01f7  */
     /* JADX WARNING: Removed duplicated region for block: B:51:0x0233  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:65:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawPicker(android.graphics.Canvas r25) {
         /*
@@ -893,7 +893,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             android.graphics.Paint r4 = r0.emptyPaint
             r7.drawBitmap(r1, r2, r3, r4)
             T r1 = r0.chartData
-            if (r1 == 0) goto L_0x03b7
+            if (r1 == 0) goto L_0x03a0
             android.graphics.Rect r1 = r0.pickerRect
             r1.set(r11, r9, r12, r8)
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
@@ -1050,39 +1050,24 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r1 = r1.getMiddleCaptured()
             android.graphics.Rect r2 = r0.pickerRect
             int r3 = r2.bottom
-            int r4 = r2.top
-            int r3 = r3 - r4
+            int r2 = r2.top
+            int r3 = r3 - r2
             int r3 = r3 >> r10
-            int r4 = r4 + r3
-            if (r1 == 0) goto L_0x035e
-            int r5 = r2.left
-            int r2 = r2.right
-            int r2 = r2 - r5
-            int r2 = r2 >> r10
-            int r5 = r5 + r2
-            float r2 = (float) r5
-            float r4 = (float) r4
-            float r3 = (float) r3
-            float r1 = r1.aValue
-            float r3 = r3 * r1
-            int r1 = HORIZONTAL_PADDING
-            float r1 = (float) r1
-            float r3 = r3 + r1
-            android.graphics.Paint r1 = r0.ripplePaint
-            r7.drawCircle(r2, r4, r3, r1)
-            goto L_0x039c
-        L_0x035e:
+            int r2 = r2 + r3
+            if (r1 == 0) goto L_0x0347
+            goto L_0x0385
+        L_0x0347:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r1 = r1.getLeftCaptured()
-            org.telegram.ui.Charts.ChartPickerDelegate r2 = r0.pickerDelegate
-            org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r2 = r2.getRightCaptured()
-            if (r1 == 0) goto L_0x0383
+            org.telegram.ui.Charts.ChartPickerDelegate r4 = r0.pickerDelegate
+            org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r4 = r4.getRightCaptured()
+            if (r1 == 0) goto L_0x036c
             android.graphics.Rect r5 = r0.pickerRect
             int r5 = r5.left
             int r6 = DP_5
             int r5 = r5 + r6
             float r5 = (float) r5
-            float r6 = (float) r4
+            float r6 = (float) r2
             float r13 = (float) r3
             float r1 = r1.aValue
             float r13 = r13 * r1
@@ -1091,23 +1076,23 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float r13 = r13 - r1
             android.graphics.Paint r1 = r0.ripplePaint
             r7.drawCircle(r5, r6, r13, r1)
-        L_0x0383:
-            if (r2 == 0) goto L_0x039c
+        L_0x036c:
+            if (r4 == 0) goto L_0x0385
             android.graphics.Rect r1 = r0.pickerRect
             int r1 = r1.right
             int r5 = DP_5
             int r1 = r1 - r5
             float r1 = (float) r1
-            float r4 = (float) r4
-            float r3 = (float) r3
-            float r2 = r2.aValue
-            float r3 = r3 * r2
-            int r2 = DP_2
             float r2 = (float) r2
-            float r3 = r3 - r2
-            android.graphics.Paint r2 = r0.ripplePaint
-            r7.drawCircle(r1, r4, r3, r2)
-        L_0x039c:
+            float r3 = (float) r3
+            float r4 = r4.aValue
+            float r3 = r3 * r4
+            int r4 = DP_2
+            float r4 = (float) r4
+            float r3 = r3 - r4
+            android.graphics.Paint r4 = r0.ripplePaint
+            r7.drawCircle(r1, r2, r3, r4)
+        L_0x0385:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             android.graphics.Rect r1 = r1.leftPickerArea
             int r2 = PICKER_CAPTURE_WIDTH
@@ -1122,7 +1107,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             int r3 = r12 - r3
             int r12 = r12 + r2
             r1.set(r3, r9, r12, r8)
-        L_0x03b7:
+        L_0x03a0:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.BaseChartView.drawPicker(android.graphics.Canvas):void");
@@ -1885,7 +1870,11 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     public long getSelectedDate() {
-        return this.chartData.x[this.selectedIndex];
+        int i = this.selectedIndex;
+        if (i < 0) {
+            return -1;
+        }
+        return this.chartData.x[i];
     }
 
     public void clearSelection() {

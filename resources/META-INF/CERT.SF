@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: +hlBiRx3bvLFogiaoAkAhObMsKU=
+SHA1-Digest-Manifest: eWgVSWKQ0QkS79LoT8tUP2FMGeU=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: sTUe7Umk+7z1vFThZTFZcM7XY7k=
+SHA1-Digest: tMUgHKSfjdV2d+A9Q+fSPcuuQXE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9502,7 +9502,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: ulq3VODyQ32+nb1gbGPf0PAHVOc=
+SHA1-Digest: LQM3RfwJJlSPS8WHFm6L4DmRKGA=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9549,41 +9549,53 @@ SHA1-Digest: UodvZnliuNH2Xmw8Vorwtns8MDY=
 Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
+Name: lib/arm64-v8a/libc++_shared.so
+SHA1-Digest: 0SUPudAC7HcT95L/FKt52breocs=
+
 Name: lib/arm64-v8a/libtgvoip1.1.so
-SHA1-Digest: RtGCkm1qQgpmZPhmzmE9OkeisnU=
+SHA1-Digest: vXNFIfRp/qe+BJUM3+L+Bau9Yz0=
 
 Name: lib/arm64-v8a/libtgvoip2.1.so
-SHA1-Digest: Ui0V3o05XT9aVEZ1IlLMTxExpl4=
+SHA1-Digest: SmSvrStXKc4TqBVOoJXMnmUmxxQ=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: bQ+dTxVeJe4PV30Xg8ABw9W+XaM=
+SHA1-Digest: aV3TbVOoFhGg7BeTTTxr8F0299c=
+
+Name: lib/armeabi-v7a/libc++_shared.so
+SHA1-Digest: ++8Qss3XvWwauNvEFDjqBK9QQek=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
-SHA1-Digest: Y/DSqOH/7ldL83aD8vO0AYIMeH8=
+SHA1-Digest: tUD40VF8PGa80TCOxTibEsqOkvU=
 
 Name: lib/armeabi-v7a/libtgvoip2.1.so
-SHA1-Digest: B5BRuX4372t5G13YSSjlqpN7W3o=
+SHA1-Digest: JvoRonDMaXMUzlr+VVm8OCdWPNo=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: S3v3v3ntSp1Lf3bIN2dbMkkW3fM=
+SHA1-Digest: FSKIed7NauThCVGwArspkVoriOY=
+
+Name: lib/x86/libc++_shared.so
+SHA1-Digest: Y5YuN910ghU+FM8To8JtXiUnXTM=
 
 Name: lib/x86/libtgvoip1.1.so
-SHA1-Digest: dU2M+zOyr9Hxurs0vQY3CS87ygM=
+SHA1-Digest: Tc+4xoD9yuXDEp9dbk2AR/4inxE=
 
 Name: lib/x86/libtgvoip2.1.so
-SHA1-Digest: nkka+2RuRaGt/XpEVyIm3xJyn9U=
+SHA1-Digest: f/q0vlCRasR46eg0TTq8K6CBy7Q=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: p8lgul6gt90Ii7OBp/uh9waRLUo=
+SHA1-Digest: z8We/oPWeJCC71f4ZkI8EaibGqM=
+
+Name: lib/x86_64/libc++_shared.so
+SHA1-Digest: u3pKAd681z837JZKrhsWXo7HCFc=
 
 Name: lib/x86_64/libtgvoip1.1.so
-SHA1-Digest: U1WF4rEutzITK4DJaXht7Y+q9zQ=
+SHA1-Digest: FSFCTnLpuZ0JyLa44Kzp5VU/hBM=
 
 Name: lib/x86_64/libtgvoip2.1.so
-SHA1-Digest: VC+1x3c0dF6yc9Nmcv/WJgQSxNU=
+SHA1-Digest: wJRPe901AZi98n083d2wsyWorUI=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: 5WuSJy8D+EMNxOr1YaVjbaQq+X4=
+SHA1-Digest: IHhsWoTvPOClQeXWVSvE+/1xtik=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -18494,7 +18506,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: vsFtss01UVz/4h60nVe3Y9eQqps=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: 4LN0h4ZfAPbd5s5gK8rkiGX/QF4=
+SHA1-Digest: SY48txr+S6OS6O1VU31AwxMhYCQ=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18509,7 +18521,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: I253KAZETy3L8qQV3v4485jABQc=
+SHA1-Digest: Xom6pMbi3ZbYJFXqu9xphxSefTA=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

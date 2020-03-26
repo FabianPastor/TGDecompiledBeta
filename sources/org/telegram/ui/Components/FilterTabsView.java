@@ -113,6 +113,7 @@ public class FilterTabsView extends FrameLayout {
     public float animationValue;
     /* access modifiers changed from: private */
     public String backgroundColorKey = "actionBarDefault";
+    private AnimatorSet colorChangeAnimator;
     private boolean commitCrossfade;
     /* access modifiers changed from: private */
     public Paint counterPaint = new Paint(1);
@@ -155,7 +156,8 @@ public class FilterTabsView extends FrameLayout {
     private int prevLayoutWidth;
     /* access modifiers changed from: private */
     public int previousId;
-    private int previousPosition;
+    /* access modifiers changed from: private */
+    public int previousPosition;
     private int scrollingToChild = -1;
     /* access modifiers changed from: private */
     public int selectedTabId = -1;
@@ -181,6 +183,8 @@ public class FilterTabsView extends FrameLayout {
         boolean isTabMenuVisible();
 
         void onDeletePressed(int i);
+
+        void onPageReorder(int i, int i2);
 
         void onPageScrolled(float f);
 
@@ -511,9 +515,11 @@ public class FilterTabsView extends FrameLayout {
         FilterTabsViewDelegate filterTabsViewDelegate;
         TabView tabView = (TabView) view;
         if (this.isEditing) {
-            float dp = (float) AndroidUtilities.dp(6.0f);
-            if (tabView.rect.left - dp < f && tabView.rect.right + dp > f) {
-                this.delegate.onDeletePressed(tabView.currentTab.id);
+            if (i != 0) {
+                float dp = (float) AndroidUtilities.dp(6.0f);
+                if (tabView.rect.left - dp < f && tabView.rect.right + dp > f) {
+                    this.delegate.onDeletePressed(tabView.currentTab.id);
+                }
             }
         } else if (i != this.currentPosition || (filterTabsViewDelegate = this.delegate) == null) {
             scrollToTab(tabView.currentTab.id, i);
@@ -645,16 +651,21 @@ public class FilterTabsView extends FrameLayout {
     }
 
     public void animateColorsTo(String str, String str2, String str3, String str4, String str5) {
+        AnimatorSet animatorSet = this.colorChangeAnimator;
+        if (animatorSet != null) {
+            animatorSet.cancel();
+        }
         this.aTabLineColorKey = str;
         this.aActiveTextColorKey = str2;
         this.aUnactiveTextColorKey = str3;
         this.aBackgroundColorKey = str5;
         this.selectorColorKey = str4;
         this.listView.setSelectorDrawableColor(Theme.getColor(str4));
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.COLORS, new float[]{0.0f, 1.0f})});
-        animatorSet.setDuration(200);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
+        AnimatorSet animatorSet2 = new AnimatorSet();
+        this.colorChangeAnimator = animatorSet2;
+        animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.COLORS, new float[]{0.0f, 1.0f})});
+        this.colorChangeAnimator.setDuration(200);
+        this.colorChangeAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 FilterTabsView filterTabsView = FilterTabsView.this;
                 String unused = filterTabsView.tabLineColorKey = filterTabsView.aTabLineColorKey;
@@ -670,7 +681,7 @@ public class FilterTabsView extends FrameLayout {
                 String unused8 = FilterTabsView.this.aBackgroundColorKey = null;
             }
         });
-        animatorSet.start();
+        this.colorChangeAnimator.start();
     }
 
     public int getCurrentTabId() {
@@ -1181,14 +1192,25 @@ public class FilterTabsView extends FrameLayout {
                 int i6 = tab.id;
                 tab.id = tab2.id;
                 tab2.id = i6;
+                FilterTabsView.this.delegate.onPageReorder(tab2.id, tab.id);
                 if (FilterTabsView.this.currentPosition == i) {
                     int unused = FilterTabsView.this.currentPosition = i2;
-                    int unused2 = FilterTabsView.this.selectedTabId = tab2.id;
+                    int unused2 = FilterTabsView.this.selectedTabId = tab.id;
+                } else if (FilterTabsView.this.currentPosition == i2) {
+                    int unused3 = FilterTabsView.this.currentPosition = i;
+                    int unused4 = FilterTabsView.this.selectedTabId = tab2.id;
+                }
+                if (FilterTabsView.this.previousPosition == i) {
+                    int unused5 = FilterTabsView.this.previousPosition = i2;
+                    int unused6 = FilterTabsView.this.previousId = tab.id;
+                } else if (FilterTabsView.this.previousPosition == i2) {
+                    int unused7 = FilterTabsView.this.previousPosition = i;
+                    int unused8 = FilterTabsView.this.previousId = tab2.id;
                 }
                 FilterTabsView.this.tabs.set(i, tab2);
                 FilterTabsView.this.tabs.set(i2, tab);
                 FilterTabsView.this.updateTabsWidths();
-                boolean unused3 = FilterTabsView.this.orderChanged = true;
+                boolean unused9 = FilterTabsView.this.orderChanged = true;
                 notifyItemMoved(i, i2);
             }
         }

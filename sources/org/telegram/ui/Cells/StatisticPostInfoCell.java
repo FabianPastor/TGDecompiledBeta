@@ -83,12 +83,12 @@ public class StatisticPostInfoCell extends FrameLayout {
     }
 
     public void setData(StatisticActivity.RecentPostInfo recentPostInfo) {
-        StatisticActivity.RecentPostInfo recentPostInfo2 = recentPostInfo;
-        MessageObject messageObject = recentPostInfo2.message;
+        MessageObject messageObject = recentPostInfo.message;
         ArrayList<TLRPC$PhotoSize> arrayList = messageObject.photoThumbs;
         if (arrayList != null) {
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(arrayList, AndroidUtilities.getPhotoSize());
-            this.imageView.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, messageObject.photoThumbsObject), "50_50", (String) null, (Drawable) null, messageObject);
+            TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 50);
+            this.imageView.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, messageObject.photoThumbsObject), "50_50", ImageLocation.getForObject(closestPhotoSizeWithSize2, messageObject.photoThumbsObject), "b1", 0, (Object) messageObject);
             this.imageView.setRoundRadius(AndroidUtilities.dp(4.0f));
         } else if (this.chat.chat_photo.sizes.size() > 0) {
             this.imageView.setImage(ImageLocation.getForPhoto(this.chat.chat_photo.sizes.get(0), this.chat.chat_photo), "50_50", (String) null, (Drawable) null, this.chat);
@@ -99,9 +99,9 @@ public class StatisticPostInfoCell extends FrameLayout {
             charSequence = messageObject.messageText;
         }
         this.message.setText(charSequence.toString().replace("\n", " ").trim());
-        this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo2.counters.views), new Object[]{formatCount(recentPostInfo2.counters.views)}));
-        this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo2.message.messageOwner.date));
-        this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo2.counters.forwards), new Object[]{formatCount(recentPostInfo2.counters.forwards)}));
+        this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo.counters.views), new Object[]{formatCount(recentPostInfo.counters.views)}));
+        this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo.message.messageOwner.date));
+        this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo.counters.forwards), new Object[]{formatCount(recentPostInfo.counters.forwards)}));
     }
 
     public String formatCount(int i) {

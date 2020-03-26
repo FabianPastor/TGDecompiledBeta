@@ -2737,6 +2737,20 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     public void onAudioFocusChange(int i) {
+        AndroidUtilities.runOnUIThread(new Runnable(i) {
+            private final /* synthetic */ int f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                WebPlayerView.this.lambda$onAudioFocusChange$5$WebPlayerView(this.f$1);
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$onAudioFocusChange$5$WebPlayerView(int i) {
         if (i == -1) {
             if (this.videoPlayer.isPlaying()) {
                 this.videoPlayer.pause();

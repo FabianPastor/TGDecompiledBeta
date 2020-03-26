@@ -76,6 +76,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public ActionBar actionBar;
         /* access modifiers changed from: private */
+        public View emptyView;
+        /* access modifiers changed from: private */
         public FrameLayout fragmentView;
         /* access modifiers changed from: private */
         public RecyclerListView listView;
@@ -266,6 +268,9 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                         }
                         if (DialogOrContactPickerActivity.this.viewPages[i3].listView2 != null) {
                             DialogOrContactPickerActivity.this.viewPages[i3].listView2.setPadding(0, measuredHeight, 0, 0);
+                        }
+                        if (DialogOrContactPickerActivity.this.viewPages[i3].emptyView != null) {
+                            DialogOrContactPickerActivity.this.viewPages[i3].emptyView.setPadding(0, measuredHeight, 0, 0);
                         }
                     }
                 }
@@ -554,15 +559,16 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 BaseFragment unused = this.viewPages[i].parentFragment = this.dialogsActivity;
                 RecyclerListView unused2 = this.viewPages[i].listView = this.dialogsActivity.getListView();
                 RecyclerListView unused3 = this.viewPages[i].listView2 = this.dialogsActivity.getSearchListView();
+                View unused4 = this.viewPages[i].emptyView = this.dialogsActivity.getEmptyView();
             } else if (i == 1) {
-                BaseFragment unused4 = this.viewPages[i].parentFragment = this.contactsActivity;
-                RecyclerListView unused5 = this.viewPages[i].listView = this.contactsActivity.getListView();
+                BaseFragment unused5 = this.viewPages[i].parentFragment = this.contactsActivity;
+                RecyclerListView unused6 = this.viewPages[i].listView = this.contactsActivity.getListView();
                 this.viewPages[i].setVisibility(8);
             }
             ViewPage[] viewPageArr2 = this.viewPages;
-            FrameLayout unused6 = viewPageArr2[i].fragmentView = (FrameLayout) viewPageArr2[i].parentFragment.getFragmentView();
+            FrameLayout unused7 = viewPageArr2[i].fragmentView = (FrameLayout) viewPageArr2[i].parentFragment.getFragmentView();
             ViewPage[] viewPageArr3 = this.viewPages;
-            ActionBar unused7 = viewPageArr3[i].actionBar = viewPageArr3[i].parentFragment.getActionBar();
+            ActionBar unused8 = viewPageArr3[i].actionBar = viewPageArr3[i].parentFragment.getActionBar();
             ViewPage[] viewPageArr4 = this.viewPages;
             viewPageArr4[i].addView(viewPageArr4[i].fragmentView, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr5 = this.viewPages;

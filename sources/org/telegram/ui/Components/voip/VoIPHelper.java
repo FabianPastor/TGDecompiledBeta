@@ -502,7 +502,7 @@ public class VoIPHelper {
     private static java.io.File getLogFile(long r7) {
         /*
             boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r0 == 0) goto L_0x0043
+            if (r0 == 0) goto L_0x0044
             java.io.File r0 = new java.io.File
             android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
             r2 = 0
@@ -510,11 +510,11 @@ public class VoIPHelper {
             java.lang.String r2 = "logs"
             r0.<init>(r1, r2)
             java.lang.String[] r1 = r0.list()
-            if (r1 == 0) goto L_0x0043
+            if (r1 == 0) goto L_0x0044
             int r2 = r1.length
             r3 = 0
         L_0x001a:
-            if (r3 >= r2) goto L_0x0043
+            if (r3 >= r2) goto L_0x0044
             r4 = r1[r3]
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
@@ -525,14 +525,14 @@ public class VoIPHelper {
             r5.append(r6)
             java.lang.String r5 = r5.toString()
             boolean r5 = r4.endsWith(r5)
-            if (r5 == 0) goto L_0x0040
+            if (r5 == 0) goto L_0x0041
             java.io.File r7 = new java.io.File
             r7.<init>(r0, r4)
             return r7
-        L_0x0040:
+        L_0x0041:
             int r3 = r3 + 1
             goto L_0x001a
-        L_0x0043:
+        L_0x0044:
             java.io.File r0 = new java.io.File
             java.io.File r1 = getLogsDir()
             java.lang.StringBuilder r2 = new java.lang.StringBuilder

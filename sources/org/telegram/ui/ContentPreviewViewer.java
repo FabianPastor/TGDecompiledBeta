@@ -79,6 +79,8 @@ public class ContentPreviewViewer {
     public float finalMoveY;
     /* access modifiers changed from: private */
     public TLRPC$BotInlineResult inlineResult;
+    /* access modifiers changed from: private */
+    public boolean isRecentSticker;
     private boolean isVisible = false;
     private int keyboardHeight = AndroidUtilities.dp(200.0f);
     private WindowInsets lastInsets;
@@ -132,6 +134,11 @@ public class ContentPreviewViewer {
                         arrayList.add(LocaleController.getString(str, i));
                         arrayList3.add(Integer.valueOf(isStickerInFavorites ? NUM : NUM));
                         arrayList2.add(2);
+                    }
+                    if (ContentPreviewViewer.this.isRecentSticker) {
+                        arrayList.add(LocaleController.getString("DeleteFromRecent", NUM));
+                        arrayList3.add(NUM);
+                        arrayList2.add(4);
                     }
                     if (!arrayList.isEmpty()) {
                         int[] iArr = new int[arrayList3.size()];
@@ -254,9 +261,9 @@ public class ContentPreviewViewer {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), z);
                 } else if (((Integer) arrayList.get(i)).intValue() == 3) {
                     TLRPC$Document access$300 = ContentPreviewViewer.this.currentDocument;
-                    Object access$1500 = ContentPreviewViewer.this.parentObject;
+                    Object access$1600 = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1500) {
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1600) {
                         private final /* synthetic */ TLRPC$Document f$1;
                         private final /* synthetic */ Object f$2;
 
@@ -269,6 +276,8 @@ public class ContentPreviewViewer {
                             ContentPreviewViewer.ContentPreviewViewerDelegate.this.sendSticker(this.f$1, this.f$2, z, i);
                         }
                     });
+                } else if (((Integer) arrayList.get(i)).intValue() == 4) {
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(0, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                 }
             }
         }
@@ -291,10 +300,10 @@ public class ContentPreviewViewer {
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
                 } else if (((Integer) arrayList.get(i)).intValue() == 3) {
                     TLRPC$Document access$300 = ContentPreviewViewer.this.currentDocument;
-                    TLRPC$BotInlineResult access$1400 = ContentPreviewViewer.this.inlineResult;
+                    TLRPC$BotInlineResult access$1500 = ContentPreviewViewer.this.inlineResult;
                     Object unused = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1400) {
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1500) {
                         private final /* synthetic */ TLRPC$Document f$1;
                         private final /* synthetic */ TLRPC$BotInlineResult f$2;
 
@@ -948,6 +957,7 @@ public class ContentPreviewViewer {
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         int i2 = i;
         if (this.parentActivity != null && this.windowView != null) {
+            this.isRecentSticker = z;
             this.stickerEmojiLayout = null;
             if (i2 == 0) {
                 if (tLRPC$Document2 != null) {

@@ -46,7 +46,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
     private BroadcastReceiver headsetPlugReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if ("android.media.AUDIO_BECOMING_NOISY".equals(intent.getAction())) {
-                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
             }
         }
     };
@@ -105,7 +105,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
                 }
 
                 public void onPause() {
-                    MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                    MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
                 }
 
                 public void onSkipToNext() {

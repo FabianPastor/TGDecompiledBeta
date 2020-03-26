@@ -1273,7 +1273,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                     invalidate();
                 }
             } else if (i2 == 1) {
-                if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
+                if (MediaController.getInstance().lambda$startAudioAgain$7$MediaController(this.currentMessageObject)) {
                     this.buttonState = 0;
                     this.radialProgress.setIcon(getIconForCurrentState(), false, true);
                     invalidate();

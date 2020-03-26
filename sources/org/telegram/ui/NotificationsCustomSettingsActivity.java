@@ -1858,7 +1858,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsAddRow
                 if (r14 != r0) goto L_0x003d
-                r14 = 2131625933(0x7f0e07cd, float:1.8879088E38)
+                r14 = 2131625938(0x7f0e07d2, float:1.8879098E38)
                 java.lang.String r0 = "NotificationsAddAnException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165249(0x7var_, float:1.794471E38)
@@ -1876,7 +1876,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.deleteAllRow
                 if (r14 != r0) goto L_0x0401
-                r14 = 2131625940(0x7f0e07d4, float:1.8879102E38)
+                r14 = 2131625945(0x7f0e07d9, float:1.8879112E38)
                 java.lang.String r0 = "NotificationsDeleteAllException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r4)
@@ -1895,7 +1895,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
                 if (r14 != r5) goto L_0x0085
-                r14 = 2131625950(0x7f0e07de, float:1.8879122E38)
+                r14 = 2131625955(0x7f0e07e3, float:1.8879133E38)
                 java.lang.String r0 = "NotificationsForPrivateChats"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableAll2"
@@ -1907,14 +1907,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
                 if (r14 != 0) goto L_0x009d
-                r14 = 2131625949(0x7f0e07dd, float:1.887912E38)
+                r14 = 2131625954(0x7f0e07e2, float:1.887913E38)
                 java.lang.String r0 = "NotificationsForGroups"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableGroup2"
                 int r13 = r13.getInt(r0, r4)
                 goto L_0x0083
             L_0x009d:
-                r14 = 2131625947(0x7f0e07db, float:1.8879116E38)
+                r14 = 2131625952(0x7f0e07e0, float:1.8879126E38)
                 java.lang.String r0 = "NotificationsForChannels"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableChannel2"
@@ -1931,7 +1931,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r9 = 0
             L_0x00bc:
                 if (r9 == 0) goto L_0x00cc
-                r13 = 2131625960(0x7f0e07e8, float:1.8879143E38)
+                r13 = 2131625965(0x7f0e07ed, float:1.8879153E38)
                 java.lang.String r14 = "NotificationsOn"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
@@ -1942,13 +1942,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r0 = 31536000(0x1e13380, float:8.2725845E-38)
                 int r0 = r13 - r0
                 if (r0 < r14) goto L_0x00e0
-                r13 = 2131625958(0x7f0e07e6, float:1.8879139E38)
+                r13 = 2131625963(0x7f0e07eb, float:1.8879149E38)
                 java.lang.String r14 = "NotificationsOff"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
                 goto L_0x00ca
             L_0x00e0:
-                r14 = 2131625959(0x7f0e07e7, float:1.887914E38)
+                r14 = 2131625964(0x7f0e07ec, float:1.887915E38)
                 java.lang.Object[] r0 = new java.lang.Object[r5]
                 long r1 = (long) r13
                 java.lang.String r13 = org.telegram.messenger.LocaleController.stringForMessageListDate(r1)
@@ -1971,7 +1971,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 if (r14 != r1) goto L_0x0160
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                r1 = 2131626807(0x7f0e0b37, float:1.888086E38)
+                r1 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
                 java.lang.String r2 = "SoundDefault"
                 if (r14 != r5) goto L_0x0126
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -1994,10 +1994,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r0 = "NoSound"
                 boolean r1 = r14.equals(r0)
                 if (r1 == 0) goto L_0x0152
-                r14 = 2131625818(0x7f0e075a, float:1.8878855E38)
+                r14 = 2131625823(0x7f0e075f, float:1.8878865E38)
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
             L_0x0152:
-                r0 = 2131626806(0x7f0e0b36, float:1.8880859E38)
+                r0 = 2131626812(0x7f0e0b3c, float:1.888087E38)
                 java.lang.String r1 = "Sound"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
@@ -2024,11 +2024,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "vibrate_channel"
                 int r14 = r0.getInt(r14, r4)
             L_0x018d:
-                r0 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
+                r0 = 2131627145(0x7f0e0CLASSNAME, float:1.8881546E38)
                 java.lang.String r1 = "Vibrate"
                 if (r14 != 0) goto L_0x01a6
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
+                r0 = 2131627146(0x7f0e0c8a, float:1.8881548E38)
                 java.lang.String r1 = "VibrationDefault"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2036,7 +2036,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x01a6:
                 if (r14 != r5) goto L_0x01ba
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626761(0x7f0e0b09, float:1.8880767E38)
+                r0 = 2131626767(0x7f0e0b0f, float:1.888078E38)
                 java.lang.String r1 = "Short"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2044,7 +2044,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x01ba:
                 if (r14 != r3) goto L_0x01ce
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627141(0x7f0e0CLASSNAME, float:1.8881538E38)
+                r0 = 2131627147(0x7f0e0c8b, float:1.888155E38)
                 java.lang.String r1 = "VibrationDisabled"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2053,7 +2053,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r3 = 3
                 if (r14 != r3) goto L_0x01e3
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625589(0x7f0e0675, float:1.887839E38)
+                r0 = 2131625594(0x7f0e067a, float:1.88784E38)
                 java.lang.String r1 = "Long"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2061,7 +2061,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x01e3:
                 if (r14 != r2) goto L_0x0401
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625989(0x7f0e0805, float:1.8879202E38)
+                r0 = 2131625994(0x7f0e080a, float:1.8879212E38)
                 java.lang.String r1 = "OnlyIfSilent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2087,11 +2087,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "priority_channel"
                 int r14 = r0.getInt(r14, r5)
             L_0x0223:
-                r0 = 2131625952(0x7f0e07e0, float:1.8879126E38)
+                r0 = 2131625957(0x7f0e07e5, float:1.8879137E38)
                 java.lang.String r1 = "NotificationsImportance"
                 if (r14 != 0) goto L_0x023c
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625962(0x7f0e07ea, float:1.8879147E38)
+                r0 = 2131625967(0x7f0e07ef, float:1.8879157E38)
                 java.lang.String r1 = "NotificationsPriorityHigh"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
@@ -2103,7 +2103,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x0241:
                 if (r14 != r2) goto L_0x0255
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625963(0x7f0e07eb, float:1.8879149E38)
+                r0 = 2131625968(0x7f0e07f0, float:1.8879159E38)
                 java.lang.String r1 = "NotificationsPriorityLow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
@@ -2112,14 +2112,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r2 = 5
                 if (r14 != r2) goto L_0x0401
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625964(0x7f0e07ec, float:1.887915E38)
+                r0 = 2131625969(0x7f0e07f1, float:1.887916E38)
                 java.lang.String r1 = "NotificationsPriorityMedium"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
                 goto L_0x0401
             L_0x026a:
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625966(0x7f0e07ee, float:1.8879155E38)
+                r0 = 2131625971(0x7f0e07f3, float:1.8879165E38)
                 java.lang.String r1 = "NotificationsPriorityUrgent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
@@ -2146,19 +2146,19 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 int r14 = r0.getInt(r14, r4)
             L_0x02a8:
                 if (r14 != 0) goto L_0x02b4
-                r14 = 2131625803(0x7f0e074b, float:1.8878824E38)
+                r14 = 2131625808(0x7f0e0750, float:1.8878834E38)
                 java.lang.String r0 = "NoPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 goto L_0x02d5
             L_0x02b4:
                 if (r14 != r5) goto L_0x02c0
-                r14 = 2131625991(0x7f0e0807, float:1.8879206E38)
+                r14 = 2131625996(0x7f0e080c, float:1.8879216E38)
                 java.lang.String r0 = "OnlyWhenScreenOn"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 goto L_0x02d5
             L_0x02c0:
                 if (r14 != r3) goto L_0x02cc
-                r14 = 2131625990(0x7f0e0806, float:1.8879204E38)
+                r14 = 2131625995(0x7f0e080b, float:1.8879214E38)
                 java.lang.String r0 = "OnlyWhenScreenOff"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 goto L_0x02d5
@@ -2167,7 +2167,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r0 = "AlwaysShowPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
             L_0x02d5:
-                r0 = 2131626387(0x7f0e0993, float:1.8880009E38)
+                r0 = 2131626392(0x7f0e0998, float:1.8880019E38)
                 java.lang.String r1 = "PopupNotification"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
@@ -2240,7 +2240,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 int r4 = r4 + 1
                 goto L_0x0360
             L_0x0372:
-                r0 = 2131625534(0x7f0e063e, float:1.8878279E38)
+                r0 = 2131625539(0x7f0e0643, float:1.8878289E38)
                 java.lang.String r1 = "LedColor"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndColor(r0, r14, r5)
@@ -2288,7 +2288,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "EnablePreviewChannel"
                 boolean r14 = r0.getBoolean(r14, r5)
             L_0x03dc:
-                r0 = 2131625676(0x7f0e06cc, float:1.8878567E38)
+                r0 = 2131625681(0x7f0e06d1, float:1.8878577E38)
                 java.lang.String r1 = "MessagePreview"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndCheck(r0, r14, r5)
@@ -2299,7 +2299,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.messageSectionRow
                 if (r14 != r0) goto L_0x0401
-                r14 = 2131626569(0x7f0e0a49, float:1.8880378E38)
+                r14 = 2131626575(0x7f0e0a4f, float:1.888039E38)
                 java.lang.String r0 = "SETTINGS"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)

@@ -412,15 +412,17 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                     f3 = 0.0f;
                     break;
                 }
-                if (f2 > f3) {
-                    float[] fArr = this.darawingValuesPercentage;
-                    if (f2 < fArr[i5] + f3) {
-                        f = f3 + fArr[i5];
-                        i3 = i5;
-                        break;
+                if (((PieChartViewData) this.lines.get(i5)).enabled || ((PieChartViewData) this.lines.get(i5)).alpha != 0.0f) {
+                    if (f2 > f3) {
+                        float[] fArr = this.darawingValuesPercentage;
+                        if (f2 < fArr[i5] + f3) {
+                            f = f3 + fArr[i5];
+                            i3 = i5;
+                            break;
+                        }
                     }
+                    f3 += this.darawingValuesPercentage[i5];
                 }
-                f3 += this.darawingValuesPercentage[i5];
                 i5++;
             }
             if (this.currentSelection != i3 && i3 >= 0) {

@@ -401,6 +401,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (createChartData == null || createChartData.x == null || createChartData.x.length < 2) {
                     chartViewData.isEmpty = true;
                 }
+                if (i == 4 && chartViewData.chartData.x != null && chartViewData.chartData.x.length > 0) {
+                    long j = chartViewData.chartData.x[chartViewData.chartData.x.length - 1];
+                    chartViewData.childChartData = new StackLinearChartData(chartViewData.chartData, j);
+                    chartViewData.activeZoom = j;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
@@ -537,7 +542,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "dialogTextBlack"
                 r2 = r0
                 r2.<init>(r3, r4, r5, r6, r7)
-                r9 = 2131626470(0x7f0e09e6, float:1.8880177E38)
+                r9 = 2131626475(0x7f0e09eb, float:1.8880187E38)
                 java.lang.String r10 = "RecentPosts"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r0.setText(r9)
@@ -872,7 +877,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         public /* synthetic */ void lambda$new$0$StatisticActivity$ChartCell(View view) {
-            zoomOut();
+            zoomOut(true);
         }
 
         public /* synthetic */ void lambda$new$1$StatisticActivity$ChartCell(long j) {
@@ -982,7 +987,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             boolean z2;
             long selectedDate = this.chartView.getSelectedDate();
             ChartData chartData = this.data.childChartData;
-            if (!z) {
+            if (!z || this.zoomedChartView.getVisibility() != 0) {
                 this.zoomedChartView.updatePicker(chartData, selectedDate);
             }
             this.zoomedChartView.setData(chartData);
@@ -1030,7 +1035,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.zoomedChartView.updateColors();
             if (!z) {
                 this.zoomedChartView.clearSelection();
-                this.chartHeaderView.zoomTo(this.zoomedChartView, selectedDate);
+                this.chartHeaderView.zoomTo(this.zoomedChartView, selectedDate, true);
             }
             this.zoomedChartView.setHeader(this.chartHeaderView);
             this.chartView.setHeader((ChartHeaderView) null);
@@ -1043,6 +1048,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 baseChartView3.transitionMode = 0;
                 baseChartView2.enabled = false;
                 baseChartView3.enabled = true;
+                this.chartHeaderView.zoomTo(baseChartView3, selectedDate, false);
                 return;
             }
             ValueAnimator createTransitionAnimator = createTransitionAnimator(selectedDate, true);
@@ -1062,8 +1068,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             createTransitionAnimator.start();
         }
 
-        private void zoomOut() {
-            this.chartHeaderView.zoomOut(this.chartView);
+        private void zoomOut(boolean z) {
+            this.chartHeaderView.zoomOut(this.chartView, z);
             this.chartView.legendSignatureView.chevron.setAlpha(1.0f);
             this.zoomedChartView.setHeader((ChartHeaderView) null);
             long selectedDate = this.chartView.getSelectedDate();
@@ -1072,6 +1078,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.zoomedChartView.clearSelection();
             this.zoomedChartView.setHeader((ChartHeaderView) null);
             this.chartView.setHeader(this.chartHeaderView);
+            if (!z) {
+                this.zoomedChartView.setVisibility(4);
+                BaseChartView baseChartView = this.chartView;
+                baseChartView.enabled = true;
+                this.zoomedChartView.enabled = false;
+                baseChartView.invalidate();
+                ((Activity) getContext()).getWindow().clearFlags(16);
+                Iterator<CheckBoxHolder> it = this.checkBoxes.iterator();
+                while (it.hasNext()) {
+                    CheckBoxHolder next = it.next();
+                    next.checkBox.setAlpha(1.0f);
+                    next.checkBox.enabled = true;
+                }
+                return;
+            }
             ValueAnimator createTransitionAnimator = createTransitionAnimator(selectedDate, false);
             createTransitionAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -1090,11 +1111,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     ((Activity) ChartCell.this.getContext()).getWindow().clearFlags(16);
                 }
             });
-            Iterator<CheckBoxHolder> it = this.checkBoxes.iterator();
-            while (it.hasNext()) {
-                CheckBoxHolder next = it.next();
-                next.checkBox.animate().alpha(1.0f).start();
-                next.checkBox.enabled = true;
+            Iterator<CheckBoxHolder> it2 = this.checkBoxes.iterator();
+            while (it2.hasNext()) {
+                CheckBoxHolder next2 = it2.next();
+                next2.checkBox.animate().alpha(1.0f).start();
+                next2.checkBox.enabled = true;
             }
             createTransitionAnimator.start();
         }
@@ -1194,6 +1215,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 this.errorTextView.setVisibility(8);
                 this.chartView.legendSignatureView.isTopHourChart = chartViewData == StatisticActivity.this.topHoursData;
+                this.chartHeaderView.showDate(chartViewData != StatisticActivity.this.topHoursData);
                 if (chartViewData.chartData != null || chartViewData.token == null) {
                     if (!z) {
                         this.progressView.setVisibility(8);
@@ -1218,6 +1240,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                         this.chartView.selectDate(j);
                         zoomChart(true);
                     } else {
+                        zoomOut(false);
                         this.chartView.invalidate();
                     }
                     recolor();
@@ -1557,66 +1580,80 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
         }
 
-        /* JADX WARNING: type inference failed for: r3v0, types: [org.telegram.ui.Charts.data.ChartData] */
-        /* JADX WARNING: type inference failed for: r3v1 */
-        /* JADX WARNING: type inference failed for: r3v2 */
-        /* JADX WARNING: type inference failed for: r14v13, types: [org.telegram.ui.Charts.data.ChartData] */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:18:0x002f  */
-        /* JADX WARNING: Unknown variable types count: 2 */
+        /* JADX WARNING: Removed duplicated region for block: B:25:0x0052  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r10, org.telegram.ui.StatisticActivity.DiffUtilsCallback r11, org.telegram.ui.StatisticActivity.Adapter r12, org.telegram.tgnet.TLObject r13, org.telegram.tgnet.TLRPC$TL_error r14) {
             /*
                 r9 = this;
                 r0 = 0
-                if (r14 != 0) goto L_0x003e
+                if (r14 != 0) goto L_0x0060
                 boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_statsGraph
-                if (r14 == 0) goto L_0x002a
+                r1 = 1
+                if (r14 == 0) goto L_0x004d
                 r14 = r13
                 org.telegram.tgnet.TLRPC$TL_statsGraph r14 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r14
                 org.telegram.tgnet.TLRPC$TL_dataJSON r14 = r14.json
                 java.lang.String r14 = r14.data
-                org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0021 }
-                r1.<init>(r14)     // Catch:{ JSONException -> 0x0021 }
-                int r14 = r9.graphType     // Catch:{ JSONException -> 0x0021 }
-                org.telegram.ui.Charts.data.ChartData r14 = org.telegram.ui.StatisticActivity.createChartData(r1, r14)     // Catch:{ JSONException -> 0x0021 }
-                r1 = r13
-                org.telegram.tgnet.TLRPC$TL_statsGraph r1 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r1     // Catch:{ JSONException -> 0x001f }
-                java.lang.String r0 = r1.zoom_token     // Catch:{ JSONException -> 0x001f }
-                goto L_0x0026
-            L_0x001f:
-                r1 = move-exception
-                goto L_0x0023
-            L_0x0021:
-                r1 = move-exception
-                r14 = r0
-            L_0x0023:
-                r1.printStackTrace()
-            L_0x0026:
+                org.json.JSONObject r2 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0047 }
+                r2.<init>(r14)     // Catch:{ JSONException -> 0x0047 }
+                int r14 = r9.graphType     // Catch:{ JSONException -> 0x0047 }
+                org.telegram.ui.Charts.data.ChartData r14 = org.telegram.ui.StatisticActivity.createChartData(r2, r14)     // Catch:{ JSONException -> 0x0047 }
+                r2 = r13
+                org.telegram.tgnet.TLRPC$TL_statsGraph r2 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r2     // Catch:{ JSONException -> 0x0042 }
+                java.lang.String r0 = r2.zoom_token     // Catch:{ JSONException -> 0x0042 }
+                int r2 = r9.graphType     // Catch:{ JSONException -> 0x0042 }
+                r3 = 4
+                if (r2 != r3) goto L_0x003e
+                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                if (r2 == 0) goto L_0x003e
+                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                int r2 = r2.length     // Catch:{ JSONException -> 0x0042 }
+                if (r2 <= 0) goto L_0x003e
+                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                long[] r3 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                int r3 = r3.length     // Catch:{ JSONException -> 0x0042 }
+                int r3 = r3 - r1
+                r3 = r2[r3]     // Catch:{ JSONException -> 0x0042 }
+                org.telegram.ui.Charts.data.StackLinearChartData r2 = new org.telegram.ui.Charts.data.StackLinearChartData     // Catch:{ JSONException -> 0x0042 }
+                r2.<init>(r14, r3)     // Catch:{ JSONException -> 0x0042 }
+                r9.childChartData = r2     // Catch:{ JSONException -> 0x0042 }
+                r9.activeZoom = r3     // Catch:{ JSONException -> 0x0042 }
+            L_0x003e:
                 r8 = r0
                 r0 = r14
                 r14 = r8
-                goto L_0x002b
-            L_0x002a:
+                goto L_0x004e
+            L_0x0042:
+                r2 = move-exception
+                r8 = r0
+                r0 = r14
+                r14 = r8
+                goto L_0x0049
+            L_0x0047:
+                r2 = move-exception
                 r14 = r0
-            L_0x002b:
-                boolean r1 = r13 instanceof org.telegram.tgnet.TLRPC$TL_statsGraphError
-                if (r1 == 0) goto L_0x003b
-                r1 = 0
-                r9.isEmpty = r1
-                r1 = 1
+            L_0x0049:
+                r2.printStackTrace()
+                goto L_0x004e
+            L_0x004d:
+                r14 = r0
+            L_0x004e:
+                boolean r2 = r13 instanceof org.telegram.tgnet.TLRPC$TL_statsGraphError
+                if (r2 == 0) goto L_0x005d
+                r2 = 0
+                r9.isEmpty = r2
                 r9.isError = r1
                 org.telegram.tgnet.TLRPC$TL_statsGraphError r13 = (org.telegram.tgnet.TLRPC$TL_statsGraphError) r13
                 java.lang.String r13 = r13.error
                 r9.errorMessage = r13
-            L_0x003b:
+            L_0x005d:
                 r4 = r14
                 r3 = r0
-                goto L_0x0040
-            L_0x003e:
+                goto L_0x0062
+            L_0x0060:
                 r3 = r0
                 r4 = r3
-            L_0x0040:
+            L_0x0062:
                 org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$sprgknZtXiqkLi_8TMZCUET0gCQ r13 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$sprgknZtXiqkLi_8TMZCUET0gCQ
                 r1 = r13
                 r2 = r9

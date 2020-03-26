@@ -20,12 +20,15 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ChartHeaderView extends FrameLayout {
     public TextView back;
-    TextView dates;
-    TextView datesTmp;
+    /* access modifiers changed from: private */
+    public TextView dates;
+    /* access modifiers changed from: private */
+    public TextView datesTmp;
     SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
-    TextView title;
+    private boolean showDate = true;
+    private TextView title;
     UpdateDatesRunnable updateDatesRunnable = new UpdateDatesRunnable();
-    Drawable zoomIcon;
+    private Drawable zoomIcon;
 
     public ChartHeaderView(Context context) {
         super(context);
@@ -88,6 +91,10 @@ public class ChartHeaderView extends FrameLayout {
     }
 
     public void setDates(long j, long j2) {
+        if (!this.showDate) {
+            this.dates.setVisibility(8);
+            this.datesTmp.setVisibility(8);
+        }
         if (TextUtils.isEmpty(this.dates.getText())) {
             this.updateDatesRunnable.setDates(j, j2);
             this.updateDatesRunnable.run();
@@ -105,44 +112,76 @@ public class ChartHeaderView extends FrameLayout {
         this.title.setText(str);
     }
 
-    public void zoomTo(BaseChartView baseChartView, long j) {
+    public void zoomTo(BaseChartView baseChartView, long j, boolean z) {
         this.updateDatesRunnable.setDates(j, j);
         AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
-        AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
         this.back.setVisibility(0);
-        this.back.setAlpha(0.0f);
-        this.back.setScaleX(0.3f);
-        this.back.setScaleY(0.3f);
-        this.back.setPivotX(0.0f);
-        this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
-        this.back.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
-        this.title.setAlpha(1.0f);
-        this.title.setTranslationX(0.0f);
-        this.title.setTranslationY(0.0f);
-        this.title.setScaleX(1.0f);
-        this.title.setScaleY(1.0f);
-        this.title.setPivotX(0.0f);
-        this.title.setPivotY(0.0f);
-        this.title.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
-    }
-
-    public void zoomOut(BaseChartView baseChartView) {
-        this.updateDatesRunnable.setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
-        AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
-        AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
-        this.title.setAlpha(0.0f);
-        this.title.setScaleX(0.3f);
-        this.title.setScaleY(0.3f);
-        this.title.setPivotX(0.0f);
-        this.title.setPivotY(0.0f);
-        this.title.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
+        if (z) {
+            if (this.showDate) {
+                AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
+            }
+            this.back.setAlpha(0.0f);
+            this.back.setScaleX(0.3f);
+            this.back.setScaleY(0.3f);
+            this.back.setPivotX(0.0f);
+            this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
+            this.back.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
+            this.title.setAlpha(1.0f);
+            this.title.setTranslationX(0.0f);
+            this.title.setTranslationY(0.0f);
+            this.title.setScaleX(1.0f);
+            this.title.setScaleY(1.0f);
+            this.title.setPivotX(0.0f);
+            this.title.setPivotY(0.0f);
+            this.title.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
+            return;
+        }
+        if (this.showDate) {
+            this.updateDatesRunnable.run();
+        }
         this.back.setAlpha(1.0f);
         this.back.setTranslationX(0.0f);
         this.back.setTranslationY(0.0f);
-        this.back.setScaleX(1.0f);
-        this.back.setScaleY(1.0f);
-        this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
-        this.back.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
+        this.title.setAlpha(0.0f);
+    }
+
+    public void zoomOut(BaseChartView baseChartView, boolean z) {
+        this.updateDatesRunnable.setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
+        AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
+        if (z) {
+            if (this.showDate) {
+                AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
+            }
+            this.title.setAlpha(0.0f);
+            this.title.setScaleX(0.3f);
+            this.title.setScaleY(0.3f);
+            this.title.setPivotX(0.0f);
+            this.title.setPivotY(0.0f);
+            this.title.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
+            this.back.setAlpha(1.0f);
+            this.back.setTranslationX(0.0f);
+            this.back.setTranslationY(0.0f);
+            this.back.setScaleX(1.0f);
+            this.back.setScaleY(1.0f);
+            this.back.setPivotY((float) AndroidUtilities.dp(40.0f));
+            this.back.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
+            return;
+        }
+        if (this.showDate) {
+            this.updateDatesRunnable.run();
+        }
+        this.title.setAlpha(1.0f);
+        this.title.setScaleX(1.0f);
+        this.title.setScaleY(1.0f);
+        this.back.setAlpha(0.0f);
+    }
+
+    public void showDate(boolean z) {
+        this.showDate = z;
+        if (!z) {
+            this.datesTmp.setVisibility(8);
+            this.dates.setVisibility(8);
+        }
     }
 
     class UpdateDatesRunnable implements Runnable {
@@ -169,8 +208,7 @@ public class ChartHeaderView extends FrameLayout {
                 return;
             }
             if (!TextUtils.isEmpty(text)) {
-                ChartHeaderView chartHeaderView = ChartHeaderView.this;
-                chartHeaderView.datesTmp.setText(chartHeaderView.dates.getText());
+                ChartHeaderView.this.datesTmp.setText(ChartHeaderView.this.dates.getText());
                 ChartHeaderView.this.dates.setText(str);
                 ChartHeaderView.this.datesTmp.setVisibility(0);
                 ChartHeaderView.this.datesTmp.setAlpha(1.0f);
@@ -184,6 +222,7 @@ public class ChartHeaderView extends FrameLayout {
                 ChartHeaderView.this.dates.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
                 return;
             }
+            ChartHeaderView.this.dates.setVisibility(0);
             ChartHeaderView.this.dates.setText(str);
             ChartHeaderView.this.datesTmp.setVisibility(8);
             ChartHeaderView.this.dates.setAlpha(1.0f);

@@ -8476,11 +8476,16 @@ public class Theme {
     }
 
     public static Drawable createSimpleSelectorRoundRectDrawable(int i, int i2, int i3) {
+        return createSimpleSelectorRoundRectDrawable(i, i2, i3, i3);
+    }
+
+    public static Drawable createSimpleSelectorRoundRectDrawable(int i, int i2, int i3, int i4) {
         float f = (float) i;
         ShapeDrawable shapeDrawable = new ShapeDrawable(new RoundRectShape(new float[]{f, f, f, f, f, f, f, f}, (RectF) null, (float[]) null));
+        int i5 = i2;
         shapeDrawable.getPaint().setColor(i2);
         ShapeDrawable shapeDrawable2 = new ShapeDrawable(new RoundRectShape(new float[]{f, f, f, f, f, f, f, f}, (RectF) null, (float[]) null));
-        shapeDrawable2.getPaint().setColor(i3);
+        shapeDrawable2.getPaint().setColor(i4);
         if (Build.VERSION.SDK_INT >= 21) {
             return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i3}), shapeDrawable, shapeDrawable2);
         }
@@ -9288,15 +9293,15 @@ public class Theme {
             SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
             if (!z3) {
                 int size = themeInfo.themeAccents.size();
-                int i = size - themeInfo.defaultAccentCount;
-                SerializedData serializedData = new SerializedData(((i * 15) + 2) * 4);
+                int max = Math.max(0, size - themeInfo.defaultAccentCount);
+                SerializedData serializedData = new SerializedData(((max * 15) + 2) * 4);
                 serializedData.writeInt32(5);
-                serializedData.writeInt32(i);
-                for (int i2 = 0; i2 < size; i2++) {
-                    ThemeAccent themeAccent = themeInfo.themeAccents.get(i2);
-                    int i3 = themeAccent.id;
-                    if (i3 >= 100) {
-                        serializedData.writeInt32(i3);
+                serializedData.writeInt32(max);
+                for (int i = 0; i < size; i++) {
+                    ThemeAccent themeAccent = themeInfo.themeAccents.get(i);
+                    int i2 = themeAccent.id;
+                    if (i2 >= 100) {
+                        serializedData.writeInt32(i2);
                         serializedData.writeInt32(themeAccent.accentColor);
                         serializedData.writeInt32(themeAccent.myMessagesAccentColor);
                         serializedData.writeInt32(themeAccent.myMessagesGradientAccentColor);

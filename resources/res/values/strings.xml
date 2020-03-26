@@ -681,8 +681,6 @@
     <string name="ChannelUserLeftError">Sorry, if a person is no longer part of a channel, you need to be in their Telegram contacts in order to add them back.\10\10Note that they could still join via the channel\'s invite link as long as they are not in the Removed users list.</string>
     <string name="ChannelUsernameHelp">If you set a permanent link, other people will be able to find and join your channel.\10\10You can use a-z, 0-9 and underscores.\10Minimum length is 5 characters.</string>
     <string name="ChannelUsernamePlaceholder">link</string>
-    <string name="ChannelVerifiedNameChange">If you change the name of your channel, it will loose its verified status. You will need to send a new application to *@verification_bot*.</string>
-    <string name="ChannelVerifiedUsernameChange">If you change the name of your channel, it will loose its verified status. You will need to send a new application to *@verification_bot*.</string>
     <string name="ChannelVerifiedWarning">Warning</string>
     <string name="Channels_few">%1$d channels</string>
     <string name="Channels_many">%1$d channels</string>
@@ -791,6 +789,10 @@
     <string name="ClearSearch">Clear search history?</string>
     <string name="ClearSearchAlert">Are you sure you want to clear your search history?</string>
     <string name="ClearSearchAlertTitle">Clear search history</string>
+    <string name="ClearSearchRemove">Remove</string>
+    <string name="ClearSearchSingleAlertTitle">Search history</string>
+    <string name="ClearSearchSingleChatAlertText">Are you sure you want to remove \"%1$s\" from search history?</string>
+    <string name="ClearSearchSingleUserAlertText">Are you sure you want to remove \"%1$s\" from search history?</string>
     <string name="Close">Close</string>
     <string name="CloseEditor">CLOSE EDITOR</string>
     <string name="Code">Code</string>
@@ -956,6 +958,7 @@
     <string name="DeleteForAll">Delete for all members</string>
     <string name="DeleteForUser">Delete for %1$s</string>
     <string name="DeleteFromFavorites">Delete from Favorites</string>
+    <string name="DeleteFromRecent">Delete from Recent</string>
     <string name="DeleteGif">Delete GIF?</string>
     <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
     <string name="DeleteLocalizationTitle">Delete language pack</string>
@@ -1296,10 +1299,14 @@
     <string name="FilterRead">Read</string>
     <string name="FilterRecommended">Recommended Folders</string>
     <string name="FilterRemoveChats">Remove Chats</string>
+    <string name="FilterRemoveExclusionChatText">Are you sure you want to remove \"%1$s\" from always excluded chats?</string>
     <string name="FilterRemoveExclusionText">Are you sure you want to remove \"%1$s\" from always excluded chats?</string>
     <string name="FilterRemoveExclusionTitle">Remove exception</string>
+    <string name="FilterRemoveExclusionUserText">Are you sure you want to remove \"%1$s\" from always excluded chats?</string>
+    <string name="FilterRemoveInclusionChatText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
     <string name="FilterRemoveInclusionText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
     <string name="FilterRemoveInclusionTitle">Remove exception</string>
+    <string name="FilterRemoveInclusionUserText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
     <string name="FilterReorder">Reorder</string>
     <string name="FilterSecretChats">Secret Chats</string>
     <string name="FilterShowMoreChats_few">Show %1$d More Chats</string>
@@ -1460,8 +1467,6 @@
     <string name="GroupUserCantAdmin">Sorry, too many administrators in this group.</string>
     <string name="GroupUserCantBot">Sorry, too many bots in this group.</string>
     <string name="GroupUserLeftError">Sorry, if a person is no longer part of a group, you need to be in their Telegram contacts in order to add them back.\10\10Note that they can still join via the group\'s invite link as long as they are not in the Removed Users list.</string>
-    <string name="GroupVerifiedNameChange">If you change the name of your group, it will loose its verified status. You will need to send a new application to *@verification_bot*.</string>
-    <string name="GroupVerifiedUsernameChange">If you change the name of your group, it will loose its verified status. You will need to send a new application to *@verification_bot*.</string>
     <string name="GroupsAndChannels">Groups</string>
     <string name="GroupsAndChannelsHelp">Change who can add you to groups and channels.</string>
     <string name="GroupsInCommon">Groups in Common</string>
@@ -2556,6 +2561,7 @@
     <string name="RemoveFromListText">Tap and hold on user to delete.</string>
     <string name="RemoveStickersCount">REMOVE %1$s</string>
     <string name="RemovedFromFavorites">Sticker was removed from Favorites</string>
+    <string name="RemovedFromRecent">Sticker was removed from Recent</string>
     <string name="RemovedUser_few">%1$d removed users</string>
     <string name="RemovedUser_many">%1$d removed users</string>
     <string name="RemovedUser_one">%1$d removed user</string>

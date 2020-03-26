@@ -246,7 +246,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
                 invalidate();
             }
         } else if (i == 1) {
-            if (MediaController.getInstance().lambda$startAudioAgain$6$MediaController(this.currentMessageObject)) {
+            if (MediaController.getInstance().lambda$startAudioAgain$7$MediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setIcon(getIconForCurrentState(), false, true);
                 invalidate();

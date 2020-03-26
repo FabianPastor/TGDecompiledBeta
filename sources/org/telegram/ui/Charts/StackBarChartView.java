@@ -187,22 +187,14 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
             } else {
                 int findIndex = ((StackBarChartData) this.chartData).findIndex(this.startXIndex, this.endXIndex, f4);
                 this.selectedIndex = findIndex;
-                int i3 = findIndex + 1;
-                T t2 = this.chartData;
-                if (i3 < ((StackBarChartData) t2).xPercentage.length) {
-                    if (Math.abs(((StackBarChartData) this.chartData).xPercentage[this.selectedIndex + 1] - f4) < Math.abs(((StackBarChartData) t2).xPercentage[findIndex] - f4)) {
-                        this.selectedIndex++;
-                    }
+                int i3 = this.endXIndex;
+                if (findIndex > i3) {
+                    this.selectedIndex = i3;
                 }
                 int i4 = this.selectedIndex;
-                int i5 = this.endXIndex;
-                if (i4 > i5) {
+                int i5 = this.startXIndex;
+                if (i4 < i5) {
                     this.selectedIndex = i5;
-                }
-                int i6 = this.selectedIndex;
-                int i7 = this.startXIndex;
-                if (i6 < i7) {
-                    this.selectedIndex = i7;
                 }
             }
             this.legendShowing = true;

@@ -533,7 +533,33 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         }
                         this.wasEmpty = z;
                     } else if (keyEvent.getAction() == 1 && this.wasEmpty && !FilterUsersActivity.this.allSpans.isEmpty()) {
-                        FilterUsersActivity.this.spansContainer.removeSpan((GroupCreateSpan) FilterUsersActivity.this.allSpans.get(FilterUsersActivity.this.allSpans.size() - 1));
+                        GroupCreateSpan groupCreateSpan = (GroupCreateSpan) FilterUsersActivity.this.allSpans.get(FilterUsersActivity.this.allSpans.size() - 1);
+                        FilterUsersActivity.this.spansContainer.removeSpan(groupCreateSpan);
+                        if (groupCreateSpan.getUid() == Integer.MIN_VALUE) {
+                            FilterUsersActivity filterUsersActivity = FilterUsersActivity.this;
+                            int unused = filterUsersActivity.filterFlags = filterUsersActivity.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_CONTACTS ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity2 = FilterUsersActivity.this;
+                            int unused2 = filterUsersActivity2.filterFlags = filterUsersActivity2.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity3 = FilterUsersActivity.this;
+                            int unused3 = filterUsersActivity3.filterFlags = filterUsersActivity3.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_GROUPS ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity4 = FilterUsersActivity.this;
+                            int unused4 = filterUsersActivity4.filterFlags = filterUsersActivity4.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_CHANNELS ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity5 = FilterUsersActivity.this;
+                            int unused5 = filterUsersActivity5.filterFlags = filterUsersActivity5.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_BOTS ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity6 = FilterUsersActivity.this;
+                            int unused6 = filterUsersActivity6.filterFlags = filterUsersActivity6.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity7 = FilterUsersActivity.this;
+                            int unused7 = filterUsersActivity7.filterFlags = filterUsersActivity7.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ ^ -1);
+                        } else if (groupCreateSpan.getUid() == -NUM) {
+                            FilterUsersActivity filterUsersActivity8 = FilterUsersActivity.this;
+                            int unused8 = filterUsersActivity8.filterFlags = filterUsersActivity8.filterFlags & (MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED ^ -1);
+                        }
                         FilterUsersActivity.this.updateHint();
                         FilterUsersActivity.this.checkVisibleRows();
                         return true;

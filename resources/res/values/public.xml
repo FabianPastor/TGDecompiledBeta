@@ -1799,8 +1799,6 @@
     <public type="string" name="ChannelUserLeftError" id="NUM" />
     <public type="string" name="ChannelUsernameHelp" id="NUM" />
     <public type="string" name="ChannelUsernamePlaceholder" id="NUM" />
-    <public type="string" name="ChannelVerifiedNameChange" id="NUM" />
-    <public type="string" name="ChannelVerifiedUsernameChange" id="NUM" />
     <public type="string" name="ChannelVerifiedWarning" id="NUM" />
     <public type="string" name="Channels_few" id="NUM" />
     <public type="string" name="Channels_many" id="NUM" />
@@ -1909,6 +1907,10 @@
     <public type="string" name="ClearSearch" id="NUM" />
     <public type="string" name="ClearSearchAlert" id="NUM" />
     <public type="string" name="ClearSearchAlertTitle" id="NUM" />
+    <public type="string" name="ClearSearchRemove" id="NUM" />
+    <public type="string" name="ClearSearchSingleAlertTitle" id="NUM" />
+    <public type="string" name="ClearSearchSingleChatAlertText" id="NUM" />
+    <public type="string" name="ClearSearchSingleUserAlertText" id="NUM" />
     <public type="string" name="Close" id="NUM" />
     <public type="string" name="CloseEditor" id="NUM" />
     <public type="string" name="Code" id="NUM" />
@@ -2074,6 +2076,7 @@
     <public type="string" name="DeleteForAll" id="NUM" />
     <public type="string" name="DeleteForUser" id="NUM" />
     <public type="string" name="DeleteFromFavorites" id="NUM" />
+    <public type="string" name="DeleteFromRecent" id="NUM" />
     <public type="string" name="DeleteGif" id="NUM" />
     <public type="string" name="DeleteLocalizationText" id="NUM" />
     <public type="string" name="DeleteLocalizationTitle" id="NUM" />
@@ -2414,10 +2417,14 @@
     <public type="string" name="FilterRead" id="NUM" />
     <public type="string" name="FilterRecommended" id="NUM" />
     <public type="string" name="FilterRemoveChats" id="NUM" />
+    <public type="string" name="FilterRemoveExclusionChatText" id="NUM" />
     <public type="string" name="FilterRemoveExclusionText" id="NUM" />
     <public type="string" name="FilterRemoveExclusionTitle" id="NUM" />
+    <public type="string" name="FilterRemoveExclusionUserText" id="NUM" />
+    <public type="string" name="FilterRemoveInclusionChatText" id="NUM" />
     <public type="string" name="FilterRemoveInclusionText" id="NUM" />
     <public type="string" name="FilterRemoveInclusionTitle" id="NUM" />
+    <public type="string" name="FilterRemoveInclusionUserText" id="NUM" />
     <public type="string" name="FilterReorder" id="NUM" />
     <public type="string" name="FilterSecretChats" id="NUM" />
     <public type="string" name="FilterShowMoreChats_few" id="NUM" />
@@ -2578,8 +2585,6 @@
     <public type="string" name="GroupUserCantAdmin" id="NUM" />
     <public type="string" name="GroupUserCantBot" id="NUM" />
     <public type="string" name="GroupUserLeftError" id="NUM" />
-    <public type="string" name="GroupVerifiedNameChange" id="NUM" />
-    <public type="string" name="GroupVerifiedUsernameChange" id="NUM" />
     <public type="string" name="GroupsAndChannels" id="NUM" />
     <public type="string" name="GroupsAndChannelsHelp" id="NUM" />
     <public type="string" name="GroupsInCommon" id="NUM" />
@@ -3674,6 +3679,7 @@
     <public type="string" name="RemoveFromListText" id="NUM" />
     <public type="string" name="RemoveStickersCount" id="NUM" />
     <public type="string" name="RemovedFromFavorites" id="NUM" />
+    <public type="string" name="RemovedFromRecent" id="NUM" />
     <public type="string" name="RemovedUser_few" id="NUM" />
     <public type="string" name="RemovedUser_many" id="NUM" />
     <public type="string" name="RemovedUser_one" id="NUM" />

@@ -411,7 +411,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         this.rowCount = 0 + 1;
         this.filterHelpRow = 0;
         int size = getMessagesController().dialogFilters.size();
-        if (!arrayList.isEmpty()) {
+        if (!arrayList.isEmpty() && size < 10) {
             int i = this.rowCount;
             int i2 = i + 1;
             this.rowCount = i2;
@@ -441,6 +441,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             int i6 = this.rowCount;
             this.rowCount = i6 + 1;
             this.createFilterRow = i6;
+        } else {
+            this.createFilterRow = -1;
         }
         int i7 = this.rowCount;
         this.rowCount = i7 + 1;
@@ -661,18 +663,25 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             FiltersSetupActivity.this.getMessagesStorage().deleteDialogFilter(dialogFilter);
             boolean z = false;
             boolean unused2 = FiltersSetupActivity.this.ignoreUpdates = false;
+            int access$600 = FiltersSetupActivity.this.createFilterRow;
+            int access$200 = FiltersSetupActivity.this.recommendedHeaderRow;
             FiltersSetupActivity filtersSetupActivity = FiltersSetupActivity.this;
             if (indexOf == -1) {
                 z = true;
             }
             filtersSetupActivity.updateRows(z);
-            if (indexOf == -1) {
-                return;
-            }
-            if (FiltersSetupActivity.this.filtersStartRow == -1) {
-                FiltersSetupActivity.this.adapter.notifyItemRangeRemoved(indexOf - 1, 2);
-            } else {
-                FiltersSetupActivity.this.adapter.notifyItemRemoved(indexOf);
+            if (indexOf != -1) {
+                if (FiltersSetupActivity.this.filtersStartRow == -1) {
+                    FiltersSetupActivity.this.adapter.notifyItemRangeRemoved(indexOf - 1, 2);
+                } else {
+                    FiltersSetupActivity.this.adapter.notifyItemRemoved(indexOf);
+                }
+                if (access$200 == -1 && FiltersSetupActivity.this.recommendedHeaderRow != -1) {
+                    FiltersSetupActivity.this.adapter.notifyItemRangeInserted(access$200, (FiltersSetupActivity.this.recommendedSectionRow - FiltersSetupActivity.this.recommendedHeaderRow) + 1);
+                }
+                if (access$600 == -1 && FiltersSetupActivity.this.createFilterRow != -1) {
+                    FiltersSetupActivity.this.adapter.notifyItemInserted(FiltersSetupActivity.this.createFilterRow);
+                }
             }
         }
 
@@ -809,11 +818,17 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 boolean z = FiltersSetupActivity.this.filtersStartRow == -1;
                 arrayList.remove(indexOf);
                 int access$700 = indexOf + FiltersSetupActivity.this.recommendedStartRow;
+                int access$600 = FiltersSetupActivity.this.createFilterRow;
+                int access$200 = FiltersSetupActivity.this.recommendedHeaderRow;
+                int access$1100 = FiltersSetupActivity.this.recommendedSectionRow;
                 FiltersSetupActivity.this.updateRows(false);
-                if (arrayList.isEmpty()) {
-                    FiltersSetupActivity.this.adapter.notifyItemRangeRemoved(access$700 - 1, 3);
-                } else {
+                if (access$600 != -1 && FiltersSetupActivity.this.createFilterRow == -1) {
+                    FiltersSetupActivity.this.adapter.notifyItemRemoved(access$600);
+                }
+                if (access$200 == -1 || FiltersSetupActivity.this.recommendedHeaderRow != -1) {
                     FiltersSetupActivity.this.adapter.notifyItemRemoved(access$700);
+                } else {
+                    FiltersSetupActivity.this.adapter.notifyItemRangeRemoved(access$200, (access$1100 - access$200) + 1);
                 }
                 if (z) {
                     FiltersSetupActivity.this.adapter.notifyItemInserted(FiltersSetupActivity.this.filtersHeaderRow);

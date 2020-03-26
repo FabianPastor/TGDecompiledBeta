@@ -1938,8 +1938,6 @@ public final class R {
         public static final int ChannelUserLeftError = NUM;
         public static final int ChannelUsernameHelp = NUM;
         public static final int ChannelUsernamePlaceholder = NUM;
-        public static final int ChannelVerifiedNameChange = NUM;
-        public static final int ChannelVerifiedUsernameChange = NUM;
         public static final int ChannelVerifiedWarning = NUM;
         public static final int Channels_few = NUM;
         public static final int Channels_many = NUM;
@@ -2048,6 +2046,10 @@ public final class R {
         public static final int ClearSearch = NUM;
         public static final int ClearSearchAlert = NUM;
         public static final int ClearSearchAlertTitle = NUM;
+        public static final int ClearSearchRemove = NUM;
+        public static final int ClearSearchSingleAlertTitle = NUM;
+        public static final int ClearSearchSingleChatAlertText = NUM;
+        public static final int ClearSearchSingleUserAlertText = NUM;
         public static final int Close = NUM;
         public static final int CloseEditor = NUM;
         public static final int Code = NUM;
@@ -2213,6 +2215,7 @@ public final class R {
         public static final int DeleteForAll = NUM;
         public static final int DeleteForUser = NUM;
         public static final int DeleteFromFavorites = NUM;
+        public static final int DeleteFromRecent = NUM;
         public static final int DeleteGif = NUM;
         public static final int DeleteLocalizationText = NUM;
         public static final int DeleteLocalizationTitle = NUM;
@@ -2553,10 +2556,14 @@ public final class R {
         public static final int FilterRead = NUM;
         public static final int FilterRecommended = NUM;
         public static final int FilterRemoveChats = NUM;
+        public static final int FilterRemoveExclusionChatText = NUM;
         public static final int FilterRemoveExclusionText = NUM;
         public static final int FilterRemoveExclusionTitle = NUM;
+        public static final int FilterRemoveExclusionUserText = NUM;
+        public static final int FilterRemoveInclusionChatText = NUM;
         public static final int FilterRemoveInclusionText = NUM;
         public static final int FilterRemoveInclusionTitle = NUM;
+        public static final int FilterRemoveInclusionUserText = NUM;
         public static final int FilterReorder = NUM;
         public static final int FilterSecretChats = NUM;
         public static final int FilterShowMoreChats_few = NUM;
@@ -2717,8 +2724,6 @@ public final class R {
         public static final int GroupUserCantAdmin = NUM;
         public static final int GroupUserCantBot = NUM;
         public static final int GroupUserLeftError = NUM;
-        public static final int GroupVerifiedNameChange = NUM;
-        public static final int GroupVerifiedUsernameChange = NUM;
         public static final int GroupsAndChannels = NUM;
         public static final int GroupsAndChannelsHelp = NUM;
         public static final int GroupsInCommon = NUM;
@@ -3813,6 +3818,7 @@ public final class R {
         public static final int RemoveFromListText = NUM;
         public static final int RemoveStickersCount = NUM;
         public static final int RemovedFromFavorites = NUM;
+        public static final int RemovedFromRecent = NUM;
         public static final int RemovedUser_few = NUM;
         public static final int RemovedUser_many = NUM;
         public static final int RemovedUser_one = NUM;

@@ -389,7 +389,7 @@ public class CacheControlActivity extends BaseFragment {
             java.lang.String r4 = "Months"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7)
             r2[r3] = r4
-            r3 = 2131625495(0x7f0e0617, float:1.88782E38)
+            r3 = 2131625500(0x7f0e061c, float:1.887821E38)
             java.lang.String r4 = "KeepMediaForever"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2[r5] = r3
@@ -407,11 +407,11 @@ public class CacheControlActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r16.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131625571(0x7f0e0663, float:1.8878354E38)
+            r2 = 2131625576(0x7f0e0668, float:1.8878364E38)
             java.lang.String r3 = "LocalDatabaseClearTextTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
-            r2 = 2131625570(0x7f0e0662, float:1.8878352E38)
+            r2 = 2131625575(0x7f0e0667, float:1.8878362E38)
             java.lang.String r3 = "LocalDatabaseClearText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
@@ -460,7 +460,7 @@ public class CacheControlActivity extends BaseFragment {
             if (r12 >= r13) goto L_0x0199
             if (r12 != 0) goto L_0x00f2
             long r8 = r0.photoSize
-            r15 = 2131625576(0x7f0e0668, float:1.8878364E38)
+            r15 = 2131625581(0x7f0e066d, float:1.8878374E38)
             java.lang.String r13 = "LocalPhotoCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r15)
         L_0x00f0:
@@ -469,28 +469,28 @@ public class CacheControlActivity extends BaseFragment {
         L_0x00f2:
             if (r12 != r7) goto L_0x0100
             long r8 = r0.videoSize
-            r13 = 2131625577(0x7f0e0669, float:1.8878366E38)
+            r13 = 2131625582(0x7f0e066e, float:1.8878376E38)
             java.lang.String r15 = "LocalVideoCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x0100:
             if (r12 != r3) goto L_0x010e
             long r8 = r0.documentsSize
-            r13 = 2131625573(0x7f0e0665, float:1.8878358E38)
+            r13 = 2131625578(0x7f0e066a, float:1.8878368E38)
             java.lang.String r15 = "LocalDocumentCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x010e:
             if (r12 != r5) goto L_0x011c
             long r8 = r0.musicSize
-            r13 = 2131625575(0x7f0e0667, float:1.8878362E38)
+            r13 = 2131625580(0x7f0e066c, float:1.8878372E38)
             java.lang.String r15 = "LocalMusicCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x011c:
             if (r12 != r4) goto L_0x012a
             long r8 = r0.audioSize
-            r13 = 2131625567(0x7f0e065f, float:1.8878346E38)
+            r13 = 2131625572(0x7f0e0664, float:1.8878356E38)
             java.lang.String r15 = "LocalAudioCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
@@ -506,7 +506,7 @@ public class CacheControlActivity extends BaseFragment {
             r8 = 6
             if (r12 != r8) goto L_0x0148
             long r8 = r0.cacheSize
-            r13 = 2131625568(0x7f0e0660, float:1.8878348E38)
+            r13 = 2131625573(0x7f0e0665, float:1.8878358E38)
             java.lang.String r15 = "LocalCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
@@ -555,7 +555,7 @@ public class CacheControlActivity extends BaseFragment {
             r3.<init>(r4, r7)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r6)
             r3.setBackgroundDrawable(r4)
-            r4 = 2131624719(0x7f0e030f, float:1.8876626E38)
+            r4 = 2131624717(0x7f0e030d, float:1.8876622E38)
             java.lang.String r5 = "ClearMediaCache"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r4 = r4.toUpperCase()
