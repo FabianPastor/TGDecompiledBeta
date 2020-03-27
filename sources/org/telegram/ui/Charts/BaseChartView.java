@@ -31,6 +31,7 @@ import org.telegram.ui.Charts.view_data.ChartHorizontalLinesData;
 import org.telegram.ui.Charts.view_data.LegendSignatureView;
 import org.telegram.ui.Charts.view_data.LineViewData;
 import org.telegram.ui.Charts.view_data.TransitionParams;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public abstract class BaseChartView<T extends ChartData, L extends LineViewData> extends View implements ChartPickerDelegate.Listener {
     protected static final boolean ANIMATE_PICKER_SIZES;
@@ -53,9 +54,9 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public static final boolean USE_LINES = (Build.VERSION.SDK_INT < 28);
     ValueAnimator alphaAnimator;
     ValueAnimator alphaBottomAnimator;
-    public boolean animateLegentTo = false;
-    int animateToMaxHeight = 0;
-    int animateToMinHeight = 0;
+    public boolean animateLegentTo;
+    float animateToMaxHeight = 0.0f;
+    float animateToMinHeight = 0.0f;
     protected float animatedToPickerMaxHeight;
     protected float animatedToPickerMinHeight;
     private Bitmap bottomChartBitmap;
@@ -86,18 +87,13 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint emptyPaint = new Paint();
     public boolean enabled = true;
     int endXIndex;
-    private ValueAnimator.AnimatorUpdateListener heightUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            BaseChartView.this.lambda$new$0$BaseChartView(valueAnimator);
-        }
-    };
     int hintLinePaintAlpha;
     ArrayList<ChartHorizontalLinesData> horizontalLines = new ArrayList<>(10);
     boolean invalidatePickerChart = true;
     boolean landscape = false;
-    int lastH = 0;
-    long lastTime = 0;
-    int lastW = 0;
+    int lastH;
+    long lastTime;
+    int lastW;
     int lastX;
     int lastY;
     public boolean legendShowing = false;
@@ -105,11 +101,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint linePaint = new Paint();
     public ArrayList<L> lines = new ArrayList<>();
     ValueAnimator maxValueAnimator;
-    private ValueAnimator.AnimatorUpdateListener minHeightUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            BaseChartView.this.lambda$new$1$BaseChartView(valueAnimator);
-        }
-    };
+    private float minMaxUpdateStep;
     Path pathTmp = new Path();
     Animator pickerAnimator;
     public ChartPickerDelegate pickerDelegate = new ChartPickerDelegate(this);
@@ -141,31 +133,17 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint selectedLinePaint = new Paint();
     public float selectionA = 0.0f;
     ValueAnimator selectionAnimator;
-    private ValueAnimator.AnimatorUpdateListener selectionAnimatorListener = new ValueAnimator.AnimatorUpdateListener() {
-        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-            BaseChartView.this.selectionA = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-            BaseChartView baseChartView = BaseChartView.this;
-            baseChartView.legendSignatureView.setAlpha(baseChartView.selectionA);
-            BaseChartView.this.invalidate();
-        }
-    };
+    private ValueAnimator.AnimatorUpdateListener selectionAnimatorListener;
     Paint selectionBackgroundPaint = new Paint(1);
-    private Animator.AnimatorListener selectorAnimatorEndListener = new AnimatorListenerAdapter() {
-        public void onAnimationEnd(Animator animator) {
-            super.onAnimationEnd(animator);
-            BaseChartView baseChartView = BaseChartView.this;
-            if (!baseChartView.animateLegentTo) {
-                baseChartView.legendShowing = false;
-                baseChartView.legendSignatureView.setVisibility(8);
-                BaseChartView.this.invalidate();
-            }
-            BaseChartView.this.postTransition = false;
-        }
-    };
+    private Animator.AnimatorListener selectorAnimatorEndListener;
     public SharedUiComponents sharedUiComponents;
     Paint signaturePaint = new TextPaint(1);
     Paint signaturePaint2 = new TextPaint(1);
     float signaturePaintAlpha;
+    private float startFromMax;
+    private float startFromMaxH;
+    private float startFromMin;
+    private float startFromMinH;
     int startXIndex;
     boolean superDraw = false;
     float thresholdMaxHeight = 0.0f;
@@ -176,7 +154,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public TransitionParams transitionParams;
     Paint unactiveBottomChartPaint = new Paint();
     boolean useAlphaSignature = false;
-    protected boolean useMinHeight = false;
+    protected boolean useMinHeight;
     Paint whiteLinePaint = new Paint(1);
 
     public interface DateSelectionListener {
@@ -217,6 +195,41 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     public BaseChartView(Context context) {
         super(context);
+        new ValueAnimator.AnimatorUpdateListener() {
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                BaseChartView.this.lambda$new$0$BaseChartView(valueAnimator);
+            }
+        };
+        new ValueAnimator.AnimatorUpdateListener() {
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                BaseChartView.this.lambda$new$1$BaseChartView(valueAnimator);
+            }
+        };
+        this.selectionAnimatorListener = new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                BaseChartView.this.selectionA = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                BaseChartView baseChartView = BaseChartView.this;
+                baseChartView.legendSignatureView.setAlpha(baseChartView.selectionA);
+                BaseChartView.this.invalidate();
+            }
+        };
+        this.selectorAnimatorEndListener = new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                super.onAnimationEnd(animator);
+                BaseChartView baseChartView = BaseChartView.this;
+                if (!baseChartView.animateLegentTo) {
+                    baseChartView.legendShowing = false;
+                    baseChartView.legendSignatureView.setVisibility(8);
+                    BaseChartView.this.invalidate();
+                }
+                BaseChartView.this.postTransition = false;
+            }
+        };
+        this.useMinHeight = false;
+        this.lastW = 0;
+        this.lastH = 0;
+        this.lastTime = 0;
+        this.animateLegentTo = false;
         init();
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
@@ -329,9 +342,9 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     private void measureHeightThreshold() {
         int measuredHeight = getMeasuredHeight() - this.chartBottom;
-        int i = this.animateToMaxHeight;
-        if (i != 0 && measuredHeight != 0) {
-            this.thresholdMaxHeight = (((float) i) / ((float) measuredHeight)) * SIGNATURE_TEXT_SIZE;
+        float f = this.animateToMaxHeight;
+        if (f != 0.0f && measuredHeight != 0) {
+            this.thresholdMaxHeight = (f / ((float) measuredHeight)) * SIGNATURE_TEXT_SIZE;
         }
     }
 
@@ -341,6 +354,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             super.onDraw(canvas);
             return;
         }
+        tick();
         int save = canvas.save();
         canvas.clipRect(0, this.chartArea.top, getMeasuredWidth(), this.chartArea.bottom);
         drawBottomLine(canvas);
@@ -369,6 +383,41 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 super.onDraw(canvas);
                 return;
             }
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void tick() {
+        float f = this.currentMaxHeight;
+        float f2 = this.animateToMaxHeight;
+        if (f != f2) {
+            float f3 = this.startFromMax + this.minMaxUpdateStep;
+            this.startFromMax = f3;
+            if (f3 > 1.0f) {
+                this.startFromMax = 1.0f;
+                this.currentMaxHeight = f2;
+            } else {
+                float f4 = this.startFromMaxH;
+                this.currentMaxHeight = f4 + ((f2 - f4) * CubicBezierInterpolator.EASE_OUT.getInterpolation(f3));
+            }
+            invalidate();
+        }
+        if (this.useMinHeight) {
+            float f5 = this.currentMinHeight;
+            float f6 = this.animateToMinHeight;
+            if (f5 != f6) {
+                float f7 = this.startFromMin + this.minMaxUpdateStep;
+                this.startFromMin = f7;
+                if (f7 > 1.0f) {
+                    this.startFromMin = 1.0f;
+                    this.currentMinHeight = f6;
+                } else {
+                    float f8 = this.startFromMinH;
+                    this.currentMinHeight = f8 + ((f6 - f8) * CubicBezierInterpolator.EASE_OUT.getInterpolation(f7));
+                }
+                invalidate();
+            }
+            invalidate();
         }
     }
 
@@ -510,49 +559,234 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: protected */
-    public void drawHorizontalLines(Canvas canvas, ChartHorizontalLinesData chartHorizontalLinesData) {
-        int length = chartHorizontalLinesData.values.length;
-        int i = this.transitionMode;
-        float f = 1.0f;
-        if (i == 2) {
-            f = 1.0f - this.transitionParams.progress;
-        } else if (i == 1) {
-            f = this.transitionParams.progress;
-        } else if (i == 3) {
-            f = this.transitionParams.progress;
-        }
-        this.linePaint.setAlpha((int) (((float) chartHorizontalLinesData.alpha) * (((float) this.hintLinePaintAlpha) / 255.0f) * f));
-        this.signaturePaint.setAlpha((int) (((float) chartHorizontalLinesData.alpha) * this.signaturePaintAlpha * f));
-        int measuredHeight = (getMeasuredHeight() - this.chartBottom) - SIGNATURE_TEXT_HEIGHT;
-        for (int i2 = !this.useMinHeight; i2 < length; i2++) {
-            float f2 = this.currentMinHeight;
-            int measuredHeight2 = (int) (((float) (getMeasuredHeight() - this.chartBottom)) - (((float) measuredHeight) * ((((float) chartHorizontalLinesData.values[i2]) - f2) / (this.currentMaxHeight - f2))));
-            canvas.drawRect((float) this.chartStart, (float) measuredHeight2, (float) this.chartEnd, (float) (measuredHeight2 + 1), this.linePaint);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0074 A[LOOP:0: B:15:0x0072->B:16:0x0074, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x002b  */
+    /* JADX WARNING: Removed duplicated region for block: B:9:0x0031  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void drawHorizontalLines(android.graphics.Canvas r13, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData r14) {
+        /*
+            r12 = this;
+            int[] r0 = r14.values
+            int r1 = r0.length
+            r2 = 2
+            r3 = 1065353216(0x3var_, float:1.0)
+            r4 = 1
+            if (r1 <= r2) goto L_0x0025
+            r5 = r0[r4]
+            r6 = 0
+            r0 = r0[r6]
+            int r5 = r5 - r0
+            float r0 = (float) r5
+            float r5 = r12.currentMaxHeight
+            float r6 = r12.currentMinHeight
+            float r5 = r5 - r6
+            float r0 = r0 / r5
+            double r5 = (double) r0
+            r7 = 4591870180066957722(0x3fb999999999999a, double:0.1)
+            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r9 >= 0) goto L_0x0025
+            r5 = 1036831949(0x3dcccccd, float:0.1)
+            float r0 = r0 / r5
+            goto L_0x0027
+        L_0x0025:
+            r0 = 1065353216(0x3var_, float:1.0)
+        L_0x0027:
+            int r5 = r12.transitionMode
+            if (r5 != r2) goto L_0x0031
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r12.transitionParams
+            float r2 = r2.progress
+            float r3 = r3 - r2
+            goto L_0x003f
+        L_0x0031:
+            if (r5 != r4) goto L_0x0038
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r12.transitionParams
+            float r3 = r2.progress
+            goto L_0x003f
+        L_0x0038:
+            r2 = 3
+            if (r5 != r2) goto L_0x003f
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r12.transitionParams
+            float r3 = r2.progress
+        L_0x003f:
+            android.graphics.Paint r2 = r12.linePaint
+            int r5 = r14.alpha
+            float r5 = (float) r5
+            int r6 = r12.hintLinePaintAlpha
+            float r6 = (float) r6
+            r7 = 1132396544(0x437var_, float:255.0)
+            float r6 = r6 / r7
+            float r5 = r5 * r6
+            float r5 = r5 * r3
+            float r5 = r5 * r0
+            int r5 = (int) r5
+            r2.setAlpha(r5)
+            android.graphics.Paint r2 = r12.signaturePaint
+            int r5 = r14.alpha
+            float r5 = (float) r5
+            float r6 = r12.signaturePaintAlpha
+            float r5 = r5 * r6
+            float r5 = r5 * r3
+            float r5 = r5 * r0
+            int r0 = (int) r5
+            r2.setAlpha(r0)
+            int r0 = r12.getMeasuredHeight()
+            int r2 = r12.chartBottom
+            int r0 = r0 - r2
+            int r2 = SIGNATURE_TEXT_HEIGHT
+            int r0 = r0 - r2
+            boolean r2 = r12.useMinHeight
+            r2 = r2 ^ r4
+        L_0x0072:
+            if (r2 >= r1) goto L_0x009f
+            int r3 = r12.getMeasuredHeight()
+            int r5 = r12.chartBottom
+            int r3 = r3 - r5
+            float r3 = (float) r3
+            float r5 = (float) r0
+            int[] r6 = r14.values
+            r6 = r6[r2]
+            float r6 = (float) r6
+            float r7 = r12.currentMinHeight
+            float r6 = r6 - r7
+            float r8 = r12.currentMaxHeight
+            float r8 = r8 - r7
+            float r6 = r6 / r8
+            float r5 = r5 * r6
+            float r3 = r3 - r5
+            int r3 = (int) r3
+            int r5 = r12.chartStart
+            float r7 = (float) r5
+            float r8 = (float) r3
+            int r5 = r12.chartEnd
+            float r9 = (float) r5
+            int r3 = r3 + r4
+            float r10 = (float) r3
+            android.graphics.Paint r11 = r12.linePaint
+            r6 = r13
+            r6.drawRect(r7, r8, r9, r10, r11)
+            int r2 = r2 + 1
+            goto L_0x0072
+        L_0x009f:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.BaseChartView.drawHorizontalLines(android.graphics.Canvas, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData):void");
     }
 
     /* access modifiers changed from: protected */
-    public void drawSignaturesToHorizontalLines(Canvas canvas, ChartHorizontalLinesData chartHorizontalLinesData) {
-        int length = chartHorizontalLinesData.values.length;
-        int i = this.transitionMode;
-        float f = 1.0f;
-        if (i == 2) {
-            f = 1.0f - this.transitionParams.progress;
-        } else if (i == 1) {
-            f = this.transitionParams.progress;
-        } else if (i == 3) {
-            f = this.transitionParams.progress;
-        }
-        this.linePaint.setAlpha((int) (((float) chartHorizontalLinesData.alpha) * (((float) this.hintLinePaintAlpha) / 255.0f) * f));
-        this.signaturePaint.setAlpha((int) (((float) chartHorizontalLinesData.alpha) * this.signaturePaintAlpha * f));
-        int measuredHeight = getMeasuredHeight() - this.chartBottom;
-        int i2 = SIGNATURE_TEXT_HEIGHT;
-        int i3 = measuredHeight - i2;
-        int textSize = (int) (((float) i2) - this.signaturePaint.getTextSize());
-        for (int i4 = true ^ this.useMinHeight; i4 < length; i4++) {
-            float f2 = this.currentMinHeight;
-            canvas.drawText(chartHorizontalLinesData.valuesStr[i4], (float) HORIZONTAL_PADDING, (float) (((int) (((float) (getMeasuredHeight() - this.chartBottom)) - (((float) i3) * ((((float) chartHorizontalLinesData.values[i4]) - f2) / (this.currentMaxHeight - f2))))) - textSize), this.signaturePaint);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x007d A[LOOP:0: B:15:0x007b->B:16:0x007d, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x002b  */
+    /* JADX WARNING: Removed duplicated region for block: B:9:0x0031  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void drawSignaturesToHorizontalLines(android.graphics.Canvas r11, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData r12) {
+        /*
+            r10 = this;
+            int[] r0 = r12.values
+            int r1 = r0.length
+            r2 = 2
+            r3 = 1065353216(0x3var_, float:1.0)
+            r4 = 1
+            if (r1 <= r2) goto L_0x0025
+            r5 = r0[r4]
+            r6 = 0
+            r0 = r0[r6]
+            int r5 = r5 - r0
+            float r0 = (float) r5
+            float r5 = r10.currentMaxHeight
+            float r6 = r10.currentMinHeight
+            float r5 = r5 - r6
+            float r0 = r0 / r5
+            double r5 = (double) r0
+            r7 = 4591870180066957722(0x3fb999999999999a, double:0.1)
+            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r9 >= 0) goto L_0x0025
+            r5 = 1036831949(0x3dcccccd, float:0.1)
+            float r0 = r0 / r5
+            goto L_0x0027
+        L_0x0025:
+            r0 = 1065353216(0x3var_, float:1.0)
+        L_0x0027:
+            int r5 = r10.transitionMode
+            if (r5 != r2) goto L_0x0031
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r10.transitionParams
+            float r2 = r2.progress
+            float r3 = r3 - r2
+            goto L_0x003f
+        L_0x0031:
+            if (r5 != r4) goto L_0x0038
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r10.transitionParams
+            float r3 = r2.progress
+            goto L_0x003f
+        L_0x0038:
+            r2 = 3
+            if (r5 != r2) goto L_0x003f
+            org.telegram.ui.Charts.view_data.TransitionParams r2 = r10.transitionParams
+            float r3 = r2.progress
+        L_0x003f:
+            android.graphics.Paint r2 = r10.linePaint
+            int r5 = r12.alpha
+            float r5 = (float) r5
+            int r6 = r10.hintLinePaintAlpha
+            float r6 = (float) r6
+            r7 = 1132396544(0x437var_, float:255.0)
+            float r6 = r6 / r7
+            float r5 = r5 * r6
+            float r5 = r5 * r3
+            float r5 = r5 * r0
+            int r5 = (int) r5
+            r2.setAlpha(r5)
+            android.graphics.Paint r2 = r10.signaturePaint
+            int r5 = r12.alpha
+            float r5 = (float) r5
+            float r6 = r10.signaturePaintAlpha
+            float r5 = r5 * r6
+            float r5 = r5 * r3
+            float r5 = r5 * r0
+            int r0 = (int) r5
+            r2.setAlpha(r0)
+            int r0 = r10.getMeasuredHeight()
+            int r2 = r10.chartBottom
+            int r0 = r0 - r2
+            int r2 = SIGNATURE_TEXT_HEIGHT
+            int r0 = r0 - r2
+            float r2 = (float) r2
+            android.graphics.Paint r3 = r10.signaturePaint
+            float r3 = r3.getTextSize()
+            float r2 = r2 - r3
+            int r2 = (int) r2
+            boolean r3 = r10.useMinHeight
+            r3 = r3 ^ r4
+        L_0x007b:
+            if (r3 >= r1) goto L_0x00a7
+            int r4 = r10.getMeasuredHeight()
+            int r5 = r10.chartBottom
+            int r4 = r4 - r5
+            float r4 = (float) r4
+            float r5 = (float) r0
+            int[] r6 = r12.values
+            r6 = r6[r3]
+            float r6 = (float) r6
+            float r7 = r10.currentMinHeight
+            float r6 = r6 - r7
+            float r8 = r10.currentMaxHeight
+            float r8 = r8 - r7
+            float r6 = r6 / r8
+            float r5 = r5 * r6
+            float r4 = r4 - r5
+            int r4 = (int) r4
+            java.lang.String[] r5 = r12.valuesStr
+            r5 = r5[r3]
+            int r6 = HORIZONTAL_PADDING
+            float r6 = (float) r6
+            int r4 = r4 - r2
+            float r4 = (float) r4
+            android.graphics.Paint r7 = r10.signaturePaint
+            r11.drawText(r5, r6, r4, r7)
+            int r3 = r3 + 1
+            goto L_0x007b
+        L_0x00a7:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.BaseChartView.drawSignaturesToHorizontalLines(android.graphics.Canvas, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData):void");
     }
 
     /* access modifiers changed from: package-private */
@@ -1119,40 +1353,48 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     /* access modifiers changed from: protected */
     public void setMaxMinValue(int i, int i2, boolean z, boolean z2) {
-        if ((((float) Math.abs(ChartHorizontalLinesData.lookupHeight(i) - this.animateToMaxHeight)) >= this.thresholdMaxHeight && i != 0) || i != this.animateToMinHeight) {
+        if ((Math.abs(((float) ChartHorizontalLinesData.lookupHeight(i)) - this.animateToMaxHeight) >= this.thresholdMaxHeight && i != 0) || ((float) i) != this.animateToMinHeight) {
             final ChartHorizontalLinesData createHorizontalLinesData = createHorizontalLinesData(i, i2);
             int[] iArr = createHorizontalLinesData.values;
             int i3 = iArr[iArr.length - 1];
             int i4 = iArr[0];
+            float f = (float) i3;
+            if (f != this.animateToMaxHeight) {
+                float f2 = this.currentMaxHeight;
+                this.startFromMaxH = f2;
+                this.startFromMax = 0.0f;
+                float f3 = (f2 - this.currentMinHeight) / ((float) (i3 - i4));
+                float f4 = 0.045f;
+                if (((double) f3) < 0.1d) {
+                    f4 = 0.03f;
+                }
+                this.minMaxUpdateStep = f4;
+            }
+            if (this.useMinHeight && ((float) i4) != this.animateToMinHeight) {
+                this.startFromMinH = this.currentMinHeight;
+                this.startFromMin = 0.0f;
+            }
+            this.animateToMaxHeight = f;
+            float f5 = (float) i4;
+            this.animateToMinHeight = f5;
+            measureHeightThreshold();
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - this.lastTime >= 320 || z2) {
                 this.lastTime = currentTimeMillis;
-                ValueAnimator valueAnimator = this.maxValueAnimator;
+                ValueAnimator valueAnimator = this.alphaAnimator;
                 if (valueAnimator != null) {
-                    valueAnimator.cancel();
-                }
-                ValueAnimator valueAnimator2 = this.alphaAnimator;
-                if (valueAnimator2 != null) {
-                    valueAnimator2.removeAllListeners();
+                    valueAnimator.removeAllListeners();
                     this.alphaAnimator.cancel();
                 }
                 if (!z) {
-                    this.currentMaxHeight = (float) i3;
-                    this.currentMinHeight = (float) i4;
+                    this.currentMaxHeight = f;
+                    this.currentMinHeight = f5;
                     this.horizontalLines.clear();
                     this.horizontalLines.add(createHorizontalLinesData);
                     createHorizontalLinesData.alpha = 255;
                     return;
                 }
                 this.horizontalLines.add(createHorizontalLinesData);
-                ValueAnimator createAnimator = createAnimator(this.currentMaxHeight, (float) i3, this.heightUpdateListener);
-                this.maxValueAnimator = createAnimator;
-                createAnimator.start();
-                if (this.useMinHeight) {
-                    ValueAnimator createAnimator2 = createAnimator(this.currentMinHeight, (float) i4, this.minHeightUpdateListener);
-                    this.maxValueAnimator = createAnimator2;
-                    createAnimator2.start();
-                }
                 int size = this.horizontalLines.size();
                 for (int i5 = 0; i5 < size; i5++) {
                     ChartHorizontalLinesData chartHorizontalLinesData = this.horizontalLines.get(i5);
@@ -1160,7 +1402,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                         chartHorizontalLinesData.fixedAlpha = chartHorizontalLinesData.alpha;
                     }
                 }
-                ValueAnimator createAnimator3 = createAnimator(0.0f, 255.0f, new ValueAnimator.AnimatorUpdateListener(createHorizontalLinesData) {
+                ValueAnimator createAnimator = createAnimator(0.0f, 255.0f, new ValueAnimator.AnimatorUpdateListener(createHorizontalLinesData) {
                     private final /* synthetic */ ChartHorizontalLinesData f$1;
 
                     {
@@ -1171,8 +1413,8 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                         BaseChartView.this.lambda$setMaxMinValue$2$BaseChartView(this.f$1, valueAnimator);
                     }
                 });
-                this.alphaAnimator = createAnimator3;
-                createAnimator3.addListener(new AnimatorListenerAdapter() {
+                this.alphaAnimator = createAnimator;
+                createAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         BaseChartView.this.horizontalLines.clear();
                         BaseChartView.this.horizontalLines.add(createHorizontalLinesData);

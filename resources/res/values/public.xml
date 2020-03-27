@@ -1329,6 +1329,7 @@
     <public type="string" name="AddToTheGroupAlertText" id="NUM" />
     <public type="string" name="AddToTheGroupAlertTitle" id="NUM" />
     <public type="string" name="AddToTheGroupForwardCount" id="NUM" />
+    <public type="string" name="AddUserErrorBlacklisted" id="NUM" />
     <public type="string" name="AddedToFavorites" id="NUM" />
     <public type="string" name="AdminWillBeRemoved" id="NUM" />
     <public type="string" name="Agree" id="NUM" />

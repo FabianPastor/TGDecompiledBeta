@@ -390,6 +390,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                 int i2 = this.currentType;
                 if (i2 == 0) {
                     MessagesController.getInstance(this.currentAccount).setUserAdminRole(this.chatId, this.currentUser, new TLRPC$TL_chatAdminRights(), this.currentRank, this.isChannel, getFragmentForAlert(0), this.isAddingNew);
+                    ChatRightsEditActivityDelegate chatRightsEditActivityDelegate = this.delegate;
+                    if (chatRightsEditActivityDelegate != null) {
+                        chatRightsEditActivityDelegate.didSetRights(0, this.adminRights, this.bannedRights, this.currentRank);
+                    }
+                    finishFragment();
                 } else if (i2 == 1) {
                     TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = new TLRPC$TL_chatBannedRights();
                     this.bannedRights = tLRPC$TL_chatBannedRights;
@@ -406,13 +411,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                     tLRPC$TL_chatBannedRights.invite_users = true;
                     tLRPC$TL_chatBannedRights.change_info = true;
                     tLRPC$TL_chatBannedRights.until_date = 0;
-                    MessagesController.getInstance(this.currentAccount).setUserBannedRole(this.chatId, this.currentUser, this.bannedRights, this.isChannel, getFragmentForAlert(0));
+                    onDonePressed();
                 }
-                ChatRightsEditActivityDelegate chatRightsEditActivityDelegate = this.delegate;
-                if (chatRightsEditActivityDelegate != null) {
-                    chatRightsEditActivityDelegate.didSetRights(0, this.adminRights, this.bannedRights, this.currentRank);
-                }
-                finishFragment();
             } else if (i == this.transferOwnerRow) {
                 lambda$null$8$ChatRightsEditActivity((TLRPC$InputCheckPasswordSRP) null, (TwoStepVerificationActivity) null);
             } else if (i == this.untilDateRow) {

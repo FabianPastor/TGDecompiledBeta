@@ -488,6 +488,7 @@ public class DataUsageActivity extends BaseFragment {
             LinearLayoutManager unused = viewPage.layoutManager = r10;
             RecyclerListView recyclerListView = new RecyclerListView(context);
             RecyclerListView unused2 = this.viewPages[i].listView = recyclerListView;
+            this.viewPages[i].listView.setScrollingTouchSlop(1);
             this.viewPages[i].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
             this.viewPages[i].listView.setClipToPadding(false);
             this.viewPages[i].listView.setSectionsType(2);

@@ -762,7 +762,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.cameraThread = null;
             }
             if (this.cancelled) {
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), true);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), true, Integer.valueOf((int) this.recordedTime));
                 startAnimation(false);
                 MediaController.getInstance().requestAudioFocus(false);
             }
@@ -2755,7 +2755,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 boolean unused2 = InstantCameraView.this.recording = true;
                 long unused3 = InstantCameraView.this.recordStartTime = System.currentTimeMillis();
                 InstantCameraView.this.invalidate();
-                NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(InstantCameraView.this.recordingGuid));
+                NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(InstantCameraView.this.recordingGuid), false);
             }
         }
 

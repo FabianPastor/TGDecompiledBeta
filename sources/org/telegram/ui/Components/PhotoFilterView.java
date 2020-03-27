@@ -1299,7 +1299,7 @@ public class PhotoFilterView extends FrameLayout {
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r10.setPadding(r6, r3, r7, r3)
             android.widget.TextView r6 = r0.cancelTextView
-            r7 = 2131624483(0x7f0e0223, float:1.8876147E38)
+            r7 = 2131624484(0x7f0e0224, float:1.887615E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -1330,7 +1330,7 @@ public class PhotoFilterView extends FrameLayout {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r6.setPadding(r10, r3, r11, r3)
             android.widget.TextView r6 = r0.doneTextView
-            r10 = 2131624972(0x7f0e040c, float:1.8877139E38)
+            r10 = 2131624973(0x7f0e040d, float:1.887714E38)
             java.lang.String r11 = "Done"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.String r10 = r10.toUpperCase()
@@ -1483,7 +1483,7 @@ public class PhotoFilterView extends FrameLayout {
             r10 = 16
             r8.setGravity(r10)
             if (r6 != 0) goto L_0x0381
-            r10 = 2131624820(0x7f0e0374, float:1.887683E38)
+            r10 = 2131624821(0x7f0e0375, float:1.8876833E38)
             java.lang.String r11 = "CurvesAll"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -1505,7 +1505,7 @@ public class PhotoFilterView extends FrameLayout {
             goto L_0x0432
         L_0x0381:
             if (r6 != r4) goto L_0x03bc
-            r10 = 2131624823(0x7f0e0377, float:1.8876837E38)
+            r10 = 2131624824(0x7f0e0378, float:1.8876839E38)
             java.lang.String r11 = "CurvesRed"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -1526,7 +1526,7 @@ public class PhotoFilterView extends FrameLayout {
             goto L_0x037e
         L_0x03bc:
             if (r6 != r5) goto L_0x03f7
-            r10 = 2131624822(0x7f0e0376, float:1.8876835E38)
+            r10 = 2131624823(0x7f0e0377, float:1.8876837E38)
             java.lang.String r11 = "CurvesGreen"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -1548,7 +1548,7 @@ public class PhotoFilterView extends FrameLayout {
         L_0x03f7:
             r10 = 3
             if (r6 != r10) goto L_0x0432
-            r11 = 2131624821(0x7f0e0375, float:1.8876833E38)
+            r11 = 2131624822(0x7f0e0376, float:1.8876835E38)
             java.lang.String r12 = "CurvesBlue"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.StringBuilder r12 = new java.lang.StringBuilder
@@ -1624,7 +1624,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.TextView r2 = r0.blurOffButton
             r2.setGravity(r4)
             android.widget.TextView r2 = r0.blurOffButton
-            r6 = 2131624435(0x7f0e01f3, float:1.887605E38)
+            r6 = 2131624436(0x7f0e01f4, float:1.8876052E38)
             java.lang.String r7 = "BlurOff"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.setText(r6)
@@ -1648,7 +1648,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.TextView r2 = r0.blurRadialButton
             r2.setGravity(r4)
             android.widget.TextView r2 = r0.blurRadialButton
-            r6 = 2131624436(0x7f0e01f4, float:1.8876052E38)
+            r6 = 2131624437(0x7f0e01f5, float:1.8876054E38)
             java.lang.String r7 = "BlurRadial"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.setText(r6)
@@ -1676,7 +1676,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.TextView r1 = r0.blurLinearButton
             r1.setGravity(r4)
             android.widget.TextView r1 = r0.blurLinearButton
-            r2 = 2131624434(0x7f0e01f2, float:1.8876048E38)
+            r2 = 2131624435(0x7f0e01f3, float:1.887605E38)
             java.lang.String r3 = "BlurLinear"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

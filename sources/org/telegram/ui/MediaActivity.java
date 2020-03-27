@@ -390,16 +390,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x03cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x03d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0572  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0579 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x03d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x03de  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x057b  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0582 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r27) {
+    public android.view.View createView(android.content.Context r28) {
         /*
-            r26 = this;
-            r6 = r26
-            r7 = r27
+            r27 = this;
+            r6 = r27
+            r7 = r28
             r8 = 0
             r0 = 0
         L_0x0006:
@@ -421,7 +421,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r0 = r0 + 1
             goto L_0x0006
         L_0x0029:
-            android.view.ViewConfiguration r0 = android.view.ViewConfiguration.get(r27)
+            android.view.ViewConfiguration r0 = android.view.ViewConfiguration.get(r28)
             int r0 = r0.getScaledMaximumFlingVelocity()
             r6.maximumVelocity = r0
             r6.searching = r8
@@ -452,7 +452,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x0081
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
+            r1 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -502,7 +502,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x00f7
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131626745(0x7f0e0af9, float:1.8880735E38)
+            r1 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -517,7 +517,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$4 r1 = new org.telegram.ui.MediaActivity$4
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
-            android.content.res.Resources r0 = r27.getResources()
+            android.content.res.Resources r0 = r28.getResources()
             r1 = 2131165805(0x7var_d, float:1.7945837E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
@@ -572,7 +572,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
-            r1 = 2131626599(0x7f0e0a67, float:1.8880439E38)
+            r1 = 2131626600(0x7f0e0a68, float:1.888044E38)
             java.lang.String r3 = "Search"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setSearchFieldHint(r4)
@@ -652,7 +652,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 2131165674(0x7var_ea, float:1.7945572E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r13 = 2131625271(0x7f0e0537, float:1.8877745E38)
+            r13 = 2131625272(0x7f0e0538, float:1.8877747E38)
             java.lang.String r14 = "Forward"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.addItemWithWidth(r3, r5, r12, r13)
@@ -661,7 +661,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 2131165670(0x7var_e6, float:1.7945564E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r12 = 2131624869(0x7f0e03a5, float:1.887693E38)
+            r12 = 2131624870(0x7f0e03a6, float:1.8876932E38)
             java.lang.String r13 = "Delete"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r2, r5, r4, r12)
@@ -701,7 +701,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         L_0x02cc:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
             int r3 = r2.length
-            if (r14 >= r3) goto L_0x0581
+            if (r14 >= r3) goto L_0x058b
             if (r14 != 0) goto L_0x0316
             r3 = r2[r14]
             if (r3 == 0) goto L_0x0316
@@ -750,22 +750,26 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r16 = 1
             r17 = 0
             r0 = r1
-            r9 = r1
-            r1 = r26
-            r10 = r2
-            r2 = r27
+            r10 = r1
+            r1 = r27
+            r12 = r2
+            r2 = r28
             r3 = r16
             r16 = r4
             r4 = r17
-            r20 = r5
+            r21 = r5
             r5 = r16
             r0.<init>(r2, r3, r4, r5)
-            androidx.recyclerview.widget.LinearLayoutManager unused = r10.layoutManager = r9
+            androidx.recyclerview.widget.LinearLayoutManager unused = r12.layoutManager = r10
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.MediaActivity$10 r1 = new org.telegram.ui.MediaActivity$10
             r1.<init>(r7)
             org.telegram.ui.Components.RecyclerListView unused = r0.listView = r1
+            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
+            r0 = r0[r14]
+            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
+            r0.setScrollingTouchSlop(r9)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
@@ -777,220 +781,218 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            r0.setSectionsType(r12)
+            r1 = 2
+            r0.setSectionsType(r1)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            r0.setLayoutManager(r9)
+            r0.setLayoutManager(r10)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r1 = r0[r14]
+            r2 = r0[r14]
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r3 = -1
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r2)
-            r1.addView(r0, r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.-$$Lambda$MediaActivity$gt9PcHemY5TDJnj_A3DgU8jzVM0 r1 = new org.telegram.ui.-$$Lambda$MediaActivity$gt9PcHemY5TDJnj_A3DgU8jzVM0
-            r3 = r16
-            r1.<init>(r3)
-            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r1)
+            r3 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r4 = -1
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r2.addView(r0, r5)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.MediaActivity$11 r1 = new org.telegram.ui.MediaActivity$11
-            r1.<init>(r9, r3)
-            r0.setOnScrollListener(r1)
+            org.telegram.ui.-$$Lambda$MediaActivity$gt9PcHemY5TDJnj_A3DgU8jzVM0 r2 = new org.telegram.ui.-$$Lambda$MediaActivity$gt9PcHemY5TDJnj_A3DgU8jzVM0
+            r4 = r16
+            r2.<init>(r4)
+            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r2)
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA r1 = new org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA
-            r1.<init>(r3)
-            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r1)
-            if (r14 != 0) goto L_0x03d2
+            org.telegram.ui.MediaActivity$11 r2 = new org.telegram.ui.MediaActivity$11
+            r2.<init>(r10, r4)
+            r0.setOnScrollListener(r2)
+            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
+            r0 = r0[r14]
+            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
+            org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA r2 = new org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA
+            r2.<init>(r4)
+            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r2)
+            if (r14 != 0) goto L_0x03de
             r0 = -1
-            if (r15 == r0) goto L_0x03d2
-            r1 = r20
-            r9.scrollToPositionWithOffset(r15, r1)
-            goto L_0x03d4
-        L_0x03d2:
-            r1 = r20
-        L_0x03d4:
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.MediaActivity$MediaPage[] r3 = r6.mediaPages
-            r3 = r3[r14]
-            org.telegram.ui.MediaActivity$12 r4 = new org.telegram.ui.MediaActivity$12
-            r4.<init>(r6, r7, r0)
-            org.telegram.ui.Components.ClippingImageView unused = r3.animatingImageView = r4
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.Components.ClippingImageView r0 = r0.animatingImageView
-            r3 = 8
-            r0.setVisibility(r3)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
+            if (r15 == r0) goto L_0x03de
+            r0 = r21
+            r10.scrollToPositionWithOffset(r15, r0)
+            goto L_0x03e0
+        L_0x03de:
+            r0 = r21
+        L_0x03e0:
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaPage[] r4 = r6.mediaPages
             r4 = r4[r14]
-            org.telegram.ui.Components.ClippingImageView r4 = r4.animatingImageView
-            r5 = -1
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r2)
-            r0.addOverlayView(r4, r9)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.MediaActivity$13 r4 = new org.telegram.ui.MediaActivity$13
-            r4.<init>(r7)
-            android.widget.LinearLayout unused = r0.emptyView = r4
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            r0.setWillNotDraw(r8)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            r4 = 1
-            r0.setOrientation(r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            r4 = 17
-            r0.setGravity(r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            r0.setVisibility(r3)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r5 = r0[r14]
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            r9 = -1
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r2)
-            r5.addView(r0, r10)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            org.telegram.ui.-$$Lambda$MediaActivity$KVxLpoziroW7rOfn3d0nOSI4Va4 r5 = org.telegram.ui.$$Lambda$MediaActivity$KVxLpoziroW7rOfn3d0nOSI4Va4.INSTANCE
-            r0.setOnTouchListener(r5)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.ImageView r5 = new android.widget.ImageView
-            r5.<init>(r7)
-            android.widget.ImageView unused = r0.emptyImageView = r5
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
+            org.telegram.ui.MediaActivity$12 r5 = new org.telegram.ui.MediaActivity$12
+            r5.<init>(r6, r7, r2)
+            org.telegram.ui.Components.ClippingImageView unused = r4.animatingImageView = r5
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            org.telegram.ui.Components.ClippingImageView r2 = r2.animatingImageView
+            r4 = 8
+            r2.setVisibility(r4)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             org.telegram.ui.MediaActivity$MediaPage[] r5 = r6.mediaPages
             r5 = r5[r14]
-            android.widget.ImageView r5 = r5.emptyImageView
-            r9 = -2
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r9)
-            r0.addView(r5, r10)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.TextView r5 = new android.widget.TextView
+            org.telegram.ui.Components.ClippingImageView r5 = r5.animatingImageView
+            r10 = -1
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r3)
+            r2.addOverlayView(r5, r12)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            org.telegram.ui.MediaActivity$13 r5 = new org.telegram.ui.MediaActivity$13
             r5.<init>(r7)
-            android.widget.TextView unused = r0.emptyTextView = r5
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.TextView r0 = r0.emptyTextView
-            java.lang.String r5 = "windowBackgroundWhiteGrayText2"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r0.setTextColor(r5)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.TextView r0 = r0.emptyTextView
-            r0.setGravity(r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.TextView r0 = r0.emptyTextView
-            r5 = 1099431936(0x41880000, float:17.0)
-            r10 = 1
-            r0.setTextSize(r10, r5)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.TextView r0 = r0.emptyTextView
-            r5 = 1109393408(0x42200000, float:40.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            android.widget.LinearLayout unused = r2.emptyView = r5
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.LinearLayout r2 = r2.emptyView
+            r2.setWillNotDraw(r8)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.LinearLayout r2 = r2.emptyView
+            r2.setOrientation(r9)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.LinearLayout r2 = r2.emptyView
+            r5 = 17
+            r2.setGravity(r5)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.LinearLayout r2 = r2.emptyView
+            r2.setVisibility(r4)
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r10 = r2[r14]
+            r2 = r2[r14]
+            android.widget.LinearLayout r2 = r2.emptyView
+            r12 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r3)
+            r10.addView(r2, r1)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.emptyView
+            org.telegram.ui.-$$Lambda$MediaActivity$KVxLpoziroW7rOfn3d0nOSI4Va4 r2 = org.telegram.ui.$$Lambda$MediaActivity$KVxLpoziroW7rOfn3d0nOSI4Va4.INSTANCE
+            r1.setOnTouchListener(r2)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r7)
+            android.widget.ImageView unused = r1.emptyImageView = r2
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.emptyView
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.ImageView r2 = r2.emptyImageView
+            r10 = -2
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r10)
+            r1.addView(r2, r12)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r7)
+            android.widget.TextView unused = r1.emptyTextView = r2
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.TextView r1 = r1.emptyTextView
+            java.lang.String r2 = "windowBackgroundWhiteGrayText2"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r1.setTextColor(r2)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.TextView r1 = r1.emptyTextView
+            r1.setGravity(r5)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.TextView r1 = r1.emptyTextView
+            r2 = 1099431936(0x41880000, float:17.0)
+            r1.setTextSize(r9, r2)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.TextView r1 = r1.emptyTextView
+            r2 = 1109393408(0x42200000, float:40.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r16 = 1124073472(0x43000000, float:128.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            r0.setPadding(r10, r8, r5, r11)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.emptyView
-            org.telegram.ui.MediaActivity$MediaPage[] r5 = r6.mediaPages
-            r5 = r5[r14]
-            android.widget.TextView r5 = r5.emptyTextView
-            r19 = -2
+            r1.setPadding(r12, r8, r2, r11)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.emptyView
+            org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
+            r2 = r2[r14]
+            android.widget.TextView r2 = r2.emptyTextView
             r20 = -2
-            r21 = 17
-            r22 = 0
-            r23 = 24
-            r24 = 0
+            r21 = -2
+            r22 = 17
+            r23 = 0
+            r24 = 24
             r25 = 0
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25)
-            r0.addView(r5, r10)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            org.telegram.ui.MediaActivity$14 r5 = new org.telegram.ui.MediaActivity$14
-            r5.<init>(r7)
-            android.widget.LinearLayout unused = r0.progressView = r5
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
-            r0.setWillNotDraw(r8)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
-            r0.setGravity(r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
-            r4 = 1
-            r0.setOrientation(r4)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
-            r0.setVisibility(r3)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r5 = r0[r14]
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
-            r10 = -1
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r2)
-            r5.addView(r0, r2)
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
+            r26 = 0
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r20, (int) r21, (int) r22, (int) r23, (int) r24, (int) r25, (int) r26)
+            r1.addView(r2, r11)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            org.telegram.ui.MediaActivity$14 r2 = new org.telegram.ui.MediaActivity$14
+            r2.<init>(r7)
+            android.widget.LinearLayout unused = r1.progressView = r2
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
+            r1.setWillNotDraw(r8)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
+            r1.setGravity(r5)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
+            r1.setOrientation(r9)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
+            r1.setVisibility(r4)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r2 = r1[r14]
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
+            r5 = -1
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r3)
+            r2.addView(r1, r3)
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
             org.telegram.ui.Components.RadialProgressView r2 = new org.telegram.ui.Components.RadialProgressView
             r2.<init>(r7)
-            org.telegram.ui.Components.RadialProgressView unused = r0.progressBar = r2
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            android.widget.LinearLayout r0 = r0.progressView
+            org.telegram.ui.Components.RadialProgressView unused = r1.progressBar = r2
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            android.widget.LinearLayout r1 = r1.progressView
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
             r2 = r2[r14]
             org.telegram.ui.Components.RadialProgressView r2 = r2.progressBar
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r9)
-            r0.addView(r2, r5)
-            if (r14 == 0) goto L_0x0579
-            org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
-            r0 = r0[r14]
-            r0.setVisibility(r3)
-        L_0x0579:
+            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r10)
+            r1.addView(r2, r3)
+            if (r14 == 0) goto L_0x0582
+            org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
+            r1 = r1[r14]
+            r1.setVisibility(r4)
+        L_0x0582:
             int r14 = r14 + 1
+            r1 = r0
             r0 = r15
-            r9 = 1
             r10 = -1
             r11 = 0
+            r12 = 2
             goto L_0x02cc
-        L_0x0581:
-            r4 = 1
+        L_0x058b:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x05a4
+            if (r0 != 0) goto L_0x05ad
             org.telegram.ui.Components.FragmentContextView r0 = new org.telegram.ui.Components.FragmentContextView
             r0.<init>(r7, r6, r8)
             r6.fragmentContextView = r0
@@ -1003,21 +1005,21 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r25 = 0
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r13.addView(r0, r1)
-        L_0x05a4:
+        L_0x05ad:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             r1 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r2 = -1
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r1)
             r13.addView(r0, r1)
-            r26.updateTabs()
+            r27.updateTabs()
             r6.switchToCurrentSelectedMode(r8)
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r6.scrollSlidingTextTabStrip
             int r0 = r0.getCurrentTabId()
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r6.scrollSlidingTextTabStrip
             int r1 = r1.getFirstTabId()
-            if (r0 != r1) goto L_0x05c5
+            if (r0 != r1) goto L_0x05ce
             r8 = 1
-        L_0x05c5:
+        L_0x05ce:
             r6.swipeBackEnabled = r8
             android.view.View r0 = r6.fragmentView
             return r0
@@ -1936,7 +1938,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r1)
             if (r0 != 0) goto L_0x00cf
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626752(0x7f0e0b00, float:1.888075E38)
+            r2 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r9 = "SharedMediaTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.addTextTab(r1, r2)
@@ -1948,14 +1950,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r6)
             if (r0 != 0) goto L_0x00eb
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626746(0x7f0e0afa, float:1.8880737E38)
+            r2 = 2131626747(0x7f0e0afb, float:1.8880739E38)
             java.lang.String r9 = "SharedFilesTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.addTextTab(r6, r2)
         L_0x00eb:
             long r9 = r12.dialog_id
             int r0 = (int) r9
-            r2 = 2131626754(0x7f0e0b02, float:1.8880753E38)
+            r2 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r9 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x0129
             int[] r0 = r12.hasMedia
@@ -1965,7 +1967,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r3)
             if (r0 != 0) goto L_0x0111
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r7 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r7 = 2131626751(0x7f0e0aff, float:1.8880747E38)
             java.lang.String r8 = "SharedLinksTab2"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.addTextTab(r3, r7)
@@ -2009,7 +2011,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x0178
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626757(0x7f0e0b05, float:1.888076E38)
+            r2 = 2131626758(0x7f0e0b06, float:1.8880761E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r4, r2)
@@ -2081,7 +2083,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r3 == 0) goto L_0x01e5
             r3 = 1101004800(0x41a00000, float:20.0)
             r11 = 1106247680(0x41var_, float:30.0)
-            r12 = 2131625812(0x7f0e0754, float:1.8878843E38)
+            r12 = 2131625813(0x7f0e0755, float:1.8878845E38)
             java.lang.String r13 = "NoResult"
             if (r21 == 0) goto L_0x0124
             org.telegram.ui.MediaActivity$MediaPage[] r14 = r0.mediaPages
@@ -2306,7 +2308,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625798(0x7f0e0746, float:1.8878814E38)
+            r3 = 2131625799(0x7f0e0747, float:1.8878816E38)
             java.lang.String r5 = "NoMediaSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2315,7 +2317,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625796(0x7f0e0744, float:1.887881E38)
+            r3 = 2131625797(0x7f0e0745, float:1.8878812E38)
             java.lang.String r5 = "NoMedia"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2345,7 +2347,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625817(0x7f0e0759, float:1.8878853E38)
+            r3 = 2131625818(0x7f0e075a, float:1.8878855E38)
             java.lang.String r5 = "NoSharedFilesSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2354,7 +2356,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625816(0x7f0e0758, float:1.887885E38)
+            r3 = 2131625817(0x7f0e0759, float:1.8878853E38)
             java.lang.String r5 = "NoSharedFiles"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2384,7 +2386,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625822(0x7f0e075e, float:1.8878863E38)
+            r3 = 2131625823(0x7f0e075f, float:1.8878865E38)
             java.lang.String r5 = "NoSharedVoiceSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2393,7 +2395,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625821(0x7f0e075d, float:1.887886E38)
+            r3 = 2131625822(0x7f0e075e, float:1.8878863E38)
             java.lang.String r5 = "NoSharedVoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2423,7 +2425,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625820(0x7f0e075c, float:1.8878859E38)
+            r3 = 2131625821(0x7f0e075d, float:1.887886E38)
             java.lang.String r5 = "NoSharedLinksSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2432,7 +2434,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625819(0x7f0e075b, float:1.8878857E38)
+            r3 = 2131625820(0x7f0e075c, float:1.8878859E38)
             java.lang.String r5 = "NoSharedLinks"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2462,7 +2464,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625815(0x7f0e0757, float:1.8878849E38)
+            r3 = 2131625816(0x7f0e0758, float:1.887885E38)
             java.lang.String r5 = "NoSharedAudioSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2471,7 +2473,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625814(0x7f0e0756, float:1.8878847E38)
+            r3 = 2131625815(0x7f0e0757, float:1.8878849E38)
             java.lang.String r5 = "NoSharedAudio"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)

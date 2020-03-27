@@ -376,6 +376,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        tick();
         drawChart(canvas);
         drawBottomLine(canvas);
         this.tmpN = this.horizontalLines.size();

@@ -409,7 +409,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (mediaController.writeFrame(mediaController.fileBuffer, !z ? MediaController.this.fileBuffer.limit() : byteBuffer.position()) != 0) {
                         MediaController.this.fileBuffer.rewind();
                         MediaController mediaController2 = MediaController.this;
-                        long unused = mediaController2.recordTimeCount = mediaController2.recordTimeCount + ((long) ((MediaController.this.fileBuffer.limit() / 2) / 48));
+                        long unused = mediaController2.recordTimeCount = mediaController2.recordTimeCount + ((long) ((MediaController.this.fileBuffer.limit() / 2) / (MediaController.this.sampleRate / 1000)));
                     }
                 }
                 if (i != -1) {
@@ -452,7 +452,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* access modifiers changed from: private */
     public int recordingGuid = -1;
     private boolean resumeAudioOnFocusGain;
-    public int sampleRate = 48000;
+    public int sampleRate = 16000;
     /* access modifiers changed from: private */
     public long samplesCount;
     /* access modifiers changed from: private */
@@ -1090,26 +1090,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public /* synthetic */ void lambda$new$2$MediaController() {
-        int parseInt;
         try {
-            if (Build.VERSION.SDK_INT >= 17) {
-                AudioManager audioManager = NotificationsController.audioManager;
-                String property = audioManager.getProperty("android.media.property.OUTPUT_SAMPLE_RATE");
-                if (property != null && ((parseInt = Integer.parseInt(property)) == 48000 || parseInt == 24000 || parseInt == 16000 || parseInt == 12000 || parseInt == 8000)) {
-                    this.sampleRate = parseInt;
-                }
-                String property2 = audioManager.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER");
-                if (property2 != null) {
-                    this.recordBufferSize = Integer.parseInt(property2) * 2;
-                }
-            }
-            int minBufferSize = AudioRecord.getMinBufferSize(this.sampleRate, 16, 2);
+            this.sampleRate = 16000;
+            int minBufferSize = AudioRecord.getMinBufferSize(16000, 16, 2);
             if (minBufferSize <= 0) {
                 minBufferSize = 1280;
             }
-            this.recordBufferSize = Math.max(this.recordBufferSize, minBufferSize * 10);
+            this.recordBufferSize = minBufferSize;
             for (int i = 0; i < 5; i++) {
-                ByteBuffer allocateDirect = ByteBuffer.allocateDirect(4096);
+                ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.recordBufferSize);
                 allocateDirect.order(ByteOrder.nativeOrder());
                 this.recordBuffers.add(allocateDirect);
             }
@@ -3639,7 +3628,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         File file = new File(FileLoader.getDirectory(4), FileLoader.getAttachFileName(this.recordingAudio));
         this.recordingAudioFile = file;
         try {
-            if (startRecord(file.getAbsolutePath(), this.sampleRate) == 0) {
+            if (startRecord(file.getAbsolutePath(), 16000) == 0) {
                 AndroidUtilities.runOnUIThread(new Runnable(i, i2) {
                     private final /* synthetic */ int f$1;
                     private final /* synthetic */ int f$2;
@@ -3723,7 +3712,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public /* synthetic */ void lambda$null$17$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
-        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(i2));
+        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(i2), true);
     }
 
     public void generateWaveform(MessageObject messageObject) {
@@ -3896,7 +3885,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             instance.postNotificationName(i4, objArr);
         } else {
             z2 = false;
-            NotificationCenter.getInstance(this.recordingCurrentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), false);
+            NotificationCenter.getInstance(this.recordingCurrentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), false, Integer.valueOf((int) j));
             file.delete();
         }
         requestAudioFocus(z2);
@@ -4019,7 +4008,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625568(0x7f0e0660, float:1.8878348E38)
+            r1 = 2131625569(0x7f0e0661, float:1.887835E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }
@@ -4842,7 +4831,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r37 = r5
             java.lang.String r5 = "AllPhotos"
             r38 = r7
-            r7 = 2131624153(0x7f0e00d9, float:1.8875478E38)
+            r7 = 2131624154(0x7f0e00da, float:1.887548E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r7)     // Catch:{ all -> 0x020c }
             r7 = 0
             r4.<init>(r7, r5, r3)     // Catch:{ all -> 0x020c }
@@ -4857,7 +4846,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x0187
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0182 }
             r39 = r8
-            r7 = 2131624152(0x7f0e00d8, float:1.8875476E38)
+            r7 = 2131624153(0x7f0e00d9, float:1.8875478E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r1, r7)     // Catch:{ all -> 0x0182 }
             r7 = 0
             r5.<init>(r7, r8, r3)     // Catch:{ all -> 0x0182 }
@@ -5153,7 +5142,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0439 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
-            r6 = 2131624154(0x7f0e00da, float:1.887548E38)
+            r6 = 2131624155(0x7f0e00db, float:1.8875482E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0439 }
             r6 = 0
             r4.<init>(r6, r5, r3)     // Catch:{ all -> 0x0439 }
@@ -5176,7 +5165,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x03d9
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03d4 }
             r20 = r7
-            r6 = 2131624152(0x7f0e00d8, float:1.8875476E38)
+            r6 = 2131624153(0x7f0e00d9, float:1.8875478E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03d4 }
             r6 = 0
             r5.<init>(r6, r7, r3)     // Catch:{ all -> 0x03d4 }

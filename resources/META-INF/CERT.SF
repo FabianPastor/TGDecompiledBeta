@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: eWgVSWKQ0QkS79LoT8tUP2FMGeU=
+SHA1-Digest-Manifest: ihXkVaz2UCkQvqX7lY8n2YPRJkQ=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: tMUgHKSfjdV2d+A9Q+fSPcuuQXE=
+SHA1-Digest: CaJ71CZkRnEL/v+JA6rsKSW4V/4=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -88,19 +88,19 @@ Name: assets/PhoneFormats.dat
 SHA1-Digest: VkZQbSGwSVwFrDRP8ehCRSbVoSc=
 
 Name: assets/arctic.attheme
-SHA1-Digest: UcbPz33nCoK1TEvKk3K+nWG3OLI=
+SHA1-Digest: VmWC3mInaToQNyBY76NO3OT5fF4=
 
 Name: assets/bluebubbles.attheme
-SHA1-Digest: 9yOX+Yh1ezl5mnwBWuM/giLZgBs=
+SHA1-Digest: PFmMRp3mmM5IT96fYYc161pBAH8=
 
 Name: assets/countries.txt
 SHA1-Digest: TgKwRWkFRuCT6aDcijIMY+MWNxc=
 
 Name: assets/darkblue.attheme
-SHA1-Digest: sq8aLL74Xbf+oZcoquUHJV09RoE=
+SHA1-Digest: VNBOjKNAlKHjjn7L4cYjDQzyBME=
 
 Name: assets/day.attheme
-SHA1-Digest: 2l/ehLvrRO8kq8ZSvi07VQvBFPs=
+SHA1-Digest: TI2RdMy/J51gs5pZkzF92ihlzxw=
 
 Name: assets/emoji/0_0.png
 SHA1-Digest: n+GLO3bx9AVCVy5AJy5caWi4z8k=
@@ -9490,10 +9490,10 @@ Name: assets/fonts/rmono.ttf
 SHA1-Digest: DRPsXBqw99JCQnYgoW+b7lejCF4=
 
 Name: assets/libtgvoip.dex
-SHA1-Digest: 64VjlxpTkmhMP/Urlh4rrzfoBAs=
+SHA1-Digest: vjoTkPJl+MC1VkW3uKujhlSaCgs=
 
 Name: assets/night.attheme
-SHA1-Digest: k+zWoJc0+5AFtAm7BIxhjrNgMiM=
+SHA1-Digest: GPfa/3CrrDKasctwcgRlp4HC7iM=
 
 Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: NqKe5SgnDZ6x81LrUFDah/g9v14=
@@ -9502,7 +9502,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: LQM3RfwJJlSPS8WHFm6L4DmRKGA=
+SHA1-Digest: Rkp8iYh96eo8MS1EF2+EibI5B3o=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9559,7 +9559,7 @@ Name: lib/arm64-v8a/libtgvoip2.1.so
 SHA1-Digest: SmSvrStXKc4TqBVOoJXMnmUmxxQ=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: aV3TbVOoFhGg7BeTTTxr8F0299c=
+SHA1-Digest: b2Oj3BLDFRdgo5dajlY4IBd/gCU=
 
 Name: lib/armeabi-v7a/libc++_shared.so
 SHA1-Digest: ++8Qss3XvWwauNvEFDjqBK9QQek=
@@ -9571,7 +9571,7 @@ Name: lib/armeabi-v7a/libtgvoip2.1.so
 SHA1-Digest: JvoRonDMaXMUzlr+VVm8OCdWPNo=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: FSKIed7NauThCVGwArspkVoriOY=
+SHA1-Digest: vCc2o1WVEBAW8cFvP4SVy+hLYqU=
 
 Name: lib/x86/libc++_shared.so
 SHA1-Digest: Y5YuN910ghU+FM8To8JtXiUnXTM=
@@ -9583,7 +9583,7 @@ Name: lib/x86/libtgvoip2.1.so
 SHA1-Digest: f/q0vlCRasR46eg0TTq8K6CBy7Q=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: z8We/oPWeJCC71f4ZkI8EaibGqM=
+SHA1-Digest: 9oJqdB5F4riCQm/jlq90Fz7EAxA=
 
 Name: lib/x86_64/libc++_shared.so
 SHA1-Digest: u3pKAd681z837JZKrhsWXo7HCFc=
@@ -9595,7 +9595,7 @@ Name: lib/x86_64/libtgvoip2.1.so
 SHA1-Digest: wJRPe901AZi98n083d2wsyWorUI=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: IHhsWoTvPOClQeXWVSvE+/1xtik=
+SHA1-Digest: vfLahpu/8igQeOQqawmGt1K2DPo=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -18503,10 +18503,10 @@ Name: res/raw/wallet_toobad.tgs
 SHA1-Digest: zW82Z1oPJDIfvErxFpNxEvp1XQA=
 
 Name: res/xml/auth.xml
-SHA1-Digest: vsFtss01UVz/4h60nVe3Y9eQqps=
+SHA1-Digest: NnonCx+XMgJrrbzBOTxEszolmNQ=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: SY48txr+S6OS6O1VU31AwxMhYCQ=
+SHA1-Digest: upWL9/pCmw8aiZld21F394mgV5o=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18521,7 +18521,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: Xom6pMbi3ZbYJFXqu9xphxSefTA=
+SHA1-Digest: bGm5cf0VkW0ZzIgYtVbfiIuG7qs=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

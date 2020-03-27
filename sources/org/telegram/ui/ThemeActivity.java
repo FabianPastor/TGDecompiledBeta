@@ -623,6 +623,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 this.themeInfoRow = i53;
             }
         }
+        ThemesHorizontalListCell themesHorizontalListCell4 = this.themesHorizontalListCell;
+        if (themesHorizontalListCell4 != null) {
+            themesHorizontalListCell4.notifyDataSetChanged(this.listView.getWidth());
+        }
         ListAdapter listAdapter2 = this.listAdapter;
         if (listAdapter2 != null) {
             if (this.currentType == 1 && (i2 = this.previousUpdatedType) != (i3 = Theme.selectedAutoNightType) && i2 != -1) {
@@ -706,10 +710,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     }
                 }
             } else if (z || this.previousUpdatedType == -1) {
-                ThemesHorizontalListCell themesHorizontalListCell4 = this.themesHorizontalListCell;
-                if (themesHorizontalListCell4 != null) {
-                    themesHorizontalListCell4.notifyDataSetChanged(this.listView.getWidth());
-                }
                 this.listAdapter.notifyDataSetChanged();
             } else if (i6 == -1 && (i = this.themeAccentListRow) != -1) {
                 this.listAdapter.notifyItemInserted(i);
@@ -1803,7 +1803,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131626728(0x7f0e0ae8, float:1.88807E38)
+                r0 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1846,21 +1846,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131624914(0x7f0e03d2, float:1.8877021E38)
+                r10 = 2131624915(0x7f0e03d3, float:1.8877023E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131624913(0x7f0e03d1, float:1.887702E38)
+                r10 = 2131624914(0x7f0e03d2, float:1.8877021E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131624869(0x7f0e03a5, float:1.887693E38)
+                r10 = 2131624870(0x7f0e03a6, float:1.8876932E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624483(0x7f0e0223, float:1.8876147E38)
+                r8 = 2131624484(0x7f0e0224, float:1.887615E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)

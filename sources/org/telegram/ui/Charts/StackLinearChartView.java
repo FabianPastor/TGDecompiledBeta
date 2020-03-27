@@ -694,6 +694,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        tick();
         drawChart(canvas);
         drawBottomLine(canvas);
         this.tmpN = this.horizontalLines.size();

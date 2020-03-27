@@ -926,6 +926,8 @@ public class MessagesStorage extends BaseController {
         this.archiveUnreadCount = 0;
         this.pendingMainUnreadCount = 0;
         this.pendingArchiveUnreadCount = 0;
+        this.dialogFilters.clear();
+        this.dialogFiltersMap.clear();
         this.lastSavedSeq = 0;
         this.lastSavedPts = 0;
         this.lastSavedDate = 0;
@@ -3656,7 +3658,7 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: processLoadedFilterPeersInternal */
     public void lambda$processLoadedFilterPeers$35$MessagesStorage(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Integer>> hashMap, HashMap<Integer, HashSet<Integer>> hashMap2, HashSet<Integer> hashSet) {
-        ArrayList<Integer> arrayList5 = arrayList4;
+        ArrayList<TLRPC$User> arrayList5 = arrayList;
         putUsersAndChats(arrayList, arrayList2, true, false);
         int size = sparseArray.size();
         int i = 0;
@@ -3692,21 +3694,23 @@ public class MessagesStorage extends BaseController {
                 z = true;
             }
         }
-        int size2 = this.dialogFilters.size();
-        boolean z2 = false;
-        for (int i2 = 0; i2 < size2; i2++) {
-            this.dialogFilters.get(i2).order = arrayList5.indexOf(Integer.valueOf(this.dialogFilters.get(i2).id));
-            if (!z2 && arrayList5.indexOf(Integer.valueOf(this.dialogFilters.get(i2).id)) != i2) {
-                z = true;
-                z2 = true;
-            }
-        }
-        int size3 = arrayList3.size();
-        int i3 = 0;
-        while (i3 < size3) {
-            saveDialogFilterInternal(arrayList3.get(i3), false, true);
-            i3++;
+        int size2 = arrayList3.size();
+        int i2 = 0;
+        while (i2 < size2) {
+            saveDialogFilterInternal(arrayList3.get(i2), false, true);
+            i2++;
             z = true;
+        }
+        int size3 = this.dialogFilters.size();
+        boolean z2 = false;
+        for (int i3 = 0; i3 < size3; i3++) {
+            MessagesController.DialogFilter dialogFilter4 = this.dialogFilters.get(i3);
+            int indexOf = arrayList4.indexOf(Integer.valueOf(dialogFilter4.id));
+            if (dialogFilter4.order != indexOf) {
+                dialogFilter4.order = indexOf;
+                z2 = true;
+                z = true;
+            }
         }
         if (z2) {
             Collections.sort(this.dialogFilters, $$Lambda$MessagesStorage$7kgjEdOltrge18vTqvmqXZnfbo8.INSTANCE);
@@ -3819,9 +3823,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$37$MessagesStorage() {
-        int size = getMessagesStorage().dialogFilters.size();
+        ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
+        int size = arrayList.size();
         for (int i = 0; i < size; i++) {
-            getMessagesStorage().dialogFilters.get(i).unreadCount = getMessagesStorage().dialogFilters.get(i).pendingUnreadCount;
+            arrayList.get(i).unreadCount = arrayList.get(i).pendingUnreadCount;
         }
         this.mainUnreadCount = this.pendingMainUnreadCount;
         this.archiveUnreadCount = this.pendingArchiveUnreadCount;
@@ -6865,9 +6870,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$updateFiltersReadCounter$70$MessagesStorage() {
-        int size = getMessagesStorage().dialogFilters.size();
+        ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
+        int size = arrayList.size();
         for (int i = 0; i < size; i++) {
-            getMessagesStorage().dialogFilters.get(i).unreadCount = getMessagesStorage().dialogFilters.get(i).pendingUnreadCount;
+            arrayList.get(i).unreadCount = arrayList.get(i).pendingUnreadCount;
         }
         this.mainUnreadCount = this.pendingMainUnreadCount;
         this.archiveUnreadCount = this.pendingArchiveUnreadCount;
@@ -21757,9 +21763,10 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$resetAllUnreadCounters$156$MessagesStorage() {
-        int size = getMessagesStorage().dialogFilters.size();
+        ArrayList<MessagesController.DialogFilter> arrayList = getMessagesController().dialogFilters;
+        int size = arrayList.size();
         for (int i = 0; i < size; i++) {
-            getMessagesStorage().dialogFilters.get(i).unreadCount = getMessagesStorage().dialogFilters.get(i).pendingUnreadCount;
+            arrayList.get(i).unreadCount = arrayList.get(i).pendingUnreadCount;
         }
         this.mainUnreadCount = this.pendingMainUnreadCount;
         this.archiveUnreadCount = this.pendingArchiveUnreadCount;

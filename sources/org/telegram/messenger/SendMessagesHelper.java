@@ -4479,7 +4479,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             android.app.Activity r4 = r17.getParentActivity()
             r3.<init>((android.content.Context) r4)
             r3.setTitle(r1)
-            r1 = 2131625983(0x7f0e07ff, float:1.887919E38)
+            r1 = 2131625984(0x7f0e0800, float:1.8879191E38)
             java.lang.String r4 = "OK"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r3.setPositiveButton(r1, r7)
@@ -12515,10 +12515,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v5, resolved type: org.telegram.tgnet.TLRPC$TL_photo} */
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x03ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x03c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x03cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x0417  */
+    /* JADX WARNING: Removed duplicated region for block: B:166:0x03bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:169:0x03c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:172:0x03cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x0418  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static /* synthetic */ void lambda$prepareSendingBotContextResult$62(long r20, org.telegram.tgnet.TLRPC$BotInlineResult r22, org.telegram.messenger.AccountInstance r23, java.util.HashMap r24, org.telegram.messenger.MessageObject r25, boolean r26, int r27) {
         /*
@@ -12567,14 +12567,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0 = 0
             r2 = 0
             r6 = 0
-            goto L_0x03ff
+            goto L_0x0400
         L_0x004c:
             boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_botInlineMediaResult
             if (r0 == 0) goto L_0x006d
             org.telegram.tgnet.TLRPC$Document r0 = r10.document
             if (r0 == 0) goto L_0x0061
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_document
-            if (r3 == 0) goto L_0x03f9
+            if (r3 == 0) goto L_0x03fa
             org.telegram.tgnet.TLRPC$TL_document r0 = (org.telegram.tgnet.TLRPC$TL_document) r0
             r2 = r0
             r0 = 0
@@ -12582,18 +12582,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r6 = 0
         L_0x005d:
             r18 = 0
-            goto L_0x03ff
+            goto L_0x0400
         L_0x0061:
             org.telegram.tgnet.TLRPC$Photo r0 = r10.photo
-            if (r0 == 0) goto L_0x03f9
+            if (r0 == 0) goto L_0x03fa
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_photo
-            if (r3 == 0) goto L_0x03f9
+            if (r3 == 0) goto L_0x03fa
             org.telegram.tgnet.TLRPC$TL_photo r0 = (org.telegram.tgnet.TLRPC$TL_photo) r0
             r2 = 0
             goto L_0x005c
         L_0x006d:
             org.telegram.tgnet.TLRPC$WebDocument r0 = r10.content
-            if (r0 == 0) goto L_0x03f9
+            if (r0 == 0) goto L_0x03fa
             java.io.File r0 = new java.io.File
             r3 = 4
             java.io.File r6 = org.telegram.messenger.FileLoader.getDirectory(r3)
@@ -12628,84 +12628,84 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r1 = "gif"
             java.lang.String r5 = "sticker"
             switch(r14) {
-                case -1890252483: goto L_0x00f6;
-                case 102340: goto L_0x00ee;
-                case 3143036: goto L_0x00e6;
-                case 93166550: goto L_0x00de;
-                case 106642994: goto L_0x00d4;
-                case 112202875: goto L_0x00cc;
-                case 112386354: goto L_0x00c4;
-                default: goto L_0x00c3;
+                case -1890252483: goto L_0x00f7;
+                case 102340: goto L_0x00ef;
+                case 3143036: goto L_0x00e7;
+                case 93166550: goto L_0x00df;
+                case 106642994: goto L_0x00d5;
+                case 112202875: goto L_0x00cd;
+                case 112386354: goto L_0x00c5;
+                default: goto L_0x00c4;
             }
-        L_0x00c3:
-            goto L_0x00fe
         L_0x00c4:
+            goto L_0x00ff
+        L_0x00c5:
             boolean r9 = r9.equals(r4)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 1
-            goto L_0x00ff
-        L_0x00cc:
+            goto L_0x0100
+        L_0x00cd:
             boolean r9 = r9.equals(r3)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 3
-            goto L_0x00ff
-        L_0x00d4:
+            goto L_0x0100
+        L_0x00d5:
             java.lang.String r14 = "photo"
             boolean r9 = r9.equals(r14)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 6
-            goto L_0x00ff
-        L_0x00de:
+            goto L_0x0100
+        L_0x00df:
             boolean r9 = r9.equals(r2)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 0
-            goto L_0x00ff
-        L_0x00e6:
+            goto L_0x0100
+        L_0x00e7:
             boolean r9 = r9.equals(r15)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 2
-            goto L_0x00ff
-        L_0x00ee:
+            goto L_0x0100
+        L_0x00ef:
             boolean r9 = r9.equals(r1)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 5
-            goto L_0x00ff
-        L_0x00f6:
+            goto L_0x0100
+        L_0x00f7:
             boolean r9 = r9.equals(r5)
-            if (r9 == 0) goto L_0x00fe
+            if (r9 == 0) goto L_0x00ff
             r9 = 4
-            goto L_0x00ff
-        L_0x00fe:
-            r9 = -1
+            goto L_0x0100
         L_0x00ff:
+            r9 = -1
+        L_0x0100:
             java.lang.String r14 = "x"
             switch(r9) {
-                case 0: goto L_0x0158;
-                case 1: goto L_0x0158;
-                case 2: goto L_0x0158;
-                case 3: goto L_0x0158;
-                case 4: goto L_0x0158;
-                case 5: goto L_0x0158;
-                case 6: goto L_0x010c;
-                default: goto L_0x0105;
+                case 0: goto L_0x0159;
+                case 1: goto L_0x0159;
+                case 2: goto L_0x0159;
+                case 3: goto L_0x0159;
+                case 4: goto L_0x0159;
+                case 5: goto L_0x0159;
+                case 6: goto L_0x010d;
+                default: goto L_0x0106;
             }
-        L_0x0105:
+        L_0x0106:
             r5 = 0
             r0 = r5
             r2 = r0
             r18 = r2
-            goto L_0x03ff
-        L_0x010c:
+            goto L_0x0400
+        L_0x010d:
             boolean r0 = r0.exists()
-            if (r0 == 0) goto L_0x011c
+            if (r0 == 0) goto L_0x011d
             org.telegram.messenger.SendMessagesHelper r0 = r23.getSendMessagesHelper()
             r1 = 0
             org.telegram.tgnet.TLRPC$TL_photo r0 = r0.generatePhotoSizes(r6, r1)
-            goto L_0x011d
-        L_0x011c:
-            r0 = 0
+            goto L_0x011e
         L_0x011d:
-            if (r0 != 0) goto L_0x0155
+            r0 = 0
+        L_0x011e:
+            if (r0 != 0) goto L_0x0156
             org.telegram.tgnet.TLRPC$TL_photo r0 = new org.telegram.tgnet.TLRPC$TL_photo
             r0.<init>()
             org.telegram.tgnet.ConnectionsManager r1 = r23.getConnectionsManager()
@@ -12729,10 +12729,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2.type = r14
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r0.sizes
             r1.add(r2)
-        L_0x0155:
+        L_0x0156:
             r2 = 0
             goto L_0x005d
-        L_0x0158:
+        L_0x0159:
             org.telegram.tgnet.TLRPC$TL_document r9 = new org.telegram.tgnet.TLRPC$TL_document
             r9.<init>()
             r7 = 0
@@ -12755,66 +12755,66 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r8 = r10.type
             int r19 = r8.hashCode()
             switch(r19) {
-                case -1890252483: goto L_0x01b6;
-                case 102340: goto L_0x01ae;
-                case 3143036: goto L_0x01a6;
-                case 93166550: goto L_0x019e;
-                case 112202875: goto L_0x0196;
-                case 112386354: goto L_0x018e;
-                default: goto L_0x018d;
+                case -1890252483: goto L_0x01b7;
+                case 102340: goto L_0x01af;
+                case 3143036: goto L_0x01a7;
+                case 93166550: goto L_0x019f;
+                case 112202875: goto L_0x0197;
+                case 112386354: goto L_0x018f;
+                default: goto L_0x018e;
             }
-        L_0x018d:
-            goto L_0x01be
         L_0x018e:
+            goto L_0x01bf
+        L_0x018f:
             boolean r1 = r8.equals(r4)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 1
-            goto L_0x01bf
-        L_0x0196:
+            goto L_0x01c0
+        L_0x0197:
             boolean r1 = r8.equals(r3)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 4
-            goto L_0x01bf
-        L_0x019e:
+            goto L_0x01c0
+        L_0x019f:
             boolean r1 = r8.equals(r2)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 2
-            goto L_0x01bf
-        L_0x01a6:
+            goto L_0x01c0
+        L_0x01a7:
             boolean r1 = r8.equals(r15)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 3
-            goto L_0x01bf
-        L_0x01ae:
+            goto L_0x01c0
+        L_0x01af:
             boolean r1 = r8.equals(r1)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 0
-            goto L_0x01bf
-        L_0x01b6:
+            goto L_0x01c0
+        L_0x01b7:
             boolean r1 = r8.equals(r5)
-            if (r1 == 0) goto L_0x01be
+            if (r1 == 0) goto L_0x01bf
             r1 = 5
-            goto L_0x01bf
-        L_0x01be:
-            r1 = -1
+            goto L_0x01c0
         L_0x01bf:
+            r1 = -1
+        L_0x01c0:
             r2 = 55
-            if (r1 == 0) goto L_0x0356
+            if (r1 == 0) goto L_0x0357
             r3 = 1
-            if (r1 == r3) goto L_0x033d
+            if (r1 == r3) goto L_0x033e
             r3 = 2
-            if (r1 == r3) goto L_0x0313
+            if (r1 == r3) goto L_0x0314
             r0 = 3
-            if (r1 == r0) goto L_0x02e3
+            if (r1 == r0) goto L_0x02e4
             r0 = 1119092736(0x42b40000, float:90.0)
             r3 = 4
-            if (r1 == r3) goto L_0x0264
+            if (r1 == r3) goto L_0x0265
             r3 = 5
-            if (r1 == r3) goto L_0x01d7
-        L_0x01d4:
+            if (r1 == r3) goto L_0x01d8
+        L_0x01d5:
             r5 = 0
-            goto L_0x03b6
-        L_0x01d7:
+            goto L_0x03b7
+        L_0x01d8:
             org.telegram.tgnet.TLRPC$TL_documentAttributeSticker r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeSticker
             r1.<init>()
             java.lang.String r3 = ""
@@ -12837,47 +12837,47 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r3.add(r1)
             java.lang.String r1 = "sticker.webp"
             r7.file_name = r1
-            org.telegram.tgnet.TLRPC$WebDocument r1 = r10.thumb     // Catch:{ all -> 0x025e }
-            if (r1 == 0) goto L_0x01d4
-            java.io.File r1 = new java.io.File     // Catch:{ all -> 0x025e }
+            org.telegram.tgnet.TLRPC$WebDocument r1 = r10.thumb     // Catch:{ all -> 0x025f }
+            if (r1 == 0) goto L_0x01d5
+            java.io.File r1 = new java.io.File     // Catch:{ all -> 0x025f }
             r3 = 4
-            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x025e }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x025e }
-            r4.<init>()     // Catch:{ all -> 0x025e }
-            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x025e }
-            java.lang.String r5 = r5.url     // Catch:{ all -> 0x025e }
-            java.lang.String r5 = org.telegram.messenger.Utilities.MD5(r5)     // Catch:{ all -> 0x025e }
-            r4.append(r5)     // Catch:{ all -> 0x025e }
-            r4.append(r13)     // Catch:{ all -> 0x025e }
-            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x025e }
-            java.lang.String r5 = r5.url     // Catch:{ all -> 0x025e }
+            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x025f }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x025f }
+            r4.<init>()     // Catch:{ all -> 0x025f }
+            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x025f }
+            java.lang.String r5 = r5.url     // Catch:{ all -> 0x025f }
+            java.lang.String r5 = org.telegram.messenger.Utilities.MD5(r5)     // Catch:{ all -> 0x025f }
+            r4.append(r5)     // Catch:{ all -> 0x025f }
+            r4.append(r13)     // Catch:{ all -> 0x025f }
+            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x025f }
+            java.lang.String r5 = r5.url     // Catch:{ all -> 0x025f }
             java.lang.String r8 = "webp"
-            java.lang.String r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r8)     // Catch:{ all -> 0x025e }
-            r4.append(r5)     // Catch:{ all -> 0x025e }
-            java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x025e }
-            r1.<init>(r3, r4)     // Catch:{ all -> 0x025e }
-            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ all -> 0x025e }
+            java.lang.String r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r8)     // Catch:{ all -> 0x025f }
+            r4.append(r5)     // Catch:{ all -> 0x025f }
+            java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x025f }
+            r1.<init>(r3, r4)     // Catch:{ all -> 0x025f }
+            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ all -> 0x025f }
             r3 = 0
             r4 = 1
-            android.graphics.Bitmap r1 = org.telegram.messenger.ImageLoader.loadBitmap(r1, r3, r0, r0, r4)     // Catch:{ all -> 0x025e }
-            if (r1 == 0) goto L_0x01d4
+            android.graphics.Bitmap r1 = org.telegram.messenger.ImageLoader.loadBitmap(r1, r3, r0, r0, r4)     // Catch:{ all -> 0x025f }
+            if (r1 == 0) goto L_0x01d5
             r3 = 0
-            org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r1, r0, r0, r2, r3)     // Catch:{ all -> 0x025e }
-            if (r0 == 0) goto L_0x0259
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.thumbs     // Catch:{ all -> 0x025e }
-            r2.add(r0)     // Catch:{ all -> 0x025e }
-            int r0 = r9.flags     // Catch:{ all -> 0x025e }
+            org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r1, r0, r0, r2, r3)     // Catch:{ all -> 0x025f }
+            if (r0 == 0) goto L_0x025a
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.thumbs     // Catch:{ all -> 0x025f }
+            r2.add(r0)     // Catch:{ all -> 0x025f }
+            int r0 = r9.flags     // Catch:{ all -> 0x025f }
             r2 = 1
             r0 = r0 | r2
-            r9.flags = r0     // Catch:{ all -> 0x025e }
-        L_0x0259:
-            r1.recycle()     // Catch:{ all -> 0x025e }
-            goto L_0x01d4
-        L_0x025e:
+            r9.flags = r0     // Catch:{ all -> 0x025f }
+        L_0x025a:
+            r1.recycle()     // Catch:{ all -> 0x025f }
+            goto L_0x01d5
+        L_0x025f:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x01d4
-        L_0x0264:
+            goto L_0x01d5
+        L_0x0265:
             java.lang.String r1 = "video.mp4"
             r7.file_name = r1
             org.telegram.tgnet.TLRPC$TL_documentAttributeVideo r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
@@ -12894,53 +12894,53 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1.supports_streaming = r4
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r9.attributes
             r3.add(r1)
-            org.telegram.tgnet.TLRPC$WebDocument r1 = r10.thumb     // Catch:{ all -> 0x02dd }
-            if (r1 == 0) goto L_0x01d4
-            java.io.File r1 = new java.io.File     // Catch:{ all -> 0x02dd }
+            org.telegram.tgnet.TLRPC$WebDocument r1 = r10.thumb     // Catch:{ all -> 0x02de }
+            if (r1 == 0) goto L_0x01d5
+            java.io.File r1 = new java.io.File     // Catch:{ all -> 0x02de }
             r3 = 4
-            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x02dd }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x02dd }
-            r4.<init>()     // Catch:{ all -> 0x02dd }
-            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x02dd }
-            java.lang.String r5 = r5.url     // Catch:{ all -> 0x02dd }
-            java.lang.String r5 = org.telegram.messenger.Utilities.MD5(r5)     // Catch:{ all -> 0x02dd }
-            r4.append(r5)     // Catch:{ all -> 0x02dd }
-            r4.append(r13)     // Catch:{ all -> 0x02dd }
-            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x02dd }
-            java.lang.String r5 = r5.url     // Catch:{ all -> 0x02dd }
+            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x02de }
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x02de }
+            r4.<init>()     // Catch:{ all -> 0x02de }
+            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x02de }
+            java.lang.String r5 = r5.url     // Catch:{ all -> 0x02de }
+            java.lang.String r5 = org.telegram.messenger.Utilities.MD5(r5)     // Catch:{ all -> 0x02de }
+            r4.append(r5)     // Catch:{ all -> 0x02de }
+            r4.append(r13)     // Catch:{ all -> 0x02de }
+            org.telegram.tgnet.TLRPC$WebDocument r5 = r10.thumb     // Catch:{ all -> 0x02de }
+            java.lang.String r5 = r5.url     // Catch:{ all -> 0x02de }
             java.lang.String r8 = "jpg"
-            java.lang.String r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r8)     // Catch:{ all -> 0x02dd }
-            r4.append(r5)     // Catch:{ all -> 0x02dd }
-            java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x02dd }
-            r1.<init>(r3, r4)     // Catch:{ all -> 0x02dd }
-            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ all -> 0x02dd }
+            java.lang.String r5 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r5, r8)     // Catch:{ all -> 0x02de }
+            r4.append(r5)     // Catch:{ all -> 0x02de }
+            java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x02de }
+            r1.<init>(r3, r4)     // Catch:{ all -> 0x02de }
+            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ all -> 0x02de }
             r3 = 0
             r4 = 1
-            android.graphics.Bitmap r1 = org.telegram.messenger.ImageLoader.loadBitmap(r1, r3, r0, r0, r4)     // Catch:{ all -> 0x02dd }
-            if (r1 == 0) goto L_0x01d4
+            android.graphics.Bitmap r1 = org.telegram.messenger.ImageLoader.loadBitmap(r1, r3, r0, r0, r4)     // Catch:{ all -> 0x02de }
+            if (r1 == 0) goto L_0x01d5
             r3 = 0
-            org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r1, r0, r0, r2, r3)     // Catch:{ all -> 0x02dd }
-            if (r0 == 0) goto L_0x02d8
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.thumbs     // Catch:{ all -> 0x02dd }
-            r2.add(r0)     // Catch:{ all -> 0x02dd }
-            int r0 = r9.flags     // Catch:{ all -> 0x02dd }
+            org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r1, r0, r0, r2, r3)     // Catch:{ all -> 0x02de }
+            if (r0 == 0) goto L_0x02d9
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.thumbs     // Catch:{ all -> 0x02de }
+            r2.add(r0)     // Catch:{ all -> 0x02de }
+            int r0 = r9.flags     // Catch:{ all -> 0x02de }
             r2 = 1
             r0 = r0 | r2
-            r9.flags = r0     // Catch:{ all -> 0x02dd }
-        L_0x02d8:
-            r1.recycle()     // Catch:{ all -> 0x02dd }
-            goto L_0x01d4
-        L_0x02dd:
+            r9.flags = r0     // Catch:{ all -> 0x02de }
+        L_0x02d9:
+            r1.recycle()     // Catch:{ all -> 0x02de }
+            goto L_0x01d5
+        L_0x02de:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x01d4
-        L_0x02e3:
+            goto L_0x01d5
+        L_0x02e4:
             org.telegram.tgnet.TLRPC$WebDocument r0 = r10.content
             java.lang.String r0 = r0.mime_type
             r1 = 47
             int r0 = r0.lastIndexOf(r1)
             r1 = -1
-            if (r0 == r1) goto L_0x030f
+            if (r0 == r1) goto L_0x0310
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = "file."
@@ -12953,11 +12953,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             r7.file_name = r0
-            goto L_0x01d4
-        L_0x030f:
+            goto L_0x01d5
+        L_0x0310:
             r7.file_name = r15
-            goto L_0x01d4
-        L_0x0313:
+            goto L_0x01d5
+        L_0x0314:
             org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
             r0.<init>()
             int r1 = org.telegram.messenger.MessageObject.getInlineResultDuration(r22)
@@ -12969,18 +12969,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r1 | r2
             r0.flags = r1
             java.lang.String r2 = r10.description
-            if (r2 == 0) goto L_0x0332
+            if (r2 == 0) goto L_0x0333
             r0.performer = r2
             r2 = 2
             r1 = r1 | r2
             r0.flags = r1
-        L_0x0332:
+        L_0x0333:
             java.lang.String r1 = "audio.mp3"
             r7.file_name = r1
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r1 = r9.attributes
             r1.add(r0)
-            goto L_0x01d4
-        L_0x033d:
+            goto L_0x01d5
+        L_0x033e:
             org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
             r0.<init>()
             int r1 = org.telegram.messenger.MessageObject.getInlineResultDuration(r22)
@@ -12991,81 +12991,81 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.file_name = r1
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r1 = r9.attributes
             r1.add(r0)
-            goto L_0x01d4
-        L_0x0356:
+            goto L_0x01d5
+        L_0x0357:
             java.lang.String r0 = "animation.gif"
             r7.file_name = r0
             java.lang.String r0 = "mp4"
             boolean r1 = r6.endsWith(r0)
-            if (r1 == 0) goto L_0x0371
+            if (r1 == 0) goto L_0x0372
             java.lang.String r1 = "video/mp4"
             r9.mime_type = r1
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r1 = r9.attributes
             org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated r3 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated
             r3.<init>()
             r1.add(r3)
-            goto L_0x0375
-        L_0x0371:
+            goto L_0x0376
+        L_0x0372:
             java.lang.String r1 = "image/gif"
             r9.mime_type = r1
-        L_0x0375:
+        L_0x0376:
             r1 = 90
-            if (r12 == 0) goto L_0x037c
+            if (r12 == 0) goto L_0x037d
             r3 = 90
-            goto L_0x037e
-        L_0x037c:
+            goto L_0x037f
+        L_0x037d:
             r3 = 320(0x140, float:4.48E-43)
-        L_0x037e:
-            boolean r0 = r6.endsWith(r0)     // Catch:{ all -> 0x03b1 }
-            if (r0 == 0) goto L_0x038b
+        L_0x037f:
+            boolean r0 = r6.endsWith(r0)     // Catch:{ all -> 0x03b2 }
+            if (r0 == 0) goto L_0x038c
             r4 = 1
-            android.graphics.Bitmap r0 = android.media.ThumbnailUtils.createVideoThumbnail(r6, r4)     // Catch:{ all -> 0x03b1 }
+            android.graphics.Bitmap r0 = android.media.ThumbnailUtils.createVideoThumbnail(r6, r4)     // Catch:{ all -> 0x03b2 }
             r5 = 0
-            goto L_0x0392
-        L_0x038b:
+            goto L_0x0393
+        L_0x038c:
             r4 = 1
             float r0 = (float) r3
             r5 = 0
-            android.graphics.Bitmap r0 = org.telegram.messenger.ImageLoader.loadBitmap(r6, r5, r0, r0, r4)     // Catch:{ all -> 0x03af }
-        L_0x0392:
-            if (r0 == 0) goto L_0x03b6
-            float r4 = (float) r3     // Catch:{ all -> 0x03af }
-            if (r3 <= r1) goto L_0x0399
+            android.graphics.Bitmap r0 = org.telegram.messenger.ImageLoader.loadBitmap(r6, r5, r0, r0, r4)     // Catch:{ all -> 0x03b0 }
+        L_0x0393:
+            if (r0 == 0) goto L_0x03b7
+            float r4 = (float) r3     // Catch:{ all -> 0x03b0 }
+            if (r3 <= r1) goto L_0x039a
             r2 = 80
-        L_0x0399:
+        L_0x039a:
             r1 = 0
-            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r4, r2, r1)     // Catch:{ all -> 0x03af }
-            if (r2 == 0) goto L_0x03ab
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.thumbs     // Catch:{ all -> 0x03af }
-            r1.add(r2)     // Catch:{ all -> 0x03af }
-            int r1 = r9.flags     // Catch:{ all -> 0x03af }
+            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r4, r4, r2, r1)     // Catch:{ all -> 0x03b0 }
+            if (r2 == 0) goto L_0x03ac
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.thumbs     // Catch:{ all -> 0x03b0 }
+            r1.add(r2)     // Catch:{ all -> 0x03b0 }
+            int r1 = r9.flags     // Catch:{ all -> 0x03b0 }
             r2 = 1
             r1 = r1 | r2
-            r9.flags = r1     // Catch:{ all -> 0x03af }
-        L_0x03ab:
-            r0.recycle()     // Catch:{ all -> 0x03af }
-            goto L_0x03b6
-        L_0x03af:
+            r9.flags = r1     // Catch:{ all -> 0x03b0 }
+        L_0x03ac:
+            r0.recycle()     // Catch:{ all -> 0x03b0 }
+            goto L_0x03b7
+        L_0x03b0:
             r0 = move-exception
-            goto L_0x03b3
-        L_0x03b1:
+            goto L_0x03b4
+        L_0x03b2:
             r0 = move-exception
             r5 = 0
-        L_0x03b3:
+        L_0x03b4:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x03b6:
+        L_0x03b7:
             java.lang.String r0 = r7.file_name
-            if (r0 != 0) goto L_0x03bc
+            if (r0 != 0) goto L_0x03bd
             r7.file_name = r15
-        L_0x03bc:
+        L_0x03bd:
             java.lang.String r0 = r9.mime_type
-            if (r0 != 0) goto L_0x03c4
+            if (r0 != 0) goto L_0x03c5
             java.lang.String r0 = "application/octet-stream"
             r9.mime_type = r0
-        L_0x03c4:
+        L_0x03c5:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r9.thumbs
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x03f4
+            if (r0 == 0) goto L_0x03f5
             org.telegram.tgnet.TLRPC$TL_photoSize r0 = new org.telegram.tgnet.TLRPC$TL_photoSize
             r0.<init>()
             int[] r1 = org.telegram.messenger.MessageObject.getInlineResultWidthAndHeight(r22)
@@ -13085,38 +13085,38 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r0 = r9.flags
             r0 = r0 | r3
             r9.flags = r0
-        L_0x03f4:
+        L_0x03f5:
             r0 = r5
             r18 = r0
             r2 = r9
-            goto L_0x03ff
-        L_0x03f9:
+            goto L_0x0400
+        L_0x03fa:
             r5 = 0
             r0 = r5
             r2 = r0
             r6 = r2
             r18 = r6
-        L_0x03ff:
-            if (r11 == 0) goto L_0x040c
+        L_0x0400:
+            if (r11 == 0) goto L_0x040d
             org.telegram.tgnet.TLRPC$WebDocument r1 = r10.content
-            if (r1 == 0) goto L_0x040c
+            if (r1 == 0) goto L_0x040d
             java.lang.String r1 = r1.url
             java.lang.String r3 = "originalPath"
             r11.put(r3, r1)
-        L_0x040c:
+        L_0x040d:
             r1 = 1
             android.graphics.Bitmap[] r3 = new android.graphics.Bitmap[r1]
             java.lang.String[] r4 = new java.lang.String[r1]
             boolean r5 = org.telegram.messenger.MessageObject.isGifDocument((org.telegram.tgnet.TLRPC$Document) r2)
-            if (r5 == 0) goto L_0x0440
+            if (r5 == 0) goto L_0x0441
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r5 = r2.thumbs
             r7 = 320(0x140, float:4.48E-43)
             org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r7)
             java.io.File r7 = org.telegram.messenger.FileLoader.getPathToAttach(r2)
             boolean r8 = r7.exists()
-            if (r8 != 0) goto L_0x042d
+            if (r8 != 0) goto L_0x042e
             java.io.File r7 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r1)
-        L_0x042d:
+        L_0x042e:
             java.lang.String r14 = r7.getAbsolutePath()
             r15 = 0
             r16 = 0
@@ -13126,7 +13126,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r1 = getKeyForPhotoSize(r5, r3, r1, r1)
             r5 = 0
             r4[r5] = r1
-        L_0x0440:
+        L_0x0441:
             org.telegram.messenger.-$$Lambda$SendMessagesHelper$MIZbjfh6Bb5p9kEGsqUHYA3MKhI r16 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$MIZbjfh6Bb5p9kEGsqUHYA3MKhI
             r1 = r16
             r5 = r23

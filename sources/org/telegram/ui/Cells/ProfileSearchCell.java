@@ -312,7 +312,7 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
             if (this.savedMessages) {
-                this.nameTop = AndroidUtilities.dp(19.0f);
+                this.nameTop = AndroidUtilities.dp(20.0f);
                 charSequence = null;
             }
         } else {

@@ -55,7 +55,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.GraySectionCell;
-import org.telegram.ui.Cells.GroupCreateSectionCell;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -100,6 +99,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
     public boolean searching;
     /* access modifiers changed from: private */
     public SparseArray<GroupCreateSpan> selectedContacts = new SparseArray<>();
+    private int selectedCount;
     /* access modifiers changed from: private */
     public SpansContainer spansContainer;
 
@@ -107,8 +107,16 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         void didSelectChats(ArrayList<Integer> arrayList, int i);
     }
 
-    /* access modifiers changed from: private */
-    public void updateHint() {
+    static /* synthetic */ int access$508(FilterUsersActivity filterUsersActivity) {
+        int i = filterUsersActivity.selectedCount;
+        filterUsersActivity.selectedCount = i + 1;
+        return i;
+    }
+
+    static /* synthetic */ int access$510(FilterUsersActivity filterUsersActivity) {
+        int i = filterUsersActivity.selectedCount;
+        filterUsersActivity.selectedCount = i - 1;
+        return i;
     }
 
     private static class ItemDecoration extends RecyclerView.ItemDecoration {
@@ -125,7 +133,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             while (i < childCount) {
                 View childAt = recyclerView.getChildAt(i);
                 View childAt2 = i < childCount + -1 ? recyclerView.getChildAt(i + 1) : null;
-                if (recyclerView.getChildAdapterPosition(childAt) >= this.skipRows && !(childAt instanceof GraySectionCell) && !(childAt2 instanceof GraySectionCell) && !(childAt instanceof GroupCreateSectionCell) && !(childAt2 instanceof GroupCreateSectionCell)) {
+                if (recyclerView.getChildAdapterPosition(childAt) >= this.skipRows && !(childAt instanceof GraySectionCell) && !(childAt2 instanceof GraySectionCell)) {
                     float bottom = (float) childAt.getBottom();
                     canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), bottom, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), bottom, Theme.dividerPaint);
                 }
@@ -258,7 +266,11 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
         public void addSpan(GroupCreateSpan groupCreateSpan, boolean z) {
             FilterUsersActivity.this.allSpans.add(groupCreateSpan);
-            FilterUsersActivity.this.selectedContacts.put(groupCreateSpan.getUid(), groupCreateSpan);
+            int uid = groupCreateSpan.getUid();
+            if (uid > -NUM) {
+                FilterUsersActivity.access$508(FilterUsersActivity.this);
+            }
+            FilterUsersActivity.this.selectedContacts.put(uid, groupCreateSpan);
             FilterUsersActivity.this.editText.setHintVisible(false);
             AnimatorSet animatorSet = this.currentAnimation;
             if (animatorSet != null) {
@@ -289,7 +301,11 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
         public void removeSpan(final GroupCreateSpan groupCreateSpan) {
             boolean unused = FilterUsersActivity.this.ignoreScrollEvent = true;
-            FilterUsersActivity.this.selectedContacts.remove(groupCreateSpan.getUid());
+            int uid = groupCreateSpan.getUid();
+            if (uid > -NUM) {
+                FilterUsersActivity.access$510(FilterUsersActivity.this);
+            }
+            FilterUsersActivity.this.selectedContacts.remove(uid);
             FilterUsersActivity.this.allSpans.remove(groupCreateSpan);
             groupCreateSpan.setOnClickListener((View.OnClickListener) null);
             AnimatorSet animatorSet = this.currentAnimation;
@@ -730,7 +746,8 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             Object object = groupCreateUserCell.getObject();
-            if (object instanceof String) {
+            boolean z = object instanceof String;
+            if (z) {
                 if (this.isInclude) {
                     if (i == 1) {
                         i3 = MessagesController.DIALOG_FILTER_FLAG_CONTACTS;
@@ -770,10 +787,10 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             } else {
                 return;
             }
-            boolean z = this.selectedContacts.indexOfKey(i2) >= 0;
-            if (z) {
+            boolean z2 = this.selectedContacts.indexOfKey(i2) >= 0;
+            if (z2) {
                 this.spansContainer.removeSpan(this.selectedContacts.get(i2));
-            } else {
+            } else if (z || this.selectedContacts.size() != 100) {
                 if (object instanceof TLRPC$User) {
                     MessagesController.getInstance(this.currentAccount).putUser((TLRPC$User) object, !this.searching);
                 } else if (object instanceof TLRPC$Chat) {
@@ -782,12 +799,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 GroupCreateSpan groupCreateSpan = new GroupCreateSpan(this.editText.getContext(), object);
                 this.spansContainer.addSpan(groupCreateSpan, true);
                 groupCreateSpan.setOnClickListener(this);
+            } else {
+                return;
             }
             updateHint();
             if (this.searching || this.searchWas) {
                 AndroidUtilities.showKeyboard(this.editText);
             } else {
-                groupCreateUserCell.setChecked(!z, true);
+                groupCreateUserCell.setChecked(!z2, true);
             }
             if (this.editText.length() > 0) {
                 this.editText.setText((CharSequence) null);
@@ -976,6 +995,16 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
     }
 
+    /* access modifiers changed from: private */
+    public void updateHint() {
+        int i = this.selectedCount;
+        if (i == 0) {
+            this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", NUM, LocaleController.formatPluralString("Chats", 100)));
+            return;
+        }
+        this.actionBar.setSubtitle(String.format(LocaleController.getPluralString("MembersCountSelected", i), new Object[]{Integer.valueOf(this.selectedCount), 100}));
+    }
+
     public void setDelegate(FilterUsersActivityDelegate filterUsersActivityDelegate) {
         this.delegate = filterUsersActivityDelegate;
     }
@@ -1060,21 +1089,21 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
 
         public int getItemCount() {
+            int i;
+            int size;
             if (this.searching) {
-                int size = this.searchResult.size();
-                int size2 = this.searchAdapterHelper.getLocalServerSearch().size();
-                int size3 = this.searchAdapterHelper.getGlobalSearch().size();
-                int i = size + size2;
-                return size3 != 0 ? i + size3 + 1 : i;
+                i = this.searchResult.size();
+                size = this.searchAdapterHelper.getLocalServerSearch().size() + this.searchAdapterHelper.getGlobalSearch().size();
+            } else {
+                i = FilterUsersActivity.this.isInclude ? 7 : 5;
+                size = this.contacts.size();
             }
-            return (FilterUsersActivity.this.isInclude ? 7 : 5) + this.contacts.size();
+            return i + size;
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
-            if (i == 0) {
-                view = new GroupCreateSectionCell(this.context);
-            } else if (i != 1) {
+            if (i != 1) {
                 view = new GraySectionCell(this.context);
             } else {
                 view = new GroupCreateUserCell(this.context, true, 0);
@@ -1092,12 +1121,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             CharSequence charSequence;
             String str3;
             int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0) {
-                GroupCreateSectionCell groupCreateSectionCell = (GroupCreateSectionCell) viewHolder.itemView;
-                if (this.searching) {
-                    groupCreateSectionCell.setText(LocaleController.getString("GlobalSearch", NUM));
-                }
-            } else if (itemViewType == 1) {
+            if (itemViewType == 1) {
                 GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) viewHolder.itemView;
                 SpannableStringBuilder spannableStringBuilder2 = null;
                 if (this.searching) {
@@ -1107,7 +1131,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                     if (i >= 0 && i < size) {
                         obj = this.searchResult.get(i);
                     } else if (i < size || i >= size3 + size) {
-                        obj = (i <= size + size3 || i > (size2 + size) + size3) ? null : this.searchAdapterHelper.getGlobalSearch().get(((i - size) - size3) - 1);
+                        obj = (i <= size + size3 || i >= (size2 + size) + size3) ? null : this.searchAdapterHelper.getGlobalSearch().get((i - size) - size3);
                     } else {
                         obj = this.searchAdapterHelper.getLocalServerSearch().get(i - size);
                     }
@@ -1226,20 +1250,17 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
 
         public int getItemViewType(int i) {
-            if (!this.searching) {
-                if (FilterUsersActivity.this.isInclude) {
-                    if (i == 0 || i == 6) {
-                        return 2;
-                    }
-                } else if (i == 0 || i == 4) {
-                    return 2;
-                }
-                return 1;
-            } else if (i == this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
-                return 0;
-            } else {
+            if (this.searching) {
                 return 1;
             }
+            if (FilterUsersActivity.this.isInclude) {
+                if (i == 0 || i == 6) {
+                    return 2;
+                }
+            } else if (i == 0 || i == 4) {
+                return 2;
+            }
+            return 1;
         }
 
         public int getPositionForScrollProgress(float f) {
@@ -1356,7 +1377,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                     }
                 } else {
                     TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
-                    strArr2[c] = tLRPC$Chat.title;
+                    strArr2[c] = tLRPC$Chat.title.toLowerCase();
                     str2 = tLRPC$Chat.username;
                 }
                 strArr2[c2] = LocaleController.getInstance().getTranslitString(strArr2[c]);
@@ -1398,7 +1419,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         i2 = i;
                     }
                     c3 = 1;
-                    if (c3 == 0 && str2 != null && str2.startsWith(str5)) {
+                    if (c3 == 0 && str2 != null && str2.toLowerCase().startsWith(str5)) {
                         c3 = 2;
                     }
                     if (c3 != 0) {
@@ -1467,7 +1488,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             }
         };
         $$Lambda$FilterUsersActivity$FkdQ8n3AovYcSu1SMsLugchoUng r7 = r9;
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_hintText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_cursor"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionShadow"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxDisabled"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue")};
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollActive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollInactive"), new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "fastScrollText"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"), new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"), new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_hintText"), new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_cursor"), new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_sectionText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkbox"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxDisabled"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"), new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanBackground"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanText"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "groupcreate_spanDelete"), new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue")};
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$3$FilterUsersActivity() {

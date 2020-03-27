@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.util.Base64;
 import java.io.File;
+import java.util.Arrays;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC$TL_account_tmpPassword;
 import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
@@ -578,15 +579,11 @@ public class UserConfig extends BaseController {
     public void resetSavedPassword() {
         this.savedPasswordTime = 0;
         if (this.savedPasswordHash != null) {
-            for (int i = 0; i < this.savedPasswordHash.length; i++) {
-                this.savedPasswordHash[i] = 0;
-            }
+            Arrays.fill(this.savedPasswordHash, (byte) 0);
             this.savedPasswordHash = null;
         }
         if (this.savedSaltedPassword != null) {
-            for (int i2 = 0; i2 < this.savedSaltedPassword.length; i2++) {
-                this.savedSaltedPassword[i2] = 0;
-            }
+            Arrays.fill(this.savedSaltedPassword, (byte) 0);
             this.savedSaltedPassword = null;
         }
     }

@@ -565,6 +565,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 RecyclerListView unused6 = this.viewPages[i].listView = this.contactsActivity.getListView();
                 this.viewPages[i].setVisibility(8);
             }
+            this.viewPages[i].listView.setScrollingTouchSlop(1);
             ViewPage[] viewPageArr2 = this.viewPages;
             FrameLayout unused7 = viewPageArr2[i].fragmentView = (FrameLayout) viewPageArr2[i].parentFragment.getFragmentView();
             ViewPage[] viewPageArr3 = this.viewPages;

@@ -1021,6 +1021,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         if (this.clearOldFrames) {
             this.renderingBitmap = null;
             this.nextRenderingBitmap = null;
+            this.loadFrameTask = null;
         }
         if (!scheduleNextGetFrame()) {
             this.forceFrameRedraw = true;

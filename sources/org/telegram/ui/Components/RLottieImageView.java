@@ -111,4 +111,8 @@ public class RLottieImageView extends ImageView {
             }
         }
     }
+
+    public RLottieDrawable getAnimatedDrawable() {
+        return this.drawable;
+    }
 }

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Charts.data.ChartData;
@@ -404,26 +405,26 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
             }
             float f2 = degrees / 360.0f;
             int i3 = -1;
+            boolean z = false;
             int i4 = 0;
-            int i5 = 0;
             float f3 = 0.0f;
             while (true) {
-                if (i5 >= this.lines.size()) {
+                if (i4 >= this.lines.size()) {
                     f3 = 0.0f;
                     break;
                 }
-                if (((PieChartViewData) this.lines.get(i5)).enabled || ((PieChartViewData) this.lines.get(i5)).alpha != 0.0f) {
+                if (((PieChartViewData) this.lines.get(i4)).enabled || ((PieChartViewData) this.lines.get(i4)).alpha != 0.0f) {
                     if (f2 > f3) {
                         float[] fArr = this.darawingValuesPercentage;
-                        if (f2 < fArr[i5] + f3) {
-                            f = f3 + fArr[i5];
-                            i3 = i5;
+                        if (f2 < fArr[i4] + f3) {
+                            f = f3 + fArr[i4];
+                            i3 = i4;
                             break;
                         }
                     }
-                    f3 += this.darawingValuesPercentage[i5];
+                    f3 += this.darawingValuesPercentage[i4];
                 }
-                i5++;
+                i4++;
             }
             if (this.currentSelection != i3 && i3 >= 0) {
                 this.currentSelection = i3;
@@ -444,8 +445,8 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                 Double.isNaN(width);
                 Double.isNaN(centerX2);
                 int min = (int) Math.min(d3, centerX2 + (cos2 * width));
-                if (min >= 0) {
-                    i4 = min;
+                if (min < 0) {
+                    min = 0;
                 }
                 double centerY = (double) this.rectF.centerY();
                 double sin = Math.sin(Math.toRadians(d4));
@@ -457,8 +458,14 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                 Double.isNaN(width);
                 Double.isNaN(centerY2);
                 int min2 = ((int) Math.min(this.rectF.centerY(), (float) ((int) Math.min(d5, centerY2 + (width * sin2))))) - AndroidUtilities.dp(50.0f);
-                this.pieLegendView.setTranslationX((float) i4);
+                this.pieLegendView.setTranslationX((float) min);
                 this.pieLegendView.setTranslationY((float) min2);
+                if (Build.VERSION.SDK_INT >= 27) {
+                    z = performHapticFeedback(9, 2);
+                }
+                if (!z) {
+                    performHapticFeedback(3, 2);
+                }
             }
             moveLegend();
         }

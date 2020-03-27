@@ -527,7 +527,7 @@ public class PollVotesAlert extends BottomSheet {
         }
     }
 
-    private class Button {
+    private static class Button {
         /* access modifiers changed from: private */
         public float decimal;
         /* access modifiers changed from: private */
@@ -535,7 +535,7 @@ public class PollVotesAlert extends BottomSheet {
         /* access modifiers changed from: private */
         public int votesCount;
 
-        private Button(PollVotesAlert pollVotesAlert) {
+        private Button() {
         }
     }
 
@@ -1027,16 +1027,18 @@ public class PollVotesAlert extends BottomSheet {
                     }
                 } else if (view instanceof UserCell) {
                     UserCell userCell = (UserCell) view;
-                    TLRPC$User currentUser = chatActivity2.getCurrentUser();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("user_id", userCell.currentUser.id);
-                    dismiss();
-                    ProfileActivity profileActivity = new ProfileActivity(bundle);
-                    if (currentUser != null && currentUser.id == userCell.currentUser.id) {
-                        i2 = 1;
+                    if (userCell.currentUser != null) {
+                        TLRPC$User currentUser = chatActivity2.getCurrentUser();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("user_id", userCell.currentUser.id);
+                        dismiss();
+                        ProfileActivity profileActivity = new ProfileActivity(bundle);
+                        if (currentUser != null && currentUser.id == userCell.currentUser.id) {
+                            i2 = 1;
+                        }
+                        profileActivity.setPlayProfileAnimation(i2);
+                        chatActivity2.presentFragment(profileActivity);
                     }
-                    profileActivity.setPlayProfileAnimation(i2);
-                    chatActivity2.presentFragment(profileActivity);
                 }
             }
         }

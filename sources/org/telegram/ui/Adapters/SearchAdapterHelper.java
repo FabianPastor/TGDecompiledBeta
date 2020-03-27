@@ -36,7 +36,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$User;
 
 public class SearchAdapterHelper {
-    private boolean allResultsAreGlobal = true;
+    private boolean allResultsAreGlobal;
     private boolean allowGlobalResults = true;
     private int channelLastReqId;
     private int channelReqId = 0;
@@ -89,6 +89,7 @@ public class SearchAdapterHelper {
     }
 
     public SearchAdapterHelper(boolean z) {
+        this.allResultsAreGlobal = z;
     }
 
     public void setAllowGlobalResults(boolean z) {
@@ -329,7 +330,7 @@ public class SearchAdapterHelper {
         TLRPC$User tLRPC$User2;
         TLRPC$Chat tLRPC$Chat2;
         int i3 = i2;
-        if (i == this.lastReqId && this.delegate.canApplySearchResults(i2)) {
+        if (i == this.lastReqId && this.delegate.canApplySearchResults(i3)) {
             this.reqId = 0;
             if (tLRPC$TL_error == null) {
                 TLRPC$TL_contacts_found tLRPC$TL_contacts_found = (TLRPC$TL_contacts_found) tLObject;
@@ -350,14 +351,11 @@ public class SearchAdapterHelper {
                     sparseArray2.put(tLRPC$User3.id, tLRPC$User3);
                 }
                 for (int i6 = 0; i6 < 2; i6++) {
-                    if (i6 == 0) {
-                        if (!this.allResultsAreGlobal) {
-                        } else {
-                            arrayList = tLRPC$TL_contacts_found.my_results;
-                        }
-                    } else if (!this.allowGlobalResults) {
-                    } else {
+                    if (i6 != 0) {
                         arrayList = tLRPC$TL_contacts_found.results;
+                    } else if (!this.allResultsAreGlobal) {
+                    } else {
+                        arrayList = tLRPC$TL_contacts_found.my_results;
                     }
                     for (int i7 = 0; i7 < arrayList.size(); i7++) {
                         TLRPC$Peer tLRPC$Peer = arrayList.get(i7);
@@ -381,11 +379,11 @@ public class SearchAdapterHelper {
                             tLRPC$User2 = null;
                         }
                         if (tLRPC$Chat2 != null) {
-                            if (z && (!z2 || ChatObject.canAddBotsToChat(tLRPC$Chat2))) {
+                            if (z && ((!z2 || ChatObject.canAddBotsToChat(tLRPC$Chat2)) && (this.allowGlobalResults || !ChatObject.isNotInChat(tLRPC$Chat2)))) {
                                 this.globalSearch.add(tLRPC$Chat2);
                                 this.globalSearchMap.put(-tLRPC$Chat2.id, tLRPC$Chat2);
                             }
-                        } else if (tLRPC$User2 != null && !z2 && ((z3 || !tLRPC$User2.bot) && (z4 || !tLRPC$User2.self))) {
+                        } else if (tLRPC$User2 != null && !z2 && ((z3 || !tLRPC$User2.bot) && ((z4 || !tLRPC$User2.self) && (this.allowGlobalResults || i6 != 1 || tLRPC$User2.contact)))) {
                             this.globalSearch.add(tLRPC$User2);
                             this.globalSearchMap.put(tLRPC$User2.id, tLRPC$User2);
                         }
@@ -430,7 +428,7 @@ public class SearchAdapterHelper {
                     mergeResults(arrayList2);
                 }
                 mergeExcludeResults();
-                this.delegate.onDataSetChanged(i2);
+                this.delegate.onDataSetChanged(i3);
             }
         }
     }

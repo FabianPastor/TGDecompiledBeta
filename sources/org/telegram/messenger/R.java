@@ -1468,6 +1468,7 @@ public final class R {
         public static final int AddToTheGroupAlertText = NUM;
         public static final int AddToTheGroupAlertTitle = NUM;
         public static final int AddToTheGroupForwardCount = NUM;
+        public static final int AddUserErrorBlacklisted = NUM;
         public static final int AddedToFavorites = NUM;
         public static final int AdminWillBeRemoved = NUM;
         public static final int Agree = NUM;

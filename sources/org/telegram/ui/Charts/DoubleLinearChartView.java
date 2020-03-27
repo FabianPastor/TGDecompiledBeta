@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import java.util.Iterator;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.data.ChartData;
 import org.telegram.ui.Charts.data.DoubleLinearChartData;
 import org.telegram.ui.Charts.view_data.ChartHorizontalLinesData;
@@ -244,47 +243,211 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
     }
 
     /* access modifiers changed from: protected */
-    public void drawSignaturesToHorizontalLines(Canvas canvas, ChartHorizontalLinesData chartHorizontalLinesData) {
-        Canvas canvas2 = canvas;
-        ChartHorizontalLinesData chartHorizontalLinesData2 = chartHorizontalLinesData;
-        int length = chartHorizontalLinesData2.values.length;
-        float f = 1.0f;
-        int i = ((DoubleLinearChartData) this.chartData).linesK[0] == 1.0f ? 1 : 0;
-        int i2 = (i + 1) % 2;
-        int i3 = this.transitionMode;
-        if (i3 == 2) {
-            f = 1.0f - this.transitionParams.progress;
-        } else if (i3 == 1) {
-            f = this.transitionParams.progress;
-        } else if (i3 == 3) {
-            f = this.transitionParams.progress;
-        }
-        this.linePaint.setAlpha((int) (((float) chartHorizontalLinesData2.alpha) * 0.1f * f));
-        int measuredHeight = getMeasuredHeight() - this.chartBottom;
-        int i4 = BaseChartView.SIGNATURE_TEXT_HEIGHT;
-        int i5 = measuredHeight - i4;
-        int textSize = (int) (((float) i4) - this.signaturePaint.getTextSize());
-        for (int i6 = 0; i6 < length; i6++) {
-            float f2 = this.currentMinHeight;
-            int measuredHeight2 = (int) (((float) (getMeasuredHeight() - this.chartBottom)) - (((float) i5) * ((((float) chartHorizontalLinesData2.values[i6]) - f2) / (this.currentMaxHeight - f2))));
-            if (chartHorizontalLinesData2.valuesStr != null && this.lines.size() > 0) {
-                if (chartHorizontalLinesData2.valuesStr2 == null || this.lines.size() < 2) {
-                    this.signaturePaint.setColor(Theme.getColor("statisticChartSignature"));
-                    this.signaturePaint.setAlpha((int) (((float) chartHorizontalLinesData2.alpha) * this.signaturePaintAlpha * f));
-                } else {
-                    this.signaturePaint.setColor(((LineViewData) this.lines.get(i2)).lineColor);
-                    this.signaturePaint.setAlpha((int) (((float) chartHorizontalLinesData2.alpha) * ((LineViewData) this.lines.get(i2)).alpha * f));
-                }
-                canvas2.drawText(chartHorizontalLinesData2.valuesStr[i6], (float) BaseChartView.HORIZONTAL_PADDING, (float) (measuredHeight2 - textSize), this.signaturePaint);
-            }
-            if (chartHorizontalLinesData2.valuesStr2 != null) {
-                if (this.lines.size() > 1) {
-                    this.signaturePaint2.setColor(((LineViewData) this.lines.get(i)).lineColor);
-                    this.signaturePaint2.setAlpha((int) (((float) chartHorizontalLinesData2.alpha) * ((LineViewData) this.lines.get(i)).alpha * f));
-                    canvas2.drawText(chartHorizontalLinesData2.valuesStr2[i6], (float) (getMeasuredWidth() - BaseChartView.HORIZONTAL_PADDING), (float) (measuredHeight2 - textSize), this.signaturePaint2);
-                }
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x004b  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x007b  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void drawSignaturesToHorizontalLines(android.graphics.Canvas r18, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData r19) {
+        /*
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            r2 = r19
+            int[] r3 = r2.values
+            int r3 = r3.length
+            T r4 = r0.chartData
+            org.telegram.ui.Charts.data.DoubleLinearChartData r4 = (org.telegram.ui.Charts.data.DoubleLinearChartData) r4
+            float[] r4 = r4.linesK
+            r5 = 0
+            r4 = r4[r5]
+            r6 = 1065353216(0x3var_, float:1.0)
+            r7 = 1
+            int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r4 != 0) goto L_0x001b
+            r4 = 1
+            goto L_0x001c
+        L_0x001b:
+            r4 = 0
+        L_0x001c:
+            int r8 = r4 + 1
+            r9 = 2
+            int r8 = r8 % r9
+            r10 = 1036831949(0x3dcccccd, float:0.1)
+            if (r3 <= r9) goto L_0x003f
+            int[] r11 = r2.values
+            r12 = r11[r7]
+            r11 = r11[r5]
+            int r12 = r12 - r11
+            float r11 = (float) r12
+            float r12 = r0.currentMaxHeight
+            float r13 = r0.currentMinHeight
+            float r12 = r12 - r13
+            float r11 = r11 / r12
+            double r12 = (double) r11
+            r14 = 4591870180066957722(0x3fb999999999999a, double:0.1)
+            int r16 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
+            if (r16 >= 0) goto L_0x003f
+            float r11 = r11 / r10
+            goto L_0x0041
+        L_0x003f:
+            r11 = 1065353216(0x3var_, float:1.0)
+        L_0x0041:
+            int r12 = r0.transitionMode
+            if (r12 != r9) goto L_0x004b
+            org.telegram.ui.Charts.view_data.TransitionParams r12 = r0.transitionParams
+            float r12 = r12.progress
+            float r6 = r6 - r12
+            goto L_0x0059
+        L_0x004b:
+            if (r12 != r7) goto L_0x0052
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            float r6 = r6.progress
+            goto L_0x0059
+        L_0x0052:
+            r13 = 3
+            if (r12 != r13) goto L_0x0059
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            float r6 = r6.progress
+        L_0x0059:
+            android.graphics.Paint r12 = r0.linePaint
+            int r13 = r2.alpha
+            float r13 = (float) r13
+            float r13 = r13 * r10
+            float r13 = r13 * r6
+            int r10 = (int) r13
+            r12.setAlpha(r10)
+            int r10 = r17.getMeasuredHeight()
+            int r12 = r0.chartBottom
+            int r10 = r10 - r12
+            int r12 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
+            int r10 = r10 - r12
+            float r12 = (float) r12
+            android.graphics.Paint r13 = r0.signaturePaint
+            float r13 = r13.getTextSize()
+            float r12 = r12 - r13
+            int r12 = (int) r12
+        L_0x0079:
+            if (r5 >= r3) goto L_0x0153
+            int r13 = r17.getMeasuredHeight()
+            int r14 = r0.chartBottom
+            int r13 = r13 - r14
+            float r13 = (float) r13
+            float r14 = (float) r10
+            int[] r15 = r2.values
+            r15 = r15[r5]
+            float r15 = (float) r15
+            float r7 = r0.currentMinHeight
+            float r15 = r15 - r7
+            float r9 = r0.currentMaxHeight
+            float r9 = r9 - r7
+            float r15 = r15 / r9
+            float r14 = r14 * r15
+            float r13 = r13 - r14
+            int r7 = (int) r13
+            java.lang.String[] r9 = r2.valuesStr
+            if (r9 == 0) goto L_0x0103
+            java.util.ArrayList<L> r9 = r0.lines
+            int r9 = r9.size()
+            if (r9 <= 0) goto L_0x0103
+            java.lang.String[] r9 = r2.valuesStr2
+            if (r9 == 0) goto L_0x00d7
+            java.util.ArrayList<L> r9 = r0.lines
+            int r9 = r9.size()
+            r13 = 2
+            if (r9 >= r13) goto L_0x00ae
+            goto L_0x00d8
+        L_0x00ae:
+            android.graphics.Paint r9 = r0.signaturePaint
+            java.util.ArrayList<L> r14 = r0.lines
+            java.lang.Object r14 = r14.get(r8)
+            org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
+            int r14 = r14.lineColor
+            r9.setColor(r14)
+            android.graphics.Paint r9 = r0.signaturePaint
+            int r14 = r2.alpha
+            float r14 = (float) r14
+            java.util.ArrayList<L> r15 = r0.lines
+            java.lang.Object r15 = r15.get(r8)
+            org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
+            float r15 = r15.alpha
+            float r14 = r14 * r15
+            float r14 = r14 * r6
+            float r14 = r14 * r11
+            int r14 = (int) r14
+            r9.setAlpha(r14)
+            goto L_0x00f4
+        L_0x00d7:
+            r13 = 2
+        L_0x00d8:
+            android.graphics.Paint r9 = r0.signaturePaint
+            java.lang.String r14 = "statisticChartSignature"
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r9.setColor(r14)
+            android.graphics.Paint r9 = r0.signaturePaint
+            int r14 = r2.alpha
+            float r14 = (float) r14
+            float r15 = r0.signaturePaintAlpha
+            float r14 = r14 * r15
+            float r14 = r14 * r6
+            float r14 = r14 * r11
+            int r14 = (int) r14
+            r9.setAlpha(r14)
+        L_0x00f4:
+            java.lang.String[] r9 = r2.valuesStr
+            r9 = r9[r5]
+            int r14 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
+            float r14 = (float) r14
+            int r15 = r7 - r12
+            float r15 = (float) r15
+            android.graphics.Paint r13 = r0.signaturePaint
+            r1.drawText(r9, r14, r15, r13)
+        L_0x0103:
+            java.lang.String[] r9 = r2.valuesStr2
+            if (r9 == 0) goto L_0x014c
+            java.util.ArrayList<L> r9 = r0.lines
+            int r9 = r9.size()
+            r13 = 1
+            if (r9 <= r13) goto L_0x014d
+            android.graphics.Paint r9 = r0.signaturePaint2
+            java.util.ArrayList<L> r14 = r0.lines
+            java.lang.Object r14 = r14.get(r4)
+            org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
+            int r14 = r14.lineColor
+            r9.setColor(r14)
+            android.graphics.Paint r9 = r0.signaturePaint2
+            int r14 = r2.alpha
+            float r14 = (float) r14
+            java.util.ArrayList<L> r15 = r0.lines
+            java.lang.Object r15 = r15.get(r4)
+            org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
+            float r15 = r15.alpha
+            float r14 = r14 * r15
+            float r14 = r14 * r6
+            float r14 = r14 * r11
+            int r14 = (int) r14
+            r9.setAlpha(r14)
+            java.lang.String[] r9 = r2.valuesStr2
+            r9 = r9[r5]
+            int r14 = r17.getMeasuredWidth()
+            int r15 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
+            int r14 = r14 - r15
+            float r14 = (float) r14
+            int r7 = r7 - r12
+            float r7 = (float) r7
+            android.graphics.Paint r15 = r0.signaturePaint2
+            r1.drawText(r9, r14, r7, r15)
+            goto L_0x014d
+        L_0x014c:
+            r13 = 1
+        L_0x014d:
+            int r5 = r5 + 1
+            r7 = 1
+            r9 = 2
+            goto L_0x0079
+        L_0x0153:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.DoubleLinearChartView.drawSignaturesToHorizontalLines(android.graphics.Canvas, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData):void");
     }
 
     public LineViewData createLineViewData(ChartData.Line line) {

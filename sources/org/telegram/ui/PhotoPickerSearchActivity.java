@@ -708,6 +708,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 RecyclerListView unused4 = this.viewPages[i2].listView = this.gifsSearch.getListView();
                 this.viewPages[i2].setVisibility(8);
             }
+            this.viewPages[i2].listView.setScrollingTouchSlop(1);
             ViewPage[] viewPageArr2 = this.viewPages;
             FrameLayout unused5 = viewPageArr2[i2].fragmentView = (FrameLayout) viewPageArr2[i2].parentFragment.getFragmentView();
             this.viewPages[i2].listView.setClipToPadding(false);

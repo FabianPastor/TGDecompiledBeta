@@ -211,6 +211,7 @@
     <string name="AddToTheGroupAlertText">Do you want to add **%1$s** to the group **%2$s**?</string>
     <string name="AddToTheGroupAlertTitle">Add bot</string>
     <string name="AddToTheGroupForwardCount">Number of last messages to forward:</string>
+    <string name="AddUserErrorBlacklisted">Sorry, you can\'t add this user because they are in the Removed Users list and you can\'t unban them.</string>
     <string name="AddedToFavorites">Sticker was added to Favorites</string>
     <string name="AdminWillBeRemoved">%1$s will be removed from admins if you restrict them.</string>
     <string name="Agree">Agree</string>

@@ -343,6 +343,7 @@ public class BarChartView extends BaseChartView<ChartData, BarViewData> {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        tick();
         drawChart(canvas);
         drawBottomLine(canvas);
         this.tmpN = this.horizontalLines.size();
