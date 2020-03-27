@@ -2307,7 +2307,6 @@
     <string name="PinMessageAlertTitle">Fissa messaggio</string>
     <string name="PinNotify">Notifica tutti i membri</string>
     <string name="PinToTop">Fissa in alto</string>
-    <string name="PinToTopLimitReached">Spiacenti, puoi fissare solo %1$s nella tua lista principale. Se stai cercando più organizzazione prova ad archiviare alcune chat – la lista Chat archiviate non ha limiti di chat fissate.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Rosa</string>
     <string name="PinnedMessage">Messaggio fissato</string>

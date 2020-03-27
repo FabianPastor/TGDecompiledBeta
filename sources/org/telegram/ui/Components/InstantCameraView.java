@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -85,6 +86,7 @@ import org.telegram.ui.Components.VideoPlayer;
 
 @TargetApi(18)
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+    private float animationTranslationY;
     /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
     private Size aspectRatio;
@@ -136,6 +138,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public boolean opened;
     /* access modifiers changed from: private */
     public Paint paint;
+    private float panTranslationY;
     private View parentView;
     private Size pictureSize;
     private int[] position = new int[2];
@@ -362,8 +365,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
         if (getVisibility() != 0) {
-            this.cameraContainer.setTranslationY((float) (getMeasuredHeight() / 2));
-            this.textureOverlayView.setTranslationY((float) (getMeasuredHeight() / 2));
+            this.animationTranslationY = (float) (getMeasuredHeight() / 2);
+            updateTranslationY();
         }
         this.blurBehindDrawable.checkSizes();
     }
@@ -551,8 +554,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void startAnimation(boolean z) {
-        float f;
-        float f2;
         AnimatorSet animatorSet2 = this.animatorSet;
         if (animatorSet2 != null) {
             animatorSet2.removeAllListeners();
@@ -563,10 +564,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             instance.showTemporary(!z);
         }
         if (z && !this.opened) {
-            this.cameraContainer.setTranslationY(((float) getMeasuredHeight()) / 2.0f);
             this.cameraContainer.setTranslationX(0.0f);
-            this.textureOverlayView.setTranslationY(((float) getMeasuredHeight()) / 2.0f);
             this.textureOverlayView.setTranslationX(0.0f);
+            this.animationTranslationY = ((float) getMeasuredHeight()) / 2.0f;
+            updateTranslationY();
         }
         this.opened = z;
         View view = this.parentView;
@@ -576,14 +577,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.blurBehindDrawable.show(z);
         this.animatorSet = new AnimatorSet();
         float dp = (z || this.recordedTime <= 300) ? 0.0f : ((float) AndroidUtilities.dp(24.0f)) - (((float) getMeasuredWidth()) / 2.0f);
+        float[] fArr = new float[2];
+        float f = 1.0f;
+        fArr[0] = z ? 1.0f : 0.0f;
+        fArr[1] = z ? 0.0f : 1.0f;
+        ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
+        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                InstantCameraView.this.lambda$startAnimation$2$InstantCameraView(valueAnimator);
+            }
+        });
         AnimatorSet animatorSet3 = this.animatorSet;
-        Animator[] animatorArr = new Animator[13];
+        Animator[] animatorArr = new Animator[12];
         ImageView imageView = this.switchCameraButton;
         Property property = View.ALPHA;
-        float[] fArr = new float[1];
-        float f3 = 1.0f;
-        fArr[0] = z ? 1.0f : 0.0f;
-        animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr);
+        float[] fArr2 = new float[1];
+        fArr2[0] = z ? 1.0f : 0.0f;
+        animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr2);
         animatorArr[1] = ObjectAnimator.ofFloat(this.muteImageView, View.ALPHA, new float[]{0.0f});
         Paint paint2 = this.paint;
         Property<Paint, Integer> property2 = AnimationProperties.PAINT_ALPHA;
@@ -592,59 +602,40 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         animatorArr[2] = ObjectAnimator.ofInt(paint2, property2, iArr);
         FrameLayout frameLayout = this.cameraContainer;
         Property property3 = View.ALPHA;
-        float[] fArr2 = new float[1];
-        fArr2[0] = z ? 1.0f : 0.0f;
-        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, property3, fArr2);
+        float[] fArr3 = new float[1];
+        fArr3[0] = z ? 1.0f : 0.0f;
+        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
         FrameLayout frameLayout2 = this.cameraContainer;
         Property property4 = View.SCALE_X;
-        float[] fArr3 = new float[1];
-        fArr3[0] = z ? 1.0f : 0.1f;
-        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout2, property4, fArr3);
-        FrameLayout frameLayout3 = this.cameraContainer;
-        Property property5 = View.SCALE_Y;
         float[] fArr4 = new float[1];
         fArr4[0] = z ? 1.0f : 0.1f;
-        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout3, property5, fArr4);
-        FrameLayout frameLayout4 = this.cameraContainer;
-        Property property6 = View.TRANSLATION_Y;
+        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout2, property4, fArr4);
+        FrameLayout frameLayout3 = this.cameraContainer;
+        Property property5 = View.SCALE_Y;
         float[] fArr5 = new float[1];
-        if (z) {
-            f = 0.0f;
-        } else {
-            f = ((float) getMeasuredHeight()) / 2.0f;
-        }
-        fArr5[0] = f;
-        animatorArr[6] = ObjectAnimator.ofFloat(frameLayout4, property6, fArr5);
-        animatorArr[7] = ObjectAnimator.ofFloat(this.cameraContainer, View.TRANSLATION_X, new float[]{dp});
+        fArr5[0] = z ? 1.0f : 0.1f;
+        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout3, property5, fArr5);
+        animatorArr[6] = ObjectAnimator.ofFloat(this.cameraContainer, View.TRANSLATION_X, new float[]{dp});
         BackupImageView backupImageView = this.textureOverlayView;
-        Property property7 = View.ALPHA;
+        Property property6 = View.ALPHA;
         float[] fArr6 = new float[1];
         fArr6[0] = z ? 1.0f : 0.0f;
-        animatorArr[8] = ObjectAnimator.ofFloat(backupImageView, property7, fArr6);
+        animatorArr[7] = ObjectAnimator.ofFloat(backupImageView, property6, fArr6);
         BackupImageView backupImageView2 = this.textureOverlayView;
-        Property property8 = View.SCALE_X;
+        Property property7 = View.SCALE_X;
         float[] fArr7 = new float[1];
         fArr7[0] = z ? 1.0f : 0.1f;
-        animatorArr[9] = ObjectAnimator.ofFloat(backupImageView2, property8, fArr7);
+        animatorArr[8] = ObjectAnimator.ofFloat(backupImageView2, property7, fArr7);
         BackupImageView backupImageView3 = this.textureOverlayView;
-        Property property9 = View.SCALE_Y;
+        Property property8 = View.SCALE_Y;
         float[] fArr8 = new float[1];
         if (!z) {
-            f3 = 0.1f;
+            f = 0.1f;
         }
-        fArr8[0] = f3;
-        animatorArr[10] = ObjectAnimator.ofFloat(backupImageView3, property9, fArr8);
-        BackupImageView backupImageView4 = this.textureOverlayView;
-        Property property10 = View.TRANSLATION_Y;
-        float[] fArr9 = new float[1];
-        if (z) {
-            f2 = 0.0f;
-        } else {
-            f2 = ((float) getMeasuredHeight()) / 2.0f;
-        }
-        fArr9[0] = f2;
-        animatorArr[11] = ObjectAnimator.ofFloat(backupImageView4, property10, fArr9);
-        animatorArr[12] = ObjectAnimator.ofFloat(this.textureOverlayView, View.TRANSLATION_X, new float[]{dp});
+        fArr8[0] = f;
+        animatorArr[9] = ObjectAnimator.ofFloat(backupImageView3, property8, fArr8);
+        animatorArr[10] = ObjectAnimator.ofFloat(this.textureOverlayView, View.TRANSLATION_X, new float[]{dp});
+        animatorArr[11] = ofFloat;
         animatorSet3.playTogether(animatorArr);
         if (!z) {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -661,6 +652,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.animatorSet.setDuration(180);
         this.animatorSet.setInterpolator(new DecelerateInterpolator());
         this.animatorSet.start();
+    }
+
+    public /* synthetic */ void lambda$startAnimation$2$InstantCameraView(ValueAnimator valueAnimator) {
+        this.animationTranslationY = (((float) getMeasuredHeight()) / 2.0f) * ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        updateTranslationY();
+    }
+
+    private void updateTranslationY() {
+        this.textureOverlayView.setTranslationY(this.animationTranslationY + this.panTranslationY);
+        this.cameraContainer.setTranslationY(this.animationTranslationY + this.panTranslationY);
     }
 
     public Rect getCameraRect() {
@@ -833,9 +834,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         ViewGroup viewGroup;
         destroy(z, (Runnable) null);
         this.cameraContainer.setTranslationX(0.0f);
-        this.cameraContainer.setTranslationY(0.0f);
         this.textureOverlayView.setTranslationX(0.0f);
-        this.textureOverlayView.setTranslationY(0.0f);
+        this.animationTranslationY = 0.0f;
+        updateTranslationY();
         MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
         TextureView textureView2 = this.textureView;
         if (!(textureView2 == null || (viewGroup = (ViewGroup) textureView2.getParent()) == null)) {
@@ -963,12 +964,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             public final void run() {
-                InstantCameraView.this.lambda$createCamera$4$InstantCameraView(this.f$1);
+                InstantCameraView.this.lambda$createCamera$5$InstantCameraView(this.f$1);
             }
         });
     }
 
-    public /* synthetic */ void lambda$createCamera$4$InstantCameraView(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$createCamera$5$InstantCameraView(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create camera session");
@@ -979,17 +980,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cameraThread.setCurrentSession(cameraSession2);
             CameraController.getInstance().openRound(this.cameraSession, surfaceTexture, new Runnable() {
                 public final void run() {
-                    InstantCameraView.this.lambda$null$2$InstantCameraView();
+                    InstantCameraView.this.lambda$null$3$InstantCameraView();
                 }
             }, new Runnable() {
                 public final void run() {
-                    InstantCameraView.this.lambda$null$3$InstantCameraView();
+                    InstantCameraView.this.lambda$null$4$InstantCameraView();
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$null$2$InstantCameraView() {
+    public /* synthetic */ void lambda$null$3$InstantCameraView() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("camera initied");
@@ -998,7 +999,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    public /* synthetic */ void lambda$null$3$InstantCameraView() {
+    public /* synthetic */ void lambda$null$4$InstantCameraView() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 
@@ -1078,7 +1079,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void invalidateBlur() {
-        this.blurBehindDrawable.invalidate();
+        BlurBehindDrawable blurBehindDrawable2 = this.blurBehindDrawable;
+        if (blurBehindDrawable2 != null) {
+            blurBehindDrawable2.invalidate();
+        }
     }
 
     public void cancelBlur() {

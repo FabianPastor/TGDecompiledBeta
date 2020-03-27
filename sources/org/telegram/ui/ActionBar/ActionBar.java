@@ -191,10 +191,15 @@ public class ActionBar extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
+    public boolean shouldClipChild(View view) {
+        return this.clipContent && (view == this.titleTextView || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView);
+    }
+
+    /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         Drawable currentHolidayDrawable;
-        boolean z = this.clipContent && (view == this.titleTextView || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView);
-        if (z) {
+        boolean shouldClipChild = shouldClipChild(view);
+        if (shouldClipChild) {
             canvas.save();
             canvas.clipRect(0.0f, (-getTranslationY()) + ((float) (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0)), (float) getMeasuredWidth(), (float) getMeasuredHeight());
         }
@@ -224,7 +229,7 @@ public class ActionBar extends FrameLayout {
                 }
             }
         }
-        if (z) {
+        if (shouldClipChild) {
             canvas.restore();
         }
         return drawChild;

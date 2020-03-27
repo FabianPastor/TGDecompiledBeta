@@ -16892,7 +16892,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
+            r3 = 2131626733(0x7f0e0aed, float:1.888071E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16907,12 +16907,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "OK"
-            r2 = 2131625984(0x7f0e0800, float:1.8879191E38)
+            r2 = 2131625987(0x7f0e0803, float:1.8879197E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626364(0x7f0e097c, float:1.8879962E38)
+            r2 = 2131626368(0x7f0e0980, float:1.887997E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
@@ -17428,7 +17428,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             goto L_0x0132
         L_0x010d:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131625986(0x7f0e0802, float:1.8879195E38)
+            r1 = 2131625989(0x7f0e0805, float:1.8879202E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             int r3 = r7.currentIndex
             int r3 = r3 + r10

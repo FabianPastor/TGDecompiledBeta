@@ -1485,7 +1485,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r6 = 2131625176(0x7f0e04d8, float:1.8877553E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165379(0x7var_c3, float:1.7944973E38)
-            r9 = 2131626599(0x7f0e0a67, float:1.8880439E38)
+            r9 = 2131626603(0x7f0e0a6b, float:1.8880447E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1503,13 +1503,13 @@ public class DocumentSelectActivity extends BaseFragment {
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625460(0x7f0e05f4, float:1.8878129E38)
+            r5 = 2131625463(0x7f0e05f7, float:1.8878135E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
             r5 = 2131165381(0x7var_c5, float:1.7944978E38)
             r4.icon = r5
-            r5 = 2131625459(0x7f0e05f3, float:1.8878127E38)
+            r5 = 2131625462(0x7f0e05f6, float:1.8878133E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1642,7 +1642,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r2.<init>()
             java.lang.String r3 = "/"
             r2.title = r3
-            r4 = 2131626884(0x7f0e0b84, float:1.8881017E38)
+            r4 = 2131626894(0x7f0e0b8e, float:1.8881037E38)
             java.lang.String r5 = "SystemRoot"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.subtitle = r4
@@ -1676,11 +1676,11 @@ public class DocumentSelectActivity extends BaseFragment {
         L_0x01d4:
             org.telegram.ui.DocumentSelectActivity$ListItem r0 = new org.telegram.ui.DocumentSelectActivity$ListItem
             r0.<init>()
-            r2 = 2131625359(0x7f0e058f, float:1.8877924E38)
+            r2 = 2131625362(0x7f0e0592, float:1.887793E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625360(0x7f0e0590, float:1.8877926E38)
+            r2 = 2131625363(0x7f0e0593, float:1.8877932E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
@@ -1697,7 +1697,7 @@ public class DocumentSelectActivity extends BaseFragment {
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625732(0x7f0e0704, float:1.887868E38)
+            r2 = 2131625735(0x7f0e0707, float:1.8878686E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2

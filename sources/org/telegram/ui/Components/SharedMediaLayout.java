@@ -2335,101 +2335,104 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
                 this.scrollSlidingTextTabStrip.selectTabWithId(this.mediaPages[1].selectedType, abs2);
             }
-        } else if (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6)) {
-            if (this.velocityTracker == null) {
-                this.velocityTracker = VelocityTracker.obtain();
-            }
-            this.velocityTracker.computeCurrentVelocity(1000, (float) this.maximumVelocity);
-            if (!this.startedTracking) {
-                float xVelocity = this.velocityTracker.getXVelocity();
-                float yVelocity = this.velocityTracker.getYVelocity();
-                if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
-                    prepareForMoving(motionEvent, xVelocity < 0.0f);
+        } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
+            if (!(motionEvent == null || motionEvent.getAction() == 3)) {
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
                 }
-            }
-            if (this.startedTracking) {
-                float x2 = this.mediaPages[0].getX();
-                this.tabsAnimation = new AnimatorSet();
-                float xVelocity2 = this.velocityTracker.getXVelocity();
-                boolean z2 = Math.abs(x2) < ((float) this.mediaPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(this.velocityTracker.getYVelocity()));
-                this.backAnimation = z2;
-                if (z2) {
-                    f = Math.abs(x2);
-                    if (this.animatingForward) {
-                        AnimatorSet animatorSet = this.tabsAnimation;
-                        MediaPage[] mediaPageArr4 = this.mediaPages;
-                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(mediaPageArr4[1], View.TRANSLATION_X, new float[]{(float) mediaPageArr4[1].getMeasuredWidth()})});
-                    } else {
-                        AnimatorSet animatorSet2 = this.tabsAnimation;
-                        MediaPage[] mediaPageArr5 = this.mediaPages;
-                        animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(mediaPageArr5[1], View.TRANSLATION_X, new float[]{(float) (-mediaPageArr5[1].getMeasuredWidth())})});
-                    }
-                } else {
-                    f = ((float) this.mediaPages[0].getMeasuredWidth()) - Math.abs(x2);
-                    if (this.animatingForward) {
-                        AnimatorSet animatorSet3 = this.tabsAnimation;
-                        MediaPage[] mediaPageArr6 = this.mediaPages;
-                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(mediaPageArr6[0], View.TRANSLATION_X, new float[]{(float) (-mediaPageArr6[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                    } else {
-                        AnimatorSet animatorSet4 = this.tabsAnimation;
-                        MediaPage[] mediaPageArr7 = this.mediaPages;
-                        animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(mediaPageArr7[0], View.TRANSLATION_X, new float[]{(float) mediaPageArr7[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                this.velocityTracker.computeCurrentVelocity(1000, (float) this.maximumVelocity);
+                if (!this.startedTracking) {
+                    float xVelocity = this.velocityTracker.getXVelocity();
+                    float yVelocity = this.velocityTracker.getYVelocity();
+                    if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
+                        prepareForMoving(motionEvent, xVelocity < 0.0f);
                     }
                 }
-                this.tabsAnimation.setInterpolator(interpolator);
-                int measuredWidth = getMeasuredWidth();
-                float f2 = (float) (measuredWidth / 2);
-                float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
-                float abs3 = Math.abs(xVelocity2);
-                if (abs3 > 0.0f) {
-                    i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs3) * 1000.0f) * 4;
-                } else {
-                    i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
-                }
-                this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
-                this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        AnimatorSet unused = SharedMediaLayout.this.tabsAnimation = null;
-                        if (SharedMediaLayout.this.backAnimation) {
-                            SharedMediaLayout.this.mediaPages[1].setVisibility(8);
-                            if (!SharedMediaLayout.this.canShowSearchItem()) {
-                                SharedMediaLayout.this.searchItem.setVisibility(4);
-                                SharedMediaLayout.this.searchItem.setAlpha(0.0f);
-                            } else if (SharedMediaLayout.this.searchItemState == 2) {
-                                SharedMediaLayout.this.searchItem.setAlpha(1.0f);
-                            } else if (SharedMediaLayout.this.searchItemState == 1) {
-                                SharedMediaLayout.this.searchItem.setAlpha(0.0f);
-                                SharedMediaLayout.this.searchItem.setVisibility(4);
-                            }
-                            int unused2 = SharedMediaLayout.this.searchItemState = 0;
+                if (this.startedTracking) {
+                    float x2 = this.mediaPages[0].getX();
+                    this.tabsAnimation = new AnimatorSet();
+                    float xVelocity2 = this.velocityTracker.getXVelocity();
+                    boolean z2 = Math.abs(x2) < ((float) this.mediaPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(this.velocityTracker.getYVelocity()));
+                    this.backAnimation = z2;
+                    if (z2) {
+                        f = Math.abs(x2);
+                        if (this.animatingForward) {
+                            AnimatorSet animatorSet = this.tabsAnimation;
+                            MediaPage[] mediaPageArr4 = this.mediaPages;
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(mediaPageArr4[1], View.TRANSLATION_X, new float[]{(float) mediaPageArr4[1].getMeasuredWidth()})});
                         } else {
-                            MediaPage mediaPage = SharedMediaLayout.this.mediaPages[0];
-                            SharedMediaLayout.this.mediaPages[0] = SharedMediaLayout.this.mediaPages[1];
-                            SharedMediaLayout.this.mediaPages[1] = mediaPage;
-                            SharedMediaLayout.this.mediaPages[1].setVisibility(8);
-                            if (SharedMediaLayout.this.searchItemState == 2) {
-                                SharedMediaLayout.this.searchItem.setVisibility(4);
-                            }
-                            int unused3 = SharedMediaLayout.this.searchItemState = 0;
-                            SharedMediaLayout.this.scrollSlidingTextTabStrip.selectTabWithId(SharedMediaLayout.this.mediaPages[0].selectedType, 1.0f);
-                            SharedMediaLayout.this.onSelectedTabChanged();
-                            SharedMediaLayout.this.startStopVisibleGifs();
+                            AnimatorSet animatorSet2 = this.tabsAnimation;
+                            MediaPage[] mediaPageArr5 = this.mediaPages;
+                            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.mediaPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(mediaPageArr5[1], View.TRANSLATION_X, new float[]{(float) (-mediaPageArr5[1].getMeasuredWidth())})});
                         }
-                        boolean unused4 = SharedMediaLayout.this.tabsAnimationInProgress = false;
-                        boolean unused5 = SharedMediaLayout.this.maybeStartTracking = false;
-                        boolean unused6 = SharedMediaLayout.this.startedTracking = false;
-                        SharedMediaLayout.this.actionBar.setEnabled(true);
-                        SharedMediaLayout.this.scrollSlidingTextTabStrip.setEnabled(true);
+                    } else {
+                        f = ((float) this.mediaPages[0].getMeasuredWidth()) - Math.abs(x2);
+                        if (this.animatingForward) {
+                            AnimatorSet animatorSet3 = this.tabsAnimation;
+                            MediaPage[] mediaPageArr6 = this.mediaPages;
+                            animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(mediaPageArr6[0], View.TRANSLATION_X, new float[]{(float) (-mediaPageArr6[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                        } else {
+                            AnimatorSet animatorSet4 = this.tabsAnimation;
+                            MediaPage[] mediaPageArr7 = this.mediaPages;
+                            animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(mediaPageArr7[0], View.TRANSLATION_X, new float[]{(float) mediaPageArr7[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(this.mediaPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                        }
                     }
-                });
-                this.tabsAnimation.start();
-                this.tabsAnimationInProgress = true;
-            } else {
+                    this.tabsAnimation.setInterpolator(interpolator);
+                    int measuredWidth = getMeasuredWidth();
+                    float f2 = (float) (measuredWidth / 2);
+                    float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
+                    float abs3 = Math.abs(xVelocity2);
+                    if (abs3 > 0.0f) {
+                        i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs3) * 1000.0f) * 4;
+                    } else {
+                        i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
+                    }
+                    this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
+                    this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            AnimatorSet unused = SharedMediaLayout.this.tabsAnimation = null;
+                            if (SharedMediaLayout.this.backAnimation) {
+                                SharedMediaLayout.this.mediaPages[1].setVisibility(8);
+                                if (!SharedMediaLayout.this.canShowSearchItem()) {
+                                    SharedMediaLayout.this.searchItem.setVisibility(4);
+                                    SharedMediaLayout.this.searchItem.setAlpha(0.0f);
+                                } else if (SharedMediaLayout.this.searchItemState == 2) {
+                                    SharedMediaLayout.this.searchItem.setAlpha(1.0f);
+                                } else if (SharedMediaLayout.this.searchItemState == 1) {
+                                    SharedMediaLayout.this.searchItem.setAlpha(0.0f);
+                                    SharedMediaLayout.this.searchItem.setVisibility(4);
+                                }
+                                int unused2 = SharedMediaLayout.this.searchItemState = 0;
+                            } else {
+                                MediaPage mediaPage = SharedMediaLayout.this.mediaPages[0];
+                                SharedMediaLayout.this.mediaPages[0] = SharedMediaLayout.this.mediaPages[1];
+                                SharedMediaLayout.this.mediaPages[1] = mediaPage;
+                                SharedMediaLayout.this.mediaPages[1].setVisibility(8);
+                                if (SharedMediaLayout.this.searchItemState == 2) {
+                                    SharedMediaLayout.this.searchItem.setVisibility(4);
+                                }
+                                int unused3 = SharedMediaLayout.this.searchItemState = 0;
+                                SharedMediaLayout.this.scrollSlidingTextTabStrip.selectTabWithId(SharedMediaLayout.this.mediaPages[0].selectedType, 1.0f);
+                                SharedMediaLayout.this.onSelectedTabChanged();
+                                SharedMediaLayout.this.startStopVisibleGifs();
+                            }
+                            boolean unused4 = SharedMediaLayout.this.tabsAnimationInProgress = false;
+                            boolean unused5 = SharedMediaLayout.this.maybeStartTracking = false;
+                            boolean unused6 = SharedMediaLayout.this.startedTracking = false;
+                            SharedMediaLayout.this.actionBar.setEnabled(true);
+                            SharedMediaLayout.this.scrollSlidingTextTabStrip.setEnabled(true);
+                        }
+                    });
+                    this.tabsAnimation.start();
+                    this.tabsAnimationInProgress = true;
+                }
+            }
+            if (!this.startedTracking) {
                 this.maybeStartTracking = false;
-                this.startedTracking = false;
                 this.actionBar.setEnabled(true);
                 this.scrollSlidingTextTabStrip.setEnabled(true);
             }
+            this.startedTracking = false;
             VelocityTracker velocityTracker3 = this.velocityTracker;
             if (velocityTracker3 != null) {
                 velocityTracker3.recycle();
@@ -3465,7 +3468,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x00fd
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131625389(0x7f0e05ad, float:1.8877985E38)
+            r3 = 2131625392(0x7f0e05b0, float:1.887799E38)
             java.lang.String r12 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r3)
             r0.addTextTab(r4, r3)
@@ -3493,14 +3496,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x013c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626754(0x7f0e0b02, float:1.8880753E38)
+            r3 = 2131626758(0x7f0e0b06, float:1.8880761E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
             goto L_0x014a
         L_0x013c:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626753(0x7f0e0b01, float:1.8880751E38)
+            r3 = 2131626757(0x7f0e0b05, float:1.888076E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
@@ -3512,14 +3515,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x0166
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626747(0x7f0e0afb, float:1.8880739E38)
+            r3 = 2131626751(0x7f0e0aff, float:1.8880747E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3)
         L_0x0166:
             long r2 = r14.dialog_id
             int r0 = (int) r2
-            r2 = 2131626755(0x7f0e0b03, float:1.8880755E38)
+            r2 = 2131626759(0x7f0e0b07, float:1.8880763E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x01a4
             int[] r0 = r14.hasMedia
@@ -3529,7 +3532,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x018c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r4 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            r4 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r5 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.addTextTab(r7, r4)
@@ -3573,7 +3576,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x01f4
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626758(0x7f0e0b06, float:1.8880761E38)
+            r2 = 2131626762(0x7f0e0b0a, float:1.888077E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2)
@@ -3585,7 +3588,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r10)
             if (r0 != 0) goto L_0x0210
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r2 = 2131626752(0x7f0e0b00, float:1.888075E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r10, r2)
@@ -3597,7 +3600,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r11)
             if (r0 != 0) goto L_0x022c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626749(0x7f0e0afd, float:1.8880743E38)
+            r2 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r11, r2)
@@ -3680,7 +3683,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (r3 == 0) goto L_0x025a
             r3 = 1101004800(0x41a00000, float:20.0)
             r14 = 1106247680(0x41var_, float:30.0)
-            r15 = 2131625813(0x7f0e0755, float:1.8878845E38)
+            r15 = 2131625816(0x7f0e0758, float:1.887885E38)
             java.lang.String r6 = "NoResult"
             if (r25 == 0) goto L_0x0173
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r10 = r0.mediaPages
@@ -3956,7 +3959,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625799(0x7f0e0747, float:1.8878816E38)
+            r3 = 2131625802(0x7f0e074a, float:1.8878822E38)
             java.lang.String r5 = "NoMediaSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -3965,7 +3968,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625797(0x7f0e0745, float:1.8878812E38)
+            r3 = 2131625800(0x7f0e0748, float:1.8878818E38)
             java.lang.String r5 = "NoMedia"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -3995,7 +3998,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625818(0x7f0e075a, float:1.8878855E38)
+            r3 = 2131625821(0x7f0e075d, float:1.887886E38)
             java.lang.String r5 = "NoSharedFilesSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4004,7 +4007,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625817(0x7f0e0759, float:1.8878853E38)
+            r3 = 2131625820(0x7f0e075c, float:1.8878859E38)
             java.lang.String r5 = "NoSharedFiles"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4034,7 +4037,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625823(0x7f0e075f, float:1.8878865E38)
+            r3 = 2131625826(0x7f0e0762, float:1.887887E38)
             java.lang.String r5 = "NoSharedVoiceSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4043,7 +4046,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625822(0x7f0e075e, float:1.8878863E38)
+            r3 = 2131625825(0x7f0e0761, float:1.8878869E38)
             java.lang.String r5 = "NoSharedVoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4073,7 +4076,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625821(0x7f0e075d, float:1.887886E38)
+            r3 = 2131625824(0x7f0e0760, float:1.8878867E38)
             java.lang.String r5 = "NoSharedLinksSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4082,7 +4085,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625820(0x7f0e075c, float:1.8878859E38)
+            r3 = 2131625823(0x7f0e075f, float:1.8878865E38)
             java.lang.String r5 = "NoSharedLinks"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4112,7 +4115,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625816(0x7f0e0758, float:1.887885E38)
+            r3 = 2131625819(0x7f0e075b, float:1.8878857E38)
             java.lang.String r5 = "NoSharedAudioSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4121,7 +4124,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625815(0x7f0e0757, float:1.8878849E38)
+            r3 = 2131625818(0x7f0e075a, float:1.8878855E38)
             java.lang.String r5 = "NoSharedAudio"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4150,7 +4153,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625819(0x7f0e075b, float:1.8878857E38)
+            r3 = 2131625822(0x7f0e075e, float:1.8878863E38)
             java.lang.String r5 = "NoSharedGifSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4159,7 +4162,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625791(0x7f0e073f, float:1.88788E38)
+            r3 = 2131625794(0x7f0e0742, float:1.8878806E38)
             java.lang.String r5 = "NoGIFs"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4185,7 +4188,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625793(0x7f0e0741, float:1.8878804E38)
+            r3 = 2131625796(0x7f0e0744, float:1.887881E38)
             java.lang.String r5 = "NoGroupsInCommon"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)

@@ -389,7 +389,7 @@ public class CacheControlActivity extends BaseFragment {
             java.lang.String r4 = "Months"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7)
             r2[r3] = r4
-            r3 = 2131625501(0x7f0e061d, float:1.8878212E38)
+            r3 = 2131625504(0x7f0e0620, float:1.8878218E38)
             java.lang.String r4 = "KeepMediaForever"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2[r5] = r3
@@ -407,11 +407,11 @@ public class CacheControlActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r16.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131625577(0x7f0e0669, float:1.8878366E38)
+            r2 = 2131625580(0x7f0e066c, float:1.8878372E38)
             java.lang.String r3 = "LocalDatabaseClearTextTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
-            r2 = 2131625576(0x7f0e0668, float:1.8878364E38)
+            r2 = 2131625579(0x7f0e066b, float:1.887837E38)
             java.lang.String r3 = "LocalDatabaseClearText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
@@ -460,7 +460,7 @@ public class CacheControlActivity extends BaseFragment {
             if (r12 >= r13) goto L_0x0199
             if (r12 != 0) goto L_0x00f2
             long r8 = r0.photoSize
-            r15 = 2131625582(0x7f0e066e, float:1.8878376E38)
+            r15 = 2131625585(0x7f0e0671, float:1.8878382E38)
             java.lang.String r13 = "LocalPhotoCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r15)
         L_0x00f0:
@@ -469,28 +469,28 @@ public class CacheControlActivity extends BaseFragment {
         L_0x00f2:
             if (r12 != r7) goto L_0x0100
             long r8 = r0.videoSize
-            r13 = 2131625583(0x7f0e066f, float:1.8878378E38)
+            r13 = 2131625586(0x7f0e0672, float:1.8878384E38)
             java.lang.String r15 = "LocalVideoCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x0100:
             if (r12 != r3) goto L_0x010e
             long r8 = r0.documentsSize
-            r13 = 2131625579(0x7f0e066b, float:1.887837E38)
+            r13 = 2131625582(0x7f0e066e, float:1.8878376E38)
             java.lang.String r15 = "LocalDocumentCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x010e:
             if (r12 != r5) goto L_0x011c
             long r8 = r0.musicSize
-            r13 = 2131625581(0x7f0e066d, float:1.8878374E38)
+            r13 = 2131625584(0x7f0e0670, float:1.887838E38)
             java.lang.String r15 = "LocalMusicCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
         L_0x011c:
             if (r12 != r4) goto L_0x012a
             long r8 = r0.audioSize
-            r13 = 2131625573(0x7f0e0665, float:1.8878358E38)
+            r13 = 2131625576(0x7f0e0668, float:1.8878364E38)
             java.lang.String r15 = "LocalAudioCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0
@@ -506,7 +506,7 @@ public class CacheControlActivity extends BaseFragment {
             r8 = 6
             if (r12 != r8) goto L_0x0148
             long r8 = r0.cacheSize
-            r13 = 2131625574(0x7f0e0666, float:1.887836E38)
+            r13 = 2131625577(0x7f0e0669, float:1.8878366E38)
             java.lang.String r15 = "LocalCache"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             goto L_0x00f0

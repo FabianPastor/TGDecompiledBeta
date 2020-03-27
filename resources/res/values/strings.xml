@@ -277,8 +277,8 @@
     <string name="ArchiveHintText3">You can pin an unlimited number of archived chats to the top.</string>
     <string name="ArchivePinned">Archive pinned.</string>
     <string name="ArchivePinnedInfo">Swipe left on the archive to hide it.</string>
+    <string name="ArchiveStickerSetsAlertTitle">Archive %1$s</string>
     <string name="ArchiveStickersAlertMessage">Are you sure you want to archive the selected sticker sets?</string>
-    <string name="ArchiveStickersAlertTitle">Archive %1$d sticker sets</string>
     <string name="ArchivedChats">Archived Chats</string>
     <string name="ArchivedMasks">Archived Masks</string>
     <string name="ArchivedMasksAlertInfo">Some of your older masks sets have been archived. You can reactivate them in the Masks Settings.</string>
@@ -975,8 +975,8 @@
     <string name="DeleteProxy">Delete Proxy?</string>
     <string name="DeleteReportSpam">Report spam</string>
     <string name="DeleteSingleMessagesTitle">Delete message</string>
+    <string name="DeleteStickerSetsAlertTitle">Delete %1$s</string>
     <string name="DeleteStickersAlertMessage">Are you sure you want to delete the selected sticker sets?</string>
-    <string name="DeleteStickersAlertTitle">Delete %1$d sticker sets</string>
     <string name="DeleteTheme">Delete theme</string>
     <string name="DeleteThemeAlert">Are you sure you want to delete this theme?</string>
     <string name="DeleteThemeTitle">Delete theme</string>
@@ -1284,10 +1284,12 @@
     <string name="FilterEditItem">Edit</string>
     <string name="FilterExclude">Excluded Chats</string>
     <string name="FilterExcludeArchived">Exclude Archived</string>
+    <string name="FilterExcludeInfo">Choose chats and types of chats that will not appear in this folder.</string>
     <string name="FilterExcludeMuted">Exclude Muted</string>
     <string name="FilterExcludeRead">Exclude Read</string>
     <string name="FilterGroups">Groups</string>
     <string name="FilterInclude">Included Chats</string>
+    <string name="FilterIncludeInfo">Choose chats and types of chats that will appear in this folder.</string>
     <string name="FilterMuted">Muted</string>
     <string name="FilterNameHint">Folder name</string>
     <string name="FilterNeverShow">Exclude Chats</string>
@@ -1319,6 +1321,7 @@
     <string name="FilterUnread">Unread</string>
     <string name="Filters">Folders</string>
     <string name="FiltersSetup">Setup</string>
+    <string name="FiltersSetupPinAlert">Set Up Folders</string>
     <string name="FinalResults">Final Results</string>
     <string name="FingerprintHelp">Touch sensor</string>
     <string name="FingerprintInfo">Confirm fingerprint to continue</string>
@@ -2421,7 +2424,7 @@
     <string name="PinMessageAlertTitle">Pin message</string>
     <string name="PinNotify">Notify all members</string>
     <string name="PinToTop">Pin to top</string>
-    <string name="PinToTopLimitReached">Sorry, you can only pin %1$s in your main list. If you\'re looking for more organization, try archiving some chats – the Archived Chats folder allows unlimited pins.</string>
+    <string name="PinToTopLimitReached2">Sorry, you can only pin %1$s to the top in the main list. More chats can be pinned in Chat Folders.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Pink</string>
     <string name="PinnedMessage">Pinned Message</string>
@@ -2883,6 +2886,12 @@
     <string name="StartMessaging">Start Messaging</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>
     <string name="Statistics">Statistics</string>
+    <string name="StickerSets_few">%1$s sticker sets</string>
+    <string name="StickerSets_many">%1$s sticker sets</string>
+    <string name="StickerSets_one">%1$s sticker set</string>
+    <string name="StickerSets_other">%1$s sticker sets</string>
+    <string name="StickerSets_two">%1$s sticker sets</string>
+    <string name="StickerSets_zero">%1$s sticker sets</string>
     <string name="StickersAndMasks">Stickers and Masks</string>
     <string name="StickersArchived">Stickers archived.</string>
     <string name="StickersArchivedInfo">%1$s has been moved to your archive.</string>

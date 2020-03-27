@@ -11661,6 +11661,21 @@ public class MessagesController extends BaseController implements NotificationCe
                     if (this.createdDialogMainThreadIds.contains(Long.valueOf(tLRPC$Dialog2.id))) {
                         getNotificationCenter().postNotificationName(NotificationCenter.updateMentionsCount, Long.valueOf(tLRPC$Dialog2.id), Integer.valueOf(tLRPC$Dialog2.unread_mentions_count));
                     }
+                    if (!z) {
+                        int i6 = 0;
+                        while (true) {
+                            DialogFilter[] dialogFilterArr3 = this.selectedDialogFilter;
+                            if (i6 < dialogFilterArr3.length) {
+                                if (dialogFilterArr3[i6] != null && (dialogFilterArr3[i6].flags & DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0) {
+                                    z = true;
+                                    break;
+                                }
+                                i6++;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -12430,221 +12445,206 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x004b  */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0092  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x004e  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0095  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void markDialogAsRead(long r18, int r20, int r21, int r22, boolean r23, int r24, boolean r25, int r26) {
+    public void markDialogAsRead(long r21, int r23, int r24, int r25, boolean r26, int r27, boolean r28, int r29) {
         /*
-            r17 = this;
-            r9 = r17
-            r10 = r18
-            r12 = r20
-            r13 = r21
-            r14 = r22
-            int r0 = (int) r10
+            r20 = this;
+            r8 = r20
+            r6 = r21
+            r5 = r23
+            r4 = r24
+            r2 = r25
+            int r0 = (int) r6
             r1 = 32
-            long r2 = r10 >> r1
-            int r3 = (int) r2
-            org.telegram.messenger.NotificationsController r2 = r17.getNotificationsController()
-            boolean r15 = r2.showBadgeMessages
-            r16 = 1
-            if (r0 == 0) goto L_0x0095
-            if (r12 != 0) goto L_0x001d
+            long r9 = r6 >> r1
+            int r3 = (int) r9
+            org.telegram.messenger.NotificationsController r9 = r20.getNotificationsController()
+            boolean r9 = r9.showBadgeMessages
+            r18 = 1
+            if (r0 == 0) goto L_0x0099
+            if (r5 != 0) goto L_0x001d
             return
         L_0x001d:
-            long r2 = (long) r12
-            long r4 = (long) r13
-            r13 = 0
-            if (r0 >= 0) goto L_0x003a
+            long r9 = (long) r5
+            long r3 = (long) r4
+            r19 = 0
+            if (r0 >= 0) goto L_0x003c
             int r0 = -r0
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r0)
-            org.telegram.tgnet.TLRPC$Chat r6 = r9.getChat(r6)
-            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r6)
-            if (r6 == 0) goto L_0x003a
-            long r6 = (long) r0
-            long r0 = r6 << r1
-            long r2 = r2 | r0
-            long r0 = r0 | r4
-            r5 = r0
-            r3 = r2
-            r7 = 1
-            goto L_0x003d
-        L_0x003a:
-            r5 = r4
-            r7 = 0
-            r3 = r2
-        L_0x003d:
-            java.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r0 = r9.dialogs_read_inbox_max
-            java.lang.Long r1 = java.lang.Long.valueOf(r18)
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r0)
+            org.telegram.tgnet.TLRPC$Chat r11 = r8.getChat(r11)
+            boolean r11 = org.telegram.messenger.ChatObject.isChannel(r11)
+            if (r11 == 0) goto L_0x003c
+            long r11 = (long) r0
+            long r0 = r11 << r1
+            long r9 = r9 | r0
+            long r0 = r0 | r3
+            r14 = r0
+            r12 = r9
+            r16 = 1
+            goto L_0x0040
+        L_0x003c:
+            r14 = r3
+            r12 = r9
+            r16 = 0
+        L_0x0040:
+            java.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r0 = r8.dialogs_read_inbox_max
+            java.lang.Long r1 = java.lang.Long.valueOf(r21)
             java.lang.Object r0 = r0.get(r1)
             java.lang.Integer r0 = (java.lang.Integer) r0
-            if (r0 != 0) goto L_0x004f
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r13)
-        L_0x004f:
-            java.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r9.dialogs_read_inbox_max
-            java.lang.Long r2 = java.lang.Long.valueOf(r18)
+            if (r0 != 0) goto L_0x0052
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r19)
+        L_0x0052:
+            java.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r1 = r8.dialogs_read_inbox_max
+            java.lang.Long r3 = java.lang.Long.valueOf(r21)
             int r0 = r0.intValue()
-            int r0 = java.lang.Math.max(r0, r12)
+            int r0 = java.lang.Math.max(r0, r5)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-            r1.put(r2, r0)
-            org.telegram.messenger.MessagesStorage r0 = r17.getMessagesStorage()
-            r1 = r18
-            r8 = r26
-            r0.processPendingRead(r1, r3, r5, r7, r8)
-            org.telegram.messenger.MessagesStorage r0 = r17.getMessagesStorage()
-            org.telegram.messenger.DispatchQueue r8 = r0.getStorageQueue()
-            org.telegram.messenger.-$$Lambda$MessagesController$MlyxSsNAuuysoo3cr1i2OvJbv0M r7 = new org.telegram.messenger.-$$Lambda$MessagesController$MlyxSsNAuuysoo3cr1i2OvJbv0M
-            r0 = r7
-            r1 = r17
-            r2 = r18
-            r4 = r24
-            r5 = r20
-            r6 = r15
-            r15 = r7
-            r7 = r23
-            r0.<init>(r2, r4, r5, r6, r7)
-            r8.postRunnable(r15)
-            r0 = 2147483647(0x7fffffff, float:NaN)
-            if (r12 == r0) goto L_0x0092
-            goto L_0x00ee
-        L_0x0092:
-            r16 = 0
-            goto L_0x00ee
-        L_0x0095:
-            if (r14 != 0) goto L_0x0098
-            return
-        L_0x0098:
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)
-            org.telegram.tgnet.TLRPC$EncryptedChat r8 = r9.getEncryptedChat(r0)
-            org.telegram.messenger.MessagesStorage r0 = r17.getMessagesStorage()
-            long r3 = (long) r12
-            long r5 = (long) r13
-            r7 = 0
-            r1 = r18
-            r9 = r8
-            r8 = r26
-            r0.processPendingRead(r1, r3, r5, r7, r8)
-            org.telegram.messenger.MessagesStorage r0 = r17.getMessagesStorage()
-            org.telegram.messenger.DispatchQueue r8 = r0.getStorageQueue()
-            org.telegram.messenger.-$$Lambda$MessagesController$EoEz5Qi9LGkDfnIr6DPIFeAJnRE r7 = new org.telegram.messenger.-$$Lambda$MessagesController$EoEz5Qi9LGkDfnIr6DPIFeAJnRE
-            r0 = r7
-            r1 = r17
-            r2 = r18
-            r4 = r22
+            r1.put(r3, r0)
+            org.telegram.messenger.MessagesStorage r9 = r20.getMessagesStorage()
+            r10 = r21
+            r17 = r29
+            r9.processPendingRead(r10, r12, r14, r16, r17)
+            org.telegram.messenger.MessagesStorage r0 = r20.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r9 = r0.getStorageQueue()
+            org.telegram.messenger.-$$Lambda$MessagesController$gN9mOiLQv4Osg84X5TcXeDddCZ0 r10 = new org.telegram.messenger.-$$Lambda$MessagesController$gN9mOiLQv4Osg84X5TcXeDddCZ0
+            r0 = r10
+            r1 = r20
+            r14 = r2
+            r2 = r21
+            r4 = r27
+            r15 = r5
             r5 = r23
-            r6 = r24
-            r10 = r7
-            r7 = r21
-            r11 = r8
-            r8 = r15
-            r0.<init>(r2, r4, r5, r6, r7, r8)
-            r11.postRunnable(r10)
-            if (r9 == 0) goto L_0x00ee
-            int r0 = r9.ttl
-            if (r0 <= 0) goto L_0x00ee
-            org.telegram.tgnet.ConnectionsManager r0 = r17.getConnectionsManager()
+            r6 = r26
+            r0.<init>(r2, r4, r5, r6)
+            r9.postRunnable(r10)
+            r0 = 2147483647(0x7fffffff, float:NaN)
+            if (r15 == r0) goto L_0x0095
+            goto L_0x0097
+        L_0x0095:
+            r18 = 0
+        L_0x0097:
+            r11 = r14
+            goto L_0x00f5
+        L_0x0099:
+            r14 = r2
+            r15 = r5
+            if (r14 != 0) goto L_0x009e
+            return
+        L_0x009e:
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)
+            org.telegram.tgnet.TLRPC$EncryptedChat r7 = r8.getEncryptedChat(r0)
+            org.telegram.messenger.MessagesStorage r9 = r20.getMessagesStorage()
+            long r12 = (long) r15
+            long r0 = (long) r4
+            r16 = 0
+            r10 = r21
+            r6 = r14
+            r14 = r0
+            r17 = r29
+            r9.processPendingRead(r10, r12, r14, r16, r17)
+            org.telegram.messenger.MessagesStorage r0 = r20.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r9 = r0.getStorageQueue()
+            org.telegram.messenger.-$$Lambda$MessagesController$OQlgO2xYDVu_k1kMd9Z0bskjwOQ r10 = new org.telegram.messenger.-$$Lambda$MessagesController$OQlgO2xYDVu_k1kMd9Z0bskjwOQ
+            r0 = r10
+            r1 = r20
+            r2 = r21
+            r4 = r25
+            r5 = r26
+            r11 = r6
+            r6 = r27
+            r12 = r7
+            r7 = r24
+            r0.<init>(r2, r4, r5, r6, r7)
+            r9.postRunnable(r10)
+            if (r12 == 0) goto L_0x00f5
+            int r0 = r12.ttl
+            if (r0 <= 0) goto L_0x00f5
+            org.telegram.tgnet.ConnectionsManager r0 = r20.getConnectionsManager()
             int r0 = r0.getCurrentTime()
-            int r3 = java.lang.Math.max(r0, r14)
-            org.telegram.messenger.MessagesStorage r0 = r17.getMessagesStorage()
-            int r1 = r9.id
+            int r3 = java.lang.Math.max(r0, r11)
+            org.telegram.messenger.MessagesStorage r0 = r20.getMessagesStorage()
+            int r1 = r12.id
             r4 = 0
             r5 = 0
-            r2 = r22
+            r2 = r25
             r0.createTaskForSecretChat(r1, r2, r3, r4, r5)
-        L_0x00ee:
-            if (r16 == 0) goto L_0x0105
+        L_0x00f5:
+            if (r18 == 0) goto L_0x010c
             org.telegram.messenger.DispatchQueue r7 = org.telegram.messenger.Utilities.stageQueue
-            org.telegram.messenger.-$$Lambda$MessagesController$UIySoYNo-vTwNlRhtB4KKr9Ut0U r8 = new org.telegram.messenger.-$$Lambda$MessagesController$UIySoYNo-vTwNlRhtB4KKr9Ut0U
-            r0 = r8
-            r1 = r17
-            r2 = r18
-            r4 = r25
-            r5 = r22
-            r6 = r20
+            org.telegram.messenger.-$$Lambda$MessagesController$UIySoYNo-vTwNlRhtB4KKr9Ut0U r9 = new org.telegram.messenger.-$$Lambda$MessagesController$UIySoYNo-vTwNlRhtB4KKr9Ut0U
+            r0 = r9
+            r1 = r20
+            r2 = r21
+            r4 = r28
+            r5 = r25
+            r6 = r23
             r0.<init>(r2, r4, r5, r6)
-            r7.postRunnable(r8)
-        L_0x0105:
+            r7.postRunnable(r9)
+        L_0x010c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.markDialogAsRead(long, int, int, int, boolean, int, boolean, int):void");
     }
 
-    public /* synthetic */ void lambda$markDialogAsRead$177$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
-        AndroidUtilities.runOnUIThread(new Runnable(j, i, i2, z, z2) {
+    public /* synthetic */ void lambda$markDialogAsRead$177$MessagesController(long j, int i, int i2, boolean z) {
+        AndroidUtilities.runOnUIThread(new Runnable(j, i, i2, z) {
             private final /* synthetic */ long f$1;
             private final /* synthetic */ int f$2;
             private final /* synthetic */ int f$3;
             private final /* synthetic */ boolean f$4;
-            private final /* synthetic */ boolean f$5;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r4;
                 this.f$3 = r5;
                 this.f$4 = r6;
-                this.f$5 = r7;
             }
 
             public final void run() {
-                MessagesController.this.lambda$null$176$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                MessagesController.this.lambda$null$176$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$176$MessagesController(long j, int i, int i2, boolean z, boolean z2) {
-        TLRPC$Dialog tLRPC$Dialog;
+    public /* synthetic */ void lambda$null$176$MessagesController(long j, int i, int i2, boolean z) {
         long j2 = j;
         int i3 = i2;
-        TLRPC$Dialog tLRPC$Dialog2 = this.dialogs_dict.get(j2);
-        if (tLRPC$Dialog2 != null) {
-            int i4 = tLRPC$Dialog2.unread_count;
-            if (i == 0 || i3 >= tLRPC$Dialog2.top_message) {
-                tLRPC$Dialog2.unread_count = 0;
+        TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j2);
+        if (tLRPC$Dialog != null) {
+            int i4 = tLRPC$Dialog.unread_count;
+            if (i == 0 || i3 >= tLRPC$Dialog.top_message) {
+                tLRPC$Dialog.unread_count = 0;
             } else {
                 int max = Math.max(i4 - i, 0);
-                tLRPC$Dialog2.unread_count = max;
+                tLRPC$Dialog.unread_count = max;
                 if (i3 != Integer.MIN_VALUE) {
-                    int i5 = tLRPC$Dialog2.top_message;
+                    int i5 = tLRPC$Dialog.top_message;
                     if (max > i5 - i3) {
-                        tLRPC$Dialog2.unread_count = i5 - i3;
+                        tLRPC$Dialog.unread_count = i5 - i3;
                     }
                 }
             }
-            int i6 = tLRPC$Dialog2.folder_id;
-            if (!(i6 == 0 || (tLRPC$Dialog = this.dialogs_dict.get(DialogObject.makeFolderDialogId(i6))) == null)) {
-                if (z) {
-                    if (isDialogMuted(tLRPC$Dialog2.id)) {
-                        tLRPC$Dialog.unread_count -= i4 - tLRPC$Dialog2.unread_count;
-                    } else {
-                        tLRPC$Dialog.unread_mentions_count -= i4 - tLRPC$Dialog2.unread_count;
-                    }
-                } else if (tLRPC$Dialog2.unread_count == 0) {
-                    if (isDialogMuted(tLRPC$Dialog2.id)) {
-                        tLRPC$Dialog.unread_count--;
-                    } else {
-                        tLRPC$Dialog.unread_mentions_count--;
-                    }
-                }
+            boolean z2 = tLRPC$Dialog.unread_mark;
+            if (z2) {
+                tLRPC$Dialog.unread_mark = false;
+                getMessagesStorage().setDialogUnread(tLRPC$Dialog.id, false);
             }
-            boolean z3 = tLRPC$Dialog2.unread_mark;
-            if (z3) {
-                tLRPC$Dialog2.unread_mark = false;
-                getMessagesStorage().setDialogUnread(tLRPC$Dialog2.id, false);
-            }
-            if ((i4 != 0 || z3) && tLRPC$Dialog2.unread_count == 0) {
+            if ((i4 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
                 if (!isDialogMuted(j)) {
                     this.unreadUnmutedDialogs--;
                 }
-                int i7 = 0;
+                int i6 = 0;
                 while (true) {
                     DialogFilter[] dialogFilterArr = this.selectedDialogFilter;
-                    if (i7 < dialogFilterArr.length) {
-                        if (dialogFilterArr[i7] != null && (dialogFilterArr[i7].flags & DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0) {
+                    if (i6 < dialogFilterArr.length) {
+                        if (dialogFilterArr[i6] != null && (dialogFilterArr[i6].flags & DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0) {
                             sortDialogs((SparseArray<TLRPC$Chat>) null);
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                             break;
                         }
-                        i7++;
+                        i6++;
                     } else {
                         break;
                     }
@@ -12652,7 +12652,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 256);
         }
-        if (!z2) {
+        if (!z) {
             getNotificationsController().processReadMessages((SparseLongArray) null, j, 0, i2, false);
             LongSparseArray longSparseArray = new LongSparseArray(1);
             longSparseArray.put(j2, 0);
@@ -12665,14 +12665,13 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationsController().processDialogsUpdateRead(longSparseArray2);
     }
 
-    public /* synthetic */ void lambda$markDialogAsRead$179$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
-        AndroidUtilities.runOnUIThread(new Runnable(j, i, z, i2, i3, z2) {
+    public /* synthetic */ void lambda$markDialogAsRead$179$MessagesController(long j, int i, boolean z, int i2, int i3) {
+        AndroidUtilities.runOnUIThread(new Runnable(j, i, z, i2, i3) {
             private final /* synthetic */ long f$1;
             private final /* synthetic */ int f$2;
             private final /* synthetic */ boolean f$3;
             private final /* synthetic */ int f$4;
             private final /* synthetic */ int f$5;
-            private final /* synthetic */ boolean f$6;
 
             {
                 this.f$1 = r2;
@@ -12680,68 +12679,50 @@ public class MessagesController extends BaseController implements NotificationCe
                 this.f$3 = r5;
                 this.f$4 = r6;
                 this.f$5 = r7;
-                this.f$6 = r8;
             }
 
             public final void run() {
-                MessagesController.this.lambda$null$178$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                MessagesController.this.lambda$null$178$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$178$MessagesController(long j, int i, boolean z, int i2, int i3, boolean z2) {
-        TLRPC$Dialog tLRPC$Dialog;
+    public /* synthetic */ void lambda$null$178$MessagesController(long j, int i, boolean z, int i2, int i3) {
         getNotificationsController().processReadMessages((SparseLongArray) null, j, i, 0, z);
-        TLRPC$Dialog tLRPC$Dialog2 = this.dialogs_dict.get(j);
-        if (tLRPC$Dialog2 != null) {
-            int i4 = tLRPC$Dialog2.unread_count;
-            if (i2 == 0 || i3 <= tLRPC$Dialog2.top_message) {
-                tLRPC$Dialog2.unread_count = 0;
+        TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j);
+        if (tLRPC$Dialog != null) {
+            int i4 = tLRPC$Dialog.unread_count;
+            if (i2 == 0 || i3 <= tLRPC$Dialog.top_message) {
+                tLRPC$Dialog.unread_count = 0;
             } else {
                 int max = Math.max(i4 - i2, 0);
-                tLRPC$Dialog2.unread_count = max;
+                tLRPC$Dialog.unread_count = max;
                 if (i3 != Integer.MAX_VALUE) {
-                    int i5 = tLRPC$Dialog2.top_message;
+                    int i5 = tLRPC$Dialog.top_message;
                     if (max > i3 - i5) {
-                        tLRPC$Dialog2.unread_count = i3 - i5;
+                        tLRPC$Dialog.unread_count = i3 - i5;
                     }
                 }
             }
-            int i6 = tLRPC$Dialog2.folder_id;
-            if (!(i6 == 0 || (tLRPC$Dialog = this.dialogs_dict.get(DialogObject.makeFolderDialogId(i6))) == null)) {
-                if (z2) {
-                    if (isDialogMuted(tLRPC$Dialog2.id)) {
-                        tLRPC$Dialog.unread_count -= i4 - tLRPC$Dialog2.unread_count;
-                    } else {
-                        tLRPC$Dialog.unread_mentions_count -= i4 - tLRPC$Dialog2.unread_count;
-                    }
-                } else if (tLRPC$Dialog2.unread_count == 0) {
-                    if (isDialogMuted(tLRPC$Dialog2.id)) {
-                        tLRPC$Dialog.unread_count--;
-                    } else {
-                        tLRPC$Dialog.unread_mentions_count--;
-                    }
-                }
+            boolean z2 = tLRPC$Dialog.unread_mark;
+            if (z2) {
+                tLRPC$Dialog.unread_mark = false;
+                getMessagesStorage().setDialogUnread(tLRPC$Dialog.id, false);
             }
-            boolean z3 = tLRPC$Dialog2.unread_mark;
-            if (z3) {
-                tLRPC$Dialog2.unread_mark = false;
-                getMessagesStorage().setDialogUnread(tLRPC$Dialog2.id, false);
-            }
-            if ((i4 != 0 || z3) && tLRPC$Dialog2.unread_count == 0) {
+            if ((i4 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
                 if (!isDialogMuted(j)) {
                     this.unreadUnmutedDialogs--;
                 }
-                int i7 = 0;
+                int i6 = 0;
                 while (true) {
                     DialogFilter[] dialogFilterArr = this.selectedDialogFilter;
-                    if (i7 < dialogFilterArr.length) {
-                        if (dialogFilterArr[i7] != null && (dialogFilterArr[i7].flags & DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0) {
+                    if (i6 < dialogFilterArr.length) {
+                        if (dialogFilterArr[i6] != null && (dialogFilterArr[i6].flags & DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0) {
                             sortDialogs((SparseArray<TLRPC$Chat>) null);
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                             break;
                         }
-                        i7++;
+                        i6++;
                     } else {
                         break;
                     }
@@ -23046,24 +23027,24 @@ public class MessagesController extends BaseController implements NotificationCe
         return this.clearingHistoryDialogs.get(j) != null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x027a  */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x027a  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x0281  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void sortDialogs(android.util.SparseArray<org.telegram.tgnet.TLRPC$Chat> r15) {
+    public void sortDialogs(android.util.SparseArray<org.telegram.tgnet.TLRPC$Chat> r14) {
         /*
-            r14 = this;
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r14.dialogsServerOnly
+            r13 = this;
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r13.dialogsServerOnly
             r0.clear()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r14.dialogsCanAddUsers
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r13.dialogsCanAddUsers
             r0.clear()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r14.dialogsChannelsOnly
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r13.dialogsChannelsOnly
             r0.clear()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r14.dialogsGroupsOnly
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r13.dialogsGroupsOnly
             r0.clear()
             r0 = 0
             r1 = 0
         L_0x0016:
-            org.telegram.messenger.MessagesController$DialogFilter[] r2 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r2 = r13.selectedDialogFilter
             int r3 = r2.length
             if (r1 >= r3) goto L_0x0029
             r3 = r2[r1]
@@ -23075,16 +23056,16 @@ public class MessagesController extends BaseController implements NotificationCe
             int r1 = r1 + 1
             goto L_0x0016
         L_0x0029:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r14.dialogsUsersOnly
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.dialogsUsersOnly
             r1.clear()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r14.dialogsForward
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.dialogsForward
             r1.clear()
             r1 = 0
         L_0x0034:
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r2 = r14.dialogsByFolder
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r2 = r13.dialogsByFolder
             int r2 = r2.size()
             if (r1 >= r2) goto L_0x004c
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r2 = r14.dialogsByFolder
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r2 = r13.dialogsByFolder
             java.lang.Object r2 = r2.valueAt(r1)
             java.util.ArrayList r2 = (java.util.ArrayList) r2
             if (r2 == 0) goto L_0x0049
@@ -23093,40 +23074,40 @@ public class MessagesController extends BaseController implements NotificationCe
             int r1 = r1 + 1
             goto L_0x0034
         L_0x004c:
-            r14.unreadUnmutedDialogs = r0
-            org.telegram.messenger.UserConfig r1 = r14.getUserConfig()
+            r13.unreadUnmutedDialogs = r0
+            org.telegram.messenger.UserConfig r1 = r13.getUserConfig()
             int r1 = r1.getClientUserId()
-            org.telegram.messenger.MessagesController$DialogFilter[] r2 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r2 = r13.selectedDialogFilter
             r3 = r2[r0]
             r4 = 32
             r5 = 1
             if (r3 != 0) goto L_0x0063
             r2 = r2[r5]
-            if (r2 == 0) goto L_0x0196
+            if (r2 == 0) goto L_0x019c
         L_0x0063:
             r2 = 0
         L_0x0064:
-            org.telegram.messenger.MessagesController$DialogFilter[] r3 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r3 = r13.selectedDialogFilter
             int r6 = r3.length
-            if (r2 >= r6) goto L_0x0196
+            if (r2 >= r6) goto L_0x019c
             r6 = r3[r2]
             if (r6 != 0) goto L_0x006f
-            goto L_0x0192
+            goto L_0x0198
         L_0x006f:
             r3 = r3[r2]
-            r14.sortingDialogFilter = r3
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r14.allDialogs
-            java.util.Comparator<org.telegram.tgnet.TLRPC$Dialog> r6 = r14.dialogDateComparator
+            r13.sortingDialogFilter = r3
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r13.allDialogs
+            java.util.Comparator<org.telegram.tgnet.TLRPC$Dialog> r6 = r13.dialogDateComparator
             java.util.Collections.sort(r3, r6)
-            org.telegram.messenger.MessagesController$DialogFilter[] r3 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r3 = r13.selectedDialogFilter
             r3 = r3[r2]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r3.dialogs
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r6 = r14.allDialogs
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r6 = r13.allDialogs
             int r6 = r6.size()
             r7 = 0
         L_0x0087:
-            if (r7 >= r6) goto L_0x0192
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r14.allDialogs
+            if (r7 >= r6) goto L_0x0198
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.allDialogs
             java.lang.Object r8 = r8.get(r7)
             org.telegram.tgnet.TLRPC$Dialog r8 = (org.telegram.tgnet.TLRPC$Dialog) r8
             long r9 = r8.id
@@ -23136,315 +23117,315 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r10 != 0) goto L_0x00a7
             if (r12 == 0) goto L_0x00a7
             java.lang.Integer r9 = java.lang.Integer.valueOf(r12)
-            org.telegram.tgnet.TLRPC$EncryptedChat r9 = r14.getEncryptedChat(r9)
+            org.telegram.tgnet.TLRPC$EncryptedChat r9 = r13.getEncryptedChat(r9)
             if (r9 == 0) goto L_0x00a7
             int r10 = r9.user_id
         L_0x00a7:
             boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_dialog
-            if (r9 == 0) goto L_0x018e
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            if (r9 == 0) goto L_0x0194
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             java.util.ArrayList<java.lang.Integer> r9 = r9.alwaysShow
             java.lang.Integer r11 = java.lang.Integer.valueOf(r10)
             boolean r9 = r9.contains(r11)
             if (r9 == 0) goto L_0x00c0
             r3.add(r8)
-            goto L_0x018e
+            goto L_0x0194
         L_0x00c0:
             int r9 = r8.folder_id
             if (r9 == 0) goto L_0x00d1
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r11 = DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
             r9 = r9 & r11
             if (r9 == 0) goto L_0x00d1
-            goto L_0x018e
+            goto L_0x0194
         L_0x00d1:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r11 = DIALOG_FILTER_FLAG_EXCLUDE_MUTED
             r9 = r9 & r11
-            if (r9 == 0) goto L_0x00e6
+            if (r9 == 0) goto L_0x00e8
             long r11 = r8.id
-            boolean r9 = r14.isDialogMuted(r11)
-            if (r9 == 0) goto L_0x00e6
-        L_0x00e4:
-            r9 = 1
-            goto L_0x010c
-        L_0x00e6:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            boolean r9 = r13.isDialogMuted(r11)
+            if (r9 == 0) goto L_0x00e8
+            int r9 = r8.unread_mentions_count
+            if (r9 == 0) goto L_0x010b
+        L_0x00e8:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r11 = DIALOG_FILTER_FLAG_EXCLUDE_READ
             r9 = r9 & r11
-            if (r9 == 0) goto L_0x00fa
+            if (r9 == 0) goto L_0x00fb
             int r9 = r8.unread_count
-            if (r9 != 0) goto L_0x00fa
+            if (r9 != 0) goto L_0x00fb
             boolean r9 = r8.unread_mark
-            if (r9 != 0) goto L_0x00fa
-            goto L_0x00e4
-        L_0x00fa:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            if (r9 == 0) goto L_0x010b
+        L_0x00fb:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             java.util.ArrayList<java.lang.Integer> r9 = r9.neverShow
             java.lang.Integer r11 = java.lang.Integer.valueOf(r10)
             boolean r9 = r9.contains(r11)
-            if (r9 == 0) goto L_0x010b
-            goto L_0x00e4
+            if (r9 == 0) goto L_0x010d
         L_0x010b:
+            r9 = 1
+            goto L_0x010e
+        L_0x010d:
             r9 = 0
-        L_0x010c:
-            if (r9 != 0) goto L_0x018e
-            if (r10 <= 0) goto L_0x015a
+        L_0x010e:
+            if (r9 != 0) goto L_0x0194
+            if (r10 <= 0) goto L_0x0160
             java.lang.Integer r9 = java.lang.Integer.valueOf(r10)
-            org.telegram.tgnet.TLRPC$User r9 = r14.getUser(r9)
-            if (r9 == 0) goto L_0x018e
+            org.telegram.tgnet.TLRPC$User r9 = r13.getUser(r9)
+            if (r9 == 0) goto L_0x0194
             boolean r11 = r9.bot
-            if (r11 != 0) goto L_0x014b
+            if (r11 != 0) goto L_0x0151
+            boolean r11 = r9.self
+            if (r11 != 0) goto L_0x0142
             boolean r9 = r9.contact
-            if (r9 != 0) goto L_0x013c
-            org.telegram.messenger.ContactsController r9 = r14.getContactsController()
+            if (r9 != 0) goto L_0x0142
+            org.telegram.messenger.ContactsController r9 = r13.getContactsController()
             boolean r9 = r9.isContact(r10)
-            if (r9 == 0) goto L_0x012d
-            goto L_0x013c
-        L_0x012d:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            if (r9 == 0) goto L_0x0133
+            goto L_0x0142
+        L_0x0133:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r10 = DIALOG_FILTER_FLAG_NON_CONTACTS
             r9 = r9 & r10
-            if (r9 == 0) goto L_0x018e
+            if (r9 == 0) goto L_0x0194
             r3.add(r8)
-            goto L_0x018e
-        L_0x013c:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            goto L_0x0194
+        L_0x0142:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r10 = DIALOG_FILTER_FLAG_CONTACTS
             r9 = r9 & r10
-            if (r9 == 0) goto L_0x018e
+            if (r9 == 0) goto L_0x0194
             r3.add(r8)
-            goto L_0x018e
-        L_0x014b:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            goto L_0x0194
+        L_0x0151:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r10 = DIALOG_FILTER_FLAG_BOTS
             r9 = r9 & r10
-            if (r9 == 0) goto L_0x018e
+            if (r9 == 0) goto L_0x0194
             r3.add(r8)
-            goto L_0x018e
-        L_0x015a:
-            if (r10 >= 0) goto L_0x018e
+            goto L_0x0194
+        L_0x0160:
+            if (r10 >= 0) goto L_0x0194
             int r9 = -r10
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            org.telegram.tgnet.TLRPC$Chat r9 = r14.getChat(r9)
-            if (r9 == 0) goto L_0x018e
+            org.telegram.tgnet.TLRPC$Chat r9 = r13.getChat(r9)
+            if (r9 == 0) goto L_0x0194
             boolean r10 = org.telegram.messenger.ChatObject.isChannel(r9)
-            if (r10 == 0) goto L_0x0180
+            if (r10 == 0) goto L_0x0186
             boolean r9 = r9.megagroup
-            if (r9 != 0) goto L_0x0180
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            if (r9 != 0) goto L_0x0186
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r10 = DIALOG_FILTER_FLAG_CHANNELS
             r9 = r9 & r10
-            if (r9 == 0) goto L_0x018e
+            if (r9 == 0) goto L_0x0194
             r3.add(r8)
-            goto L_0x018e
-        L_0x0180:
-            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r14.selectedDialogFilter
+            goto L_0x0194
+        L_0x0186:
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r13.selectedDialogFilter
             r9 = r9[r2]
             int r9 = r9.flags
             int r10 = DIALOG_FILTER_FLAG_GROUPS
             r9 = r9 & r10
-            if (r9 == 0) goto L_0x018e
+            if (r9 == 0) goto L_0x0194
             r3.add(r8)
-        L_0x018e:
+        L_0x0194:
             int r7 = r7 + 1
             goto L_0x0087
-        L_0x0192:
+        L_0x0198:
             int r2 = r2 + 1
             goto L_0x0064
-        L_0x0196:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r14.allDialogs
-            java.util.Comparator<org.telegram.tgnet.TLRPC$Dialog> r3 = r14.dialogComparator
+        L_0x019c:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r13.allDialogs
+            java.util.Comparator<org.telegram.tgnet.TLRPC$Dialog> r3 = r13.dialogComparator
             java.util.Collections.sort(r2, r3)
-            r14.isLeftProxyChannel = r5
-            org.telegram.tgnet.TLRPC$Dialog r2 = r14.proxyDialog
-            if (r2 == 0) goto L_0x01bd
+            r13.isLeftProxyChannel = r5
+            org.telegram.tgnet.TLRPC$Dialog r2 = r13.proxyDialog
+            if (r2 == 0) goto L_0x01c3
             long r2 = r2.id
             r6 = 0
             int r8 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r8 >= 0) goto L_0x01bd
+            if (r8 >= 0) goto L_0x01c3
             int r3 = (int) r2
             int r2 = -r3
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            org.telegram.tgnet.TLRPC$Chat r2 = r14.getChat(r2)
-            if (r2 == 0) goto L_0x01bd
+            org.telegram.tgnet.TLRPC$Chat r2 = r13.getChat(r2)
+            if (r2 == 0) goto L_0x01c3
             boolean r2 = r2.left
-            if (r2 != 0) goto L_0x01bd
-            r14.isLeftProxyChannel = r0
-        L_0x01bd:
-            org.telegram.messenger.NotificationsController r2 = r14.getNotificationsController()
-            boolean r2 = r2.showBadgeMessages
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r14.allDialogs
-            int r3 = r3.size()
+            if (r2 != 0) goto L_0x01c3
+            r13.isLeftProxyChannel = r0
+        L_0x01c3:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r13.allDialogs
+            int r2 = r2.size()
+            r3 = 0
             r6 = 0
-            r7 = 0
         L_0x01cb:
-            if (r6 >= r3) goto L_0x02bc
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r14.allDialogs
-            java.lang.Object r8 = r8.get(r6)
-            org.telegram.tgnet.TLRPC$Dialog r8 = (org.telegram.tgnet.TLRPC$Dialog) r8
-            long r9 = r8.id
-            long r11 = r9 >> r4
-            int r12 = (int) r11
-            int r11 = (int) r9
-            boolean r13 = r8 instanceof org.telegram.tgnet.TLRPC$TL_dialog
-            if (r13 == 0) goto L_0x0286
-            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r13 = r14.dialogMessage
-            java.lang.Object r9 = r13.get(r9)
-            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
-            if (r9 == 0) goto L_0x01f3
-            org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
-            int r9 = r9.date
-            int r10 = r14.dialogsLoadedTillDate
-            if (r9 >= r10) goto L_0x01f3
+            if (r3 >= r2) goto L_0x02bc
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r13.allDialogs
+            java.lang.Object r7 = r7.get(r3)
+            org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7
+            long r8 = r7.id
+            long r10 = r8 >> r4
+            int r11 = (int) r10
+            int r10 = (int) r8
+            boolean r12 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialog
+            if (r12 == 0) goto L_0x0286
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r12 = r13.dialogMessage
+            java.lang.Object r8 = r12.get(r8)
+            org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
+            if (r8 == 0) goto L_0x01f3
+            org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
+            int r8 = r8.date
+            int r9 = r13.dialogsLoadedTillDate
+            if (r8 >= r9) goto L_0x01f3
             goto L_0x02b9
         L_0x01f3:
-            if (r11 == 0) goto L_0x0271
-            if (r12 == r5) goto L_0x0271
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsServerOnly
-            r9.add(r8)
-            boolean r9 = org.telegram.messenger.DialogObject.isChannel(r8)
-            if (r9 == 0) goto L_0x0246
-            int r9 = -r11
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            org.telegram.tgnet.TLRPC$Chat r9 = r14.getChat(r9)
+            if (r10 == 0) goto L_0x0271
+            if (r11 == r5) goto L_0x0271
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsServerOnly
+            r8.add(r7)
+            boolean r8 = org.telegram.messenger.DialogObject.isChannel(r7)
+            if (r8 == 0) goto L_0x0246
+            int r8 = -r10
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            org.telegram.tgnet.TLRPC$Chat r8 = r13.getChat(r8)
+            if (r8 == 0) goto L_0x0226
+            boolean r9 = r8.megagroup
             if (r9 == 0) goto L_0x0226
-            boolean r10 = r9.megagroup
-            if (r10 == 0) goto L_0x0226
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r10 = r9.admin_rights
-            if (r10 == 0) goto L_0x021d
-            boolean r12 = r10.post_messages
-            if (r12 != 0) goto L_0x0221
-            boolean r10 = r10.add_admins
-            if (r10 != 0) goto L_0x0221
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r9 = r8.admin_rights
+            if (r9 == 0) goto L_0x021d
+            boolean r11 = r9.post_messages
+            if (r11 != 0) goto L_0x0221
+            boolean r9 = r9.add_admins
+            if (r9 != 0) goto L_0x0221
         L_0x021d:
-            boolean r10 = r9.creator
-            if (r10 == 0) goto L_0x0226
+            boolean r9 = r8.creator
+            if (r9 == 0) goto L_0x0226
         L_0x0221:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r10 = r14.dialogsCanAddUsers
-            r10.add(r8)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r13.dialogsCanAddUsers
+            r9.add(r7)
         L_0x0226:
+            if (r8 == 0) goto L_0x0232
+            boolean r9 = r8.megagroup
             if (r9 == 0) goto L_0x0232
-            boolean r10 = r9.megagroup
-            if (r10 == 0) goto L_0x0232
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsGroupsOnly
-            r9.add(r8)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsGroupsOnly
+            r8.add(r7)
             goto L_0x0271
         L_0x0232:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r10 = r14.dialogsChannelsOnly
-            r10.add(r8)
-            boolean r10 = org.telegram.messenger.ChatObject.hasAdminRights(r9)
-            if (r10 == 0) goto L_0x0244
-            boolean r9 = org.telegram.messenger.ChatObject.canPost(r9)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r13.dialogsChannelsOnly
+            r9.add(r7)
+            boolean r9 = org.telegram.messenger.ChatObject.hasAdminRights(r8)
             if (r9 == 0) goto L_0x0244
+            boolean r8 = org.telegram.messenger.ChatObject.canPost(r8)
+            if (r8 == 0) goto L_0x0244
             goto L_0x0271
         L_0x0244:
-            r9 = 0
+            r8 = 0
             goto L_0x0272
         L_0x0246:
-            if (r11 >= 0) goto L_0x0268
-            if (r15 == 0) goto L_0x025d
-            int r9 = -r11
-            java.lang.Object r9 = r15.get(r9)
-            org.telegram.tgnet.TLRPC$Chat r9 = (org.telegram.tgnet.TLRPC$Chat) r9
-            if (r9 == 0) goto L_0x025d
-            org.telegram.tgnet.TLRPC$InputChannel r9 = r9.migrated_to
-            if (r9 == 0) goto L_0x025d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r14.allDialogs
-            r8.remove(r6)
+            if (r10 >= 0) goto L_0x0268
+            if (r14 == 0) goto L_0x025d
+            int r8 = -r10
+            java.lang.Object r8 = r14.get(r8)
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
+            if (r8 == 0) goto L_0x025d
+            org.telegram.tgnet.TLRPC$InputChannel r8 = r8.migrated_to
+            if (r8 == 0) goto L_0x025d
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r13.allDialogs
+            r7.remove(r3)
             goto L_0x02b0
         L_0x025d:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsCanAddUsers
-            r9.add(r8)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsGroupsOnly
-            r9.add(r8)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsCanAddUsers
+            r8.add(r7)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsGroupsOnly
+            r8.add(r7)
             goto L_0x0271
         L_0x0268:
-            if (r11 <= 0) goto L_0x0271
-            if (r11 == r1) goto L_0x0271
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsUsersOnly
-            r9.add(r8)
+            if (r10 <= 0) goto L_0x0271
+            if (r10 == r1) goto L_0x0271
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsUsersOnly
+            r8.add(r7)
         L_0x0271:
-            r9 = 1
+            r8 = 1
         L_0x0272:
-            if (r9 == 0) goto L_0x0286
-            int r9 = r8.folder_id
-            if (r9 != 0) goto L_0x0286
-            if (r11 != r1) goto L_0x0281
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r14.dialogsForward
-            r7.add(r0, r8)
-            r7 = 1
+            if (r8 == 0) goto L_0x0286
+            int r8 = r7.folder_id
+            if (r8 != 0) goto L_0x0286
+            if (r10 != r1) goto L_0x0281
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r6 = r13.dialogsForward
+            r6.add(r0, r7)
+            r6 = 1
             goto L_0x0286
         L_0x0281:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r9 = r14.dialogsForward
-            r9.add(r8)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r13.dialogsForward
+            r8.add(r7)
         L_0x0286:
-            int r9 = r8.unread_count
-            if (r9 != 0) goto L_0x028e
-            boolean r9 = r8.unread_mark
-            if (r9 == 0) goto L_0x029b
+            int r8 = r7.unread_count
+            if (r8 != 0) goto L_0x028e
+            boolean r8 = r7.unread_mark
+            if (r8 == 0) goto L_0x029b
         L_0x028e:
-            long r9 = r8.id
-            boolean r9 = r14.isDialogMuted(r9)
-            if (r9 != 0) goto L_0x029b
-            int r9 = r14.unreadUnmutedDialogs
-            int r9 = r9 + r5
-            r14.unreadUnmutedDialogs = r9
+            long r8 = r7.id
+            boolean r8 = r13.isDialogMuted(r8)
+            if (r8 != 0) goto L_0x029b
+            int r8 = r13.unreadUnmutedDialogs
+            int r8 = r8 + r5
+            r13.unreadUnmutedDialogs = r8
         L_0x029b:
-            org.telegram.tgnet.TLRPC$Dialog r9 = r14.proxyDialog
-            if (r9 == 0) goto L_0x02b5
-            long r10 = r8.id
-            long r12 = r9.id
-            int r9 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r9 != 0) goto L_0x02b5
-            boolean r9 = r14.isLeftProxyChannel
-            if (r9 == 0) goto L_0x02b5
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r14.allDialogs
-            r8.remove(r6)
+            org.telegram.tgnet.TLRPC$Dialog r8 = r13.proxyDialog
+            if (r8 == 0) goto L_0x02b5
+            long r9 = r7.id
+            long r11 = r8.id
+            int r8 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r8 != 0) goto L_0x02b5
+            boolean r8 = r13.isLeftProxyChannel
+            if (r8 == 0) goto L_0x02b5
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r7 = r13.allDialogs
+            r7.remove(r3)
         L_0x02b0:
-            int r6 = r6 + -1
             int r3 = r3 + -1
+            int r2 = r2 + -1
             goto L_0x02b9
         L_0x02b5:
-            r9 = -1
-            r14.addDialogToItsFolder(r9, r8, r2)
+            r8 = -1
+            r13.addDialogToItsFolder(r8, r7)
         L_0x02b9:
-            int r6 = r6 + r5
+            int r3 = r3 + r5
             goto L_0x01cb
         L_0x02bc:
-            org.telegram.tgnet.TLRPC$Dialog r15 = r14.proxyDialog
-            if (r15 == 0) goto L_0x02cf
-            boolean r1 = r14.isLeftProxyChannel
+            org.telegram.tgnet.TLRPC$Dialog r14 = r13.proxyDialog
+            if (r14 == 0) goto L_0x02cf
+            boolean r1 = r13.isLeftProxyChannel
             if (r1 == 0) goto L_0x02cf
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r14.allDialogs
-            r1.add(r0, r15)
-            r15 = -2
-            org.telegram.tgnet.TLRPC$Dialog r1 = r14.proxyDialog
-            r14.addDialogToItsFolder(r15, r1, r2)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.allDialogs
+            r1.add(r0, r14)
+            r14 = -2
+            org.telegram.tgnet.TLRPC$Dialog r1 = r13.proxyDialog
+            r13.addDialogToItsFolder(r14, r1)
         L_0x02cf:
-            if (r7 != 0) goto L_0x02fc
-            org.telegram.messenger.UserConfig r15 = r14.getUserConfig()
-            org.telegram.tgnet.TLRPC$User r15 = r15.getCurrentUser()
-            if (r15 == 0) goto L_0x02fc
+            if (r6 != 0) goto L_0x02fc
+            org.telegram.messenger.UserConfig r14 = r13.getUserConfig()
+            org.telegram.tgnet.TLRPC$User r14 = r14.getCurrentUser()
+            if (r14 == 0) goto L_0x02fc
             org.telegram.tgnet.TLRPC$TL_dialog r1 = new org.telegram.tgnet.TLRPC$TL_dialog
             r1.<init>()
-            int r2 = r15.id
+            int r2 = r14.id
             long r2 = (long) r2
             r1.id = r2
             org.telegram.tgnet.TLRPC$TL_peerNotifySettings r2 = new org.telegram.tgnet.TLRPC$TL_peerNotifySettings
@@ -23453,23 +23434,23 @@ public class MessagesController extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$TL_peerUser r2 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r2.<init>()
             r1.peer = r2
-            int r15 = r15.id
-            r2.user_id = r15
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r15 = r14.dialogsForward
-            r15.add(r0, r1)
+            int r14 = r14.id
+            r2.user_id = r14
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r14 = r13.dialogsForward
+            r14.add(r0, r1)
         L_0x02fc:
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r15 = r14.dialogsByFolder
-            int r15 = r15.size()
-            if (r0 >= r15) goto L_0x0320
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r15 = r14.dialogsByFolder
-            int r15 = r15.keyAt(r0)
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r1 = r14.dialogsByFolder
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r14 = r13.dialogsByFolder
+            int r14 = r14.size()
+            if (r0 >= r14) goto L_0x0320
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r14 = r13.dialogsByFolder
+            int r14 = r14.keyAt(r0)
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r1 = r13.dialogsByFolder
             java.lang.Object r1 = r1.valueAt(r0)
             java.util.ArrayList r1 = (java.util.ArrayList) r1
             boolean r1 = r1.isEmpty()
             if (r1 == 0) goto L_0x031d
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r1 = r14.dialogsByFolder
-            r1.remove(r15)
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog>> r1 = r13.dialogsByFolder
+            r1.remove(r14)
         L_0x031d:
             int r0 = r0 + 1
             goto L_0x02fc
@@ -23479,12 +23460,9 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.sortDialogs(android.util.SparseArray):void");
     }
 
-    private void addDialogToItsFolder(int i, TLRPC$Dialog tLRPC$Dialog, boolean z) {
+    private void addDialogToItsFolder(int i, TLRPC$Dialog tLRPC$Dialog) {
         int i2;
-        TLRPC$Dialog tLRPC$Dialog2;
         if (tLRPC$Dialog instanceof TLRPC$TL_dialogFolder) {
-            tLRPC$Dialog.unread_count = 0;
-            tLRPC$Dialog.unread_mentions_count = 0;
             i2 = 0;
         } else {
             i2 = tLRPC$Dialog.folder_id;
@@ -23493,19 +23471,6 @@ public class MessagesController extends BaseController implements NotificationCe
         if (arrayList == null) {
             arrayList = new ArrayList();
             this.dialogsByFolder.put(i2, arrayList);
-        }
-        if (!(i2 == 0 || tLRPC$Dialog.unread_count == 0 || (tLRPC$Dialog2 = this.dialogs_dict.get(DialogObject.makeFolderDialogId(i2))) == null)) {
-            if (z) {
-                if (isDialogMuted(tLRPC$Dialog.id)) {
-                    tLRPC$Dialog2.unread_count += tLRPC$Dialog.unread_count;
-                } else {
-                    tLRPC$Dialog2.unread_mentions_count += tLRPC$Dialog.unread_count;
-                }
-            } else if (isDialogMuted(tLRPC$Dialog.id)) {
-                tLRPC$Dialog2.unread_count++;
-            } else {
-                tLRPC$Dialog2.unread_mentions_count++;
-            }
         }
         if (i == -1) {
             arrayList.add(tLRPC$Dialog);

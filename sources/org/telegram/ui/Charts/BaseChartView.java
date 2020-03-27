@@ -1363,20 +1363,28 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 float f2 = this.currentMaxHeight;
                 this.startFromMaxH = f2;
                 this.startFromMax = 0.0f;
-                float f3 = (f2 - this.currentMinHeight) / ((float) (i3 - i4));
-                float f4 = 0.045f;
-                if (((double) f3) < 0.1d) {
-                    f4 = 0.03f;
+                float f3 = this.currentMinHeight;
+                float f4 = (float) (i3 - i4);
+                float f5 = (f2 - f3) / f4;
+                if (f5 > 1.0f) {
+                    f5 = f4 / (f2 - f3);
                 }
-                this.minMaxUpdateStep = f4;
+                float f6 = 0.045f;
+                double d = (double) f5;
+                if (d > 0.7d) {
+                    f6 = 0.1f;
+                } else if (d < 0.1d) {
+                    f6 = 0.03f;
+                }
+                this.minMaxUpdateStep = f6;
             }
             if (this.useMinHeight && ((float) i4) != this.animateToMinHeight) {
                 this.startFromMinH = this.currentMinHeight;
                 this.startFromMin = 0.0f;
             }
             this.animateToMaxHeight = f;
-            float f5 = (float) i4;
-            this.animateToMinHeight = f5;
+            float f7 = (float) i4;
+            this.animateToMinHeight = f7;
             measureHeightThreshold();
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - this.lastTime >= 320 || z2) {
@@ -1388,7 +1396,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 }
                 if (!z) {
                     this.currentMaxHeight = f;
-                    this.currentMinHeight = f5;
+                    this.currentMinHeight = f7;
                     this.horizontalLines.clear();
                     this.horizontalLines.add(createHorizontalLinesData);
                     createHorizontalLinesData.alpha = 255;

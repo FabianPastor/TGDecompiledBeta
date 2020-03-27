@@ -2307,7 +2307,6 @@
     <string name="PinMessageAlertTitle">تثبيت الرسالة</string>
     <string name="PinNotify">إشعار جميع الأعضاء</string>
     <string name="PinToTop">تثبيت في الأعلى</string>
-    <string name="PinToTopLimitReached">المعذرة، لا يمكنك تثبيت أكثر من %1$s في قائمتك الرئيسية. في حال كنت تبحث عن المزيد من التنظيم، جرّب أرشفة بعض المحادثات – يسمح ملف المحادثات المؤرشفة بتثبيت عدد غير محدود من المحادثات.</string>
     <string name="Ping">التماس: %1$d ج.ث</string>
     <string name="Pink">الزهري</string>
     <string name="PinnedMessage">رسالة مثبتة</string>

@@ -2307,7 +2307,6 @@
     <string name="PinMessageAlertTitle">Nachricht anheften</string>
     <string name="PinNotify">Mitglieder benachrichtigen</string>
     <string name="PinToTop">Oben anheften</string>
-    <string name="PinToTopLimitReached">Bis zu %1$s kann man in der Chatliste oben anheften.\10\10Wenn du mehr Ordnung brauchst, versuche einige Chats zu archivieren. Der Ordner \"Archivierte Chats\" erlaubt das Anheften von beliebig vielen Chats.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Rosa</string>
     <string name="PinnedMessage">Angeheftete Nachricht</string>

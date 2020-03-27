@@ -1395,8 +1395,8 @@
     <public type="string" name="ArchiveHintText3" id="NUM" />
     <public type="string" name="ArchivePinned" id="NUM" />
     <public type="string" name="ArchivePinnedInfo" id="NUM" />
+    <public type="string" name="ArchiveStickerSetsAlertTitle" id="NUM" />
     <public type="string" name="ArchiveStickersAlertMessage" id="NUM" />
-    <public type="string" name="ArchiveStickersAlertTitle" id="NUM" />
     <public type="string" name="ArchivedChats" id="NUM" />
     <public type="string" name="ArchivedMasks" id="NUM" />
     <public type="string" name="ArchivedMasksAlertInfo" id="NUM" />
@@ -2093,8 +2093,8 @@
     <public type="string" name="DeleteProxy" id="NUM" />
     <public type="string" name="DeleteReportSpam" id="NUM" />
     <public type="string" name="DeleteSingleMessagesTitle" id="NUM" />
+    <public type="string" name="DeleteStickerSetsAlertTitle" id="NUM" />
     <public type="string" name="DeleteStickersAlertMessage" id="NUM" />
-    <public type="string" name="DeleteStickersAlertTitle" id="NUM" />
     <public type="string" name="DeleteTheme" id="NUM" />
     <public type="string" name="DeleteThemeAlert" id="NUM" />
     <public type="string" name="DeleteThemeTitle" id="NUM" />
@@ -2402,10 +2402,12 @@
     <public type="string" name="FilterEditItem" id="NUM" />
     <public type="string" name="FilterExclude" id="NUM" />
     <public type="string" name="FilterExcludeArchived" id="NUM" />
+    <public type="string" name="FilterExcludeInfo" id="NUM" />
     <public type="string" name="FilterExcludeMuted" id="NUM" />
     <public type="string" name="FilterExcludeRead" id="NUM" />
     <public type="string" name="FilterGroups" id="NUM" />
     <public type="string" name="FilterInclude" id="NUM" />
+    <public type="string" name="FilterIncludeInfo" id="NUM" />
     <public type="string" name="FilterMuted" id="NUM" />
     <public type="string" name="FilterNameHint" id="NUM" />
     <public type="string" name="FilterNeverShow" id="NUM" />
@@ -2437,6 +2439,7 @@
     <public type="string" name="FilterUnread" id="NUM" />
     <public type="string" name="Filters" id="NUM" />
     <public type="string" name="FiltersSetup" id="NUM" />
+    <public type="string" name="FiltersSetupPinAlert" id="NUM" />
     <public type="string" name="FinalResults" id="NUM" />
     <public type="string" name="FingerprintHelp" id="NUM" />
     <public type="string" name="FingerprintInfo" id="NUM" />
@@ -3539,7 +3542,7 @@
     <public type="string" name="PinMessageAlertTitle" id="NUM" />
     <public type="string" name="PinNotify" id="NUM" />
     <public type="string" name="PinToTop" id="NUM" />
-    <public type="string" name="PinToTopLimitReached" id="NUM" />
+    <public type="string" name="PinToTopLimitReached2" id="NUM" />
     <public type="string" name="Ping" id="NUM" />
     <public type="string" name="Pink" id="NUM" />
     <public type="string" name="PinnedMessage" id="NUM" />
@@ -4001,6 +4004,12 @@
     <public type="string" name="StartMessaging" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
     <public type="string" name="Statistics" id="NUM" />
+    <public type="string" name="StickerSets_few" id="NUM" />
+    <public type="string" name="StickerSets_many" id="NUM" />
+    <public type="string" name="StickerSets_one" id="NUM" />
+    <public type="string" name="StickerSets_other" id="NUM" />
+    <public type="string" name="StickerSets_two" id="NUM" />
+    <public type="string" name="StickerSets_zero" id="NUM" />
     <public type="string" name="StickersAndMasks" id="NUM" />
     <public type="string" name="StickersArchived" id="NUM" />
     <public type="string" name="StickersArchivedInfo" id="NUM" />

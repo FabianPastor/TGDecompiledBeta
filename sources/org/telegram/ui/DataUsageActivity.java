@@ -369,78 +369,81 @@ public class DataUsageActivity extends BaseFragment {
                         }
                         DataUsageActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DataUsageActivity.this.viewPages[1].selectedType, ((float) Math.abs(x)) / ((float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()));
                     }
-                } else if (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6)) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    this.velocityTracker.computeCurrentVelocity(1000, (float) DataUsageActivity.this.maximumVelocity);
-                    if (!this.startedTracking) {
-                        float xVelocity = this.velocityTracker.getXVelocity();
-                        float yVelocity = this.velocityTracker.getYVelocity();
-                        if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
-                            prepareForMoving(motionEvent, xVelocity < 0.0f);
+                } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
+                    if (!(motionEvent == null || motionEvent.getAction() == 3)) {
+                        if (this.velocityTracker == null) {
+                            this.velocityTracker = VelocityTracker.obtain();
                         }
-                    }
-                    if (this.startedTracking) {
-                        float x2 = DataUsageActivity.this.viewPages[0].getX();
-                        AnimatorSet unused = DataUsageActivity.this.tabsAnimation = new AnimatorSet();
-                        float xVelocity2 = this.velocityTracker.getXVelocity();
-                        boolean unused2 = DataUsageActivity.this.backAnimation = Math.abs(x2) < ((float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(this.velocityTracker.getYVelocity()));
-                        if (DataUsageActivity.this.backAnimation) {
-                            f = Math.abs(x2);
-                            if (DataUsageActivity.this.animatingForward) {
-                                DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) DataUsageActivity.this.viewPages[1].getMeasuredWidth()})});
-                            } else {
-                                DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-DataUsageActivity.this.viewPages[1].getMeasuredWidth())})});
-                            }
-                        } else {
-                            f = ((float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x2);
-                            if (DataUsageActivity.this.animatingForward) {
-                                DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-DataUsageActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                            } else {
-                                DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                        this.velocityTracker.computeCurrentVelocity(1000, (float) DataUsageActivity.this.maximumVelocity);
+                        if (!this.startedTracking) {
+                            float xVelocity = this.velocityTracker.getXVelocity();
+                            float yVelocity = this.velocityTracker.getYVelocity();
+                            if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
+                                prepareForMoving(motionEvent, xVelocity < 0.0f);
                             }
                         }
-                        DataUsageActivity.this.tabsAnimation.setInterpolator(DataUsageActivity.interpolator);
-                        int measuredWidth = getMeasuredWidth();
-                        float f2 = (float) (measuredWidth / 2);
-                        float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
-                        float abs2 = Math.abs(xVelocity2);
-                        if (abs2 > 0.0f) {
-                            i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
-                        } else {
-                            i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
-                        }
-                        DataUsageActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
-                        DataUsageActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                AnimatorSet unused = DataUsageActivity.this.tabsAnimation = null;
-                                if (DataUsageActivity.this.backAnimation) {
-                                    DataUsageActivity.this.viewPages[1].setVisibility(8);
+                        if (this.startedTracking) {
+                            float x2 = DataUsageActivity.this.viewPages[0].getX();
+                            AnimatorSet unused = DataUsageActivity.this.tabsAnimation = new AnimatorSet();
+                            float xVelocity2 = this.velocityTracker.getXVelocity();
+                            boolean unused2 = DataUsageActivity.this.backAnimation = Math.abs(x2) < ((float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(this.velocityTracker.getYVelocity()));
+                            if (DataUsageActivity.this.backAnimation) {
+                                f = Math.abs(x2);
+                                if (DataUsageActivity.this.animatingForward) {
+                                    DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) DataUsageActivity.this.viewPages[1].getMeasuredWidth()})});
                                 } else {
-                                    ViewPage viewPage = DataUsageActivity.this.viewPages[0];
-                                    DataUsageActivity.this.viewPages[0] = DataUsageActivity.this.viewPages[1];
-                                    DataUsageActivity.this.viewPages[1] = viewPage;
-                                    DataUsageActivity.this.viewPages[1].setVisibility(8);
-                                    DataUsageActivity dataUsageActivity = DataUsageActivity.this;
-                                    boolean unused2 = dataUsageActivity.swipeBackEnabled = dataUsageActivity.viewPages[0].selectedType == DataUsageActivity.this.scrollSlidingTextTabStrip.getFirstTabId();
-                                    DataUsageActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DataUsageActivity.this.viewPages[0].selectedType, 1.0f);
+                                    DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-DataUsageActivity.this.viewPages[1].getMeasuredWidth())})});
                                 }
-                                boolean unused3 = DataUsageActivity.this.tabsAnimationInProgress = false;
-                                boolean unused4 = AnonymousClass3.this.maybeStartTracking = false;
-                                boolean unused5 = AnonymousClass3.this.startedTracking = false;
-                                DataUsageActivity.this.actionBar.setEnabled(true);
-                                DataUsageActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
+                            } else {
+                                f = ((float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x2);
+                                if (DataUsageActivity.this.animatingForward) {
+                                    DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-DataUsageActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                                } else {
+                                    DataUsageActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) DataUsageActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(DataUsageActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                                }
                             }
-                        });
-                        DataUsageActivity.this.tabsAnimation.start();
-                        boolean unused3 = DataUsageActivity.this.tabsAnimationInProgress = true;
-                    } else {
+                            DataUsageActivity.this.tabsAnimation.setInterpolator(DataUsageActivity.interpolator);
+                            int measuredWidth = getMeasuredWidth();
+                            float f2 = (float) (measuredWidth / 2);
+                            float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
+                            float abs2 = Math.abs(xVelocity2);
+                            if (abs2 > 0.0f) {
+                                i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
+                            } else {
+                                i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
+                            }
+                            DataUsageActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
+                            DataUsageActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animator) {
+                                    AnimatorSet unused = DataUsageActivity.this.tabsAnimation = null;
+                                    if (DataUsageActivity.this.backAnimation) {
+                                        DataUsageActivity.this.viewPages[1].setVisibility(8);
+                                    } else {
+                                        ViewPage viewPage = DataUsageActivity.this.viewPages[0];
+                                        DataUsageActivity.this.viewPages[0] = DataUsageActivity.this.viewPages[1];
+                                        DataUsageActivity.this.viewPages[1] = viewPage;
+                                        DataUsageActivity.this.viewPages[1].setVisibility(8);
+                                        DataUsageActivity dataUsageActivity = DataUsageActivity.this;
+                                        boolean unused2 = dataUsageActivity.swipeBackEnabled = dataUsageActivity.viewPages[0].selectedType == DataUsageActivity.this.scrollSlidingTextTabStrip.getFirstTabId();
+                                        DataUsageActivity.this.scrollSlidingTextTabStrip.selectTabWithId(DataUsageActivity.this.viewPages[0].selectedType, 1.0f);
+                                    }
+                                    boolean unused3 = DataUsageActivity.this.tabsAnimationInProgress = false;
+                                    boolean unused4 = AnonymousClass3.this.maybeStartTracking = false;
+                                    boolean unused5 = AnonymousClass3.this.startedTracking = false;
+                                    DataUsageActivity.this.actionBar.setEnabled(true);
+                                    DataUsageActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
+                                }
+                            });
+                            DataUsageActivity.this.tabsAnimation.start();
+                            boolean unused3 = DataUsageActivity.this.tabsAnimationInProgress = true;
+                        }
+                    }
+                    if (!this.startedTracking) {
                         this.maybeStartTracking = false;
-                        this.startedTracking = false;
                         DataUsageActivity.this.actionBar.setEnabled(true);
                         DataUsageActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
                     }
+                    this.startedTracking = false;
                     VelocityTracker velocityTracker3 = this.velocityTracker;
                     if (velocityTracker3 != null) {
                         velocityTracker3.recycle();

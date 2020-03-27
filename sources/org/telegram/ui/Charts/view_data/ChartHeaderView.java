@@ -102,9 +102,8 @@ public class ChartHeaderView extends FrameLayout {
         }
         UpdateDatesRunnable updateDatesRunnable2 = this.updateDatesRunnable;
         if (updateDatesRunnable2.start / 86400000 != j / 86400000 || updateDatesRunnable2.end / 86400000 != j2 / 86400000) {
-            AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
             this.updateDatesRunnable.setDates(j, j2);
-            AndroidUtilities.runOnUIThread(this.updateDatesRunnable, 200);
+            this.updateDatesRunnable.run();
         }
     }
 
@@ -114,12 +113,9 @@ public class ChartHeaderView extends FrameLayout {
 
     public void zoomTo(BaseChartView baseChartView, long j, boolean z) {
         this.updateDatesRunnable.setDates(j, j);
-        AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
+        this.updateDatesRunnable.run();
         this.back.setVisibility(0);
         if (z) {
-            if (this.showDate) {
-                AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
-            }
             this.back.setAlpha(0.0f);
             this.back.setScaleX(0.3f);
             this.back.setScaleY(0.3f);
@@ -147,11 +143,8 @@ public class ChartHeaderView extends FrameLayout {
 
     public void zoomOut(BaseChartView baseChartView, boolean z) {
         this.updateDatesRunnable.setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
-        AndroidUtilities.cancelRunOnUIThread(this.updateDatesRunnable);
+        this.updateDatesRunnable.run();
         if (z) {
-            if (this.showDate) {
-                AndroidUtilities.runOnUIThread(this.updateDatesRunnable);
-            }
             this.title.setAlpha(0.0f);
             this.title.setScaleX(0.3f);
             this.title.setScaleY(0.3f);
@@ -203,29 +196,9 @@ public class ChartHeaderView extends FrameLayout {
             } else {
                 str = ChartHeaderView.this.formatter.format(new Date(this.start));
             }
-            CharSequence text = ChartHeaderView.this.dates.getText();
-            if (text != null && text.toString().equals(str)) {
-                return;
-            }
-            if (!TextUtils.isEmpty(text)) {
-                ChartHeaderView.this.datesTmp.setText(ChartHeaderView.this.dates.getText());
-                ChartHeaderView.this.dates.setText(str);
-                ChartHeaderView.this.datesTmp.setVisibility(0);
-                ChartHeaderView.this.datesTmp.setAlpha(1.0f);
-                ChartHeaderView.this.datesTmp.setPivotY((float) AndroidUtilities.dp(20.0f));
-                ChartHeaderView.this.datesTmp.setScaleX(1.0f);
-                ChartHeaderView.this.datesTmp.setScaleY(1.0f);
-                ChartHeaderView.this.datesTmp.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
-                ChartHeaderView.this.dates.setAlpha(0.0f);
-                ChartHeaderView.this.dates.setScaleX(0.3f);
-                ChartHeaderView.this.dates.setScaleY(0.3f);
-                ChartHeaderView.this.dates.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(200).start();
-                return;
-            }
-            ChartHeaderView.this.dates.setVisibility(0);
             ChartHeaderView.this.dates.setText(str);
+            ChartHeaderView.this.dates.setVisibility(0);
             ChartHeaderView.this.datesTmp.setVisibility(8);
-            ChartHeaderView.this.dates.setAlpha(1.0f);
         }
     }
 }

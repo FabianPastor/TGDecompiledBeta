@@ -223,6 +223,11 @@ public class ConnectionsManager extends BaseController {
             str3 = Build.MANUFACTURER + Build.MODEL;
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             str2 = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                str2 = str2 + " pbeta";
+            } else if (BuildVars.DEBUG_VERSION) {
+                str2 = str2 + " beta";
+            }
             str4 = "SDK " + Build.VERSION.SDK_INT;
             str = lowerCase;
         } catch (Exception unused) {

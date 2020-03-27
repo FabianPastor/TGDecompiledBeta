@@ -357,7 +357,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r5.<init>(r0)
             r3.setActionBarMenuItemSearchListener(r5)
             java.lang.String r5 = "Search"
-            r6 = 2131626600(0x7f0e0a68, float:1.888044E38)
+            r6 = 2131626604(0x7f0e0a6c, float:1.8880449E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setSearchFieldHint(r5)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -368,7 +368,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setAddToContainer(r4)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r5 = "ThemePreview"
-            r6 = 2131626946(0x7f0e0bc2, float:1.8881143E38)
+            r6 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setTitle(r5)
             org.telegram.ui.ThemePreviewActivity$2 r3 = new org.telegram.ui.ThemePreviewActivity$2
@@ -653,7 +653,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r8 = r0.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r8 = r8.createMenu()
             r15 = 4
-            r14 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r14 = 2131626583(0x7f0e0a57, float:1.8880406E38)
             java.lang.String r13 = "Save"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r14)
             java.lang.String r13 = r13.toUpperCase()
@@ -932,7 +932,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             r6.setTextColor(r8)
             android.widget.TextView r6 = r0.bottomOverlayChatText
-            r8 = 2131626702(0x7f0e0ace, float:1.8880648E38)
+            r8 = 2131626706(0x7f0e0ad2, float:1.8880656E38)
             java.lang.String r12 = "SetBackground"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             r6.setText(r8)
@@ -2593,21 +2593,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131626581(0x7f0e0a55, float:1.8880402E38)
+            r1 = 2131626585(0x7f0e0a59, float:1.888041E38)
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626580(0x7f0e0a54, float:1.88804E38)
+            r1 = 2131626584(0x7f0e0a58, float:1.8880408E38)
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+            r1 = 2131626583(0x7f0e0a57, float:1.8880406E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo
             r2.<init>()
             r0.setPositiveButton(r1, r2)
-            r1 = 2131626102(0x7f0e0876, float:1.887943E38)
+            r1 = 2131626105(0x7f0e0879, float:1.8879437E38)
             java.lang.String r2 = "PassportDiscard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c

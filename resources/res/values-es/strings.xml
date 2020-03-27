@@ -2307,7 +2307,6 @@
     <string name="PinMessageAlertTitle">Anclar mensaje</string>
     <string name="PinNotify">Notificar a todos los miembros</string>
     <string name="PinToTop">Anclar</string>
-    <string name="PinToTopLimitReached">Lo sentimos, sólo puedes anclar %1$s chats en la lista principal. Si buscas más organización, prueba archivando algunos chats. La carpeta de Chats archivados permite un número ilimitado de anclados.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Rosa</string>
     <string name="PinnedMessage">Mensaje anclado</string>

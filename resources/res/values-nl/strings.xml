@@ -2307,7 +2307,6 @@
     <string name="PinMessageAlertTitle">Bericht vastzetten</string>
     <string name="PinNotify">Alle leden informeren</string>
     <string name="PinToTop">Vastzetten</string>
-    <string name="PinToTopLimitReached">Je kunt maxmimaal %1$s vastzetten. Wil je je chats anders organiseren? Probeer wat chats te archiveren, in je archief kun je onbeperkt chats vastzetten.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Roze</string>
     <string name="PinnedMessage">Vastgezet bericht</string>

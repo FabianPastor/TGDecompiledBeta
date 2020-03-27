@@ -374,15 +374,23 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_reorderStickerSets, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    StickersActivity.this.lambda$sendReorder$4$StickersActivity(tLObject, tLRPC$TL_error);
+                    StickersActivity.this.lambda$sendReorder$5$StickersActivity(tLObject, tLRPC$TL_error);
                 }
             });
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(this.currentType));
         }
     }
 
-    public /* synthetic */ void lambda$sendReorder$4$StickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$null$4$StickersActivity() {
         this.activeReorderingRequests--;
+    }
+
+    public /* synthetic */ void lambda$sendReorder$5$StickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                StickersActivity.this.lambda$null$4$StickersActivity();
+            }
+        });
     }
 
     private void updateRows() {
@@ -586,11 +594,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (size2 != 1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) StickersActivity.this.getParentActivity());
                     if (i == 1) {
-                        builder.setTitle(LocaleController.formatString("DeleteStickersAlertTitle", NUM, Integer.valueOf(size2)));
+                        builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size2)));
                         builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", NUM, Integer.valueOf(size2)));
                         str = LocaleController.getString("Delete", NUM);
                     } else {
-                        builder.setTitle(LocaleController.formatString("ArchiveStickersAlertTitle", NUM, Integer.valueOf(size2)));
+                        builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size2)));
                         builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", NUM, Integer.valueOf(size2)));
                         str = LocaleController.getString("Archive", NUM);
                     }

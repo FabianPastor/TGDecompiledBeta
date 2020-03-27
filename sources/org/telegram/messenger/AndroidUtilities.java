@@ -2307,9 +2307,10 @@ public class AndroidUtilities {
             if (BuildVars.DEBUG_VERSION) {
                 Distribute.setEnabledForDebuggableBuild(true);
                 AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
-                return;
+            } else {
+                AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Crashes.class);
             }
-            AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Crashes.class);
+            AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         } catch (Throwable th) {
             FileLog.e(th);
         }
@@ -2894,7 +2895,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131625984(0x7f0e0800, float:1.8879191E38)
+            r7 = 2131625987(0x7f0e0803, float:1.8879197E38)
             java.lang.String r8 = "OK"
             r9 = 2131624195(0x7f0e0103, float:1.8875563E38)
             java.lang.String r10 = "AppName"
@@ -2917,7 +2918,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625452(0x7f0e05ec, float:1.8878112E38)
+            r1 = 2131625455(0x7f0e05ef, float:1.8878118E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3001,7 +3002,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625794(0x7f0e0742, float:1.8878806E38)
+            r1 = 2131625797(0x7f0e0745, float:1.8878812E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3108,7 +3109,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626318(0x7f0e094e, float:1.8879869E38)
+            r0 = 2131626321(0x7f0e0951, float:1.8879875E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw

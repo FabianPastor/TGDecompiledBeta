@@ -1534,8 +1534,8 @@ public final class R {
         public static final int ArchiveHintText3 = NUM;
         public static final int ArchivePinned = NUM;
         public static final int ArchivePinnedInfo = NUM;
+        public static final int ArchiveStickerSetsAlertTitle = NUM;
         public static final int ArchiveStickersAlertMessage = NUM;
-        public static final int ArchiveStickersAlertTitle = NUM;
         public static final int ArchivedChats = NUM;
         public static final int ArchivedMasks = NUM;
         public static final int ArchivedMasksAlertInfo = NUM;
@@ -2232,8 +2232,8 @@ public final class R {
         public static final int DeleteProxy = NUM;
         public static final int DeleteReportSpam = NUM;
         public static final int DeleteSingleMessagesTitle = NUM;
+        public static final int DeleteStickerSetsAlertTitle = NUM;
         public static final int DeleteStickersAlertMessage = NUM;
-        public static final int DeleteStickersAlertTitle = NUM;
         public static final int DeleteTheme = NUM;
         public static final int DeleteThemeAlert = NUM;
         public static final int DeleteThemeTitle = NUM;
@@ -2541,10 +2541,12 @@ public final class R {
         public static final int FilterEditItem = NUM;
         public static final int FilterExclude = NUM;
         public static final int FilterExcludeArchived = NUM;
+        public static final int FilterExcludeInfo = NUM;
         public static final int FilterExcludeMuted = NUM;
         public static final int FilterExcludeRead = NUM;
         public static final int FilterGroups = NUM;
         public static final int FilterInclude = NUM;
+        public static final int FilterIncludeInfo = NUM;
         public static final int FilterMuted = NUM;
         public static final int FilterNameHint = NUM;
         public static final int FilterNeverShow = NUM;
@@ -2576,6 +2578,7 @@ public final class R {
         public static final int FilterUnread = NUM;
         public static final int Filters = NUM;
         public static final int FiltersSetup = NUM;
+        public static final int FiltersSetupPinAlert = NUM;
         public static final int FinalResults = NUM;
         public static final int FingerprintHelp = NUM;
         public static final int FingerprintInfo = NUM;
@@ -3678,7 +3681,7 @@ public final class R {
         public static final int PinMessageAlertTitle = NUM;
         public static final int PinNotify = NUM;
         public static final int PinToTop = NUM;
-        public static final int PinToTopLimitReached = NUM;
+        public static final int PinToTopLimitReached2 = NUM;
         public static final int Ping = NUM;
         public static final int Pink = NUM;
         public static final int PinnedMessage = NUM;
@@ -4140,6 +4143,12 @@ public final class R {
         public static final int StartMessaging = NUM;
         public static final int StartText = NUM;
         public static final int Statistics = NUM;
+        public static final int StickerSets_few = NUM;
+        public static final int StickerSets_many = NUM;
+        public static final int StickerSets_one = NUM;
+        public static final int StickerSets_other = NUM;
+        public static final int StickerSets_two = NUM;
+        public static final int StickerSets_zero = NUM;
         public static final int StickersAndMasks = NUM;
         public static final int StickersArchived = NUM;
         public static final int StickersArchivedInfo = NUM;

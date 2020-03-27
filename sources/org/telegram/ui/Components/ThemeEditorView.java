@@ -385,7 +385,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131626600(0x7f0e0a68, float:1.888044E38)
+                    r1 = 2131626604(0x7f0e0a6c, float:1.8880449E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -1191,7 +1191,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131625813(0x7f0e0755, float:1.8878845E38)
+                r9 = 2131625816(0x7f0e0758, float:1.887885E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1315,7 +1315,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131626582(0x7f0e0a56, float:1.8880404E38)
+                r15 = 2131626586(0x7f0e0a5a, float:1.8880412E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1406,7 +1406,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131626579(0x7f0e0a53, float:1.8880398E38)
+                r3 = 2131626583(0x7f0e0a57, float:1.8880406E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)

@@ -2679,6 +2679,7 @@ public class MediaDataController extends BaseController {
         Context context2 = context;
         TLObject tLObject2 = tLObject;
         int i3 = i;
+        BaseFragment baseFragment2 = baseFragment;
         if (tLObject2 instanceof TLRPC$TL_messages_stickerSet) {
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet3 = (TLRPC$TL_messages_stickerSet) tLObject2;
             tLRPC$TL_messages_stickerSet = tLRPC$TL_messages_stickerSet3;
@@ -2728,7 +2729,7 @@ public class MediaDataController extends BaseController {
             if (!cancelRemovingStickerSet(tLRPC$StickerSet.id)) {
                 toggleStickerSetInternal(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4, z2);
             }
-        } else if (!z2) {
+        } else if (!z2 || baseFragment2 == null) {
             toggleStickerSetInternal(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4, false);
         } else {
             StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(context2, tLObject2, i3);
@@ -2782,7 +2783,7 @@ public class MediaDataController extends BaseController {
                     Bulletin.UndoButton.this.undo();
                 }
             });
-            Bulletin.make(baseFragment, (Bulletin.Layout) stickerSetBulletinLayout, 2750).show();
+            Bulletin.make(baseFragment2, (Bulletin.Layout) stickerSetBulletinLayout, 2750).show();
         }
     }
 
@@ -2894,7 +2895,7 @@ public class MediaDataController extends BaseController {
             processStickerSetInstallResultArchive(baseFragment, z, i, (TLRPC$TL_messages_stickerSetInstallResultArchive) tLObject);
         }
         loadStickers(i, false, false, true);
-        if (tLRPC$TL_error == null && z2) {
+        if (tLRPC$TL_error == null && z2 && baseFragment != null) {
             Bulletin.make(baseFragment, (Bulletin.Layout) new StickerSetBulletinLayout(context, tLObject2, 2), 1500).show();
         }
     }
@@ -4735,7 +4736,7 @@ public class MediaDataController extends BaseController {
             android.content.pm.ShortcutInfo$Builder r10 = new android.content.pm.ShortcutInfo$Builder     // Catch:{ all -> 0x02b3 }
             android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
             r10.<init>(r11, r9)     // Catch:{ all -> 0x02b3 }
-            r11 = 2131625752(0x7f0e0718, float:1.887872E38)
+            r11 = 2131625755(0x7f0e071b, float:1.8878727E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r10 = r10.setShortLabel(r12)     // Catch:{ all -> 0x02b3 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
@@ -5556,7 +5557,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
+            r9 = 2131626592(0x7f0e0a60, float:1.8880425E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1

@@ -622,7 +622,7 @@ public class UserCell extends FrameLayout {
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r6 == 0) goto L_0x019c
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
+            r4 = 2131626592(0x7f0e0a60, float:1.8880425E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.setText(r4, r5)
@@ -770,7 +770,7 @@ public class UserCell extends FrameLayout {
             int r5 = r0.statusOnlineColor
             r3.setTextColor(r5)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r5 = 2131625988(0x7f0e0804, float:1.88792E38)
+            r5 = 2131625991(0x7f0e0807, float:1.8879206E38)
             java.lang.String r6 = "Online"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
