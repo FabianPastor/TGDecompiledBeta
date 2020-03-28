@@ -118,7 +118,9 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public String getPath() {
-        return appendPath(new StringBuffer(), this).toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        appendPath(stringBuffer, this);
+        return stringBuffer.toString();
     }
 
     public String toString() {

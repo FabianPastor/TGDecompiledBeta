@@ -1824,7 +1824,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             intent.putExtra("android.intent.extra.EMAIL", "");
             intent.putExtra("android.intent.extra.SUBJECT", "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
             intent.putExtra("android.intent.extra.STREAM", uri);
-            getParentActivity().startActivityForResult(Intent.createChooser(intent, "Select email application."), 500);
+            if (getParentActivity() != null) {
+                getParentActivity().startActivityForResult(Intent.createChooser(intent, "Select email application."), 500);
+                return;
+            }
             return;
         }
         Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", NUM), 0).show();

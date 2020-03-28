@@ -145,8 +145,4 @@ public enum ID3v1Genre {
     public String getDescription() {
         return this.description;
     }
-
-    public int getId() {
-        return ordinal();
-    }
 }

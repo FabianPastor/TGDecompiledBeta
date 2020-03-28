@@ -176,6 +176,8 @@ public class FilterTabsView extends FrameLayout {
     public String unactiveTextColorKey = "actionBarTabUnactiveText";
 
     public interface FilterTabsViewDelegate {
+        boolean canPerformActions();
+
         boolean didSelectTab(TabView tabView, boolean z);
 
         int getTabCounter(int i);
@@ -434,7 +436,7 @@ public class FilterTabsView extends FrameLayout {
 
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(View view) {
-                return FilterTabsView.this.isEnabled();
+                return FilterTabsView.this.isEnabled() && FilterTabsView.this.delegate.canPerformActions();
             }
 
             /* access modifiers changed from: protected */
@@ -513,23 +515,25 @@ public class FilterTabsView extends FrameLayout {
 
     public /* synthetic */ void lambda$new$0$FilterTabsView(View view, int i, float f, float f2) {
         FilterTabsViewDelegate filterTabsViewDelegate;
-        TabView tabView = (TabView) view;
-        if (this.isEditing) {
-            if (i != 0) {
-                float dp = (float) AndroidUtilities.dp(6.0f);
-                if (tabView.rect.left - dp < f && tabView.rect.right + dp > f) {
-                    this.delegate.onDeletePressed(tabView.currentTab.id);
+        if (this.delegate.canPerformActions()) {
+            TabView tabView = (TabView) view;
+            if (this.isEditing) {
+                if (i != 0) {
+                    float dp = (float) AndroidUtilities.dp(6.0f);
+                    if (tabView.rect.left - dp < f && tabView.rect.right + dp > f) {
+                        this.delegate.onDeletePressed(tabView.currentTab.id);
+                    }
                 }
+            } else if (i != this.currentPosition || (filterTabsViewDelegate = this.delegate) == null) {
+                scrollToTab(tabView.currentTab.id, i);
+            } else {
+                filterTabsViewDelegate.onSamePageSelected();
             }
-        } else if (i != this.currentPosition || (filterTabsViewDelegate = this.delegate) == null) {
-            scrollToTab(tabView.currentTab.id, i);
-        } else {
-            filterTabsViewDelegate.onSamePageSelected();
         }
     }
 
     public /* synthetic */ boolean lambda$new$1$FilterTabsView(View view, int i) {
-        if (!this.isEditing) {
+        if (this.delegate.canPerformActions() && !this.isEditing) {
             if (this.delegate.didSelectTab((TabView) view, i == this.currentPosition)) {
                 this.listView.hideSelector(true);
                 return true;

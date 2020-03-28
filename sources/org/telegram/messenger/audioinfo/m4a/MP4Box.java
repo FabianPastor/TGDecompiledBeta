@@ -7,7 +7,6 @@ import org.telegram.messenger.audioinfo.util.PositionInputStream;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class MP4Box<I extends PositionInputStream> {
-    protected static final String ASCII = "ISO8859_1";
     private MP4Atom child;
     protected final DataInput data;
     private final I input;

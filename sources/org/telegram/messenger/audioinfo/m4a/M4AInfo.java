@@ -4,21 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.audioinfo.mp3.ID3v1Genre;
 
 public class M4AInfo extends AudioInfo {
-    private static final String ASCII = "ISO8859_1";
     static final Logger LOGGER = Logger.getLogger(M4AInfo.class.getName());
-    private static final String UTF_8 = "UTF-8";
     private final Level debugLevel;
-    private byte rating;
-    private BigDecimal speed;
-    private short tempo;
-    private BigDecimal volume;
 
     public M4AInfo(InputStream inputStream) throws IOException {
         this(inputStream, Level.FINEST);
@@ -48,7 +41,7 @@ public class M4AInfo extends AudioInfo {
             Logger logger2 = LOGGER;
             logger2.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (expected M4A or M4P)");
         }
-        this.version = String.valueOf(mP4Atom.readInt());
+        String.valueOf(mP4Atom.readInt());
     }
 
     /* access modifiers changed from: package-private */
@@ -102,8 +95,8 @@ public class M4AInfo extends AudioInfo {
                 logger.log(level, "mvhd: duration " + this.duration + " -> " + j);
             }
         }
-        this.speed = mP4Atom.readIntegerFixedPoint();
-        this.volume = mP4Atom.readShortFixedPoint();
+        mP4Atom.readIntegerFixedPoint();
+        mP4Atom.readShortFixedPoint();
     }
 
     /* access modifiers changed from: package-private */
@@ -438,10 +431,10 @@ public class M4AInfo extends AudioInfo {
                 this.title = mP4Atom.readString("UTF-8");
                 return;
             case 17:
-                this.rating = mP4Atom.readByte();
+                mP4Atom.readByte();
                 return;
             case 18:
-                this.tempo = mP4Atom.readShort();
+                mP4Atom.readShort();
                 return;
             case 19:
                 mP4Atom.skip(2);
@@ -451,21 +444,5 @@ public class M4AInfo extends AudioInfo {
             default:
                 return;
         }
-    }
-
-    public short getTempo() {
-        return this.tempo;
-    }
-
-    public byte getRating() {
-        return this.rating;
-    }
-
-    public BigDecimal getSpeed() {
-        return this.speed;
-    }
-
-    public BigDecimal getVolume() {
-        return this.volume;
     }
 }

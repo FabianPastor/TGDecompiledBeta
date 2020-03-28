@@ -14,17 +14,13 @@ public final class FingerprintManagerCompat {
     private Context mContext;
 
     public static abstract class AuthenticationCallback {
-        public void onAuthenticationError(int i, CharSequence charSequence) {
-        }
+        public abstract void onAuthenticationError(int i, CharSequence charSequence);
 
-        public void onAuthenticationFailed() {
-        }
+        public abstract void onAuthenticationFailed();
 
-        public void onAuthenticationHelp(int i, CharSequence charSequence) {
-        }
+        public abstract void onAuthenticationHelp(int i, CharSequence charSequence);
 
-        public void onAuthenticationSucceeded(AuthenticationResult authenticationResult) {
-        }
+        public abstract void onAuthenticationSucceeded(AuthenticationResult authenticationResult);
     }
 
     private interface FingerprintManagerCompatImpl {
@@ -113,14 +109,7 @@ public final class FingerprintManagerCompat {
     }
 
     public static final class AuthenticationResult {
-        private CryptoObject mCryptoObject;
-
         public AuthenticationResult(CryptoObject cryptoObject) {
-            this.mCryptoObject = cryptoObject;
-        }
-
-        public CryptoObject getCryptoObject() {
-            return this.mCryptoObject;
         }
     }
 

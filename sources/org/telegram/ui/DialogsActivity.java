@@ -913,7 +913,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             float f;
             int i;
             boolean z = false;
-            if (DialogsActivity.this.filterTabsView == null || DialogsActivity.this.searching || DialogsActivity.this.parentLayout.checkTransitionAnimation() || DialogsActivity.this.parentLayout.isInPreviewMode() || DialogsActivity.this.parentLayout.isPreviewOpenAnimationInProgress() || DialogsActivity.this.parentLayout.getDrawerLayoutContainer().isDrawerOpened() || (motionEvent != null && !DialogsActivity.this.startedTracking && motionEvent.getY() <= ((float) DialogsActivity.this.actionBar.getMeasuredHeight()) + DialogsActivity.this.actionBar.getTranslationY())) {
+            if (DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.isEditing() || DialogsActivity.this.searching || DialogsActivity.this.parentLayout.checkTransitionAnimation() || DialogsActivity.this.parentLayout.isInPreviewMode() || DialogsActivity.this.parentLayout.isPreviewOpenAnimationInProgress() || DialogsActivity.this.parentLayout.getDrawerLayoutContainer().isDrawerOpened() || (motionEvent != null && !DialogsActivity.this.startedTracking && motionEvent.getY() <= ((float) DialogsActivity.this.actionBar.getMeasuredHeight()) + DialogsActivity.this.actionBar.getTranslationY())) {
                 return false;
             }
             if (motionEvent != null) {
@@ -961,7 +961,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else if (motionEvent != null && motionEvent.getAction() == 0) {
                 float unused9 = DialogsActivity.this.additionalOffset = 0.0f;
             }
-            if (motionEvent != null && motionEvent.getAction() == 0 && !DialogsActivity.this.startedTracking && !DialogsActivity.this.maybeStartTracking && DialogsActivity.this.filterTabsView.getVisibility() == 0 && !DialogsActivity.this.filterTabsView.isEditing()) {
+            if (motionEvent != null && motionEvent.getAction() == 0 && !DialogsActivity.this.startedTracking && !DialogsActivity.this.maybeStartTracking && DialogsActivity.this.filterTabsView.getVisibility() == 0) {
                 this.startedTrackingPointerId = motionEvent.getPointerId(0);
                 boolean unused10 = DialogsActivity.this.maybeStartTracking = true;
                 this.startedTrackingX = (int) motionEvent.getX();
@@ -1930,9 +1930,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (!this.onlySelect) {
             this.actionBar.setAddToContainer(false);
+            this.actionBar.setCastShadows(false);
+            this.actionBar.setClipContent(true);
         }
-        this.actionBar.setClipContent(true);
-        this.actionBar.setCastShadows(false);
         this.actionBar.setTitleActionRunnable(new Runnable() {
             public final void run() {
                 DialogsActivity.this.lambda$createView$3$DialogsActivity();
@@ -2039,22 +2039,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(i == DialogsActivity.this.filterTabsView.getFirstTabId());
                         }
                         int unused = DialogsActivity.this.viewPages[1].selectedType = i;
-                        if (DialogsActivity.this.searching) {
-                            DialogsActivity.this.viewPages[1].setScaleX(0.9f);
-                            DialogsActivity.this.viewPages[1].setScaleY(0.9f);
-                            DialogsActivity.this.viewPages[1].setAlpha(0.0f);
-                            DialogsActivity.this.viewPages[1].listView.hide();
-                            DialogsActivity.this.viewPages[0].setScaleX(1.0f);
-                            DialogsActivity.this.viewPages[0].setScaleY(1.0f);
-                            DialogsActivity.this.viewPages[0].setAlpha(1.0f);
-                        } else {
-                            DialogsActivity.this.viewPages[1].setVisibility(0);
-                            DialogsActivity.this.viewPages[1].setTranslationX((float) DialogsActivity.this.viewPages[0].getMeasuredWidth());
-                        }
+                        DialogsActivity.this.viewPages[1].setVisibility(0);
+                        DialogsActivity.this.viewPages[1].setTranslationX((float) DialogsActivity.this.viewPages[0].getMeasuredWidth());
                         DialogsActivity.this.showScrollbars(false);
                         DialogsActivity.this.switchToCurrentSelectedMode(true);
                         boolean unused2 = DialogsActivity.this.animatingForward = z;
                     }
+                }
+
+                public boolean canPerformActions() {
+                    return !DialogsActivity.this.searching;
                 }
 
                 public void onPageScrolled(float f) {
@@ -2071,9 +2065,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.viewPages[0] = DialogsActivity.this.viewPages[1];
                             DialogsActivity.this.viewPages[1] = viewPage;
                             DialogsActivity.this.viewPages[1].setVisibility(8);
-                            if (DialogsActivity.this.searching) {
-                                DialogsActivity.this.viewPages[1].listView.show();
-                            }
                             DialogsActivity.this.showScrollbars(true);
                             DialogsActivity.this.updateCounters(false);
                             DialogsActivity dialogsActivity = DialogsActivity.this;
@@ -4957,7 +4948,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r4 = r4.clientUserId
             if (r8 != r4) goto L_0x0111
             java.lang.Object[] r8 = new java.lang.Object[r2]
-            r0 = 2131626592(0x7f0e0a60, float:1.8880425E38)
+            r0 = 2131626590(0x7f0e0a5e, float:1.888042E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r8[r1] = r0
@@ -5212,6 +5203,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         FragmentContextView fragmentContextView3 = this.fragmentLocationContextView;
         if (fragmentContextView3 != null) {
             fragmentContextView3.setTranslationY(((float) this.topPadding) + f);
+        }
+        if (this.viewPages != null) {
+            int i = 0;
+            while (true) {
+                ViewPage[] viewPageArr = this.viewPages;
+                if (i >= viewPageArr.length) {
+                    break;
+                }
+                viewPageArr[i].listView.setTopGlowOffset(this.viewPages[i].listView.getPaddingTop() + ((int) f));
+                i++;
+            }
         }
         this.fragmentView.invalidate();
     }
@@ -6105,7 +6107,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r3 = r0.canUnarchiveCount
             if (r3 == 0) goto L_0x0238
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r0.archiveItem
-            r4 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
+            r4 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
             java.lang.String r5 = "Unarchive"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = 2131165725(0x7var_d, float:1.7945675E38)
@@ -6256,7 +6258,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 2131165728(0x7var_, float:1.7945681E38)
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.pinItem
-            r2 = 2131627041(0x7f0e0CLASSNAME, float:1.8881335E38)
+            r2 = 2131627039(0x7f0e0c1f, float:1.8881331E38)
             java.lang.String r3 = "UnpinFromTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)

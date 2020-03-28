@@ -28,16 +28,7 @@ public abstract class AudioInfo {
     protected String title;
     protected short track;
     protected short tracks;
-    protected String version;
     protected short year;
-
-    public String getBrand() {
-        return this.brand;
-    }
-
-    public String getVersion() {
-        return this.version;
-    }
 
     public long getDuration() {
         return this.duration;

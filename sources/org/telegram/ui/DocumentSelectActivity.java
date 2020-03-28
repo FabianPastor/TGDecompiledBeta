@@ -1485,7 +1485,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r6 = 2131625176(0x7f0e04d8, float:1.8877553E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165379(0x7var_c3, float:1.7944973E38)
-            r9 = 2131626603(0x7f0e0a6b, float:1.8880447E38)
+            r9 = 2131626601(0x7f0e0a69, float:1.8880443E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1642,7 +1642,7 @@ public class DocumentSelectActivity extends BaseFragment {
             r2.<init>()
             java.lang.String r3 = "/"
             r2.title = r3
-            r4 = 2131626894(0x7f0e0b8e, float:1.8881037E38)
+            r4 = 2131626892(0x7f0e0b8c, float:1.8881033E38)
             java.lang.String r5 = "SystemRoot"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.subtitle = r4

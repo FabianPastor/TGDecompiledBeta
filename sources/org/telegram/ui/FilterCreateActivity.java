@@ -254,16 +254,22 @@ public class FilterCreateActivity extends BaseFragment {
         } else {
             this.includeBotsRow = -1;
         }
-        this.includeStartRow = this.rowCount;
-        int size = (this.includeExpanded || this.newAlwaysShow.size() < 8) ? this.newAlwaysShow.size() : Math.min(5, this.newAlwaysShow.size());
-        int i10 = this.rowCount + size;
-        this.rowCount = i10;
-        this.includeEndRow = i10;
-        if (size != this.newAlwaysShow.size()) {
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.includeShowMoreRow = i11;
+        if (!this.newAlwaysShow.isEmpty()) {
+            this.includeStartRow = this.rowCount;
+            int size = (this.includeExpanded || this.newAlwaysShow.size() < 8) ? this.newAlwaysShow.size() : Math.min(5, this.newAlwaysShow.size());
+            int i10 = this.rowCount + size;
+            this.rowCount = i10;
+            this.includeEndRow = i10;
+            if (size != this.newAlwaysShow.size()) {
+                int i11 = this.rowCount;
+                this.rowCount = i11 + 1;
+                this.includeShowMoreRow = i11;
+            } else {
+                this.includeShowMoreRow = -1;
+            }
         } else {
+            this.includeStartRow = -1;
+            this.includeEndRow = -1;
             this.includeShowMoreRow = -1;
         }
         int i12 = this.rowCount;
@@ -300,16 +306,22 @@ public class FilterCreateActivity extends BaseFragment {
         } else {
             this.excludeArchivedRow = -1;
         }
-        this.excludeStartRow = this.rowCount;
-        int size2 = (this.excludeExpanded || this.newNeverShow.size() < 8) ? this.newNeverShow.size() : Math.min(5, this.newNeverShow.size());
-        int i18 = this.rowCount + size2;
-        this.rowCount = i18;
-        this.excludeEndRow = i18;
-        if (size2 != this.newNeverShow.size()) {
-            int i19 = this.rowCount;
-            this.rowCount = i19 + 1;
-            this.excludeShowMoreRow = i19;
+        if (!this.newNeverShow.isEmpty()) {
+            this.excludeStartRow = this.rowCount;
+            int size2 = (this.excludeExpanded || this.newNeverShow.size() < 8) ? this.newNeverShow.size() : Math.min(5, this.newNeverShow.size());
+            int i18 = this.rowCount + size2;
+            this.rowCount = i18;
+            this.excludeEndRow = i18;
+            if (size2 != this.newNeverShow.size()) {
+                int i19 = this.rowCount;
+                this.rowCount = i19 + 1;
+                this.excludeShowMoreRow = i19;
+            } else {
+                this.excludeShowMoreRow = -1;
+            }
         } else {
+            this.excludeStartRow = -1;
+            this.excludeEndRow = -1;
             this.excludeShowMoreRow = -1;
         }
         int i20 = this.rowCount;

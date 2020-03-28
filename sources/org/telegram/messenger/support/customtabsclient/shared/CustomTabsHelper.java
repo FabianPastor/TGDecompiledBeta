@@ -14,25 +14,7 @@ import java.util.List;
 import org.telegram.messenger.ApplicationLoader;
 
 public class CustomTabsHelper {
-    private static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
-    static final String BETA_PACKAGE = "com.chrome.beta";
-    static final String DEV_PACKAGE = "com.chrome.dev";
-    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = "android.support.customtabs.extra.KEEP_ALIVE";
-    static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
-    static final String STABLE_PACKAGE = "com.android.chrome";
-    private static final String TAG = "CustomTabsHelper";
     private static String sPackageNameToUse;
-
-    public static String[] getPackages() {
-        return new String[]{"", "com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.google.android.apps.chrome"};
-    }
-
-    private CustomTabsHelper() {
-    }
-
-    public static void addKeepAliveExtra(Context context, Intent intent) {
-        intent.putExtra("android.support.customtabs.extra.KEEP_ALIVE", new Intent().setClassName(context.getPackageName(), KeepAliveService.class.getCanonicalName()));
-    }
 
     public static String getPackageNameToUse(Context context) {
         PackageManager packageManager;

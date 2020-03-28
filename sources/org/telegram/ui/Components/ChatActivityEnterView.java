@@ -66,7 +66,6 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
-import com.google.android.exoplayer2.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -4668,7 +4667,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         public void cancelRecordingAudioVideo() {
-            if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {
+            ImageView imageView;
+            if (!this.hasRecordVideo || (imageView = this.videoSendButton) == null || imageView.getTag() == null) {
                 this.delegate.needStartRecordAudio(0);
                 MediaController.getInstance().stopRecording(0, false, 0);
             } else {
@@ -5238,7 +5238,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         public boolean isInVideoMode() {
-            return this.videoSendButton.getTag() != null;
+            ImageView imageView = this.videoSendButton;
+            return (imageView == null || imageView.getTag() == null) ? false : true;
         }
 
         public boolean hasRecordVideo() {
@@ -5300,6 +5301,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.audioToSendMessageObject = null;
                 this.videoToSendMessageObject = null;
                 this.videoTimelineView.destroy();
+                if (this.videoSendButton == null || !isInVideoMode()) {
+                    ImageView imageView = this.audioSendButton;
+                    if (imageView != null) {
+                        imageView.setVisibility(0);
+                    }
+                } else {
+                    this.videoSendButton.setVisibility(0);
+                }
                 if (z) {
                     this.attachButton.setAlpha(0.0f);
                     this.emojiButton[0].setAlpha(0.0f);
@@ -6234,10 +6243,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             long j;
             float f;
             float f2;
+            float f3;
             final ViewGroup viewGroup;
             final ViewGroup.LayoutParams layoutParams;
             final int i2 = i;
-            Log.d("kek", "update record interface " + i2);
             if (this.recordingAudioVideo) {
                 if (this.recordInterfaceState != 1) {
                     this.recordInterfaceState = 1;
@@ -6361,30 +6370,38 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.messageEditText.setVisibility(0);
                     this.runningAnimationAudio = new AnimatorSet();
                     if (z || i2 == 4) {
+                        if (this.videoSendButton == null || !isInVideoMode()) {
+                            ImageView imageView4 = this.audioSendButton;
+                            if (imageView4 != null) {
+                                imageView4.setVisibility(0);
+                            }
+                        } else {
+                            this.videoSendButton.setVisibility(0);
+                        }
                         this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, this.recordCircleScale, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, this.recordCircleScale, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, "slideToCancelProgress", new float[]{1.0f})});
-                        ImageView imageView4 = this.audioSendButton;
-                        if (imageView4 != null) {
+                        ImageView imageView5 = this.audioSendButton;
+                        if (imageView5 != null) {
                             AnimatorSet animatorSet8 = this.runningAnimationAudio;
                             Animator[] animatorArr = new Animator[1];
                             Property property = View.ALPHA;
                             float[] fArr = new float[1];
                             fArr[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr[0] = ObjectAnimator.ofFloat(imageView4, property, fArr);
+                            animatorArr[0] = ObjectAnimator.ofFloat(imageView5, property, fArr);
                             animatorSet8.playTogether(animatorArr);
                         }
-                        ImageView imageView5 = this.videoSendButton;
-                        if (imageView5 != null) {
+                        ImageView imageView6 = this.videoSendButton;
+                        if (imageView6 != null) {
                             AnimatorSet animatorSet9 = this.runningAnimationAudio;
                             Animator[] animatorArr2 = new Animator[1];
                             Property property2 = View.ALPHA;
                             float[] fArr2 = new float[1];
                             fArr2[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr2[0] = ObjectAnimator.ofFloat(imageView5, property2, fArr2);
+                            animatorArr2[0] = ObjectAnimator.ofFloat(imageView6, property2, fArr2);
                             animatorSet9.playTogether(animatorArr2);
                         }
-                        ImageView imageView6 = this.scheduledButton;
-                        if (imageView6 != null) {
-                            this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView6, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
+                        ImageView imageView7 = this.scheduledButton;
+                        if (imageView7 != null) {
+                            this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView7, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
                         }
                         LinearLayout linearLayout2 = this.attachLayout;
                         if (linearLayout2 != null) {
@@ -6447,22 +6464,26 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.recordDeleteImageView.setScaleY(0.0f);
                         AnimatorSet animatorSet10 = new AnimatorSet();
                         animatorSet10.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.slideText, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{0.0f})});
-                        ImageView imageView7 = this.videoSendButton;
-                        if (imageView7 != null) {
-                            Animator[] animatorArr3 = new Animator[1];
+                        ImageView imageView8 = this.videoSendButton;
+                        if (imageView8 != null) {
+                            Animator[] animatorArr3 = new Animator[3];
                             Property property3 = View.ALPHA;
                             float[] fArr3 = new float[1];
                             fArr3[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr3[0] = ObjectAnimator.ofFloat(imageView7, property3, fArr3);
+                            animatorArr3[0] = ObjectAnimator.ofFloat(imageView8, property3, fArr3);
+                            animatorArr3[1] = ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_X, new float[]{1.0f});
+                            animatorArr3[2] = ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_Y, new float[]{1.0f});
                             animatorSet10.playTogether(animatorArr3);
                         }
-                        ImageView imageView8 = this.audioSendButton;
-                        if (imageView8 != null) {
-                            Animator[] animatorArr4 = new Animator[1];
+                        ImageView imageView9 = this.audioSendButton;
+                        if (imageView9 != null) {
+                            Animator[] animatorArr4 = new Animator[3];
                             Property property4 = View.ALPHA;
                             float[] fArr4 = new float[1];
                             fArr4[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr4[0] = ObjectAnimator.ofFloat(imageView8, property4, fArr4);
+                            animatorArr4[0] = ObjectAnimator.ofFloat(imageView9, property4, fArr4);
+                            animatorArr4[1] = ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_X, new float[]{1.0f});
+                            animatorArr4[2] = ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_Y, new float[]{1.0f});
                             animatorSet10.playTogether(animatorArr4);
                         }
                         animatorSet10.setDuration(150);
@@ -6493,6 +6514,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                         });
                     } else if (i2 == 2 || i2 == 5) {
+                        if (this.videoSendButton == null || !isInVideoMode()) {
+                            ImageView imageView10 = this.audioSendButton;
+                            if (imageView10 != null) {
+                                imageView10.setVisibility(0);
+                            }
+                        } else {
+                            this.videoSendButton.setVisibility(0);
+                        }
                         this.recordIsCanceled = true;
                         AnimatorSet animatorSet12 = new AnimatorSet();
                         animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f})});
@@ -6514,38 +6543,45 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             if (linearLayout3 != null) {
                                 animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(linearLayout3, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachLayout, View.TRANSLATION_X, new float[]{0.0f})});
                             }
-                            ImageView imageView9 = this.attachButton;
-                            if (imageView9 != null) {
+                            ImageView imageView11 = this.attachButton;
+                            if (imageView11 != null) {
                                 f2 = 1.0f;
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView9, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView11, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
                             } else {
                                 f2 = 1.0f;
                             }
-                            ImageView imageView10 = this.botButton;
-                            if (imageView10 != null) {
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView10, View.SCALE_X, new float[]{f2}), ObjectAnimator.ofFloat(this.botButton, View.SCALE_Y, new float[]{f2})});
+                            ImageView imageView12 = this.botButton;
+                            if (imageView12 != null) {
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView12, View.SCALE_X, new float[]{f2}), ObjectAnimator.ofFloat(this.botButton, View.SCALE_Y, new float[]{f2})});
                             }
-                            ImageView imageView11 = this.videoSendButton;
-                            if (imageView11 != null) {
+                            ImageView imageView13 = this.videoSendButton;
+                            if (imageView13 != null) {
                                 Animator[] animatorArr5 = new Animator[1];
                                 Property property5 = View.ALPHA;
                                 float[] fArr5 = new float[1];
                                 fArr5[0] = isInVideoMode() ? 1.0f : 0.0f;
-                                animatorArr5[0] = ObjectAnimator.ofFloat(imageView11, property5, fArr5);
+                                animatorArr5[0] = ObjectAnimator.ofFloat(imageView13, property5, fArr5);
                                 animatorSet12.playTogether(animatorArr5);
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_X, new float[]{1.0f})});
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_Y, new float[]{1.0f})});
                             }
-                            ImageView imageView12 = this.audioSendButton;
-                            if (imageView12 != null) {
+                            ImageView imageView14 = this.audioSendButton;
+                            if (imageView14 != null) {
                                 Animator[] animatorArr6 = new Animator[1];
                                 Property property6 = View.ALPHA;
                                 float[] fArr6 = new float[1];
                                 fArr6[0] = isInVideoMode() ? 0.0f : 1.0f;
-                                animatorArr6[0] = ObjectAnimator.ofFloat(imageView12, property6, fArr6);
+                                animatorArr6[0] = ObjectAnimator.ofFloat(imageView14, property6, fArr6);
                                 animatorSet12.playTogether(animatorArr6);
+                                f3 = 1.0f;
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_X, new float[]{1.0f})});
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_Y, new float[]{1.0f})});
+                            } else {
+                                f3 = 1.0f;
                             }
-                            ImageView imageView13 = this.scheduledButton;
-                            if (imageView13 != null) {
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView13, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
+                            ImageView imageView15 = this.scheduledButton;
+                            if (imageView15 != null) {
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView15, View.ALPHA, new float[]{f3}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
                             }
                             j = 150;
                         } else {
@@ -6558,9 +6594,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             } else {
                                 f = 1.0f;
                             }
-                            ImageView imageView14 = this.scheduledButton;
-                            if (imageView14 != null) {
-                                animatorSet14.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView14, View.ALPHA, new float[]{f}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
+                            ImageView imageView16 = this.scheduledButton;
+                            if (imageView16 != null) {
+                                animatorSet14.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView16, View.ALPHA, new float[]{f}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
                             }
                             j = 150;
                             animatorSet14.setDuration(150);
@@ -6607,33 +6643,41 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         this.recordDot.playDeleteAnimation();
                     } else {
+                        if (this.videoSendButton == null || !isInVideoMode()) {
+                            ImageView imageView17 = this.audioSendButton;
+                            if (imageView17 != null) {
+                                imageView17.setVisibility(0);
+                            }
+                        } else {
+                            this.videoSendButton.setVisibility(0);
+                        }
                         AnimatorSet animatorSet16 = new AnimatorSet();
                         animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f})});
-                        ImageView imageView15 = this.audioSendButton;
-                        if (imageView15 != null) {
+                        ImageView imageView18 = this.audioSendButton;
+                        if (imageView18 != null) {
                             Animator[] animatorArr7 = new Animator[1];
                             Property property7 = View.ALPHA;
                             float[] fArr7 = new float[1];
                             fArr7[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr7[0] = ObjectAnimator.ofFloat(imageView15, property7, fArr7);
+                            animatorArr7[0] = ObjectAnimator.ofFloat(imageView18, property7, fArr7);
                             animatorSet16.playTogether(animatorArr7);
                         }
-                        ImageView imageView16 = this.videoSendButton;
-                        if (imageView16 != null) {
+                        ImageView imageView19 = this.videoSendButton;
+                        if (imageView19 != null) {
                             Animator[] animatorArr8 = new Animator[1];
                             Property property8 = View.ALPHA;
                             float[] fArr8 = new float[1];
                             fArr8[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr8[0] = ObjectAnimator.ofFloat(imageView16, property8, fArr8);
+                            animatorArr8[0] = ObjectAnimator.ofFloat(imageView19, property8, fArr8);
                             animatorSet16.playTogether(animatorArr8);
                         }
                         LinearLayout linearLayout5 = this.attachLayout;
                         if (linearLayout5 != null) {
                             animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(linearLayout5, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.attachLayout, View.ALPHA, new float[]{1.0f})});
                         }
-                        ImageView imageView17 = this.scheduledButton;
-                        if (imageView17 != null) {
-                            animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView17, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
+                        ImageView imageView20 = this.scheduledButton;
+                        if (imageView20 != null) {
+                            animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView20, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
                         }
                         animatorSet16.setDuration(150);
                         animatorSet16.setStartDelay(200);
@@ -8769,180 +8813,195 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             } else {
                 int i5 = 4;
-                if (i == NotificationCenter.recordStartError || i == NotificationCenter.recordStopped) {
-                    if (objArr[0].intValue() == this.recordingGuid) {
-                        if (this.recordingAudioVideo) {
-                            this.recordingAudioVideo = false;
-                            if (i == NotificationCenter.recordStopped) {
-                                Integer num = objArr[1];
-                                if (num.intValue() != 4) {
-                                    if (isInVideoMode() && num.intValue() == 5) {
-                                        i5 = 1;
-                                    } else if (num.intValue() == 0) {
-                                        i5 = 5;
-                                    } else {
-                                        i5 = num.intValue() == 6 ? 2 : 3;
-                                    }
+                if (i != NotificationCenter.recordStartError && i != NotificationCenter.recordStopped) {
+                    int i6 = null;
+                    if (i == NotificationCenter.recordStarted) {
+                        if (objArr[0].intValue() == this.recordingGuid) {
+                            boolean booleanValue = objArr[1].booleanValue();
+                            ImageView imageView2 = this.videoSendButton;
+                            if (imageView2 != null) {
+                                if (!booleanValue) {
+                                    i6 = 1;
                                 }
-                                if (i5 != 3) {
-                                    updateRecordIntefrace(i5);
+                                imageView2.setTag(i6);
+                                int i7 = 8;
+                                this.videoSendButton.setVisibility(booleanValue ? 8 : 0);
+                                ImageView imageView3 = this.videoSendButton;
+                                if (booleanValue) {
+                                    i7 = 0;
                                 }
-                            } else {
-                                updateRecordIntefrace(2);
+                                imageView3.setVisibility(i7);
                             }
-                        }
-                        if (i == NotificationCenter.recordStopped) {
-                            Integer num2 = objArr[1];
-                        }
-                    }
-                } else if (i == NotificationCenter.recordStarted) {
-                    if (objArr[0].intValue() == this.recordingGuid) {
-                        objArr[1].booleanValue();
-                        if (!this.recordingAudioVideo) {
-                            this.recordingAudioVideo = true;
-                            updateRecordIntefrace(0);
-                            this.recordTimerView.start();
-                            boolean unused = this.recordDot.enterAnimation = false;
-                            return;
-                        }
-                        this.recordCircle.showWaves(true, true);
-                        this.recordTimerView.start();
-                        boolean unused2 = this.recordDot.enterAnimation = false;
-                    }
-                } else if (i == NotificationCenter.audioDidSent) {
-                    if (objArr[0].intValue() == this.recordingGuid) {
-                        VideoEditedInfo videoEditedInfo = objArr[1];
-                        if (videoEditedInfo instanceof VideoEditedInfo) {
-                            this.videoToSendMessageObject = videoEditedInfo;
-                            String str = objArr[2];
-                            this.audioToSendPath = str;
-                            this.videoTimelineView.setVideoPath(str);
-                            this.videoTimelineView.setKeyframes(objArr[3]);
-                            this.videoTimelineView.setVisibility(0);
-                            this.videoTimelineView.setMinProgressDiff(1000.0f / ((float) this.videoToSendMessageObject.estimatedDuration));
-                            updateRecordIntefrace(3);
-                            checkSendButton(false);
-                            return;
-                        }
-                        TLRPC$TL_document tLRPC$TL_document = objArr[1];
-                        this.audioToSend = tLRPC$TL_document;
-                        this.audioToSendPath = objArr[2];
-                        if (tLRPC$TL_document == null) {
-                            ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
-                            if (chatActivityEnterViewDelegate != null) {
-                                chatActivityEnterViewDelegate.onMessageSend((CharSequence) null, true, 0);
-                            }
-                        } else if (this.recordedAudioPanel != null) {
-                            TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
-                            tLRPC$TL_message.out = true;
-                            tLRPC$TL_message.id = 0;
-                            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
-                            tLRPC$TL_message.to_id = tLRPC$TL_peerUser;
-                            int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                            tLRPC$TL_message.from_id = clientUserId;
-                            tLRPC$TL_peerUser.user_id = clientUserId;
-                            tLRPC$TL_message.date = (int) (System.currentTimeMillis() / 1000);
-                            tLRPC$TL_message.message = "";
-                            tLRPC$TL_message.attachPath = this.audioToSendPath;
-                            TLRPC$TL_messageMediaDocument tLRPC$TL_messageMediaDocument = new TLRPC$TL_messageMediaDocument();
-                            tLRPC$TL_message.media = tLRPC$TL_messageMediaDocument;
-                            tLRPC$TL_messageMediaDocument.flags |= 3;
-                            tLRPC$TL_messageMediaDocument.document = this.audioToSend;
-                            tLRPC$TL_message.flags |= 768;
-                            this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false);
-                            this.recordedAudioPanel.setAlpha(1.0f);
-                            this.recordedAudioPanel.setVisibility(0);
-                            this.recordDeleteImageView.setVisibility(0);
-                            this.recordDeleteImageView.setAlpha(0.0f);
-                            this.recordDeleteImageView.setScaleY(0.0f);
-                            this.recordDeleteImageView.setScaleX(0.0f);
-                            int i6 = 0;
-                            while (true) {
-                                if (i6 >= this.audioToSend.attributes.size()) {
-                                    i3 = 0;
-                                    break;
-                                }
-                                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.audioToSend.attributes.get(i6);
-                                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) {
-                                    i3 = tLRPC$DocumentAttribute.duration;
-                                    break;
-                                }
-                                i6++;
-                            }
-                            int i7 = 0;
-                            while (true) {
-                                if (i7 >= this.audioToSend.attributes.size()) {
-                                    break;
-                                }
-                                TLRPC$DocumentAttribute tLRPC$DocumentAttribute2 = this.audioToSend.attributes.get(i7);
-                                if (tLRPC$DocumentAttribute2 instanceof TLRPC$TL_documentAttributeAudio) {
-                                    byte[] bArr = tLRPC$DocumentAttribute2.waveform;
-                                    if (bArr == null || bArr.length == 0) {
-                                        tLRPC$DocumentAttribute2.waveform = MediaController.getInstance().getWaveform(this.audioToSendPath);
-                                    }
-                                    this.recordedAudioSeekBar.setWaveform(tLRPC$DocumentAttribute2.waveform);
-                                } else {
-                                    i7++;
-                                }
-                            }
-                            this.recordedAudioTimeTextView.setText(AndroidUtilities.formatShortDuration(i3));
-                            checkSendButton(false);
-                            updateRecordIntefrace(3);
-                        }
-                    }
-                } else if (i == NotificationCenter.audioRouteChanged) {
-                    if (this.parentActivity != null) {
-                        boolean booleanValue = objArr[0].booleanValue();
-                        Activity activity = this.parentActivity;
-                        if (!booleanValue) {
-                            i4 = Integer.MIN_VALUE;
-                        }
-                        activity.setVolumeControlStream(i4);
-                    }
-                } else if (i == NotificationCenter.messagePlayingDidReset) {
-                    if (this.audioToSendMessageObject != null && !MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
-                        this.playPauseDrawable.setIcon(0, true);
-                        this.recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
-                        this.recordedAudioSeekBar.setProgress(0.0f);
-                    }
-                } else if (i == NotificationCenter.messagePlayingProgressDidChanged) {
-                    Integer num3 = objArr[0];
-                    if (this.audioToSendMessageObject != null && MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
-                        MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                        MessageObject messageObject = this.audioToSendMessageObject;
-                        messageObject.audioProgress = playingMessageObject.audioProgress;
-                        messageObject.audioProgressSec = playingMessageObject.audioProgressSec;
-                        if (!this.recordedAudioSeekBar.isDragging()) {
-                            this.recordedAudioSeekBar.setProgress(this.audioToSendMessageObject.audioProgress);
-                        }
-                    }
-                } else if (i == NotificationCenter.featuredStickersDidLoad) {
-                    if (this.emojiButton != null) {
-                        while (true) {
-                            ImageView[] imageViewArr = this.emojiButton;
-                            if (i4 < imageViewArr.length) {
-                                imageViewArr[i4].invalidate();
-                                i4++;
-                            } else {
+                            if (!this.recordingAudioVideo) {
+                                this.recordingAudioVideo = true;
+                                updateRecordIntefrace(0);
+                                this.recordTimerView.start();
+                                boolean unused = this.recordDot.enterAnimation = false;
                                 return;
                             }
+                            this.recordCircle.showWaves(true, true);
+                            this.recordTimerView.start();
+                            boolean unused2 = this.recordDot.enterAnimation = false;
+                        }
+                    } else if (i == NotificationCenter.audioDidSent) {
+                        if (objArr[0].intValue() == this.recordingGuid) {
+                            VideoEditedInfo videoEditedInfo = objArr[1];
+                            if (videoEditedInfo instanceof VideoEditedInfo) {
+                                this.videoToSendMessageObject = videoEditedInfo;
+                                String str = objArr[2];
+                                this.audioToSendPath = str;
+                                this.videoTimelineView.setVideoPath(str);
+                                this.videoTimelineView.setKeyframes(objArr[3]);
+                                this.videoTimelineView.setVisibility(0);
+                                this.videoTimelineView.setMinProgressDiff(1000.0f / ((float) this.videoToSendMessageObject.estimatedDuration));
+                                updateRecordIntefrace(3);
+                                checkSendButton(false);
+                                return;
+                            }
+                            TLRPC$TL_document tLRPC$TL_document = objArr[1];
+                            this.audioToSend = tLRPC$TL_document;
+                            this.audioToSendPath = objArr[2];
+                            if (tLRPC$TL_document == null) {
+                                ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
+                                if (chatActivityEnterViewDelegate != null) {
+                                    chatActivityEnterViewDelegate.onMessageSend((CharSequence) null, true, 0);
+                                }
+                            } else if (this.recordedAudioPanel != null) {
+                                TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
+                                tLRPC$TL_message.out = true;
+                                tLRPC$TL_message.id = 0;
+                                TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                                tLRPC$TL_message.to_id = tLRPC$TL_peerUser;
+                                int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
+                                tLRPC$TL_message.from_id = clientUserId;
+                                tLRPC$TL_peerUser.user_id = clientUserId;
+                                tLRPC$TL_message.date = (int) (System.currentTimeMillis() / 1000);
+                                tLRPC$TL_message.message = "";
+                                tLRPC$TL_message.attachPath = this.audioToSendPath;
+                                TLRPC$TL_messageMediaDocument tLRPC$TL_messageMediaDocument = new TLRPC$TL_messageMediaDocument();
+                                tLRPC$TL_message.media = tLRPC$TL_messageMediaDocument;
+                                tLRPC$TL_messageMediaDocument.flags |= 3;
+                                tLRPC$TL_messageMediaDocument.document = this.audioToSend;
+                                tLRPC$TL_message.flags |= 768;
+                                this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false);
+                                this.recordedAudioPanel.setAlpha(1.0f);
+                                this.recordedAudioPanel.setVisibility(0);
+                                this.recordDeleteImageView.setVisibility(0);
+                                this.recordDeleteImageView.setAlpha(0.0f);
+                                this.recordDeleteImageView.setScaleY(0.0f);
+                                this.recordDeleteImageView.setScaleX(0.0f);
+                                int i8 = 0;
+                                while (true) {
+                                    if (i8 >= this.audioToSend.attributes.size()) {
+                                        i3 = 0;
+                                        break;
+                                    }
+                                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.audioToSend.attributes.get(i8);
+                                    if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) {
+                                        i3 = tLRPC$DocumentAttribute.duration;
+                                        break;
+                                    }
+                                    i8++;
+                                }
+                                int i9 = 0;
+                                while (true) {
+                                    if (i9 >= this.audioToSend.attributes.size()) {
+                                        break;
+                                    }
+                                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute2 = this.audioToSend.attributes.get(i9);
+                                    if (tLRPC$DocumentAttribute2 instanceof TLRPC$TL_documentAttributeAudio) {
+                                        byte[] bArr = tLRPC$DocumentAttribute2.waveform;
+                                        if (bArr == null || bArr.length == 0) {
+                                            tLRPC$DocumentAttribute2.waveform = MediaController.getInstance().getWaveform(this.audioToSendPath);
+                                        }
+                                        this.recordedAudioSeekBar.setWaveform(tLRPC$DocumentAttribute2.waveform);
+                                    } else {
+                                        i9++;
+                                    }
+                                }
+                                this.recordedAudioTimeTextView.setText(AndroidUtilities.formatShortDuration(i3));
+                                checkSendButton(false);
+                                updateRecordIntefrace(3);
+                            }
+                        }
+                    } else if (i == NotificationCenter.audioRouteChanged) {
+                        if (this.parentActivity != null) {
+                            boolean booleanValue2 = objArr[0].booleanValue();
+                            Activity activity = this.parentActivity;
+                            if (!booleanValue2) {
+                                i4 = Integer.MIN_VALUE;
+                            }
+                            activity.setVolumeControlStream(i4);
+                        }
+                    } else if (i == NotificationCenter.messagePlayingDidReset) {
+                        if (this.audioToSendMessageObject != null && !MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
+                            this.playPauseDrawable.setIcon(0, true);
+                            this.recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
+                            this.recordedAudioSeekBar.setProgress(0.0f);
+                        }
+                    } else if (i == NotificationCenter.messagePlayingProgressDidChanged) {
+                        Integer num = objArr[0];
+                        if (this.audioToSendMessageObject != null && MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject)) {
+                            MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            MessageObject messageObject = this.audioToSendMessageObject;
+                            messageObject.audioProgress = playingMessageObject.audioProgress;
+                            messageObject.audioProgressSec = playingMessageObject.audioProgressSec;
+                            if (!this.recordedAudioSeekBar.isDragging()) {
+                                this.recordedAudioSeekBar.setProgress(this.audioToSendMessageObject.audioProgress);
+                            }
+                        }
+                    } else if (i == NotificationCenter.featuredStickersDidLoad) {
+                        if (this.emojiButton != null) {
+                            while (true) {
+                                ImageView[] imageViewArr = this.emojiButton;
+                                if (i4 < imageViewArr.length) {
+                                    imageViewArr[i4].invalidate();
+                                    i4++;
+                                } else {
+                                    return;
+                                }
+                            }
+                        }
+                    } else if (i == NotificationCenter.messageReceivedByServer) {
+                        if (!objArr[6].booleanValue() && objArr[3].longValue() == this.dialog_id && (tLRPC$ChatFull = this.info) != null && tLRPC$ChatFull.slowmode_seconds != 0 && (chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(this.info.id))) != null && !ChatObject.hasAdminRights(chat)) {
+                            TLRPC$ChatFull tLRPC$ChatFull2 = this.info;
+                            int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
+                            TLRPC$ChatFull tLRPC$ChatFull3 = this.info;
+                            tLRPC$ChatFull2.slowmode_next_send_date = currentTime + tLRPC$ChatFull3.slowmode_seconds;
+                            tLRPC$ChatFull3.flags |= 262144;
+                            setSlowModeTimer(tLRPC$ChatFull3.slowmode_next_send_date);
+                        }
+                    } else if (i == NotificationCenter.sendingMessagesChanged) {
+                        if (this.info != null) {
+                            updateSlowModeText();
+                        }
+                    } else if (i == NotificationCenter.audioRecordTooShort) {
+                        updateRecordIntefrace(4);
+                    }
+                } else if (objArr[0].intValue() == this.recordingGuid) {
+                    if (this.recordingAudioVideo) {
+                        this.recordingAudioVideo = false;
+                        if (i == NotificationCenter.recordStopped) {
+                            Integer num2 = objArr[1];
+                            if (num2.intValue() != 4) {
+                                if (isInVideoMode() && num2.intValue() == 5) {
+                                    i5 = 1;
+                                } else if (num2.intValue() == 0) {
+                                    i5 = 5;
+                                } else {
+                                    i5 = num2.intValue() == 6 ? 2 : 3;
+                                }
+                            }
+                            if (i5 != 3) {
+                                updateRecordIntefrace(i5);
+                            }
+                        } else {
+                            updateRecordIntefrace(2);
                         }
                     }
-                } else if (i == NotificationCenter.messageReceivedByServer) {
-                    if (!objArr[6].booleanValue() && objArr[3].longValue() == this.dialog_id && (tLRPC$ChatFull = this.info) != null && tLRPC$ChatFull.slowmode_seconds != 0 && (chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(this.info.id))) != null && !ChatObject.hasAdminRights(chat)) {
-                        TLRPC$ChatFull tLRPC$ChatFull2 = this.info;
-                        int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                        TLRPC$ChatFull tLRPC$ChatFull3 = this.info;
-                        tLRPC$ChatFull2.slowmode_next_send_date = currentTime + tLRPC$ChatFull3.slowmode_seconds;
-                        tLRPC$ChatFull3.flags |= 262144;
-                        setSlowModeTimer(tLRPC$ChatFull3.slowmode_next_send_date);
+                    if (i == NotificationCenter.recordStopped) {
+                        Integer num3 = objArr[1];
                     }
-                } else if (i == NotificationCenter.sendingMessagesChanged) {
-                    if (this.info != null) {
-                        updateSlowModeText();
-                    }
-                } else if (i == NotificationCenter.audioRecordTooShort) {
-                    updateRecordIntefrace(4);
                 }
             }
         }

@@ -10,10 +10,6 @@ public class MP3Input extends PositionInputStream {
         super(inputStream);
     }
 
-    public MP3Input(InputStream inputStream, long j) {
-        super(inputStream, j);
-    }
-
     public final void readFully(byte[] bArr, int i, int i2) throws IOException {
         int i3 = 0;
         while (i3 < i2) {

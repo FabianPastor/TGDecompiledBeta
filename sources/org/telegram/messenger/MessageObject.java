@@ -482,7 +482,7 @@ public class MessageObject {
                 r11 = 0
             L_0x0027:
                 r12 = 1067030938(0x3var_a, float:1.2)
-                if (r7 >= r1) goto L_0x00be
+                if (r7 >= r1) goto L_0x00bd
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r13 = r0.messages
                 java.lang.Object r13 = r13.get(r7)
                 org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
@@ -539,43 +539,43 @@ public class MessageObject {
             L_0x0087:
                 r15.aspectRatio = r6
                 int r12 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1))
-                if (r12 <= 0) goto L_0x0094
+                if (r12 <= 0) goto L_0x0093
                 java.lang.String r6 = "w"
                 r4.append(r6)
-                goto L_0x00a6
-            L_0x0094:
+                goto L_0x00a5
+            L_0x0093:
                 r12 = 1061997773(0x3f4ccccd, float:0.8)
                 int r6 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1))
-                if (r6 >= 0) goto L_0x00a1
+                if (r6 >= 0) goto L_0x00a0
                 java.lang.String r6 = "n"
                 r4.append(r6)
-                goto L_0x00a6
-            L_0x00a1:
+                goto L_0x00a5
+            L_0x00a0:
                 java.lang.String r6 = "q"
                 r4.append(r6)
-            L_0x00a6:
+            L_0x00a5:
                 float r6 = r15.aspectRatio
                 float r9 = r9 + r6
                 r12 = 1073741824(0x40000000, float:2.0)
                 int r6 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1))
-                if (r6 <= 0) goto L_0x00b0
+                if (r6 <= 0) goto L_0x00af
                 r10 = 1
-            L_0x00b0:
+            L_0x00af:
                 java.util.HashMap<org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessagePosition> r6 = r0.positions
                 r6.put(r13, r15)
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r6 = r0.posArray
                 r6.add(r15)
                 int r7 = r7 + 1
                 goto L_0x0027
-            L_0x00be:
-                if (r8 == 0) goto L_0x00cc
+            L_0x00bd:
+                if (r8 == 0) goto L_0x00cb
                 int r6 = r0.maxSizeWidth
                 int r6 = r6 + -50
                 r0.maxSizeWidth = r6
                 int r6 = r0.firstSpanAdditionalSize
                 int r6 = r6 + 50
                 r0.firstSpanAdditionalSize = r6
-            L_0x00cc:
+            L_0x00cb:
                 r6 = 1123024896(0x42var_, float:120.0)
                 int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
@@ -614,14 +614,14 @@ public class MessageObject {
                 r15 = 4
                 r12 = 3
                 r3 = 2
-                if (r10 != 0) goto L_0x0521
-                if (r1 == r3) goto L_0x0117
-                if (r1 == r12) goto L_0x0117
-                if (r1 != r15) goto L_0x0521
-            L_0x0117:
+                if (r10 != 0) goto L_0x0520
+                if (r1 == r3) goto L_0x0116
+                if (r1 == r12) goto L_0x0116
+                if (r1 != r15) goto L_0x0520
+            L_0x0116:
                 r10 = 1053609165(0x3ecccccd, float:0.4)
                 r15 = 1137410048(0x43cb8000, float:407.0)
-                if (r1 != r3) goto L_0x0245
+                if (r1 != r3) goto L_0x0244
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r7 = r0.posArray
                 java.lang.Object r7 = r7.get(r5)
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r7 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r7
@@ -631,21 +631,21 @@ public class MessageObject {
                 java.lang.String r4 = r4.toString()
                 java.lang.String r12 = "ww"
                 boolean r14 = r4.equals(r12)
-                if (r14 == 0) goto L_0x0199
+                if (r14 == 0) goto L_0x0198
                 double r2 = (double) r9
                 r18 = 4608983858650965606(0x3ffNUM, double:1.4)
                 double r13 = (double) r13
                 java.lang.Double.isNaN(r13)
                 double r13 = r13 * r18
                 int r9 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r9 <= 0) goto L_0x0199
+                if (r9 <= 0) goto L_0x0198
                 float r2 = r7.aspectRatio
                 float r3 = r8.aspectRatio
                 float r9 = r2 - r3
                 double r13 = (double) r9
                 r18 = 4596373779694328218(0x3fCLASSNAMEa, double:0.2)
                 int r9 = (r13 > r18 ? 1 : (r13 == r18 ? 0 : -1))
-                if (r9 >= 0) goto L_0x0199
+                if (r9 >= 0) goto L_0x0198
                 int r4 = r0.maxSizeWidth
                 float r6 = (float) r4
                 float r6 = r6 / r2
@@ -674,15 +674,15 @@ public class MessageObject {
                 r18 = r8
                 r23 = r3
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
-                goto L_0x051e
-            L_0x0199:
+                goto L_0x051d
+            L_0x0198:
                 boolean r2 = r4.equals(r12)
-                if (r2 != 0) goto L_0x0208
+                if (r2 != 0) goto L_0x0207
                 java.lang.String r2 = "qq"
                 boolean r2 = r4.equals(r2)
-                if (r2 == 0) goto L_0x01a8
-                goto L_0x0208
-            L_0x01a8:
+                if (r2 == 0) goto L_0x01a7
+                goto L_0x0207
+            L_0x01a7:
                 int r2 = r0.maxSizeWidth
                 float r3 = (float) r2
                 float r3 = r3 * r10
@@ -701,11 +701,11 @@ public class MessageObject {
                 int r2 = (int) r2
                 int r3 = r0.maxSizeWidth
                 int r3 = r3 - r2
-                if (r3 >= r6) goto L_0x01cd
+                if (r3 >= r6) goto L_0x01cc
                 int r3 = r6 - r3
                 int r2 = r2 - r3
                 r3 = r6
-            L_0x01cd:
+            L_0x01cc:
                 float r4 = (float) r3
                 float r6 = r7.aspectRatio
                 float r4 = r4 / r6
@@ -733,8 +733,8 @@ public class MessageObject {
                 r18 = r8
                 r23 = r2
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
-                goto L_0x037d
-            L_0x0208:
+                goto L_0x037c
+            L_0x0207:
                 int r2 = r0.maxSizeWidth
                 r3 = 2
                 int r2 = r2 / r3
@@ -763,10 +763,10 @@ public class MessageObject {
                 r25 = 14
                 r18 = r8
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
-                goto L_0x037d
-            L_0x0245:
+                goto L_0x037c
+            L_0x0244:
                 r2 = 1141264221(0x44064f5d, float:537.24005)
-                if (r1 != r12) goto L_0x0380
+                if (r1 != r12) goto L_0x037f
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r3 = r0.posArray
                 java.lang.Object r3 = r3.get(r5)
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r3
@@ -780,7 +780,7 @@ public class MessageObject {
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r9 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r9
                 char r4 = r4.charAt(r5)
                 r10 = 110(0x6e, float:1.54E-43)
-                if (r4 != r10) goto L_0x0313
+                if (r4 != r10) goto L_0x0312
                 float r2 = r7.aspectRatio
                 int r4 = r0.maxSizeWidth
                 float r4 = (float) r4
@@ -854,18 +854,18 @@ public class MessageObject {
                 r2 = 1
                 r13[r2] = r10
                 r3.siblingHeights = r13
-                if (r11 == 0) goto L_0x030b
+                if (r11 == 0) goto L_0x030a
                 int r8 = r8 - r4
                 r3.spanSize = r8
-                goto L_0x0310
-            L_0x030b:
+                goto L_0x030f
+            L_0x030a:
                 int r8 = r8 - r6
                 r7.spanSize = r8
                 r9.leftSpanOffset = r6
-            L_0x0310:
+            L_0x030f:
                 r0.hasSibling = r2
-                goto L_0x037d
-            L_0x0313:
+                goto L_0x037c
+            L_0x0312:
                 int r4 = r0.maxSizeWidth
                 float r4 = (float) r4
                 float r6 = r3.aspectRatio
@@ -901,9 +901,9 @@ public class MessageObject {
                 float r2 = java.lang.Math.min(r2, r6)
                 float r2 = r2 / r4
                 int r4 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                if (r4 >= 0) goto L_0x035f
+                if (r4 >= 0) goto L_0x035e
                 r2 = r14
-            L_0x035f:
+            L_0x035e:
                 r19 = 0
                 r20 = 0
                 r21 = 1
@@ -918,12 +918,12 @@ public class MessageObject {
                 r25 = 10
                 r18 = r9
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
-            L_0x037d:
+            L_0x037c:
                 r2 = 1
-                goto L_0x073c
-            L_0x0380:
+                goto L_0x073b
+            L_0x037f:
                 r3 = 4
-                if (r1 != r3) goto L_0x051e
+                if (r1 != r3) goto L_0x051d
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r3 = r0.posArray
                 java.lang.Object r3 = r3.get(r5)
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r3
@@ -941,7 +941,7 @@ public class MessageObject {
                 char r4 = r4.charAt(r5)
                 r5 = 119(0x77, float:1.67E-43)
                 r12 = 1051260355(0x3ea8f5c3, float:0.33)
-                if (r4 != r5) goto L_0x0467
+                if (r4 != r5) goto L_0x0466
                 int r4 = r0.maxSizeWidth
                 float r4 = (float) r4
                 float r5 = r3.aspectRatio
@@ -993,7 +993,7 @@ public class MessageObject {
                 int r6 = r6 - r4
                 r7 = 1114112000(0x42680000, float:58.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                if (r6 >= r8) goto L_0x0428
+                if (r6 >= r8) goto L_0x0427
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r8 = r8 - r6
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -1001,16 +1001,16 @@ public class MessageObject {
                 int r5 = r5 - r7
                 int r8 = r8 - r7
                 int r4 = r4 - r8
-            L_0x0428:
+            L_0x0427:
                 r23 = r5
                 r5 = 1145798656(0x444b8000, float:814.0)
                 float r2 = r5 - r2
                 float r2 = java.lang.Math.min(r2, r3)
                 float r2 = r2 / r5
                 int r3 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                if (r3 >= 0) goto L_0x0439
+                if (r3 >= 0) goto L_0x0438
                 r2 = r14
-            L_0x0439:
+            L_0x0438:
                 r19 = 0
                 r20 = 0
                 r21 = 1
@@ -1032,8 +1032,8 @@ public class MessageObject {
                 r23 = r4
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
                 r2 = 2
-                goto L_0x073c
-            L_0x0467:
+                goto L_0x073b
+            L_0x0466:
                 float r2 = r9.aspectRatio
                 r4 = 1065353216(0x3var_, float:1.0)
                 float r2 = r4 / r2
@@ -1106,16 +1106,16 @@ public class MessageObject {
                 r18.set(r19, r20, r21, r22, r23, r24, r25)
                 int r8 = r0.maxSizeWidth
                 r15.spanSize = r8
-                if (r11 == 0) goto L_0x0505
+                if (r11 == 0) goto L_0x0504
                 int r8 = r8 - r2
                 r3.spanSize = r8
-                goto L_0x050c
-            L_0x0505:
+                goto L_0x050b
+            L_0x0504:
                 int r8 = r8 - r4
                 r9.spanSize = r8
                 r13.leftSpanOffset = r4
                 r15.leftSpanOffset = r4
-            L_0x050c:
+            L_0x050b:
                 r2 = 3
                 float[] r2 = new float[r2]
                 r4 = 0
@@ -1126,20 +1126,20 @@ public class MessageObject {
                 r2[r5] = r6
                 r3.siblingHeights = r2
                 r0.hasSibling = r4
-                goto L_0x037d
-            L_0x051e:
+                goto L_0x037c
+            L_0x051d:
                 r2 = 0
-                goto L_0x073c
-            L_0x0521:
+                goto L_0x073b
+            L_0x0520:
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r2 = r0.posArray
                 int r2 = r2.size()
                 float[] r3 = new float[r2]
                 r4 = 0
-            L_0x052a:
-                if (r4 >= r1) goto L_0x056d
+            L_0x0529:
+                if (r4 >= r1) goto L_0x056c
                 r5 = 1066192077(0x3f8ccccd, float:1.1)
                 int r5 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0546
+                if (r5 <= 0) goto L_0x0545
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r5 = r0.posArray
                 java.lang.Object r5 = r5.get(r4)
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r5
@@ -1147,8 +1147,8 @@ public class MessageObject {
                 r7 = 1065353216(0x3var_, float:1.0)
                 float r5 = java.lang.Math.max(r7, r5)
                 r3[r4] = r5
-                goto L_0x0558
-            L_0x0546:
+                goto L_0x0557
+            L_0x0545:
                 r7 = 1065353216(0x3var_, float:1.0)
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r5 = r0.posArray
                 java.lang.Object r5 = r5.get(r4)
@@ -1156,7 +1156,7 @@ public class MessageObject {
                 float r5 = r5.aspectRatio
                 float r5 = java.lang.Math.min(r7, r5)
                 r3[r4] = r5
-            L_0x0558:
+            L_0x0557:
                 r5 = 1059760867(0x3f2aaae3, float:0.66667)
                 r8 = 1071225242(0x3fd9999a, float:1.7)
                 r10 = r3[r4]
@@ -1164,52 +1164,52 @@ public class MessageObject {
                 float r5 = java.lang.Math.max(r5, r8)
                 r3[r4] = r5
                 int r4 = r4 + 1
-                goto L_0x052a
-            L_0x056d:
+                goto L_0x0529
+            L_0x056c:
                 java.util.ArrayList r4 = new java.util.ArrayList
                 r4.<init>()
                 r5 = 1
-            L_0x0573:
-                if (r5 >= r2) goto L_0x0591
+            L_0x0572:
+                if (r5 >= r2) goto L_0x0590
                 int r7 = r2 - r5
                 r8 = 3
-                if (r5 > r8) goto L_0x058e
-                if (r7 <= r8) goto L_0x057d
-                goto L_0x058e
-            L_0x057d:
+                if (r5 > r8) goto L_0x058d
+                if (r7 <= r8) goto L_0x057c
+                goto L_0x058d
+            L_0x057c:
                 org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt r8 = new org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt
                 r10 = 0
                 float r12 = r0.multiHeight(r3, r10, r5)
                 float r10 = r0.multiHeight(r3, r5, r2)
                 r8.<init>(r5, r7, r12, r10)
                 r4.add(r8)
-            L_0x058e:
+            L_0x058d:
                 int r5 = r5 + 1
-                goto L_0x0573
-            L_0x0591:
+                goto L_0x0572
+            L_0x0590:
                 r5 = 1
-            L_0x0592:
+            L_0x0591:
                 int r7 = r2 + -1
-                if (r5 >= r7) goto L_0x05d3
+                if (r5 >= r7) goto L_0x05d2
                 r7 = 1
-            L_0x0597:
+            L_0x0596:
                 int r8 = r2 - r5
-                if (r7 >= r8) goto L_0x05d0
+                if (r7 >= r8) goto L_0x05cf
                 int r8 = r8 - r7
                 r10 = 3
-                if (r5 > r10) goto L_0x05cd
+                if (r5 > r10) goto L_0x05cc
                 r12 = 1062836634(0x3var_a, float:0.85)
                 int r12 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-                if (r12 >= 0) goto L_0x05a8
+                if (r12 >= 0) goto L_0x05a7
                 r12 = 4
-                goto L_0x05a9
-            L_0x05a8:
+                goto L_0x05a8
+            L_0x05a7:
                 r12 = 3
-            L_0x05a9:
-                if (r7 > r12) goto L_0x05cd
-                if (r8 <= r10) goto L_0x05ae
-                goto L_0x05cd
-            L_0x05ae:
+            L_0x05a8:
+                if (r7 > r12) goto L_0x05cc
+                if (r8 <= r10) goto L_0x05ad
+                goto L_0x05cc
+            L_0x05ad:
                 org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt r10 = new org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt
                 r12 = 0
                 float r23 = r0.multiHeight(r3, r12, r5)
@@ -1222,33 +1222,33 @@ public class MessageObject {
                 r22 = r8
                 r19.<init>(r20, r21, r22, r23, r24, r25)
                 r4.add(r10)
-            L_0x05cd:
+            L_0x05cc:
                 int r7 = r7 + 1
-                goto L_0x0597
-            L_0x05d0:
+                goto L_0x0596
+            L_0x05cf:
                 int r5 = r5 + 1
-                goto L_0x0592
-            L_0x05d3:
+                goto L_0x0591
+            L_0x05d2:
                 r5 = 1
-            L_0x05d4:
+            L_0x05d3:
                 int r7 = r2 + -2
-                if (r5 >= r7) goto L_0x061d
+                if (r5 >= r7) goto L_0x061c
                 r7 = 1
-            L_0x05d9:
+            L_0x05d8:
                 int r8 = r2 - r5
-                if (r7 >= r8) goto L_0x061a
+                if (r7 >= r8) goto L_0x0619
                 r9 = 1
-            L_0x05de:
+            L_0x05dd:
                 int r10 = r8 - r7
-                if (r9 >= r10) goto L_0x0617
+                if (r9 >= r10) goto L_0x0616
                 int r10 = r10 - r9
                 r12 = 3
-                if (r5 > r12) goto L_0x0614
-                if (r7 > r12) goto L_0x0614
-                if (r9 > r12) goto L_0x0614
-                if (r10 <= r12) goto L_0x05ed
-                goto L_0x0614
-            L_0x05ed:
+                if (r5 > r12) goto L_0x0613
+                if (r7 > r12) goto L_0x0613
+                if (r9 > r12) goto L_0x0613
+                if (r10 <= r12) goto L_0x05ec
+                goto L_0x0613
+            L_0x05ec:
                 org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt r12 = new org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt
                 r13 = 0
                 float r32 = r0.multiHeight(r3, r13, r5)
@@ -1264,16 +1264,16 @@ public class MessageObject {
                 r31 = r10
                 r27.<init>(r28, r29, r30, r31, r32, r33, r34, r35)
                 r4.add(r12)
-            L_0x0614:
+            L_0x0613:
                 int r9 = r9 + 1
-                goto L_0x05de
-            L_0x0617:
+                goto L_0x05dd
+            L_0x0616:
                 int r7 = r7 + 1
-                goto L_0x05d9
-            L_0x061a:
+                goto L_0x05d8
+            L_0x0619:
                 int r5 = r5 + 1
-                goto L_0x05d4
-            L_0x061d:
+                goto L_0x05d3
+            L_0x061c:
                 int r2 = r0.maxSizeWidth
                 r5 = 3
                 int r2 = r2 / r5
@@ -1283,103 +1283,103 @@ public class MessageObject {
                 r9 = 0
                 r10 = 0
                 r12 = 0
-            L_0x0628:
+            L_0x0627:
                 int r13 = r4.size()
-                if (r9 >= r13) goto L_0x06ac
+                if (r9 >= r13) goto L_0x06ab
                 java.lang.Object r13 = r4.get(r9)
                 org.telegram.messenger.MessageObject$GroupedMessages$MessageGroupedLayoutAttempt r13 = (org.telegram.messenger.MessageObject.GroupedMessages.MessageGroupedLayoutAttempt) r13
                 r15 = 2139095039(0x7f7fffff, float:3.4028235E38)
                 r15 = 0
                 r16 = 2139095039(0x7f7fffff, float:3.4028235E38)
                 r18 = 0
-            L_0x063d:
+            L_0x063c:
                 float[] r5 = r13.heights
                 int r7 = r5.length
-                if (r15 >= r7) goto L_0x0653
+                if (r15 >= r7) goto L_0x0652
                 r7 = r5[r15]
                 float r18 = r18 + r7
                 r7 = r5[r15]
                 int r7 = (r7 > r16 ? 1 : (r7 == r16 ? 0 : -1))
-                if (r7 >= 0) goto L_0x0650
+                if (r7 >= 0) goto L_0x064f
                 r5 = r5[r15]
                 r16 = r5
-            L_0x0650:
+            L_0x064f:
                 int r15 = r15 + 1
-                goto L_0x063d
-            L_0x0653:
+                goto L_0x063c
+            L_0x0652:
                 float r18 = r18 - r2
                 float r5 = java.lang.Math.abs(r18)
                 int[] r7 = r13.lineCounts
                 int r15 = r7.length
                 r8 = 1
                 r21 = r2
-                if (r15 <= r8) goto L_0x0690
+                if (r15 <= r8) goto L_0x068f
                 r15 = 0
                 r2 = r7[r15]
                 r15 = r7[r8]
-                if (r2 > r15) goto L_0x0689
+                if (r2 > r15) goto L_0x0688
                 int r2 = r7.length
                 r15 = 2
-                if (r2 <= r15) goto L_0x0678
+                if (r2 <= r15) goto L_0x0677
                 r2 = r7[r8]
                 r7 = r7[r15]
-                if (r2 > r7) goto L_0x0673
-                goto L_0x0678
-            L_0x0673:
+                if (r2 > r7) goto L_0x0672
+                goto L_0x0677
+            L_0x0672:
                 r2 = 1067030938(0x3var_a, float:1.2)
                 r8 = 3
-                goto L_0x068d
-            L_0x0678:
+                goto L_0x068c
+            L_0x0677:
                 int[] r2 = r13.lineCounts
                 int r7 = r2.length
                 r8 = 3
-                if (r7 <= r8) goto L_0x0685
+                if (r7 <= r8) goto L_0x0684
                 r7 = r2[r15]
                 r2 = r2[r8]
-                if (r7 <= r2) goto L_0x0685
-                goto L_0x068a
-            L_0x0685:
+                if (r7 <= r2) goto L_0x0684
+                goto L_0x0689
+            L_0x0684:
                 r2 = 1067030938(0x3var_a, float:1.2)
-                goto L_0x0694
+                goto L_0x0693
+            L_0x0688:
+                r8 = 3
             L_0x0689:
-                r8 = 3
-            L_0x068a:
                 r2 = 1067030938(0x3var_a, float:1.2)
-            L_0x068d:
+            L_0x068c:
                 float r5 = r5 * r2
-                goto L_0x0694
-            L_0x0690:
+                goto L_0x0693
+            L_0x068f:
                 r2 = 1067030938(0x3var_a, float:1.2)
                 r8 = 3
-            L_0x0694:
+            L_0x0693:
                 float r7 = (float) r6
                 int r7 = (r16 > r7 ? 1 : (r16 == r7 ? 0 : -1))
-                if (r7 >= 0) goto L_0x069d
+                if (r7 >= 0) goto L_0x069c
                 r7 = 1069547520(0x3fCLASSNAME, float:1.5)
                 float r5 = r5 * r7
-            L_0x069d:
-                if (r10 == 0) goto L_0x06a3
+            L_0x069c:
+                if (r10 == 0) goto L_0x06a2
                 int r7 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-                if (r7 >= 0) goto L_0x06a5
-            L_0x06a3:
+                if (r7 >= 0) goto L_0x06a4
+            L_0x06a2:
                 r12 = r5
                 r10 = r13
-            L_0x06a5:
+            L_0x06a4:
                 int r9 = r9 + 1
                 r2 = r21
                 r5 = 4
-                goto L_0x0628
-            L_0x06ac:
-                if (r10 != 0) goto L_0x06af
+                goto L_0x0627
+            L_0x06ab:
+                if (r10 != 0) goto L_0x06ae
                 return
-            L_0x06af:
+            L_0x06ae:
                 r2 = 0
                 r4 = 0
                 r5 = 0
-            L_0x06b2:
+            L_0x06b1:
                 int[] r6 = r10.lineCounts
                 int r7 = r6.length
-                if (r4 >= r7) goto L_0x073b
+                if (r4 >= r7) goto L_0x073a
                 r6 = r6[r4]
                 float[] r7 = r10.heights
                 r7 = r7[r4]
@@ -1389,8 +1389,8 @@ public class MessageObject {
                 r12 = r8
                 r8 = 0
                 r13 = 0
-            L_0x06c8:
-                if (r8 >= r6) goto L_0x0722
+            L_0x06c7:
+                if (r8 >= r6) goto L_0x0721
                 r15 = r3[r2]
                 float r15 = r15 * r7
                 int r15 = (int) r15
@@ -1401,33 +1401,33 @@ public class MessageObject {
                 r26 = r3
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r26 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r26
                 r17 = r5
-                if (r4 != 0) goto L_0x06e2
+                if (r4 != 0) goto L_0x06e1
                 r3 = 4
-                goto L_0x06e3
-            L_0x06e2:
+                goto L_0x06e2
+            L_0x06e1:
                 r3 = 0
-            L_0x06e3:
+            L_0x06e2:
                 int[] r5 = r10.lineCounts
                 int r5 = r5.length
                 r20 = 1
                 int r5 = r5 + -1
-                if (r4 != r5) goto L_0x06ee
+                if (r4 != r5) goto L_0x06ed
                 r3 = r3 | 8
-            L_0x06ee:
-                if (r8 != 0) goto L_0x06f6
+            L_0x06ed:
+                if (r8 != 0) goto L_0x06f5
                 r3 = r3 | 1
-                if (r11 == 0) goto L_0x06f6
+                if (r11 == 0) goto L_0x06f5
                 r13 = r26
-            L_0x06f6:
-                if (r8 != r9) goto L_0x0701
+            L_0x06f5:
+                if (r8 != r9) goto L_0x0700
                 r3 = r3 | 2
-                if (r11 != 0) goto L_0x0701
+                if (r11 != 0) goto L_0x0700
                 r33 = r3
                 r13 = r26
-                goto L_0x0703
-            L_0x0701:
+                goto L_0x0702
+            L_0x0700:
                 r33 = r3
-            L_0x0703:
+            L_0x0702:
                 r3 = 1145798656(0x444b8000, float:814.0)
                 float r5 = r7 / r3
                 float r32 = java.lang.Math.max(r14, r5)
@@ -1441,8 +1441,8 @@ public class MessageObject {
                 int r8 = r8 + 1
                 r3 = r16
                 r5 = r17
-                goto L_0x06c8
-            L_0x0722:
+                goto L_0x06c7
+            L_0x0721:
                 r16 = r3
                 r17 = r5
                 r3 = 1145798656(0x444b8000, float:814.0)
@@ -1455,92 +1455,92 @@ public class MessageObject {
                 int r4 = r4 + 1
                 r3 = r16
                 r5 = r17
-                goto L_0x06b2
-            L_0x073b:
+                goto L_0x06b1
+            L_0x073a:
                 r2 = r5
-            L_0x073c:
+            L_0x073b:
                 r5 = 0
-            L_0x073d:
-                if (r5 >= r1) goto L_0x07b9
+            L_0x073c:
+                if (r5 >= r1) goto L_0x07b8
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r3 = r0.posArray
                 java.lang.Object r3 = r3.get(r5)
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r3
-                if (r11 == 0) goto L_0x075f
+                if (r11 == 0) goto L_0x075e
                 byte r4 = r3.minX
-                if (r4 != 0) goto L_0x0754
+                if (r4 != 0) goto L_0x0753
                 int r4 = r3.spanSize
                 int r6 = r0.firstSpanAdditionalSize
                 int r4 = r4 + r6
                 r3.spanSize = r4
-            L_0x0754:
+            L_0x0753:
                 int r4 = r3.flags
                 r6 = 2
                 r4 = r4 & r6
-                if (r4 == 0) goto L_0x075d
+                if (r4 == 0) goto L_0x075c
                 r4 = 1
                 r3.edge = r4
-            L_0x075d:
+            L_0x075c:
                 r6 = 1
-                goto L_0x0778
-            L_0x075f:
+                goto L_0x0777
+            L_0x075e:
                 r6 = 2
                 byte r4 = r3.maxX
-                if (r4 == r2) goto L_0x0769
+                if (r4 == r2) goto L_0x0768
                 int r4 = r3.flags
                 r4 = r4 & r6
-                if (r4 == 0) goto L_0x0770
-            L_0x0769:
+                if (r4 == 0) goto L_0x076f
+            L_0x0768:
                 int r4 = r3.spanSize
                 int r6 = r0.firstSpanAdditionalSize
                 int r4 = r4 + r6
                 r3.spanSize = r4
-            L_0x0770:
+            L_0x076f:
                 int r4 = r3.flags
                 r6 = 1
                 r4 = r4 & r6
-                if (r4 == 0) goto L_0x0778
+                if (r4 == 0) goto L_0x0777
                 r3.edge = r6
-            L_0x0778:
+            L_0x0777:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.messages
                 java.lang.Object r4 = r4.get(r5)
                 org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
-                if (r11 != 0) goto L_0x07b5
+                if (r11 != 0) goto L_0x07b4
                 boolean r4 = r4.needDrawAvatarInternal()
-                if (r4 == 0) goto L_0x07b5
+                if (r4 == 0) goto L_0x07b4
                 boolean r4 = r3.edge
                 r7 = 1000(0x3e8, float:1.401E-42)
-                if (r4 == 0) goto L_0x079d
+                if (r4 == 0) goto L_0x079c
                 int r4 = r3.spanSize
-                if (r4 == r7) goto L_0x0796
+                if (r4 == r7) goto L_0x0795
                 int r4 = r4 + 108
                 r3.spanSize = r4
-            L_0x0796:
+            L_0x0795:
                 int r4 = r3.pw
                 int r4 = r4 + 108
                 r3.pw = r4
-                goto L_0x07b5
-            L_0x079d:
+                goto L_0x07b4
+            L_0x079c:
                 int r4 = r3.flags
                 r8 = 2
                 r4 = r4 & r8
-                if (r4 == 0) goto L_0x07b6
+                if (r4 == 0) goto L_0x07b5
                 int r4 = r3.spanSize
-                if (r4 == r7) goto L_0x07ac
+                if (r4 == r7) goto L_0x07ab
                 int r4 = r4 + -108
                 r3.spanSize = r4
-                goto L_0x07b6
-            L_0x07ac:
+                goto L_0x07b5
+            L_0x07ab:
                 int r4 = r3.leftSpanOffset
-                if (r4 == 0) goto L_0x07b6
+                if (r4 == 0) goto L_0x07b5
                 int r4 = r4 + 108
                 r3.leftSpanOffset = r4
-                goto L_0x07b6
-            L_0x07b5:
+                goto L_0x07b5
+            L_0x07b4:
                 r8 = 2
-            L_0x07b6:
+            L_0x07b5:
                 int r5 = r5 + 1
-                goto L_0x073d
-            L_0x07b9:
+                goto L_0x073c
+            L_0x07b8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.GroupedMessages.calculate():void");
@@ -2582,7 +2582,7 @@ public class MessageObject {
             goto L_0x063b
         L_0x068e:
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r2 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
+            r2 = 2131627121(0x7f0e0CLASSNAME, float:1.8881497E38)
             java.lang.String r11 = "UserRestrictionsUntilForever"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r11, r2)
             r9.<init>(r2)

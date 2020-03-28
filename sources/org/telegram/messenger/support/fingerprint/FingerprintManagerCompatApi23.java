@@ -14,17 +14,13 @@ import org.telegram.messenger.FileLog;
 public final class FingerprintManagerCompatApi23 {
 
     public static abstract class AuthenticationCallback {
-        public void onAuthenticationError(int i, CharSequence charSequence) {
-        }
+        public abstract void onAuthenticationError(int i, CharSequence charSequence);
 
-        public void onAuthenticationFailed() {
-        }
+        public abstract void onAuthenticationFailed();
 
-        public void onAuthenticationHelp(int i, CharSequence charSequence) {
-        }
+        public abstract void onAuthenticationHelp(int i, CharSequence charSequence);
 
-        public void onAuthenticationSucceeded(AuthenticationResultInternal authenticationResultInternal) {
-        }
+        public abstract void onAuthenticationSucceeded(AuthenticationResultInternal authenticationResultInternal);
     }
 
     private static FingerprintManager getFingerprintManager(Context context) {

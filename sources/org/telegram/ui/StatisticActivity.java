@@ -542,7 +542,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "dialogTextBlack"
                 r2 = r0
                 r2.<init>(r3, r4, r5, r6, r7)
-                r9 = 2131626480(0x7f0e09f0, float:1.8880197E38)
+                r9 = 2131626478(0x7f0e09ee, float:1.8880193E38)
                 java.lang.String r10 = "RecentPosts"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r0.setText(r9)
@@ -1329,14 +1329,13 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.line = lineViewData;
                 this.checkBox.setText(lineViewData.line.name);
                 this.checkBox.setChecked(lineViewData.enabled, false);
-                this.checkBox.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
                 this.checkBox.setOnClickListener(
                 /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0024: INVOKE  
-                      (wrap: org.telegram.ui.Components.FlatCheckBox : 0x001d: IGET  (r0v3 org.telegram.ui.Components.FlatCheckBox) = 
+                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001a: INVOKE  
+                      (wrap: org.telegram.ui.Components.FlatCheckBox : 0x0013: IGET  (r0v2 org.telegram.ui.Components.FlatCheckBox) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                      org.telegram.ui.StatisticActivity.ChartCell.CheckBoxHolder.checkBox org.telegram.ui.Components.FlatCheckBox)
-                      (wrap: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls : 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
+                      (wrap: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls : 0x0017: CONSTRUCTOR  (r1v3 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
                      call: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls.<init>(org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR)
@@ -1401,7 +1400,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
+                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0017: CONSTRUCTOR  (r1v3 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
                      call: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls.<init>(org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR in method: org.telegram.ui.StatisticActivity.ChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes.dex
@@ -1431,10 +1430,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     boolean r1 = r4.enabled
                     r2 = 0
                     r0.setChecked(r1, r2)
-                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
-                    org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener r1 = new org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener
-                    r1.<init>()
-                    r0.setOnTouchListener(r1)
                     org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
                     org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls r1 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls
                     r1.<init>(r3, r4)

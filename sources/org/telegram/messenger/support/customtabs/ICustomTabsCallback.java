@@ -4,7 +4,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
-import android.os.Parcel;
 import android.os.RemoteException;
 
 public interface ICustomTabsCallback extends IInterface {
@@ -17,26 +16,12 @@ public interface ICustomTabsCallback extends IInterface {
     void onPostMessage(String str, Bundle bundle) throws RemoteException;
 
     public static abstract class Stub extends Binder implements ICustomTabsCallback {
-        private static final String DESCRIPTOR = "android.support.customtabs.ICustomTabsCallback";
-        static final int TRANSACTION_extraCallback = 3;
-        static final int TRANSACTION_onMessageChannelReady = 4;
-        static final int TRANSACTION_onNavigationEvent = 2;
-        static final int TRANSACTION_onPostMessage = 5;
-
         public IBinder asBinder() {
             return this;
         }
 
         public Stub() {
             attachInterface(this, "android.support.customtabs.ICustomTabsCallback");
-        }
-
-        public static ICustomTabsCallback asInterface(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("android.support.customtabs.ICustomTabsCallback");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof ICustomTabsCallback)) ? new Proxy(iBinder) : (ICustomTabsCallback) queryLocalInterface;
         }
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object} */
@@ -123,101 +108,6 @@ public interface ICustomTabsCallback extends IInterface {
                 return r2
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.onTransact(int, android.os.Parcel, android.os.Parcel, int):boolean");
-        }
-
-        private static class Proxy implements ICustomTabsCallback {
-            private IBinder mRemote;
-
-            public String getInterfaceDescriptor() {
-                return "android.support.customtabs.ICustomTabsCallback";
-            }
-
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.mRemote;
-            }
-
-            public void onNavigationEvent(int i, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
-                    obtain.writeInt(i);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void extraCallback(String str, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
-                    obtain.writeString(str);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void onMessageChannelReady(Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void onPostMessage(String str, Bundle bundle) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
-                    obtain.writeString(str);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.mRemote.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
         }
     }
 }

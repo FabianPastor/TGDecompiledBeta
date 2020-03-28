@@ -14,28 +14,20 @@ public class ID3v2Info extends AudioInfo {
     private final Level debugLevel;
 
     static class AttachedPicture {
-        static final byte TYPE_COVER_FRONT = 3;
-        static final byte TYPE_OTHER = 0;
-        final String description;
         final byte[] imageData;
-        final String imageType;
         final byte type;
 
         public AttachedPicture(byte b, String str, String str2, byte[] bArr) {
             this.type = b;
-            this.description = str;
-            this.imageType = str2;
             this.imageData = bArr;
         }
     }
 
     static class CommentOrUnsynchronizedLyrics {
         final String description;
-        final String language;
         final String text;
 
         public CommentOrUnsynchronizedLyrics(String str, String str2, String str3) {
-            this.language = str;
             this.description = str2;
             this.text = str3;
         }
@@ -50,56 +42,53 @@ public class ID3v2Info extends AudioInfo {
         }
     }
 
-    public ID3v2Info(InputStream inputStream) throws IOException, ID3v2Exception {
-        this(inputStream, Level.FINEST);
-    }
-
     public ID3v2Info(InputStream inputStream, Level level) throws IOException, ID3v2Exception {
+        ID3v2FrameBody frameBody;
         ID3v2DataInput data;
         long remainingLength;
         this.debugLevel = level;
         if (isID3v2StartPosition(inputStream)) {
             ID3v2TagHeader iD3v2TagHeader = new ID3v2TagHeader(inputStream);
             this.brand = "ID3";
-            this.version = String.format("2.%d.%d", new Object[]{Integer.valueOf(iD3v2TagHeader.getVersion()), Integer.valueOf(iD3v2TagHeader.getRevision())});
+            String.format("2.%d.%d", new Object[]{Integer.valueOf(iD3v2TagHeader.getVersion()), Integer.valueOf(iD3v2TagHeader.getRevision())});
             ID3v2TagBody tagBody = iD3v2TagHeader.tagBody(inputStream);
             while (true) {
-                if (tagBody.getRemainingLength() <= 10) {
-                    break;
-                }
-                ID3v2FrameHeader iD3v2FrameHeader = new ID3v2FrameHeader(tagBody);
-                if (iD3v2FrameHeader.isPadding()) {
-                    break;
-                } else if (((long) iD3v2FrameHeader.getBodySize()) > tagBody.getRemainingLength()) {
-                    if (LOGGER.isLoggable(level)) {
-                        LOGGER.log(level, "ID3 frame claims to extend frames area");
+                try {
+                    if (tagBody.getRemainingLength() <= 10) {
+                        break;
                     }
-                } else if (!iD3v2FrameHeader.isValid() || iD3v2FrameHeader.isEncryption()) {
-                    tagBody.getData().skipFully((long) iD3v2FrameHeader.getBodySize());
-                } else {
-                    ID3v2FrameBody frameBody = tagBody.frameBody(iD3v2FrameHeader);
-                    try {
-                        parseFrame(frameBody);
-                        data = frameBody.getData();
-                        remainingLength = frameBody.getRemainingLength();
-                    } catch (ID3v2Exception e) {
+                    ID3v2FrameHeader iD3v2FrameHeader = new ID3v2FrameHeader(tagBody);
+                    if (iD3v2FrameHeader.isPadding()) {
+                        break;
+                    } else if (((long) iD3v2FrameHeader.getBodySize()) > tagBody.getRemainingLength()) {
+                        if (LOGGER.isLoggable(level)) {
+                            LOGGER.log(level, "ID3 frame claims to extend frames area");
+                        }
+                    } else if (!iD3v2FrameHeader.isValid() || iD3v2FrameHeader.isEncryption()) {
+                        tagBody.getData().skipFully((long) iD3v2FrameHeader.getBodySize());
+                    } else {
+                        frameBody = tagBody.frameBody(iD3v2FrameHeader);
                         try {
+                            parseFrame(frameBody);
+                            data = frameBody.getData();
+                            remainingLength = frameBody.getRemainingLength();
+                        } catch (ID3v2Exception e) {
                             if (LOGGER.isLoggable(level)) {
                                 LOGGER.log(level, String.format("ID3 exception occured in frame %s: %s", new Object[]{iD3v2FrameHeader.getFrameId(), e.getMessage()}));
                             }
                             data = frameBody.getData();
                             remainingLength = frameBody.getRemainingLength();
-                        } catch (ID3v2Exception e2) {
-                            if (LOGGER.isLoggable(level)) {
-                                Logger logger = LOGGER;
-                                logger.log(level, "ID3 exception occured: " + e2.getMessage());
-                            }
-                        } catch (Throwable th) {
-                            frameBody.getData().skipFully(frameBody.getRemainingLength());
-                            throw th;
                         }
+                        data.skipFully(remainingLength);
                     }
-                    data.skipFully(remainingLength);
+                } catch (ID3v2Exception e2) {
+                    if (LOGGER.isLoggable(level)) {
+                        Logger logger = LOGGER;
+                        logger.log(level, "ID3 exception occured: " + e2.getMessage());
+                    }
+                } catch (Throwable th) {
+                    frameBody.getData().skipFully(frameBody.getRemainingLength());
+                    throw th;
                 }
             }
             tagBody.getData().skipFully(tagBody.getRemainingLength());

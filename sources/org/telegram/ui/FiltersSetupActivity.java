@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -362,7 +363,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             if (sb.length() == 0) {
                 sb.append(LocaleController.getString("FilterNoChats", NUM));
             }
-            this.textView.setText(dialogFilter.name);
+            TextView textView2 = this.textView;
+            textView2.setText(Emoji.replaceEmoji(dialogFilter.name, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
             this.valueTextView.setText(sb);
             this.needDivider = z;
         }

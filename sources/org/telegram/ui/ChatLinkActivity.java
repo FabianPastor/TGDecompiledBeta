@@ -731,7 +731,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
             imageView2.setImageResource(Theme.getCurrentTheme().isDark() ? NUM : NUM);
-            addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
+            addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 0.0f, 0.0f));
             TextView textView = new TextView(context);
             this.messageTextView = textView;
             textView.setTextColor(Theme.getColor("chats_message"));
@@ -759,7 +759,6 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         private ArrayList<TLRPC$Chat> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
-        private int totalCount;
 
         public int getItemViewType(int i) {
             return 0;
@@ -1009,11 +1008,6 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
 
         public void notifyDataSetChanged() {
-            this.totalCount = 0;
-            int size = this.searchResult.size();
-            if (size != 0) {
-                this.totalCount += size + 1;
-            }
             super.notifyDataSetChanged();
         }
 

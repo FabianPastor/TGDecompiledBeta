@@ -385,7 +385,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
         if (stackLinearChartData != null) {
             this.values = new float[stackLinearChartData.lines.size()];
             this.darawingValuesPercentage = new float[stackLinearChartData.lines.size()];
-            onPickerDataChanged(false, true);
+            onPickerDataChanged(false, true, false);
         }
     }
 
@@ -545,7 +545,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
             if (f3 > 1.0f) {
                 chartPickerDelegate3.pickerEnd = 1.0f;
             }
-            onPickerDataChanged(true, true);
+            onPickerDataChanged(true, true, false);
         }
     }
 
@@ -556,8 +556,8 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
         return pieLegendView2;
     }
 
-    public void onPickerDataChanged(boolean z, boolean z2) {
-        super.onPickerDataChanged(z, z2);
+    public void onPickerDataChanged(boolean z, boolean z2, boolean z3) {
+        super.onPickerDataChanged(z, z2, z3);
         T t = this.chartData;
         if (t != null && ((StackLinearChartData) t).xPercentage != null) {
             ChartPickerDelegate chartPickerDelegate = this.pickerDelegate;

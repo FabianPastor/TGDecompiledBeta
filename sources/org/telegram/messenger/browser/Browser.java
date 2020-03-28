@@ -28,21 +28,12 @@ public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
     /* access modifiers changed from: private */
     public static CustomTabsClient customTabsClient;
-    private static WeakReference<CustomTabsSession> customTabsCurrentSession;
     private static String customTabsPackageToBind;
     private static CustomTabsServiceConnection customTabsServiceConnection;
     private static CustomTabsSession customTabsSession;
 
-    private static CustomTabsSession getCurrentSession() {
-        WeakReference<CustomTabsSession> weakReference = customTabsCurrentSession;
-        if (weakReference == null) {
-            return null;
-        }
-        return (CustomTabsSession) weakReference.get();
-    }
-
     private static void setCurrentSession(CustomTabsSession customTabsSession2) {
-        customTabsCurrentSession = new WeakReference<>(customTabsSession2);
+        new WeakReference(customTabsSession2);
     }
 
     private static CustomTabsSession getSession() {
@@ -399,7 +390,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0223 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131626733(0x7f0e0aed, float:1.888071E38)
+            r4 = 2131626731(0x7f0e0aeb, float:1.8880706E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0223 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0223 }
             android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12)     // Catch:{ Exception -> 0x0223 }
