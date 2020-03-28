@@ -387,6 +387,14 @@ public class EditTextBoldCursor extends EditText {
         this.supportRtlHint = z;
     }
 
+    /* access modifiers changed from: protected */
+    public void onScrollChanged(int i, int i2, int i3, int i4) {
+        super.onScrollChanged(i, i2, i3, i4);
+        if (i != i3) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+    }
+
     public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
         super.setText(charSequence, bufferType);
         checkHeaderVisibility(this.nextSetTextAnimated);

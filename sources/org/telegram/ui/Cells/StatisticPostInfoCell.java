@@ -100,7 +100,7 @@ public class StatisticPostInfoCell extends FrameLayout {
         }
         this.message.setText(charSequence.toString().replace("\n", " ").trim());
         this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo.counters.views), new Object[]{formatCount(recentPostInfo.counters.views)}));
-        this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo.message.messageOwner.date));
+        this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo.message.messageOwner.date, false));
         this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo.counters.forwards), new Object[]{formatCount(recentPostInfo.counters.forwards)}));
     }
 

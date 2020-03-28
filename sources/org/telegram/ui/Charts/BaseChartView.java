@@ -1356,44 +1356,40 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             int[] iArr = createHorizontalLinesData.values;
             int i4 = iArr[iArr.length - 1];
             int i5 = iArr[0];
-            float f = (float) i4;
-            if (!(f == this.animateToMaxHeight && ((float) i5) == this.animateToMinHeight)) {
-                Animator animator = this.maxValueAnimator;
-                if (animator != null) {
-                    animator.removeAllListeners();
-                    this.maxValueAnimator.cancel();
-                }
-                if (z3) {
-                    this.minMaxUpdateStep = 0.0f;
-                }
-            }
             if (!z3) {
-                float f2 = this.currentMaxHeight;
-                float f3 = this.currentMinHeight;
-                float f4 = (float) (i4 - i5);
-                float f5 = (f2 - f3) / f4;
-                if (f5 > 1.0f) {
-                    f5 = f4 / (f2 - f3);
+                float f = this.currentMaxHeight;
+                float f2 = this.currentMinHeight;
+                float f3 = (float) (i4 - i5);
+                float f4 = (f - f2) / f3;
+                if (f4 > 1.0f) {
+                    f4 = f3 / (f - f2);
                 }
-                float f6 = 0.045f;
-                double d = (double) f5;
+                float f5 = 0.045f;
+                double d = (double) f4;
                 if (d > 0.7d) {
-                    f6 = 0.1f;
+                    f5 = 0.1f;
                 } else if (d < 0.1d) {
-                    f6 = 0.03f;
+                    f5 = 0.03f;
                 }
-                if (f != this.animateToMaxHeight) {
-                    this.startFromMaxH = this.currentMaxHeight;
-                    this.startFromMax = 0.0f;
-                    this.minMaxUpdateStep = f6;
-                }
+                boolean z4 = ((float) i4) != this.animateToMaxHeight;
                 if (this.useMinHeight && ((float) i5) != this.animateToMinHeight) {
+                    z4 = true;
+                }
+                if (z4) {
+                    Animator animator = this.maxValueAnimator;
+                    if (animator != null) {
+                        animator.removeAllListeners();
+                        this.maxValueAnimator.cancel();
+                    }
+                    this.startFromMaxH = this.currentMaxHeight;
                     this.startFromMinH = this.currentMinHeight;
+                    this.startFromMax = 0.0f;
                     this.startFromMin = 0.0f;
-                    this.minMaxUpdateStep = f6;
+                    this.minMaxUpdateStep = f5;
                 }
             }
-            this.animateToMaxHeight = f;
+            float f6 = (float) i4;
+            this.animateToMaxHeight = f6;
             float f7 = (float) i5;
             this.animateToMinHeight = f7;
             measureHeightThreshold();
@@ -1406,7 +1402,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                     this.alphaAnimator.cancel();
                 }
                 if (!z) {
-                    this.currentMaxHeight = f;
+                    this.currentMaxHeight = f6;
                     this.currentMinHeight = f7;
                     this.horizontalLines.clear();
                     this.horizontalLines.add(createHorizontalLinesData);
@@ -1415,8 +1411,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 }
                 this.horizontalLines.add(createHorizontalLinesData);
                 if (z3) {
+                    Animator animator2 = this.maxValueAnimator;
+                    if (animator2 != null) {
+                        animator2.removeAllListeners();
+                        this.maxValueAnimator.cancel();
+                    }
+                    this.minMaxUpdateStep = 0.0f;
                     AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(new Animator[]{createAnimator(this.currentMaxHeight, f, this.heightUpdateListener)});
+                    animatorSet.playTogether(new Animator[]{createAnimator(this.currentMaxHeight, f6, this.heightUpdateListener)});
                     if (this.useMinHeight) {
                         animatorSet.playTogether(new Animator[]{createAnimator(this.currentMinHeight, f7, this.minHeightUpdateListener)});
                     }

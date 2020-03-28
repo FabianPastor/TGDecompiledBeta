@@ -8006,6 +8006,13 @@ public class MessagesStorage extends BaseController {
         executeFast.step();
         executeFast.dispose();
         nativeByteBuffer.reuse();
+        if ((tLRPC$UserFull.flags & 2048) != 0) {
+            SQLitePreparedStatement executeFast2 = this.database.executeFast("UPDATE dialogs SET folder_id = ? WHERE did = ?");
+            executeFast2.bindInteger(1, tLRPC$UserFull.folder_id);
+            executeFast2.bindLong(2, (long) tLRPC$UserFull.user.id);
+            executeFast2.step();
+            executeFast2.dispose();
+        }
     }
 
     public void updateChatInfo(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
@@ -8058,6 +8065,13 @@ public class MessagesStorage extends BaseController {
                         executeFast2.dispose();
                     }
                     queryFinalized2.dispose();
+                }
+                if ((tLRPC$ChatFull.flags & 2048) != 0) {
+                    SQLitePreparedStatement executeFast3 = this.database.executeFast("UPDATE dialogs SET folder_id = ? WHERE did = ?");
+                    executeFast3.bindInteger(1, tLRPC$ChatFull.folder_id);
+                    executeFast3.bindLong(2, (long) (-tLRPC$ChatFull.id));
+                    executeFast3.step();
+                    executeFast3.dispose();
                 }
             }
         } catch (Exception e) {

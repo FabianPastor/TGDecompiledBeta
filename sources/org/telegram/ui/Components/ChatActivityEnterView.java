@@ -7239,90 +7239,92 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             L_0x008d:
                 r3 = 0
             L_0x008e:
-                if (r3 == 0) goto L_0x0096
+                if (r3 == 0) goto L_0x009a
                 boolean r4 = r13.scheduleButtonHidden
-                if (r4 != 0) goto L_0x0096
+                if (r4 != 0) goto L_0x009a
+                boolean r4 = r13.recordingAudioVideo
+                if (r4 != 0) goto L_0x009a
                 r4 = 1
-                goto L_0x0097
-            L_0x0096:
+                goto L_0x009b
+            L_0x009a:
                 r4 = 0
-            L_0x0097:
+            L_0x009b:
                 android.widget.ImageView r5 = r13.scheduledButton
                 r6 = 1119879168(0x42CLASSNAME, float:96.0)
                 r7 = 1111490560(0x42400000, float:48.0)
                 r8 = 0
                 r9 = 8
-                if (r5 == 0) goto L_0x0104
+                if (r5 == 0) goto L_0x0108
                 java.lang.Object r5 = r5.getTag()
-                if (r5 == 0) goto L_0x00aa
-                if (r4 != 0) goto L_0x00b4
-            L_0x00aa:
+                if (r5 == 0) goto L_0x00ae
+                if (r4 != 0) goto L_0x00b8
+            L_0x00ae:
                 android.widget.ImageView r5 = r13.scheduledButton
                 java.lang.Object r5 = r5.getTag()
-                if (r5 != 0) goto L_0x00f7
-                if (r4 != 0) goto L_0x00f7
-            L_0x00b4:
+                if (r5 != 0) goto L_0x00fb
+                if (r4 != 0) goto L_0x00fb
+            L_0x00b8:
                 android.widget.ImageView r14 = r13.notifyButton
-                if (r14 == 0) goto L_0x00f6
-                if (r3 != 0) goto L_0x00c5
-                if (r1 == 0) goto L_0x00c5
+                if (r14 == 0) goto L_0x00fa
+                if (r3 != 0) goto L_0x00c9
+                if (r1 == 0) goto L_0x00c9
                 android.widget.ImageView r14 = r13.scheduledButton
                 int r14 = r14.getVisibility()
-                if (r14 == 0) goto L_0x00c5
-                goto L_0x00c7
-            L_0x00c5:
+                if (r14 == 0) goto L_0x00c9
+                goto L_0x00cb
+            L_0x00c9:
                 r2 = 8
-            L_0x00c7:
+            L_0x00cb:
                 android.widget.ImageView r14 = r13.notifyButton
                 int r14 = r14.getVisibility()
-                if (r2 == r14) goto L_0x00f6
+                if (r2 == r14) goto L_0x00fa
                 android.widget.ImageView r14 = r13.notifyButton
                 r14.setVisibility(r2)
                 android.widget.LinearLayout r14 = r13.attachLayout
-                if (r14 == 0) goto L_0x00f6
+                if (r14 == 0) goto L_0x00fa
                 android.widget.ImageView r0 = r13.botButton
-                if (r0 == 0) goto L_0x00e2
+                if (r0 == 0) goto L_0x00e6
                 int r0 = r0.getVisibility()
-                if (r0 != r9) goto L_0x00ee
-            L_0x00e2:
+                if (r0 != r9) goto L_0x00f2
+            L_0x00e6:
                 android.widget.ImageView r0 = r13.notifyButton
-                if (r0 == 0) goto L_0x00ec
+                if (r0 == 0) goto L_0x00f0
                 int r0 = r0.getVisibility()
-                if (r0 != r9) goto L_0x00ee
-            L_0x00ec:
+                if (r0 != r9) goto L_0x00f2
+            L_0x00f0:
                 r6 = 1111490560(0x42400000, float:48.0)
-            L_0x00ee:
+            L_0x00f2:
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r0 = (float) r0
                 r14.setPivotX(r0)
-            L_0x00f6:
+            L_0x00fa:
                 return
-            L_0x00f7:
+            L_0x00fb:
                 android.widget.ImageView r3 = r13.scheduledButton
-                if (r4 == 0) goto L_0x0100
+                if (r4 == 0) goto L_0x0104
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r0)
-                goto L_0x0101
-            L_0x0100:
-                r5 = r8
-            L_0x0101:
-                r3.setTag(r5)
+                goto L_0x0105
             L_0x0104:
+                r5 = r8
+            L_0x0105:
+                r3.setTag(r5)
+            L_0x0108:
                 android.animation.AnimatorSet r3 = r13.scheduledButtonAnimation
-                if (r3 == 0) goto L_0x010d
+                if (r3 == 0) goto L_0x0111
                 r3.cancel()
                 r13.scheduledButtonAnimation = r8
-            L_0x010d:
+            L_0x0111:
                 r3 = 0
                 r5 = 1036831949(0x3dcccccd, float:0.1)
                 r8 = 1065353216(0x3var_, float:1.0)
-                if (r14 == 0) goto L_0x018a
-                if (r1 == 0) goto L_0x0118
-                goto L_0x018a
-            L_0x0118:
-                if (r4 == 0) goto L_0x011f
+                if (r14 == 0) goto L_0x018e
+                if (r1 == 0) goto L_0x011c
+                goto L_0x018e
+            L_0x011c:
+                if (r4 == 0) goto L_0x0123
                 android.widget.ImageView r14 = r13.scheduledButton
                 r14.setVisibility(r2)
-            L_0x011f:
+            L_0x0123:
                 android.widget.ImageView r14 = r13.scheduledButton
                 r1 = 1103101952(0x41CLASSNAME, float:24.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -7336,21 +7338,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.widget.ImageView r10 = r13.scheduledButton
                 android.util.Property r11 = android.view.View.ALPHA
                 float[] r12 = new float[r0]
-                if (r4 == 0) goto L_0x013f
+                if (r4 == 0) goto L_0x0143
                 r3 = 1065353216(0x3var_, float:1.0)
-            L_0x013f:
+            L_0x0143:
                 r12[r2] = r3
                 android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
                 r1[r2] = r3
                 android.widget.ImageView r3 = r13.scheduledButton
                 android.util.Property r10 = android.view.View.SCALE_X
                 float[] r11 = new float[r0]
-                if (r4 == 0) goto L_0x0152
+                if (r4 == 0) goto L_0x0156
                 r12 = 1065353216(0x3var_, float:1.0)
-                goto L_0x0155
-            L_0x0152:
+                goto L_0x0159
+            L_0x0156:
                 r12 = 1036831949(0x3dcccccd, float:0.1)
-            L_0x0155:
+            L_0x0159:
                 r11[r2] = r12
                 android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
                 r1[r0] = r3
@@ -7358,9 +7360,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.widget.ImageView r10 = r13.scheduledButton
                 android.util.Property r11 = android.view.View.SCALE_Y
                 float[] r0 = new float[r0]
-                if (r4 == 0) goto L_0x0168
+                if (r4 == 0) goto L_0x016c
                 r5 = 1065353216(0x3var_, float:1.0)
-            L_0x0168:
+            L_0x016c:
                 r0[r2] = r5
                 android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r10, r11, r0)
                 r1[r3] = r0
@@ -7374,66 +7376,66 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r14.addListener(r0)
                 android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
                 r14.start()
-                goto L_0x01ca
-            L_0x018a:
+                goto L_0x01ce
+            L_0x018e:
                 android.widget.ImageView r14 = r13.scheduledButton
-                if (r14 == 0) goto L_0x01b6
-                if (r4 == 0) goto L_0x0192
+                if (r14 == 0) goto L_0x01ba
+                if (r4 == 0) goto L_0x0196
                 r0 = 0
-                goto L_0x0194
-            L_0x0192:
+                goto L_0x0198
+            L_0x0196:
                 r0 = 8
-            L_0x0194:
+            L_0x0198:
                 r14.setVisibility(r0)
                 android.widget.ImageView r14 = r13.scheduledButton
-                if (r4 == 0) goto L_0x019d
+                if (r4 == 0) goto L_0x01a1
                 r3 = 1065353216(0x3var_, float:1.0)
-            L_0x019d:
+            L_0x01a1:
                 r14.setAlpha(r3)
                 android.widget.ImageView r14 = r13.scheduledButton
-                if (r4 == 0) goto L_0x01a7
+                if (r4 == 0) goto L_0x01ab
                 r0 = 1065353216(0x3var_, float:1.0)
-                goto L_0x01aa
-            L_0x01a7:
+                goto L_0x01ae
+            L_0x01ab:
                 r0 = 1036831949(0x3dcccccd, float:0.1)
-            L_0x01aa:
+            L_0x01ae:
                 r14.setScaleX(r0)
                 android.widget.ImageView r14 = r13.scheduledButton
-                if (r4 == 0) goto L_0x01b3
+                if (r4 == 0) goto L_0x01b7
                 r5 = 1065353216(0x3var_, float:1.0)
-            L_0x01b3:
+            L_0x01b7:
                 r14.setScaleY(r5)
-            L_0x01b6:
+            L_0x01ba:
                 android.widget.ImageView r14 = r13.notifyButton
-                if (r14 == 0) goto L_0x01ca
-                if (r1 == 0) goto L_0x01c5
+                if (r14 == 0) goto L_0x01ce
+                if (r1 == 0) goto L_0x01c9
                 android.widget.ImageView r0 = r13.scheduledButton
                 int r0 = r0.getVisibility()
-                if (r0 == 0) goto L_0x01c5
-                goto L_0x01c7
-            L_0x01c5:
+                if (r0 == 0) goto L_0x01c9
+                goto L_0x01cb
+            L_0x01c9:
                 r2 = 8
-            L_0x01c7:
+            L_0x01cb:
                 r14.setVisibility(r2)
-            L_0x01ca:
+            L_0x01ce:
                 android.widget.LinearLayout r14 = r13.attachLayout
-                if (r14 == 0) goto L_0x01ec
+                if (r14 == 0) goto L_0x01f0
                 android.widget.ImageView r0 = r13.botButton
-                if (r0 == 0) goto L_0x01d8
+                if (r0 == 0) goto L_0x01dc
                 int r0 = r0.getVisibility()
-                if (r0 != r9) goto L_0x01e4
-            L_0x01d8:
+                if (r0 != r9) goto L_0x01e8
+            L_0x01dc:
                 android.widget.ImageView r0 = r13.notifyButton
-                if (r0 == 0) goto L_0x01e2
+                if (r0 == 0) goto L_0x01e6
                 int r0 = r0.getVisibility()
-                if (r0 != r9) goto L_0x01e4
-            L_0x01e2:
+                if (r0 != r9) goto L_0x01e8
+            L_0x01e6:
                 r6 = 1111490560(0x42400000, float:48.0)
-            L_0x01e4:
+            L_0x01e8:
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r0 = (float) r0
                 r14.setPivotX(r0)
-            L_0x01ec:
+            L_0x01f0:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateScheduleButton(boolean):void");

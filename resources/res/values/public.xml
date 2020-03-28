@@ -3127,6 +3127,7 @@
     <public type="string" name="NotificationsAddAnException" id="NUM" />
     <public type="string" name="NotificationsAndSounds" id="NUM" />
     <public type="string" name="NotificationsChannels" id="NUM" />
+    <public type="string" name="NotificationsChartTitle" id="NUM" />
     <public type="string" name="NotificationsCustom" id="NUM" />
     <public type="string" name="NotificationsCustomize" id="NUM" />
     <public type="string" name="NotificationsDefaultOff" id="NUM" />
@@ -4179,6 +4180,7 @@
     <public type="string" name="TintShadows" id="NUM" />
     <public type="string" name="TodayAt" id="NUM" />
     <public type="string" name="TodayAtFormatted" id="NUM" />
+    <public type="string" name="TodayAtFormattedWithToday" id="NUM" />
     <public type="string" name="TooManyCommunities" id="NUM" />
     <public type="string" name="TooManyCommunitiesHintCreate" id="NUM" />
     <public type="string" name="TooManyCommunitiesHintEdit" id="NUM" />

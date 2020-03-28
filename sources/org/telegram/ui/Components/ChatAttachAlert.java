@@ -728,12 +728,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutGrouping"
-            r2 = 2131626679(0x7f0e0ab7, float:1.88806E38)
+            r2 = 2131626680(0x7f0e0ab8, float:1.8880603E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r9, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutCompression"
-            r2 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+            r2 = 2131626679(0x7f0e0ab7, float:1.88806E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r10, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
@@ -1085,7 +1085,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             r0.setAlpha(r11)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
-            r2 = 2131626648(0x7f0e0a98, float:1.8880538E38)
+            r2 = 2131626649(0x7f0e0a99, float:1.888054E38)
             java.lang.String r3 = "Send"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -1421,7 +1421,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = -1
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.tooltipTextView
-            r1 = 2131626893(0x7f0e0b8d, float:1.8881035E38)
+            r1 = 2131626894(0x7f0e0b8e, float:1.8881037E38)
             java.lang.String r2 = "TapForVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)

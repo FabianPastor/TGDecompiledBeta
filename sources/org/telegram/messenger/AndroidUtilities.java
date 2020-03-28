@@ -2895,7 +2895,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131625987(0x7f0e0803, float:1.8879197E38)
+            r7 = 2131625988(0x7f0e0804, float:1.88792E38)
             java.lang.String r8 = "OK"
             r9 = 2131624195(0x7f0e0103, float:1.8875563E38)
             java.lang.String r10 = "AppName"
@@ -3109,7 +3109,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626321(0x7f0e0951, float:1.8879875E38)
+            r0 = 2131626322(0x7f0e0952, float:1.8879877E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw

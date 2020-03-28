@@ -3266,6 +3266,7 @@ public final class R {
         public static final int NotificationsAddAnException = NUM;
         public static final int NotificationsAndSounds = NUM;
         public static final int NotificationsChannels = NUM;
+        public static final int NotificationsChartTitle = NUM;
         public static final int NotificationsCustom = NUM;
         public static final int NotificationsCustomize = NUM;
         public static final int NotificationsDefaultOff = NUM;
@@ -4318,6 +4319,7 @@ public final class R {
         public static final int TintShadows = NUM;
         public static final int TodayAt = NUM;
         public static final int TodayAtFormatted = NUM;
+        public static final int TodayAtFormattedWithToday = NUM;
         public static final int TooManyCommunities = NUM;
         public static final int TooManyCommunitiesHintCreate = NUM;
         public static final int TooManyCommunitiesHintEdit = NUM;

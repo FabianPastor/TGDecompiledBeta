@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -20,14 +19,12 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ChartHeaderView extends FrameLayout {
     public TextView back;
-    /* access modifiers changed from: private */
-    public TextView dates;
-    /* access modifiers changed from: private */
-    public TextView datesTmp;
+    private TextView dates;
+    private TextView datesTmp;
     SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
     private boolean showDate = true;
+    int textMargin;
     private TextView title;
-    UpdateDatesRunnable updateDatesRunnable = new UpdateDatesRunnable();
     private Drawable zoomIcon;
 
     public ChartHeaderView(Context context) {
@@ -35,11 +32,12 @@ public class ChartHeaderView extends FrameLayout {
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(14.0f);
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textMargin = (int) textPaint.measureText("00 MMM 0000 - 00 MMM 000");
         TextView textView = new TextView(context);
         this.title = textView;
         textView.setTextSize(15.0f);
         this.title.setTypeface(Typeface.DEFAULT_BOLD);
-        addView(this.title, LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) ((int) textPaint.measureText("00 MMM 0000 - 00 MMM 000")), 0.0f));
+        addView(this.title, LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) this.textMargin, 0.0f));
         TextView textView2 = new TextView(context);
         this.back = textView2;
         textView2.setTextSize(15.0f);
@@ -91,20 +89,19 @@ public class ChartHeaderView extends FrameLayout {
     }
 
     public void setDates(long j, long j2) {
+        String str;
         if (!this.showDate) {
             this.dates.setVisibility(8);
             this.datesTmp.setVisibility(8);
-        }
-        if (TextUtils.isEmpty(this.dates.getText())) {
-            this.updateDatesRunnable.setDates(j, j2);
-            this.updateDatesRunnable.run();
             return;
         }
-        UpdateDatesRunnable updateDatesRunnable2 = this.updateDatesRunnable;
-        if (updateDatesRunnable2.start / 86400000 != j / 86400000 || updateDatesRunnable2.end / 86400000 != j2 / 86400000) {
-            this.updateDatesRunnable.setDates(j, j2);
-            this.updateDatesRunnable.run();
+        if (j2 - j >= 86400000) {
+            str = this.formatter.format(new Date(j)) + " — " + this.formatter.format(new Date(j2));
+        } else {
+            str = this.formatter.format(new Date(j));
         }
+        this.dates.setText(str);
+        this.dates.setVisibility(0);
     }
 
     public void setTitle(String str) {
@@ -112,8 +109,7 @@ public class ChartHeaderView extends FrameLayout {
     }
 
     public void zoomTo(BaseChartView baseChartView, long j, boolean z) {
-        this.updateDatesRunnable.setDates(j, j);
-        this.updateDatesRunnable.run();
+        setDates(j, j);
         this.back.setVisibility(0);
         if (z) {
             this.back.setAlpha(0.0f);
@@ -132,9 +128,6 @@ public class ChartHeaderView extends FrameLayout {
             this.title.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
             return;
         }
-        if (this.showDate) {
-            this.updateDatesRunnable.run();
-        }
         this.back.setAlpha(1.0f);
         this.back.setTranslationX(0.0f);
         this.back.setTranslationY(0.0f);
@@ -142,8 +135,7 @@ public class ChartHeaderView extends FrameLayout {
     }
 
     public void zoomOut(BaseChartView baseChartView, boolean z) {
-        this.updateDatesRunnable.setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
-        this.updateDatesRunnable.run();
+        setDates(baseChartView.getStartDate(), baseChartView.getEndDate());
         if (z) {
             this.title.setAlpha(0.0f);
             this.title.setScaleX(0.3f);
@@ -160,9 +152,6 @@ public class ChartHeaderView extends FrameLayout {
             this.back.animate().alpha(0.0f).scaleY(0.3f).scaleX(0.3f).setDuration(200).start();
             return;
         }
-        if (this.showDate) {
-            this.updateDatesRunnable.run();
-        }
         this.title.setAlpha(1.0f);
         this.title.setScaleX(1.0f);
         this.title.setScaleY(1.0f);
@@ -174,31 +163,10 @@ public class ChartHeaderView extends FrameLayout {
         if (!z) {
             this.datesTmp.setVisibility(8);
             this.dates.setVisibility(8);
+            this.title.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, 16.0f, 0.0f));
+            this.title.requestLayout();
+            return;
         }
-    }
-
-    class UpdateDatesRunnable implements Runnable {
-        long end;
-        long start;
-
-        UpdateDatesRunnable() {
-        }
-
-        public void setDates(long j, long j2) {
-            this.start = j;
-            this.end = j2;
-        }
-
-        public void run() {
-            String str;
-            if (this.end - this.start >= 86400000) {
-                str = ChartHeaderView.this.formatter.format(new Date(this.start)) + " — " + ChartHeaderView.this.formatter.format(new Date(this.end));
-            } else {
-                str = ChartHeaderView.this.formatter.format(new Date(this.start));
-            }
-            ChartHeaderView.this.dates.setText(str);
-            ChartHeaderView.this.dates.setVisibility(0);
-            ChartHeaderView.this.datesTmp.setVisibility(8);
-        }
+        this.title.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) this.textMargin, 0.0f));
     }
 }

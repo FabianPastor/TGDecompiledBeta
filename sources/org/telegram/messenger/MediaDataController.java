@@ -5557,7 +5557,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626590(0x7f0e0a5e, float:1.888042E38)
+            r9 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1

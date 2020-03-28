@@ -2009,6 +2009,7 @@
     <string name="NotificationsAddAnException">Add an Exception</string>
     <string name="NotificationsAndSounds">Notifications and Sounds</string>
     <string name="NotificationsChannels">Channels</string>
+    <string name="NotificationsChartTitle">Notifications</string>
     <string name="NotificationsCustom">Custom</string>
     <string name="NotificationsCustomize">Customize</string>
     <string name="NotificationsDefaultOff">Default (Off)</string>
@@ -3061,6 +3062,7 @@
     <string name="TintShadows">SHADOWS</string>
     <string name="TodayAt">at</string>
     <string name="TodayAtFormatted">at %1$s</string>
+    <string name="TodayAtFormattedWithToday">today at %1$s</string>
     <string name="TooManyCommunities">Too Many Communities</string>
     <string name="TooManyCommunitiesHintCreate">Sorry, you are a member of too many groups or channels. Please leave some before creating a new one.</string>
     <string name="TooManyCommunitiesHintEdit">Sorry, you are a member of too many groups and channels. For technical reasons, you need to leave some first before changing this setting in your groups.</string>

@@ -2582,7 +2582,7 @@ public class MessageObject {
             goto L_0x063b
         L_0x068e:
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r2 = 2131627121(0x7f0e0CLASSNAME, float:1.8881497E38)
+            r2 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
             java.lang.String r11 = "UserRestrictionsUntilForever"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r11, r2)
             r9.<init>(r2)
@@ -8729,10 +8729,10 @@ public class MessageObject {
                     } else if (!z) {
                         return null;
                     } else {
-                        return LocaleController.formatDateAudio((long) this.messageOwner.date);
+                        return LocaleController.formatDateAudio((long) this.messageOwner.date, true);
                     }
                 } else if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeVideo) && tLRPC$DocumentAttribute.round_message) {
-                    return LocaleController.formatDateAudio((long) this.messageOwner.date);
+                    return LocaleController.formatDateAudio((long) this.messageOwner.date, true);
                 } else {
                     i++;
                 }

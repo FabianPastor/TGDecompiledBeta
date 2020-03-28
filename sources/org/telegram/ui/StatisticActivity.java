@@ -121,6 +121,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     /* access modifiers changed from: private */
     public ChartViewData newFollowersBySourceData;
     /* access modifiers changed from: private */
+    public ChartViewData notificationsData;
+    /* access modifiers changed from: private */
     public LinearLayout progressLayout;
     private final SparseIntArray recentPostIdtoIndexMap = new SparseIntArray();
     /* access modifiers changed from: private */
@@ -164,17 +166,18 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     public /* synthetic */ void lambda$onFragmentCreate$1$StatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChartViewData[] chartViewDataArr = new ChartViewData[8];
+        ChartViewData[] chartViewDataArr = new ChartViewData[9];
         if (tLObject instanceof TLRPC$TL_stats_broadcastStats) {
             TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats = (TLRPC$TL_stats_broadcastStats) tLObject;
-            chartViewDataArr[0] = createViewData(tLRPC$TL_stats_broadcastStats.growth_graph, LocaleController.getString("GrowthChartTitle", NUM), 0);
+            chartViewDataArr[0] = createViewData(tLRPC$TL_stats_broadcastStats.iv_interactions_graph, LocaleController.getString("IVInteractionsChartTitle", NUM), 1);
             chartViewDataArr[1] = createViewData(tLRPC$TL_stats_broadcastStats.followers_graph, LocaleController.getString("FollowersChartTitle", NUM), 0);
             chartViewDataArr[2] = createViewData(tLRPC$TL_stats_broadcastStats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", NUM), 0);
             chartViewDataArr[3] = createViewData(tLRPC$TL_stats_broadcastStats.interactions_graph, LocaleController.getString("InteractionsChartTitle", NUM), 1);
-            chartViewDataArr[4] = createViewData(tLRPC$TL_stats_broadcastStats.iv_interactions_graph, LocaleController.getString("IVInteractionsChartTitle", NUM), 1);
+            chartViewDataArr[4] = createViewData(tLRPC$TL_stats_broadcastStats.growth_graph, LocaleController.getString("GrowthChartTitle", NUM), 0);
             chartViewDataArr[5] = createViewData(tLRPC$TL_stats_broadcastStats.views_by_source_graph, LocaleController.getString("ViewsBySourceChartTitle", NUM), 2);
             chartViewDataArr[6] = createViewData(tLRPC$TL_stats_broadcastStats.new_followers_by_source_graph, LocaleController.getString("NewFollowersBySourceChartTitle", NUM), 2);
             chartViewDataArr[7] = createViewData(tLRPC$TL_stats_broadcastStats.languages_graph, LocaleController.getString("LanguagesChartTitle", NUM), 4);
+            chartViewDataArr[8] = createViewData(tLRPC$TL_stats_broadcastStats.mute_graph, LocaleController.getString("NotificationsChartTitle", NUM), 0);
             this.recentPostsAll.clear();
             for (int i = 0; i < tLRPC$TL_stats_broadcastStats.recent_message_interactions.size(); i++) {
                 RecentPostInfo recentPostInfo = new RecentPostInfo();
@@ -201,14 +204,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     public /* synthetic */ void lambda$null$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
-        this.growthData = chartViewDataArr[0];
+        this.ivInteractionsData = chartViewDataArr[0];
         this.followersData = chartViewDataArr[1];
         this.topHoursData = chartViewDataArr[2];
         this.interactionsData = chartViewDataArr[3];
-        this.ivInteractionsData = chartViewDataArr[4];
+        this.growthData = chartViewDataArr[4];
         this.viewsBySourceData = chartViewDataArr[5];
         this.newFollowersBySourceData = chartViewDataArr[6];
         this.languagesData = chartViewDataArr[7];
+        this.notificationsData = chartViewDataArr[8];
         Adapter adapter2 = this.adapter;
         if (adapter2 != null) {
             adapter2.update();
@@ -442,6 +446,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         int ivInteractionsCell = -1;
         int languagesCell = -1;
         int newFollowersBySourceCell = -1;
+        int notificationsCell = -1;
         int progressCell = -1;
         int recentPostsEndRow = -1;
         int recentPostsHeaderCell = -1;
@@ -454,7 +459,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         public int getItemViewType(int i) {
-            if (i == this.growCell || i == this.folowersCell || i == this.topHourseCell) {
+            if (i == this.growCell || i == this.folowersCell || i == this.topHourseCell || i == this.notificationsCell) {
                 return 0;
             }
             if (i == this.interactionsCell || i == this.ivInteractionsCell) {
@@ -542,7 +547,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "dialogTextBlack"
                 r2 = r0
                 r2.<init>(r3, r4, r5, r6, r7)
-                r9 = 2131626478(0x7f0e09ee, float:1.8880193E38)
+                r9 = 2131626479(0x7f0e09ef, float:1.8880195E38)
                 java.lang.String r10 = "RecentPosts"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r0.setText(r9)
@@ -591,6 +596,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     chartViewData = StatisticActivity.this.ivInteractionsData;
                 } else if (this.topHourseCell == i) {
                     chartViewData = StatisticActivity.this.topHoursData;
+                } else if (this.notificationsCell == i) {
+                    chartViewData = StatisticActivity.this.notificationsData;
                 } else {
                     chartViewData = StatisticActivity.this.languagesData;
                 }
@@ -618,6 +625,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.recentPostsHeaderCell = -1;
             this.ivInteractionsCell = -1;
             this.topHourseCell = -1;
+            this.notificationsCell = -1;
             this.count = 0;
             this.shadowDivideCells.clear();
             if (StatisticActivity.this.growthData != null && !StatisticActivity.this.growthData.isEmpty) {
@@ -636,7 +644,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.count = i3 + 1;
                 this.folowersCell = i3;
             }
-            if (StatisticActivity.this.topHoursData != null && !StatisticActivity.this.topHoursData.isEmpty) {
+            if (StatisticActivity.this.notificationsData != null && !StatisticActivity.this.notificationsData.isEmpty) {
                 int i4 = this.count;
                 if (i4 > 0) {
                     ArraySet<Integer> arraySet2 = this.shadowDivideCells;
@@ -645,9 +653,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i5 = this.count;
                 this.count = i5 + 1;
-                this.topHourseCell = i5;
+                this.notificationsCell = i5;
             }
-            if (StatisticActivity.this.interactionsData != null && !StatisticActivity.this.interactionsData.isEmpty) {
+            if (StatisticActivity.this.topHoursData != null && !StatisticActivity.this.topHoursData.isEmpty) {
                 int i6 = this.count;
                 if (i6 > 0) {
                     ArraySet<Integer> arraySet3 = this.shadowDivideCells;
@@ -656,9 +664,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i7 = this.count;
                 this.count = i7 + 1;
-                this.interactionsCell = i7;
+                this.topHourseCell = i7;
             }
-            if ((StatisticActivity.this.ivInteractionsData != null && !StatisticActivity.this.ivInteractionsData.isEmpty && !StatisticActivity.this.ivInteractionsData.isError) || (StatisticActivity.this.ivInteractionsData != null && StatisticActivity.this.ivInteractionsData.viewShowed)) {
+            if (StatisticActivity.this.interactionsData != null && !StatisticActivity.this.interactionsData.isEmpty) {
                 int i8 = this.count;
                 if (i8 > 0) {
                     ArraySet<Integer> arraySet4 = this.shadowDivideCells;
@@ -667,9 +675,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i9 = this.count;
                 this.count = i9 + 1;
-                this.ivInteractionsCell = i9;
+                this.interactionsCell = i9;
             }
-            if (StatisticActivity.this.viewsBySourceData != null && !StatisticActivity.this.viewsBySourceData.isEmpty) {
+            if ((StatisticActivity.this.ivInteractionsData != null && !StatisticActivity.this.ivInteractionsData.isEmpty && !StatisticActivity.this.ivInteractionsData.isError) || (StatisticActivity.this.ivInteractionsData != null && StatisticActivity.this.ivInteractionsData.viewShowed)) {
                 int i10 = this.count;
                 if (i10 > 0) {
                     ArraySet<Integer> arraySet5 = this.shadowDivideCells;
@@ -678,9 +686,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i11 = this.count;
                 this.count = i11 + 1;
-                this.viewsBySourceCell = i11;
+                this.ivInteractionsCell = i11;
             }
-            if (StatisticActivity.this.newFollowersBySourceData != null && !StatisticActivity.this.newFollowersBySourceData.isEmpty) {
+            if (StatisticActivity.this.viewsBySourceData != null && !StatisticActivity.this.viewsBySourceData.isEmpty) {
                 int i12 = this.count;
                 if (i12 > 0) {
                     ArraySet<Integer> arraySet6 = this.shadowDivideCells;
@@ -689,9 +697,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i13 = this.count;
                 this.count = i13 + 1;
-                this.newFollowersBySourceCell = i13;
+                this.viewsBySourceCell = i13;
             }
-            if (StatisticActivity.this.languagesData != null && !StatisticActivity.this.languagesData.isEmpty) {
+            if (StatisticActivity.this.newFollowersBySourceData != null && !StatisticActivity.this.newFollowersBySourceData.isEmpty) {
                 int i14 = this.count;
                 if (i14 > 0) {
                     ArraySet<Integer> arraySet7 = this.shadowDivideCells;
@@ -700,36 +708,47 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i15 = this.count;
                 this.count = i15 + 1;
-                this.languagesCell = i15;
+                this.newFollowersBySourceCell = i15;
             }
-            ArraySet<Integer> arraySet8 = this.shadowDivideCells;
-            int i16 = this.count;
-            this.count = i16 + 1;
-            arraySet8.add(Integer.valueOf(i16));
-            if (StatisticActivity.this.recentPostsAll.size() > 0) {
+            if (StatisticActivity.this.languagesData != null && !StatisticActivity.this.languagesData.isEmpty) {
+                int i16 = this.count;
+                if (i16 > 0) {
+                    ArraySet<Integer> arraySet8 = this.shadowDivideCells;
+                    this.count = i16 + 1;
+                    arraySet8.add(Integer.valueOf(i16));
+                }
                 int i17 = this.count;
-                int i18 = i17 + 1;
-                this.count = i18;
-                this.recentPostsHeaderCell = i17;
-                this.count = i18 + 1;
-                this.recentPostsStartRow = i18;
-                int size = (i18 + StatisticActivity.this.recentPostsLoaded.size()) - 1;
+                this.count = i17 + 1;
+                this.languagesCell = i17;
+            }
+            ArraySet<Integer> arraySet9 = this.shadowDivideCells;
+            int i18 = this.count;
+            this.count = i18 + 1;
+            arraySet9.add(Integer.valueOf(i18));
+            if (StatisticActivity.this.recentPostsAll.size() > 0) {
+                int i19 = this.count;
+                int i20 = i19 + 1;
+                this.count = i20;
+                this.recentPostsHeaderCell = i19;
+                this.count = i20 + 1;
+                this.recentPostsStartRow = i20;
+                int size = (i20 + StatisticActivity.this.recentPostsLoaded.size()) - 1;
                 this.recentPostsEndRow = size;
                 this.count = size;
                 this.count = size + 1;
                 if (StatisticActivity.this.recentPostsLoaded.size() != StatisticActivity.this.recentPostsAll.size()) {
-                    int i19 = this.count;
-                    this.count = i19 + 1;
-                    this.progressCell = i19;
+                    int i21 = this.count;
+                    this.count = i21 + 1;
+                    this.progressCell = i21;
                 } else {
-                    int i20 = this.count;
-                    this.count = i20 + 1;
-                    this.emptyCell = i20;
+                    int i22 = this.count;
+                    this.count = i22 + 1;
+                    this.emptyCell = i22;
                 }
-                ArraySet<Integer> arraySet9 = this.shadowDivideCells;
-                int i21 = this.count;
-                this.count = i21 + 1;
-                arraySet9.add(Integer.valueOf(i21));
+                ArraySet<Integer> arraySet10 = this.shadowDivideCells;
+                int i23 = this.count;
+                this.count = i23 + 1;
+                arraySet10.add(Integer.valueOf(i23));
             }
         }
 
@@ -1791,6 +1810,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         int ivInteractionsCell;
         int languagesCell;
         int newFollowersBySourceCell;
+        int notificationsCell;
         SparseIntArray positionToTypeMap;
         int topHourseCell;
         int viewsBySourceCell;
@@ -1805,6 +1825,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.newFollowersBySourceCell = -1;
             this.languagesCell = -1;
             this.topHourseCell = -1;
+            this.notificationsCell = -1;
         }
 
         public void saveOldState(Adapter adapter2) {
@@ -1822,6 +1843,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.newFollowersBySourceCell = adapter2.newFollowersBySourceCell;
             this.languagesCell = adapter2.languagesCell;
             this.topHourseCell = adapter2.topHourseCell;
+            this.notificationsCell = adapter2.notificationsCell;
         }
 
         public int getOldListSize() {
@@ -1859,6 +1881,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 return true;
             }
             if (i == this.topHourseCell && i2 == this.adapter.topHourseCell) {
+                return true;
+            }
+            if (i == this.notificationsCell && i2 == this.adapter.notificationsCell) {
                 return true;
             }
             return false;
@@ -1903,7 +1928,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             simpleTextView = chatAvatarContainer2.getSubtitleTextView();
         }
         arrayList.add(new ThemeDescription((View) simpleTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSubtitle", (Object) null));
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 9; i++) {
             if (i == 0) {
                 chartViewData = this.growthData;
             } else if (i == 1) {
@@ -1916,6 +1941,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 chartViewData = this.viewsBySourceData;
             } else if (i == 5) {
                 chartViewData = this.newFollowersBySourceData;
+            } else if (i == 6) {
+                chartViewData = this.notificationsData;
+            } else if (i == 7) {
+                chartViewData = this.topHoursData;
             } else {
                 chartViewData = this.languagesData;
             }

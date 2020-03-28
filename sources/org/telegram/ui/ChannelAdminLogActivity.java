@@ -1758,7 +1758,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626731(0x7f0e0aeb, float:1.8880706E38)
+            r3 = 2131626732(0x7f0e0aec, float:1.8880709E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1794,7 +1794,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131625987(0x7f0e0803, float:1.8879197E38)
+            r2 = 2131625988(0x7f0e0804, float:1.88792E38)
             java.lang.String r3 = "OK"
             r4 = 2131624195(0x7f0e0103, float:1.8875563E38)
             java.lang.String r5 = "AppName"
