@@ -212,17 +212,13 @@ public class FilterCreateActivity extends BaseFragment {
         int i3 = i2 + 1;
         this.rowCount = i3;
         this.nameSectionRow = i2;
-        this.rowCount = i3 + 1;
+        int i4 = i3 + 1;
+        this.rowCount = i4;
         this.includeHeaderRow = i3;
-        if (this.newAlwaysShow.size() < 100) {
-            int i4 = this.rowCount;
-            this.rowCount = i4 + 1;
-            this.includeAddRow = i4;
-        } else {
-            this.includeAddRow = -1;
-        }
+        int i5 = i4 + 1;
+        this.rowCount = i5;
+        this.includeAddRow = i4;
         if ((this.newFilterFlags & MessagesController.DIALOG_FILTER_FLAG_CONTACTS) != 0) {
-            int i5 = this.rowCount;
             this.rowCount = i5 + 1;
             this.includeContactsRow = i5;
         } else {
@@ -278,17 +274,13 @@ public class FilterCreateActivity extends BaseFragment {
         int i13 = i12 + 1;
         this.rowCount = i13;
         this.includeSectionRow = i12;
-        this.rowCount = i13 + 1;
+        int i14 = i13 + 1;
+        this.rowCount = i14;
         this.excludeHeaderRow = i13;
-        if (this.newNeverShow.size() < 100) {
-            int i14 = this.rowCount;
-            this.rowCount = i14 + 1;
-            this.excludeAddRow = i14;
-        } else {
-            this.excludeAddRow = -1;
-        }
+        int i15 = i14 + 1;
+        this.rowCount = i15;
+        this.excludeAddRow = i14;
         if ((this.newFilterFlags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0) {
-            int i15 = this.rowCount;
             this.rowCount = i15 + 1;
             this.excludeMutedRow = i15;
         } else {

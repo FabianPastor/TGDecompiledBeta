@@ -192,28 +192,31 @@ public class RecyclerAnimationScrollHelper {
 
                 public /* synthetic */ void lambda$onLayoutChange$0$RecyclerAnimationScrollHelper$1(ArrayList arrayList, boolean z, int i, ArrayList arrayList2, ValueAnimator valueAnimator) {
                     float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-                    Iterator it = arrayList.iterator();
-                    while (it.hasNext()) {
-                        View view = (View) it.next();
-                        if (z) {
-                            view.setTranslationY(((float) (-i)) * floatValue);
-                        } else {
-                            view.setTranslationY(((float) i) * floatValue);
+                    int size = arrayList.size();
+                    for (int i2 = 0; i2 < size; i2++) {
+                        View view = (View) arrayList.get(i2);
+                        float y = view.getY();
+                        if (view.getY() + ((float) view.getMeasuredHeight()) >= 0.0f && y <= ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) {
+                            if (z) {
+                                view.setTranslationY(((float) (-i)) * floatValue);
+                            } else {
+                                view.setTranslationY(((float) i) * floatValue);
+                            }
                         }
                     }
-                    Iterator it2 = arrayList2.iterator();
-                    while (it2.hasNext()) {
-                        View view2 = (View) it2.next();
+                    int size2 = arrayList2.size();
+                    for (int i3 = 0; i3 < size2; i3++) {
+                        View view2 = (View) arrayList2.get(i3);
                         if (z) {
                             view2.setTranslationY(((float) i) * (1.0f - floatValue));
                         } else {
                             view2.setTranslationY(((float) (-i)) * (1.0f - floatValue));
                         }
                     }
+                    RecyclerAnimationScrollHelper.this.recyclerView.invalidate();
                     if (RecyclerAnimationScrollHelper.this.scrollListener != null) {
                         RecyclerAnimationScrollHelper.this.scrollListener.onScroll();
                     }
-                    RecyclerAnimationScrollHelper.this.recyclerView.invalidate();
                 }
             });
         }

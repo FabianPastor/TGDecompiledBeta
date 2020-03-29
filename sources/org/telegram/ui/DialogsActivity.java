@@ -3331,7 +3331,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$bottomPanelTranslationYChanged(this, f);
                 }
 
-                public void didPressedAttachButton() {
+                public void didPressAttachButton() {
                 }
 
                 public /* synthetic */ boolean hasScheduledMessages() {
@@ -6420,79 +6420,87 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public void showDoneItem(final boolean z) {
-        AnimatorSet animatorSet = this.doneItemAnimator;
-        if (animatorSet != null) {
-            animatorSet.cancel();
-            this.doneItemAnimator = null;
-        }
-        AnimatorSet animatorSet2 = new AnimatorSet();
-        this.doneItemAnimator = animatorSet2;
-        animatorSet2.setDuration(180);
-        if (z) {
-            this.doneItem.setVisibility(0);
-        } else {
-            this.doneItem.setSelected(false);
-            Drawable background = this.doneItem.getBackground();
-            if (background != null) {
-                background.setState(StateSet.NOTHING);
-                background.jumpToCurrentState();
+        if (this.doneItem != null) {
+            AnimatorSet animatorSet = this.doneItemAnimator;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+                this.doneItemAnimator = null;
             }
-            this.searchItem.setVisibility(0);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.doneItemAnimator = animatorSet2;
+            animatorSet2.setDuration(180);
+            if (z) {
+                this.doneItem.setVisibility(0);
+            } else {
+                this.doneItem.setSelected(false);
+                Drawable background = this.doneItem.getBackground();
+                if (background != null) {
+                    background.setState(StateSet.NOTHING);
+                    background.jumpToCurrentState();
+                }
+                ActionBarMenuItem actionBarMenuItem = this.searchItem;
+                if (actionBarMenuItem != null) {
+                    actionBarMenuItem.setVisibility(0);
+                }
+                ActionBarMenuItem actionBarMenuItem2 = this.proxyItem;
+                if (actionBarMenuItem2 != null && this.proxyItemVisible) {
+                    actionBarMenuItem2.setVisibility(0);
+                }
+                ActionBarMenuItem actionBarMenuItem3 = this.passcodeItem;
+                if (actionBarMenuItem3 != null && this.passcodeItemVisible) {
+                    actionBarMenuItem3.setVisibility(0);
+                }
+            }
+            ArrayList arrayList = new ArrayList();
+            ActionBarMenuItem actionBarMenuItem4 = this.doneItem;
+            Property property = View.ALPHA;
+            float[] fArr = new float[1];
+            float f = 1.0f;
+            fArr[0] = z ? 1.0f : 0.0f;
+            arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem4, property, fArr));
             if (this.proxyItemVisible) {
-                this.proxyItem.setVisibility(0);
+                ActionBarMenuItem actionBarMenuItem5 = this.proxyItem;
+                Property property2 = View.ALPHA;
+                float[] fArr2 = new float[1];
+                fArr2[0] = z ? 0.0f : 1.0f;
+                arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem5, property2, fArr2));
             }
             if (this.passcodeItemVisible) {
-                this.passcodeItem.setVisibility(0);
+                ActionBarMenuItem actionBarMenuItem6 = this.passcodeItem;
+                Property property3 = View.ALPHA;
+                float[] fArr3 = new float[1];
+                fArr3[0] = z ? 0.0f : 1.0f;
+                arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem6, property3, fArr3));
             }
-        }
-        ArrayList arrayList = new ArrayList();
-        ActionBarMenuItem actionBarMenuItem = this.doneItem;
-        Property property = View.ALPHA;
-        float[] fArr = new float[1];
-        float f = 1.0f;
-        fArr[0] = z ? 1.0f : 0.0f;
-        arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem, property, fArr));
-        if (this.proxyItemVisible) {
-            ActionBarMenuItem actionBarMenuItem2 = this.proxyItem;
-            Property property2 = View.ALPHA;
-            float[] fArr2 = new float[1];
-            fArr2[0] = z ? 0.0f : 1.0f;
-            arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem2, property2, fArr2));
-        }
-        if (this.passcodeItemVisible) {
-            ActionBarMenuItem actionBarMenuItem3 = this.passcodeItem;
-            Property property3 = View.ALPHA;
-            float[] fArr3 = new float[1];
-            fArr3[0] = z ? 0.0f : 1.0f;
-            arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem3, property3, fArr3));
-        }
-        ActionBarMenuItem actionBarMenuItem4 = this.searchItem;
-        Property property4 = View.ALPHA;
-        float[] fArr4 = new float[1];
-        if (z) {
-            f = 0.0f;
-        }
-        fArr4[0] = f;
-        arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem4, property4, fArr4));
-        this.doneItemAnimator.playTogether(arrayList);
-        this.doneItemAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                AnimatorSet unused = DialogsActivity.this.doneItemAnimator = null;
-                if (z) {
-                    DialogsActivity.this.searchItem.setVisibility(4);
-                    if (DialogsActivity.this.proxyItemVisible) {
-                        DialogsActivity.this.proxyItem.setVisibility(4);
+            ActionBarMenuItem actionBarMenuItem7 = this.searchItem;
+            Property property4 = View.ALPHA;
+            float[] fArr4 = new float[1];
+            if (z) {
+                f = 0.0f;
+            }
+            fArr4[0] = f;
+            arrayList.add(ObjectAnimator.ofFloat(actionBarMenuItem7, property4, fArr4));
+            this.doneItemAnimator.playTogether(arrayList);
+            this.doneItemAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AnimatorSet unused = DialogsActivity.this.doneItemAnimator = null;
+                    if (z) {
+                        if (DialogsActivity.this.searchItem != null) {
+                            DialogsActivity.this.searchItem.setVisibility(4);
+                        }
+                        if (DialogsActivity.this.proxyItem != null && DialogsActivity.this.proxyItemVisible) {
+                            DialogsActivity.this.proxyItem.setVisibility(4);
+                        }
+                        if (DialogsActivity.this.passcodeItem != null && DialogsActivity.this.passcodeItemVisible) {
+                            DialogsActivity.this.passcodeItem.setVisibility(4);
+                        }
+                    } else if (DialogsActivity.this.doneItem != null) {
+                        DialogsActivity.this.doneItem.setVisibility(8);
                     }
-                    if (DialogsActivity.this.passcodeItemVisible) {
-                        DialogsActivity.this.passcodeItem.setVisibility(4);
-                        return;
-                    }
-                    return;
                 }
-                DialogsActivity.this.doneItem.setVisibility(8);
-            }
-        });
-        this.doneItemAnimator.start();
+            });
+            this.doneItemAnimator.start();
+        }
     }
 
     /* access modifiers changed from: private */

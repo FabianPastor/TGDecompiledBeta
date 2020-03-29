@@ -448,7 +448,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         void bottomPanelTranslationYChanged(float f);
 
-        void didPressedAttachButton();
+        void didPressAttachButton();
 
         boolean hasScheduledMessages();
 
@@ -4021,7 +4021,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         public /* synthetic */ void lambda$new$4$ChatActivityEnterView(View view) {
-            this.delegate.didPressedAttachButton();
+            this.delegate.didPressAttachButton();
         }
 
         public /* synthetic */ void lambda$new$5$ChatActivityEnterView(View view) {

@@ -327,10 +327,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         this.progressLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 1, 0, 0, 0, 10));
         this.progressLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1));
         frameLayout.addView(this.progressLayout, LayoutHelper.createFrame(240, -2.0f, 17, 0.0f, 0.0f, 0.0f, 30.0f));
-        RecyclerListView recyclerListView2 = this.recyclerListView;
-        Adapter adapter2 = new Adapter();
-        this.adapter = adapter2;
-        recyclerListView2.setAdapter(adapter2);
+        if (this.adapter == null) {
+            this.adapter = new Adapter();
+        }
+        this.recyclerListView.setAdapter(this.adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
@@ -407,7 +407,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (createChartData == null || createChartData.x == null || createChartData.x.length < 2) {
                     chartViewData.isEmpty = true;
                 }
-                if (i == 4 && chartViewData.chartData.x != null && chartViewData.chartData.x.length > 0) {
+                if (i == 4 && chartViewData.chartData != null && chartViewData.chartData.x != null && chartViewData.chartData.x.length > 0) {
                     long j = chartViewData.chartData.x[chartViewData.chartData.x.length - 1];
                     chartViewData.childChartData = new StackLinearChartData(chartViewData.chartData, j);
                     chartViewData.activeZoom = j;
@@ -1618,115 +1618,109 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.loading = true;
                 TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
                 tLRPC$TL_stats_loadAsyncGraph.token = this.token;
-                RecyclerListView recyclerListView2 = recyclerListView;
-                int sendRequest = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, adapter, diffUtilsCallback) {
+                ConnectionsManager.getInstance(i).bindRequestToGuid(ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, diffUtilsCallback) {
                     private final /* synthetic */ RecyclerListView f$1;
-                    private final /* synthetic */ StatisticActivity.Adapter f$2;
-                    private final /* synthetic */ StatisticActivity.DiffUtilsCallback f$3;
+                    private final /* synthetic */ StatisticActivity.DiffUtilsCallback f$2;
 
                     {
                         this.f$1 = r2;
                         this.f$2 = r3;
-                        this.f$3 = r4;
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        StatisticActivity.ChartViewData.this.lambda$load$1$StatisticActivity$ChartViewData(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+                        StatisticActivity.ChartViewData.this.lambda$load$1$StatisticActivity$ChartViewData(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
-                }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, i3, 1, true);
-                int i4 = i2;
-                ConnectionsManager.getInstance(i).bindRequestToGuid(sendRequest, i2);
+                }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, i3, 1, true), i2);
             }
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:25:0x0052  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r10, org.telegram.ui.StatisticActivity.Adapter r11, org.telegram.ui.StatisticActivity.DiffUtilsCallback r12, org.telegram.tgnet.TLObject r13, org.telegram.tgnet.TLRPC$TL_error r14) {
+        public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r9, org.telegram.ui.StatisticActivity.DiffUtilsCallback r10, org.telegram.tgnet.TLObject r11, org.telegram.tgnet.TLRPC$TL_error r12) {
             /*
-                r9 = this;
+                r8 = this;
                 r0 = 0
-                if (r14 != 0) goto L_0x0060
-                boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_statsGraph
+                if (r12 != 0) goto L_0x0060
+                boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$TL_statsGraph
                 r1 = 1
-                if (r14 == 0) goto L_0x004d
-                r14 = r13
-                org.telegram.tgnet.TLRPC$TL_statsGraph r14 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r14
-                org.telegram.tgnet.TLRPC$TL_dataJSON r14 = r14.json
-                java.lang.String r14 = r14.data
+                if (r12 == 0) goto L_0x004d
+                r12 = r11
+                org.telegram.tgnet.TLRPC$TL_statsGraph r12 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r12
+                org.telegram.tgnet.TLRPC$TL_dataJSON r12 = r12.json
+                java.lang.String r12 = r12.data
                 org.json.JSONObject r2 = new org.json.JSONObject     // Catch:{ JSONException -> 0x0047 }
-                r2.<init>(r14)     // Catch:{ JSONException -> 0x0047 }
-                int r14 = r9.graphType     // Catch:{ JSONException -> 0x0047 }
-                org.telegram.ui.Charts.data.ChartData r14 = org.telegram.ui.StatisticActivity.createChartData(r2, r14)     // Catch:{ JSONException -> 0x0047 }
-                r2 = r13
+                r2.<init>(r12)     // Catch:{ JSONException -> 0x0047 }
+                int r12 = r8.graphType     // Catch:{ JSONException -> 0x0047 }
+                org.telegram.ui.Charts.data.ChartData r12 = org.telegram.ui.StatisticActivity.createChartData(r2, r12)     // Catch:{ JSONException -> 0x0047 }
+                r2 = r11
                 org.telegram.tgnet.TLRPC$TL_statsGraph r2 = (org.telegram.tgnet.TLRPC$TL_statsGraph) r2     // Catch:{ JSONException -> 0x0042 }
                 java.lang.String r0 = r2.zoom_token     // Catch:{ JSONException -> 0x0042 }
-                int r2 = r9.graphType     // Catch:{ JSONException -> 0x0042 }
+                int r2 = r8.graphType     // Catch:{ JSONException -> 0x0042 }
                 r3 = 4
                 if (r2 != r3) goto L_0x003e
-                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                long[] r2 = r12.x     // Catch:{ JSONException -> 0x0042 }
                 if (r2 == 0) goto L_0x003e
-                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                long[] r2 = r12.x     // Catch:{ JSONException -> 0x0042 }
                 int r2 = r2.length     // Catch:{ JSONException -> 0x0042 }
                 if (r2 <= 0) goto L_0x003e
-                long[] r2 = r14.x     // Catch:{ JSONException -> 0x0042 }
-                long[] r3 = r14.x     // Catch:{ JSONException -> 0x0042 }
+                long[] r2 = r12.x     // Catch:{ JSONException -> 0x0042 }
+                long[] r3 = r12.x     // Catch:{ JSONException -> 0x0042 }
                 int r3 = r3.length     // Catch:{ JSONException -> 0x0042 }
                 int r3 = r3 - r1
                 r3 = r2[r3]     // Catch:{ JSONException -> 0x0042 }
                 org.telegram.ui.Charts.data.StackLinearChartData r2 = new org.telegram.ui.Charts.data.StackLinearChartData     // Catch:{ JSONException -> 0x0042 }
-                r2.<init>(r14, r3)     // Catch:{ JSONException -> 0x0042 }
-                r9.childChartData = r2     // Catch:{ JSONException -> 0x0042 }
-                r9.activeZoom = r3     // Catch:{ JSONException -> 0x0042 }
+                r2.<init>(r12, r3)     // Catch:{ JSONException -> 0x0042 }
+                r8.childChartData = r2     // Catch:{ JSONException -> 0x0042 }
+                r8.activeZoom = r3     // Catch:{ JSONException -> 0x0042 }
             L_0x003e:
-                r8 = r0
-                r0 = r14
-                r14 = r8
+                r7 = r0
+                r0 = r12
+                r12 = r7
                 goto L_0x004e
             L_0x0042:
                 r2 = move-exception
-                r8 = r0
-                r0 = r14
-                r14 = r8
+                r7 = r0
+                r0 = r12
+                r12 = r7
                 goto L_0x0049
             L_0x0047:
                 r2 = move-exception
-                r14 = r0
+                r12 = r0
             L_0x0049:
                 r2.printStackTrace()
                 goto L_0x004e
             L_0x004d:
-                r14 = r0
+                r12 = r0
             L_0x004e:
-                boolean r2 = r13 instanceof org.telegram.tgnet.TLRPC$TL_statsGraphError
+                boolean r2 = r11 instanceof org.telegram.tgnet.TLRPC$TL_statsGraphError
                 if (r2 == 0) goto L_0x005d
                 r2 = 0
-                r9.isEmpty = r2
-                r9.isError = r1
-                org.telegram.tgnet.TLRPC$TL_statsGraphError r13 = (org.telegram.tgnet.TLRPC$TL_statsGraphError) r13
-                java.lang.String r13 = r13.error
-                r9.errorMessage = r13
+                r8.isEmpty = r2
+                r8.isError = r1
+                org.telegram.tgnet.TLRPC$TL_statsGraphError r11 = (org.telegram.tgnet.TLRPC$TL_statsGraphError) r11
+                java.lang.String r11 = r11.error
+                r8.errorMessage = r11
             L_0x005d:
-                r4 = r14
+                r4 = r12
                 r3 = r0
                 goto L_0x0062
             L_0x0060:
                 r3 = r0
                 r4 = r3
             L_0x0062:
-                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$LKS57NTIvtsDBOq6xYMvar_QeztI r13 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$LKS57NTIvtsDBOq6xYMvar_QeztI
-                r1 = r13
-                r2 = r9
-                r5 = r10
-                r6 = r11
-                r7 = r12
-                r1.<init>(r3, r4, r5, r6, r7)
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
+                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$vMH7ubLdDDtfG2fUC-nS18g4dGo r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$vMH7ubLdDDtfG2fUC-nS18g4dGo
+                r1 = r11
+                r2 = r8
+                r5 = r9
+                r6 = r10
+                r1.<init>(r3, r4, r5, r6)
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r11)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$Adapter, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
         }
 
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, Adapter adapter, DiffUtilsCallback diffUtilsCallback) {
+        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
             boolean z = false;
             this.loading = false;
             this.chartData = chartData2;
@@ -1742,7 +1736,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     ChartCell chartCell = (ChartCell) childAt;
                     if (chartCell.data == this) {
                         chartCell.updateData(this, true);
-                        adapter.notifyItemChanged(recyclerListView.getChildAdapterPosition(childAt));
                         z = true;
                         break;
                     }
@@ -1957,22 +1950,24 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             int i;
             long j;
             int i2;
+            View findViewByPosition;
             saveOldState();
             this.adapter.update();
             int findFirstVisibleItemPosition = this.layoutManager.findFirstVisibleItemPosition();
             int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
             while (true) {
                 i = 0;
-                if (findFirstVisibleItemPosition > findLastVisibleItemPosition) {
+                if (findFirstVisibleItemPosition <= findLastVisibleItemPosition) {
+                    if (this.adapter.getItemId(findFirstVisibleItemPosition) != -1 && (findViewByPosition = this.layoutManager.findViewByPosition(findFirstVisibleItemPosition)) != null) {
+                        j = this.adapter.getItemId(findFirstVisibleItemPosition);
+                        i2 = findViewByPosition.getTop();
+                        break;
+                    }
+                    findFirstVisibleItemPosition++;
+                } else {
                     j = -1;
                     i2 = 0;
                     break;
-                } else if (this.adapter.getItemId(findFirstVisibleItemPosition) != -1) {
-                    j = this.adapter.getItemId(findFirstVisibleItemPosition);
-                    i2 = this.layoutManager.findViewByPosition(findFirstVisibleItemPosition).getTop();
-                    break;
-                } else {
-                    findFirstVisibleItemPosition++;
                 }
             }
             DiffUtil.calculateDiff(this).dispatchUpdatesTo((RecyclerView.Adapter) this.adapter);

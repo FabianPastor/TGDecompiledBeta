@@ -361,7 +361,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$bottomPanelTranslationYChanged(this, f);
             }
 
-            public void didPressedAttachButton() {
+            public void didPressAttachButton() {
             }
 
             public /* synthetic */ boolean hasScheduledMessages() {
