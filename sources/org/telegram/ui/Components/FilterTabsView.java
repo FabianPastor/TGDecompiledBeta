@@ -224,11 +224,11 @@ public class FilterTabsView extends FrameLayout {
             } else {
                 i = this.counter;
             }
-            if (i <= 0) {
-                return ceil;
+            if (i > 0) {
+                String format = String.format("%d", new Object[]{Integer.valueOf(i)});
+                ceil += Math.max(AndroidUtilities.dp(10.0f), (int) Math.ceil((double) FilterTabsView.this.textCounterPaint.measureText(format))) + AndroidUtilities.dp(10.0f) + AndroidUtilities.dp(6.0f);
             }
-            String format = String.format("%d", new Object[]{Integer.valueOf(i)});
-            return ceil + Math.max(AndroidUtilities.dp(10.0f), (int) Math.ceil((double) FilterTabsView.this.textCounterPaint.measureText(format))) + AndroidUtilities.dp(10.0f) + AndroidUtilities.dp(6.0f);
+            return Math.max(AndroidUtilities.dp(40.0f), ceil);
         }
 
         public boolean setTitle(String str) {
@@ -711,11 +711,11 @@ public class FilterTabsView extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x018c  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x01a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00de  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0196  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01b1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean drawChild(android.graphics.Canvas r11, android.view.View r12, long r13) {
         /*
@@ -724,7 +724,7 @@ public class FilterTabsView extends FrameLayout {
             org.telegram.ui.Components.RecyclerListView r14 = r10.listView
             r0 = 0
             r1 = 0
-            if (r12 != r14) goto L_0x00e5
+            if (r12 != r14) goto L_0x00ef
             int r12 = r10.getMeasuredHeight()
             android.graphics.drawable.GradientDrawable r14 = r10.selectorDrawable
             org.telegram.ui.Components.RecyclerListView r2 = r10.listView
@@ -735,18 +735,21 @@ public class FilterTabsView extends FrameLayout {
             r14.setAlpha(r2)
             boolean r14 = r10.animatingIndicator
             r2 = -1
-            if (r14 != 0) goto L_0x004c
+            if (r14 != 0) goto L_0x0056
             int r14 = r10.manualScrollingToPosition
             if (r14 == r2) goto L_0x0028
-            goto L_0x004c
+            goto L_0x0056
         L_0x0028:
             org.telegram.ui.Components.RecyclerListView r14 = r10.listView
             int r2 = r10.currentPosition
             androidx.recyclerview.widget.RecyclerView$ViewHolder r14 = r14.findViewHolderForAdapterPosition(r2)
-            if (r14 == 0) goto L_0x0049
+            if (r14 == 0) goto L_0x0053
             android.view.View r14 = r14.itemView
             org.telegram.ui.Components.FilterTabsView$TabView r14 = (org.telegram.ui.Components.FilterTabsView.TabView) r14
-            int r2 = r14.tabWidth
+            r2 = 1109393408(0x42200000, float:40.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r4 = r14.tabWidth
+            int r2 = java.lang.Math.max(r2, r4)
             float r4 = r14.getX()
             int r14 = r14.getMeasuredWidth()
             int r14 = r14 - r2
@@ -754,27 +757,27 @@ public class FilterTabsView extends FrameLayout {
             float r14 = (float) r14
             float r4 = r4 + r14
             int r14 = (int) r4
-            goto L_0x00bb
-        L_0x0049:
+            goto L_0x00c5
+        L_0x0053:
             r14 = 0
             r2 = 0
-            goto L_0x00bb
-        L_0x004c:
+            goto L_0x00c5
+        L_0x0056:
             androidx.recyclerview.widget.LinearLayoutManager r14 = r10.layoutManager
             int r14 = r14.findFirstVisibleItemPosition()
-            if (r14 == r2) goto L_0x0049
+            if (r14 == r2) goto L_0x0053
             org.telegram.ui.Components.RecyclerListView r2 = r10.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r2 = r2.findViewHolderForAdapterPosition(r14)
-            if (r2 == 0) goto L_0x0049
+            if (r2 == 0) goto L_0x0053
             boolean r4 = r10.animatingIndicator
-            if (r4 == 0) goto L_0x0065
+            if (r4 == 0) goto L_0x006f
             int r4 = r10.previousPosition
             int r5 = r10.currentPosition
-            goto L_0x0069
-        L_0x0065:
+            goto L_0x0073
+        L_0x006f:
             int r4 = r10.currentPosition
             int r5 = r10.manualScrollingToPosition
-        L_0x0069:
+        L_0x0073:
             android.util.SparseIntArray r6 = r10.positionToX
             int r6 = r6.get(r4)
             android.util.SparseIntArray r7 = r10.positionToX
@@ -785,7 +788,7 @@ public class FilterTabsView extends FrameLayout {
             int r5 = r8.get(r5)
             int r8 = r10.additionalTabWidth
             r9 = 1098907648(0x41800000, float:16.0)
-            if (r8 == 0) goto L_0x0096
+            if (r8 == 0) goto L_0x00a0
             float r14 = (float) r6
             int r7 = r7 - r6
             float r2 = (float) r7
@@ -795,8 +798,8 @@ public class FilterTabsView extends FrameLayout {
             int r14 = (int) r14
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r14 = r14 + r2
-            goto L_0x00b2
-        L_0x0096:
+            goto L_0x00bc
+        L_0x00a0:
             android.util.SparseIntArray r8 = r10.positionToX
             int r14 = r8.get(r14)
             float r8 = (float) r6
@@ -812,7 +815,7 @@ public class FilterTabsView extends FrameLayout {
             int r6 = r6 - r14
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r14 = r14 + r6
-        L_0x00b2:
+        L_0x00bc:
             float r2 = (float) r4
             int r5 = r5 - r4
             float r4 = (float) r5
@@ -820,8 +823,8 @@ public class FilterTabsView extends FrameLayout {
             float r4 = r4 * r5
             float r2 = r2 + r4
             int r2 = (int) r2
-        L_0x00bb:
-            if (r2 == 0) goto L_0x00d0
+        L_0x00c5:
+            if (r2 == 0) goto L_0x00da
             android.graphics.drawable.GradientDrawable r4 = r10.selectorDrawable
             r5 = 1082130432(0x40800000, float:4.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dpr(r5)
@@ -830,9 +833,9 @@ public class FilterTabsView extends FrameLayout {
             r4.setBounds(r14, r5, r2, r12)
             android.graphics.drawable.GradientDrawable r12 = r10.selectorDrawable
             r12.draw(r11)
-        L_0x00d0:
+        L_0x00da:
             android.graphics.Bitmap r12 = r10.crossfadeBitmap
-            if (r12 == 0) goto L_0x00e5
+            if (r12 == 0) goto L_0x00ef
             android.graphics.Paint r12 = r10.crossfadePaint
             float r14 = r10.crossfadeAlpha
             float r14 = r14 * r3
@@ -841,7 +844,7 @@ public class FilterTabsView extends FrameLayout {
             android.graphics.Bitmap r12 = r10.crossfadeBitmap
             android.graphics.Paint r14 = r10.crossfadePaint
             r11.drawBitmap(r12, r1, r1, r14)
-        L_0x00e5:
+        L_0x00ef:
             long r11 = android.os.SystemClock.elapsedRealtime()
             r2 = 17
             long r4 = r10.lastEditingAnimationTime
@@ -851,128 +854,128 @@ public class FilterTabsView extends FrameLayout {
             boolean r11 = r10.isEditing
             r12 = 1065353216(0x3var_, float:1.0)
             r14 = 1
-            if (r11 != 0) goto L_0x0105
+            if (r11 != 0) goto L_0x010f
             float r11 = r10.editingAnimationProgress
             int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 == 0) goto L_0x0103
-            goto L_0x0105
-        L_0x0103:
+            if (r11 == 0) goto L_0x010d
+            goto L_0x010f
+        L_0x010d:
             r11 = 0
-            goto L_0x015b
-        L_0x0105:
+            goto L_0x0165
+        L_0x010f:
             boolean r11 = r10.editingForwardAnimation
             r4 = 1123024896(0x42var_, float:120.0)
-            if (r11 == 0) goto L_0x0132
+            if (r11 == 0) goto L_0x013c
             float r11 = r10.editingAnimationProgress
             int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 > 0) goto L_0x0113
+            if (r11 > 0) goto L_0x011d
             r11 = 1
-            goto L_0x0114
-        L_0x0113:
+            goto L_0x011e
+        L_0x011d:
             r11 = 0
-        L_0x0114:
+        L_0x011e:
             float r5 = r10.editingAnimationProgress
             float r6 = (float) r2
             float r6 = r6 / r4
             float r5 = r5 + r6
             r10.editingAnimationProgress = r5
             boolean r4 = r10.isEditing
-            if (r4 != 0) goto L_0x0127
-            if (r11 == 0) goto L_0x0127
+            if (r4 != 0) goto L_0x0131
+            if (r11 == 0) goto L_0x0131
             int r11 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r11 < 0) goto L_0x0127
+            if (r11 < 0) goto L_0x0131
             r10.editingAnimationProgress = r1
-        L_0x0127:
+        L_0x0131:
             float r11 = r10.editingAnimationProgress
             int r11 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1))
-            if (r11 < 0) goto L_0x015a
+            if (r11 < 0) goto L_0x0164
             r10.editingAnimationProgress = r12
             r10.editingForwardAnimation = r0
-            goto L_0x015a
-        L_0x0132:
+            goto L_0x0164
+        L_0x013c:
             float r11 = r10.editingAnimationProgress
             int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 < 0) goto L_0x013a
+            if (r11 < 0) goto L_0x0144
             r11 = 1
-            goto L_0x013b
-        L_0x013a:
+            goto L_0x0145
+        L_0x0144:
             r11 = 0
-        L_0x013b:
+        L_0x0145:
             float r5 = r10.editingAnimationProgress
             float r6 = (float) r2
             float r6 = r6 / r4
             float r5 = r5 - r6
             r10.editingAnimationProgress = r5
             boolean r4 = r10.isEditing
-            if (r4 != 0) goto L_0x014e
-            if (r11 == 0) goto L_0x014e
+            if (r4 != 0) goto L_0x0158
+            if (r11 == 0) goto L_0x0158
             int r11 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r11 > 0) goto L_0x014e
+            if (r11 > 0) goto L_0x0158
             r10.editingAnimationProgress = r1
-        L_0x014e:
+        L_0x0158:
             float r11 = r10.editingAnimationProgress
             r4 = -1082130432(0xffffffffbvar_, float:-1.0)
             int r11 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-            if (r11 > 0) goto L_0x015a
+            if (r11 > 0) goto L_0x0164
             r10.editingAnimationProgress = r4
             r10.editingForwardAnimation = r14
-        L_0x015a:
+        L_0x0164:
             r11 = 1
-        L_0x015b:
+        L_0x0165:
             boolean r4 = r10.isEditing
             r5 = 1127481344(0x43340000, float:180.0)
-            if (r4 == 0) goto L_0x0174
+            if (r4 == 0) goto L_0x017e
             float r4 = r10.editingStartAnimationProgress
             int r6 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r6 >= 0) goto L_0x0188
+            if (r6 >= 0) goto L_0x0192
             float r11 = (float) r2
             float r11 = r11 / r5
             float r4 = r4 + r11
             r10.editingStartAnimationProgress = r4
             int r11 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r11 <= 0) goto L_0x0172
+            if (r11 <= 0) goto L_0x017c
             r10.editingStartAnimationProgress = r12
-        L_0x0172:
+        L_0x017c:
             r11 = 1
-            goto L_0x0188
-        L_0x0174:
-            if (r4 != 0) goto L_0x0188
+            goto L_0x0192
+        L_0x017e:
+            if (r4 != 0) goto L_0x0192
             float r12 = r10.editingStartAnimationProgress
             int r4 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0188
+            if (r4 <= 0) goto L_0x0192
             float r11 = (float) r2
             float r11 = r11 / r5
             float r12 = r12 - r11
             r10.editingStartAnimationProgress = r12
             int r11 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r11 >= 0) goto L_0x0172
+            if (r11 >= 0) goto L_0x017c
             r10.editingStartAnimationProgress = r1
-            goto L_0x0172
-        L_0x0188:
+            goto L_0x017c
+        L_0x0192:
             boolean r12 = r10.commitCrossfade
-            if (r12 == 0) goto L_0x01a4
+            if (r12 == 0) goto L_0x01ae
             float r11 = r10.crossfadeAlpha
             float r12 = (float) r2
             float r12 = r12 / r5
             float r11 = r11 - r12
             r10.crossfadeAlpha = r11
             int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 >= 0) goto L_0x01a5
+            if (r11 >= 0) goto L_0x01af
             r10.commitCrossfade = r0
             android.graphics.Bitmap r11 = r10.crossfadeBitmap
-            if (r11 == 0) goto L_0x01a5
+            if (r11 == 0) goto L_0x01af
             r11.recycle()
             r11 = 0
             r10.crossfadeBitmap = r11
-            goto L_0x01a5
-        L_0x01a4:
+            goto L_0x01af
+        L_0x01ae:
             r14 = r11
-        L_0x01a5:
-            if (r14 == 0) goto L_0x01af
+        L_0x01af:
+            if (r14 == 0) goto L_0x01b9
             org.telegram.ui.Components.RecyclerListView r11 = r10.listView
             r11.invalidateViews()
             r10.invalidate()
-        L_0x01af:
+        L_0x01b9:
             return r13
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FilterTabsView.drawChild(android.graphics.Canvas, android.view.View, long):boolean");

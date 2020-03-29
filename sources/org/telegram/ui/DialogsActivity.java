@@ -911,7 +911,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         public boolean onTouchEvent(MotionEvent motionEvent) {
             float f;
+            float f2;
+            float f3;
             int i;
+            FileLog.d("event = " + motionEvent);
             boolean z = false;
             if (DialogsActivity.this.filterTabsView == null || DialogsActivity.this.filterTabsView.isEditing() || DialogsActivity.this.searching || DialogsActivity.this.parentLayout.checkTransitionAnimation() || DialogsActivity.this.parentLayout.isInPreviewMode() || DialogsActivity.this.parentLayout.isPreviewOpenAnimationInProgress() || DialogsActivity.this.parentLayout.getDrawerLayoutContainer().isDrawerOpened() || (motionEvent != null && !DialogsActivity.this.startedTracking && motionEvent.getY() <= ((float) DialogsActivity.this.actionBar.getMeasuredHeight()) + DialogsActivity.this.actionBar.getTranslationY())) {
                 return false;
@@ -998,91 +1001,89 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     DialogsActivity.this.filterTabsView.selectTabWithId(DialogsActivity.this.viewPages[1].selectedType, ((float) Math.abs(x)) / ((float) DialogsActivity.this.viewPages[0].getMeasuredWidth()));
                 }
             } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
-                if (!(motionEvent == null || motionEvent.getAction() == 3)) {
-                    this.velocityTracker.computeCurrentVelocity(1000, (float) DialogsActivity.this.maximumVelocity);
-                    if (!DialogsActivity.this.startedTracking) {
-                        float xVelocity = this.velocityTracker.getXVelocity();
-                        float yVelocity = this.velocityTracker.getYVelocity();
-                        if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
-                            prepareForMoving(motionEvent, xVelocity < 0.0f);
-                        }
-                    }
-                    if (DialogsActivity.this.startedTracking) {
-                        float x3 = DialogsActivity.this.viewPages[0].getX();
-                        AnimatorSet unused13 = DialogsActivity.this.tabsAnimation = new AnimatorSet();
-                        float xVelocity2 = this.velocityTracker.getXVelocity();
-                        float yVelocity2 = this.velocityTracker.getYVelocity();
-                        if (DialogsActivity.this.additionalOffset == 0.0f) {
-                            boolean unused14 = DialogsActivity.this.backAnimation = Math.abs(x3) < ((float) DialogsActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(yVelocity2));
-                        } else if (Math.abs(xVelocity2) > 1500.0f) {
-                            DialogsActivity dialogsActivity5 = DialogsActivity.this;
-                            boolean unused15 = dialogsActivity5.backAnimation = !dialogsActivity5.animatingForward ? xVelocity2 < 0.0f : xVelocity2 > 0.0f;
-                        } else if (DialogsActivity.this.animatingForward) {
-                            DialogsActivity dialogsActivity6 = DialogsActivity.this;
-                            boolean unused16 = dialogsActivity6.backAnimation = dialogsActivity6.viewPages[1].getX() > ((float) (DialogsActivity.this.viewPages[0].getMeasuredWidth() >> 1));
-                        } else {
-                            DialogsActivity dialogsActivity7 = DialogsActivity.this;
-                            boolean unused17 = dialogsActivity7.backAnimation = dialogsActivity7.viewPages[0].getX() < ((float) (DialogsActivity.this.viewPages[0].getMeasuredWidth() >> 1));
-                        }
-                        if (DialogsActivity.this.backAnimation) {
-                            f = Math.abs(x3);
-                            if (DialogsActivity.this.animatingForward) {
-                                DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) DialogsActivity.this.viewPages[1].getMeasuredWidth()})});
-                            } else {
-                                DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-DialogsActivity.this.viewPages[1].getMeasuredWidth())})});
-                            }
-                        } else {
-                            f = ((float) DialogsActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x3);
-                            if (DialogsActivity.this.animatingForward) {
-                                DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-DialogsActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                            } else {
-                                DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) DialogsActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                            }
-                        }
-                        DialogsActivity.this.tabsAnimation.setInterpolator(DialogsActivity.interpolator);
-                        int measuredWidth = getMeasuredWidth();
-                        float f2 = (float) (measuredWidth / 2);
-                        float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
-                        float abs2 = Math.abs(xVelocity2);
-                        if (abs2 > 0.0f) {
-                            i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
-                        } else {
-                            i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
-                        }
-                        DialogsActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
-                        DialogsActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                AnimatorSet unused = DialogsActivity.this.tabsAnimation = null;
-                                if (!DialogsActivity.this.backAnimation) {
-                                    ViewPage viewPage = DialogsActivity.this.viewPages[0];
-                                    DialogsActivity.this.viewPages[0] = DialogsActivity.this.viewPages[1];
-                                    DialogsActivity.this.viewPages[1] = viewPage;
-                                    DialogsActivity.this.filterTabsView.selectTabWithId(DialogsActivity.this.viewPages[0].selectedType, 1.0f);
-                                    DialogsActivity.this.updateCounters(false);
-                                }
-                                if (DialogsActivity.this.parentLayout != null) {
-                                    DialogsActivity.this.parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(DialogsActivity.this.viewPages[0].selectedType == DialogsActivity.this.filterTabsView.getFirstTabId());
-                                }
-                                DialogsActivity.this.viewPages[1].setVisibility(8);
-                                DialogsActivity.this.showScrollbars(true);
-                                boolean unused2 = DialogsActivity.this.tabsAnimationInProgress = false;
-                                boolean unused3 = DialogsActivity.this.maybeStartTracking = false;
-                                DialogsActivity.this.actionBar.setEnabled(true);
-                                DialogsActivity.this.filterTabsView.setEnabled(true);
-                                DialogsActivity dialogsActivity = DialogsActivity.this;
-                                dialogsActivity.checkListLoad(dialogsActivity.viewPages[0]);
-                            }
-                        });
-                        DialogsActivity.this.tabsAnimation.start();
-                        boolean unused18 = DialogsActivity.this.tabsAnimationInProgress = true;
+                this.velocityTracker.computeCurrentVelocity(1000, (float) DialogsActivity.this.maximumVelocity);
+                if (motionEvent == null || motionEvent.getAction() == 3) {
+                    f2 = 0.0f;
+                    f = 0.0f;
+                } else {
+                    f2 = this.velocityTracker.getXVelocity();
+                    f = this.velocityTracker.getYVelocity();
+                    if (!DialogsActivity.this.startedTracking && Math.abs(f2) >= 3000.0f && Math.abs(f2) > Math.abs(f)) {
+                        prepareForMoving(motionEvent, f2 < 0.0f);
                     }
                 }
-                if (!DialogsActivity.this.startedTracking) {
-                    boolean unused19 = DialogsActivity.this.maybeStartTracking = false;
+                if (DialogsActivity.this.startedTracking) {
+                    float x3 = DialogsActivity.this.viewPages[0].getX();
+                    AnimatorSet unused13 = DialogsActivity.this.tabsAnimation = new AnimatorSet();
+                    if (DialogsActivity.this.additionalOffset == 0.0f) {
+                        boolean unused14 = DialogsActivity.this.backAnimation = Math.abs(x3) < ((float) DialogsActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(f2) < 3500.0f || Math.abs(f2) < Math.abs(f));
+                    } else if (Math.abs(f2) > 1500.0f) {
+                        DialogsActivity dialogsActivity5 = DialogsActivity.this;
+                        boolean unused15 = dialogsActivity5.backAnimation = !dialogsActivity5.animatingForward ? f2 < 0.0f : f2 > 0.0f;
+                    } else if (DialogsActivity.this.animatingForward) {
+                        DialogsActivity dialogsActivity6 = DialogsActivity.this;
+                        boolean unused16 = dialogsActivity6.backAnimation = dialogsActivity6.viewPages[1].getX() > ((float) (DialogsActivity.this.viewPages[0].getMeasuredWidth() >> 1));
+                    } else {
+                        DialogsActivity dialogsActivity7 = DialogsActivity.this;
+                        boolean unused17 = dialogsActivity7.backAnimation = dialogsActivity7.viewPages[0].getX() < ((float) (DialogsActivity.this.viewPages[0].getMeasuredWidth() >> 1));
+                    }
+                    if (DialogsActivity.this.backAnimation) {
+                        f3 = Math.abs(x3);
+                        if (DialogsActivity.this.animatingForward) {
+                            DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) DialogsActivity.this.viewPages[1].getMeasuredWidth()})});
+                        } else {
+                            DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-DialogsActivity.this.viewPages[1].getMeasuredWidth())})});
+                        }
+                    } else {
+                        f3 = ((float) DialogsActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x3);
+                        if (DialogsActivity.this.animatingForward) {
+                            DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-DialogsActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                        } else {
+                            DialogsActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) DialogsActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(DialogsActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                        }
+                    }
+                    DialogsActivity.this.tabsAnimation.setInterpolator(DialogsActivity.interpolator);
+                    int measuredWidth = getMeasuredWidth();
+                    float f4 = (float) (measuredWidth / 2);
+                    float distanceInfluenceForSnapDuration = f4 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f3 * 1.0f) / ((float) measuredWidth))) * f4);
+                    float abs2 = Math.abs(f2);
+                    if (abs2 > 0.0f) {
+                        i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
+                    } else {
+                        i = (int) (((f3 / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
+                    }
+                    DialogsActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
+                    DialogsActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            AnimatorSet unused = DialogsActivity.this.tabsAnimation = null;
+                            if (!DialogsActivity.this.backAnimation) {
+                                ViewPage viewPage = DialogsActivity.this.viewPages[0];
+                                DialogsActivity.this.viewPages[0] = DialogsActivity.this.viewPages[1];
+                                DialogsActivity.this.viewPages[1] = viewPage;
+                                DialogsActivity.this.filterTabsView.selectTabWithId(DialogsActivity.this.viewPages[0].selectedType, 1.0f);
+                                DialogsActivity.this.updateCounters(false);
+                            }
+                            if (DialogsActivity.this.parentLayout != null) {
+                                DialogsActivity.this.parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(DialogsActivity.this.viewPages[0].selectedType == DialogsActivity.this.filterTabsView.getFirstTabId());
+                            }
+                            DialogsActivity.this.viewPages[1].setVisibility(8);
+                            DialogsActivity.this.showScrollbars(true);
+                            boolean unused2 = DialogsActivity.this.tabsAnimationInProgress = false;
+                            boolean unused3 = DialogsActivity.this.maybeStartTracking = false;
+                            DialogsActivity.this.actionBar.setEnabled(true);
+                            DialogsActivity.this.filterTabsView.setEnabled(true);
+                            DialogsActivity dialogsActivity = DialogsActivity.this;
+                            dialogsActivity.checkListLoad(dialogsActivity.viewPages[0]);
+                        }
+                    });
+                    DialogsActivity.this.tabsAnimation.start();
+                    boolean unused18 = DialogsActivity.this.tabsAnimationInProgress = true;
+                    boolean unused19 = DialogsActivity.this.startedTracking = false;
+                } else {
+                    boolean unused20 = DialogsActivity.this.maybeStartTracking = false;
                     DialogsActivity.this.actionBar.setEnabled(true);
                     DialogsActivity.this.filterTabsView.setEnabled(true);
                 }
-                boolean unused20 = DialogsActivity.this.startedTracking = false;
                 VelocityTracker velocityTracker2 = this.velocityTracker;
                 if (velocityTracker2 != null) {
                     velocityTracker2.recycle();
@@ -1938,7 +1939,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 DialogsActivity.this.lambda$createView$3$DialogsActivity();
             }
         });
-        if (this.initialDialogsType == 0 && this.folderId == 0) {
+        if (this.initialDialogsType == 0 && this.folderId == 0 && !this.onlySelect) {
             this.scrimPaint = new Paint() {
                 public void setAlpha(int i) {
                     super.setAlpha(i);
@@ -2207,7 +2208,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (r6 > r0) goto L_0x010f
                         goto L_0x0162
                     L_0x010f:
-                        r6 = 2131625246(0x7f0e051e, float:1.8877695E38)
+                        r6 = 2131625248(0x7f0e0520, float:1.8877699E38)
                         java.lang.String r10 = "FilterReorder"
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
                         r10 = 2131165929(0x7var_e9, float:1.7946089E38)
@@ -2464,11 +2465,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$14500 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$14600 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$14500);
+                    dialogsActivity.setDelegate(access$14600);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -2504,7 +2505,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.actionModeViews.add(addItemWithWidth);
         ContentView contentView = new ContentView(context2);
         this.fragmentView = contentView;
-        int i3 = (this.folderId == 0 && this.initialDialogsType == 0) ? 2 : 1;
+        int i3 = (this.folderId == 0 && this.initialDialogsType == 0 && !this.onlySelect) ? 2 : 1;
         this.viewPages = new ViewPage[i3];
         int i4 = 0;
         while (i4 < i3) {
@@ -2998,9 +2999,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (!DialogsActivity.this.hasHiddenArchive() || !(findViewHolderForAdapterPosition == null || findViewHolderForAdapterPosition.getAdapterPosition() == 0)) {
                             int top = findViewHolderForAdapterPosition != null ? findViewHolderForAdapterPosition.itemView.getTop() : 0;
                             if (DialogsActivity.this.prevPosition == findFirstVisibleItemPosition) {
-                                int access$15400 = DialogsActivity.this.prevTop - top;
+                                int access$15500 = DialogsActivity.this.prevTop - top;
                                 z = top < DialogsActivity.this.prevTop;
-                                if (Math.abs(access$15400) <= 1) {
+                                if (Math.abs(access$15500) <= 1) {
                                     z2 = false;
                                     if (z2 && DialogsActivity.this.scrollUpdated && (z || (!z && DialogsActivity.this.scrollingManually))) {
                                         DialogsActivity.this.hideFloatingButton(z);
@@ -3405,9 +3406,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 public void onMessageSend(CharSequence charSequence, boolean z, int i) {
                     if (DialogsActivity.this.delegate != null && !DialogsActivity.this.selectedDialogs.isEmpty()) {
-                        DialogsActivityDelegate access$14500 = DialogsActivity.this.delegate;
+                        DialogsActivityDelegate access$14600 = DialogsActivity.this.delegate;
                         DialogsActivity dialogsActivity = DialogsActivity.this;
-                        access$14500.didSelectDialogs(dialogsActivity, dialogsActivity.selectedDialogs, charSequence, false);
+                        access$14600.didSelectDialogs(dialogsActivity, dialogsActivity.selectedDialogs, charSequence, false);
                     }
                 }
             });
@@ -3875,11 +3876,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r5.<init>((android.content.Context) r0)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r5.setTitle(r0)
-            r0 = 2131626323(0x7f0e0953, float:1.8879879E38)
+            r0 = 2131626325(0x7f0e0955, float:1.8879883E38)
             java.lang.String r3 = "PermissionStorage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r5.setMessage(r0)
-            r0 = 2131625988(0x7f0e0804, float:1.88792E38)
+            r0 = 2131625990(0x7f0e0806, float:1.8879204E38)
             java.lang.String r3 = "OK"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r3 = 0
@@ -3917,11 +3918,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>((android.content.Context) r5)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTitle(r3)
-            r3 = 2131626324(0x7f0e0954, float:1.887988E38)
+            r3 = 2131626326(0x7f0e0956, float:1.8879885E38)
             java.lang.String r4 = "PermissionXiaomiLockscreen"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setMessage(r3)
-            r3 = 2131626322(0x7f0e0952, float:1.8879877E38)
+            r3 = 2131626324(0x7f0e0954, float:1.887988E38)
             java.lang.String r4 = "PermissionOpenSettings"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.-$$Lambda$DialogsActivity$LFpO29Hi6P9UXk9vf4Rx2HdTKDQ r4 = new org.telegram.ui.-$$Lambda$DialogsActivity$LFpO29Hi6P9UXk9vf4Rx2HdTKDQ
@@ -4948,7 +4949,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r4 = r4.clientUserId
             if (r8 != r4) goto L_0x0111
             java.lang.Object[] r8 = new java.lang.Object[r2]
-            r0 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
+            r0 = 2131626593(0x7f0e0a61, float:1.8880427E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r8[r1] = r0
@@ -5072,18 +5073,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10[r2] = r11
             java.lang.CharSequence[] r8 = new java.lang.CharSequence[r8]
             if (r7 == 0) goto L_0x0207
-            r7 = 2131625621(0x7f0e0695, float:1.8878455E38)
+            r7 = 2131625623(0x7f0e0697, float:1.887846E38)
             java.lang.String r9 = "MarkAllAsRead"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r7)
         L_0x0207:
             r8[r1] = r9
             boolean r7 = org.telegram.messenger.SharedConfig.archiveHidden
             if (r7 == 0) goto L_0x0213
-            r7 = 2131626353(0x7f0e0971, float:1.887994E38)
+            r7 = 2131626355(0x7f0e0973, float:1.8879944E38)
             java.lang.String r9 = "PinInTheList"
             goto L_0x0218
         L_0x0213:
-            r7 = 2131625421(0x7f0e05cd, float:1.887805E38)
+            r7 = 2131625423(0x7f0e05cf, float:1.8878054E38)
             java.lang.String r9 = "HideAboveTheList"
         L_0x0218:
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
@@ -5439,8 +5440,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     size = i18;
                 }
                 i4 = size;
-                if (this.viewPages[0].selectedType == 7 || this.viewPages[0].selectedType == 8) {
-                    i7 = (100 - dialogFilter.alwaysShow.size()) + dialogFilter.pinnedDialogs.size();
+                if (this.viewPages[0].dialogsType == 7 || this.viewPages[0].dialogsType == 8) {
+                    i7 = 100 - dialogFilter.alwaysShow.size();
                 } else if (this.folderId == 0 && dialogFilter == null) {
                     i7 = getMessagesController().maxPinnedDialogsCount;
                 } else {
@@ -6107,7 +6108,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r3 = r0.canUnarchiveCount
             if (r3 == 0) goto L_0x0238
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r0.archiveItem
-            r4 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
+            r4 = 2131627029(0x7f0e0CLASSNAME, float:1.888131E38)
             java.lang.String r5 = "Unarchive"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = 2131165725(0x7var_d, float:1.7945675E38)
@@ -6223,7 +6224,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r1 = r0.canReadCount
             if (r1 == 0) goto L_0x0302
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.readItem
-            r2 = 2131625622(0x7f0e0696, float:1.8878457E38)
+            r2 = 2131625624(0x7f0e0698, float:1.8878461E38)
             java.lang.String r3 = "MarkAsRead"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131165690(0x7var_fa, float:1.7945604E38)
@@ -6231,7 +6232,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0313
         L_0x0302:
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.readItem
-            r2 = 2131625623(0x7f0e0697, float:1.887846E38)
+            r2 = 2131625625(0x7f0e0699, float:1.8878463E38)
             java.lang.String r3 = "MarkAsUnread"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131165691(0x7var_fb, float:1.7945606E38)
@@ -6243,7 +6244,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 2131165702(0x7var_, float:1.7945629E38)
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.pinItem
-            r2 = 2131626360(0x7f0e0978, float:1.8879954E38)
+            r2 = 2131626362(0x7f0e097a, float:1.8879958E38)
             java.lang.String r3 = "PinToTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
@@ -6258,7 +6259,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 2131165728(0x7var_, float:1.7945681E38)
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.pinItem
-            r2 = 2131627041(0x7f0e0CLASSNAME, float:1.8881335E38)
+            r2 = 2131627043(0x7f0e0CLASSNAME, float:1.888134E38)
             java.lang.String r3 = "UnpinFromTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)

@@ -326,7 +326,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream, z2);
             if (this.nativePtr != 0) {
                 int[] iArr = this.metaData;
-                if (iArr[0] > 2000 || iArr[1] > 2000) {
+                if (iArr[0] > 3840 || iArr[1] > 3840) {
                     destroyDecoder(this.nativePtr);
                     this.nativePtr = 0;
                 }

@@ -1292,6 +1292,8 @@
     <string name="FilterIncludeInfo">Choose chats and types of chats that will appear in this folder.</string>
     <string name="FilterMuted">Muted</string>
     <string name="FilterNameHint">Folder name</string>
+    <string name="FilterNameNonMuted">Not Muted</string>
+    <string name="FilterNameUnread">Unread</string>
     <string name="FilterNeverShow">Exclude Chats</string>
     <string name="FilterNew">New Folder</string>
     <string name="FilterNoChats">No Chats</string>

@@ -194,7 +194,10 @@ public final class Bulletin {
             this.layout.onExitTransitionStart();
             this.layout.onExitTransitionEnd();
             this.layout.onHide();
-            this.containerLayout.removeView(this.layout);
+            FrameLayout frameLayout = this.containerLayout;
+            if (frameLayout != null) {
+                frameLayout.removeView(this.layout);
+            }
             this.layout.onDetach();
         }
     }
@@ -202,7 +205,10 @@ public final class Bulletin {
     public /* synthetic */ void lambda$hide$0$Bulletin() {
         this.layout.onExitTransitionEnd();
         this.layout.onHide();
-        this.containerLayout.removeView(this.layout);
+        FrameLayout frameLayout = this.containerLayout;
+        if (frameLayout != null) {
+            frameLayout.removeView(this.layout);
+        }
         this.layout.onDetach();
     }
 

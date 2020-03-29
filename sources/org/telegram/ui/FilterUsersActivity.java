@@ -790,7 +790,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             boolean z2 = this.selectedContacts.indexOfKey(i2) >= 0;
             if (z2) {
                 this.spansContainer.removeSpan(this.selectedContacts.get(i2));
-            } else if (z || this.selectedContacts.size() != 100) {
+            } else if (z || this.selectedCount < 100) {
                 if (object instanceof TLRPC$User) {
                     MessagesController.getInstance(this.currentAccount).putUser((TLRPC$User) object, !this.searching);
                 } else if (object instanceof TLRPC$Chat) {

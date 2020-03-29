@@ -2410,6 +2410,8 @@
     <public type="string" name="FilterIncludeInfo" id="NUM" />
     <public type="string" name="FilterMuted" id="NUM" />
     <public type="string" name="FilterNameHint" id="NUM" />
+    <public type="string" name="FilterNameNonMuted" id="NUM" />
+    <public type="string" name="FilterNameUnread" id="NUM" />
     <public type="string" name="FilterNeverShow" id="NUM" />
     <public type="string" name="FilterNew" id="NUM" />
     <public type="string" name="FilterNoChats" id="NUM" />

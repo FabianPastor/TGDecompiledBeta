@@ -58,11 +58,11 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return false;
     }
 
-    private class StickerResult {
+    private static class StickerResult {
         public Object parent;
         public TLRPC$Document sticker;
 
-        public StickerResult(StickersAdapter stickersAdapter, TLRPC$Document tLRPC$Document, Object obj) {
+        public StickerResult(TLRPC$Document tLRPC$Document, Object obj) {
             this.sticker = tLRPC$Document;
             this.parent = obj;
         }
@@ -155,7 +155,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
                     this.stickers = new ArrayList<>();
                     this.stickersMap = new HashMap<>();
                 }
-                this.stickers.add(new StickerResult(this, tLRPC$Document, obj));
+                this.stickers.add(new StickerResult(tLRPC$Document, obj));
                 this.stickersMap.put(str, tLRPC$Document);
             }
         }
@@ -186,7 +186,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
                         }
                         i2++;
                     }
-                    this.stickers.add(new StickerResult(this, tLRPC$Document, obj));
+                    this.stickers.add(new StickerResult(tLRPC$Document, obj));
                     this.stickersMap.put(str, tLRPC$Document);
                 }
             }
@@ -320,9 +320,9 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         this.delayLocalResults = false;
         final ArrayList<TLRPC$Document> recentStickersNoCopy = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
         final ArrayList<TLRPC$Document> recentStickersNoCopy2 = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
-        int size = recentStickersNoCopy.size();
+        int min = Math.min(20, recentStickersNoCopy.size());
         int i3 = 0;
-        for (int i4 = 0; i4 < size; i4++) {
+        for (int i4 = 0; i4 < min; i4++) {
             TLRPC$Document tLRPC$Document = recentStickersNoCopy.get(i4);
             if (isValidSticker(tLRPC$Document, this.lastSticker)) {
                 addStickerToResult(tLRPC$Document, "recent");
@@ -332,8 +332,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
                 }
             }
         }
-        int size2 = recentStickersNoCopy2.size();
-        for (int i5 = 0; i5 < size2; i5++) {
+        int size = recentStickersNoCopy2.size();
+        for (int i5 = 0; i5 < size; i5++) {
             TLRPC$Document tLRPC$Document2 = recentStickersNoCopy2.get(i5);
             if (isValidSticker(tLRPC$Document2, this.lastSticker)) {
                 addStickerToResult(tLRPC$Document2, "fav");
@@ -347,15 +347,15 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         ArrayList<StickerResult> arrayList3 = this.stickers;
         if (arrayList3 != null) {
             Collections.sort(arrayList3, new Comparator<StickerResult>(this) {
-                private int getIndex(long j) {
+                private int getIndex(StickerResult stickerResult) {
                     for (int i = 0; i < recentStickersNoCopy2.size(); i++) {
-                        if (((TLRPC$Document) recentStickersNoCopy2.get(i)).id == j) {
-                            return i + 1000;
+                        if (((TLRPC$Document) recentStickersNoCopy2.get(i)).id == stickerResult.sticker.id) {
+                            return i + 2000000;
                         }
                     }
-                    for (int i2 = 0; i2 < recentStickersNoCopy.size(); i2++) {
-                        if (((TLRPC$Document) recentStickersNoCopy.get(i2)).id == j) {
-                            return i2;
+                    for (int i2 = 0; i2 < Math.min(20, recentStickersNoCopy.size()); i2++) {
+                        if (((TLRPC$Document) recentStickersNoCopy.get(i2)).id == stickerResult.sticker.id) {
+                            return (recentStickersNoCopy.size() - i2) + 1000000;
                         }
                     }
                     return -1;
@@ -365,8 +365,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
                     boolean isAnimatedStickerDocument = MessageObject.isAnimatedStickerDocument(stickerResult.sticker, true);
                     boolean isAnimatedStickerDocument2 = MessageObject.isAnimatedStickerDocument(stickerResult2.sticker, true);
                     if (isAnimatedStickerDocument == isAnimatedStickerDocument2) {
-                        int index = getIndex(stickerResult.sticker.id);
-                        int index2 = getIndex(stickerResult2.sticker.id);
+                        int index = getIndex(stickerResult);
+                        int index2 = getIndex(stickerResult2);
                         if (index > index2) {
                             return -1;
                         }

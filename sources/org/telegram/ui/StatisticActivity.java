@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.collection.ArraySet;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,7 +97,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public final TLRPC$ChatFull chat;
     /* access modifiers changed from: private */
     public LruCache<ChartData> childDataCache = new LruCache<>(50);
-    DiffUtilsCallback diffUtilsCallback = new DiffUtilsCallback();
+    /* access modifiers changed from: private */
+    public DiffUtilsCallback diffUtilsCallback;
     /* access modifiers changed from: private */
     public ChartViewData followersData;
     /* access modifiers changed from: private */
@@ -246,15 +246,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.messagesDidLoad && objArr[10].intValue() == this.classGuid) {
             ArrayList arrayList = objArr[2];
+            ArrayList arrayList2 = new ArrayList();
             int size = arrayList.size();
             int i3 = 0;
             for (int i4 = 0; i4 < size; i4++) {
                 MessageObject messageObject = (MessageObject) arrayList.get(i4);
                 int i5 = this.recentPostIdtoIndexMap.get(messageObject.getId(), -1);
                 if (i5 >= 0 && this.recentPostsAll.get(i5).counters.msg_id == messageObject.getId()) {
-                    this.recentPostsAll.get(i5).message = messageObject;
+                    if (messageObject.deleted) {
+                        arrayList2.add(this.recentPostsAll.get(i5));
+                    } else {
+                        this.recentPostsAll.get(i5).message = messageObject;
+                    }
                 }
             }
+            this.recentPostsAll.removeAll(arrayList2);
             this.recentPostsLoaded.clear();
             int size2 = this.recentPostsAll.size();
             while (true) {
@@ -273,11 +279,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             if (this.recentPostsLoaded.size() < 20) {
                 loadMessages();
             }
-            Adapter adapter2 = this.adapter;
-            if (adapter2 != null) {
-                this.diffUtilsCallback.saveOldState(adapter2);
-                this.adapter.update();
-                DiffUtil.calculateDiff(this.diffUtilsCallback).dispatchUpdatesTo((RecyclerView.Adapter) this.adapter);
+            if (this.adapter != null) {
+                this.diffUtilsCallback.update();
             }
         }
     }
@@ -331,9 +334,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        defaultItemAnimator.setSupportsChangeAnimations(false);
-        this.recyclerListView.setItemAnimator(defaultItemAnimator);
+        this.recyclerListView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (StatisticActivity.this.recentPostsAll.size() != StatisticActivity.this.recentPostsLoaded.size() && !StatisticActivity.this.messagesIsLoading && StatisticActivity.this.layoutManager.findLastVisibleItemPosition() > StatisticActivity.this.adapter.getItemCount() - 20) {
@@ -376,6 +377,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.progressLayout.setVisibility(8);
             this.recyclerListView.setVisibility(0);
         }
+        this.diffUtilsCallback = new DiffUtilsCallback(this.adapter, this.layoutManager);
         return this.fragmentView;
     }
 
@@ -483,97 +485,135 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             return i == this.recentPostsHeaderCell ? 13 : 10;
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v2, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v6, resolved type: org.telegram.ui.Cells.EmptyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v7, resolved type: org.telegram.ui.Cells.LoadingCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v8, resolved type: org.telegram.ui.Cells.StatisticPostInfoCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.ui.StatisticActivity$ChartCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v12, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v13, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v14, resolved type: org.telegram.ui.Cells.HeaderCell} */
-        /* JADX WARNING: type inference failed for: r0v0, types: [android.view.View] */
+        public long getItemId(int i) {
+            if (i >= this.recentPostsStartRow && i <= this.recentPostsEndRow) {
+                return (long) ((RecentPostInfo) StatisticActivity.this.recentPostsLoaded.get(i - this.recentPostsStartRow)).counters.msg_id;
+            }
+            if (i == this.growCell) {
+                return 1;
+            }
+            if (i == this.folowersCell) {
+                return 2;
+            }
+            if (i == this.topHourseCell) {
+                return 3;
+            }
+            if (i == this.interactionsCell) {
+                return 4;
+            }
+            if (i == this.notificationsCell) {
+                return 5;
+            }
+            if (i == this.ivInteractionsCell) {
+                return 6;
+            }
+            if (i == this.viewsBySourceCell) {
+                return 7;
+            }
+            if (i == this.newFollowersBySourceCell) {
+                return 8;
+            }
+            if (i == this.languagesCell) {
+                return 9;
+            }
+            return super.getItemId(i);
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v2, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v4, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: org.telegram.ui.Cells.EmptyCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v7, resolved type: org.telegram.ui.Cells.LoadingCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.ui.StatisticActivity$Adapter$2} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v10, resolved type: org.telegram.ui.StatisticActivity$Adapter$1} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v1, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v12, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v13, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v14, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX WARNING: type inference failed for: r1v0, types: [android.view.View] */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r9, int r10) {
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r11, int r12) {
             /*
-                r8 = this;
-                if (r10 < 0) goto L_0x0012
-                r0 = 4
-                if (r10 > r0) goto L_0x0012
-                org.telegram.ui.StatisticActivity$ChartCell r0 = new org.telegram.ui.StatisticActivity$ChartCell
-                org.telegram.ui.StatisticActivity r1 = org.telegram.ui.StatisticActivity.this
-                android.content.Context r9 = r9.getContext()
-                r0.<init>(r9, r10)
-                goto L_0x009b
-            L_0x0012:
-                r0 = 9
-                if (r10 != r0) goto L_0x0027
-                org.telegram.ui.Cells.StatisticPostInfoCell r0 = new org.telegram.ui.Cells.StatisticPostInfoCell
-                android.content.Context r9 = r9.getContext()
-                org.telegram.ui.StatisticActivity r10 = org.telegram.ui.StatisticActivity.this
-                org.telegram.tgnet.TLRPC$ChatFull r10 = r10.chat
-                r0.<init>(r9, r10)
-                goto L_0x009b
-            L_0x0027:
-                r0 = 11
-                if (r10 != r0) goto L_0x003f
-                org.telegram.ui.Cells.LoadingCell r0 = new org.telegram.ui.Cells.LoadingCell
-                android.content.Context r9 = r9.getContext()
-                r0.<init>(r9)
-                java.lang.String r9 = "windowBackgroundWhite"
-                int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-                r0.setBackgroundColor(r9)
-                goto L_0x009b
-            L_0x003f:
-                r0 = 12
-                if (r10 != r0) goto L_0x0053
-                org.telegram.ui.Cells.EmptyCell r0 = new org.telegram.ui.Cells.EmptyCell
-                android.content.Context r9 = r9.getContext()
-                r10 = 1097859072(0x41700000, float:15.0)
-                int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                r0.<init>(r9, r10)
-                goto L_0x009b
-            L_0x0053:
-                r1 = 13
-                if (r10 != r1) goto L_0x008a
-                org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
-                android.content.Context r3 = r9.getContext()
-                r5 = 16
-                r6 = 15
-                r7 = 0
-                java.lang.String r4 = "dialogTextBlack"
-                r2 = r0
-                r2.<init>(r3, r4, r5, r6, r7)
-                r9 = 2131626479(0x7f0e09ef, float:1.8880195E38)
-                java.lang.String r10 = "RecentPosts"
-                java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-                r0.setText(r9)
-                int r9 = r0.getPaddingLeft()
-                int r10 = r0.getTop()
-                int r1 = r0.getRight()
+                r10 = this;
+                r0 = 0
+                if (r12 < 0) goto L_0x0014
+                r1 = 4
+                if (r12 > r1) goto L_0x0014
+                org.telegram.ui.StatisticActivity$Adapter$1 r1 = new org.telegram.ui.StatisticActivity$Adapter$1
+                android.content.Context r11 = r11.getContext()
+                r1.<init>(r10, r11, r12)
+                r1.setWillNotDraw(r0)
+                goto L_0x00a4
+            L_0x0014:
+                r1 = 9
+                if (r12 != r1) goto L_0x002c
+                org.telegram.ui.StatisticActivity$Adapter$2 r1 = new org.telegram.ui.StatisticActivity$Adapter$2
+                android.content.Context r11 = r11.getContext()
+                org.telegram.ui.StatisticActivity r12 = org.telegram.ui.StatisticActivity.this
+                org.telegram.tgnet.TLRPC$ChatFull r12 = r12.chat
+                r1.<init>(r10, r11, r12)
+                r1.setWillNotDraw(r0)
+                goto L_0x00a4
+            L_0x002c:
+                r1 = 11
+                if (r12 != r1) goto L_0x0044
+                org.telegram.ui.Cells.LoadingCell r1 = new org.telegram.ui.Cells.LoadingCell
+                android.content.Context r11 = r11.getContext()
+                r1.<init>(r11)
+                java.lang.String r11 = "windowBackgroundWhite"
+                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+                r1.setBackgroundColor(r11)
+                goto L_0x00a4
+            L_0x0044:
+                r1 = 12
+                if (r12 != r1) goto L_0x0058
+                org.telegram.ui.Cells.EmptyCell r1 = new org.telegram.ui.Cells.EmptyCell
+                android.content.Context r11 = r11.getContext()
+                r12 = 1097859072(0x41700000, float:15.0)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
+                r1.<init>(r11, r12)
+                goto L_0x00a4
+            L_0x0058:
+                r2 = 13
+                if (r12 != r2) goto L_0x0093
+                org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
+                android.content.Context r5 = r11.getContext()
+                r7 = 16
+                r8 = 15
+                r9 = 0
+                java.lang.String r6 = "dialogTextBlack"
+                r3 = r1
+                r4 = r10
+                r3.<init>(r4, r5, r6, r7, r8, r9)
+                r1.setWillNotDraw(r0)
+                r11 = 2131626481(0x7f0e09f1, float:1.88802E38)
+                java.lang.String r12 = "RecentPosts"
+                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+                r1.setText(r11)
+                int r11 = r1.getPaddingLeft()
+                int r12 = r1.getTop()
+                int r0 = r1.getRight()
                 r2 = 1090519040(0x41000000, float:8.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                r0.setPadding(r9, r10, r1, r2)
-                goto L_0x009b
-            L_0x008a:
-                org.telegram.ui.Cells.ShadowSectionCell r10 = new org.telegram.ui.Cells.ShadowSectionCell
-                android.content.Context r9 = r9.getContext()
-                java.lang.String r1 = "windowBackgroundGray"
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-                r10.<init>(r9, r0, r1)
-                r0 = r10
-            L_0x009b:
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r9 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-                r10 = -1
-                r1 = -2
-                r9.<init>((int) r10, (int) r1)
-                r0.setLayoutParams(r9)
-                org.telegram.ui.Components.RecyclerListView$Holder r9 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r9.<init>(r0)
-                return r9
+                r1.setPadding(r11, r12, r0, r2)
+                goto L_0x00a4
+            L_0x0093:
+                org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
+                android.content.Context r11 = r11.getContext()
+                java.lang.String r0 = "windowBackgroundGray"
+                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                r12.<init>(r11, r1, r0)
+                r1 = r12
+            L_0x00a4:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r11 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r12 = -1
+                r0 = -2
+                r11.<init>((int) r12, (int) r0)
+                r1.setLayoutParams(r11)
+                org.telegram.ui.Components.RecyclerListView$Holder r11 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r11.<init>(r1)
+                return r11
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.Adapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
@@ -666,7 +706,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.count = i7 + 1;
                 this.topHourseCell = i7;
             }
-            if (StatisticActivity.this.interactionsData != null && !StatisticActivity.this.interactionsData.isEmpty) {
+            if (StatisticActivity.this.viewsBySourceData != null && !StatisticActivity.this.viewsBySourceData.isEmpty) {
                 int i8 = this.count;
                 if (i8 > 0) {
                     ArraySet<Integer> arraySet4 = this.shadowDivideCells;
@@ -675,9 +715,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i9 = this.count;
                 this.count = i9 + 1;
-                this.interactionsCell = i9;
+                this.viewsBySourceCell = i9;
             }
-            if ((StatisticActivity.this.ivInteractionsData != null && !StatisticActivity.this.ivInteractionsData.isEmpty && !StatisticActivity.this.ivInteractionsData.isError) || (StatisticActivity.this.ivInteractionsData != null && StatisticActivity.this.ivInteractionsData.viewShowed)) {
+            if (StatisticActivity.this.newFollowersBySourceData != null && !StatisticActivity.this.newFollowersBySourceData.isEmpty) {
                 int i10 = this.count;
                 if (i10 > 0) {
                     ArraySet<Integer> arraySet5 = this.shadowDivideCells;
@@ -686,9 +726,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i11 = this.count;
                 this.count = i11 + 1;
-                this.ivInteractionsCell = i11;
+                this.newFollowersBySourceCell = i11;
             }
-            if (StatisticActivity.this.viewsBySourceData != null && !StatisticActivity.this.viewsBySourceData.isEmpty) {
+            if (StatisticActivity.this.languagesData != null && !StatisticActivity.this.languagesData.isEmpty) {
                 int i12 = this.count;
                 if (i12 > 0) {
                     ArraySet<Integer> arraySet6 = this.shadowDivideCells;
@@ -697,9 +737,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i13 = this.count;
                 this.count = i13 + 1;
-                this.viewsBySourceCell = i13;
+                this.languagesCell = i13;
             }
-            if (StatisticActivity.this.newFollowersBySourceData != null && !StatisticActivity.this.newFollowersBySourceData.isEmpty) {
+            if (StatisticActivity.this.interactionsData != null && !StatisticActivity.this.interactionsData.isEmpty) {
                 int i14 = this.count;
                 if (i14 > 0) {
                     ArraySet<Integer> arraySet7 = this.shadowDivideCells;
@@ -708,9 +748,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i15 = this.count;
                 this.count = i15 + 1;
-                this.newFollowersBySourceCell = i15;
+                this.interactionsCell = i15;
             }
-            if (StatisticActivity.this.languagesData != null && !StatisticActivity.this.languagesData.isEmpty) {
+            if (StatisticActivity.this.ivInteractionsData != null && !StatisticActivity.this.ivInteractionsData.loading && !StatisticActivity.this.ivInteractionsData.isError) {
                 int i16 = this.count;
                 if (i16 > 0) {
                     ArraySet<Integer> arraySet8 = this.shadowDivideCells;
@@ -719,7 +759,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 int i17 = this.count;
                 this.count = i17 + 1;
-                this.languagesCell = i17;
+                this.ivInteractionsCell = i17;
             }
             ArraySet<Integer> arraySet9 = this.shadowDivideCells;
             int i18 = this.count;
@@ -1348,13 +1388,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 this.line = lineViewData;
                 this.checkBox.setText(lineViewData.line.name);
                 this.checkBox.setChecked(lineViewData.enabled, false);
+                this.checkBox.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
                 this.checkBox.setOnClickListener(
                 /*  JADX ERROR: Method code generation error
-                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001a: INVOKE  
-                      (wrap: org.telegram.ui.Components.FlatCheckBox : 0x0013: IGET  (r0v2 org.telegram.ui.Components.FlatCheckBox) = 
+                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0024: INVOKE  
+                      (wrap: org.telegram.ui.Components.FlatCheckBox : 0x001d: IGET  (r0v3 org.telegram.ui.Components.FlatCheckBox) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                      org.telegram.ui.StatisticActivity.ChartCell.CheckBoxHolder.checkBox org.telegram.ui.Components.FlatCheckBox)
-                      (wrap: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls : 0x0017: CONSTRUCTOR  (r1v3 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
+                      (wrap: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls : 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
                      call: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls.<init>(org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR)
@@ -1419,7 +1460,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0017: CONSTRUCTOR  (r1v3 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
+                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
                      call: org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls.<init>(org.telegram.ui.StatisticActivity$ChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR in method: org.telegram.ui.StatisticActivity.ChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes.dex
@@ -1449,6 +1490,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     boolean r1 = r4.enabled
                     r2 = 0
                     r0.setChecked(r1, r2)
+                    org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
+                    org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener r1 = new org.telegram.ui.Components.RecyclerListView$FoucsableOnTouchListener
+                    r1.<init>()
+                    r0.setOnTouchListener(r1)
                     org.telegram.ui.Components.FlatCheckBox r0 = r3.checkBox
                     org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls r1 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartCell$CheckBoxHolder$-ATCv5uDSIXDA3hgLHcbxjcI0ls
                     r1.<init>(r3, r4)
@@ -1574,10 +1619,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
                 tLRPC$TL_stats_loadAsyncGraph.token = this.token;
                 RecyclerListView recyclerListView2 = recyclerListView;
-                int sendRequest = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, diffUtilsCallback, adapter) {
+                int sendRequest = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, adapter, diffUtilsCallback) {
                     private final /* synthetic */ RecyclerListView f$1;
-                    private final /* synthetic */ StatisticActivity.DiffUtilsCallback f$2;
-                    private final /* synthetic */ StatisticActivity.Adapter f$3;
+                    private final /* synthetic */ StatisticActivity.Adapter f$2;
+                    private final /* synthetic */ StatisticActivity.DiffUtilsCallback f$3;
 
                     {
                         this.f$1 = r2;
@@ -1596,7 +1641,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
         /* JADX WARNING: Removed duplicated region for block: B:25:0x0052  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r10, org.telegram.ui.StatisticActivity.DiffUtilsCallback r11, org.telegram.ui.StatisticActivity.Adapter r12, org.telegram.tgnet.TLObject r13, org.telegram.tgnet.TLRPC$TL_error r14) {
+        public /* synthetic */ void lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView r10, org.telegram.ui.StatisticActivity.Adapter r11, org.telegram.ui.StatisticActivity.DiffUtilsCallback r12, org.telegram.tgnet.TLObject r13, org.telegram.tgnet.TLRPC$TL_error r14) {
             /*
                 r9 = this;
                 r0 = 0
@@ -1668,7 +1713,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r3 = r0
                 r4 = r3
             L_0x0062:
-                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$sprgknZtXiqkLi_8TMZCUET0gCQ r13 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$sprgknZtXiqkLi_8TMZCUET0gCQ
+                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$LKS57NTIvtsDBOq6xYMvar_QeztI r13 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$LKS57NTIvtsDBOq6xYMvar_QeztI
                 r1 = r13
                 r2 = r9
                 r5 = r10
@@ -1678,10 +1723,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.ui.StatisticActivity$Adapter, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.ChartViewData.lambda$load$1$StatisticActivity$ChartViewData(org.telegram.ui.Components.RecyclerListView, org.telegram.ui.StatisticActivity$Adapter, org.telegram.ui.StatisticActivity$DiffUtilsCallback, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
         }
 
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback, Adapter adapter) {
+        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, Adapter adapter, DiffUtilsCallback diffUtilsCallback) {
             boolean z = false;
             this.loading = false;
             this.chartData = chartData2;
@@ -1697,6 +1742,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     ChartCell chartCell = (ChartCell) childAt;
                     if (chartCell.data == this) {
                         chartCell.updateData(this, true);
+                        adapter.notifyItemChanged(recyclerListView.getChildAdapterPosition(childAt));
                         z = true;
                         break;
                     }
@@ -1704,9 +1750,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 i++;
             }
             if (!z) {
-                diffUtilsCallback.saveOldState(adapter);
-                adapter.update();
-                DiffUtil.calculateDiff(diffUtilsCallback).dispatchUpdatesTo((RecyclerView.Adapter) adapter);
+                diffUtilsCallback.update();
             }
         }
     }
@@ -1784,9 +1828,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     i++;
                 }
             }
-            this.diffUtilsCallback.saveOldState(this.adapter);
-            this.adapter.update();
-            DiffUtil.calculateDiff(this.diffUtilsCallback).dispatchUpdatesTo((RecyclerView.Adapter) this.adapter);
+            this.diffUtilsCallback.update();
         }
     }
 
@@ -1802,20 +1844,23 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     private static class DiffUtilsCallback extends DiffUtil.Callback {
-        Adapter adapter;
+        private final Adapter adapter;
         int count;
+        int endPosts;
         int folowersCell;
         int growCell;
         int interactionsCell;
         int ivInteractionsCell;
         int languagesCell;
+        private final LinearLayoutManager layoutManager;
         int newFollowersBySourceCell;
         int notificationsCell;
         SparseIntArray positionToTypeMap;
+        int startPosts;
         int topHourseCell;
         int viewsBySourceCell;
 
-        private DiffUtilsCallback() {
+        private DiffUtilsCallback(Adapter adapter2, LinearLayoutManager linearLayoutManager) {
             this.positionToTypeMap = new SparseIntArray();
             this.growCell = -1;
             this.folowersCell = -1;
@@ -1826,15 +1871,19 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.languagesCell = -1;
             this.topHourseCell = -1;
             this.notificationsCell = -1;
+            this.startPosts = -1;
+            this.endPosts = -1;
+            this.adapter = adapter2;
+            this.layoutManager = linearLayoutManager;
         }
 
-        public void saveOldState(Adapter adapter2) {
-            this.adapter = adapter2;
+        public void saveOldState() {
             this.positionToTypeMap.clear();
-            this.count = adapter2.getItemCount();
+            this.count = this.adapter.getItemCount();
             for (int i = 0; i < this.count; i++) {
-                this.positionToTypeMap.put(i, adapter2.getItemViewType(i));
+                this.positionToTypeMap.put(i, this.adapter.getItemViewType(i));
             }
+            Adapter adapter2 = this.adapter;
             this.growCell = adapter2.growCell;
             this.folowersCell = adapter2.folowersCell;
             this.interactionsCell = adapter2.interactionsCell;
@@ -1844,6 +1893,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.languagesCell = adapter2.languagesCell;
             this.topHourseCell = adapter2.topHourseCell;
             this.notificationsCell = adapter2.notificationsCell;
+            this.startPosts = adapter2.recentPostsStartRow;
+            this.endPosts = adapter2.recentPostsEndRow;
         }
 
         public int getOldListSize() {
@@ -1855,38 +1906,92 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         public boolean areItemsTheSame(int i, int i2) {
-            return this.positionToTypeMap.get(i) == this.adapter.getItemViewType(i2);
+            if (this.positionToTypeMap.get(i) == 13 && this.adapter.getItemViewType(i2) == 13) {
+                return true;
+            }
+            if (this.positionToTypeMap.get(i) == 10 && this.adapter.getItemViewType(i2) == 10) {
+                return true;
+            }
+            int i3 = this.startPosts;
+            if (i < i3 || i > this.endPosts) {
+                if (i == this.growCell && i2 == this.adapter.growCell) {
+                    return true;
+                }
+                if (i == this.folowersCell && i2 == this.adapter.folowersCell) {
+                    return true;
+                }
+                if (i == this.interactionsCell && i2 == this.adapter.interactionsCell) {
+                    return true;
+                }
+                if (i == this.ivInteractionsCell && i2 == this.adapter.ivInteractionsCell) {
+                    return true;
+                }
+                if (i == this.viewsBySourceCell && i2 == this.adapter.viewsBySourceCell) {
+                    return true;
+                }
+                if (i == this.newFollowersBySourceCell && i2 == this.adapter.newFollowersBySourceCell) {
+                    return true;
+                }
+                if (i == this.languagesCell && i2 == this.adapter.languagesCell) {
+                    return true;
+                }
+                if (i == this.topHourseCell && i2 == this.adapter.topHourseCell) {
+                    return true;
+                }
+                if (i == this.notificationsCell && i2 == this.adapter.notificationsCell) {
+                    return true;
+                }
+                return false;
+            } else if (i - i3 == i2 - this.adapter.recentPostsStartRow) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         public boolean areContentsTheSame(int i, int i2) {
-            if (i == this.growCell && i2 == this.adapter.growCell) {
-                return true;
+            return this.positionToTypeMap.get(i) == this.adapter.getItemViewType(i2);
+        }
+
+        public void update() {
+            int i;
+            long j;
+            int i2;
+            saveOldState();
+            this.adapter.update();
+            int findFirstVisibleItemPosition = this.layoutManager.findFirstVisibleItemPosition();
+            int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
+            while (true) {
+                i = 0;
+                if (findFirstVisibleItemPosition > findLastVisibleItemPosition) {
+                    j = -1;
+                    i2 = 0;
+                    break;
+                } else if (this.adapter.getItemId(findFirstVisibleItemPosition) != -1) {
+                    j = this.adapter.getItemId(findFirstVisibleItemPosition);
+                    i2 = this.layoutManager.findViewByPosition(findFirstVisibleItemPosition).getTop();
+                    break;
+                } else {
+                    findFirstVisibleItemPosition++;
+                }
             }
-            if (i == this.folowersCell && i2 == this.adapter.folowersCell) {
-                return true;
+            DiffUtil.calculateDiff(this).dispatchUpdatesTo((RecyclerView.Adapter) this.adapter);
+            if (j != -1) {
+                int i3 = -1;
+                while (true) {
+                    if (i >= this.adapter.getItemCount()) {
+                        break;
+                    } else if (this.adapter.getItemId(i) == j) {
+                        i3 = i;
+                        break;
+                    } else {
+                        i++;
+                    }
+                }
+                if (i3 > 0) {
+                    this.layoutManager.scrollToPositionWithOffset(i3, i2);
+                }
             }
-            if (i == this.interactionsCell && i2 == this.adapter.interactionsCell) {
-                return true;
-            }
-            if (i == this.ivInteractionsCell && i2 == this.adapter.ivInteractionsCell) {
-                return true;
-            }
-            if (i == this.viewsBySourceCell && i2 == this.adapter.viewsBySourceCell) {
-                return true;
-            }
-            if (i == this.newFollowersBySourceCell && i2 == this.adapter.newFollowersBySourceCell) {
-                return true;
-            }
-            if (i == this.languagesCell && i2 == this.adapter.languagesCell) {
-                return true;
-            }
-            if (i == this.topHourseCell && i2 == this.adapter.topHourseCell) {
-                return true;
-            }
-            if (i == this.notificationsCell && i2 == this.adapter.notificationsCell) {
-                return true;
-            }
-            return false;
         }
     }
 

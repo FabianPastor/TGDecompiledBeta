@@ -2549,6 +2549,8 @@ public final class R {
         public static final int FilterIncludeInfo = NUM;
         public static final int FilterMuted = NUM;
         public static final int FilterNameHint = NUM;
+        public static final int FilterNameNonMuted = NUM;
+        public static final int FilterNameUnread = NUM;
         public static final int FilterNeverShow = NUM;
         public static final int FilterNew = NUM;
         public static final int FilterNoChats = NUM;

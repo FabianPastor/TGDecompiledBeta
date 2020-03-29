@@ -536,27 +536,28 @@ public class PhotoPickerSearchActivity extends BaseFragment {
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 float f;
+                float f2;
+                float f3;
                 int i;
                 boolean z = false;
                 if (PhotoPickerSearchActivity.this.parentLayout.checkTransitionAnimation() || checkTabsAnimationInProgress()) {
                     return false;
+                }
+                if (motionEvent != null) {
+                    if (this.velocityTracker == null) {
+                        this.velocityTracker = VelocityTracker.obtain();
+                    }
+                    this.velocityTracker.addMovement(motionEvent);
                 }
                 if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
                     this.startedTrackingPointerId = motionEvent.getPointerId(0);
                     this.maybeStartTracking = true;
                     this.startedTrackingX = (int) motionEvent.getX();
                     this.startedTrackingY = (int) motionEvent.getY();
-                    VelocityTracker velocityTracker2 = this.velocityTracker;
-                    if (velocityTracker2 != null) {
-                        velocityTracker2.clear();
-                    }
+                    this.velocityTracker.clear();
                 } else if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
                     int x = (int) (motionEvent.getX() - ((float) this.startedTrackingX));
                     int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
-                    this.velocityTracker.addMovement(motionEvent);
                     if (this.startedTracking && ((PhotoPickerSearchActivity.this.animatingForward && x > 0) || (!PhotoPickerSearchActivity.this.animatingForward && x < 0))) {
                         if (!prepareForMoving(motionEvent, x < 0)) {
                             this.maybeStartTracking = true;
@@ -583,83 +584,79 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                         PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.selectTabWithId(PhotoPickerSearchActivity.this.viewPages[1].selectedType, ((float) Math.abs(x)) / ((float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()));
                     }
                 } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
-                    if (!(motionEvent == null || motionEvent.getAction() == 3)) {
-                        if (this.velocityTracker == null) {
-                            this.velocityTracker = VelocityTracker.obtain();
-                        }
-                        this.velocityTracker.computeCurrentVelocity(1000, (float) PhotoPickerSearchActivity.this.maximumVelocity);
-                        if (!this.startedTracking) {
-                            float xVelocity = this.velocityTracker.getXVelocity();
-                            float yVelocity = this.velocityTracker.getYVelocity();
-                            if (Math.abs(xVelocity) >= 3000.0f && Math.abs(xVelocity) > Math.abs(yVelocity)) {
-                                prepareForMoving(motionEvent, xVelocity < 0.0f);
-                            }
-                        }
-                        if (this.startedTracking) {
-                            float x2 = PhotoPickerSearchActivity.this.viewPages[0].getX();
-                            AnimatorSet unused = PhotoPickerSearchActivity.this.tabsAnimation = new AnimatorSet();
-                            float xVelocity2 = this.velocityTracker.getXVelocity();
-                            boolean unused2 = PhotoPickerSearchActivity.this.backAnimation = Math.abs(x2) < ((float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(xVelocity2) < 3500.0f || Math.abs(xVelocity2) < Math.abs(this.velocityTracker.getYVelocity()));
-                            if (PhotoPickerSearchActivity.this.backAnimation) {
-                                f = Math.abs(x2);
-                                if (PhotoPickerSearchActivity.this.animatingForward) {
-                                    PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) PhotoPickerSearchActivity.this.viewPages[1].getMeasuredWidth()})});
-                                } else {
-                                    PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-PhotoPickerSearchActivity.this.viewPages[1].getMeasuredWidth())})});
-                                }
-                            } else {
-                                f = ((float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x2);
-                                if (PhotoPickerSearchActivity.this.animatingForward) {
-                                    PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                                } else {
-                                    PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
-                                }
-                            }
-                            PhotoPickerSearchActivity.this.tabsAnimation.setInterpolator(PhotoPickerSearchActivity.interpolator);
-                            int measuredWidth = getMeasuredWidth();
-                            float f2 = (float) (measuredWidth / 2);
-                            float distanceInfluenceForSnapDuration = f2 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f * 1.0f) / ((float) measuredWidth))) * f2);
-                            float abs2 = Math.abs(xVelocity2);
-                            if (abs2 > 0.0f) {
-                                i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
-                            } else {
-                                i = (int) (((f / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
-                            }
-                            PhotoPickerSearchActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
-                            PhotoPickerSearchActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animator) {
-                                    AnimatorSet unused = PhotoPickerSearchActivity.this.tabsAnimation = null;
-                                    if (PhotoPickerSearchActivity.this.backAnimation) {
-                                        PhotoPickerSearchActivity.this.viewPages[1].setVisibility(8);
-                                    } else {
-                                        ViewPage viewPage = PhotoPickerSearchActivity.this.viewPages[0];
-                                        PhotoPickerSearchActivity.this.viewPages[0] = PhotoPickerSearchActivity.this.viewPages[1];
-                                        PhotoPickerSearchActivity.this.viewPages[1] = viewPage;
-                                        PhotoPickerSearchActivity.this.viewPages[1].setVisibility(8);
-                                        PhotoPickerSearchActivity photoPickerSearchActivity = PhotoPickerSearchActivity.this;
-                                        boolean unused2 = photoPickerSearchActivity.swipeBackEnabled = photoPickerSearchActivity.viewPages[0].selectedType == PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.getFirstTabId();
-                                        PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.selectTabWithId(PhotoPickerSearchActivity.this.viewPages[0].selectedType, 1.0f);
-                                    }
-                                    boolean unused3 = PhotoPickerSearchActivity.this.tabsAnimationInProgress = false;
-                                    boolean unused4 = AnonymousClass4.this.maybeStartTracking = false;
-                                    boolean unused5 = AnonymousClass4.this.startedTracking = false;
-                                    PhotoPickerSearchActivity.this.actionBar.setEnabled(true);
-                                    PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
-                                }
-                            });
-                            PhotoPickerSearchActivity.this.tabsAnimation.start();
-                            boolean unused3 = PhotoPickerSearchActivity.this.tabsAnimationInProgress = true;
+                    this.velocityTracker.computeCurrentVelocity(1000, (float) PhotoPickerSearchActivity.this.maximumVelocity);
+                    if (motionEvent == null || motionEvent.getAction() == 3) {
+                        f2 = 0.0f;
+                        f = 0.0f;
+                    } else {
+                        f2 = this.velocityTracker.getXVelocity();
+                        f = this.velocityTracker.getYVelocity();
+                        if (!this.startedTracking && Math.abs(f2) >= 3000.0f && Math.abs(f2) > Math.abs(f)) {
+                            prepareForMoving(motionEvent, f2 < 0.0f);
                         }
                     }
-                    if (!this.startedTracking) {
+                    if (this.startedTracking) {
+                        float x2 = PhotoPickerSearchActivity.this.viewPages[0].getX();
+                        AnimatorSet unused = PhotoPickerSearchActivity.this.tabsAnimation = new AnimatorSet();
+                        boolean unused2 = PhotoPickerSearchActivity.this.backAnimation = Math.abs(x2) < ((float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()) / 3.0f && (Math.abs(f2) < 3500.0f || Math.abs(f2) < Math.abs(f));
+                        if (PhotoPickerSearchActivity.this.backAnimation) {
+                            f3 = Math.abs(x2);
+                            if (PhotoPickerSearchActivity.this.animatingForward) {
+                                PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) PhotoPickerSearchActivity.this.viewPages[1].getMeasuredWidth()})});
+                            } else {
+                                PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{(float) (-PhotoPickerSearchActivity.this.viewPages[1].getMeasuredWidth())})});
+                            }
+                        } else {
+                            f3 = ((float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()) - Math.abs(x2);
+                            if (PhotoPickerSearchActivity.this.animatingForward) {
+                                PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) (-PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth())}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                            } else {
+                                PhotoPickerSearchActivity.this.tabsAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[0], View.TRANSLATION_X, new float[]{(float) PhotoPickerSearchActivity.this.viewPages[0].getMeasuredWidth()}), ObjectAnimator.ofFloat(PhotoPickerSearchActivity.this.viewPages[1], View.TRANSLATION_X, new float[]{0.0f})});
+                            }
+                        }
+                        PhotoPickerSearchActivity.this.tabsAnimation.setInterpolator(PhotoPickerSearchActivity.interpolator);
+                        int measuredWidth = getMeasuredWidth();
+                        float f4 = (float) (measuredWidth / 2);
+                        float distanceInfluenceForSnapDuration = f4 + (AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (f3 * 1.0f) / ((float) measuredWidth))) * f4);
+                        float abs2 = Math.abs(f2);
+                        if (abs2 > 0.0f) {
+                            i = Math.round(Math.abs(distanceInfluenceForSnapDuration / abs2) * 1000.0f) * 4;
+                        } else {
+                            i = (int) (((f3 / ((float) getMeasuredWidth())) + 1.0f) * 100.0f);
+                        }
+                        PhotoPickerSearchActivity.this.tabsAnimation.setDuration((long) Math.max(150, Math.min(i, 600)));
+                        PhotoPickerSearchActivity.this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                AnimatorSet unused = PhotoPickerSearchActivity.this.tabsAnimation = null;
+                                if (PhotoPickerSearchActivity.this.backAnimation) {
+                                    PhotoPickerSearchActivity.this.viewPages[1].setVisibility(8);
+                                } else {
+                                    ViewPage viewPage = PhotoPickerSearchActivity.this.viewPages[0];
+                                    PhotoPickerSearchActivity.this.viewPages[0] = PhotoPickerSearchActivity.this.viewPages[1];
+                                    PhotoPickerSearchActivity.this.viewPages[1] = viewPage;
+                                    PhotoPickerSearchActivity.this.viewPages[1].setVisibility(8);
+                                    PhotoPickerSearchActivity photoPickerSearchActivity = PhotoPickerSearchActivity.this;
+                                    boolean unused2 = photoPickerSearchActivity.swipeBackEnabled = photoPickerSearchActivity.viewPages[0].selectedType == PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.getFirstTabId();
+                                    PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.selectTabWithId(PhotoPickerSearchActivity.this.viewPages[0].selectedType, 1.0f);
+                                }
+                                boolean unused3 = PhotoPickerSearchActivity.this.tabsAnimationInProgress = false;
+                                boolean unused4 = AnonymousClass4.this.maybeStartTracking = false;
+                                boolean unused5 = AnonymousClass4.this.startedTracking = false;
+                                PhotoPickerSearchActivity.this.actionBar.setEnabled(true);
+                                PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
+                            }
+                        });
+                        PhotoPickerSearchActivity.this.tabsAnimation.start();
+                        boolean unused3 = PhotoPickerSearchActivity.this.tabsAnimationInProgress = true;
+                        this.startedTracking = false;
+                    } else {
                         this.maybeStartTracking = false;
                         PhotoPickerSearchActivity.this.actionBar.setEnabled(true);
                         PhotoPickerSearchActivity.this.scrollSlidingTextTabStrip.setEnabled(true);
                     }
-                    this.startedTracking = false;
-                    VelocityTracker velocityTracker3 = this.velocityTracker;
-                    if (velocityTracker3 != null) {
-                        velocityTracker3.recycle();
+                    VelocityTracker velocityTracker2 = this.velocityTracker;
+                    if (velocityTracker2 != null) {
+                        velocityTracker2.recycle();
                         this.velocityTracker = null;
                     }
                 }

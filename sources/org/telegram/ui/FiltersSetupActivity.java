@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -561,7 +562,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         public /* synthetic */ void lambda$onCreateViewHolder$5$FiltersSetupActivity$ListAdapter(View view) {
             MessagesController.DialogFilter currentFilter = ((FilterCell) view.getParent()).getCurrentFilter();
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) FiltersSetupActivity.this.getParentActivity());
-            builder.setTitle(currentFilter.name);
+            TextPaint textPaint = new TextPaint(1);
+            textPaint.setTextSize((float) AndroidUtilities.dp(20.0f));
+            builder.setTitle(Emoji.replaceEmoji(currentFilter.name, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
             builder.setItems(new CharSequence[]{LocaleController.getString("FilterEditItem", NUM), LocaleController.getString("FilterDeleteItem", NUM)}, new int[]{NUM, NUM}, new DialogInterface.OnClickListener(currentFilter) {
                 private final /* synthetic */ MessagesController.DialogFilter f$1;
 

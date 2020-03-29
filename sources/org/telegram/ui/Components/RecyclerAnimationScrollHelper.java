@@ -159,11 +159,11 @@ public class RecyclerAnimationScrollHelper {
                             Iterator it = arrayList.iterator();
                             while (it.hasNext()) {
                                 View view = (View) it.next();
-                                RecyclerAnimationScrollHelper.this.recyclerView.removeView(view);
                                 if (view instanceof ChatMessageCell) {
                                     ((ChatMessageCell) view).setAnimationRunning(false);
                                 }
                                 view.setTranslationY(0.0f);
+                                RecyclerAnimationScrollHelper.this.recyclerView.removeView(view);
                             }
                             RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
                             int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();

@@ -752,6 +752,11 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             }
             addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 124.0f, 52.0f, 27.0f));
         }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
+        }
     }
 
     private class SearchAdapter extends RecyclerListView.SelectionAdapter {

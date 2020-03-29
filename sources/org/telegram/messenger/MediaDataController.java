@@ -4736,7 +4736,7 @@ public class MediaDataController extends BaseController {
             android.content.pm.ShortcutInfo$Builder r10 = new android.content.pm.ShortcutInfo$Builder     // Catch:{ all -> 0x02b3 }
             android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
             r10.<init>(r11, r9)     // Catch:{ all -> 0x02b3 }
-            r11 = 2131625755(0x7f0e071b, float:1.8878727E38)
+            r11 = 2131625757(0x7f0e071d, float:1.887873E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r10 = r10.setShortLabel(r12)     // Catch:{ all -> 0x02b3 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
@@ -5557,7 +5557,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
+            r9 = 2131626593(0x7f0e0a61, float:1.8880427E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1
