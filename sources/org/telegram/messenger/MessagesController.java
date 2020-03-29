@@ -110,7 +110,6 @@ import org.telegram.tgnet.TLRPC$TL_dialogFolder;
 import org.telegram.tgnet.TLRPC$TL_dialogPeer;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
 import org.telegram.tgnet.TLRPC$TL_draftMessage;
-import org.telegram.tgnet.TLRPC$TL_encryptedChat;
 import org.telegram.tgnet.TLRPC$TL_encryptedChatRequested;
 import org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting;
 import org.telegram.tgnet.TLRPC$TL_error;
@@ -1405,126 +1404,282 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedDialogFilters$9$MessagesController(org.telegram.tgnet.TLRPC$messages_Dialogs, java.util.ArrayList, org.telegram.tgnet.TLRPC$messages_Dialogs, int, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList):void");
     }
 
-    public /* synthetic */ void lambda$null$8$MessagesController(int i, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, ArrayList arrayList4, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
-        int i2 = i;
-        TLRPC$messages_Dialogs tLRPC$messages_Dialogs2 = tLRPC$messages_Dialogs;
-        ArrayList arrayList5 = arrayList4;
-        LongSparseArray longSparseArray3 = longSparseArray;
-        LongSparseArray longSparseArray4 = longSparseArray2;
-        if (i2 != 2) {
-            this.dialogFilters = arrayList;
-        }
-        if (i2 != 0) {
-            getUserConfig().filtersLoaded = true;
-            getUserConfig().saveConfig(false);
-            this.loadingRemoteFilters = false;
-            getNotificationCenter().postNotificationName(NotificationCenter.filterSettingsUpdated, new Object[0]);
-            if (i2 == 2) {
-                return;
-            }
-        }
-        this.dialogFiltersById.clear();
-        int size = this.dialogFilters.size();
-        for (int i3 = 0; i3 < size; i3++) {
-            DialogFilter dialogFilter = this.dialogFilters.get(i3);
-            this.dialogFiltersById.put(dialogFilter.id, dialogFilter);
-        }
-        Collections.sort(this.dialogFilters, $$Lambda$MessagesController$1E07KbvZzMnmeQ7te_ONDoVxl4.INSTANCE);
-        putUsers(arrayList2, true);
-        putChats(arrayList3, true);
-        getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated, new Object[0]);
-        if (i2 == 0) {
-            loadRemoteFilters(false);
-        }
-        if (tLRPC$messages_Dialogs2 != null && !tLRPC$messages_Dialogs2.dialogs.isEmpty()) {
-            applyDialogsNotificationsSettings(tLRPC$messages_Dialogs2.dialogs);
-        }
-        if (arrayList5 != null) {
-            for (int i4 = 0; i4 < arrayList4.size(); i4++) {
-                TLRPC$EncryptedChat tLRPC$EncryptedChat = (TLRPC$EncryptedChat) arrayList5.get(i4);
-                if ((tLRPC$EncryptedChat instanceof TLRPC$TL_encryptedChat) && AndroidUtilities.getMyLayerVersion(tLRPC$EncryptedChat.layer) < 101) {
-                    getSecretChatHelper().sendNotifyLayerMessage(tLRPC$EncryptedChat, (TLRPC$Message) null);
-                }
-                putEncryptedChat(tLRPC$EncryptedChat, true);
-            }
-        }
-        for (int i5 = 0; i5 < longSparseArray.size(); i5++) {
-            long keyAt = longSparseArray3.keyAt(i5);
-            TLRPC$Dialog tLRPC$Dialog = (TLRPC$Dialog) longSparseArray3.valueAt(i5);
-            TLRPC$Dialog tLRPC$Dialog2 = this.dialogs_dict.get(keyAt);
-            if (tLRPC$messages_Dialogs2 != null && tLRPC$messages_Dialogs2.dialogs.contains(tLRPC$Dialog)) {
-                if (tLRPC$Dialog.draft instanceof TLRPC$TL_draftMessage) {
-                    getMediaDataController().saveDraft(tLRPC$Dialog.id, tLRPC$Dialog.draft, (TLRPC$Message) null, false);
-                }
-                if (tLRPC$Dialog2 != null) {
-                    tLRPC$Dialog2.notify_settings = tLRPC$Dialog.notify_settings;
-                }
-            }
-            if (tLRPC$Dialog2 == null) {
-                this.dialogs_dict.put(keyAt, tLRPC$Dialog);
-                MessageObject messageObject = (MessageObject) longSparseArray4.get(tLRPC$Dialog.id);
-                this.dialogMessage.put(keyAt, messageObject);
-                if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
-                    this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
-                    long j = messageObject.messageOwner.random_id;
-                    if (j != 0) {
-                        this.dialogMessagesByRandomIds.put(j, messageObject);
-                    }
-                }
-            } else {
-                tLRPC$Dialog2.pinned = tLRPC$Dialog.pinned;
-                tLRPC$Dialog2.pinnedNum = tLRPC$Dialog.pinnedNum;
-                MessageObject messageObject2 = this.dialogMessage.get(keyAt);
-                if ((messageObject2 == null || !messageObject2.deleted) && messageObject2 != null && tLRPC$Dialog2.top_message <= 0) {
-                    MessageObject messageObject3 = (MessageObject) longSparseArray4.get(tLRPC$Dialog.id);
-                    if (messageObject2.deleted || messageObject3 == null || messageObject3.messageOwner.date > messageObject2.messageOwner.date) {
-                        this.dialogs_dict.put(keyAt, tLRPC$Dialog);
-                        this.dialogMessage.put(keyAt, messageObject3);
-                        if (messageObject3 != null && messageObject3.messageOwner.to_id.channel_id == 0) {
-                            this.dialogMessagesByIds.put(messageObject3.getId(), messageObject3);
-                            if (messageObject3 != null) {
-                                long j2 = messageObject3.messageOwner.random_id;
-                                if (j2 != 0) {
-                                    this.dialogMessagesByRandomIds.put(j2, messageObject3);
-                                }
-                            }
-                        }
-                        this.dialogMessagesByIds.remove(messageObject2.getId());
-                        long j3 = messageObject2.messageOwner.random_id;
-                        if (j3 != 0) {
-                            this.dialogMessagesByRandomIds.remove(j3);
-                        }
-                    }
-                } else if (tLRPC$Dialog.top_message >= tLRPC$Dialog2.top_message) {
-                    this.dialogs_dict.put(keyAt, tLRPC$Dialog);
-                    MessageObject messageObject4 = (MessageObject) longSparseArray4.get(tLRPC$Dialog.id);
-                    this.dialogMessage.put(keyAt, messageObject4);
-                    if (messageObject4 != null && messageObject4.messageOwner.to_id.channel_id == 0) {
-                        this.dialogMessagesByIds.put(messageObject4.getId(), messageObject4);
-                        if (messageObject4 != null) {
-                            long j4 = messageObject4.messageOwner.random_id;
-                            if (j4 != 0) {
-                                this.dialogMessagesByRandomIds.put(j4, messageObject4);
-                            }
-                        }
-                    }
-                    if (messageObject2 != null) {
-                        this.dialogMessagesByIds.remove(messageObject2.getId());
-                        long j5 = messageObject2.messageOwner.random_id;
-                        if (j5 != 0) {
-                            this.dialogMessagesByRandomIds.remove(j5);
-                        }
-                    }
-                }
-            }
-        }
-        this.allDialogs.clear();
-        int size2 = this.dialogs_dict.size();
-        for (int i6 = 0; i6 < size2; i6++) {
-            this.allDialogs.add(this.dialogs_dict.valueAt(i6));
-        }
-        sortDialogs((SparseArray<TLRPC$Chat>) null);
-        getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+    /* JADX WARNING: type inference failed for: r4v2 */
+    /* JADX WARNING: type inference failed for: r4v3 */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v1, types: [int, boolean] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$null$8$MessagesController(int r21, java.util.ArrayList r22, java.util.ArrayList r23, java.util.ArrayList r24, org.telegram.tgnet.TLRPC$messages_Dialogs r25, java.util.ArrayList r26, android.util.LongSparseArray r27, android.util.LongSparseArray r28) {
+        /*
+            r20 = this;
+            r0 = r20
+            r1 = r21
+            r2 = r25
+            r3 = r26
+            r4 = r27
+            r5 = r28
+            r6 = 1
+            r7 = 0
+            r8 = 2
+            if (r1 == r8) goto L_0x020d
+            r8 = r22
+            r0.dialogFilters = r8
+            android.util.SparseArray<org.telegram.messenger.MessagesController$DialogFilter> r8 = r0.dialogFiltersById
+            r8.clear()
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r8 = r0.dialogFilters
+            int r8 = r8.size()
+            r9 = 0
+        L_0x0021:
+            if (r9 >= r8) goto L_0x0035
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r10 = r0.dialogFilters
+            java.lang.Object r10 = r10.get(r9)
+            org.telegram.messenger.MessagesController$DialogFilter r10 = (org.telegram.messenger.MessagesController.DialogFilter) r10
+            android.util.SparseArray<org.telegram.messenger.MessagesController$DialogFilter> r11 = r0.dialogFiltersById
+            int r12 = r10.id
+            r11.put(r12, r10)
+            int r9 = r9 + 1
+            goto L_0x0021
+        L_0x0035:
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r8 = r0.dialogFilters
+            org.telegram.messenger.-$$Lambda$MessagesController$1E0-7KbvZzMnmeQ7te_ONDoVxl4 r9 = org.telegram.messenger.$$Lambda$MessagesController$1E07KbvZzMnmeQ7te_ONDoVxl4.INSTANCE
+            java.util.Collections.sort(r8, r9)
+            r8 = r23
+            r0.putUsers(r8, r6)
+            r8 = r24
+            r0.putChats(r8, r6)
+            org.telegram.messenger.NotificationCenter r8 = r20.getNotificationCenter()
+            int r9 = org.telegram.messenger.NotificationCenter.dialogFiltersUpdated
+            java.lang.Object[] r10 = new java.lang.Object[r7]
+            r8.postNotificationName(r9, r10)
+            if (r1 != 0) goto L_0x0056
+            r0.loadRemoteFilters(r7)
+        L_0x0056:
+            if (r2 == 0) goto L_0x0065
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r2.dialogs
+            boolean r8 = r8.isEmpty()
+            if (r8 != 0) goto L_0x0065
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r8 = r2.dialogs
+            r0.applyDialogsNotificationsSettings(r8)
+        L_0x0065:
+            r8 = 0
+            if (r3 == 0) goto L_0x0090
+            r9 = 0
+        L_0x0069:
+            int r10 = r26.size()
+            if (r9 >= r10) goto L_0x0090
+            java.lang.Object r10 = r3.get(r9)
+            org.telegram.tgnet.TLRPC$EncryptedChat r10 = (org.telegram.tgnet.TLRPC$EncryptedChat) r10
+            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChat
+            if (r11 == 0) goto L_0x008a
+            int r11 = r10.layer
+            int r11 = org.telegram.messenger.AndroidUtilities.getMyLayerVersion(r11)
+            r12 = 101(0x65, float:1.42E-43)
+            if (r11 >= r12) goto L_0x008a
+            org.telegram.messenger.SecretChatHelper r11 = r20.getSecretChatHelper()
+            r11.sendNotifyLayerMessage(r10, r8)
+        L_0x008a:
+            r0.putEncryptedChat(r10, r6)
+            int r9 = r9 + 1
+            goto L_0x0069
+        L_0x0090:
+            r3 = 0
+        L_0x0091:
+            int r9 = r27.size()
+            if (r3 >= r9) goto L_0x01e1
+            long r9 = r4.keyAt(r3)
+            java.lang.Object r11 = r4.valueAt(r3)
+            org.telegram.tgnet.TLRPC$Dialog r11 = (org.telegram.tgnet.TLRPC$Dialog) r11
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r12 = r0.dialogs_dict
+            java.lang.Object r12 = r12.get(r9)
+            org.telegram.tgnet.TLRPC$Dialog r12 = (org.telegram.tgnet.TLRPC$Dialog) r12
+            if (r2 == 0) goto L_0x00d1
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r13 = r2.dialogs
+            boolean r13 = r13.contains(r11)
+            if (r13 == 0) goto L_0x00d1
+            org.telegram.tgnet.TLRPC$DraftMessage r13 = r11.draft
+            boolean r13 = r13 instanceof org.telegram.tgnet.TLRPC$TL_draftMessage
+            if (r13 == 0) goto L_0x00cb
+            org.telegram.messenger.MediaDataController r14 = r20.getMediaDataController()
+            long r6 = r11.id
+            org.telegram.tgnet.TLRPC$DraftMessage r15 = r11.draft
+            r18 = 0
+            r19 = 0
+            r17 = r15
+            r15 = r6
+            r14.saveDraft(r15, r17, r18, r19)
+        L_0x00cb:
+            if (r12 == 0) goto L_0x00d1
+            org.telegram.tgnet.TLRPC$PeerNotifySettings r6 = r11.notify_settings
+            r12.notify_settings = r6
+        L_0x00d1:
+            r6 = 0
+            if (r12 != 0) goto L_0x0109
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r12 = r0.dialogs_dict
+            r12.put(r9, r11)
+            long r11 = r11.id
+            java.lang.Object r11 = r5.get(r11)
+            org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r12 = r0.dialogMessage
+            r12.put(r9, r11)
+            if (r11 == 0) goto L_0x01db
+            org.telegram.tgnet.TLRPC$Message r9 = r11.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r9 = r9.to_id
+            int r9 = r9.channel_id
+            if (r9 != 0) goto L_0x01db
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r9 = r0.dialogMessagesByIds
+            int r10 = r11.getId()
+            r9.put(r10, r11)
+            org.telegram.tgnet.TLRPC$Message r9 = r11.messageOwner
+            long r9 = r9.random_id
+            int r12 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
+            if (r12 == 0) goto L_0x01db
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByRandomIds
+            r6.put(r9, r11)
+            goto L_0x01db
+        L_0x0109:
+            boolean r14 = r11.pinned
+            r12.pinned = r14
+            int r14 = r11.pinnedNum
+            r12.pinnedNum = r14
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r14 = r0.dialogMessage
+            java.lang.Object r14 = r14.get(r9)
+            org.telegram.messenger.MessageObject r14 = (org.telegram.messenger.MessageObject) r14
+            if (r14 == 0) goto L_0x011f
+            boolean r15 = r14.deleted
+            if (r15 != 0) goto L_0x0185
+        L_0x011f:
+            if (r14 == 0) goto L_0x0185
+            int r15 = r12.top_message
+            if (r15 <= 0) goto L_0x0126
+            goto L_0x0185
+        L_0x0126:
+            long r6 = r11.id
+            java.lang.Object r6 = r5.get(r6)
+            org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
+            boolean r7 = r14.deleted
+            if (r7 != 0) goto L_0x013e
+            if (r6 == 0) goto L_0x013e
+            org.telegram.tgnet.TLRPC$Message r7 = r6.messageOwner
+            int r7 = r7.date
+            org.telegram.tgnet.TLRPC$Message r12 = r14.messageOwner
+            int r12 = r12.date
+            if (r7 <= r12) goto L_0x01db
+        L_0x013e:
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r7 = r0.dialogs_dict
+            r7.put(r9, r11)
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessage
+            r7.put(r9, r6)
+            if (r6 == 0) goto L_0x016c
+            org.telegram.tgnet.TLRPC$Message r7 = r6.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r7 = r7.to_id
+            int r7 = r7.channel_id
+            if (r7 != 0) goto L_0x016c
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessagesByIds
+            int r9 = r6.getId()
+            r7.put(r9, r6)
+            if (r6 == 0) goto L_0x016c
+            org.telegram.tgnet.TLRPC$Message r7 = r6.messageOwner
+            long r9 = r7.random_id
+            r11 = 0
+            int r7 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r7 == 0) goto L_0x016c
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessagesByRandomIds
+            r7.put(r9, r6)
+        L_0x016c:
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByIds
+            int r7 = r14.getId()
+            r6.remove(r7)
+            org.telegram.tgnet.TLRPC$Message r6 = r14.messageOwner
+            long r6 = r6.random_id
+            r9 = 0
+            int r11 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
+            if (r11 == 0) goto L_0x01db
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r9 = r0.dialogMessagesByRandomIds
+            r9.remove(r6)
+            goto L_0x01db
+        L_0x0185:
+            int r6 = r11.top_message
+            int r7 = r12.top_message
+            if (r6 < r7) goto L_0x01db
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r6 = r0.dialogs_dict
+            r6.put(r9, r11)
+            long r6 = r11.id
+            java.lang.Object r6 = r5.get(r6)
+            org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessage
+            r7.put(r9, r6)
+            if (r6 == 0) goto L_0x01c1
+            org.telegram.tgnet.TLRPC$Message r7 = r6.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r7 = r7.to_id
+            int r7 = r7.channel_id
+            if (r7 != 0) goto L_0x01c1
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessagesByIds
+            int r9 = r6.getId()
+            r7.put(r9, r6)
+            if (r6 == 0) goto L_0x01c1
+            org.telegram.tgnet.TLRPC$Message r7 = r6.messageOwner
+            long r9 = r7.random_id
+            r11 = 0
+            int r7 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r7 == 0) goto L_0x01c1
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r0.dialogMessagesByRandomIds
+            r7.put(r9, r6)
+        L_0x01c1:
+            if (r14 == 0) goto L_0x01db
+            android.util.SparseArray<org.telegram.messenger.MessageObject> r6 = r0.dialogMessagesByIds
+            int r7 = r14.getId()
+            r6.remove(r7)
+            org.telegram.tgnet.TLRPC$Message r6 = r14.messageOwner
+            long r6 = r6.random_id
+            r9 = 0
+            int r11 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
+            if (r11 == 0) goto L_0x01db
+            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r9 = r0.dialogMessagesByRandomIds
+            r9.remove(r6)
+        L_0x01db:
+            int r3 = r3 + 1
+            r6 = 1
+            r7 = 0
+            goto L_0x0091
+        L_0x01e1:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.allDialogs
+            r2.clear()
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r0.dialogs_dict
+            int r2 = r2.size()
+            r3 = 0
+        L_0x01ed:
+            if (r3 >= r2) goto L_0x01fd
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r4 = r0.allDialogs
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r5 = r0.dialogs_dict
+            java.lang.Object r5 = r5.valueAt(r3)
+            r4.add(r5)
+            int r3 = r3 + 1
+            goto L_0x01ed
+        L_0x01fd:
+            r0.sortDialogs(r8)
+            org.telegram.messenger.NotificationCenter r2 = r20.getNotificationCenter()
+            int r3 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
+            r4 = 0
+            java.lang.Object[] r5 = new java.lang.Object[r4]
+            r2.postNotificationName(r3, r5)
+            goto L_0x020e
+        L_0x020d:
+            r4 = 0
+        L_0x020e:
+            if (r1 == 0) goto L_0x022b
+            org.telegram.messenger.UserConfig r1 = r20.getUserConfig()
+            r2 = 1
+            r1.filtersLoaded = r2
+            org.telegram.messenger.UserConfig r1 = r20.getUserConfig()
+            r1.saveConfig(r4)
+            r0.loadingRemoteFilters = r4
+            org.telegram.messenger.NotificationCenter r1 = r20.getNotificationCenter()
+            int r2 = org.telegram.messenger.NotificationCenter.filterSettingsUpdated
+            java.lang.Object[] r3 = new java.lang.Object[r4]
+            r1.postNotificationName(r2, r3)
+        L_0x022b:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$null$8$MessagesController(int, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, org.telegram.tgnet.TLRPC$messages_Dialogs, java.util.ArrayList, android.util.LongSparseArray, android.util.LongSparseArray):void");
     }
 
     static /* synthetic */ int lambda$null$7(DialogFilter dialogFilter, DialogFilter dialogFilter2) {
@@ -2563,6 +2718,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.loadingSuggestedFilters = false;
         this.loadingRemoteFilters = false;
         this.suggestedFilters.clear();
+        this.gettingAppChangelog = false;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public final void run() {
                 MessagesController.this.lambda$cleanup$27$MessagesController();

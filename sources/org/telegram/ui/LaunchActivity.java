@@ -4749,8 +4749,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog r7 = new org.telegram.ui.ActionBar.AlertDialog
             r8 = 3
             r7.<init>(r4, r8)
-            int[] r8 = new int[r11]
-            r8[r12] = r12
+            int[] r13 = new int[r11]
+            r13[r12] = r12
             if (r0 == 0) goto L_0x010f
             org.telegram.tgnet.TLRPC$TL_contacts_resolveUsername r1 = new org.telegram.tgnet.TLRPC$TL_contacts_resolveUsername
             r1.<init>()
@@ -4767,7 +4767,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r40 = r7
             r33.<init>(r35, r36, r37, r38, r39, r40)
             int r0 = r0.sendRequest(r1, r2)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x010f:
             if (r5 == 0) goto L_0x0142
@@ -4779,7 +4779,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.-$$Lambda$LaunchActivity$vUk_dybBMAIvbhU62z04SQXrPks r6 = new org.telegram.ui.-$$Lambda$LaunchActivity$vUk_dybBMAIvbhU62z04SQXrPks
             r6.<init>(r3, r7, r5)
             int r0 = r1.sendRequest(r0, r6, r2)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x012b:
             if (r1 != r11) goto L_0x032d
@@ -4832,7 +4832,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "onlySelect"
             r0.putBoolean(r1, r11)
             java.lang.String r1 = "dialogsType"
-            r0.putInt(r1, r2)
+            r0.putInt(r1, r8)
             org.telegram.ui.DialogsActivity r1 = new org.telegram.ui.DialogsActivity
             r1.<init>(r0)
             org.telegram.ui.-$$Lambda$LaunchActivity$Rls3K3QtgdE8loKShvCQMzPUlQE r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$Rls3K3QtgdE8loKShvCQMzPUlQE
@@ -4872,10 +4872,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = (java.lang.String) r0
             r6.public_key = r0
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
-            org.telegram.ui.-$$Lambda$LaunchActivity$vCehZA31YUFYTaDVEnzegxRmqeI r9 = new org.telegram.ui.-$$Lambda$LaunchActivity$vCehZA31YUFYTaDVEnzegxRmqeI
-            r23 = r9
+            org.telegram.ui.-$$Lambda$LaunchActivity$vCehZA31YUFYTaDVEnzegxRmqeI r8 = new org.telegram.ui.-$$Lambda$LaunchActivity$vCehZA31YUFYTaDVEnzegxRmqeI
+            r23 = r8
             r24 = r21
-            r25 = r8
+            r25 = r13
             r26 = r22
             r27 = r7
             r28 = r6
@@ -4883,8 +4883,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r30 = r2
             r31 = r5
             r23.<init>(r25, r26, r27, r28, r29, r30, r31)
-            int r0 = r0.sendRequest(r6, r9)
-            r8[r12] = r0
+            int r0 = r0.sendRequest(r6, r8)
+            r13[r12] = r0
             goto L_0x032d
         L_0x0213:
             r0 = r35
@@ -4897,7 +4897,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.-$$Lambda$LaunchActivity$zcSIPeMix4HG2uFGcss6lWwGsz4 r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$zcSIPeMix4HG2uFGcss6lWwGsz4
             r2.<init>(r7)
             int r0 = r0.sendRequest(r1, r2)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x0231:
             java.lang.String r0 = "android"
@@ -4911,7 +4911,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.-$$Lambda$LaunchActivity$JFoMujQKcmXb-cZb0UBx2oj-r3c r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$JFoMujQKcmXb-cZb0UBx2oj-r3c
             r2.<init>(r7)
             int r0 = r0.sendRequest(r1, r2)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x0251:
             r1 = r38
@@ -4925,10 +4925,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r5 = r5.background_color     // Catch:{ Exception -> 0x0282 }
             org.telegram.tgnet.TLRPC$WallPaperSettings r6 = r1.settings     // Catch:{ Exception -> 0x0282 }
             int r6 = r6.second_background_color     // Catch:{ Exception -> 0x0282 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r9 = r1.settings     // Catch:{ Exception -> 0x0282 }
-            int r9 = r9.rotation     // Catch:{ Exception -> 0x0282 }
-            int r9 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r9, r12)     // Catch:{ Exception -> 0x0282 }
-            r0.<init>(r2, r5, r6, r9)     // Catch:{ Exception -> 0x0282 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r8 = r1.settings     // Catch:{ Exception -> 0x0282 }
+            int r8 = r8.rotation     // Catch:{ Exception -> 0x0282 }
+            int r8 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r8, r12)     // Catch:{ Exception -> 0x0282 }
+            r0.<init>(r2, r5, r6, r8)     // Catch:{ Exception -> 0x0282 }
             org.telegram.ui.ThemePreviewActivity r2 = new org.telegram.ui.ThemePreviewActivity     // Catch:{ Exception -> 0x0282 }
             r2.<init>(r0, r10)     // Catch:{ Exception -> 0x0282 }
             org.telegram.ui.-$$Lambda$LaunchActivity$TJYsDPVYvHLPKqN-YVLsvbJGyt8 r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$TJYsDPVYvHLPKqN-YVLsvbJGyt8     // Catch:{ Exception -> 0x0282 }
@@ -4954,7 +4954,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.-$$Lambda$LaunchActivity$zT-hFFzd9Wgk92DQ_D554ANyLac r5 = new org.telegram.ui.-$$Lambda$LaunchActivity$zT-hFFzd9Wgk92DQ_D554ANyLac
             r5.<init>(r7, r1)
             int r0 = r2.sendRequest(r0, r5)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x02ac:
             r1 = r39
@@ -4973,7 +4973,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.-$$Lambda$LaunchActivity$GZkLzPKxX0SNuZ7tUENydm9iGIg r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$GZkLzPKxX0SNuZ7tUENydm9iGIg
             r1.<init>(r7)
             int r0 = r0.sendRequest(r2, r1)
-            r8[r12] = r0
+            r13[r12] = r0
             goto L_0x032d
         L_0x02d7:
             if (r31 == 0) goto L_0x032d
@@ -5008,17 +5008,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = r21
             r25 = r0
             r26 = r31
-            r27 = r8
+            r27 = r13
             r28 = r7
             r29 = r1
             r30 = r22
             r23.<init>(r25, r26, r27, r28, r29, r30)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
         L_0x032d:
-            r0 = r8[r12]
+            r0 = r13[r12]
             if (r0 == 0) goto L_0x033e
             org.telegram.ui.-$$Lambda$LaunchActivity$fN6e8T6z5S_MqvWxoiyHNaInNHI r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$fN6e8T6z5S_MqvWxoiyHNaInNHI
-            r0.<init>(r3, r8, r10)
+            r0.<init>(r3, r13, r10)
             r7.setOnCancelListener(r0)
             r0 = 300(0x12c, double:1.48E-321)
             r7.showDelayed(r0)     // Catch:{ Exception -> 0x033e }

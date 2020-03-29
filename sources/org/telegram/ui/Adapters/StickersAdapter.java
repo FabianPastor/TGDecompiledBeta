@@ -289,7 +289,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             i--;
             i++;
         }
-        this.lastSticker = charSequence.toString();
+        this.lastSticker = charSequence.toString().trim();
         this.stickersToLoad.clear();
         boolean z3 = z2 && (Emoji.isValidEmoji(charSequence2) || Emoji.isValidEmoji(this.lastSticker));
         if (z3 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence)) != null) {
