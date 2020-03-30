@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.6.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: QRlpebptWtYq+McEC7qGMJl+OSQ=
+SHA1-Digest: QgllUXjcTzeiBqNyLgvombd2+d0=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9501,7 +9501,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: WMQ9gCZrkdQo0WdS4O3f8oj5kj8=
+SHA1-Digest: jhttnnYCGcWi8DQAgD3Y2iU73O4=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=

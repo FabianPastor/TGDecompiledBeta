@@ -223,10 +223,10 @@ public class UndoView extends FrameLayout {
         showWithAction(j, i, (Object) null, runnable, runnable2);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x0580  */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x05a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x05eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x064d  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x0584  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x05ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x05ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x0651  */
     /* JADX WARNING: Removed duplicated region for block: B:127:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x0181  */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x01b2  */
@@ -281,8 +281,8 @@ public class UndoView extends FrameLayout {
             r11 = 1095761920(0x41500000, float:13.0)
             r14 = 0
             r15 = 1096810496(0x41600000, float:14.0)
-            r16 = 1086324736(0x40CLASSNAME, float:6.0)
             java.lang.String r13 = ""
+            r16 = 1086324736(0x40CLASSNAME, float:6.0)
             r17 = 1114112000(0x42680000, float:58.0)
             r12 = 8
             if (r9 == 0) goto L_0x01e6
@@ -497,7 +497,7 @@ public class UndoView extends FrameLayout {
             r1.playAnimation()
         L_0x0252:
             r2 = 1096810496(0x41600000, float:14.0)
-            goto L_0x056a
+            goto L_0x056e
         L_0x0256:
             r4 = 15
             r8 = 33
@@ -822,8 +822,9 @@ public class UndoView extends FrameLayout {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
             r6.leftMargin = r3
             r6.rightMargin = r1
-            r6.topMargin = r7
-            r1 = 1065353216(0x3var_, float:1.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            r6.topMargin = r1
+            r1 = 1088421888(0x40e00000, float:7.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r6.bottomMargin = r1
             r1 = -1
@@ -832,7 +833,7 @@ public class UndoView extends FrameLayout {
             r1.setVisibility(r12)
             org.telegram.ui.Components.RLottieImageView r1 = r0.leftImageView
             r1.setVisibility(r7)
-        L_0x056a:
+        L_0x056e:
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             android.widget.TextView r3 = r0.infoTextView
@@ -840,7 +841,7 @@ public class UndoView extends FrameLayout {
             r1.append(r3)
             android.widget.TextView r3 = r0.subinfoTextView
             int r3 = r3.getVisibility()
-            if (r3 != 0) goto L_0x0597
+            if (r3 != 0) goto L_0x059b
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
             java.lang.String r4 = ". "
@@ -849,19 +850,19 @@ public class UndoView extends FrameLayout {
             java.lang.CharSequence r4 = r4.getText()
             r3.append(r4)
             java.lang.String r13 = r3.toString()
-        L_0x0597:
+        L_0x059b:
             r1.append(r13)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.AndroidUtilities.makeAccessibilityAnnouncement(r1)
             boolean r1 = r18.isMultilineSubInfo()
-            if (r1 == 0) goto L_0x05eb
+            if (r1 == 0) goto L_0x05ef
             android.view.ViewParent r1 = r18.getParent()
             android.view.ViewGroup r1 = (android.view.ViewGroup) r1
             int r1 = r1.getMeasuredWidth()
-            if (r1 != 0) goto L_0x05b7
+            if (r1 != 0) goto L_0x05bb
             android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r1.x
-        L_0x05b7:
+        L_0x05bb:
             r2 = 1098907648(0x41800000, float:16.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r1 = r1 - r2
@@ -884,25 +885,25 @@ public class UndoView extends FrameLayout {
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r1 = r1 + r2
             r0.undoViewHeight = r1
-            goto L_0x0647
-        L_0x05eb:
+            goto L_0x064b
+        L_0x05ef:
             boolean r1 = r18.hasSubInfo()
-            if (r1 == 0) goto L_0x05fa
+            if (r1 == 0) goto L_0x05fe
             r1 = 1112539136(0x42500000, float:52.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r0.undoViewHeight = r1
-            goto L_0x0647
-        L_0x05fa:
+            goto L_0x064b
+        L_0x05fe:
             android.view.ViewParent r1 = r18.getParent()
             boolean r1 = r1 instanceof android.view.ViewGroup
-            if (r1 == 0) goto L_0x0647
+            if (r1 == 0) goto L_0x064b
             android.view.ViewParent r1 = r18.getParent()
             android.view.ViewGroup r1 = (android.view.ViewGroup) r1
             int r1 = r1.getMeasuredWidth()
-            if (r1 != 0) goto L_0x0612
+            if (r1 != 0) goto L_0x0616
             android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r1.x
-        L_0x0612:
+        L_0x0616:
             android.widget.TextView r3 = r0.infoTextView
             r4 = 1073741824(0x40000000, float:2.0)
             int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r4)
@@ -920,18 +921,18 @@ public class UndoView extends FrameLayout {
             int r1 = r1.getMeasuredHeight()
             int r3 = r0.currentAction
             r4 = 16
-            if (r3 != r4) goto L_0x063e
+            if (r3 != r4) goto L_0x0642
             r15 = 1096810496(0x41600000, float:14.0)
-            goto L_0x0640
-        L_0x063e:
+            goto L_0x0644
+        L_0x0642:
             r15 = 1105199104(0x41e00000, float:28.0)
-        L_0x0640:
+        L_0x0644:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r1 = r1 + r2
             r0.undoViewHeight = r1
-        L_0x0647:
+        L_0x064b:
             int r1 = r18.getVisibility()
-            if (r1 == 0) goto L_0x0693
+            if (r1 == 0) goto L_0x0697
             r0.setVisibility(r7)
             r1 = 1090519040(0x41000000, float:8.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -963,7 +964,7 @@ public class UndoView extends FrameLayout {
             r2 = 180(0xb4, double:8.9E-322)
             r1.setDuration(r2)
             r1.start()
-        L_0x0693:
+        L_0x0697:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UndoView.showWithAction(long, int, java.lang.Object, java.lang.Runnable, java.lang.Runnable):void");
