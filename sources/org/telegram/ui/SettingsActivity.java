@@ -581,6 +581,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     MessagesController.getGlobalMainSettings().edit().remove("archivehint").remove("archivehint_l").remove("gifhint").remove("soundHint").remove("themehint").remove("filterhint").commit();
                     SharedConfig.textSelectionHintShows = 0;
                     SharedConfig.lockRecordAudioVideoHint = 0;
+                    SharedConfig.stickersReorderingHintUsed = false;
                 } else if (i == 7) {
                     VoIPHelper.showCallDebugSettings(SettingsActivity.this.getParentActivity());
                 } else if (i == 8) {
@@ -3270,7 +3271,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     if (itemViewType == 2) {
                         TextCell textCell = (TextCell) viewHolder.itemView;
                         if (i == SettingsActivity.this.languageRow) {
-                            textCell.setTextAndIcon(LocaleController.getString("Language", NUM), NUM, true);
+                            textCell.setTextAndIcon(LocaleController.getString("Language", NUM), NUM, false);
                         } else if (i == SettingsActivity.this.notificationRow) {
                             textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", NUM), NUM, true);
                         } else if (i == SettingsActivity.this.privacyRow) {

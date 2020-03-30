@@ -602,19 +602,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "" + NUM, AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), false, (int[]) null);
             this.drawable = rLottieDrawable;
             rLottieDrawable.setCurrentParentView(this);
-            this.drawable.setClearOldFrames(true);
+            this.drawable.setInvalidateOnProgressSet(true);
             updateColors();
         }
 
         public void updateColors() {
             int color = Theme.getColor("chat_recordedVoiceDot");
+            int color2 = Theme.getColor("chat_messagePanelBackground");
             ChatActivityEnterView.this.redDotPaint.setColor(color);
+            this.drawable.beginApplyLayerColors();
             this.drawable.setLayerColor("Cup Red.**", color);
             this.drawable.setLayerColor("Box.**", color);
-            int color2 = Theme.getColor("chat_messagePanelBackground");
             this.drawable.setLayerColor("Line 1.**", color2);
             this.drawable.setLayerColor("Line 2.**", color2);
             this.drawable.setLayerColor("Line 3.**", color2);
+            this.drawable.commitApplyLayerColors();
         }
 
         public void resetAlpha() {
@@ -636,9 +638,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         public void onDraw(Canvas canvas) {
             if (this.playing) {
                 this.drawable.setAlpha((int) (this.alpha * 255.0f));
-            } else {
-                ChatActivityEnterView.this.redDotPaint.setAlpha((int) (this.alpha * 255.0f));
             }
+            ChatActivityEnterView.this.redDotPaint.setAlpha((int) (this.alpha * 255.0f));
             long currentTimeMillis = System.currentTimeMillis() - this.lastUpdateTime;
             if (this.enterAnimation) {
                 this.alpha = 1.0f;
@@ -660,7 +661,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.lastUpdateTime = System.currentTimeMillis();
             if (this.playing) {
                 this.drawable.draw(canvas);
-            } else {
+            }
+            if (!this.playing || !this.drawable.hasBitmap()) {
                 canvas.drawCircle((float) (getMeasuredWidth() >> 1), (float) (getMeasuredHeight() >> 1), (float) AndroidUtilities.dp(5.0f), ChatActivityEnterView.this.redDotPaint);
             }
             invalidate();
@@ -3600,7 +3602,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.recordDeleteImageView = rLottieImageView;
             rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.recordDeleteImageView.setAnimation(NUM, 28, 28);
-            this.recordDeleteImageView.getAnimatedDrawable().setClearOldFrames(true);
+            this.recordDeleteImageView.getAnimatedDrawable().setInvalidateOnProgressSet(true);
             updateRecordedDeleteIconColors();
             this.recordDeleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
             if (Build.VERSION.SDK_INT >= 21) {
@@ -9526,6 +9528,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             float replaceTransition;
             long startTime;
             long stopTime;
+            boolean stoppedInternal;
             final TextPaint textPaint = new TextPaint(1);
 
             public TimerView(Context context) {
@@ -9542,11 +9545,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             public void stop() {
-                this.isRunning = false;
-                if (this.startTime > 0) {
-                    this.stopTime = System.currentTimeMillis();
+                if (this.isRunning) {
+                    this.isRunning = false;
+                    if (this.startTime > 0) {
+                        this.stopTime = System.currentTimeMillis();
+                    }
+                    invalidate();
                 }
-                invalidate();
             }
 
             /* access modifiers changed from: protected */
@@ -9558,9 +9563,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 long currentTimeMillis = (this.isRunning ? System.currentTimeMillis() : this.stopTime) - this.startTime;
                 long j = currentTimeMillis / 1000;
                 int i = ((int) (currentTimeMillis % 1000)) / 10;
-                if (currentTimeMillis >= 59500) {
-                    float unused = ChatActivityEnterView.this.startedDraggingX = -1.0f;
-                    ChatActivityEnterView.this.delegate.needStartRecordVideo(3, true, 0);
+                if (!(ChatActivityEnterView.this.videoSendButton == null || ChatActivityEnterView.this.videoSendButton.getTag() == null)) {
+                    if (currentTimeMillis >= 59500 && !this.stoppedInternal) {
+                        float unused = ChatActivityEnterView.this.startedDraggingX = -1.0f;
+                        ChatActivityEnterView.this.delegate.needStartRecordVideo(3, true, 0);
+                        this.stoppedInternal = true;
+                    }
+                    int i2 = (currentTimeMillis > 60000 ? 1 : (currentTimeMillis == 60000 ? 0 : -1));
                 }
                 long j2 = j / 60;
                 if (j2 >= 60) {
@@ -9587,45 +9596,45 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.replaceIn.append(str);
                     this.replaceOut.append(this.oldString);
                     this.replaceStable.append(str);
-                    int i2 = -1;
                     int i3 = -1;
-                    int i4 = 0;
+                    int i4 = -1;
                     int i5 = 0;
-                    for (int i6 = 0; i6 < length - 1; i6++) {
-                        if (this.oldString.charAt(i6) != str.charAt(i6)) {
-                            if (i5 == 0) {
-                                i3 = i6;
+                    int i6 = 0;
+                    for (int i7 = 0; i7 < length - 1; i7++) {
+                        if (this.oldString.charAt(i7) != str.charAt(i7)) {
+                            if (i6 == 0) {
+                                i4 = i7;
                             }
-                            i5++;
-                            if (i4 != 0) {
+                            i6++;
+                            if (i5 != 0) {
                                 EmptyStubSpan emptyStubSpan = new EmptyStubSpan();
-                                if (i6 == length - 2) {
-                                    i4++;
+                                if (i7 == length - 2) {
+                                    i5++;
                                 }
-                                int i7 = i4 + i2;
-                                this.replaceIn.setSpan(emptyStubSpan, i2, i7, 33);
-                                this.replaceOut.setSpan(emptyStubSpan, i2, i7, 33);
-                                i4 = 0;
+                                int i8 = i5 + i3;
+                                this.replaceIn.setSpan(emptyStubSpan, i3, i8, 33);
+                                this.replaceOut.setSpan(emptyStubSpan, i3, i8, 33);
+                                i5 = 0;
                             }
                         } else {
-                            if (i4 == 0) {
-                                i2 = i6;
+                            if (i5 == 0) {
+                                i3 = i7;
                             }
-                            i4++;
-                            if (i5 != 0) {
-                                this.replaceStable.setSpan(new EmptyStubSpan(), i3, i5 + i3, 33);
-                                i5 = 0;
+                            i5++;
+                            if (i6 != 0) {
+                                this.replaceStable.setSpan(new EmptyStubSpan(), i4, i6 + i4, 33);
+                                i6 = 0;
                             }
                         }
                     }
-                    if (i4 != 0) {
-                        EmptyStubSpan emptyStubSpan2 = new EmptyStubSpan();
-                        int i8 = i4 + i2 + 1;
-                        this.replaceIn.setSpan(emptyStubSpan2, i2, i8, 33);
-                        this.replaceOut.setSpan(emptyStubSpan2, i2, i8, 33);
-                    }
                     if (i5 != 0) {
-                        this.replaceStable.setSpan(new EmptyStubSpan(), i3, i5 + i3, 33);
+                        EmptyStubSpan emptyStubSpan2 = new EmptyStubSpan();
+                        int i9 = i5 + i3 + 1;
+                        this.replaceIn.setSpan(emptyStubSpan2, i3, i9, 33);
+                        this.replaceOut.setSpan(emptyStubSpan2, i3, i9, 33);
+                    }
+                    if (i6 != 0) {
+                        this.replaceStable.setSpan(new EmptyStubSpan(), i4, i6 + i4, 33);
                     }
                     this.inLayout = new StaticLayout(this.replaceIn, this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.outLayout = new StaticLayout(this.replaceOut, this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -9689,6 +9698,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.isRunning = false;
                 this.startTime = 0;
                 this.stopTime = 0;
+                this.stoppedInternal = false;
             }
         }
 

@@ -413,7 +413,6 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                     }
                     invalidate();
                 }
-                invalidate();
             }
         }
     }

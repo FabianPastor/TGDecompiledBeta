@@ -1337,11 +1337,7 @@ public class RecyclerListView extends RecyclerView {
                                             } else {
                                                 i2 = -AndroidUtilities.dp(100.0f);
                                             }
-                                            if (i2 < 0) {
-                                                sectionHeaderView.setTag(Integer.valueOf(i2));
-                                            } else {
-                                                sectionHeaderView.setTag(0);
-                                            }
+                                            sectionHeaderView.setTag(Integer.valueOf(Math.min(i2, 0)));
                                         } else {
                                             sectionHeaderView.setTag(0);
                                         }

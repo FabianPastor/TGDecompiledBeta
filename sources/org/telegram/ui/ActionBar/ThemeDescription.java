@@ -443,7 +443,7 @@ public class ThemeDescription {
         View view14 = this.viewToInvalidate;
         if (view14 instanceof RecyclerListView) {
             RecyclerListView recyclerListView = (RecyclerListView) view14;
-            if ((this.changeFlags & FLAG_SELECTOR) != 0 && this.currentKey.equals("listSelectorSDK21")) {
+            if ((this.changeFlags & FLAG_SELECTOR) != 0) {
                 recyclerListView.setListSelectorColor(i);
             }
             if ((this.changeFlags & FLAG_FASTSCROLL) != 0) {

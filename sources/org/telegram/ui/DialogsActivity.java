@@ -377,13 +377,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         /* access modifiers changed from: private */
         public SwipeController swipeController;
 
-        static /* synthetic */ int access$6308(ViewPage viewPage) {
+        static /* synthetic */ int access$6408(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i + 1;
             return i;
         }
 
-        static /* synthetic */ int access$6310(ViewPage viewPage) {
+        static /* synthetic */ int access$6410(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i - 1;
             return i;
@@ -926,6 +926,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             if (motionEvent != null && motionEvent.getAction() == 0 && checkTabsAnimationInProgress()) {
                 boolean unused = DialogsActivity.this.startedTracking = true;
+                this.startedTrackingPointerId = motionEvent.getPointerId(0);
                 this.startedTrackingX = (int) motionEvent.getX();
                 DialogsActivity.this.parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(false);
                 if (DialogsActivity.this.animatingForward) {
@@ -1079,6 +1080,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     boolean unused18 = DialogsActivity.this.tabsAnimationInProgress = true;
                     boolean unused19 = DialogsActivity.this.startedTracking = false;
                 } else {
+                    DialogsActivity.this.parentLayout.getDrawerLayoutContainer().setAllowOpenDrawerBySwipe(DialogsActivity.this.viewPages[0].selectedType == DialogsActivity.this.filterTabsView.getFirstTabId());
                     boolean unused20 = DialogsActivity.this.maybeStartTracking = false;
                     DialogsActivity.this.actionBar.setEnabled(true);
                     DialogsActivity.this.filterTabsView.setEnabled(true);
@@ -1250,11 +1252,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean z = false;
             int unused = this.parentPage.archivePullViewState = SharedConfig.archiveHidden ? 2 : 0;
             if (this.parentPage.pullForegroundDrawable != null) {
-                PullForegroundDrawable access$6000 = this.parentPage.pullForegroundDrawable;
+                PullForegroundDrawable access$6100 = this.parentPage.pullForegroundDrawable;
                 if (this.parentPage.archivePullViewState != 0) {
                     z = true;
                 }
-                access$6000.setWillDraw(z);
+                access$6100.setWillDraw(z);
             }
         }
 
@@ -1535,7 +1537,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (!(addDialogToFolder == 2 && i3 == 0)) {
                     DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$6310(this.parentPage);
+                    ViewPage.access$6410(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i3);
                     int unused2 = DialogsActivity.this.dialogRemoveFinished = 2;
                 }
@@ -1547,7 +1549,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.setDialogsListFrozen(true);
                             this.parentPage.dialogsAdapter.notifyItemChanged(0);
                         } else {
-                            ViewPage.access$6308(this.parentPage);
+                            ViewPage.access$6408(this.parentPage);
                             this.parentPage.dialogsAdapter.notifyItemInserted(0);
                             if (!SharedConfig.archiveHidden && this.parentPage.layoutManager.findFirstVisibleItemPosition() == 0) {
                                 boolean unused4 = DialogsActivity.this.disableActionBarScrolling = true;
@@ -1603,7 +1605,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     int unused3 = DialogsActivity.this.dialogInsertFinished = 2;
                     DialogsActivity.this.setDialogsListFrozen(true);
                     DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$6308(this.parentPage);
+                    ViewPage.access$6408(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemInserted(indexOf);
                 }
                 if (dialogs2.isEmpty()) {
@@ -1616,7 +1618,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     DialogsActivity.frozenDialogsList.remove(0);
                     DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$6310(this.parentPage);
+                    ViewPage.access$6410(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(0);
                     return;
                 }
@@ -2464,11 +2466,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$14600 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$14700 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$14600);
+                    dialogsActivity.setDelegate(access$14700);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -2998,9 +3000,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (!DialogsActivity.this.hasHiddenArchive() || !(findViewHolderForAdapterPosition == null || findViewHolderForAdapterPosition.getAdapterPosition() == 0)) {
                             int top = findViewHolderForAdapterPosition != null ? findViewHolderForAdapterPosition.itemView.getTop() : 0;
                             if (DialogsActivity.this.prevPosition == findFirstVisibleItemPosition) {
-                                int access$15500 = DialogsActivity.this.prevTop - top;
+                                int access$15600 = DialogsActivity.this.prevTop - top;
                                 z = top < DialogsActivity.this.prevTop;
-                                if (Math.abs(access$15500) <= 1) {
+                                if (Math.abs(access$15600) <= 1) {
                                     z2 = false;
                                     if (z2 && DialogsActivity.this.scrollUpdated && (z || (!z && DialogsActivity.this.scrollingManually))) {
                                         DialogsActivity.this.hideFloatingButton(z);
@@ -3125,10 +3127,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     DialogsActivity.this.closeSearch();
                     if (AndroidUtilities.isTablet() && DialogsActivity.this.viewPages != null) {
-                        for (ViewPage access$9400 : DialogsActivity.this.viewPages) {
-                            DialogsAdapter access$94002 = access$9400.dialogsAdapter;
+                        for (ViewPage access$9500 : DialogsActivity.this.viewPages) {
+                            DialogsAdapter access$95002 = access$9500.dialogsAdapter;
                             long unused = DialogsActivity.this.openedDialogId = j;
-                            access$94002.setOpenedDialogId(j);
+                            access$95002.setOpenedDialogId(j);
                         }
                         DialogsActivity.this.updateVisibleRows(512);
                     }
@@ -3405,9 +3407,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 public void onMessageSend(CharSequence charSequence, boolean z, int i) {
                     if (DialogsActivity.this.delegate != null && !DialogsActivity.this.selectedDialogs.isEmpty()) {
-                        DialogsActivityDelegate access$14600 = DialogsActivity.this.delegate;
+                        DialogsActivityDelegate access$14700 = DialogsActivity.this.delegate;
                         DialogsActivity dialogsActivity = DialogsActivity.this;
-                        access$14600.didSelectDialogs(dialogsActivity, dialogsActivity.selectedDialogs, charSequence, false);
+                        access$14700.didSelectDialogs(dialogsActivity, dialogsActivity.selectedDialogs, charSequence, false);
                     }
                 }
             });
@@ -4044,7 +4046,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             ActionBar actionBar = this.actionBar;
             if (actionBar == null || !actionBar.isActionModeShowed()) {
                 FilterTabsView filterTabsView3 = this.filterTabsView;
-                if (filterTabsView3 == null || filterTabsView3.getVisibility() != 0 || this.filterTabsView.getCurrentTabId() == Integer.MAX_VALUE) {
+                if (filterTabsView3 == null || filterTabsView3.getVisibility() != 0 || this.filterTabsView.isAnimatingIndicator() || this.filterTabsView.getCurrentTabId() == Integer.MAX_VALUE || this.startedTracking) {
                     ChatActivityEnterView chatActivityEnterView = this.commentView;
                     if (chatActivityEnterView == null || !chatActivityEnterView.isPopupShowing()) {
                         return super.onBackPressed();
@@ -5017,10 +5019,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean r3 = r5.dialogsListFrozen
             java.util.ArrayList r8 = getDialogsArray(r8, r10, r0, r3)
             int r7 = r11.fixPosition(r7)
-            if (r7 < 0) goto L_0x0241
+            if (r7 < 0) goto L_0x0247
             int r10 = r8.size()
             if (r7 < r10) goto L_0x01aa
-            goto L_0x0241
+            goto L_0x0247
         L_0x01aa:
             java.lang.Object r7 = r8.get(r7)
             org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7
@@ -5039,53 +5041,54 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             long r7 = r7.id
             r5.addOrRemoveSelectedDialog(r7, r6)
             r5.updateSelectedCount()
-            goto L_0x0240
+            goto L_0x0246
         L_0x01cd:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r8 == 0) goto L_0x022e
+            if (r8 == 0) goto L_0x0234
             org.telegram.ui.ActionBar.BottomSheet$Builder r6 = new org.telegram.ui.ActionBar.BottomSheet$Builder
-            android.app.Activity r8 = r5.getParentActivity()
-            r6.<init>(r8)
-            int r7 = r7.unread_count
-            if (r7 == 0) goto L_0x01e0
+            android.app.Activity r7 = r5.getParentActivity()
+            r6.<init>(r7)
+            org.telegram.messenger.MessagesStorage r7 = r5.getMessagesStorage()
+            int r7 = r7.getArchiveUnreadCount()
+            if (r7 == 0) goto L_0x01e6
             r7 = 1
-            goto L_0x01e1
-        L_0x01e0:
+            goto L_0x01e7
+        L_0x01e6:
             r7 = 0
-        L_0x01e1:
+        L_0x01e7:
             r8 = 2
             int[] r10 = new int[r8]
-            if (r7 == 0) goto L_0x01ea
+            if (r7 == 0) goto L_0x01f0
             r11 = 2131165630(0x7var_be, float:1.7945483E38)
-            goto L_0x01eb
-        L_0x01ea:
+            goto L_0x01f1
+        L_0x01f0:
             r11 = 0
-        L_0x01eb:
+        L_0x01f1:
             r10[r1] = r11
             boolean r11 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r11 == 0) goto L_0x01f5
+            if (r11 == 0) goto L_0x01fb
             r11 = 2131165328(0x7var_, float:1.794487E38)
-            goto L_0x01f8
-        L_0x01f5:
+            goto L_0x01fe
+        L_0x01fb:
             r11 = 2131165332(0x7var_, float:1.7944878E38)
-        L_0x01f8:
+        L_0x01fe:
             r10[r2] = r11
             java.lang.CharSequence[] r8 = new java.lang.CharSequence[r8]
-            if (r7 == 0) goto L_0x0207
+            if (r7 == 0) goto L_0x020d
             r7 = 2131625623(0x7f0e0697, float:1.887846E38)
             java.lang.String r9 = "MarkAllAsRead"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r7)
-        L_0x0207:
+        L_0x020d:
             r8[r1] = r9
             boolean r7 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r7 == 0) goto L_0x0213
+            if (r7 == 0) goto L_0x0219
             r7 = 2131626355(0x7f0e0973, float:1.8879944E38)
             java.lang.String r9 = "PinInTheList"
-            goto L_0x0218
-        L_0x0213:
+            goto L_0x021e
+        L_0x0219:
             r7 = 2131625423(0x7f0e05cf, float:1.8878054E38)
             java.lang.String r9 = "HideAboveTheList"
-        L_0x0218:
+        L_0x021e:
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r8[r2] = r7
             org.telegram.ui.-$$Lambda$DialogsActivity$jubw7sk_hMJmE4X5j0bMD98NPBM r7 = new org.telegram.ui.-$$Lambda$DialogsActivity$jubw7sk_hMJmE4X5j0bMD98NPBM
@@ -5094,18 +5097,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.BottomSheet r6 = r6.create()
             r5.showDialog(r6)
             return r1
-        L_0x022e:
+        L_0x0234:
             org.telegram.ui.ActionBar.ActionBar r8 = r5.actionBar
             boolean r8 = r8.isActionModeShowed()
-            if (r8 == 0) goto L_0x023d
+            if (r8 == 0) goto L_0x0243
             boolean r8 = r5.isDialogPinned(r7)
-            if (r8 == 0) goto L_0x023d
+            if (r8 == 0) goto L_0x0243
             return r1
-        L_0x023d:
+        L_0x0243:
             r5.showOrUpdateActionMode(r7, r6)
-        L_0x0240:
+        L_0x0246:
             return r2
-        L_0x0241:
+        L_0x0247:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemLongClick(android.view.View, int, float, float, int, androidx.recyclerview.widget.RecyclerView$Adapter):boolean");
@@ -7284,7 +7287,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 arrayList.add(new ThemeDescription((View) this.filterTabsView, 0, new Class[]{FilterTabsView.class}, new String[]{"selectorDrawable"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabLine"));
                 arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FilterTabsView.TabView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabActiveText"));
                 arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FilterTabsView.TabView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabUnactiveText"));
-                arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{FilterTabsView.TabView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabSelector"));
+                arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarTabSelector"));
             }
             arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), 0, new Class[]{FilterTabsView.TabView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_tabUnreadActiveBackground"));
             arrayList.add(new ThemeDescription(this.filterTabsView.getTabsContainer(), 0, new Class[]{FilterTabsView.TabView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_tabUnreadUnactiveBackground"));
@@ -7293,7 +7296,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.searchEmptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
         arrayList.add(new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionIcon"));
         arrayList.add(new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-        arrayList.add(new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionPressedBackground"));
+        arrayList.add(new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionPressedBackground"));
         int i = 0;
         while (i < 3) {
             if (i == 2) {

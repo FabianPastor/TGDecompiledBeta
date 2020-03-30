@@ -41,19 +41,21 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public volatile Bitmap backgroundBitmap;
     /* access modifiers changed from: private */
     public Runnable cacheGenerateTask;
-    private boolean clearOldFrames;
     /* access modifiers changed from: private */
     public int currentFrame;
     private View currentParentView;
     private boolean decodeSingleFrame;
     /* access modifiers changed from: private */
     public boolean destroyWhenDone;
+    private boolean doNotRemoveInvalidOnFrameReady;
     private final Rect dstRect;
     private boolean forceFrameRedraw;
     /* access modifiers changed from: private */
     public int height;
+    private boolean invalidateOnProgressSet;
     /* access modifiers changed from: private */
     public int isDice;
+    private boolean isInvalid;
     /* access modifiers changed from: private */
     public volatile boolean isRecycled;
     /* access modifiers changed from: private */
@@ -907,10 +909,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
         if (this.autoRepeat < 2 || this.autoRepeatPlayCount == 0) {
             this.isRunning = true;
-            if (this.clearOldFrames) {
-                this.nextRenderingBitmap = null;
-                this.renderingBitmap = null;
-                this.loadFrameTask = null;
+            if (this.invalidateOnProgressSet) {
+                this.isInvalid = true;
+                if (this.loadFrameTask != null) {
+                    this.doNotRemoveInvalidOnFrameReady = true;
+                }
             }
             scheduleNextGetFrame();
             invalidateInternal();
@@ -1018,10 +1021,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.currentFrame = (int) (((float) this.metaData[0]) * f);
         this.nextFrameIsLast = false;
         this.singleFrameDecoded = false;
-        if (this.clearOldFrames) {
-            this.renderingBitmap = null;
-            this.nextRenderingBitmap = null;
-            this.loadFrameTask = null;
+        if (this.invalidateOnProgressSet) {
+            this.isInvalid = true;
+            if (this.loadFrameTask != null) {
+                this.doNotRemoveInvalidOnFrameReady = true;
+            }
         }
         if (!scheduleNextGetFrame()) {
             this.forceFrameRedraw = true;
@@ -1069,6 +1073,32 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.applyTransformation = true;
     }
 
+    private void setCurrentFrame(long j, long j2, long j3, boolean z) {
+        this.backgroundBitmap = this.renderingBitmap;
+        this.renderingBitmap = this.nextRenderingBitmap;
+        if (this.nextFrameIsLast) {
+            stop();
+        }
+        this.loadFrameTask = null;
+        if (this.doNotRemoveInvalidOnFrameReady) {
+            this.doNotRemoveInvalidOnFrameReady = false;
+        } else if (this.isInvalid) {
+            this.isInvalid = false;
+        }
+        this.singleFrameDecoded = true;
+        this.nextRenderingBitmap = null;
+        if (AndroidUtilities.screenRefreshRate <= 60.0f) {
+            this.lastFrameTime = j;
+        } else {
+            this.lastFrameTime = j - Math.min(16, j2 - j3);
+        }
+        if (z && this.forceFrameRedraw) {
+            this.singleFrameDecoded = false;
+            this.forceFrameRedraw = false;
+        }
+        scheduleNextGetFrame();
+    }
+
     public void draw(Canvas canvas) {
         int i;
         Integer num;
@@ -1088,42 +1118,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     if (!(hashMap == null || this.currentParentView == null || (num = hashMap.get(Integer.valueOf(this.currentFrame - 1))) == null)) {
                         this.currentParentView.performHapticFeedback(num.intValue() == 1 ? 0 : 3, 2);
                     }
-                    this.backgroundBitmap = this.renderingBitmap;
-                    this.renderingBitmap = this.nextRenderingBitmap;
-                    if (this.nextFrameIsLast) {
-                        stop();
-                    }
-                    this.loadFrameTask = null;
-                    this.singleFrameDecoded = true;
-                    this.nextRenderingBitmap = null;
-                    if (AndroidUtilities.screenRefreshRate <= 60.0f) {
-                        this.lastFrameTime = elapsedRealtime;
-                    } else {
-                        this.lastFrameTime = elapsedRealtime - Math.min(16, abs - ((long) i));
-                    }
-                    scheduleNextGetFrame();
+                    setCurrentFrame(elapsedRealtime, abs, (long) i, false);
                 }
             } else if ((this.forceFrameRedraw || (this.decodeSingleFrame && abs >= ((long) i))) && this.nextRenderingBitmap != null) {
-                this.backgroundBitmap = this.renderingBitmap;
-                this.renderingBitmap = this.nextRenderingBitmap;
-                if (this.nextFrameIsLast) {
-                    stop();
-                }
-                this.loadFrameTask = null;
-                this.singleFrameDecoded = true;
-                this.nextRenderingBitmap = null;
-                if (AndroidUtilities.screenRefreshRate <= 60.0f) {
-                    this.lastFrameTime = elapsedRealtime;
-                } else {
-                    this.lastFrameTime = elapsedRealtime - Math.min(16, abs - ((long) i));
-                }
-                if (this.forceFrameRedraw) {
-                    this.singleFrameDecoded = false;
-                    this.forceFrameRedraw = false;
-                }
-                scheduleNextGetFrame();
+                setCurrentFrame(elapsedRealtime, abs, (long) i, true);
             }
-            if (this.renderingBitmap != null) {
+            if (!this.isInvalid && this.renderingBitmap != null) {
                 if (this.applyTransformation) {
                     this.dstRect.set(getBounds());
                     this.scaleX = ((float) this.dstRect.width()) / ((float) this.width);
@@ -1162,10 +1162,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public boolean hasBitmap() {
-        return (this.nativePtr == 0 || (this.renderingBitmap == null && this.nextRenderingBitmap == null)) ? false : true;
+        return this.nativePtr != 0 && !(this.renderingBitmap == null && this.nextRenderingBitmap == null) && !this.isInvalid;
     }
 
-    public void setClearOldFrames(boolean z) {
-        this.clearOldFrames = z;
+    public void setInvalidateOnProgressSet(boolean z) {
+        this.invalidateOnProgressSet = z;
     }
 }
