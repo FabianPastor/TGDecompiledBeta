@@ -282,6 +282,7 @@ public final class R {
         public static final int corner_out_tr = NUM;
         public static final int delete = NUM;
         public static final int devices = NUM;
+        public static final int dice = NUM;
         public static final int doc_big = NUM;
         public static final int edit_cancel = NUM;
         public static final int editor_rotate = NUM;
@@ -2246,7 +2247,7 @@ public final class R {
         public static final int Devices = NUM;
         public static final int DialogPin = NUM;
         public static final int DialogUnpin = NUM;
-        public static final int DiceInfo = NUM;
+        public static final int DiceInfo2 = NUM;
         public static final int DidNotGetTheCode = NUM;
         public static final int DidNotGetTheCodeSms = NUM;
         public static final int Digits_few = NUM;
@@ -3980,6 +3981,7 @@ public final class R {
         public static final int SendContactToText = NUM;
         public static final int SendDayAt = NUM;
         public static final int SendDayYearAt = NUM;
+        public static final int SendDice = NUM;
         public static final int SendGameToGroupText = NUM;
         public static final int SendGameToText = NUM;
         public static final int SendGifPreview = NUM;

@@ -587,7 +587,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = r10
                 r3.<init>(r4, r5, r6, r7, r8, r9)
                 r1.setWillNotDraw(r0)
-                r11 = 2131626481(0x7f0e09f1, float:1.88802E38)
+                r11 = 2131626482(0x7f0e09f2, float:1.8880201E38)
                 java.lang.String r12 = "RecentPosts"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
                 r1.setText(r11)

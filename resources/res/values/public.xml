@@ -301,6 +301,7 @@
     <public type="drawable" name="corner_out_tr" id="NUM" />
     <public type="drawable" name="delete" id="NUM" />
     <public type="drawable" name="devices" id="NUM" />
+    <public type="drawable" name="dice" id="NUM" />
     <public type="drawable" name="doc_big" id="NUM" />
     <public type="drawable" name="edit_cancel" id="NUM" />
     <public type="drawable" name="editor_rotate" id="NUM" />
@@ -2107,7 +2108,7 @@
     <public type="string" name="Devices" id="NUM" />
     <public type="string" name="DialogPin" id="NUM" />
     <public type="string" name="DialogUnpin" id="NUM" />
-    <public type="string" name="DiceInfo" id="NUM" />
+    <public type="string" name="DiceInfo2" id="NUM" />
     <public type="string" name="DidNotGetTheCode" id="NUM" />
     <public type="string" name="DidNotGetTheCodeSms" id="NUM" />
     <public type="string" name="Digits_few" id="NUM" />
@@ -3841,6 +3842,7 @@
     <public type="string" name="SendContactToText" id="NUM" />
     <public type="string" name="SendDayAt" id="NUM" />
     <public type="string" name="SendDayYearAt" id="NUM" />
+    <public type="string" name="SendDice" id="NUM" />
     <public type="string" name="SendGameToGroupText" id="NUM" />
     <public type="string" name="SendGameToText" id="NUM" />
     <public type="string" name="SendGifPreview" id="NUM" />

@@ -512,7 +512,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r8)
             android.widget.ImageView r2 = r0.pipButton
-            r8 = 2131165961(0x7var_, float:1.7946154E38)
+            r8 = 2131165962(0x7var_a, float:1.7946156E38)
             r2.setImageResource(r8)
             android.widget.ImageView r2 = r0.pipButton
             r2.setEnabled(r5)
@@ -550,7 +550,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.<init>(r1)
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r10)
-            r10 = 2131165954(0x7var_, float:1.794614E38)
+            r10 = 2131165955(0x7var_, float:1.7946142E38)
             r8.setImageResource(r10)
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r14)
@@ -622,7 +622,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r6, r5)
-            r1 = 2131626009(0x7f0e0819, float:1.8879242E38)
+            r1 = 2131626010(0x7f0e081a, float:1.8879244E38)
             java.lang.String r6 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             java.lang.String r1 = r1.toUpperCase()

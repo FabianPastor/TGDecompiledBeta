@@ -987,7 +987,6 @@
     <string name="Devices">Dispositivos</string>
     <string name="DialogPin">Anclar</string>
     <string name="DialogUnpin">Desanclar</string>
-    <string name="DiceInfo">Envía el emoji �� a cualquier chat para obtener un número aleatorio de Telegram.</string>
     <string name="DidNotGetTheCode">¿No recibiste el código?</string>
     <string name="DidNotGetTheCodeSms">Enviar el código como un SMS</string>
     <string name="DirectShare">Direct Share</string>

@@ -491,6 +491,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private SparseBooleanArray serverDialogsEndReached = new SparseBooleanArray();
     private SparseIntArray shortPollChannels = new SparseIntArray();
     private SparseIntArray shortPollOnlines = new SparseIntArray();
+    public boolean showFiltersTooltip;
     private DialogFilter sortingDialogFilter;
     private int statusRequest;
     private int statusSettingState;
@@ -817,6 +818,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.animatedEmojisZoom = this.mainPreferences.getFloat("animatedEmojisZoom", 0.625f);
         this.qrLoginCamera = this.mainPreferences.getBoolean("qrLoginCamera", false);
         this.filtersEnabled = this.mainPreferences.getBoolean("filtersEnabled", false);
+        this.showFiltersTooltip = this.mainPreferences.getBoolean("showFiltersTooltip", false);
     }
 
     public /* synthetic */ void lambda$new$4$MessagesController() {
@@ -1849,12 +1851,13 @@ public class MessagesController extends BaseController implements NotificationCe
         boolean z2;
         boolean z3;
         boolean z4;
+        boolean z5;
         if (tLObject instanceof TLRPC$TL_jsonObject) {
             SharedPreferences.Editor edit = this.mainPreferences.edit();
             TLRPC$TL_jsonObject tLRPC$TL_jsonObject = (TLRPC$TL_jsonObject) tLObject;
             int size = tLRPC$TL_jsonObject.value.size();
-            boolean z5 = false;
             boolean z6 = false;
+            boolean z7 = false;
             for (int i = 0; i < size; i++) {
                 TLRPC$TL_jsonObjectValue tLRPC$TL_jsonObjectValue = tLRPC$TL_jsonObject.value.get(i);
                 if ("emojies_animated_zoom".equals(tLRPC$TL_jsonObjectValue.key)) {
@@ -1869,15 +1872,21 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 } else if ("dialog_filters_enabled".equals(tLRPC$TL_jsonObjectValue.key)) {
                     TLRPC$JSONValue tLRPC$JSONValue2 = tLRPC$TL_jsonObjectValue.value;
-                    if ((tLRPC$JSONValue2 instanceof TLRPC$TL_jsonBool) && (z4 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue2).value) != this.filtersEnabled) {
-                        this.filtersEnabled = z4;
-                        edit.putBoolean("filtersEnabled", z4);
+                    if ((tLRPC$JSONValue2 instanceof TLRPC$TL_jsonBool) && (z5 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue2).value) != this.filtersEnabled) {
+                        this.filtersEnabled = z5;
+                        edit.putBoolean("filtersEnabled", z5);
+                    }
+                } else if ("dialog_filters_tooltip".equals(tLRPC$TL_jsonObjectValue.key)) {
+                    TLRPC$JSONValue tLRPC$JSONValue3 = tLRPC$TL_jsonObjectValue.value;
+                    if ((tLRPC$JSONValue3 instanceof TLRPC$TL_jsonBool) && (z4 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue3).value) != this.showFiltersTooltip) {
+                        this.showFiltersTooltip = z4;
+                        edit.putBoolean("showFiltersTooltip", z4);
                         getNotificationCenter().postNotificationName(NotificationCenter.filterSettingsUpdated, new Object[0]);
                     }
                 } else if ("youtube_pip".equals(tLRPC$TL_jsonObjectValue.key)) {
-                    TLRPC$JSONValue tLRPC$JSONValue3 = tLRPC$TL_jsonObjectValue.value;
-                    if (tLRPC$JSONValue3 instanceof TLRPC$TL_jsonString) {
-                        TLRPC$TL_jsonString tLRPC$TL_jsonString = (TLRPC$TL_jsonString) tLRPC$JSONValue3;
+                    TLRPC$JSONValue tLRPC$JSONValue4 = tLRPC$TL_jsonObjectValue.value;
+                    if (tLRPC$JSONValue4 instanceof TLRPC$TL_jsonString) {
+                        TLRPC$TL_jsonString tLRPC$TL_jsonString = (TLRPC$TL_jsonString) tLRPC$JSONValue4;
                         if (!tLRPC$TL_jsonString.value.equals(this.youtubePipType)) {
                             String str = tLRPC$TL_jsonString.value;
                             this.youtubePipType = str;
@@ -1886,35 +1895,35 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 } else {
                     if ("background_connection".equals(tLRPC$TL_jsonObjectValue.key)) {
-                        TLRPC$JSONValue tLRPC$JSONValue4 = tLRPC$TL_jsonObjectValue.value;
-                        if ((tLRPC$JSONValue4 instanceof TLRPC$TL_jsonBool) && (z3 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue4).value) != this.backgroundConnection) {
+                        TLRPC$JSONValue tLRPC$JSONValue5 = tLRPC$TL_jsonObjectValue.value;
+                        if ((tLRPC$JSONValue5 instanceof TLRPC$TL_jsonBool) && (z3 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue5).value) != this.backgroundConnection) {
                             this.backgroundConnection = z3;
                             edit.putBoolean("backgroundConnection", z3);
                         }
                     } else {
                         if ("keep_alive_service".equals(tLRPC$TL_jsonObjectValue.key)) {
-                            TLRPC$JSONValue tLRPC$JSONValue5 = tLRPC$TL_jsonObjectValue.value;
-                            if ((tLRPC$JSONValue5 instanceof TLRPC$TL_jsonBool) && (z2 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue5).value) != this.keepAliveService) {
+                            TLRPC$JSONValue tLRPC$JSONValue6 = tLRPC$TL_jsonObjectValue.value;
+                            if ((tLRPC$JSONValue6 instanceof TLRPC$TL_jsonBool) && (z2 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue6).value) != this.keepAliveService) {
                                 this.keepAliveService = z2;
                                 edit.putBoolean("keepAliveService", z2);
                             }
                         } else if ("qr_login_camera".equals(tLRPC$TL_jsonObjectValue.key)) {
-                            TLRPC$JSONValue tLRPC$JSONValue6 = tLRPC$TL_jsonObjectValue.value;
-                            if ((tLRPC$JSONValue6 instanceof TLRPC$TL_jsonBool) && (z = ((TLRPC$TL_jsonBool) tLRPC$JSONValue6).value) != this.qrLoginCamera) {
+                            TLRPC$JSONValue tLRPC$JSONValue7 = tLRPC$TL_jsonObjectValue.value;
+                            if ((tLRPC$JSONValue7 instanceof TLRPC$TL_jsonBool) && (z = ((TLRPC$TL_jsonBool) tLRPC$JSONValue7).value) != this.qrLoginCamera) {
                                 this.qrLoginCamera = z;
                                 edit.putBoolean("qrLoginCamera", z);
                             }
                         }
                     }
-                    z5 = true;
                     z6 = true;
+                    z7 = true;
                 }
-                z5 = true;
-            }
-            if (z5) {
-                edit.commit();
+                z6 = true;
             }
             if (z6) {
+                edit.commit();
+            }
+            if (z7) {
                 ApplicationLoader.startPushService();
                 ConnectionsManager connectionsManager = getConnectionsManager();
                 connectionsManager.setPushConnectionEnabled(connectionsManager.isPushConnectionEnabled());
@@ -22703,10 +22712,14 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isDialogMuted(long j) {
+        return isDialogMuted(j, (TLRPC$Chat) null);
+    }
+
+    public boolean isDialogMuted(long j, TLRPC$Chat tLRPC$Chat) {
         SharedPreferences sharedPreferences = this.notificationsPreferences;
         int i = sharedPreferences.getInt("notify2_" + j, -1);
         if (i == -1) {
-            return !getNotificationsController().isGlobalNotificationsEnabled(j);
+            return !getNotificationsController().isGlobalNotificationsEnabled(j, tLRPC$Chat);
         }
         if (i == 2) {
             return true;

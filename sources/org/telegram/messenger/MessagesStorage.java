@@ -2438,7 +2438,7 @@ public class MessagesStorage extends BaseController {
             int r8 = r5.id     // Catch:{ Exception -> 0x0533 }
             int r8 = -r8
             long r12 = (long) r8     // Catch:{ Exception -> 0x0533 }
-            boolean r7 = r7.isDialogMuted(r12)     // Catch:{ Exception -> 0x0533 }
+            boolean r7 = r7.isDialogMuted(r12, r5)     // Catch:{ Exception -> 0x0533 }
             if (r7 == 0) goto L_0x028e
             android.util.LongSparseArray<java.lang.Integer> r7 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0533 }
             int r8 = r5.id     // Catch:{ Exception -> 0x0533 }
@@ -6495,7 +6495,7 @@ public class MessagesStorage extends BaseController {
             int r13 = r8.id
             int r13 = -r13
             long r13 = (long) r13
-            boolean r11 = r11.isDialogMuted(r13)
+            boolean r11 = r11.isDialogMuted(r13, r8)
             if (r11 == 0) goto L_0x030e
             if (r1 == 0) goto L_0x030c
             int r11 = r8.id

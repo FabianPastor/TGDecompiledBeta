@@ -1330,7 +1330,7 @@ public class PhotoFilterView extends FrameLayout {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r6.setPadding(r10, r3, r11, r3)
             android.widget.TextView r6 = r0.doneTextView
-            r10 = 2131624973(0x7f0e040d, float:1.887714E38)
+            r10 = 2131624974(0x7f0e040e, float:1.8877143E38)
             java.lang.String r11 = "Done"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.String r10 = r10.toUpperCase()
@@ -1353,7 +1353,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r10)
             android.widget.ImageView r2 = r0.tuneItem
-            r10 = 2131165799(0x7var_, float:1.7945825E38)
+            r10 = 2131165800(0x7var_, float:1.7945827E38)
             r2.setImageResource(r10)
             android.widget.ImageView r2 = r0.tuneItem
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1380,7 +1380,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r13)
             android.widget.ImageView r2 = r0.blurItem
-            r13 = 2131165940(0x7var_f4, float:1.7946111E38)
+            r13 = 2131165941(0x7var_f5, float:1.7946113E38)
             r2.setImageResource(r13)
             android.widget.ImageView r2 = r0.blurItem
             android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
@@ -1398,7 +1398,7 @@ public class PhotoFilterView extends FrameLayout {
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r13)
             android.widget.ImageView r2 = r0.curveItem
-            r13 = 2131165942(0x7var_f6, float:1.7946115E38)
+            r13 = 2131165943(0x7var_f7, float:1.7946117E38)
             r2.setImageResource(r13)
             android.widget.ImageView r2 = r0.curveItem
             android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)

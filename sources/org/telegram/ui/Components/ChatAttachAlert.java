@@ -624,7 +624,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.messenger.NotificationCenter.cameraInitied
             r0.addObserver(r6, r1)
             android.content.res.Resources r0 = r40.getResources()
-            r1 = 2131165520(0x7var_, float:1.794526E38)
+            r1 = 2131165521(0x7var_, float:1.7945261E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r6.cameraDrawable = r0
@@ -676,7 +676,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r18)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131165437(0x7var_fd, float:1.7945091E38)
+            r1 = 2131165438(0x7var_fe, float:1.7945093E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r16)
@@ -719,7 +719,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.selectedMenuItem = r14
             r14.setLongClickEnabled(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131165444(0x7var_, float:1.7945105E38)
+            r1 = 2131165445(0x7var_, float:1.7945107E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "AccDescrMoreOptions"
@@ -728,12 +728,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutGrouping"
-            r2 = 2131626682(0x7f0e0aba, float:1.8880607E38)
+            r2 = 2131626684(0x7f0e0abc, float:1.8880611E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r9, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             java.lang.String r1 = "SendWithoutCompression"
-            r2 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
+            r2 = 2131626683(0x7f0e0abb, float:1.888061E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.addSubItem(r10, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
@@ -887,7 +887,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r17)
             r0.setTypeface(r1)
             android.content.res.Resources r0 = r40.getResources()
-            r1 = 2131165455(0x7var_f, float:1.7945128E38)
+            r1 = 2131165456(0x7var_, float:1.794513E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r6.dropDownDrawable = r0
@@ -929,7 +929,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.Components.EmptyTextProgressView r0 = new org.telegram.ui.Components.EmptyTextProgressView
             r0.<init>(r7)
             r6.progressView = r0
-            r1 = 2131625810(0x7f0e0752, float:1.8878838E38)
+            r1 = 2131625811(0x7f0e0753, float:1.887884E38)
             java.lang.String r2 = "NoPhotos"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -956,7 +956,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.view.View r0 = new android.view.View
             r0.<init>(r7)
             r6.shadow = r0
-            r1 = 2131165435(0x7var_fb, float:1.7945087E38)
+            r1 = 2131165436(0x7var_fc, float:1.794509E38)
             r0.setBackgroundResource(r1)
             android.view.ViewGroup r0 = r6.containerView
             android.view.View r1 = r6.shadow
@@ -1085,7 +1085,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             r0.setAlpha(r11)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
-            r2 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
+            r2 = 2131626652(0x7f0e0a9c, float:1.8880546E38)
             java.lang.String r3 = "Send"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setContentDescription(r2)
@@ -1118,7 +1118,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r0 = android.os.Build.VERSION.SDK_INT
             if (r0 >= r4) goto L_0x059d
             android.content.res.Resources r0 = r40.getResources()
-            r2 = 2131165393(0x7var_d1, float:1.7945002E38)
+            r2 = 2131165394(0x7var_d2, float:1.7945004E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -1227,7 +1227,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r7)
             r6.recordTime = r0
-            r1 = 2131165927(0x7var_e7, float:1.7946085E38)
+            r1 = 2131165928(0x7var_e8, float:1.7946087E38)
             r0.setBackgroundResource(r1)
             android.widget.TextView r0 = r6.recordTime
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1281,7 +1281,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r7)
             r6.counterTextView = r0
-            r2 = 2131165806(0x7var_e, float:1.794584E38)
+            r2 = 2131165807(0x7var_f, float:1.7945842E38)
             r0.setBackgroundResource(r2)
             android.widget.TextView r0 = r6.counterTextView
             r0.setVisibility(r1)
@@ -1298,7 +1298,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r17)
             r0.setTypeface(r2)
             android.widget.TextView r0 = r6.counterTextView
-            r2 = 2131165804(0x7var_c, float:1.7945835E38)
+            r2 = 2131165805(0x7var_d, float:1.7945837E38)
             r0.setCompoundDrawablesWithIntrinsicBounds(r9, r9, r2, r9)
             android.widget.TextView r0 = r6.counterTextView
             r2 = 1082130432(0x40800000, float:4.0)
@@ -1421,7 +1421,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = -1
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.tooltipTextView
-            r1 = 2131626896(0x7f0e0b90, float:1.8881041E38)
+            r1 = 2131626898(0x7f0e0b92, float:1.8881045E38)
             java.lang.String r2 = "TapForVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -2541,7 +2541,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             if (r6 == r2) goto L_0x003b
             goto L_0x0073
         L_0x003b:
-            r6 = 2131165385(0x7var_c9, float:1.7944986E38)
+            r6 = 2131165386(0x7var_ca, float:1.7944988E38)
             r5.setImageResource(r6)
             r6 = 2131623954(0x7f0e0012, float:1.8875074E38)
             java.lang.String r0 = "AccDescrCameraFlashAuto"
@@ -2549,7 +2549,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x004e:
-            r6 = 2131165387(0x7var_cb, float:1.794499E38)
+            r6 = 2131165388(0x7var_cc, float:1.7944992E38)
             r5.setImageResource(r6)
             r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r0 = "AccDescrCameraFlashOn"
@@ -2557,7 +2557,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x0061:
-            r6 = 2131165386(0x7var_ca, float:1.7944988E38)
+            r6 = 2131165387(0x7var_cb, float:1.794499E38)
             r5.setImageResource(r6)
             r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r0 = "AccDescrCameraFlashOff"

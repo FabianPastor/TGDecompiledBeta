@@ -1020,7 +1020,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r0.<init>(r6)
             r1.setOnClickListener(r0)
             android.app.Activity r0 = r29.getParentActivity()
-            r1 = 2131165417(0x7var_e9, float:1.794505E38)
+            r1 = 2131165418(0x7var_ea, float:1.7945053E38)
             java.lang.String r3 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r3)
             org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -1183,7 +1183,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14.setGravity(r4)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r14.setTypeface(r1)
-            r1 = 2131626584(0x7f0e0a58, float:1.8880408E38)
+            r1 = 2131626585(0x7f0e0a59, float:1.888041E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1501,7 +1501,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r14 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r14
                 org.telegram.ui.DataAutoDownloadActivity r0 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r0 = r0.typeSectionRow
-                r4 = 2131165417(0x7var_e9, float:1.794505E38)
+                r4 = 2131165418(0x7var_ea, float:1.7945053E38)
                 java.lang.String r5 = "windowBackgroundGrayShadow"
                 if (r15 != r0) goto L_0x003f
                 r15 = 2131624318(0x7f0e017e, float:1.8875812E38)
@@ -1522,7 +1522,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 r0 = -1
                 if (r15 != r0) goto L_0x009e
                 android.content.Context r15 = r13.mContext
-                r0 = 2131165418(0x7var_ea, float:1.7945053E38)
+                r0 = 2131165419(0x7var_eb, float:1.7945055E38)
                 android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r15, (int) r0, (java.lang.String) r5)
                 r14.setBackgroundDrawable(r15)
                 org.telegram.ui.DataAutoDownloadActivity r15 = org.telegram.ui.DataAutoDownloadActivity.this

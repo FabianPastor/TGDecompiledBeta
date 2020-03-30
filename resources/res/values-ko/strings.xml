@@ -987,7 +987,6 @@
     <string name="Devices">디바이스</string>
     <string name="DialogPin">Pin</string>
     <string name="DialogUnpin">Unpin</string>
-    <string name="DiceInfo">Send a �� emoji to any chat to get a random number from Telegram.</string>
     <string name="DidNotGetTheCode">코드를 받지 못하셨나요?</string>
     <string name="DidNotGetTheCodeSms">코드를 SMS로 보내기</string>
     <string name="DirectShare">바로 공유</string>

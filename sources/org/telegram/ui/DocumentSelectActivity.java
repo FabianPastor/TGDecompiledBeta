@@ -1482,10 +1482,10 @@ public class DocumentSelectActivity extends BaseFragment {
             java.lang.String r4 = android.os.Environment.getExternalStorageState()
             java.lang.String r5 = "mounted"
             boolean r5 = r4.equals(r5)
-            r6 = 2131625176(0x7f0e04d8, float:1.8877553E38)
+            r6 = 2131625177(0x7f0e04d9, float:1.8877555E38)
             java.lang.String r7 = "ExternalFolderInfo"
-            r8 = 2131165379(0x7var_c3, float:1.7944973E38)
-            r9 = 2131626604(0x7f0e0a6c, float:1.8880449E38)
+            r8 = 2131165380(0x7var_c4, float:1.7944975E38)
+            r9 = 2131626605(0x7f0e0a6d, float:1.888045E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1503,13 +1503,13 @@ public class DocumentSelectActivity extends BaseFragment {
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625465(0x7f0e05f9, float:1.8878139E38)
+            r5 = 2131625466(0x7f0e05fa, float:1.887814E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
-            r5 = 2131165381(0x7var_c5, float:1.7944978E38)
+            r5 = 2131165382(0x7var_c6, float:1.794498E38)
             r4.icon = r5
-            r5 = 2131625464(0x7f0e05f8, float:1.8878137E38)
+            r5 = 2131625465(0x7f0e05f9, float:1.8878139E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1600,7 +1600,7 @@ public class DocumentSelectActivity extends BaseFragment {
             goto L_0x014c
         L_0x0141:
             java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625177(0x7f0e04d9, float:1.8877555E38)
+            r12 = 2131625178(0x7f0e04da, float:1.8877557E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0162 }
             r4.title = r11     // Catch:{ Exception -> 0x0162 }
         L_0x014c:
@@ -1642,11 +1642,11 @@ public class DocumentSelectActivity extends BaseFragment {
             r2.<init>()
             java.lang.String r3 = "/"
             r2.title = r3
-            r4 = 2131626895(0x7f0e0b8f, float:1.888104E38)
+            r4 = 2131626897(0x7f0e0b91, float:1.8881043E38)
             java.lang.String r5 = "SystemRoot"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.subtitle = r4
-            r4 = 2131165377(0x7var_c1, float:1.794497E38)
+            r4 = 2131165378(0x7var_c2, float:1.7944971E38)
             r2.icon = r4
             java.io.File r5 = new java.io.File
             r5.<init>(r3)
@@ -1676,15 +1676,15 @@ public class DocumentSelectActivity extends BaseFragment {
         L_0x01d4:
             org.telegram.ui.DocumentSelectActivity$ListItem r0 = new org.telegram.ui.DocumentSelectActivity$ListItem
             r0.<init>()
-            r2 = 2131625364(0x7f0e0594, float:1.8877934E38)
+            r2 = 2131625365(0x7f0e0595, float:1.8877936E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625365(0x7f0e0595, float:1.8877936E38)
+            r2 = 2131625366(0x7f0e0596, float:1.8877938E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
-            r2 = 2131165378(0x7var_c2, float:1.7944971E38)
+            r2 = 2131165379(0x7var_c3, float:1.7944973E38)
             r0.icon = r2
             r0.file = r1
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r2 = r13.items
@@ -1697,11 +1697,11 @@ public class DocumentSelectActivity extends BaseFragment {
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625737(0x7f0e0709, float:1.887869E38)
+            r2 = 2131625738(0x7f0e070a, float:1.8878692E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
-            r2 = 2131165380(0x7var_c4, float:1.7944975E38)
+            r2 = 2131165381(0x7var_c5, float:1.7944978E38)
             r0.icon = r2
             r0.file = r1
             java.util.ArrayList<org.telegram.ui.DocumentSelectActivity$ListItem> r1 = r13.items

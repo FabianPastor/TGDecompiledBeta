@@ -987,7 +987,6 @@
     <string name="Devices">الأجهزة</string>
     <string name="DialogPin">تثبيت</string>
     <string name="DialogUnpin">إلغاء التثبيت</string>
-    <string name="DiceInfo">أرسل الرمز �� إلى أية محادثة للحصول على رقم عشوائي من تيليجرام.</string>
     <string name="DidNotGetTheCode">لم يصلك الرمز؟</string>
     <string name="DidNotGetTheCodeSms">إرسال الرمز برسالة SMS قصيرة</string>
     <string name="DirectShare">مشاركة مباشرة</string>
