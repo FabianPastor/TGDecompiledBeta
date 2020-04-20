@@ -52,6 +52,10 @@ public class PollEditTextCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
+    public void onFieldTouchUp(EditTextBoldCursor editTextBoldCursor) {
+    }
+
+    /* access modifiers changed from: protected */
     public boolean shouldShowCheckBox() {
         return false;
     }
@@ -80,6 +84,9 @@ public class PollEditTextCell extends FrameLayout {
                 if (!isEnabled()) {
                     return false;
                 }
+                if (motionEvent.getAction() == 1) {
+                    PollEditTextCell.this.onFieldTouchUp(this);
+                }
                 return super.onTouchEvent(motionEvent);
             }
         };
@@ -94,6 +101,7 @@ public class PollEditTextCell extends FrameLayout {
         editTextBoldCursor.setImeOptions(editTextBoldCursor.getImeOptions() | NUM);
         EditTextBoldCursor editTextBoldCursor2 = this.textView;
         editTextBoldCursor2.setInputType(editTextBoldCursor2.getInputType() | 16384);
+        this.textView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(11.0f));
         if (onClickListener2 != null) {
             addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 58.0f : 64.0f, 0.0f, !LocaleController.isRTL ? 58.0f : 64.0f, 0.0f));
             ImageView imageView = new ImageView(context2);
@@ -158,6 +166,7 @@ public class PollEditTextCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
+        int i3;
         int size = View.MeasureSpec.getSize(i);
         ImageView imageView = this.deleteImageView;
         if (imageView != null) {
@@ -175,7 +184,12 @@ public class PollEditTextCell extends FrameLayout {
         if (checkBox2 != null) {
             checkBox2.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
         }
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec(((size - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp((this.textView2 == null || this.textView.getBackground() != null) ? 42.0f : 122.0f), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+        if (this.textView2 == null) {
+            i3 = 42;
+        } else {
+            i3 = this.deleteImageView == null ? 70 : 122;
+        }
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec(((size - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp((float) i3), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
         int measuredHeight = this.textView.getMeasuredHeight();
         setMeasuredDimension(size, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + (this.needDivider ? 1 : 0));
         SimpleTextView simpleTextView2 = this.textView2;

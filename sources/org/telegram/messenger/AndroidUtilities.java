@@ -139,7 +139,7 @@ public class AndroidUtilities {
     private static int[] documentMediaIcons = {NUM, NUM, NUM, NUM};
     public static boolean firstConfigurationWas;
     private static WeakReference<BaseFragment> flagSecureFragment;
-    private static boolean hasCallPermissions;
+    private static boolean hasCallPermissions = (Build.VERSION.SDK_INT >= 23);
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
     private static Boolean isTablet = null;
@@ -147,6 +147,7 @@ public class AndroidUtilities {
     public static int leftBaseline = (isTablet() ? 80 : 72);
     private static Field mAttachInfoField;
     private static Field mStableInsetsField;
+    public static final String[] numbersSignatureArray = {"", "K", "M", "G", "T", "P"};
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
@@ -230,7 +231,6 @@ public class AndroidUtilities {
     }
 
     static {
-        boolean z = false;
         WEB_URL = null;
         try {
             Pattern compile = Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))");
@@ -240,10 +240,6 @@ public class AndroidUtilities {
             FileLog.e((Throwable) e);
         }
         checkDisplaySize(ApplicationLoader.applicationContext, (Configuration) null);
-        if (Build.VERSION.SDK_INT >= 23) {
-            z = true;
-        }
-        hasCallPermissions = z;
     }
 
     private static boolean containsUnsupportedCharacters(String str) {
@@ -2727,6 +2723,57 @@ public class AndroidUtilities {
         }
     }
 
+    public static String formatCount(int i) {
+        if (i < 1000) {
+            return Integer.toString(i);
+        }
+        ArrayList arrayList = new ArrayList();
+        while (i != 0) {
+            int i2 = i % 1000;
+            i /= 1000;
+            if (i > 0) {
+                arrayList.add(String.format(Locale.ENGLISH, "%03d", new Object[]{Integer.valueOf(i2)}));
+            } else {
+                arrayList.add(Integer.toString(i2));
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int size = arrayList.size() - 1; size >= 0; size--) {
+            sb.append((String) arrayList.get(size));
+            if (size != 0) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String formatWholeNumber(int i, int i2) {
+        if (i == 0) {
+            return "0";
+        }
+        float f = (float) i;
+        if (i2 == 0) {
+            i2 = i;
+        }
+        if (i2 < 1000) {
+            return formatCount(i);
+        }
+        int i3 = 0;
+        while (i2 >= 1000 && i3 < numbersSignatureArray.length - 1) {
+            i2 /= 1000;
+            f /= 1000.0f;
+            i3++;
+        }
+        if (((double) f) < 0.1d) {
+            return "0";
+        }
+        int i4 = (int) f;
+        if (f == ((float) i4)) {
+            return String.format(Locale.ENGLISH, "%s%s", new Object[]{formatCount(i4), numbersSignatureArray[i3]});
+        }
+        return String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(((float) ((int) (f * 10.0f))) / 10.0f), numbersSignatureArray[i3]});
+    }
+
     public static byte[] decodeQuotedPrintable(byte[] bArr) {
         if (bArr == null) {
             return null;
@@ -2895,9 +2942,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131625991(0x7f0e0807, float:1.8879206E38)
+            r7 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r9 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -2918,7 +2965,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625458(0x7f0e05f2, float:1.8878125E38)
+            r1 = 2131625472(0x7f0e0600, float:1.8878153E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3002,7 +3049,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625800(0x7f0e0748, float:1.8878818E38)
+            r1 = 2131625815(0x7f0e0757, float:1.8878849E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3101,21 +3148,21 @@ public class AndroidUtilities {
             if (r8 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r0 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624193(0x7f0e0101, float:1.8875559E38)
+            r0 = 2131624196(0x7f0e0104, float:1.8875565E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626325(0x7f0e0955, float:1.8879883E38)
+            r0 = 2131626341(0x7f0e0965, float:1.8879915E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624484(0x7f0e0224, float:1.887615E38)
+            r9 = 2131624489(0x7f0e0229, float:1.887616E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)
@@ -3949,5 +3996,76 @@ public class AndroidUtilities {
             int systemUiVisibility = decorView.getSystemUiVisibility();
             decorView.setSystemUiVisibility(z ? systemUiVisibility | 16 : systemUiVisibility & -17);
         }
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x0055 A[ADDED_TO_REGION] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean shouldShowUrlInAlert(java.lang.String r8) {
+        /*
+            r0 = 1
+            r1 = 0
+            android.net.Uri r8 = android.net.Uri.parse(r8)     // Catch:{ Exception -> 0x004d }
+            java.lang.String r8 = r8.getHost()     // Catch:{ Exception -> 0x004d }
+            int r2 = r8.length()     // Catch:{ Exception -> 0x004d }
+            r3 = 0
+            r4 = 0
+            r5 = 0
+        L_0x0011:
+            if (r3 >= r2) goto L_0x0053
+            char r6 = r8.charAt(r3)     // Catch:{ Exception -> 0x004b }
+            r7 = 46
+            if (r6 == r7) goto L_0x0048
+            r7 = 45
+            if (r6 == r7) goto L_0x0048
+            r7 = 47
+            if (r6 == r7) goto L_0x0048
+            r7 = 43
+            if (r6 == r7) goto L_0x0048
+            r7 = 48
+            if (r6 < r7) goto L_0x0030
+            r7 = 57
+            if (r6 > r7) goto L_0x0030
+            goto L_0x0048
+        L_0x0030:
+            r7 = 97
+            if (r6 < r7) goto L_0x0038
+            r7 = 122(0x7a, float:1.71E-43)
+            if (r6 < r7) goto L_0x0040
+        L_0x0038:
+            r7 = 65
+            if (r6 < r7) goto L_0x0042
+            r7 = 90
+            if (r6 > r7) goto L_0x0042
+        L_0x0040:
+            r4 = 1
+            goto L_0x0043
+        L_0x0042:
+            r5 = 1
+        L_0x0043:
+            if (r4 == 0) goto L_0x0048
+            if (r5 == 0) goto L_0x0048
+            goto L_0x0053
+        L_0x0048:
+            int r3 = r3 + 1
+            goto L_0x0011
+        L_0x004b:
+            r8 = move-exception
+            goto L_0x0050
+        L_0x004d:
+            r8 = move-exception
+            r4 = 0
+            r5 = 0
+        L_0x0050:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x0053:
+            if (r4 == 0) goto L_0x0058
+            if (r5 == 0) goto L_0x0058
+            goto L_0x0059
+        L_0x0058:
+            r0 = 0
+        L_0x0059:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.shouldShowUrlInAlert(java.lang.String):boolean");
     }
 }

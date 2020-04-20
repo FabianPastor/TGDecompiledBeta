@@ -42,7 +42,7 @@ public class Track {
     private float volume = 0.0f;
     private int width;
 
-    private class SamplePresentationTime {
+    private static class SamplePresentationTime {
         /* access modifiers changed from: private */
         public long dt;
         /* access modifiers changed from: private */
@@ -277,10 +277,7 @@ public class Track {
             if (samplePresentationTime.index != 0) {
                 this.duration += access$000;
             }
-            j = j3;
-            if (access$000 != 0) {
-                j = Math.min(j, access$000);
-            }
+            j = (access$000 <= 0 || access$000 >= 2147483647L) ? j3 : Math.min(j3, access$000);
             if (samplePresentationTime.index != i2) {
                 z = true;
             }

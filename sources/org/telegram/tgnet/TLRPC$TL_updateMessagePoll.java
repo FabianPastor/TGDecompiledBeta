@@ -3,7 +3,7 @@ package org.telegram.tgnet;
 public class TLRPC$TL_updateMessagePoll extends TLRPC$Update {
     public static int constructor = -NUM;
     public int flags;
-    public TLRPC$TL_poll poll;
+    public TLRPC$Poll poll;
     public long poll_id;
     public TLRPC$PollResults results;
 
@@ -11,7 +11,7 @@ public class TLRPC$TL_updateMessagePoll extends TLRPC$Update {
         this.flags = abstractSerializedData.readInt32(z);
         this.poll_id = abstractSerializedData.readInt64(z);
         if ((this.flags & 1) != 0) {
-            this.poll = TLRPC$TL_poll.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.poll = TLRPC$Poll.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         this.results = TLRPC$PollResults.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }

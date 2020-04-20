@@ -1043,7 +1043,7 @@ public class ContentPreviewViewer {
                 this.currentMoveY = 0.0f;
                 this.moveY = 0.0f;
                 this.lastUpdateTime = System.currentTimeMillis();
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 8);
             }
         }
     }
@@ -1070,7 +1070,7 @@ public class ContentPreviewViewer {
             this.currentStickerSet = null;
             this.delegate = null;
             this.isVisible = false;
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 8);
         }
     }
 
@@ -1098,7 +1098,7 @@ public class ContentPreviewViewer {
                 FileLog.e((Throwable) e2);
             }
             Instance = null;
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 8);
         }
     }
 

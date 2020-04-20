@@ -170,7 +170,7 @@ public class Theme {
     public static Paint chat_actionBackgroundPaint = null;
     public static TextPaint chat_actionTextPaint = null;
     public static TextPaint chat_adminPaint = null;
-    public static Drawable[] chat_attachButtonDrawables = new Drawable[6];
+    public static RLottieDrawable[] chat_attachButtonDrawables = new RLottieDrawable[6];
     public static Drawable chat_attachEmptyDrawable = null;
     public static TextPaint chat_audioPerformerPaint = null;
     public static TextPaint chat_audioTimePaint = null;
@@ -273,6 +273,8 @@ public class Theme {
     public static Drawable[][] chat_photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
     public static Drawable[] chat_pollCheckDrawable = new Drawable[2];
     public static Drawable[] chat_pollCrossDrawable = new Drawable[2];
+    public static Drawable[] chat_pollHintDrawable = new Drawable[2];
+    public static Paint chat_pollTimerPaint = null;
     public static Paint chat_radialProgress2Paint = null;
     public static Paint chat_radialProgressPaint = null;
     public static Drawable chat_redLocationIcon = null;
@@ -441,6 +443,9 @@ public class Theme {
     private static Drawable wallpaper;
     private static final Object wallpaperSync = new Object();
 
+    public static void destroyResources() {
+    }
+
     public static class MessageDrawable extends Drawable {
         private Drawable[][] backgroundDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{2, 4}));
         private int[][] backgroundDrawableColor = {new int[]{-1, -1, -1, -1}, new int[]{-1, -1, -1, -1}};
@@ -563,53 +568,235 @@ public class Theme {
             return this.shadowDrawable;
         }
 
-        public Drawable getBackgroundDrawable() {
-            char c;
-            int i;
-            int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
-            boolean z = false;
-            if (this.isTopNear && this.isBottomNear) {
-                c = 3;
-            } else if (this.isTopNear) {
-                c = 2;
-            } else {
-                c = this.isBottomNear ? (char) 1 : 0;
-            }
-            char c2 = this.isSelected;
-            int[][] iArr = this.currentBackgroundDrawableRadius;
-            if (iArr[c2][c] != dp) {
-                iArr[c2][c] = dp;
-                try {
-                    Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(createBitmap);
-                    Paint paint2 = new Paint(1);
-                    paint2.setColor(-1);
-                    this.backupRect.set(getBounds());
-                    setBounds(0, 0, createBitmap.getWidth(), createBitmap.getHeight());
-                    draw(canvas, paint2);
-                    this.backgroundDrawable[c2][c] = new NinePatchDrawable(createBitmap, getByteBuffer((createBitmap.getWidth() / 2) - 1, (createBitmap.getWidth() / 2) + 1, (createBitmap.getHeight() / 2) - 1, (createBitmap.getHeight() / 2) + 1).array(), new Rect(), (String) null);
-                    try {
-                        setBounds(this.backupRect);
-                    } catch (Throwable unused) {
-                    }
-                    z = true;
-                } catch (Throwable unused2) {
-                }
-            }
-            if (this.isSelected) {
-                i = getColor(this.isOut ? "chat_outBubbleSelected" : "chat_inBubbleSelected");
-            } else {
-                i = getColor(this.isOut ? "chat_outBubble" : "chat_inBubble");
-            }
-            if (this.backgroundDrawable[c2][c] != null && (this.backgroundDrawableColor[c2][c] != i || z)) {
-                this.backgroundDrawable[c2][c].setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
-                this.backgroundDrawableColor[c2][c] = i;
-            }
-            return this.backgroundDrawable[c2][c];
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0155  */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x0163  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public android.graphics.drawable.Drawable getBackgroundDrawable() {
+            /*
+                r20 = this;
+                r0 = r20
+                int r1 = org.telegram.messenger.SharedConfig.bubbleRadius
+                float r1 = (float) r1
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                boolean r2 = r0.isTopNear
+                r3 = 2
+                r4 = 1
+                r5 = 0
+                if (r2 == 0) goto L_0x0016
+                boolean r2 = r0.isBottomNear
+                if (r2 == 0) goto L_0x0016
+                r2 = 3
+                goto L_0x0023
+            L_0x0016:
+                boolean r2 = r0.isTopNear
+                if (r2 == 0) goto L_0x001c
+                r2 = 2
+                goto L_0x0023
+            L_0x001c:
+                boolean r2 = r0.isBottomNear
+                if (r2 == 0) goto L_0x0022
+                r2 = 1
+                goto L_0x0023
+            L_0x0022:
+                r2 = 0
+            L_0x0023:
+                boolean r6 = r0.isSelected
+                android.graphics.LinearGradient r7 = r0.gradientShader
+                if (r7 != 0) goto L_0x002d
+                if (r6 != 0) goto L_0x002d
+                r7 = 1
+                goto L_0x002e
+            L_0x002d:
+                r7 = 0
+            L_0x002e:
+                boolean r8 = r0.isOut
+                if (r8 == 0) goto L_0x0035
+                java.lang.String r8 = "chat_outBubbleShadow"
+                goto L_0x0037
+            L_0x0035:
+                java.lang.String r8 = "chat_inBubbleShadow"
+            L_0x0037:
+                int r8 = r0.getColor(r8)
+                int[][] r9 = r0.currentBackgroundDrawableRadius
+                r9 = r9[r6]
+                r9 = r9[r2]
+                if (r9 != r1) goto L_0x004f
+                if (r7 == 0) goto L_0x004c
+                int[] r9 = r0.shadowDrawableColor
+                r9 = r9[r2]
+                if (r9 == r8) goto L_0x004c
+                goto L_0x004f
+            L_0x004c:
+                r4 = 0
+                goto L_0x0151
+            L_0x004f:
+                int[][] r9 = r0.currentBackgroundDrawableRadius
+                r9 = r9[r6]
+                r9[r2] = r1
+                r1 = 1112014848(0x42480000, float:50.0)
+                int r1 = r0.dp(r1)     // Catch:{ all -> 0x004c }
+                r9 = 1109393408(0x42200000, float:40.0)
+                int r10 = r0.dp(r9)     // Catch:{ all -> 0x004c }
+                android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x004c }
+                android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1, r10, r11)     // Catch:{ all -> 0x004c }
+                android.graphics.Canvas r10 = new android.graphics.Canvas     // Catch:{ all -> 0x004c }
+                r10.<init>(r1)     // Catch:{ all -> 0x004c }
+                android.graphics.Rect r11 = r0.backupRect     // Catch:{ all -> 0x004c }
+                android.graphics.Rect r12 = r20.getBounds()     // Catch:{ all -> 0x004c }
+                r11.set(r12)     // Catch:{ all -> 0x004c }
+                r11 = -1
+                if (r7 == 0) goto L_0x0102
+                int[] r7 = r0.shadowDrawableColor     // Catch:{ all -> 0x004c }
+                r7[r2] = r8     // Catch:{ all -> 0x004c }
+                android.graphics.Paint r7 = new android.graphics.Paint     // Catch:{ all -> 0x004c }
+                r7.<init>(r4)     // Catch:{ all -> 0x004c }
+                android.graphics.LinearGradient r15 = new android.graphics.LinearGradient     // Catch:{ all -> 0x004c }
+                r13 = 0
+                r14 = 0
+                r16 = 0
+                int r9 = r0.dp(r9)     // Catch:{ all -> 0x004c }
+                float r9 = (float) r9     // Catch:{ all -> 0x004c }
+                int[] r12 = new int[r3]     // Catch:{ all -> 0x004c }
+                r17 = 358573417(0x155var_, float:4.511449E-26)
+                r12[r5] = r17     // Catch:{ all -> 0x004c }
+                r17 = 694117737(0x295var_, float:4.9603906E-14)
+                r12[r4] = r17     // Catch:{ all -> 0x004c }
+                r18 = 0
+                android.graphics.Shader$TileMode r19 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x004c }
+                r17 = r12
+                r12 = r15
+                r3 = r15
+                r15 = r16
+                r16 = r9
+                r12.<init>(r13, r14, r15, r16, r17, r18, r19)     // Catch:{ all -> 0x004c }
+                r7.setShader(r3)     // Catch:{ all -> 0x004c }
+                android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter     // Catch:{ all -> 0x004c }
+                android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY     // Catch:{ all -> 0x004c }
+                r3.<init>(r8, r9)     // Catch:{ all -> 0x004c }
+                r7.setColorFilter(r3)     // Catch:{ all -> 0x004c }
+                r3 = 1073741824(0x40000000, float:2.0)
+                r8 = 1065353216(0x3var_, float:1.0)
+                r9 = 0
+                r7.setShadowLayer(r3, r9, r8, r11)     // Catch:{ all -> 0x004c }
+                float r3 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x004c }
+                int r3 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
+                if (r3 <= 0) goto L_0x00d0
+                int r3 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                int r3 = r3 + r4
+                int r12 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                int r12 = r12 + r4
+                r0.setBounds(r11, r11, r3, r12)     // Catch:{ all -> 0x004c }
+                goto L_0x00db
+            L_0x00d0:
+                int r3 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                int r12 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                r0.setBounds(r5, r5, r3, r12)     // Catch:{ all -> 0x004c }
+            L_0x00db:
+                r0.draw(r10, r7)     // Catch:{ all -> 0x004c }
+                float r3 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x004c }
+                int r3 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
+                if (r3 <= 0) goto L_0x0102
+                r7.setColor(r5)     // Catch:{ all -> 0x004c }
+                r7.setShadowLayer(r9, r9, r9, r5)     // Catch:{ all -> 0x004c }
+                android.graphics.PorterDuffXfermode r3 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x004c }
+                android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x004c }
+                r3.<init>(r8)     // Catch:{ all -> 0x004c }
+                r7.setXfermode(r3)     // Catch:{ all -> 0x004c }
+                int r3 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                int r8 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                r0.setBounds(r5, r5, r3, r8)     // Catch:{ all -> 0x004c }
+                r0.draw(r10, r7)     // Catch:{ all -> 0x004c }
+            L_0x0102:
+                android.graphics.Paint r3 = new android.graphics.Paint     // Catch:{ all -> 0x004c }
+                r3.<init>(r4)     // Catch:{ all -> 0x004c }
+                r3.setColor(r11)     // Catch:{ all -> 0x004c }
+                int r7 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                int r8 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                r0.setBounds(r5, r5, r7, r8)     // Catch:{ all -> 0x004c }
+                r0.draw(r10, r3)     // Catch:{ all -> 0x004c }
+                android.graphics.drawable.Drawable[][] r3 = r0.backgroundDrawable     // Catch:{ all -> 0x004c }
+                r3 = r3[r6]     // Catch:{ all -> 0x004c }
+                android.graphics.drawable.NinePatchDrawable r7 = new android.graphics.drawable.NinePatchDrawable     // Catch:{ all -> 0x004c }
+                int r8 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                r9 = 2
+                int r8 = r8 / r9
+                int r8 = r8 - r4
+                int r10 = r1.getWidth()     // Catch:{ all -> 0x004c }
+                int r10 = r10 / r9
+                int r10 = r10 + r4
+                int r11 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                int r11 = r11 / r9
+                int r11 = r11 - r4
+                int r12 = r1.getHeight()     // Catch:{ all -> 0x004c }
+                int r12 = r12 / r9
+                int r12 = r12 + r4
+                java.nio.ByteBuffer r8 = getByteBuffer(r8, r10, r11, r12)     // Catch:{ all -> 0x004c }
+                byte[] r8 = r8.array()     // Catch:{ all -> 0x004c }
+                android.graphics.Rect r9 = new android.graphics.Rect     // Catch:{ all -> 0x004c }
+                r9.<init>()     // Catch:{ all -> 0x004c }
+                r10 = 0
+                r7.<init>(r1, r8, r9, r10)     // Catch:{ all -> 0x004c }
+                r3[r2] = r7     // Catch:{ all -> 0x004c }
+                android.graphics.Rect r1 = r0.backupRect     // Catch:{ all -> 0x0150 }
+                r0.setBounds(r1)     // Catch:{ all -> 0x0150 }
+                goto L_0x0151
+            L_0x0150:
+            L_0x0151:
+                boolean r1 = r0.isSelected
+                if (r1 == 0) goto L_0x0163
+                boolean r1 = r0.isOut
+                if (r1 == 0) goto L_0x015c
+                java.lang.String r1 = "chat_outBubbleSelected"
+                goto L_0x015e
+            L_0x015c:
+                java.lang.String r1 = "chat_inBubbleSelected"
+            L_0x015e:
+                int r1 = r0.getColor(r1)
+                goto L_0x0170
+            L_0x0163:
+                boolean r1 = r0.isOut
+                if (r1 == 0) goto L_0x016a
+                java.lang.String r1 = "chat_outBubble"
+                goto L_0x016c
+            L_0x016a:
+                java.lang.String r1 = "chat_inBubble"
+            L_0x016c:
+                int r1 = r0.getColor(r1)
+            L_0x0170:
+                android.graphics.drawable.Drawable[][] r3 = r0.backgroundDrawable
+                r3 = r3[r6]
+                r3 = r3[r2]
+                if (r3 == 0) goto L_0x0198
+                int[][] r3 = r0.backgroundDrawableColor
+                r3 = r3[r6]
+                r3 = r3[r2]
+                if (r3 != r1) goto L_0x0182
+                if (r4 == 0) goto L_0x0198
+            L_0x0182:
+                android.graphics.drawable.Drawable[][] r3 = r0.backgroundDrawable
+                r3 = r3[r6]
+                r3 = r3[r2]
+                android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+                android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
+                r4.<init>(r1, r5)
+                r3.setColorFilter(r4)
+                int[][] r3 = r0.backgroundDrawableColor
+                r3 = r3[r6]
+                r3[r2] = r1
+            L_0x0198:
+                android.graphics.drawable.Drawable[][] r1 = r0.backgroundDrawable
+                r1 = r1[r6]
+                r1 = r1[r2]
+                return r1
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.getBackgroundDrawable():android.graphics.drawable.Drawable");
         }
 
         public Drawable getShadowDrawable() {
             char c;
+            if (this.gradientShader == null && !this.isSelected) {
+                return null;
+            }
             int dp = AndroidUtilities.dp((float) SharedConfig.bubbleRadius);
             boolean z = false;
             if (this.isTopNear && this.isBottomNear) {
@@ -626,7 +813,7 @@ public class Theme {
                     Bitmap createBitmap = Bitmap.createBitmap(dp(50.0f), dp(40.0f), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(createBitmap);
                     Paint paint2 = new Paint(1);
-                    LinearGradient linearGradient = r9;
+                    LinearGradient linearGradient = r10;
                     LinearGradient linearGradient2 = new LinearGradient(0.0f, 0.0f, 0.0f, (float) dp(40.0f), new int[]{NUM, NUM}, (float[]) null, Shader.TileMode.CLAMP);
                     paint2.setShader(linearGradient);
                     paint2.setShadowLayer(2.0f, 0.0f, 1.0f, -1);
@@ -3153,46 +3340,46 @@ public class Theme {
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v86, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v319, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v331, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v89, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v324, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v336, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v90, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v242, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v240, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v328, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v329, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v340, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v341, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v92, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v93, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v332, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v344, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v97, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v282, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v338, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v280, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v350, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v110, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v341, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v344, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v345, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v348, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v366, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v367, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v368, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v369, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v375, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v376, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v377, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v353, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v356, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v357, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v360, resolved type: org.telegram.ui.ActionBar.Theme$ThemeInfo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v378, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v379, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v380, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v381, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v387, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v388, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v389, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v390, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r5v22, types: [boolean] */
     /* JADX WARNING: type inference failed for: r5v24 */
     /* JADX WARNING: type inference failed for: r5v35 */
     /* JADX WARNING: Code restructure failed: missing block: B:74:0x2CLASSNAME, code lost:
         if (r0 == null) goto L_0x2CLASSNAME;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:75:0x2c1a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:75:0x2CLASSNAME, code lost:
         r0 = themesDict.get(r0);
         r9 = r9;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:76:0x2CLASSNAME, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:76:0x2c4e, code lost:
         if (r0 == null) goto L_0x2CLASSNAME;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:77:0x2CLASSNAME, code lost:
@@ -3200,21 +3387,21 @@ public class Theme {
         r9 = r9;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:130:0x2d4e A[Catch:{ all -> 0x2d76 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x2d5a A[Catch:{ all -> 0x2d74 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x2e89 A[Catch:{ Exception -> 0x2var_ }] */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x2ea6 A[Catch:{ Exception -> 0x2var_ }] */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x2ea9 A[Catch:{ Exception -> 0x2var_ }] */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x2eb6 A[Catch:{ Exception -> 0x2var_ }] */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:222:0x2var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x2fe4  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x2fed  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x302d  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x304c  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x3050  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x3052  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x2ec5 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x2d7a A[Catch:{ all -> 0x2da2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x2d86 A[Catch:{ all -> 0x2da0 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x2eb5 A[Catch:{ Exception -> 0x2f9d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x2ed2 A[Catch:{ Exception -> 0x2f9d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x2ed5 A[Catch:{ Exception -> 0x2f9d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x2ee2 A[Catch:{ Exception -> 0x2f9d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:221:0x2fb0  */
+    /* JADX WARNING: Removed duplicated region for block: B:222:0x2fb3  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x3010  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x3019  */
+    /* JADX WARNING: Removed duplicated region for block: B:244:0x3057  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x3076  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x307a  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x307c  */
+    /* JADX WARNING: Removed duplicated region for block: B:265:0x2ef1 A[SYNTHETIC] */
     static {
         /*
             java.lang.Object r0 = new java.lang.Object
@@ -3270,8 +3457,10 @@ public class Theme {
             chat_pollCheckDrawable = r7
             android.graphics.drawable.Drawable[] r7 = new android.graphics.drawable.Drawable[r6]
             chat_pollCrossDrawable = r7
+            android.graphics.drawable.Drawable[] r7 = new android.graphics.drawable.Drawable[r6]
+            chat_pollHintDrawable = r7
             r7 = 6
-            android.graphics.drawable.Drawable[] r8 = new android.graphics.drawable.Drawable[r7]
+            org.telegram.ui.Components.RLottieDrawable[] r8 = new org.telegram.ui.Components.RLottieDrawable[r7]
             chat_attachButtonDrawables = r8
             android.graphics.drawable.Drawable[] r8 = new android.graphics.drawable.Drawable[r6]
             chat_locationDrawable = r8
@@ -4474,12 +4663,22 @@ public class Theme {
             java.lang.String r15 = "chat_attachGalleryBackground"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -13726231(0xffffffffff2e8de9, float:-2.3202251E38)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachGalleryText"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachGalleryIcon"
             r7.put(r9, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             r9 = -1351584(0xffffffffffeb6060, float:NaN)
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "chat_attachAudioBackground"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -2209977(0xffffffffffde4747, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachAudioText"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachAudioIcon"
@@ -4490,12 +4689,22 @@ public class Theme {
             java.lang.String r15 = "chat_attachFileBackground"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -15423260(0xfffffffffvar_a8e4, float:-1.9760267E38)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachFileText"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachFileIcon"
             r7.put(r9, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             r9 = -868277(0xfffffffffff2CLASSNAMEb, float:NaN)
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "chat_attachContactBackground"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -2121728(0xffffffffffdfa000, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachContactText"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachContactIcon"
@@ -4506,12 +4715,22 @@ public class Theme {
             java.lang.String r15 = "chat_attachLocationBackground"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -12801233(0xffffffffff3cab2f, float:-2.507837E38)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachLocationText"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachLocationIcon"
             r7.put(r9, r0)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             r9 = -868277(0xfffffffffff2CLASSNAMEb, float:NaN)
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             java.lang.String r15 = "chat_attachPollBackground"
+            r7.put(r15, r9)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
+            r9 = -2121728(0xffffffffffdfa000, float:NaN)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            java.lang.String r15 = "chat_attachPollText"
             r7.put(r15, r9)
             java.util.HashMap<java.lang.String, java.lang.Integer> r7 = defaultColors
             java.lang.String r9 = "chat_attachPollIcon"
@@ -5420,18 +5639,8 @@ public class Theme {
             java.lang.String r8 = "chat_messagePanelIcons"
             r4.put(r8, r7)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r7 = -11817481(0xffffffffff4badf7, float:-2.7073656E38)
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            java.lang.String r8 = "chat_messagePanelVideoFrame"
-            r4.put(r8, r7)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             java.lang.String r7 = "chat_recordedVoicePlayPause"
             r4.put(r7, r0)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r7 = -2495749(0xffffffffffd9eafb, float:NaN)
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            java.lang.String r8 = "chat_recordedVoicePlayPausePressed"
-            r4.put(r8, r7)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             r7 = -2468275(0xffffffffffda564d, float:NaN)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
@@ -5525,11 +5734,6 @@ public class Theme {
             r7 = -10639650(0xffffffffff5da6de, float:-2.9462581E38)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
             java.lang.String r8 = "chat_messagePanelVoiceBackground"
-            r4.put(r8, r7)
-            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
-            r7 = 218103808(0xd000000, float:3.9443045E-31)
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            java.lang.String r8 = "chat_messagePanelVoiceShadow"
             r4.put(r8, r7)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             r7 = -9211021(0xfffffffffvar_, float:-3.2360185E38)
@@ -5755,6 +5959,11 @@ public class Theme {
             r7 = -1445899(0xffffffffffe9eff5, float:NaN)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
             java.lang.String r8 = "player_progressBackground"
+            r4.put(r8, r7)
+            java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
+            r7 = -3353637(0xffffffffffccd3db, float:NaN)
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+            java.lang.String r8 = "player_progressBackground2"
             r4.put(r8, r7)
             java.util.HashMap<java.lang.String, java.lang.Integer> r4 = defaultColors
             r7 = -1445899(0xffffffffffe9eff5, float:NaN)
@@ -6775,6 +6984,30 @@ public class Theme {
             java.lang.String r4 = "statisticChartPopupBackground"
             java.lang.String r7 = "dialogBackground"
             r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachGalleryText"
+            java.lang.String r7 = "chat_attachGalleryBackground"
+            r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachAudioText"
+            java.lang.String r7 = "chat_attachAudioBackground"
+            r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachFileText"
+            java.lang.String r7 = "chat_attachFileBackground"
+            r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachContactText"
+            java.lang.String r7 = "chat_attachContactBackground"
+            r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachLocationText"
+            java.lang.String r7 = "chat_attachLocationBackground"
+            r0.put(r4, r7)
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
+            java.lang.String r4 = "chat_attachPollText"
+            java.lang.String r7 = "chat_attachPollBackground"
+            r0.put(r4, r7)
             java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
             java.lang.String[] r4 = keys_avatar_background
             java.util.List r4 = java.util.Arrays.asList(r4)
@@ -6788,6 +7021,12 @@ public class Theme {
             r0.add(r4)
             java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
             java.lang.String r4 = "chat_attachGalleryBackground"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "chat_attachFileText"
+            r0.add(r4)
+            java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
+            java.lang.String r4 = "chat_attachGalleryText"
             r0.add(r4)
             java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
             java.lang.String r4 = "chat_shareBackground"
@@ -7446,20 +7685,20 @@ public class Theme {
             java.lang.String r0 = "themes2"
             java.lang.String r0 = r4.getString(r0, r2)
             r7 = 0
-        L_0x2ab8:
+        L_0x2ae4:
             r8 = 3
-            if (r7 >= r8) goto L_0x2b00
+            if (r7 >= r8) goto L_0x2b2c
             int[] r8 = remoteThemesHash
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
             java.lang.String r10 = "remoteThemesHash"
             r9.append(r10)
-            if (r7 == 0) goto L_0x2ace
+            if (r7 == 0) goto L_0x2afa
             java.lang.Integer r10 = java.lang.Integer.valueOf(r7)
-            goto L_0x2acf
-        L_0x2ace:
+            goto L_0x2afb
+        L_0x2afa:
             r10 = r3
-        L_0x2acf:
+        L_0x2afb:
             r9.append(r10)
             java.lang.String r9 = r9.toString()
             int r9 = r4.getInt(r9, r1)
@@ -7469,59 +7708,59 @@ public class Theme {
             r9.<init>()
             java.lang.String r10 = "lastLoadingThemesTime"
             r9.append(r10)
-            if (r7 == 0) goto L_0x2aef
+            if (r7 == 0) goto L_0x2b1b
             java.lang.Integer r10 = java.lang.Integer.valueOf(r7)
-            goto L_0x2af0
-        L_0x2aef:
+            goto L_0x2b1c
+        L_0x2b1b:
             r10 = r3
-        L_0x2af0:
+        L_0x2b1c:
             r9.append(r10)
             java.lang.String r9 = r9.toString()
             int r9 = r4.getInt(r9, r1)
             r8[r7] = r9
             int r7 = r7 + 1
-            goto L_0x2ab8
-        L_0x2b00:
+            goto L_0x2ae4
+        L_0x2b2c:
             boolean r7 = android.text.TextUtils.isEmpty(r0)
-            if (r7 != 0) goto L_0x2b3a
-            org.json.JSONArray r7 = new org.json.JSONArray     // Catch:{ Exception -> 0x2b35 }
-            r7.<init>(r0)     // Catch:{ Exception -> 0x2b35 }
+            if (r7 != 0) goto L_0x2b66
+            org.json.JSONArray r7 = new org.json.JSONArray     // Catch:{ Exception -> 0x2b61 }
+            r7.<init>(r0)     // Catch:{ Exception -> 0x2b61 }
             r0 = 0
-        L_0x2b0c:
-            int r8 = r7.length()     // Catch:{ Exception -> 0x2b35 }
-            if (r0 >= r8) goto L_0x2b7e
-            org.json.JSONObject r8 = r7.getJSONObject(r0)     // Catch:{ Exception -> 0x2b35 }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r8)     // Catch:{ Exception -> 0x2b35 }
-            if (r8 == 0) goto L_0x2b32
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = otherThemes     // Catch:{ Exception -> 0x2b35 }
-            r9.add(r8)     // Catch:{ Exception -> 0x2b35 }
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themes     // Catch:{ Exception -> 0x2b35 }
-            r9.add(r8)     // Catch:{ Exception -> 0x2b35 }
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themesDict     // Catch:{ Exception -> 0x2b35 }
-            java.lang.String r10 = r8.getKey()     // Catch:{ Exception -> 0x2b35 }
-            r9.put(r10, r8)     // Catch:{ Exception -> 0x2b35 }
-            r8.loadWallpapers(r4)     // Catch:{ Exception -> 0x2b35 }
-        L_0x2b32:
+        L_0x2b38:
+            int r8 = r7.length()     // Catch:{ Exception -> 0x2b61 }
+            if (r0 >= r8) goto L_0x2baa
+            org.json.JSONObject r8 = r7.getJSONObject(r0)     // Catch:{ Exception -> 0x2b61 }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithJson(r8)     // Catch:{ Exception -> 0x2b61 }
+            if (r8 == 0) goto L_0x2b5e
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = otherThemes     // Catch:{ Exception -> 0x2b61 }
+            r9.add(r8)     // Catch:{ Exception -> 0x2b61 }
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themes     // Catch:{ Exception -> 0x2b61 }
+            r9.add(r8)     // Catch:{ Exception -> 0x2b61 }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themesDict     // Catch:{ Exception -> 0x2b61 }
+            java.lang.String r10 = r8.getKey()     // Catch:{ Exception -> 0x2b61 }
+            r9.put(r10, r8)     // Catch:{ Exception -> 0x2b61 }
+            r8.loadWallpapers(r4)     // Catch:{ Exception -> 0x2b61 }
+        L_0x2b5e:
             int r0 = r0 + 1
-            goto L_0x2b0c
-        L_0x2b35:
+            goto L_0x2b38
+        L_0x2b61:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x2b7e
-        L_0x2b3a:
+            goto L_0x2baa
+        L_0x2b66:
             java.lang.String r0 = "themes"
             java.lang.String r0 = r4.getString(r0, r2)
             boolean r7 = android.text.TextUtils.isEmpty(r0)
-            if (r7 != 0) goto L_0x2b7e
+            if (r7 != 0) goto L_0x2baa
             java.lang.String r7 = "&"
             java.lang.String[] r0 = r0.split(r7)
             r7 = 0
-        L_0x2b4d:
+        L_0x2b79:
             int r8 = r0.length
-            if (r7 >= r8) goto L_0x2b6e
+            if (r7 >= r8) goto L_0x2b9a
             r8 = r0[r7]
             org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.ThemeInfo.createWithString(r8)
-            if (r8 == 0) goto L_0x2b6b
+            if (r8 == 0) goto L_0x2b97
             java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = otherThemes
             r9.add(r8)
             java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themes
@@ -7529,551 +7768,551 @@ public class Theme {
             java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themesDict
             java.lang.String r10 = r8.getKey()
             r9.put(r10, r8)
-        L_0x2b6b:
+        L_0x2b97:
             int r7 = r7 + 1
-            goto L_0x2b4d
-        L_0x2b6e:
+            goto L_0x2b79
+        L_0x2b9a:
             saveOtherThemes(r5, r5)
             android.content.SharedPreferences$Editor r0 = r4.edit()
             java.lang.String r7 = "themes"
             android.content.SharedPreferences$Editor r0 = r0.remove(r7)
             r0.commit()
-        L_0x2b7e:
+        L_0x2baa:
             sortThemes()
             android.content.SharedPreferences r7 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2f7c }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2fa8 }
             java.lang.String r8 = "Dark Blue"
-            java.lang.Object r0 = r0.get(r8)     // Catch:{ Exception -> 0x2f7c }
+            java.lang.Object r0 = r0.get(r8)     // Catch:{ Exception -> 0x2fa8 }
             r8 = r0
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x2f7c }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x2fa8 }
             java.lang.String r0 = "theme"
-            java.lang.String r0 = r7.getString(r0, r2)     // Catch:{ Exception -> 0x2f7c }
+            java.lang.String r0 = r7.getString(r0, r2)     // Catch:{ Exception -> 0x2fa8 }
             java.lang.String r9 = "Default"
-            boolean r9 = r9.equals(r0)     // Catch:{ Exception -> 0x2f7c }
-            if (r9 == 0) goto L_0x2bb1
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2bae }
+            boolean r9 = r9.equals(r0)     // Catch:{ Exception -> 0x2fa8 }
+            if (r9 == 0) goto L_0x2bdd
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2bda }
             java.lang.String r9 = "Blue"
-            java.lang.Object r0 = r0.get(r9)     // Catch:{ Exception -> 0x2bae }
+            java.lang.Object r0 = r0.get(r9)     // Catch:{ Exception -> 0x2bda }
             r9 = r0
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9     // Catch:{ Exception -> 0x2bae }
-            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2var_ }
-            r9.currentAccentId = r0     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2bea
-        L_0x2bae:
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9     // Catch:{ Exception -> 0x2bda }
+            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2fa5 }
+            r9.currentAccentId = r0     // Catch:{ Exception -> 0x2fa5 }
+            goto L_0x2CLASSNAME
+        L_0x2bda:
             r0 = move-exception
-            goto L_0x2f7e
-        L_0x2bb1:
+            goto L_0x2faa
+        L_0x2bdd:
             java.lang.String r9 = "Dark"
-            boolean r9 = r9.equals(r0)     // Catch:{ Exception -> 0x2f7c }
-            if (r9 == 0) goto L_0x2bc3
+            boolean r9 = r9.equals(r0)     // Catch:{ Exception -> 0x2fa8 }
+            if (r9 == 0) goto L_0x2bef
             r0 = 9
-            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2bbf }
+            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2beb }
             r9 = r8
-            goto L_0x2bea
-        L_0x2bbf:
+            goto L_0x2CLASSNAME
+        L_0x2beb:
             r0 = move-exception
             r2 = r8
-            goto L_0x2f7e
-        L_0x2bc3:
-            if (r0 == 0) goto L_0x2be9
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themesDict     // Catch:{ Exception -> 0x2bae }
-            java.lang.Object r0 = r9.get(r0)     // Catch:{ Exception -> 0x2bae }
+            goto L_0x2faa
+        L_0x2bef:
+            if (r0 == 0) goto L_0x2CLASSNAME
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r9 = themesDict     // Catch:{ Exception -> 0x2bda }
+            java.lang.Object r0 = r9.get(r0)     // Catch:{ Exception -> 0x2bda }
             r9 = r0
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9     // Catch:{ Exception -> 0x2bae }
-            if (r9 == 0) goto L_0x2bea
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r9     // Catch:{ Exception -> 0x2bda }
+            if (r9 == 0) goto L_0x2CLASSNAME
             java.lang.String r0 = "lastDayTheme"
-            boolean r0 = r4.contains(r0)     // Catch:{ Exception -> 0x2var_ }
-            if (r0 != 0) goto L_0x2bea
-            android.content.SharedPreferences$Editor r0 = r4.edit()     // Catch:{ Exception -> 0x2var_ }
+            boolean r0 = r4.contains(r0)     // Catch:{ Exception -> 0x2fa5 }
+            if (r0 != 0) goto L_0x2CLASSNAME
+            android.content.SharedPreferences$Editor r0 = r4.edit()     // Catch:{ Exception -> 0x2fa5 }
             java.lang.String r10 = "lastDayTheme"
-            java.lang.String r11 = r9.getKey()     // Catch:{ Exception -> 0x2var_ }
-            r0.putString(r10, r11)     // Catch:{ Exception -> 0x2var_ }
-            r0.commit()     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2bea
-        L_0x2be9:
+            java.lang.String r11 = r9.getKey()     // Catch:{ Exception -> 0x2fa5 }
+            r0.putString(r10, r11)     // Catch:{ Exception -> 0x2fa5 }
+            r0.commit()     // Catch:{ Exception -> 0x2fa5 }
+            goto L_0x2CLASSNAME
+        L_0x2CLASSNAME:
             r9 = r2
-        L_0x2bea:
+        L_0x2CLASSNAME:
             java.lang.String r0 = "nighttheme"
-            java.lang.String r0 = r7.getString(r0, r2)     // Catch:{ Exception -> 0x2var_ }
+            java.lang.String r0 = r7.getString(r0, r2)     // Catch:{ Exception -> 0x2fa5 }
             java.lang.String r10 = "Default"
-            boolean r10 = r10.equals(r0)     // Catch:{ Exception -> 0x2var_ }
+            boolean r10 = r10.equals(r0)     // Catch:{ Exception -> 0x2fa5 }
             if (r10 == 0) goto L_0x2CLASSNAME
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2var_ }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2fa5 }
             java.lang.String r8 = "Blue"
-            java.lang.Object r0 = r0.get(r8)     // Catch:{ Exception -> 0x2var_ }
+            java.lang.Object r0 = r0.get(r8)     // Catch:{ Exception -> 0x2fa5 }
             r8 = r0
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x2var_ }
-            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2bbf }
-            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2bbf }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r8     // Catch:{ Exception -> 0x2fa5 }
+            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2beb }
+            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2beb }
             r9 = r8
             goto L_0x2CLASSNAME
         L_0x2CLASSNAME:
             java.lang.String r10 = "Dark"
-            boolean r10 = r10.equals(r0)     // Catch:{ Exception -> 0x2var_ }
+            boolean r10 = r10.equals(r0)     // Catch:{ Exception -> 0x2fa5 }
             if (r10 == 0) goto L_0x2CLASSNAME
-            currentNightTheme = r8     // Catch:{ Exception -> 0x2var_ }
+            currentNightTheme = r8     // Catch:{ Exception -> 0x2fa5 }
             r0 = 9
-            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2var_ }
+            r8.currentAccentId = r0     // Catch:{ Exception -> 0x2fa5 }
             goto L_0x2CLASSNAME
         L_0x2CLASSNAME:
             if (r0 == 0) goto L_0x2CLASSNAME
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r8 = themesDict     // Catch:{ Exception -> 0x2var_ }
-            java.lang.Object r0 = r8.get(r0)     // Catch:{ Exception -> 0x2var_ }
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x2var_ }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r8 = themesDict     // Catch:{ Exception -> 0x2fa5 }
+            java.lang.Object r0 = r8.get(r0)     // Catch:{ Exception -> 0x2fa5 }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0     // Catch:{ Exception -> 0x2fa5 }
             if (r0 == 0) goto L_0x2CLASSNAME
-            currentNightTheme = r0     // Catch:{ Exception -> 0x2var_ }
+            currentNightTheme = r0     // Catch:{ Exception -> 0x2fa5 }
         L_0x2CLASSNAME:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = currentNightTheme     // Catch:{ Exception -> 0x2var_ }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = currentNightTheme     // Catch:{ Exception -> 0x2f9f }
             if (r0 == 0) goto L_0x2CLASSNAME
             java.lang.String r0 = "lastDarkTheme"
-            boolean r0 = r4.contains(r0)     // Catch:{ Exception -> 0x2var_ }
+            boolean r0 = r4.contains(r0)     // Catch:{ Exception -> 0x2fa5 }
             if (r0 != 0) goto L_0x2CLASSNAME
-            android.content.SharedPreferences$Editor r0 = r4.edit()     // Catch:{ Exception -> 0x2var_ }
+            android.content.SharedPreferences$Editor r0 = r4.edit()     // Catch:{ Exception -> 0x2fa5 }
             java.lang.String r8 = "lastDarkTheme"
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = currentNightTheme     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r10 = r10.getKey()     // Catch:{ Exception -> 0x2var_ }
-            r0.putString(r8, r10)     // Catch:{ Exception -> 0x2var_ }
-            r0.commit()     // Catch:{ Exception -> 0x2var_ }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = currentNightTheme     // Catch:{ Exception -> 0x2fa5 }
+            java.lang.String r10 = r10.getKey()     // Catch:{ Exception -> 0x2fa5 }
+            r0.putString(r8, r10)     // Catch:{ Exception -> 0x2fa5 }
+            r0.commit()     // Catch:{ Exception -> 0x2fa5 }
         L_0x2CLASSNAME:
-            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2var_ }
-            java.util.Collection r0 = r0.values()     // Catch:{ Exception -> 0x2var_ }
-            java.util.Iterator r8 = r0.iterator()     // Catch:{ Exception -> 0x2var_ }
+            java.util.HashMap<java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeInfo> r0 = themesDict     // Catch:{ Exception -> 0x2f9f }
+            java.util.Collection r0 = r0.values()     // Catch:{ Exception -> 0x2f9f }
+            java.util.Iterator r8 = r0.iterator()     // Catch:{ Exception -> 0x2f9f }
             r10 = r2
             r11 = r10
-        L_0x2CLASSNAME:
-            boolean r0 = r8.hasNext()     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2ece
-            java.lang.Object r0 = r8.next()     // Catch:{ Exception -> 0x2var_ }
+        L_0x2c7c:
+            boolean r0 = r8.hasNext()     // Catch:{ Exception -> 0x2f9f }
+            if (r0 == 0) goto L_0x2efa
+            java.lang.Object r0 = r8.next()     // Catch:{ Exception -> 0x2f9f }
             r12 = r0
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r12 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r12     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r12.assetName     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2ebf
-            int r0 = r12.accentBaseColor     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2ebf
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2var_ }
-            r0.<init>()     // Catch:{ Exception -> 0x2var_ }
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r12 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r12     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r0 = r12.assetName     // Catch:{ Exception -> 0x2f9f }
+            if (r0 == 0) goto L_0x2eeb
+            int r0 = r12.accentBaseColor     // Catch:{ Exception -> 0x2f9f }
+            if (r0 == 0) goto L_0x2eeb
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2f9f }
+            r0.<init>()     // Catch:{ Exception -> 0x2f9f }
             java.lang.String r13 = "accents_"
-            r0.append(r13)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r13 = r12.assetName     // Catch:{ Exception -> 0x2var_ }
-            r0.append(r13)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r4.getString(r0, r2)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2var_ }
-            r13.<init>()     // Catch:{ Exception -> 0x2var_ }
+            r0.append(r13)     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r13 = r12.assetName     // Catch:{ Exception -> 0x2f9f }
+            r0.append(r13)     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r0 = r4.getString(r0, r2)     // Catch:{ Exception -> 0x2f9f }
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2f9f }
+            r13.<init>()     // Catch:{ Exception -> 0x2f9f }
             java.lang.String r14 = "accent_current_"
-            r13.append(r14)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r14 = r12.assetName     // Catch:{ Exception -> 0x2var_ }
-            r13.append(r14)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x2var_ }
-            boolean r14 = r12.firstAccentIsDefault     // Catch:{ Exception -> 0x2var_ }
-            if (r14 == 0) goto L_0x2CLASSNAME
-            int r14 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2CLASSNAME
-        L_0x2CLASSNAME:
+            r13.append(r14)     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r14 = r12.assetName     // Catch:{ Exception -> 0x2f9f }
+            r13.append(r14)     // Catch:{ Exception -> 0x2f9f }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x2f9f }
+            boolean r14 = r12.firstAccentIsDefault     // Catch:{ Exception -> 0x2f9f }
+            if (r14 == 0) goto L_0x2cc2
+            int r14 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2fa5 }
+            goto L_0x2cc3
+        L_0x2cc2:
             r14 = 0
-        L_0x2CLASSNAME:
-            int r13 = r4.getInt(r13, r14)     // Catch:{ Exception -> 0x2var_ }
-            r12.currentAccentId = r13     // Catch:{ Exception -> 0x2var_ }
-            java.util.ArrayList r13 = new java.util.ArrayList     // Catch:{ Exception -> 0x2var_ }
-            r13.<init>()     // Catch:{ Exception -> 0x2var_ }
-            boolean r14 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x2var_ }
-            if (r14 != 0) goto L_0x2d93
-            org.telegram.tgnet.SerializedData r14 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x2d80 }
+        L_0x2cc3:
+            int r13 = r4.getInt(r13, r14)     // Catch:{ Exception -> 0x2f9f }
+            r12.currentAccentId = r13     // Catch:{ Exception -> 0x2f9f }
+            java.util.ArrayList r13 = new java.util.ArrayList     // Catch:{ Exception -> 0x2f9f }
+            r13.<init>()     // Catch:{ Exception -> 0x2f9f }
+            boolean r14 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x2f9f }
+            if (r14 != 0) goto L_0x2dbf
+            org.telegram.tgnet.SerializedData r14 = new org.telegram.tgnet.SerializedData     // Catch:{ all -> 0x2dac }
             r15 = 3
-            byte[] r0 = android.util.Base64.decode(r0, r15)     // Catch:{ all -> 0x2d80 }
-            r14.<init>((byte[]) r0)     // Catch:{ all -> 0x2d80 }
-            int r0 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
-            int r15 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
+            byte[] r0 = android.util.Base64.decode(r0, r15)     // Catch:{ all -> 0x2dac }
+            r14.<init>((byte[]) r0)     // Catch:{ all -> 0x2dac }
+            int r0 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
+            int r15 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
             r2 = 0
-        L_0x2cbb:
-            if (r2 >= r15) goto L_0x2d7a
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ all -> 0x2d80 }
-            r1.<init>()     // Catch:{ all -> 0x2d80 }
-            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
-            r1.id = r6     // Catch:{ all -> 0x2d80 }
-            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
-            r1.accentColor = r6     // Catch:{ all -> 0x2d80 }
-            r1.parentTheme = r12     // Catch:{ all -> 0x2d80 }
-            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
-            r1.myMessagesAccentColor = r6     // Catch:{ all -> 0x2d80 }
-            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2d80 }
-            r1.myMessagesGradientAccentColor = r6     // Catch:{ all -> 0x2d80 }
+        L_0x2ce7:
+            if (r2 >= r15) goto L_0x2da6
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r1 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ all -> 0x2dac }
+            r1.<init>()     // Catch:{ all -> 0x2dac }
+            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
+            r1.id = r6     // Catch:{ all -> 0x2dac }
+            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
+            r1.accentColor = r6     // Catch:{ all -> 0x2dac }
+            r1.parentTheme = r12     // Catch:{ all -> 0x2dac }
+            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
+            r1.myMessagesAccentColor = r6     // Catch:{ all -> 0x2dac }
+            int r6 = r14.readInt32(r5)     // Catch:{ all -> 0x2dac }
+            r1.myMessagesGradientAccentColor = r6     // Catch:{ all -> 0x2dac }
             r6 = 3
-            if (r0 < r6) goto L_0x2ce9
+            if (r0 < r6) goto L_0x2d15
             r22 = r8
             r6 = r9
-            long r8 = r14.readInt64(r5)     // Catch:{ all -> 0x2d76 }
-            r1.backgroundOverrideColor = r8     // Catch:{ all -> 0x2d76 }
-            goto L_0x2cf3
-        L_0x2ce9:
+            long r8 = r14.readInt64(r5)     // Catch:{ all -> 0x2da2 }
+            r1.backgroundOverrideColor = r8     // Catch:{ all -> 0x2da2 }
+            goto L_0x2d1f
+        L_0x2d15:
             r22 = r8
             r6 = r9
-            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2d76 }
-            long r8 = (long) r8     // Catch:{ all -> 0x2d76 }
-            r1.backgroundOverrideColor = r8     // Catch:{ all -> 0x2d76 }
-        L_0x2cf3:
+            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2da2 }
+            long r8 = (long) r8     // Catch:{ all -> 0x2da2 }
+            r1.backgroundOverrideColor = r8     // Catch:{ all -> 0x2da2 }
+        L_0x2d1f:
             r8 = 2
-            if (r0 < r8) goto L_0x2cfd
-            long r8 = r14.readInt64(r5)     // Catch:{ all -> 0x2d76 }
-            r1.backgroundGradientOverrideColor = r8     // Catch:{ all -> 0x2d76 }
-            goto L_0x2d04
-        L_0x2cfd:
-            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2d76 }
-            long r8 = (long) r8     // Catch:{ all -> 0x2d76 }
-            r1.backgroundGradientOverrideColor = r8     // Catch:{ all -> 0x2d76 }
-        L_0x2d04:
-            if (r0 < r5) goto L_0x2d0c
-            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2d76 }
-            r1.backgroundRotation = r8     // Catch:{ all -> 0x2d76 }
-        L_0x2d0c:
-            r8 = 4
-            if (r0 < r8) goto L_0x2d28
-            r14.readInt64(r5)     // Catch:{ all -> 0x2d76 }
-            double r8 = r14.readDouble(r5)     // Catch:{ all -> 0x2d76 }
-            float r8 = (float) r8     // Catch:{ all -> 0x2d76 }
-            r1.patternIntensity = r8     // Catch:{ all -> 0x2d76 }
-            boolean r8 = r14.readBool(r5)     // Catch:{ all -> 0x2d76 }
-            r1.patternMotion = r8     // Catch:{ all -> 0x2d76 }
-            r8 = 5
             if (r0 < r8) goto L_0x2d29
-            java.lang.String r8 = r14.readString(r5)     // Catch:{ all -> 0x2d76 }
-            r1.patternSlug = r8     // Catch:{ all -> 0x2d76 }
-        L_0x2d28:
-            r8 = 5
+            long r8 = r14.readInt64(r5)     // Catch:{ all -> 0x2da2 }
+            r1.backgroundGradientOverrideColor = r8     // Catch:{ all -> 0x2da2 }
+            goto L_0x2d30
         L_0x2d29:
-            if (r0 < r8) goto L_0x2d43
-            boolean r8 = r14.readBool(r5)     // Catch:{ all -> 0x2d76 }
-            if (r8 == 0) goto L_0x2d43
-            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2d76 }
-            r1.account = r8     // Catch:{ all -> 0x2d76 }
-            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2d76 }
-            org.telegram.tgnet.TLRPC$Theme r8 = org.telegram.tgnet.TLRPC$Theme.TLdeserialize(r14, r8, r5)     // Catch:{ all -> 0x2d76 }
-            org.telegram.tgnet.TLRPC$TL_theme r8 = (org.telegram.tgnet.TLRPC$TL_theme) r8     // Catch:{ all -> 0x2d76 }
-            r1.info = r8     // Catch:{ all -> 0x2d76 }
-        L_0x2d43:
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r8 = r12.themeAccentsMap     // Catch:{ all -> 0x2d76 }
-            int r9 = r1.id     // Catch:{ all -> 0x2d76 }
-            r8.put(r9, r1)     // Catch:{ all -> 0x2d76 }
-            org.telegram.tgnet.TLRPC$TL_theme r8 = r1.info     // Catch:{ all -> 0x2d76 }
-            if (r8 == 0) goto L_0x2d5a
-            android.util.LongSparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r8 = r12.accentsByThemeId     // Catch:{ all -> 0x2d76 }
-            org.telegram.tgnet.TLRPC$TL_theme r9 = r1.info     // Catch:{ all -> 0x2d76 }
+            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2da2 }
+            long r8 = (long) r8     // Catch:{ all -> 0x2da2 }
+            r1.backgroundGradientOverrideColor = r8     // Catch:{ all -> 0x2da2 }
+        L_0x2d30:
+            if (r0 < r5) goto L_0x2d38
+            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2da2 }
+            r1.backgroundRotation = r8     // Catch:{ all -> 0x2da2 }
+        L_0x2d38:
+            r8 = 4
+            if (r0 < r8) goto L_0x2d54
+            r14.readInt64(r5)     // Catch:{ all -> 0x2da2 }
+            double r8 = r14.readDouble(r5)     // Catch:{ all -> 0x2da2 }
+            float r8 = (float) r8     // Catch:{ all -> 0x2da2 }
+            r1.patternIntensity = r8     // Catch:{ all -> 0x2da2 }
+            boolean r8 = r14.readBool(r5)     // Catch:{ all -> 0x2da2 }
+            r1.patternMotion = r8     // Catch:{ all -> 0x2da2 }
+            r8 = 5
+            if (r0 < r8) goto L_0x2d55
+            java.lang.String r8 = r14.readString(r5)     // Catch:{ all -> 0x2da2 }
+            r1.patternSlug = r8     // Catch:{ all -> 0x2da2 }
+        L_0x2d54:
+            r8 = 5
+        L_0x2d55:
+            if (r0 < r8) goto L_0x2d6f
+            boolean r8 = r14.readBool(r5)     // Catch:{ all -> 0x2da2 }
+            if (r8 == 0) goto L_0x2d6f
+            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2da2 }
+            r1.account = r8     // Catch:{ all -> 0x2da2 }
+            int r8 = r14.readInt32(r5)     // Catch:{ all -> 0x2da2 }
+            org.telegram.tgnet.TLRPC$Theme r8 = org.telegram.tgnet.TLRPC$Theme.TLdeserialize(r14, r8, r5)     // Catch:{ all -> 0x2da2 }
+            org.telegram.tgnet.TLRPC$TL_theme r8 = (org.telegram.tgnet.TLRPC$TL_theme) r8     // Catch:{ all -> 0x2da2 }
+            r1.info = r8     // Catch:{ all -> 0x2da2 }
+        L_0x2d6f:
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r8 = r12.themeAccentsMap     // Catch:{ all -> 0x2da2 }
+            int r9 = r1.id     // Catch:{ all -> 0x2da2 }
+            r8.put(r9, r1)     // Catch:{ all -> 0x2da2 }
+            org.telegram.tgnet.TLRPC$TL_theme r8 = r1.info     // Catch:{ all -> 0x2da2 }
+            if (r8 == 0) goto L_0x2d86
+            android.util.LongSparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r8 = r12.accentsByThemeId     // Catch:{ all -> 0x2da2 }
+            org.telegram.tgnet.TLRPC$TL_theme r9 = r1.info     // Catch:{ all -> 0x2da2 }
             r24 = r6
-            long r5 = r9.id     // Catch:{ all -> 0x2d74 }
-            r8.put(r5, r1)     // Catch:{ all -> 0x2d74 }
-            goto L_0x2d5c
-        L_0x2d5a:
+            long r5 = r9.id     // Catch:{ all -> 0x2da0 }
+            r8.put(r5, r1)     // Catch:{ all -> 0x2da0 }
+            goto L_0x2d88
+        L_0x2d86:
             r24 = r6
-        L_0x2d5c:
-            r13.add(r1)     // Catch:{ all -> 0x2d74 }
-            int r5 = r12.lastAccentId     // Catch:{ all -> 0x2d74 }
-            int r1 = r1.id     // Catch:{ all -> 0x2d74 }
-            int r1 = java.lang.Math.max(r5, r1)     // Catch:{ all -> 0x2d74 }
-            r12.lastAccentId = r1     // Catch:{ all -> 0x2d74 }
+        L_0x2d88:
+            r13.add(r1)     // Catch:{ all -> 0x2da0 }
+            int r5 = r12.lastAccentId     // Catch:{ all -> 0x2da0 }
+            int r1 = r1.id     // Catch:{ all -> 0x2da0 }
+            int r1 = java.lang.Math.max(r5, r1)     // Catch:{ all -> 0x2da0 }
+            r12.lastAccentId = r1     // Catch:{ all -> 0x2da0 }
             int r2 = r2 + 1
             r8 = r22
             r9 = r24
             r1 = 0
             r5 = 1
             r6 = 2
-            goto L_0x2cbb
-        L_0x2d74:
+            goto L_0x2ce7
+        L_0x2da0:
             r0 = move-exception
-            goto L_0x2d85
-        L_0x2d76:
+            goto L_0x2db1
+        L_0x2da2:
             r0 = move-exception
             r24 = r6
-            goto L_0x2d85
-        L_0x2d7a:
+            goto L_0x2db1
+        L_0x2da6:
             r22 = r8
             r24 = r9
             r2 = 5
-            goto L_0x2d8a
-        L_0x2d80:
+            goto L_0x2db6
+        L_0x2dac:
             r0 = move-exception
             r22 = r8
             r24 = r9
-        L_0x2d85:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x2d8d }
-        L_0x2d88:
+        L_0x2db1:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x2db9 }
+        L_0x2db4:
             r2 = 5
             r5 = 1
-        L_0x2d8a:
+        L_0x2db6:
             r6 = 3
-            goto L_0x2e83
-        L_0x2d8d:
+            goto L_0x2eaf
+        L_0x2db9:
             r0 = move-exception
             r2 = r24
             r5 = 1
-            goto L_0x2f7e
-        L_0x2d93:
+            goto L_0x2faa
+        L_0x2dbf:
             r22 = r8
             r24 = r9
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2ebb }
-            r0.<init>()     // Catch:{ Exception -> 0x2ebb }
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2ee7 }
+            r0.<init>()     // Catch:{ Exception -> 0x2ee7 }
             java.lang.String r1 = "accent_for_"
-            r0.append(r1)     // Catch:{ Exception -> 0x2ebb }
-            java.lang.String r1 = r12.assetName     // Catch:{ Exception -> 0x2ebb }
-            r0.append(r1)     // Catch:{ Exception -> 0x2ebb }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2ebb }
+            r0.append(r1)     // Catch:{ Exception -> 0x2ee7 }
+            java.lang.String r1 = r12.assetName     // Catch:{ Exception -> 0x2ee7 }
+            r0.append(r1)     // Catch:{ Exception -> 0x2ee7 }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2ee7 }
             r1 = 0
-            int r2 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2ebb }
-            if (r2 == 0) goto L_0x2d88
-            if (r10 != 0) goto L_0x2dbb
-            android.content.SharedPreferences$Editor r10 = r7.edit()     // Catch:{ Exception -> 0x2d8d }
-            android.content.SharedPreferences$Editor r11 = r4.edit()     // Catch:{ Exception -> 0x2d8d }
-        L_0x2dbb:
-            r10.remove(r0)     // Catch:{ Exception -> 0x2ebb }
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccents     // Catch:{ Exception -> 0x2ebb }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x2ebb }
+            int r2 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2ee7 }
+            if (r2 == 0) goto L_0x2db4
+            if (r10 != 0) goto L_0x2de7
+            android.content.SharedPreferences$Editor r10 = r7.edit()     // Catch:{ Exception -> 0x2db9 }
+            android.content.SharedPreferences$Editor r11 = r4.edit()     // Catch:{ Exception -> 0x2db9 }
+        L_0x2de7:
+            r10.remove(r0)     // Catch:{ Exception -> 0x2ee7 }
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccents     // Catch:{ Exception -> 0x2ee7 }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x2ee7 }
             r1 = 0
-        L_0x2dc5:
-            if (r1 >= r0) goto L_0x2ddc
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r5 = r12.themeAccents     // Catch:{ Exception -> 0x2d8d }
-            java.lang.Object r5 = r5.get(r1)     // Catch:{ Exception -> 0x2d8d }
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r5 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r5     // Catch:{ Exception -> 0x2d8d }
-            int r6 = r5.accentColor     // Catch:{ Exception -> 0x2d8d }
-            if (r6 != r2) goto L_0x2dd9
-            int r0 = r5.id     // Catch:{ Exception -> 0x2d8d }
-            r12.currentAccentId = r0     // Catch:{ Exception -> 0x2d8d }
+        L_0x2df1:
+            if (r1 >= r0) goto L_0x2e08
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r5 = r12.themeAccents     // Catch:{ Exception -> 0x2db9 }
+            java.lang.Object r5 = r5.get(r1)     // Catch:{ Exception -> 0x2db9 }
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r5 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r5     // Catch:{ Exception -> 0x2db9 }
+            int r6 = r5.accentColor     // Catch:{ Exception -> 0x2db9 }
+            if (r6 != r2) goto L_0x2e05
+            int r0 = r5.id     // Catch:{ Exception -> 0x2db9 }
+            r12.currentAccentId = r0     // Catch:{ Exception -> 0x2db9 }
             r0 = 1
-            goto L_0x2ddd
-        L_0x2dd9:
+            goto L_0x2e09
+        L_0x2e05:
             int r1 = r1 + 1
-            goto L_0x2dc5
-        L_0x2ddc:
+            goto L_0x2df1
+        L_0x2e08:
             r0 = 0
-        L_0x2ddd:
-            if (r0 != 0) goto L_0x2e68
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ Exception -> 0x2ebb }
-            r0.<init>()     // Catch:{ Exception -> 0x2ebb }
-            r1 = 100
-            r0.id = r1     // Catch:{ Exception -> 0x2ebb }
-            r0.accentColor = r2     // Catch:{ Exception -> 0x2ebb }
-            r0.parentTheme = r12     // Catch:{ Exception -> 0x2ebb }
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r2 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2ebb }
-            r2.put(r1, r0)     // Catch:{ Exception -> 0x2ebb }
-            r1 = 0
-            r13.add(r1, r0)     // Catch:{ Exception -> 0x2ebb }
-            r1 = 100
-            r12.currentAccentId = r1     // Catch:{ Exception -> 0x2ebb }
-            r1 = 101(0x65, float:1.42E-43)
-            r12.lastAccentId = r1     // Catch:{ Exception -> 0x2ebb }
-            org.telegram.tgnet.SerializedData r1 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x2ebb }
-            r2 = 68
-            r1.<init>((int) r2)     // Catch:{ Exception -> 0x2ebb }
-            r2 = 5
-            r1.writeInt32(r2)     // Catch:{ Exception -> 0x2ebb }
-            r5 = 1
-            r1.writeInt32(r5)     // Catch:{ Exception -> 0x2var_ }
-            int r6 = r0.id     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2var_ }
-            int r6 = r0.accentColor     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2var_ }
-            int r6 = r0.myMessagesAccentColor     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2var_ }
-            int r6 = r0.myMessagesGradientAccentColor     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2var_ }
-            long r8 = r0.backgroundOverrideColor     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2var_ }
-            long r8 = r0.backgroundGradientOverrideColor     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2var_ }
-            int r6 = r0.backgroundRotation     // Catch:{ Exception -> 0x2var_ }
-            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2var_ }
-            r8 = 0
-            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2var_ }
-            float r6 = r0.patternIntensity     // Catch:{ Exception -> 0x2var_ }
-            double r8 = (double) r6     // Catch:{ Exception -> 0x2var_ }
-            r1.writeDouble(r8)     // Catch:{ Exception -> 0x2var_ }
-            boolean r6 = r0.patternMotion     // Catch:{ Exception -> 0x2var_ }
-            r1.writeBool(r6)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r0.patternSlug     // Catch:{ Exception -> 0x2var_ }
-            r1.writeString(r0)     // Catch:{ Exception -> 0x2var_ }
-            r6 = 0
-            r1.writeBool(r6)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2var_ }
-            r0.<init>()     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r6 = "accents_"
-            r0.append(r6)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r6 = r12.assetName     // Catch:{ Exception -> 0x2var_ }
-            r0.append(r6)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2var_ }
-            byte[] r1 = r1.toByteArray()     // Catch:{ Exception -> 0x2var_ }
-            r6 = 3
-            java.lang.String r1 = android.util.Base64.encodeToString(r1, r6)     // Catch:{ Exception -> 0x2var_ }
-            r11.putString(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2e6b
-        L_0x2e68:
-            r2 = 5
-            r5 = 1
-            r6 = 3
-        L_0x2e6b:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2var_ }
-            r0.<init>()     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r1 = "accent_current_"
-            r0.append(r1)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r1 = r12.assetName     // Catch:{ Exception -> 0x2var_ }
-            r0.append(r1)     // Catch:{ Exception -> 0x2var_ }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2var_ }
-            int r1 = r12.currentAccentId     // Catch:{ Exception -> 0x2var_ }
-            r11.putInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-        L_0x2e83:
-            boolean r0 = r13.isEmpty()     // Catch:{ Exception -> 0x2var_ }
+        L_0x2e09:
             if (r0 != 0) goto L_0x2e94
-            org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg r0 = org.telegram.ui.ActionBar.$$Lambda$Theme$1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE     // Catch:{ Exception -> 0x2var_ }
-            java.util.Collections.sort(r13, r0)     // Catch:{ Exception -> 0x2var_ }
-            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccents     // Catch:{ Exception -> 0x2var_ }
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = new org.telegram.ui.ActionBar.Theme$ThemeAccent     // Catch:{ Exception -> 0x2ee7 }
+            r0.<init>()     // Catch:{ Exception -> 0x2ee7 }
+            r1 = 100
+            r0.id = r1     // Catch:{ Exception -> 0x2ee7 }
+            r0.accentColor = r2     // Catch:{ Exception -> 0x2ee7 }
+            r0.parentTheme = r12     // Catch:{ Exception -> 0x2ee7 }
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r2 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2ee7 }
+            r2.put(r1, r0)     // Catch:{ Exception -> 0x2ee7 }
             r1 = 0
-            r0.addAll(r1, r13)     // Catch:{ Exception -> 0x2var_ }
+            r13.add(r1, r0)     // Catch:{ Exception -> 0x2ee7 }
+            r1 = 100
+            r12.currentAccentId = r1     // Catch:{ Exception -> 0x2ee7 }
+            r1 = 101(0x65, float:1.42E-43)
+            r12.lastAccentId = r1     // Catch:{ Exception -> 0x2ee7 }
+            org.telegram.tgnet.SerializedData r1 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x2ee7 }
+            r2 = 68
+            r1.<init>((int) r2)     // Catch:{ Exception -> 0x2ee7 }
+            r2 = 5
+            r1.writeInt32(r2)     // Catch:{ Exception -> 0x2ee7 }
+            r5 = 1
+            r1.writeInt32(r5)     // Catch:{ Exception -> 0x2f9d }
+            int r6 = r0.id     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2f9d }
+            int r6 = r0.accentColor     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2f9d }
+            int r6 = r0.myMessagesAccentColor     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2f9d }
+            int r6 = r0.myMessagesGradientAccentColor     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2f9d }
+            long r8 = r0.backgroundOverrideColor     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2f9d }
+            long r8 = r0.backgroundGradientOverrideColor     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2f9d }
+            int r6 = r0.backgroundRotation     // Catch:{ Exception -> 0x2f9d }
+            r1.writeInt32(r6)     // Catch:{ Exception -> 0x2f9d }
+            r8 = 0
+            r1.writeInt64(r8)     // Catch:{ Exception -> 0x2f9d }
+            float r6 = r0.patternIntensity     // Catch:{ Exception -> 0x2f9d }
+            double r8 = (double) r6     // Catch:{ Exception -> 0x2f9d }
+            r1.writeDouble(r8)     // Catch:{ Exception -> 0x2f9d }
+            boolean r6 = r0.patternMotion     // Catch:{ Exception -> 0x2f9d }
+            r1.writeBool(r6)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r0 = r0.patternSlug     // Catch:{ Exception -> 0x2f9d }
+            r1.writeString(r0)     // Catch:{ Exception -> 0x2f9d }
+            r6 = 0
+            r1.writeBool(r6)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2f9d }
+            r0.<init>()     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r6 = "accents_"
+            r0.append(r6)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r6 = r12.assetName     // Catch:{ Exception -> 0x2f9d }
+            r0.append(r6)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2f9d }
+            byte[] r1 = r1.toByteArray()     // Catch:{ Exception -> 0x2f9d }
+            r6 = 3
+            java.lang.String r1 = android.util.Base64.encodeToString(r1, r6)     // Catch:{ Exception -> 0x2f9d }
+            r11.putString(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            goto L_0x2e97
         L_0x2e94:
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2eac
-            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2var_ }
-            int r1 = r12.currentAccentId     // Catch:{ Exception -> 0x2var_ }
-            java.lang.Object r0 = r0.get(r1)     // Catch:{ Exception -> 0x2var_ }
-            if (r0 != 0) goto L_0x2eac
-            boolean r0 = r12.firstAccentIsDefault     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2ea9
-            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2eaa
-        L_0x2ea9:
-            r0 = 0
-        L_0x2eaa:
-            r12.currentAccentId = r0     // Catch:{ Exception -> 0x2var_ }
-        L_0x2eac:
-            r12.loadWallpapers(r4)     // Catch:{ Exception -> 0x2var_ }
+            r2 = 5
+            r5 = 1
+            r6 = 3
+        L_0x2e97:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x2f9d }
+            r0.<init>()     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r1 = "accent_current_"
+            r0.append(r1)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r1 = r12.assetName     // Catch:{ Exception -> 0x2f9d }
+            r0.append(r1)     // Catch:{ Exception -> 0x2f9d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x2f9d }
+            int r1 = r12.currentAccentId     // Catch:{ Exception -> 0x2f9d }
+            r11.putInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+        L_0x2eaf:
+            boolean r0 = r13.isEmpty()     // Catch:{ Exception -> 0x2f9d }
+            if (r0 != 0) goto L_0x2ec0
+            org.telegram.ui.ActionBar.-$$Lambda$Theme$-1eio9W5h8f4eCuCQ0q4O3hfyjg r0 = org.telegram.ui.ActionBar.$$Lambda$Theme$1eio9W5h8f4eCuCQ0q4O3hfyjg.INSTANCE     // Catch:{ Exception -> 0x2f9d }
+            java.util.Collections.sort(r13, r0)     // Catch:{ Exception -> 0x2f9d }
+            java.util.ArrayList<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccents     // Catch:{ Exception -> 0x2f9d }
             r1 = 0
-            org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r12.getAccent(r1)     // Catch:{ Exception -> 0x2var_ }
-            if (r0 == 0) goto L_0x2ec5
-            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r0 = r0.overrideWallpaper     // Catch:{ Exception -> 0x2var_ }
-            r12.overrideWallpaper = r0     // Catch:{ Exception -> 0x2var_ }
-            goto L_0x2ec5
-        L_0x2ebb:
+            r0.addAll(r1, r13)     // Catch:{ Exception -> 0x2f9d }
+        L_0x2ec0:
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2f9d }
+            if (r0 == 0) goto L_0x2ed8
+            android.util.SparseArray<org.telegram.ui.ActionBar.Theme$ThemeAccent> r0 = r12.themeAccentsMap     // Catch:{ Exception -> 0x2f9d }
+            int r1 = r12.currentAccentId     // Catch:{ Exception -> 0x2f9d }
+            java.lang.Object r0 = r0.get(r1)     // Catch:{ Exception -> 0x2f9d }
+            if (r0 != 0) goto L_0x2ed8
+            boolean r0 = r12.firstAccentIsDefault     // Catch:{ Exception -> 0x2f9d }
+            if (r0 == 0) goto L_0x2ed5
+            int r0 = DEFALT_THEME_ACCENT_ID     // Catch:{ Exception -> 0x2f9d }
+            goto L_0x2ed6
+        L_0x2ed5:
+            r0 = 0
+        L_0x2ed6:
+            r12.currentAccentId = r0     // Catch:{ Exception -> 0x2f9d }
+        L_0x2ed8:
+            r12.loadWallpapers(r4)     // Catch:{ Exception -> 0x2f9d }
+            r1 = 0
+            org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r12.getAccent(r1)     // Catch:{ Exception -> 0x2f9d }
+            if (r0 == 0) goto L_0x2ef1
+            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r0 = r0.overrideWallpaper     // Catch:{ Exception -> 0x2f9d }
+            r12.overrideWallpaper = r0     // Catch:{ Exception -> 0x2f9d }
+            goto L_0x2ef1
+        L_0x2ee7:
             r0 = move-exception
             r5 = 1
-            goto L_0x2var_
-        L_0x2ebf:
+            goto L_0x2fa2
+        L_0x2eeb:
             r22 = r8
             r24 = r9
             r2 = 5
             r6 = 3
-        L_0x2ec5:
+        L_0x2ef1:
             r8 = r22
             r9 = r24
             r1 = 0
             r2 = 0
             r6 = 2
-            goto L_0x2CLASSNAME
-        L_0x2ece:
+            goto L_0x2c7c
+        L_0x2efa:
             r24 = r9
             r6 = 3
-            if (r10 == 0) goto L_0x2ed9
-            r10.commit()     // Catch:{ Exception -> 0x2var_ }
-            r11.commit()     // Catch:{ Exception -> 0x2var_ }
-        L_0x2ed9:
+            if (r10 == 0) goto L_0x2var_
+            r10.commit()     // Catch:{ Exception -> 0x2f9d }
+            r11.commit()     // Catch:{ Exception -> 0x2f9d }
+        L_0x2var_:
             java.lang.String r0 = "selectedAutoNightType"
-            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x2var_ }
+            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x2f9d }
             r2 = 29
-            if (r1 < r2) goto L_0x2ee3
+            if (r1 < r2) goto L_0x2f0f
             r4 = 3
-            goto L_0x2ee4
-        L_0x2ee3:
+            goto L_0x2var_
+        L_0x2f0f:
             r4 = 0
-        L_0x2ee4:
-            int r0 = r7.getInt(r0, r4)     // Catch:{ Exception -> 0x2var_ }
-            selectedAutoNightType = r0     // Catch:{ Exception -> 0x2var_ }
+        L_0x2var_:
+            int r0 = r7.getInt(r0, r4)     // Catch:{ Exception -> 0x2f9d }
+            selectedAutoNightType = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightScheduleByLocation"
             r1 = 0
-            boolean r0 = r7.getBoolean(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightScheduleByLocation = r0     // Catch:{ Exception -> 0x2var_ }
+            boolean r0 = r7.getBoolean(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightScheduleByLocation = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightBrighnessThreshold"
             r1 = 1048576000(0x3e800000, float:0.25)
-            float r0 = r7.getFloat(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightBrighnessThreshold = r0     // Catch:{ Exception -> 0x2var_ }
+            float r0 = r7.getFloat(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightBrighnessThreshold = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightDayStartTime"
             r1 = 1320(0x528, float:1.85E-42)
-            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightDayStartTime = r0     // Catch:{ Exception -> 0x2var_ }
+            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightDayStartTime = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightDayEndTime"
             r1 = 480(0x1e0, float:6.73E-43)
-            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightDayEndTime = r0     // Catch:{ Exception -> 0x2var_ }
+            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightDayEndTime = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightSunsetTime"
             r1 = 1320(0x528, float:1.85E-42)
-            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightSunsetTime = r0     // Catch:{ Exception -> 0x2var_ }
+            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightSunsetTime = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightSunriseTime"
             r1 = 480(0x1e0, float:6.73E-43)
-            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightSunriseTime = r0     // Catch:{ Exception -> 0x2var_ }
+            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightSunriseTime = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightCityName"
-            java.lang.String r0 = r7.getString(r0, r3)     // Catch:{ Exception -> 0x2var_ }
-            autoNightCityName = r0     // Catch:{ Exception -> 0x2var_ }
+            java.lang.String r0 = r7.getString(r0, r3)     // Catch:{ Exception -> 0x2f9d }
+            autoNightCityName = r0     // Catch:{ Exception -> 0x2f9d }
             java.lang.String r0 = "autoNightLocationLatitude3"
             r1 = 10000(0x2710, double:4.9407E-320)
-            long r0 = r7.getLong(r0, r1)     // Catch:{ Exception -> 0x2var_ }
+            long r0 = r7.getLong(r0, r1)     // Catch:{ Exception -> 0x2f9d }
             r8 = 10000(0x2710, double:4.9407E-320)
             int r2 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r2 == 0) goto L_0x2var_
-            double r0 = java.lang.Double.longBitsToDouble(r0)     // Catch:{ Exception -> 0x2var_ }
-            autoNightLocationLatitude = r0     // Catch:{ Exception -> 0x2var_ }
+            if (r2 == 0) goto L_0x2f6e
+            double r0 = java.lang.Double.longBitsToDouble(r0)     // Catch:{ Exception -> 0x2f9d }
+            autoNightLocationLatitude = r0     // Catch:{ Exception -> 0x2f9d }
             goto L_0x2var_
-        L_0x2var_:
+        L_0x2f6e:
             r0 = 4666723172467343360(0x40cNUM, double:10000.0)
-            autoNightLocationLatitude = r0     // Catch:{ Exception -> 0x2var_ }
+            autoNightLocationLatitude = r0     // Catch:{ Exception -> 0x2f9d }
         L_0x2var_:
             java.lang.String r0 = "autoNightLocationLongitude3"
             r1 = 10000(0x2710, double:4.9407E-320)
-            long r0 = r7.getLong(r0, r1)     // Catch:{ Exception -> 0x2var_ }
+            long r0 = r7.getLong(r0, r1)     // Catch:{ Exception -> 0x2f9d }
             r8 = 10000(0x2710, double:4.9407E-320)
             int r2 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r2 == 0) goto L_0x2f5e
-            double r0 = java.lang.Double.longBitsToDouble(r0)     // Catch:{ Exception -> 0x2var_ }
-            autoNightLocationLongitude = r0     // Catch:{ Exception -> 0x2var_ }
+            if (r2 == 0) goto L_0x2f8a
+            double r0 = java.lang.Double.longBitsToDouble(r0)     // Catch:{ Exception -> 0x2f9d }
+            autoNightLocationLongitude = r0     // Catch:{ Exception -> 0x2f9d }
             goto L_0x2var_
-        L_0x2f5e:
+        L_0x2f8a:
             r0 = 4666723172467343360(0x40cNUM, double:10000.0)
-            autoNightLocationLongitude = r0     // Catch:{ Exception -> 0x2var_ }
+            autoNightLocationLongitude = r0     // Catch:{ Exception -> 0x2f9d }
         L_0x2var_:
             java.lang.String r0 = "autoNightLastSunCheckDay"
             r1 = -1
-            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2var_ }
-            autoNightLastSunCheckDay = r0     // Catch:{ Exception -> 0x2var_ }
+            int r0 = r7.getInt(r0, r1)     // Catch:{ Exception -> 0x2f9d }
+            autoNightLastSunCheckDay = r0     // Catch:{ Exception -> 0x2f9d }
             r9 = r24
-            goto L_0x2var_
-        L_0x2var_:
+            goto L_0x2fae
+        L_0x2f9d:
             r0 = move-exception
-            goto L_0x2var_
-        L_0x2var_:
+            goto L_0x2fa2
+        L_0x2f9f:
             r0 = move-exception
             r24 = r9
-        L_0x2var_:
+        L_0x2fa2:
             r2 = r24
-            goto L_0x2f7e
-        L_0x2var_:
+            goto L_0x2faa
+        L_0x2fa5:
             r0 = move-exception
             r2 = r9
-            goto L_0x2f7e
-        L_0x2f7c:
+            goto L_0x2faa
+        L_0x2fa8:
             r0 = move-exception
             r2 = 0
-        L_0x2f7e:
+        L_0x2faa:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r9 = r2
-        L_0x2var_:
-            if (r9 != 0) goto L_0x2var_
+        L_0x2fae:
+            if (r9 != 0) goto L_0x2fb3
             org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = defaultTheme
-            goto L_0x2var_
-        L_0x2var_:
+            goto L_0x2fb5
+        L_0x2fb3:
             currentDayTheme = r9
-        L_0x2var_:
+        L_0x2fb5:
             java.lang.String r0 = "overrideThemeWallpaper"
             boolean r0 = r7.contains(r0)
-            if (r0 != 0) goto L_0x2var_
+            if (r0 != 0) goto L_0x2fc5
             java.lang.String r0 = "selectedBackground2"
             boolean r0 = r7.contains(r0)
-            if (r0 == 0) goto L_0x3045
-        L_0x2var_:
+            if (r0 == 0) goto L_0x306f
+        L_0x2fc5:
             java.lang.String r0 = "overrideThemeWallpaper"
             r1 = 0
             boolean r0 = r7.getBoolean(r0, r1)
@@ -8082,15 +8321,15 @@ public class Theme {
             long r1 = r7.getLong(r4, r1)
             r10 = -1
             int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r4 == 0) goto L_0x2fbe
-            if (r0 == 0) goto L_0x3032
+            if (r4 == 0) goto L_0x2fea
+            if (r0 == 0) goto L_0x305c
             r10 = -2
             int r0 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x3032
+            if (r0 == 0) goto L_0x305c
             r10 = 1000001(0xvar_, double:4.94066E-318)
             int r0 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x3032
-        L_0x2fbe:
+            if (r0 == 0) goto L_0x305c
+        L_0x2fea:
             org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r0 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo
             r0.<init>()
             java.lang.String r4 = "selectedColor"
@@ -8102,23 +8341,23 @@ public class Theme {
             r0.slug = r4
             r10 = -100
             int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r4 < 0) goto L_0x2fed
+            if (r4 < 0) goto L_0x3019
             r10 = -1
             int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r4 > 0) goto L_0x2fed
+            if (r4 > 0) goto L_0x3019
             int r1 = r0.color
-            if (r1 == 0) goto L_0x2fed
+            if (r1 == 0) goto L_0x3019
             java.lang.String r1 = "c"
             r0.slug = r1
             r0.fileName = r3
             r0.originalFileName = r3
-            goto L_0x2ff7
-        L_0x2fed:
+            goto L_0x3021
+        L_0x3019:
             java.lang.String r1 = "wallpaper.jpg"
             r0.fileName = r1
             java.lang.String r1 = "wallpaper_original.jpg"
             r0.originalFileName = r1
-        L_0x2ff7:
+        L_0x3021:
             java.lang.String r1 = "selectedGradientColor"
             r2 = 0
             int r1 = r7.getInt(r1, r2)
@@ -8140,29 +8379,29 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = currentDayTheme
             r1.setOverrideWallpaper(r0)
             int r1 = selectedAutoNightType
-            if (r1 == 0) goto L_0x3032
+            if (r1 == 0) goto L_0x305c
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = currentNightTheme
             r1.setOverrideWallpaper(r0)
-        L_0x3032:
+        L_0x305c:
             android.content.SharedPreferences$Editor r0 = r7.edit()
             java.lang.String r1 = "overrideThemeWallpaper"
             android.content.SharedPreferences$Editor r0 = r0.remove(r1)
             java.lang.String r1 = "selectedBackground2"
             android.content.SharedPreferences$Editor r0 = r0.remove(r1)
             r0.commit()
-        L_0x3045:
+        L_0x306f:
             int r0 = needSwitchToTheme()
             r1 = 2
-            if (r0 != r1) goto L_0x304e
+            if (r0 != r1) goto L_0x3078
             org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = currentNightTheme
-        L_0x304e:
-            if (r0 != r1) goto L_0x3052
+        L_0x3078:
+            if (r0 != r1) goto L_0x307c
             r1 = 0
-            goto L_0x3054
-        L_0x3052:
+            goto L_0x307e
+        L_0x307c:
             r1 = 0
             r5 = 0
-        L_0x3054:
+        L_0x307e:
             applyTheme(r9, r1, r1, r5)
             org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I r0 = org.telegram.ui.ActionBar.$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs9k1I.INSTANCE
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
@@ -8377,7 +8616,7 @@ public class Theme {
         L_0x005f:
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r0 = r0.getResources()
-            r1 = 2131165740(0x7var_c, float:1.7945706E38)
+            r1 = 2131165734(0x7var_, float:1.7945693E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             dialogs_holidayDrawable = r0
             r0 = 1077936128(0x40400000, float:3.0)
@@ -8443,6 +8682,8 @@ public class Theme {
         float f = (float) i;
         ovalShape.resize(f, f);
         ShapeDrawable shapeDrawable = new ShapeDrawable(ovalShape);
+        shapeDrawable.setIntrinsicWidth(i);
+        shapeDrawable.setIntrinsicHeight(i);
         shapeDrawable.getPaint().setColor(i2);
         return shapeDrawable;
     }
@@ -8937,16 +9178,16 @@ public class Theme {
     }
 
     /* JADX WARNING: Can't wrap try/catch for region: R(11:75|76|(1:78)|79|80|82|84|(0)|87|90|(0)(0)) */
-    /* JADX WARNING: Can't wrap try/catch for region: R(24:31|32|33|(1:37)|38|39|40|41|(3:47|(4:50|(2:52|98)(2:53|(2:55|97)(1:99))|56|48)|96)|57|58|59|60|(2:62|(1:64))|65|67|68|(1:70)|82|84|(0)|87|90|(1:102)(1:101)) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x00c8 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:79:0x017a */
+    /* JADX WARNING: Can't wrap try/catch for region: R(13:31|32|33|(1:37)|38|39|(10:40|41|(3:47|(4:50|(2:52|98)(2:53|(2:55|97)(1:99))|56|48)|96)|57|58|(3:59|60|(2:62|(1:64)))|65|67|68|(1:70))|82|84|(0)|87|90|(1:102)(1:101)) */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:38:0x00c7 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:79:0x0179 */
     /* JADX WARNING: Removed duplicated region for block: B:101:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00f3 A[Catch:{ all -> 0x0167 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x012c A[Catch:{ Exception -> 0x014e }] */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x015a A[Catch:{ Exception -> 0x0165 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x018c A[Catch:{ Exception -> 0x019c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x01a4 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:38:0x00c8=Splitter:B:38:0x00c8, B:79:0x017a=Splitter:B:79:0x017a} */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00f2 A[Catch:{ all -> 0x0166 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x012b A[Catch:{ Exception -> 0x014d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0159 A[Catch:{ Exception -> 0x0164 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x018b A[Catch:{ Exception -> 0x019b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x01a3 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:38:0x00c7=Splitter:B:38:0x00c7, B:79:0x0179=Splitter:B:79:0x0179} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static void applyTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r6, boolean r7, boolean r8, boolean r9) {
         /*
@@ -8958,203 +9199,203 @@ public class Theme {
             r8.destroy()
         L_0x000c:
             r8 = 0
-            java.lang.String r0 = r6.pathToFile     // Catch:{ Exception -> 0x019c }
+            java.lang.String r0 = r6.pathToFile     // Catch:{ Exception -> 0x019b }
             java.lang.String r1 = "theme"
             r2 = 0
             if (r0 != 0) goto L_0x003a
-            java.lang.String r0 = r6.assetName     // Catch:{ Exception -> 0x019c }
+            java.lang.String r0 = r6.assetName     // Catch:{ Exception -> 0x019b }
             if (r0 == 0) goto L_0x0019
             goto L_0x003a
         L_0x0019:
             if (r9 != 0) goto L_0x002b
             if (r7 == 0) goto L_0x002b
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019c }
-            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019c }
-            r0.remove(r1)     // Catch:{ Exception -> 0x019c }
-            r0.commit()     // Catch:{ Exception -> 0x019c }
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019b }
+            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019b }
+            r0.remove(r1)     // Catch:{ Exception -> 0x019b }
+            r0.commit()     // Catch:{ Exception -> 0x019b }
         L_0x002b:
-            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = currentColorsNoAccent     // Catch:{ Exception -> 0x019c }
-            r0.clear()     // Catch:{ Exception -> 0x019c }
-            themedWallpaperFileOffset = r8     // Catch:{ Exception -> 0x019c }
-            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019c }
-            wallpaper = r2     // Catch:{ Exception -> 0x019c }
-            themedWallpaper = r2     // Catch:{ Exception -> 0x019c }
-            goto L_0x017e
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = currentColorsNoAccent     // Catch:{ Exception -> 0x019b }
+            r0.clear()     // Catch:{ Exception -> 0x019b }
+            themedWallpaperFileOffset = r8     // Catch:{ Exception -> 0x019b }
+            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019b }
+            wallpaper = r2     // Catch:{ Exception -> 0x019b }
+            themedWallpaper = r2     // Catch:{ Exception -> 0x019b }
+            goto L_0x017d
         L_0x003a:
             if (r9 != 0) goto L_0x0050
             if (r7 == 0) goto L_0x0050
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019c }
-            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019c }
-            java.lang.String r3 = r6.getKey()     // Catch:{ Exception -> 0x019c }
-            r0.putString(r1, r3)     // Catch:{ Exception -> 0x019c }
-            r0.commit()     // Catch:{ Exception -> 0x019c }
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019b }
+            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019b }
+            java.lang.String r3 = r6.getKey()     // Catch:{ Exception -> 0x019b }
+            r0.putString(r1, r3)     // Catch:{ Exception -> 0x019b }
+            r0.commit()     // Catch:{ Exception -> 0x019b }
         L_0x0050:
             r0 = 1
-            java.lang.String[] r1 = new java.lang.String[r0]     // Catch:{ Exception -> 0x019c }
-            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x019c }
+            java.lang.String[] r1 = new java.lang.String[r0]     // Catch:{ Exception -> 0x019b }
+            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x019b }
             if (r3 == 0) goto L_0x0060
-            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x019c }
-            java.util.HashMap r3 = getThemeFileValues(r2, r3, r2)     // Catch:{ Exception -> 0x019c }
-            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019c }
+            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x019b }
+            java.util.HashMap r3 = getThemeFileValues(r2, r3, r2)     // Catch:{ Exception -> 0x019b }
+            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019b }
             goto L_0x006d
         L_0x0060:
-            java.io.File r3 = new java.io.File     // Catch:{ Exception -> 0x019c }
-            java.lang.String r4 = r6.pathToFile     // Catch:{ Exception -> 0x019c }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x019c }
-            java.util.HashMap r3 = getThemeFileValues(r3, r2, r1)     // Catch:{ Exception -> 0x019c }
-            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019c }
+            java.io.File r3 = new java.io.File     // Catch:{ Exception -> 0x019b }
+            java.lang.String r4 = r6.pathToFile     // Catch:{ Exception -> 0x019b }
+            r3.<init>(r4)     // Catch:{ Exception -> 0x019b }
+            java.util.HashMap r3 = getThemeFileValues(r3, r2, r1)     // Catch:{ Exception -> 0x019b }
+            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019b }
         L_0x006d:
-            java.util.HashMap<java.lang.String, java.lang.Integer> r3 = currentColorsNoAccent     // Catch:{ Exception -> 0x019c }
+            java.util.HashMap<java.lang.String, java.lang.Integer> r3 = currentColorsNoAccent     // Catch:{ Exception -> 0x019b }
             java.lang.String r4 = "wallpaperFileOffset"
-            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x019c }
-            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ Exception -> 0x019c }
-            if (r3 == 0) goto L_0x007f
-            int r3 = r3.intValue()     // Catch:{ Exception -> 0x019c }
-            goto L_0x0080
-        L_0x007f:
+            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x019b }
+            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ Exception -> 0x019b }
+            if (r3 == 0) goto L_0x007e
+            int r3 = r3.intValue()     // Catch:{ Exception -> 0x019b }
+            goto L_0x007f
+        L_0x007e:
             r3 = -1
-        L_0x0080:
-            themedWallpaperFileOffset = r3     // Catch:{ Exception -> 0x019c }
-            r3 = r1[r8]     // Catch:{ Exception -> 0x019c }
-            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x019c }
-            if (r3 != 0) goto L_0x016c
-            r1 = r1[r8]     // Catch:{ Exception -> 0x019c }
-            themedWallpaperLink = r1     // Catch:{ Exception -> 0x019c }
-            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x019c }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x019c }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x019c }
-            r3.<init>()     // Catch:{ Exception -> 0x019c }
-            java.lang.String r4 = themedWallpaperLink     // Catch:{ Exception -> 0x019c }
-            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ Exception -> 0x019c }
-            r3.append(r4)     // Catch:{ Exception -> 0x019c }
+        L_0x007f:
+            themedWallpaperFileOffset = r3     // Catch:{ Exception -> 0x019b }
+            r3 = r1[r8]     // Catch:{ Exception -> 0x019b }
+            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x019b }
+            if (r3 != 0) goto L_0x016b
+            r1 = r1[r8]     // Catch:{ Exception -> 0x019b }
+            themedWallpaperLink = r1     // Catch:{ Exception -> 0x019b }
+            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x019b }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x019b }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x019b }
+            r3.<init>()     // Catch:{ Exception -> 0x019b }
+            java.lang.String r4 = themedWallpaperLink     // Catch:{ Exception -> 0x019b }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ Exception -> 0x019b }
+            r3.append(r4)     // Catch:{ Exception -> 0x019b }
             java.lang.String r4 = ".wp"
-            r3.append(r4)     // Catch:{ Exception -> 0x019c }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x019c }
-            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x019c }
-            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x019c }
-            java.lang.String r2 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c8 }
-            if (r2 == 0) goto L_0x00c8
-            java.lang.String r2 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c8 }
-            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x00c8 }
-            if (r2 != 0) goto L_0x00c8
-            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x00c8 }
-            java.lang.String r3 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c8 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x00c8 }
-            r2.delete()     // Catch:{ Exception -> 0x00c8 }
-        L_0x00c8:
-            r6.pathToWallpaper = r1     // Catch:{ Exception -> 0x019c }
-            java.lang.String r1 = themedWallpaperLink     // Catch:{ all -> 0x0167 }
-            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x0167 }
+            r3.append(r4)     // Catch:{ Exception -> 0x019b }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x019b }
+            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x019b }
+            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x019b }
+            java.lang.String r2 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c7 }
+            if (r2 == 0) goto L_0x00c7
+            java.lang.String r2 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c7 }
+            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x00c7 }
+            if (r2 != 0) goto L_0x00c7
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x00c7 }
+            java.lang.String r3 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c7 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x00c7 }
+            r2.delete()     // Catch:{ Exception -> 0x00c7 }
+        L_0x00c7:
+            r6.pathToWallpaper = r1     // Catch:{ Exception -> 0x019b }
+            java.lang.String r1 = themedWallpaperLink     // Catch:{ all -> 0x0166 }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x0166 }
             java.lang.String r2 = "slug"
-            java.lang.String r2 = r1.getQueryParameter(r2)     // Catch:{ all -> 0x0167 }
-            r6.slug = r2     // Catch:{ all -> 0x0167 }
+            java.lang.String r2 = r1.getQueryParameter(r2)     // Catch:{ all -> 0x0166 }
+            r6.slug = r2     // Catch:{ all -> 0x0166 }
             java.lang.String r2 = "mode"
-            java.lang.String r2 = r1.getQueryParameter(r2)     // Catch:{ all -> 0x0167 }
-            if (r2 == 0) goto L_0x010f
-            java.lang.String r2 = r2.toLowerCase()     // Catch:{ all -> 0x0167 }
+            java.lang.String r2 = r1.getQueryParameter(r2)     // Catch:{ all -> 0x0166 }
+            if (r2 == 0) goto L_0x010e
+            java.lang.String r2 = r2.toLowerCase()     // Catch:{ all -> 0x0166 }
             java.lang.String r3 = " "
-            java.lang.String[] r2 = r2.split(r3)     // Catch:{ all -> 0x0167 }
-            if (r2 == 0) goto L_0x010f
-            int r3 = r2.length     // Catch:{ all -> 0x0167 }
-            if (r3 <= 0) goto L_0x010f
+            java.lang.String[] r2 = r2.split(r3)     // Catch:{ all -> 0x0166 }
+            if (r2 == 0) goto L_0x010e
+            int r3 = r2.length     // Catch:{ all -> 0x0166 }
+            if (r3 <= 0) goto L_0x010e
             r3 = 0
-        L_0x00f0:
-            int r4 = r2.length     // Catch:{ all -> 0x0167 }
-            if (r3 >= r4) goto L_0x010f
+        L_0x00ef:
+            int r4 = r2.length     // Catch:{ all -> 0x0166 }
+            if (r3 >= r4) goto L_0x010e
             java.lang.String r4 = "blur"
-            r5 = r2[r3]     // Catch:{ all -> 0x0167 }
-            boolean r4 = r4.equals(r5)     // Catch:{ all -> 0x0167 }
-            if (r4 == 0) goto L_0x0100
-            r6.isBlured = r0     // Catch:{ all -> 0x0167 }
-            goto L_0x010c
-        L_0x0100:
+            r5 = r2[r3]     // Catch:{ all -> 0x0166 }
+            boolean r4 = r4.equals(r5)     // Catch:{ all -> 0x0166 }
+            if (r4 == 0) goto L_0x00ff
+            r6.isBlured = r0     // Catch:{ all -> 0x0166 }
+            goto L_0x010b
+        L_0x00ff:
             java.lang.String r4 = "motion"
-            r5 = r2[r3]     // Catch:{ all -> 0x0167 }
-            boolean r4 = r4.equals(r5)     // Catch:{ all -> 0x0167 }
-            if (r4 == 0) goto L_0x010c
-            r6.isMotion = r0     // Catch:{ all -> 0x0167 }
-        L_0x010c:
+            r5 = r2[r3]     // Catch:{ all -> 0x0166 }
+            boolean r4 = r4.equals(r5)     // Catch:{ all -> 0x0166 }
+            if (r4 == 0) goto L_0x010b
+            r6.isMotion = r0     // Catch:{ all -> 0x0166 }
+        L_0x010b:
             int r3 = r3 + 1
-            goto L_0x00f0
-        L_0x010f:
+            goto L_0x00ef
+        L_0x010e:
             java.lang.String r0 = "intensity"
-            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ all -> 0x0167 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x0167 }
-            r0.intValue()     // Catch:{ all -> 0x0167 }
+            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ all -> 0x0166 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x0166 }
+            r0.intValue()     // Catch:{ all -> 0x0166 }
             r0 = 45
-            r6.patternBgGradientRotation = r0     // Catch:{ all -> 0x0167 }
+            r6.patternBgGradientRotation = r0     // Catch:{ all -> 0x0166 }
             java.lang.String r0 = "bg_color"
-            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ Exception -> 0x014e }
-            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x014e }
-            if (r2 != 0) goto L_0x014e
+            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ Exception -> 0x014d }
+            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x014d }
+            if (r2 != 0) goto L_0x014d
             r2 = 6
-            java.lang.String r3 = r0.substring(r8, r2)     // Catch:{ Exception -> 0x014e }
+            java.lang.String r3 = r0.substring(r8, r2)     // Catch:{ Exception -> 0x014d }
             r4 = 16
-            int r3 = java.lang.Integer.parseInt(r3, r4)     // Catch:{ Exception -> 0x014e }
+            int r3 = java.lang.Integer.parseInt(r3, r4)     // Catch:{ Exception -> 0x014d }
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r3 = r3 | r5
-            r6.patternBgColor = r3     // Catch:{ Exception -> 0x014e }
-            int r3 = r0.length()     // Catch:{ Exception -> 0x014e }
-            if (r3 <= r2) goto L_0x014e
+            r6.patternBgColor = r3     // Catch:{ Exception -> 0x014d }
+            int r3 = r0.length()     // Catch:{ Exception -> 0x014d }
+            if (r3 <= r2) goto L_0x014d
             r2 = 7
-            java.lang.String r0 = r0.substring(r2)     // Catch:{ Exception -> 0x014e }
-            int r0 = java.lang.Integer.parseInt(r0, r4)     // Catch:{ Exception -> 0x014e }
+            java.lang.String r0 = r0.substring(r2)     // Catch:{ Exception -> 0x014d }
+            int r0 = java.lang.Integer.parseInt(r0, r4)     // Catch:{ Exception -> 0x014d }
             r0 = r0 | r5
-            r6.patternBgGradientColor = r0     // Catch:{ Exception -> 0x014e }
-        L_0x014e:
+            r6.patternBgGradientColor = r0     // Catch:{ Exception -> 0x014d }
+        L_0x014d:
             java.lang.String r0 = "rotation"
-            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ Exception -> 0x0165 }
-            boolean r1 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0165 }
-            if (r1 != 0) goto L_0x017e
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0165 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0165 }
-            r6.patternBgGradientRotation = r0     // Catch:{ Exception -> 0x0165 }
-            goto L_0x017e
-        L_0x0165:
-            goto L_0x017e
-        L_0x0167:
+            java.lang.String r0 = r1.getQueryParameter(r0)     // Catch:{ Exception -> 0x0164 }
+            boolean r1 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0164 }
+            if (r1 != 0) goto L_0x017d
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0164 }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0164 }
+            r6.patternBgGradientRotation = r0     // Catch:{ Exception -> 0x0164 }
+            goto L_0x017d
+        L_0x0164:
+            goto L_0x017d
+        L_0x0166:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x019c }
-            goto L_0x017e
-        L_0x016c:
-            java.lang.String r0 = r6.pathToWallpaper     // Catch:{ Exception -> 0x017a }
-            if (r0 == 0) goto L_0x017a
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x017a }
-            java.lang.String r1 = r6.pathToWallpaper     // Catch:{ Exception -> 0x017a }
-            r0.<init>(r1)     // Catch:{ Exception -> 0x017a }
-            r0.delete()     // Catch:{ Exception -> 0x017a }
-        L_0x017a:
-            r6.pathToWallpaper = r2     // Catch:{ Exception -> 0x019c }
-            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019c }
-        L_0x017e:
-            if (r9 != 0) goto L_0x0196
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme     // Catch:{ Exception -> 0x019c }
-            if (r0 != 0) goto L_0x0196
-            currentDayTheme = r6     // Catch:{ Exception -> 0x019c }
-            boolean r0 = isCurrentThemeNight()     // Catch:{ Exception -> 0x019c }
-            if (r0 == 0) goto L_0x0196
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x019b }
+            goto L_0x017d
+        L_0x016b:
+            java.lang.String r0 = r6.pathToWallpaper     // Catch:{ Exception -> 0x0179 }
+            if (r0 == 0) goto L_0x0179
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x0179 }
+            java.lang.String r1 = r6.pathToWallpaper     // Catch:{ Exception -> 0x0179 }
+            r0.<init>(r1)     // Catch:{ Exception -> 0x0179 }
+            r0.delete()     // Catch:{ Exception -> 0x0179 }
+        L_0x0179:
+            r6.pathToWallpaper = r2     // Catch:{ Exception -> 0x019b }
+            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019b }
+        L_0x017d:
+            if (r9 != 0) goto L_0x0195
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme     // Catch:{ Exception -> 0x019b }
+            if (r0 != 0) goto L_0x0195
+            currentDayTheme = r6     // Catch:{ Exception -> 0x019b }
+            boolean r0 = isCurrentThemeNight()     // Catch:{ Exception -> 0x019b }
+            if (r0 == 0) goto L_0x0195
             r0 = 2000(0x7d0, float:2.803E-42)
-            switchNightThemeDelay = r0     // Catch:{ Exception -> 0x019c }
-            long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x019c }
-            lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x019c }
-        L_0x0196:
-            currentTheme = r6     // Catch:{ Exception -> 0x019c }
-            refreshThemeColors()     // Catch:{ Exception -> 0x019c }
-            goto L_0x01a0
-        L_0x019c:
+            switchNightThemeDelay = r0     // Catch:{ Exception -> 0x019b }
+            long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x019b }
+            lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x019b }
+        L_0x0195:
+            currentTheme = r6     // Catch:{ Exception -> 0x019b }
+            refreshThemeColors()     // Catch:{ Exception -> 0x019b }
+            goto L_0x019f
+        L_0x019b:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01a0:
+        L_0x019f:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme
-            if (r0 != 0) goto L_0x01b7
-            if (r7 == 0) goto L_0x01b7
+            if (r0 != 0) goto L_0x01b6
+            if (r7 == 0) goto L_0x01b6
             boolean r7 = switchingNightTheme
-            if (r7 != 0) goto L_0x01b7
+            if (r7 != 0) goto L_0x01b6
             int r7 = r6.account
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r6.getAccent(r8)
             r7.saveTheme(r6, r0, r9, r8)
-        L_0x01b7:
+        L_0x01b6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.applyTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");
@@ -10704,16 +10945,16 @@ public class Theme {
         return num.intValue();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x034a A[SYNTHETIC, Splitter:B:100:0x034a] */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x035e A[SYNTHETIC, Splitter:B:112:0x035e] */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x037e A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x03b6 A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x03e1 A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x03fd A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x046c A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x04ad A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x04d0 A[Catch:{ all -> 0x036a, all -> 0x053a }] */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:116:0x0364=Splitter:B:116:0x0364, B:38:0x01bc=Splitter:B:38:0x01bc} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0349 A[SYNTHETIC, Splitter:B:100:0x0349] */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x035d A[SYNTHETIC, Splitter:B:112:0x035d] */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x037d A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x03b5 A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x03e0 A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x03fc A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x046b A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x04ac A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x04cf A[Catch:{ all -> 0x0369, all -> 0x0539 }] */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:116:0x0363=Splitter:B:116:0x0363, B:38:0x01bb=Splitter:B:38:0x01bb} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String createThemePreviewImage(java.lang.String r26, java.lang.String r27) {
         /*
@@ -10721,115 +10962,115 @@ public class Theme {
             r1 = r27
             r2 = 0
             r3 = 1
-            java.lang.String[] r4 = new java.lang.String[r3]     // Catch:{ all -> 0x053a }
-            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x053a }
-            r5.<init>(r0)     // Catch:{ all -> 0x053a }
-            java.util.HashMap r5 = getThemeFileValues(r5, r2, r4)     // Catch:{ all -> 0x053a }
+            java.lang.String[] r4 = new java.lang.String[r3]     // Catch:{ all -> 0x0539 }
+            java.io.File r5 = new java.io.File     // Catch:{ all -> 0x0539 }
+            r5.<init>(r0)     // Catch:{ all -> 0x0539 }
+            java.util.HashMap r5 = getThemeFileValues(r5, r2, r4)     // Catch:{ all -> 0x0539 }
             java.lang.String r6 = "wallpaperFileOffset"
-            java.lang.Object r6 = r5.get(r6)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r6 = (java.lang.Integer) r6     // Catch:{ all -> 0x053a }
+            java.lang.Object r6 = r5.get(r6)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r6 = (java.lang.Integer) r6     // Catch:{ all -> 0x0539 }
             r7 = 560(0x230, float:7.85E-43)
             r8 = 678(0x2a6, float:9.5E-43)
-            android.graphics.Bitmap$Config r9 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x053a }
-            android.graphics.Bitmap r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9)     // Catch:{ all -> 0x053a }
-            android.graphics.Canvas r14 = new android.graphics.Canvas     // Catch:{ all -> 0x053a }
-            r14.<init>(r7)     // Catch:{ all -> 0x053a }
-            android.graphics.Paint r15 = new android.graphics.Paint     // Catch:{ all -> 0x053a }
-            r15.<init>()     // Catch:{ all -> 0x053a }
+            android.graphics.Bitmap$Config r9 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0539 }
+            android.graphics.Bitmap r7 = org.telegram.messenger.Bitmaps.createBitmap(r7, r8, r9)     // Catch:{ all -> 0x0539 }
+            android.graphics.Canvas r14 = new android.graphics.Canvas     // Catch:{ all -> 0x0539 }
+            r14.<init>(r7)     // Catch:{ all -> 0x0539 }
+            android.graphics.Paint r15 = new android.graphics.Paint     // Catch:{ all -> 0x0539 }
+            r15.<init>()     // Catch:{ all -> 0x0539 }
             java.lang.String r8 = "actionBarDefault"
-            int r8 = getPreviewColor(r5, r8)     // Catch:{ all -> 0x053a }
+            int r8 = getPreviewColor(r5, r8)     // Catch:{ all -> 0x0539 }
             java.lang.String r9 = "actionBarDefaultIcon"
-            int r9 = getPreviewColor(r5, r9)     // Catch:{ all -> 0x053a }
+            int r9 = getPreviewColor(r5, r9)     // Catch:{ all -> 0x0539 }
             java.lang.String r10 = "chat_messagePanelBackground"
-            int r13 = getPreviewColor(r5, r10)     // Catch:{ all -> 0x053a }
+            int r13 = getPreviewColor(r5, r10)     // Catch:{ all -> 0x0539 }
             java.lang.String r10 = "chat_messagePanelIcons"
-            int r10 = getPreviewColor(r5, r10)     // Catch:{ all -> 0x053a }
+            int r10 = getPreviewColor(r5, r10)     // Catch:{ all -> 0x0539 }
             java.lang.String r11 = "chat_inBubble"
-            int r11 = getPreviewColor(r5, r11)     // Catch:{ all -> 0x053a }
+            int r11 = getPreviewColor(r5, r11)     // Catch:{ all -> 0x0539 }
             java.lang.String r12 = "chat_outBubble"
-            int r12 = getPreviewColor(r5, r12)     // Catch:{ all -> 0x053a }
+            int r12 = getPreviewColor(r5, r12)     // Catch:{ all -> 0x0539 }
             java.lang.String r2 = "chat_outBubbleGradient"
-            java.lang.Object r2 = r5.get(r2)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ all -> 0x053a }
+            java.lang.Object r2 = r5.get(r2)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ all -> 0x0539 }
             java.lang.String r2 = "chat_wallpaper"
-            java.lang.Object r2 = r5.get(r2)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ all -> 0x053a }
+            java.lang.Object r2 = r5.get(r2)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ all -> 0x0539 }
             java.lang.String r3 = "chat_serviceBackground"
-            java.lang.Object r3 = r5.get(r3)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ all -> 0x053a }
+            java.lang.Object r3 = r5.get(r3)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ all -> 0x0539 }
             r16 = r11
             java.lang.String r11 = "chat_wallpaper_gradient_to"
-            java.lang.Object r11 = r5.get(r11)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r11 = (java.lang.Integer) r11     // Catch:{ all -> 0x053a }
-            android.content.Context r17 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x053a }
+            java.lang.Object r11 = r5.get(r11)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r11 = (java.lang.Integer) r11     // Catch:{ all -> 0x0539 }
+            android.content.Context r17 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0539 }
             r18 = r12
-            android.content.res.Resources r12 = r17.getResources()     // Catch:{ all -> 0x053a }
+            android.content.res.Resources r12 = r17.getResources()     // Catch:{ all -> 0x0539 }
             r17 = r13
-            r13 = 2131165835(0x7var_b, float:1.7945898E38)
-            android.graphics.drawable.Drawable r12 = r12.getDrawable(r13)     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.Drawable r13 = r12.mutate()     // Catch:{ all -> 0x053a }
-            setDrawableColor(r13, r9)     // Catch:{ all -> 0x053a }
-            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x053a }
-            android.content.res.Resources r12 = r12.getResources()     // Catch:{ all -> 0x053a }
+            r13 = 2131165829(0x7var_, float:1.7945886E38)
+            android.graphics.drawable.Drawable r12 = r12.getDrawable(r13)     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.Drawable r13 = r12.mutate()     // Catch:{ all -> 0x0539 }
+            setDrawableColor(r13, r9)     // Catch:{ all -> 0x0539 }
+            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0539 }
+            android.content.res.Resources r12 = r12.getResources()     // Catch:{ all -> 0x0539 }
             r19 = r13
-            r13 = 2131165837(0x7var_d, float:1.7945902E38)
-            android.graphics.drawable.Drawable r12 = r12.getDrawable(r13)     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.Drawable r13 = r12.mutate()     // Catch:{ all -> 0x053a }
-            setDrawableColor(r13, r9)     // Catch:{ all -> 0x053a }
-            android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x053a }
-            android.content.res.Resources r9 = r9.getResources()     // Catch:{ all -> 0x053a }
-            r12 = 2131165840(0x7var_, float:1.7945908E38)
-            android.graphics.drawable.Drawable r9 = r9.getDrawable(r12)     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.Drawable r12 = r9.mutate()     // Catch:{ all -> 0x053a }
-            setDrawableColor(r12, r10)     // Catch:{ all -> 0x053a }
-            android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x053a }
-            android.content.res.Resources r9 = r9.getResources()     // Catch:{ all -> 0x053a }
+            r13 = 2131165831(0x7var_, float:1.794589E38)
+            android.graphics.drawable.Drawable r12 = r12.getDrawable(r13)     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.Drawable r13 = r12.mutate()     // Catch:{ all -> 0x0539 }
+            setDrawableColor(r13, r9)     // Catch:{ all -> 0x0539 }
+            android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0539 }
+            android.content.res.Resources r9 = r9.getResources()     // Catch:{ all -> 0x0539 }
+            r12 = 2131165834(0x7var_a, float:1.7945896E38)
+            android.graphics.drawable.Drawable r9 = r9.getDrawable(r12)     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.Drawable r12 = r9.mutate()     // Catch:{ all -> 0x0539 }
+            setDrawableColor(r12, r10)     // Catch:{ all -> 0x0539 }
+            android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0539 }
+            android.content.res.Resources r9 = r9.getResources()     // Catch:{ all -> 0x0539 }
             r20 = r12
-            r12 = 2131165838(0x7var_e, float:1.7945904E38)
-            android.graphics.drawable.Drawable r9 = r9.getDrawable(r12)     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.Drawable r12 = r9.mutate()     // Catch:{ all -> 0x053a }
-            setDrawableColor(r12, r10)     // Catch:{ all -> 0x053a }
+            r12 = 2131165832(0x7var_, float:1.7945892E38)
+            android.graphics.drawable.Drawable r9 = r9.getDrawable(r12)     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.Drawable r12 = r9.mutate()     // Catch:{ all -> 0x0539 }
+            setDrawableColor(r12, r10)     // Catch:{ all -> 0x0539 }
             r10 = 2
-            org.telegram.ui.ActionBar.Theme$MessageDrawable[] r9 = new org.telegram.ui.ActionBar.Theme.MessageDrawable[r10]     // Catch:{ all -> 0x053a }
+            org.telegram.ui.ActionBar.Theme$MessageDrawable[] r9 = new org.telegram.ui.ActionBar.Theme.MessageDrawable[r10]     // Catch:{ all -> 0x0539 }
             r21 = r12
             r12 = 0
-        L_0x00d2:
-            if (r12 >= r10) goto L_0x00ff
-            org.telegram.ui.ActionBar.Theme$8 r10 = new org.telegram.ui.ActionBar.Theme$8     // Catch:{ all -> 0x053a }
+        L_0x00d1:
+            if (r12 >= r10) goto L_0x00fe
+            org.telegram.ui.ActionBar.Theme$8 r10 = new org.telegram.ui.ActionBar.Theme$8     // Catch:{ all -> 0x0539 }
             r22 = r13
             r13 = 1
             r23 = r8
             r24 = r15
             r8 = 2
-            if (r12 != r13) goto L_0x00e2
+            if (r12 != r13) goto L_0x00e1
             r13 = 1
-            goto L_0x00e3
-        L_0x00e2:
+            goto L_0x00e2
+        L_0x00e1:
             r13 = 0
-        L_0x00e3:
+        L_0x00e2:
             r15 = 0
-            r10.<init>(r8, r13, r15, r5)     // Catch:{ all -> 0x053a }
-            r9[r12] = r10     // Catch:{ all -> 0x053a }
-            r8 = r9[r12]     // Catch:{ all -> 0x053a }
-            if (r12 != 0) goto L_0x00f0
+            r10.<init>(r8, r13, r15, r5)     // Catch:{ all -> 0x0539 }
+            r9[r12] = r10     // Catch:{ all -> 0x0539 }
+            r8 = r9[r12]     // Catch:{ all -> 0x0539 }
+            if (r12 != 0) goto L_0x00ef
             r10 = r16
-            goto L_0x00f2
-        L_0x00f0:
+            goto L_0x00f1
+        L_0x00ef:
             r10 = r18
-        L_0x00f2:
-            setDrawableColor(r8, r10)     // Catch:{ all -> 0x053a }
+        L_0x00f1:
+            setDrawableColor(r8, r10)     // Catch:{ all -> 0x0539 }
             int r12 = r12 + 1
             r13 = r22
             r8 = r23
             r15 = r24
             r10 = 2
-            goto L_0x00d2
-        L_0x00ff:
+            goto L_0x00d1
+        L_0x00fe:
             r23 = r8
             r22 = r13
             r24 = r15
-            android.graphics.RectF r15 = new android.graphics.RectF     // Catch:{ all -> 0x053a }
-            r15.<init>()     // Catch:{ all -> 0x053a }
+            android.graphics.RectF r15 = new android.graphics.RectF     // Catch:{ all -> 0x0539 }
+            r15.<init>()     // Catch:{ all -> 0x0539 }
             r8 = 80
             r10 = 1065353216(0x3var_, float:1.0)
             r12 = 1073741824(0x40000000, float:2.0)
@@ -10837,380 +11078,380 @@ public class Theme {
             r16 = 1141637120(0x440CLASSNAME, float:560.0)
             r18 = r9
             r9 = 120(0x78, float:1.68E-43)
-            if (r1 == 0) goto L_0x01c5
-            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x01b9 }
-            r0.<init>()     // Catch:{ all -> 0x01b9 }
+            if (r1 == 0) goto L_0x01c4
+            android.graphics.BitmapFactory$Options r0 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x01b8 }
+            r0.<init>()     // Catch:{ all -> 0x01b8 }
             r2 = 1
-            r0.inJustDecodeBounds = r2     // Catch:{ all -> 0x01b9 }
-            android.graphics.BitmapFactory.decodeFile(r1, r0)     // Catch:{ all -> 0x01b9 }
-            int r2 = r0.outWidth     // Catch:{ all -> 0x01b9 }
-            if (r2 <= 0) goto L_0x01b7
-            int r2 = r0.outHeight     // Catch:{ all -> 0x01b9 }
-            if (r2 <= 0) goto L_0x01b7
-            int r2 = r0.outWidth     // Catch:{ all -> 0x01b9 }
-            float r2 = (float) r2     // Catch:{ all -> 0x01b9 }
+            r0.inJustDecodeBounds = r2     // Catch:{ all -> 0x01b8 }
+            android.graphics.BitmapFactory.decodeFile(r1, r0)     // Catch:{ all -> 0x01b8 }
+            int r2 = r0.outWidth     // Catch:{ all -> 0x01b8 }
+            if (r2 <= 0) goto L_0x01b6
+            int r2 = r0.outHeight     // Catch:{ all -> 0x01b8 }
+            if (r2 <= 0) goto L_0x01b6
+            int r2 = r0.outWidth     // Catch:{ all -> 0x01b8 }
+            float r2 = (float) r2     // Catch:{ all -> 0x01b8 }
             float r2 = r2 / r16
-            int r4 = r0.outHeight     // Catch:{ all -> 0x01b9 }
-            float r4 = (float) r4     // Catch:{ all -> 0x01b9 }
+            int r4 = r0.outHeight     // Catch:{ all -> 0x01b8 }
+            float r4 = (float) r4     // Catch:{ all -> 0x01b8 }
             float r4 = r4 / r16
-            float r2 = java.lang.Math.min(r2, r4)     // Catch:{ all -> 0x01b9 }
+            float r2 = java.lang.Math.min(r2, r4)     // Catch:{ all -> 0x01b8 }
             r4 = 1
-            r0.inSampleSize = r4     // Catch:{ all -> 0x01b9 }
+            r0.inSampleSize = r4     // Catch:{ all -> 0x01b8 }
             int r4 = (r2 > r10 ? 1 : (r2 == r10 ? 0 : -1))
-            if (r4 <= 0) goto L_0x014d
-        L_0x0141:
-            int r4 = r0.inSampleSize     // Catch:{ all -> 0x01b9 }
+            if (r4 <= 0) goto L_0x014c
+        L_0x0140:
+            int r4 = r0.inSampleSize     // Catch:{ all -> 0x01b8 }
             r5 = 2
             int r4 = r4 * 2
-            r0.inSampleSize = r4     // Catch:{ all -> 0x01b9 }
-            float r4 = (float) r4     // Catch:{ all -> 0x01b9 }
+            r0.inSampleSize = r4     // Catch:{ all -> 0x01b8 }
+            float r4 = (float) r4     // Catch:{ all -> 0x01b8 }
             int r4 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r4 < 0) goto L_0x0141
-        L_0x014d:
+            if (r4 < 0) goto L_0x0140
+        L_0x014c:
             r2 = 0
-            r0.inJustDecodeBounds = r2     // Catch:{ all -> 0x01b9 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r1, r0)     // Catch:{ all -> 0x01b9 }
-            if (r0 == 0) goto L_0x01b7
-            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x01b9 }
-            r1.<init>()     // Catch:{ all -> 0x01b9 }
+            r0.inJustDecodeBounds = r2     // Catch:{ all -> 0x01b8 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r1, r0)     // Catch:{ all -> 0x01b8 }
+            if (r0 == 0) goto L_0x01b6
+            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x01b8 }
+            r1.<init>()     // Catch:{ all -> 0x01b8 }
             r2 = 1
-            r1.setFilterBitmap(r2)     // Catch:{ all -> 0x01b9 }
-            int r2 = r0.getWidth()     // Catch:{ all -> 0x01b9 }
-            float r2 = (float) r2     // Catch:{ all -> 0x01b9 }
+            r1.setFilterBitmap(r2)     // Catch:{ all -> 0x01b8 }
+            int r2 = r0.getWidth()     // Catch:{ all -> 0x01b8 }
+            float r2 = (float) r2     // Catch:{ all -> 0x01b8 }
             float r2 = r2 / r16
-            int r4 = r0.getHeight()     // Catch:{ all -> 0x01b9 }
-            float r4 = (float) r4     // Catch:{ all -> 0x01b9 }
+            int r4 = r0.getHeight()     // Catch:{ all -> 0x01b8 }
+            float r4 = (float) r4     // Catch:{ all -> 0x01b8 }
             float r4 = r4 / r16
-            float r2 = java.lang.Math.min(r2, r4)     // Catch:{ all -> 0x01b9 }
-            int r4 = r0.getWidth()     // Catch:{ all -> 0x01b9 }
-            float r4 = (float) r4     // Catch:{ all -> 0x01b9 }
+            float r2 = java.lang.Math.min(r2, r4)     // Catch:{ all -> 0x01b8 }
+            int r4 = r0.getWidth()     // Catch:{ all -> 0x01b8 }
+            float r4 = (float) r4     // Catch:{ all -> 0x01b8 }
             float r4 = r4 / r2
-            int r5 = r0.getHeight()     // Catch:{ all -> 0x01b9 }
-            float r5 = (float) r5     // Catch:{ all -> 0x01b9 }
+            int r5 = r0.getHeight()     // Catch:{ all -> 0x01b8 }
+            float r5 = (float) r5     // Catch:{ all -> 0x01b8 }
             float r5 = r5 / r2
-            r15.set(r13, r13, r4, r5)     // Catch:{ all -> 0x01b9 }
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x01b9 }
-            float r2 = (float) r2     // Catch:{ all -> 0x01b9 }
-            float r4 = r15.width()     // Catch:{ all -> 0x01b9 }
+            r15.set(r13, r13, r4, r5)     // Catch:{ all -> 0x01b8 }
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x01b8 }
+            float r2 = (float) r2     // Catch:{ all -> 0x01b8 }
+            float r4 = r15.width()     // Catch:{ all -> 0x01b8 }
             float r2 = r2 - r4
             float r2 = r2 / r12
-            int r4 = r7.getHeight()     // Catch:{ all -> 0x01b9 }
-            float r4 = (float) r4     // Catch:{ all -> 0x01b9 }
-            float r5 = r15.height()     // Catch:{ all -> 0x01b9 }
+            int r4 = r7.getHeight()     // Catch:{ all -> 0x01b8 }
+            float r4 = (float) r4     // Catch:{ all -> 0x01b8 }
+            float r5 = r15.height()     // Catch:{ all -> 0x01b8 }
             float r4 = r4 - r5
             float r4 = r4 / r12
-            r15.offset(r2, r4)     // Catch:{ all -> 0x01b9 }
+            r15.offset(r2, r4)     // Catch:{ all -> 0x01b8 }
             r2 = 0
-            r14.drawBitmap(r0, r2, r15, r1)     // Catch:{ all -> 0x01b9 }
-            if (r3 != 0) goto L_0x01b5
-            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x01b1 }
-            r1.<init>(r0)     // Catch:{ all -> 0x01b1 }
-            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x01b1 }
+            r14.drawBitmap(r0, r2, r15, r1)     // Catch:{ all -> 0x01b8 }
+            if (r3 != 0) goto L_0x01b4
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x01b0 }
+            r1.<init>(r0)     // Catch:{ all -> 0x01b0 }
+            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x01b0 }
             r1 = 0
-            r0 = r0[r1]     // Catch:{ all -> 0x01b1 }
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x01b1 }
+            r0 = r0[r1]     // Catch:{ all -> 0x01b0 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x01b0 }
             r3 = r0
-            goto L_0x01b5
-        L_0x01b1:
+            goto L_0x01b4
+        L_0x01b0:
             r0 = move-exception
             r1 = r0
             r0 = 1
-            goto L_0x01bc
-        L_0x01b5:
+            goto L_0x01bb
+        L_0x01b4:
             r0 = 1
-            goto L_0x01bf
-        L_0x01b7:
+            goto L_0x01be
+        L_0x01b6:
             r0 = 0
-            goto L_0x01bf
-        L_0x01b9:
+            goto L_0x01be
+        L_0x01b8:
             r0 = move-exception
             r1 = r0
             r0 = 0
-        L_0x01bc:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x053a }
-        L_0x01bf:
+        L_0x01bb:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0539 }
+        L_0x01be:
             r1 = r0
             r0 = 80
-        L_0x01c2:
+        L_0x01c1:
             r10 = 2
-            goto L_0x037c
-        L_0x01c5:
-            if (r2 == 0) goto L_0x0230
-            if (r11 != 0) goto L_0x01d3
-            android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x053a }
-            int r1 = r2.intValue()     // Catch:{ all -> 0x053a }
-            r0.<init>(r1)     // Catch:{ all -> 0x053a }
-            goto L_0x0207
-        L_0x01d3:
+            goto L_0x037b
+        L_0x01c4:
+            if (r2 == 0) goto L_0x022f
+            if (r11 != 0) goto L_0x01d2
+            android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x0539 }
+            int r1 = r2.intValue()     // Catch:{ all -> 0x0539 }
+            r0.<init>(r1)     // Catch:{ all -> 0x0539 }
+            goto L_0x0206
+        L_0x01d2:
             java.lang.String r0 = "chat_wallpaper_gradient_rotation"
-            java.lang.Object r0 = r5.get(r0)     // Catch:{ all -> 0x053a }
-            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x053a }
-            if (r0 != 0) goto L_0x01e3
+            java.lang.Object r0 = r5.get(r0)     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x0539 }
+            if (r0 != 0) goto L_0x01e2
             r0 = 45
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x053a }
-        L_0x01e3:
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x0539 }
+        L_0x01e2:
             r1 = 2
-            int[] r4 = new int[r1]     // Catch:{ all -> 0x053a }
-            int r1 = r2.intValue()     // Catch:{ all -> 0x053a }
+            int[] r4 = new int[r1]     // Catch:{ all -> 0x0539 }
+            int r1 = r2.intValue()     // Catch:{ all -> 0x0539 }
             r5 = 0
-            r4[r5] = r1     // Catch:{ all -> 0x053a }
-            int r1 = r11.intValue()     // Catch:{ all -> 0x053a }
+            r4[r5] = r1     // Catch:{ all -> 0x0539 }
+            int r1 = r11.intValue()     // Catch:{ all -> 0x0539 }
             r5 = 1
-            r4[r5] = r1     // Catch:{ all -> 0x053a }
-            int r0 = r0.intValue()     // Catch:{ all -> 0x053a }
-            int r1 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            int r5 = r7.getHeight()     // Catch:{ all -> 0x053a }
+            r4[r5] = r1     // Catch:{ all -> 0x0539 }
+            int r0 = r0.intValue()     // Catch:{ all -> 0x0539 }
+            int r1 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            int r5 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r5 = r5 - r9
-            android.graphics.drawable.BitmapDrawable r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable((int) r0, (int[]) r4, (int) r1, (int) r5)     // Catch:{ all -> 0x053a }
+            android.graphics.drawable.BitmapDrawable r0 = org.telegram.ui.Components.BackgroundGradientDrawable.createDitheredGradientBitmapDrawable((int) r0, (int[]) r4, (int) r1, (int) r5)     // Catch:{ all -> 0x0539 }
             r8 = 90
-        L_0x0207:
-            int r1 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            int r4 = r7.getHeight()     // Catch:{ all -> 0x053a }
+        L_0x0206:
+            int r1 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            int r4 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r4 = r4 - r9
             r5 = 0
-            r0.setBounds(r5, r9, r1, r4)     // Catch:{ all -> 0x053a }
-            r0.draw(r14)     // Catch:{ all -> 0x053a }
-            if (r3 != 0) goto L_0x022d
-            android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x053a }
-            int r1 = r2.intValue()     // Catch:{ all -> 0x053a }
-            r0.<init>(r1)     // Catch:{ all -> 0x053a }
-            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0)     // Catch:{ all -> 0x053a }
+            r0.setBounds(r5, r9, r1, r4)     // Catch:{ all -> 0x0539 }
+            r0.draw(r14)     // Catch:{ all -> 0x0539 }
+            if (r3 != 0) goto L_0x022c
+            android.graphics.drawable.ColorDrawable r0 = new android.graphics.drawable.ColorDrawable     // Catch:{ all -> 0x0539 }
+            int r1 = r2.intValue()     // Catch:{ all -> 0x0539 }
+            r0.<init>(r1)     // Catch:{ all -> 0x0539 }
+            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0)     // Catch:{ all -> 0x0539 }
             r1 = 0
-            r0 = r0[r1]     // Catch:{ all -> 0x053a }
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x053a }
-        L_0x022d:
+            r0 = r0[r1]     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x0539 }
+        L_0x022c:
             r0 = r8
             r1 = 1
-            goto L_0x01c2
-        L_0x0230:
-            if (r6 == 0) goto L_0x0238
-            int r1 = r6.intValue()     // Catch:{ all -> 0x053a }
-            if (r1 >= 0) goto L_0x0241
-        L_0x0238:
+            goto L_0x01c1
+        L_0x022f:
+            if (r6 == 0) goto L_0x0237
+            int r1 = r6.intValue()     // Catch:{ all -> 0x0539 }
+            if (r1 >= 0) goto L_0x0240
+        L_0x0237:
             r1 = 0
-            r2 = r4[r1]     // Catch:{ all -> 0x053a }
-            boolean r1 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x053a }
-            if (r1 != 0) goto L_0x0378
-        L_0x0241:
-            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0355 }
-            r1.<init>()     // Catch:{ all -> 0x0355 }
+            r2 = r4[r1]     // Catch:{ all -> 0x0539 }
+            boolean r1 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x0539 }
+            if (r1 != 0) goto L_0x0377
+        L_0x0240:
+            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0354 }
+            r1.<init>()     // Catch:{ all -> 0x0354 }
             r2 = 1
-            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x0355 }
+            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x0354 }
             r2 = 0
-            r5 = r4[r2]     // Catch:{ all -> 0x0355 }
-            boolean r2 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x0355 }
-            if (r2 != 0) goto L_0x0282
-            java.io.File r0 = new java.io.File     // Catch:{ all -> 0x027c }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x027c }
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x027c }
-            r5.<init>()     // Catch:{ all -> 0x027c }
+            r5 = r4[r2]     // Catch:{ all -> 0x0354 }
+            boolean r2 = android.text.TextUtils.isEmpty(r5)     // Catch:{ all -> 0x0354 }
+            if (r2 != 0) goto L_0x0281
+            java.io.File r0 = new java.io.File     // Catch:{ all -> 0x027b }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ all -> 0x027b }
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x027b }
+            r5.<init>()     // Catch:{ all -> 0x027b }
             r11 = 0
-            r4 = r4[r11]     // Catch:{ all -> 0x027c }
-            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ all -> 0x027c }
-            r5.append(r4)     // Catch:{ all -> 0x027c }
+            r4 = r4[r11]     // Catch:{ all -> 0x027b }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ all -> 0x027b }
+            r5.append(r4)     // Catch:{ all -> 0x027b }
             java.lang.String r4 = ".wp"
-            r5.append(r4)     // Catch:{ all -> 0x027c }
-            java.lang.String r4 = r5.toString()     // Catch:{ all -> 0x027c }
-            r0.<init>(r2, r4)     // Catch:{ all -> 0x027c }
-            java.lang.String r2 = r0.getAbsolutePath()     // Catch:{ all -> 0x027c }
-            android.graphics.BitmapFactory.decodeFile(r2, r1)     // Catch:{ all -> 0x027c }
+            r5.append(r4)     // Catch:{ all -> 0x027b }
+            java.lang.String r4 = r5.toString()     // Catch:{ all -> 0x027b }
+            r0.<init>(r2, r4)     // Catch:{ all -> 0x027b }
+            java.lang.String r2 = r0.getAbsolutePath()     // Catch:{ all -> 0x027b }
+            android.graphics.BitmapFactory.decodeFile(r2, r1)     // Catch:{ all -> 0x027b }
             r2 = 0
-            goto L_0x0298
-        L_0x027c:
+            goto L_0x0297
+        L_0x027b:
             r0 = move-exception
             r1 = 0
             r2 = 0
             r10 = 2
-            goto L_0x0359
-        L_0x0282:
-            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x0355 }
-            r2.<init>(r0)     // Catch:{ all -> 0x0355 }
-            java.nio.channels.FileChannel r0 = r2.getChannel()     // Catch:{ all -> 0x0351 }
-            int r4 = r6.intValue()     // Catch:{ all -> 0x0351 }
-            long r4 = (long) r4     // Catch:{ all -> 0x0351 }
-            r0.position(r4)     // Catch:{ all -> 0x0351 }
+            goto L_0x0358
+        L_0x0281:
+            java.io.FileInputStream r2 = new java.io.FileInputStream     // Catch:{ all -> 0x0354 }
+            r2.<init>(r0)     // Catch:{ all -> 0x0354 }
+            java.nio.channels.FileChannel r0 = r2.getChannel()     // Catch:{ all -> 0x0350 }
+            int r4 = r6.intValue()     // Catch:{ all -> 0x0350 }
+            long r4 = (long) r4     // Catch:{ all -> 0x0350 }
+            r0.position(r4)     // Catch:{ all -> 0x0350 }
             r4 = 0
-            android.graphics.BitmapFactory.decodeStream(r2, r4, r1)     // Catch:{ all -> 0x0351 }
+            android.graphics.BitmapFactory.decodeStream(r2, r4, r1)     // Catch:{ all -> 0x0350 }
             r0 = 0
-        L_0x0298:
-            int r4 = r1.outWidth     // Catch:{ all -> 0x0351 }
-            if (r4 <= 0) goto L_0x0346
-            int r4 = r1.outHeight     // Catch:{ all -> 0x0351 }
-            if (r4 <= 0) goto L_0x0346
-            int r4 = r1.outWidth     // Catch:{ all -> 0x0351 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0351 }
+        L_0x0297:
+            int r4 = r1.outWidth     // Catch:{ all -> 0x0350 }
+            if (r4 <= 0) goto L_0x0345
+            int r4 = r1.outHeight     // Catch:{ all -> 0x0350 }
+            if (r4 <= 0) goto L_0x0345
+            int r4 = r1.outWidth     // Catch:{ all -> 0x0350 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0350 }
             float r4 = r4 / r16
-            int r5 = r1.outHeight     // Catch:{ all -> 0x0351 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0351 }
+            int r5 = r1.outHeight     // Catch:{ all -> 0x0350 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0350 }
             float r5 = r5 / r16
-            float r4 = java.lang.Math.min(r4, r5)     // Catch:{ all -> 0x0351 }
+            float r4 = java.lang.Math.min(r4, r5)     // Catch:{ all -> 0x0350 }
             r5 = 1
-            r1.inSampleSize = r5     // Catch:{ all -> 0x0351 }
+            r1.inSampleSize = r5     // Catch:{ all -> 0x0350 }
             int r5 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
-            if (r5 <= 0) goto L_0x02c2
-        L_0x02b5:
-            int r5 = r1.inSampleSize     // Catch:{ all -> 0x0351 }
+            if (r5 <= 0) goto L_0x02c1
+        L_0x02b4:
+            int r5 = r1.inSampleSize     // Catch:{ all -> 0x0350 }
             r10 = 2
             int r5 = r5 * 2
-            r1.inSampleSize = r5     // Catch:{ all -> 0x0344 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0344 }
+            r1.inSampleSize = r5     // Catch:{ all -> 0x0343 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0343 }
             int r5 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
-            if (r5 < 0) goto L_0x02b5
-            goto L_0x02c3
-        L_0x02c2:
+            if (r5 < 0) goto L_0x02b4
+            goto L_0x02c2
+        L_0x02c1:
             r10 = 2
-        L_0x02c3:
+        L_0x02c2:
             r4 = 0
-            r1.inJustDecodeBounds = r4     // Catch:{ all -> 0x0344 }
-            if (r0 == 0) goto L_0x02d1
-            java.lang.String r0 = r0.getAbsolutePath()     // Catch:{ all -> 0x0344 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r0, r1)     // Catch:{ all -> 0x0344 }
-            goto L_0x02e2
-        L_0x02d1:
-            java.nio.channels.FileChannel r0 = r2.getChannel()     // Catch:{ all -> 0x0344 }
-            int r4 = r6.intValue()     // Catch:{ all -> 0x0344 }
-            long r4 = (long) r4     // Catch:{ all -> 0x0344 }
-            r0.position(r4)     // Catch:{ all -> 0x0344 }
+            r1.inJustDecodeBounds = r4     // Catch:{ all -> 0x0343 }
+            if (r0 == 0) goto L_0x02d0
+            java.lang.String r0 = r0.getAbsolutePath()     // Catch:{ all -> 0x0343 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r0, r1)     // Catch:{ all -> 0x0343 }
+            goto L_0x02e1
+        L_0x02d0:
+            java.nio.channels.FileChannel r0 = r2.getChannel()     // Catch:{ all -> 0x0343 }
+            int r4 = r6.intValue()     // Catch:{ all -> 0x0343 }
+            long r4 = (long) r4     // Catch:{ all -> 0x0343 }
+            r0.position(r4)     // Catch:{ all -> 0x0343 }
             r4 = 0
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeStream(r2, r4, r1)     // Catch:{ all -> 0x0344 }
-        L_0x02e2:
-            if (r0 == 0) goto L_0x0347
-            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x0344 }
-            r1.<init>()     // Catch:{ all -> 0x0344 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeStream(r2, r4, r1)     // Catch:{ all -> 0x0343 }
+        L_0x02e1:
+            if (r0 == 0) goto L_0x0346
+            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x0343 }
+            r1.<init>()     // Catch:{ all -> 0x0343 }
             r4 = 1
-            r1.setFilterBitmap(r4)     // Catch:{ all -> 0x0344 }
-            int r4 = r0.getWidth()     // Catch:{ all -> 0x0344 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0344 }
+            r1.setFilterBitmap(r4)     // Catch:{ all -> 0x0343 }
+            int r4 = r0.getWidth()     // Catch:{ all -> 0x0343 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0343 }
             float r4 = r4 / r16
-            int r5 = r0.getHeight()     // Catch:{ all -> 0x0344 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0344 }
+            int r5 = r0.getHeight()     // Catch:{ all -> 0x0343 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0343 }
             float r5 = r5 / r16
-            float r4 = java.lang.Math.min(r4, r5)     // Catch:{ all -> 0x0344 }
-            int r5 = r0.getWidth()     // Catch:{ all -> 0x0344 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0344 }
+            float r4 = java.lang.Math.min(r4, r5)     // Catch:{ all -> 0x0343 }
+            int r5 = r0.getWidth()     // Catch:{ all -> 0x0343 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0343 }
             float r5 = r5 / r4
-            int r6 = r0.getHeight()     // Catch:{ all -> 0x0344 }
-            float r6 = (float) r6     // Catch:{ all -> 0x0344 }
+            int r6 = r0.getHeight()     // Catch:{ all -> 0x0343 }
+            float r6 = (float) r6     // Catch:{ all -> 0x0343 }
             float r6 = r6 / r4
-            r15.set(r13, r13, r5, r6)     // Catch:{ all -> 0x0344 }
-            int r4 = r7.getWidth()     // Catch:{ all -> 0x0344 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0344 }
-            float r5 = r15.width()     // Catch:{ all -> 0x0344 }
+            r15.set(r13, r13, r5, r6)     // Catch:{ all -> 0x0343 }
+            int r4 = r7.getWidth()     // Catch:{ all -> 0x0343 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0343 }
+            float r5 = r15.width()     // Catch:{ all -> 0x0343 }
             float r4 = r4 - r5
             float r4 = r4 / r12
-            int r5 = r7.getHeight()     // Catch:{ all -> 0x0344 }
-            float r5 = (float) r5     // Catch:{ all -> 0x0344 }
-            float r6 = r15.height()     // Catch:{ all -> 0x0344 }
+            int r5 = r7.getHeight()     // Catch:{ all -> 0x0343 }
+            float r5 = (float) r5     // Catch:{ all -> 0x0343 }
+            float r6 = r15.height()     // Catch:{ all -> 0x0343 }
             float r5 = r5 - r6
             float r5 = r5 / r12
-            r15.offset(r4, r5)     // Catch:{ all -> 0x0344 }
+            r15.offset(r4, r5)     // Catch:{ all -> 0x0343 }
             r4 = 0
-            r14.drawBitmap(r0, r4, r15, r1)     // Catch:{ all -> 0x0344 }
-            if (r3 != 0) goto L_0x0342
-            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x033f }
-            r1.<init>(r0)     // Catch:{ all -> 0x033f }
-            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x033f }
+            r14.drawBitmap(r0, r4, r15, r1)     // Catch:{ all -> 0x0343 }
+            if (r3 != 0) goto L_0x0341
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x033e }
+            r1.<init>(r0)     // Catch:{ all -> 0x033e }
+            int[] r0 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x033e }
             r1 = 0
-            r0 = r0[r1]     // Catch:{ all -> 0x033f }
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x033f }
+            r0 = r0[r1]     // Catch:{ all -> 0x033e }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x033e }
             r3 = r0
-            goto L_0x0342
-        L_0x033f:
+            goto L_0x0341
+        L_0x033e:
             r0 = move-exception
             r1 = 1
-            goto L_0x0359
-        L_0x0342:
+            goto L_0x0358
+        L_0x0341:
             r1 = 1
-            goto L_0x0348
-        L_0x0344:
+            goto L_0x0347
+        L_0x0343:
             r0 = move-exception
-            goto L_0x0353
-        L_0x0346:
+            goto L_0x0352
+        L_0x0345:
             r10 = 2
-        L_0x0347:
+        L_0x0346:
             r1 = 0
-        L_0x0348:
-            if (r2 == 0) goto L_0x0367
-            r2.close()     // Catch:{ Exception -> 0x034e }
-            goto L_0x0367
-        L_0x034e:
+        L_0x0347:
+            if (r2 == 0) goto L_0x0366
+            r2.close()     // Catch:{ Exception -> 0x034d }
+            goto L_0x0366
+        L_0x034d:
             r0 = move-exception
             r2 = r0
-            goto L_0x0364
-        L_0x0351:
+            goto L_0x0363
+        L_0x0350:
             r0 = move-exception
             r10 = 2
-        L_0x0353:
+        L_0x0352:
             r1 = 0
-            goto L_0x0359
-        L_0x0355:
+            goto L_0x0358
+        L_0x0354:
             r0 = move-exception
             r10 = 2
             r1 = 0
             r2 = 0
-        L_0x0359:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x036a }
-            if (r2 == 0) goto L_0x0367
-            r2.close()     // Catch:{ Exception -> 0x0362 }
-            goto L_0x0367
-        L_0x0362:
+        L_0x0358:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0369 }
+            if (r2 == 0) goto L_0x0366
+            r2.close()     // Catch:{ Exception -> 0x0361 }
+            goto L_0x0366
+        L_0x0361:
             r0 = move-exception
             r2 = r0
-        L_0x0364:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x053a }
-        L_0x0367:
+        L_0x0363:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x0539 }
+        L_0x0366:
             r0 = 80
-            goto L_0x037c
-        L_0x036a:
+            goto L_0x037b
+        L_0x0369:
             r0 = move-exception
             r1 = r0
-            if (r2 == 0) goto L_0x0377
-            r2.close()     // Catch:{ Exception -> 0x0372 }
-            goto L_0x0377
-        L_0x0372:
+            if (r2 == 0) goto L_0x0376
+            r2.close()     // Catch:{ Exception -> 0x0371 }
+            goto L_0x0376
+        L_0x0371:
             r0 = move-exception
             r2 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x053a }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x0539 }
+        L_0x0376:
+            throw r1     // Catch:{ all -> 0x0539 }
         L_0x0377:
-            throw r1     // Catch:{ all -> 0x053a }
-        L_0x0378:
             r10 = 2
             r0 = 80
             r1 = 0
-        L_0x037c:
-            if (r1 != 0) goto L_0x03b6
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x053a }
-            android.content.res.Resources r1 = r1.getResources()     // Catch:{ all -> 0x053a }
-            r2 = 2131165317(0x7var_, float:1.7944848E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.Drawable r1 = r1.mutate()     // Catch:{ all -> 0x053a }
-            android.graphics.drawable.BitmapDrawable r1 = (android.graphics.drawable.BitmapDrawable) r1     // Catch:{ all -> 0x053a }
-            if (r3 != 0) goto L_0x039e
-            int[] r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x053a }
+        L_0x037b:
+            if (r1 != 0) goto L_0x03b5
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0539 }
+            android.content.res.Resources r1 = r1.getResources()     // Catch:{ all -> 0x0539 }
+            r2 = 2131165311(0x7var_f, float:1.7944836E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.Drawable r1 = r1.mutate()     // Catch:{ all -> 0x0539 }
+            android.graphics.drawable.BitmapDrawable r1 = (android.graphics.drawable.BitmapDrawable) r1     // Catch:{ all -> 0x0539 }
+            if (r3 != 0) goto L_0x039d
+            int[] r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r1)     // Catch:{ all -> 0x0539 }
             r3 = 0
-            r2 = r2[r3]     // Catch:{ all -> 0x053a }
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r2)     // Catch:{ all -> 0x053a }
-        L_0x039e:
-            android.graphics.Shader$TileMode r2 = android.graphics.Shader.TileMode.REPEAT     // Catch:{ all -> 0x053a }
-            android.graphics.Shader$TileMode r4 = android.graphics.Shader.TileMode.REPEAT     // Catch:{ all -> 0x053a }
-            r1.setTileModeXY(r2, r4)     // Catch:{ all -> 0x053a }
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            int r4 = r7.getHeight()     // Catch:{ all -> 0x053a }
+            r2 = r2[r3]     // Catch:{ all -> 0x0539 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r2)     // Catch:{ all -> 0x0539 }
+        L_0x039d:
+            android.graphics.Shader$TileMode r2 = android.graphics.Shader.TileMode.REPEAT     // Catch:{ all -> 0x0539 }
+            android.graphics.Shader$TileMode r4 = android.graphics.Shader.TileMode.REPEAT     // Catch:{ all -> 0x0539 }
+            r1.setTileModeXY(r2, r4)     // Catch:{ all -> 0x0539 }
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            int r4 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r4 = r4 - r9
             r5 = 0
-            r1.setBounds(r5, r9, r2, r4)     // Catch:{ all -> 0x053a }
-            r1.draw(r14)     // Catch:{ all -> 0x053a }
-            goto L_0x03b7
-        L_0x03b6:
+            r1.setBounds(r5, r9, r2, r4)     // Catch:{ all -> 0x0539 }
+            r1.draw(r14)     // Catch:{ all -> 0x0539 }
+            goto L_0x03b6
+        L_0x03b5:
             r5 = 0
-        L_0x03b7:
+        L_0x03b6:
             r2 = r23
             r1 = r24
-            r1.setColor(r2)     // Catch:{ all -> 0x053a }
+            r1.setColor(r2)     // Catch:{ all -> 0x0539 }
             r2 = 0
             r4 = 0
-            int r6 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            float r11 = (float) r6     // Catch:{ all -> 0x053a }
+            int r6 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            float r11 = (float) r6     // Catch:{ all -> 0x0539 }
             r12 = 1123024896(0x42var_, float:120.0)
             r8 = r14
             r6 = r18
@@ -11226,166 +11467,166 @@ public class Theme {
             r5 = r22
             r4 = 0
             r13 = r1
-            r8.drawRect(r9, r10, r11, r12, r13)     // Catch:{ all -> 0x053a }
-            if (r2 == 0) goto L_0x03fb
+            r8.drawRect(r9, r10, r11, r12, r13)     // Catch:{ all -> 0x0539 }
+            if (r2 == 0) goto L_0x03fa
             r8 = 13
-            int r9 = r2.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r9 = r2.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r9 = 120 - r9
             r10 = 2
             int r9 = r9 / r10
-            int r10 = r2.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            int r10 = r2.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r10 = r10 + r8
-            int r11 = r2.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r11 = r2.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r11 = r11 + r9
-            r2.setBounds(r8, r9, r10, r11)     // Catch:{ all -> 0x053a }
-            r2.draw(r14)     // Catch:{ all -> 0x053a }
-        L_0x03fb:
-            if (r5 == 0) goto L_0x0420
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            int r8 = r5.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            r2.setBounds(r8, r9, r10, r11)     // Catch:{ all -> 0x0539 }
+            r2.draw(r14)     // Catch:{ all -> 0x0539 }
+        L_0x03fa:
+            if (r5 == 0) goto L_0x041f
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            int r8 = r5.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r2 = r2 - r8
             int r2 = r2 + -10
-            int r8 = r5.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r8 = r5.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r9 = 120 - r8
             r8 = 2
             int r9 = r9 / r8
-            int r8 = r5.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            int r8 = r5.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r8 = r8 + r2
-            int r10 = r5.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r10 = r5.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r10 = r10 + r9
-            r5.setBounds(r2, r9, r8, r10)     // Catch:{ all -> 0x053a }
-            r5.draw(r14)     // Catch:{ all -> 0x053a }
-        L_0x0420:
+            r5.setBounds(r2, r9, r8, r10)     // Catch:{ all -> 0x0539 }
+            r5.draw(r14)     // Catch:{ all -> 0x0539 }
+        L_0x041f:
             r2 = 1
-            r5 = r6[r2]     // Catch:{ all -> 0x053a }
+            r5 = r6[r2]     // Catch:{ all -> 0x0539 }
             r8 = 216(0xd8, float:3.03E-43)
-            int r9 = r7.getWidth()     // Catch:{ all -> 0x053a }
+            int r9 = r7.getWidth()     // Catch:{ all -> 0x0539 }
             r10 = 20
             int r9 = r9 - r10
             r11 = 308(0x134, float:4.32E-43)
             r12 = 161(0xa1, float:2.26E-43)
-            r5.setBounds(r12, r8, r9, r11)     // Catch:{ all -> 0x053a }
-            r5 = r6[r2]     // Catch:{ all -> 0x053a }
+            r5.setBounds(r12, r8, r9, r11)     // Catch:{ all -> 0x0539 }
+            r5 = r6[r2]     // Catch:{ all -> 0x0539 }
             r8 = 522(0x20a, float:7.31E-43)
-            r5.setTop(r4, r8, r4, r4)     // Catch:{ all -> 0x053a }
-            r5 = r6[r2]     // Catch:{ all -> 0x053a }
-            r5.draw(r14)     // Catch:{ all -> 0x053a }
-            r5 = r6[r2]     // Catch:{ all -> 0x053a }
-            int r9 = r7.getWidth()     // Catch:{ all -> 0x053a }
+            r5.setTop(r4, r8, r4, r4)     // Catch:{ all -> 0x0539 }
+            r5 = r6[r2]     // Catch:{ all -> 0x0539 }
+            r5.draw(r14)     // Catch:{ all -> 0x0539 }
+            r5 = r6[r2]     // Catch:{ all -> 0x0539 }
+            int r9 = r7.getWidth()     // Catch:{ all -> 0x0539 }
             int r9 = r9 - r10
             r11 = 430(0x1ae, float:6.03E-43)
-            r5.setBounds(r12, r11, r9, r8)     // Catch:{ all -> 0x053a }
-            r5 = r6[r2]     // Catch:{ all -> 0x053a }
-            r5.setTop(r11, r8, r4, r4)     // Catch:{ all -> 0x053a }
-            r2 = r6[r2]     // Catch:{ all -> 0x053a }
-            r2.draw(r14)     // Catch:{ all -> 0x053a }
-            r2 = r6[r4]     // Catch:{ all -> 0x053a }
+            r5.setBounds(r12, r11, r9, r8)     // Catch:{ all -> 0x0539 }
+            r5 = r6[r2]     // Catch:{ all -> 0x0539 }
+            r5.setTop(r11, r8, r4, r4)     // Catch:{ all -> 0x0539 }
+            r2 = r6[r2]     // Catch:{ all -> 0x0539 }
+            r2.draw(r14)     // Catch:{ all -> 0x0539 }
+            r2 = r6[r4]     // Catch:{ all -> 0x0539 }
             r5 = 399(0x18f, float:5.59E-43)
             r9 = 415(0x19f, float:5.82E-43)
             r11 = 323(0x143, float:4.53E-43)
-            r2.setBounds(r10, r11, r5, r9)     // Catch:{ all -> 0x053a }
-            r2 = r6[r4]     // Catch:{ all -> 0x053a }
-            r2.setTop(r11, r8, r4, r4)     // Catch:{ all -> 0x053a }
-            r2 = r6[r4]     // Catch:{ all -> 0x053a }
-            r2.draw(r14)     // Catch:{ all -> 0x053a }
-            if (r3 == 0) goto L_0x048d
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x053a }
+            r2.setBounds(r10, r11, r5, r9)     // Catch:{ all -> 0x0539 }
+            r2 = r6[r4]     // Catch:{ all -> 0x0539 }
+            r2.setTop(r11, r8, r4, r4)     // Catch:{ all -> 0x0539 }
+            r2 = r6[r4]     // Catch:{ all -> 0x0539 }
+            r2.draw(r14)     // Catch:{ all -> 0x0539 }
+            if (r3 == 0) goto L_0x048c
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x0539 }
             int r2 = r2 + -126
             r4 = 2
             int r2 = r2 / r4
             r4 = 150(0x96, float:2.1E-43)
-            float r5 = (float) r2     // Catch:{ all -> 0x053a }
-            float r4 = (float) r4     // Catch:{ all -> 0x053a }
+            float r5 = (float) r2     // Catch:{ all -> 0x0539 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0539 }
             int r2 = r2 + 126
-            float r2 = (float) r2     // Catch:{ all -> 0x053a }
+            float r2 = (float) r2     // Catch:{ all -> 0x0539 }
             r6 = 192(0xc0, float:2.69E-43)
-            float r6 = (float) r6     // Catch:{ all -> 0x053a }
-            r15.set(r5, r4, r2, r6)     // Catch:{ all -> 0x053a }
-            int r2 = r3.intValue()     // Catch:{ all -> 0x053a }
-            r1.setColor(r2)     // Catch:{ all -> 0x053a }
+            float r6 = (float) r6     // Catch:{ all -> 0x0539 }
+            r15.set(r5, r4, r2, r6)     // Catch:{ all -> 0x0539 }
+            int r2 = r3.intValue()     // Catch:{ all -> 0x0539 }
+            r1.setColor(r2)     // Catch:{ all -> 0x0539 }
             r2 = 1101529088(0x41a80000, float:21.0)
-            r14.drawRoundRect(r15, r2, r2, r1)     // Catch:{ all -> 0x053a }
-        L_0x048d:
+            r14.drawRoundRect(r15, r2, r2, r1)     // Catch:{ all -> 0x0539 }
+        L_0x048c:
             r2 = r25
-            r1.setColor(r2)     // Catch:{ all -> 0x053a }
+            r1.setColor(r2)     // Catch:{ all -> 0x0539 }
             r9 = 0
-            int r2 = r7.getHeight()     // Catch:{ all -> 0x053a }
+            int r2 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r2 = r2 + -120
-            float r10 = (float) r2     // Catch:{ all -> 0x053a }
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            float r11 = (float) r2     // Catch:{ all -> 0x053a }
-            int r2 = r7.getHeight()     // Catch:{ all -> 0x053a }
-            float r12 = (float) r2     // Catch:{ all -> 0x053a }
+            float r10 = (float) r2     // Catch:{ all -> 0x0539 }
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            float r11 = (float) r2     // Catch:{ all -> 0x0539 }
+            int r2 = r7.getHeight()     // Catch:{ all -> 0x0539 }
+            float r12 = (float) r2     // Catch:{ all -> 0x0539 }
             r8 = r14
             r13 = r1
-            r8.drawRect(r9, r10, r11, r12, r13)     // Catch:{ all -> 0x053a }
+            r8.drawRect(r9, r10, r11, r12, r13)     // Catch:{ all -> 0x0539 }
             r1 = 22
-            if (r20 == 0) goto L_0x04ce
-            int r2 = r7.getHeight()     // Catch:{ all -> 0x053a }
+            if (r20 == 0) goto L_0x04cd
+            int r2 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r2 = r2 + -120
-            int r3 = r20.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r3 = r20.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r9 = 120 - r3
             r3 = 2
             int r9 = r9 / r3
             int r2 = r2 + r9
-            int r3 = r20.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            int r3 = r20.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r3 = r3 + r1
-            int r4 = r20.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r4 = r20.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r4 = r4 + r2
             r5 = r20
-            r5.setBounds(r1, r2, r3, r4)     // Catch:{ all -> 0x053a }
-            r5.draw(r14)     // Catch:{ all -> 0x053a }
-        L_0x04ce:
-            if (r21 == 0) goto L_0x04fb
-            int r2 = r7.getWidth()     // Catch:{ all -> 0x053a }
-            int r3 = r21.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            r5.setBounds(r1, r2, r3, r4)     // Catch:{ all -> 0x0539 }
+            r5.draw(r14)     // Catch:{ all -> 0x0539 }
+        L_0x04cd:
+            if (r21 == 0) goto L_0x04fa
+            int r2 = r7.getWidth()     // Catch:{ all -> 0x0539 }
+            int r3 = r21.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r2 = r2 - r3
             int r2 = r2 - r1
-            int r1 = r7.getHeight()     // Catch:{ all -> 0x053a }
+            int r1 = r7.getHeight()     // Catch:{ all -> 0x0539 }
             int r1 = r1 + -120
-            int r3 = r21.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r3 = r21.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r9 = 120 - r3
             r3 = 2
             int r9 = r9 / r3
             int r1 = r1 + r9
-            int r3 = r21.getIntrinsicWidth()     // Catch:{ all -> 0x053a }
+            int r3 = r21.getIntrinsicWidth()     // Catch:{ all -> 0x0539 }
             int r3 = r3 + r2
-            int r4 = r21.getIntrinsicHeight()     // Catch:{ all -> 0x053a }
+            int r4 = r21.getIntrinsicHeight()     // Catch:{ all -> 0x0539 }
             int r4 = r4 + r1
             r5 = r21
-            r5.setBounds(r2, r1, r3, r4)     // Catch:{ all -> 0x053a }
-            r5.draw(r14)     // Catch:{ all -> 0x053a }
-        L_0x04fb:
+            r5.setBounds(r2, r1, r3, r4)     // Catch:{ all -> 0x0539 }
+            r5.draw(r14)     // Catch:{ all -> 0x0539 }
+        L_0x04fa:
             r1 = 0
-            r14.setBitmap(r1)     // Catch:{ all -> 0x053a }
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x053a }
-            r1.<init>()     // Catch:{ all -> 0x053a }
+            r14.setBitmap(r1)     // Catch:{ all -> 0x0539 }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x0539 }
+            r1.<init>()     // Catch:{ all -> 0x0539 }
             java.lang.String r2 = "-2147483648_"
-            r1.append(r2)     // Catch:{ all -> 0x053a }
-            int r2 = org.telegram.messenger.SharedConfig.getLastLocalId()     // Catch:{ all -> 0x053a }
-            r1.append(r2)     // Catch:{ all -> 0x053a }
+            r1.append(r2)     // Catch:{ all -> 0x0539 }
+            int r2 = org.telegram.messenger.SharedConfig.getLastLocalId()     // Catch:{ all -> 0x0539 }
+            r1.append(r2)     // Catch:{ all -> 0x0539 }
             java.lang.String r2 = ".jpg"
-            r1.append(r2)     // Catch:{ all -> 0x053a }
-            java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x053a }
-            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x053a }
+            r1.append(r2)     // Catch:{ all -> 0x0539 }
+            java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x0539 }
+            java.io.File r2 = new java.io.File     // Catch:{ all -> 0x0539 }
             r3 = 4
-            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x053a }
-            r2.<init>(r3, r1)     // Catch:{ all -> 0x053a }
-            java.io.FileOutputStream r1 = new java.io.FileOutputStream     // Catch:{ all -> 0x0535 }
-            r1.<init>(r2)     // Catch:{ all -> 0x0535 }
-            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x0535 }
-            r7.compress(r3, r0, r1)     // Catch:{ all -> 0x0535 }
-            org.telegram.messenger.SharedConfig.saveConfig()     // Catch:{ all -> 0x0535 }
-            java.lang.String r0 = r2.getAbsolutePath()     // Catch:{ all -> 0x0535 }
+            java.io.File r3 = org.telegram.messenger.FileLoader.getDirectory(r3)     // Catch:{ all -> 0x0539 }
+            r2.<init>(r3, r1)     // Catch:{ all -> 0x0539 }
+            java.io.FileOutputStream r1 = new java.io.FileOutputStream     // Catch:{ all -> 0x0534 }
+            r1.<init>(r2)     // Catch:{ all -> 0x0534 }
+            android.graphics.Bitmap$CompressFormat r3 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x0534 }
+            r7.compress(r3, r0, r1)     // Catch:{ all -> 0x0534 }
+            org.telegram.messenger.SharedConfig.saveConfig()     // Catch:{ all -> 0x0534 }
+            java.lang.String r0 = r2.getAbsolutePath()     // Catch:{ all -> 0x0534 }
             return r0
-        L_0x0535:
+        L_0x0534:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x053a }
-            goto L_0x053e
-        L_0x053a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0539 }
+            goto L_0x053d
+        L_0x0539:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x053e:
+        L_0x053d:
             r1 = 0
             return r1
         */
@@ -11397,7 +11638,7 @@ public class Theme {
         r4 = org.telegram.messenger.Utilities.parseInt(r13).intValue();
      */
     /* JADX WARNING: Missing exception handler attribute for start block: B:34:0x0081 */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00ca A[SYNTHETIC, Splitter:B:55:0x00ca] */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00c9 A[SYNTHETIC, Splitter:B:55:0x00c9] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.util.HashMap<java.lang.String, java.lang.Integer> getThemeFileValues(java.io.File r16, java.lang.String r17, java.lang.String[] r18) {
         /*
@@ -11406,22 +11647,22 @@ public class Theme {
             r1.<init>()
             r2 = 1024(0x400, float:1.435E-42)
             r3 = 0
-            byte[] r2 = new byte[r2]     // Catch:{ all -> 0x00c4 }
+            byte[] r2 = new byte[r2]     // Catch:{ all -> 0x00c3 }
             if (r17 == 0) goto L_0x0013
-            java.io.File r4 = getAssetFile(r17)     // Catch:{ all -> 0x00c4 }
+            java.io.File r4 = getAssetFile(r17)     // Catch:{ all -> 0x00c3 }
             goto L_0x0015
         L_0x0013:
             r4 = r16
         L_0x0015:
-            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x00c4 }
-            r5.<init>(r4)     // Catch:{ all -> 0x00c4 }
+            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ all -> 0x00c3 }
+            r5.<init>(r4)     // Catch:{ all -> 0x00c3 }
             r3 = -1
             r4 = 0
             r6 = 0
             r7 = -1
             r8 = 0
         L_0x001f:
-            int r9 = r5.read(r2)     // Catch:{ all -> 0x00c1 }
+            int r9 = r5.read(r2)     // Catch:{ all -> 0x00c0 }
             if (r9 == r3) goto L_0x00b3
             r12 = r6
             r10 = 0
@@ -11429,27 +11670,27 @@ public class Theme {
         L_0x0028:
             r13 = 1
             if (r10 >= r9) goto L_0x00a0
-            byte r14 = r2[r10]     // Catch:{ all -> 0x00c1 }
+            byte r14 = r2[r10]     // Catch:{ all -> 0x00c0 }
             r15 = 10
             if (r14 != r15) goto L_0x009b
             int r14 = r10 - r11
             int r14 = r14 + r13
-            java.lang.String r15 = new java.lang.String     // Catch:{ all -> 0x00c1 }
+            java.lang.String r15 = new java.lang.String     // Catch:{ all -> 0x00c0 }
             int r13 = r14 + -1
-            r15.<init>(r2, r11, r13)     // Catch:{ all -> 0x00c1 }
+            r15.<init>(r2, r11, r13)     // Catch:{ all -> 0x00c0 }
             java.lang.String r13 = "WLS="
-            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c1 }
+            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c0 }
             if (r13 == 0) goto L_0x0050
             if (r0 == 0) goto L_0x0099
-            int r13 = r0.length     // Catch:{ all -> 0x00c1 }
+            int r13 = r0.length     // Catch:{ all -> 0x00c0 }
             if (r13 <= 0) goto L_0x0099
             r13 = 4
-            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c1 }
-            r0[r4] = r13     // Catch:{ all -> 0x00c1 }
+            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c0 }
+            r0[r4] = r13     // Catch:{ all -> 0x00c0 }
             goto L_0x0099
         L_0x0050:
             java.lang.String r13 = "WPS"
-            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c1 }
+            boolean r13 = r15.startsWith(r13)     // Catch:{ all -> 0x00c0 }
             if (r13 == 0) goto L_0x005c
             int r14 = r14 + r12
             r7 = r14
@@ -11457,28 +11698,28 @@ public class Theme {
             goto L_0x00a0
         L_0x005c:
             r13 = 61
-            int r13 = r15.indexOf(r13)     // Catch:{ all -> 0x00c1 }
+            int r13 = r15.indexOf(r13)     // Catch:{ all -> 0x00c0 }
             if (r13 == r3) goto L_0x0099
-            java.lang.String r3 = r15.substring(r4, r13)     // Catch:{ all -> 0x00c1 }
+            java.lang.String r3 = r15.substring(r4, r13)     // Catch:{ all -> 0x00c0 }
             int r13 = r13 + 1
-            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c1 }
-            int r15 = r13.length()     // Catch:{ all -> 0x00c1 }
+            java.lang.String r13 = r15.substring(r13)     // Catch:{ all -> 0x00c0 }
+            int r15 = r13.length()     // Catch:{ all -> 0x00c0 }
             if (r15 <= 0) goto L_0x008a
-            char r15 = r13.charAt(r4)     // Catch:{ all -> 0x00c1 }
+            char r15 = r13.charAt(r4)     // Catch:{ all -> 0x00c0 }
             r4 = 35
             if (r15 != r4) goto L_0x008a
             int r4 = android.graphics.Color.parseColor(r13)     // Catch:{ Exception -> 0x0081 }
             goto L_0x0092
         L_0x0081:
-            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c1 }
-            int r4 = r4.intValue()     // Catch:{ all -> 0x00c1 }
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c0 }
+            int r4 = r4.intValue()     // Catch:{ all -> 0x00c0 }
             goto L_0x0092
         L_0x008a:
-            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c1 }
-            int r4 = r4.intValue()     // Catch:{ all -> 0x00c1 }
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r13)     // Catch:{ all -> 0x00c0 }
+            int r4 = r4.intValue()     // Catch:{ all -> 0x00c0 }
         L_0x0092:
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch:{ all -> 0x00c1 }
-            r1.put(r3, r4)     // Catch:{ all -> 0x00c1 }
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch:{ all -> 0x00c0 }
+            r1.put(r3, r4)     // Catch:{ all -> 0x00c0 }
         L_0x0099:
             int r11 = r11 + r14
             int r12 = r12 + r14
@@ -11491,9 +11732,9 @@ public class Theme {
             if (r6 != r12) goto L_0x00a3
             goto L_0x00b3
         L_0x00a3:
-            java.nio.channels.FileChannel r3 = r5.getChannel()     // Catch:{ all -> 0x00c1 }
-            long r9 = (long) r12     // Catch:{ all -> 0x00c1 }
-            r3.position(r9)     // Catch:{ all -> 0x00c1 }
+            java.nio.channels.FileChannel r3 = r5.getChannel()     // Catch:{ all -> 0x00c0 }
+            long r9 = (long) r12     // Catch:{ all -> 0x00c0 }
+            r3.position(r9)     // Catch:{ all -> 0x00c0 }
             if (r8 == 0) goto L_0x00ae
             goto L_0x00b3
         L_0x00ae:
@@ -11503,43 +11744,43 @@ public class Theme {
             goto L_0x001f
         L_0x00b3:
             java.lang.String r0 = "wallpaperFileOffset"
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r7)     // Catch:{ all -> 0x00c1 }
-            r1.put(r0, r2)     // Catch:{ all -> 0x00c1 }
-            r5.close()     // Catch:{ Exception -> 0x00ce }
-            goto L_0x00d3
-        L_0x00c1:
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r7)     // Catch:{ all -> 0x00c0 }
+            r1.put(r0, r2)     // Catch:{ all -> 0x00c0 }
+            r5.close()     // Catch:{ Exception -> 0x00cd }
+            goto L_0x00d2
+        L_0x00c0:
             r0 = move-exception
             r3 = r5
-            goto L_0x00c5
-        L_0x00c4:
+            goto L_0x00c4
+        L_0x00c3:
             r0 = move-exception
-        L_0x00c5:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00d4 }
-            if (r3 == 0) goto L_0x00d3
-            r3.close()     // Catch:{ Exception -> 0x00ce }
-            goto L_0x00d3
-        L_0x00ce:
+        L_0x00c4:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00d3 }
+            if (r3 == 0) goto L_0x00d2
+            r3.close()     // Catch:{ Exception -> 0x00cd }
+            goto L_0x00d2
+        L_0x00cd:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x00d3:
+        L_0x00d2:
             return r1
-        L_0x00d4:
+        L_0x00d3:
             r0 = move-exception
             r1 = r0
-            if (r3 == 0) goto L_0x00e1
-            r3.close()     // Catch:{ Exception -> 0x00dc }
-            goto L_0x00e1
-        L_0x00dc:
+            if (r3 == 0) goto L_0x00e0
+            r3.close()     // Catch:{ Exception -> 0x00db }
+            goto L_0x00e0
+        L_0x00db:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x00e1:
-            goto L_0x00e3
-        L_0x00e2:
-            throw r1
-        L_0x00e3:
+        L_0x00e0:
             goto L_0x00e2
+        L_0x00e1:
+            throw r1
+        L_0x00e2:
+            goto L_0x00e1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.getThemeFileValues(java.io.File, java.lang.String, java.lang.String[]):java.util.HashMap");
     }
@@ -11766,21 +12007,6 @@ public class Theme {
         }
     }
 
-    public static void destroyResources() {
-        int i = 0;
-        while (true) {
-            Drawable[] drawableArr = chat_attachButtonDrawables;
-            if (i < drawableArr.length) {
-                if (drawableArr[i] != null) {
-                    drawableArr[i].setCallback((Drawable.Callback) null);
-                }
-                i++;
-            } else {
-                return;
-            }
-        }
-    }
-
     public static void reloadAllResources(Context context) {
         destroyResources();
         if (chat_msgInDrawable != null) {
@@ -11800,44 +12026,44 @@ public class Theme {
     }
 
     /* JADX WARNING: Can't wrap try/catch for region: R(14:11|(1:13)|40|14|15|16|(4:18|(1:20)(1:21)|22|23)|41|24|25|26|27|28|29) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x0b4e */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:27:0x0ba0 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void createChatResources(android.content.Context r17, boolean r18) {
         /*
             java.lang.Object r1 = sync
             monitor-enter(r1)
-            android.text.TextPaint r0 = chat_msgTextPaint     // Catch:{ all -> 0x0cde }
+            android.text.TextPaint r0 = chat_msgTextPaint     // Catch:{ all -> 0x0d3d }
             r2 = 1
             if (r0 != 0) goto L_0x003b
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgTextPaint = r0     // Catch:{ all -> 0x0cde }
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgGameTextPaint = r0     // Catch:{ all -> 0x0cde }
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgTextPaintOneEmoji = r0     // Catch:{ all -> 0x0cde }
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgTextPaintTwoEmoji = r0     // Catch:{ all -> 0x0cde }
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgTextPaintThreeEmoji = r0     // Catch:{ all -> 0x0cde }
-            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0cde }
-            r0.<init>(r2)     // Catch:{ all -> 0x0cde }
-            chat_msgBotButtonPaint = r0     // Catch:{ all -> 0x0cde }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgTextPaint = r0     // Catch:{ all -> 0x0d3d }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgGameTextPaint = r0     // Catch:{ all -> 0x0d3d }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgTextPaintOneEmoji = r0     // Catch:{ all -> 0x0d3d }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgTextPaintTwoEmoji = r0     // Catch:{ all -> 0x0d3d }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgTextPaintThreeEmoji = r0     // Catch:{ all -> 0x0d3d }
+            android.text.TextPaint r0 = new android.text.TextPaint     // Catch:{ all -> 0x0d3d }
+            r0.<init>(r2)     // Catch:{ all -> 0x0d3d }
+            chat_msgBotButtonPaint = r0     // Catch:{ all -> 0x0d3d }
             java.lang.String r3 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)     // Catch:{ all -> 0x0cde }
-            r0.setTypeface(r3)     // Catch:{ all -> 0x0cde }
+            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)     // Catch:{ all -> 0x0d3d }
+            r0.setTypeface(r3)     // Catch:{ all -> 0x0d3d }
         L_0x003b:
-            monitor-exit(r1)     // Catch:{ all -> 0x0cde }
+            monitor-exit(r1)     // Catch:{ all -> 0x0d3d }
             r0 = 1077936128(0x40400000, float:3.0)
             r1 = 1096810496(0x41600000, float:14.0)
             r3 = 2
-            if (r18 != 0) goto L_0x0b58
+            if (r18 != 0) goto L_0x0baa
             org.telegram.ui.ActionBar.Theme$MessageDrawable r4 = chat_msgInDrawable
-            if (r4 != 0) goto L_0x0b58
+            if (r4 != 0) goto L_0x0baa
             android.text.TextPaint r4 = new android.text.TextPaint
             r4.<init>(r2)
             chat_infoPaint = r4
@@ -11975,6 +12201,17 @@ public class Theme {
             chat_instantViewRectPaint = r4
             android.graphics.Paint$Style r5 = android.graphics.Paint.Style.STROKE
             r4.setStyle(r5)
+            android.graphics.Paint r4 = chat_instantViewRectPaint
+            android.graphics.Paint$Cap r5 = android.graphics.Paint.Cap.ROUND
+            r4.setStrokeCap(r5)
+            android.graphics.Paint r4 = new android.graphics.Paint
+            r4.<init>(r2)
+            chat_pollTimerPaint = r4
+            android.graphics.Paint$Style r5 = android.graphics.Paint.Style.STROKE
+            r4.setStyle(r5)
+            android.graphics.Paint r4 = chat_pollTimerPaint
+            android.graphics.Paint$Cap r5 = android.graphics.Paint.Cap.ROUND
+            r4.setStrokeCap(r5)
             android.graphics.Paint r4 = new android.graphics.Paint
             r4.<init>(r2)
             chat_replyLinePaint = r4
@@ -12017,7 +12254,7 @@ public class Theme {
             r4.<init>()
             chat_composeBackgroundPaint = r4
             android.content.res.Resources r4 = r17.getResources()
-            r5 = 2131165961(0x7var_, float:1.7946154E38)
+            r5 = 2131165959(0x7var_, float:1.794615E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgNoSoundDrawable = r5
             org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
@@ -12045,47 +12282,47 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme$MessageDrawable r5 = new org.telegram.ui.ActionBar.Theme$MessageDrawable
             r5.<init>(r2, r2, r2)
             chat_msgOutMediaSelectedDrawable = r5
-            r5 = 2131165665(0x7var_e1, float:1.7945554E38)
+            r5 = 2131165659(0x7var_db, float:1.7945541E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCheckDrawable = r5
-            r5 = 2131165665(0x7var_e1, float:1.7945554E38)
+            r5 = 2131165659(0x7var_db, float:1.7945541E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCheckSelectedDrawable = r5
-            r5 = 2131165665(0x7var_e1, float:1.7945554E38)
+            r5 = 2131165659(0x7var_db, float:1.7945541E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCheckReadDrawable = r5
-            r5 = 2131165665(0x7var_e1, float:1.7945554E38)
+            r5 = 2131165659(0x7var_db, float:1.7945541E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCheckReadSelectedDrawable = r5
-            r5 = 2131165666(0x7var_e2, float:1.7945556E38)
+            r5 = 2131165660(0x7var_dc, float:1.7945543E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgMediaCheckDrawable = r5
-            r5 = 2131165666(0x7var_e2, float:1.7945556E38)
+            r5 = 2131165660(0x7var_dc, float:1.7945543E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerCheckDrawable = r5
-            r5 = 2131165680(0x7var_f0, float:1.7945584E38)
+            r5 = 2131165674(0x7var_ea, float:1.7945572E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutHalfCheckDrawable = r5
-            r5 = 2131165680(0x7var_f0, float:1.7945584E38)
+            r5 = 2131165674(0x7var_ea, float:1.7945572E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutHalfCheckSelectedDrawable = r5
-            r5 = 2131165681(0x7var_f1, float:1.7945586E38)
+            r5 = 2131165675(0x7var_eb, float:1.7945574E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgMediaHalfCheckDrawable = r5
-            r5 = 2131165681(0x7var_f1, float:1.7945586E38)
+            r5 = 2131165675(0x7var_eb, float:1.7945574E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerHalfCheckDrawable = r5
-            r5 = 2131165668(0x7var_e4, float:1.794556E38)
+            r5 = 2131165662(0x7var_de, float:1.7945547E38)
             android.graphics.drawable.Drawable r7 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             chat_msgOutClockDrawable = r7
@@ -12104,7 +12341,7 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerClockDrawable = r5
-            r5 = 2131165732(0x7var_, float:1.794569E38)
+            r5 = 2131165726(0x7var_e, float:1.7945677E38)
             android.graphics.drawable.Drawable r7 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             chat_msgInViewsDrawable = r7
@@ -12123,227 +12360,250 @@ public class Theme {
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgStickerViewsDrawable = r5
-            r5 = 2131165657(0x7var_d9, float:1.7945537E38)
+            r5 = 2131165651(0x7var_d3, float:1.7945525E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInMenuDrawable = r5
-            r5 = 2131165657(0x7var_d9, float:1.7945537E38)
+            r5 = 2131165651(0x7var_d3, float:1.7945525E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInMenuSelectedDrawable = r5
-            r5 = 2131165657(0x7var_d9, float:1.7945537E38)
+            r5 = 2131165651(0x7var_d3, float:1.7945525E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutMenuDrawable = r5
-            r5 = 2131165657(0x7var_d9, float:1.7945537E38)
+            r5 = 2131165651(0x7var_d3, float:1.7945525E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutMenuSelectedDrawable = r5
-            r5 = 2131165954(0x7var_, float:1.794614E38)
+            r5 = 2131165952(0x7var_, float:1.7946136E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgMediaMenuDrawable = r5
-            r5 = 2131165684(0x7var_f4, float:1.7945592E38)
+            r5 = 2131165678(0x7var_ee, float:1.794558E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInInstantDrawable = r5
-            r5 = 2131165684(0x7var_f4, float:1.7945592E38)
+            r5 = 2131165678(0x7var_ee, float:1.794558E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutInstantDrawable = r5
-            r5 = 2131165733(0x7var_, float:1.7945691E38)
+            r5 = 2131165727(0x7var_f, float:1.794568E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_msgErrorDrawable = r5
-            r5 = 2131165554(0x7var_, float:1.7945328E38)
+            r5 = 2131165548(0x7var_c, float:1.7945316E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_muteIconDrawable = r5
-            r5 = 2131165475(0x7var_, float:1.7945168E38)
+            r5 = 2131165469(0x7var_d, float:1.7945156E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_lockIconDrawable = r5
-            r5 = 2131165305(0x7var_, float:1.7944823E38)
+            r5 = 2131165299(0x7var_, float:1.7944811E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgBroadcastDrawable = r5
-            r5 = 2131165305(0x7var_, float:1.7944823E38)
+            r5 = 2131165299(0x7var_, float:1.7944811E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgBroadcastMediaDrawable = r5
-            r5 = 2131165458(0x7var_, float:1.7945134E38)
+            r5 = 2131165452(0x7var_c, float:1.7945122E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInCallDrawable = r5
-            r5 = 2131165458(0x7var_, float:1.7945134E38)
+            r5 = 2131165452(0x7var_c, float:1.7945122E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgInCallSelectedDrawable = r5
-            r5 = 2131165458(0x7var_, float:1.7945134E38)
+            r5 = 2131165452(0x7var_c, float:1.7945122E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCallDrawable = r5
-            r5 = 2131165458(0x7var_, float:1.7945134E38)
+            r5 = 2131165452(0x7var_c, float:1.7945122E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgOutCallSelectedDrawable = r5
-            r5 = 2131165461(0x7var_, float:1.794514E38)
+            r5 = 2131165455(0x7var_f, float:1.7945128E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgCallUpGreenDrawable = r5
-            r5 = 2131165464(0x7var_, float:1.7945146E38)
+            r5 = 2131165458(0x7var_, float:1.7945134E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgCallDownRedDrawable = r5
-            r5 = 2131165464(0x7var_, float:1.7945146E38)
+            r5 = 2131165458(0x7var_, float:1.7945134E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgCallDownGreenDrawable = r5
             r5 = 0
-        L_0x0433:
-            if (r5 >= r3) goto L_0x0456
+        L_0x044d:
+            if (r5 >= r3) goto L_0x047f
             android.graphics.drawable.Drawable[] r7 = chat_pollCheckDrawable
-            r8 = 2131165828(0x7var_, float:1.7945884E38)
+            r8 = 2131165822(0x7var_e, float:1.7945872E38)
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r7[r5] = r8
             android.graphics.drawable.Drawable[] r7 = chat_pollCrossDrawable
-            r8 = 2131165829(0x7var_, float:1.7945886E38)
+            r8 = 2131165823(0x7var_f, float:1.7945874E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r7[r5] = r8
+            android.graphics.drawable.Drawable[] r7 = chat_pollHintDrawable
+            r8 = 2131165889(0x7var_c1, float:1.7946008E38)
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r7[r5] = r8
             int r5 = r5 + 1
-            goto L_0x0433
-        L_0x0456:
-            r5 = 2131165461(0x7var_, float:1.794514E38)
+            goto L_0x044d
+        L_0x047f:
+            r5 = 2131165455(0x7var_f, float:1.7945128E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             calllog_msgCallUpRedDrawable = r5
-            r5 = 2131165461(0x7var_, float:1.794514E38)
+            r5 = 2131165455(0x7var_f, float:1.7945128E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             calllog_msgCallUpGreenDrawable = r5
-            r5 = 2131165464(0x7var_, float:1.7945146E38)
+            r5 = 2131165458(0x7var_, float:1.7945134E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             calllog_msgCallDownRedDrawable = r5
-            r5 = 2131165464(0x7var_, float:1.7945146E38)
+            r5 = 2131165458(0x7var_, float:1.7945134E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             calllog_msgCallDownGreenDrawable = r5
-            r5 = 2131165561(0x7var_, float:1.7945343E38)
+            r5 = 2131165555(0x7var_, float:1.794533E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_msgAvatarLiveLocationDrawable = r5
-            r5 = 2131165296(0x7var_, float:1.7944805E38)
+            r5 = 2131165290(0x7var_a, float:1.7944793E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_inlineResultFile = r5
-            r5 = 2131165300(0x7var_, float:1.7944813E38)
+            r5 = 2131165294(0x7var_e, float:1.7944801E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_inlineResultAudio = r5
-            r5 = 2131165299(0x7var_, float:1.7944811E38)
+            r5 = 2131165293(0x7var_d, float:1.79448E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_inlineResultLocation = r5
-            r5 = 2131165575(0x7var_, float:1.794537E38)
+            r5 = 2131165569(0x7var_, float:1.7945359E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_redLocationIcon = r5
-            r5 = 2131165298(0x7var_, float:1.794481E38)
+            r5 = 2131165292(0x7var_c, float:1.7944797E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_botLinkDrawalbe = r5
-            r5 = 2131165297(0x7var_, float:1.7944807E38)
+            r5 = 2131165291(0x7var_b, float:1.7944795E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_botInlineDrawable = r5
-            r5 = 2131165928(0x7var_e8, float:1.7946087E38)
+            r5 = 2131165926(0x7var_e6, float:1.7946083E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_systemDrawable = r5
-            r5 = 2131165435(0x7var_fb, float:1.7945087E38)
+            r5 = 2131165429(0x7var_f5, float:1.7945075E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_contextResult_shadowUnderSwitchDrawable = r5
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            r7 = 1112014848(0x42480000, float:50.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 2131165270(0x7var_, float:1.7944752E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 2131165266(0x7var_, float:1.7944744E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 2131165269(0x7var_, float:1.794475E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
-            r5[r3] = r8
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 2131165268(0x7var_, float:1.7944748E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
-            r9 = 3
-            r5[r9] = r8
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r10 = 2131165271(0x7var_, float:1.7944754E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r10)
-            r10 = 4
-            r5[r10] = r8
-            android.graphics.drawable.Drawable[] r5 = chat_attachButtonDrawables
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r8 = 2131165272(0x7var_, float:1.7944756E38)
-            org.telegram.ui.Components.CombinedDrawable r7 = createCircleDrawableWithIcon(r7, r8)
-            r8 = 5
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r8 = 2131558402(0x7f0d0002, float:1.8742119E38)
+            r9 = 1104150528(0x41d00000, float:26.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r12 = "attach_gallery"
+            r7.<init>(r8, r12, r10, r11)
+            r5[r6] = r7
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r8 = 2131558404(0x7f0d0004, float:1.8742123E38)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r12 = "attach_music"
+            r7.<init>(r8, r12, r10, r11)
+            r5[r2] = r7
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r8 = 2131558401(0x7f0d0001, float:1.8742117E38)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r12 = "attach_file"
+            r7.<init>(r8, r12, r10, r11)
+            r5[r3] = r7
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r8 = 2131558400(0x7f0d0000, float:1.8742115E38)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r12 = "attach_contact"
+            r7.<init>(r8, r12, r10, r11)
+            r8 = 3
             r5[r8] = r7
-            r5 = 2131165748(0x7var_, float:1.7945722E38)
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r10 = 2131558403(0x7f0d0003, float:1.874212E38)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r13 = "attach_location"
+            r7.<init>(r10, r13, r11, r12)
+            r10 = 4
+            r5[r10] = r7
+            org.telegram.ui.Components.RLottieDrawable[] r5 = chat_attachButtonDrawables
+            org.telegram.ui.Components.RLottieDrawable r7 = new org.telegram.ui.Components.RLottieDrawable
+            r11 = 2131558405(0x7f0d0005, float:1.8742125E38)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            java.lang.String r13 = "attach_poll"
+            r7.<init>(r11, r13, r12, r9)
+            r9 = 5
+            r5[r9] = r7
+            r5 = 2131165742(0x7var_e, float:1.794571E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_attachEmptyDrawable = r5
             android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
-            r7 = 2131165366(0x7var_b6, float:1.7944947E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r6] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
-            r7 = 2131165367(0x7var_b7, float:1.794495E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r2] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
-            r7 = 2131165365(0x7var_b5, float:1.7944945E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r3] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
-            r7 = 2131165364(0x7var_b4, float:1.7944943E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r9] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
-            r7 = 2131165363(0x7var_b3, float:1.794494E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r6] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
-            r7 = 2131165362(0x7var_b2, float:1.7944939E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r2] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
-            r7 = 2131165361(0x7var_b1, float:1.7944937E38)
-            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r3] = r7
-            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
             r7 = 2131165360(0x7var_b0, float:1.7944935E38)
             android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
-            r5[r9] = r7
-            r5 = 2131165876(0x7var_b4, float:1.7945981E38)
+            r5[r6] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
+            r7 = 2131165361(0x7var_b1, float:1.7944937E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r2] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
+            r7 = 2131165359(0x7var_af, float:1.7944933E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r3] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerOuter
+            r7 = 2131165358(0x7var_ae, float:1.794493E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r8] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
+            r7 = 2131165357(0x7var_ad, float:1.7944929E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r6] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
+            r7 = 2131165356(0x7var_ac, float:1.7944927E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r2] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
+            r7 = 2131165355(0x7var_ab, float:1.7944925E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r3] = r7
+            android.graphics.drawable.Drawable[] r5 = chat_cornerInner
+            r7 = 2131165354(0x7var_aa, float:1.7944923E38)
+            android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
+            r5[r8] = r7
+            r5 = 2131165870(0x7var_ae, float:1.794597E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_shareDrawable = r5
-            r5 = 2131165875(0x7var_b3, float:1.794598E38)
+            r5 = 2131165869(0x7var_ad, float:1.7945967E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_shareIconDrawable = r5
-            r5 = 2131165375(0x7var_bf, float:1.7944965E38)
+            r5 = 2131165369(0x7var_b9, float:1.7944953E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_replyIconDrawable = r5
-            r5 = 2131165650(0x7var_d2, float:1.7945523E38)
+            r5 = 2131165644(0x7var_cc, float:1.794551E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             chat_goIconDrawable = r5
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r6]
             r7 = 1102053376(0x41b00000, float:22.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165275(0x7var_b, float:1.7944763E38)
+            r12 = 2131165269(0x7var_, float:1.794475E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
@@ -12354,7 +12614,7 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r2]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165276(0x7var_c, float:1.7944765E38)
+            r12 = 2131165270(0x7var_, float:1.7944752E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
@@ -12365,7 +12625,7 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r3]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165275(0x7var_b, float:1.7944763E38)
+            r12 = 2131165269(0x7var_, float:1.794475E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
@@ -12374,20 +12634,20 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r2] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
-            r5 = r5[r9]
+            r5 = r5[r8]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165276(0x7var_c, float:1.7944765E38)
+            r12 = 2131165270(0x7var_, float:1.7944752E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
-            r5 = r5[r9]
+            r5 = r5[r8]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r2] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
             r5 = r5[r10]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165958(0x7var_, float:1.7946148E38)
+            r12 = 2131165956(0x7var_, float:1.7946144E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
@@ -12396,15 +12656,15 @@ public class Theme {
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r2] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
-            r5 = r5[r8]
+            r5 = r5[r9]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165959(0x7var_, float:1.794615E38)
+            r12 = 2131165957(0x7var_, float:1.7946146E38)
             org.telegram.ui.Components.CombinedDrawable r11 = createCircleDrawableWithIcon(r11, r12)
             r5[r6] = r11
             org.telegram.ui.Components.CombinedDrawable[][] r5 = chat_fileMiniStatesDrawable
-            r5 = r5[r8]
+            r5 = r5[r9]
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r11 = 2131165959(0x7var_, float:1.794615E38)
+            r11 = 2131165957(0x7var_, float:1.7946146E38)
             org.telegram.ui.Components.CombinedDrawable r7 = createCircleDrawableWithIcon(r7, r11)
             r5[r2] = r7
             r5 = 1073741824(0x40000000, float:2.0)
@@ -12459,30 +12719,30 @@ public class Theme {
             float r15 = (float) r15
             r16 = 1100480512(0x41980000, float:19.0)
             int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r8 = r16 + r5
-            float r8 = (float) r8
-            r7.set(r11, r14, r15, r8)
-            android.graphics.Path[] r8 = chat_filePath
-            r8 = r8[r6]
+            int r9 = r16 + r5
+            float r9 = (float) r9
+            r7.set(r11, r14, r15, r9)
+            android.graphics.Path[] r9 = chat_filePath
+            r9 = r9[r6]
             r11 = 0
             r14 = 1119092736(0x42b40000, float:90.0)
-            r8.arcTo(r7, r11, r14, r6)
-            android.graphics.Path[] r8 = chat_filePath
-            r8 = r8[r6]
+            r9.arcTo(r7, r11, r14, r6)
+            android.graphics.Path[] r9 = chat_filePath
+            r9 = r9[r6]
             r11 = 1086324736(0x40CLASSNAME, float:6.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r11 = (float) r11
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
-            r8.lineTo(r11, r12)
-            r8 = 1084227584(0x40a00000, float:5.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r9.lineTo(r11, r12)
+            r9 = 1084227584(0x40a00000, float:5.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
             float r11 = (float) r11
             r12 = 1100480512(0x41980000, float:19.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             int r12 = r12 - r5
             float r12 = (float) r12
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r14 = r14 + r13
             float r14 = (float) r14
             r15 = 1100480512(0x41980000, float:19.0)
@@ -12497,17 +12757,17 @@ public class Theme {
             r5.arcTo(r7, r11, r12, r6)
             android.graphics.Path[] r5 = chat_filePath
             r5 = r5[r6]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
             float r11 = (float) r11
             r12 = 1082130432(0x40800000, float:4.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
             r5.lineTo(r11, r12)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
             float r5 = (float) r5
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r0)
             float r11 = (float) r11
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r12 = r12 + r13
             float r12 = (float) r12
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r0)
@@ -12530,377 +12790,377 @@ public class Theme {
             r5 = r5[r2]
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r7 = (float) r7
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r8 = (float) r8
-            r5.moveTo(r7, r8)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            r5.moveTo(r7, r9)
             android.graphics.Path[] r5 = chat_filePath
             r5 = r5[r2]
             r7 = 1100480512(0x41980000, float:19.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             float r7 = (float) r7
-            r8 = 1092616192(0x41200000, float:10.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r8 = (float) r8
-            r5.lineTo(r7, r8)
+            r9 = 1092616192(0x41200000, float:10.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            r5.lineTo(r7, r9)
             android.graphics.Path[] r5 = chat_filePath
             r5 = r5[r2]
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r7 = (float) r7
-            r8 = 1092616192(0x41200000, float:10.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r8 = (float) r8
-            r5.lineTo(r7, r8)
+            r9 = 1092616192(0x41200000, float:10.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r9 = (float) r9
+            r5.lineTo(r7, r9)
             android.graphics.Path[] r5 = chat_filePath
             r5 = r5[r2]
             r5.close()
-            r5 = 2131165308(0x7var_c, float:1.794483E38)
+            r5 = 2131165302(0x7var_, float:1.7944817E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_flameIcon = r5
-            r5 = 2131165712(0x7var_, float:1.7945649E38)
+            r5 = 2131165706(0x7var_a, float:1.7945637E38)
             android.graphics.drawable.Drawable r5 = r4.getDrawable(r5)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             chat_gifIcon = r5
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r6]
             r7 = 1110441984(0x42300000, float:44.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r11 = 2131165715(0x7var_, float:1.7945655E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r11)
-            r5[r6] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r11 = 2131165709(0x7var_d, float:1.7945643E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r11)
+            r5[r6] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r6]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r11)
-            r5[r2] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r11)
+            r5[r2] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r2]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165714(0x7var_, float:1.7945653E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r6] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r12 = 2131165708(0x7var_c, float:1.794564E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r6] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r2]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r2] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r2] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r3]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r12 = 2131165713(0x7var_, float:1.794565E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r6] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r12 = 2131165707(0x7var_b, float:1.7945639E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r6] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
             r5 = r5[r3]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r2] = r8
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r2] = r9
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r5 = r5[r9]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r13 = 2131165711(0x7var_f, float:1.7945647E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r5 = r5[r9]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r5 = r5[r10]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r13 = 2131165710(0x7var_e, float:1.7945645E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r5 = r5[r10]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 5
             r5 = r5[r8]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r13 = 2131165705(0x7var_, float:1.7945635E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r8]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r10]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r13 = 2131165704(0x7var_, float:1.7945633E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r5 = r5[r10]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 5
+            r5 = r5[r9]
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r7)
             org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r11)
             r5[r6] = r14
             android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r11)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 6
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r14 = 2131165714(0x7var_, float:1.7945653E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r14)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 6
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r14)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 7
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 7
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 8
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r14 = 2131165711(0x7var_f, float:1.7945647E38)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r14)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 8
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r14)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 9
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r6] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
-            r8 = 9
-            r5 = r5[r8]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
-            r5[r2] = r8
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r6]
-            r8 = 1111490560(0x42400000, float:48.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
-            r5[r6] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r6]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
-            r5[r2] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r2]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
-            r5[r6] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r2]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
-            r5[r2] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r3]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r15 = 2131165712(0x7var_, float:1.7945649E38)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
-            r5[r6] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r3]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
-            r5[r2] = r14
-            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
             r5 = r5[r9]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r11)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 6
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r14 = 2131165708(0x7var_c, float:1.794564E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r14)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 6
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r14)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 7
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 7
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 8
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r14 = 2131165705(0x7var_, float:1.7945635E38)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r14)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 8
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r14)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 9
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r6] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_fileStatesDrawable
+            r9 = 9
+            r5 = r5[r9]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
+            r5[r2] = r9
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r6]
+            r9 = 1111490560(0x42400000, float:48.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r6]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r12)
+            r5[r2] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r2]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r2]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r13)
+            r5[r2] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r3]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            r15 = 2131165706(0x7var_a, float:1.7945637E38)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
+            r5[r6] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r3]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r15)
+            r5[r2] = r14
+            android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
+            r5 = r5[r8]
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r9)
             org.telegram.ui.Components.CombinedDrawable r14 = createCircleDrawableWithIcon(r14, r11)
             r5[r6] = r14
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r11)
-            r5[r2] = r9
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r11)
+            r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = r5[r10]
+            r8 = r5[r10]
             r5 = r5[r10]
-            r10 = 2131165308(0x7var_c, float:1.794483E38)
+            r10 = 2131165302(0x7var_, float:1.7944817E38)
             android.graphics.drawable.Drawable r10 = r4.getDrawable(r10)
             r5[r2] = r10
-            r9[r6] = r10
+            r8[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 5
-            r10 = r5[r9]
-            r5 = r5[r9]
-            r9 = 2131165334(0x7var_, float:1.7944882E38)
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
-            r5[r2] = r9
-            r10[r6] = r9
+            r8 = 5
+            r10 = r5[r8]
+            r5 = r5[r8]
+            r8 = 2131165328(0x7var_, float:1.794487E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            r5[r2] = r8
+            r10[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 6
-            r9 = r5[r9]
+            r8 = 6
+            r8 = r5[r8]
             r10 = 6
             r5 = r5[r10]
-            r10 = 2131165804(0x7var_c, float:1.7945835E38)
+            r10 = 2131165798(0x7var_, float:1.7945823E38)
             android.graphics.drawable.Drawable r10 = r4.getDrawable(r10)
             r5[r2] = r10
-            r9[r6] = r10
+            r8[r6] = r10
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 7
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
-            r5[r6] = r9
+            r8 = 7
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
+            r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 7
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
-            r5[r2] = r9
+            r8 = 7
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
+            r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 8
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
-            r5[r6] = r9
+            r8 = 8
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
+            r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 8
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
-            r5[r2] = r9
+            r8 = 8
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
+            r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 9
-            r5 = r5[r9]
-            r9 = 2131165371(0x7var_bb, float:1.7944957E38)
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            r5[r6] = r9
+            r8 = 9
+            r5 = r5[r8]
+            r8 = 2131165365(0x7var_b5, float:1.7944945E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 9
-            r5 = r5[r9]
-            r9 = 2131165371(0x7var_bb, float:1.7944957E38)
-            android.graphics.drawable.Drawable r9 = r4.getDrawable(r9)
-            android.graphics.drawable.Drawable r9 = r9.mutate()
-            r5[r2] = r9
+            r8 = 9
+            r5 = r5[r8]
+            r8 = 2131165365(0x7var_b5, float:1.7944945E38)
+            android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
+            r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 10
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
-            r5[r6] = r9
+            r8 = 10
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
+            r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 10
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r12)
-            r5[r2] = r9
+            r8 = 10
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r12)
+            r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 11
-            r5 = r5[r9]
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            org.telegram.ui.Components.CombinedDrawable r9 = createCircleDrawableWithIcon(r9, r13)
-            r5[r6] = r9
+            r8 = 11
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
+            r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
-            r9 = 11
-            r5 = r5[r9]
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r8 = 11
+            r5 = r5[r8]
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
             org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r13)
             r5[r2] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
             r8 = 12
             r5 = r5[r8]
-            r8 = 2131165371(0x7var_bb, float:1.7944957E38)
+            r8 = 2131165365(0x7var_b5, float:1.7944945E38)
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r5[r6] = r8
             android.graphics.drawable.Drawable[][] r5 = chat_photoStatesDrawables
             r8 = 12
             r5 = r5[r8]
-            r8 = 2131165371(0x7var_bb, float:1.7944957E38)
+            r8 = 2131165365(0x7var_b5, float:1.7944945E38)
             android.graphics.drawable.Drawable r8 = r4.getDrawable(r8)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r5[r2] = r8
             android.graphics.drawable.Drawable[] r5 = chat_contactDrawable
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r9 = 2131165669(0x7var_e5, float:1.7945562E38)
+            r9 = 2131165663(0x7var_df, float:1.794555E38)
             org.telegram.ui.Components.CombinedDrawable r8 = createCircleDrawableWithIcon(r8, r9)
             r5[r6] = r8
             android.graphics.drawable.Drawable[] r5 = chat_contactDrawable
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r8 = 2131165669(0x7var_e5, float:1.7945562E38)
+            r8 = 2131165663(0x7var_df, float:1.794555E38)
             org.telegram.ui.Components.CombinedDrawable r7 = createCircleDrawableWithIcon(r7, r8)
             r5[r2] = r7
             android.graphics.drawable.Drawable[] r5 = chat_locationDrawable
-            r7 = 2131165689(0x7var_f9, float:1.7945602E38)
+            r7 = 2131165683(0x7var_f3, float:1.794559E38)
             android.graphics.drawable.Drawable r7 = r4.getDrawable(r7)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r5[r6] = r7
             android.graphics.drawable.Drawable[] r5 = chat_locationDrawable
-            r7 = 2131165689(0x7var_f9, float:1.7945602E38)
+            r7 = 2131165683(0x7var_f3, float:1.794559E38)
             android.graphics.drawable.Drawable r4 = r4.getDrawable(r7)
             android.graphics.drawable.Drawable r4 = r4.mutate()
             r5[r2] = r4
             android.content.res.Resources r4 = r17.getResources()
-            r5 = 2131165357(0x7var_ad, float:1.7944929E38)
+            r5 = 2131165351(0x7var_a7, float:1.7944917E38)
             android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
             chat_composeShadowDrawable = r4
-            int r4 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0b55 }
+            int r4 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0ba7 }
             r5 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)     // Catch:{ all -> 0x0b55 }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)     // Catch:{ all -> 0x0ba7 }
             int r4 = r4 + r5
-            android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0b55 }
-            android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r4, r4, r5)     // Catch:{ all -> 0x0b55 }
-            android.graphics.Canvas r7 = new android.graphics.Canvas     // Catch:{ all -> 0x0b55 }
-            r7.<init>(r5)     // Catch:{ all -> 0x0b55 }
-            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x0b55 }
-            r8.<init>(r2)     // Catch:{ all -> 0x0b55 }
-            r8.setColor(r6)     // Catch:{ all -> 0x0b55 }
-            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x0b55 }
-            r8.setStyle(r9)     // Catch:{ all -> 0x0b55 }
-            android.graphics.PorterDuffXfermode r9 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x0b55 }
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x0b55 }
-            r9.<init>(r10)     // Catch:{ all -> 0x0b55 }
-            r8.setXfermode(r9)     // Catch:{ all -> 0x0b55 }
-            android.graphics.Paint r9 = new android.graphics.Paint     // Catch:{ all -> 0x0b55 }
-            r9.<init>(r2)     // Catch:{ all -> 0x0b55 }
+            android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0ba7 }
+            android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r4, r4, r5)     // Catch:{ all -> 0x0ba7 }
+            android.graphics.Canvas r7 = new android.graphics.Canvas     // Catch:{ all -> 0x0ba7 }
+            r7.<init>(r5)     // Catch:{ all -> 0x0ba7 }
+            android.graphics.Paint r8 = new android.graphics.Paint     // Catch:{ all -> 0x0ba7 }
+            r8.<init>(r2)     // Catch:{ all -> 0x0ba7 }
+            r8.setColor(r6)     // Catch:{ all -> 0x0ba7 }
+            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL     // Catch:{ all -> 0x0ba7 }
+            r8.setStyle(r9)     // Catch:{ all -> 0x0ba7 }
+            android.graphics.PorterDuffXfermode r9 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x0ba7 }
+            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x0ba7 }
+            r9.<init>(r10)     // Catch:{ all -> 0x0ba7 }
+            r8.setXfermode(r9)     // Catch:{ all -> 0x0ba7 }
+            android.graphics.Paint r9 = new android.graphics.Paint     // Catch:{ all -> 0x0ba7 }
+            r9.<init>(r2)     // Catch:{ all -> 0x0ba7 }
             r2 = 1082130432(0x40800000, float:4.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x0b55 }
-            float r2 = (float) r2     // Catch:{ all -> 0x0b55 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x0ba7 }
+            float r2 = (float) r2     // Catch:{ all -> 0x0ba7 }
             r10 = 0
             r11 = 0
             r12 = 1593835520(0x5var_, float:9.223372E18)
-            r9.setShadowLayer(r2, r10, r11, r12)     // Catch:{ all -> 0x0b55 }
-        L_0x0b2c:
-            if (r6 >= r3) goto L_0x0b4a
+            r9.setShadowLayer(r2, r10, r11, r12)     // Catch:{ all -> 0x0ba7 }
+        L_0x0b7e:
+            if (r6 >= r3) goto L_0x0b9c
             int r2 = r4 / 2
-            float r2 = (float) r2     // Catch:{ all -> 0x0b55 }
+            float r2 = (float) r2     // Catch:{ all -> 0x0ba7 }
             int r10 = r4 / 2
-            float r10 = (float) r10     // Catch:{ all -> 0x0b55 }
-            int r11 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0b55 }
+            float r10 = (float) r10     // Catch:{ all -> 0x0ba7 }
+            int r11 = org.telegram.messenger.AndroidUtilities.roundMessageSize     // Catch:{ all -> 0x0ba7 }
             int r11 = r11 / r3
             r12 = 1065353216(0x3var_, float:1.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)     // Catch:{ all -> 0x0b55 }
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)     // Catch:{ all -> 0x0ba7 }
             int r11 = r11 - r12
-            float r11 = (float) r11     // Catch:{ all -> 0x0b55 }
-            if (r6 != 0) goto L_0x0b43
+            float r11 = (float) r11     // Catch:{ all -> 0x0ba7 }
+            if (r6 != 0) goto L_0x0b95
             r12 = r9
-            goto L_0x0b44
-        L_0x0b43:
+            goto L_0x0b96
+        L_0x0b95:
             r12 = r8
-        L_0x0b44:
-            r7.drawCircle(r2, r10, r11, r12)     // Catch:{ all -> 0x0b55 }
+        L_0x0b96:
+            r7.drawCircle(r2, r10, r11, r12)     // Catch:{ all -> 0x0ba7 }
             int r6 = r6 + 1
-            goto L_0x0b2c
-        L_0x0b4a:
+            goto L_0x0b7e
+        L_0x0b9c:
             r2 = 0
-            r7.setBitmap(r2)     // Catch:{ Exception -> 0x0b4e }
-        L_0x0b4e:
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0b55 }
-            r2.<init>(r5)     // Catch:{ all -> 0x0b55 }
-            chat_roundVideoShadow = r2     // Catch:{ all -> 0x0b55 }
-        L_0x0b55:
+            r7.setBitmap(r2)     // Catch:{ Exception -> 0x0ba0 }
+        L_0x0ba0:
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable     // Catch:{ all -> 0x0ba7 }
+            r2.<init>(r5)     // Catch:{ all -> 0x0ba7 }
+            chat_roundVideoShadow = r2     // Catch:{ all -> 0x0ba7 }
+        L_0x0ba7:
             applyChatTheme(r18)
-        L_0x0b58:
+        L_0x0baa:
             android.text.TextPaint r2 = chat_msgTextPaintOneEmoji
             r4 = 1105199104(0x41e00000, float:28.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -12931,9 +13191,9 @@ public class Theme {
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r5 = (float) r5
             r2.setTextSize(r5)
-            if (r18 != 0) goto L_0x0cdd
+            if (r18 != 0) goto L_0x0d3c
             android.graphics.Paint r2 = chat_botProgressPaint
-            if (r2 == 0) goto L_0x0cdd
+            if (r2 == 0) goto L_0x0d3c
             r5 = 1073741824(0x40000000, float:2.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r5 = (float) r5
@@ -13030,6 +13290,11 @@ public class Theme {
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             r1.setStrokeWidth(r2)
+            android.graphics.Paint r1 = chat_pollTimerPaint
+            r2 = 1066192077(0x3f8ccccd, float:1.1)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            r1.setStrokeWidth(r2)
             android.graphics.Paint r1 = chat_statusRecordPaint
             r2 = 1073741824(0x40000000, float:2.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -13061,18 +13326,56 @@ public class Theme {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             r0.setStrokeWidth(r1)
-        L_0x0cdd:
+        L_0x0d3c:
             return
-        L_0x0cde:
+        L_0x0d3d:
             r0 = move-exception
-            monitor-exit(r1)     // Catch:{ all -> 0x0cde }
-            goto L_0x0ce2
-        L_0x0ce1:
+            monitor-exit(r1)     // Catch:{ all -> 0x0d3d }
+            goto L_0x0d41
+        L_0x0d40:
             throw r0
-        L_0x0ce2:
-            goto L_0x0ce1
+        L_0x0d41:
+            goto L_0x0d40
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createChatResources(android.content.Context, boolean):void");
+    }
+
+    public static void refreshAttachButtonsColors() {
+        int i = 0;
+        while (true) {
+            RLottieDrawable[] rLottieDrawableArr = chat_attachButtonDrawables;
+            if (i < rLottieDrawableArr.length) {
+                if (rLottieDrawableArr[i] != null) {
+                    rLottieDrawableArr[i].beginApplyLayerColors();
+                    if (i == 0) {
+                        chat_attachButtonDrawables[i].setLayerColor("Color_Mount.**", getNonAnimatedColor("chat_attachGalleryBackground"));
+                        chat_attachButtonDrawables[i].setLayerColor("Color_PhotoShadow.**", getNonAnimatedColor("chat_attachGalleryBackground"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_Photo.**", getNonAnimatedColor("chat_attachGalleryIcon"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_BackPhoto.**", getNonAnimatedColor("chat_attachGalleryIcon"));
+                    } else if (i == 1) {
+                        chat_attachButtonDrawables[i].setLayerColor("White_Play1.**", getNonAnimatedColor("chat_attachAudioIcon"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_Play2.**", getNonAnimatedColor("chat_attachAudioIcon"));
+                    } else if (i == 2) {
+                        chat_attachButtonDrawables[i].setLayerColor("Color_Corner.**", getNonAnimatedColor("chat_attachFileBackground"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_List.**", getNonAnimatedColor("chat_attachFileIcon"));
+                    } else if (i == 3) {
+                        chat_attachButtonDrawables[i].setLayerColor("White_User1.**", getNonAnimatedColor("chat_attachContactIcon"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_User2.**", getNonAnimatedColor("chat_attachContactIcon"));
+                    } else if (i == 4) {
+                        chat_attachButtonDrawables[i].setLayerColor("Color_Oval.**", getNonAnimatedColor("chat_attachLocationBackground"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_Pin.**", getNonAnimatedColor("chat_attachLocationIcon"));
+                    } else if (i == 5) {
+                        chat_attachButtonDrawables[i].setLayerColor("White_Column 1.**", getNonAnimatedColor("chat_attachPollIcon"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_Column 2.**", getNonAnimatedColor("chat_attachPollIcon"));
+                        chat_attachButtonDrawables[i].setLayerColor("White_Column 3.**", getNonAnimatedColor("chat_attachPollIcon"));
+                    }
+                    chat_attachButtonDrawables[i].commitApplyLayerColors();
+                }
+                i++;
+            } else {
+                return;
+            }
+        }
     }
 
     public static void applyChatTheme(boolean z) {
@@ -13205,24 +13508,15 @@ public class Theme {
             setCombinedDrawableColor(chat_contactDrawable[1], getColor("chat_outContactIcon"), true);
             setDrawableColor(chat_locationDrawable[0], getColor("chat_inLocationIcon"));
             setDrawableColor(chat_locationDrawable[1], getColor("chat_outLocationIcon"));
+            setDrawableColor(chat_pollHintDrawable[0], getColor("chat_inPreviewInstantText"));
+            setDrawableColor(chat_pollHintDrawable[1], getColor("chat_outPreviewInstantText"));
             setDrawableColorByKey(chat_composeShadowDrawable, "chat_messagePanelShadow");
-            setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[0], getColor("chat_attachGalleryIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachAudioBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[1], getColor("chat_attachAudioIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachFileBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[2], getColor("chat_attachFileIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachContactBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[3], getColor("chat_attachContactIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachLocationBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[4], getColor("chat_attachLocationIcon"), true);
-            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollBackground"), false);
-            setCombinedDrawableColor(chat_attachButtonDrawables[5], getColor("chat_attachPollIcon"), true);
             int color = getColor("chat_outAudioSeekbarFill") == -1 ? getColor("chat_outBubble") : -1;
             setDrawableColor(chat_pollCheckDrawable[1], color);
             setDrawableColor(chat_pollCrossDrawable[1], color);
             setDrawableColor(chat_attachEmptyDrawable, getColor("chat_attachEmptyImage"));
             applyChatServiceMessageColor();
+            refreshAttachButtonsColors();
         }
     }
 
@@ -13910,7 +14204,7 @@ public class Theme {
         L_0x016c:
             r8 = 0
         L_0x016d:
-            r9 = 2131165280(0x7var_, float:1.7944773E38)
+            r9 = 2131165274(0x7var_a, float:1.794476E38)
             if (r7 == 0) goto L_0x01f3
             boolean r10 = r7.isDefault()     // Catch:{ all -> 0x0201 }
             if (r10 == 0) goto L_0x017a

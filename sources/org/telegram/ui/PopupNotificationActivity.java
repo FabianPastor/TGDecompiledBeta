@@ -1043,8 +1043,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x016b  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x016a  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x017e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private android.view.ViewGroup getViewForMessage(int r29, boolean r30) {
         /*
@@ -1086,23 +1086,23 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r12 = 17
             r13 = -1082130432(0xffffffffbvar_, float:-1.0)
             r15 = 1092616192(0x41200000, float:10.0)
-            if (r7 == r4) goto L_0x0048
-            if (r7 != r9) goto L_0x01e8
-        L_0x0048:
+            if (r7 == r4) goto L_0x0047
+            if (r7 != r9) goto L_0x01e7
+        L_0x0047:
             boolean r7 = r6.isSecretMedia()
-            if (r7 != 0) goto L_0x01e8
+            if (r7 != 0) goto L_0x01e7
             java.util.ArrayList<android.view.ViewGroup> r7 = r0.imageViews
             int r7 = r7.size()
             r16 = 312(0x138, float:4.37E-43)
             r17 = 311(0x137, float:4.36E-43)
-            if (r7 <= 0) goto L_0x0068
+            if (r7 <= 0) goto L_0x0067
             java.util.ArrayList<android.view.ViewGroup> r7 = r0.imageViews
             java.lang.Object r7 = r7.get(r5)
             android.view.ViewGroup r7 = (android.view.ViewGroup) r7
             java.util.ArrayList<android.view.ViewGroup> r8 = r0.imageViews
             r8.remove(r5)
-            goto L_0x00d7
-        L_0x0068:
+            goto L_0x00d6
+        L_0x0067:
             android.widget.FrameLayout r7 = new android.widget.FrameLayout
             r7.<init>(r0)
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
@@ -1139,7 +1139,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             org.telegram.ui.-$$Lambda$PopupNotificationActivity$yXN7dQz6jZF2SRmRmEwBYh62Ap0 r3 = new org.telegram.ui.-$$Lambda$PopupNotificationActivity$yXN7dQz6jZF2SRmRmEwBYh62Ap0
             r3.<init>()
             r7.setOnClickListener(r3)
-        L_0x00d7:
+        L_0x00d6:
             r3 = r7
             java.lang.Integer r7 = java.lang.Integer.valueOf(r16)
             android.view.View r7 = r3.findViewWithTag(r7)
@@ -1153,34 +1153,34 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             int r7 = r6.type
             r13 = 8
             r8 = 100
-            if (r7 != r4) goto L_0x0187
+            if (r7 != r4) goto L_0x0186
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r6.photoThumbs
             int r9 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r7 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r9)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r6.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r8)
-            if (r7 == 0) goto L_0x0166
+            if (r7 == 0) goto L_0x0165
             int r9 = r6.type
-            if (r9 != r4) goto L_0x011d
+            if (r9 != r4) goto L_0x011c
             org.telegram.tgnet.TLRPC$Message r9 = r6.messageOwner
             java.io.File r9 = org.telegram.messenger.FileLoader.getPathToMessage(r9)
             boolean r9 = r9.exists()
-            if (r9 != 0) goto L_0x011d
+            if (r9 != 0) goto L_0x011c
             r9 = 0
-            goto L_0x011e
-        L_0x011d:
+            goto L_0x011d
+        L_0x011c:
             r9 = 1
-        L_0x011e:
+        L_0x011d:
             boolean r10 = r6.needDrawBluredPreview()
-            if (r10 != 0) goto L_0x0166
-            if (r9 != 0) goto L_0x0147
+            if (r10 != 0) goto L_0x0165
+            if (r9 != 0) goto L_0x0146
             int r9 = r6.currentAccount
             org.telegram.messenger.DownloadController r9 = org.telegram.messenger.DownloadController.getInstance(r9)
             boolean r9 = r9.canDownloadMedia((org.telegram.messenger.MessageObject) r6)
-            if (r9 == 0) goto L_0x0133
-            goto L_0x0147
-        L_0x0133:
-            if (r8 == 0) goto L_0x0166
+            if (r9 == 0) goto L_0x0132
+            goto L_0x0146
+        L_0x0132:
+            if (r8 == 0) goto L_0x0165
             org.telegram.tgnet.TLObject r7 = r6.photoThumbsObject
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForObject(r8, r7)
             r10 = 0
@@ -1190,8 +1190,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r12 = r6
             r7.setImage(r8, r9, r10, r11, r12)
             r4 = 8
-            goto L_0x0164
-        L_0x0147:
+            goto L_0x0163
+        L_0x0146:
             org.telegram.tgnet.TLObject r9 = r6.photoThumbsObject
             org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForObject(r7, r9)
             org.telegram.tgnet.TLObject r10 = r6.photoThumbsObject
@@ -1206,14 +1206,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4 = 8
             r13 = r6
             r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (org.telegram.messenger.ImageLocation) r10, (java.lang.String) r11, (int) r12, (java.lang.Object) r13)
-        L_0x0164:
+        L_0x0163:
             r7 = 1
-            goto L_0x0169
-        L_0x0166:
+            goto L_0x0168
+        L_0x0165:
             r4 = 8
             r7 = 0
-        L_0x0169:
-            if (r7 != 0) goto L_0x017f
+        L_0x0168:
+            if (r7 != 0) goto L_0x017e
             r15.setVisibility(r4)
             r14.setVisibility(r5)
             int r4 = org.telegram.messenger.SharedConfig.fontSize
@@ -1222,15 +1222,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r14.setTextSize(r7, r4)
             java.lang.CharSequence r4 = r6.messageText
             r14.setText(r4)
-            goto L_0x032a
-        L_0x017f:
+            goto L_0x0329
+        L_0x017e:
             r15.setVisibility(r5)
             r14.setVisibility(r4)
-            goto L_0x032a
-        L_0x0187:
+            goto L_0x0329
+        L_0x0186:
             r4 = 8
             r9 = 4
-            if (r7 != r9) goto L_0x032a
+            if (r7 != r9) goto L_0x0329
             r14.setVisibility(r4)
             java.lang.CharSequence r4 = r6.messageText
             r14.setText(r4)
@@ -1244,7 +1244,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             int r7 = r7.mapProvider
             r13 = 2
-            if (r7 != r13) goto L_0x01cc
+            if (r7 != r13) goto L_0x01cb
             r7 = 15
             float r9 = org.telegram.messenger.AndroidUtilities.density
             double r9 = (double) r9
@@ -1259,8 +1259,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r7 = r15
             r12 = r6
             r7.setImage(r8, r9, r10, r11, r12)
-            goto L_0x032a
-        L_0x01cc:
+            goto L_0x0329
+        L_0x01cb:
             int r4 = r6.currentAccount
             r23 = 100
             r24 = 100
@@ -1273,15 +1273,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r18, r19, r21, r23, r24, r25, r26, r27)
             r6 = 0
             r15.setImage(r4, r6, r6)
-            goto L_0x032a
-        L_0x01e8:
+            goto L_0x0329
+        L_0x01e7:
             int r3 = r6.type
             r4 = 2
-            if (r3 != r4) goto L_0x0285
+            if (r3 != r4) goto L_0x0284
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.audioViews
             int r3 = r3.size()
             r4 = 300(0x12c, float:4.2E-43)
-            if (r3 <= 0) goto L_0x020f
+            if (r3 <= 0) goto L_0x020e
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.audioViews
             java.lang.Object r3 = r3.get(r5)
             android.view.ViewGroup r3 = (android.view.ViewGroup) r3
@@ -1290,8 +1290,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             android.view.View r4 = r3.findViewWithTag(r4)
             org.telegram.ui.Components.PopupAudioView r4 = (org.telegram.ui.Components.PopupAudioView) r4
-            goto L_0x0271
-        L_0x020f:
+            goto L_0x0270
+        L_0x020e:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r0)
             android.widget.FrameLayout r7 = new android.widget.FrameLayout
@@ -1328,26 +1328,26 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4.<init>()
             r3.setOnClickListener(r4)
             r4 = r7
-        L_0x0271:
+        L_0x0270:
             r4.setMessageObject(r6)
             int r7 = r6.currentAccount
             org.telegram.messenger.DownloadController r7 = org.telegram.messenger.DownloadController.getInstance(r7)
             boolean r6 = r7.canDownloadMedia((org.telegram.messenger.MessageObject) r6)
-            if (r6 == 0) goto L_0x032a
+            if (r6 == 0) goto L_0x0329
             r4.downloadAudioIfNeed()
-            goto L_0x032a
-        L_0x0285:
+            goto L_0x0329
+        L_0x0284:
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.textViews
             int r3 = r3.size()
             r4 = 301(0x12d, float:4.22E-43)
-            if (r3 <= 0) goto L_0x029d
+            if (r3 <= 0) goto L_0x029c
             java.util.ArrayList<android.view.ViewGroup> r3 = r0.textViews
             java.lang.Object r3 = r3.get(r5)
             android.view.ViewGroup r3 = (android.view.ViewGroup) r3
             java.util.ArrayList<android.view.ViewGroup> r7 = r0.textViews
             r7.remove(r5)
-            goto L_0x0314
-        L_0x029d:
+            goto L_0x0313
+        L_0x029c:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r0)
             android.widget.ScrollView r7 = new android.widget.ScrollView
@@ -1388,7 +1388,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r10.addView(r7, r8)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
             r3.setTag(r7)
-        L_0x0314:
+        L_0x0313:
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             android.view.View r4 = r3.findViewWithTag(r4)
             android.widget.TextView r4 = (android.widget.TextView) r4
@@ -1398,14 +1398,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r4.setTextSize(r8, r7)
             java.lang.CharSequence r6 = r6.messageText
             r4.setText(r6)
-        L_0x032a:
+        L_0x0329:
             android.view.ViewParent r4 = r3.getParent()
-            if (r4 != 0) goto L_0x0335
+            if (r4 != 0) goto L_0x0334
             android.view.ViewGroup r4 = r0.messageContainer
             r4.addView(r3)
-        L_0x0335:
+        L_0x0334:
             r3.setVisibility(r5)
-            if (r30 == 0) goto L_0x0374
+            if (r30 == 0) goto L_0x0373
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r4 = r4.x
             r5 = 1103101952(0x41CLASSNAME, float:24.0)
@@ -1418,27 +1418,27 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r5.height = r2
             r5.width = r4
             int r2 = r0.currentMessageNum
-            if (r1 != r2) goto L_0x035c
+            if (r1 != r2) goto L_0x035b
             r1 = 0
             r3.setTranslationX(r1)
-            goto L_0x036e
-        L_0x035c:
+            goto L_0x036d
+        L_0x035b:
             int r6 = r2 + -1
-            if (r1 != r6) goto L_0x0366
+            if (r1 != r6) goto L_0x0365
             int r1 = -r4
             float r1 = (float) r1
             r3.setTranslationX(r1)
-            goto L_0x036e
-        L_0x0366:
+            goto L_0x036d
+        L_0x0365:
             r6 = 1
             int r2 = r2 + r6
-            if (r1 != r2) goto L_0x036e
+            if (r1 != r2) goto L_0x036d
             float r1 = (float) r4
             r3.setTranslationX(r1)
-        L_0x036e:
+        L_0x036d:
             r3.setLayoutParams(r5)
             r3.invalidate()
-        L_0x0374:
+        L_0x0373:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PopupNotificationActivity.getViewForMessage(int, boolean):android.view.ViewGroup");

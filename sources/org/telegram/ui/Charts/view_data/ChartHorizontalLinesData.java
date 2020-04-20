@@ -1,10 +1,6 @@
 package org.telegram.ui.Charts.view_data;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 public class ChartHorizontalLinesData {
-    public static final String[] s = {"", "K", "M", "G", "T", "P"};
     public int alpha;
     public int fixedAlpha;
     public int[] values;
@@ -64,7 +60,7 @@ public class ChartHorizontalLinesData {
             r8[r4] = r10
             java.lang.String[] r10 = r7.valuesStr
             r8 = r8[r4]
-            java.lang.String r8 = formatWholeNumber(r8, r1)
+            java.lang.String r8 = org.telegram.messenger.AndroidUtilities.formatWholeNumber(r8, r1)
             r10[r4] = r8
             int r4 = r4 + 1
             goto L_0x003e
@@ -125,7 +121,7 @@ public class ChartHorizontalLinesData {
             r3[r1] = r5
             java.lang.String[] r5 = r7.valuesStr
             r3 = r3[r1]
-            java.lang.String r3 = formatWholeNumber(r3, r8)
+            java.lang.String r3 = org.telegram.messenger.AndroidUtilities.formatWholeNumber(r3, r8)
             r5[r1] = r3
             int r3 = (r11 > r10 ? 1 : (r11 == r10 ? 0 : -1))
             if (r3 <= 0) goto L_0x00e4
@@ -144,7 +140,7 @@ public class ChartHorizontalLinesData {
             float r6 = (float) r8
             float r6 = r6 / r11
             int r6 = (int) r6
-            java.lang.String r5 = formatWholeNumber(r5, r6)
+            java.lang.String r5 = org.telegram.messenger.AndroidUtilities.formatWholeNumber(r5, r6)
             r3[r1] = r5
             goto L_0x00e4
         L_0x00d1:
@@ -158,7 +154,7 @@ public class ChartHorizontalLinesData {
             float r6 = (float) r8
             float r6 = r6 / r11
             int r6 = (int) r6
-            java.lang.String r3 = formatWholeNumber(r3, r6)
+            java.lang.String r3 = org.telegram.messenger.AndroidUtilities.formatWholeNumber(r3, r6)
             r5[r1] = r3
         L_0x00e4:
             int r1 = r1 + 1
@@ -176,61 +172,10 @@ public class ChartHorizontalLinesData {
         return ((int) Math.ceil((double) (((float) i) / 5.0f))) * 5;
     }
 
-    public static String formatWholeNumber(int i, int i2) {
-        if (i == 0) {
-            return "0";
-        }
-        float f = (float) i;
-        if (i2 == 0) {
-            i2 = i;
-        }
-        if (i2 < 1000) {
-            return formatCount(i);
-        }
-        int i3 = 0;
-        while (i2 >= 1000 && i3 < s.length - 1) {
-            i2 /= 1000;
-            f /= 1000.0f;
-            i3++;
-        }
-        if (((double) f) < 0.1d) {
-            return "0";
-        }
-        int i4 = (int) f;
-        if (f == ((float) i4)) {
-            return String.format(Locale.ENGLISH, "%s%s", new Object[]{formatCount(i4), s[i3]});
-        }
-        return String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(f), s[i3]});
-    }
-
     private static int round(int i) {
         if (((float) (i / 5)) % 10.0f == 0.0f) {
             return i;
         }
         return ((i / 10) + 1) * 10;
-    }
-
-    public static String formatCount(int i) {
-        if (i < 1000) {
-            return Integer.toString(i);
-        }
-        ArrayList arrayList = new ArrayList();
-        while (i != 0) {
-            int i2 = i % 1000;
-            i /= 1000;
-            if (i > 0) {
-                arrayList.add(String.format(Locale.ENGLISH, "%03d", new Object[]{Integer.valueOf(i2)}));
-            } else {
-                arrayList.add(Integer.toString(i2));
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int size = arrayList.size() - 1; size >= 0; size--) {
-            sb.append((String) arrayList.get(size));
-            if (size != 0) {
-                sb.append(",");
-            }
-        }
-        return sb.toString();
     }
 }

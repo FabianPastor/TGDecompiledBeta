@@ -216,14 +216,14 @@ public class CheckBoxBase {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:112:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x01fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0214  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void draw(android.graphics.Canvas r21) {
+    public void draw(android.graphics.Canvas r22) {
         /*
-            r20 = this;
-            r0 = r20
-            r7 = r21
+            r21 = this;
+            r0 = r21
+            r7 = r22
             android.graphics.Bitmap r1 = r0.drawBitmap
             if (r1 != 0) goto L_0x0009
             return
@@ -262,16 +262,24 @@ public class CheckBoxBase {
             java.lang.String r3 = r0.backgroundColorKey
             r4 = 8
             r5 = 16777215(0xffffff, float:2.3509886E-38)
-            r15 = 7
-            r6 = 6
-            if (r3 == 0) goto L_0x00a2
+            r15 = 10
+            r6 = 7
+            r8 = 6
+            if (r3 == 0) goto L_0x00b3
             boolean r3 = r0.drawUnchecked
-            if (r3 == 0) goto L_0x0089
+            if (r3 == 0) goto L_0x009a
             int r3 = r0.drawBackgroundAsArc
-            if (r3 == r6) goto L_0x0072
-            if (r3 != r15) goto L_0x0056
-            goto L_0x0072
-        L_0x0056:
+            if (r3 == r8) goto L_0x0083
+            if (r3 != r6) goto L_0x0058
+            goto L_0x0083
+        L_0x0058:
+            if (r3 != r15) goto L_0x0067
+            android.graphics.Paint r3 = r0.backgroundPaint
+            java.lang.String r5 = r0.background2ColorKey
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r3.setColor(r5)
+            goto L_0x0104
+        L_0x0067:
             android.graphics.Paint r3 = paint
             int r16 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor()
             r5 = r16 & r5
@@ -282,8 +290,8 @@ public class CheckBoxBase {
             java.lang.String r5 = r0.checkColorKey
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r3.setColor(r5)
-            goto L_0x00f3
-        L_0x0072:
+            goto L_0x0104
+        L_0x0083:
             android.graphics.Paint r3 = paint
             java.lang.String r5 = r0.background2ColorKey
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
@@ -292,149 +300,155 @@ public class CheckBoxBase {
             java.lang.String r5 = r0.checkColorKey
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r3.setColor(r5)
-            goto L_0x00f3
-        L_0x0089:
+            goto L_0x0104
+        L_0x009a:
             android.graphics.Paint r3 = r0.backgroundPaint
-            java.lang.String r8 = r0.background2ColorKey
-            if (r8 == 0) goto L_0x0090
-            goto L_0x0092
-        L_0x0090:
-            java.lang.String r8 = r0.checkColorKey
-        L_0x0092:
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            float r11 = r0.progress
-            float r10 = r0.backgroundAlpha
-            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r8, r11, r10)
+            java.lang.String r11 = r0.background2ColorKey
+            if (r11 == 0) goto L_0x00a1
+            goto L_0x00a3
+        L_0x00a1:
+            java.lang.String r11 = r0.checkColorKey
+        L_0x00a3:
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            float r10 = r0.progress
+            float r6 = r0.backgroundAlpha
+            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r11, r10, r6)
             r3.setColor(r5)
-            goto L_0x00f3
-        L_0x00a2:
+            goto L_0x0104
+        L_0x00b3:
             boolean r3 = r0.drawUnchecked
-            if (r3 == 0) goto L_0x00db
+            if (r3 == 0) goto L_0x00ec
             android.graphics.Paint r3 = paint
             r5 = 1103626240(0x41CLASSNAME, float:25.0)
-            float r8 = r0.backgroundAlpha
-            float r8 = r8 * r5
-            int r5 = (int) r8
+            float r6 = r0.backgroundAlpha
+            float r6 = r6 * r5
+            int r5 = (int) r6
             int r5 = android.graphics.Color.argb(r5, r2, r2, r2)
             r3.setColor(r5)
             int r3 = r0.drawBackgroundAsArc
-            if (r3 != r4) goto L_0x00c6
+            if (r3 != r4) goto L_0x00d7
             android.graphics.Paint r3 = r0.backgroundPaint
             java.lang.String r5 = r0.background2ColorKey
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r3.setColor(r5)
-            goto L_0x00f3
-        L_0x00c6:
+            goto L_0x0104
+        L_0x00d7:
             android.graphics.Paint r3 = r0.backgroundPaint
             r5 = -1
-            java.lang.String r8 = r0.checkColorKey
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            java.lang.String r6 = r0.checkColorKey
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             float r10 = r0.progress
             float r11 = r0.backgroundAlpha
-            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r8, r10, r11)
+            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r6, r10, r11)
             r3.setColor(r5)
-            goto L_0x00f3
-        L_0x00db:
+            goto L_0x0104
+        L_0x00ec:
             android.graphics.Paint r3 = r0.backgroundPaint
-            java.lang.String r8 = r0.background2ColorKey
-            if (r8 == 0) goto L_0x00e2
-            goto L_0x00e4
-        L_0x00e2:
-            java.lang.String r8 = r0.checkColorKey
-        L_0x00e4:
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            java.lang.String r6 = r0.background2ColorKey
+            if (r6 == 0) goto L_0x00f3
+            goto L_0x00f5
+        L_0x00f3:
+            java.lang.String r6 = r0.checkColorKey
+        L_0x00f5:
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             float r10 = r0.progress
             float r11 = r0.backgroundAlpha
-            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r8, r10, r11)
+            int r5 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r5, r6, r10, r11)
             r3.setColor(r5)
-        L_0x00f3:
+        L_0x0104:
             boolean r3 = r0.drawUnchecked
-            r8 = 1069547520(0x3fCLASSNAME, float:1.5)
-            if (r3 == 0) goto L_0x0135
+            r10 = 1069547520(0x3fCLASSNAME, float:1.5)
+            if (r3 == 0) goto L_0x014a
             int r3 = r0.drawBackgroundAsArc
-            if (r3 != r4) goto L_0x010c
-            float r3 = (float) r13
-            float r5 = (float) r14
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r10 = (float) r10
-            float r10 = r9 - r10
-            android.graphics.Paint r11 = r0.backgroundPaint
-            r7.drawCircle(r3, r5, r10, r11)
-            goto L_0x0135
-        L_0x010c:
-            if (r3 == r6) goto L_0x0119
+            if (r3 == r4) goto L_0x013c
             if (r3 != r15) goto L_0x0111
-            goto L_0x0119
+            goto L_0x013c
         L_0x0111:
+            if (r3 == r8) goto L_0x011f
+            r5 = 7
+            if (r3 != r5) goto L_0x0117
+            goto L_0x011f
+        L_0x0117:
             float r3 = (float) r13
             float r5 = (float) r14
-            android.graphics.Paint r10 = paint
-            r7.drawCircle(r3, r5, r9, r10)
-            goto L_0x0135
-        L_0x0119:
+            android.graphics.Paint r6 = paint
+            r7.drawCircle(r3, r5, r9, r6)
+            goto L_0x014a
+        L_0x011f:
             float r3 = (float) r13
             float r5 = (float) r14
-            r10 = 1065353216(0x3var_, float:1.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            float r10 = (float) r11
-            float r10 = r9 - r10
+            r6 = 1065353216(0x3var_, float:1.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r11
+            float r6 = r9 - r6
             android.graphics.Paint r11 = paint
-            r7.drawCircle(r3, r5, r10, r11)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            float r10 = (float) r10
-            float r10 = r9 - r10
+            r7.drawCircle(r3, r5, r6, r11)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r6 = (float) r6
+            float r6 = r9 - r6
             android.graphics.Paint r11 = r0.backgroundPaint
-            r7.drawCircle(r3, r5, r10, r11)
-        L_0x0135:
+            r7.drawCircle(r3, r5, r6, r11)
+            goto L_0x014a
+        L_0x013c:
+            float r3 = (float) r13
+            float r5 = (float) r14
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r6 = (float) r6
+            float r6 = r9 - r6
+            android.graphics.Paint r11 = r0.backgroundPaint
+            r7.drawCircle(r3, r5, r6, r11)
+        L_0x014a:
             android.graphics.Paint r3 = paint
             java.lang.String r5 = r0.checkColorKey
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r3.setColor(r5)
             int r3 = r0.drawBackgroundAsArc
-            r10 = 9
-            r11 = 1
-            if (r3 == r15) goto L_0x01f4
-            if (r3 == r4) goto L_0x01f4
-            if (r3 == r10) goto L_0x01f4
-            if (r3 != 0) goto L_0x0156
+            r11 = 9
+            r6 = 1
+            r5 = 7
+            if (r3 == r5) goto L_0x020e
+            if (r3 == r4) goto L_0x020e
+            if (r3 == r11) goto L_0x020e
+            if (r3 == r15) goto L_0x020e
+            if (r3 != 0) goto L_0x016e
             float r1 = (float) r13
             float r2 = (float) r14
             android.graphics.Paint r3 = r0.backgroundPaint
             r7.drawCircle(r1, r2, r9, r3)
-            goto L_0x01f4
-        L_0x0156:
+            goto L_0x020e
+        L_0x016e:
             android.graphics.RectF r3 = r0.rect
             float r4 = (float) r13
-            float r5 = r4 - r1
-            float r2 = (float) r14
-            float r8 = r2 - r1
+            float r2 = r4 - r1
+            float r5 = (float) r14
+            float r10 = r5 - r1
             float r4 = r4 + r1
-            float r2 = r2 + r1
-            r3.set(r5, r8, r4, r2)
+            float r5 = r5 + r1
+            r3.set(r2, r10, r4, r5)
             int r1 = r0.drawBackgroundAsArc
-            if (r1 != r6) goto L_0x0170
+            if (r1 != r8) goto L_0x0188
             r1 = -1011613696(0xffffffffc3b40000, float:-360.0)
             float r2 = r0.progress
             float r2 = r2 * r1
             int r1 = (int) r2
             r2 = 0
-            goto L_0x0182
-        L_0x0170:
-            if (r1 != r11) goto L_0x0179
+            goto L_0x019a
+        L_0x0188:
+            if (r1 != r6) goto L_0x0191
             r2 = -90
             r1 = -1014562816(0xffffffffCLASSNAME, float:-270.0)
             float r3 = r0.progress
-            goto L_0x017f
-        L_0x0179:
+            goto L_0x0197
+        L_0x0191:
             r2 = 90
             r1 = 1132920832(0x43870000, float:270.0)
             float r3 = r0.progress
-        L_0x017f:
+        L_0x0197:
             float r3 = r3 * r1
             int r1 = (int) r3
-        L_0x0182:
+        L_0x019a:
             int r3 = r0.drawBackgroundAsArc
-            if (r3 != r6) goto L_0x01e1
+            if (r3 != r8) goto L_0x01fb
             java.lang.String r3 = "dialogBackground"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             int r4 = android.graphics.Color.alpha(r3)
@@ -447,19 +461,20 @@ public class CheckBoxBase {
             int r4 = (int) r4
             r3.setAlpha(r4)
             android.graphics.RectF r3 = r0.rect
-            float r8 = (float) r2
+            float r10 = (float) r2
             float r5 = (float) r1
             r17 = 0
             android.graphics.Paint r4 = r0.backgroundPaint
-            r1 = r21
+            r1 = r22
             r2 = r3
-            r3 = r8
-            r18 = r4
+            r3 = r10
+            r19 = r4
             r4 = r5
-            r19 = r5
+            r18 = r5
+            r20 = 7
             r5 = r17
-            r11 = 6
-            r6 = r18
+            r15 = 7
+            r6 = r19
             r1.drawArc(r2, r3, r4, r5, r6)
             java.lang.String r1 = "chat_attachPhotoBackground"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
@@ -475,89 +490,91 @@ public class CheckBoxBase {
             android.graphics.RectF r2 = r0.rect
             r5 = 0
             android.graphics.Paint r6 = r0.backgroundPaint
-            r1 = r21
-            r3 = r8
-            r4 = r19
+            r1 = r22
+            r3 = r10
+            r4 = r18
             r1.drawArc(r2, r3, r4, r5, r6)
-            goto L_0x01f5
-        L_0x01e1:
-            r11 = 6
+            goto L_0x020f
+        L_0x01fb:
+            r15 = 7
             android.graphics.RectF r3 = r0.rect
             float r4 = (float) r2
             float r5 = (float) r1
             r6 = 0
-            android.graphics.Paint r8 = r0.backgroundPaint
-            r1 = r21
+            android.graphics.Paint r10 = r0.backgroundPaint
+            r1 = r22
             r2 = r3
             r3 = r4
             r4 = r5
             r5 = r6
-            r6 = r8
+            r6 = r10
             r1.drawArc(r2, r3, r4, r5, r6)
-            goto L_0x01f5
-        L_0x01f4:
-            r11 = 6
-        L_0x01f5:
+            goto L_0x020f
+        L_0x020e:
+            r15 = 7
+        L_0x020f:
             r1 = 0
             int r2 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0390
+            if (r2 <= 0) goto L_0x03ae
             float r2 = r0.progress
             r3 = 1056964608(0x3var_, float:0.5)
             int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0204
+            if (r4 >= 0) goto L_0x021e
             r2 = 0
-            goto L_0x0206
-        L_0x0204:
+            goto L_0x0220
+        L_0x021e:
             float r2 = r2 - r3
             float r2 = r2 / r3
-        L_0x0206:
+        L_0x0220:
             int r3 = r0.drawBackgroundAsArc
-            if (r3 != r10) goto L_0x0216
+            if (r3 != r11) goto L_0x0230
             android.graphics.Paint r3 = paint
             java.lang.String r4 = r0.background2ColorKey
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r3.setColor(r4)
-            goto L_0x0241
-        L_0x0216:
-            if (r3 == r11) goto L_0x0236
-            if (r3 == r15) goto L_0x0236
+            goto L_0x025f
+        L_0x0230:
+            if (r3 == r8) goto L_0x0254
+            if (r3 == r15) goto L_0x0254
+            r4 = 10
+            if (r3 == r4) goto L_0x0254
             boolean r3 = r0.drawUnchecked
-            if (r3 != 0) goto L_0x0223
+            if (r3 != 0) goto L_0x0241
             java.lang.String r3 = r0.backgroundColorKey
-            if (r3 == 0) goto L_0x0223
-            goto L_0x0236
-        L_0x0223:
+            if (r3 == 0) goto L_0x0241
+            goto L_0x0254
+        L_0x0241:
             android.graphics.Paint r3 = paint
             boolean r4 = r0.enabled
-            if (r4 == 0) goto L_0x022c
+            if (r4 == 0) goto L_0x024a
             java.lang.String r4 = "checkbox"
-            goto L_0x022e
-        L_0x022c:
+            goto L_0x024c
+        L_0x024a:
             java.lang.String r4 = "checkboxDisabled"
-        L_0x022e:
+        L_0x024c:
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r3.setColor(r4)
-            goto L_0x0241
-        L_0x0236:
+            goto L_0x025f
+        L_0x0254:
             android.graphics.Paint r3 = paint
             java.lang.String r4 = r0.backgroundColorKey
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r3.setColor(r4)
-        L_0x0241:
+        L_0x025f:
             boolean r3 = r0.useDefaultCheck
-            if (r3 != 0) goto L_0x0253
+            if (r3 != 0) goto L_0x0271
             java.lang.String r3 = r0.checkColorKey
-            if (r3 == 0) goto L_0x0253
+            if (r3 == 0) goto L_0x0271
             android.graphics.Paint r4 = r0.checkPaint
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r4.setColor(r3)
-            goto L_0x025e
-        L_0x0253:
+            goto L_0x027c
+        L_0x0271:
             android.graphics.Paint r3 = r0.checkPaint
             java.lang.String r4 = "checkboxCheck"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r3.setColor(r4)
-        L_0x025e:
+        L_0x027c:
             r3 = 1056964608(0x3var_, float:0.5)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r3 = (float) r3
@@ -601,11 +618,11 @@ public class CheckBoxBase {
             r8 = 0
             r7.drawBitmap(r3, r4, r6, r8)
             int r1 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1))
-            if (r1 == 0) goto L_0x0390
+            if (r1 == 0) goto L_0x03ae
             java.lang.String r1 = r0.checkedText
-            if (r1 == 0) goto L_0x0328
+            if (r1 == 0) goto L_0x0346
             android.text.TextPaint r1 = r0.textPaint
-            if (r1 != 0) goto L_0x02d1
+            if (r1 != 0) goto L_0x02ef
             android.text.TextPaint r1 = new android.text.TextPaint
             r3 = 1
             r1.<init>(r3)
@@ -613,28 +630,28 @@ public class CheckBoxBase {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            goto L_0x02d2
-        L_0x02d1:
+            goto L_0x02f0
+        L_0x02ef:
             r3 = 1
-        L_0x02d2:
+        L_0x02f0:
             java.lang.String r1 = r0.checkedText
             int r1 = r1.length()
-            if (r1 == 0) goto L_0x02eb
-            if (r1 == r3) goto L_0x02eb
-            if (r1 == r5) goto L_0x02eb
+            if (r1 == 0) goto L_0x0309
+            if (r1 == r3) goto L_0x0309
+            if (r1 == r5) goto L_0x0309
             r3 = 3
-            if (r1 == r3) goto L_0x02e6
+            if (r1 == r3) goto L_0x0304
             r1 = 1090519040(0x41000000, float:8.0)
             r3 = 1098645504(0x417CLASSNAME, float:15.75)
-            goto L_0x02ef
-        L_0x02e6:
+            goto L_0x030d
+        L_0x0304:
             r1 = 1092616192(0x41200000, float:10.0)
             r3 = 1099169792(0x41840000, float:16.5)
-            goto L_0x02ef
-        L_0x02eb:
+            goto L_0x030d
+        L_0x0309:
             r1 = 1096810496(0x41600000, float:14.0)
             r3 = 1099956224(0x41900000, float:18.0)
-        L_0x02ef:
+        L_0x030d:
             android.text.TextPaint r4 = r0.textPaint
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
@@ -643,7 +660,7 @@ public class CheckBoxBase {
             java.lang.String r4 = r0.checkColorKey
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r1.setColor(r4)
-            r21.save()
+            r22.save()
             float r1 = (float) r13
             float r4 = (float) r14
             r5 = 1065353216(0x3var_, float:1.0)
@@ -658,20 +675,20 @@ public class CheckBoxBase {
             float r3 = (float) r3
             android.text.TextPaint r4 = r0.textPaint
             r7.drawText(r2, r1, r3, r4)
-            r21.restore()
-            goto L_0x0390
-        L_0x0328:
+            r22.restore()
+            goto L_0x03ae
+        L_0x0346:
             r5 = 1065353216(0x3var_, float:1.0)
             android.graphics.Path r1 = r0.path
             r1.reset()
             int r1 = r0.drawBackgroundAsArc
             r3 = 5
-            if (r1 != r3) goto L_0x0338
+            if (r1 != r3) goto L_0x0356
             r10 = 1061997773(0x3f4ccccd, float:0.8)
-            goto L_0x033a
-        L_0x0338:
+            goto L_0x0358
+        L_0x0356:
             r10 = 1065353216(0x3var_, float:1.0)
-        L_0x033a:
+        L_0x0358:
             r1 = 1091567616(0x41100000, float:9.0)
             float r1 = r1 * r10
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -714,7 +731,7 @@ public class CheckBoxBase {
             android.graphics.Path r1 = r0.path
             android.graphics.Paint r2 = r0.checkPaint
             r7.drawPath(r1, r2)
-        L_0x0390:
+        L_0x03ae:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.CheckBoxBase.draw(android.graphics.Canvas):void");

@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.TextureView;
+import android.view.ViewGroup;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -27,6 +28,7 @@ import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.video.SurfaceNotValidException;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
@@ -37,12 +39,15 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     private SimpleExoPlayer audioPlayer;
     /* access modifiers changed from: private */
     public boolean audioPlayerReady;
+    private String audioType;
+    private Uri audioUri;
     private boolean autoplay;
     private Uri currentUri;
     private VideoPlayerDelegate delegate;
     private boolean isStreaming;
     private boolean lastReportedPlayWhenReady;
     private int lastReportedPlaybackState = 1;
+    private boolean loop;
     private Handler mainHandler = new Handler();
     private DataSource.Factory mediaDataSourceFactory;
     private boolean mixedAudio;
@@ -51,6 +56,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     private TextureView textureView;
     private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
     private boolean videoPlayerReady;
+    private String videoType;
+    private Uri videoUri;
 
     public interface VideoPlayerDelegate {
         void onError(Exception exc);
@@ -162,117 +169,129 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
     }
 
-    /* JADX WARNING: type inference failed for: r6v1, types: [com.google.android.exoplayer2.source.MediaSource] */
-    /* JADX WARNING: type inference failed for: r8v8, types: [com.google.android.exoplayer2.source.dash.DashMediaSource] */
-    /* JADX WARNING: type inference failed for: r6v5 */
-    /* JADX WARNING: type inference failed for: r8v9, types: [com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource] */
-    /* JADX WARNING: type inference failed for: r8v10, types: [com.google.android.exoplayer2.source.ExtractorMediaSource] */
+    /* JADX WARNING: type inference failed for: r10v1, types: [com.google.android.exoplayer2.source.MediaSource] */
+    /* JADX WARNING: type inference failed for: r12v8, types: [com.google.android.exoplayer2.source.dash.DashMediaSource] */
+    /* JADX WARNING: type inference failed for: r10v5 */
+    /* JADX WARNING: type inference failed for: r12v9, types: [com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource] */
+    /* JADX WARNING: type inference failed for: r12v10, types: [com.google.android.exoplayer2.source.ExtractorMediaSource] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void preparePlayerLoop(android.net.Uri r15, java.lang.String r16, android.net.Uri r17, java.lang.String r18) {
+    public void preparePlayerLoop(android.net.Uri r19, java.lang.String r20, android.net.Uri r21, java.lang.String r22) {
         /*
-            r14 = this;
-            r0 = r14
-            r1 = 1
-            r0.mixedAudio = r1
-            r2 = 0
-            r0.audioPlayerReady = r2
-            r0.videoPlayerReady = r2
-            r14.ensurePleyaerCreated()
-            r3 = 0
-            r4 = r3
-            r5 = 0
-        L_0x000f:
-            r6 = 2
-            if (r5 >= r6) goto L_0x009f
-            if (r5 != 0) goto L_0x0018
-            r9 = r15
-            r7 = r16
-            goto L_0x001c
-        L_0x0018:
-            r9 = r17
-            r7 = r18
-        L_0x001c:
-            r8 = -1
-            int r10 = r7.hashCode()
-            r11 = 3680(0xe60, float:5.157E-42)
-            if (r10 == r11) goto L_0x0044
-            r11 = 103407(0x193ef, float:1.44904E-40)
-            if (r10 == r11) goto L_0x003a
-            r11 = 3075986(0x2eevar_, float:4.310374E-39)
-            if (r10 == r11) goto L_0x0030
-            goto L_0x004d
-        L_0x0030:
-            java.lang.String r10 = "dash"
-            boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004d
-            r8 = 0
-            goto L_0x004d
-        L_0x003a:
-            java.lang.String r10 = "hls"
-            boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004d
-            r8 = 1
-            goto L_0x004d
-        L_0x0044:
-            java.lang.String r10 = "ss"
-            boolean r7 = r7.equals(r10)
-            if (r7 == 0) goto L_0x004d
-            r8 = 2
-        L_0x004d:
-            if (r8 == 0) goto L_0x0081
-            if (r8 == r1) goto L_0x0075
-            if (r8 == r6) goto L_0x0064
-            com.google.android.exoplayer2.source.ExtractorMediaSource r6 = new com.google.android.exoplayer2.source.ExtractorMediaSource
-            com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
-            com.google.android.exoplayer2.extractor.DefaultExtractorsFactory r11 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-            r11.<init>()
-            android.os.Handler r12 = r0.mainHandler
-            r13 = 0
-            r8 = r6
-            r8.<init>(r9, r10, r11, r12, r13)
-            goto L_0x0091
-        L_0x0064:
-            com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource r6 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
-            com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
-            com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory r11 = new com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory
+            r18 = this;
+            r0 = r18
+            r1 = r19
+            r0.videoUri = r1
+            r2 = r21
+            r0.audioUri = r2
+            r3 = r20
+            r0.videoType = r3
+            r4 = r22
+            r0.audioType = r4
+            r5 = 1
+            r0.loop = r5
+            r0.mixedAudio = r5
+            r6 = 0
+            r0.audioPlayerReady = r6
+            r0.videoPlayerReady = r6
+            r18.ensurePleyaerCreated()
+            r7 = 0
+            r8 = r7
+            r9 = 0
+        L_0x0022:
+            r10 = 2
+            if (r9 >= r10) goto L_0x00b8
+            if (r9 != 0) goto L_0x002a
+            r13 = r1
+            r11 = r3
+            goto L_0x002c
+        L_0x002a:
+            r13 = r2
+            r11 = r4
+        L_0x002c:
+            r12 = -1
+            int r14 = r11.hashCode()
+            r15 = 3680(0xe60, float:5.157E-42)
+            if (r14 == r15) goto L_0x0054
+            r15 = 103407(0x193ef, float:1.44904E-40)
+            if (r14 == r15) goto L_0x004a
+            r15 = 3075986(0x2eevar_, float:4.310374E-39)
+            if (r14 == r15) goto L_0x0040
+            goto L_0x005d
+        L_0x0040:
+            java.lang.String r14 = "dash"
+            boolean r11 = r11.equals(r14)
+            if (r11 == 0) goto L_0x005d
+            r12 = 0
+            goto L_0x005d
+        L_0x004a:
+            java.lang.String r14 = "hls"
+            boolean r11 = r11.equals(r14)
+            if (r11 == 0) goto L_0x005d
+            r12 = 1
+            goto L_0x005d
+        L_0x0054:
+            java.lang.String r14 = "ss"
+            boolean r11 = r11.equals(r14)
+            if (r11 == 0) goto L_0x005d
+            r12 = 2
+        L_0x005d:
+            if (r12 == 0) goto L_0x0097
+            if (r12 == r5) goto L_0x008b
+            if (r12 == r10) goto L_0x0077
+            com.google.android.exoplayer2.source.ExtractorMediaSource r10 = new com.google.android.exoplayer2.source.ExtractorMediaSource
+            com.google.android.exoplayer2.upstream.DataSource$Factory r14 = r0.mediaDataSourceFactory
+            com.google.android.exoplayer2.extractor.DefaultExtractorsFactory r15 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+            r15.<init>()
+            android.os.Handler r11 = r0.mainHandler
+            r17 = 0
+            r12 = r10
+            r16 = r11
+            r12.<init>(r13, r14, r15, r16, r17)
+            goto L_0x00aa
+        L_0x0077:
+            com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource r10 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
+            com.google.android.exoplayer2.upstream.DataSource$Factory r14 = r0.mediaDataSourceFactory
+            com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory r15 = new com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory
+            r15.<init>(r14)
+            android.os.Handler r11 = r0.mainHandler
+            r17 = 0
+            r12 = r10
+            r16 = r11
+            r12.<init>(r13, r14, r15, r16, r17)
+            goto L_0x00aa
+        L_0x008b:
+            com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory r10 = new com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
+            com.google.android.exoplayer2.upstream.DataSource$Factory r11 = r0.mediaDataSourceFactory
+            r10.<init>((com.google.android.exoplayer2.upstream.DataSource.Factory) r11)
+            com.google.android.exoplayer2.source.hls.HlsMediaSource r10 = r10.createMediaSource(r13)
+            goto L_0x00aa
+        L_0x0097:
+            com.google.android.exoplayer2.source.dash.DashMediaSource r10 = new com.google.android.exoplayer2.source.dash.DashMediaSource
+            com.google.android.exoplayer2.upstream.DataSource$Factory r14 = r0.mediaDataSourceFactory
+            com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory r15 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory
+            r15.<init>(r14)
+            android.os.Handler r11 = r0.mainHandler
+            r17 = 0
+            r12 = r10
+            r16 = r11
+            r12.<init>(r13, r14, r15, r16, r17)
+        L_0x00aa:
+            com.google.android.exoplayer2.source.LoopingMediaSource r11 = new com.google.android.exoplayer2.source.LoopingMediaSource
             r11.<init>(r10)
-            android.os.Handler r12 = r0.mainHandler
-            r13 = 0
-            r8 = r6
-            r8.<init>(r9, r10, r11, r12, r13)
-            goto L_0x0091
-        L_0x0075:
-            com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory r6 = new com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
-            com.google.android.exoplayer2.upstream.DataSource$Factory r7 = r0.mediaDataSourceFactory
-            r6.<init>((com.google.android.exoplayer2.upstream.DataSource.Factory) r7)
-            com.google.android.exoplayer2.source.hls.HlsMediaSource r6 = r6.createMediaSource(r9)
-            goto L_0x0091
-        L_0x0081:
-            com.google.android.exoplayer2.source.dash.DashMediaSource r6 = new com.google.android.exoplayer2.source.dash.DashMediaSource
-            com.google.android.exoplayer2.upstream.DataSource$Factory r10 = r0.mediaDataSourceFactory
-            com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory r11 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory
-            r11.<init>(r10)
-            android.os.Handler r12 = r0.mainHandler
-            r13 = 0
-            r8 = r6
-            r8.<init>(r9, r10, r11, r12, r13)
-        L_0x0091:
-            com.google.android.exoplayer2.source.LoopingMediaSource r7 = new com.google.android.exoplayer2.source.LoopingMediaSource
-            r7.<init>(r6)
-            if (r5 != 0) goto L_0x009a
-            r3 = r7
-            goto L_0x009b
-        L_0x009a:
-            r4 = r7
-        L_0x009b:
-            int r5 = r5 + 1
-            goto L_0x000f
-        L_0x009f:
-            com.google.android.exoplayer2.SimpleExoPlayer r2 = r0.player
-            r2.prepare(r3, r1, r1)
-            com.google.android.exoplayer2.SimpleExoPlayer r2 = r0.audioPlayer
-            r2.prepare(r4, r1, r1)
+            if (r9 != 0) goto L_0x00b3
+            r7 = r11
+            goto L_0x00b4
+        L_0x00b3:
+            r8 = r11
+        L_0x00b4:
+            int r9 = r9 + 1
+            goto L_0x0022
+        L_0x00b8:
+            com.google.android.exoplayer2.SimpleExoPlayer r1 = r0.player
+            r1.prepare(r7, r5, r5)
+            com.google.android.exoplayer2.SimpleExoPlayer r1 = r0.audioPlayer
+            r1.prepare(r8, r5, r5)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoPlayer.preparePlayerLoop(android.net.Uri, java.lang.String, android.net.Uri, java.lang.String):void");
@@ -283,66 +302,72 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     /* JADX WARNING: type inference failed for: r7v4 */
     /* JADX WARNING: type inference failed for: r0v9, types: [com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource] */
     /* JADX WARNING: type inference failed for: r0v10, types: [com.google.android.exoplayer2.source.ExtractorMediaSource] */
-    /* JADX WARNING: Code restructure failed: missing block: B:13:0x0039, code lost:
-        if (r10.equals("dash") == false) goto L_0x0050;
+    /* JADX WARNING: Code restructure failed: missing block: B:13:0x0044, code lost:
+        if (r10.equals("dash") == false) goto L_0x005b;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0087  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x005e  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0092  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void preparePlayer(android.net.Uri r9, java.lang.String r10) {
         /*
             r8 = this;
+            r8.videoUri = r9
+            r8.videoType = r10
             r2 = 0
+            r8.audioUri = r2
+            r8.audioType = r2
+            r2 = 0
+            r8.loop = r2
             r8.videoPlayerReady = r2
             r8.mixedAudio = r2
             r8.currentUri = r9
             java.lang.String r3 = r9.getScheme()
             r6 = 1
-            if (r3 == 0) goto L_0x0018
+            if (r3 == 0) goto L_0x0023
             java.lang.String r4 = "file"
             boolean r3 = r3.startsWith(r4)
-            if (r3 != 0) goto L_0x0018
+            if (r3 != 0) goto L_0x0023
             r3 = 1
-            goto L_0x0019
-        L_0x0018:
+            goto L_0x0024
+        L_0x0023:
             r3 = 0
-        L_0x0019:
+        L_0x0024:
             r8.isStreaming = r3
             r8.ensurePleyaerCreated()
             r3 = -1
             int r4 = r10.hashCode()
             r5 = 3680(0xe60, float:5.157E-42)
             r7 = 2
-            if (r4 == r5) goto L_0x0046
+            if (r4 == r5) goto L_0x0051
             r5 = 103407(0x193ef, float:1.44904E-40)
-            if (r4 == r5) goto L_0x003c
+            if (r4 == r5) goto L_0x0047
             r5 = 3075986(0x2eevar_, float:4.310374E-39)
-            if (r4 == r5) goto L_0x0033
-            goto L_0x0050
-        L_0x0033:
+            if (r4 == r5) goto L_0x003e
+            goto L_0x005b
+        L_0x003e:
             java.lang.String r4 = "dash"
             boolean r0 = r10.equals(r4)
-            if (r0 == 0) goto L_0x0050
-            goto L_0x0051
-        L_0x003c:
+            if (r0 == 0) goto L_0x005b
+            goto L_0x005c
+        L_0x0047:
             java.lang.String r2 = "hls"
             boolean r0 = r10.equals(r2)
-            if (r0 == 0) goto L_0x0050
+            if (r0 == 0) goto L_0x005b
             r2 = 1
-            goto L_0x0051
-        L_0x0046:
+            goto L_0x005c
+        L_0x0051:
             java.lang.String r2 = "ss"
             boolean r0 = r10.equals(r2)
-            if (r0 == 0) goto L_0x0050
+            if (r0 == 0) goto L_0x005b
             r2 = 2
-            goto L_0x0051
-        L_0x0050:
+            goto L_0x005c
+        L_0x005b:
             r2 = -1
-        L_0x0051:
-            if (r2 == 0) goto L_0x0087
-            if (r2 == r6) goto L_0x007b
-            if (r2 == r7) goto L_0x0069
+        L_0x005c:
+            if (r2 == 0) goto L_0x0092
+            if (r2 == r6) goto L_0x0086
+            if (r2 == r7) goto L_0x0074
             com.google.android.exoplayer2.source.ExtractorMediaSource r7 = new com.google.android.exoplayer2.source.ExtractorMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r2 = r8.mediaDataSourceFactory
             com.google.android.exoplayer2.extractor.DefaultExtractorsFactory r3 = new com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -352,8 +377,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r0 = r7
             r1 = r9
             r0.<init>(r1, r2, r3, r4, r5)
-            goto L_0x0098
-        L_0x0069:
+            goto L_0x00a3
+        L_0x0074:
             com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource r7 = new com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r2 = r8.mediaDataSourceFactory
             com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory r3 = new com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource$Factory
@@ -363,14 +388,14 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r0 = r7
             r1 = r9
             r0.<init>(r1, r2, r3, r4, r5)
-            goto L_0x0098
-        L_0x007b:
+            goto L_0x00a3
+        L_0x0086:
             com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory r0 = new com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
             com.google.android.exoplayer2.upstream.DataSource$Factory r2 = r8.mediaDataSourceFactory
             r0.<init>((com.google.android.exoplayer2.upstream.DataSource.Factory) r2)
             com.google.android.exoplayer2.source.hls.HlsMediaSource r7 = r0.createMediaSource(r9)
-            goto L_0x0098
-        L_0x0087:
+            goto L_0x00a3
+        L_0x0092:
             com.google.android.exoplayer2.source.dash.DashMediaSource r7 = new com.google.android.exoplayer2.source.dash.DashMediaSource
             com.google.android.exoplayer2.upstream.DataSource$Factory r2 = r8.mediaDataSourceFactory
             com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory r3 = new com.google.android.exoplayer2.source.dash.DefaultDashChunkSource$Factory
@@ -380,7 +405,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r0 = r7
             r1 = r9
             r0.<init>(r1, r2, r3, r4, r5)
-        L_0x0098:
+        L_0x00a3:
             com.google.android.exoplayer2.SimpleExoPlayer r0 = r8.player
             r0.prepare(r7, r6, r6)
             return
@@ -622,7 +647,26 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     public void onPlayerError(ExoPlaybackException exoPlaybackException) {
-        this.delegate.onError(exoPlaybackException);
+        Throwable cause = exoPlaybackException.getCause();
+        TextureView textureView2 = this.textureView;
+        if (textureView2 == null || !(cause instanceof SurfaceNotValidException)) {
+            this.delegate.onError(exoPlaybackException);
+        } else if (this.player != null) {
+            ViewGroup viewGroup = (ViewGroup) textureView2.getParent();
+            if (viewGroup != null) {
+                int indexOfChild = viewGroup.indexOfChild(this.textureView);
+                viewGroup.removeView(this.textureView);
+                viewGroup.addView(this.textureView, indexOfChild);
+            }
+            this.player.clearVideoTextureView(this.textureView);
+            this.player.setVideoTextureView(this.textureView);
+            if (this.loop) {
+                preparePlayerLoop(this.videoUri, this.videoType, this.audioUri, this.audioType);
+            } else {
+                preparePlayer(this.videoUri, this.videoType);
+            }
+            play();
+        }
     }
 
     public void onVideoSizeChanged(int i, int i2, int i3, float f) {

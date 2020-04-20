@@ -447,8 +447,8 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0113  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x017e  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0112  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x017c  */
     /* JADX WARNING: Removed duplicated region for block: B:53:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void animateToBoundsMaybe() {
@@ -477,61 +477,61 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
             java.lang.String r12 = "sidex"
             java.lang.String r13 = "x"
             r14 = 1065353216(0x3var_, float:1.0)
-            if (r10 <= r9) goto L_0x00e3
+            if (r10 <= r9) goto L_0x00e2
             android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
             int r10 = r10.x
-            if (r10 >= 0) goto L_0x004b
+            if (r10 >= 0) goto L_0x004a
             int r15 = r0.videoWidth
             int r15 = -r15
             int r15 = r15 / 4
-            if (r10 <= r15) goto L_0x004b
-            goto L_0x00e3
-        L_0x004b:
+            if (r10 <= r15) goto L_0x004a
+            goto L_0x00e2
+        L_0x004a:
             android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
             int r10 = r10.x
             int r10 = r5 - r10
             int r10 = java.lang.Math.abs(r10)
-            if (r10 <= r9) goto L_0x00b6
+            if (r10 <= r9) goto L_0x00b5
             android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
             int r10 = r10.x
             android.graphics.Point r15 = org.telegram.messenger.AndroidUtilities.displaySize
             int r15 = r15.x
             int r2 = r0.videoWidth
             int r11 = r15 - r2
-            if (r10 <= r11) goto L_0x006d
+            if (r10 <= r11) goto L_0x006c
             int r2 = r2 / 4
             int r2 = r2 * 3
             int r15 = r15 - r2
-            if (r10 >= r15) goto L_0x006d
-            goto L_0x00b6
-        L_0x006d:
+            if (r10 >= r15) goto L_0x006c
+            goto L_0x00b5
+        L_0x006c:
             android.widget.FrameLayout r2 = r0.windowView
             float r2 = r2.getAlpha()
             int r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-            if (r2 == 0) goto L_0x00a2
+            if (r2 == 0) goto L_0x00a1
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
-            if (r2 >= 0) goto L_0x0091
+            if (r2 >= 0) goto L_0x0090
             int[] r2 = new int[r4]
             int r5 = r0.videoWidth
             int r5 = -r5
             r2[r3] = r5
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
             r1.add(r2)
-            goto L_0x00a0
-        L_0x0091:
+            goto L_0x009f
+        L_0x0090:
             int[] r2 = new int[r4]
             android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
             int r5 = r5.x
             r2[r3] = r5
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
             r1.add(r2)
-        L_0x00a0:
+        L_0x009f:
             r2 = 1
-            goto L_0x0111
-        L_0x00a2:
+            goto L_0x0110
+        L_0x00a1:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
             int r2 = r2 - r1
@@ -544,80 +544,80 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
             r1 = 2
             r8.putInt(r12, r1)
             r1 = 0
-            goto L_0x0110
-        L_0x00b6:
+            goto L_0x010f
+        L_0x00b5:
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             r8.putInt(r12, r4)
             android.widget.FrameLayout r2 = r0.windowView
             float r2 = r2.getAlpha()
             int r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-            if (r2 == 0) goto L_0x00d7
+            if (r2 == 0) goto L_0x00d6
             android.widget.FrameLayout r2 = r0.windowView
             android.util.Property r10 = android.view.View.ALPHA
             float[] r11 = new float[r4]
             r11[r3] = r14
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r11)
             r1.add(r2)
-        L_0x00d7:
+        L_0x00d6:
             int[] r2 = new int[r4]
             r2[r3] = r5
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
             r1.add(r2)
-            goto L_0x0110
-        L_0x00e3:
+            goto L_0x010f
+        L_0x00e2:
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r8.putInt(r12, r3)
             android.widget.FrameLayout r5 = r0.windowView
             float r5 = r5.getAlpha()
             int r5 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1))
-            if (r5 == 0) goto L_0x0104
+            if (r5 == 0) goto L_0x0103
             android.widget.FrameLayout r5 = r0.windowView
             android.util.Property r10 = android.view.View.ALPHA
             float[] r11 = new float[r4]
             r11[r3] = r14
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
             r2.add(r5)
-        L_0x0104:
+        L_0x0103:
             int[] r5 = new int[r4]
             r5[r3] = r1
             android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5)
             r2.add(r1)
             r1 = r2
-        L_0x0110:
+        L_0x010f:
             r2 = 0
-        L_0x0111:
-            if (r2 != 0) goto L_0x017c
+        L_0x0110:
+            if (r2 != 0) goto L_0x017a
             android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
             int r5 = r5.y
             int r5 = r6 - r5
             int r5 = java.lang.Math.abs(r5)
             java.lang.String r10 = "y"
             java.lang.String r11 = "sidey"
-            if (r5 <= r9) goto L_0x0164
+            if (r5 <= r9) goto L_0x0162
             android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
             int r5 = r5.y
             int r12 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            if (r5 > r12) goto L_0x012f
-            goto L_0x0164
-        L_0x012f:
+            if (r5 > r12) goto L_0x012d
+            goto L_0x0162
+        L_0x012d:
             android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
             int r5 = r5.y
             int r5 = r7 - r5
             int r5 = java.lang.Math.abs(r5)
-            if (r5 > r9) goto L_0x0151
-            if (r1 != 0) goto L_0x0142
+            if (r5 > r9) goto L_0x014f
+            if (r1 != 0) goto L_0x0140
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0142:
+        L_0x0140:
             r8.putInt(r11, r4)
             int[] r5 = new int[r4]
             r5[r3] = r7
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
             r1.add(r5)
-            goto L_0x0179
-        L_0x0151:
+            goto L_0x0177
+        L_0x014f:
             android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
             int r5 = r5.y
             int r5 = r5 - r6
@@ -629,34 +629,34 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
             r8.putFloat(r6, r5)
             r5 = 2
             r8.putInt(r11, r5)
-            goto L_0x0179
-        L_0x0164:
-            if (r1 != 0) goto L_0x016b
+            goto L_0x0177
+        L_0x0162:
+            if (r1 != 0) goto L_0x0169
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x016b:
+        L_0x0169:
             r8.putInt(r11, r3)
             int[] r5 = new int[r4]
             r5[r3] = r6
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
             r1.add(r5)
-        L_0x0179:
+        L_0x0177:
             r8.commit()
-        L_0x017c:
-            if (r1 == 0) goto L_0x01b8
+        L_0x017a:
+            if (r1 == 0) goto L_0x01b6
             android.view.animation.DecelerateInterpolator r5 = r0.decelerateInterpolator
-            if (r5 != 0) goto L_0x0189
+            if (r5 != 0) goto L_0x0187
             android.view.animation.DecelerateInterpolator r5 = new android.view.animation.DecelerateInterpolator
             r5.<init>()
             r0.decelerateInterpolator = r5
-        L_0x0189:
+        L_0x0187:
             android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
             r5.<init>()
             android.view.animation.DecelerateInterpolator r6 = r0.decelerateInterpolator
             r5.setInterpolator(r6)
             r6 = 150(0x96, double:7.4E-322)
             r5.setDuration(r6)
-            if (r2 == 0) goto L_0x01b2
+            if (r2 == 0) goto L_0x01b0
             android.widget.FrameLayout r2 = r0.windowView
             android.util.Property r6 = android.view.View.ALPHA
             float[] r4 = new float[r4]
@@ -667,10 +667,10 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
             org.telegram.ui.Components.PipRoundVideoView$7 r2 = new org.telegram.ui.Components.PipRoundVideoView$7
             r2.<init>()
             r5.addListener(r2)
-        L_0x01b2:
+        L_0x01b0:
             r5.playTogether(r1)
             r5.start()
-        L_0x01b8:
+        L_0x01b6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.animateToBoundsMaybe():void");

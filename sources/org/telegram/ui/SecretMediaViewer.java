@@ -42,7 +42,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -52,6 +51,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Scroller;
+import org.telegram.ui.Components.TimerParticles;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.SecretMediaViewer;
@@ -185,7 +185,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         return false;
     }
 
-    static /* synthetic */ int access$1210(SecretMediaViewer secretMediaViewer) {
+    static /* synthetic */ int access$1110(SecretMediaViewer secretMediaViewer) {
         int i = secretMediaViewer.playerRetryPlayCount;
         secretMediaViewer.playerRetryPlayCount = i - 1;
         return i;
@@ -220,25 +220,9 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         private long destroyTime;
         private long destroyTtl;
         private Drawable drawable;
-        private ArrayList<Particle> freeParticles = new ArrayList<>();
-        private long lastAnimationTime;
         private Paint particlePaint;
-        private ArrayList<Particle> particles = new ArrayList<>();
+        private TimerParticles timerParticles = new TimerParticles();
         private boolean useVideoProgress;
-
-        private class Particle {
-            float alpha;
-            float currentTime;
-            float lifeTime;
-            float velocity;
-            float vx;
-            float vy;
-            float x;
-            float y;
-
-            private Particle(SecretDeleteTimer secretDeleteTimer) {
-            }
-        }
 
         public SecretDeleteTimer(Context context) {
             super(context);
@@ -259,9 +243,6 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.circlePaint = paint3;
             paint3.setColor(NUM);
             this.drawable = context.getResources().getDrawable(NUM);
-            for (int i = 0; i < 40; i++) {
-                this.freeParticles.add(new Particle());
-            }
         }
 
         /* access modifiers changed from: private */
@@ -269,36 +250,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.destroyTime = j;
             this.destroyTtl = j2;
             this.useVideoProgress = z;
-            this.lastAnimationTime = System.currentTimeMillis();
             invalidate();
-        }
-
-        private void updateParticles(long j) {
-            int size = this.particles.size();
-            int i = 0;
-            while (i < size) {
-                Particle particle = this.particles.get(i);
-                float f = particle.currentTime;
-                float f2 = particle.lifeTime;
-                if (f >= f2) {
-                    if (this.freeParticles.size() < 40) {
-                        this.freeParticles.add(particle);
-                    }
-                    this.particles.remove(i);
-                    i--;
-                    size--;
-                } else {
-                    particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(f / f2);
-                    float f3 = particle.x;
-                    float f4 = particle.vx;
-                    float f5 = particle.velocity;
-                    float f6 = (float) j;
-                    particle.x = f3 + (((f4 * f5) * f6) / 500.0f);
-                    particle.y += ((particle.vy * f5) * f6) / 500.0f;
-                    particle.currentTime += f6;
-                }
-                i++;
-            }
         }
 
         /* access modifiers changed from: protected */
@@ -311,79 +263,25 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         /* access modifiers changed from: protected */
         @SuppressLint({"DrawAllocation"})
         public void onDraw(Canvas canvas) {
-            float f;
-            Particle particle;
-            Canvas canvas2 = canvas;
             if (SecretMediaViewer.this.currentMessageObject != null && SecretMediaViewer.this.currentMessageObject.messageOwner.destroyTime != 0) {
-                canvas2.drawCircle((float) (getMeasuredWidth() - AndroidUtilities.dp(35.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(16.0f), this.circlePaint);
-                if (this.useVideoProgress) {
-                    if (SecretMediaViewer.this.videoPlayer != null) {
-                        long duration = SecretMediaViewer.this.videoPlayer.getDuration();
-                        long currentPosition = SecretMediaViewer.this.videoPlayer.getCurrentPosition();
-                        if (!(duration == -9223372036854775807L || currentPosition == -9223372036854775807L)) {
-                            f = 1.0f - (((float) currentPosition) / ((float) duration));
-                        }
-                    }
-                    f = 1.0f;
-                } else {
+                canvas.drawCircle((float) (getMeasuredWidth() - AndroidUtilities.dp(35.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(16.0f), this.circlePaint);
+                float f = 1.0f;
+                if (!this.useVideoProgress) {
                     f = ((float) Math.max(0, this.destroyTime - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(SecretMediaViewer.this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.destroyTtl) * 1000.0f);
+                } else if (SecretMediaViewer.this.videoPlayer != null) {
+                    long duration = SecretMediaViewer.this.videoPlayer.getDuration();
+                    long currentPosition = SecretMediaViewer.this.videoPlayer.getCurrentPosition();
+                    if (!(duration == -9223372036854775807L || currentPosition == -9223372036854775807L)) {
+                        f = 1.0f - (((float) currentPosition) / ((float) duration));
+                    }
                 }
                 int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(40.0f);
                 int measuredHeight = ((getMeasuredHeight() - AndroidUtilities.dp(14.0f)) / 2) - AndroidUtilities.dp(0.5f);
                 this.drawable.setBounds(measuredWidth, measuredHeight, AndroidUtilities.dp(10.0f) + measuredWidth, AndroidUtilities.dp(14.0f) + measuredHeight);
-                this.drawable.draw(canvas2);
-                float f2 = f * -360.0f;
+                this.drawable.draw(canvas);
+                float f2 = -360.0f * f;
                 canvas.drawArc(this.deleteProgressRect, -90.0f, f2, false, this.afterDeleteProgressPaint);
-                int size = this.particles.size();
-                for (int i = 0; i < size; i++) {
-                    Particle particle2 = this.particles.get(i);
-                    this.particlePaint.setAlpha((int) (particle2.alpha * 255.0f));
-                    canvas2.drawPoint(particle2.x, particle2.y, this.particlePaint);
-                }
-                double d = (double) (f2 - 90.0f);
-                double d2 = 0.017453292519943295d;
-                Double.isNaN(d);
-                double d3 = d * 0.017453292519943295d;
-                double sin = Math.sin(d3);
-                double d4 = -Math.cos(d3);
-                double dp = (double) AndroidUtilities.dp(14.0f);
-                Double.isNaN(dp);
-                double centerX = (double) this.deleteProgressRect.centerX();
-                Double.isNaN(centerX);
-                float f3 = (float) (((-d4) * dp) + centerX);
-                Double.isNaN(dp);
-                double centerY = (double) this.deleteProgressRect.centerY();
-                Double.isNaN(centerY);
-                float f4 = (float) ((dp * sin) + centerY);
-                int i2 = 0;
-                while (i2 < 1) {
-                    if (!this.freeParticles.isEmpty()) {
-                        particle = this.freeParticles.get(0);
-                        this.freeParticles.remove(0);
-                    } else {
-                        particle = new Particle();
-                    }
-                    particle.x = f3;
-                    particle.y = f4;
-                    double nextInt = (double) (Utilities.random.nextInt(140) - 70);
-                    Double.isNaN(nextInt);
-                    double d5 = nextInt * d2;
-                    if (d5 < 0.0d) {
-                        d5 += 6.283185307179586d;
-                    }
-                    particle.vx = (float) ((Math.cos(d5) * sin) - (Math.sin(d5) * d4));
-                    particle.vy = (float) ((Math.sin(d5) * sin) + (Math.cos(d5) * d4));
-                    particle.alpha = 1.0f;
-                    particle.currentTime = 0.0f;
-                    particle.lifeTime = (float) (Utilities.random.nextInt(100) + 400);
-                    particle.velocity = (Utilities.random.nextFloat() * 4.0f) + 20.0f;
-                    this.particles.add(particle);
-                    i2++;
-                    d2 = 0.017453292519943295d;
-                }
-                long currentTimeMillis = System.currentTimeMillis();
-                updateParticles(currentTimeMillis - this.lastAnimationTime);
-                this.lastAnimationTime = currentTimeMillis;
+                this.timerParticles.draw(canvas, this.particlePaint, this.deleteProgressRect, f2, 1.0f);
                 invalidate();
             }
         }
@@ -555,7 +453,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
                     public void onError(Exception exc) {
                         if (SecretMediaViewer.this.playerRetryPlayCount > 0) {
-                            SecretMediaViewer.access$1210(SecretMediaViewer.this);
+                            SecretMediaViewer.access$1110(SecretMediaViewer.this);
                             AndroidUtilities.runOnUIThread(new Runnable(file) {
                                 private final /* synthetic */ File f$1;
 

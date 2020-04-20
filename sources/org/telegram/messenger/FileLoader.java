@@ -415,7 +415,7 @@ public class FileLoader extends BaseController {
             i3 = 0;
         }
         FileLoaderDelegate fileLoaderDelegate = this.delegate;
-        if (fileLoaderDelegate != null) {
+        if (!(fileLoaderDelegate == null || i4 == 0)) {
             fileLoaderDelegate.fileUploadProgressChanged(str, 0, (long) i4, z);
         }
         FileUploadOperation fileUploadOperation = new FileUploadOperation(this.currentAccount, str, z, i3, i2);

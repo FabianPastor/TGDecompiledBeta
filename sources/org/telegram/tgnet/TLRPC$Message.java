@@ -142,7 +142,7 @@ public abstract class TLRPC$Message extends TLObject {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:57:0x009d  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0122  */
     /* JADX WARNING: Removed duplicated region for block: B:93:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r8, int r9) {
@@ -205,7 +205,7 @@ public abstract class TLRPC$Message extends TLObject {
             if (r9 == r5) goto L_0x0061
         L_0x005d:
             boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x0119
+            if (r9 == 0) goto L_0x0118
         L_0x0061:
             r9 = 2
             if (r0 == 0) goto L_0x0097
@@ -235,57 +235,57 @@ public abstract class TLRPC$Message extends TLObject {
             r7.message = r0
         L_0x0097:
             int r0 = r8.remaining()
-            if (r0 <= 0) goto L_0x0119
+            if (r0 <= 0) goto L_0x0118
             java.lang.String r0 = r8.readString(r1)
             r7.attachPath = r0
-            if (r0 == 0) goto L_0x0119
+            if (r0 == 0) goto L_0x0118
             int r0 = r7.id
             if (r0 < 0) goto L_0x00b1
             int r0 = r7.send_state
             if (r0 == r5) goto L_0x00b1
             boolean r0 = r7.legacy
-            if (r0 == 0) goto L_0x0111
+            if (r0 == 0) goto L_0x0110
         L_0x00b1:
             java.lang.String r0 = r7.attachPath
             java.lang.String r3 = "||"
             boolean r0 = r0.startsWith(r3)
-            if (r0 == 0) goto L_0x0111
+            if (r0 == 0) goto L_0x0110
             java.lang.String r0 = r7.attachPath
             java.lang.String r3 = "\\|\\|"
             java.lang.String[] r0 = r0.split(r3)
             int r3 = r0.length
-            if (r3 <= 0) goto L_0x0119
+            if (r3 <= 0) goto L_0x0118
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r7.params
-            if (r3 != 0) goto L_0x00d2
+            if (r3 != 0) goto L_0x00d1
             java.util.HashMap r3 = new java.util.HashMap
             r3.<init>()
             r7.params = r3
-        L_0x00d2:
+        L_0x00d1:
             r3 = 1
-        L_0x00d3:
+        L_0x00d2:
             int r4 = r0.length
             int r4 = r4 - r2
-            if (r3 >= r4) goto L_0x00ee
+            if (r3 >= r4) goto L_0x00ed
             r4 = r0[r3]
             java.lang.String r5 = "\\|=\\|"
             java.lang.String[] r4 = r4.split(r5)
             int r5 = r4.length
-            if (r5 != r9) goto L_0x00eb
+            if (r5 != r9) goto L_0x00ea
             java.util.HashMap<java.lang.String, java.lang.String> r5 = r7.params
             r6 = r4[r1]
             r4 = r4[r2]
             r5.put(r6, r4)
-        L_0x00eb:
+        L_0x00ea:
             int r3 = r3 + 1
-            goto L_0x00d3
-        L_0x00ee:
+            goto L_0x00d2
+        L_0x00ed:
             int r9 = r0.length
             int r9 = r9 - r2
             r9 = r0[r9]
             java.lang.String r9 = r9.trim()
             r7.attachPath = r9
             boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x0119
+            if (r9 == 0) goto L_0x0118
             java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.params
             java.lang.String r0 = "legacy_layer"
             java.lang.Object r9 = r9.get(r0)
@@ -293,20 +293,20 @@ public abstract class TLRPC$Message extends TLObject {
             java.lang.Integer r9 = org.telegram.messenger.Utilities.parseInt(r9)
             int r9 = r9.intValue()
             r7.layer = r9
-            goto L_0x0119
-        L_0x0111:
+            goto L_0x0118
+        L_0x0110:
             java.lang.String r9 = r7.attachPath
             java.lang.String r9 = r9.trim()
             r7.attachPath = r9
-        L_0x0119:
+        L_0x0118:
             int r9 = r7.flags
             r9 = r9 & 4
-            if (r9 == 0) goto L_0x0129
+            if (r9 == 0) goto L_0x0128
             int r9 = r7.id
-            if (r9 >= 0) goto L_0x0129
+            if (r9 >= 0) goto L_0x0128
             int r8 = r8.readInt32(r1)
             r7.fwd_msg_id = r8
-        L_0x0129:
+        L_0x0128:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");
@@ -335,8 +335,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 111;
-            this.params.put("legacy_layer", "111");
+            this.layer = 112;
+            this.params.put("legacy_layer", "112");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

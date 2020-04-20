@@ -163,7 +163,7 @@ public class MP4Builder {
         return new FileTypeBox("isom", 512, linkedList);
     }
 
-    private class InterleaveChunkMdat implements Box {
+    private static class InterleaveChunkMdat implements Box {
         private long contentSize;
         private long dataOffset;
         private Container parent;

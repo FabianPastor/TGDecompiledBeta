@@ -86,11 +86,13 @@ public class ProgressButton extends Button {
     }
 
     public void setDrawProgress(boolean z, boolean z2) {
-        this.drawProgress = z;
-        if (!z2) {
-            this.progressAlpha = z ? 1.0f : 0.0f;
+        if (this.drawProgress != z) {
+            this.drawProgress = z;
+            if (!z2) {
+                this.progressAlpha = z ? 1.0f : 0.0f;
+            }
+            this.lastUpdateTime = System.currentTimeMillis();
+            invalidate();
         }
-        this.lastUpdateTime = System.currentTimeMillis();
-        invalidate();
     }
 }

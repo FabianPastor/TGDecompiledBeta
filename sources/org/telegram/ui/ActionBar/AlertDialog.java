@@ -137,7 +137,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public int topResId;
 
-    public ThemeDescription[] getThemeDescriptions() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
         return null;
     }
 

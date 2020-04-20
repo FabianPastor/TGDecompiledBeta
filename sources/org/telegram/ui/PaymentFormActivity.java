@@ -449,25 +449,32 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:445:0x0var_, code lost:
-        if (r9.email_requested == false) goto L_0x0var_;
+    /* JADX WARNING: Can't wrap try/catch for region: R(19:297|298|299|300|301|302|303|304|305|306|307|308|309|310|311|312|313|314|(2:315|316)) */
+    /* JADX WARNING: Code restructure failed: missing block: B:321:0x0ab0, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:77:0x0318, code lost:
-        if (r13.email_requested == false) goto L_0x0309;
+    /* JADX WARNING: Code restructure failed: missing block: B:322:0x0ab1, code lost:
+        org.telegram.messenger.FileLog.e((java.lang.Throwable) r0);
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:445:0x0f5b, code lost:
+        if (r9.email_requested == false) goto L_0x0f4c;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:77:0x0314, code lost:
+        if (r13.email_requested == false) goto L_0x0305;
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:302:0x0a8f */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:307:0x0a9a */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:312:0x0aa5 */
-    /* JADX WARNING: Removed duplicated region for block: B:481:0x12d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:488:0x138b  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x13b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:496:0x13df  */
-    /* JADX WARNING: Removed duplicated region for block: B:497:0x13e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:500:0x140c  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x1443  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:302:0x0a8a */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:307:0x0a95 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:312:0x0aa0 */
+    /* JADX WARNING: Removed duplicated region for block: B:481:0x12cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:488:0x1381  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x13a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:496:0x13d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:497:0x13d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:500:0x1402  */
+    /* JADX WARNING: Removed duplicated region for block: B:501:0x1439  */
     @android.annotation.SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r35) {
@@ -484,7 +491,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r8 = 1
             if (r0 != 0) goto L_0x001e
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626293(0x7f0e0935, float:1.8879818E38)
+            r9 = 2131626309(0x7f0e0945, float:1.887985E38)
             java.lang.String r10 = "PaymentShippingInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -492,7 +499,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x001e:
             if (r0 != r8) goto L_0x0030
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626294(0x7f0e0936, float:1.887982E38)
+            r9 = 2131626310(0x7f0e0946, float:1.8879853E38)
             java.lang.String r10 = "PaymentShippingMethod"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -500,7 +507,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0030:
             if (r0 != r7) goto L_0x0042
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            r9 = 2131626269(0x7f0e091d, float:1.887977E38)
             java.lang.String r10 = "PaymentCardInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -508,7 +515,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0042:
             if (r0 != r6) goto L_0x0054
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            r9 = 2131626269(0x7f0e091d, float:1.887977E38)
             java.lang.String r10 = "PaymentCardInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -524,7 +531,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9.<init>()
             java.lang.String r10 = "Test "
             r9.append(r10)
-            r10 = 2131626260(0x7f0e0914, float:1.8879751E38)
+            r10 = 2131626276(0x7f0e0924, float:1.8879784E38)
             java.lang.String r11 = "PaymentCheckout"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -533,7 +540,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             goto L_0x00d6
         L_0x007e:
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626260(0x7f0e0914, float:1.8879751E38)
+            r9 = 2131626276(0x7f0e0924, float:1.8879784E38)
             java.lang.String r10 = "PaymentCheckout"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -549,7 +556,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9.<init>()
             java.lang.String r10 = "Test "
             r9.append(r10)
-            r10 = 2131626286(0x7f0e092e, float:1.8879804E38)
+            r10 = 2131626302(0x7f0e093e, float:1.8879836E38)
             java.lang.String r11 = "PaymentReceipt"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -558,7 +565,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             goto L_0x00d6
         L_0x00b7:
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626286(0x7f0e092e, float:1.8879804E38)
+            r9 = 2131626302(0x7f0e093e, float:1.8879836E38)
             java.lang.String r10 = "PaymentReceipt"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -566,13 +573,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x00c6:
             if (r0 != r3) goto L_0x00d6
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626275(0x7f0e0923, float:1.8879782E38)
+            r9 = 2131626291(0x7f0e0933, float:1.8879814E38)
             java.lang.String r10 = "PaymentPassword"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
         L_0x00d6:
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131165438(0x7var_fe, float:1.7945093E38)
+            r9 = 2131165432(0x7var_f8, float:1.794508E38)
             r0.setBackButtonImage(r9)
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             r0.setAllowOverlayTitle(r8)
@@ -592,7 +599,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             if (r9 == r5) goto L_0x0104
             if (r9 != r3) goto L_0x013b
         L_0x0104:
-            r9 = 2131165468(0x7var_c, float:1.7945154E38)
+            r9 = 2131165462(0x7var_, float:1.7945142E38)
             r12 = 1113587712(0x42600000, float:56.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r8, r9, r12)
@@ -638,14 +645,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r16 = 0
             r17 = 0
             int r10 = r1.currentStep
-            if (r10 != r5) goto L_0x0179
+            if (r10 != r5) goto L_0x0178
             r10 = 1111490560(0x42400000, float:48.0)
             r18 = 1111490560(0x42400000, float:48.0)
-            goto L_0x017c
-        L_0x0179:
+            goto L_0x017b
+        L_0x0178:
             r10 = 0
             r18 = 0
-        L_0x017c:
+        L_0x017b:
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r9.addView(r0, r10)
             android.widget.LinearLayout r0 = new android.widget.LinearLayout
@@ -663,57 +670,57 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             java.lang.String r10 = "windowBackgroundGrayShadow"
             java.lang.String r22 = "windowBackgroundWhite"
             r12 = 0
-            if (r0 != 0) goto L_0x091e
+            if (r0 != 0) goto L_0x0919
             java.util.HashMap r9 = new java.util.HashMap
             r9.<init>()
             java.util.HashMap r4 = new java.util.HashMap
             r4.<init>()
-            java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x020f }
-            java.io.InputStreamReader r15 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x020f }
-            android.content.res.Resources r19 = r35.getResources()     // Catch:{ Exception -> 0x020f }
-            android.content.res.AssetManager r14 = r19.getAssets()     // Catch:{ Exception -> 0x020f }
+            java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x020b }
+            java.io.InputStreamReader r15 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x020b }
+            android.content.res.Resources r19 = r35.getResources()     // Catch:{ Exception -> 0x020b }
+            android.content.res.AssetManager r14 = r19.getAssets()     // Catch:{ Exception -> 0x020b }
             java.lang.String r3 = "countries.txt"
-            java.io.InputStream r3 = r14.open(r3)     // Catch:{ Exception -> 0x020f }
-            r15.<init>(r3)     // Catch:{ Exception -> 0x020f }
-            r0.<init>(r15)     // Catch:{ Exception -> 0x020f }
-        L_0x01ca:
-            java.lang.String r3 = r0.readLine()     // Catch:{ Exception -> 0x020f }
-            if (r3 == 0) goto L_0x020b
+            java.io.InputStream r3 = r14.open(r3)     // Catch:{ Exception -> 0x020b }
+            r15.<init>(r3)     // Catch:{ Exception -> 0x020b }
+            r0.<init>(r15)     // Catch:{ Exception -> 0x020b }
+        L_0x01c6:
+            java.lang.String r3 = r0.readLine()     // Catch:{ Exception -> 0x020b }
+            if (r3 == 0) goto L_0x0207
             java.lang.String r14 = ";"
-            java.lang.String[] r3 = r3.split(r14)     // Catch:{ Exception -> 0x020f }
-            java.util.ArrayList<java.lang.String> r14 = r1.countriesArray     // Catch:{ Exception -> 0x020f }
-            r15 = r3[r7]     // Catch:{ Exception -> 0x020f }
-            r14.add(r12, r15)     // Catch:{ Exception -> 0x020f }
-            java.util.HashMap<java.lang.String, java.lang.String> r14 = r1.countriesMap     // Catch:{ Exception -> 0x020f }
-            r15 = r3[r7]     // Catch:{ Exception -> 0x020f }
-            r11 = r3[r12]     // Catch:{ Exception -> 0x020f }
-            r14.put(r15, r11)     // Catch:{ Exception -> 0x020f }
-            java.util.HashMap<java.lang.String, java.lang.String> r11 = r1.codesMap     // Catch:{ Exception -> 0x020f }
-            r14 = r3[r12]     // Catch:{ Exception -> 0x020f }
-            r15 = r3[r7]     // Catch:{ Exception -> 0x020f }
-            r11.put(r14, r15)     // Catch:{ Exception -> 0x020f }
-            r11 = r3[r8]     // Catch:{ Exception -> 0x020f }
-            r14 = r3[r7]     // Catch:{ Exception -> 0x020f }
-            r4.put(r11, r14)     // Catch:{ Exception -> 0x020f }
-            int r11 = r3.length     // Catch:{ Exception -> 0x020f }
-            if (r11 <= r6) goto L_0x0202
-            java.util.HashMap<java.lang.String, java.lang.String> r11 = r1.phoneFormatMap     // Catch:{ Exception -> 0x020f }
-            r14 = r3[r12]     // Catch:{ Exception -> 0x020f }
-            r15 = r3[r6]     // Catch:{ Exception -> 0x020f }
-            r11.put(r14, r15)     // Catch:{ Exception -> 0x020f }
-        L_0x0202:
-            r11 = r3[r8]     // Catch:{ Exception -> 0x020f }
-            r3 = r3[r7]     // Catch:{ Exception -> 0x020f }
-            r9.put(r11, r3)     // Catch:{ Exception -> 0x020f }
+            java.lang.String[] r3 = r3.split(r14)     // Catch:{ Exception -> 0x020b }
+            java.util.ArrayList<java.lang.String> r14 = r1.countriesArray     // Catch:{ Exception -> 0x020b }
+            r15 = r3[r7]     // Catch:{ Exception -> 0x020b }
+            r14.add(r12, r15)     // Catch:{ Exception -> 0x020b }
+            java.util.HashMap<java.lang.String, java.lang.String> r14 = r1.countriesMap     // Catch:{ Exception -> 0x020b }
+            r15 = r3[r7]     // Catch:{ Exception -> 0x020b }
+            r11 = r3[r12]     // Catch:{ Exception -> 0x020b }
+            r14.put(r15, r11)     // Catch:{ Exception -> 0x020b }
+            java.util.HashMap<java.lang.String, java.lang.String> r11 = r1.codesMap     // Catch:{ Exception -> 0x020b }
+            r14 = r3[r12]     // Catch:{ Exception -> 0x020b }
+            r15 = r3[r7]     // Catch:{ Exception -> 0x020b }
+            r11.put(r14, r15)     // Catch:{ Exception -> 0x020b }
+            r11 = r3[r8]     // Catch:{ Exception -> 0x020b }
+            r14 = r3[r7]     // Catch:{ Exception -> 0x020b }
+            r4.put(r11, r14)     // Catch:{ Exception -> 0x020b }
+            int r11 = r3.length     // Catch:{ Exception -> 0x020b }
+            if (r11 <= r6) goto L_0x01fe
+            java.util.HashMap<java.lang.String, java.lang.String> r11 = r1.phoneFormatMap     // Catch:{ Exception -> 0x020b }
+            r14 = r3[r12]     // Catch:{ Exception -> 0x020b }
+            r15 = r3[r6]     // Catch:{ Exception -> 0x020b }
+            r11.put(r14, r15)     // Catch:{ Exception -> 0x020b }
+        L_0x01fe:
+            r11 = r3[r8]     // Catch:{ Exception -> 0x020b }
+            r3 = r3[r7]     // Catch:{ Exception -> 0x020b }
+            r9.put(r11, r3)     // Catch:{ Exception -> 0x020b }
             r11 = -1
-            goto L_0x01ca
+            goto L_0x01c6
+        L_0x0207:
+            r0.close()     // Catch:{ Exception -> 0x020b }
+            goto L_0x020f
         L_0x020b:
-            r0.close()     // Catch:{ Exception -> 0x020f }
-            goto L_0x0213
-        L_0x020f:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0213:
+        L_0x020f:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
             org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r3 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
             java.util.Collections.sort(r0, r3)
@@ -721,11 +728,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r0]
             r1.inputFields = r0
             r0 = 0
-        L_0x0221:
+        L_0x021d:
             r3 = 10
             r11 = 9
-            if (r0 >= r3) goto L_0x075d
-            if (r0 != 0) goto L_0x025f
+            if (r0 >= r3) goto L_0x0758
+            if (r0 != 0) goto L_0x025b
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r14 = new org.telegram.ui.Cells.HeaderCell
             r14.<init>(r2)
@@ -736,7 +743,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r14)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r14 = 2131626287(0x7f0e092f, float:1.8879806E38)
+            r14 = 2131626303(0x7f0e093f, float:1.8879838E38)
             java.lang.String r15 = "PaymentShippingAddress"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r3.setText(r14)
@@ -748,11 +755,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.addView(r14, r7)
             r3 = 8
             r14 = -1
-            goto L_0x02af
-        L_0x025f:
+            goto L_0x02ab
+        L_0x025b:
             r3 = 6
             r15 = -1
-            if (r0 != r3) goto L_0x02ac
+            if (r0 != r3) goto L_0x02a8
             org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
             org.telegram.ui.Cells.ShadowSectionCell r7 = new org.telegram.ui.Cells.ShadowSectionCell
             r7.<init>(r2)
@@ -772,7 +779,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r7)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r7 = 2131626297(0x7f0e0939, float:1.8879826E38)
+            r7 = 2131626313(0x7f0e0949, float:1.8879859E38)
             java.lang.String r14 = "PaymentShippingReceiver"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r7)
             r3.setText(r7)
@@ -782,13 +789,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r14 = -1
             android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r14, r13)
             r3.addView(r7, r15)
-            goto L_0x02ad
-        L_0x02ac:
+            goto L_0x02a9
+        L_0x02a8:
             r14 = -1
-        L_0x02ad:
+        L_0x02a9:
             r3 = 8
-        L_0x02af:
-            if (r0 != r3) goto L_0x02cd
+        L_0x02ab:
+            if (r0 != r3) goto L_0x02c9
             android.widget.LinearLayout r3 = new android.widget.LinearLayout
             r3.<init>(r2)
             r3.setOrientation(r12)
@@ -798,16 +805,16 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r7.addView(r3, r13)
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r3.setBackgroundColor(r7)
-            goto L_0x0339
-        L_0x02cd:
-            if (r0 != r11) goto L_0x02dc
+            goto L_0x0335
+        L_0x02c9:
+            if (r0 != r11) goto L_0x02d8
             org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
             r7 = 8
             r3 = r3[r7]
             android.view.ViewParent r3 = r3.getParent()
             android.view.ViewGroup r3 = (android.view.ViewGroup) r3
-            goto L_0x0339
-        L_0x02dc:
+            goto L_0x0335
+        L_0x02d8:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r2)
             android.widget.LinearLayout r7 = r1.linearLayout2
@@ -818,35 +825,35 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r3.setBackgroundColor(r7)
             r7 = 5
-            if (r0 == r7) goto L_0x02fb
-            if (r0 == r11) goto L_0x02fb
+            if (r0 == r7) goto L_0x02f7
+            if (r0 == r11) goto L_0x02f7
             r7 = 1
-            goto L_0x02fc
-        L_0x02fb:
+            goto L_0x02f8
+        L_0x02f7:
             r7 = 0
-        L_0x02fc:
-            if (r7 == 0) goto L_0x031b
+        L_0x02f8:
+            if (r7 == 0) goto L_0x0317
             r13 = 7
-            if (r0 != r13) goto L_0x030b
+            if (r0 != r13) goto L_0x0307
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r13 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r13 = r13.invoice
             boolean r13 = r13.phone_requested
-            if (r13 != 0) goto L_0x030b
-        L_0x0309:
+            if (r13 != 0) goto L_0x0307
+        L_0x0305:
             r7 = 0
-            goto L_0x031b
-        L_0x030b:
+            goto L_0x0317
+        L_0x0307:
             r13 = 6
-            if (r0 != r13) goto L_0x031b
+            if (r0 != r13) goto L_0x0317
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r13 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r13 = r13.invoice
             boolean r14 = r13.phone_requested
-            if (r14 != 0) goto L_0x031b
+            if (r14 != 0) goto L_0x0317
             boolean r13 = r13.email_requested
-            if (r13 != 0) goto L_0x031b
-            goto L_0x0309
-        L_0x031b:
-            if (r7 == 0) goto L_0x0339
+            if (r13 != 0) goto L_0x0317
+            goto L_0x0305
+        L_0x0317:
+            if (r7 == 0) goto L_0x0335
             org.telegram.ui.PaymentFormActivity$2 r7 = new org.telegram.ui.PaymentFormActivity$2
             r7.<init>(r1, r2)
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r22)
@@ -858,19 +865,19 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r15 = -1
             r13.<init>(r15, r8, r14)
             r3.addView(r7, r13)
-        L_0x0339:
-            if (r0 != r11) goto L_0x0345
+        L_0x0335:
+            if (r0 != r11) goto L_0x0341
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             org.telegram.ui.Components.HintEditText r13 = new org.telegram.ui.Components.HintEditText
             r13.<init>(r2)
             r7[r0] = r13
-            goto L_0x034e
-        L_0x0345:
+            goto L_0x034a
+        L_0x0341:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             org.telegram.ui.Components.EditTextBoldCursor r13 = new org.telegram.ui.Components.EditTextBoldCursor
             r13.<init>(r2)
             r7[r0] = r13
-        L_0x034e:
+        L_0x034a:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             java.lang.Integer r13 = java.lang.Integer.valueOf(r0)
@@ -906,7 +913,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = 1069547520(0x3fCLASSNAME, float:1.5)
             r7.setCursorWidth(r13)
             r7 = 4
-            if (r0 != r7) goto L_0x03ba
+            if (r0 != r7) goto L_0x03b5
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.-$$Lambda$PaymentFormActivity$uDw-faglZkNLuTGLVBNZMQdnOLU r13 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$uDw-faglZkNLuTGLVBNZMQdnOLU
@@ -915,107 +922,107 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setInputType(r12)
-        L_0x03ba:
-            if (r0 == r11) goto L_0x03d6
+        L_0x03b5:
+            if (r0 == r11) goto L_0x03d1
             r7 = 8
-            if (r0 != r7) goto L_0x03c1
-            goto L_0x03d6
-        L_0x03c1:
+            if (r0 != r7) goto L_0x03bc
+            goto L_0x03d1
+        L_0x03bc:
             r7 = 7
-            if (r0 != r7) goto L_0x03cc
+            if (r0 != r7) goto L_0x03c7
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setInputType(r8)
-            goto L_0x03dd
-        L_0x03cc:
+            goto L_0x03d8
+        L_0x03c7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r13 = 16385(0x4001, float:2.296E-41)
             r7.setInputType(r13)
-            goto L_0x03dd
-        L_0x03d6:
+            goto L_0x03d8
+        L_0x03d1:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setInputType(r6)
-        L_0x03dd:
+        L_0x03d8:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r13 = 268435461(0x10000005, float:2.5243564E-29)
             r7.setImeOptions(r13)
             switch(r0) {
-                case 0: goto L_0x04fc;
-                case 1: goto L_0x04d8;
-                case 2: goto L_0x04b4;
-                case 3: goto L_0x0490;
-                case 4: goto L_0x0457;
-                case 5: goto L_0x0432;
-                case 6: goto L_0x040f;
-                case 7: goto L_0x03ec;
-                default: goto L_0x03ea;
+                case 0: goto L_0x04f7;
+                case 1: goto L_0x04d3;
+                case 2: goto L_0x04af;
+                case 3: goto L_0x048b;
+                case 4: goto L_0x0452;
+                case 5: goto L_0x042d;
+                case 6: goto L_0x040a;
+                case 7: goto L_0x03e7;
+                default: goto L_0x03e5;
             }
-        L_0x03ea:
-            goto L_0x051f
-        L_0x03ec:
+        L_0x03e5:
+            goto L_0x051a
+        L_0x03e7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626292(0x7f0e0934, float:1.8879816E38)
+            r13 = 2131626308(0x7f0e0944, float:1.8879849E38)
             java.lang.String r14 = "PaymentShippingEmailPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             java.lang.String r7 = r7.email
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             r13.setText(r7)
-            goto L_0x051f
-        L_0x040f:
+            goto L_0x051a
+        L_0x040a:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626295(0x7f0e0937, float:1.8879822E38)
+            r13 = 2131626311(0x7f0e0947, float:1.8879855E38)
             java.lang.String r14 = "PaymentShippingName"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             java.lang.String r7 = r7.name
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             r13.setText(r7)
-            goto L_0x051f
-        L_0x0432:
+            goto L_0x051a
+        L_0x042d:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626301(0x7f0e093d, float:1.8879834E38)
+            r13 = 2131626317(0x7f0e094d, float:1.8879867E38)
             java.lang.String r14 = "PaymentShippingZipPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             java.lang.String r7 = r7.post_code
             r13.setText(r7)
-            goto L_0x051f
-        L_0x0457:
+            goto L_0x051a
+        L_0x0452:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626291(0x7f0e0933, float:1.8879814E38)
+            r13 = 2131626307(0x7f0e0943, float:1.8879846E38)
             java.lang.String r14 = "PaymentShippingCountry"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             java.lang.String r7 = r7.country_iso2
             java.lang.Object r7 = r4.get(r7)
             java.lang.String r7 = (java.lang.String) r7
@@ -1026,88 +1033,88 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r1.countryName = r13
             org.telegram.ui.Components.EditTextBoldCursor[] r14 = r1.inputFields
             r14 = r14[r0]
-            if (r7 == 0) goto L_0x048a
-            goto L_0x048b
-        L_0x048a:
+            if (r7 == 0) goto L_0x0485
+            goto L_0x0486
+        L_0x0485:
             r7 = r13
-        L_0x048b:
+        L_0x0486:
             r14.setText(r7)
-            goto L_0x051f
-        L_0x0490:
+            goto L_0x051a
+        L_0x048b:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626300(0x7f0e093c, float:1.8879832E38)
+            r13 = 2131626316(0x7f0e094c, float:1.8879865E38)
             java.lang.String r14 = "PaymentShippingStatePlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             java.lang.String r7 = r7.state
             r13.setText(r7)
-            goto L_0x051f
-        L_0x04b4:
+            goto L_0x051a
+        L_0x04af:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626290(0x7f0e0932, float:1.8879812E38)
+            r13 = 2131626306(0x7f0e0942, float:1.8879844E38)
             java.lang.String r14 = "PaymentShippingCityPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             java.lang.String r7 = r7.city
             r13.setText(r7)
-            goto L_0x051f
-        L_0x04d8:
+            goto L_0x051a
+        L_0x04d3:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626289(0x7f0e0931, float:1.887981E38)
+            r13 = 2131626305(0x7f0e0941, float:1.8879842E38)
             java.lang.String r14 = "PaymentShippingAddress2Placeholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             java.lang.String r7 = r7.street_line2
             r13.setText(r7)
-            goto L_0x051f
-        L_0x04fc:
+            goto L_0x051a
+        L_0x04f7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626288(0x7f0e0930, float:1.8879808E38)
+            r13 = 2131626304(0x7f0e0940, float:1.887984E38)
             java.lang.String r14 = "PaymentShippingAddress1Placeholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x051f
+            if (r7 == 0) goto L_0x051a
             org.telegram.ui.Components.EditTextBoldCursor[] r13 = r1.inputFields
             r13 = r13[r0]
             java.lang.String r7 = r7.street_line1
             r13.setText(r7)
-        L_0x051f:
+        L_0x051a:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r13 = r7[r0]
             r7 = r7[r0]
             int r7 = r7.length()
             r13.setSelection(r7)
             r7 = 8
-            if (r0 != r7) goto L_0x05a6
+            if (r0 != r7) goto L_0x05a1
             android.widget.TextView r7 = new android.widget.TextView
             r7.<init>(r2)
             r1.textView = r7
@@ -1157,9 +1164,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.PaymentFormActivity$3 r7 = new org.telegram.ui.PaymentFormActivity$3
             r7.<init>()
             r3.addTextChangedListener(r7)
-            goto L_0x0610
-        L_0x05a6:
-            if (r0 != r11) goto L_0x05dc
+            goto L_0x060b
+        L_0x05a1:
+            if (r0 != r11) goto L_0x05d7
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setPadding(r12, r12, r12, r12)
@@ -1182,8 +1189,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.PaymentFormActivity$4 r7 = new org.telegram.ui.PaymentFormActivity$4
             r7.<init>()
             r3.addTextChangedListener(r7)
-            goto L_0x0610
-        L_0x05dc:
+            goto L_0x060b
+        L_0x05d7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r13 = 1086324736(0x40CLASSNAME, float:6.0)
@@ -1192,12 +1199,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             boolean r13 = org.telegram.messenger.LocaleController.isRTL
-            if (r13 == 0) goto L_0x05f3
+            if (r13 == 0) goto L_0x05ee
             r13 = 5
-            goto L_0x05f4
-        L_0x05f3:
+            goto L_0x05ef
+        L_0x05ee:
             r13 = 3
-        L_0x05f4:
+        L_0x05ef:
             r7.setGravity(r13)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
@@ -1210,21 +1217,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r33 = 1086324736(0x40CLASSNAME, float:6.0)
             android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
             r3.addView(r7, r13)
-        L_0x0610:
+        L_0x060b:
             org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
             r3 = r3[r0]
             org.telegram.ui.-$$Lambda$PaymentFormActivity$waFpzGxIzLdyjPlQN2X3YYqAdDY r7 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$waFpzGxIzLdyjPlQN2X3YYqAdDY
             r7.<init>()
             r3.setOnEditorActionListener(r7)
-            if (r0 != r11) goto L_0x0757
+            if (r0 != r11) goto L_0x0752
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r3 = r3.invoice
             boolean r7 = r3.email_to_provider
-            if (r7 != 0) goto L_0x0645
+            if (r7 != 0) goto L_0x0640
             boolean r3 = r3.phone_to_provider
-            if (r3 == 0) goto L_0x062b
-            goto L_0x0645
-        L_0x062b:
+            if (r3 == 0) goto L_0x0626
+            goto L_0x0640
+        L_0x0626:
             org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
             org.telegram.ui.Cells.ShadowSectionCell r7 = new org.telegram.ui.Cells.ShadowSectionCell
             r7.<init>(r2)
@@ -1236,15 +1243,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
             r3.addView(r7, r14)
-            goto L_0x06ec
-        L_0x0645:
+            goto L_0x06e7
+        L_0x0640:
             r3 = 0
             r7 = 0
-        L_0x0647:
+        L_0x0642:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r1.paymentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r11 = r11.users
             int r11 = r11.size()
-            if (r7 >= r11) goto L_0x0667
+            if (r7 >= r11) goto L_0x0662
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r1.paymentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r11 = r11.users
             java.lang.Object r11 = r11.get(r7)
@@ -1252,27 +1259,27 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r13 = r11.id
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r14 = r1.paymentForm
             int r14 = r14.provider_id
-            if (r13 != r14) goto L_0x0664
+            if (r13 != r14) goto L_0x065f
             r3 = r11
-        L_0x0664:
+        L_0x065f:
             int r7 = r7 + 1
-            goto L_0x0647
-        L_0x0667:
-            if (r3 == 0) goto L_0x0672
+            goto L_0x0642
+        L_0x0662:
+            if (r3 == 0) goto L_0x066d
             java.lang.String r7 = r3.first_name
             java.lang.String r3 = r3.last_name
             java.lang.String r3 = org.telegram.messenger.ContactsController.formatName(r7, r3)
-            goto L_0x0674
-        L_0x0672:
+            goto L_0x066f
+        L_0x066d:
             java.lang.String r3 = ""
-        L_0x0674:
+        L_0x066f:
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             org.telegram.ui.Cells.TextInfoPrivacyCell r11 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r11.<init>(r2)
             r7[r8] = r11
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r11 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r11, (java.lang.String) r10)
             r7.setBackgroundDrawable(r13)
             android.widget.LinearLayout r7 = r1.linearLayout2
@@ -1285,49 +1292,49 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
             boolean r11 = r7.email_to_provider
-            if (r11 == 0) goto L_0x06bb
+            if (r11 == 0) goto L_0x06b6
             boolean r7 = r7.phone_to_provider
-            if (r7 == 0) goto L_0x06bb
+            if (r7 == 0) goto L_0x06b6
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626283(0x7f0e092b, float:1.8879798E38)
+            r11 = 2131626299(0x7f0e093b, float:1.887983E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentPhoneEmailToProvider"
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r11, r13)
             r7.setText(r3)
-            goto L_0x06ec
-        L_0x06bb:
+            goto L_0x06e7
+        L_0x06b6:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
             boolean r7 = r7.email_to_provider
-            if (r7 == 0) goto L_0x06d8
+            if (r7 == 0) goto L_0x06d3
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626271(0x7f0e091f, float:1.8879773E38)
+            r11 = 2131626287(0x7f0e092f, float:1.8879806E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentEmailToProvider"
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r11, r13)
             r7.setText(r3)
-            goto L_0x06ec
-        L_0x06d8:
+            goto L_0x06e7
+        L_0x06d3:
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626284(0x7f0e092c, float:1.88798E38)
+            r11 = 2131626300(0x7f0e093c, float:1.8879832E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentPhoneToProvider"
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r11, r13)
             r7.setText(r3)
-        L_0x06ec:
+        L_0x06e7:
             org.telegram.ui.Cells.TextCheckCell r3 = new org.telegram.ui.Cells.TextCheckCell
             r3.<init>(r2)
             r1.checkCell1 = r3
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r3.setBackgroundDrawable(r7)
             org.telegram.ui.Cells.TextCheckCell r3 = r1.checkCell1
-            r7 = 2131626298(0x7f0e093a, float:1.8879828E38)
+            r7 = 2131626314(0x7f0e094a, float:1.887986E38)
             java.lang.String r11 = "PaymentShippingSave"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             boolean r11 = r1.saveShippingInfo
@@ -1348,12 +1355,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3[r12] = r7
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r7 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r7 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r3.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r7 = 2131626299(0x7f0e093b, float:1.887983E38)
+            r7 = 2131626315(0x7f0e094b, float:1.8879863E38)
             java.lang.String r11 = "PaymentShippingSaveInfo"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r3.setText(r7)
@@ -1364,16 +1371,16 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
             r3.addView(r7, r14)
-        L_0x0757:
+        L_0x0752:
             int r0 = r0 + 1
             r7 = 2
             r13 = -2
-            goto L_0x0221
-        L_0x075d:
+            goto L_0x021d
+        L_0x0758:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.name_requested
-            if (r0 != 0) goto L_0x0776
+            if (r0 != 0) goto L_0x0771
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r2 = 6
             r0 = r0[r2]
@@ -1381,128 +1388,128 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
             r2 = 8
             r0.setVisibility(r2)
-            goto L_0x0778
-        L_0x0776:
+            goto L_0x0773
+        L_0x0771:
             r2 = 8
-        L_0x0778:
+        L_0x0773:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.phone_requested
-            if (r0 != 0) goto L_0x078d
+            if (r0 != 0) goto L_0x0788
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r0 = r0[r2]
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
             r0.setVisibility(r2)
-        L_0x078d:
+        L_0x0788:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.email_requested
-            if (r0 != 0) goto L_0x07a3
+            if (r0 != 0) goto L_0x079e
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r3 = 7
             r0 = r0[r3]
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
             r0.setVisibility(r2)
-        L_0x07a3:
+        L_0x079e:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r2 = r0.phone_requested
-            if (r2 == 0) goto L_0x07b6
+            if (r2 == 0) goto L_0x07b1
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r0 = r0[r11]
             r2 = 268435462(0x10000006, float:2.5243567E-29)
             r0.setImeOptions(r2)
-            goto L_0x07db
-        L_0x07b6:
+            goto L_0x07d6
+        L_0x07b1:
             r2 = 268435462(0x10000006, float:2.5243567E-29)
             boolean r3 = r0.email_requested
-            if (r3 == 0) goto L_0x07c6
+            if (r3 == 0) goto L_0x07c1
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r3 = 7
             r0 = r0[r3]
             r0.setImeOptions(r2)
-            goto L_0x07db
-        L_0x07c6:
+            goto L_0x07d6
+        L_0x07c1:
             boolean r0 = r0.name_requested
-            if (r0 == 0) goto L_0x07d3
+            if (r0 == 0) goto L_0x07ce
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r3 = 6
             r0 = r0[r3]
             r0.setImeOptions(r2)
-            goto L_0x07db
-        L_0x07d3:
+            goto L_0x07d6
+        L_0x07ce:
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r3 = 5
             r0 = r0[r3]
             r0.setImeOptions(r2)
-        L_0x07db:
+        L_0x07d6:
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
             r2 = r0[r8]
-            if (r2 == 0) goto L_0x07fc
+            if (r2 == 0) goto L_0x07f7
             r0 = r0[r8]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
             boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x07f7
+            if (r3 != 0) goto L_0x07f2
             boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x07f7
+            if (r3 != 0) goto L_0x07f2
             boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x07f4
-            goto L_0x07f7
-        L_0x07f4:
+            if (r2 == 0) goto L_0x07ef
+            goto L_0x07f2
+        L_0x07ef:
             r2 = 8
-            goto L_0x07f8
-        L_0x07f7:
+            goto L_0x07f3
+        L_0x07f2:
             r2 = 0
-        L_0x07f8:
+        L_0x07f3:
             r0.setVisibility(r2)
-            goto L_0x081c
-        L_0x07fc:
+            goto L_0x0817
+        L_0x07f7:
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
             r2 = r0[r8]
-            if (r2 == 0) goto L_0x081c
+            if (r2 == 0) goto L_0x0817
             r0 = r0[r8]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
             boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x0818
+            if (r3 != 0) goto L_0x0813
             boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x0818
+            if (r3 != 0) goto L_0x0813
             boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x0815
-            goto L_0x0818
-        L_0x0815:
+            if (r2 == 0) goto L_0x0810
+            goto L_0x0813
+        L_0x0810:
             r2 = 8
-            goto L_0x0819
-        L_0x0818:
+            goto L_0x0814
+        L_0x0813:
             r2 = 0
-        L_0x0819:
+        L_0x0814:
             r0.setVisibility(r2)
-        L_0x081c:
+        L_0x0817:
             org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
             r0 = r0[r8]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
             boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x0834
+            if (r3 != 0) goto L_0x082f
             boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x0834
+            if (r3 != 0) goto L_0x082f
             boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x0831
-            goto L_0x0834
-        L_0x0831:
+            if (r2 == 0) goto L_0x082c
+            goto L_0x082f
+        L_0x082c:
             r2 = 8
-            goto L_0x0835
-        L_0x0834:
+            goto L_0x0830
+        L_0x082f:
             r2 = 0
-        L_0x0835:
+        L_0x0830:
             r0.setVisibility(r2)
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.shipping_address_requested
-            if (r0 != 0) goto L_0x08a1
+            if (r0 != 0) goto L_0x089c
             org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
             r0 = r0[r12]
             r2 = 8
@@ -1543,60 +1550,60 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
             r0.setVisibility(r2)
-        L_0x08a1:
+        L_0x089c:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
-            if (r0 == 0) goto L_0x08b9
+            if (r0 == 0) goto L_0x08b4
             java.lang.String r0 = r0.phone
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x08b9
+            if (r0 != 0) goto L_0x08b4
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
             java.lang.String r0 = r0.phone
             r1.fillNumber(r0)
-            goto L_0x08bd
-        L_0x08b9:
+            goto L_0x08b8
+        L_0x08b4:
             r2 = 0
             r1.fillNumber(r2)
-        L_0x08bd:
+        L_0x08b8:
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r2 = 8
             r0 = r0[r2]
             int r0 = r0.length()
-            if (r0 != 0) goto L_0x187f
+            if (r0 != 0) goto L_0x1874
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r2 = r0.invoice
             boolean r2 = r2.phone_requested
-            if (r2 == 0) goto L_0x187f
+            if (r2 == 0) goto L_0x1874
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
-            if (r0 == 0) goto L_0x08dd
+            if (r0 == 0) goto L_0x08d8
             java.lang.String r0 = r0.phone
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x187f
-        L_0x08dd:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x08f3 }
+            if (r0 == 0) goto L_0x1874
+        L_0x08d8:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x08ee }
             java.lang.String r2 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r2)     // Catch:{ Exception -> 0x08f3 }
-            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x08f3 }
-            if (r0 == 0) goto L_0x08f7
-            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x08f3 }
-            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x08f3 }
+            java.lang.Object r0 = r0.getSystemService(r2)     // Catch:{ Exception -> 0x08ee }
+            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x08ee }
+            if (r0 == 0) goto L_0x08f2
+            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x08ee }
+            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x08ee }
             r5 = r0
-            goto L_0x08f8
-        L_0x08f3:
+            goto L_0x08f3
+        L_0x08ee:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x08f7:
+        L_0x08f2:
             r5 = 0
-        L_0x08f8:
-            if (r5 == 0) goto L_0x187f
+        L_0x08f3:
+            if (r5 == 0) goto L_0x1874
             java.lang.Object r0 = r9.get(r5)
             java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x187f
+            if (r0 == 0) goto L_0x1874
             java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
             int r2 = r2.indexOf(r0)
             r3 = -1
-            if (r2 == r3) goto L_0x187f
+            if (r2 == r3) goto L_0x1874
             org.telegram.ui.Components.EditTextBoldCursor[] r2 = r1.inputFields
             r3 = 8
             r2 = r2[r3]
@@ -1604,46 +1611,46 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             java.lang.Object r0 = r3.get(r0)
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             r2.setText(r0)
-            goto L_0x187f
-        L_0x091e:
+            goto L_0x1874
+        L_0x0919:
             r3 = 2
-            if (r0 != r3) goto L_0x0e46
+            if (r0 != r3) goto L_0x0e40
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
-            if (r0 == 0) goto L_0x0955
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0951 }
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x0951 }
-            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x0951 }
-            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x0951 }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x0951 }
+            if (r0 == 0) goto L_0x0950
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x094c }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x094c }
+            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x094c }
+            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x094c }
+            r0.<init>(r3)     // Catch:{ Exception -> 0x094c }
             java.lang.String r3 = "android_pay_public_key"
-            java.lang.String r3 = r0.getString(r3)     // Catch:{ Exception -> 0x0941 }
-            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0941 }
-            if (r4 != 0) goto L_0x0944
-            r1.androidPayPublicKey = r3     // Catch:{ Exception -> 0x0941 }
-            goto L_0x0944
-        L_0x0941:
+            java.lang.String r3 = r0.getString(r3)     // Catch:{ Exception -> 0x093c }
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x093c }
+            if (r4 != 0) goto L_0x093f
+            r1.androidPayPublicKey = r3     // Catch:{ Exception -> 0x093c }
+            goto L_0x093f
+        L_0x093c:
             r3 = 0
-            r1.androidPayPublicKey = r3     // Catch:{ Exception -> 0x0951 }
-        L_0x0944:
+            r1.androidPayPublicKey = r3     // Catch:{ Exception -> 0x094c }
+        L_0x093f:
             java.lang.String r3 = "android_pay_bgcolor"
-            r0.getInt(r3)     // Catch:{ Exception -> 0x0949 }
-        L_0x0949:
+            r0.getInt(r3)     // Catch:{ Exception -> 0x0944 }
+        L_0x0944:
             java.lang.String r3 = "android_pay_inverse"
-            r0.getBoolean(r3)     // Catch:{ Exception -> 0x094f }
-            goto L_0x0955
-        L_0x094f:
-            goto L_0x0955
-        L_0x0951:
+            r0.getBoolean(r3)     // Catch:{ Exception -> 0x094a }
+            goto L_0x0950
+        L_0x094a:
+            goto L_0x0950
+        L_0x094c:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0955:
+        L_0x0950:
             boolean r0 = r1.isWebView
-            if (r0 == 0) goto L_0x0a75
+            if (r0 == 0) goto L_0x0a70
             java.lang.String r0 = r1.androidPayPublicKey
-            if (r0 == 0) goto L_0x0960
+            if (r0 == 0) goto L_0x095b
             r34.initAndroidPay(r35)
-        L_0x0960:
+        L_0x095b:
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r2)
             r1.androidPayContainer = r0
@@ -1681,24 +1688,24 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setDomStorageEnabled(r8)
             int r0 = android.os.Build.VERSION.SDK_INT
             r3 = 21
-            if (r0 < r3) goto L_0x09d2
+            if (r0 < r3) goto L_0x09cd
             android.webkit.WebView r0 = r1.webView
             android.webkit.WebSettings r0 = r0.getSettings()
             r0.setMixedContentMode(r12)
             android.webkit.CookieManager r0 = android.webkit.CookieManager.getInstance()
             android.webkit.WebView r3 = r1.webView
             r0.setAcceptThirdPartyCookies(r3, r8)
-        L_0x09d2:
+        L_0x09cd:
             int r0 = android.os.Build.VERSION.SDK_INT
             r3 = 17
-            if (r0 < r3) goto L_0x09e5
+            if (r0 < r3) goto L_0x09e0
             android.webkit.WebView r0 = r1.webView
             org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy r3 = new org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy
             r4 = 0
             r3.<init>()
             java.lang.String r4 = "TelegramWebviewProxy"
             r0.addJavascriptInterface(r3, r4)
-        L_0x09e5:
+        L_0x09e0:
             android.webkit.WebView r0 = r1.webView
             org.telegram.ui.PaymentFormActivity$6 r3 = new org.telegram.ui.PaymentFormActivity$6
             r3.<init>()
@@ -1726,7 +1733,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r0.setBackgroundDrawable(r3)
             org.telegram.ui.Cells.TextCheckCell r0 = r1.checkCell1
-            r3 = 2131626256(0x7f0e0910, float:1.8879743E38)
+            r3 = 2131626272(0x7f0e0920, float:1.8879776E38)
             java.lang.String r4 = "PaymentCardSavePaymentInformation"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             boolean r4 = r1.saveCardInfo
@@ -1747,7 +1754,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0[r12] = r3
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
             r0 = r0[r12]
-            r3 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r3 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             r34.updateSavePaymentField()
@@ -1758,57 +1765,57 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = -1
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
             r0.addView(r2, r3)
-            goto L_0x187f
-        L_0x0a75:
+            goto L_0x1874
+        L_0x0a70:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
-            if (r0 == 0) goto L_0x0ab9
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0ab5 }
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x0ab5 }
-            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x0ab5 }
-            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x0ab5 }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x0ab5 }
+            if (r0 == 0) goto L_0x0ab4
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0ab0 }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x0ab0 }
+            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x0ab0 }
+            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x0ab0 }
+            r0.<init>(r3)     // Catch:{ Exception -> 0x0ab0 }
             java.lang.String r3 = "need_country"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a8f }
-            r1.need_card_country = r3     // Catch:{ Exception -> 0x0a8f }
-            goto L_0x0a91
-        L_0x0a8f:
-            r1.need_card_country = r12     // Catch:{ Exception -> 0x0ab5 }
-        L_0x0a91:
+            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a8a }
+            r1.need_card_country = r3     // Catch:{ Exception -> 0x0a8a }
+            goto L_0x0a8c
+        L_0x0a8a:
+            r1.need_card_country = r12     // Catch:{ Exception -> 0x0ab0 }
+        L_0x0a8c:
             java.lang.String r3 = "need_zip"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a9a }
-            r1.need_card_postcode = r3     // Catch:{ Exception -> 0x0a9a }
-            goto L_0x0a9c
-        L_0x0a9a:
-            r1.need_card_postcode = r12     // Catch:{ Exception -> 0x0ab5 }
-        L_0x0a9c:
+            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a95 }
+            r1.need_card_postcode = r3     // Catch:{ Exception -> 0x0a95 }
+            goto L_0x0a97
+        L_0x0a95:
+            r1.need_card_postcode = r12     // Catch:{ Exception -> 0x0ab0 }
+        L_0x0a97:
             java.lang.String r3 = "need_cardholder_name"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0aa5 }
-            r1.need_card_name = r3     // Catch:{ Exception -> 0x0aa5 }
-            goto L_0x0aa7
-        L_0x0aa5:
-            r1.need_card_name = r12     // Catch:{ Exception -> 0x0ab5 }
-        L_0x0aa7:
+            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0aa0 }
+            r1.need_card_name = r3     // Catch:{ Exception -> 0x0aa0 }
+            goto L_0x0aa2
+        L_0x0aa0:
+            r1.need_card_name = r12     // Catch:{ Exception -> 0x0ab0 }
+        L_0x0aa2:
             java.lang.String r3 = "publishable_key"
-            java.lang.String r0 = r0.getString(r3)     // Catch:{ Exception -> 0x0ab0 }
-            r1.stripeApiKey = r0     // Catch:{ Exception -> 0x0ab0 }
-            goto L_0x0ab9
-        L_0x0ab0:
+            java.lang.String r0 = r0.getString(r3)     // Catch:{ Exception -> 0x0aab }
+            r1.stripeApiKey = r0     // Catch:{ Exception -> 0x0aab }
+            goto L_0x0ab4
+        L_0x0aab:
             java.lang.String r0 = ""
-            r1.stripeApiKey = r0     // Catch:{ Exception -> 0x0ab5 }
-            goto L_0x0ab9
-        L_0x0ab5:
+            r1.stripeApiKey = r0     // Catch:{ Exception -> 0x0ab0 }
+            goto L_0x0ab4
+        L_0x0ab0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0ab9:
+        L_0x0ab4:
             r34.initAndroidPay(r35)
             r3 = 6
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r3]
             r1.inputFields = r0
             r0 = 0
-        L_0x0ac2:
-            if (r0 >= r3) goto L_0x0e11
-            if (r0 != 0) goto L_0x0afa
+        L_0x0abd:
+            if (r0 >= r3) goto L_0x0e0b
+            if (r0 != 0) goto L_0x0af5
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
             r4.<init>(r2)
@@ -1819,7 +1826,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626259(0x7f0e0913, float:1.887975E38)
+            r4 = 2131626275(0x7f0e0923, float:1.8879782E38)
             java.lang.String r7 = "PaymentCardTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -1830,10 +1837,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9 = -1
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
             r3.addView(r4, r11)
-            goto L_0x0b30
-        L_0x0afa:
+            goto L_0x0b2b
+        L_0x0af5:
             r3 = 4
-            if (r0 != r3) goto L_0x0b30
+            if (r0 != r3) goto L_0x0b2b
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
             r4.<init>(r2)
@@ -1844,7 +1851,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r4 = 2131626250(0x7f0e090a, float:1.887973E38)
+            r4 = 2131626266(0x7f0e091a, float:1.8879763E38)
             java.lang.String r7 = "PaymentBillingAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -1855,20 +1862,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9 = -1
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
             r3.addView(r4, r11)
-        L_0x0b30:
-            if (r0 == r6) goto L_0x0b3e
+        L_0x0b2b:
+            if (r0 == r6) goto L_0x0b39
             r3 = 5
-            if (r0 == r3) goto L_0x0b3e
+            if (r0 == r3) goto L_0x0b39
             r3 = 4
-            if (r0 != r3) goto L_0x0b3c
+            if (r0 != r3) goto L_0x0b37
             boolean r3 = r1.need_card_postcode
-            if (r3 == 0) goto L_0x0b3e
-        L_0x0b3c:
+            if (r3 == 0) goto L_0x0b39
+        L_0x0b37:
             r3 = 1
-            goto L_0x0b3f
-        L_0x0b3e:
+            goto L_0x0b3a
+        L_0x0b39:
             r3 = 0
-        L_0x0b3f:
+        L_0x0b3a:
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r2)
             android.widget.LinearLayout r7 = r1.linearLayout2
@@ -1916,7 +1923,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r7 = r7[r0]
             r9 = 1069547520(0x3fCLASSNAME, float:1.5)
             r7.setCursorWidth(r9)
-            if (r0 != r6) goto L_0x0be6
+            if (r0 != r6) goto L_0x0be0
             android.text.InputFilter[] r7 = new android.text.InputFilter[r8]
             android.text.InputFilter$LengthFilter r9 = new android.text.InputFilter$LengthFilter
             r9.<init>(r6)
@@ -1937,13 +1944,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.text.method.PasswordTransformationMethod r9 = android.text.method.PasswordTransformationMethod.getInstance()
             r7.setTransformationMethod(r9)
             goto L_0x0CLASSNAME
-        L_0x0be6:
-            if (r0 != 0) goto L_0x0bf0
+        L_0x0be0:
+            if (r0 != 0) goto L_0x0bea
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setInputType(r6)
             goto L_0x0CLASSNAME
-        L_0x0bf0:
+        L_0x0bea:
             r7 = 4
             if (r0 != r7) goto L_0x0CLASSNAME
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
@@ -1956,21 +1963,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r7.setInputType(r12)
             goto L_0x0CLASSNAME
         L_0x0CLASSNAME:
-            if (r0 != r8) goto L_0x0CLASSNAME
+            if (r0 != r8) goto L_0x0c0d
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r9 = 16386(0x4002, float:2.2962E-41)
             r7.setInputType(r9)
             goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+        L_0x0c0d:
             r7 = 2
-            if (r0 != r7) goto L_0x0CLASSNAME
+            if (r0 != r7) goto L_0x0c1a
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r9 = 4097(0x1001, float:5.741E-42)
             r7.setInputType(r9)
             goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+        L_0x0c1a:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r9 = 16385(0x4001, float:2.296E-41)
@@ -1984,75 +1991,75 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             if (r0 == r8) goto L_0x0CLASSNAME
             r7 = 2
             if (r0 == r7) goto L_0x0CLASSNAME
-            if (r0 == r6) goto L_0x0CLASSNAME
+            if (r0 == r6) goto L_0x0c5f
             r7 = 4
-            if (r0 == r7) goto L_0x0CLASSNAME
+            if (r0 == r7) goto L_0x0c4e
             r7 = 5
-            if (r0 == r7) goto L_0x0CLASSNAME
-            goto L_0x0ca8
-        L_0x0CLASSNAME:
+            if (r0 == r7) goto L_0x0c3d
+            goto L_0x0ca2
+        L_0x0c3d:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626301(0x7f0e093d, float:1.8879834E38)
+            r9 = 2131626317(0x7f0e094d, float:1.8879867E38)
             java.lang.String r11 = "PaymentShippingZipPlaceholder"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-            goto L_0x0ca8
-        L_0x0CLASSNAME:
+            goto L_0x0ca2
+        L_0x0c4e:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626291(0x7f0e0933, float:1.8879814E38)
+            r9 = 2131626307(0x7f0e0943, float:1.8879846E38)
             java.lang.String r11 = "PaymentShippingCountry"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-            goto L_0x0ca8
-        L_0x0CLASSNAME:
+            goto L_0x0ca2
+        L_0x0c5f:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626251(0x7f0e090b, float:1.8879733E38)
+            r9 = 2131626267(0x7f0e091b, float:1.8879765E38)
             java.lang.String r11 = "PaymentCardCvv"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-            goto L_0x0ca8
+            goto L_0x0ca2
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626254(0x7f0e090e, float:1.887974E38)
+            r9 = 2131626270(0x7f0e091e, float:1.8879771E38)
             java.lang.String r11 = "PaymentCardName"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-            goto L_0x0ca8
+            goto L_0x0ca2
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626252(0x7f0e090c, float:1.8879735E38)
+            r9 = 2131626268(0x7f0e091c, float:1.8879767E38)
             java.lang.String r11 = "PaymentCardExpireDate"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-            goto L_0x0ca8
+            goto L_0x0ca2
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626255(0x7f0e090f, float:1.8879741E38)
+            r9 = 2131626271(0x7f0e091f, float:1.8879773E38)
             java.lang.String r11 = "PaymentCardNumber"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
-        L_0x0ca8:
-            if (r0 != 0) goto L_0x0cb7
+        L_0x0ca2:
+            if (r0 != 0) goto L_0x0cb1
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.PaymentFormActivity$7 r9 = new org.telegram.ui.PaymentFormActivity$7
             r9.<init>()
             r7.addTextChangedListener(r9)
-            goto L_0x0cc5
-        L_0x0cb7:
-            if (r0 != r8) goto L_0x0cc5
+            goto L_0x0cbf
+        L_0x0cb1:
+            if (r0 != r8) goto L_0x0cbf
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.PaymentFormActivity$8 r9 = new org.telegram.ui.PaymentFormActivity$8
             r9.<init>()
             r7.addTextChangedListener(r9)
-        L_0x0cc5:
+        L_0x0cbf:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r9 = 1086324736(0x40CLASSNAME, float:6.0)
@@ -2061,12 +2068,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0cdc
+            if (r9 == 0) goto L_0x0cd6
             r9 = 5
-            goto L_0x0cdd
-        L_0x0cdc:
+            goto L_0x0cd7
+        L_0x0cd6:
             r9 = 3
-        L_0x0cdd:
+        L_0x0cd7:
             r7.setGravity(r9)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
@@ -2084,7 +2091,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.-$$Lambda$PaymentFormActivity$kGOIockVRhCZimnBQEOXCbrCCls r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$kGOIockVRhCZimnBQEOXCbrCCls
             r9.<init>()
             r7.setOnEditorActionListener(r9)
-            if (r0 != r6) goto L_0x0d21
+            if (r0 != r6) goto L_0x0d1b
             org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
             org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
             r9.<init>(r2)
@@ -2096,12 +2103,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
             r7.addView(r9, r14)
-            goto L_0x0dd1
-        L_0x0d21:
+            goto L_0x0dcb
+        L_0x0d1b:
             r7 = 5
             r11 = -2
             r13 = -1
-            if (r0 != r7) goto L_0x0d9c
+            if (r0 != r7) goto L_0x0d96
             org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
             org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
             r9.<init>(r2)
@@ -2118,7 +2125,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r7.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextCheckCell r7 = r1.checkCell1
-            r9 = 2131626256(0x7f0e0910, float:1.8879743E38)
+            r9 = 2131626272(0x7f0e0920, float:1.8879776E38)
             java.lang.String r11 = "PaymentCardSavePaymentInformation"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             boolean r11 = r1.saveCardInfo
@@ -2139,7 +2146,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r7[r12] = r9
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r12]
-            r9 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r9 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r9, (java.lang.String) r10)
             r7.setBackgroundDrawable(r11)
             r34.updateSavePaymentField()
@@ -2150,9 +2157,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
             r7.addView(r9, r14)
-            goto L_0x0dd1
-        L_0x0d9c:
-            if (r0 != 0) goto L_0x0dd1
+            goto L_0x0dcb
+        L_0x0d96:
+            if (r0 != 0) goto L_0x0dcb
             android.widget.FrameLayout r7 = new android.widget.FrameLayout
             r7.<init>(r2)
             r1.androidPayContainer = r7
@@ -2174,8 +2181,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r33 = 0
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
             r4.addView(r7, r9)
-        L_0x0dd1:
-            if (r3 == 0) goto L_0x0def
+        L_0x0dcb:
+            if (r3 == 0) goto L_0x0de9
             org.telegram.ui.PaymentFormActivity$9 r3 = new org.telegram.ui.PaymentFormActivity$9
             r3.<init>(r1, r2)
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r22)
@@ -2187,37 +2194,37 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r11 = -1
             r7.<init>(r11, r8, r9)
             r4.addView(r3, r7)
-        L_0x0def:
+        L_0x0de9:
             r3 = 4
-            if (r0 != r3) goto L_0x0dfa
+            if (r0 != r3) goto L_0x0df4
             boolean r3 = r1.need_card_country
-            if (r3 == 0) goto L_0x0df7
-            goto L_0x0dfa
-        L_0x0df7:
+            if (r3 == 0) goto L_0x0df1
+            goto L_0x0df4
+        L_0x0df1:
             r3 = 8
-            goto L_0x0e09
-        L_0x0dfa:
+            goto L_0x0e03
+        L_0x0df4:
             r3 = 5
-            if (r0 != r3) goto L_0x0e01
+            if (r0 != r3) goto L_0x0dfb
             boolean r3 = r1.need_card_postcode
-            if (r3 == 0) goto L_0x0df7
-        L_0x0e01:
+            if (r3 == 0) goto L_0x0df1
+        L_0x0dfb:
             r3 = 2
-            if (r0 != r3) goto L_0x0e0c
+            if (r0 != r3) goto L_0x0e06
             boolean r3 = r1.need_card_name
-            if (r3 != 0) goto L_0x0e0c
-            goto L_0x0df7
-        L_0x0e09:
+            if (r3 != 0) goto L_0x0e06
+            goto L_0x0df1
+        L_0x0e03:
             r4.setVisibility(r3)
-        L_0x0e0c:
+        L_0x0e06:
             int r0 = r0 + 1
             r3 = 6
-            goto L_0x0ac2
-        L_0x0e11:
+            goto L_0x0abd
+        L_0x0e0b:
             boolean r0 = r1.need_card_country
-            if (r0 != 0) goto L_0x0e29
+            if (r0 != 0) goto L_0x0e23
             boolean r0 = r1.need_card_postcode
-            if (r0 != 0) goto L_0x0e29
+            if (r0 != 0) goto L_0x0e23
             org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
             r0 = r0[r8]
             r2 = 8
@@ -2225,31 +2232,31 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
             r0 = r0[r12]
             r0.setVisibility(r2)
-        L_0x0e29:
+        L_0x0e23:
             boolean r0 = r1.need_card_postcode
-            if (r0 == 0) goto L_0x0e3a
+            if (r0 == 0) goto L_0x0e34
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r2 = 5
             r0 = r0[r2]
             r2 = 268435462(0x10000006, float:2.5243567E-29)
             r0.setImeOptions(r2)
-            goto L_0x187f
-        L_0x0e3a:
+            goto L_0x1874
+        L_0x0e34:
             r2 = 268435462(0x10000006, float:2.5243567E-29)
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
             r0 = r0[r6]
             r0.setImeOptions(r2)
-            goto L_0x187f
-        L_0x0e46:
-            if (r0 != r8) goto L_0x0ee8
+            goto L_0x1874
+        L_0x0e40:
+            if (r0 != r8) goto L_0x0ee2
             org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r0 = r1.requestedInfo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r0 = r0.shipping_options
             int r0 = r0.size()
             org.telegram.ui.Cells.RadioCell[] r3 = new org.telegram.ui.Cells.RadioCell[r0]
             r1.radioCells = r3
             r3 = 0
-        L_0x0e55:
-            if (r3 >= r0) goto L_0x0ec0
+        L_0x0e4f:
+            if (r3 >= r0) goto L_0x0eba
             org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r4 = r1.requestedInfo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r4 = r4.shipping_options
             java.lang.Object r4 = r4.get(r3)
@@ -2277,19 +2284,19 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r7[r8] = r4
             java.lang.String r4 = "%s - %s"
             java.lang.String r4 = java.lang.String.format(r4, r7)
-            if (r3 != 0) goto L_0x0e9d
+            if (r3 != 0) goto L_0x0e97
             r6 = 1
-            goto L_0x0e9e
-        L_0x0e9d:
+            goto L_0x0e98
+        L_0x0e97:
             r6 = 0
-        L_0x0e9e:
+        L_0x0e98:
             int r7 = r0 + -1
-            if (r3 == r7) goto L_0x0ea4
+            if (r3 == r7) goto L_0x0e9e
             r7 = 1
-            goto L_0x0ea5
-        L_0x0ea4:
+            goto L_0x0e9f
+        L_0x0e9e:
             r7 = 0
-        L_0x0ea5:
+        L_0x0e9f:
             r5.setText(r4, r6, r7)
             org.telegram.ui.Cells.RadioCell[] r4 = r1.radioCells
             r4 = r4[r3]
@@ -2301,15 +2308,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r5 = r5[r3]
             r4.addView(r5)
             int r3 = r3 + 1
-            goto L_0x0e55
-        L_0x0ec0:
+            goto L_0x0e4f
+        L_0x0eba:
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
             org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r3.<init>(r2)
             r0[r12] = r3
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
             r0 = r0[r12]
-            r3 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r3 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             android.widget.LinearLayout r0 = r1.linearLayout2
@@ -2319,15 +2326,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = -1
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
             r0.addView(r2, r3)
-            goto L_0x187f
-        L_0x0ee8:
-            if (r0 != r6) goto L_0x1126
+            goto L_0x1874
+        L_0x0ee2:
+            if (r0 != r6) goto L_0x111f
             r3 = 2
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r3]
             r1.inputFields = r0
             r0 = 0
-        L_0x0ef0:
-            if (r0 >= r3) goto L_0x187f
+        L_0x0eea:
+            if (r0 >= r3) goto L_0x1874
             if (r0 != 0) goto L_0x0var_
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
@@ -2339,7 +2346,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626259(0x7f0e0913, float:1.887975E38)
+            r4 = 2131626275(0x7f0e0923, float:1.8879782E38)
             java.lang.String r7 = "PaymentCardTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2362,34 +2369,34 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4.addView(r3, r11)
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r3.setBackgroundColor(r4)
-            if (r0 == r8) goto L_0x0var_
+            if (r0 == r8) goto L_0x0f3e
             r4 = 1
-            goto L_0x0var_
-        L_0x0var_:
+            goto L_0x0f3f
+        L_0x0f3e:
             r4 = 0
-        L_0x0var_:
+        L_0x0f3f:
             r7 = 7
-            if (r4 == 0) goto L_0x0var_
-            if (r0 != r7) goto L_0x0var_
+            if (r4 == 0) goto L_0x0f5e
+            if (r0 != r7) goto L_0x0f4e
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
             boolean r9 = r9.phone_requested
-            if (r9 != 0) goto L_0x0var_
-        L_0x0var_:
+            if (r9 != 0) goto L_0x0f4e
+        L_0x0f4c:
             r4 = 0
-            goto L_0x0var_
-        L_0x0var_:
+            goto L_0x0f5e
+        L_0x0f4e:
             r9 = 6
-            if (r0 != r9) goto L_0x0var_
+            if (r0 != r9) goto L_0x0f5e
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
             boolean r11 = r9.phone_requested
-            if (r11 != 0) goto L_0x0var_
+            if (r11 != 0) goto L_0x0f5e
             boolean r9 = r9.email_requested
-            if (r9 != 0) goto L_0x0var_
-            goto L_0x0var_
-        L_0x0var_:
-            if (r4 == 0) goto L_0x0var_
+            if (r9 != 0) goto L_0x0f5e
+            goto L_0x0f4c
+        L_0x0f5e:
+            if (r4 == 0) goto L_0x0f7c
             org.telegram.ui.PaymentFormActivity$10 r4 = new org.telegram.ui.PaymentFormActivity$10
             r4.<init>(r1, r2)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r22)
@@ -2401,7 +2408,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             r9.<init>(r13, r8, r11)
             r3.addView(r4, r9)
-        L_0x0var_:
+        L_0x0f7c:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             org.telegram.ui.Components.EditTextBoldCursor r9 = new org.telegram.ui.Components.EditTextBoldCursor
             r9.<init>(r2)
@@ -2440,7 +2447,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = r4[r0]
             r9 = 1069547520(0x3fCLASSNAME, float:1.5)
             r4.setCursorWidth(r9)
-            if (r0 != 0) goto L_0x0ff4
+            if (r0 != 0) goto L_0x0fed
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             org.telegram.ui.-$$Lambda$PaymentFormActivity$NaAxpZmEom2J3d4n5KPbjk_hflw r9 = org.telegram.ui.$$Lambda$PaymentFormActivity$NaAxpZmEom2J3d4n5KPbjk_hflw.INSTANCE
@@ -2448,8 +2455,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r4.setInputType(r12)
-            goto L_0x1006
-        L_0x0ff4:
+            goto L_0x0fff
+        L_0x0fed:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r9 = 129(0x81, float:1.81E-43)
@@ -2458,33 +2465,33 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = r4[r0]
             android.graphics.Typeface r9 = android.graphics.Typeface.DEFAULT
             r4.setTypeface(r9)
-        L_0x1006:
+        L_0x0fff:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r9 = 268435462(0x10000006, float:2.5243567E-29)
             r4.setImeOptions(r9)
-            if (r0 == 0) goto L_0x102d
-            if (r0 == r8) goto L_0x1015
-            goto L_0x103a
-        L_0x1015:
+            if (r0 == 0) goto L_0x1026
+            if (r0 == r8) goto L_0x100e
+            goto L_0x1033
+        L_0x100e:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r9 = 2131625599(0x7f0e067f, float:1.887841E38)
+            r9 = 2131625614(0x7f0e068e, float:1.887844E38)
             java.lang.String r11 = "LoginPassword"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r4.setHint(r9)
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r4.requestFocus()
-            goto L_0x103a
-        L_0x102d:
+            goto L_0x1033
+        L_0x1026:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r9 = r9.saved_credentials
             java.lang.String r9 = r9.title
             r4.setText(r9)
-        L_0x103a:
+        L_0x1033:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r9 = 1086324736(0x40CLASSNAME, float:6.0)
@@ -2493,12 +2500,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x1051
+            if (r9 == 0) goto L_0x104a
             r9 = 5
-            goto L_0x1052
-        L_0x1051:
+            goto L_0x104b
+        L_0x104a:
             r9 = 3
-        L_0x1052:
+        L_0x104b:
             r4.setGravity(r9)
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
@@ -2516,14 +2523,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.-$$Lambda$PaymentFormActivity$7nDt_ueaNatOk32R3AVkL3FoSzw r4 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$7nDt_ueaNatOk32R3AVkL3FoSzw
             r4.<init>()
             r3.setOnEditorActionListener(r4)
-            if (r0 != r8) goto L_0x1121
+            if (r0 != r8) goto L_0x111a
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r2)
             r3[r12] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131626268(0x7f0e091c, float:1.8879767E38)
+            r4 = 2131626284(0x7f0e092c, float:1.88798E38)
             java.lang.Object[] r9 = new java.lang.Object[r8]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r11 = r11.saved_credentials
@@ -2534,7 +2541,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setText(r4)
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r4 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r10)
             r3.setBackgroundDrawable(r4)
             android.widget.LinearLayout r3 = r1.linearLayout2
@@ -2554,7 +2561,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundDrawable(r4)
             org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
             r3 = r3[r12]
-            r4 = 2131626269(0x7f0e091d, float:1.887977E38)
+            r4 = 2131626285(0x7f0e092d, float:1.8879802E38)
             java.lang.String r9 = "PaymentConfirmationNewCard"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             r3.setText(r4, r12)
@@ -2576,7 +2583,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3[r8] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r8]
-            r4 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r4 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r10)
             r3.setBackgroundDrawable(r9)
             android.widget.LinearLayout r3 = r1.linearLayout2
@@ -2586,23 +2593,23 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r11 = -1
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r9)
             r3.addView(r4, r13)
-        L_0x1121:
+        L_0x111a:
             int r0 = r0 + 1
             r3 = 2
-            goto L_0x0ef0
-        L_0x1126:
+            goto L_0x0eea
+        L_0x111f:
             r3 = 4
-            if (r0 == r3) goto L_0x1485
+            if (r0 == r3) goto L_0x147b
             r3 = 5
-            if (r0 != r3) goto L_0x112e
-            goto L_0x1485
-        L_0x112e:
+            if (r0 != r3) goto L_0x1127
+            goto L_0x147b
+        L_0x1127:
             r3 = 6
-            if (r0 != r3) goto L_0x187f
+            if (r0 != r3) goto L_0x1874
             org.telegram.ui.Cells.EditTextSettingsCell r0 = new org.telegram.ui.Cells.EditTextSettingsCell
             r0.<init>(r2)
             r1.codeFieldCell = r0
-            r3 = 2131626242(0x7f0e0902, float:1.8879715E38)
+            r3 = 2131626258(0x7f0e0912, float:1.8879747E38)
             java.lang.String r4 = "PasswordCode"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r4 = ""
@@ -2634,7 +2641,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0[r4] = r3
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
             r0 = r0[r4]
-            r3 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r3 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r3)
             android.widget.LinearLayout r0 = r1.linearLayout2
@@ -2661,7 +2668,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setTextColor(r3)
             org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
             r0 = r0[r8]
-            r3 = 2131626538(0x7f0e0a2a, float:1.8880315E38)
+            r3 = 2131626556(0x7f0e0a3c, float:1.8880352E38)
             java.lang.String r4 = "ResendCode"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setText(r3, r8)
@@ -2715,9 +2722,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r6]
             r1.inputFields = r0
             r0 = 0
-        L_0x124d:
-            if (r0 >= r6) goto L_0x1480
-            if (r0 != 0) goto L_0x1285
+        L_0x1244:
+            if (r0 >= r6) goto L_0x1476
+            if (r0 != 0) goto L_0x127c
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
             r4.<init>(r2)
@@ -2728,7 +2735,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626282(0x7f0e092a, float:1.8879796E38)
+            r4 = 2131626298(0x7f0e093a, float:1.8879828E38)
             java.lang.String r7 = "PaymentPasswordTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2739,10 +2746,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9 = -1
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
             r3.addView(r4, r11)
-            goto L_0x12bc
-        L_0x1285:
+            goto L_0x12b3
+        L_0x127c:
             r3 = 2
-            if (r0 != r3) goto L_0x12bc
+            if (r0 != r3) goto L_0x12b3
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
             r4.<init>(r2)
@@ -2753,7 +2760,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r4 = 2131626278(0x7f0e0926, float:1.8879788E38)
+            r4 = 2131626294(0x7f0e0936, float:1.887982E38)
             java.lang.String r7 = "PaymentPasswordEmailTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2764,10 +2771,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9 = -1
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
             r3.addView(r4, r11)
-            goto L_0x12bd
-        L_0x12bc:
+            goto L_0x12b4
+        L_0x12b3:
             r9 = -1
-        L_0x12bd:
+        L_0x12b4:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r2)
             android.widget.LinearLayout r4 = r1.linearLayout2
@@ -2776,7 +2783,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4.addView(r3, r11)
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r3.setBackgroundColor(r4)
-            if (r0 != 0) goto L_0x12f2
+            if (r0 != 0) goto L_0x12e9
             org.telegram.ui.PaymentFormActivity$16 r4 = new org.telegram.ui.PaymentFormActivity$16
             r4.<init>(r1, r2)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r22)
@@ -2788,7 +2795,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r13 = -1
             r9.<init>(r13, r8, r11)
             r3.addView(r4, r9)
-        L_0x12f2:
+        L_0x12e9:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             org.telegram.ui.Components.EditTextBoldCursor r9 = new org.telegram.ui.Components.EditTextBoldCursor
             r9.<init>(r2)
@@ -2827,10 +2834,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = r4[r0]
             r13 = 1069547520(0x3fCLASSNAME, float:1.5)
             r4.setCursorWidth(r13)
-            if (r0 == 0) goto L_0x136a
-            if (r0 != r8) goto L_0x1356
-            goto L_0x136a
-        L_0x1356:
+            if (r0 == 0) goto L_0x1360
+            if (r0 != r8) goto L_0x134c
+            goto L_0x1360
+        L_0x134c:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r13 = 33
@@ -2839,8 +2846,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = r4[r0]
             r13 = 268435462(0x10000006, float:2.5243567E-29)
             r4.setImeOptions(r13)
-            goto L_0x1389
-        L_0x136a:
+            goto L_0x137f
+        L_0x1360:
             r13 = 268435462(0x10000006, float:2.5243567E-29)
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
@@ -2854,39 +2861,39 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = r4[r0]
             r14 = 268435461(0x10000005, float:2.5243564E-29)
             r4.setImeOptions(r14)
-        L_0x1389:
-            if (r0 == 0) goto L_0x13b3
-            if (r0 == r8) goto L_0x13a2
+        L_0x137f:
+            if (r0 == 0) goto L_0x13a9
+            if (r0 == r8) goto L_0x1398
             r4 = 2
-            if (r0 == r4) goto L_0x1391
-            goto L_0x13ca
-        L_0x1391:
+            if (r0 == r4) goto L_0x1387
+            goto L_0x13c0
+        L_0x1387:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626276(0x7f0e0924, float:1.8879784E38)
+            r14 = 2131626292(0x7f0e0934, float:1.8879816E38)
             java.lang.String r15 = "PaymentPasswordEmail"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
-            goto L_0x13ca
-        L_0x13a2:
+            goto L_0x13c0
+        L_0x1398:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626281(0x7f0e0929, float:1.8879794E38)
+            r14 = 2131626297(0x7f0e0939, float:1.8879826E38)
             java.lang.String r15 = "PaymentPasswordReEnter"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
-            goto L_0x13ca
-        L_0x13b3:
+            goto L_0x13c0
+        L_0x13a9:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626279(0x7f0e0927, float:1.887979E38)
+            r14 = 2131626295(0x7f0e0937, float:1.8879822E38)
             java.lang.String r15 = "PaymentPasswordEnter"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r4.requestFocus()
-        L_0x13ca:
+        L_0x13c0:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             r14 = 1086324736(0x40CLASSNAME, float:6.0)
@@ -2895,12 +2902,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
             boolean r14 = org.telegram.messenger.LocaleController.isRTL
-            if (r14 == 0) goto L_0x13e1
+            if (r14 == 0) goto L_0x13d7
             r14 = 5
-            goto L_0x13e2
-        L_0x13e1:
+            goto L_0x13d8
+        L_0x13d7:
             r14 = 3
-        L_0x13e2:
+        L_0x13d8:
             r4.setGravity(r14)
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
@@ -2918,20 +2925,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.-$$Lambda$PaymentFormActivity$wikSuuvfxhb2U7Hw9X3oaWcgGS8 r4 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$wikSuuvfxhb2U7Hw9X3oaWcgGS8
             r4.<init>()
             r3.setOnEditorActionListener(r4)
-            if (r0 != r8) goto L_0x1443
+            if (r0 != r8) goto L_0x1439
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r2)
             r3[r12] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131626280(0x7f0e0928, float:1.8879792E38)
+            r4 = 2131626296(0x7f0e0938, float:1.8879824E38)
             java.lang.String r14 = "PaymentPasswordInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r14, r4)
             r3.setText(r4)
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r4 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r10)
             r3.setBackgroundDrawable(r4)
             android.widget.LinearLayout r3 = r1.linearLayout2
@@ -2941,23 +2948,23 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r15 = -1
             android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r14)
             r3.addView(r4, r7)
-            goto L_0x147c
-        L_0x1443:
+            goto L_0x1472
+        L_0x1439:
             r3 = 2
-            if (r0 != r3) goto L_0x147c
+            if (r0 != r3) goto L_0x1472
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r2)
             r3[r8] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r8]
-            r4 = 2131626277(0x7f0e0925, float:1.8879786E38)
+            r4 = 2131626293(0x7f0e0935, float:1.8879818E38)
             java.lang.String r7 = "PaymentPasswordEmailInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r8]
-            r4 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r4 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r10)
             r3.setBackgroundDrawable(r7)
             android.widget.LinearLayout r3 = r1.linearLayout2
@@ -2967,13 +2974,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r14 = -1
             android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r14, r7)
             r3.addView(r4, r15)
-        L_0x147c:
+        L_0x1472:
             int r0 = r0 + 1
-            goto L_0x124d
-        L_0x1480:
+            goto L_0x1244
+        L_0x1476:
             r34.updatePasswordFields()
-            goto L_0x187f
-        L_0x1485:
+            goto L_0x1874
+        L_0x147b:
             r11 = 0
             org.telegram.ui.Cells.PaymentInfoCell r0 = new org.telegram.ui.Cells.PaymentInfoCell
             r0.<init>(r2)
@@ -3008,15 +3015,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r3 = r3.prices
             r0.<init>(r3)
             org.telegram.tgnet.TLRPC$TL_shippingOption r3 = r1.shippingOption
-            if (r3 == 0) goto L_0x14da
+            if (r3 == 0) goto L_0x14d0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r3 = r3.prices
             r0.addAll(r3)
-        L_0x14da:
+        L_0x14d0:
             java.lang.String r3 = r1.getTotalPriceString(r0)
             r4 = 0
-        L_0x14df:
+        L_0x14d5:
             int r5 = r0.size()
-            if (r4 >= r5) goto L_0x1519
+            if (r4 >= r5) goto L_0x150f
             java.lang.Object r5 = r0.get(r4)
             org.telegram.tgnet.TLRPC$TL_labeledPrice r5 = (org.telegram.tgnet.TLRPC$TL_labeledPrice) r5
             org.telegram.ui.Cells.TextPriceCell r7 = new org.telegram.ui.Cells.TextPriceCell
@@ -3037,14 +3044,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r4 = r4 + 1
             r9 = r17
             r8 = 1
-            goto L_0x14df
-        L_0x1519:
+            goto L_0x14d5
+        L_0x150f:
             r17 = r9
             org.telegram.ui.Cells.TextPriceCell r0 = new org.telegram.ui.Cells.TextPriceCell
             r0.<init>(r2)
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r0.setBackgroundColor(r4)
-            r4 = 2131626307(0x7f0e0943, float:1.8879846E38)
+            r4 = 2131626323(0x7f0e0953, float:1.8879879E38)
             java.lang.String r5 = "PaymentTransactionTotal"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = 1
@@ -3074,7 +3081,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             r0 = r0[r12]
             java.lang.String r4 = r1.cardName
-            r7 = 2131626262(0x7f0e0916, float:1.8879755E38)
+            r7 = 2131626278(0x7f0e0926, float:1.8879788E38)
             java.lang.String r8 = "PaymentCheckoutMethod"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.setTextAndValue(r4, r7, r5)
@@ -3084,20 +3091,20 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.addView(r4)
             int r0 = r1.currentStep
             r4 = 4
-            if (r0 != r4) goto L_0x1597
+            if (r0 != r4) goto L_0x158d
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             r0 = r0[r12]
             org.telegram.ui.-$$Lambda$PaymentFormActivity$-_v7hZyhHE9vxsissEj7icTtuGM r4 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$-_v7hZyhHE9vxsissEj7icTtuGM
             r4.<init>()
             r0.setOnClickListener(r4)
-        L_0x1597:
+        L_0x158d:
             r5 = r11
             r0 = 0
-        L_0x1599:
+        L_0x158f:
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r1.paymentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r4 = r4.users
             int r4 = r4.size()
-            if (r0 >= r4) goto L_0x15b9
+            if (r0 >= r4) goto L_0x15af
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r1.paymentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r4 = r4.users
             java.lang.Object r4 = r4.get(r0)
@@ -3105,13 +3112,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r7 = r4.id
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r8 = r1.paymentForm
             int r8 = r8.provider_id
-            if (r7 != r8) goto L_0x15b6
+            if (r7 != r8) goto L_0x15ac
             r5 = r4
-        L_0x15b6:
+        L_0x15ac:
             int r0 = r0 + 1
-            goto L_0x1599
-        L_0x15b9:
-            if (r5 == 0) goto L_0x15f2
+            goto L_0x158f
+        L_0x15af:
+            if (r5 == 0) goto L_0x15e8
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
             r4.<init>(r2)
@@ -3126,7 +3133,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             java.lang.String r4 = r5.first_name
             java.lang.String r5 = r5.last_name
             java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r5)
-            r5 = 2131626266(0x7f0e091a, float:1.8879763E38)
+            r5 = 2131626282(0x7f0e092a, float:1.8879796E38)
             java.lang.String r8 = "PaymentCheckoutProvider"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
             r0.setTextAndValue(r4, r5, r7)
@@ -3134,15 +3141,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r7]
             r0.addView(r5)
-            goto L_0x15f4
-        L_0x15f2:
+            goto L_0x15ea
+        L_0x15e8:
             java.lang.String r4 = ""
-        L_0x15f4:
+        L_0x15ea:
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
-            if (r0 == 0) goto L_0x1747
+            if (r0 == 0) goto L_0x173d
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             org.telegram.tgnet.TLRPC$TL_postAddress r0 = r0.shipping_address
-            if (r0 == 0) goto L_0x1652
+            if (r0 == 0) goto L_0x1648
             r5 = 6
             java.lang.Object[] r7 = new java.lang.Object[r5]
             java.lang.String r5 = r0.street_line1
@@ -3174,7 +3181,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r5.setBackgroundColor(r7)
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r8]
-            r7 = 2131626287(0x7f0e092f, float:1.8879806E38)
+            r7 = 2131626303(0x7f0e093f, float:1.8879838E38)
             java.lang.String r9 = "PaymentShippingAddress"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r9 = 1
@@ -3183,11 +3190,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r8]
             r0.addView(r5)
-        L_0x1652:
+        L_0x1648:
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.name
-            if (r0 == 0) goto L_0x168e
+            if (r0 == 0) goto L_0x1684
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             org.telegram.ui.Cells.TextDetailSettingsCell r5 = new org.telegram.ui.Cells.TextDetailSettingsCell
             r5.<init>(r2)
@@ -3201,7 +3208,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
             java.lang.String r5 = r5.name
-            r7 = 2131626263(0x7f0e0917, float:1.8879757E38)
+            r7 = 2131626279(0x7f0e0927, float:1.887979E38)
             java.lang.String r8 = "PaymentCheckoutName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = 1
@@ -3210,11 +3217,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r6]
             r0.addView(r5)
-        L_0x168e:
+        L_0x1684:
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.phone
-            if (r0 == 0) goto L_0x16d4
+            if (r0 == 0) goto L_0x16ca
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             org.telegram.ui.Cells.TextDetailSettingsCell r5 = new org.telegram.ui.Cells.TextDetailSettingsCell
             r5.<init>(r2)
@@ -3231,7 +3238,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r6 = r6.info
             java.lang.String r6 = r6.phone
             java.lang.String r5 = r5.format(r6)
-            r6 = 2131626265(0x7f0e0919, float:1.8879761E38)
+            r6 = 2131626281(0x7f0e0929, float:1.8879794E38)
             java.lang.String r7 = "PaymentCheckoutPhoneNumber"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r7 = 1
@@ -3241,11 +3248,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r6 = 4
             r5 = r5[r6]
             r0.addView(r5)
-        L_0x16d4:
+        L_0x16ca:
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.email
-            if (r0 == 0) goto L_0x1711
+            if (r0 == 0) goto L_0x1707
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             org.telegram.ui.Cells.TextDetailSettingsCell r5 = new org.telegram.ui.Cells.TextDetailSettingsCell
             r5.<init>(r2)
@@ -3260,7 +3267,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
             java.lang.String r5 = r5.email
-            r7 = 2131626261(0x7f0e0915, float:1.8879753E38)
+            r7 = 2131626277(0x7f0e0925, float:1.8879786E38)
             java.lang.String r8 = "PaymentCheckoutEmail"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = 1
@@ -3269,9 +3276,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r6]
             r0.addView(r5)
-        L_0x1711:
+        L_0x1707:
             org.telegram.tgnet.TLRPC$TL_shippingOption r0 = r1.shippingOption
-            if (r0 == 0) goto L_0x1747
+            if (r0 == 0) goto L_0x173d
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             org.telegram.ui.Cells.TextDetailSettingsCell r5 = new org.telegram.ui.Cells.TextDetailSettingsCell
             r5.<init>(r2)
@@ -3285,7 +3292,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0 = r0[r6]
             org.telegram.tgnet.TLRPC$TL_shippingOption r5 = r1.shippingOption
             java.lang.String r5 = r5.title
-            r7 = 2131626267(0x7f0e091b, float:1.8879765E38)
+            r7 = 2131626283(0x7f0e092b, float:1.8879798E38)
             java.lang.String r8 = "PaymentCheckoutShippingMethod"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.setTextAndValue(r5, r7, r12)
@@ -3293,10 +3300,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r6]
             r0.addView(r5)
-        L_0x1747:
+        L_0x173d:
             int r0 = r1.currentStep
             r5 = 4
-            if (r0 != r5) goto L_0x1858
+            if (r0 != r5) goto L_0x184d
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r2)
             r1.bottomLayout = r0
@@ -3321,7 +3328,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r0.setTextColor(r4)
             android.widget.TextView r0 = r1.payTextView
-            r4 = 2131626264(0x7f0e0918, float:1.887976E38)
+            r4 = 2131626280(0x7f0e0928, float:1.8879792E38)
             r5 = 1
             java.lang.Object[] r7 = new java.lang.Object[r5]
             r7[r12] = r3
@@ -3355,7 +3362,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.addView(r3, r7)
             android.view.View r0 = new android.view.View
             r0.<init>(r2)
-            r3 = 2131165436(0x7var_fc, float:1.794509E38)
+            r3 = 2131165430(0x7var_f6, float:1.7945077E38)
             r0.setBackgroundResource(r3)
             r20 = -1
             r21 = 1077936128(0x40400000, float:3.0)
@@ -3386,14 +3393,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setDomStorageEnabled(r3)
             int r0 = android.os.Build.VERSION.SDK_INT
             r4 = 21
-            if (r0 < r4) goto L_0x183b
+            if (r0 < r4) goto L_0x1830
             android.webkit.WebView r0 = r1.webView
             android.webkit.WebSettings r0 = r0.getSettings()
             r0.setMixedContentMode(r12)
             android.webkit.CookieManager r0 = android.webkit.CookieManager.getInstance()
             android.webkit.WebView r4 = r1.webView
             r0.setAcceptThirdPartyCookies(r4, r3)
-        L_0x183b:
+        L_0x1830:
             android.webkit.WebView r0 = r1.webView
             org.telegram.ui.PaymentFormActivity$14 r3 = new org.telegram.ui.PaymentFormActivity$14
             r3.<init>()
@@ -3406,7 +3413,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.webkit.WebView r0 = r1.webView
             r3 = 8
             r0.setVisibility(r3)
-        L_0x1858:
+        L_0x184d:
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
             org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
             r3.<init>(r2)
@@ -3414,7 +3421,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0[r4] = r3
             org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
             r0 = r0[r4]
-            r3 = 2131165419(0x7var_eb, float:1.7945055E38)
+            r3 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             android.widget.LinearLayout r0 = r1.linearLayout2
@@ -3424,7 +3431,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r4 = -1
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
             r0.addView(r2, r3)
-        L_0x187f:
+        L_0x1874:
             android.view.View r0 = r1.fragmentView
             return r0
         */
@@ -5086,8 +5093,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         return false;
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        ArrayList arrayList = new ArrayList();
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -5172,6 +5179,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         arrayList.add(new ThemeDescription((View) this.paymentInfoCell, 0, new Class[]{PaymentInfoCell.class}, new String[]{"detailExTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
         arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.bottomLayout, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+        return arrayList;
     }
 }

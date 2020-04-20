@@ -485,7 +485,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r13.setPadding(r3, r5, r8, r5)
-            r3 = 2131624730(0x7f0e031a, float:1.8876648E38)
+            r3 = 2131624738(0x7f0e0322, float:1.8876664E38)
             java.lang.String r8 = "Close"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -512,7 +512,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r8)
             android.widget.ImageView r2 = r0.pipButton
-            r8 = 2131165962(0x7var_a, float:1.7946156E38)
+            r8 = 2131165960(0x7var_, float:1.7946152E38)
             r2.setImageResource(r8)
             android.widget.ImageView r2 = r0.pipButton
             r2.setEnabled(r5)
@@ -550,7 +550,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.<init>(r1)
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r10)
-            r10 = 2131165955(0x7var_, float:1.7946142E38)
+            r10 = 2131165953(0x7var_, float:1.7946138E38)
             r8.setImageResource(r10)
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r14)
@@ -590,7 +590,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r7.setPadding(r8, r5, r10, r5)
             android.widget.TextView r7 = r0.copyTextButton
-            r8 = 2131624790(0x7f0e0356, float:1.887677E38)
+            r8 = 2131624798(0x7f0e035e, float:1.8876786E38)
             java.lang.String r10 = "Copy"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -622,7 +622,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r6, r5)
-            r1 = 2131626010(0x7f0e081a, float:1.8879244E38)
+            r1 = 2131626025(0x7f0e0829, float:1.8879275E38)
             java.lang.String r6 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             java.lang.String r1 = r1.toUpperCase()

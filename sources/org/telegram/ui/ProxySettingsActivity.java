@@ -843,13 +843,13 @@ public class ProxySettingsActivity extends BaseFragment {
         }
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
         $$Lambda$ProxySettingsActivity$qS6lDCijO5MZFsaWHNwLVj0xZHU r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 ProxySettingsActivity.this.lambda$getThemeDescriptions$6$ProxySettingsActivity();
             }
         };
-        ArrayList arrayList = new ArrayList();
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.scrollView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
@@ -908,7 +908,7 @@ public class ProxySettingsActivity extends BaseFragment {
             arrayList.add(new ThemeDescription((View) this.bottomCells[i4], 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
             arrayList.add(new ThemeDescription((View) this.bottomCells[i4], ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
         }
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+        return arrayList;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$6$ProxySettingsActivity() {

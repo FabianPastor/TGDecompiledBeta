@@ -471,6 +471,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     EmojiView.EmojiViewDelegate.CC.$default$onTabOpened(this, i);
                 }
 
+                public /* synthetic */ void showTrendingStickersAlert(TrendingStickersLayout trendingStickersLayout) {
+                    EmojiView.EmojiViewDelegate.CC.$default$showTrendingStickersAlert(this, trendingStickersLayout);
+                }
+
                 public boolean onBackspace() {
                     if (EditTextEmoji.this.editText.length() == 0) {
                         return false;

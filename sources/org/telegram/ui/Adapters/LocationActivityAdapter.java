@@ -46,6 +46,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     private Location gpsLocation;
     private int locationType;
     private Context mContext;
+    private boolean needEmptyView;
     private int overScrollHeight;
     private Location previousFetchedLocation;
     private SendLocationCell sendLocationCell;
@@ -55,13 +56,13 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     /* access modifiers changed from: protected */
     public void onDirectionClick() {
-        throw null;
     }
 
-    public LocationActivityAdapter(Context context, int i, long j) {
+    public LocationActivityAdapter(Context context, int i, long j, boolean z) {
         this.mContext = context;
         this.locationType = i;
         this.dialogId = j;
+        this.needEmptyView = z;
     }
 
     public void setOverScrollHeight(int i) {
@@ -202,28 +203,29 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     public int getItemCount() {
         int i = this.locationType;
+        int i2 = 5;
         if (i == 5 || i == 4) {
             return 2;
         }
-        int i2 = 1;
+        int i3 = 1;
         if (this.currentMessageObject != null) {
             if (!this.currentLiveLocations.isEmpty()) {
-                i2 = this.currentLiveLocations.size() + 3;
+                i3 = this.currentLiveLocations.size() + 3;
             }
-            return i2 + 2;
+            return i3 + 2;
         } else if (i == 2) {
             return this.currentLiveLocations.size() + 2;
         } else {
             boolean z = this.searching;
             if (z || (!z && this.places.isEmpty())) {
                 if (this.locationType != 0) {
-                    return 6;
+                    i2 = 6;
                 }
-                return 5;
+                return i2 + (this.needEmptyView ? 1 : 0);
             } else if (this.locationType == 1) {
-                return this.places.size() + 5 + (this.places.isEmpty() ^ true ? 1 : 0);
+                return this.places.size() + 5 + (this.places.isEmpty() ^ true ? 1 : 0) + (this.needEmptyView ? 1 : 0);
             } else {
-                return this.places.size() + 4 + (this.places.isEmpty() ^ true ? 1 : 0);
+                return this.places.size() + 4 + (this.places.isEmpty() ^ true ? 1 : 0) + (this.needEmptyView ? 1 : 0);
             }
         }
     }
@@ -291,12 +293,15 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 });
                 shadowSectionCell = locationDirectionCell;
                 break;
-            default:
+            case 9:
                 ShadowSectionCell shadowSectionCell2 = new ShadowSectionCell(this.mContext);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
                 shadowSectionCell2.setBackgroundDrawable(combinedDrawable);
                 shadowSectionCell = shadowSectionCell2;
+                break;
+            default:
+                shadowSectionCell = new View(this.mContext);
                 break;
         }
         shadowSectionCell = view;
@@ -404,6 +409,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
     public int getItemViewType(int i) {
         if (i == 0) {
             return 0;
+        }
+        if (this.needEmptyView && i == getItemCount() - 1) {
+            return 10;
         }
         int i2 = this.locationType;
         if (i2 == 5) {

@@ -541,123 +541,123 @@ public class SvgHelper {
             int r0 = r2.hashCode()
             r1 = -1
             switch(r0) {
-                case -734239628: goto L_0x005f;
-                case 112785: goto L_0x0055;
-                case 3027034: goto L_0x004b;
-                case 3068707: goto L_0x0041;
-                case 3181155: goto L_0x0037;
-                case 93818879: goto L_0x002d;
-                case 98619139: goto L_0x0023;
+                case -734239628: goto L_0x005e;
+                case 112785: goto L_0x0054;
+                case 3027034: goto L_0x004a;
+                case 3068707: goto L_0x0040;
+                case 3181155: goto L_0x0036;
+                case 93818879: goto L_0x002c;
+                case 98619139: goto L_0x0022;
                 case 113101865: goto L_0x0017;
                 case 828922025: goto L_0x000d;
                 default: goto L_0x000c;
             }
         L_0x000c:
-            goto L_0x006a
+            goto L_0x0068
         L_0x000d:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 7
-            goto L_0x006b
+            goto L_0x0069
         L_0x0017:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 8
-            goto L_0x006b
-        L_0x0023:
+            goto L_0x0069
+        L_0x0022:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 3
-            goto L_0x006b
-        L_0x002d:
+            goto L_0x0069
+        L_0x002c:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 0
-            goto L_0x006b
-        L_0x0037:
+            goto L_0x0069
+        L_0x0036:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 1
-            goto L_0x006b
-        L_0x0041:
+            goto L_0x0069
+        L_0x0040:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 6
-            goto L_0x006b
-        L_0x004b:
+            goto L_0x0069
+        L_0x004a:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 4
-            goto L_0x006b
-        L_0x0055:
+            goto L_0x0069
+        L_0x0054:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 2
-            goto L_0x006b
-        L_0x005f:
+            goto L_0x0069
+        L_0x005e:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x006a
+            if (r2 == 0) goto L_0x0068
             r2 = 5
-            goto L_0x006b
-        L_0x006a:
+            goto L_0x0069
+        L_0x0068:
             r2 = -1
-        L_0x006b:
+        L_0x0069:
             switch(r2) {
-                case 0: goto L_0x00ab;
-                case 1: goto L_0x00a3;
-                case 2: goto L_0x009c;
-                case 3: goto L_0x0094;
-                case 4: goto L_0x008c;
-                case 5: goto L_0x0085;
-                case 6: goto L_0x007d;
-                case 7: goto L_0x0075;
-                case 8: goto L_0x0070;
-                default: goto L_0x006e;
+                case 0: goto L_0x00a9;
+                case 1: goto L_0x00a1;
+                case 2: goto L_0x009a;
+                case 3: goto L_0x0092;
+                case 4: goto L_0x008a;
+                case 5: goto L_0x0083;
+                case 6: goto L_0x007b;
+                case 7: goto L_0x0073;
+                case 8: goto L_0x006e;
+                default: goto L_0x006c;
             }
-        L_0x006e:
+        L_0x006c:
             r2 = 0
             return r2
-        L_0x0070:
+        L_0x006e:
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x0075:
+        L_0x0073:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x007d:
+        L_0x007b:
             r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0085:
+        L_0x0083:
             r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x008c:
+        L_0x008a:
             r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0094:
+        L_0x0092:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x009c:
+        L_0x009a:
             r2 = -65536(0xfffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a3:
+        L_0x00a1:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00ab:
+        L_0x00a9:
             r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2

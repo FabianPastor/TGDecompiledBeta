@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">정말 배경을 색깔로 바꾸시겠습니까?</string>
     <string name="ChannelAddAdmin">관리자 추가</string>
     <string name="ChannelAddException">예외 추가</string>
-    <string name="ChannelAddMembers">참가자 추가</string>
     <string name="ChannelAddTo">%1$s 님을 채널에 추가할까요?</string>
     <string name="ChannelAddToChannel">채널에 추가</string>
     <string name="ChannelAddToGroup">그룹에 추가</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">테마 삭제</string>
     <string name="DeleteThemeAlert">이 테마를 삭제하시겠습니까?</string>
     <string name="DeleteThemeTitle">테마 삭제</string>
-    <string name="DeleteTheseChats">대화방 삭제</string>
     <string name="DeleteThisChat">대화방 삭제</string>
     <string name="DeleteThisGroup">이 그룹 삭제</string>
     <string name="DescriptionInfo">채널에 관해 안내해 주실 수 있습니다.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">줄이기</string>
     <string name="PollExpand">늘이기</string>
     <string name="PollMultiple">다중 선택</string>
-    <string name="PollOptions">설문 선택지</string>
     <string name="PollQuiz">퀴즈 모드</string>
     <string name="PollResults">설문 결과</string>
     <string name="PollSelectOption">먼저 선택지를 고르세요</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">설문</string>
     <string name="PublicPollCantForward">죄송합니다. 공개 투표 설문은 채널로 전달하실 수 없습니다.</string>
     <string name="Purple">보라색</string>
-    <string name="Question">질문</string>
     <string name="QuestionHint">질문을 작성하세요</string>
     <string name="QuickReplyCustom">맞춤 메시지...</string>
     <string name="QuickReplyDefault1">지금 대화할 수 없어요. 무슨 일인가요?</string>

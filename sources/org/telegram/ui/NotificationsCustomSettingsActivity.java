@@ -1671,7 +1671,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.Cells.GraySectionCell r7 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r8 = r6.mContext
                 r7.<init>(r8)
-                goto L_0x0020
+                goto L_0x001f
             L_0x000a:
                 org.telegram.ui.Cells.UserCell r7 = new org.telegram.ui.Cells.UserCell
                 android.content.Context r1 = r6.mContext
@@ -1684,7 +1684,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r8 = "windowBackgroundWhite"
                 int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
                 r7.setBackgroundColor(r8)
-            L_0x0020:
+            L_0x001f:
                 org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r8.<init>(r7)
                 return r8
@@ -1754,49 +1754,49 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r3 = this;
                 java.lang.String r4 = "windowBackgroundWhite"
                 switch(r5) {
-                    case 0: goto L_0x006a;
-                    case 1: goto L_0x005b;
-                    case 2: goto L_0x004a;
-                    case 3: goto L_0x003b;
-                    case 4: goto L_0x0033;
-                    case 5: goto L_0x0024;
-                    case 6: goto L_0x0015;
-                    default: goto L_0x0006;
+                    case 0: goto L_0x0069;
+                    case 1: goto L_0x005a;
+                    case 2: goto L_0x0049;
+                    case 3: goto L_0x003a;
+                    case 4: goto L_0x0032;
+                    case 5: goto L_0x0023;
+                    case 6: goto L_0x0014;
+                    default: goto L_0x0005;
                 }
-            L_0x0006:
+            L_0x0005:
                 org.telegram.ui.Cells.TextCell r5 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x0015:
+                goto L_0x0077
+            L_0x0014:
                 org.telegram.ui.Cells.NotificationsCheckCell r5 = new org.telegram.ui.Cells.NotificationsCheckCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x0024:
+                goto L_0x0077
+            L_0x0023:
                 org.telegram.ui.Cells.TextSettingsCell r5 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x0033:
+                goto L_0x0077
+            L_0x0032:
                 org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r4 = r3.mContext
                 r5.<init>(r4)
-                goto L_0x0078
-            L_0x003b:
+                goto L_0x0077
+            L_0x003a:
                 org.telegram.ui.Cells.TextColorCell r5 = new org.telegram.ui.Cells.TextColorCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x004a:
+                goto L_0x0077
+            L_0x0049:
                 org.telegram.ui.Cells.UserCell r5 = new org.telegram.ui.Cells.UserCell
                 android.content.Context r0 = r3.mContext
                 r1 = 6
@@ -1804,21 +1804,21 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r5.<init>(r0, r1, r2, r2)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x005b:
+                goto L_0x0077
+            L_0x005a:
                 org.telegram.ui.Cells.TextCheckCell r5 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-                goto L_0x0078
-            L_0x006a:
+                goto L_0x0077
+            L_0x0069:
                 org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r3.mContext
                 r5.<init>(r0)
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                 r5.setBackgroundColor(r4)
-            L_0x0078:
+            L_0x0077:
                 org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r4.<init>(r5)
                 return r4
@@ -1845,25 +1845,25 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r4 = 0
                 r5 = 1
                 switch(r0) {
-                    case 0: goto L_0x03e9;
-                    case 1: goto L_0x03a6;
-                    case 2: goto L_0x0380;
-                    case 3: goto L_0x032f;
-                    case 4: goto L_0x02e3;
-                    case 5: goto L_0x00fc;
-                    case 6: goto L_0x0059;
+                    case 0: goto L_0x03e5;
+                    case 1: goto L_0x03a2;
+                    case 2: goto L_0x037c;
+                    case 3: goto L_0x032b;
+                    case 4: goto L_0x02e0;
+                    case 5: goto L_0x00f9;
+                    case 6: goto L_0x0056;
                     case 7: goto L_0x000e;
                     default: goto L_0x000c;
                 }
             L_0x000c:
-                goto L_0x0401
+                goto L_0x03fd
             L_0x000e:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextCell r13 = (org.telegram.ui.Cells.TextCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsAddRow
-                if (r14 != r0) goto L_0x003d
-                r14 = 2131625945(0x7f0e07d9, float:1.8879112E38)
+                if (r14 != r0) goto L_0x003b
+                r14 = 2131625960(0x7f0e07e8, float:1.8879143E38)
                 java.lang.String r0 = "NotificationsAddAnException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165249(0x7var_, float:1.794471E38)
@@ -1876,19 +1876,19 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r0 = "windowBackgroundWhiteBlueButton"
                 r13.setColors(r14, r0)
-                goto L_0x0401
-            L_0x003d:
+                goto L_0x03fd
+            L_0x003b:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.deleteAllRow
-                if (r14 != r0) goto L_0x0401
-                r14 = 2131625953(0x7f0e07e1, float:1.8879129E38)
+                if (r14 != r0) goto L_0x03fd
+                r14 = 2131625968(0x7f0e07f0, float:1.8879159E38)
                 java.lang.String r0 = "NotificationsDeleteAllException"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r4)
                 java.lang.String r14 = "windowBackgroundWhiteRedText5"
                 r13.setColors(r1, r14)
-                goto L_0x0401
-            L_0x0059:
+                goto L_0x03fd
+            L_0x0056:
                 android.view.View r13 = r13.itemView
                 r6 = r13
                 org.telegram.ui.Cells.NotificationsCheckCell r6 = (org.telegram.ui.Cells.NotificationsCheckCell) r6
@@ -1899,61 +1899,61 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 android.content.SharedPreferences r13 = r13.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0085
-                r14 = 2131625963(0x7f0e07eb, float:1.8879149E38)
+                if (r14 != r5) goto L_0x0082
+                r14 = 2131625978(0x7f0e07fa, float:1.887918E38)
                 java.lang.String r0 = "NotificationsForPrivateChats"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableAll2"
                 int r13 = r13.getInt(r0, r4)
-            L_0x0083:
+            L_0x0080:
                 r7 = r14
-                goto L_0x00ad
-            L_0x0085:
+                goto L_0x00aa
+            L_0x0082:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x009d
-                r14 = 2131625962(0x7f0e07ea, float:1.8879147E38)
+                if (r14 != 0) goto L_0x009a
+                r14 = 2131625977(0x7f0e07f9, float:1.8879177E38)
                 java.lang.String r0 = "NotificationsForGroups"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableGroup2"
                 int r13 = r13.getInt(r0, r4)
-                goto L_0x0083
-            L_0x009d:
-                r14 = 2131625960(0x7f0e07e8, float:1.8879143E38)
+                goto L_0x0080
+            L_0x009a:
+                r14 = 2131625975(0x7f0e07f7, float:1.8879173E38)
                 java.lang.String r0 = "NotificationsForChannels"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 java.lang.String r0 = "EnableChannel2"
                 int r13 = r13.getInt(r0, r4)
-                goto L_0x0083
-            L_0x00ad:
+                goto L_0x0080
+            L_0x00aa:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 org.telegram.tgnet.ConnectionsManager r14 = r14.getConnectionsManager()
                 int r14 = r14.getCurrentTime()
-                if (r13 >= r14) goto L_0x00bb
+                if (r13 >= r14) goto L_0x00b8
                 r9 = 1
-                goto L_0x00bc
-            L_0x00bb:
+                goto L_0x00b9
+            L_0x00b8:
                 r9 = 0
-            L_0x00bc:
-                if (r9 == 0) goto L_0x00cc
-                r13 = 2131625973(0x7f0e07f5, float:1.887917E38)
+            L_0x00b9:
+                if (r9 == 0) goto L_0x00c9
+                r13 = 2131625988(0x7f0e0804, float:1.88792E38)
                 java.lang.String r14 = "NotificationsOn"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
-            L_0x00ca:
+            L_0x00c7:
                 r10 = 0
-                goto L_0x00f6
-            L_0x00cc:
+                goto L_0x00f3
+            L_0x00c9:
                 r0 = 31536000(0x1e13380, float:8.2725845E-38)
                 int r0 = r13 - r0
-                if (r0 < r14) goto L_0x00e0
-                r13 = 2131625971(0x7f0e07f3, float:1.8879165E38)
+                if (r0 < r14) goto L_0x00dd
+                r13 = 2131625986(0x7f0e0802, float:1.8879195E38)
                 java.lang.String r14 = "NotificationsOff"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
                 r8.append(r13)
-                goto L_0x00ca
-            L_0x00e0:
-                r14 = 2131625972(0x7f0e07f4, float:1.8879167E38)
+                goto L_0x00c7
+            L_0x00dd:
+                r14 = 2131625987(0x7f0e0803, float:1.8879197E38)
                 java.lang.Object[] r0 = new java.lang.Object[r5]
                 long r1 = (long) r13
                 java.lang.String r13 = org.telegram.messenger.LocaleController.stringForMessageListDate(r1)
@@ -1962,255 +1962,255 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r13 = org.telegram.messenger.LocaleController.formatString(r13, r14, r0)
                 r8.append(r13)
                 r10 = 2
-            L_0x00f6:
+            L_0x00f3:
                 r11 = 0
                 r6.setTextAndValueAndCheck(r7, r8, r9, r10, r11)
-                goto L_0x0401
-            L_0x00fc:
+                goto L_0x03fd
+            L_0x00f9:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextSettingsCell r13 = (org.telegram.ui.Cells.TextSettingsCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 android.content.SharedPreferences r0 = r0.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messageSoundRow
-                if (r14 != r1) goto L_0x0160
+                if (r14 != r1) goto L_0x015d
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                r1 = 2131626821(0x7f0e0b45, float:1.888089E38)
+                r1 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
                 java.lang.String r2 = "SoundDefault"
-                if (r14 != r5) goto L_0x0126
+                if (r14 != r5) goto L_0x0123
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "GlobalSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-                goto L_0x0143
-            L_0x0126:
+                goto L_0x0140
+            L_0x0123:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x0139
+                if (r14 != 0) goto L_0x0136
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "GroupSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-                goto L_0x0143
-            L_0x0139:
+                goto L_0x0140
+            L_0x0136:
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 java.lang.String r1 = "ChannelSound"
                 java.lang.String r14 = r0.getString(r1, r14)
-            L_0x0143:
+            L_0x0140:
                 java.lang.String r0 = "NoSound"
                 boolean r1 = r14.equals(r0)
-                if (r1 == 0) goto L_0x0152
-                r14 = 2131625830(0x7f0e0766, float:1.887888E38)
+                if (r1 == 0) goto L_0x014f
+                r14 = 2131625845(0x7f0e0775, float:1.887891E38)
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-            L_0x0152:
-                r0 = 2131626820(0x7f0e0b44, float:1.8880887E38)
+            L_0x014f:
+                r0 = 2131626841(0x7f0e0b59, float:1.888093E38)
                 java.lang.String r1 = "Sound"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
-                goto L_0x0401
-            L_0x0160:
+                goto L_0x03fd
+            L_0x015d:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messageVibrateRow
                 r2 = 4
-                if (r14 != r1) goto L_0x01f7
+                if (r14 != r1) goto L_0x01f4
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0178
+                if (r14 != r5) goto L_0x0175
                 java.lang.String r14 = "vibrate_messages"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x018d
-            L_0x0178:
+                goto L_0x018a
+            L_0x0175:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x0187
+                if (r14 != 0) goto L_0x0184
                 java.lang.String r14 = "vibrate_group"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x018d
-            L_0x0187:
+                goto L_0x018a
+            L_0x0184:
                 java.lang.String r14 = "vibrate_channel"
                 int r14 = r0.getInt(r14, r4)
-            L_0x018d:
-                r0 = 2131627160(0x7f0e0CLASSNAME, float:1.8881577E38)
+            L_0x018a:
+                r0 = 2131627185(0x7f0e0cb1, float:1.8881627E38)
                 java.lang.String r1 = "Vibrate"
-                if (r14 != 0) goto L_0x01a6
+                if (r14 != 0) goto L_0x01a3
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627161(0x7f0e0CLASSNAME, float:1.8881579E38)
+                r0 = 2131627186(0x7f0e0cb2, float:1.888163E38)
                 java.lang.String r1 = "VibrationDefault"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x0401
-            L_0x01a6:
-                if (r14 != r5) goto L_0x01ba
+                goto L_0x03fd
+            L_0x01a3:
+                if (r14 != r5) goto L_0x01b7
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+                r0 = 2131626796(0x7f0e0b2c, float:1.8880838E38)
                 java.lang.String r1 = "Short"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x0401
-            L_0x01ba:
-                if (r14 != r3) goto L_0x01ce
+                goto L_0x03fd
+            L_0x01b7:
+                if (r14 != r3) goto L_0x01cb
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+                r0 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
                 java.lang.String r1 = "VibrationDisabled"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x0401
-            L_0x01ce:
+                goto L_0x03fd
+            L_0x01cb:
                 r3 = 3
-                if (r14 != r3) goto L_0x01e3
+                if (r14 != r3) goto L_0x01e0
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625601(0x7f0e0681, float:1.8878415E38)
+                r0 = 2131625616(0x7f0e0690, float:1.8878445E38)
                 java.lang.String r1 = "Long"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x0401
-            L_0x01e3:
-                if (r14 != r2) goto L_0x0401
+                goto L_0x03fd
+            L_0x01e0:
+                if (r14 != r2) goto L_0x03fd
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131626002(0x7f0e0812, float:1.8879228E38)
+                r0 = 2131626017(0x7f0e0821, float:1.8879258E38)
                 java.lang.String r1 = "OnlyIfSilent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
-                goto L_0x0401
-            L_0x01f7:
+                goto L_0x03fd
+            L_0x01f4:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messagePriorityRow
-                if (r14 != r1) goto L_0x027c
+                if (r14 != r1) goto L_0x0279
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x020e
+                if (r14 != r5) goto L_0x020b
                 java.lang.String r14 = "priority_messages"
                 int r14 = r0.getInt(r14, r5)
-                goto L_0x0223
-            L_0x020e:
+                goto L_0x0220
+            L_0x020b:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x021d
+                if (r14 != 0) goto L_0x021a
                 java.lang.String r14 = "priority_group"
                 int r14 = r0.getInt(r14, r5)
-                goto L_0x0223
-            L_0x021d:
+                goto L_0x0220
+            L_0x021a:
                 java.lang.String r14 = "priority_channel"
                 int r14 = r0.getInt(r14, r5)
-            L_0x0223:
-                r0 = 2131625965(0x7f0e07ed, float:1.8879153E38)
+            L_0x0220:
+                r0 = 2131625980(0x7f0e07fc, float:1.8879183E38)
                 java.lang.String r1 = "NotificationsImportance"
-                if (r14 != 0) goto L_0x023c
+                if (r14 != 0) goto L_0x0239
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625975(0x7f0e07f7, float:1.8879173E38)
+                r0 = 2131625990(0x7f0e0806, float:1.8879204E38)
                 java.lang.String r1 = "NotificationsPriorityHigh"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x0401
-            L_0x023c:
-                if (r14 == r5) goto L_0x026a
-                if (r14 != r3) goto L_0x0241
-                goto L_0x026a
-            L_0x0241:
-                if (r14 != r2) goto L_0x0255
+                goto L_0x03fd
+            L_0x0239:
+                if (r14 == r5) goto L_0x0267
+                if (r14 != r3) goto L_0x023e
+                goto L_0x0267
+            L_0x023e:
+                if (r14 != r2) goto L_0x0252
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625976(0x7f0e07f8, float:1.8879175E38)
+                r0 = 2131625991(0x7f0e0807, float:1.8879206E38)
                 java.lang.String r1 = "NotificationsPriorityLow"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x0401
-            L_0x0255:
+                goto L_0x03fd
+            L_0x0252:
                 r2 = 5
-                if (r14 != r2) goto L_0x0401
+                if (r14 != r2) goto L_0x03fd
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625977(0x7f0e07f9, float:1.8879177E38)
+                r0 = 2131625992(0x7f0e0808, float:1.8879208E38)
                 java.lang.String r1 = "NotificationsPriorityMedium"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x0401
-            L_0x026a:
+                goto L_0x03fd
+            L_0x0267:
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131625979(0x7f0e07fb, float:1.8879181E38)
+                r0 = 2131625994(0x7f0e080a, float:1.8879212E38)
                 java.lang.String r1 = "NotificationsPriorityUrgent"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r4)
-                goto L_0x0401
-            L_0x027c:
+                goto L_0x03fd
+            L_0x0279:
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.messagePopupNotificationRow
-                if (r14 != r1) goto L_0x0401
+                if (r14 != r1) goto L_0x03fd
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x0293
+                if (r14 != r5) goto L_0x0290
                 java.lang.String r14 = "popupAll"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x02a8
-            L_0x0293:
+                goto L_0x02a5
+            L_0x0290:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x02a2
+                if (r14 != 0) goto L_0x029f
                 java.lang.String r14 = "popupGroup"
                 int r14 = r0.getInt(r14, r4)
-                goto L_0x02a8
-            L_0x02a2:
+                goto L_0x02a5
+            L_0x029f:
                 java.lang.String r14 = "popupChannel"
                 int r14 = r0.getInt(r14, r4)
-            L_0x02a8:
-                if (r14 != 0) goto L_0x02b4
-                r14 = 2131625815(0x7f0e0757, float:1.8878849E38)
+            L_0x02a5:
+                if (r14 != 0) goto L_0x02b1
+                r14 = 2131625830(0x7f0e0766, float:1.887888E38)
                 java.lang.String r0 = "NoPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d5
-            L_0x02b4:
-                if (r14 != r5) goto L_0x02c0
-                r14 = 2131626004(0x7f0e0814, float:1.8879232E38)
+                goto L_0x02d2
+            L_0x02b1:
+                if (r14 != r5) goto L_0x02bd
+                r14 = 2131626019(0x7f0e0823, float:1.8879262E38)
                 java.lang.String r0 = "OnlyWhenScreenOn"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d5
-            L_0x02c0:
-                if (r14 != r3) goto L_0x02cc
-                r14 = 2131626003(0x7f0e0813, float:1.887923E38)
+                goto L_0x02d2
+            L_0x02bd:
+                if (r14 != r3) goto L_0x02c9
+                r14 = 2131626018(0x7f0e0822, float:1.887926E38)
                 java.lang.String r0 = "OnlyWhenScreenOff"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                goto L_0x02d5
-            L_0x02cc:
-                r14 = 2131624165(0x7f0e00e5, float:1.8875502E38)
+                goto L_0x02d2
+            L_0x02c9:
+                r14 = 2131624167(0x7f0e00e7, float:1.8875506E38)
                 java.lang.String r0 = "AlwaysShowPopup"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-            L_0x02d5:
-                r0 = 2131626400(0x7f0e09a0, float:1.8880035E38)
+            L_0x02d2:
+                r0 = 2131626417(0x7f0e09b1, float:1.888007E38)
                 java.lang.String r1 = "PopupNotification"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r0, r14, r5)
-                goto L_0x0401
-            L_0x02e3:
+                goto L_0x03fd
+            L_0x02e0:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.deleteAllSectionRow
                 java.lang.String r1 = "windowBackgroundGrayShadow"
-                if (r14 == r0) goto L_0x031f
+                if (r14 == r0) goto L_0x031b
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.groupSection2Row
-                if (r14 != r0) goto L_0x02fe
+                if (r14 != r0) goto L_0x02fa
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsSection2Row
-                if (r0 == r2) goto L_0x031f
-            L_0x02fe:
+                if (r0 == r2) goto L_0x031b
+            L_0x02fa:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.exceptionsSection2Row
-                if (r14 != r0) goto L_0x030f
+                if (r14 != r0) goto L_0x030b
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.deleteAllRow
-                if (r14 != r2) goto L_0x030f
-                goto L_0x031f
-            L_0x030f:
+                if (r14 != r2) goto L_0x030b
+                goto L_0x031b
+            L_0x030b:
                 android.view.View r13 = r13.itemView
                 android.content.Context r14 = r12.mContext
-                r0 = 2131165418(0x7var_ea, float:1.7945053E38)
+                r0 = 2131165412(0x7var_e4, float:1.794504E38)
                 android.graphics.drawable.Drawable r14 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r14, (int) r0, (java.lang.String) r1)
                 r13.setBackgroundDrawable(r14)
-                goto L_0x0401
-            L_0x031f:
+                goto L_0x03fd
+            L_0x031b:
                 android.view.View r13 = r13.itemView
                 android.content.Context r14 = r12.mContext
-                r0 = 2131165419(0x7var_eb, float:1.7945055E38)
+                r0 = 2131165413(0x7var_e5, float:1.7945042E38)
                 android.graphics.drawable.Drawable r14 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r14, (int) r0, (java.lang.String) r1)
                 r13.setBackgroundDrawable(r14)
-                goto L_0x0401
-            L_0x032f:
+                goto L_0x03fd
+            L_0x032b:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextColorCell r13 = (org.telegram.ui.Cells.TextColorCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
@@ -2218,39 +2218,39 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.currentType
                 r1 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
-                if (r0 != r5) goto L_0x034b
+                if (r0 != r5) goto L_0x0347
                 java.lang.String r0 = "MessagesLed"
                 int r14 = r14.getInt(r0, r1)
-                goto L_0x0360
-            L_0x034b:
+                goto L_0x035c
+            L_0x0347:
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.currentType
-                if (r0 != 0) goto L_0x035a
+                if (r0 != 0) goto L_0x0356
                 java.lang.String r0 = "GroupLed"
                 int r14 = r14.getInt(r0, r1)
-                goto L_0x0360
-            L_0x035a:
+                goto L_0x035c
+            L_0x0356:
                 java.lang.String r0 = "ChannelLed"
                 int r14 = r14.getInt(r0, r1)
-            L_0x0360:
+            L_0x035c:
                 r0 = 9
-                if (r4 >= r0) goto L_0x0372
+                if (r4 >= r0) goto L_0x036e
                 int[] r0 = org.telegram.ui.Cells.TextColorCell.colorsToSave
                 r0 = r0[r4]
-                if (r0 != r14) goto L_0x036f
+                if (r0 != r14) goto L_0x036b
                 int[] r14 = org.telegram.ui.Cells.TextColorCell.colors
                 r14 = r14[r4]
-                goto L_0x0372
-            L_0x036f:
+                goto L_0x036e
+            L_0x036b:
                 int r4 = r4 + 1
-                goto L_0x0360
-            L_0x0372:
-                r0 = 2131625546(0x7f0e064a, float:1.8878303E38)
+                goto L_0x035c
+            L_0x036e:
+                r0 = 2131625560(0x7f0e0658, float:1.8878331E38)
                 java.lang.String r1 = "LedColor"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndColor(r0, r14, r5)
-                goto L_0x0401
-            L_0x0380:
+                goto L_0x03fd
+            L_0x037c:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.UserCell r13 = (org.telegram.ui.Cells.UserCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
@@ -2263,52 +2263,52 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 org.telegram.ui.NotificationsCustomSettingsActivity r2 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r2 = r2.exceptionsEndRow
                 int r2 = r2 - r5
-                if (r14 == r2) goto L_0x03a2
+                if (r14 == r2) goto L_0x039e
                 r4 = 1
-            L_0x03a2:
+            L_0x039e:
                 r13.setException(r0, r1, r4)
-                goto L_0x0401
-            L_0x03a6:
+                goto L_0x03fd
+            L_0x03a2:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextCheckCell r13 = (org.telegram.ui.Cells.TextCheckCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 android.content.SharedPreferences r0 = r0.getNotificationsSettings()
                 org.telegram.ui.NotificationsCustomSettingsActivity r1 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r1 = r1.previewRow
-                if (r14 != r1) goto L_0x0401
+                if (r14 != r1) goto L_0x03fd
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != r5) goto L_0x03c7
+                if (r14 != r5) goto L_0x03c3
                 java.lang.String r14 = "EnablePreviewAll"
                 boolean r14 = r0.getBoolean(r14, r5)
-                goto L_0x03dc
-            L_0x03c7:
+                goto L_0x03d8
+            L_0x03c3:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r14 = r14.currentType
-                if (r14 != 0) goto L_0x03d6
+                if (r14 != 0) goto L_0x03d2
                 java.lang.String r14 = "EnablePreviewGroup"
                 boolean r14 = r0.getBoolean(r14, r5)
-                goto L_0x03dc
-            L_0x03d6:
+                goto L_0x03d8
+            L_0x03d2:
                 java.lang.String r14 = "EnablePreviewChannel"
                 boolean r14 = r0.getBoolean(r14, r5)
-            L_0x03dc:
-                r0 = 2131625688(0x7f0e06d8, float:1.8878591E38)
+            L_0x03d8:
+                r0 = 2131625703(0x7f0e06e7, float:1.8878621E38)
                 java.lang.String r1 = "MessagePreview"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndCheck(r0, r14, r5)
-                goto L_0x0401
-            L_0x03e9:
+                goto L_0x03fd
+            L_0x03e5:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.HeaderCell r13 = (org.telegram.ui.Cells.HeaderCell) r13
                 org.telegram.ui.NotificationsCustomSettingsActivity r0 = org.telegram.ui.NotificationsCustomSettingsActivity.this
                 int r0 = r0.messageSectionRow
-                if (r14 != r0) goto L_0x0401
-                r14 = 2131626582(0x7f0e0a56, float:1.8880404E38)
+                if (r14 != r0) goto L_0x03fd
+                r14 = 2131626600(0x7f0e0a68, float:1.888044E38)
                 java.lang.String r0 = "SETTINGS"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
-            L_0x0401:
+            L_0x03fd:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -2358,15 +2358,57 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r11 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 NotificationsCustomSettingsActivity.this.lambda$getThemeDescriptions$12$NotificationsCustomSettingsActivity();
             }
         };
-        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r8 = r10;
-        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r7 = r10;
-        return new ThemeDescription[]{new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCheckCell.class, TextColorCell.class, TextSettingsCell.class, UserCell.class, NotificationsCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"), new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"), new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"), new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"), new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText"), new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteBlueText"), new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundGreen"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundCyan"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundBlue"), new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundPink"), new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"), new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"), new ThemeDescription((View) this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"), new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"), new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueButton"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText5"), new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueIcon")};
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCheckCell.class, TextColorCell.class, TextSettingsCell.class, UserCell.class, NotificationsCheckCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r9 = r11;
+        ThemeDescription themeDescription = r2;
+        ThemeDescription themeDescription2 = new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText");
+        arrayList.add(themeDescription);
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
+        $$Lambda$NotificationsCustomSettingsActivity$YpE9rwbQwhMphj8bqCEt9ez12V8 r8 = r11;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundPink"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "graySection"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueButton"));
+        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText5"));
+        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueIcon"));
+        return arrayList;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$12$NotificationsCustomSettingsActivity() {

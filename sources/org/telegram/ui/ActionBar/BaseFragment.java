@@ -72,10 +72,6 @@ public class BaseFragment {
         return false;
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[0];
-    }
-
     public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
         return true;
     }
@@ -160,14 +156,6 @@ public class BaseFragment {
         this.isPaused = true;
         this.arguments = bundle;
         this.classGuid = ConnectionsManager.generateClassGuid();
-    }
-
-    public void setCurrentAccount(int i) {
-        if (this.fragmentView == null) {
-            this.currentAccount = i;
-            return;
-        }
-        throw new IllegalStateException("trying to set current account when fragment UI already created");
     }
 
     public ActionBar getActionBar() {
@@ -516,8 +504,16 @@ public class BaseFragment {
         return 0;
     }
 
+    public Dialog getVisibleDialog() {
+        return this.visibleDialog;
+    }
+
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        return new ArrayList<>();
     }
 
     public AccountInstance getAccountInstance() {
@@ -541,7 +537,6 @@ public class BaseFragment {
         return getAccountInstance().getConnectionsManager();
     }
 
-    /* access modifiers changed from: protected */
     public LocationController getLocationController() {
         return getAccountInstance().getLocationController();
     }

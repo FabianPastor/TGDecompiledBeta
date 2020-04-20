@@ -40,7 +40,10 @@ public class RLottieImageView extends ImageView {
     }
 
     public void setAnimation(int i, int i2, int i3, int[] iArr) {
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr);
+        setAnimation(new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr));
+    }
+
+    public void setAnimation(RLottieDrawable rLottieDrawable) {
         this.drawable = rLottieDrawable;
         if (this.autoRepeat) {
             rLottieDrawable.setAutoRepeat(1);
@@ -58,11 +61,14 @@ public class RLottieImageView extends ImageView {
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
-        RLottieDrawable rLottieDrawable;
         super.onAttachedToWindow();
         this.attachedToWindow = true;
-        if (this.playing && (rLottieDrawable = this.drawable) != null) {
-            rLottieDrawable.start();
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            rLottieDrawable.setCallback(this);
+            if (this.playing) {
+                this.drawable.start();
+            }
         }
     }
 

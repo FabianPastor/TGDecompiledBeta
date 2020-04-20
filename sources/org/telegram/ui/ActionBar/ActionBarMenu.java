@@ -188,7 +188,7 @@ public class ActionBarMenu extends LinearLayout {
             View childAt = getChildAt(i);
             if (childAt instanceof ActionBarMenuItem) {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
-                if (actionBarMenuItem.isSearchField()) {
+                if (actionBarMenuItem.isSearchField() && actionBarMenuItem.isSearchFieldVisible()) {
                     ActionBarMenuItem.ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = actionBarMenuItem.listener;
                     if (actionBarMenuItemSearchListener == null || actionBarMenuItemSearchListener.canCollapseSearch()) {
                         this.parentActionBar.onSearchFieldVisibilityChanged(false);
@@ -229,7 +229,6 @@ public class ActionBarMenu extends LinearLayout {
                 if (actionBarMenuItem.isSearchField()) {
                     actionBarMenuItem.setSearchFieldText(str, false);
                     actionBarMenuItem.getSearchField().setSelection(str.length());
-                    return;
                 }
             }
         }
@@ -243,7 +242,6 @@ public class ActionBarMenu extends LinearLayout {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
                 if (actionBarMenuItem.isSearchField()) {
                     actionBarMenuItem.onSearchPressed();
-                    return;
                 }
             }
         }

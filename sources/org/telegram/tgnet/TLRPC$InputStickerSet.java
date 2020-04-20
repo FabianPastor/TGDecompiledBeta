@@ -14,6 +14,9 @@ public abstract class TLRPC$InputStickerSet extends TLObject {
             case -1645763991:
                 tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetID();
                 break;
+            case -427863538:
+                tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetDice();
+                break;
             case -4838507:
                 tLRPC$InputStickerSet = new TLRPC$TL_inputStickerSetEmpty();
                 break;

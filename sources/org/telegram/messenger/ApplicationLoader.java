@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
+import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -39,6 +40,12 @@ public class ApplicationLoader extends Application {
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime;
     public static volatile boolean unableGetCurrentNetwork;
+
+    /* access modifiers changed from: protected */
+    public void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
 
     public static File getFilesDirFixed() {
         for (int i = 0; i < 10; i++) {

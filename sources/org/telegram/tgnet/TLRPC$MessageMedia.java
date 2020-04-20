@@ -83,6 +83,9 @@ public abstract class TLRPC$MessageMedia extends TLObject {
             case 1038967584:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaEmpty();
                 break;
+            case 1065280907:
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaDice();
+                break;
             case 1272375192:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaPoll();
                 break;
@@ -96,7 +99,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaContact_layer81();
                 break;
             case 1670374507:
-                tLRPC$MessageMedia = new TLRPC$TL_messageMediaDice();
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaDice_layer111();
                 break;
             case 1766936791:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaPhoto();

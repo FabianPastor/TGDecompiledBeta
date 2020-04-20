@@ -7,20 +7,24 @@ public abstract class TLRPC$PollResults extends TLObject {
     public boolean min;
     public ArrayList<Integer> recent_voters = new ArrayList<>();
     public ArrayList<TLRPC$TL_pollAnswerVoters> results = new ArrayList<>();
+    public String solution;
+    public ArrayList<TLRPC$MessageEntity> solution_entities = new ArrayList<>();
     public int total_voters;
 
     public static TLRPC$PollResults TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_pollResults tLRPC$TL_pollResults;
-        if (i != -NUM) {
-            tLRPC$TL_pollResults = i != NUM ? null : new TLRPC$TL_pollResults_layer108();
+        TLRPC$PollResults tLRPC$PollResults;
+        if (i == -NUM) {
+            tLRPC$PollResults = new TLRPC$TL_pollResults();
+        } else if (i != -NUM) {
+            tLRPC$PollResults = i != NUM ? null : new TLRPC$TL_pollResults_layer108();
         } else {
-            tLRPC$TL_pollResults = new TLRPC$TL_pollResults();
+            tLRPC$PollResults = new TLRPC$TL_pollResults_layer111();
         }
-        if (tLRPC$TL_pollResults != null || !z) {
-            if (tLRPC$TL_pollResults != null) {
-                tLRPC$TL_pollResults.readParams(abstractSerializedData, z);
+        if (tLRPC$PollResults != null || !z) {
+            if (tLRPC$PollResults != null) {
+                tLRPC$PollResults.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_pollResults;
+            return tLRPC$PollResults;
         }
         throw new RuntimeException(String.format("can't parse magic %x in PollResults", new Object[]{Integer.valueOf(i)}));
     }

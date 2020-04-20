@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">Möchtest du wirklich dein Hintergrundbild durch eine Farbe ersetzen?</string>
     <string name="ChannelAddAdmin">Admin hinzufügen</string>
     <string name="ChannelAddException">Ausnahme hinzufügen</string>
-    <string name="ChannelAddMembers">Mitglieder hinzufügen</string>
     <string name="ChannelAddTo">%1$s zum Kanal hinzufügen?</string>
     <string name="ChannelAddToChannel">Dem Kanal hinzufügen</string>
     <string name="ChannelAddToGroup">Der Gruppe hinzufügen</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">Thema löschen</string>
     <string name="DeleteThemeAlert">Möchtest du wirklich dieses Thema löschen?</string>
     <string name="DeleteThemeTitle">Thema löschen</string>
-    <string name="DeleteTheseChats">Chats löschen</string>
     <string name="DeleteThisChat">Diesen Chat löschen</string>
     <string name="DeleteThisGroup">Diese Gruppe löschen</string>
     <string name="DescriptionInfo">Beschreibe deinen Kanal (optional).</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">Zuklappen</string>
     <string name="PollExpand">Aufklappen</string>
     <string name="PollMultiple">Mehrfachauswahl</string>
-    <string name="PollOptions">Umfrageoptionen</string>
     <string name="PollQuiz">Quiz-Modus</string>
     <string name="PollResults">Umfrageergebnis</string>
     <string name="PollSelectOption">Erst eine Option wählen</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">Umfrage</string>
     <string name="PublicPollCantForward">Leider können Umfragen mit sichtbaren Stimmen nicht an Kanäle weitergeleitet werden.</string>
     <string name="Purple">Violett</string>
-    <string name="Question">Frage</string>
     <string name="QuestionHint">Stelle eine Frage</string>
     <string name="QuickReplyCustom">Eigene Nachricht...</string>
     <string name="QuickReplyDefault1">Kann nicht sprechen. Was gibt\'s?</string>

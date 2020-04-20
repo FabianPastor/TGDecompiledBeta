@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.SystemClock;
 import android.transition.AutoTransition;
@@ -19,7 +20,6 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
@@ -31,7 +31,6 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ScrollSlidingTabStrip;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
@@ -42,6 +41,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private ScrollSlidingTabStripDelegate delegate;
     private SparseArray<View> futureTabsPositions = new SparseArray<>();
     private int indicatorColor = -10066330;
+    private GradientDrawable indicatorDrawable = new GradientDrawable();
     private int indicatorHeight;
     private long lastAnimationTime;
     private int lastScrollX;
@@ -54,11 +54,17 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private int tabCount;
     private HashMap<String, View> tabTypes = new HashMap<>();
     private LinearLayout tabsContainer;
+    private Type type = Type.LINE;
     private int underlineColor = NUM;
     private int underlineHeight = AndroidUtilities.dp(2.0f);
 
     public interface ScrollSlidingTabStripDelegate {
         void onPageSelected(int i);
+    }
+
+    public enum Type {
+        LINE,
+        TAB
     }
 
     public ScrollSlidingTabStrip(Context context) {
@@ -84,6 +90,56 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public void setDelegate(ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate) {
         this.delegate = scrollSlidingTabStripDelegate;
+    }
+
+    public Type getType() {
+        return this.type;
+    }
+
+    public void setType(Type type2) {
+        if (type2 != null && this.type != type2) {
+            this.type = type2;
+            int i = AnonymousClass2.$SwitchMap$org$telegram$ui$Components$ScrollSlidingTabStrip$Type[type2.ordinal()];
+            if (i == 1) {
+                this.indicatorDrawable.setCornerRadius(0.0f);
+            } else if (i == 2) {
+                float dpf2 = AndroidUtilities.dpf2(3.0f);
+                this.indicatorDrawable.setCornerRadii(new float[]{dpf2, dpf2, dpf2, dpf2, 0.0f, 0.0f, 0.0f, 0.0f});
+            }
+        }
+    }
+
+    /* renamed from: org.telegram.ui.Components.ScrollSlidingTabStrip$2  reason: invalid class name */
+    static /* synthetic */ class AnonymousClass2 {
+        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$ScrollSlidingTabStrip$Type;
+
+        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|6) */
+        /* JADX WARNING: Code restructure failed: missing block: B:7:?, code lost:
+            return;
+         */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        static {
+            /*
+                org.telegram.ui.Components.ScrollSlidingTabStrip$Type[] r0 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.values()
+                int r0 = r0.length
+                int[] r0 = new int[r0]
+                $SwitchMap$org$telegram$ui$Components$ScrollSlidingTabStrip$Type = r0
+                org.telegram.ui.Components.ScrollSlidingTabStrip$Type r1 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.LINE     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
+                r2 = 1
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$telegram$ui$Components$ScrollSlidingTabStrip$Type     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.telegram.ui.Components.ScrollSlidingTabStrip$Type r1 = org.telegram.ui.Components.ScrollSlidingTabStrip.Type.TAB     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
+                r2 = 2
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ScrollSlidingTabStrip.AnonymousClass2.<clinit>():void");
+        }
     }
 
     public void removeTabs() {
@@ -162,52 +218,6 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             hashMap.remove(str);
         }
         this.futureTabsPositions.put(i, view);
-    }
-
-    public TextView addIconTabWithCounter(int i, Drawable drawable) {
-        TextView textView;
-        String str = "textTab" + i;
-        int i2 = this.tabCount;
-        this.tabCount = i2 + 1;
-        FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(str);
-        boolean z = false;
-        if (frameLayout != null) {
-            textView = (TextView) frameLayout.getChildAt(1);
-            checkViewIndex(str, frameLayout, i2);
-        } else {
-            frameLayout = new FrameLayout(getContext());
-            frameLayout.setFocusable(true);
-            this.tabsContainer.addView(frameLayout, i2);
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageDrawable(drawable);
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
-            frameLayout.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    ScrollSlidingTabStrip.this.lambda$addIconTabWithCounter$0$ScrollSlidingTabStrip(view);
-                }
-            });
-            frameLayout.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-            textView = new TextView(getContext());
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setTextSize(1, 12.0f);
-            textView.setTextColor(Theme.getColor("chat_emojiPanelBadgeText"));
-            textView.setGravity(17);
-            textView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(9.0f), Theme.getColor("chat_emojiPanelBadgeBackground")));
-            textView.setMinWidth(AndroidUtilities.dp(18.0f));
-            textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
-            frameLayout.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
-        }
-        frameLayout.setTag(NUM, Integer.valueOf(i2));
-        if (i2 == this.currentPosition) {
-            z = true;
-        }
-        frameLayout.setSelected(z);
-        this.tabTypes.put(str, frameLayout);
-        return textView;
-    }
-
-    public /* synthetic */ void lambda$addIconTabWithCounter$0$ScrollSlidingTabStrip(View view) {
-        this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
     public ImageView addIconTab(int i, Drawable drawable) {
@@ -460,14 +470,22 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     f = ((f - f3) * CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(this.positionAnimationProgress)) + f3;
                     invalidate();
                 }
-                float f4 = f;
-                this.rectPaint.setColor(this.indicatorColor);
-                int i2 = this.indicatorHeight;
-                if (i2 == 0) {
-                    canvas.drawRect(f4, 0.0f, f4 + ((float) i), (float) height, this.rectPaint);
-                    return;
+                int i2 = AnonymousClass2.$SwitchMap$org$telegram$ui$Components$ScrollSlidingTabStrip$Type[this.type.ordinal()];
+                if (i2 == 1) {
+                    int i3 = this.indicatorHeight;
+                    if (i3 == 0) {
+                        int i4 = (int) f;
+                        this.indicatorDrawable.setBounds(i4, 0, i + i4, height);
+                    } else {
+                        int i5 = (int) f;
+                        this.indicatorDrawable.setBounds(i5, height - i3, i + i5, height);
+                    }
+                } else if (i2 == 2) {
+                    int i6 = (int) f;
+                    this.indicatorDrawable.setBounds(AndroidUtilities.dp(6.0f) + i6, height - AndroidUtilities.dp(3.0f), (i6 + i) - AndroidUtilities.dp(6.0f), height);
                 }
-                canvas.drawRect(f4, (float) (height - i2), f4 + ((float) i), (float) height, this.rectPaint);
+                this.indicatorDrawable.setColor(this.indicatorColor);
+                this.indicatorDrawable.draw(canvas);
             }
         }
     }
@@ -479,11 +497,6 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public int getCurrentPosition() {
         return this.currentPosition;
-    }
-
-    public void cancelPositionAnimation() {
-        this.animateFromPosition = false;
-        this.positionAnimationProgress = 1.0f;
     }
 
     public void onPageScrolled(int i, int i2) {

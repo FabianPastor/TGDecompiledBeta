@@ -45,6 +45,7 @@ import org.telegram.tgnet.TLRPC$MessageFwdHeader;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$Poll;
 import org.telegram.tgnet.TLRPC$PollResults;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_channelFull;
@@ -82,7 +83,6 @@ import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
 import org.telegram.tgnet.TLRPC$TL_photos_photos;
-import org.telegram.tgnet.TLRPC$TL_poll;
 import org.telegram.tgnet.TLRPC$TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC$TL_userStatusLastMonth;
@@ -102,7 +102,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 67;
+    private static final int LAST_DB_VERSION = 68;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -393,8 +393,9 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE web_recent_v3(id TEXT, type INTEGER, image_url TEXT, thumb_url TEXT, local_url TEXT, width INTEGER, height INTEGER, size INTEGER, date INTEGER, document BLOB, PRIMARY KEY (id, type));").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE hashtag_recent_v2(id TEXT PRIMARY KEY, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE webpage_pending(id INTEGER, mid INTEGER, PRIMARY KEY (id, mid));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sent_files_v2(uid TEXT, type INTEGER, data BLOB, parent TEXT, PRIMARY KEY (uid, type))").stepThis().dispose();
@@ -415,7 +416,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
                 loadDialogFilters();
                 loadUnreadMessages();
                 loadPendingTasks();
@@ -458,7 +459,7 @@ public class MessagesStorage extends BaseController {
                             FileLog.e((Throwable) e2);
                         }
                     }
-                    if (intValue < 67) {
+                    if (intValue < 68) {
                         updateDbToLastVersion(intValue);
                     }
                     loadDialogFilters();
@@ -469,8 +470,9 @@ public class MessagesStorage extends BaseController {
                 throw new Exception("malformed");
             }
         } catch (Exception e3) {
-            FileLog.e((Throwable) e3);
-            if (i2 < 3 && e3.getMessage().contains("malformed")) {
+            Exception exc = e3;
+            FileLog.e((Throwable) exc);
+            if (i2 < 3 && exc.getMessage().contains("malformed")) {
                 if (i2 == 2) {
                     cleanupInternal(true);
                     for (int i4 = 0; i4 < 2; i4++) {
@@ -625,7 +627,7 @@ public class MessagesStorage extends BaseController {
         }
         if (i == 18) {
             this.database.executeFast("DROP TABLE IF EXISTS stickers;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_v2(id INTEGER PRIMARY KEY, data BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 19").stepThis().dispose();
             i = 19;
         }
@@ -737,7 +739,7 @@ public class MessagesStorage extends BaseController {
             i = 34;
         }
         if (i == 34) {
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash TEXT);").stepThis().dispose();
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_featured(id INTEGER PRIMARY KEY, data BLOB, unread BLOB, date INTEGER, hash INTEGER);").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 35").stepThis().dispose();
             i = 35;
         }
@@ -917,6 +919,11 @@ public class MessagesStorage extends BaseController {
         if (i == 66) {
             this.database.executeFast("CREATE TABLE dialog_filter_pin_v2(id INTEGER, peer INTEGER, pin INTEGER, PRIMARY KEY (id, peer))").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 67").stepThis().dispose();
+            i = 67;
+        }
+        if (i == 67) {
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS stickers_dice(emoji TEXT PRIMARY KEY, data BLOB, date INTEGER);").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 68").stepThis().dispose();
         }
     }
 
@@ -5634,10 +5641,10 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void updateMessagePollResults(long j, TLRPC$TL_poll tLRPC$TL_poll, TLRPC$PollResults tLRPC$PollResults) {
-        this.storageQueue.postRunnable(new Runnable(j, tLRPC$TL_poll, tLRPC$PollResults) {
+    public void updateMessagePollResults(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
+        this.storageQueue.postRunnable(new Runnable(j, tLRPC$Poll, tLRPC$PollResults) {
             private final /* synthetic */ long f$1;
-            private final /* synthetic */ TLRPC$TL_poll f$2;
+            private final /* synthetic */ TLRPC$Poll f$2;
             private final /* synthetic */ TLRPC$PollResults f$3;
 
             {
@@ -5652,7 +5659,7 @@ public class MessagesStorage extends BaseController {
         });
     }
 
-    public /* synthetic */ void lambda$updateMessagePollResults$61$MessagesStorage(long j, TLRPC$TL_poll tLRPC$TL_poll, TLRPC$PollResults tLRPC$PollResults) {
+    public /* synthetic */ void lambda$updateMessagePollResults$61$MessagesStorage(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
         ArrayList arrayList = null;
         try {
             SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(j)}), new Object[0]);
@@ -5677,8 +5684,8 @@ public class MessagesStorage extends BaseController {
                             byteBufferValue.reuse();
                             if (TLdeserialize.media instanceof TLRPC$TL_messageMediaPoll) {
                                 TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll = (TLRPC$TL_messageMediaPoll) TLdeserialize.media;
-                                if (tLRPC$TL_poll != null) {
-                                    tLRPC$TL_messageMediaPoll.poll = tLRPC$TL_poll;
+                                if (tLRPC$Poll != null) {
+                                    tLRPC$TL_messageMediaPoll.poll = tLRPC$Poll;
                                 }
                                 if (tLRPC$PollResults != null) {
                                     MessageObject.updatePollResults(tLRPC$TL_messageMediaPoll, tLRPC$PollResults);
@@ -15680,6 +15687,7 @@ public class MessagesStorage extends BaseController {
                     queryFinalized.dispose();
                 }
                 executeFast.requery();
+                tLRPC$Chat.flags |= 131072;
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$Chat.getObjectSize());
                 tLRPC$Chat.serializeToStream(nativeByteBuffer);
                 executeFast.bindInteger(1, tLRPC$Chat.id);
@@ -17087,7 +17095,7 @@ public class MessagesStorage extends BaseController {
             r8.requery()     // Catch:{ Exception -> 0x0113 }
             r11 = 1
             r8.bindLong(r11, r13)     // Catch:{ Exception -> 0x0113 }
-            org.telegram.tgnet.TLRPC$TL_poll r2 = r2.poll     // Catch:{ Exception -> 0x0113 }
+            org.telegram.tgnet.TLRPC$Poll r2 = r2.poll     // Catch:{ Exception -> 0x0113 }
             long r11 = r2.id     // Catch:{ Exception -> 0x0113 }
             r2 = 2
             r8.bindLong(r2, r11)     // Catch:{ Exception -> 0x0113 }
@@ -19687,14 +19695,14 @@ public class MessagesStorage extends BaseController {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
                     byte[] bArr = new byte[1];
                     tLRPC$MessageMedia.bytes = bArr;
-                    bArr[0] = 111;
+                    bArr[0] = 112;
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
                 byte[] bArr2 = new byte[1];
                 tLRPC$TL_messageMediaUnsupported_old.bytes = bArr2;
-                bArr2[0] = 111;
+                bArr2[0] = 112;
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -20970,7 +20978,7 @@ public class MessagesStorage extends BaseController {
             r0.requery()     // Catch:{ Exception -> 0x059d }
             r4 = 1
             r0.bindLong(r4, r13)     // Catch:{ Exception -> 0x059d }
-            org.telegram.tgnet.TLRPC$TL_poll r1 = r1.poll     // Catch:{ Exception -> 0x059d }
+            org.telegram.tgnet.TLRPC$Poll r1 = r1.poll     // Catch:{ Exception -> 0x059d }
             long r4 = r1.id     // Catch:{ Exception -> 0x059d }
             r1 = 2
             r0.bindLong(r1, r4)     // Catch:{ Exception -> 0x059d }
@@ -22110,7 +22118,7 @@ public class MessagesStorage extends BaseController {
             r2.requery()     // Catch:{ Exception -> 0x02fa }
             r9 = 1
             r2.bindLong(r9, r12)     // Catch:{ Exception -> 0x02fa }
-            org.telegram.tgnet.TLRPC$TL_poll r3 = r3.poll     // Catch:{ Exception -> 0x02fa }
+            org.telegram.tgnet.TLRPC$Poll r3 = r3.poll     // Catch:{ Exception -> 0x02fa }
             long r11 = r3.id     // Catch:{ Exception -> 0x02fa }
             r3 = 2
             r2.bindLong(r3, r11)     // Catch:{ Exception -> 0x02fa }

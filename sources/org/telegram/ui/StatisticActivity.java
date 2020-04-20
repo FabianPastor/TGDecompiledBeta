@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -47,9 +48,11 @@ import org.telegram.tgnet.TLRPC$StatsGraph;
 import org.telegram.tgnet.TLRPC$TL_channels_getMessages;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messageInteractionCounters;
+import org.telegram.tgnet.TLRPC$TL_statsAbsValueAndPrev;
 import org.telegram.tgnet.TLRPC$TL_statsGraph;
 import org.telegram.tgnet.TLRPC$TL_statsGraphAsync;
 import org.telegram.tgnet.TLRPC$TL_statsGraphError;
+import org.telegram.tgnet.TLRPC$TL_statsPercentValue;
 import org.telegram.tgnet.TLRPC$TL_stats_broadcastStats;
 import org.telegram.tgnet.TLRPC$TL_stats_getBroadcastStats;
 import org.telegram.tgnet.TLRPC$TL_stats_loadAsyncGraph;
@@ -123,6 +126,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     /* access modifiers changed from: private */
     public ChartViewData notificationsData;
     /* access modifiers changed from: private */
+    public OverviewData overviewData;
+    /* access modifiers changed from: private */
     public LinearLayout progressLayout;
     private final SparseIntArray recentPostIdtoIndexMap = new SparseIntArray();
     /* access modifiers changed from: private */
@@ -178,6 +183,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             chartViewDataArr[6] = createViewData(tLRPC$TL_stats_broadcastStats.new_followers_by_source_graph, LocaleController.getString("NewFollowersBySourceChartTitle", NUM), 2);
             chartViewDataArr[7] = createViewData(tLRPC$TL_stats_broadcastStats.languages_graph, LocaleController.getString("LanguagesChartTitle", NUM), 4);
             chartViewDataArr[8] = createViewData(tLRPC$TL_stats_broadcastStats.mute_graph, LocaleController.getString("NotificationsChartTitle", NUM), 0);
+            this.overviewData = new OverviewData(tLRPC$TL_stats_broadcastStats);
             this.recentPostsAll.clear();
             for (int i = 0; i < tLRPC$TL_stats_broadcastStats.recent_message_interactions.size(); i++) {
                 RecentPostInfo recentPostInfo = new RecentPostInfo();
@@ -449,6 +455,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         int languagesCell = -1;
         int newFollowersBySourceCell = -1;
         int notificationsCell = -1;
+        int overviewCell;
+        int overviewHeaderCell = -1;
         int progressCell = -1;
         int recentPostsEndRow = -1;
         int recentPostsHeaderCell = -1;
@@ -482,7 +490,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             if (i == this.emptyCell) {
                 return 12;
             }
-            return i == this.recentPostsHeaderCell ? 13 : 10;
+            if (i == this.recentPostsHeaderCell || i == this.overviewHeaderCell) {
+                return 13;
+            }
+            return i == this.overviewCell ? 14 : 10;
         }
 
         public long getItemId(int i) {
@@ -521,15 +532,17 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v2, resolved type: org.telegram.ui.Cells.ShadowSectionCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v4, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: org.telegram.ui.Cells.EmptyCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v7, resolved type: org.telegram.ui.Cells.LoadingCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.ui.StatisticActivity$Adapter$2} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v10, resolved type: org.telegram.ui.StatisticActivity$Adapter$1} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v1, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v5, resolved type: org.telegram.ui.StatisticActivity$OverviewCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v7, resolved type: org.telegram.ui.Cells.EmptyCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.ui.Cells.LoadingCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v9, resolved type: org.telegram.ui.StatisticActivity$Adapter$2} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: org.telegram.ui.StatisticActivity$Adapter$1} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v12, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v1, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v13, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v14, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v15, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v16, resolved type: org.telegram.ui.StatisticActivity$Adapter$3} */
         /* JADX WARNING: type inference failed for: r1v0, types: [android.view.View] */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -557,7 +570,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 goto L_0x00a4
             L_0x002c:
                 r1 = 11
-                if (r12 != r1) goto L_0x0044
+                if (r12 != r1) goto L_0x0043
                 org.telegram.ui.Cells.LoadingCell r1 = new org.telegram.ui.Cells.LoadingCell
                 android.content.Context r11 = r11.getContext()
                 r1.<init>(r11)
@@ -565,18 +578,18 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
                 r1.setBackgroundColor(r11)
                 goto L_0x00a4
-            L_0x0044:
+            L_0x0043:
                 r1 = 12
-                if (r12 != r1) goto L_0x0058
+                if (r12 != r1) goto L_0x0057
                 org.telegram.ui.Cells.EmptyCell r1 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r11 = r11.getContext()
                 r12 = 1097859072(0x41700000, float:15.0)
                 int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
                 r1.<init>(r11, r12)
                 goto L_0x00a4
-            L_0x0058:
+            L_0x0057:
                 r2 = 13
-                if (r12 != r2) goto L_0x0093
+                if (r12 != r2) goto L_0x0086
                 org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
                 android.content.Context r5 = r11.getContext()
                 r7 = 16
@@ -587,10 +600,6 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = r10
                 r3.<init>(r4, r5, r6, r7, r8, r9)
                 r1.setWillNotDraw(r0)
-                r11 = 2131626482(0x7f0e09f2, float:1.8880201E38)
-                java.lang.String r12 = "RecentPosts"
-                java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                r1.setText(r11)
                 int r11 = r1.getPaddingLeft()
                 int r12 = r1.getTop()
                 int r0 = r1.getRight()
@@ -598,7 +607,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 r1.setPadding(r11, r12, r0, r2)
                 goto L_0x00a4
-            L_0x0093:
+            L_0x0086:
+                r0 = 14
+                if (r12 != r0) goto L_0x0094
+                org.telegram.ui.StatisticActivity$OverviewCell r1 = new org.telegram.ui.StatisticActivity$OverviewCell
+                android.content.Context r11 = r11.getContext()
+                r1.<init>(r11)
+                goto L_0x00a4
+            L_0x0094:
                 org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r11 = r11.getContext()
                 java.lang.String r0 = "windowBackgroundGray"
@@ -644,6 +660,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 ((ChartCell) viewHolder.itemView).updateData(chartViewData, false);
             } else if (itemViewType == 9) {
                 ((StatisticPostInfoCell) viewHolder.itemView).setData((RecentPostInfo) StatisticActivity.this.recentPostsLoaded.get(i - this.recentPostsStartRow));
+            } else if (itemViewType == 13) {
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                if (i == this.overviewHeaderCell) {
+                    headerCell.setText(LocaleController.getString("StatisticOverview", NUM));
+                } else {
+                    headerCell.setText(LocaleController.getString("RecentPosts", NUM));
+                }
+            } else if (itemViewType == 14) {
+                ((OverviewCell) viewHolder.itemView).setData(StatisticActivity.this.overviewData);
             }
         }
 
@@ -668,127 +693,141 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.notificationsCell = -1;
             this.count = 0;
             this.shadowDivideCells.clear();
-            if (StatisticActivity.this.growthData != null && !StatisticActivity.this.growthData.isEmpty) {
+            if (StatisticActivity.this.overviewData != null) {
                 int i = this.count;
-                this.count = i + 1;
-                this.growCell = i;
+                int i2 = i + 1;
+                this.count = i2;
+                this.overviewHeaderCell = i;
+                this.count = i2 + 1;
+                this.overviewCell = i2;
+            }
+            if (StatisticActivity.this.growthData != null && !StatisticActivity.this.growthData.isEmpty) {
+                int i3 = this.count;
+                if (i3 > 0) {
+                    ArraySet<Integer> arraySet = this.shadowDivideCells;
+                    this.count = i3 + 1;
+                    arraySet.add(Integer.valueOf(i3));
+                }
+                int i4 = this.count;
+                this.count = i4 + 1;
+                this.growCell = i4;
             }
             if (StatisticActivity.this.followersData != null && !StatisticActivity.this.followersData.isEmpty) {
-                int i2 = this.count;
-                if (i2 > 0) {
-                    ArraySet<Integer> arraySet = this.shadowDivideCells;
-                    this.count = i2 + 1;
-                    arraySet.add(Integer.valueOf(i2));
+                int i5 = this.count;
+                if (i5 > 0) {
+                    ArraySet<Integer> arraySet2 = this.shadowDivideCells;
+                    this.count = i5 + 1;
+                    arraySet2.add(Integer.valueOf(i5));
                 }
-                int i3 = this.count;
-                this.count = i3 + 1;
-                this.folowersCell = i3;
+                int i6 = this.count;
+                this.count = i6 + 1;
+                this.folowersCell = i6;
             }
             if (StatisticActivity.this.notificationsData != null && !StatisticActivity.this.notificationsData.isEmpty) {
-                int i4 = this.count;
-                if (i4 > 0) {
-                    ArraySet<Integer> arraySet2 = this.shadowDivideCells;
-                    this.count = i4 + 1;
-                    arraySet2.add(Integer.valueOf(i4));
+                int i7 = this.count;
+                if (i7 > 0) {
+                    ArraySet<Integer> arraySet3 = this.shadowDivideCells;
+                    this.count = i7 + 1;
+                    arraySet3.add(Integer.valueOf(i7));
                 }
-                int i5 = this.count;
-                this.count = i5 + 1;
-                this.notificationsCell = i5;
+                int i8 = this.count;
+                this.count = i8 + 1;
+                this.notificationsCell = i8;
             }
             if (StatisticActivity.this.topHoursData != null && !StatisticActivity.this.topHoursData.isEmpty) {
-                int i6 = this.count;
-                if (i6 > 0) {
-                    ArraySet<Integer> arraySet3 = this.shadowDivideCells;
-                    this.count = i6 + 1;
-                    arraySet3.add(Integer.valueOf(i6));
+                int i9 = this.count;
+                if (i9 > 0) {
+                    ArraySet<Integer> arraySet4 = this.shadowDivideCells;
+                    this.count = i9 + 1;
+                    arraySet4.add(Integer.valueOf(i9));
                 }
-                int i7 = this.count;
-                this.count = i7 + 1;
-                this.topHourseCell = i7;
+                int i10 = this.count;
+                this.count = i10 + 1;
+                this.topHourseCell = i10;
             }
             if (StatisticActivity.this.viewsBySourceData != null && !StatisticActivity.this.viewsBySourceData.isEmpty) {
-                int i8 = this.count;
-                if (i8 > 0) {
-                    ArraySet<Integer> arraySet4 = this.shadowDivideCells;
-                    this.count = i8 + 1;
-                    arraySet4.add(Integer.valueOf(i8));
+                int i11 = this.count;
+                if (i11 > 0) {
+                    ArraySet<Integer> arraySet5 = this.shadowDivideCells;
+                    this.count = i11 + 1;
+                    arraySet5.add(Integer.valueOf(i11));
                 }
-                int i9 = this.count;
-                this.count = i9 + 1;
-                this.viewsBySourceCell = i9;
+                int i12 = this.count;
+                this.count = i12 + 1;
+                this.viewsBySourceCell = i12;
             }
             if (StatisticActivity.this.newFollowersBySourceData != null && !StatisticActivity.this.newFollowersBySourceData.isEmpty) {
-                int i10 = this.count;
-                if (i10 > 0) {
-                    ArraySet<Integer> arraySet5 = this.shadowDivideCells;
-                    this.count = i10 + 1;
-                    arraySet5.add(Integer.valueOf(i10));
+                int i13 = this.count;
+                if (i13 > 0) {
+                    ArraySet<Integer> arraySet6 = this.shadowDivideCells;
+                    this.count = i13 + 1;
+                    arraySet6.add(Integer.valueOf(i13));
                 }
-                int i11 = this.count;
-                this.count = i11 + 1;
-                this.newFollowersBySourceCell = i11;
+                int i14 = this.count;
+                this.count = i14 + 1;
+                this.newFollowersBySourceCell = i14;
             }
             if (StatisticActivity.this.languagesData != null && !StatisticActivity.this.languagesData.isEmpty) {
-                int i12 = this.count;
-                if (i12 > 0) {
-                    ArraySet<Integer> arraySet6 = this.shadowDivideCells;
-                    this.count = i12 + 1;
-                    arraySet6.add(Integer.valueOf(i12));
+                int i15 = this.count;
+                if (i15 > 0) {
+                    ArraySet<Integer> arraySet7 = this.shadowDivideCells;
+                    this.count = i15 + 1;
+                    arraySet7.add(Integer.valueOf(i15));
                 }
-                int i13 = this.count;
-                this.count = i13 + 1;
-                this.languagesCell = i13;
+                int i16 = this.count;
+                this.count = i16 + 1;
+                this.languagesCell = i16;
             }
             if (StatisticActivity.this.interactionsData != null && !StatisticActivity.this.interactionsData.isEmpty) {
-                int i14 = this.count;
-                if (i14 > 0) {
-                    ArraySet<Integer> arraySet7 = this.shadowDivideCells;
-                    this.count = i14 + 1;
-                    arraySet7.add(Integer.valueOf(i14));
+                int i17 = this.count;
+                if (i17 > 0) {
+                    ArraySet<Integer> arraySet8 = this.shadowDivideCells;
+                    this.count = i17 + 1;
+                    arraySet8.add(Integer.valueOf(i17));
                 }
-                int i15 = this.count;
-                this.count = i15 + 1;
-                this.interactionsCell = i15;
+                int i18 = this.count;
+                this.count = i18 + 1;
+                this.interactionsCell = i18;
             }
             if (StatisticActivity.this.ivInteractionsData != null && !StatisticActivity.this.ivInteractionsData.loading && !StatisticActivity.this.ivInteractionsData.isError) {
-                int i16 = this.count;
-                if (i16 > 0) {
-                    ArraySet<Integer> arraySet8 = this.shadowDivideCells;
-                    this.count = i16 + 1;
-                    arraySet8.add(Integer.valueOf(i16));
-                }
-                int i17 = this.count;
-                this.count = i17 + 1;
-                this.ivInteractionsCell = i17;
-            }
-            ArraySet<Integer> arraySet9 = this.shadowDivideCells;
-            int i18 = this.count;
-            this.count = i18 + 1;
-            arraySet9.add(Integer.valueOf(i18));
-            if (StatisticActivity.this.recentPostsAll.size() > 0) {
                 int i19 = this.count;
-                int i20 = i19 + 1;
-                this.count = i20;
-                this.recentPostsHeaderCell = i19;
+                if (i19 > 0) {
+                    ArraySet<Integer> arraySet9 = this.shadowDivideCells;
+                    this.count = i19 + 1;
+                    arraySet9.add(Integer.valueOf(i19));
+                }
+                int i20 = this.count;
                 this.count = i20 + 1;
-                this.recentPostsStartRow = i20;
-                int size = (i20 + StatisticActivity.this.recentPostsLoaded.size()) - 1;
+                this.ivInteractionsCell = i20;
+            }
+            ArraySet<Integer> arraySet10 = this.shadowDivideCells;
+            int i21 = this.count;
+            this.count = i21 + 1;
+            arraySet10.add(Integer.valueOf(i21));
+            if (StatisticActivity.this.recentPostsAll.size() > 0) {
+                int i22 = this.count;
+                int i23 = i22 + 1;
+                this.count = i23;
+                this.recentPostsHeaderCell = i22;
+                this.count = i23 + 1;
+                this.recentPostsStartRow = i23;
+                int size = (i23 + StatisticActivity.this.recentPostsLoaded.size()) - 1;
                 this.recentPostsEndRow = size;
                 this.count = size;
                 this.count = size + 1;
                 if (StatisticActivity.this.recentPostsLoaded.size() != StatisticActivity.this.recentPostsAll.size()) {
-                    int i21 = this.count;
-                    this.count = i21 + 1;
-                    this.progressCell = i21;
+                    int i24 = this.count;
+                    this.count = i24 + 1;
+                    this.progressCell = i24;
                 } else {
-                    int i22 = this.count;
-                    this.count = i22 + 1;
-                    this.emptyCell = i22;
+                    int i25 = this.count;
+                    this.count = i25 + 1;
+                    this.emptyCell = i25;
                 }
-                ArraySet<Integer> arraySet10 = this.shadowDivideCells;
-                int i23 = this.count;
-                this.count = i23 + 1;
-                arraySet10.add(Integer.valueOf(i23));
+                ArraySet<Integer> arraySet11 = this.shadowDivideCells;
+                int i26 = this.count;
+                this.count = i26 + 1;
+                arraySet11.add(Integer.valueOf(i26));
             }
         }
 
@@ -1834,6 +1873,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             combinedDrawable.setFullsize(true);
             view.setBackground(combinedDrawable);
         }
+        if (view instanceof OverviewCell) {
+            ((OverviewCell) view).updateColors();
+        }
     }
 
     private static class DiffUtilsCallback extends DiffUtil.Callback {
@@ -1990,7 +2032,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    public ThemeDescription[] getThemeDescriptions() {
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
         ChartViewData chartViewData;
         ChartData chartData;
         $$Lambda$StatisticActivity$CqWRJOatjWarjR1aKS5KtRf4UcY r10 = new ThemeDescription.ThemeDescriptionDelegate() {
@@ -1998,7 +2040,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 StatisticActivity.this.lambda$getThemeDescriptions$5$StatisticActivity();
             }
         };
-        ArrayList arrayList = new ArrayList();
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{StatisticPostInfoCell.class}, new String[]{"message"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
         arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{StatisticPostInfoCell.class}, new String[]{"views"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
@@ -2019,6 +2061,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         $$Lambda$StatisticActivity$CqWRJOatjWarjR1aKS5KtRf4UcY r7 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteGreenText2"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "windowBackgroundWhiteRedText5"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
         SimpleTextView simpleTextView = null;
@@ -2063,7 +2107,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
             }
         }
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+        return arrayList;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$5$StatisticActivity() {
@@ -2090,6 +2134,242 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         BaseChartView.SharedUiComponents sharedUiComponents = this.sharedUi;
         if (sharedUiComponents != null) {
             sharedUiComponents.invalidate();
+        }
+    }
+
+    public static class OverviewData {
+        String followersPrimary;
+        String followersSecondary;
+        String followersTitle = LocaleController.getString("FollowersChartTitle", NUM);
+        boolean followersUp;
+        String notificationsPrimary;
+        String notificationsTitle;
+        String sharesPrimary;
+        String sharesSecondary;
+        String sharesTitle;
+        boolean sharesUp;
+        String viewsPrimary;
+        String viewsSecondary;
+        String viewsTitle;
+        boolean viewsUp;
+
+        public OverviewData(TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats) {
+            String str;
+            String str2;
+            String str3;
+            String str4;
+            TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats2 = tLRPC$TL_stats_broadcastStats;
+            TLRPC$TL_statsAbsValueAndPrev tLRPC$TL_statsAbsValueAndPrev = tLRPC$TL_stats_broadcastStats2.followers;
+            double d = tLRPC$TL_statsAbsValueAndPrev.current;
+            double d2 = tLRPC$TL_statsAbsValueAndPrev.previous;
+            int i = (int) (d - d2);
+            float abs = Math.abs((((float) i) / ((float) d2)) * 100.0f);
+            this.followersPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.followers.current, 0);
+            String str5 = "+";
+            if (i == 0) {
+                this.followersSecondary = "";
+            } else {
+                int i2 = (int) abs;
+                if (abs == ((float) i2)) {
+                    Locale locale = Locale.ENGLISH;
+                    Object[] objArr = new Object[3];
+                    StringBuilder sb = new StringBuilder();
+                    if (i > 0) {
+                        str4 = str5;
+                    } else {
+                        str4 = "";
+                    }
+                    sb.append(str4);
+                    sb.append(AndroidUtilities.formatWholeNumber(i, 0));
+                    objArr[0] = sb.toString();
+                    objArr[1] = Integer.valueOf(i2);
+                    objArr[2] = "%";
+                    this.followersSecondary = String.format(locale, "%s (%d%s)", objArr);
+                } else {
+                    Locale locale2 = Locale.ENGLISH;
+                    Object[] objArr2 = new Object[3];
+                    StringBuilder sb2 = new StringBuilder();
+                    if (i > 0) {
+                        str3 = str5;
+                    } else {
+                        str3 = "";
+                    }
+                    sb2.append(str3);
+                    sb2.append(AndroidUtilities.formatWholeNumber(i, 0));
+                    objArr2[0] = sb2.toString();
+                    objArr2[1] = Float.valueOf(abs);
+                    objArr2[2] = "%";
+                    this.followersSecondary = String.format(locale2, "%s (%.1f%s)", objArr2);
+                }
+            }
+            this.followersUp = i >= 0;
+            TLRPC$TL_statsAbsValueAndPrev tLRPC$TL_statsAbsValueAndPrev2 = tLRPC$TL_stats_broadcastStats2.shares_per_post;
+            double d3 = tLRPC$TL_statsAbsValueAndPrev2.current;
+            double d4 = tLRPC$TL_statsAbsValueAndPrev2.previous;
+            int i3 = (int) (d3 - d4);
+            float abs2 = Math.abs((((float) i3) / ((float) d4)) * 100.0f);
+            this.sharesTitle = LocaleController.getString("SharesPerPost", NUM);
+            this.sharesPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.shares_per_post.current, 0);
+            if (i3 == 0) {
+                this.sharesSecondary = "";
+            } else {
+                int i4 = (int) abs2;
+                if (abs2 == ((float) i4)) {
+                    Locale locale3 = Locale.ENGLISH;
+                    Object[] objArr3 = new Object[3];
+                    StringBuilder sb3 = new StringBuilder();
+                    if (i3 > 0) {
+                        str2 = str5;
+                    } else {
+                        str2 = "";
+                    }
+                    sb3.append(str2);
+                    sb3.append(AndroidUtilities.formatWholeNumber(i3, 0));
+                    objArr3[0] = sb3.toString();
+                    objArr3[1] = Integer.valueOf(i4);
+                    objArr3[2] = "%";
+                    this.sharesSecondary = String.format(locale3, "%s (%d%s)", objArr3);
+                } else {
+                    Locale locale4 = Locale.ENGLISH;
+                    Object[] objArr4 = new Object[3];
+                    StringBuilder sb4 = new StringBuilder();
+                    if (i3 > 0) {
+                        str = str5;
+                    } else {
+                        str = "";
+                    }
+                    sb4.append(str);
+                    sb4.append(AndroidUtilities.formatWholeNumber(i3, 0));
+                    objArr4[0] = sb4.toString();
+                    objArr4[1] = Float.valueOf(abs2);
+                    objArr4[2] = "%";
+                    this.sharesSecondary = String.format(locale4, "%s (%.1f%s)", objArr4);
+                }
+            }
+            this.sharesUp = i3 >= 0;
+            TLRPC$TL_statsAbsValueAndPrev tLRPC$TL_statsAbsValueAndPrev3 = tLRPC$TL_stats_broadcastStats2.views_per_post;
+            double d5 = tLRPC$TL_statsAbsValueAndPrev3.current;
+            double d6 = tLRPC$TL_statsAbsValueAndPrev3.previous;
+            int i5 = (int) (d5 - d6);
+            float abs3 = Math.abs((((float) i5) / ((float) d6)) * 100.0f);
+            this.viewsTitle = LocaleController.getString("ViewsPerPost", NUM);
+            this.viewsPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.views_per_post.current, 0);
+            if (i5 == 0) {
+                this.viewsSecondary = "";
+            } else {
+                int i6 = (int) abs3;
+                if (abs3 == ((float) i6)) {
+                    Locale locale5 = Locale.ENGLISH;
+                    Object[] objArr5 = new Object[3];
+                    StringBuilder sb5 = new StringBuilder();
+                    sb5.append(i5 <= 0 ? "" : str5);
+                    sb5.append(AndroidUtilities.formatWholeNumber(i5, 0));
+                    objArr5[0] = sb5.toString();
+                    objArr5[1] = Integer.valueOf(i6);
+                    objArr5[2] = "%";
+                    this.viewsSecondary = String.format(locale5, "%s (%d%s)", objArr5);
+                } else {
+                    Locale locale6 = Locale.ENGLISH;
+                    Object[] objArr6 = new Object[3];
+                    StringBuilder sb6 = new StringBuilder();
+                    sb6.append(i5 <= 0 ? "" : str5);
+                    sb6.append(AndroidUtilities.formatWholeNumber(i5, 0));
+                    objArr6[0] = sb6.toString();
+                    objArr6[1] = Float.valueOf(abs3);
+                    objArr6[2] = "%";
+                    this.viewsSecondary = String.format(locale6, "%s (%.1f%s)", objArr6);
+                }
+            }
+            this.viewsUp = i5 >= 0;
+            TLRPC$TL_statsPercentValue tLRPC$TL_statsPercentValue = tLRPC$TL_stats_broadcastStats2.enabled_notifications;
+            float f = (float) ((tLRPC$TL_statsPercentValue.part / tLRPC$TL_statsPercentValue.total) * 100.0d);
+            this.notificationsTitle = LocaleController.getString("EnabledNotifications", NUM);
+            int i7 = (int) f;
+            if (f == ((float) i7)) {
+                this.notificationsPrimary = String.format(Locale.ENGLISH, "%d%s", new Object[]{Integer.valueOf(i7), "%"});
+            } else {
+                this.notificationsPrimary = String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(f), "%"});
+            }
+        }
+    }
+
+    public static class OverviewCell extends LinearLayout {
+        TextView[] primary = new TextView[4];
+        TextView[] secondary = new TextView[4];
+        TextView[] title = new TextView[4];
+
+        public OverviewCell(Context context) {
+            super(context);
+            setOrientation(1);
+            setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+            for (int i = 0; i < 2; i++) {
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(0);
+                for (int i2 = 0; i2 < 2; i2++) {
+                    LinearLayout linearLayout2 = new LinearLayout(context);
+                    linearLayout2.setOrientation(1);
+                    LinearLayout linearLayout3 = new LinearLayout(context);
+                    linearLayout3.setOrientation(0);
+                    int i3 = (i * 2) + i2;
+                    this.primary[i3] = new TextView(context);
+                    this.secondary[i3] = new TextView(context);
+                    this.title[i3] = new TextView(context);
+                    this.primary[i3].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    this.primary[i3].setTextSize(17.0f);
+                    this.title[i3].setTextSize(13.0f);
+                    this.secondary[i3].setTextSize(13.0f);
+                    this.secondary[i3].setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
+                    linearLayout3.addView(this.primary[i3]);
+                    linearLayout3.addView(this.secondary[i3]);
+                    linearLayout2.addView(linearLayout3);
+                    linearLayout2.addView(this.title[i3]);
+                    linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2, 1.0f));
+                }
+                addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, 0.0f, 0.0f, 16.0f));
+            }
+        }
+
+        public void setData(OverviewData overviewData) {
+            String str;
+            this.primary[0].setText(overviewData.followersPrimary);
+            this.primary[1].setText(overviewData.notificationsPrimary);
+            this.primary[2].setText(overviewData.viewsPrimary);
+            this.primary[3].setText(overviewData.sharesPrimary);
+            this.secondary[0].setText(overviewData.followersSecondary);
+            String str2 = "windowBackgroundWhiteGreenText2";
+            this.secondary[0].setTag(overviewData.followersUp ? str2 : "windowBackgroundWhiteRedText5");
+            this.secondary[1].setText("");
+            this.secondary[2].setText(overviewData.viewsSecondary);
+            TextView textView = this.secondary[2];
+            if (overviewData.viewsUp) {
+                str = str2;
+            } else {
+                str = "windowBackgroundWhiteRedText5";
+            }
+            textView.setTag(str);
+            this.secondary[3].setText(overviewData.sharesSecondary);
+            TextView textView2 = this.secondary[3];
+            if (!overviewData.sharesUp) {
+                str2 = "windowBackgroundWhiteRedText5";
+            }
+            textView2.setTag(str2);
+            this.title[0].setText(overviewData.followersTitle);
+            this.title[1].setText(overviewData.notificationsTitle);
+            this.title[2].setText(overviewData.viewsTitle);
+            this.title[3].setText(overviewData.sharesTitle);
+            updateColors();
+        }
+
+        /* access modifiers changed from: private */
+        public void updateColors() {
+            for (int i = 0; i < 4; i++) {
+                this.primary[i].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.title[i].setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+                String str = (String) this.secondary[i].getTag();
+                if (str != null) {
+                    this.secondary[i].setTextColor(Theme.getColor(str));
+                }
+            }
         }
     }
 }

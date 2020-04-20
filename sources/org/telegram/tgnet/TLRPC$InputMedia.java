@@ -32,12 +32,6 @@ public abstract class TLRPC$InputMedia extends TLObject {
             case -1771768449:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaEmpty();
                 break;
-            case -1410741723:
-                tLRPC$InputMedia = new TLRPC$TL_inputMediaPoll();
-                break;
-            case -1358977017:
-                tLRPC$InputMedia = new TLRPC$TL_inputMediaDice();
-                break;
             case -1279654347:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaPhoto();
                 break;
@@ -53,6 +47,9 @@ public abstract class TLRPC$InputMedia extends TLObject {
             case -440664550:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaPhotoExternal();
                 break;
+            case -428884101:
+                tLRPC$InputMedia = new TLRPC$TL_inputMediaDice();
+                break;
             case -122978821:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaContact();
                 break;
@@ -61,6 +58,9 @@ public abstract class TLRPC$InputMedia extends TLObject {
                 break;
             case -78455655:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaDocumentExternal();
+                break;
+            case 261416433:
+                tLRPC$InputMedia = new TLRPC$TL_inputMediaPoll();
                 break;
             case 505969924:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaUploadedPhoto();

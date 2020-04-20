@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">¿Quieres cambiar el fondo de tu chat a un color?</string>
     <string name="ChannelAddAdmin">Añadir administrador</string>
     <string name="ChannelAddException">Añadir excepción</string>
-    <string name="ChannelAddMembers">Añadir miembros</string>
     <string name="ChannelAddTo">¿Añadir a %1$s al canal?</string>
     <string name="ChannelAddToChannel">Añadir al canal</string>
     <string name="ChannelAddToGroup">Añadir al grupo</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">Eliminar tema</string>
     <string name="DeleteThemeAlert">¿Quieres eliminar este tema?</string>
     <string name="DeleteThemeTitle">Eliminar tema</string>
-    <string name="DeleteTheseChats">Eliminar chats</string>
     <string name="DeleteThisChat">Eliminar este chat</string>
     <string name="DeleteThisGroup">Eliminar este grupo</string>
     <string name="DescriptionInfo">Puedes poner una descripción para tu canal.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">Contraer</string>
     <string name="PollExpand">Expandir</string>
     <string name="PollMultiple">Respuesta múltiple</string>
-    <string name="PollOptions">Opciones de encuesta</string>
     <string name="PollQuiz">Cuestionario</string>
     <string name="PollResults">Resultados de la encuesta</string>
     <string name="PollSelectOption">Elige una opción primero</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">Encuesta</string>
     <string name="PublicPollCantForward">Lo sentimos, las encuestas con voto visible no se pueden reenviar a canales.</string>
     <string name="Purple">Púrpura</string>
-    <string name="Question">Pregunta</string>
     <string name="QuestionHint">Haz una pregunta</string>
     <string name="QuickReplyCustom">Mensaje personalizado...</string>
     <string name="QuickReplyDefault1">No puedo hablar ahora. ¿Qué pasa?</string>

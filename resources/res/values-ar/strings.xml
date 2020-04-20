@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">هل أنت متأكد من رغبتك في تغيير خلفية المحادثة إلى لون؟</string>
     <string name="ChannelAddAdmin">إضافة مشرف</string>
     <string name="ChannelAddException">إضافة استثناء</string>
-    <string name="ChannelAddMembers">إضافة أعضاء</string>
     <string name="ChannelAddTo">هل ترغب بإضافة %1$s للقناة؟</string>
     <string name="ChannelAddToChannel">إضافة للقناة</string>
     <string name="ChannelAddToGroup">إضافة للمجموعة</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">حذف المظهر</string>
     <string name="DeleteThemeAlert">هل ترغب حقًا في حذف هذا النمط؟</string>
     <string name="DeleteThemeTitle">حذف النمط</string>
-    <string name="DeleteTheseChats">حذف المحادثات</string>
     <string name="DeleteThisChat">حذف هذه المحادثة</string>
     <string name="DeleteThisGroup">حذف هذه المحادثة</string>
     <string name="DescriptionInfo">يمكنك إضافة وصف اختياري لقناتك.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">طيّ</string>
     <string name="PollExpand">توسيع</string>
     <string name="PollMultiple">إجابات متعددة</string>
-    <string name="PollOptions">خيارات الاستفتاء</string>
     <string name="PollQuiz">وضع الاختبار</string>
     <string name="PollResults">نتائج الاستفتاء</string>
     <string name="PollSelectOption">حدد خيارًا أولًا</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">استفتاء</string>
     <string name="PublicPollCantForward">المعذرة، لا يمكن تحويل استفتاءات الإجابات العلنية للقنوات.</string>
     <string name="Purple">القرمزي</string>
-    <string name="Question">السؤال</string>
     <string name="QuestionHint">اطرح سؤالًا</string>
     <string name="QuickReplyCustom">رسالة مخصصة...</string>
     <string name="QuickReplyDefault1">لا يمكنني التحدثُ الآن، ما الأمر؟</string>

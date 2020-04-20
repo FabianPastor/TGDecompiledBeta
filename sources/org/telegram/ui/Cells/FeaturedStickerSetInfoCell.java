@@ -29,7 +29,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public ProgressButton addButton;
     private AnimatorSet animatorSet;
-    private int currentAccount = UserConfig.selectedAccount;
+    private int currentAccount;
     /* access modifiers changed from: private */
     public TextView delButton;
     private boolean hasOnClick;
@@ -38,11 +38,22 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     public boolean isInstalled;
     private boolean isUnread;
     private TextView nameTextView;
-    private Paint paint = new Paint(1);
+    private boolean needDivider;
+    private Paint paint;
     private TLRPC$StickerSetCovered set;
 
     public FeaturedStickerSetInfoCell(Context context, int i) {
+        this(context, i, false);
+    }
+
+    public FeaturedStickerSetInfoCell(Context context, int i, boolean z) {
         super(context);
+        FrameLayout.LayoutParams layoutParams;
+        FrameLayout.LayoutParams layoutParams2;
+        FrameLayout.LayoutParams layoutParams3;
+        FrameLayout.LayoutParams layoutParams4;
+        this.currentAccount = UserConfig.selectedAccount;
+        this.paint = new Paint(1);
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setTextColor(Theme.getColor("chat_emojiPanelTrendingTitle"));
@@ -50,22 +61,36 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setSingleLine(true);
-        float f = (float) i;
-        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 8.0f, 40.0f, 0.0f));
+        if (z) {
+            layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388659, (float) i, 8.0f, 40.0f, 0.0f);
+        } else {
+            layoutParams = LayoutHelper.createFrame(-2, -2.0f, 51, (float) i, 8.0f, 40.0f, 0.0f);
+        }
+        addView(this.nameTextView, layoutParams);
         TextView textView2 = new TextView(context);
         this.infoTextView = textView2;
         textView2.setTextColor(Theme.getColor("chat_emojiPanelTrendingDescription"));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.infoTextView.setSingleLine(true);
-        addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 30.0f, 100.0f, 0.0f));
+        if (z) {
+            layoutParams2 = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388659, (float) i, 30.0f, 100.0f, 0.0f);
+        } else {
+            layoutParams2 = LayoutHelper.createFrame(-2, -2.0f, 51, (float) i, 30.0f, 100.0f, 0.0f);
+        }
+        addView(this.infoTextView, layoutParams2);
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
         progressButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
         this.addButton.setText(LocaleController.getString("Add", NUM));
-        addView(this.addButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f));
+        if (z) {
+            layoutParams3 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
+        } else {
+            layoutParams3 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
+        }
+        addView(this.addButton, layoutParams3);
         TextView textView3 = new TextView(context);
         this.delButton = textView3;
         textView3.setGravity(17);
@@ -73,7 +98,12 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.delButton.setTextSize(1, 14.0f);
         this.delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.delButton.setText(LocaleController.getString("StickersRemove", NUM));
-        addView(this.delButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f));
+        if (z) {
+            layoutParams4 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
+        } else {
+            layoutParams4 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
+        }
+        addView(this.delButton, layoutParams4);
         setWillNotDraw(false);
     }
 
@@ -233,11 +263,18 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         return this.set;
     }
 
+    public void setNeedDivider(boolean z) {
+        this.needDivider = z;
+    }
+
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.isUnread) {
             this.paint.setColor(Theme.getColor("featuredStickers_unread"));
             canvas.drawCircle((float) (this.nameTextView.getRight() + AndroidUtilities.dp(12.0f)), (float) AndroidUtilities.dp(20.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
+        }
+        if (this.needDivider) {
+            canvas.drawLine(0.0f, 0.0f, (float) getWidth(), 0.0f, Theme.dividerPaint);
         }
     }
 }

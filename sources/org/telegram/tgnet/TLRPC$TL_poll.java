@@ -1,29 +1,7 @@
 package org.telegram.tgnet;
 
-import java.util.ArrayList;
-
-public class TLRPC$TL_poll extends TLObject {
+public class TLRPC$TL_poll extends TLRPC$Poll {
     public static int constructor = -NUM;
-    public ArrayList<TLRPC$TL_pollAnswer> answers = new ArrayList<>();
-    public boolean closed;
-    public int flags;
-    public long id;
-    public boolean multiple_choice;
-    public boolean public_voters;
-    public String question;
-    public boolean quiz;
-
-    public static TLRPC$TL_poll TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_poll tLRPC$TL_poll = new TLRPC$TL_poll();
-            tLRPC$TL_poll.readParams(abstractSerializedData, z);
-            return tLRPC$TL_poll;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_poll", new Object[]{Integer.valueOf(i)}));
-        }
-    }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.id = abstractSerializedData.readInt64(z);
@@ -46,6 +24,12 @@ public class TLRPC$TL_poll extends TLObject {
                 } else {
                     return;
                 }
+            }
+            if ((this.flags & 16) != 0) {
+                this.close_period = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 32) != 0) {
+                this.close_date = abstractSerializedData.readInt32(z);
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
@@ -70,6 +54,12 @@ public class TLRPC$TL_poll extends TLObject {
         abstractSerializedData.writeInt32(size);
         for (int i5 = 0; i5 < size; i5++) {
             this.answers.get(i5).serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 16) != 0) {
+            abstractSerializedData.writeInt32(this.close_period);
+        }
+        if ((this.flags & 32) != 0) {
+            abstractSerializedData.writeInt32(this.close_date);
         }
     }
 }

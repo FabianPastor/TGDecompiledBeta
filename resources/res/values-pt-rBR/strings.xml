@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">Deseja mesmo alterar o papel de parede das conversas para uma cor?</string>
     <string name="ChannelAddAdmin">Adicionar Admin</string>
     <string name="ChannelAddException">Adicionar Exceção</string>
-    <string name="ChannelAddMembers">Adicionar membros</string>
     <string name="ChannelAddTo">Adicionar %1$s ao canal?</string>
     <string name="ChannelAddToChannel">Adicionar ao canal</string>
     <string name="ChannelAddToGroup">Adicionar ao grupo</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">Apagar tema</string>
     <string name="DeleteThemeAlert">Tem certeza de que deseja apagar esse tema?</string>
     <string name="DeleteThemeTitle">Apagar tema</string>
-    <string name="DeleteTheseChats">Apagar chats</string>
     <string name="DeleteThisChat">Apagar este chat</string>
     <string name="DeleteThisGroup">Apagar este grupo</string>
     <string name="DescriptionInfo">Você pode adicionar uma descrição opcional em seu canal.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">Recolher</string>
     <string name="PollExpand">Expandir</string>
     <string name="PollMultiple">Múltiplas Respostas</string>
-    <string name="PollOptions">Opções da enquete</string>
     <string name="PollQuiz">Modo Quiz</string>
     <string name="PollResults">Resultados da Enquete</string>
     <string name="PollSelectOption">Selecione uma opção primeiro</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">Enquete</string>
     <string name="PublicPollCantForward">Desculpe, enquetes com votos visíveis não podem ser encaminhadas para canais.</string>
     <string name="Purple">Roxo</string>
-    <string name="Question">Pergunta</string>
     <string name="QuestionHint">Faça uma pergunta</string>
     <string name="QuickReplyCustom">Mensagem Customizada...</string>
     <string name="QuickReplyDefault1">Não posso falar agora, está tudo certo?</string>

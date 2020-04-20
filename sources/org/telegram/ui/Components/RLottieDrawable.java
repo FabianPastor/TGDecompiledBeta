@@ -47,6 +47,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private boolean decodeSingleFrame;
     /* access modifiers changed from: private */
     public boolean destroyWhenDone;
+    /* access modifiers changed from: private */
+    public int diceSwitchFramesCount;
     private boolean doNotRemoveInvalidOnFrameReady;
     private final Rect dstRect;
     private boolean forceFrameRedraw;
@@ -82,6 +84,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private volatile Bitmap renderingBitmap;
     private float scaleX;
     private float scaleY;
+    /* access modifiers changed from: private */
+    public int secondFramesCount;
     /* access modifiers changed from: private */
     public volatile long secondNativePtr;
     /* access modifiers changed from: private */
@@ -125,7 +129,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         return -2;
     }
 
-    static /* synthetic */ int access$3108(RLottieDrawable rLottieDrawable) {
+    static /* synthetic */ int access$3308(RLottieDrawable rLottieDrawable) {
         int i = rLottieDrawable.autoRepeatPlayCount;
         rLottieDrawable.autoRepeatPlayCount = i + 1;
         return i;
@@ -180,6 +184,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -239,7 +244,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             public void run() {
                 long access$800;
                 if (!RLottieDrawable.this.isRecycled) {
-                    if (RLottieDrawable.this.nativePtr == 0) {
+                    if (RLottieDrawable.this.nativePtr == 0 || (RLottieDrawable.this.isDice == 2 && RLottieDrawable.this.secondNativePtr == 0)) {
                         RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableNoFrame);
                         return;
                     }
@@ -270,7 +275,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.isDice == 2) {
                                 access$800 = RLottieDrawable.this.secondNativePtr;
                                 if (RLottieDrawable.this.setLastFrame) {
-                                    int unused4 = RLottieDrawable.this.currentFrame = 179;
+                                    int unused4 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.secondFramesCount - 1;
                                 }
                             } else {
                                 access$800 = RLottieDrawable.this.nativePtr;
@@ -286,7 +291,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             Bitmap unused5 = RLottieDrawable.this.nextRenderingBitmap = RLottieDrawable.this.backgroundBitmap;
                             int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
                             if (RLottieDrawable.this.isDice == 1) {
-                                if (RLottieDrawable.this.currentFrame + i < 60) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.diceSwitchFramesCount == -1 ? RLottieDrawable.this.metaData[0] : RLottieDrawable.this.diceSwitchFramesCount)) {
                                     int unused6 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     int unused7 = RLottieDrawable.this.currentFrame = 0;
@@ -296,16 +301,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     }
                                 }
                             } else if (RLottieDrawable.this.isDice == 2) {
-                                if (RLottieDrawable.this.currentFrame + i < 180) {
+                                if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.secondFramesCount) {
                                     int unused10 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
                             } else if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
                                 if (RLottieDrawable.this.autoRepeat == 3) {
                                     boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 } else {
                                     int unused13 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                     boolean unused14 = RLottieDrawable.this.nextFrameIsLast = false;
@@ -316,7 +321,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.autoRepeat == 2) {
                                 int unused17 = RLottieDrawable.this.currentFrame = 0;
                                 boolean unused18 = RLottieDrawable.this.nextFrameIsLast = true;
-                                RLottieDrawable.access$3108(RLottieDrawable.this);
+                                RLottieDrawable.access$3308(RLottieDrawable.this);
                             } else {
                                 boolean unused19 = RLottieDrawable.this.nextFrameIsLast = true;
                             }
@@ -349,10 +354,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this(i, str, i2, i3, true, (int[]) null);
     }
 
-    public RLottieDrawable(int i, int i2, int i3) {
+    public RLottieDrawable(String str, int i, int i2) {
+        String str2;
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -412,7 +419,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             public void run() {
                 long access$800;
                 if (!RLottieDrawable.this.isRecycled) {
-                    if (RLottieDrawable.this.nativePtr == 0) {
+                    if (RLottieDrawable.this.nativePtr == 0 || (RLottieDrawable.this.isDice == 2 && RLottieDrawable.this.secondNativePtr == 0)) {
                         RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableNoFrame);
                         return;
                     }
@@ -443,7 +450,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.isDice == 2) {
                                 access$800 = RLottieDrawable.this.secondNativePtr;
                                 if (RLottieDrawable.this.setLastFrame) {
-                                    int unused4 = RLottieDrawable.this.currentFrame = 179;
+                                    int unused4 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.secondFramesCount - 1;
                                 }
                             } else {
                                 access$800 = RLottieDrawable.this.nativePtr;
@@ -459,7 +466,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             Bitmap unused5 = RLottieDrawable.this.nextRenderingBitmap = RLottieDrawable.this.backgroundBitmap;
                             int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
                             if (RLottieDrawable.this.isDice == 1) {
-                                if (RLottieDrawable.this.currentFrame + i < 60) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.diceSwitchFramesCount == -1 ? RLottieDrawable.this.metaData[0] : RLottieDrawable.this.diceSwitchFramesCount)) {
                                     int unused6 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     int unused7 = RLottieDrawable.this.currentFrame = 0;
@@ -469,16 +476,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     }
                                 }
                             } else if (RLottieDrawable.this.isDice == 2) {
-                                if (RLottieDrawable.this.currentFrame + i < 180) {
+                                if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.secondFramesCount) {
                                     int unused10 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
                             } else if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
                                 if (RLottieDrawable.this.autoRepeat == 3) {
                                     boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 } else {
                                     int unused13 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                     boolean unused14 = RLottieDrawable.this.nextFrameIsLast = false;
@@ -489,7 +496,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.autoRepeat == 2) {
                                 int unused17 = RLottieDrawable.this.currentFrame = 0;
                                 boolean unused18 = RLottieDrawable.this.nextFrameIsLast = true;
-                                RLottieDrawable.access$3108(RLottieDrawable.this);
+                                RLottieDrawable.access$3308(RLottieDrawable.this);
                             } else {
                                 boolean unused19 = RLottieDrawable.this.nextFrameIsLast = true;
                             }
@@ -501,55 +508,69 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        this.width = i2;
-        this.height = i3;
+        this.width = i;
+        this.height = i2;
         this.isDice = 1;
-        String readRes = readRes(i);
-        if (!TextUtils.isEmpty(readRes)) {
-            getPaint().setFlags(2);
-            this.nativePtr = createWithJson(readRes, "dice", this.metaData, (int[]) null);
-            this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
+        if ("🎲".equals(str)) {
+            str2 = readRes((File) null, NUM);
+            this.diceSwitchFramesCount = 60;
+        } else {
+            str2 = "🎯".equals(str) ? readRes((File) null, NUM) : null;
         }
+        getPaint().setFlags(2);
+        if (TextUtils.isEmpty(str2)) {
+            this.timeBetweenFrames = 16;
+            return;
+        }
+        this.nativePtr = createWithJson(str2, "dice", this.metaData, (int[]) null);
+        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
     }
 
-    public void setDiceNumber(int i, boolean z) {
-        int i2;
-        switch (i) {
-            case 1:
-                i2 = NUM;
-                break;
-            case 2:
-                i2 = NUM;
-                break;
-            case 3:
-                i2 = NUM;
-                break;
-            case 4:
-                i2 = NUM;
-                break;
-            case 5:
-                i2 = NUM;
-                break;
-            case 6:
-                i2 = NUM;
-                break;
-            default:
-                return;
+    public boolean setBaseDice(File file) {
+        if (this.nativePtr != 0) {
+            return true;
         }
-        String readRes = readRes(i2);
-        if (!TextUtils.isEmpty(readRes)) {
-            if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
-                this.isDice = 2;
-                this.setLastFrame = true;
-            }
-            this.secondNativePtr = createWithJson(readRes, "dice", this.metaData, (int[]) null);
+        String readRes = readRes(file, 0);
+        if (TextUtils.isEmpty(readRes)) {
+            return false;
         }
+        this.nativePtr = createWithJson(readRes, "dice", this.metaData, (int[]) null);
+        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
+        if (this.isRunning) {
+            scheduleNextGetFrame();
+            invalidateInternal();
+        }
+        return true;
+    }
+
+    public boolean hasBaseDice() {
+        return this.nativePtr != 0;
+    }
+
+    public boolean setDiceNumber(File file, boolean z) {
+        if (this.secondNativePtr != 0) {
+            return true;
+        }
+        String readRes = readRes(file, 0);
+        if (TextUtils.isEmpty(readRes)) {
+            return false;
+        }
+        if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
+            this.isDice = 2;
+            this.setLastFrame = true;
+        }
+        int[] iArr = new int[3];
+        this.secondNativePtr = createWithJson(readRes, "dice", iArr, (int[]) null);
+        this.secondFramesCount = iArr[0];
+        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) iArr[1])));
+        return true;
     }
 
     public RLottieDrawable(int i, String str, int i2, int i3, boolean z, int[] iArr) {
         this.metaData = new int[3];
         this.newColorUpdates = new HashMap<>();
         this.pendingColorUpdates = new HashMap<>();
+        this.diceSwitchFramesCount = -1;
         this.autoRepeat = 1;
         this.scaleX = 1.0f;
         this.scaleY = 1.0f;
@@ -609,7 +630,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             public void run() {
                 long access$800;
                 if (!RLottieDrawable.this.isRecycled) {
-                    if (RLottieDrawable.this.nativePtr == 0) {
+                    if (RLottieDrawable.this.nativePtr == 0 || (RLottieDrawable.this.isDice == 2 && RLottieDrawable.this.secondNativePtr == 0)) {
                         RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableNoFrame);
                         return;
                     }
@@ -640,7 +661,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.isDice == 2) {
                                 access$800 = RLottieDrawable.this.secondNativePtr;
                                 if (RLottieDrawable.this.setLastFrame) {
-                                    int unused4 = RLottieDrawable.this.currentFrame = 179;
+                                    int unused4 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.secondFramesCount - 1;
                                 }
                             } else {
                                 access$800 = RLottieDrawable.this.nativePtr;
@@ -656,7 +677,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             Bitmap unused5 = RLottieDrawable.this.nextRenderingBitmap = RLottieDrawable.this.backgroundBitmap;
                             int i = RLottieDrawable.this.shouldLimitFps ? 2 : 1;
                             if (RLottieDrawable.this.isDice == 1) {
-                                if (RLottieDrawable.this.currentFrame + i < 60) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.diceSwitchFramesCount == -1 ? RLottieDrawable.this.metaData[0] : RLottieDrawable.this.diceSwitchFramesCount)) {
                                     int unused6 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     int unused7 = RLottieDrawable.this.currentFrame = 0;
@@ -666,16 +687,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     }
                                 }
                             } else if (RLottieDrawable.this.isDice == 2) {
-                                if (RLottieDrawable.this.currentFrame + i < 180) {
+                                if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.secondFramesCount) {
                                     int unused10 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                 } else {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
                             } else if (RLottieDrawable.this.currentFrame + i < RLottieDrawable.this.metaData[0]) {
                                 if (RLottieDrawable.this.autoRepeat == 3) {
                                     boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
-                                    RLottieDrawable.access$3108(RLottieDrawable.this);
+                                    RLottieDrawable.access$3308(RLottieDrawable.this);
                                 } else {
                                     int unused13 = RLottieDrawable.this.currentFrame = RLottieDrawable.this.currentFrame + i;
                                     boolean unused14 = RLottieDrawable.this.nextFrameIsLast = false;
@@ -686,7 +707,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                             } else if (RLottieDrawable.this.autoRepeat == 2) {
                                 int unused17 = RLottieDrawable.this.currentFrame = 0;
                                 boolean unused18 = RLottieDrawable.this.nextFrameIsLast = true;
-                                RLottieDrawable.access$3108(RLottieDrawable.this);
+                                RLottieDrawable.access$3308(RLottieDrawable.this);
                             } else {
                                 boolean unused19 = RLottieDrawable.this.nextFrameIsLast = true;
                             }
@@ -701,7 +722,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.width = i2;
         this.height = i3;
         this.autoRepeat = 0;
-        String readRes = readRes(i);
+        String readRes = readRes((File) null, i);
         if (!TextUtils.isEmpty(readRes)) {
             getPaint().setFlags(2);
             this.nativePtr = createWithJson(readRes, str, this.metaData, iArr);
@@ -712,18 +733,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0060, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0061, code lost:
-        if (r8 != null) goto L_0x0063;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:?, code lost:
-        r8.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:30:0x0066 */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0070 A[SYNTHETIC, Splitter:B:33:0x0070] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private java.lang.String readRes(int r8) {
+    private java.lang.String readRes(java.io.File r8, int r9) {
         /*
             r7 = this;
             java.lang.ThreadLocal<byte[]> r0 = readBufferLocal
@@ -735,62 +747,77 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             java.lang.ThreadLocal<byte[]> r1 = readBufferLocal
             r1.set(r0)
         L_0x0013:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0067 }
-            android.content.res.Resources r1 = r1.getResources()     // Catch:{ all -> 0x0067 }
-            java.io.InputStream r8 = r1.openRawResource(r8)     // Catch:{ all -> 0x0067 }
-            java.lang.ThreadLocal<byte[]> r1 = bufferLocal     // Catch:{ all -> 0x005e }
-            java.lang.Object r1 = r1.get()     // Catch:{ all -> 0x005e }
-            byte[] r1 = (byte[]) r1     // Catch:{ all -> 0x005e }
+            r1 = 0
+            if (r8 == 0) goto L_0x001c
+            java.io.FileInputStream r9 = new java.io.FileInputStream     // Catch:{ all -> 0x0069 }
+            r9.<init>(r8)     // Catch:{ all -> 0x0069 }
+            goto L_0x0026
+        L_0x001c:
+            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0069 }
+            android.content.res.Resources r8 = r8.getResources()     // Catch:{ all -> 0x0069 }
+            java.io.InputStream r9 = r8.openRawResource(r9)     // Catch:{ all -> 0x0069 }
+        L_0x0026:
+            java.lang.ThreadLocal<byte[]> r8 = bufferLocal     // Catch:{ all -> 0x0067 }
+            java.lang.Object r8 = r8.get()     // Catch:{ all -> 0x0067 }
+            byte[] r8 = (byte[]) r8     // Catch:{ all -> 0x0067 }
             r2 = 0
-            if (r1 != 0) goto L_0x0031
-            r1 = 4096(0x1000, float:5.74E-42)
-            byte[] r1 = new byte[r1]     // Catch:{ all -> 0x005e }
-            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x005e }
-            r3.set(r1)     // Catch:{ all -> 0x005e }
-        L_0x0031:
+            if (r8 != 0) goto L_0x003a
+            r8 = 4096(0x1000, float:5.74E-42)
+            byte[] r8 = new byte[r8]     // Catch:{ all -> 0x0067 }
+            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x0067 }
+            r3.set(r8)     // Catch:{ all -> 0x0067 }
+        L_0x003a:
             r3 = 0
-        L_0x0032:
-            int r4 = r1.length     // Catch:{ all -> 0x005e }
-            int r4 = r8.read(r1, r2, r4)     // Catch:{ all -> 0x005e }
-            if (r4 < 0) goto L_0x0053
-            int r5 = r0.length     // Catch:{ all -> 0x005e }
+        L_0x003b:
+            int r4 = r8.length     // Catch:{ all -> 0x0067 }
+            int r4 = r9.read(r8, r2, r4)     // Catch:{ all -> 0x0067 }
+            if (r4 < 0) goto L_0x005c
+            int r5 = r0.length     // Catch:{ all -> 0x0067 }
             int r6 = r3 + r4
-            if (r5 >= r6) goto L_0x004c
-            int r5 = r0.length     // Catch:{ all -> 0x005e }
+            if (r5 >= r6) goto L_0x0055
+            int r5 = r0.length     // Catch:{ all -> 0x0067 }
             int r5 = r5 * 2
-            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x005e }
-            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x005e }
-            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x005e }
-            r0.set(r5)     // Catch:{ all -> 0x005e }
+            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x0067 }
+            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x0067 }
+            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x0067 }
+            r0.set(r5)     // Catch:{ all -> 0x0067 }
             r0 = r5
-        L_0x004c:
-            if (r4 <= 0) goto L_0x0032
-            java.lang.System.arraycopy(r1, r2, r0, r3, r4)     // Catch:{ all -> 0x005e }
+        L_0x0055:
+            if (r4 <= 0) goto L_0x003b
+            java.lang.System.arraycopy(r8, r2, r0, r3, r4)     // Catch:{ all -> 0x0067 }
             r3 = r6
-            goto L_0x0032
-        L_0x0053:
-            if (r8 == 0) goto L_0x0058
-            r8.close()     // Catch:{ all -> 0x0067 }
-        L_0x0058:
+            goto L_0x003b
+        L_0x005c:
+            if (r9 == 0) goto L_0x0061
+            r9.close()     // Catch:{ all -> 0x0061 }
+        L_0x0061:
             java.lang.String r8 = new java.lang.String
             r8.<init>(r0, r2, r3)
             return r8
-        L_0x005e:
-            r0 = move-exception
-            throw r0     // Catch:{ all -> 0x0060 }
-        L_0x0060:
-            r0 = move-exception
-            if (r8 == 0) goto L_0x0066
-            r8.close()     // Catch:{ all -> 0x0066 }
-        L_0x0066:
-            throw r0     // Catch:{ all -> 0x0067 }
         L_0x0067:
             r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-            r8 = 0
-            return r8
+            goto L_0x006b
+        L_0x0069:
+            r8 = move-exception
+            r9 = r1
+        L_0x006b:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x0074 }
+            if (r9 == 0) goto L_0x0073
+            r9.close()     // Catch:{ all -> 0x0073 }
+        L_0x0073:
+            return r1
+        L_0x0074:
+            r8 = move-exception
+            if (r9 == 0) goto L_0x007a
+            r9.close()     // Catch:{ all -> 0x007a }
+        L_0x007a:
+            goto L_0x007c
+        L_0x007b:
+            throw r8
+        L_0x007c:
+            goto L_0x007b
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RLottieDrawable.readRes(int):java.lang.String");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RLottieDrawable.readRes(java.io.File, int):java.lang.String");
     }
 
     public void addParentView(View view) {

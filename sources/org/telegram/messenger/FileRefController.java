@@ -91,7 +91,7 @@ public class FileRefController extends BaseController {
     static /* synthetic */ void lambda$onUpdateObjectReference$25(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
-    private class Requester {
+    private static class Requester {
         /* access modifiers changed from: private */
         public Object[] args;
         /* access modifiers changed from: private */
@@ -105,7 +105,7 @@ public class FileRefController extends BaseController {
         }
     }
 
-    private class CachedResult {
+    private static class CachedResult {
         /* access modifiers changed from: private */
         public long firstQueryTime;
         /* access modifiers changed from: private */

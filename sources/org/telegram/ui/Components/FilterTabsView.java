@@ -458,13 +458,13 @@ public class FilterTabsView extends FrameLayout {
         RecyclerListView recyclerListView = this.listView;
         AnonymousClass4 r3 = new LinearLayoutManager(context, 0, false) {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
-                AnonymousClass1 r2 = new LinearSmoothScroller(this, recyclerView.getContext()) {
+                AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     /* access modifiers changed from: protected */
                     public void onTargetFound(View view, RecyclerView.State state, RecyclerView.SmoothScroller.Action action) {
                         int calculateDxToMakeVisible = calculateDxToMakeVisible(view, getHorizontalSnapPreference());
-                        if (calculateDxToMakeVisible > 0) {
+                        if (calculateDxToMakeVisible > 0 || (calculateDxToMakeVisible == 0 && view.getLeft() - AndroidUtilities.dp(8.0f) < 0)) {
                             calculateDxToMakeVisible += AndroidUtilities.dp(60.0f);
-                        } else if (calculateDxToMakeVisible < 0) {
+                        } else if (calculateDxToMakeVisible < 0 || (calculateDxToMakeVisible == 0 && view.getRight() + AndroidUtilities.dp(8.0f) > FilterTabsView.this.getMeasuredWidth())) {
                             calculateDxToMakeVisible -= AndroidUtilities.dp(60.0f);
                         }
                         int calculateDyToMakeVisible = calculateDyToMakeVisible(view, getVerticalSnapPreference());

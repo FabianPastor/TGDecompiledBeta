@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">Chatachtergrond echt naar een kleur wijzigen?</string>
     <string name="ChannelAddAdmin">Beheerder toevoegen</string>
     <string name="ChannelAddException">Uitzondering toevoegen</string>
-    <string name="ChannelAddMembers">Leden toevoegen</string>
     <string name="ChannelAddTo">%1$s toevoegen aan het kanaal?</string>
     <string name="ChannelAddToChannel">Toevoegen aan kanaal</string>
     <string name="ChannelAddToGroup">Toevoegen aan groep</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">Thema verwijderen</string>
     <string name="DeleteThemeAlert">Thema echt verwijderen?</string>
     <string name="DeleteThemeTitle">Thema verwijderen</string>
-    <string name="DeleteTheseChats">Chats verwijderen</string>
     <string name="DeleteThisChat">Chat verwijderen</string>
     <string name="DeleteThisGroup">Deze groep verwijderen</string>
     <string name="DescriptionInfo">Optioneel kun je een kanaalbeschrijving geven.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">Inklappen</string>
     <string name="PollExpand">Uitklappen</string>
     <string name="PollMultiple">Meerdere antwoorden</string>
-    <string name="PollOptions">Pollopties</string>
     <string name="PollQuiz">Quizmode</string>
     <string name="PollResults">Poll resultaten</string>
     <string name="PollSelectOption">Kies eerst een optie</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">Poll</string>
     <string name="PublicPollCantForward">Sorry, polls met zichtbare stemmen kunnen niet naar kanalen worden doorgestuurd.</string>
     <string name="Purple">Paars</string>
-    <string name="Question">Vraag</string>
     <string name="QuestionHint">Stel een vraag</string>
     <string name="QuickReplyCustom">Aangepast bericht.</string>
     <string name="QuickReplyDefault1">Kan nu niet praten, wat is er?</string>

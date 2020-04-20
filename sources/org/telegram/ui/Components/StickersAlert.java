@@ -153,6 +153,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public AnimatorSet[] shadowAnimation = new AnimatorSet[2];
     /* access modifiers changed from: private */
     public boolean showEmoji;
+    private boolean showTooltipWhenToggle = true;
     private TextView stickerEmojiTextView;
     /* access modifiers changed from: private */
     public BackupImageView stickerImageView;
@@ -313,11 +314,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.parentFragment = baseFragment;
         loadStickerSet();
         init(context);
-    }
-
-    public void show() {
-        super.show();
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 2);
     }
 
     public void setClearsInputField(boolean z) {
@@ -831,7 +827,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         BackupImageView backupImageView = new BackupImageView(context2);
         this.stickerImageView = backupImageView;
         backupImageView.setAspectFit(true);
-        this.stickerImageView.setLayerNum(3);
+        this.stickerImageView.setLayerNum(5);
         this.stickerPreviewLayout.addView(this.stickerImageView);
         TextView textView3 = new TextView(context2);
         this.stickerEmojiTextView = textView3;
@@ -1087,7 +1083,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626503(0x7f0e0a07, float:1.8880244E38)
+            r6 = 2131626521(0x7f0e0a19, float:1.888028E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1127,7 +1123,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
             boolean r6 = r6.masks
-            r7 = 2131624132(0x7f0e00c4, float:1.8875435E38)
+            r7 = 2131624134(0x7f0e00c6, float:1.887544E38)
             java.lang.String r8 = "AddStickersCount"
             if (r6 == 0) goto L_0x012f
             java.lang.Object[] r4 = new java.lang.Object[r5]
@@ -1156,7 +1152,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.notifyDataSetChanged()
             goto L_0x0170
         L_0x0157:
-            r0 = 2131624730(0x7f0e031a, float:1.8876648E38)
+            r0 = 2131624738(0x7f0e0322, float:1.8876664E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1207,7 +1203,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         boolean z = this.stickerSet.set.masks;
         if (tLRPC$TL_error == null) {
             try {
-                Bulletin.make(this.parentFragment, (Bulletin.Layout) new StickerSetBulletinLayout(this.pickerBottomLayout.getContext(), this.stickerSet, 2), 1500).show();
+                if (this.showTooltipWhenToggle) {
+                    Bulletin.make(this.parentFragment, (Bulletin.Layout) new StickerSetBulletinLayout(this.pickerBottomLayout.getContext(), this.stickerSet, 2), 1500).show();
+                }
                 if (tLObject instanceof TLRPC$TL_messages_stickerSetInstallResultArchive) {
                     MediaDataController.getInstance(this.currentAccount).processStickerSetInstallResultArchive(this.parentFragment, true, z, (TLRPC$TL_messages_stickerSetInstallResultArchive) tLObject);
                 }
@@ -1226,7 +1224,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             stickersAlertInstallDelegate.onStickerSetUninstalled();
         }
         dismiss();
-        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 1, this.parentFragment, true, true);
+        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 1, this.parentFragment, true, this.showTooltipWhenToggle);
     }
 
     public /* synthetic */ void lambda$updateFields$15$StickersAlert(View view) {
@@ -1235,7 +1233,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             stickersAlertInstallDelegate.onStickerSetUninstalled();
         }
         dismiss();
-        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 0, this.parentFragment, true, true);
+        MediaDataController.getInstance(this.currentAccount).toggleStickerSet(getContext(), this.stickerSet, 0, this.parentFragment, true, this.showTooltipWhenToggle);
     }
 
     public /* synthetic */ void lambda$updateFields$16$StickersAlert(View view) {
@@ -1335,6 +1333,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
+    public void show() {
+        super.show();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4);
+    }
+
     public void dismiss() {
         super.dismiss();
         if (this.reqId != 0) {
@@ -1342,7 +1345,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             this.reqId = 0;
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 2);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -1365,6 +1368,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.pickerBottomLayout.setTextColor(i);
         this.pickerBottomLayout.setText(str.toUpperCase());
         this.pickerBottomLayout.setOnClickListener(onClickListener);
+    }
+
+    public void setShowTooltipWhenToggle(boolean z) {
+        this.showTooltipWhenToggle = z;
     }
 
     private class GridAdapter extends RecyclerListView.SelectionAdapter {
@@ -1414,7 +1421,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         super.onMeasure(View.MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                     }
                 };
-                r2.getImageView().setLayerNum(3);
+                r2.getImageView().setLayerNum(5);
                 featuredStickerSetInfoCell = r2;
             } else if (i != 1) {
                 featuredStickerSetInfoCell = i != 2 ? null : new FeaturedStickerSetInfoCell(this.context, 8);

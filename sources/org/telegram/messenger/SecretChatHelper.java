@@ -1128,8 +1128,8 @@ public class SecretChatHelper extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.encryptedChatUpdated, tLRPC$EncryptedChat);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x0748  */
-    /* JADX WARNING: Removed duplicated region for block: B:276:0x0758  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0746  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0756  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public org.telegram.tgnet.TLRPC$Message processDecryptedObject(org.telegram.tgnet.TLRPC$EncryptedChat r17, org.telegram.tgnet.TLRPC$EncryptedFile r18, int r19, org.telegram.tgnet.TLObject r20, boolean r21) {
         /*
@@ -1140,7 +1140,7 @@ public class SecretChatHelper extends BaseController {
             r3 = r19
             r4 = r20
             r5 = 0
-            if (r4 == 0) goto L_0x08b0
+            if (r4 == 0) goto L_0x08ae
             int r6 = r1.admin_id
             org.telegram.messenger.UserConfig r7 = r16.getUserConfig()
             int r7 = r7.getClientUserId()
@@ -1203,7 +1203,7 @@ public class SecretChatHelper extends BaseController {
             r8 = 8
             r13 = 32
             r14 = 1
-            if (r7 == 0) goto L_0x058e
+            if (r7 == 0) goto L_0x058d
             org.telegram.tgnet.TLRPC$TL_decryptedMessage r4 = (org.telegram.tgnet.TLRPC$TL_decryptedMessage) r4
             int r7 = r1.layer
             int r7 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r7)
@@ -1275,10 +1275,10 @@ public class SecretChatHelper extends BaseController {
             r7.flags = r1
         L_0x0120:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
-            if (r1 == 0) goto L_0x0568
+            if (r1 == 0) goto L_0x0567
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaEmpty
             if (r6 == 0) goto L_0x012a
-            goto L_0x0568
+            goto L_0x0567
         L_0x012a:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaWebPage
             if (r6 == 0) goto L_0x0148
@@ -1293,7 +1293,7 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             java.lang.String r2 = r2.url
             r1.url = r2
-            goto L_0x056f
+            goto L_0x056e
         L_0x0148:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaContact
             java.lang.String r8 = ""
@@ -1311,7 +1311,7 @@ public class SecretChatHelper extends BaseController {
             int r2 = r2.user_id
             r1.user_id = r2
             r1.vcard = r8
-            goto L_0x056f
+            goto L_0x056e
         L_0x016b:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaGeoPoint
             if (r6 == 0) goto L_0x018d
@@ -1328,22 +1328,22 @@ public class SecretChatHelper extends BaseController {
             r1.lat = r3
             double r2 = r2._long
             r1._long = r2
-            goto L_0x056f
+            goto L_0x056e
         L_0x018d:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaPhoto
             r9 = 6000(0x1770, float:8.408E-42)
             r10 = 100
             java.lang.String r11 = "s"
-            if (r6 == 0) goto L_0x0260
+            if (r6 == 0) goto L_0x025f
             byte[] r3 = r1.key
-            if (r3 == 0) goto L_0x025f
+            if (r3 == 0) goto L_0x025e
             int r3 = r3.length
-            if (r3 != r13) goto L_0x025f
+            if (r3 != r13) goto L_0x025e
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x025f
+            if (r1 == 0) goto L_0x025e
             int r1 = r1.length
             if (r1 == r13) goto L_0x01a7
-            goto L_0x025f
+            goto L_0x025e
         L_0x01a7:
             org.telegram.tgnet.TLRPC$TL_messageMediaPhoto r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
             r1.<init>()
@@ -1437,22 +1437,22 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Photo r2 = r2.photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.sizes
             r2.add(r1)
-            goto L_0x056f
-        L_0x025f:
+            goto L_0x056e
+        L_0x025e:
             return r5
-        L_0x0260:
+        L_0x025f:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo
-            if (r6 == 0) goto L_0x0349
-            byte[] r6 = r1.key
             if (r6 == 0) goto L_0x0348
+            byte[] r6 = r1.key
+            if (r6 == 0) goto L_0x0347
             int r6 = r6.length
-            if (r6 != r13) goto L_0x0348
+            if (r6 != r13) goto L_0x0347
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x0348
+            if (r1 == 0) goto L_0x0347
             int r1 = r1.length
-            if (r1 == r13) goto L_0x0274
-            goto L_0x0348
-        L_0x0274:
+            if (r1 == r13) goto L_0x0273
+            goto L_0x0347
+        L_0x0273:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1472,9 +1472,9 @@ public class SecretChatHelper extends BaseController {
             int r6 = r2.dc_id
             r1.dc_id = r6
             java.lang.String r1 = r5.caption
-            if (r1 == 0) goto L_0x029f
+            if (r1 == 0) goto L_0x029e
             r8 = r1
-        L_0x029f:
+        L_0x029e:
             r7.message = r8
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
@@ -1488,23 +1488,23 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             java.lang.String r2 = r2.mime_type
             r1.mime_type = r2
-            if (r2 != 0) goto L_0x02bf
+            if (r2 != 0) goto L_0x02be
             java.lang.String r2 = "video/mp4"
             r1.mime_type = r2
-        L_0x02bf:
+        L_0x02be:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             r2 = r1
             org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo r2 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo) r2
             byte[] r2 = r2.thumb
-            if (r2 == 0) goto L_0x02f1
+            if (r2 == 0) goto L_0x02f0
             int r3 = r2.length
-            if (r3 == 0) goto L_0x02f1
+            if (r3 == 0) goto L_0x02f0
             int r3 = r2.length
-            if (r3 > r9) goto L_0x02f1
+            if (r3 > r9) goto L_0x02f0
             int r3 = r1.thumb_w
-            if (r3 > r10) goto L_0x02f1
+            if (r3 > r10) goto L_0x02f0
             int r1 = r1.thumb_h
-            if (r1 > r10) goto L_0x02f1
+            if (r1 > r10) goto L_0x02f0
             org.telegram.tgnet.TLRPC$TL_photoCachedSize r1 = new org.telegram.tgnet.TLRPC$TL_photoCachedSize
             r1.<init>()
             r1.bytes = r2
@@ -1517,12 +1517,12 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable r2 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             r2.<init>()
             r1.location = r2
-            goto L_0x02f8
-        L_0x02f1:
+            goto L_0x02f7
+        L_0x02f0:
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r1 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r1.<init>()
             r1.type = r11
-        L_0x02f8:
+        L_0x02f7:
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.thumbs
@@ -1548,36 +1548,36 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             r2.add(r1)
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0337
+            if (r1 == 0) goto L_0x0336
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             r2.ttl_seconds = r1
             int r1 = r2.flags
             r1 = r1 | 4
             r2.flags = r1
-        L_0x0337:
+        L_0x0336:
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x056f
+            if (r1 == 0) goto L_0x056e
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             int r2 = r2.duration
             int r2 = r2 + r14
             int r1 = java.lang.Math.max(r2, r1)
             r7.ttl = r1
-            goto L_0x056f
-        L_0x0348:
+            goto L_0x056e
+        L_0x0347:
             return r5
-        L_0x0349:
+        L_0x0348:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument
-            if (r6 == 0) goto L_0x0437
-            byte[] r6 = r1.key
             if (r6 == 0) goto L_0x0436
+            byte[] r6 = r1.key
+            if (r6 == 0) goto L_0x0435
             int r6 = r6.length
-            if (r6 != r13) goto L_0x0436
+            if (r6 != r13) goto L_0x0435
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x0436
+            if (r1 == 0) goto L_0x0435
             int r1 = r1.length
-            if (r1 == r13) goto L_0x035d
-            goto L_0x0436
-        L_0x035d:
+            if (r1 == r13) goto L_0x035c
+            goto L_0x0435
+        L_0x035c:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1586,11 +1586,11 @@ public class SecretChatHelper extends BaseController {
             r1.flags = r5
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             java.lang.String r1 = r1.caption
-            if (r1 == 0) goto L_0x0371
-            goto L_0x0372
-        L_0x0371:
+            if (r1 == 0) goto L_0x0370
+            goto L_0x0371
+        L_0x0370:
             r1 = r8
-        L_0x0372:
+        L_0x0371:
             r7.message = r1
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$TL_documentEncrypted r5 = new org.telegram.tgnet.TLRPC$TL_documentEncrypted
@@ -1605,7 +1605,7 @@ public class SecretChatHelper extends BaseController {
             r1.date = r3
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
             boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument_layer8
-            if (r5 == 0) goto L_0x03a6
+            if (r5 == 0) goto L_0x03a5
             org.telegram.tgnet.TLRPC$TL_documentAttributeFilename r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
@@ -1615,24 +1615,24 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             r3.add(r1)
-            goto L_0x03aa
-        L_0x03a6:
+            goto L_0x03a9
+        L_0x03a5:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             r1.attributes = r3
-        L_0x03aa:
+        L_0x03a9:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
             java.lang.String r5 = r3.mime_type
             r1.mime_type = r5
             int r3 = r3.size
-            if (r3 == 0) goto L_0x03bf
+            if (r3 == 0) goto L_0x03be
             int r5 = r2.size
             int r3 = java.lang.Math.min(r3, r5)
-            goto L_0x03c1
-        L_0x03bf:
+            goto L_0x03c0
+        L_0x03be:
             int r3 = r2.size
-        L_0x03c1:
+        L_0x03c0:
             r1.size = r3
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
@@ -1642,22 +1642,22 @@ public class SecretChatHelper extends BaseController {
             byte[] r3 = r3.iv
             r1.iv = r3
             java.lang.String r3 = r1.mime_type
-            if (r3 != 0) goto L_0x03d7
+            if (r3 != 0) goto L_0x03d6
             r1.mime_type = r8
-        L_0x03d7:
+        L_0x03d6:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             r3 = r1
             org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument r3 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument) r3
             byte[] r3 = r3.thumb
-            if (r3 == 0) goto L_0x0409
+            if (r3 == 0) goto L_0x0408
             int r5 = r3.length
-            if (r5 == 0) goto L_0x0409
+            if (r5 == 0) goto L_0x0408
             int r5 = r3.length
-            if (r5 > r9) goto L_0x0409
+            if (r5 > r9) goto L_0x0408
             int r5 = r1.thumb_w
-            if (r5 > r10) goto L_0x0409
+            if (r5 > r10) goto L_0x0408
             int r1 = r1.thumb_h
-            if (r1 > r10) goto L_0x0409
+            if (r1 > r10) goto L_0x0408
             org.telegram.tgnet.TLRPC$TL_photoCachedSize r1 = new org.telegram.tgnet.TLRPC$TL_photoCachedSize
             r1.<init>()
             r1.bytes = r3
@@ -1670,12 +1670,12 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable r3 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             r3.<init>()
             r1.location = r3
-            goto L_0x0410
-        L_0x0409:
+            goto L_0x040f
+        L_0x0408:
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r1 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r1.<init>()
             r1.type = r11
-        L_0x0410:
+        L_0x040f:
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r3.thumbs
@@ -1688,17 +1688,17 @@ public class SecretChatHelper extends BaseController {
             int r2 = r2.dc_id
             r1.dc_id = r2
             boolean r1 = org.telegram.messenger.MessageObject.isVoiceMessage(r7)
-            if (r1 != 0) goto L_0x0432
+            if (r1 != 0) goto L_0x0431
             boolean r1 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r7)
-            if (r1 == 0) goto L_0x056f
-        L_0x0432:
+            if (r1 == 0) goto L_0x056e
+        L_0x0431:
             r7.media_unread = r14
-            goto L_0x056f
-        L_0x0436:
+            goto L_0x056e
+        L_0x0435:
             return r5
-        L_0x0437:
+        L_0x0436:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaExternalDocument
-            if (r6 == 0) goto L_0x0492
+            if (r6 == 0) goto L_0x0491
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1739,22 +1739,22 @@ public class SecretChatHelper extends BaseController {
             r2 = r2 | r14
             r1.flags = r2
             java.lang.String r2 = r1.mime_type
-            if (r2 != 0) goto L_0x056f
+            if (r2 != 0) goto L_0x056e
             r1.mime_type = r8
-            goto L_0x056f
-        L_0x0492:
+            goto L_0x056e
+        L_0x0491:
             boolean r6 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaAudio
-            if (r6 == 0) goto L_0x0534
-            byte[] r6 = r1.key
             if (r6 == 0) goto L_0x0533
+            byte[] r6 = r1.key
+            if (r6 == 0) goto L_0x0532
             int r6 = r6.length
-            if (r6 != r13) goto L_0x0533
+            if (r6 != r13) goto L_0x0532
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x0533
+            if (r1 == 0) goto L_0x0532
             int r1 = r1.length
-            if (r1 == r13) goto L_0x04a6
-            goto L_0x0533
-        L_0x04a6:
+            if (r1 == r13) goto L_0x04a5
+            goto L_0x0532
+        L_0x04a5:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1783,17 +1783,17 @@ public class SecretChatHelper extends BaseController {
             java.lang.String r2 = r5.mime_type
             r1.mime_type = r2
             java.lang.String r1 = r5.caption
-            if (r1 == 0) goto L_0x04e3
+            if (r1 == 0) goto L_0x04e2
             r8 = r1
-        L_0x04e3:
+        L_0x04e2:
             r7.message = r8
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r2 = r1.mime_type
-            if (r2 != 0) goto L_0x04f1
+            if (r2 != 0) goto L_0x04f0
             java.lang.String r2 = "audio/ogg"
             r1.mime_type = r2
-        L_0x04f1:
+        L_0x04f0:
             org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
@@ -1805,18 +1805,18 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             r2.add(r1)
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0516
+            if (r1 == 0) goto L_0x0515
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             int r2 = r2.duration
             int r2 = r2 + r14
             int r1 = java.lang.Math.max(r2, r1)
             r7.ttl = r1
-        L_0x0516:
+        L_0x0515:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.thumbs
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x056f
+            if (r1 == 0) goto L_0x056e
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r1 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r1.<init>()
             r1.type = r11
@@ -1824,12 +1824,12 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.thumbs
             r2.add(r1)
-            goto L_0x056f
-        L_0x0533:
+            goto L_0x056e
+        L_0x0532:
             return r5
-        L_0x0534:
+        L_0x0533:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVenue
-            if (r1 == 0) goto L_0x0567
+            if (r1 == 0) goto L_0x0566
             org.telegram.tgnet.TLRPC$TL_messageMediaVenue r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaVenue
             r1.<init>()
             r7.media = r1
@@ -1852,45 +1852,45 @@ public class SecretChatHelper extends BaseController {
             java.lang.String r2 = r3.venue_id
             r1.venue_id = r2
             r1.venue_type = r8
-            goto L_0x056f
-        L_0x0567:
+            goto L_0x056e
+        L_0x0566:
             return r5
-        L_0x0568:
+        L_0x0567:
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r1.<init>()
             r7.media = r1
-        L_0x056f:
+        L_0x056e:
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0581
+            if (r1 == 0) goto L_0x0580
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             int r3 = r2.ttl_seconds
-            if (r3 != 0) goto L_0x0581
+            if (r3 != 0) goto L_0x0580
             r2.ttl_seconds = r1
             int r1 = r2.flags
             r1 = r1 | 4
             r2.flags = r1
-        L_0x0581:
+        L_0x0580:
             java.lang.String r1 = r7.message
-            if (r1 == 0) goto L_0x058d
+            if (r1 == 0) goto L_0x058c
             r2 = 8238(0x202e, float:1.1544E-41)
             java.lang.String r1 = r1.replace(r2, r13)
             r7.message = r1
-        L_0x058d:
+        L_0x058c:
             return r7
-        L_0x058e:
+        L_0x058d:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService
-            if (r2 == 0) goto L_0x0897
+            if (r2 == 0) goto L_0x0895
             r2 = r4
             org.telegram.tgnet.TLRPC$TL_decryptedMessageService r2 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageService) r2
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r4 = r2.action
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r7 != 0) goto L_0x0821
+            if (r7 != 0) goto L_0x081f
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages
-            if (r7 == 0) goto L_0x05a1
-            goto L_0x0821
-        L_0x05a1:
+            if (r7 == 0) goto L_0x05a0
+            goto L_0x081f
+        L_0x05a0:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionFlushHistory
-            if (r3 == 0) goto L_0x05b2
+            if (r3 == 0) goto L_0x05b1
             int r1 = r1.id
             long r1 = (long) r1
             long r1 = r1 << r13
@@ -1898,24 +1898,24 @@ public class SecretChatHelper extends BaseController {
             r3.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
             return r5
-        L_0x05b2:
+        L_0x05b1:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionDeleteMessages
-            if (r3 == 0) goto L_0x05c8
+            if (r3 == 0) goto L_0x05c7
             java.util.ArrayList<java.lang.Long> r1 = r4.random_ids
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x05c7
+            if (r1 != 0) goto L_0x05c6
             java.util.ArrayList<java.lang.Long> r1 = r0.pendingEncMessagesToDelete
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             java.util.ArrayList<java.lang.Long> r2 = r2.random_ids
             r1.addAll(r2)
-        L_0x05c7:
+        L_0x05c6:
             return r5
-        L_0x05c8:
+        L_0x05c7:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionReadMessages
-            if (r3 == 0) goto L_0x05ed
+            if (r3 == 0) goto L_0x05ec
             java.util.ArrayList<java.lang.Long> r3 = r4.random_ids
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x08b9
+            if (r3 != 0) goto L_0x08b7
             org.telegram.tgnet.ConnectionsManager r3 = r16.getConnectionsManager()
             int r9 = r3.getCurrentTime()
             org.telegram.messenger.MessagesStorage r6 = r16.getMessagesStorage()
@@ -1925,31 +1925,31 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<java.lang.Long> r11 = r1.random_ids
             r8 = r9
             r6.createTaskForSecretChat(r7, r8, r9, r10, r11)
-            goto L_0x08b9
-        L_0x05ed:
+            goto L_0x08b7
+        L_0x05ec:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNotifyLayer
-            if (r3 == 0) goto L_0x05f8
+            if (r3 == 0) goto L_0x05f7
             int r2 = r4.layer
             r0.applyPeerLayer(r1, r2)
-            goto L_0x08b9
-        L_0x05f8:
+            goto L_0x08b7
+        L_0x05f7:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionRequestKey
-            if (r3 == 0) goto L_0x06be
+            if (r3 == 0) goto L_0x06bc
             long r6 = r1.exchange_id
             int r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-            if (r3 == 0) goto L_0x0616
+            if (r3 == 0) goto L_0x0614
             long r3 = r4.exchange_id
             int r9 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r9 <= 0) goto L_0x0613
+            if (r9 <= 0) goto L_0x0611
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x0612
+            if (r1 == 0) goto L_0x0610
             java.lang.String r1 = "we already have request key with higher exchange_id"
             org.telegram.messenger.FileLog.d(r1)
-        L_0x0612:
+        L_0x0610:
             return r5
-        L_0x0613:
+        L_0x0611:
             r0.sendAbortKeyMessage(r1, r5, r6)
-        L_0x0616:
+        L_0x0614:
             byte[] r3 = new byte[r12]
             java.security.SecureRandom r4 = org.telegram.messenger.Utilities.random
             r4.nextBytes(r3)
@@ -1969,52 +1969,52 @@ public class SecretChatHelper extends BaseController {
             byte[] r9 = r9.g_a
             r7.<init>(r14, r9)
             boolean r9 = org.telegram.messenger.Utilities.isGoodGaAndGb(r7, r4)
-            if (r9 != 0) goto L_0x0657
+            if (r9 != 0) goto L_0x0655
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r2 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r5, r2)
             return r5
-        L_0x0657:
+        L_0x0655:
             byte[] r6 = r6.toByteArray()
             int r9 = r6.length
-            if (r9 <= r12) goto L_0x0665
+            if (r9 <= r12) goto L_0x0663
             byte[] r9 = new byte[r12]
             r10 = 0
             java.lang.System.arraycopy(r6, r14, r9, r10, r12)
             r6 = r9
-        L_0x0665:
+        L_0x0663:
             java.math.BigInteger r9 = new java.math.BigInteger
             r9.<init>(r14, r3)
             java.math.BigInteger r3 = r7.modPow(r9, r4)
             byte[] r3 = r3.toByteArray()
             int r4 = r3.length
-            if (r4 <= r12) goto L_0x067f
+            if (r4 <= r12) goto L_0x067d
             byte[] r4 = new byte[r12]
             int r7 = r3.length
             int r7 = r7 - r12
             r15 = 0
             java.lang.System.arraycopy(r3, r7, r4, r15, r12)
-        L_0x067d:
+        L_0x067b:
             r3 = r4
-            goto L_0x0697
-        L_0x067f:
+            goto L_0x0695
+        L_0x067d:
             r15 = 0
             int r4 = r3.length
-            if (r4 >= r12) goto L_0x0697
+            if (r4 >= r12) goto L_0x0695
             byte[] r4 = new byte[r12]
             int r7 = r3.length
             int r7 = 256 - r7
             int r9 = r3.length
             java.lang.System.arraycopy(r3, r15, r4, r7, r9)
             r7 = 0
-        L_0x068d:
+        L_0x068b:
             int r9 = r3.length
             int r9 = 256 - r9
-            if (r7 >= r9) goto L_0x067d
+            if (r7 >= r9) goto L_0x067b
             r4[r7] = r15
             int r7 = r7 + 1
-            goto L_0x068d
-        L_0x0697:
+            goto L_0x068b
+        L_0x0695:
             byte[] r4 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r3)
             byte[] r7 = new byte[r8]
             int r9 = r4.length
@@ -2030,14 +2030,14 @@ public class SecretChatHelper extends BaseController {
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
             r0.sendAcceptKeyMessage(r1, r5)
-            goto L_0x08b9
-        L_0x06be:
+            goto L_0x08b7
+        L_0x06bc:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAcceptKey
-            if (r3 == 0) goto L_0x0788
+            if (r3 == 0) goto L_0x0786
             long r6 = r1.exchange_id
             long r3 = r4.exchange_id
             int r11 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r11 != 0) goto L_0x0770
+            if (r11 != 0) goto L_0x076e
             java.math.BigInteger r3 = new java.math.BigInteger
             org.telegram.messenger.MessagesStorage r4 = r16.getMessagesStorage()
             byte[] r4 = r4.getSecretPBytes()
@@ -2047,7 +2047,7 @@ public class SecretChatHelper extends BaseController {
             byte[] r6 = r6.g_b
             r4.<init>(r14, r6)
             boolean r6 = org.telegram.messenger.Utilities.isGoodGaAndGb(r4, r3)
-            if (r6 != 0) goto L_0x06fd
+            if (r6 != 0) goto L_0x06fb
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2058,40 +2058,40 @@ public class SecretChatHelper extends BaseController {
             long r2 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r5, r2)
             return r5
-        L_0x06fd:
+        L_0x06fb:
             java.math.BigInteger r6 = new java.math.BigInteger
             byte[] r7 = r1.a_or_b
             r6.<init>(r14, r7)
             java.math.BigInteger r3 = r4.modPow(r6, r3)
             byte[] r3 = r3.toByteArray()
             int r4 = r3.length
-            if (r4 <= r12) goto L_0x0719
+            if (r4 <= r12) goto L_0x0717
             byte[] r4 = new byte[r12]
             int r6 = r3.length
             int r6 = r6 - r12
             r15 = 0
             java.lang.System.arraycopy(r3, r6, r4, r15, r12)
-        L_0x0717:
+        L_0x0715:
             r3 = r4
-            goto L_0x0731
-        L_0x0719:
+            goto L_0x072f
+        L_0x0717:
             r15 = 0
             int r4 = r3.length
-            if (r4 >= r12) goto L_0x0731
+            if (r4 >= r12) goto L_0x072f
             byte[] r4 = new byte[r12]
             int r6 = r3.length
             int r6 = 256 - r6
             int r7 = r3.length
             java.lang.System.arraycopy(r3, r15, r4, r6, r7)
             r6 = 0
-        L_0x0727:
+        L_0x0725:
             int r7 = r3.length
             int r7 = 256 - r7
-            if (r6 >= r7) goto L_0x0717
+            if (r6 >= r7) goto L_0x0715
             r4[r6] = r15
             int r6 = r6 + 1
-            goto L_0x0727
-        L_0x0731:
+            goto L_0x0725
+        L_0x072f:
             byte[] r4 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r3)
             byte[] r6 = new byte[r8]
             int r7 = r4.length
@@ -2101,14 +2101,14 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r4 = r2.action
             long r13 = r4.key_fingerprint
             int r4 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1))
-            if (r4 != 0) goto L_0x0758
+            if (r4 != 0) goto L_0x0756
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r6
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
             r0.sendCommitKeyMessage(r1, r5)
-            goto L_0x08b9
-        L_0x0758:
+            goto L_0x08b7
+        L_0x0756:
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2118,8 +2118,8 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r2 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r5, r2)
-            goto L_0x08b9
-        L_0x0770:
+            goto L_0x08b7
+        L_0x076e:
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2129,18 +2129,18 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r2 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r5, r2)
-            goto L_0x08b9
-        L_0x0788:
+            goto L_0x08b7
+        L_0x0786:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionCommitKey
-            if (r3 == 0) goto L_0x07df
+            if (r3 == 0) goto L_0x07dd
             long r6 = r1.exchange_id
             long r13 = r4.exchange_id
             int r3 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1))
-            if (r3 != 0) goto L_0x07c7
+            if (r3 != 0) goto L_0x07c5
             long r6 = r1.future_key_fingerprint
             long r3 = r4.key_fingerprint
             int r8 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r8 != 0) goto L_0x07c7
+            if (r8 != 0) goto L_0x07c5
             long r2 = r1.key_fingerprint
             byte[] r4 = r1.auth_key
             r1.key_fingerprint = r6
@@ -2158,8 +2158,8 @@ public class SecretChatHelper extends BaseController {
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
             r0.sendNoopMessage(r1, r5)
-            goto L_0x08b9
-        L_0x07c7:
+            goto L_0x08b7
+        L_0x07c5:
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2169,63 +2169,63 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r2 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r5, r2)
-            goto L_0x08b9
-        L_0x07df:
+            goto L_0x08b7
+        L_0x07dd:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAbortKey
-            if (r3 == 0) goto L_0x07fc
+            if (r3 == 0) goto L_0x07fa
             long r2 = r1.exchange_id
             long r6 = r4.exchange_id
             int r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r4 != 0) goto L_0x08b9
+            if (r4 != 0) goto L_0x08b7
             byte[] r2 = new byte[r12]
             r1.future_auth_key = r2
             r1.future_key_fingerprint = r9
             r1.exchange_id = r9
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
-            goto L_0x08b9
-        L_0x07fc:
+            goto L_0x08b7
+        L_0x07fa:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNoop
-            if (r3 == 0) goto L_0x0802
-            goto L_0x08b9
-        L_0x0802:
+            if (r3 == 0) goto L_0x0800
+            goto L_0x08b7
+        L_0x0800:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionResend
-            if (r3 == 0) goto L_0x0820
+            if (r3 == 0) goto L_0x081e
             int r3 = r4.end_seq_no
             int r6 = r1.in_seq_no
-            if (r3 < r6) goto L_0x0820
+            if (r3 < r6) goto L_0x081e
             int r7 = r4.start_seq_no
-            if (r3 >= r7) goto L_0x0811
-            goto L_0x0820
-        L_0x0811:
-            if (r7 >= r6) goto L_0x0815
+            if (r3 >= r7) goto L_0x080f
+            goto L_0x081e
+        L_0x080f:
+            if (r7 >= r6) goto L_0x0813
             r4.start_seq_no = r6
-        L_0x0815:
+        L_0x0813:
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             int r3 = r2.start_seq_no
             int r2 = r2.end_seq_no
             r0.resendMessages(r3, r2, r1)
-            goto L_0x08b9
-        L_0x0820:
+            goto L_0x08b7
+        L_0x081e:
             return r5
-        L_0x0821:
+        L_0x081f:
             org.telegram.tgnet.TLRPC$TL_messageService r4 = new org.telegram.tgnet.TLRPC$TL_messageService
             r4.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r5 = r2.action
             boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r7 == 0) goto L_0x0854
+            if (r7 == 0) goto L_0x0852
             org.telegram.tgnet.TLRPC$TL_messageEncryptedAction r5 = new org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
             r5.<init>()
             r4.action = r5
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r5 = r2.action
             int r5 = r5.ttl_seconds
             r7 = 31536000(0x1e13380, float:8.2725845E-38)
-            if (r5 < 0) goto L_0x083e
-            if (r5 <= r7) goto L_0x0842
-        L_0x083e:
+            if (r5 < 0) goto L_0x083c
+            if (r5 <= r7) goto L_0x0840
+        L_0x083c:
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r5 = r2.action
             r5.ttl_seconds = r7
-        L_0x0842:
+        L_0x0840:
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             int r5 = r2.ttl_seconds
             r1.ttl = r5
@@ -2233,16 +2233,16 @@ public class SecretChatHelper extends BaseController {
             r5.encryptedAction = r2
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChatTTL(r1)
-            goto L_0x0863
-        L_0x0854:
+            goto L_0x0861
+        L_0x0852:
             boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages
-            if (r5 == 0) goto L_0x0863
+            if (r5 == 0) goto L_0x0861
             org.telegram.tgnet.TLRPC$TL_messageEncryptedAction r5 = new org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
             r5.<init>()
             r4.action = r5
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             r5.encryptedAction = r2
-        L_0x0863:
+        L_0x0861:
             org.telegram.messenger.UserConfig r2 = r16.getUserConfig()
             int r2 = r2.getNewMessageId()
             r4.id = r2
@@ -2265,9 +2265,9 @@ public class SecretChatHelper extends BaseController {
             long r1 = r1 << r13
             r4.dialog_id = r1
             return r4
-        L_0x0897:
+        L_0x0895:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x08b9
+            if (r1 == 0) goto L_0x08b7
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = "unknown message "
@@ -2275,13 +2275,13 @@ public class SecretChatHelper extends BaseController {
             r1.append(r4)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-            goto L_0x08b9
-        L_0x08b0:
+            goto L_0x08b7
+        L_0x08ae:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x08b9
+            if (r1 == 0) goto L_0x08b7
             java.lang.String r1 = "unknown TLObject"
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-        L_0x08b9:
+        L_0x08b7:
             return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.processDecryptedObject(org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$EncryptedFile, int, org.telegram.tgnet.TLObject, boolean):org.telegram.tgnet.TLRPC$Message");

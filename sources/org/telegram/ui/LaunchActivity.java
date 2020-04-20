@@ -95,10 +95,10 @@ import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BlockingUpdateView;
+import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
-import org.telegram.ui.Components.PhonebookSelectShareAlert;
 import org.telegram.ui.Components.PhonebookShareAlert;
 import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.RecyclerListView;
@@ -365,7 +365,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9)
             r1.addView(r4, r6)
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x0297
+            if (r1 == 0) goto L_0x0296
             android.view.Window r1 = r12.getWindow()
             r4 = 16
             r1.setSoftInputMode(r4)
@@ -378,7 +378,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4.<init>(r12)
             r12.backgroundTablet = r4
             android.content.res.Resources r4 = r12.getResources()
-            r6 = 2131165317(0x7var_, float:1.7944848E38)
+            r6 = 2131165311(0x7var_f, float:1.7944836E38)
             android.graphics.drawable.Drawable r4 = r4.getDrawable(r6)
             android.graphics.drawable.BitmapDrawable r4 = (android.graphics.drawable.BitmapDrawable) r4
             android.graphics.Shader$TileMode r6 = android.graphics.Shader.TileMode.REPEAT
@@ -411,12 +411,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12.shadowTablet = r4
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = layerFragmentsStack
             boolean r6 = r6.isEmpty()
-            if (r6 == 0) goto L_0x0230
+            if (r6 == 0) goto L_0x022f
             r6 = 8
-            goto L_0x0231
-        L_0x0230:
+            goto L_0x0230
+        L_0x022f:
             r6 = 0
-        L_0x0231:
+        L_0x0230:
             r4.setVisibility(r6)
             android.widget.FrameLayout r4 = r12.shadowTablet
             r6 = 2130706432(0x7var_, float:1.7014118E38)
@@ -440,7 +440,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             r4.setUseAlphaAnimations(r2)
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
-            r6 = 2131165302(0x7var_, float:1.7944817E38)
+            r6 = 2131165296(0x7var_, float:1.7944805E38)
             r4.setBackgroundResource(r6)
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = layerFragmentsStack
@@ -453,22 +453,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = layerFragmentsStack
             boolean r6 = r6.isEmpty()
-            if (r6 == 0) goto L_0x028d
-            goto L_0x028e
-        L_0x028d:
+            if (r6 == 0) goto L_0x028c
+            goto L_0x028d
+        L_0x028c:
             r8 = 0
-        L_0x028e:
+        L_0x028d:
             r4.setVisibility(r8)
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             r1.addView(r4)
-            goto L_0x02a3
-        L_0x0297:
+            goto L_0x02a2
+        L_0x0296:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout
             android.view.ViewGroup$LayoutParams r6 = new android.view.ViewGroup$LayoutParams
             r6.<init>(r7, r7)
             r1.addView(r4, r6)
-        L_0x02a3:
+        L_0x02a2:
             org.telegram.ui.LaunchActivity$4 r1 = new org.telegram.ui.LaunchActivity$4
             r1.<init>(r12)
             r12.sideMenu = r1
@@ -502,10 +502,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()
             boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
             r8 = 1134559232(0x43a00000, float:320.0)
-            if (r6 == 0) goto L_0x02fe
+            if (r6 == 0) goto L_0x02fd
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            goto L_0x0315
-        L_0x02fe:
+            goto L_0x0314
+        L_0x02fd:
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r8 = r4.x
             int r4 = r4.y
@@ -514,7 +514,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r4 = r4 - r8
             int r4 = java.lang.Math.min(r6, r4)
-        L_0x0315:
+        L_0x0314:
             r1.width = r4
             r1.height = r7
             org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
@@ -589,19 +589,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x04eb
+            if (r1 == 0) goto L_0x04e9
             int r1 = r12.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             boolean r1 = r1.isClientActivated()
-            if (r1 != 0) goto L_0x03ff
+            if (r1 != 0) goto L_0x03fe
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             org.telegram.ui.LoginActivity r4 = new org.telegram.ui.LoginActivity
             r4.<init>()
             r1.addFragmentToStack(r4)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
             r1.setAllowOpenDrawer(r3, r3)
-            goto L_0x0413
-        L_0x03ff:
+            goto L_0x0412
+        L_0x03fe:
             org.telegram.ui.DialogsActivity r1 = new org.telegram.ui.DialogsActivity
             r1.<init>(r5)
             org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
@@ -610,234 +610,234 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4.addFragmentToStack(r1)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
             r1.setAllowOpenDrawer(r2, r3)
-        L_0x0413:
-            if (r13 == 0) goto L_0x0552
+        L_0x0412:
+            if (r13 == 0) goto L_0x0550
             java.lang.String r1 = "fragment"
-            java.lang.String r1 = r13.getString(r1)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x0552
+            java.lang.String r1 = r13.getString(r1)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0550
             java.lang.String r4 = "args"
-            android.os.Bundle r4 = r13.getBundle(r4)     // Catch:{ Exception -> 0x04e6 }
-            int r5 = r1.hashCode()     // Catch:{ Exception -> 0x04e6 }
+            android.os.Bundle r4 = r13.getBundle(r4)     // Catch:{ Exception -> 0x04e4 }
+            int r5 = r1.hashCode()     // Catch:{ Exception -> 0x04e4 }
             r6 = 5
             r8 = 4
             r9 = 3
             r10 = 2
             switch(r5) {
-                case -1529105743: goto L_0x0461;
-                case -1349522494: goto L_0x0457;
-                case 3052376: goto L_0x044d;
-                case 98629247: goto L_0x0443;
-                case 738950403: goto L_0x0439;
-                case 1434631203: goto L_0x042f;
-                default: goto L_0x042e;
-            }     // Catch:{ Exception -> 0x04e6 }
+                case -1529105743: goto L_0x0460;
+                case -1349522494: goto L_0x0456;
+                case 3052376: goto L_0x044c;
+                case 98629247: goto L_0x0442;
+                case 738950403: goto L_0x0438;
+                case 1434631203: goto L_0x042e;
+                default: goto L_0x042d;
+            }     // Catch:{ Exception -> 0x04e4 }
+        L_0x042d:
+            goto L_0x0469
         L_0x042e:
-            goto L_0x046b
-        L_0x042f:
             java.lang.String r5 = "settings"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 1
-            goto L_0x046b
-        L_0x0439:
+            goto L_0x0469
+        L_0x0438:
             java.lang.String r5 = "channel"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 3
-            goto L_0x046b
-        L_0x0443:
+            goto L_0x0469
+        L_0x0442:
             java.lang.String r5 = "group"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 2
-            goto L_0x046b
-        L_0x044d:
+            goto L_0x0469
+        L_0x044c:
             java.lang.String r5 = "chat"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 0
-            goto L_0x046b
-        L_0x0457:
+            goto L_0x0469
+        L_0x0456:
             java.lang.String r5 = "chat_profile"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 4
-            goto L_0x046b
-        L_0x0461:
+            goto L_0x0469
+        L_0x0460:
             java.lang.String r5 = "wallpapers"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e6 }
-            if (r1 == 0) goto L_0x046b
+            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x04e4 }
+            if (r1 == 0) goto L_0x0469
             r7 = 5
-        L_0x046b:
-            if (r7 == 0) goto L_0x04d3
-            if (r7 == r2) goto L_0x04c4
-            if (r7 == r10) goto L_0x04b0
-            if (r7 == r9) goto L_0x049c
-            if (r7 == r8) goto L_0x0488
-            if (r7 == r6) goto L_0x0479
-            goto L_0x0552
-        L_0x0479:
-            org.telegram.ui.WallpapersListActivity r1 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>(r3)     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x0488:
-            if (r4 == 0) goto L_0x0552
-            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            if (r4 == 0) goto L_0x0552
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x049c:
-            if (r4 == 0) goto L_0x0552
-            org.telegram.ui.ChannelCreateActivity r1 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            if (r4 == 0) goto L_0x0552
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x04b0:
-            if (r4 == 0) goto L_0x0552
-            org.telegram.ui.GroupCreateFinalActivity r1 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            if (r4 == 0) goto L_0x0552
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x04c4:
-            org.telegram.ui.SettingsActivity r1 = new org.telegram.ui.SettingsActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>()     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x04d3:
-            if (r4 == 0) goto L_0x0552
-            org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x04e6 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x04e6 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e6 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e6 }
-            if (r4 == 0) goto L_0x0552
-            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e6 }
-            goto L_0x0552
-        L_0x04e6:
+        L_0x0469:
+            if (r7 == 0) goto L_0x04d1
+            if (r7 == r2) goto L_0x04c2
+            if (r7 == r10) goto L_0x04ae
+            if (r7 == r9) goto L_0x049a
+            if (r7 == r8) goto L_0x0486
+            if (r7 == r6) goto L_0x0477
+            goto L_0x0550
+        L_0x0477:
+            org.telegram.ui.WallpapersListActivity r1 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x0486:
+            if (r4 == 0) goto L_0x0550
+            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>(r4)     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            if (r4 == 0) goto L_0x0550
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x049a:
+            if (r4 == 0) goto L_0x0550
+            org.telegram.ui.ChannelCreateActivity r1 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>(r4)     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            if (r4 == 0) goto L_0x0550
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x04ae:
+            if (r4 == 0) goto L_0x0550
+            org.telegram.ui.GroupCreateFinalActivity r1 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>(r4)     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            if (r4 == 0) goto L_0x0550
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x04c2:
+            org.telegram.ui.SettingsActivity r1 = new org.telegram.ui.SettingsActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>()     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x04d1:
+            if (r4 == 0) goto L_0x0550
+            org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x04e4 }
+            r1.<init>(r4)     // Catch:{ Exception -> 0x04e4 }
+            org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e4 }
+            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e4 }
+            if (r4 == 0) goto L_0x0550
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e4 }
+            goto L_0x0550
+        L_0x04e4:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            goto L_0x0552
-        L_0x04eb:
+            goto L_0x0550
+        L_0x04e9:
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             java.lang.Object r1 = r1.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r1 = (org.telegram.ui.ActionBar.BaseFragment) r1
             boolean r4 = r1 instanceof org.telegram.ui.DialogsActivity
-            if (r4 == 0) goto L_0x0500
+            if (r4 == 0) goto L_0x04fe
             org.telegram.ui.DialogsActivity r1 = (org.telegram.ui.DialogsActivity) r1
             org.telegram.ui.Components.RecyclerListView r4 = r12.sideMenu
             r1.setSideMenu(r4)
-        L_0x0500:
+        L_0x04fe:
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x0535
+            if (r1 == 0) goto L_0x0533
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             int r1 = r1.size()
-            if (r1 > r2) goto L_0x051c
+            if (r1 > r2) goto L_0x051a
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x051c
+            if (r1 == 0) goto L_0x051a
             r1 = 1
-            goto L_0x051d
-        L_0x051c:
+            goto L_0x051b
+        L_0x051a:
             r1 = 0
-        L_0x051d:
+        L_0x051b:
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
             int r4 = r4.size()
-            if (r4 != r2) goto L_0x0536
+            if (r4 != r2) goto L_0x0534
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
             java.lang.Object r4 = r4.get(r3)
             boolean r4 = r4 instanceof org.telegram.ui.LoginActivity
-            if (r4 == 0) goto L_0x0536
+            if (r4 == 0) goto L_0x0534
             r1 = 0
-            goto L_0x0536
-        L_0x0535:
+            goto L_0x0534
+        L_0x0533:
             r1 = 1
-        L_0x0536:
+        L_0x0534:
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
             int r4 = r4.size()
-            if (r4 != r2) goto L_0x054d
+            if (r4 != r2) goto L_0x054b
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
             java.lang.Object r4 = r4.get(r3)
             boolean r4 = r4 instanceof org.telegram.ui.LoginActivity
-            if (r4 == 0) goto L_0x054d
+            if (r4 == 0) goto L_0x054b
             r1 = 0
-        L_0x054d:
+        L_0x054b:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r4 = r12.drawerLayoutContainer
             r4.setAllowOpenDrawer(r1, r3)
-        L_0x0552:
+        L_0x0550:
             r12.checkLayout()
             r12.checkSystemBarColors()
             android.content.Intent r1 = r12.getIntent()
-            if (r13 == 0) goto L_0x0560
+            if (r13 == 0) goto L_0x055e
             r13 = 1
-            goto L_0x0561
-        L_0x0560:
+            goto L_0x055f
+        L_0x055e:
             r13 = 0
-        L_0x0561:
+        L_0x055f:
             r12.handleIntent(r1, r3, r13, r3)
-            java.lang.String r13 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x05c1 }
-            java.lang.String r1 = android.os.Build.USER     // Catch:{ Exception -> 0x05c1 }
+            java.lang.String r13 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x05bf }
+            java.lang.String r1 = android.os.Build.USER     // Catch:{ Exception -> 0x05bf }
             java.lang.String r3 = ""
-            if (r13 == 0) goto L_0x0571
-            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x05c1 }
-            goto L_0x0572
-        L_0x0571:
+            if (r13 == 0) goto L_0x056f
+            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x05bf }
+            goto L_0x0570
+        L_0x056f:
             r13 = r3
-        L_0x0572:
-            if (r1 == 0) goto L_0x0578
-            java.lang.String r3 = r13.toLowerCase()     // Catch:{ Exception -> 0x05c1 }
-        L_0x0578:
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x05c1 }
-            if (r1 == 0) goto L_0x0598
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x05c1 }
-            r1.<init>()     // Catch:{ Exception -> 0x05c1 }
+        L_0x0570:
+            if (r1 == 0) goto L_0x0576
+            java.lang.String r3 = r13.toLowerCase()     // Catch:{ Exception -> 0x05bf }
+        L_0x0576:
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x05bf }
+            if (r1 == 0) goto L_0x0596
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x05bf }
+            r1.<init>()     // Catch:{ Exception -> 0x05bf }
             java.lang.String r4 = "OS name "
-            r1.append(r4)     // Catch:{ Exception -> 0x05c1 }
-            r1.append(r13)     // Catch:{ Exception -> 0x05c1 }
+            r1.append(r4)     // Catch:{ Exception -> 0x05bf }
+            r1.append(r13)     // Catch:{ Exception -> 0x05bf }
             java.lang.String r4 = " "
-            r1.append(r4)     // Catch:{ Exception -> 0x05c1 }
-            r1.append(r3)     // Catch:{ Exception -> 0x05c1 }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x05c1 }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x05c1 }
-        L_0x0598:
-            boolean r13 = r13.contains(r0)     // Catch:{ Exception -> 0x05c1 }
-            if (r13 != 0) goto L_0x05a4
-            boolean r13 = r3.contains(r0)     // Catch:{ Exception -> 0x05c1 }
-            if (r13 == 0) goto L_0x05c5
-        L_0x05a4:
-            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r2     // Catch:{ Exception -> 0x05c1 }
-            android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x05c1 }
-            android.view.View r13 = r13.getDecorView()     // Catch:{ Exception -> 0x05c1 }
-            android.view.View r13 = r13.getRootView()     // Catch:{ Exception -> 0x05c1 }
-            android.view.ViewTreeObserver r0 = r13.getViewTreeObserver()     // Catch:{ Exception -> 0x05c1 }
-            org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0 r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0     // Catch:{ Exception -> 0x05c1 }
-            r1.<init>(r13)     // Catch:{ Exception -> 0x05c1 }
-            r12.onGlobalLayoutListener = r1     // Catch:{ Exception -> 0x05c1 }
-            r0.addOnGlobalLayoutListener(r1)     // Catch:{ Exception -> 0x05c1 }
-            goto L_0x05c5
-        L_0x05c1:
+            r1.append(r4)     // Catch:{ Exception -> 0x05bf }
+            r1.append(r3)     // Catch:{ Exception -> 0x05bf }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x05bf }
+            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x05bf }
+        L_0x0596:
+            boolean r13 = r13.contains(r0)     // Catch:{ Exception -> 0x05bf }
+            if (r13 != 0) goto L_0x05a2
+            boolean r13 = r3.contains(r0)     // Catch:{ Exception -> 0x05bf }
+            if (r13 == 0) goto L_0x05c3
+        L_0x05a2:
+            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r2     // Catch:{ Exception -> 0x05bf }
+            android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x05bf }
+            android.view.View r13 = r13.getDecorView()     // Catch:{ Exception -> 0x05bf }
+            android.view.View r13 = r13.getRootView()     // Catch:{ Exception -> 0x05bf }
+            android.view.ViewTreeObserver r0 = r13.getViewTreeObserver()     // Catch:{ Exception -> 0x05bf }
+            org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0 r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0     // Catch:{ Exception -> 0x05bf }
+            r1.<init>(r13)     // Catch:{ Exception -> 0x05bf }
+            r12.onGlobalLayoutListener = r1     // Catch:{ Exception -> 0x05bf }
+            r0.addOnGlobalLayoutListener(r1)     // Catch:{ Exception -> 0x05bf }
+            goto L_0x05c3
+        L_0x05bf:
             r13 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-        L_0x05c5:
+        L_0x05c3:
             org.telegram.messenger.MediaController r13 = org.telegram.messenger.MediaController.getInstance()
             r13.setBaseActivity(r12, r2)
             org.telegram.messenger.AndroidUtilities.startAppCenter(r12)
@@ -1084,7 +1084,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.needShowPlayServicesAlert);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogFiltersUpdated);
         }
         int i2 = UserConfig.selectedAccount;
         this.currentAccount = i2;
@@ -1098,7 +1097,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.needShowPlayServicesAlert);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogFiltersUpdated);
     }
 
     private void checkLayout() {
@@ -1863,57 +1861,57 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Code restructure failed: missing block: B:112:0x022a, code lost:
         if (r15.sendingText == null) goto L_0x0125;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:547:0x0d41, code lost:
-        if (r4 == 0) goto L_0x0d43;
+    /* JADX WARNING: Code restructure failed: missing block: B:547:0x0d3d, code lost:
+        if (r4 == 0) goto L_0x0d3f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:605:0x0ebd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:605:0x0eb9, code lost:
         r11[0] = r2;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:608:?, code lost:
         switchToAccount(r11[0], true);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:688:0x10b5, code lost:
-        if (r4.checkCanOpenChat(r0, r5.get(r5.size() - 1)) != false) goto L_0x10b9;
+    /* JADX WARNING: Code restructure failed: missing block: B:688:0x10b1, code lost:
+        if (r4.checkCanOpenChat(r0, r5.get(r5.size() - 1)) != false) goto L_0x10b5;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:691:0x10c9, code lost:
-        if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r0), false, true, true, false) != false) goto L_0x10cb;
+    /* JADX WARNING: Code restructure failed: missing block: B:691:0x10c5, code lost:
+        if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r0), false, true, true, false) != false) goto L_0x10c7;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:693:0x10cd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:693:0x10c9, code lost:
         r13 = false;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:702:0x1102, code lost:
-        if (r0.checkCanOpenChat(r5, r4.get(r4.size() - 1)) != false) goto L_0x1104;
+    /* JADX WARNING: Code restructure failed: missing block: B:702:0x10fe, code lost:
+        if (r0.checkCanOpenChat(r5, r4.get(r4.size() - 1)) != false) goto L_0x1100;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:704:0x1114, code lost:
-        if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r5), false, true, true, false) != false) goto L_0x10cb;
+    /* JADX WARNING: Code restructure failed: missing block: B:704:0x1110, code lost:
+        if (r2.actionBarLayout.presentFragment(new org.telegram.ui.ChatActivity(r5), false, true, true, false) != false) goto L_0x10c7;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:781:0x12f0, code lost:
-        if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x12f2;
+    /* JADX WARNING: Code restructure failed: missing block: B:781:0x12ec, code lost:
+        if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x12ee;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:787:0x130f, code lost:
-        if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x12f2;
+    /* JADX WARNING: Code restructure failed: missing block: B:787:0x130b, code lost:
+        if ((r0.get(r0.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x12ee;
      */
     /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r3v2, types: [int, boolean] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:625:0x0ef7 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:625:0x0ef3 */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:115:0x0231  */
     /* JADX WARNING: Removed duplicated region for block: B:178:0x0338  */
     /* JADX WARNING: Removed duplicated region for block: B:204:0x0399 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x065b A[SYNTHETIC, Splitter:B:300:0x065b] */
-    /* JADX WARNING: Removed duplicated region for block: B:433:0x0a67  */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x0de5  */
-    /* JADX WARNING: Removed duplicated region for block: B:577:0x0e58  */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x0e5f  */
-    /* JADX WARNING: Removed duplicated region for block: B:629:0x0efc A[Catch:{ all -> 0x0ef0, all -> 0x0ef7, Exception -> 0x0var_ }] */
-    /* JADX WARNING: Removed duplicated region for block: B:681:0x1082  */
-    /* JADX WARNING: Removed duplicated region for block: B:792:0x132b  */
-    /* JADX WARNING: Removed duplicated region for block: B:793:0x1333  */
-    /* JADX WARNING: Removed duplicated region for block: B:805:0x136d  */
-    /* JADX WARNING: Removed duplicated region for block: B:806:0x1379  */
-    /* JADX WARNING: Removed duplicated region for block: B:808:0x1391  */
-    /* JADX WARNING: Removed duplicated region for block: B:815:0x13a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:823:0x13e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:831:0x142a  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0659 A[SYNTHETIC, Splitter:B:300:0x0659] */
+    /* JADX WARNING: Removed duplicated region for block: B:433:0x0a63  */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x0de1  */
+    /* JADX WARNING: Removed duplicated region for block: B:577:0x0e54  */
+    /* JADX WARNING: Removed duplicated region for block: B:578:0x0e5b  */
+    /* JADX WARNING: Removed duplicated region for block: B:629:0x0ef8 A[Catch:{ all -> 0x0eec, all -> 0x0ef3, Exception -> 0x0efc }] */
+    /* JADX WARNING: Removed duplicated region for block: B:681:0x107e  */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x1327  */
+    /* JADX WARNING: Removed duplicated region for block: B:793:0x132f  */
+    /* JADX WARNING: Removed duplicated region for block: B:805:0x1369  */
+    /* JADX WARNING: Removed duplicated region for block: B:806:0x1375  */
+    /* JADX WARNING: Removed duplicated region for block: B:808:0x138d  */
+    /* JADX WARNING: Removed duplicated region for block: B:815:0x139c  */
+    /* JADX WARNING: Removed duplicated region for block: B:823:0x13e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:831:0x1426  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean handleIntent(android.content.Intent r46, boolean r47, boolean r48, boolean r49) {
         /*
@@ -2010,11 +2008,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2 = 1048576(0x100000, float:1.469368E-39)
             r1 = r1 & r2
             r5 = 2
-            if (r1 != 0) goto L_0x1066
-            if (r14 == 0) goto L_0x1066
+            if (r1 != 0) goto L_0x1062
+            if (r14 == 0) goto L_0x1062
             java.lang.String r1 = r46.getAction()
-            if (r1 == 0) goto L_0x1066
-            if (r0 != 0) goto L_0x1066
+            if (r1 == 0) goto L_0x1062
+            if (r0 != 0) goto L_0x1062
             java.lang.String r0 = r46.getAction()
             java.lang.String r1 = "android.intent.action.SEND"
             boolean r0 = r1.equals(r0)
@@ -2323,16 +2321,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2 = r15
             r3 = 0
             r36 = 0
-            goto L_0x106c
+            goto L_0x1068
         L_0x0349:
             java.lang.String r0 = r46.getAction()
             java.lang.String r4 = "android.intent.action.VIEW"
             boolean r0 = r4.equals(r0)
-            if (r0 == 0) goto L_0x0f9d
-            android.net.Uri r0 = r46.getData()
             if (r0 == 0) goto L_0x0var_
+            android.net.Uri r0 = r46.getData()
+            if (r0 == 0) goto L_0x0f7f
             java.lang.String r4 = r0.getScheme()
-            if (r4 == 0) goto L_0x0e25
+            if (r4 == 0) goto L_0x0e21
             int r9 = r4.hashCode()
             r8 = 3699(0xe73, float:5.183E-42)
             if (r9 == r8) goto L_0x0388
@@ -2364,12 +2362,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0393:
             java.lang.String r9 = "text"
             r18 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            if (r8 == 0) goto L_0x0a36
-            if (r8 == r13) goto L_0x0a36
+            if (r8 == 0) goto L_0x0a32
+            if (r8 == r13) goto L_0x0a32
             if (r8 == r5) goto L_0x03a0
         L_0x039d:
             r7 = 0
-            goto L_0x0e25
+            goto L_0x0e21
         L_0x03a0:
             java.lang.String r0 = r0.toString()
             java.lang.String r8 = "tg:resolve"
@@ -2381,81 +2379,81 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "payload"
             java.lang.String r12 = "scope"
             java.lang.String r10 = "tg://telegram.org"
-            if (r8 != 0) goto L_0x095b
+            if (r8 != 0) goto L_0x0959
             java.lang.String r8 = "tg://resolve"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x03c4
-            goto L_0x095b
+            goto L_0x0959
         L_0x03c4:
             java.lang.String r8 = "tg:privatepost"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x090b
+            if (r8 != 0) goto L_0x0909
             java.lang.String r8 = "tg://privatepost"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x03d6
-            goto L_0x090b
+            goto L_0x0909
         L_0x03d6:
             java.lang.String r8 = "tg:bg"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x0797
+            if (r8 != 0) goto L_0x0795
             java.lang.String r8 = "tg://bg"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x03e8
-            goto L_0x0797
+            goto L_0x0795
         L_0x03e8:
             java.lang.String r8 = "tg:join"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x077b
+            if (r8 != 0) goto L_0x0779
             java.lang.String r8 = "tg://join"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x03fa
-            goto L_0x077b
+            goto L_0x0779
         L_0x03fa:
             java.lang.String r8 = "tg:addstickers"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x075b
+            if (r8 != 0) goto L_0x0759
             java.lang.String r8 = "tg://addstickers"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x040c
-            goto L_0x075b
+            goto L_0x0759
         L_0x040c:
             java.lang.String r8 = "tg:msg"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x06d7
+            if (r8 != 0) goto L_0x06d5
             java.lang.String r8 = "tg://msg"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x06d7
+            if (r8 != 0) goto L_0x06d5
             java.lang.String r8 = "tg://share"
             boolean r8 = r0.startsWith(r8)
-            if (r8 != 0) goto L_0x06d7
+            if (r8 != 0) goto L_0x06d5
             java.lang.String r8 = "tg:share"
             boolean r8 = r0.startsWith(r8)
             if (r8 == 0) goto L_0x042e
-            goto L_0x06d7
+            goto L_0x06d5
         L_0x042e:
             java.lang.String r1 = "tg:confirmphone"
             boolean r1 = r0.startsWith(r1)
-            if (r1 != 0) goto L_0x06b9
+            if (r1 != 0) goto L_0x06b7
             java.lang.String r1 = "tg://confirmphone"
             boolean r1 = r0.startsWith(r1)
             if (r1 == 0) goto L_0x0440
-            goto L_0x06b9
+            goto L_0x06b7
         L_0x0440:
             java.lang.String r1 = "tg:login"
             boolean r1 = r0.startsWith(r1)
-            if (r1 != 0) goto L_0x0679
+            if (r1 != 0) goto L_0x0677
             java.lang.String r1 = "tg://login"
             boolean r1 = r0.startsWith(r1)
             if (r1 == 0) goto L_0x0452
-            goto L_0x0679
+            goto L_0x0677
         L_0x0452:
             java.lang.String r1 = "tg:openmessage"
             boolean r1 = r0.startsWith(r1)
-            if (r1 != 0) goto L_0x0625
+            if (r1 != 0) goto L_0x0623
             java.lang.String r1 = "tg://openmessage"
             boolean r1 = r0.startsWith(r1)
             if (r1 == 0) goto L_0x0464
-            goto L_0x0625
+            goto L_0x0623
         L_0x0464:
             java.lang.String r1 = "tg:passport"
             boolean r1 = r0.startsWith(r1)
@@ -2523,7 +2521,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r28 = 0
             r29 = 0
             r30 = 0
-            goto L_0x0a2c
+            goto L_0x0a28
         L_0x04ec:
             java.lang.String r1 = "themes"
             boolean r1 = r0.contains(r1)
@@ -2546,7 +2544,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = 0
             r26 = 0
             r28 = 2
-            goto L_0x0a26
+            goto L_0x0a22
         L_0x050e:
             java.lang.String r1 = "devices"
             boolean r1 = r0.contains(r1)
@@ -2569,11 +2567,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = 0
             r26 = 0
             r28 = 3
-            goto L_0x0a26
+            goto L_0x0a22
         L_0x0530:
             java.lang.String r1 = "folders"
             boolean r0 = r0.contains(r1)
-            if (r0 == 0) goto L_0x0a57
+            if (r0 == 0) goto L_0x0a53
             r0 = 4
             r0 = 0
             r1 = 0
@@ -2593,7 +2591,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = 0
             r26 = 0
             r28 = 4
-            goto L_0x0a26
+            goto L_0x0a22
         L_0x0553:
             java.lang.String r1 = "tg:addtheme"
             java.lang.String r0 = r0.replace(r1, r10)
@@ -2627,7 +2625,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r32 = 0
             r33 = 0
             r34 = 0
-            goto L_0x0e49
+            goto L_0x0e45
         L_0x0591:
             java.lang.String r1 = "tg:setlanguage"
             java.lang.String r0 = r0.replace(r1, r10)
@@ -2656,7 +2654,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r26 = 0
             r28 = 0
             r29 = 0
-            goto L_0x0a2a
+            goto L_0x0a26
         L_0x05c5:
             java.lang.String r1 = "tg:passport"
             java.lang.String r0 = r0.replace(r1, r10)
@@ -2669,20 +2667,20 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1.<init>()
             java.lang.String r2 = r0.getQueryParameter(r12)
             boolean r8 = android.text.TextUtils.isEmpty(r2)
-            if (r8 != 0) goto L_0x0604
+            if (r8 != 0) goto L_0x0602
             java.lang.String r8 = "{"
             boolean r8 = r2.startsWith(r8)
-            if (r8 == 0) goto L_0x0604
+            if (r8 == 0) goto L_0x0602
             java.lang.String r8 = "}"
             boolean r8 = r2.endsWith(r8)
-            if (r8 == 0) goto L_0x0604
+            if (r8 == 0) goto L_0x0602
             java.lang.String r4 = r0.getQueryParameter(r5)
             r1.put(r5, r4)
-            goto L_0x060b
-        L_0x0604:
+            goto L_0x0609
+        L_0x0602:
             java.lang.String r5 = r0.getQueryParameter(r4)
             r1.put(r4, r5)
-        L_0x060b:
+        L_0x0609:
             java.lang.String r4 = r0.getQueryParameter(r13)
             r1.put(r13, r4)
             r1.put(r12, r2)
@@ -2690,8 +2688,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1.put(r7, r2)
             java.lang.String r0 = r0.getQueryParameter(r6)
             r1.put(r6, r0)
-            goto L_0x09c1
-        L_0x0625:
+            goto L_0x09bd
+        L_0x0623:
             java.lang.String r1 = "tg:openmessage"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://openmessage"
@@ -2703,26 +2701,26 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = r0.getQueryParameter(r2)
             java.lang.String r4 = "message_id"
             java.lang.String r0 = r0.getQueryParameter(r4)
-            if (r1 == 0) goto L_0x064e
-            int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ NumberFormatException -> 0x0657 }
-            goto L_0x0658
-        L_0x064e:
-            if (r2 == 0) goto L_0x0657
-            int r1 = java.lang.Integer.parseInt(r2)     // Catch:{ NumberFormatException -> 0x0657 }
+            if (r1 == 0) goto L_0x064c
+            int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ NumberFormatException -> 0x0655 }
+            goto L_0x0656
+        L_0x064c:
+            if (r2 == 0) goto L_0x0655
+            int r1 = java.lang.Integer.parseInt(r2)     // Catch:{ NumberFormatException -> 0x0655 }
             r2 = r1
             r1 = 0
-            goto L_0x0659
-        L_0x0657:
+            goto L_0x0657
+        L_0x0655:
             r1 = 0
-        L_0x0658:
+        L_0x0656:
             r2 = 0
-        L_0x0659:
-            if (r0 == 0) goto L_0x0660
-            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x0660 }
-            goto L_0x0661
-        L_0x0660:
+        L_0x0657:
+            if (r0 == 0) goto L_0x065e
+            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x065e }
+            goto L_0x065f
+        L_0x065e:
             r0 = 0
-        L_0x0661:
+        L_0x065f:
             r26 = r0
             r23 = r1
             r24 = r2
@@ -2740,8 +2738,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r13 = 0
             r18 = 0
             r19 = 0
-            goto L_0x0a24
-        L_0x0679:
+            goto L_0x0a20
+        L_0x0677:
             java.lang.String r1 = "tg:login"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://login"
@@ -2774,8 +2772,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r29 = 0
             r30 = 0
             r31 = 0
-            goto L_0x0a30
-        L_0x06b9:
+            goto L_0x0a2c
+        L_0x06b7:
             java.lang.String r1 = "tg:confirmphone"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://confirmphone"
@@ -2786,8 +2784,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = r0.getQueryParameter(r3)
             r2 = r1
             r1 = 0
-            goto L_0x094c
-        L_0x06d7:
+            goto L_0x094a
+        L_0x06d5:
             java.lang.String r4 = "tg:msg"
             java.lang.String r0 = r0.replace(r4, r10)
             java.lang.String r4 = "tg://msg"
@@ -2799,52 +2797,52 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.net.Uri r0 = android.net.Uri.parse(r0)
             java.lang.String r4 = "url"
             java.lang.String r4 = r0.getQueryParameter(r4)
-            if (r4 != 0) goto L_0x06fc
-            goto L_0x06fd
-        L_0x06fc:
+            if (r4 != 0) goto L_0x06fa
+            goto L_0x06fb
+        L_0x06fa:
             r2 = r4
-        L_0x06fd:
+        L_0x06fb:
             java.lang.String r4 = r0.getQueryParameter(r9)
-            if (r4 == 0) goto L_0x072f
+            if (r4 == 0) goto L_0x072d
             int r4 = r2.length()
-            if (r4 <= 0) goto L_0x071a
+            if (r4 <= 0) goto L_0x0718
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             r4.append(r2)
             r4.append(r1)
             java.lang.String r2 = r4.toString()
             r4 = 1
-            goto L_0x071b
-        L_0x071a:
+            goto L_0x0719
+        L_0x0718:
             r4 = 0
-        L_0x071b:
+        L_0x0719:
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
             r5.<init>()
             r5.append(r2)
             java.lang.String r0 = r0.getQueryParameter(r9)
             r5.append(r0)
             java.lang.String r2 = r5.toString()
-            goto L_0x0730
-        L_0x072f:
+            goto L_0x072e
+        L_0x072d:
             r4 = 0
-        L_0x0730:
+        L_0x072e:
             int r0 = r2.length()
             r5 = 16384(0x4000, float:2.2959E-41)
             r6 = 0
-            if (r0 <= r5) goto L_0x073e
+            if (r0 <= r5) goto L_0x073c
             java.lang.String r0 = r2.substring(r6, r5)
-            goto L_0x073f
-        L_0x073e:
+            goto L_0x073d
+        L_0x073c:
             r0 = r2
-        L_0x073f:
+        L_0x073d:
             boolean r2 = r0.endsWith(r1)
-            if (r2 == 0) goto L_0x0750
+            if (r2 == 0) goto L_0x074e
             int r2 = r0.length()
             r5 = 1
             int r2 = r2 - r5
             java.lang.String r0 = r0.substring(r6, r2)
-            goto L_0x073f
-        L_0x0750:
+            goto L_0x073d
+        L_0x074e:
             r1 = r0
             r9 = r4
             r0 = 0
@@ -2854,8 +2852,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r6 = 0
             r7 = 0
             r8 = 0
-            goto L_0x0952
-        L_0x075b:
+            goto L_0x0950
+        L_0x0759:
             java.lang.String r1 = "tg:addstickers"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://addstickers"
@@ -2871,8 +2869,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = 2
             r6 = 0
             r7 = 0
-            goto L_0x0951
-        L_0x077b:
+            goto L_0x094f
+        L_0x0779:
             java.lang.String r1 = "tg:join"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://join"
@@ -2884,8 +2882,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0 = 0
             r1 = 0
             r2 = 0
-            goto L_0x094d
-        L_0x0797:
+            goto L_0x094b
+        L_0x0795:
             java.lang.String r1 = "tg:bg"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://bg"
@@ -2899,103 +2897,103 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = "slug"
             java.lang.String r2 = r0.getQueryParameter(r2)
             r1.slug = r2
-            if (r2 != 0) goto L_0x07c5
+            if (r2 != 0) goto L_0x07c3
             java.lang.String r2 = "color"
             java.lang.String r2 = r0.getQueryParameter(r2)
             r1.slug = r2
-        L_0x07c5:
+        L_0x07c3:
             java.lang.String r2 = r1.slug
-            if (r2 == 0) goto L_0x07e3
+            if (r2 == 0) goto L_0x07e1
             int r2 = r2.length()
             r4 = 6
-            if (r2 != r4) goto L_0x07e3
-            org.telegram.tgnet.TLRPC$WallPaperSettings r0 = r1.settings     // Catch:{ Exception -> 0x07de }
-            java.lang.String r2 = r1.slug     // Catch:{ Exception -> 0x07de }
+            if (r2 != r4) goto L_0x07e1
+            org.telegram.tgnet.TLRPC$WallPaperSettings r0 = r1.settings     // Catch:{ Exception -> 0x07dc }
+            java.lang.String r2 = r1.slug     // Catch:{ Exception -> 0x07dc }
             r4 = 16
-            int r2 = java.lang.Integer.parseInt(r2, r4)     // Catch:{ Exception -> 0x07de }
+            int r2 = java.lang.Integer.parseInt(r2, r4)     // Catch:{ Exception -> 0x07dc }
             r2 = r2 | r18
-            r0.background_color = r2     // Catch:{ Exception -> 0x07de }
-        L_0x07de:
+            r0.background_color = r2     // Catch:{ Exception -> 0x07dc }
+        L_0x07dc:
             r2 = 0
             r1.slug = r2
-            goto L_0x08e5
-        L_0x07e3:
+            goto L_0x08e3
+        L_0x07e1:
             java.lang.String r2 = r1.slug
-            if (r2 == 0) goto L_0x0843
+            if (r2 == 0) goto L_0x0841
             int r2 = r2.length()
             r4 = 13
-            if (r2 != r4) goto L_0x0843
+            if (r2 != r4) goto L_0x0841
             java.lang.String r2 = r1.slug
             r4 = 6
             char r2 = r2.charAt(r4)
             r5 = 45
-            if (r2 != r5) goto L_0x0843
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0826 }
-            java.lang.String r5 = r1.slug     // Catch:{ Exception -> 0x0826 }
+            if (r2 != r5) goto L_0x0841
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0824 }
+            java.lang.String r5 = r1.slug     // Catch:{ Exception -> 0x0824 }
             r6 = 0
-            java.lang.String r4 = r5.substring(r6, r4)     // Catch:{ Exception -> 0x0826 }
+            java.lang.String r4 = r5.substring(r6, r4)     // Catch:{ Exception -> 0x0824 }
             r5 = 16
-            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0826 }
+            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0824 }
             r4 = r4 | r18
-            r2.background_color = r4     // Catch:{ Exception -> 0x0826 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0826 }
-            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x0826 }
+            r2.background_color = r4     // Catch:{ Exception -> 0x0824 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0824 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x0824 }
             r5 = 7
-            java.lang.String r4 = r4.substring(r5)     // Catch:{ Exception -> 0x0826 }
+            java.lang.String r4 = r4.substring(r5)     // Catch:{ Exception -> 0x0824 }
             r5 = 16
-            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0826 }
+            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0824 }
             r4 = r4 | r18
-            r2.second_background_color = r4     // Catch:{ Exception -> 0x0826 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0826 }
+            r2.second_background_color = r4     // Catch:{ Exception -> 0x0824 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0824 }
             r4 = 45
-            r2.rotation = r4     // Catch:{ Exception -> 0x0826 }
-        L_0x0826:
+            r2.rotation = r4     // Catch:{ Exception -> 0x0824 }
+        L_0x0824:
             java.lang.String r2 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x083e }
-            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x083e }
-            if (r2 != 0) goto L_0x083e
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x083e }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x083e }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x083e }
-            r2.rotation = r0     // Catch:{ Exception -> 0x083e }
-        L_0x083e:
+            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x083c }
+            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x083c }
+            if (r2 != 0) goto L_0x083c
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x083c }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x083c }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x083c }
+            r2.rotation = r0     // Catch:{ Exception -> 0x083c }
+        L_0x083c:
             r2 = 0
             r1.slug = r2
-            goto L_0x08e5
-        L_0x0843:
+            goto L_0x08e3
+        L_0x0841:
             java.lang.String r2 = "mode"
             java.lang.String r2 = r0.getQueryParameter(r2)
-            if (r2 == 0) goto L_0x0880
+            if (r2 == 0) goto L_0x087e
             java.lang.String r2 = r2.toLowerCase()
             java.lang.String r4 = " "
             java.lang.String[] r2 = r2.split(r4)
-            if (r2 == 0) goto L_0x0880
+            if (r2 == 0) goto L_0x087e
             int r4 = r2.length
-            if (r4 <= 0) goto L_0x0880
+            if (r4 <= 0) goto L_0x087e
             r4 = 0
-        L_0x085b:
+        L_0x0859:
             int r5 = r2.length
-            if (r4 >= r5) goto L_0x0880
+            if (r4 >= r5) goto L_0x087e
             r5 = r2[r4]
             java.lang.String r6 = "blur"
             boolean r5 = r6.equals(r5)
-            if (r5 == 0) goto L_0x086e
+            if (r5 == 0) goto L_0x086c
             org.telegram.tgnet.TLRPC$WallPaperSettings r5 = r1.settings
             r6 = 1
             r5.blur = r6
-            goto L_0x087d
-        L_0x086e:
+            goto L_0x087b
+        L_0x086c:
             r6 = 1
             r5 = r2[r4]
             java.lang.String r7 = "motion"
             boolean r5 = r7.equals(r5)
-            if (r5 == 0) goto L_0x087d
+            if (r5 == 0) goto L_0x087b
             org.telegram.tgnet.TLRPC$WallPaperSettings r5 = r1.settings
             r5.motion = r6
-        L_0x087d:
+        L_0x087b:
             int r4 = r4 + 1
-            goto L_0x085b
-        L_0x0880:
+            goto L_0x0859
+        L_0x087e:
             org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings
             java.lang.String r4 = "intensity"
             java.lang.String r4 = r0.getQueryParameter(r4)
@@ -3003,39 +3001,39 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r4 = r4.intValue()
             r2.intensity = r4
             java.lang.String r2 = "bg_color"
-            java.lang.String r2 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x08cd }
-            boolean r4 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x08cd }
-            if (r4 != 0) goto L_0x08cd
-            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x08cd }
+            java.lang.String r2 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x08cb }
+            boolean r4 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x08cb }
+            if (r4 != 0) goto L_0x08cb
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x08cb }
             r5 = 6
             r6 = 0
-            java.lang.String r7 = r2.substring(r6, r5)     // Catch:{ Exception -> 0x08cd }
+            java.lang.String r7 = r2.substring(r6, r5)     // Catch:{ Exception -> 0x08cb }
             r6 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r6)     // Catch:{ Exception -> 0x08cd }
+            int r7 = java.lang.Integer.parseInt(r7, r6)     // Catch:{ Exception -> 0x08cb }
             r6 = r7 | r18
-            r4.background_color = r6     // Catch:{ Exception -> 0x08cd }
-            int r4 = r2.length()     // Catch:{ Exception -> 0x08cd }
-            if (r4 <= r5) goto L_0x08cd
-            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x08cd }
+            r4.background_color = r6     // Catch:{ Exception -> 0x08cb }
+            int r4 = r2.length()     // Catch:{ Exception -> 0x08cb }
+            if (r4 <= r5) goto L_0x08cb
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x08cb }
             r5 = 7
-            java.lang.String r2 = r2.substring(r5)     // Catch:{ Exception -> 0x08cd }
+            java.lang.String r2 = r2.substring(r5)     // Catch:{ Exception -> 0x08cb }
             r5 = 16
-            int r2 = java.lang.Integer.parseInt(r2, r5)     // Catch:{ Exception -> 0x08cd }
+            int r2 = java.lang.Integer.parseInt(r2, r5)     // Catch:{ Exception -> 0x08cb }
             r2 = r2 | r18
-            r4.second_background_color = r2     // Catch:{ Exception -> 0x08cd }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x08cd }
+            r4.second_background_color = r2     // Catch:{ Exception -> 0x08cb }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x08cb }
             r4 = 45
-            r2.rotation = r4     // Catch:{ Exception -> 0x08cd }
-        L_0x08cd:
+            r2.rotation = r4     // Catch:{ Exception -> 0x08cb }
+        L_0x08cb:
             java.lang.String r2 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x08e5 }
-            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x08e5 }
-            if (r2 != 0) goto L_0x08e5
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x08e5 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x08e5 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x08e5 }
-            r2.rotation = r0     // Catch:{ Exception -> 0x08e5 }
-        L_0x08e5:
+            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x08e3 }
+            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x08e3 }
+            if (r2 != 0) goto L_0x08e3
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x08e3 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x08e3 }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x08e3 }
+            r2.rotation = r0     // Catch:{ Exception -> 0x08e3 }
+        L_0x08e3:
             r34 = r1
             r0 = 0
             r1 = 0
@@ -3060,8 +3058,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r31 = 0
             r32 = 0
             r33 = 0
-            goto L_0x0a32
-        L_0x090b:
+            goto L_0x0a2e
+        L_0x0909:
             java.lang.String r1 = "tg:privatepost"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://privatepost"
@@ -3074,11 +3072,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = r0.getQueryParameter(r2)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
             int r2 = r1.intValue()
-            if (r2 == 0) goto L_0x0949
+            if (r2 == 0) goto L_0x0947
             int r2 = r0.intValue()
-            if (r2 != 0) goto L_0x093c
-            goto L_0x0949
-        L_0x093c:
+            if (r2 != 0) goto L_0x093a
+            goto L_0x0947
+        L_0x093a:
             r13 = r0
             r12 = r1
             r0 = 0
@@ -3091,29 +3089,29 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r8 = 0
             r9 = 0
             r10 = 0
-            goto L_0x0955
-        L_0x0949:
+            goto L_0x0953
+        L_0x0947:
             r0 = 0
             r1 = 0
             r2 = 0
-        L_0x094c:
+        L_0x094a:
             r4 = 0
-        L_0x094d:
+        L_0x094b:
             r5 = 2
             r6 = 0
             r7 = 0
             r8 = 0
-        L_0x0951:
+        L_0x094f:
             r9 = 0
-        L_0x0952:
+        L_0x0950:
             r10 = 0
             r12 = 0
             r13 = 0
-        L_0x0955:
+        L_0x0953:
             r18 = 0
             r19 = 0
-            goto L_0x0a1e
-        L_0x095b:
+            goto L_0x0a1a
+        L_0x0959:
             java.lang.String r1 = "tg:resolve"
             java.lang.String r0 = r0.replace(r1, r10)
             java.lang.String r1 = "tg://resolve"
@@ -3123,25 +3121,25 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = r0.getQueryParameter(r1)
             java.lang.String r2 = "telegrampassport"
             boolean r2 = r2.equals(r1)
-            if (r2 == 0) goto L_0x09dc
+            if (r2 == 0) goto L_0x09d8
             java.util.HashMap r1 = new java.util.HashMap
             r1.<init>()
             java.lang.String r2 = r0.getQueryParameter(r12)
             boolean r8 = android.text.TextUtils.isEmpty(r2)
-            if (r8 != 0) goto L_0x09a2
+            if (r8 != 0) goto L_0x099e
             java.lang.String r8 = "{"
             boolean r8 = r2.startsWith(r8)
-            if (r8 == 0) goto L_0x09a2
+            if (r8 == 0) goto L_0x099e
             java.lang.String r8 = "}"
             boolean r8 = r2.endsWith(r8)
-            if (r8 == 0) goto L_0x09a2
+            if (r8 == 0) goto L_0x099e
             java.lang.String r4 = r0.getQueryParameter(r5)
             r1.put(r5, r4)
-            goto L_0x09a9
-        L_0x09a2:
+            goto L_0x09a5
+        L_0x099e:
             java.lang.String r5 = r0.getQueryParameter(r4)
             r1.put(r4, r5)
-        L_0x09a9:
+        L_0x09a5:
             java.lang.String r4 = r0.getQueryParameter(r13)
             r1.put(r13, r4)
             r1.put(r12, r2)
@@ -3149,7 +3147,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1.put(r7, r2)
             java.lang.String r0 = r0.getQueryParameter(r6)
             r1.put(r6, r0)
-        L_0x09c1:
+        L_0x09bd:
             r29 = r1
             r0 = 0
             r1 = 0
@@ -3169,8 +3167,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = 0
             r26 = 0
             r28 = 0
-            goto L_0x0a28
-        L_0x09dc:
+            goto L_0x0a24
+        L_0x09d8:
             java.lang.String r2 = "start"
             java.lang.String r2 = r0.getQueryParameter(r2)
             java.lang.String r4 = "startgroup"
@@ -3181,7 +3179,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = r0.getQueryParameter(r6)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
             int r6 = r0.intValue()
-            if (r6 != 0) goto L_0x0a0e
+            if (r6 != 0) goto L_0x0a0a
             r19 = r1
             r6 = r2
             r10 = r4
@@ -3195,8 +3193,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r8 = 0
             r9 = 0
             r12 = 0
-            goto L_0x0a1d
-        L_0x0a0e:
+            goto L_0x0a19
+        L_0x0a0a:
             r12 = r0
             r19 = r1
             r6 = r2
@@ -3210,54 +3208,54 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r7 = 0
             r8 = 0
             r9 = 0
-        L_0x0a1d:
+        L_0x0a19:
             r13 = 0
-        L_0x0a1e:
+        L_0x0a1a:
             r23 = 0
             r24 = 0
             r26 = 0
-        L_0x0a24:
+        L_0x0a20:
             r28 = 0
-        L_0x0a26:
+        L_0x0a22:
             r29 = 0
-        L_0x0a28:
+        L_0x0a24:
             r30 = 0
-        L_0x0a2a:
+        L_0x0a26:
             r31 = 0
-        L_0x0a2c:
+        L_0x0a28:
             r32 = 0
             r33 = 0
-        L_0x0a30:
+        L_0x0a2c:
             r34 = 0
-        L_0x0a32:
+        L_0x0a2e:
             r35 = 0
-            goto L_0x0e49
-        L_0x0a36:
+            goto L_0x0e45
+        L_0x0a32:
             java.lang.String r4 = r0.getHost()
             java.lang.String r4 = r4.toLowerCase()
             java.lang.String r5 = "telegram.me"
             boolean r5 = r4.equals(r5)
-            if (r5 != 0) goto L_0x0a5a
+            if (r5 != 0) goto L_0x0a56
             java.lang.String r5 = "t.me"
             boolean r5 = r4.equals(r5)
-            if (r5 != 0) goto L_0x0a5a
+            if (r5 != 0) goto L_0x0a56
             java.lang.String r5 = "telegram.dog"
             boolean r4 = r4.equals(r5)
-            if (r4 == 0) goto L_0x0a57
-            goto L_0x0a5a
-        L_0x0a57:
+            if (r4 == 0) goto L_0x0a53
+            goto L_0x0a56
+        L_0x0a53:
             r5 = 2
             goto L_0x039d
-        L_0x0a5a:
+        L_0x0a56:
             java.lang.String r4 = r0.getPath()
-            if (r4 == 0) goto L_0x0de5
+            if (r4 == 0) goto L_0x0de1
             int r5 = r4.length()
             r6 = 1
-            if (r5 <= r6) goto L_0x0de5
+            if (r5 <= r6) goto L_0x0de1
             java.lang.String r4 = r4.substring(r6)
             java.lang.String r5 = "bg/"
             boolean r5 = r4.startsWith(r5)
-            if (r5 == 0) goto L_0x0bcd
+            if (r5 == 0) goto L_0x0bc9
             org.telegram.tgnet.TLRPC$TL_wallPaper r1 = new org.telegram.tgnet.TLRPC$TL_wallPaper
             r1.<init>()
             org.telegram.tgnet.TLRPC$TL_wallPaperSettings r5 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
@@ -3266,152 +3264,152 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r5 = "bg/"
             java.lang.String r2 = r4.replace(r5, r2)
             r1.slug = r2
-            if (r2 == 0) goto L_0x0aa4
+            if (r2 == 0) goto L_0x0aa0
             int r2 = r2.length()
             r4 = 6
-            if (r2 != r4) goto L_0x0aa4
-            org.telegram.tgnet.TLRPC$WallPaperSettings r0 = r1.settings     // Catch:{ Exception -> 0x0a9e }
-            java.lang.String r2 = r1.slug     // Catch:{ Exception -> 0x0a9e }
+            if (r2 != r4) goto L_0x0aa0
+            org.telegram.tgnet.TLRPC$WallPaperSettings r0 = r1.settings     // Catch:{ Exception -> 0x0a9a }
+            java.lang.String r2 = r1.slug     // Catch:{ Exception -> 0x0a9a }
             r4 = 16
-            int r2 = java.lang.Integer.parseInt(r2, r4)     // Catch:{ Exception -> 0x0a9e }
+            int r2 = java.lang.Integer.parseInt(r2, r4)     // Catch:{ Exception -> 0x0a9a }
             r2 = r2 | r18
-            r0.background_color = r2     // Catch:{ Exception -> 0x0a9e }
-        L_0x0a9e:
+            r0.background_color = r2     // Catch:{ Exception -> 0x0a9a }
+        L_0x0a9a:
             r2 = 0
             r1.slug = r2
             r7 = r2
-            goto L_0x0bba
-        L_0x0aa4:
+            goto L_0x0bb6
+        L_0x0aa0:
             java.lang.String r2 = r1.slug
-            if (r2 == 0) goto L_0x0b04
+            if (r2 == 0) goto L_0x0b00
             int r2 = r2.length()
             r4 = 13
-            if (r2 != r4) goto L_0x0b04
+            if (r2 != r4) goto L_0x0b00
             java.lang.String r2 = r1.slug
             r4 = 6
             char r2 = r2.charAt(r4)
             r5 = 45
-            if (r2 != r5) goto L_0x0b04
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae7 }
-            java.lang.String r5 = r1.slug     // Catch:{ Exception -> 0x0ae7 }
+            if (r2 != r5) goto L_0x0b00
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae3 }
+            java.lang.String r5 = r1.slug     // Catch:{ Exception -> 0x0ae3 }
             r6 = 0
-            java.lang.String r4 = r5.substring(r6, r4)     // Catch:{ Exception -> 0x0ae7 }
+            java.lang.String r4 = r5.substring(r6, r4)     // Catch:{ Exception -> 0x0ae3 }
             r5 = 16
-            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0ae7 }
+            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0ae3 }
             r4 = r4 | r18
-            r2.background_color = r4     // Catch:{ Exception -> 0x0ae7 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae7 }
-            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x0ae7 }
+            r2.background_color = r4     // Catch:{ Exception -> 0x0ae3 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae3 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x0ae3 }
             r5 = 7
-            java.lang.String r4 = r4.substring(r5)     // Catch:{ Exception -> 0x0ae7 }
+            java.lang.String r4 = r4.substring(r5)     // Catch:{ Exception -> 0x0ae3 }
             r5 = 16
-            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0ae7 }
+            int r4 = java.lang.Integer.parseInt(r4, r5)     // Catch:{ Exception -> 0x0ae3 }
             r4 = r4 | r18
-            r2.second_background_color = r4     // Catch:{ Exception -> 0x0ae7 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae7 }
+            r2.second_background_color = r4     // Catch:{ Exception -> 0x0ae3 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ae3 }
             r4 = 45
-            r2.rotation = r4     // Catch:{ Exception -> 0x0ae7 }
-        L_0x0ae7:
+            r2.rotation = r4     // Catch:{ Exception -> 0x0ae3 }
+        L_0x0ae3:
             java.lang.String r2 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0aff }
-            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0aff }
-            if (r2 != 0) goto L_0x0aff
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0aff }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0aff }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0aff }
-            r2.rotation = r0     // Catch:{ Exception -> 0x0aff }
-        L_0x0aff:
+            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0afb }
+            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0afb }
+            if (r2 != 0) goto L_0x0afb
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0afb }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0afb }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0afb }
+            r2.rotation = r0     // Catch:{ Exception -> 0x0afb }
+        L_0x0afb:
             r7 = 0
             r1.slug = r7
-            goto L_0x0bba
-        L_0x0b04:
+            goto L_0x0bb6
+        L_0x0b00:
             r7 = 0
             java.lang.String r2 = "mode"
             java.lang.String r2 = r0.getQueryParameter(r2)
-            if (r2 == 0) goto L_0x0b42
+            if (r2 == 0) goto L_0x0b3e
             java.lang.String r2 = r2.toLowerCase()
             java.lang.String r4 = " "
             java.lang.String[] r2 = r2.split(r4)
-            if (r2 == 0) goto L_0x0b42
+            if (r2 == 0) goto L_0x0b3e
             int r4 = r2.length
-            if (r4 <= 0) goto L_0x0b42
+            if (r4 <= 0) goto L_0x0b3e
             r4 = 0
-        L_0x0b1d:
+        L_0x0b19:
             int r5 = r2.length
-            if (r4 >= r5) goto L_0x0b42
+            if (r4 >= r5) goto L_0x0b3e
             r5 = r2[r4]
             java.lang.String r6 = "blur"
             boolean r5 = r6.equals(r5)
-            if (r5 == 0) goto L_0x0b30
+            if (r5 == 0) goto L_0x0b2c
             org.telegram.tgnet.TLRPC$WallPaperSettings r5 = r1.settings
             r6 = 1
             r5.blur = r6
-            goto L_0x0b3f
-        L_0x0b30:
+            goto L_0x0b3b
+        L_0x0b2c:
             r6 = 1
             r5 = r2[r4]
             java.lang.String r8 = "motion"
             boolean r5 = r8.equals(r5)
-            if (r5 == 0) goto L_0x0b3f
+            if (r5 == 0) goto L_0x0b3b
             org.telegram.tgnet.TLRPC$WallPaperSettings r5 = r1.settings
             r5.motion = r6
-        L_0x0b3f:
+        L_0x0b3b:
             int r4 = r4 + 1
-            goto L_0x0b1d
-        L_0x0b42:
+            goto L_0x0b19
+        L_0x0b3e:
             java.lang.String r2 = "intensity"
             java.lang.String r2 = r0.getQueryParameter(r2)
             boolean r4 = android.text.TextUtils.isEmpty(r2)
-            if (r4 != 0) goto L_0x0b5b
+            if (r4 != 0) goto L_0x0b57
             org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings
             java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)
             int r2 = r2.intValue()
             r4.intensity = r2
-            goto L_0x0b61
-        L_0x0b5b:
+            goto L_0x0b5d
+        L_0x0b57:
             org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings
             r4 = 50
             r2.intensity = r4
-        L_0x0b61:
+        L_0x0b5d:
             java.lang.String r2 = "bg_color"
-            java.lang.String r2 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0ba2 }
-            boolean r4 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x0ba2 }
-            if (r4 != 0) goto L_0x0b9d
-            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x0ba2 }
+            java.lang.String r2 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0b9e }
+            boolean r4 = android.text.TextUtils.isEmpty(r2)     // Catch:{ Exception -> 0x0b9e }
+            if (r4 != 0) goto L_0x0b99
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x0b9e }
             r5 = 6
             r6 = 0
-            java.lang.String r8 = r2.substring(r6, r5)     // Catch:{ Exception -> 0x0ba2 }
+            java.lang.String r8 = r2.substring(r6, r5)     // Catch:{ Exception -> 0x0b9e }
             r6 = 16
-            int r8 = java.lang.Integer.parseInt(r8, r6)     // Catch:{ Exception -> 0x0ba2 }
+            int r8 = java.lang.Integer.parseInt(r8, r6)     // Catch:{ Exception -> 0x0b9e }
             r6 = r8 | r18
-            r4.background_color = r6     // Catch:{ Exception -> 0x0ba2 }
-            int r4 = r2.length()     // Catch:{ Exception -> 0x0ba2 }
-            if (r4 <= r5) goto L_0x0ba2
-            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x0ba2 }
+            r4.background_color = r6     // Catch:{ Exception -> 0x0b9e }
+            int r4 = r2.length()     // Catch:{ Exception -> 0x0b9e }
+            if (r4 <= r5) goto L_0x0b9e
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x0b9e }
             r5 = 7
-            java.lang.String r2 = r2.substring(r5)     // Catch:{ Exception -> 0x0ba2 }
+            java.lang.String r2 = r2.substring(r5)     // Catch:{ Exception -> 0x0b9e }
             r5 = 16
-            int r2 = java.lang.Integer.parseInt(r2, r5)     // Catch:{ Exception -> 0x0ba2 }
+            int r2 = java.lang.Integer.parseInt(r2, r5)     // Catch:{ Exception -> 0x0b9e }
             r2 = r2 | r18
-            r4.second_background_color = r2     // Catch:{ Exception -> 0x0ba2 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ba2 }
+            r4.second_background_color = r2     // Catch:{ Exception -> 0x0b9e }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0b9e }
             r4 = 45
-            r2.rotation = r4     // Catch:{ Exception -> 0x0ba2 }
-            goto L_0x0ba2
-        L_0x0b9d:
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0ba2 }
+            r2.rotation = r4     // Catch:{ Exception -> 0x0b9e }
+            goto L_0x0b9e
+        L_0x0b99:
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0b9e }
             r4 = -1
-            r2.background_color = r4     // Catch:{ Exception -> 0x0ba2 }
-        L_0x0ba2:
+            r2.background_color = r4     // Catch:{ Exception -> 0x0b9e }
+        L_0x0b9e:
             java.lang.String r2 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0bba }
-            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0bba }
-            if (r2 != 0) goto L_0x0bba
-            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0bba }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0bba }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0bba }
-            r2.rotation = r0     // Catch:{ Exception -> 0x0bba }
-        L_0x0bba:
+            java.lang.String r0 = r0.getQueryParameter(r2)     // Catch:{ Exception -> 0x0bb6 }
+            boolean r2 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0bb6 }
+            if (r2 != 0) goto L_0x0bb6
+            org.telegram.tgnet.TLRPC$WallPaperSettings r2 = r1.settings     // Catch:{ Exception -> 0x0bb6 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0bb6 }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0bb6 }
+            r2.rotation = r0     // Catch:{ Exception -> 0x0bb6 }
+        L_0x0bb6:
             r20 = r1
             r0 = r7
             r1 = r0
@@ -3426,12 +3424,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r18 = r13
             r19 = r18
             r23 = r19
-            goto L_0x0bee
-        L_0x0bcd:
+            goto L_0x0bea
+        L_0x0bc9:
             r7 = 0
             java.lang.String r5 = "login/"
             boolean r5 = r4.startsWith(r5)
-            if (r5 == 0) goto L_0x0bf3
+            if (r5 == 0) goto L_0x0bef
             java.lang.String r0 = "login/"
             java.lang.String r2 = r4.replace(r0, r2)
             r19 = r2
@@ -3447,16 +3445,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r13 = r12
             r18 = r13
             r20 = r18
-        L_0x0bec:
+        L_0x0be8:
             r23 = r20
-        L_0x0bee:
+        L_0x0bea:
             r24 = r23
             r5 = 2
-            goto L_0x0dfb
-        L_0x0bf3:
+            goto L_0x0df7
+        L_0x0bef:
             java.lang.String r5 = "joinchat/"
             boolean r5 = r4.startsWith(r5)
-            if (r5 == 0) goto L_0x0CLASSNAME
+            if (r5 == 0) goto L_0x0c0e
             java.lang.String r0 = "joinchat/"
             java.lang.String r2 = r4.replace(r0, r2)
             r6 = r2
@@ -3471,12 +3469,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12 = r10
             r13 = r12
             r18 = r13
-        L_0x0c0d:
-            r19 = r18
-        L_0x0c0f:
-            r20 = r19
-            goto L_0x0bec
         L_0x0CLASSNAME:
+            r19 = r18
+        L_0x0c0b:
+            r20 = r19
+            goto L_0x0be8
+        L_0x0c0e:
             java.lang.String r5 = "addstickers/"
             boolean r5 = r4.startsWith(r5)
             if (r5 == 0) goto L_0x0CLASSNAME
@@ -3493,12 +3491,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0CLASSNAME:
             java.lang.String r5 = "msg/"
             boolean r5 = r4.startsWith(r5)
-            if (r5 != 0) goto L_0x0d72
+            if (r5 != 0) goto L_0x0d6e
             java.lang.String r5 = "share/"
             boolean r5 = r4.startsWith(r5)
-            if (r5 == 0) goto L_0x0c3a
-            goto L_0x0d72
-        L_0x0c3a:
+            if (r5 == 0) goto L_0x0CLASSNAME
+            goto L_0x0d6e
+        L_0x0CLASSNAME:
             java.lang.String r1 = "confirmphone"
             boolean r1 = r4.startsWith(r1)
             if (r1 == 0) goto L_0x0CLASSNAME
@@ -3522,11 +3520,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r26 = 0
             r1 = r0
             r0 = r24
-            goto L_0x0dfd
+            goto L_0x0df9
         L_0x0CLASSNAME:
             java.lang.String r1 = "setlanguage/"
             boolean r1 = r4.startsWith(r1)
-            if (r1 == 0) goto L_0x0CLASSNAME
+            if (r1 == 0) goto L_0x0c7d
             r0 = 12
             java.lang.String r2 = r4.substring(r0)
             r13 = r2
@@ -3540,11 +3538,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r10 = r9
             r12 = r10
             r18 = r12
-            goto L_0x0c0d
-        L_0x0CLASSNAME:
+            goto L_0x0CLASSNAME
+        L_0x0c7d:
             java.lang.String r1 = "addtheme/"
             boolean r1 = r4.startsWith(r1)
-            if (r1 == 0) goto L_0x0c9f
+            if (r1 == 0) goto L_0x0c9b
             r0 = 9
             java.lang.String r2 = r4.substring(r0)
             r18 = r2
@@ -3559,15 +3557,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12 = r10
             r13 = r12
             r19 = r13
-            goto L_0x0c0f
-        L_0x0c9f:
+            goto L_0x0c0b
+        L_0x0c9b:
             java.lang.String r1 = "c/"
             boolean r1 = r4.startsWith(r1)
-            if (r1 == 0) goto L_0x0cf4
+            if (r1 == 0) goto L_0x0cf0
             java.util.List r0 = r0.getPathSegments()
             int r1 = r0.size()
             r2 = 3
-            if (r1 != r2) goto L_0x0cdb
+            if (r1 != r2) goto L_0x0cd7
             r1 = 1
             java.lang.Object r2 = r0.get(r1)
             java.lang.CharSequence r2 = (java.lang.CharSequence) r2
@@ -3577,21 +3575,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
             int r1 = r0.intValue()
-            if (r1 == 0) goto L_0x0cdc
+            if (r1 == 0) goto L_0x0cd8
             int r1 = r2.intValue()
-            if (r1 != 0) goto L_0x0cd5
-            goto L_0x0cdc
-        L_0x0cd5:
+            if (r1 != 0) goto L_0x0cd1
+            goto L_0x0cd8
+        L_0x0cd1:
             r44 = r2
             r2 = r0
             r0 = r44
-            goto L_0x0cde
-        L_0x0cdb:
+            goto L_0x0cda
+        L_0x0cd7:
             r5 = 2
-        L_0x0cdc:
+        L_0x0cd8:
             r0 = r7
             r2 = r0
-        L_0x0cde:
+        L_0x0cda:
             r24 = r0
             r23 = r2
             r0 = r7
@@ -3607,48 +3605,48 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r18 = r13
             r19 = r18
             r20 = r19
-            goto L_0x0dfb
-        L_0x0cf4:
+            goto L_0x0df7
+        L_0x0cf0:
             r5 = 2
             int r1 = r4.length()
             r2 = 1
-            if (r1 < r2) goto L_0x0de7
+            if (r1 < r2) goto L_0x0de3
             java.util.ArrayList r1 = new java.util.ArrayList
             java.util.List r2 = r0.getPathSegments()
             r1.<init>(r2)
             int r2 = r1.size()
-            if (r2 <= 0) goto L_0x0d1e
+            if (r2 <= 0) goto L_0x0d1a
             r2 = 0
             java.lang.Object r4 = r1.get(r2)
             java.lang.String r4 = (java.lang.String) r4
             java.lang.String r6 = "s"
             boolean r4 = r4.equals(r6)
-            if (r4 == 0) goto L_0x0d1f
+            if (r4 == 0) goto L_0x0d1b
             r1.remove(r2)
-            goto L_0x0d1f
-        L_0x0d1e:
+            goto L_0x0d1b
+        L_0x0d1a:
             r2 = 0
-        L_0x0d1f:
+        L_0x0d1b:
             int r4 = r1.size()
-            if (r4 <= 0) goto L_0x0d45
+            if (r4 <= 0) goto L_0x0d41
             java.lang.Object r4 = r1.get(r2)
             r2 = r4
             java.lang.String r2 = (java.lang.String) r2
             int r4 = r1.size()
             r6 = 1
-            if (r4 <= r6) goto L_0x0d43
+            if (r4 <= r6) goto L_0x0d3f
             java.lang.Object r1 = r1.get(r6)
             java.lang.CharSequence r1 = (java.lang.CharSequence) r1
             java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
             int r4 = r1.intValue()
-            if (r4 != 0) goto L_0x0d47
-        L_0x0d43:
+            if (r4 != 0) goto L_0x0d43
+        L_0x0d3f:
             r1 = r7
-            goto L_0x0d47
-        L_0x0d45:
+            goto L_0x0d43
+        L_0x0d41:
             r1 = r7
             r2 = r1
-        L_0x0d47:
+        L_0x0d43:
             java.lang.String r4 = "start"
             java.lang.String r4 = r0.getQueryParameter(r4)
             java.lang.String r6 = "startgroup"
@@ -3671,54 +3669,54 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r26 = 0
             r4 = r2
             r2 = r24
-            goto L_0x0dfd
-        L_0x0d72:
+            goto L_0x0df9
+        L_0x0d6e:
             r5 = 2
             java.lang.String r4 = "url"
             java.lang.String r4 = r0.getQueryParameter(r4)
-            if (r4 != 0) goto L_0x0d7c
-            goto L_0x0d7d
-        L_0x0d7c:
+            if (r4 != 0) goto L_0x0d78
+            goto L_0x0d79
+        L_0x0d78:
             r2 = r4
-        L_0x0d7d:
+        L_0x0d79:
             java.lang.String r4 = r0.getQueryParameter(r9)
-            if (r4 == 0) goto L_0x0daf
+            if (r4 == 0) goto L_0x0dab
             int r4 = r2.length()
-            if (r4 <= 0) goto L_0x0d9a
+            if (r4 <= 0) goto L_0x0d96
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             r4.append(r2)
             r4.append(r1)
             java.lang.String r2 = r4.toString()
             r4 = 1
-            goto L_0x0d9b
-        L_0x0d9a:
+            goto L_0x0d97
+        L_0x0d96:
             r4 = 0
-        L_0x0d9b:
+        L_0x0d97:
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
             r6.append(r2)
             java.lang.String r0 = r0.getQueryParameter(r9)
             r6.append(r0)
             java.lang.String r2 = r6.toString()
-            goto L_0x0db0
-        L_0x0daf:
+            goto L_0x0dac
+        L_0x0dab:
             r4 = 0
-        L_0x0db0:
+        L_0x0dac:
             int r0 = r2.length()
             r6 = 16384(0x4000, float:2.2959E-41)
             r8 = 0
-            if (r0 <= r6) goto L_0x0dbd
+            if (r0 <= r6) goto L_0x0db9
             java.lang.String r2 = r2.substring(r8, r6)
-        L_0x0dbd:
+        L_0x0db9:
             boolean r0 = r2.endsWith(r1)
-            if (r0 == 0) goto L_0x0dce
+            if (r0 == 0) goto L_0x0dca
             int r0 = r2.length()
             r6 = 1
             int r0 = r0 - r6
             java.lang.String r2 = r2.substring(r8, r0)
-            goto L_0x0dbd
-        L_0x0dce:
+            goto L_0x0db9
+        L_0x0dca:
             r0 = r2
             r26 = r4
             r1 = r7
@@ -3735,11 +3733,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r20 = r19
             r23 = r20
             r24 = r23
-            goto L_0x0dfd
-        L_0x0de5:
+            goto L_0x0df9
+        L_0x0de1:
             r5 = 2
             r7 = 0
-        L_0x0de7:
+        L_0x0de3:
             r0 = r7
             r1 = r0
             r2 = r1
@@ -3755,9 +3753,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r20 = r19
             r23 = r20
             r24 = r23
-        L_0x0dfb:
+        L_0x0df7:
             r26 = 0
-        L_0x0dfd:
+        L_0x0df9:
             r29 = r7
             r31 = r29
             r33 = r31
@@ -3779,8 +3777,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r44 = r1
             r1 = r0
             r0 = r44
-            goto L_0x0e49
-        L_0x0e25:
+            goto L_0x0e45
+        L_0x0e21:
             r0 = r7
             r1 = r0
             r2 = r1
@@ -3804,115 +3802,115 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r24 = 0
             r26 = 0
             r28 = 0
-        L_0x0e49:
-            if (r32 != 0) goto L_0x0e5f
+        L_0x0e45:
+            if (r32 != 0) goto L_0x0e5b
             int r5 = r15.currentAccount
             org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
             boolean r5 = r5.isClientActivated()
-            if (r5 == 0) goto L_0x0e58
-            goto L_0x0e5f
-        L_0x0e58:
+            if (r5 == 0) goto L_0x0e54
+            goto L_0x0e5b
+        L_0x0e54:
             r42 = r11
             r2 = r15
             r36 = 0
-            goto L_0x0f7e
-        L_0x0e5f:
-            if (r2 != 0) goto L_0x0var_
-            if (r0 == 0) goto L_0x0e65
-            goto L_0x0var_
-        L_0x0e65:
-            if (r19 != 0) goto L_0x0var_
-            if (r4 != 0) goto L_0x0var_
-            if (r8 != 0) goto L_0x0var_
-            if (r1 != 0) goto L_0x0var_
-            if (r18 != 0) goto L_0x0var_
-            if (r29 != 0) goto L_0x0var_
-            if (r31 != 0) goto L_0x0var_
-            if (r30 != 0) goto L_0x0var_
-            if (r32 != 0) goto L_0x0var_
-            if (r34 != 0) goto L_0x0var_
-            if (r13 != 0) goto L_0x0var_
-            if (r35 != 0) goto L_0x0var_
-            if (r33 == 0) goto L_0x0e81
-            goto L_0x0var_
-        L_0x0e81:
-            android.content.ContentResolver r36 = r45.getContentResolver()     // Catch:{ Exception -> 0x0var_ }
-            android.net.Uri r37 = r46.getData()     // Catch:{ Exception -> 0x0var_ }
+            goto L_0x0f7a
+        L_0x0e5b:
+            if (r2 != 0) goto L_0x0f5f
+            if (r0 == 0) goto L_0x0e61
+            goto L_0x0f5f
+        L_0x0e61:
+            if (r19 != 0) goto L_0x0f0f
+            if (r4 != 0) goto L_0x0f0f
+            if (r8 != 0) goto L_0x0f0f
+            if (r1 != 0) goto L_0x0f0f
+            if (r18 != 0) goto L_0x0f0f
+            if (r29 != 0) goto L_0x0f0f
+            if (r31 != 0) goto L_0x0f0f
+            if (r30 != 0) goto L_0x0f0f
+            if (r32 != 0) goto L_0x0f0f
+            if (r34 != 0) goto L_0x0f0f
+            if (r13 != 0) goto L_0x0f0f
+            if (r35 != 0) goto L_0x0f0f
+            if (r33 == 0) goto L_0x0e7d
+            goto L_0x0f0f
+        L_0x0e7d:
+            android.content.ContentResolver r36 = r45.getContentResolver()     // Catch:{ Exception -> 0x0efe }
+            android.net.Uri r37 = r46.getData()     // Catch:{ Exception -> 0x0efe }
             r38 = 0
             r39 = 0
             r40 = 0
             r41 = 0
-            android.database.Cursor r1 = r36.query(r37, r38, r39, r40, r41)     // Catch:{ Exception -> 0x0var_ }
-            if (r1 == 0) goto L_0x0ef8
-            boolean r0 = r1.moveToFirst()     // Catch:{ all -> 0x0eec }
-            if (r0 == 0) goto L_0x0ef8
+            android.database.Cursor r1 = r36.query(r37, r38, r39, r40, r41)     // Catch:{ Exception -> 0x0efe }
+            if (r1 == 0) goto L_0x0ef4
+            boolean r0 = r1.moveToFirst()     // Catch:{ all -> 0x0ee8 }
+            if (r0 == 0) goto L_0x0ef4
             java.lang.String r0 = "account_name"
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x0eec }
-            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x0eec }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x0eec }
-            int r0 = r0.intValue()     // Catch:{ all -> 0x0eec }
+            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x0ee8 }
+            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x0ee8 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x0ee8 }
+            int r0 = r0.intValue()     // Catch:{ all -> 0x0ee8 }
             r2 = 0
             r5 = 3
-        L_0x0eb1:
-            if (r2 >= r5) goto L_0x0ece
-            org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ all -> 0x0ecb }
-            int r3 = r3.getClientUserId()     // Catch:{ all -> 0x0ecb }
-            if (r3 != r0) goto L_0x0ec7
+        L_0x0ead:
+            if (r2 >= r5) goto L_0x0eca
+            org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ all -> 0x0ec7 }
+            int r3 = r3.getClientUserId()     // Catch:{ all -> 0x0ec7 }
+            if (r3 != r0) goto L_0x0ec3
             r3 = 0
-            r11[r3] = r2     // Catch:{ all -> 0x0ecb }
-            r0 = r11[r3]     // Catch:{ all -> 0x0ecb }
+            r11[r3] = r2     // Catch:{ all -> 0x0ec7 }
+            r0 = r11[r3]     // Catch:{ all -> 0x0ec7 }
             r3 = 1
-            r15.switchToAccount(r0, r3)     // Catch:{ all -> 0x0eea }
-            goto L_0x0ecf
-        L_0x0ec7:
+            r15.switchToAccount(r0, r3)     // Catch:{ all -> 0x0ee6 }
+            goto L_0x0ecb
+        L_0x0ec3:
             r3 = 1
             int r2 = r2 + 1
-            goto L_0x0eb1
+            goto L_0x0ead
+        L_0x0ec7:
+            r0 = move-exception
+            r3 = 1
+            goto L_0x0eeb
+        L_0x0eca:
+            r3 = 1
         L_0x0ecb:
-            r0 = move-exception
-            r3 = 1
-            goto L_0x0eef
-        L_0x0ece:
-            r3 = 1
-        L_0x0ecf:
             java.lang.String r0 = "DATA4"
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x0eea }
-            int r0 = r1.getInt(r0)     // Catch:{ all -> 0x0eea }
+            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x0ee6 }
+            int r0 = r1.getInt(r0)     // Catch:{ all -> 0x0ee6 }
             r2 = 0
-            r4 = r11[r2]     // Catch:{ all -> 0x0eea }
-            org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getInstance(r4)     // Catch:{ all -> 0x0eea }
-            int r6 = org.telegram.messenger.NotificationCenter.closeChats     // Catch:{ all -> 0x0eea }
-            java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ all -> 0x0eea }
-            r4.postNotificationName(r6, r8)     // Catch:{ all -> 0x0eea }
+            r4 = r11[r2]     // Catch:{ all -> 0x0ee6 }
+            org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getInstance(r4)     // Catch:{ all -> 0x0ee6 }
+            int r6 = org.telegram.messenger.NotificationCenter.closeChats     // Catch:{ all -> 0x0ee6 }
+            java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ all -> 0x0ee6 }
+            r4.postNotificationName(r6, r8)     // Catch:{ all -> 0x0ee6 }
             r23 = r0
-            goto L_0x0efa
-        L_0x0eea:
+            goto L_0x0ef6
+        L_0x0ee6:
             r0 = move-exception
-            goto L_0x0eef
+            goto L_0x0eeb
+        L_0x0ee8:
+            r0 = move-exception
+            r3 = 1
+            r5 = 3
+        L_0x0eeb:
+            throw r0     // Catch:{ all -> 0x0eec }
         L_0x0eec:
             r0 = move-exception
-            r3 = 1
-            r5 = 3
-        L_0x0eef:
-            throw r0     // Catch:{ all -> 0x0ef0 }
-        L_0x0ef0:
-            r0 = move-exception
             r2 = r0
-            if (r1 == 0) goto L_0x0ef7
-            r1.close()     // Catch:{ all -> 0x0ef7 }
-        L_0x0ef7:
-            throw r2     // Catch:{ Exception -> 0x0var_ }
-        L_0x0ef8:
+            if (r1 == 0) goto L_0x0ef3
+            r1.close()     // Catch:{ all -> 0x0ef3 }
+        L_0x0ef3:
+            throw r2     // Catch:{ Exception -> 0x0efc }
+        L_0x0ef4:
             r3 = 1
             r5 = 3
-        L_0x0efa:
+        L_0x0ef6:
             if (r1 == 0) goto L_0x0var_
-            r1.close()     // Catch:{ Exception -> 0x0var_ }
+            r1.close()     // Catch:{ Exception -> 0x0efc }
             goto L_0x0var_
-        L_0x0var_:
+        L_0x0efc:
             r0 = move-exception
             goto L_0x0var_
-        L_0x0var_:
+        L_0x0efe:
             r0 = move-exception
             r3 = 1
             r5 = 3
@@ -3924,24 +3922,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12 = r23
             r13 = r28
             r36 = 0
-            goto L_0x0f8e
-        L_0x0var_:
+            goto L_0x0f8a
+        L_0x0f0f:
             r3 = 1
             r5 = 3
-            if (r1 == 0) goto L_0x0var_
+            if (r1 == 0) goto L_0x0f2d
             java.lang.String r0 = "@"
             boolean r0 = r1.startsWith(r0)
-            if (r0 == 0) goto L_0x0var_
+            if (r0 == 0) goto L_0x0f2d
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r2 = " "
             r0.append(r2)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            goto L_0x0var_
-        L_0x0var_:
+            goto L_0x0f2e
+        L_0x0f2d:
             r0 = r1
-        L_0x0var_:
+        L_0x0f2e:
             r25 = 0
             r2 = r11[r25]
             r20 = 0
@@ -3970,8 +3968,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r19 = r35
             r1.runLinkRequest(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20)
             r2 = r45
-            goto L_0x0f7e
-        L_0x0var_:
+            goto L_0x0f7a
+        L_0x0f5f:
             r42 = r11
             r36 = 0
             android.os.Bundle r1 = new android.os.Bundle
@@ -3983,11 +3981,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2 = r45
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x0f7e:
+        L_0x0f7a:
             r12 = r23
             r13 = r28
-            goto L_0x0f8e
-        L_0x0var_:
+            goto L_0x0f8a
+        L_0x0f7f:
             r42 = r11
             r2 = r15
             r36 = 0
@@ -3995,7 +3993,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r13 = 0
             r24 = 0
             r26 = 0
-        L_0x0f8e:
+        L_0x0f8a:
             r1 = r46
             r8 = r13
             r0 = r24
@@ -4005,15 +4003,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = 0
             r7 = 0
             r9 = 0
-            goto L_0x1073
-        L_0x0f9d:
+            goto L_0x106f
+        L_0x0var_:
             r42 = r11
             r2 = r15
             r36 = 0
             java.lang.String r0 = r46.getAction()
             java.lang.String r1 = "org.telegram.messenger.OPEN_ACCOUNT"
             boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x0fba
+            if (r0 == 0) goto L_0x0fb6
             r1 = r46
             r6 = r42
             r0 = 0
@@ -4022,12 +4020,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = 0
             r7 = 0
             r8 = 1
-            goto L_0x1071
-        L_0x0fba:
+            goto L_0x106d
+        L_0x0fb6:
             java.lang.String r0 = r46.getAction()
             java.lang.String r1 = "new_dialog"
             boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x0fd3
+            if (r0 == 0) goto L_0x0fcf
             r1 = r46
             r6 = r42
             r0 = 0
@@ -4037,12 +4035,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r7 = 0
             r8 = 0
             r9 = 1
-            goto L_0x1072
-        L_0x0fd3:
+            goto L_0x106e
+        L_0x0fcf:
             java.lang.String r0 = r46.getAction()
             java.lang.String r1 = "com.tmessages.openchat"
             boolean r0 = r0.startsWith(r1)
-            if (r0 == 0) goto L_0x103b
+            if (r0 == 0) goto L_0x1037
             java.lang.String r0 = "chatId"
             r1 = r46
             r3 = 0
@@ -4051,7 +4049,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r4 = r1.getIntExtra(r4, r3)
             java.lang.String r5 = "encId"
             int r5 = r1.getIntExtra(r5, r3)
-            if (r0 == 0) goto L_0x1009
+            if (r0 == 0) goto L_0x1005
             r6 = r42
             r4 = r6[r3]
             org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getInstance(r4)
@@ -4059,14 +4057,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Object[] r7 = new java.lang.Object[r3]
             r4.postNotificationName(r5, r7)
             r5 = 0
-        L_0x1006:
+        L_0x1002:
             r12 = 0
-        L_0x1007:
+        L_0x1003:
             r13 = 0
-            goto L_0x1033
-        L_0x1009:
+            goto L_0x102f
+        L_0x1005:
             r6 = r42
-            if (r4 == 0) goto L_0x101e
+            if (r4 == 0) goto L_0x101a
             r0 = r6[r3]
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r5 = org.telegram.messenger.NotificationCenter.closeChats
@@ -4075,37 +4073,37 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12 = r4
             r0 = 0
             r5 = 0
-            goto L_0x1007
-        L_0x101e:
-            if (r5 == 0) goto L_0x102f
+            goto L_0x1003
+        L_0x101a:
+            if (r5 == 0) goto L_0x102b
             r0 = r6[r3]
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r4 = org.telegram.messenger.NotificationCenter.closeChats
             java.lang.Object[] r7 = new java.lang.Object[r3]
             r0.postNotificationName(r4, r7)
             r0 = 0
-            goto L_0x1006
-        L_0x102f:
+            goto L_0x1002
+        L_0x102b:
             r0 = 0
             r5 = 0
             r12 = 0
             r13 = 1
-        L_0x1033:
+        L_0x102f:
             r43 = r13
             r4 = 0
             r7 = 0
             r8 = 0
             r9 = 0
             r13 = 0
-            goto L_0x1076
-        L_0x103b:
+            goto L_0x1072
+        L_0x1037:
             r1 = r46
             r6 = r42
             r3 = 0
             java.lang.String r0 = r46.getAction()
             java.lang.String r4 = "com.tmessages.openplayer"
             boolean r0 = r0.equals(r4)
-            if (r0 == 0) goto L_0x1055
+            if (r0 == 0) goto L_0x1051
             r0 = 0
             r4 = 0
             r5 = 0
@@ -4114,55 +4112,55 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r9 = 0
             r12 = 0
             r13 = 1
-            goto L_0x1074
-        L_0x1055:
+            goto L_0x1070
+        L_0x1051:
             java.lang.String r0 = r46.getAction()
             java.lang.String r4 = "org.tmessages.openlocations"
             boolean r0 = r0.equals(r4)
-            if (r0 == 0) goto L_0x106c
+            if (r0 == 0) goto L_0x1068
             r0 = 0
             r4 = 0
             r5 = 0
             r7 = 1
-            goto L_0x1070
-        L_0x1066:
+            goto L_0x106c
+        L_0x1062:
             r36 = r8
             r6 = r11
             r1 = r14
             r2 = r15
             r3 = 0
-        L_0x106c:
+        L_0x1068:
             r0 = 0
             r4 = 0
             r5 = 0
             r7 = 0
-        L_0x1070:
+        L_0x106c:
             r8 = 0
-        L_0x1071:
+        L_0x106d:
             r9 = 0
-        L_0x1072:
+        L_0x106e:
             r12 = 0
-        L_0x1073:
+        L_0x106f:
             r13 = 0
-        L_0x1074:
+        L_0x1070:
             r43 = 0
-        L_0x1076:
+        L_0x1072:
             int r10 = r2.currentAccount
             org.telegram.messenger.UserConfig r10 = org.telegram.messenger.UserConfig.getInstance(r10)
             boolean r10 = r10.isClientActivated()
-            if (r10 == 0) goto L_0x1391
-            if (r12 == 0) goto L_0x10cf
+            if (r10 == 0) goto L_0x138d
+            if (r12 == 0) goto L_0x10cb
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r5 = "user_id"
             r0.putInt(r5, r12)
-            if (r4 == 0) goto L_0x1095
+            if (r4 == 0) goto L_0x1091
             java.lang.String r5 = "message_id"
             r0.putInt(r5, r4)
-        L_0x1095:
+        L_0x1091:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = mainFragmentsStack
             boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x10b8
+            if (r4 != 0) goto L_0x10b4
             r4 = r6[r3]
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r5 = mainFragmentsStack
@@ -4172,11 +4170,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Object r5 = r5.get(r6)
             org.telegram.ui.ActionBar.BaseFragment r5 = (org.telegram.ui.ActionBar.BaseFragment) r5
             boolean r4 = r4.checkCanOpenChat(r0, r5)
-            if (r4 == 0) goto L_0x10cd
-            goto L_0x10b9
-        L_0x10b8:
+            if (r4 == 0) goto L_0x10c9
+            goto L_0x10b5
+        L_0x10b4:
             r10 = 1
-        L_0x10b9:
+        L_0x10b5:
             org.telegram.ui.ChatActivity r12 = new org.telegram.ui.ChatActivity
             r12.<init>(r0)
             org.telegram.ui.ActionBar.ActionBarLayout r11 = r2.actionBarLayout
@@ -4185,27 +4183,27 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15 = 1
             r16 = 0
             boolean r0 = r11.presentFragment(r12, r13, r14, r15, r16)
-            if (r0 == 0) goto L_0x10cd
-        L_0x10cb:
+            if (r0 == 0) goto L_0x10c9
+        L_0x10c7:
             r13 = 1
-            goto L_0x1133
-        L_0x10cd:
+            goto L_0x112f
+        L_0x10c9:
             r13 = 0
-            goto L_0x1133
-        L_0x10cf:
+            goto L_0x112f
+        L_0x10cb:
             r10 = 1
-            if (r0 == 0) goto L_0x1117
+            if (r0 == 0) goto L_0x1113
             android.os.Bundle r5 = new android.os.Bundle
             r5.<init>()
             java.lang.String r7 = "chat_id"
             r5.putInt(r7, r0)
-            if (r4 == 0) goto L_0x10e3
+            if (r4 == 0) goto L_0x10df
             java.lang.String r0 = "message_id"
             r5.putInt(r0, r4)
-        L_0x10e3:
+        L_0x10df:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x1104
+            if (r0 != 0) goto L_0x1100
             r0 = r6[r3]
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = mainFragmentsStack
@@ -4214,8 +4212,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Object r4 = r4.get(r6)
             org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
             boolean r0 = r0.checkCanOpenChat(r5, r4)
-            if (r0 == 0) goto L_0x10cd
-        L_0x1104:
+            if (r0 == 0) goto L_0x10c9
+        L_0x1100:
             org.telegram.ui.ChatActivity r12 = new org.telegram.ui.ChatActivity
             r12.<init>(r5)
             org.telegram.ui.ActionBar.ActionBarLayout r11 = r2.actionBarLayout
@@ -4224,10 +4222,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15 = 1
             r16 = 0
             boolean r0 = r11.presentFragment(r12, r13, r14, r15, r16)
-            if (r0 == 0) goto L_0x10cd
-            goto L_0x10cb
-        L_0x1117:
-            if (r5 == 0) goto L_0x1138
+            if (r0 == 0) goto L_0x10c9
+            goto L_0x10c7
+        L_0x1113:
+            if (r5 == 0) goto L_0x1134
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r4 = "enc_id"
@@ -4240,46 +4238,46 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15 = 1
             r16 = 0
             boolean r13 = r11.presentFragment(r12, r13, r14, r15, r16)
-        L_0x1133:
+        L_0x112f:
             r0 = r47
             r4 = 0
-            goto L_0x1396
-        L_0x1138:
-            if (r43 == 0) goto L_0x1170
+            goto L_0x1392
+        L_0x1134:
+            if (r43 == 0) goto L_0x116c
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x1146
+            if (r0 != 0) goto L_0x1142
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             r0.removeAllFragments()
-            goto L_0x116e
-        L_0x1146:
+            goto L_0x116a
+        L_0x1142:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x116e
-        L_0x1150:
+            if (r0 != 0) goto L_0x116a
+        L_0x114c:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
             int r0 = r0 - r10
-            if (r0 <= 0) goto L_0x1169
+            if (r0 <= 0) goto L_0x1165
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r0.fragmentsStack
             java.lang.Object r4 = r4.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
             r0.removeFragmentFromStack((org.telegram.ui.ActionBar.BaseFragment) r4)
-            goto L_0x1150
-        L_0x1169:
+            goto L_0x114c
+        L_0x1165:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             r0.closeLastFragment(r3)
-        L_0x116e:
+        L_0x116a:
             r0 = 0
-            goto L_0x1190
-        L_0x1170:
-            if (r13 == 0) goto L_0x1193
+            goto L_0x118c
+        L_0x116c:
+            if (r13 == 0) goto L_0x118f
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x118e
+            if (r0 != 0) goto L_0x118a
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             java.lang.Object r0 = r0.get(r3)
@@ -4287,17 +4285,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Components.AudioPlayerAlert r4 = new org.telegram.ui.Components.AudioPlayerAlert
             r4.<init>(r2)
             r0.showDialog(r4)
-        L_0x118e:
+        L_0x118a:
             r0 = r47
-        L_0x1190:
+        L_0x118c:
             r4 = 0
-            goto L_0x1395
-        L_0x1193:
-            if (r7 == 0) goto L_0x11b7
+            goto L_0x1391
+        L_0x118f:
+            if (r7 == 0) goto L_0x11b3
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x118e
+            if (r0 != 0) goto L_0x118a
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             java.lang.Object r0 = r0.get(r3)
@@ -4307,66 +4305,66 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5.<init>(r6)
             r4.<init>(r2, r5)
             r0.showDialog(r4)
-            goto L_0x118e
-        L_0x11b7:
+            goto L_0x118a
+        L_0x11b3:
             java.lang.String r0 = r2.videoPath
-            if (r0 != 0) goto L_0x125a
+            if (r0 != 0) goto L_0x1256
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r0 = r2.photoPathsArray
-            if (r0 != 0) goto L_0x125a
+            if (r0 != 0) goto L_0x1256
             java.lang.String r0 = r2.sendingText
-            if (r0 != 0) goto L_0x125a
+            if (r0 != 0) goto L_0x1256
             java.util.ArrayList<java.lang.String> r0 = r2.documentsPathsArray
-            if (r0 != 0) goto L_0x125a
+            if (r0 != 0) goto L_0x1256
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r0 = r2.contactsToSend
-            if (r0 != 0) goto L_0x125a
+            if (r0 != 0) goto L_0x1256
             java.util.ArrayList<android.net.Uri> r0 = r2.documentsUrisArray
-            if (r0 == 0) goto L_0x11d1
-            goto L_0x125a
-        L_0x11d1:
-            if (r8 == 0) goto L_0x121b
-            if (r8 != r10) goto L_0x11db
+            if (r0 == 0) goto L_0x11cd
+            goto L_0x1256
+        L_0x11cd:
+            if (r8 == 0) goto L_0x1217
+            if (r8 != r10) goto L_0x11d7
             org.telegram.ui.SettingsActivity r7 = new org.telegram.ui.SettingsActivity
             r7.<init>()
-            goto L_0x11f7
-        L_0x11db:
+            goto L_0x11f3
+        L_0x11d7:
             r4 = 2
-            if (r8 != r4) goto L_0x11e4
+            if (r8 != r4) goto L_0x11e0
             org.telegram.ui.ThemeActivity r7 = new org.telegram.ui.ThemeActivity
             r7.<init>(r3)
-            goto L_0x11f7
-        L_0x11e4:
+            goto L_0x11f3
+        L_0x11e0:
             r4 = 3
-            if (r8 != r4) goto L_0x11ed
+            if (r8 != r4) goto L_0x11e9
             org.telegram.ui.SessionsActivity r7 = new org.telegram.ui.SessionsActivity
             r7.<init>(r3)
-            goto L_0x11f7
-        L_0x11ed:
+            goto L_0x11f3
+        L_0x11e9:
             r0 = 4
-            if (r8 != r0) goto L_0x11f6
+            if (r8 != r0) goto L_0x11f2
             org.telegram.ui.FiltersSetupActivity r7 = new org.telegram.ui.FiltersSetupActivity
             r7.<init>()
-            goto L_0x11f7
-        L_0x11f6:
+            goto L_0x11f3
+        L_0x11f2:
             r7 = 0
-        L_0x11f7:
+        L_0x11f3:
             org.telegram.ui.-$$Lambda$LaunchActivity$YC0TQSCzjX6yEZP4KwCgFQIY6u8 r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$YC0TQSCzjX6yEZP4KwCgFQIY6u8
             r0.<init>(r7)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1215
+            if (r0 == 0) goto L_0x1211
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.rightActionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r3, r3)
-            goto L_0x1251
-        L_0x1215:
+            goto L_0x124d
+        L_0x1211:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r10, r3)
-            goto L_0x1251
-        L_0x121b:
-            if (r9 == 0) goto L_0x1257
+            goto L_0x124d
+        L_0x1217:
+            if (r9 == 0) goto L_0x1253
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r4 = "destroyAfterSelect"
@@ -4380,37 +4378,37 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r16 = 0
             r11.presentFragment(r12, r13, r14, r15, r16)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x124c
+            if (r0 == 0) goto L_0x1248
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.rightActionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r3, r3)
-            goto L_0x1251
-        L_0x124c:
+            goto L_0x124d
+        L_0x1248:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r10, r3)
-        L_0x1251:
+        L_0x124d:
             r0 = r47
             r4 = 0
             r13 = 1
-            goto L_0x1396
-        L_0x1257:
+            goto L_0x1392
+        L_0x1253:
             r4 = 0
-            goto L_0x1393
-        L_0x125a:
+            goto L_0x138f
+        L_0x1256:
             r4 = 3
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x126e
+            if (r0 != 0) goto L_0x126a
             r0 = r6[r3]
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r5 = org.telegram.messenger.NotificationCenter.closeChats
             java.lang.Object[] r6 = new java.lang.Object[r3]
             r0.postNotificationName(r5, r6)
-        L_0x126e:
+        L_0x126a:
             int r0 = (r21 > r36 ? 1 : (r21 == r36 ? 0 : -1))
-            if (r0 != 0) goto L_0x1380
+            if (r0 != 0) goto L_0x137c
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r5 = "onlySelect"
@@ -4420,152 +4418,152 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "allowSwitchAccount"
             r0.putBoolean(r4, r10)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r4 = r2.contactsToSend
-            if (r4 == 0) goto L_0x12ad
+            if (r4 == 0) goto L_0x12a9
             int r4 = r4.size()
-            if (r4 == r10) goto L_0x12c9
-            r4 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+            if (r4 == r10) goto L_0x12c5
+            r4 = 2131626698(0x7f0e0aca, float:1.888064E38)
             java.lang.String r5 = "SendContactToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626656(0x7f0e0aa0, float:1.8880554E38)
+            r4 = 2131626676(0x7f0e0ab4, float:1.8880595E38)
             java.lang.String r5 = "SendContactToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
             r0.putString(r5, r4)
-            goto L_0x12c9
-        L_0x12ad:
-            r4 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+            goto L_0x12c5
+        L_0x12a9:
+            r4 = 2131626698(0x7f0e0aca, float:1.888064E38)
             java.lang.String r5 = "SendMessagesToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626677(0x7f0e0ab5, float:1.8880597E38)
+            r4 = 2131626697(0x7f0e0ac9, float:1.8880638E38)
             java.lang.String r5 = "SendMessagesToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
             r0.putString(r5, r4)
-        L_0x12c9:
+        L_0x12c5:
             org.telegram.ui.DialogsActivity r12 = new org.telegram.ui.DialogsActivity
             r12.<init>(r0)
             r12.setDelegate(r2)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x12f6
+            if (r0 == 0) goto L_0x12f2
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
-            if (r0 <= 0) goto L_0x12f4
+            if (r0 <= 0) goto L_0x12f0
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r4 = r0.size()
             int r4 = r4 - r10
             java.lang.Object r0 = r0.get(r4)
             boolean r0 = r0 instanceof org.telegram.ui.DialogsActivity
-            if (r0 == 0) goto L_0x12f4
-        L_0x12f2:
+            if (r0 == 0) goto L_0x12f0
+        L_0x12ee:
             r13 = 1
-            goto L_0x1312
-        L_0x12f4:
+            goto L_0x130e
+        L_0x12f0:
             r13 = 0
-            goto L_0x1312
-        L_0x12f6:
+            goto L_0x130e
+        L_0x12f2:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
-            if (r0 <= r10) goto L_0x12f4
+            if (r0 <= r10) goto L_0x12f0
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r4 = r0.size()
             int r4 = r4 - r10
             java.lang.Object r0 = r0.get(r4)
             boolean r0 = r0 instanceof org.telegram.ui.DialogsActivity
-            if (r0 == 0) goto L_0x12f4
-            goto L_0x12f2
-        L_0x1312:
+            if (r0 == 0) goto L_0x12f0
+            goto L_0x12ee
+        L_0x130e:
             org.telegram.ui.ActionBar.ActionBarLayout r11 = r2.actionBarLayout
             r14 = 1
             r15 = 1
             r16 = 0
             r11.presentFragment(r12, r13, r14, r15, r16)
             boolean r0 = org.telegram.ui.SecretMediaViewer.hasInstance()
-            if (r0 == 0) goto L_0x1333
+            if (r0 == 0) goto L_0x132f
             org.telegram.ui.SecretMediaViewer r0 = org.telegram.ui.SecretMediaViewer.getInstance()
             boolean r0 = r0.isVisible()
-            if (r0 == 0) goto L_0x1333
+            if (r0 == 0) goto L_0x132f
             org.telegram.ui.SecretMediaViewer r0 = org.telegram.ui.SecretMediaViewer.getInstance()
             r0.closePhoto(r3, r3)
-            goto L_0x1362
-        L_0x1333:
+            goto L_0x135e
+        L_0x132f:
             boolean r0 = org.telegram.ui.PhotoViewer.hasInstance()
-            if (r0 == 0) goto L_0x134b
+            if (r0 == 0) goto L_0x1347
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
             boolean r0 = r0.isVisible()
-            if (r0 == 0) goto L_0x134b
+            if (r0 == 0) goto L_0x1347
             org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.getInstance()
             r0.closePhoto(r3, r10)
-            goto L_0x1362
-        L_0x134b:
+            goto L_0x135e
+        L_0x1347:
             boolean r0 = org.telegram.ui.ArticleViewer.hasInstance()
-            if (r0 == 0) goto L_0x1362
+            if (r0 == 0) goto L_0x135e
             org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.getInstance()
             boolean r0 = r0.isVisible()
-            if (r0 == 0) goto L_0x1362
+            if (r0 == 0) goto L_0x135e
             org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.getInstance()
             r0.close(r3, r10)
-        L_0x1362:
+        L_0x135e:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r3, r3)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1379
+            if (r0 == 0) goto L_0x1375
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.rightActionBarLayout
             r0.showLastFragment()
-            goto L_0x1251
-        L_0x1379:
+            goto L_0x124d
+        L_0x1375:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r10, r3)
-            goto L_0x1251
-        L_0x1380:
+            goto L_0x124d
+        L_0x137c:
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.lang.Long r4 = java.lang.Long.valueOf(r21)
             r0.add(r4)
             r4 = 0
             r2.didSelectDialogs(r4, r0, r4, r3)
-            goto L_0x1393
-        L_0x1391:
+            goto L_0x138f
+        L_0x138d:
             r4 = 0
             r10 = 1
-        L_0x1393:
+        L_0x138f:
             r0 = r47
-        L_0x1395:
+        L_0x1391:
             r13 = 0
-        L_0x1396:
-            if (r13 != 0) goto L_0x1434
-            if (r0 != 0) goto L_0x1434
+        L_0x1392:
+            if (r13 != 0) goto L_0x1430
+            if (r0 != 0) goto L_0x1430
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x13e5
+            if (r0 == 0) goto L_0x13e1
             int r0 = r2.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             boolean r0 = r0.isClientActivated()
-            if (r0 != 0) goto L_0x13c6
+            if (r0 != 0) goto L_0x13c2
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x141f
+            if (r0 == 0) goto L_0x141b
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             org.telegram.ui.LoginActivity r5 = new org.telegram.ui.LoginActivity
             r5.<init>()
             r0.addFragmentToStack(r5)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r3, r3)
-            goto L_0x141f
-        L_0x13c6:
+            goto L_0x141b
+        L_0x13c2:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x141f
+            if (r0 == 0) goto L_0x141b
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
             r0.<init>(r4)
             org.telegram.ui.Components.RecyclerListView r5 = r2.sideMenu
@@ -4574,24 +4572,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5.addFragmentToStack(r0)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r10, r3)
-            goto L_0x141f
-        L_0x13e5:
+            goto L_0x141b
+        L_0x13e1:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x141f
+            if (r0 == 0) goto L_0x141b
             int r0 = r2.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             boolean r0 = r0.isClientActivated()
-            if (r0 != 0) goto L_0x140b
+            if (r0 != 0) goto L_0x1407
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             org.telegram.ui.LoginActivity r5 = new org.telegram.ui.LoginActivity
             r5.<init>()
             r0.addFragmentToStack(r5)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r3, r3)
-            goto L_0x141f
-        L_0x140b:
+            goto L_0x141b
+        L_0x1407:
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
             r0.<init>(r4)
             org.telegram.ui.Components.RecyclerListView r5 = r2.sideMenu
@@ -4600,16 +4598,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5.addFragmentToStack(r0)
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r2.drawerLayoutContainer
             r0.setAllowOpenDrawer(r10, r3)
-        L_0x141f:
+        L_0x141b:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.actionBarLayout
             r0.showLastFragment()
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1434
+            if (r0 == 0) goto L_0x1430
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.layersActionBarLayout
             r0.showLastFragment()
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.rightActionBarLayout
             r0.showLastFragment()
-        L_0x1434:
+        L_0x1430:
             r1.setAction(r4)
             return r13
         */
@@ -4694,7 +4692,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x005b:
             r4 = r15
             r15 = r13
-            r7 = 2131625991(0x7f0e0807, float:1.8879206E38)
+            r7 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r8 = "OK"
             r10 = 0
             r11 = 1
@@ -4713,11 +4711,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0081:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r4)
-            r1 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r1 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626027(0x7f0e082b, float:1.8879279E38)
+            r1 = 2131626042(0x7f0e083a, float:1.887931E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             r2[r12] = r36
             java.lang.String r3 = "OtherLoginCode"
@@ -4733,11 +4731,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r37 == 0) goto L_0x00db
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r4)
-            r1 = 2131624308(0x7f0e0174, float:1.8875792E38)
+            r1 = 2131624312(0x7f0e0178, float:1.88758E38)
             java.lang.String r2 = "AuthAnotherClient"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131624317(0x7f0e017d, float:1.887581E38)
+            r1 = 2131624321(0x7f0e0181, float:1.8875818E38)
             java.lang.String r2 = "AuthAnotherClientUrl"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
@@ -5123,12 +5121,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "cantSendToChannels"
             r3.putBoolean(r4, r6)
             r3.putInt(r8, r6)
-            r4 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+            r4 = 2131626682(0x7f0e0aba, float:1.8880607E38)
             java.lang.String r8 = "SendGameToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             java.lang.String r8 = "selectAlertString"
             r3.putString(r8, r4)
-            r4 = 2131626661(0x7f0e0aa5, float:1.8880564E38)
+            r4 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
             java.lang.String r8 = "SendGameToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             java.lang.String r8 = "selectAlertStringGroup"
@@ -5243,7 +5241,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4.putBoolean(r9, r6)
             r5 = 2
             r4.putInt(r8, r5)
-            r8 = 2131624144(0x7f0e00d0, float:1.887546E38)
+            r8 = 2131624146(0x7f0e00d2, float:1.8875463E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             java.lang.String r9 = org.telegram.messenger.UserObject.getUserName(r0)
             r5[r7] = r9
@@ -5262,7 +5260,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x024f
         L_0x0190:
             java.lang.String r0 = "BotCantJoinGroups"
-            r2 = 2131624440(0x7f0e01f8, float:1.887606E38)
+            r2 = 2131624444(0x7f0e01fc, float:1.8876068E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x01a1 }
             android.widget.Toast r0 = android.widget.Toast.makeText(r13, r0, r7)     // Catch:{ Exception -> 0x01a1 }
             r0.show()     // Catch:{ Exception -> 0x01a1 }
@@ -5377,7 +5375,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0276:
             r10 = r21
             java.lang.String r0 = "NoUsernameFound"
-            r2 = 2131625833(0x7f0e0769, float:1.8878885E38)
+            r2 = 2131625848(0x7f0e0778, float:1.8878916E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0289 }
             android.widget.Toast r0 = android.widget.Toast.makeText(r13, r0, r7)     // Catch:{ Exception -> 0x0289 }
             r0.show()     // Catch:{ Exception -> 0x0289 }
@@ -5563,7 +5561,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00a9:
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r11.<init>((android.content.Context) r9)
-            r12 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r12 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r14 = "AppName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r14, r12)
             r11.setTitle(r12)
@@ -5571,18 +5569,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r12 = "FLOOD_WAIT"
             boolean r10 = r10.startsWith(r12)
             if (r10 == 0) goto L_0x00d1
-            r10 = 2131625266(0x7f0e0532, float:1.8877735E38)
+            r10 = 2131625280(0x7f0e0540, float:1.8877763E38)
             java.lang.String r12 = "FloodWait"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
             goto L_0x00dd
         L_0x00d1:
-            r10 = 2131625501(0x7f0e061d, float:1.8878212E38)
+            r10 = 2131625515(0x7f0e062b, float:1.887824E38)
             java.lang.String r12 = "JoinToGroupErrorNotExist"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
         L_0x00dd:
-            r10 = 2131625991(0x7f0e0807, float:1.8879206E38)
+            r10 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r12 = "OK"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setPositiveButton(r10, r0)
@@ -5941,7 +5939,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0049:
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
-            r10 = 2131625067(0x7f0e046b, float:1.8877331E38)
+            r10 = 2131625081(0x7f0e0479, float:1.887736E38)
             java.lang.String r11 = "ErrorOccurred"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -6067,11 +6065,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
         L_0x008e:
-            r5 = 2131626938(0x7f0e0bba, float:1.8881126E38)
+            r5 = 2131626961(0x7f0e0bd1, float:1.8881173E38)
             java.lang.String r6 = "Theme"
             if (r0 != r1) goto L_0x00aa
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131626958(0x7f0e0bce, float:1.8881167E38)
+            r6 = 2131626981(0x7f0e0be5, float:1.8881214E38)
             java.lang.String r7 = "ThemeNotSupported"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -6079,7 +6077,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00be
         L_0x00aa:
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131626957(0x7f0e0bcd, float:1.8881165E38)
+            r6 = 2131626980(0x7f0e0be4, float:1.8881212E38)
             java.lang.String r7 = "ThemeNotFound"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -6419,7 +6417,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 } else {
                     ArrayList<BaseFragment> arrayList11 = mainFragmentsStack;
                     PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(arrayList11.get(arrayList11.size() - 1), (ContactsController.Contact) null, (TLRPC$User) null, this.contactsToSendUri, (File) null, (String) null);
-                    phonebookShareAlert.setDelegate(new PhonebookSelectShareAlert.PhonebookShareAlertDelegate(chatActivity, arrayList2, currentAccount2) {
+                    phonebookShareAlert.setDelegate(new ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate(chatActivity, arrayList2, currentAccount2) {
                         private final /* synthetic */ ChatActivity f$1;
                         private final /* synthetic */ ArrayList f$2;
                         private final /* synthetic */ int f$3;
@@ -6478,6 +6476,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.openArticle);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.hasNewContactsToImport);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.needShowPlayServicesAlert);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailToLoad);
             }
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needShowAlert);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
@@ -6815,7 +6816,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: type inference failed for: r1v9 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0427  */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0426  */
     /* JADX WARNING: Removed duplicated region for block: B:230:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int r13, int r14, java.lang.Object... r15) {
@@ -6824,23 +6825,23 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r0 = org.telegram.messenger.NotificationCenter.appDidLogout
             if (r13 != r0) goto L_0x0009
             r12.switchToAvailableAccountOrLogout()
-            goto L_0x056a
+            goto L_0x0569
         L_0x0009:
             int r0 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
             r1 = 0
             if (r13 != r0) goto L_0x001a
             r13 = r15[r1]
-            if (r13 == r12) goto L_0x056a
+            if (r13 == r12) goto L_0x0569
             r12.onFinish()
             r12.finish()
-            goto L_0x056a
+            goto L_0x0569
         L_0x001a:
             int r0 = org.telegram.messenger.NotificationCenter.didUpdateConnectionState
             if (r13 != r0) goto L_0x0049
             org.telegram.tgnet.ConnectionsManager r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r14)
             int r13 = r13.getConnectionState()
             int r15 = r12.currentConnectionState
-            if (r15 == r13) goto L_0x056a
+            if (r15 == r13) goto L_0x0569
             boolean r15 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r15 == 0) goto L_0x0042
             java.lang.StringBuilder r15 = new java.lang.StringBuilder
@@ -6853,22 +6854,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0042:
             r12.currentConnectionState = r13
             r12.updateCurrentConnectionState(r14)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0049:
             int r0 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged
             if (r13 != r0) goto L_0x0054
             org.telegram.ui.Adapters.DrawerLayoutAdapter r13 = r12.drawerLayoutAdapter
             r13.notifyDataSetChanged()
-            goto L_0x056a
+            goto L_0x0569
         L_0x0054:
             int r0 = org.telegram.messenger.NotificationCenter.needShowAlert
-            r2 = 2131624484(0x7f0e0224, float:1.887615E38)
+            r2 = 2131624489(0x7f0e0229, float:1.887616E38)
             java.lang.String r3 = "Cancel"
-            r4 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r4 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r5 = "AppName"
             r6 = 3
             r7 = 2
-            r8 = 2131625991(0x7f0e0807, float:1.8879206E38)
+            r8 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -6897,7 +6898,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r1 == r7) goto L_0x00b2
             int r1 = r13.intValue()
             if (r1 == r6) goto L_0x00b2
-            r1 = 2131625731(0x7f0e0703, float:1.8878678E38)
+            r1 = 2131625746(0x7f0e0712, float:1.8878709E38)
             java.lang.String r4 = "MoreInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.-$$Lambda$LaunchActivity$bF2RAMQkjS-XZtlAJEgLJHkP4ac r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$bF2RAMQkjS-XZtlAJEgLJHkP4ac
@@ -6907,7 +6908,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r14 = r13.intValue()
             r1 = 5
             if (r14 != r1) goto L_0x00ce
-            r13 = 2131625838(0x7f0e076e, float:1.8878895E38)
+            r13 = 2131625853(0x7f0e077d, float:1.8878926E38)
             java.lang.String r14 = "NobodyLikesSpam3"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6917,7 +6918,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00ce:
             int r14 = r13.intValue()
             if (r14 != 0) goto L_0x00e9
-            r13 = 2131625836(0x7f0e076c, float:1.8878891E38)
+            r13 = 2131625851(0x7f0e077b, float:1.8878922E38)
             java.lang.String r14 = "NobodyLikesSpam1"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6927,7 +6928,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00e9:
             int r14 = r13.intValue()
             if (r14 != r11) goto L_0x0103
-            r13 = 2131625837(0x7f0e076d, float:1.8878893E38)
+            r13 = 2131625852(0x7f0e077c, float:1.8878924E38)
             java.lang.String r14 = "NobodyLikesSpam2"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6947,7 +6948,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r13 == 0) goto L_0x0135
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setPositiveButton(r13, r10)
-            r13 = 2131625594(0x7f0e067a, float:1.88784E38)
+            r13 = 2131625609(0x7f0e0689, float:1.887843E38)
             java.lang.String r14 = "LogOut"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.-$$Lambda$LaunchActivity$zZysRuGcsEomhTOcorktwP65b_E r14 = new org.telegram.ui.-$$Lambda$LaunchActivity$zZysRuGcsEomhTOcorktwP65b_E
@@ -6961,11 +6962,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x013d:
             int r13 = r13.intValue()
             if (r13 != r6) goto L_0x0169
-            r13 = 2131626449(0x7f0e09d1, float:1.8880135E38)
+            r13 = 2131626466(0x7f0e09e2, float:1.888017E38)
             java.lang.String r14 = "Proxy"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setTitle(r13)
-            r13 = 2131627089(0x7f0e0CLASSNAME, float:1.8881433E38)
+            r13 = 2131627114(0x7f0e0c6a, float:1.8881483E38)
             java.lang.String r14 = "UseProxyTelegramError"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6977,7 +6978,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0169:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r13 = mainFragmentsStack
             boolean r13 = r13.isEmpty()
-            if (r13 != 0) goto L_0x056a
+            if (r13 != 0) goto L_0x0569
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r13 = mainFragmentsStack
             int r14 = r13.size()
             int r14 = r14 - r11
@@ -6985,7 +6986,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r13 = (org.telegram.ui.ActionBar.BaseFragment) r13
             org.telegram.ui.ActionBar.AlertDialog r14 = r0.create()
             r13.showDialog(r14)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0187:
             int r0 = org.telegram.messenger.NotificationCenter.wasUnableToFindCurrentLocation
             if (r13 != r0) goto L_0x01dd
@@ -6997,19 +6998,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15.setTitle(r0)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r15.setPositiveButton(r0, r10)
-            r0 = 2131626749(0x7f0e0afd, float:1.8880743E38)
+            r0 = 2131626769(0x7f0e0b11, float:1.8880784E38)
             java.lang.String r1 = "ShareYouLocationUnableManually"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.-$$Lambda$LaunchActivity$q-CXmSfWmpKLmI8IZ1k-863-aIA r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$q-CXmSfWmpKLmI8IZ1k-863-aIA
             r1.<init>(r13, r14)
             r15.setNegativeButton(r0, r1)
-            r13 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r13 = 2131626768(0x7f0e0b10, float:1.8880782E38)
             java.lang.String r14 = "ShareYouLocationUnable"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r15.setMessage(r13)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r13 = mainFragmentsStack
             boolean r13 = r13.isEmpty()
-            if (r13 != 0) goto L_0x056a
+            if (r13 != 0) goto L_0x0569
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r13 = mainFragmentsStack
             int r14 = r13.size()
             int r14 = r14 - r11
@@ -7017,16 +7018,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r13 = (org.telegram.ui.ActionBar.BaseFragment) r13
             org.telegram.ui.ActionBar.AlertDialog r14 = r15.create()
             r13.showDialog(r14)
-            goto L_0x056a
+            goto L_0x0569
         L_0x01dd:
             int r0 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
             if (r13 != r0) goto L_0x01f0
             org.telegram.ui.Components.RecyclerListView r13 = r12.sideMenu
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             android.view.View r13 = r13.getChildAt(r1)
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             r13.invalidate()
-            goto L_0x056a
+            goto L_0x0569
         L_0x01f0:
             int r0 = org.telegram.messenger.NotificationCenter.didSetPasscode
             if (r13 != r0) goto L_0x0226
@@ -7038,21 +7039,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r13 != 0) goto L_0x0211
             android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x020b }
             r13.setFlags(r14, r14)     // Catch:{ Exception -> 0x020b }
-            goto L_0x056a
+            goto L_0x0569
         L_0x020b:
             r13 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0211:
             boolean r13 = org.telegram.messenger.AndroidUtilities.hasFlagSecureFragment()
-            if (r13 != 0) goto L_0x056a
+            if (r13 != 0) goto L_0x0569
             android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x0220 }
             r13.clearFlags(r14)     // Catch:{ Exception -> 0x0220 }
-            goto L_0x056a
+            goto L_0x0569
         L_0x0220:
             r13 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0226:
             int r0 = org.telegram.messenger.NotificationCenter.reloadInterface
             if (r13 != r0) goto L_0x0247
@@ -7068,12 +7069,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = 1
         L_0x0242:
             r12.rebuildAllFragments(r1)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0247:
             int r0 = org.telegram.messenger.NotificationCenter.suggestedLangpack
             if (r13 != r0) goto L_0x0250
             r12.showLanguageAlert(r1)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0250:
             int r0 = org.telegram.messenger.NotificationCenter.openArticle
             if (r13 != r0) goto L_0x0282
@@ -7095,7 +7096,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15 = r15[r11]
             java.lang.String r15 = (java.lang.String) r15
             r13.open(r14, r15)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0282:
             int r0 = org.telegram.messenger.NotificationCenter.hasNewContactsToImport
             if (r13 != r0) goto L_0x0307
@@ -7125,11 +7126,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r5.<init>((android.content.Context) r12)
-            r6 = 2131627057(0x7f0e0CLASSNAME, float:1.8881368E38)
+            r6 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
             java.lang.String r7 = "UpdateContactsTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setTitle(r6)
-            r6 = 2131627056(0x7f0e0CLASSNAME, float:1.8881366E38)
+            r6 = 2131627081(0x7f0e0CLASSNAME, float:1.8881416E38)
             java.lang.String r7 = "UpdateContactsMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setMessage(r6)
@@ -7147,13 +7148,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog r13 = r5.create()
             r4.showDialog(r13)
             r13.setCanceledOnTouchOutside(r1)
-            goto L_0x056a
+            goto L_0x0569
         L_0x0306:
             return
         L_0x0307:
             int r14 = org.telegram.messenger.NotificationCenter.didSetNewTheme
             r0 = 21
-            if (r13 != r14) goto L_0x0367
+            if (r13 != r14) goto L_0x0366
             r13 = r15[r1]
             java.lang.Boolean r13 = (java.lang.Boolean) r13
             boolean r13 = r13.booleanValue()
@@ -7189,83 +7190,83 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
             r13.setBehindKeyboardColor(r14)
             r12.checkSystemBarColors()
-            goto L_0x056a
-        L_0x0367:
+            goto L_0x0569
+        L_0x0366:
             int r14 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
-            if (r13 != r14) goto L_0x0433
+            if (r13 != r14) goto L_0x0432
             int r13 = android.os.Build.VERSION.SDK_INT
-            if (r13 < r0) goto L_0x0407
+            if (r13 < r0) goto L_0x0406
             r13 = r15[r7]
-            if (r13 == 0) goto L_0x0407
+            if (r13 == 0) goto L_0x0406
             android.widget.ImageView r13 = r12.themeSwitchImageView
             int r13 = r13.getVisibility()
-            if (r13 != 0) goto L_0x037c
+            if (r13 != 0) goto L_0x037b
             return
-        L_0x037c:
-            r13 = r15[r7]     // Catch:{ all -> 0x0407 }
-            int[] r13 = (int[]) r13     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r14 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            int r14 = r14.getMeasuredWidth()     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            int r0 = r0.getMeasuredHeight()     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            int r2 = r2.getMeasuredWidth()     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r3 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            int r3 = r3.getMeasuredHeight()     // Catch:{ all -> 0x0407 }
-            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0407 }
-            android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r2, r3, r4)     // Catch:{ all -> 0x0407 }
-            android.graphics.Canvas r3 = new android.graphics.Canvas     // Catch:{ all -> 0x0407 }
-            r3.<init>(r2)     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r4 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            r4.draw(r3)     // Catch:{ all -> 0x0407 }
-            android.widget.ImageView r3 = r12.themeSwitchImageView     // Catch:{ all -> 0x0407 }
-            r3.setImageBitmap(r2)     // Catch:{ all -> 0x0407 }
-            android.widget.ImageView r2 = r12.themeSwitchImageView     // Catch:{ all -> 0x0407 }
-            r2.setVisibility(r1)     // Catch:{ all -> 0x0407 }
-            r2 = r13[r1]     // Catch:{ all -> 0x0407 }
+        L_0x037b:
+            r13 = r15[r7]     // Catch:{ all -> 0x0406 }
+            int[] r13 = (int[]) r13     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r14 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            int r14 = r14.getMeasuredWidth()     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            int r0 = r0.getMeasuredHeight()     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            int r2 = r2.getMeasuredWidth()     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r3 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            int r3 = r3.getMeasuredHeight()     // Catch:{ all -> 0x0406 }
+            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0406 }
+            android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r2, r3, r4)     // Catch:{ all -> 0x0406 }
+            android.graphics.Canvas r3 = new android.graphics.Canvas     // Catch:{ all -> 0x0406 }
+            r3.<init>(r2)     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r4 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            r4.draw(r3)     // Catch:{ all -> 0x0406 }
+            android.widget.ImageView r3 = r12.themeSwitchImageView     // Catch:{ all -> 0x0406 }
+            r3.setImageBitmap(r2)     // Catch:{ all -> 0x0406 }
+            android.widget.ImageView r2 = r12.themeSwitchImageView     // Catch:{ all -> 0x0406 }
+            r2.setVisibility(r1)     // Catch:{ all -> 0x0406 }
+            r2 = r13[r1]     // Catch:{ all -> 0x0406 }
             int r2 = r14 - r2
-            r3 = r13[r1]     // Catch:{ all -> 0x0407 }
+            r3 = r13[r1]     // Catch:{ all -> 0x0406 }
             int r14 = r14 - r3
             int r2 = r2 * r14
-            r14 = r13[r11]     // Catch:{ all -> 0x0407 }
+            r14 = r13[r11]     // Catch:{ all -> 0x0406 }
             int r14 = r0 - r14
-            r3 = r13[r11]     // Catch:{ all -> 0x0407 }
+            r3 = r13[r11]     // Catch:{ all -> 0x0406 }
             int r3 = r0 - r3
             int r14 = r14 * r3
             int r2 = r2 + r14
-            double r2 = (double) r2     // Catch:{ all -> 0x0407 }
-            double r2 = java.lang.Math.sqrt(r2)     // Catch:{ all -> 0x0407 }
-            r14 = r13[r1]     // Catch:{ all -> 0x0407 }
-            r4 = r13[r1]     // Catch:{ all -> 0x0407 }
+            double r2 = (double) r2     // Catch:{ all -> 0x0406 }
+            double r2 = java.lang.Math.sqrt(r2)     // Catch:{ all -> 0x0406 }
+            r14 = r13[r1]     // Catch:{ all -> 0x0406 }
+            r4 = r13[r1]     // Catch:{ all -> 0x0406 }
             int r14 = r14 * r4
-            r4 = r13[r11]     // Catch:{ all -> 0x0407 }
+            r4 = r13[r11]     // Catch:{ all -> 0x0406 }
             int r4 = r0 - r4
-            r5 = r13[r11]     // Catch:{ all -> 0x0407 }
+            r5 = r13[r11]     // Catch:{ all -> 0x0406 }
             int r0 = r0 - r5
             int r4 = r4 * r0
             int r14 = r14 + r4
-            double r4 = (double) r14     // Catch:{ all -> 0x0407 }
-            double r4 = java.lang.Math.sqrt(r4)     // Catch:{ all -> 0x0407 }
-            double r2 = java.lang.Math.max(r2, r4)     // Catch:{ all -> 0x0407 }
-            float r14 = (float) r2     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0407 }
-            r2 = r13[r1]     // Catch:{ all -> 0x0407 }
-            r13 = r13[r11]     // Catch:{ all -> 0x0407 }
+            double r4 = (double) r14     // Catch:{ all -> 0x0406 }
+            double r4 = java.lang.Math.sqrt(r4)     // Catch:{ all -> 0x0406 }
+            double r2 = java.lang.Math.max(r2, r4)     // Catch:{ all -> 0x0406 }
+            float r14 = (float) r2     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r12.drawerLayoutContainer     // Catch:{ all -> 0x0406 }
+            r2 = r13[r1]     // Catch:{ all -> 0x0406 }
+            r13 = r13[r11]     // Catch:{ all -> 0x0406 }
             r3 = 0
-            android.animation.Animator r13 = android.view.ViewAnimationUtils.createCircularReveal(r0, r2, r13, r3, r14)     // Catch:{ all -> 0x0407 }
+            android.animation.Animator r13 = android.view.ViewAnimationUtils.createCircularReveal(r0, r2, r13, r3, r14)     // Catch:{ all -> 0x0406 }
             r2 = 400(0x190, double:1.976E-321)
-            r13.setDuration(r2)     // Catch:{ all -> 0x0407 }
-            android.view.animation.Interpolator r14 = org.telegram.ui.Components.Easings.easeInOutQuad     // Catch:{ all -> 0x0407 }
-            r13.setInterpolator(r14)     // Catch:{ all -> 0x0407 }
-            org.telegram.ui.LaunchActivity$7 r14 = new org.telegram.ui.LaunchActivity$7     // Catch:{ all -> 0x0407 }
-            r14.<init>()     // Catch:{ all -> 0x0407 }
-            r13.addListener(r14)     // Catch:{ all -> 0x0407 }
-            r13.start()     // Catch:{ all -> 0x0407 }
+            r13.setDuration(r2)     // Catch:{ all -> 0x0406 }
+            android.view.animation.Interpolator r14 = org.telegram.ui.Components.Easings.easeInOutQuad     // Catch:{ all -> 0x0406 }
+            r13.setInterpolator(r14)     // Catch:{ all -> 0x0406 }
+            org.telegram.ui.LaunchActivity$7 r14 = new org.telegram.ui.LaunchActivity$7     // Catch:{ all -> 0x0406 }
+            r14.<init>()     // Catch:{ all -> 0x0406 }
+            r13.addListener(r14)     // Catch:{ all -> 0x0406 }
+            r13.start()     // Catch:{ all -> 0x0406 }
             r13 = 1
-            goto L_0x0408
-        L_0x0407:
+            goto L_0x0407
+        L_0x0406:
             r13 = 0
-        L_0x0408:
+        L_0x0407:
             r14 = r15[r1]
             org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r14
             r0 = r15[r11]
@@ -7277,53 +7278,53 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             r1.animateThemedValues(r14, r15, r0, r13)
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x056a
+            if (r1 == 0) goto L_0x0569
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.layersActionBarLayout
             r1.animateThemedValues(r14, r15, r0, r13)
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.rightActionBarLayout
             r1.animateThemedValues(r14, r15, r0, r13)
-            goto L_0x056a
-        L_0x0433:
+            goto L_0x0569
+        L_0x0432:
             int r14 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
-            if (r13 != r14) goto L_0x0464
+            if (r13 != r14) goto L_0x0463
             org.telegram.ui.Components.RecyclerListView r13 = r12.sideMenu
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             r14 = r15[r1]
             java.lang.Integer r14 = (java.lang.Integer) r14
             int r13 = r13.getChildCount()
-        L_0x0443:
-            if (r1 >= r13) goto L_0x056a
+        L_0x0442:
+            if (r1 >= r13) goto L_0x0569
             org.telegram.ui.Components.RecyclerListView r15 = r12.sideMenu
             android.view.View r15 = r15.getChildAt(r1)
             boolean r0 = r15 instanceof org.telegram.ui.Cells.DrawerUserCell
-            if (r0 == 0) goto L_0x0461
+            if (r0 == 0) goto L_0x0460
             r0 = r15
             org.telegram.ui.Cells.DrawerUserCell r0 = (org.telegram.ui.Cells.DrawerUserCell) r0
             int r0 = r0.getAccountNumber()
             int r2 = r14.intValue()
-            if (r0 != r2) goto L_0x0461
+            if (r0 != r2) goto L_0x0460
             r15.invalidate()
-            goto L_0x056a
-        L_0x0461:
+            goto L_0x0569
+        L_0x0460:
             int r1 = r1 + 1
-            goto L_0x0443
-        L_0x0464:
+            goto L_0x0442
+        L_0x0463:
             int r14 = org.telegram.messenger.NotificationCenter.needShowPlayServicesAlert
-            if (r13 != r14) goto L_0x0473
-            r13 = r15[r1]     // Catch:{ all -> 0x056a }
-            com.google.android.gms.common.api.Status r13 = (com.google.android.gms.common.api.Status) r13     // Catch:{ all -> 0x056a }
+            if (r13 != r14) goto L_0x0472
+            r13 = r15[r1]     // Catch:{ all -> 0x0569 }
+            com.google.android.gms.common.api.Status r13 = (com.google.android.gms.common.api.Status) r13     // Catch:{ all -> 0x0569 }
             r14 = 140(0x8c, float:1.96E-43)
-            r13.startResolutionForResult(r12, r14)     // Catch:{ all -> 0x056a }
-            goto L_0x056a
-        L_0x0473:
+            r13.startResolutionForResult(r12, r14)     // Catch:{ all -> 0x0569 }
+            goto L_0x0569
+        L_0x0472:
             int r14 = org.telegram.messenger.NotificationCenter.fileDidLoad
-            if (r13 != r14) goto L_0x0532
+            if (r13 != r14) goto L_0x0531
             java.lang.String r13 = r12.loadingThemeFileName
-            if (r13 == 0) goto L_0x0500
+            if (r13 == 0) goto L_0x04ff
             r14 = r15[r1]
             java.lang.String r14 = (java.lang.String) r14
             boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             r12.loadingThemeFileName = r10
             java.io.File r13 = new java.io.File
             java.io.File r14 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
@@ -7341,14 +7342,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.tgnet.TLRPC$TL_theme r14 = r12.loadingTheme
             java.lang.String r15 = r14.title
             org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = org.telegram.ui.ActionBar.Theme.fillThemeValues(r13, r15, r14)
-            if (r14 == 0) goto L_0x04fb
+            if (r14 == 0) goto L_0x04fa
             java.lang.String r15 = r14.pathToWallpaper
-            if (r15 == 0) goto L_0x04e4
+            if (r15 == 0) goto L_0x04e3
             java.io.File r15 = new java.io.File
             java.lang.String r0 = r14.pathToWallpaper
             r15.<init>(r0)
             boolean r15 = r15.exists()
-            if (r15 != 0) goto L_0x04e4
+            if (r15 != 0) goto L_0x04e3
             org.telegram.tgnet.TLRPC$TL_account_getWallPaper r13 = new org.telegram.tgnet.TLRPC$TL_account_getWallPaper
             r13.<init>()
             org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug r15 = new org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug
@@ -7362,11 +7363,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.<init>(r14)
             r15.sendRequest(r13, r0)
             return
-        L_0x04e4:
+        L_0x04e3:
             org.telegram.tgnet.TLRPC$TL_theme r14 = r12.loadingTheme
             java.lang.String r15 = r14.title
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r13, r15, r14, r11)
-            if (r1 == 0) goto L_0x04fb
+            if (r1 == 0) goto L_0x04fa
             org.telegram.ui.ThemePreviewActivity r13 = new org.telegram.ui.ThemePreviewActivity
             r2 = 1
             r3 = 0
@@ -7375,67 +7376,67 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0 = r13
             r0.<init>(r1, r2, r3, r4, r5)
             r12.lambda$runLinkRequest$30$LaunchActivity(r13)
-        L_0x04fb:
+        L_0x04fa:
             r12.onThemeLoadFinish()
-            goto L_0x056a
-        L_0x0500:
+            goto L_0x0569
+        L_0x04ff:
             java.lang.String r13 = r12.loadingThemeWallpaperName
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             r14 = r15[r1]
             java.lang.String r14 = (java.lang.String) r14
             boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x056a
+            if (r13 == 0) goto L_0x0569
             r12.loadingThemeWallpaperName = r10
             r13 = r15[r11]
             java.io.File r13 = (java.io.File) r13
             boolean r14 = r12.loadingThemeAccent
-            if (r14 == 0) goto L_0x0525
+            if (r14 == 0) goto L_0x0524
             org.telegram.tgnet.TLRPC$TL_theme r13 = r12.loadingTheme
             org.telegram.tgnet.TLRPC$TL_wallPaper r14 = r12.loadingThemeWallpaper
             org.telegram.ui.ActionBar.Theme$ThemeInfo r15 = r12.loadingThemeInfo
             r12.openThemeAccentPreview(r13, r14, r15)
             r12.onThemeLoadFinish()
-            goto L_0x056a
-        L_0x0525:
+            goto L_0x0569
+        L_0x0524:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r14 = r12.loadingThemeInfo
             org.telegram.messenger.DispatchQueue r15 = org.telegram.messenger.Utilities.globalQueue
             org.telegram.ui.-$$Lambda$LaunchActivity$-B6V0WWj11RTU3AcYX0QmqhCwL0 r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$-B6V0WWj11RTU3AcYX0QmqhCwL0
             r0.<init>(r14, r13)
             r15.postRunnable(r0)
-            goto L_0x056a
-        L_0x0532:
+            goto L_0x0569
+        L_0x0531:
             int r14 = org.telegram.messenger.NotificationCenter.fileDidFailToLoad
-            if (r13 != r14) goto L_0x054e
+            if (r13 != r14) goto L_0x054d
             r13 = r15[r1]
             java.lang.String r13 = (java.lang.String) r13
             java.lang.String r14 = r12.loadingThemeFileName
             boolean r14 = r13.equals(r14)
-            if (r14 != 0) goto L_0x054a
+            if (r14 != 0) goto L_0x0549
             java.lang.String r14 = r12.loadingThemeWallpaperName
             boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x056a
-        L_0x054a:
+            if (r13 == 0) goto L_0x0569
+        L_0x0549:
             r12.onThemeLoadFinish()
-            goto L_0x056a
-        L_0x054e:
+            goto L_0x0569
+        L_0x054d:
             int r14 = org.telegram.messenger.NotificationCenter.screenStateChanged
-            if (r13 != r14) goto L_0x0563
+            if (r13 != r14) goto L_0x0562
             boolean r13 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused
-            if (r13 == 0) goto L_0x0557
+            if (r13 == 0) goto L_0x0556
             return
-        L_0x0557:
+        L_0x0556:
             boolean r13 = org.telegram.messenger.ApplicationLoader.isScreenOn
-            if (r13 == 0) goto L_0x055f
+            if (r13 == 0) goto L_0x055e
             r12.onPasscodeResume()
-            goto L_0x056a
-        L_0x055f:
+            goto L_0x0569
+        L_0x055e:
             r12.onPasscodePause()
-            goto L_0x056a
-        L_0x0563:
+            goto L_0x0569
+        L_0x0562:
             int r14 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors
-            if (r13 != r14) goto L_0x056a
+            if (r13 != r14) goto L_0x0569
             r12.checkSystemBarColors()
-        L_0x056a:
+        L_0x0569:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -7641,7 +7642,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0115 }
             r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r9 = 2131624706(0x7f0e0302, float:1.88766E38)
+            r9 = 2131624712(0x7f0e0308, float:1.8876611E38)
             java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
             r7.setTitle(r8)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
@@ -7656,7 +7657,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r13 = "English"
-            r14 = 2131625056(0x7f0e0460, float:1.887731E38)
+            r14 = 2131625070(0x7f0e046e, float:1.8877338E38)
             java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0115 }
             if (r5 == 0) goto L_0x0056
             r13 = r4
@@ -7727,7 +7728,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
             r3.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r5 = 2131624707(0x7f0e0303, float:1.8876601E38)
+            r5 = 2131624713(0x7f0e0309, float:1.8876613E38)
             java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
@@ -7740,7 +7741,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.addView(r3, r0)     // Catch:{ Exception -> 0x0115 }
             r7.setView(r2)     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = "OK"
-            r2 = 2131625991(0x7f0e0807, float:1.8879206E38)
+            r2 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
             org.telegram.ui.-$$Lambda$LaunchActivity$0kAJMcwHL3BemO-ZzCrDhD7Syb0 r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$0kAJMcwHL3BemO-ZzCrDhD7Syb0     // Catch:{ Exception -> 0x0115 }
             r2.<init>(r10)     // Catch:{ Exception -> 0x0115 }

@@ -61,19 +61,24 @@ public class RecyclerAnimationScrollHelper {
             this.recyclerView.setScrollEnabled(false);
             final ArrayList arrayList = new ArrayList();
             this.positionToOldView.clear();
+            final ArrayList arrayList2 = new ArrayList();
             int i4 = 0;
             int i5 = 0;
             for (int i6 = 0; i6 < childCount; i6++) {
                 View childAt = this.recyclerView.getChildAt(0);
                 arrayList.add(childAt);
+                RecyclerView.ViewHolder childViewHolder = this.recyclerView.getChildViewHolder(childAt);
+                if (childViewHolder != null) {
+                    arrayList2.add(childViewHolder);
+                }
                 this.positionToOldView.put(this.layoutManager.getPosition(childAt), childAt);
                 int bottom = childAt.getBottom();
                 int top = childAt.getTop();
-                if (bottom > i4) {
-                    i4 = bottom;
+                if (bottom > i5) {
+                    i5 = bottom;
                 }
-                if (top < i5) {
-                    i5 = top;
+                if (top < i4) {
+                    i4 = top;
                 }
                 if (childAt instanceof ChatMessageCell) {
                     ((ChatMessageCell) childAt).setAnimationRunning(true, true);
@@ -81,9 +86,9 @@ public class RecyclerAnimationScrollHelper {
                 this.recyclerView.removeView(childAt);
             }
             if (z3) {
-                i3 = i4;
+                i3 = i5;
             } else {
-                i3 = this.recyclerView.getHeight() - i5;
+                i3 = this.recyclerView.getHeight() - i4;
             }
             RecyclerView.Adapter adapter = this.recyclerView.getAdapter();
             AnimatableAdapter animatableAdapter = null;
@@ -185,12 +190,16 @@ public class RecyclerAnimationScrollHelper {
                             if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
                                 RecyclerAnimationScrollHelper.this.animationCallback.onEndAnimation();
                             }
+                            Iterator it2 = arrayList2.iterator();
+                            while (it2.hasNext()) {
+                                RecyclerAnimationScrollHelper.this.recyclerView.getRecycledViewPool().putRecycledView((RecyclerView.ViewHolder) it2.next());
+                            }
                             RecyclerAnimationScrollHelper.this.positionToOldView.clear();
                             ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = null;
                         }
                     });
                     RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
-                    RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min((long) (((height / RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight()) + 1) * 200), 1300));
+                    RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min((long) (((((float) height) / ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) + 1.0f) * 200.0f), 1300));
                     RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     RecyclerAnimationScrollHelper.this.animator.start();
                 }
@@ -300,6 +309,12 @@ public class RecyclerAnimationScrollHelper {
             }
             this.rangeRemoved.add(Integer.valueOf(i));
             this.rangeRemoved.add(Integer.valueOf(i2));
+        }
+
+        public void notifyItemRangeChanged(int i, int i2) {
+            if (!this.animationRunning) {
+                super.notifyItemRangeChanged(i, i2);
+            }
         }
 
         public void onAnimationStart() {

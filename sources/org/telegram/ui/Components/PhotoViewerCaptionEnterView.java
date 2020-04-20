@@ -426,6 +426,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     EmojiView.EmojiViewDelegate.CC.$default$onTabOpened(this, i);
                 }
 
+                public /* synthetic */ void showTrendingStickersAlert(TrendingStickersLayout trendingStickersLayout) {
+                    EmojiView.EmojiViewDelegate.CC.$default$showTrendingStickersAlert(this, trendingStickersLayout);
+                }
+
                 public boolean onBackspace() {
                     if (PhotoViewerCaptionEnterView.this.messageEditText.length() == 0) {
                         return false;

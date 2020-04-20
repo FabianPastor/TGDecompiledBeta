@@ -165,7 +165,7 @@ public class LoginActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public SlideView[] views = new SlideView[9];
 
-    private class ProgressView extends View {
+    private static class ProgressView extends View {
         private boolean animating;
         private final RectF boundsRect = new RectF();
         private long duration;
@@ -176,7 +176,7 @@ public class LoginActivity extends BaseFragment {
         private final RectF rect = new RectF();
         private long startTime;
 
-        public ProgressView(LoginActivity loginActivity, Context context) {
+        public ProgressView(Context context) {
             super(context);
             this.paint.setColor(Theme.getColor("login_progressInner"));
             this.paint2.setColor(Theme.getColor("login_progressOuter"));
@@ -267,7 +267,7 @@ public class LoginActivity extends BaseFragment {
             r1 = r29
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             java.lang.String r3 = "AppName"
-            r4 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r4 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r2.setTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
@@ -286,7 +286,7 @@ public class LoginActivity extends BaseFragment {
             r5.setAllowOverlayTitle(r4)
             r5 = 1113587712(0x42600000, float:56.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r7 = 2131165468(0x7var_c, float:1.7945154E38)
+            r7 = 2131165462(0x7var_, float:1.7945142E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItemWithWidth(r4, r7, r6)
             r0.doneItem = r3
             org.telegram.ui.Components.ContextProgressView r3 = new org.telegram.ui.Components.ContextProgressView
@@ -315,7 +315,7 @@ public class LoginActivity extends BaseFragment {
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10)
             r3.addView(r9, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.doneItem
-            r9 = 2131624974(0x7f0e040e, float:1.8877143E38)
+            r9 = 2131624987(0x7f0e041b, float:1.887717E38)
             java.lang.String r12 = "Done"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r3.setContentDescription(r13)
@@ -502,7 +502,7 @@ public class LoginActivity extends BaseFragment {
             r11 = 21
             if (r10 >= r11) goto L_0x0221
             android.content.res.Resources r10 = r29.getResources()
-            r14 = 2131165393(0x7var_d1, float:1.7945002E38)
+            r14 = 2131165387(0x7var_cb, float:1.794499E38)
             android.graphics.drawable.Drawable r10 = r10.getDrawable(r14)
             android.graphics.drawable.Drawable r10 = r10.mutate()
             android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -612,7 +612,7 @@ public class LoginActivity extends BaseFragment {
             r3.setImageResource(r5)
             android.widget.FrameLayout r3 = r0.floatingButtonContainer
             r7 = r14
-            r5 = 2131624974(0x7f0e040e, float:1.8877143E38)
+            r5 = 2131624987(0x7f0e041b, float:1.887717E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r3.setContentDescription(r5)
             android.widget.FrameLayout r3 = r0.floatingButtonContainer
@@ -694,7 +694,7 @@ public class LoginActivity extends BaseFragment {
             r5 = 0
             goto L_0x0392
         L_0x038f:
-            r5 = 2131165438(0x7var_fe, float:1.7945093E38)
+            r5 = 2131165432(0x7var_f8, float:1.794508E38)
         L_0x0392:
             r3.setBackButtonImage(r5)
             org.telegram.ui.Components.SlideView[] r3 = r0.views
@@ -1495,12 +1495,12 @@ public class LoginActivity extends BaseFragment {
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
                 r9 = 5
                 r10 = 3
-                if (r8 == 0) goto L_0x0080
+                if (r8 == 0) goto L_0x007f
                 r8 = 5
-                goto L_0x0081
-            L_0x0080:
+                goto L_0x0080
+            L_0x007f:
                 r8 = 3
-            L_0x0081:
+            L_0x0080:
                 r8 = r8 | r4
                 r5.setGravity(r8)
                 android.widget.TextView r5 = r1.countryButton
@@ -1674,7 +1674,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.TextView r5 = new android.widget.TextView
                 r5.<init>(r0)
                 r1.textView2 = r5
-                r6 = 2131626825(0x7f0e0b49, float:1.8880897E38)
+                r6 = 2131626846(0x7f0e0b5e, float:1.888094E38)
                 java.lang.String r7 = "StartText"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5.setText(r6)
@@ -1687,12 +1687,12 @@ public class LoginActivity extends BaseFragment {
                 r5.setTextSize(r4, r6)
                 android.widget.TextView r5 = r1.textView2
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x025d
+                if (r6 == 0) goto L_0x0259
                 r6 = 5
-                goto L_0x025e
-            L_0x025d:
+                goto L_0x025a
+            L_0x0259:
                 r6 = 3
-            L_0x025e:
+            L_0x025a:
                 r5.setGravity(r6)
                 android.widget.TextView r5 = r1.textView2
                 r6 = 1073741824(0x40000000, float:2.0)
@@ -1704,12 +1704,12 @@ public class LoginActivity extends BaseFragment {
                 r11 = -2
                 r12 = -2
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0279
+                if (r6 == 0) goto L_0x0275
                 r13 = 5
-                goto L_0x027a
-            L_0x0279:
+                goto L_0x0276
+            L_0x0275:
                 r13 = 3
-            L_0x027a:
+            L_0x0276:
                 r14 = 0
                 r15 = 28
                 r16 = 0
@@ -1718,11 +1718,11 @@ public class LoginActivity extends BaseFragment {
                 r1.addView(r5, r6)
                 boolean r5 = r22.newAccount
                 r6 = 2
-                if (r5 == 0) goto L_0x02c5
+                if (r5 == 0) goto L_0x02c1
                 org.telegram.ui.Cells.CheckBoxCell r5 = new org.telegram.ui.Cells.CheckBoxCell
                 r5.<init>(r0, r6)
                 r1.checkBoxCell = r5
-                r0 = 2131626888(0x7f0e0b88, float:1.8881025E38)
+                r0 = 2131626910(0x7f0e0b9e, float:1.888107E38)
                 java.lang.String r7 = "SyncContacts"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r7, r0)
                 boolean r7 = r22.syncContacts
@@ -1742,63 +1742,63 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.ui.LoginActivity$PhoneView$4 r5 = new org.telegram.ui.LoginActivity$PhoneView$4
                 r5.<init>(r2)
                 r0.setOnClickListener(r5)
-            L_0x02c5:
+            L_0x02c1:
                 java.util.HashMap r5 = new java.util.HashMap
                 r5.<init>()
-                java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x031f }
-                java.io.InputStreamReader r7 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x031f }
-                android.content.res.Resources r8 = r21.getResources()     // Catch:{ Exception -> 0x031f }
-                android.content.res.AssetManager r8 = r8.getAssets()     // Catch:{ Exception -> 0x031f }
+                java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x031b }
+                java.io.InputStreamReader r7 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x031b }
+                android.content.res.Resources r8 = r21.getResources()     // Catch:{ Exception -> 0x031b }
+                android.content.res.AssetManager r8 = r8.getAssets()     // Catch:{ Exception -> 0x031b }
                 java.lang.String r9 = "countries.txt"
-                java.io.InputStream r8 = r8.open(r9)     // Catch:{ Exception -> 0x031f }
-                r7.<init>(r8)     // Catch:{ Exception -> 0x031f }
-                r0.<init>(r7)     // Catch:{ Exception -> 0x031f }
-            L_0x02e2:
-                java.lang.String r7 = r0.readLine()     // Catch:{ Exception -> 0x031f }
-                if (r7 == 0) goto L_0x031b
+                java.io.InputStream r8 = r8.open(r9)     // Catch:{ Exception -> 0x031b }
+                r7.<init>(r8)     // Catch:{ Exception -> 0x031b }
+                r0.<init>(r7)     // Catch:{ Exception -> 0x031b }
+            L_0x02de:
+                java.lang.String r7 = r0.readLine()     // Catch:{ Exception -> 0x031b }
+                if (r7 == 0) goto L_0x0317
                 java.lang.String r8 = ";"
-                java.lang.String[] r7 = r7.split(r8)     // Catch:{ Exception -> 0x031f }
-                java.util.ArrayList<java.lang.String> r8 = r1.countriesArray     // Catch:{ Exception -> 0x031f }
-                r9 = r7[r6]     // Catch:{ Exception -> 0x031f }
-                r8.add(r3, r9)     // Catch:{ Exception -> 0x031f }
-                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.countriesMap     // Catch:{ Exception -> 0x031f }
-                r9 = r7[r6]     // Catch:{ Exception -> 0x031f }
-                r11 = r7[r3]     // Catch:{ Exception -> 0x031f }
-                r8.put(r9, r11)     // Catch:{ Exception -> 0x031f }
-                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.codesMap     // Catch:{ Exception -> 0x031f }
-                r9 = r7[r3]     // Catch:{ Exception -> 0x031f }
-                r11 = r7[r6]     // Catch:{ Exception -> 0x031f }
-                r8.put(r9, r11)     // Catch:{ Exception -> 0x031f }
-                int r8 = r7.length     // Catch:{ Exception -> 0x031f }
-                if (r8 <= r10) goto L_0x0313
-                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.phoneFormatMap     // Catch:{ Exception -> 0x031f }
-                r9 = r7[r3]     // Catch:{ Exception -> 0x031f }
-                r11 = r7[r10]     // Catch:{ Exception -> 0x031f }
-                r8.put(r9, r11)     // Catch:{ Exception -> 0x031f }
-            L_0x0313:
-                r8 = r7[r4]     // Catch:{ Exception -> 0x031f }
-                r7 = r7[r6]     // Catch:{ Exception -> 0x031f }
-                r5.put(r8, r7)     // Catch:{ Exception -> 0x031f }
-                goto L_0x02e2
+                java.lang.String[] r7 = r7.split(r8)     // Catch:{ Exception -> 0x031b }
+                java.util.ArrayList<java.lang.String> r8 = r1.countriesArray     // Catch:{ Exception -> 0x031b }
+                r9 = r7[r6]     // Catch:{ Exception -> 0x031b }
+                r8.add(r3, r9)     // Catch:{ Exception -> 0x031b }
+                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.countriesMap     // Catch:{ Exception -> 0x031b }
+                r9 = r7[r6]     // Catch:{ Exception -> 0x031b }
+                r11 = r7[r3]     // Catch:{ Exception -> 0x031b }
+                r8.put(r9, r11)     // Catch:{ Exception -> 0x031b }
+                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.codesMap     // Catch:{ Exception -> 0x031b }
+                r9 = r7[r3]     // Catch:{ Exception -> 0x031b }
+                r11 = r7[r6]     // Catch:{ Exception -> 0x031b }
+                r8.put(r9, r11)     // Catch:{ Exception -> 0x031b }
+                int r8 = r7.length     // Catch:{ Exception -> 0x031b }
+                if (r8 <= r10) goto L_0x030f
+                java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.phoneFormatMap     // Catch:{ Exception -> 0x031b }
+                r9 = r7[r3]     // Catch:{ Exception -> 0x031b }
+                r11 = r7[r10]     // Catch:{ Exception -> 0x031b }
+                r8.put(r9, r11)     // Catch:{ Exception -> 0x031b }
+            L_0x030f:
+                r8 = r7[r4]     // Catch:{ Exception -> 0x031b }
+                r7 = r7[r6]     // Catch:{ Exception -> 0x031b }
+                r5.put(r8, r7)     // Catch:{ Exception -> 0x031b }
+                goto L_0x02de
+            L_0x0317:
+                r0.close()     // Catch:{ Exception -> 0x031b }
+                goto L_0x031f
             L_0x031b:
-                r0.close()     // Catch:{ Exception -> 0x031f }
-                goto L_0x0323
-            L_0x031f:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0323:
+            L_0x031f:
                 java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
                 org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r3 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
                 java.util.Collections.sort(r0, r3)
-                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0335 }
+                android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0331 }
                 java.lang.String r3 = "phone"
-                java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x0335 }
-                android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0335 }
-                goto L_0x0339
-            L_0x0335:
+                java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x0331 }
+                android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0331 }
+                goto L_0x0335
+            L_0x0331:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0339:
+            L_0x0335:
                 org.telegram.tgnet.TLRPC$TL_help_getNearestDc r0 = new org.telegram.tgnet.TLRPC$TL_help_getNearestDc
                 r0.<init>()
                 org.telegram.messenger.AccountInstance r2 = r22.getAccountInstance()
@@ -1809,9 +1809,9 @@ public class LoginActivity extends BaseFragment {
                 r2.sendRequest(r0, r3, r5)
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 int r0 = r0.length()
-                if (r0 != 0) goto L_0x036e
+                if (r0 != 0) goto L_0x036a
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624694(0x7f0e02f6, float:1.8876575E38)
+                r2 = 2131624700(0x7f0e02fc, float:1.8876587E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -1819,20 +1819,20 @@ public class LoginActivity extends BaseFragment {
                 r2 = 0
                 r0.setHintText(r2)
                 r1.countryState = r4
-            L_0x036e:
+            L_0x036a:
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 int r0 = r0.length()
-                if (r0 == 0) goto L_0x0385
+                if (r0 == 0) goto L_0x0381
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
                 r0.requestFocus()
                 org.telegram.ui.Components.HintEditText r0 = r1.phoneField
                 int r2 = r0.length()
                 r0.setSelection(r2)
-                goto L_0x038a
-            L_0x0385:
+                goto L_0x0386
+            L_0x0381:
                 org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
                 r0.requestFocus()
-            L_0x038a:
+            L_0x0386:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.PhoneView.<init>(org.telegram.ui.LoginActivity, android.content.Context):void");
@@ -2413,12 +2413,12 @@ public class LoginActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x007d
+                if (r10 == 0) goto L_0x007b
                 r10 = 5
-                goto L_0x007e
-            L_0x007d:
+                goto L_0x007c
+            L_0x007b:
                 r10 = 3
-            L_0x007e:
+            L_0x007c:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -2429,34 +2429,34 @@ public class LoginActivity extends BaseFragment {
                 r4.setGravity(r10)
                 int r4 = r0.currentType
                 r13 = -2
-                if (r4 != r12) goto L_0x012c
+                if (r4 != r12) goto L_0x012a
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x009f
+                if (r8 == 0) goto L_0x009d
                 r8 = 5
-                goto L_0x00a0
-            L_0x009f:
+                goto L_0x009e
+            L_0x009d:
                 r8 = 3
-            L_0x00a0:
+            L_0x009e:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00b0
+                if (r8 == 0) goto L_0x00ae
                 r8 = 5
-                goto L_0x00b1
-            L_0x00b0:
+                goto L_0x00af
+            L_0x00ae:
                 r8 = 3
-            L_0x00b1:
+            L_0x00af:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165789(0x7var_d, float:1.7945805E38)
+                r14 = 2131165783(0x7var_, float:1.7945793E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x00fb
+                if (r14 == 0) goto L_0x00f9
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -2470,29 +2470,29 @@ public class LoginActivity extends BaseFragment {
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x00e8
+                if (r16 == 0) goto L_0x00e6
                 r16 = 5
-                goto L_0x00ea
-            L_0x00e8:
+                goto L_0x00e8
+            L_0x00e6:
                 r16 = 3
-            L_0x00ea:
+            L_0x00e8:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x0210
-            L_0x00fb:
+                goto L_0x020e
+            L_0x00f9:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x0106
+                if (r14 == 0) goto L_0x0104
                 r18 = 5
-                goto L_0x0108
-            L_0x0106:
+                goto L_0x0106
+            L_0x0104:
                 r18 = 3
-            L_0x0108:
+            L_0x0106:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -2507,8 +2507,8 @@ public class LoginActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x0210
-            L_0x012c:
+                goto L_0x020e
+            L_0x012a:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -2517,11 +2517,11 @@ public class LoginActivity extends BaseFragment {
                 r0.addView(r4, r14)
                 int r14 = r0.currentType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01ac
+                if (r14 != r3) goto L_0x01aa
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165912(0x7var_d8, float:1.7946055E38)
+                r11 = 2131165905(0x7var_d1, float:1.794604E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -2542,7 +2542,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165910(0x7var_d6, float:1.794605E38)
+                r10 = 2131165903(0x7var_cf, float:1.7946036E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -2554,16 +2554,16 @@ public class LoginActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626695(0x7f0e0ac7, float:1.8880633E38)
+                r8 = 2131626715(0x7f0e0adb, float:1.8880674E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x01ee
-            L_0x01ac:
+                goto L_0x01ec
+            L_0x01aa:
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165911(0x7var_d7, float:1.7946052E38)
+                r10 = 2131165904(0x7var_d0, float:1.7946038E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -2582,11 +2582,11 @@ public class LoginActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626699(0x7f0e0acb, float:1.8880642E38)
+                r8 = 2131626719(0x7f0e0adf, float:1.8880682E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x01ee:
+            L_0x01ec:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -2601,7 +2601,7 @@ public class LoginActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x0210:
+            L_0x020e:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -2612,11 +2612,11 @@ public class LoginActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x0231
+                if (r4 != r12) goto L_0x022f
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x0231:
+            L_0x022f:
                 org.telegram.ui.LoginActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.LoginActivity$LoginActivitySmsView$1
                 r4.<init>(r0, r2, r1)
                 r0.timeText = r4
@@ -2629,30 +2629,30 @@ public class LoginActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x028f
+                if (r4 != r12) goto L_0x028d
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x025e
+                if (r6 == 0) goto L_0x025c
                 r6 = 5
-                goto L_0x025f
-            L_0x025e:
+                goto L_0x025d
+            L_0x025c:
                 r6 = 3
-            L_0x025f:
+            L_0x025d:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.LoginActivity$ProgressView r4 = new org.telegram.ui.LoginActivity$ProgressView
-                r4.<init>(r1, r2)
+                r4.<init>(r2)
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0275
+                if (r6 == 0) goto L_0x0273
                 r11 = 5
-                goto L_0x0276
-            L_0x0275:
+                goto L_0x0274
+            L_0x0273:
                 r11 = 3
-            L_0x0276:
+            L_0x0274:
                 r4.setGravity(r11)
                 org.telegram.ui.LoginActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -2663,8 +2663,8 @@ public class LoginActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02b1
-            L_0x028f:
+                goto L_0x02af
+            L_0x028d:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -2677,7 +2677,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02b1:
+            L_0x02af:
                 org.telegram.ui.LoginActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.LoginActivity$LoginActivitySmsView$2
                 r4.<init>(r0, r2, r1)
                 r0.problemText = r4
@@ -2698,20 +2698,20 @@ public class LoginActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x02f8
+                if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624928(0x7f0e03e0, float:1.887705E38)
+                r2 = 2131624941(0x7f0e03ed, float:1.8877076E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0306
-            L_0x02f8:
+                goto L_0x0303
+            L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624927(0x7f0e03df, float:1.8877048E38)
+                r2 = 2131624940(0x7f0e03ec, float:1.8877074E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0306:
+            L_0x0303:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -3640,7 +3640,7 @@ public class LoginActivity extends BaseFragment {
                                         if (r1 != r4) goto L_0x00a0
                                         org.telegram.ui.LoginActivity$LoginActivitySmsView r1 = org.telegram.ui.LoginActivity.LoginActivitySmsView.this
                                         android.widget.TextView r1 = r1.timeText
-                                        r2 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
+                                        r2 = 2131626834(0x7f0e0b52, float:1.8880915E38)
                                         java.lang.Object[] r3 = new java.lang.Object[r4]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r3[r5] = r0
@@ -3653,7 +3653,7 @@ public class LoginActivity extends BaseFragment {
                                     L_0x0080:
                                         org.telegram.ui.LoginActivity$LoginActivitySmsView r1 = org.telegram.ui.LoginActivity.LoginActivitySmsView.this
                                         android.widget.TextView r1 = r1.timeText
-                                        r2 = 2131624477(0x7f0e021d, float:1.8876135E38)
+                                        r2 = 2131624482(0x7f0e0222, float:1.8876145E38)
                                         java.lang.Object[] r3 = new java.lang.Object[r4]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r3[r5] = r0
@@ -3734,7 +3734,7 @@ public class LoginActivity extends BaseFragment {
                                         if (r0 != r3) goto L_0x0157
                                         org.telegram.ui.LoginActivity$LoginActivitySmsView r0 = org.telegram.ui.LoginActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624479(0x7f0e021f, float:1.8876139E38)
+                                        r1 = 2131624484(0x7f0e0224, float:1.887615E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -3742,7 +3742,7 @@ public class LoginActivity extends BaseFragment {
                                     L_0x0157:
                                         org.telegram.ui.LoginActivity$LoginActivitySmsView r0 = org.telegram.ui.LoginActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626691(0x7f0e0ac3, float:1.8880625E38)
+                                        r1 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -4106,12 +4106,12 @@ public class LoginActivity extends BaseFragment {
                                 java.lang.String r7 = r6.text
                                 java.lang.String r8 = "PHONE_NUMBER_INVALID"
                                 boolean r7 = r7.contains(r8)
-                                r8 = 2131624195(0x7f0e0103, float:1.8875563E38)
+                                r8 = 2131624198(0x7f0e0106, float:1.8875569E38)
                                 java.lang.String r3 = "AppName"
                                 if (r7 == 0) goto L_0x00e8
                                 org.telegram.ui.LoginActivity r6 = r5.this$0
                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
-                                r8 = 2131625470(0x7f0e05fe, float:1.8878149E38)
+                                r8 = 2131625484(0x7f0e060c, float:1.8878177E38)
                                 java.lang.String r2 = "InvalidPhoneNumber"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                                 r6.needShowAlert(r7, r8)
@@ -4137,7 +4137,7 @@ public class LoginActivity extends BaseFragment {
                                 r6.setPage(r1, r2, r7, r2)
                                 org.telegram.ui.LoginActivity r6 = r5.this$0
                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
-                                r8 = 2131624733(0x7f0e031d, float:1.8876654E38)
+                                r8 = 2131624741(0x7f0e0325, float:1.887667E38)
                                 java.lang.String r2 = "CodeExpired"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                                 r6.needShowAlert(r7, r8)
@@ -4149,7 +4149,7 @@ public class LoginActivity extends BaseFragment {
                                 if (r7 == 0) goto L_0x0140
                                 org.telegram.ui.LoginActivity r6 = r5.this$0
                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
-                                r8 = 2131625266(0x7f0e0532, float:1.8877735E38)
+                                r8 = 2131625280(0x7f0e0540, float:1.8877763E38)
                                 java.lang.String r2 = "FloodWait"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                                 r6.needShowAlert(r7, r8)
@@ -4159,7 +4159,7 @@ public class LoginActivity extends BaseFragment {
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r3, r8)
                                 java.lang.StringBuilder r2 = new java.lang.StringBuilder
                                 r2.<init>()
-                                r3 = 2131625067(0x7f0e046b, float:1.8877331E38)
+                                r3 = 2131625081(0x7f0e0479, float:1.887736E38)
                                 java.lang.String r4 = "ErrorOccurred"
                                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                                 r2.append(r3)
@@ -4173,7 +4173,7 @@ public class LoginActivity extends BaseFragment {
                             L_0x0169:
                                 org.telegram.ui.LoginActivity r6 = r5.this$0
                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
-                                r8 = 2131625467(0x7f0e05fb, float:1.8878143E38)
+                                r8 = 2131625481(0x7f0e0609, float:1.8878171E38)
                                 java.lang.String r2 = "InvalidCode"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                                 r6.needShowAlert(r7, r8)
@@ -4470,12 +4470,12 @@ public class LoginActivity extends BaseFragment {
                                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
                                 r7 = 5
                                 r8 = 3
-                                if (r6 == 0) goto L_0x0031
+                                if (r6 == 0) goto L_0x0030
                                 r6 = 5
-                                goto L_0x0032
-                            L_0x0031:
+                                goto L_0x0031
+                            L_0x0030:
                                 r6 = 3
-                            L_0x0032:
+                            L_0x0031:
                                 r3.setGravity(r6)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 r6 = 1073741824(0x40000000, float:2.0)
@@ -4484,18 +4484,18 @@ public class LoginActivity extends BaseFragment {
                                 r10 = 1065353216(0x3var_, float:1.0)
                                 r3.setLineSpacing(r9, r10)
                                 android.widget.TextView r3 = r0.confirmTextView
-                                r9 = 2131625600(0x7f0e0680, float:1.8878413E38)
+                                r9 = 2131625615(0x7f0e068f, float:1.8878443E38)
                                 java.lang.String r11 = "LoginPasswordText"
                                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                                 r3.setText(r9)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x0059
+                                if (r9 == 0) goto L_0x0058
                                 r9 = 5
-                                goto L_0x005a
-                            L_0x0059:
+                                goto L_0x0059
+                            L_0x0058:
                                 r9 = 3
-                            L_0x005a:
+                            L_0x0059:
                                 r11 = -2
                                 android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r11, (int) r9)
                                 r0.addView(r3, r9)
@@ -4524,7 +4524,7 @@ public class LoginActivity extends BaseFragment {
                                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r2, r9)
                                 r3.setBackgroundDrawable(r12)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
-                                r12 = 2131625599(0x7f0e067f, float:1.887841E38)
+                                r12 = 2131625614(0x7f0e068e, float:1.887844E38)
                                 java.lang.String r13 = "LoginPassword"
                                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
                                 r3.setHint(r12)
@@ -4549,12 +4549,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.setTypeface(r12)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
                                 boolean r12 = org.telegram.messenger.LocaleController.isRTL
-                                if (r12 == 0) goto L_0x00ea
+                                if (r12 == 0) goto L_0x00e7
                                 r12 = 5
-                                goto L_0x00eb
-                            L_0x00ea:
+                                goto L_0x00e8
+                            L_0x00e7:
                                 r12 = 3
-                            L_0x00eb:
+                            L_0x00e8:
                                 r3.setGravity(r12)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
                                 r12 = -1
@@ -4574,12 +4574,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.cancelButton = r3
                                 boolean r12 = org.telegram.messenger.LocaleController.isRTL
-                                if (r12 == 0) goto L_0x0119
+                                if (r12 == 0) goto L_0x0116
                                 r12 = 5
-                                goto L_0x011a
-                            L_0x0119:
+                                goto L_0x0117
+                            L_0x0116:
                                 r12 = 3
-                            L_0x011a:
+                            L_0x0117:
                                 r12 = r12 | 48
                                 r3.setGravity(r12)
                                 android.widget.TextView r3 = r0.cancelButton
@@ -4587,7 +4587,7 @@ public class LoginActivity extends BaseFragment {
                                 int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
                                 r3.setTextColor(r12)
                                 android.widget.TextView r3 = r0.cancelButton
-                                r12 = 2131625277(0x7f0e053d, float:1.8877757E38)
+                                r12 = 2131625291(0x7f0e054b, float:1.8877786E38)
                                 java.lang.String r13 = "ForgotPassword"
                                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
                                 r3.setText(r12)
@@ -4603,12 +4603,12 @@ public class LoginActivity extends BaseFragment {
                                 android.widget.TextView r3 = r0.cancelButton
                                 r12 = -1
                                 boolean r13 = org.telegram.messenger.LocaleController.isRTL
-                                if (r13 == 0) goto L_0x015a
+                                if (r13 == 0) goto L_0x0156
                                 r13 = 5
-                                goto L_0x015b
-                            L_0x015a:
+                                goto L_0x0157
+                            L_0x0156:
                                 r13 = 3
-                            L_0x015b:
+                            L_0x0157:
                                 r13 = r13 | 48
                                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r11, (int) r13)
                                 r0.addView(r3, r11)
@@ -4620,12 +4620,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.resetAccountButton = r3
                                 boolean r11 = org.telegram.messenger.LocaleController.isRTL
-                                if (r11 == 0) goto L_0x017b
+                                if (r11 == 0) goto L_0x0177
                                 r11 = 5
-                                goto L_0x017c
-                            L_0x017b:
+                                goto L_0x0178
+                            L_0x0177:
                                 r11 = 3
-                            L_0x017c:
+                            L_0x0178:
                                 r11 = r11 | 48
                                 r3.setGravity(r11)
                                 android.widget.TextView r3 = r0.resetAccountButton
@@ -4636,7 +4636,7 @@ public class LoginActivity extends BaseFragment {
                                 r11 = 8
                                 r3.setVisibility(r11)
                                 android.widget.TextView r3 = r0.resetAccountButton
-                                r12 = 2131626554(0x7f0e0a3a, float:1.8880347E38)
+                                r12 = 2131626572(0x7f0e0a4c, float:1.8880384E38)
                                 java.lang.String r13 = "ResetMyAccount"
                                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
                                 r3.setText(r12)
@@ -4657,12 +4657,12 @@ public class LoginActivity extends BaseFragment {
                                 r12 = -2
                                 r13 = -2
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x01cf
+                                if (r9 == 0) goto L_0x01ca
                                 r9 = 5
-                                goto L_0x01d0
-                            L_0x01cf:
+                                goto L_0x01cb
+                            L_0x01ca:
                                 r9 = 3
-                            L_0x01d0:
+                            L_0x01cb:
                                 r14 = r9 | 48
                                 r15 = 0
                                 r16 = 34
@@ -4678,12 +4678,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.resetAccountText = r3
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x01f7
+                                if (r2 == 0) goto L_0x01f2
                                 r2 = 5
-                                goto L_0x01f8
-                            L_0x01f7:
+                                goto L_0x01f3
+                            L_0x01f2:
                                 r2 = 3
-                            L_0x01f8:
+                            L_0x01f3:
                                 r2 = r2 | 48
                                 r3.setGravity(r2)
                                 android.widget.TextView r2 = r0.resetAccountText
@@ -4692,7 +4692,7 @@ public class LoginActivity extends BaseFragment {
                                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                                 r2.setTextColor(r3)
                                 android.widget.TextView r2 = r0.resetAccountText
-                                r3 = 2131626555(0x7f0e0a3b, float:1.888035E38)
+                                r3 = 2131626573(0x7f0e0a4d, float:1.8880386E38)
                                 java.lang.String r4 = "ResetMyAccountText"
                                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                                 r2.setText(r3)
@@ -4706,11 +4706,11 @@ public class LoginActivity extends BaseFragment {
                                 r9 = -2
                                 r10 = -2
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x0231
-                                goto L_0x0232
-                            L_0x0231:
+                                if (r2 == 0) goto L_0x022c
+                                goto L_0x022d
+                            L_0x022c:
                                 r7 = 3
-                            L_0x0232:
+                            L_0x022d:
                                 r11 = r7 | 48
                                 r12 = 0
                                 r13 = 7
@@ -5204,12 +5204,12 @@ public class LoginActivity extends BaseFragment {
                                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
                                 r7 = 5
                                 r8 = 3
-                                if (r6 == 0) goto L_0x0031
+                                if (r6 == 0) goto L_0x0030
                                 r6 = 5
-                                goto L_0x0032
-                            L_0x0031:
+                                goto L_0x0031
+                            L_0x0030:
                                 r6 = 3
-                            L_0x0032:
+                            L_0x0031:
                                 r3.setGravity(r6)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 r6 = 1073741824(0x40000000, float:2.0)
@@ -5219,12 +5219,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.setLineSpacing(r9, r10)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x004b
+                                if (r9 == 0) goto L_0x004a
                                 r9 = 5
-                                goto L_0x004c
-                            L_0x004b:
+                                goto L_0x004b
+                            L_0x004a:
                                 r9 = 3
-                            L_0x004c:
+                            L_0x004b:
                                 r11 = -2
                                 android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r11, (int) r9)
                                 r0.addView(r3, r9)
@@ -5232,19 +5232,19 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.resetAccountText = r3
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x0061
+                                if (r9 == 0) goto L_0x0060
                                 r9 = 5
-                                goto L_0x0062
-                            L_0x0061:
+                                goto L_0x0061
+                            L_0x0060:
                                 r9 = 3
-                            L_0x0062:
+                            L_0x0061:
                                 r9 = r9 | 48
                                 r3.setGravity(r9)
                                 android.widget.TextView r3 = r0.resetAccountText
                                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
                                 r3.setTextColor(r9)
                                 android.widget.TextView r3 = r0.resetAccountText
-                                r9 = 2131626545(0x7f0e0a31, float:1.888033E38)
+                                r9 = 2131626563(0x7f0e0a43, float:1.8880366E38)
                                 java.lang.String r11 = "ResetAccountStatus"
                                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
                                 r3.setText(r9)
@@ -5258,12 +5258,12 @@ public class LoginActivity extends BaseFragment {
                                 r11 = -2
                                 r12 = -2
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x0097
+                                if (r9 == 0) goto L_0x0096
                                 r9 = 5
-                                goto L_0x0098
-                            L_0x0097:
+                                goto L_0x0097
+                            L_0x0096:
                                 r9 = 3
-                            L_0x0098:
+                            L_0x0097:
                                 r13 = r9 | 48
                                 r14 = 0
                                 r15 = 24
@@ -5275,12 +5275,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.resetAccountTime = r3
                                 boolean r9 = org.telegram.messenger.LocaleController.isRTL
-                                if (r9 == 0) goto L_0x00b5
+                                if (r9 == 0) goto L_0x00b4
                                 r9 = 5
-                                goto L_0x00b6
-                            L_0x00b5:
+                                goto L_0x00b5
+                            L_0x00b4:
                                 r9 = 3
-                            L_0x00b6:
+                            L_0x00b5:
                                 r9 = r9 | 48
                                 r3.setGravity(r9)
                                 android.widget.TextView r3 = r0.resetAccountTime
@@ -5296,12 +5296,12 @@ public class LoginActivity extends BaseFragment {
                                 r11 = -2
                                 r12 = -2
                                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                                if (r4 == 0) goto L_0x00dd
+                                if (r4 == 0) goto L_0x00dc
                                 r4 = 5
-                                goto L_0x00de
-                            L_0x00dd:
+                                goto L_0x00dd
+                            L_0x00dc:
                                 r4 = 3
-                            L_0x00de:
+                            L_0x00dd:
                                 r13 = r4 | 48
                                 r14 = 0
                                 r15 = 2
@@ -5313,16 +5313,16 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.resetAccountButton = r3
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x00fa
+                                if (r2 == 0) goto L_0x00f9
                                 r2 = 5
-                                goto L_0x00fb
-                            L_0x00fa:
+                                goto L_0x00fa
+                            L_0x00f9:
                                 r2 = 3
-                            L_0x00fb:
+                            L_0x00fa:
                                 r2 = r2 | 48
                                 r3.setGravity(r2)
                                 android.widget.TextView r2 = r0.resetAccountButton
-                                r3 = 2131626542(0x7f0e0a2e, float:1.8880323E38)
+                                r3 = 2131626560(0x7f0e0a40, float:1.888036E38)
                                 java.lang.String r4 = "ResetAccountButton"
                                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                                 r2.setText(r3)
@@ -5344,11 +5344,11 @@ public class LoginActivity extends BaseFragment {
                                 r9 = -2
                                 r10 = -2
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x013b
-                                goto L_0x013c
-                            L_0x013b:
+                                if (r2 == 0) goto L_0x013a
+                                goto L_0x013b
+                            L_0x013a:
                                 r7 = 3
-                            L_0x013c:
+                            L_0x013b:
                                 r11 = r7 | 48
                                 r12 = 0
                                 r13 = 7
@@ -5537,12 +5537,12 @@ public class LoginActivity extends BaseFragment {
                                 boolean r5 = org.telegram.messenger.LocaleController.isRTL
                                 r6 = 5
                                 r7 = 3
-                                if (r5 == 0) goto L_0x0031
+                                if (r5 == 0) goto L_0x0030
                                 r5 = 5
-                                goto L_0x0032
-                            L_0x0031:
+                                goto L_0x0031
+                            L_0x0030:
                                 r5 = 3
-                            L_0x0032:
+                            L_0x0031:
                                 r3.setGravity(r5)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 r5 = 1073741824(0x40000000, float:2.0)
@@ -5551,18 +5551,18 @@ public class LoginActivity extends BaseFragment {
                                 r9 = 1065353216(0x3var_, float:1.0)
                                 r3.setLineSpacing(r8, r9)
                                 android.widget.TextView r3 = r0.confirmTextView
-                                r8 = 2131626566(0x7f0e0a46, float:1.8880372E38)
+                                r8 = 2131626584(0x7f0e0a58, float:1.8880408E38)
                                 java.lang.String r10 = "RestoreEmailSentInfo"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                                 r3.setText(r8)
                                 android.widget.TextView r3 = r0.confirmTextView
                                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                                if (r8 == 0) goto L_0x0059
+                                if (r8 == 0) goto L_0x0058
                                 r8 = 5
-                                goto L_0x005a
-                            L_0x0059:
+                                goto L_0x0059
+                            L_0x0058:
                                 r8 = 3
-                            L_0x005a:
+                            L_0x0059:
                                 r10 = -2
                                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r10, (int) r8)
                                 r0.addView(r3, r8)
@@ -5591,7 +5591,7 @@ public class LoginActivity extends BaseFragment {
                                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r2, r8)
                                 r3.setBackgroundDrawable(r10)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
-                                r10 = 2131626242(0x7f0e0902, float:1.8879715E38)
+                                r10 = 2131626258(0x7f0e0912, float:1.8879747E38)
                                 java.lang.String r11 = "PasswordCode"
                                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                                 r3.setHint(r10)
@@ -5615,12 +5615,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.setTypeface(r10)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
                                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
-                                if (r10 == 0) goto L_0x00e8
+                                if (r10 == 0) goto L_0x00e5
                                 r10 = 5
-                                goto L_0x00e9
-                            L_0x00e8:
+                                goto L_0x00e6
+                            L_0x00e5:
                                 r10 = 3
-                            L_0x00e9:
+                            L_0x00e6:
                                 r3.setGravity(r10)
                                 org.telegram.ui.Components.EditTextBoldCursor r3 = r0.codeField
                                 r10 = -1
@@ -5640,12 +5640,12 @@ public class LoginActivity extends BaseFragment {
                                 r3.<init>(r2)
                                 r0.cancelButton = r3
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x0116
+                                if (r2 == 0) goto L_0x0113
                                 r2 = 5
-                                goto L_0x0117
-                            L_0x0116:
+                                goto L_0x0114
+                            L_0x0113:
                                 r2 = 3
-                            L_0x0117:
+                            L_0x0114:
                                 r2 = r2 | 80
                                 r3.setGravity(r2)
                                 android.widget.TextView r2 = r0.cancelButton
@@ -5665,11 +5665,11 @@ public class LoginActivity extends BaseFragment {
                                 r8 = -2
                                 r9 = -2
                                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                                if (r2 == 0) goto L_0x0149
-                                goto L_0x014a
-                            L_0x0149:
+                                if (r2 == 0) goto L_0x0145
+                                goto L_0x0146
+                            L_0x0145:
                                 r6 = 3
-                            L_0x014a:
+                            L_0x0146:
                                 r10 = r6 | 80
                                 r11 = 0
                                 r12 = 0
@@ -5951,7 +5951,7 @@ public class LoginActivity extends BaseFragment {
                                     builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                                 }
                                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.this$0.currentTermsOfService.text);
-                                MessageObject.addEntitiesToText(spannableStringBuilder, this.this$0.currentTermsOfService.entities, false, 0, false, false, false);
+                                MessageObject.addEntitiesToText(spannableStringBuilder, this.this$0.currentTermsOfService.entities, false, false, false, false);
                                 builder.setMessage(spannableStringBuilder);
                                 this.this$0.showDialog(builder.create());
                             }
@@ -6016,7 +6016,7 @@ public class LoginActivity extends BaseFragment {
                                 r5.<init>(r2)
                                 r0.textView = r5
                                 java.lang.String r6 = "RegisterText2"
-                                r7 = 2131626496(0x7f0e0a00, float:1.888023E38)
+                                r7 = 2131626514(0x7f0e0a12, float:1.8880266E38)
                                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
                                 r5.setText(r6)
                                 android.widget.TextView r5 = r0.textView
@@ -6026,12 +6026,12 @@ public class LoginActivity extends BaseFragment {
                                 android.widget.TextView r5 = r0.textView
                                 boolean r7 = org.telegram.messenger.LocaleController.isRTL
                                 r9 = 5
-                                if (r7 == 0) goto L_0x004f
+                                if (r7 == 0) goto L_0x004e
                                 r7 = 5
-                                goto L_0x0050
-                            L_0x004f:
+                                goto L_0x004f
+                            L_0x004e:
                                 r7 = 3
-                            L_0x0050:
+                            L_0x004f:
                                 r5.setGravity(r7)
                                 android.widget.TextView r5 = r0.textView
                                 r7 = 1096810496(0x41600000, float:14.0)
@@ -6040,12 +6040,12 @@ public class LoginActivity extends BaseFragment {
                                 r10 = -2
                                 r11 = -2
                                 boolean r12 = org.telegram.messenger.LocaleController.isRTL
-                                if (r12 == 0) goto L_0x0064
+                                if (r12 == 0) goto L_0x0063
                                 r12 = 5
-                                goto L_0x0065
-                            L_0x0064:
+                                goto L_0x0064
+                            L_0x0063:
                                 r12 = 3
-                            L_0x0065:
+                            L_0x0064:
                                 r13 = 0
                                 r14 = 0
                                 r15 = 0
@@ -6081,12 +6081,12 @@ public class LoginActivity extends BaseFragment {
                                 r11 = 64
                                 r12 = 1115684864(0x42800000, float:64.0)
                                 boolean r13 = org.telegram.messenger.LocaleController.isRTL
-                                if (r13 == 0) goto L_0x00b4
+                                if (r13 == 0) goto L_0x00b3
                                 r13 = 5
-                                goto L_0x00b5
-                            L_0x00b4:
+                                goto L_0x00b4
+                            L_0x00b3:
                                 r13 = 3
-                            L_0x00b5:
+                            L_0x00b4:
                                 r13 = r13 | 48
                                 r14 = 0
                                 r15 = 1098907648(0x41800000, float:16.0)
@@ -6104,12 +6104,12 @@ public class LoginActivity extends BaseFragment {
                                 r12 = 64
                                 r13 = 1115684864(0x42800000, float:64.0)
                                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
-                                if (r10 == 0) goto L_0x00e0
+                                if (r10 == 0) goto L_0x00df
                                 r10 = 5
-                                goto L_0x00e1
-                            L_0x00e0:
+                                goto L_0x00e0
+                            L_0x00df:
                                 r10 = 3
-                            L_0x00e1:
+                            L_0x00e0:
                                 r14 = r10 | 48
                                 r15 = 0
                                 r16 = 1098907648(0x41800000, float:16.0)
@@ -6141,12 +6141,12 @@ public class LoginActivity extends BaseFragment {
                                 r12 = 64
                                 r13 = 1115684864(0x42800000, float:64.0)
                                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                                if (r14 == 0) goto L_0x0130
+                                if (r14 == 0) goto L_0x012f
                                 r14 = 5
-                                goto L_0x0131
-                            L_0x0130:
+                                goto L_0x0130
+                            L_0x012f:
                                 r14 = 3
-                            L_0x0131:
+                            L_0x0130:
                                 r14 = r14 | 48
                                 r15 = 0
                                 r16 = 1098907648(0x41800000, float:16.0)
@@ -6167,12 +6167,12 @@ public class LoginActivity extends BaseFragment {
                                 r12 = 64
                                 r13 = 1115684864(0x42800000, float:64.0)
                                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                                if (r14 == 0) goto L_0x0163
+                                if (r14 == 0) goto L_0x0162
                                 r14 = 5
-                                goto L_0x0164
-                            L_0x0163:
+                                goto L_0x0163
+                            L_0x0162:
                                 r14 = 3
-                            L_0x0164:
+                            L_0x0163:
                                 r14 = r14 | 48
                                 r15 = 0
                                 r16 = 1098907648(0x41800000, float:16.0)
@@ -6205,7 +6205,7 @@ public class LoginActivity extends BaseFragment {
                                 r15 = 1069547520(0x3fCLASSNAME, float:1.5)
                                 r1.setCursorWidth(r15)
                                 org.telegram.ui.Components.EditTextBoldCursor r1 = r0.firstNameField
-                                r8 = 2131625265(0x7f0e0531, float:1.8877733E38)
+                                r8 = 2131625279(0x7f0e053f, float:1.8877761E38)
                                 java.lang.String r9 = "FirstName"
                                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                                 r1.setHint(r8)
@@ -6224,30 +6224,30 @@ public class LoginActivity extends BaseFragment {
                                 r18 = -1
                                 r19 = 1108344832(0x42100000, float:36.0)
                                 boolean r20 = org.telegram.messenger.LocaleController.isRTL
-                                if (r20 == 0) goto L_0x01ee
+                                if (r20 == 0) goto L_0x01eb
                                 r20 = 5
-                                goto L_0x01f0
-                            L_0x01ee:
+                                goto L_0x01ed
+                            L_0x01eb:
                                 r20 = 3
-                            L_0x01f0:
+                            L_0x01ed:
                                 r20 = r20 | 48
                                 boolean r21 = org.telegram.messenger.LocaleController.isRTL
                                 r25 = 0
                                 r26 = 1118437376(0x42aa0000, float:85.0)
-                                if (r21 == 0) goto L_0x01fd
+                                if (r21 == 0) goto L_0x01fa
                                 r21 = 0
-                                goto L_0x01ff
-                            L_0x01fd:
+                                goto L_0x01fc
+                            L_0x01fa:
                                 r21 = 1118437376(0x42aa0000, float:85.0)
-                            L_0x01ff:
+                            L_0x01fc:
                                 r22 = 0
                                 boolean r23 = org.telegram.messenger.LocaleController.isRTL
-                                if (r23 == 0) goto L_0x0208
+                                if (r23 == 0) goto L_0x0205
                                 r23 = 1118437376(0x42aa0000, float:85.0)
-                                goto L_0x020a
-                            L_0x0208:
+                                goto L_0x0207
+                            L_0x0205:
                                 r23 = 0
-                            L_0x020a:
+                            L_0x0207:
                                 r24 = 0
                                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
                                 r5.addView(r1, r10)
@@ -6258,7 +6258,7 @@ public class LoginActivity extends BaseFragment {
                                 org.telegram.ui.Components.EditTextBoldCursor r1 = new org.telegram.ui.Components.EditTextBoldCursor
                                 r1.<init>(r2)
                                 r0.lastNameField = r1
-                                r10 = 2131625526(0x7f0e0636, float:1.8878262E38)
+                                r10 = 2131625540(0x7f0e0644, float:1.887829E38)
                                 java.lang.String r11 = "LastName"
                                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                                 r1.setHint(r10)
@@ -6292,28 +6292,28 @@ public class LoginActivity extends BaseFragment {
                                 r8 = -1
                                 r9 = 1108344832(0x42100000, float:36.0)
                                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
-                                if (r10 == 0) goto L_0x0284
+                                if (r10 == 0) goto L_0x0281
                                 r10 = 5
-                                goto L_0x0285
-                            L_0x0284:
+                                goto L_0x0282
+                            L_0x0281:
                                 r10 = 3
-                            L_0x0285:
+                            L_0x0282:
                                 r10 = r10 | 48
                                 boolean r11 = org.telegram.messenger.LocaleController.isRTL
-                                if (r11 == 0) goto L_0x028d
+                                if (r11 == 0) goto L_0x028a
                                 r11 = 0
-                                goto L_0x028f
-                            L_0x028d:
+                                goto L_0x028c
+                            L_0x028a:
                                 r11 = 1118437376(0x42aa0000, float:85.0)
-                            L_0x028f:
+                            L_0x028c:
                                 r12 = 1112276992(0x424CLASSNAME, float:51.0)
                                 boolean r13 = org.telegram.messenger.LocaleController.isRTL
-                                if (r13 == 0) goto L_0x0298
+                                if (r13 == 0) goto L_0x0295
                                 r13 = 1118437376(0x42aa0000, float:85.0)
-                                goto L_0x0299
-                            L_0x0298:
+                                goto L_0x0296
+                            L_0x0295:
                                 r13 = 0
-                            L_0x0299:
+                            L_0x0296:
                                 r14 = 0
                                 android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
                                 r5.addView(r1, r8)
@@ -6324,18 +6324,18 @@ public class LoginActivity extends BaseFragment {
                                 android.widget.TextView r1 = new android.widget.TextView
                                 r1.<init>(r2)
                                 r0.wrongNumber = r1
-                                r5 = 2131624494(0x7f0e022e, float:1.887617E38)
+                                r5 = 2131624499(0x7f0e0233, float:1.887618E38)
                                 java.lang.String r8 = "CancelRegistration"
                                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
                                 r1.setText(r5)
                                 android.widget.TextView r1 = r0.wrongNumber
                                 boolean r5 = org.telegram.messenger.LocaleController.isRTL
-                                if (r5 == 0) goto L_0x02c6
+                                if (r5 == 0) goto L_0x02c3
                                 r5 = 5
-                                goto L_0x02c7
-                            L_0x02c6:
+                                goto L_0x02c4
+                            L_0x02c3:
                                 r5 = 3
-                            L_0x02c7:
+                            L_0x02c4:
                                 r5 = r5 | r4
                                 r1.setGravity(r5)
                                 android.widget.TextView r1 = r0.wrongNumber
@@ -6361,12 +6361,12 @@ public class LoginActivity extends BaseFragment {
                                 r9 = -2
                                 r10 = -2
                                 boolean r5 = org.telegram.messenger.LocaleController.isRTL
-                                if (r5 == 0) goto L_0x0307
+                                if (r5 == 0) goto L_0x0303
                                 r16 = 5
-                                goto L_0x0309
-                            L_0x0307:
+                                goto L_0x0305
+                            L_0x0303:
                                 r16 = 3
-                            L_0x0309:
+                            L_0x0305:
                                 r11 = r16 | 48
                                 r12 = 0
                                 r13 = 20
@@ -6416,7 +6416,7 @@ public class LoginActivity extends BaseFragment {
                                 r5 = -2
                                 android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r5, r3)
                                 r1.addView(r2, r3)
-                                r1 = 2131626934(0x7f0e0bb6, float:1.8881118E38)
+                                r1 = 2131626957(0x7f0e0bcd, float:1.8881165E38)
                                 java.lang.String r2 = "TermsOfServiceLogin"
                                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                 android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
@@ -6425,9 +6425,9 @@ public class LoginActivity extends BaseFragment {
                                 int r5 = r1.indexOf(r3)
                                 int r1 = r1.lastIndexOf(r3)
                                 r3 = -1
-                                if (r5 == r3) goto L_0x03bf
-                                if (r1 == r3) goto L_0x03bf
-                                if (r5 == r1) goto L_0x03bf
+                                if (r5 == r3) goto L_0x03ba
+                                if (r1 == r3) goto L_0x03ba
+                                if (r5 == r1) goto L_0x03ba
                                 int r3 = r1 + 1
                                 java.lang.String r6 = ""
                                 r2.replace(r1, r3, r6)
@@ -6439,7 +6439,7 @@ public class LoginActivity extends BaseFragment {
                                 int r1 = r1 - r4
                                 r4 = 33
                                 r2.setSpan(r3, r5, r1, r4)
-                            L_0x03bf:
+                            L_0x03ba:
                                 android.widget.TextView r1 = r0.privacyView
                                 r1.setText(r2)
                                 return
@@ -6687,10 +6687,6 @@ public class LoginActivity extends BaseFragment {
                                         LoginActivity.LoginActivityRegisterView.this.lambda$null$12$LoginActivity$LoginActivityRegisterView(this.f$1);
                                     }
                                 }, 150);
-                                if (this.avatarBig != null) {
-                                    MessagesController.getInstance(this.this$0.currentAccount).uploadAndApplyUserAvatar(this.avatarBig);
-                                    return;
-                                }
                                 return;
                             }
                             this.this$0.needHideProgress(false);
@@ -6713,6 +6709,9 @@ public class LoginActivity extends BaseFragment {
                             this.this$0.needHideProgress(false, false);
                             AndroidUtilities.hideKeyboard(this.this$0.fragmentView.findFocus());
                             this.this$0.onAuthSuccess((TLRPC$TL_auth_authorization) tLObject, true);
+                            if (this.avatarBig != null) {
+                                MessagesController.getInstance(this.this$0.currentAccount).uploadAndApplyUserAvatar(this.avatarBig);
+                            }
                         }
 
                         public void saveStateParams(Bundle bundle) {
@@ -6768,7 +6767,7 @@ public class LoginActivity extends BaseFragment {
                         }
                     }
 
-                    public ThemeDescription[] getThemeDescriptions() {
+                    public ArrayList<ThemeDescription> getThemeDescriptions() {
                         int i = 0;
                         while (true) {
                             SlideView[] slideViewArr = this.views;
@@ -6782,7 +6781,7 @@ public class LoginActivity extends BaseFragment {
                                 LoginActivityPasswordView loginActivityPasswordView = (LoginActivityPasswordView) slideViewArr[6];
                                 LoginActivityRecoverView loginActivityRecoverView = (LoginActivityRecoverView) slideViewArr[7];
                                 LoginActivityResetWaitView loginActivityResetWaitView = (LoginActivityResetWaitView) slideViewArr[8];
-                                ArrayList arrayList = new ArrayList();
+                                ArrayList<ThemeDescription> arrayList = new ArrayList<>();
                                 ThemeDescription themeDescription = r12;
                                 ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite");
                                 arrayList.add(themeDescription);
@@ -6894,9 +6893,9 @@ public class LoginActivity extends BaseFragment {
                                 arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
                                 arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                                 arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-                                return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
+                                return arrayList;
                             } else if (slideViewArr[i] == null) {
-                                return new ThemeDescription[0];
+                                return new ArrayList<>();
                             } else {
                                 i++;
                             }

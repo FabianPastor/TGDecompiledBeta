@@ -581,7 +581,6 @@
     <string name="ChangeWallpaperToColor">Sei sicuro di voler cambiare lo sfondo della chat con un colore?</string>
     <string name="ChannelAddAdmin">Aggiungi amministratore</string>
     <string name="ChannelAddException">Aggiungi eccezione</string>
-    <string name="ChannelAddMembers">Aggiungi membri</string>
     <string name="ChannelAddTo">Aggiungere %1$s al canale?</string>
     <string name="ChannelAddToChannel">Aggiungi al canale</string>
     <string name="ChannelAddToGroup">Aggiungi al gruppo</string>
@@ -978,7 +977,6 @@
     <string name="DeleteTheme">Elimina tema</string>
     <string name="DeleteThemeAlert">Sei sicuro di voler eliminare questo tema?</string>
     <string name="DeleteThemeTitle">Elimina tema</string>
-    <string name="DeleteTheseChats">Elimina chat</string>
     <string name="DeleteThisChat">Elimina questa chat</string>
     <string name="DeleteThisGroup">Elimina questo gruppo</string>
     <string name="DescriptionInfo">Puoi inserire una descrizione opzionale per il tuo canale.</string>
@@ -2439,7 +2437,6 @@
     <string name="PollCollapse">Comprimi</string>
     <string name="PollExpand">Espandi</string>
     <string name="PollMultiple">Risposte multiple</string>
-    <string name="PollOptions">Opzioni sondaggio</string>
     <string name="PollQuiz">Modalità quiz</string>
     <string name="PollResults">Risultati sondaggio</string>
     <string name="PollSelectOption">Seleziona prima un\'opzione</string>
@@ -2505,7 +2502,6 @@
     <string name="PublicPoll">Sondaggio</string>
     <string name="PublicPollCantForward">Spiacenti, i sondaggi con voti visibili non possono essere inoltrati nei canali.</string>
     <string name="Purple">Viola</string>
-    <string name="Question">Domanda</string>
     <string name="QuestionHint">Fai una domanda</string>
     <string name="QuickReplyCustom">Messaggio personalizzato...</string>
     <string name="QuickReplyDefault1">Non posso parlare ora. Cosa succede?</string>

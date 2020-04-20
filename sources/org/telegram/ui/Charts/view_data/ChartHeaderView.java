@@ -36,7 +36,7 @@ public class ChartHeaderView extends FrameLayout {
         TextView textView = new TextView(context);
         this.title = textView;
         textView.setTextSize(15.0f);
-        this.title.setTypeface(Typeface.DEFAULT_BOLD);
+        this.title.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.title, LayoutHelper.createFrame(-2, -2.0f, 8388627, 16.0f, 0.0f, (float) this.textMargin, 0.0f));
         TextView textView2 = new TextView(context);
         this.back = textView2;

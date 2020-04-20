@@ -603,6 +603,10 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public boolean isSearchFieldVisible() {
+        return this.searchContainer.getVisibility() == 0;
+    }
+
     public boolean toggleSearch(boolean z) {
         Animator customToggleTransition;
         if (this.searchContainer == null) {
@@ -664,6 +668,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public ImageView getIconView() {
         return this.iconView;
+    }
+
+    public TextView getTextView() {
+        return this.textView;
     }
 
     public void setIcon(int i) {

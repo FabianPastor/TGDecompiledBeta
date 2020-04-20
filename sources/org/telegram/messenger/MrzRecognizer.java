@@ -126,7 +126,7 @@ public class MrzRecognizer {
             r1 = 0
         L_0x0057:
             int r2 = r11.size()
-            if (r1 >= r2) goto L_0x0253
+            if (r1 >= r2) goto L_0x0252
             java.lang.Object r2 = r11.valueAt(r1)
             com.google.android.gms.vision.barcode.Barcode r2 = (com.google.android.gms.vision.barcode.Barcode) r2
             int r4 = r2.valueFormat
@@ -295,75 +295,75 @@ public class MrzRecognizer {
         L_0x01a1:
             int r4 = r2.valueFormat
             r5 = 7
-            if (r4 != r5) goto L_0x024f
+            if (r4 != r5) goto L_0x024e
             int r4 = r2.format
             r5 = 2048(0x800, float:2.87E-42)
-            if (r4 != r5) goto L_0x024f
+            if (r4 != r5) goto L_0x024e
             java.lang.String r4 = r2.rawValue
             java.lang.String r5 = "^[A-Za-z0-9=]+$"
             boolean r4 = r4.matches(r5)
-            if (r4 == 0) goto L_0x024f
-            java.lang.String r2 = r2.rawValue     // Catch:{ Exception -> 0x024f }
-            byte[] r2 = android.util.Base64.decode(r2, r0)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x024f }
+            if (r4 == 0) goto L_0x024e
+            java.lang.String r2 = r2.rawValue     // Catch:{ Exception -> 0x024e }
+            byte[] r2 = android.util.Base64.decode(r2, r0)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x024e }
             java.lang.String r5 = "windows-1251"
-            r4.<init>(r2, r5)     // Catch:{ Exception -> 0x024f }
+            r4.<init>(r2, r5)     // Catch:{ Exception -> 0x024e }
             java.lang.String r2 = "\\|"
-            java.lang.String[] r2 = r4.split(r2)     // Catch:{ Exception -> 0x024f }
-            int r4 = r2.length     // Catch:{ Exception -> 0x024f }
+            java.lang.String[] r2 = r4.split(r2)     // Catch:{ Exception -> 0x024e }
+            int r4 = r2.length     // Catch:{ Exception -> 0x024e }
             r5 = 10
-            if (r4 < r5) goto L_0x024f
-            org.telegram.messenger.MrzRecognizer$Result r4 = new org.telegram.messenger.MrzRecognizer$Result     // Catch:{ Exception -> 0x024f }
-            r4.<init>()     // Catch:{ Exception -> 0x024f }
-            r4.type = r8     // Catch:{ Exception -> 0x024f }
+            if (r4 < r5) goto L_0x024e
+            org.telegram.messenger.MrzRecognizer$Result r4 = new org.telegram.messenger.MrzRecognizer$Result     // Catch:{ Exception -> 0x024e }
+            r4.<init>()     // Catch:{ Exception -> 0x024e }
+            r4.type = r8     // Catch:{ Exception -> 0x024e }
             java.lang.String r5 = "RU"
-            r4.issuingCountry = r5     // Catch:{ Exception -> 0x024f }
-            r4.nationality = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r0]     // Catch:{ Exception -> 0x024f }
-            r4.number = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryYear = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryMonth = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryDay = r5     // Catch:{ Exception -> 0x024f }
+            r4.issuingCountry = r5     // Catch:{ Exception -> 0x024e }
+            r4.nationality = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r0]     // Catch:{ Exception -> 0x024e }
+            r4.number = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r7]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024e }
+            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024e }
+            r4.expiryYear = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r7]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024e }
+            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024e }
+            r4.expiryMonth = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r7]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = r5.substring(r6)     // Catch:{ Exception -> 0x024e }
+            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024e }
+            r4.expiryDay = r5     // Catch:{ Exception -> 0x024e }
             r5 = 3
-            r5 = r2[r5]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.lastName = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r8]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.firstName = r5     // Catch:{ Exception -> 0x024f }
+            r5 = r2[r5]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024e }
+            r4.lastName = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r8]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024e }
+            r4.firstName = r5     // Catch:{ Exception -> 0x024e }
             r5 = 5
-            r5 = r2[r5]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.middleName = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.birthYear = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.birthMonth = r5     // Catch:{ Exception -> 0x024f }
-            r2 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r2 = r2.substring(r6)     // Catch:{ Exception -> 0x024f }
-            int r2 = java.lang.Integer.parseInt(r2)     // Catch:{ Exception -> 0x024f }
-            r4.birthDay = r2     // Catch:{ Exception -> 0x024f }
+            r5 = r2[r5]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024e }
+            r4.middleName = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r6]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024e }
+            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024e }
+            r4.birthYear = r5     // Catch:{ Exception -> 0x024e }
+            r5 = r2[r6]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024e }
+            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024e }
+            r4.birthMonth = r5     // Catch:{ Exception -> 0x024e }
+            r2 = r2[r6]     // Catch:{ Exception -> 0x024e }
+            java.lang.String r2 = r2.substring(r6)     // Catch:{ Exception -> 0x024e }
+            int r2 = java.lang.Integer.parseInt(r2)     // Catch:{ Exception -> 0x024e }
+            r4.birthDay = r2     // Catch:{ Exception -> 0x024e }
             return r4
-        L_0x024f:
+        L_0x024e:
             int r1 = r1 + 1
             goto L_0x0057
-        L_0x0253:
+        L_0x0252:
             r11 = 0
             return r11
         */

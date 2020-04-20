@@ -14,8 +14,8 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public final class TgVoip {
-    private static final List<String> AVAILABLE_VERSIONS = Arrays.asList(new String[]{"2.4.4", "2.6"});
-    private static final List<Integer> AVAILABLE_VERSIONS_IDS = Arrays.asList(new Integer[]{1, 2});
+    private static final List<String> AVAILABLE_VERSIONS = Arrays.asList(new String[]{"2.4.4", "2.7"});
+    private static final List<Integer> AVAILABLE_VERSIONS_IDS = Arrays.asList(new Integer[]{1, 3});
     public static final int DATA_SAVING_ALWAYS = 2;
     public static final int DATA_SAVING_MOBILE = 1;
     public static final int DATA_SAVING_NEVER = 0;

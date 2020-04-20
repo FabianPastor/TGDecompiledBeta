@@ -18,7 +18,7 @@ public class SeekBarView extends FrameLayout {
     private float bufferedProgress;
     boolean captured;
     private float currentRadius;
-    public SeekBarViewDelegate delegate;
+    private SeekBarViewDelegate delegate;
     private Drawable hoverDrawable;
     private Paint innerPaint1;
     private long lastUpdateTime;
@@ -101,6 +101,22 @@ public class SeekBarView extends FrameLayout {
         }
         if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             this.captured = false;
+            if (motionEvent.getAction() == 1) {
+                if (Math.abs(motionEvent.getY() - this.sy) < ((float) ViewConfiguration.get(getContext()).getScaledTouchSlop())) {
+                    int measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
+                    if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) (this.thumbX + this.thumbSize + measuredHeight))) {
+                        int x = ((int) motionEvent.getX()) - (this.thumbSize / 2);
+                        this.thumbX = x;
+                        if (x < 0) {
+                            this.thumbX = 0;
+                        } else if (x > getMeasuredWidth() - this.selectorWidth) {
+                            this.thumbX = getMeasuredWidth() - this.selectorWidth;
+                        }
+                    }
+                    this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
+                    this.pressed = true;
+                }
+            }
             if (this.pressed) {
                 if (motionEvent.getAction() == 1) {
                     this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
@@ -119,14 +135,14 @@ public class SeekBarView extends FrameLayout {
                 if (Math.abs(motionEvent.getY() - this.sy) <= ((float) viewConfiguration.getScaledTouchSlop()) && Math.abs(motionEvent.getX() - this.sx) > ((float) viewConfiguration.getScaledTouchSlop())) {
                     this.captured = true;
                     getParent().requestDisallowInterceptTouchEvent(true);
-                    int measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
+                    int measuredHeight2 = (getMeasuredHeight() - this.thumbSize) / 2;
                     if (motionEvent.getY() >= 0.0f && motionEvent.getY() <= ((float) getMeasuredHeight())) {
-                        if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) (this.thumbX + this.thumbSize + measuredHeight))) {
-                            int x = ((int) motionEvent.getX()) - (this.thumbSize / 2);
-                            this.thumbX = x;
-                            if (x < 0) {
+                        if (((float) (this.thumbX - measuredHeight2)) > motionEvent.getX() || motionEvent.getX() > ((float) (this.thumbX + this.thumbSize + measuredHeight2))) {
+                            int x2 = ((int) motionEvent.getX()) - (this.thumbSize / 2);
+                            this.thumbX = x2;
+                            if (x2 < 0) {
                                 this.thumbX = 0;
-                            } else if (x > getMeasuredWidth() - this.selectorWidth) {
+                            } else if (x2 > getMeasuredWidth() - this.selectorWidth) {
                                 this.thumbX = getMeasuredWidth() - this.selectorWidth;
                             }
                         }
@@ -142,11 +158,11 @@ public class SeekBarView extends FrameLayout {
                     }
                 }
             } else if (this.pressed) {
-                int x2 = (int) (motionEvent.getX() - ((float) this.thumbDX));
-                this.thumbX = x2;
-                if (x2 < 0) {
+                int x3 = (int) (motionEvent.getX() - ((float) this.thumbDX));
+                this.thumbX = x3;
+                if (x3 < 0) {
                     this.thumbX = 0;
-                } else if (x2 > getMeasuredWidth() - this.selectorWidth) {
+                } else if (x3 > getMeasuredWidth() - this.selectorWidth) {
                     this.thumbX = getMeasuredWidth() - this.selectorWidth;
                 }
                 if (this.reportChanges) {

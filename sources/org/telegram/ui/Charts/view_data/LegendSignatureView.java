@@ -197,11 +197,11 @@ public class LegendSignatureView extends FrameLayout {
             return String.format("%d", new Object[]{Integer.valueOf(i)});
         }
         int i2 = 0;
-        while (f >= 10000.0f && i2 < ChartHorizontalLinesData.s.length - 1) {
+        while (f >= 10000.0f && i2 < AndroidUtilities.numbersSignatureArray.length - 1) {
             f /= 1000.0f;
             i2++;
         }
-        return String.format("%.2f", new Object[]{Float.valueOf(f)}) + ChartHorizontalLinesData.s[i2];
+        return String.format("%.2f", new Object[]{Float.valueOf(f)}) + AndroidUtilities.numbersSignatureArray[i2];
     }
 
     public void showProgress(boolean z, boolean z2) {

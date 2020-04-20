@@ -474,8 +474,8 @@ public class PipVideoView {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0116  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0182  */
     /* JADX WARNING: Removed duplicated region for block: B:54:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void animateToBoundsMaybe() {
@@ -505,43 +505,43 @@ public class PipVideoView {
             java.lang.String r13 = "sidex"
             java.lang.String r14 = "x"
             r15 = 1065353216(0x3var_, float:1.0)
-            if (r10 <= r9) goto L_0x00e8
+            if (r10 <= r9) goto L_0x00e7
             android.view.WindowManager$LayoutParams r10 = r0.windowLayoutParams
             int r10 = r10.x
-            if (r10 >= 0) goto L_0x004d
+            if (r10 >= 0) goto L_0x004c
             int r2 = r0.videoWidth
             int r2 = -r2
             int r2 = r2 / 4
-            if (r10 <= r2) goto L_0x004d
-            goto L_0x00e8
-        L_0x004d:
+            if (r10 <= r2) goto L_0x004c
+            goto L_0x00e7
+        L_0x004c:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
             int r2 = r5 - r2
             int r2 = java.lang.Math.abs(r2)
-            if (r2 <= r9) goto L_0x00ba
+            if (r2 <= r9) goto L_0x00b9
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
             android.graphics.Point r10 = org.telegram.messenger.AndroidUtilities.displaySize
             int r10 = r10.x
             int r11 = r0.videoWidth
             int r3 = r10 - r11
-            if (r2 <= r3) goto L_0x006f
+            if (r2 <= r3) goto L_0x006e
             int r11 = r11 / 4
             int r11 = r11 * 3
             int r10 = r10 - r11
-            if (r2 >= r10) goto L_0x006f
-            goto L_0x00ba
-        L_0x006f:
+            if (r2 >= r10) goto L_0x006e
+            goto L_0x00b9
+        L_0x006e:
             android.widget.FrameLayout r2 = r0.windowView
             float r2 = r2.getAlpha()
             int r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1))
-            if (r2 == 0) goto L_0x00a6
+            if (r2 == 0) goto L_0x00a5
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
-            if (r2 >= 0) goto L_0x0094
+            if (r2 >= 0) goto L_0x0093
             int[] r2 = new int[r4]
             int r3 = r0.videoWidth
             int r3 = -r3
@@ -549,8 +549,8 @@ public class PipVideoView {
             r2[r5] = r3
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2)
             r1.add(r2)
-            goto L_0x00a4
-        L_0x0094:
+            goto L_0x00a3
+        L_0x0093:
             r5 = 0
             int[] r2 = new int[r4]
             android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -558,10 +558,10 @@ public class PipVideoView {
             r2[r5] = r3
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2)
             r1.add(r2)
-        L_0x00a4:
+        L_0x00a3:
             r5 = 1
-            goto L_0x0115
-        L_0x00a6:
+            goto L_0x0114
+        L_0x00a5:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.x
             int r2 = r2 - r1
@@ -574,31 +574,31 @@ public class PipVideoView {
             r1 = 2
             r8.putInt(r13, r1)
             r1 = 0
-            goto L_0x0114
-        L_0x00ba:
+            goto L_0x0113
+        L_0x00b9:
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             r8.putInt(r13, r4)
             android.widget.FrameLayout r2 = r0.windowView
             float r2 = r2.getAlpha()
             int r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1))
-            if (r2 == 0) goto L_0x00db
+            if (r2 == 0) goto L_0x00da
             android.widget.FrameLayout r2 = r0.windowView
             float[] r3 = new float[r4]
             r10 = 0
             r3[r10] = r15
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r12, r3)
             r1.add(r2)
-            goto L_0x00dc
-        L_0x00db:
+            goto L_0x00db
+        L_0x00da:
             r10 = 0
-        L_0x00dc:
+        L_0x00db:
             int[] r2 = new int[r4]
             r2[r10] = r5
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2)
             r1.add(r2)
-            goto L_0x0114
-        L_0x00e8:
+            goto L_0x0113
+        L_0x00e7:
             r10 = 0
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
@@ -606,52 +606,52 @@ public class PipVideoView {
             android.widget.FrameLayout r3 = r0.windowView
             float r3 = r3.getAlpha()
             int r3 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1))
-            if (r3 == 0) goto L_0x0108
+            if (r3 == 0) goto L_0x0107
             android.widget.FrameLayout r3 = r0.windowView
             float[] r5 = new float[r4]
             r5[r10] = r15
             android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r12, r5)
             r2.add(r3)
-        L_0x0108:
+        L_0x0107:
             int[] r3 = new int[r4]
             r3[r10] = r1
             android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofInt(r0, r14, r3)
             r2.add(r1)
             r1 = r2
-        L_0x0114:
+        L_0x0113:
             r5 = 0
-        L_0x0115:
-            if (r5 != 0) goto L_0x0182
+        L_0x0114:
+            if (r5 != 0) goto L_0x0180
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
             int r2 = r6 - r2
             int r2 = java.lang.Math.abs(r2)
             java.lang.String r3 = "y"
             java.lang.String r10 = "sidey"
-            if (r2 <= r9) goto L_0x0169
+            if (r2 <= r9) goto L_0x0167
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
             int r11 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            if (r2 > r11) goto L_0x0133
-            goto L_0x0169
-        L_0x0133:
+            if (r2 > r11) goto L_0x0131
+            goto L_0x0167
+        L_0x0131:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
             int r2 = r7 - r2
             int r2 = java.lang.Math.abs(r2)
-            if (r2 > r9) goto L_0x0156
-            if (r1 != 0) goto L_0x0146
+            if (r2 > r9) goto L_0x0154
+            if (r1 != 0) goto L_0x0144
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0146:
+        L_0x0144:
             r8.putInt(r10, r4)
             int[] r2 = new int[r4]
             r6 = 0
             r2[r6] = r7
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r2)
             r1.add(r2)
-            goto L_0x017f
-        L_0x0156:
+            goto L_0x017d
+        L_0x0154:
             android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
             int r2 = r2.y
             int r2 = r2 - r6
@@ -663,35 +663,35 @@ public class PipVideoView {
             r8.putFloat(r3, r2)
             r2 = 2
             r8.putInt(r10, r2)
-            goto L_0x017f
-        L_0x0169:
-            if (r1 != 0) goto L_0x0170
+            goto L_0x017d
+        L_0x0167:
+            if (r1 != 0) goto L_0x016e
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0170:
+        L_0x016e:
             r2 = 0
             r8.putInt(r10, r2)
             int[] r7 = new int[r4]
             r7[r2] = r6
             android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r7)
             r1.add(r2)
-        L_0x017f:
+        L_0x017d:
             r8.commit()
-        L_0x0182:
-            if (r1 == 0) goto L_0x01bd
+        L_0x0180:
+            if (r1 == 0) goto L_0x01bb
             android.view.animation.DecelerateInterpolator r2 = r0.decelerateInterpolator
-            if (r2 != 0) goto L_0x018f
+            if (r2 != 0) goto L_0x018d
             android.view.animation.DecelerateInterpolator r2 = new android.view.animation.DecelerateInterpolator
             r2.<init>()
             r0.decelerateInterpolator = r2
-        L_0x018f:
+        L_0x018d:
             android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
             r2.<init>()
             android.view.animation.DecelerateInterpolator r3 = r0.decelerateInterpolator
             r2.setInterpolator(r3)
             r6 = 150(0x96, double:7.4E-322)
             r2.setDuration(r6)
-            if (r5 == 0) goto L_0x01b7
+            if (r5 == 0) goto L_0x01b5
             android.widget.FrameLayout r3 = r0.windowView
             float[] r4 = new float[r4]
             r5 = 0
@@ -702,10 +702,10 @@ public class PipVideoView {
             org.telegram.ui.Components.PipVideoView$2 r3 = new org.telegram.ui.Components.PipVideoView$2
             r3.<init>()
             r2.addListener(r3)
-        L_0x01b7:
+        L_0x01b5:
             r2.playTogether(r1)
             r2.start()
-        L_0x01bd:
+        L_0x01bb:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipVideoView.animateToBoundsMaybe():void");

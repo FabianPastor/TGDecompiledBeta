@@ -139,7 +139,9 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
         }
         int height = (rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView);
         Rect rect3 = this.rect;
-        return Math.max(0, height - (rect3.bottom - rect3.top));
+        int max = Math.max(0, height - (rect3.bottom - rect3.top));
+        this.keyboardHeight = max;
+        return max;
     }
 
     public void notifyHeightChanged() {
@@ -180,7 +182,7 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
     }
 
     public int getHeightWithKeyboard() {
-        return getKeyboardHeight() + getMeasuredHeight();
+        return this.keyboardHeight + getMeasuredHeight();
     }
 
     /* access modifiers changed from: protected */
@@ -239,18 +241,14 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
                     } else {
                         int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
                         int measuredHeight = getMeasuredHeight() - currentActionBarHeight;
-                        float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth());
-                        float intrinsicHeight = ((float) (measuredHeight + i)) / ((float) drawable.getIntrinsicHeight());
-                        if (measuredWidth < intrinsicHeight) {
-                            measuredWidth = intrinsicHeight;
-                        }
-                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * measuredWidth * this.parallaxScale));
-                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * measuredWidth * this.parallaxScale));
-                        int measuredWidth2 = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
+                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) (measuredHeight + i)) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max * this.parallaxScale));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max * this.parallaxScale));
+                        int measuredWidth = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
                         int i3 = this.backgroundTranslationY + (((measuredHeight - ceil2) + i) / 2) + currentActionBarHeight + ((int) this.translationY);
                         canvas.save();
                         canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
-                        drawable.setBounds(measuredWidth2, i3, ceil + measuredWidth2, ceil2 + i3);
+                        drawable.setBounds(measuredWidth, i3, ceil + measuredWidth, ceil2 + i3);
                         drawable.draw(canvas);
                         canvas.restore();
                     }

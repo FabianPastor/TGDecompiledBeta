@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
-import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
@@ -105,32 +104,8 @@ public class StatisticPostInfoCell extends FrameLayout {
             str = charSequence.toString();
         }
         this.message.setText(str.replace("\n", " ").trim());
-        this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo.counters.views), new Object[]{formatCount(recentPostInfo.counters.views)}));
+        this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo.counters.views), new Object[]{AndroidUtilities.formatCount(recentPostInfo.counters.views)}));
         this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo.message.messageOwner.date, false));
-        this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo.counters.forwards), new Object[]{formatCount(recentPostInfo.counters.forwards)}));
-    }
-
-    public String formatCount(int i) {
-        if (i < 1000) {
-            return Integer.toString(i);
-        }
-        ArrayList arrayList = new ArrayList();
-        while (i != 0) {
-            int i2 = i % 1000;
-            i /= 1000;
-            if (i > 0) {
-                arrayList.add(String.format(Locale.ENGLISH, "%03d", new Object[]{Integer.valueOf(i2)}));
-            } else {
-                arrayList.add(Integer.toString(i2));
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int size = arrayList.size() - 1; size >= 0; size--) {
-            sb.append((String) arrayList.get(size));
-            if (size != 0) {
-                sb.append(",");
-            }
-        }
-        return sb.toString();
+        this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo.counters.forwards), new Object[]{AndroidUtilities.formatCount(recentPostInfo.counters.forwards)}));
     }
 }
